@@ -307,8 +307,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swWatchdog.setChecked(prefs.getBoolean("watchdog", true));
         swUpdates.setChecked(prefs.getBoolean("updates", true));
         swUpdates.setVisibility(
-                Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext())
-                        ? View.GONE : View.VISIBLE);
+/*              Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext())
+                        ? View.GONE*/ View.VISIBLE);
         swExperiments.setChecked(prefs.getBoolean("experiments", false));
         swCrashReports.setChecked(prefs.getBoolean("crash_reports", false));
         tvUuid.setText(prefs.getString("uuid", null));

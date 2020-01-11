@@ -388,12 +388,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }, new Runnable() {
             @Override
             public void run() {
-                if (!Helper.isPlayStoreInstall()) {
+//              if (!Helper.isPlayStoreInstall()) {
                     if (!drawerLayout.isLocked(drawerContainer))
                         drawerLayout.closeDrawer(drawerContainer);
                     checkUpdate(true);
                 }
-            }
+//          }
         }).setSeparated());
 
         extra.add(new NavMenuItem(R.drawable.baseline_monetization_on_24, R.string.menu_pro, new Runnable() {
@@ -688,8 +688,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     }
 
     private void checkUpdate(boolean always) {
-        if (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(this))
-            return;
+/*      if (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(this))
+            return; */
 
         long now = new Date().getTime();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
