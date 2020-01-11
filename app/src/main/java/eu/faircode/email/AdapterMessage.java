@@ -3681,7 +3681,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             new SimpleTask<Void>() {
                 @Override
                 protected Void onExecute(Context context, Bundle args) {
-                    Long id = args.getLong("id");
+                    long id = args.getLong("id");
 
                     DB db = DB.getInstance(context);
                     try {
@@ -3703,6 +3703,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ServiceSynchronize.eval(context, "raw");
 
                     return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Void data) {
+                    ToastEx.makeText(context, R.string.title_executing, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -3884,19 +3889,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (message.attachments > 0)
                     result.add(context.getString(R.string.title_accessibility_attachment));
 
-                // For a11y purpose report addresses first in case of incoming message
                 boolean outgoing = isOutgoing(message);
-                if (!outgoing || message.count > 1)
-                    result.add(tvFrom.getText().toString());
-                else
+                Address[] addresses = (outgoing && (viewType != ViewType.THREAD || !threading) ? message.to : message.senders);
+                String from = MessageHelper.formatAddresses(addresses, name_email, false);
+                // For a11y purpose subject is reported first when: user wishes so or this is a single outgoing message
+                if (subject_top || (outgoing && message.visible == 1)) {
                     result.add(message.subject); // Don't want to ellipsize for a11y
-
-                result.add(tvTime.getText().toString());
-
-                if (outgoing && message.count == 1)
-                    result.add(tvFrom.getText().toString());
-                else
+                    result.add(tvTime.getText().toString());
+                    result.add(from);
+                } else {
+                    result.add(from);
+                    result.add(tvTime.getText().toString());
                     result.add(message.subject);
+                }
 
                 if (message.encrypted > 0)
                     result.add(context.getString(R.string.title_legend_encrypted));

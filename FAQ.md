@@ -269,6 +269,7 @@ FairEmail follows all the best practices for an email client as described in [th
 * [(139) How do I fix 'User is authenticated but not connected'?](#user-content-faq139)
 * [(140) Why does the message text contain strange characters?](#user-content-faq140)
 * [(141) How can I fix 'A drafts folder is required to send messages'?](#user-content-faq141)
+* [(142) How can I store sent messages in the inbox?](#user-content-faq142)
 
 [I have another question.](#user-content-support)
 
@@ -614,6 +615,7 @@ If you want to undo decryption, you can use the *resync* menu item in the three-
 *PGP*
 
 You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) first.
+FairEmail was tested with OpenKeychain version 5.4. Later versions will most likely be compatible, but earlier versions might not be.
 
 The OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key.
 You can workaround this by trying to send a signed/encrypted message to a sender with an unknown public key.
@@ -2631,6 +2633,21 @@ You can fix this problem by manually selecting the drafts folder in the account 
 If there is no drafts folder at all,
 you can create a drafts folder by tapping on the '+' button in the folder list of the account (tap on the account name in the navigation menu).
 
+<br />
+
+<a name="faq142"></a>
+**(142) How can I store sent messages in the inbox?**
+
+Generally, it is not a good idea to store sent messages in the inbox because this is hard to undo and could be incompatible with other email clients.
+
+That said, FairEmail is able to properly handle sent messages in the inbox.
+FairEmail will mark outgoing messages with a sent messages icon for example.
+
+The best solution would be to enable showing the sent folder in the unified inbox
+by long pressing the sent folder in the folder list and enabling *Show in unified inbox*.
+This way all messages can stay where they belong, while allowing to see both incoming and outgoing messages at one place.
+
+If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox.
 
 <br />
 
