@@ -246,6 +246,7 @@
 
     <string name="title_advanced_receive">Receive messages</string>
     <string name="title_advanced_when">When</string>
+    <string name="title_advanced_always">Always synchronize these accounts</string>
     <string name="title_advanced_schedule">Schedule</string>
     <string name="title_advanced_unseen">All unread messages</string>
     <string name="title_advanced_flagged">All starred messages</string>
@@ -1103,6 +1104,7 @@
         <item>Every 2 hours</item>
         <item>Every 4 hours</item>
         <item>Every 8 hours</item>
+        <item>Every day</item>
     </string-array>
 
     <integer-array name="pollIntervalValues" translatable="false">
@@ -1113,6 +1115,7 @@
         <item>120</item>
         <item>240</item>
         <item>480</item>
+        <item>1440</item>
     </integer-array>
 
     <string-array name="sendDelayedNames">

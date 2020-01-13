@@ -90,6 +90,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
 public class ServiceSynchronize extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private Integer lastStartId = null;
     private Boolean lastSuitable = null;
     private long lastLost = 0;
     private int lastAccounts = 0;
@@ -101,7 +102,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private MediatorState liveAccountNetworkState = new MediatorState();
 
     private static final long YIELD_DURATION = 200L; // milliseconds
-    private static final long QUIT_DELAY = 5 * 1000L; // milliseconds
+    private static final long QUIT_DELAY = 10 * 1000L; // milliseconds
     private static final int CONNECT_BACKOFF_START = 8; // seconds
     private static final int CONNECT_BACKOFF_MAX = 64; // seconds (totally 2 minutes)
     private static final int CONNECT_BACKOFF_AlARM = 15; // minutes
@@ -179,7 +180,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     for (TupleAccountNetworkState prev : accountStates)
                         stop(prev);
 
-                    quit();
+                    quit(null);
 
                     accountStates.clear();
                     coreStates.clear();
@@ -261,7 +262,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
                         }
                     } else
-                        stopSelf(); // will result in quit
+                        quit(lastStartId);
                 }
             }
 
@@ -343,7 +344,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 });
             }
 
-            private void quit() {
+            private void quit(final Integer startId) {
                 EntityLog.log(ServiceSynchronize.this, "Service quit");
 
                 queue.submit(new Runnable() {
@@ -357,13 +358,18 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             Log.w(ex);
                         }
 
-                        DB db = DB.getInstance(ServiceSynchronize.this);
-                        List<EntityOperation> ops = db.operation().getOperations(EntityOperation.SYNC);
-                        for (EntityOperation op : ops)
-                            db.folder().setFolderSyncState(op.folder, null);
+                        if (startId != null) {
+                            stopSelf(startId);
 
-                        stopSelf();
-                        EntityLog.log(ServiceSynchronize.this, "### quited");
+                            if (startId.equals(lastStartId)) {
+                                DB db = DB.getInstance(ServiceSynchronize.this);
+                                List<EntityOperation> ops = db.operation().getOperations(EntityOperation.SYNC);
+                                for (EntityOperation op : ops)
+                                    db.folder().setFolderSyncState(op.folder, null);
+                            }
+
+                            EntityLog.log(ServiceSynchronize.this, "### quit requested");
+                        }
                     }
                 });
             }
@@ -577,6 +583,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        lastStartId = startId;
         String action = (intent == null ? null : intent.getAction());
         String reason = (intent == null ? null : intent.getStringExtra("reason"));
         EntityLog.log(ServiceSynchronize.this, "### Service command " + intent +
@@ -1497,7 +1504,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             List<TupleAccountNetworkState> result = new ArrayList<>();
             for (TupleAccountState accountState : accountStates)
                 result.add(new TupleAccountNetworkState(
-                        enabled && pollInterval == 0 && scheduled,
+                        enabled && (pollInterval == 0 || accountState.poll_exempted) && scheduled,
                         command,
                         networkState,
                         accountState));
@@ -1573,7 +1580,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, pi);
         }
 
-        WorkerPoll.init(context, enabled);
+        ServiceUI.schedule(context, enabled);
     }
 
     private static long[] getSchedule(Context context) {

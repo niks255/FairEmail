@@ -67,6 +67,7 @@
         <item quantity="other">Jo %1$d mezu spamtzat?</item>
     </plurals>
     <string name="title_ask_spam_who">Jo %1$s erabiltzailearen mezua spamtzat?</string>
+    <string name="title_block">Blokeatu %1$s</string>
     <string name="title_block_sender">Blokeatu igorlea</string>
     <string name="title_block_sender_hint">        Honek etorkizuneko mezuak automatikoki spam karpetara eramateko arau bat sortuko du.
         Arauak sortu eta erabiltzea ordainpeko ezaugarri bat da.
@@ -200,6 +201,7 @@
     <string name="title_advanced_section_misc">Miszelanea</string>
     <string name="title_advanced_receive">Jaso mezuak</string>
     <string name="title_advanced_when">Noiz</string>
+    <string name="title_advanced_always">Sinkronizatu beti kontu hauek</string>
     <string name="title_advanced_schedule">Egitaraua</string>
     <string name="title_advanced_unseen">Irakurri gabeko mezu guztiak</string>
     <string name="title_advanced_flagged">Izardun mezu guztiak</string>
@@ -973,6 +975,7 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
         <item>2 ordurik behin</item>
         <item>4 ordurik behin</item>
         <item>8 ordurik behin</item>
+        <item>Egunero</item>
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Ez</item>

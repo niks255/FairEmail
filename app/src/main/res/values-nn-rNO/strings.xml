@@ -201,6 +201,7 @@
     <string name="title_advanced_section_misc">Diverse</string>
     <string name="title_advanced_receive">Motta meldinger</string>
     <string name="title_advanced_when">Når</string>
+    <string name="title_advanced_always">Synkroniser alltid disse kontoene</string>
     <string name="title_advanced_schedule">Tidsplan</string>
     <string name="title_advanced_unseen">Alle uleste meldinger</string>
     <string name="title_advanced_flagged">Alle stjernemerkede meldinger</string>
@@ -974,6 +975,7 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
         <item>Hver 2. time</item>
         <item>Hver 4. time</item>
         <item>Hver 8. time</item>
+        <item>Hver dag</item>
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Nei</item>
