@@ -582,6 +582,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        Log.i("Task removed=" + rootIntent);
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         lastStartId = startId;
         String action = (intent == null ? null : intent.getAction());
@@ -1598,7 +1604,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         ServiceUI.schedule(context, enabled);
     }
 
-    private static long[] getSchedule(Context context) {
+    static long[] getSchedule(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (!prefs.getBoolean("schedule", false))
             return null;
