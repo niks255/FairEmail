@@ -45,6 +45,7 @@ Related questions:
 * Change the account name: Setup, step 1, Manage, tap account
 * Change the swipe left/right target: Setup, step 1, Manage, tap account, at the bottom
 * Set a signature: Setup, step 2, Manage, tap identity
+* Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
 * Add a folder to the unified inbox: long press the folder in the folder list and check *Show in unified inbox*
 * Add a folder to the navigation menu: long press the folder in the folder list and check *Show in navigation menu*
 * Load older messages: long press a folder in the folder list, select *Edit properties* and change the number of days to sync/keep messages for; please [read this FAQ](#user-content-faq39)
@@ -689,6 +690,11 @@ Searching through a large number of messages is not very fast because of two lim
 
 This means that searching for a message text requires that files containing the message texts need to be opened one by one
 to check if the searched text is contained in the file, which is a relative expensive process.
+
+In the *miscellaneous settings* you can enable *Full text search* to significantly increase the speed of searching on the device,
+but be aware that this will increase battery usage and significantly increase storage space usage too.
+An advantage is that a number of advanced query options will become available,
+see [here](https://www.sqlite.org/fts5.html#full_text_query_syntax).
 
 Searching messages on the device is a free feature, searching messages on the server is a pro feature.
 

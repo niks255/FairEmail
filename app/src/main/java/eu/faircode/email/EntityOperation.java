@@ -100,12 +100,15 @@ public class EntityOperation {
             for (Object value : values)
                 jargs.put(value);
 
-            if (ADD.equals(name) &&
-                    (EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) ||
-                            EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))) {
-                EntityFolder folder = db.folder().getFolder(message.folder);
-                if (folder != null && EntityFolder.DRAFTS.equals(folder.type))
-                    return;
+            if (ADD.equals(name)) {
+                if (EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) ||
+                        EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt)) {
+                    EntityFolder folder = db.folder().getFolder(message.folder);
+                    if (folder != null && EntityFolder.DRAFTS.equals(folder.type)) {
+                        WorkerFts.init(context, false);
+                        return;
+                    }
+                }
             }
 
             if (MOVE.equals(name) &&
@@ -153,8 +156,8 @@ public class EntityOperation {
                 boolean autoread = prefs.getBoolean("autoread", false);
                 boolean autounflag = prefs.getBoolean("autounflag", false);
 
-                if (jargs.optBoolean(1)) // rule
-                    autoread = true;
+                if (jargs.opt(1) != null) // rules
+                    autoread = jargs.getBoolean(1);
                 jargs.put(1, autoread);
                 jargs.put(3, autounflag);
 
@@ -199,6 +202,7 @@ public class EntityOperation {
                     Long identity = message.identity;
                     long uid = message.uid;
                     int notifying = message.notifying;
+                    boolean fts = message.fts;
                     boolean seen = message.seen;
                     boolean ui_seen = message.ui_seen;
                     Boolean ui_hide = message.ui_hide;
@@ -211,6 +215,7 @@ public class EntityOperation {
                     message.identity = null;
                     message.uid = null;
                     message.notifying = 0;
+                    message.fts = false;
                     if (autoread) {
                         message.seen = true;
                         message.ui_seen = true;
@@ -229,6 +234,7 @@ public class EntityOperation {
                     message.identity = identity;
                     message.uid = uid;
                     message.notifying = notifying;
+                    message.fts = fts;
                     message.seen = seen;
                     message.ui_seen = ui_seen;
                     message.ui_hide = ui_hide;

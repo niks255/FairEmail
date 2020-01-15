@@ -65,6 +65,8 @@ import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 
+import io.requery.android.database.sqlite.SQLiteDatabase;
+
 public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMessageEx> {
     private Context context;
     private Long folder;
@@ -182,6 +184,31 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         }
 
         int found = 0;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean fts = prefs.getBoolean("fts", false);
+        if (fts && seen == null && flagged == null && snoozed == null && encrypted == null) {
+            if (state.ids == null) {
+                SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
+                state.ids = FtsDbHelper.match(sdb, folder, query);
+            }
+
+            try {
+                db.beginTransaction();
+
+                for (; state.index < state.ids.size() && found < pageSize && !state.destroyed; state.index++) {
+                    found++;
+                    db.message().setMessageFound(state.ids.get(state.index));
+                }
+                db.setTransactionSuccessful();
+
+            } finally {
+                db.endTransaction();
+            }
+
+            return found;
+        }
+
         try {
             db.beginTransaction();
 
@@ -546,6 +573,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         boolean error = false;
         int index = 0;
         int offset = 0;
+        List<Long> ids = null;
         List<TupleMatch> matches = null;
 
         MailService iservice = null;

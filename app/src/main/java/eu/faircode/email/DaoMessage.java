@@ -202,6 +202,12 @@ public interface DaoMessage {
             " AND ui_hide")
     LiveData<List<Long>> liveHiddenThread(long account, String thread);
 
+    @Query("SELECT SUM(fts) AS fts, COUNT(*) AS total FROM message" +
+            " JOIN folder ON folder.id = message.folder" +
+            " WHERE content" +
+            " AND folder.type <> '" + EntityFolder.OUTBOX + "'")
+    LiveData<TupleFtsStats> liveFts();
+
     @Query("SELECT *" +
             " FROM message" +
             " WHERE id = :id")
@@ -226,6 +232,14 @@ public interface DaoMessage {
             " AND NOT ui_hide" +
             " ORDER BY message.received DESC")
     List<Long> getMessageIdsByFolder(Long folder);
+
+    @Query("SELECT message.id FROM message" +
+            " JOIN folder ON folder.id = message.folder" +
+            " WHERE content" +
+            " AND NOT fts" +
+            " AND folder.type <> '" + EntityFolder.OUTBOX + "'" +
+            " ORDER BY message.received")
+    Cursor getMessageFts();
 
     @Query("SELECT id, account, thread, (:find IS NULL" +
             " OR `from` LIKE :find COLLATE NOCASE" +
@@ -437,6 +451,9 @@ public interface DaoMessage {
     @Query("UPDATE message SET notifying = :notifying WHERE id = :id")
     int setMessageNotifying(long id, int notifying);
 
+    @Query("UPDATE message SET fts = :fts WHERE id = :id")
+    int setMessageFts(long id, boolean fts);
+
     @Query("UPDATE message SET received = :received WHERE id = :id")
     int setMessageReceived(long id, long received);
 
@@ -482,10 +499,14 @@ public interface DaoMessage {
     @Query("UPDATE message SET revisions = :revisions WHERE id = :id")
     int setMessageRevisions(long id, Integer revisions);
 
-    @Query("UPDATE message SET content = :content WHERE id = :id")
+    @Query("UPDATE message" +
+            " SET content = :content, fts = 0" +
+            " WHERE id = :id")
     int setMessageContent(long id, boolean content);
 
-    @Query("UPDATE message SET content = :content, plain_only = :plain_only, preview = :preview, warning = :warning WHERE id = :id")
+    @Query("UPDATE message" +
+            " SET content = :content, fts = 0, plain_only = :plain_only, preview = :preview, warning = :warning" +
+            " WHERE id = :id")
     int setMessageContent(long id, boolean content, Boolean plain_only, String preview, String warning);
 
     @Query("UPDATE message SET size = :size, total = :total WHERE id = :id")
@@ -532,6 +553,9 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET headers = NULL WHERE headers IS NOT NULL")
     int clearMessageHeaders();
+
+    @Query("UPDATE message SET fts = 0")
+    int resetFts();
 
     @Query("DELETE FROM message WHERE id = :id")
     int deleteMessage(long id);
