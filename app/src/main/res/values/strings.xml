@@ -382,8 +382,8 @@
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$d</string>
 
     <string name="title_advanced_external_search">Allow other apps to search in messages</string>
-    <string name="title_advanced_fts">Full text search</string>
-    <string name="title_advanced_fts_indexed">%1$d/%2$d indexed</string>
+    <string name="title_advanced_fts">Build search index</string>
+    <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexed (%3$s)</string>
     <string name="title_advanced_english">Force English language</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for updates</string>
@@ -912,6 +912,7 @@
     <string name="title_legend_signed">Is signed</string>
     <string name="title_legend_encrypted">Is encrypted</string>
     <string name="title_legend_auth">Authentication failed</string>
+    <string name="title_legend_found">Was found</string>
     <string name="title_legend_snoozed">Is snoozed</string>
     <string name="title_legend_browsed">Is browsed or searched</string>
     <string name="title_legend_answered">Has been answered</string>

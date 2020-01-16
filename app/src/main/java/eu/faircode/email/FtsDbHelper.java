@@ -85,11 +85,25 @@ public class FtsDbHelper extends SQLiteOpenHelper {
         db.insert("message", SQLiteDatabase.CONFLICT_FAIL, cv);
     }
 
+    static void delete(SQLiteDatabase db) {
+        db.delete("message", null, null);
+    }
+
     static void delete(SQLiteDatabase db, long id) {
         db.delete("message", "rowid = ?", new Object[]{id});
     }
 
-    static List<Long> match(SQLiteDatabase db, Long folder, String search) {
+    static List<Long> match(SQLiteDatabase db, Long folder, String query) {
+        String[] parts = query.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) {
+            if (sb.length() > 0)
+                sb.append(" AND ");
+            part = part.replaceAll("\"", "\"\"");
+            sb.append("\"").append(part).append("\"");
+        }
+
+        String search = sb.toString();
         Log.i("FTS folder=" + folder + " search=" + search);
         List<Long> result = new ArrayList<>();
         try (Cursor cursor = db.query(
@@ -109,5 +123,14 @@ public class FtsDbHelper extends SQLiteOpenHelper {
                 "message", new String[]{"rowid"},
                 null, null,
                 null, null, "time");
+    }
+
+    static long size(Context context) {
+        return context.getDatabasePath(DATABASE_NAME).length();
+    }
+
+    static void optimize(SQLiteDatabase db) {
+        Log.i("FTS optimize");
+        db.execSQL("INSERT INTO message (message) VALUES ('optimize')");
     }
 }
