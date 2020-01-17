@@ -92,7 +92,7 @@ All pro features are convenience or advanced features.
 * Reply templates
 * Accept/decline calendar invitations
 * Filter rules ([instructions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq71))
-* Search on server ([instructions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq13))
+* Search indexing, search on server ([instructions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq13))
 * Keyword management
 * S/MIME sign/encrypt
 * Biometric authentication ([instructions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq113))
@@ -107,7 +107,7 @@ Please see [here](https://email.faircode.eu/#screenshots) for screenshots.
 
 * [GitHub](https://github.com/M66B/FairEmail/releases)
 * [Play store](https://play.google.com/store/apps/details?id=eu.faircode.email)
-* [Play store](https://play.google.com/apps/testing/eu.faircode.email) (test)
+* ~~[Play store](https://play.google.com/apps/testing/eu.faircode.email) (test)~~
 
 To download a GitHub release you might need to expand the assets section to download the [APK file](https://en.wikipedia.org/wiki/Android_application_package).
 
