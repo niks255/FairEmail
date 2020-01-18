@@ -125,6 +125,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     static final String ACTION_EDIT_RULES = BuildConfig.APPLICATION_ID + ".EDIT_RULES";
     static final String ACTION_EDIT_RULE = BuildConfig.APPLICATION_ID + ".EDIT_RULE";
 
+    private static final int UPDATE_TIMEOUT = 15 * 1000; // milliseconds
     private static final long EXIT_DELAY = 2500L; // milliseconds
     static final long UPDATE_INTERVAL = (BuildConfig.BETA_RELEASE ? 4 : 12) * 3600 * 1000L; // milliseconds
 
@@ -348,6 +349,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 if (!drawerLayout.isLocked(drawerContainer))
                     drawerLayout.closeDrawer(drawerContainer);
                 onDebugInfo();
+            }
+        }).setExternal(true));
+
+        extra.add(new NavMenuItem(R.drawable.baseline_language_24, R.string.menu_translate, new Runnable() {
+            @Override
+            public void run() {
+                if (!drawerLayout.isLocked(drawerContainer))
+                    drawerLayout.closeDrawer(drawerContainer);
+                onMenuTranslate();
             }
         }).setExternal(true));
 
@@ -711,6 +721,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     URL latest = new URL(BuildConfig.GITHUB_LATEST_API);
                     urlConnection = (HttpsURLConnection) latest.openConnection();
                     urlConnection.setRequestMethod("GET");
+                    urlConnection.setReadTimeout(UPDATE_TIMEOUT);
+                    urlConnection.setConnectTimeout(UPDATE_TIMEOUT);
                     urlConnection.setDoOutput(false);
                     urlConnection.connect();
 
@@ -985,6 +997,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     private void onMenuFAQ() {
         Helper.viewFAQ(this, 0);
+    }
+
+    private void onMenuTranslate() {
+        Helper.view(this, Uri.parse(Helper.CROWDIN_URI), true);
     }
 
     private void onMenuIssue() {

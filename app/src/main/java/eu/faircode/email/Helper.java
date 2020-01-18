@@ -138,6 +138,7 @@ public class Helper {
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
     static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport";
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
+    static final String CROWDIN_URI = "https://crowdin.com/project/open-source-email";
 
     static ExecutorService getBackgroundExecutor(int threads, String name) {
         ThreadFactory factory = new ThreadFactory() {
@@ -704,6 +705,10 @@ public class Helper {
 
     static String sha256(byte[] data) throws NoSuchAlgorithmException {
         return sha("SHA-256", data);
+    }
+
+    static String md5(byte[] data) throws NoSuchAlgorithmException {
+        return sha("MD5", data);
     }
 
     static String sha(String digest, byte[] data) throws NoSuchAlgorithmException {
