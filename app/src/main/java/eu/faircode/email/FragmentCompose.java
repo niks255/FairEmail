@@ -1095,9 +1095,9 @@ public class FragmentCompose extends FragmentBase {
 
                 DB db = DB.getInstance(context);
                 if (EntityMessage.ENCRYPT_NONE.equals(encrypt))
-                    db.message().setMessageEncrypt(id, null);
+                    db.message().setMessageUiEncrypt(id, null);
                 else
-                    db.message().setMessageEncrypt(id, encrypt);
+                    db.message().setMessageUiEncrypt(id, encrypt);
 
                 return null;
             }
@@ -2649,6 +2649,7 @@ public class FragmentCompose extends FragmentBase {
                             data.draft.encrypt = EntityMessage.SMIME_SIGNONLY;
                         else
                             data.draft.encrypt = EntityMessage.PGP_SIGNONLY;
+                    data.draft.ui_encrypt = data.draft.encrypt;
                     if (receipt_default)
                         data.draft.receipt_request = true;
 
@@ -2895,8 +2896,10 @@ public class FragmentCompose extends FragmentBase {
 
                         if (ref.plain_only != null && ref.plain_only)
                             data.draft.plain_only = true;
-                        if (ref.encrypt != null && ref.encrypt != 0)
-                            data.draft.encrypt = ref.encrypt;
+                        if (ref.ui_encrypt != null && ref.ui_encrypt != EntityMessage.ENCRYPT_NONE) {
+                            data.draft.encrypt = ref.ui_encrypt;
+                            data.draft.ui_encrypt = ref.ui_encrypt;
+                        }
 
                         if (answer > 0) {
                             EntityAnswer a = db.answer().getAnswer(answer);
@@ -3592,8 +3595,9 @@ public class FragmentCompose extends FragmentBase {
                             if (TextUtils.isEmpty(draft.subject))
                                 args.putBoolean("remind_subject", true);
 
-                            File refFile = draft.getRefFile(context);
-                            if (empty && !refFile.exists())
+                            Document d = JsoupEx.parse(body);
+
+                            if (empty && d.select("div[fairemail=reference]").isEmpty())
                                 args.putBoolean("remind_text", true);
 
                             int attached = 0;
@@ -3609,7 +3613,6 @@ public class FragmentCompose extends FragmentBase {
                                 for (String text : Helper.getStrings(context, R.string.title_attachment_keywords))
                                     keywords.addAll(Arrays.asList(text.split(",")));
 
-                                Document d = JsoupEx.parse(body);
                                 d.select("div[fairemail=signature]").remove();
                                 d.select("div[fairemail=reference]").remove();
                                 String text = d.text();
@@ -3734,11 +3737,14 @@ public class FragmentCompose extends FragmentBase {
                 boolean remind_subject = args.getBoolean("remind_subject", false);
                 boolean remind_text = args.getBoolean("remind_text", false);
                 boolean remind_attachment = args.getBoolean("remind_attachment", false);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean send_reminders = prefs.getBoolean("send_reminders", true);
 
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
-                if (dialog || remind_subject || remind_text || remind_attachment || recipients > RECIPIENTS_WARNING) {
+                if (dialog || (send_reminders &&
+                        (remind_subject || remind_text || remind_attachment || recipients > RECIPIENTS_WARNING))) {
                     setBusy(false);
 
                     FragmentDialogSend fragment = new FragmentDialogSend();
@@ -4274,7 +4280,7 @@ public class FragmentCompose extends FragmentBase {
                             int encrypt = args.getInt("encrypt");
 
                             DB db = DB.getInstance(context);
-                            db.message().setMessageEncrypt(id, encrypt);
+                            db.message().setMessageUiEncrypt(id, encrypt);
 
                             return null;
                         }

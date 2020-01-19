@@ -1516,6 +1516,7 @@ class Core {
                     message.total = helper.getSize();
                     message.content = false;
                     message.encrypt = parts.getEncryption();
+                    message.ui_encrypt = message.encrypt;
                     message.received = sent;
                     message.sent = sent;
                     message.seen = false;
@@ -1530,6 +1531,9 @@ class Core {
                     message.ui_found = false;
                     message.ui_ignored = false;
                     message.ui_browsed = false;
+
+                    if (message.size == null && message.total != null)
+                        message.size = message.total;
 
                     EntityIdentity identity = matchIdentity(context, folder, message);
                     message.identity = (identity == null ? null : identity.id);
@@ -1926,6 +1930,8 @@ class Core {
 
             int count = ifolder.getMessageCount();
             db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
+            account.last_connected = new Date().getTime();
+            db.account().setAccountConnected(account.id, account.last_connected);
 
             if (download && initialize == 0) {
                 db.folder().setFolderSyncState(folder.id, "downloading");
@@ -2101,6 +2107,7 @@ class Core {
             message.total = helper.getSize();
             message.content = false;
             message.encrypt = parts.getEncryption();
+            message.ui_encrypt = message.encrypt;
             message.received = (account.use_date ? (sent == null ? 0 : sent) : helper.getReceived());
             message.sent = sent;
             message.seen = seen;

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.room.Database;
+import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -56,7 +57,7 @@ import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 131,
+        version = 132,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -163,7 +164,8 @@ public abstract class DB extends RoomDatabase {
                 .addCallback(new Callback() {
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                        Log.i("Creating triggers");
+                        Log.i("Database version=" + db.getVersion());
+
                         db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_insert" +
                                 " AFTER INSERT ON attachment" +
                                 " BEGIN UPDATE message SET attachments = attachments + 1 WHERE message.id = NEW.message; END");
@@ -177,13 +179,6 @@ public abstract class DB extends RoomDatabase {
     private static DB migrate(final Context context, RoomDatabase.Builder<DB> builder) {
         // https://www.sqlite.org/lang_altertable.html
         return builder
-                .addCallback(new Callback() {
-                    @Override
-                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                        Log.i("Database version=" + db.getVersion());
-                        super.onOpen(db);
-                    }
-                })
                 .addMigrations(new Migration(1, 2) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -1259,6 +1254,14 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `answer` ADD COLUMN `favorite` INTEGER NOT NULL DEFAULT 0");
+                    }
+                })
+                .addMigrations(new Migration(131, 132) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `ui_encrypt` INTEGER");
+                        db.execSQL("UPDATE `message` SET `ui_encrypt` = `encrypt`");
                     }
                 })
                 .build();
