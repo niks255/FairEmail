@@ -627,7 +627,10 @@ You can workaround this by trying to send a signed/encrypted message to a sender
 To let apps like FairEmail reliably connect to the OpenKeychain service to encrypt/decrypt messages,
 it might be necessary to disable battery optimizations for the OpenKeychain app.
 
-FairEmail will send the [Autocrypt](https://autocrypt.org/) headers for use by other email clients.
+FairEmail will send the [Autocrypt](https://autocrypt.org/) headers for use by other email clients
+and send received Autocrypt headers to the OpenKeychain app for storage.
+
+All key handling is delegated to the OpenKey chain app for security reasons. This also means that FairEmail does not store PGP keys.
 
 Inline encrypted PGP in received messages is supported, but inline PGP signatures and inline PGP in outgoing messages is not supported,
 see [here](https://josefsson.org/inline-openpgp-considered-harmful.html) about why not.
@@ -1149,6 +1152,9 @@ If this isn't the case, please let me know.
 
 It is inevitable that synchronizing messages will use battery power because it requires network access and accessing the messages database.
 
+If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is setup similarly.
+For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
+
 Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage.
 In this case you might want to synchronize periodically, for example each hour, instead of continuously.
 Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always
@@ -1519,11 +1525,11 @@ The following authentication methods are supported and used in this order:
 
 * LOGIN
 * PLAIN
+* CRAM-MD5
 * NTLM (untested)
 
-SASL authentication methods, like CRAM-MD5, are not supported
+SASL authentication methods, besides CRAM-MD5, are not supported
 because [JavaMail for Android](https://javaee.github.io/javamail/Android) does not support SASL authentication.
-If using secure connections, a must today, there is little value in using CRAM-MD5 anyway.
 
 If your provider requires an unsupported authentication method, you'll likely get the error message *authentication failed*.
 
@@ -1725,12 +1731,10 @@ else FairEmail needs to connect to the folder(s) for each message.
 **(74) Why do I see duplicate messages?**
 
 Some providers, notably Gmail, list all messages in all folders, except trashed messages, in the archive (all messages) folder too.
-FairEmail shows all these messages, except for one, dimmed, to indicate that these messages are in fact the same message.
+FairEmail shows all these messages in a non obtrusive way to indicate that these messages are in fact the same message.
 
 Gmail allows one message to have multiple labels, which are presented to FairEmail as folders.
 This means that messages with multiple labels will be shown multiple times as well.
-
-You can hide duplicate messages by disabling *Show duplicates* in the three dots overflow menu.
 
 <br />
 
@@ -1831,6 +1835,8 @@ which is another possibility to have different synchronization schedules and to 
 
 It is also possible to create [rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition.
 This way it is possible to snooze business related messages until the start of the business hours.
+This also means that the messages will be on your device for when there is no internet connection, for example when flying.
+
 
 Scheduling is a pro feature.
 
@@ -1956,6 +1962,8 @@ You will likely need to save the associated identity again as well.
 
 To authorize a Yahoo! account you will need to create a third-party app password.
 Please see [here](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html) for the instructions.
+
+Please see [this FAQ](#user-content-faq111) about OAuth support.
 
 <br />
 

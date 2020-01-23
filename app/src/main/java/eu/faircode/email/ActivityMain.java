@@ -30,9 +30,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
+import java.util.Date;
 import java.util.List;
 
 public class ActivityMain extends ActivityBase implements FragmentManager.OnBackStackChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final long SPLASH_DELAY = 1500L; // milliseconds
+    private static final long SERVICE_START_DELAY = 5 * 1000L; // milliseconds
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportFragmentManager().addOnBackStackChangedListener(this);
@@ -52,7 +56,10 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
         if (eula) {
             super.onCreate(savedInstanceState);
 
-            final SimpleTask start = new SimpleTask<Boolean>() {
+            long start = new Date().getTime();
+            Log.i("Main boot");
+
+            final SimpleTask boot = new SimpleTask<Boolean>() {
                 @Override
                 protected void onPreExecute(Bundle args) {
                     new Handler().postDelayed(new Runnable() {
@@ -60,7 +67,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                         public void run() {
                             getWindow().setBackgroundDrawableResource(R.drawable.splash);
                         }
-                    }, 1500);
+                    }, SPLASH_DELAY);
                 }
 
                 @Override
@@ -97,10 +104,19 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                                 startActivity(view);
                             }
 
-                        ServiceSynchronize.eval(ActivityMain.this, "main");
-                        ServiceSend.watchdog(ActivityMain.this);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ServiceSynchronize.eval(ActivityMain.this, "main");
+                                ServiceSend.watchdog(ActivityMain.this);
+                            }
+                        }, SERVICE_START_DELAY);
                     } else
                         startActivity(new Intent(ActivityMain.this, ActivitySetup.class));
+
+                    long end = new Date().getTime();
+                    Log.i("Main booted " + (end - start) + " ms");
+
                     finish();
                 }
 
@@ -119,7 +135,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                                 Bundle args = new Bundle();
                                 if (intent.hasExtra("intent"))
                                     args.putParcelable("intent", intent.getParcelableExtra("intent"));
-                                start.execute(ActivityMain.this, args, "main:accounts");
+                                boot.execute(ActivityMain.this, args, "main:accounts");
                             }
                         },
                         new Runnable() {
@@ -157,7 +173,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                             }
                         });
             else
-                start.execute(this, new Bundle(), "main:accounts");
+                boot.execute(this, new Bundle(), "main:accounts");
         } else {
             // Enable compact view on small screens
             if (!getResources().getConfiguration().isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE))

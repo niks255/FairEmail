@@ -121,6 +121,7 @@ class Core {
     private static final int SYNC_BATCH_SIZE = 20;
     private static final int DOWNLOAD_BATCH_SIZE = 20;
     private static final long YIELD_DURATION = 200L; // milliseconds
+    private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
 
     static void processOperations(
             Context context,
@@ -1015,7 +1016,7 @@ class Core {
         // Delete message
         DB db = DB.getInstance(context);
 
-        if (!account.browse && EntityFolder.INBOX.equals(folder.type)) {
+        if (!account.leave_on_server && EntityFolder.INBOX.equals(folder.type)) {
             Map<String, String> caps = istore.capabilities();
 
             Message[] imessages = ifolder.getMessages();
@@ -1588,10 +1589,11 @@ class Core {
                     ((POP3Message) imessage).invalidate(true);
                 }
 
-            for (String msgid : existing) {
-                Log.i(folder.name + " POP deleted=" + msgid);
-                db.message().deleteMessage(folder.id, msgid);
-            }
+            if (!account.leave_on_device)
+                for (String msgid : existing) {
+                    Log.i(folder.name + " POP deleted=" + msgid);
+                    db.message().deleteMessage(folder.id, msgid);
+                }
 
             Log.i(folder.name + " done");
         } finally {
@@ -2071,6 +2073,16 @@ class Core {
 
         if (message == null) {
             Long sent = helper.getSent();
+            long received;
+            if (account.use_date)
+                received = (sent == null ? 0 : sent);
+            else {
+                received = helper.getReceived();
+                if (received == 0 || received > new Date().getTime() + FUTURE_RECEIVED)
+                    if (sent != null)
+                        received = sent;
+            }
+
             String authentication = helper.getAuthentication();
             MessageHelper.MessageParts parts = helper.getMessageParts(context);
 
@@ -2108,7 +2120,7 @@ class Core {
             message.content = false;
             message.encrypt = parts.getEncryption();
             message.ui_encrypt = message.encrypt;
-            message.received = (account.use_date ? (sent == null ? 0 : sent) : helper.getReceived());
+            message.received = received;
             message.sent = sent;
             message.seen = seen;
             message.answered = answered;
@@ -2163,12 +2175,12 @@ class Core {
                     String r = ((InternetAddress) reply).getAddress();
                     int rat = (r == null ? -1 : r.indexOf('@'));
                     if (rat > 0) {
-                        String rdomain = r.substring(rat + 1);
+                        String rdomain = ConnectionHelper.getParentDomain(r.substring(rat + 1));
                         for (Address from : message.from) {
                             String f = ((InternetAddress) from).getAddress();
                             int fat = (f == null ? -1 : f.indexOf('@'));
                             if (fat > 0) {
-                                String fdomain = f.substring(fat + 1);
+                                String fdomain = ConnectionHelper.getParentDomain(f.substring(fat + 1));
                                 if (!rdomain.equalsIgnoreCase(fdomain)) {
                                     if (message.warning == null)
                                         message.warning = context.getString(R.string.title_reply_domain, fdomain, rdomain);
@@ -2951,7 +2963,7 @@ class Core {
                             .setDeleteIntent(piIgnore)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                             .setCategory(NotificationCompat.CATEGORY_EMAIL)
-                            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                             .setOnlyAlertOnce(alert_once)
                             .setAllowSystemGeneratedContextualActions(false);
 

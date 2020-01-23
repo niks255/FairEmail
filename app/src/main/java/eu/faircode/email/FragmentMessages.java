@@ -36,6 +36,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -52,8 +53,11 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.security.KeyChain;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Base64;
 import android.util.LongSparseArray;
 import android.util.Pair;
@@ -120,7 +124,6 @@ import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableFile;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSTypedData;
-import org.bouncycastle.cms.CMSVerifierCertificateNotValidException;
 import org.bouncycastle.cms.KeyTransRecipientId;
 import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.SignerInformation;
@@ -148,8 +151,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.cert.CertPathBuilder;
+import java.security.cert.CertStore;
+import java.security.cert.CertStoreParameters;
 import java.security.cert.CertificateFactory;
+import java.security.cert.CollectionCertStoreParameters;
+import java.security.cert.PKIXBuilderParameters;
+import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.text.Collator;
 import java.text.DateFormat;
@@ -868,7 +878,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fabReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onReply("reply");
+                boolean reply_hint = prefs.getBoolean("reply_hint", false);
+                if (reply_hint)
+                    onReply("reply");
+                else
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.title_reply_hint)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    prefs.edit().putBoolean("reply_hint", true).apply();
+                                    onReply("reply");
+                                }
+                            })
+                            .show();
             }
         });
 
@@ -985,7 +1008,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                         PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), fabSearch);
 
-                        popupMenu.getMenu().add(Menu.NONE, 0, 0, R.string.title_search_server)
+                        SpannableString ss = new SpannableString(getString(R.string.title_search_server));
+                        ss.setSpan(new StyleSpan(Typeface.ITALIC), 0, ss.length(), 0);
+                        ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
+                        popupMenu.getMenu().add(Menu.NONE, 0, 0, ss)
                                 .setEnabled(false);
                         popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.title_search_text)
                                 .setCheckable(true).setChecked(search_text);
@@ -1072,9 +1098,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         else
             fabCompose.hide();
 
-        if (viewType == AdapterMessage.ViewType.SEARCH && !server)
-            fabSearch.show();
-        else
+        if (viewType == AdapterMessage.ViewType.SEARCH && !server) {
+            if (query != null && query.startsWith(getString(R.string.title_search_special_prefix) + ":")) {
+                String special = query.split(":")[1];
+                if (getString(R.string.title_search_special_snoozed).equals(special) ||
+                        getString(R.string.title_search_special_encrypted).equals(special))
+                    fabSearch.hide();
+                else
+                    fabSearch.show();
+            } else
+                fabSearch.show();
+        } else
             fabSearch.hide();
 
         fabMore.hide();
@@ -4753,10 +4787,38 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     args.putString("sender", sender);
                                     args.putBoolean("known", known);
 
+                                    try {
+                                        // https://tools.ietf.org/html/rfc3852#section-10.2.3
+                                        KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+                                        ks.load(null, null);
+
+                                        X509CertSelector target = new X509CertSelector();
+                                        target.setCertificate(cert);
+
+                                        List<X509Certificate> certs = new ArrayList<>();
+                                        for (Object m : store.getMatches(null)) {
+                                            X509CertificateHolder h = (X509CertificateHolder) m;
+                                            certs.add(new JcaX509CertificateConverter().getCertificate(h));
+                                        }
+
+                                        PKIXBuilderParameters params = new PKIXBuilderParameters(ks, target);
+                                        CertStoreParameters intermediates = new CollectionCertStoreParameters(certs);
+                                        params.addCertStore(CertStore.getInstance("Collection", intermediates));
+                                        params.setRevocationEnabled(false);
+                                        params.setDate(new Date(message.received));
+
+                                        CertPathBuilder builder = CertPathBuilder.getInstance("PKIX");
+                                        builder.build(params);
+
+                                        args.putBoolean("valid", true);
+                                    } catch (Throwable ex) {
+                                        Log.w(ex);
+                                    }
+
                                     result = cert;
                                     break;
                                 }
-                            } catch (CMSVerifierCertificateNotValidException ex) {
+                            } catch (CMSException ex) {
                                 Log.w(ex);
                             }
                         }
@@ -4889,6 +4951,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
                     String sender = args.getString("sender");
                     boolean known = args.getBoolean("known");
+                    boolean valid = args.getBoolean("valid");
 
                     if (cert == null)
                         Snackbar.make(view, R.string.title_signature_invalid, Snackbar.LENGTH_LONG).show();
@@ -4904,11 +4967,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     break;
                                 }
 
-                            if (known && !record.isExpired() && match)
+                            if (known && !record.isExpired() && match && valid)
                                 Snackbar.make(view, R.string.title_signature_valid, Snackbar.LENGTH_LONG).show();
                             else {
                                 LayoutInflater inflator = LayoutInflater.from(getContext());
                                 View dview = inflator.inflate(R.layout.dialog_certificate, null);
+                                TextView tvCaption = dview.findViewById(R.id.tvCaption);
                                 TextView tvSender = dview.findViewById(R.id.tvSender);
                                 TextView tvEmail = dview.findViewById(R.id.tvEmail);
                                 TextView tvEmailInvalid = dview.findViewById(R.id.tvEmailInvalid);
@@ -4917,6 +4981,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 TextView tvBefore = dview.findViewById(R.id.tvBefore);
                                 TextView tvExpired = dview.findViewById(R.id.tvExpired);
 
+                                tvCaption.setText(valid ? R.string.title_signature_valid : R.string.title_signature_invalid);
+                                if (!valid)
+                                    tvCaption.setTextColor(Helper.resolveColor(getContext(), R.attr.colorWarning));
                                 tvSender.setText(sender);
                                 tvEmail.setText(TextUtils.join(",", emails));
                                 tvEmailInvalid.setVisibility(match ? View.GONE : View.VISIBLE);

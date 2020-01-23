@@ -363,6 +363,7 @@
     <string name="title_advanced_layout_hint">Puoi passare ad un layout più compatto e modificare la dimensione del testo del messaggio nel menu della barra di azione in alto nella vista dei messaggi</string>
     <string name="title_advanced_date_hint">I messaggi sono raggruppati per data solo se sono ordinati cronologicamente</string>
     <string name="title_advanced_threading_hint">Messaggi di gruppo relazionati a vicenda</string>
+    <string name="title_advanced_gravatars_hint">Potrebbe esserci un rischio per la privacy</string>
     <string name="title_advanced_name_email_hint">Quando disabilitati saranno mostrati solo i nomi quando disponibili</string>
     <string name="title_advanced_preview_hint">Disponibile solo quando è stato scaricato il testo del messaggio</string>
     <string name="title_advanced_inline_hint">Le immagini in linea sono incluse nel messaggio</string>
@@ -427,6 +428,7 @@
     <string name="title_primary_account">Principale (account predefinito)</string>
     <string name="title_primary_identity">Principale (identità predefinita)</string>
     <string name="title_leave_on_server">Lascia i messaggi sul server</string>
+    <string name="title_leave_on_device">Lascia messaggi sul dispositivo</string>
     <string name="title_keep_alive_interval">Intervallo resta-attivo/sondaggio (minuti)</string>
     <string name="title_use_date">Usa la data nell\'intestazione di invio al posto di quella del server di ricezione</string>
     <string name="title_related_identity">Aggiungi identità correlata</string>
@@ -600,6 +602,7 @@
     <string name="title_ask_help">Aiuta a migliorare FairEmail</string>
     <string name="title_ask_reporting">Inviare rapporti di errore?</string>
     <string name="title_reporting_why">Il report di errore aiuterà a migliorare FairEmail</string>
+    <string name="title_reply_hint">Puoi rispondere a tutti, inoltrare, ecc tramite il menu delle azioni a doppia freccia appena sotto l\'intestazione del messaggio</string>
     <string name="title_ask_review">Si prega di valutare FairEmail</string>
     <string name="title_ask_review_rationale">        Stai usando FairEmail da un po\'.
         Ti saremmo grati se potessi valutare FairEmail nel Play Store.
@@ -621,6 +624,7 @@
     <string name="title_discard">Elimina</string>
     <string name="title_save">Salva</string>
     <string name="title_send">Invia</string>
+    <string name="title_send_now">Invia ora</string>
     <string name="title_send_via">Invia tramite</string>
     <string name="title_send_with_options">Invia &#8230;</string>
     <string name="title_send_at">Invia alle &#8230;</string>

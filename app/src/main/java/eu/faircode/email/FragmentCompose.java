@@ -59,8 +59,10 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.QuoteSpan;
+import android.text.style.StyleSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -178,6 +180,7 @@ import biweekly.component.VEvent;
 import biweekly.property.Organizer;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_FIRST_USER;
 import static android.app.Activity.RESULT_OK;
 import static android.widget.AdapterView.INVALID_POSITION;
 
@@ -465,10 +468,65 @@ public class FragmentCompose extends FragmentBase {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
                 Activity activity = getActivity();
                 if (activity != null)
                     activity.onUserInteraction();
+
+                if (before == 0 && count == 1 && text.charAt(start) == '\n') {
+                    // break block quotes
+                    boolean broken = false;
+                    SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+                    StyledQuoteSpan[] spans = ssb.getSpans(start + 1, start + 1, StyledQuoteSpan.class);
+                    for (StyledQuoteSpan span : spans) {
+                        int s = ssb.getSpanStart(span);
+                        int e = ssb.getSpanEnd(span);
+                        int f = ssb.getSpanFlags(span);
+                        Log.i("Span " + s + "..." + e + " start=" + start);
+
+                        if (start - s > 0 && e - (start + 1) > 0 &&
+                                ssb.charAt(s - 1) == '\n' && ssb.charAt(start - 1) == '\n' &&
+                                ssb.charAt(start) == '\n' && ssb.charAt(e - 1) == '\n') {
+                            broken = true;
+
+                            StyledQuoteSpan q1 = new StyledQuoteSpan(getContext(), span.getColor());
+                            ssb.setSpan(q1, s, start, f);
+                            Log.i("Span " + s + "..." + start);
+
+                            StyledQuoteSpan q2 = new StyledQuoteSpan(getContext(), span.getColor());
+                            ssb.setSpan(q2, start + 1, e, f);
+                            Log.i("Span " + (start + 1) + "..." + e);
+
+                            ssb.removeSpan(span);
+                        }
+                    }
+
+                    if (broken) {
+                        StyleSpan[] sspan = ssb.getSpans(start, start, StyleSpan.class);
+                        for (StyleSpan span : sspan) {
+                            int s = ssb.getSpanStart(span);
+                            int e = ssb.getSpanEnd(span);
+                            int f = ssb.getSpanFlags(span);
+                            Log.i("Style span " + s + "..." + e + " start=" + start);
+
+                            StyleSpan s1 = new StyleSpan(span.getStyle());
+                            ssb.setSpan(s1, s, start, f);
+                            Log.i("Style span " + s + "..." + start);
+
+                            StyleSpan s2 = new StyleSpan(span.getStyle());
+                            ssb.setSpan(s2, start + 1, e, f);
+                            Log.i("Style span " + (start + 1) + "..." + e);
+
+                            ssb.removeSpan(span);
+                        }
+
+                        int color = Helper.resolveColor(getContext(), android.R.attr.textColorPrimary);
+                        ssb.setSpan(new ForegroundColorSpan(color), start, start, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+                        etBody.setText(ssb);
+                        etBody.setSelection(start);
+                    }
+                }
             }
 
             @Override
@@ -610,7 +668,7 @@ public class FragmentCompose extends FragmentBase {
                 getContext(),
                 R.layout.spinner_item2_dropdown,
                 null,
-                new String[]{"name", "email"},
+                new String[]{"display", "email"},
                 new int[]{android.R.id.text1, android.R.id.text2},
                 0);
 
@@ -643,7 +701,7 @@ public class FragmentCompose extends FragmentBase {
                 String wildcard = "%" + typed + "%";
                 List<Cursor> cursors = new ArrayList<>();
 
-                MatrixCursor provided = new MatrixCursor(new String[]{"_id", "name", "email"});
+                MatrixCursor provided = new MatrixCursor(new String[]{"_id", "name", "email", "display"});
                 boolean contacts = Helper.hasPermission(getContext(), Manifest.permission.READ_CONTACTS);
                 if (contacts) {
                     Cursor cursor = resolver.query(
@@ -665,7 +723,8 @@ public class FragmentCompose extends FragmentBase {
                         provided.newRow()
                                 .add(cursor.getLong(0))
                                 .add(cursor.getString(1))
-                                .add(cursor.getString(2));
+                                .add(cursor.getString(2))
+                                .add(cursor.getString(1));
                 }
                 cursors.add(provided);
 
@@ -1463,7 +1522,9 @@ public class FragmentCompose extends FragmentBase {
                     break;
                 case REQUEST_SEND:
                     if (resultCode == RESULT_OK)
-                        onActionSend();
+                        onActionSend(false);
+                    else if (resultCode == RESULT_FIRST_USER)
+                        onActionSend(true);
                     break;
                 case REQUEST_CERTIFICATE:
                     if (resultCode == RESULT_OK && data != null)
@@ -2310,17 +2371,22 @@ public class FragmentCompose extends FragmentBase {
         onAction(R.id.action_delete);
     }
 
-    private void onActionSend() {
+    private void onActionSend(boolean now) {
         Bundle args = new Bundle();
         args.putLong("id", working);
+        args.putBoolean("now", now);
 
         new SimpleTask<EntityMessage>() {
             @Override
             protected EntityMessage onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
+                boolean now = args.getBoolean("now");
 
                 DB db = DB.getInstance(context);
-                return db.message().getMessage(id);
+                EntityMessage draft = db.message().getMessage(id);
+                if (draft != null && now)
+                    db.message().setMessageSnoozed(draft.id, new Date().getTime());
+                return draft;
             }
 
             @Override
@@ -3669,6 +3735,11 @@ public class FragmentCompose extends FragmentBase {
                             db.message().setMessageSnoozed(draft.id, draft.ui_snoozed);
                         }
 
+                        if (draft.ui_snoozed != null && draft.ui_snoozed <= new Date().getTime()) {
+                            draft.ui_snoozed = null;
+                            db.message().setMessageSnoozed(draft.id, null);
+                        }
+
                         // Send message
                         if (draft.ui_snoozed == null)
                             EntityOperation.queue(context, draft, EntityOperation.SEND);
@@ -4411,13 +4482,21 @@ public class FragmentCompose extends FragmentBase {
                     .setView(dview)
                     .setNegativeButton(android.R.string.cancel, null);
 
-            if (!remind_to)
+            if (!remind_to) {
+                if (send_delayed != 0)
+                    builder.setNeutralButton(R.string.title_send_now, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendResult(Activity.RESULT_FIRST_USER);
+                        }
+                    });
                 builder.setPositiveButton(R.string.title_send, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         sendResult(Activity.RESULT_OK);
                     }
                 });
+            }
 
             return builder.create();
         }

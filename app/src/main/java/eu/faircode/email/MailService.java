@@ -84,7 +84,7 @@ public class MailService implements AutoCloseable {
     private final static int CONNECT_TIMEOUT = 20 * 1000; // milliseconds
     private final static int WRITE_TIMEOUT = 60 * 1000; // milliseconds
     private final static int READ_TIMEOUT = 60 * 1000; // milliseconds
-    private final static int FETCH_SIZE = 512 * 1024; // bytes, default 16K
+    private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
     private final static int POOL_TIMEOUT = 45 * 1000; // milliseconds, default 45 sec
 
     private static final int APPEND_BUFFER_SIZE = 4 * 1024 * 1024; // bytes
@@ -121,6 +121,8 @@ public class MailService implements AutoCloseable {
         properties.put("mail.event.scope", "folder");
         properties.put("mail.event.executor", executor);
 
+        properties.put("mail." + protocol + ".sasl.enable", "true");
+        properties.put("mail." + protocol + ".sasl.mechanisms", "CRAM-MD5");
         properties.put("mail." + protocol + ".sasl.realm", realm == null ? "" : realm);
         properties.put("mail." + protocol + ".auth.ntlm.domain", realm == null ? "" : realm);
 
@@ -364,33 +366,31 @@ public class MailService implements AutoCloseable {
         } else if ("smtp".equals(protocol) || "smtps".equals(protocol)) {
             String[] c = BuildConfig.APPLICATION_ID.split("\\.");
             Collections.reverse(Arrays.asList(c));
-            String domain = TextUtils.join(".", c);
+            String hdomain = TextUtils.join(".", c);
 
-            String haddr = domain;
-            if (useip)
-                try {
-                    // This assumes getByName always returns the same address (type)
-                    InetAddress addr = InetAddress.getByName(host);
-                    if (addr instanceof Inet4Address)
-                        haddr = "[" + Inet4Address.getLocalHost().getHostAddress() + "]";
-                    else
-                        haddr = "[IPv6:" + Inet6Address.getLocalHost().getHostAddress() + "]";
-                } catch (UnknownHostException ex) {
-                    Log.w(ex);
-                }
+            String haddr = "[127.0.0.1]";
+            try {
+                // This assumes getByName always returns the same address (type)
+                InetAddress addr = InetAddress.getByName(host);
+                if (addr instanceof Inet4Address)
+                    haddr = "[" + Inet4Address.getLocalHost().getHostAddress() + "]";
+                else
+                    haddr = "[IPv6:" + Inet6Address.getLocalHost().getHostAddress() + "]";
+            } catch (UnknownHostException ex) {
+                Log.w(ex);
+            }
 
             Log.i("Using localhost=" + haddr);
-            properties.put("mail." + protocol + ".localhost", haddr);
+            properties.put("mail." + protocol + ".localhost", useip ? haddr : hdomain);
 
             iservice = isession.getTransport(protocol);
             try {
                 iservice.connect(host, port, user, password);
             } catch (MessagingException ex) {
-                if (useip &&
-                        ex.getMessage() != null &&
+                if (ex.getMessage() != null &&
                         ex.getMessage().toLowerCase().contains("syntactically invalid")) {
-                    Log.w("Using localhost=" + domain, ex);
-                    ((SMTPTransport) iservice).setLocalHost(domain);
+                    Log.w("Using localhost=" + (useip ? hdomain : haddr), ex);
+                    ((SMTPTransport) iservice).setLocalHost(useip ? hdomain : haddr);
                     iservice.connect(host, port, user, password);
                 } else
                     throw ex;
