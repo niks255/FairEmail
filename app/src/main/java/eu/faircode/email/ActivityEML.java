@@ -51,6 +51,7 @@ import com.sun.mail.imap.IMAPFolder;
 
 import org.jsoup.nodes.Document;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -66,6 +67,19 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
 public class ActivityEML extends ActivityBase {
+    private TextView tvFrom;
+    private TextView tvTo;
+    private TextView tvReplyTo;
+    private TextView tvCc;
+    private TextView tvSent;
+    private TextView tvReceived;
+    private TextView tvSubject;
+    private View vSeparatorAttachments;
+    private RecyclerView rvAttachment;
+    private TextView tvBody;
+    private ContentLoadingProgressBar pbWait;
+    private Group grpReady;
+
     private Uri uri;
     private MessageHelper.AttachmentPart apart;
     private static final int REQUEST_ATTACHMENT = 1;
@@ -77,18 +91,18 @@ public class ActivityEML extends ActivityBase {
         getSupportActionBar().setSubtitle("EML");
         setContentView(R.layout.activity_eml);
 
-        final TextView tvFrom = findViewById(R.id.tvFrom);
-        final TextView tvTo = findViewById(R.id.tvTo);
-        final TextView tvReplyTo = findViewById(R.id.tvReplyTo);
-        final TextView tvCc = findViewById(R.id.tvCc);
-        final TextView tvSent = findViewById(R.id.tvSent);
-        final TextView tvReceived = findViewById(R.id.tvReceived);
-        final TextView tvSubject = findViewById(R.id.tvSubject);
-        final View vSeparatorAttachments = findViewById(R.id.vSeparatorAttachments);
-        final RecyclerView rvAttachment = findViewById(R.id.rvAttachment);
-        final TextView tvBody = findViewById(R.id.tvBody);
-        final ContentLoadingProgressBar pbWait = findViewById(R.id.pbWait);
-        final Group grpReady = findViewById(R.id.grpReady);
+        tvFrom = findViewById(R.id.tvFrom);
+        tvTo = findViewById(R.id.tvTo);
+        tvReplyTo = findViewById(R.id.tvReplyTo);
+        tvCc = findViewById(R.id.tvCc);
+        tvSent = findViewById(R.id.tvSent);
+        tvReceived = findViewById(R.id.tvReceived);
+        tvSubject = findViewById(R.id.tvSubject);
+        vSeparatorAttachments = findViewById(R.id.vSeparatorAttachments);
+        rvAttachment = findViewById(R.id.rvAttachment);
+        tvBody = findViewById(R.id.tvBody);
+        pbWait = findViewById(R.id.pbWait);
+        grpReady = findViewById(R.id.grpReady);
 
         rvAttachment.setHasFixedSize(false);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -99,19 +113,29 @@ public class ActivityEML extends ActivityBase {
         vSeparatorAttachments.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
 
-        uri = getIntent().getData();
-        if (uri == null) {
-            pbWait.setVisibility(View.GONE);
-            return;
-        } else
-            pbWait.setVisibility(View.VISIBLE);
+        load();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        load();
+    }
+
+    private void load() {
+        uri = getIntent().getData();
         Log.i("EML uri=" + uri);
 
         Bundle args = new Bundle();
         args.putParcelable("uri", uri);
 
         new SimpleTask<Result>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                pbWait.setVisibility(View.VISIBLE);
+            }
+
             @Override
             protected void onPostExecute(Bundle args) {
                 pbWait.setVisibility(View.GONE);
@@ -120,6 +144,9 @@ public class ActivityEML extends ActivityBase {
             @Override
             protected Result onExecute(Context context, Bundle args) throws Throwable {
                 Uri uri = args.getParcelable("uri");
+
+                if (uri == null)
+                    throw new FileNotFoundException();
 
                 if (!"content".equals(uri.getScheme()) &&
                         !Helper.hasPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -177,7 +204,41 @@ public class ActivityEML extends ActivityBase {
                         result.parts.getAttachmentParts(),
                         new AdapterAttachmentEML.IEML() {
                             @Override
-                            public void onSelected(MessageHelper.AttachmentPart apart) {
+                            public void onShare(MessageHelper.AttachmentPart apart) {
+                                new SimpleTask<File>() {
+                                    @Override
+                                    protected File onExecute(Context context, Bundle args) throws Throwable {
+                                        apart.attachment.id = 0L;
+                                        File file = apart.attachment.getFile(context);
+                                        Log.i("Writing to " + file);
+
+                                        try (InputStream is = apart.part.getInputStream()) {
+                                            try (OutputStream os = new FileOutputStream(file)) {
+                                                byte[] buffer = new byte[Helper.BUFFER_SIZE];
+                                                for (int len = is.read(buffer); len != -1; len = is.read(buffer))
+                                                    os.write(buffer, 0, len);
+                                            }
+                                        }
+
+                                        return file;
+                                    }
+
+                                    @Override
+                                    protected void onExecuted(Bundle args, File file) {
+                                        Helper.share(ActivityEML.this, file,
+                                                apart.attachment.getMimeType(),
+                                                apart.attachment.name);
+                                    }
+
+                                    @Override
+                                    protected void onException(Bundle args, Throwable ex) {
+                                        Log.unexpectedError(getSupportFragmentManager(), ex);
+                                    }
+                                }.execute(ActivityEML.this, new Bundle(), "eml:share");
+                            }
+
+                            @Override
+                            public void onSave(MessageHelper.AttachmentPart apart) {
                                 ActivityEML.this.apart = apart;
 
                                 Intent create = new Intent(Intent.ACTION_CREATE_DOCUMENT);

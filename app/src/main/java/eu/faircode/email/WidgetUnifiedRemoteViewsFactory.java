@@ -84,7 +84,10 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         try {
             db.beginTransaction();
 
-            messages = db.message().getWidgetUnified(folder < 0 ? null : folder, threading, unseen, flagged);
+            messages = db.message().getWidgetUnified(
+                    account < 0 ? null : account,
+                    folder < 0 ? null : folder,
+                    threading, unseen, flagged);
 
             db.setTransactionSuccessful();
         } finally {

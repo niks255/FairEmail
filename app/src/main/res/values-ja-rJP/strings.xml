@@ -349,6 +349,7 @@
     <string name="title_advanced_layout_hint">よりコンパクトなレイアウトへの切り替えとメッセージのテキストサイズの変更はメッセージビューの上部アクションバーメニューで行えます</string>
     <string name="title_advanced_date_hint">時間で並び替えをしている場合にのみ、メッセージは日付でグループ化されます</string>
     <string name="title_advanced_threading_hint">互いに関連するグループメッセージ</string>
+    <string name="title_advanced_gravatars_hint">プライバシーリスクが有るかもしれません</string>
     <string name="title_advanced_name_email_hint">無効にすると利用可能な場合にのみ名前が表示されます</string>
     <string name="title_advanced_preview_hint">メッセージテキストがダウンロードされた場合にのみ使用可能</string>
     <string name="title_advanced_inline_hint">インライン画像はメッセージに含まれる画像です</string>
@@ -667,6 +668,7 @@ PlayストアでFairEmailを評価できれば幸いです。
     <string name="title_signature_valid">メッセージ署名が有効</string>
     <string name="title_signature_unconfirmed">メッセージ署名は有効ですが確認されていません</string>
     <string name="title_signature_invalid">メッセージ署名が無効です</string>
+    <string name="title_signature_certificate_invalid">証明書が無効</string>
     <string name="title_signature_sender">差出人のメールアドレス</string>
     <string name="title_signature_email">署名のアドレス</string>
     <string name="title_signature_mismatch">送信者のメールアドレスと署名が一致しません</string>
