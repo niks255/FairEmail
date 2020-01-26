@@ -973,8 +973,8 @@ public class MessageHelper {
         if (subject == null)
             return null;
 
+        subject = subject.replaceAll("\\?=\\r?\\n\\s+=\\?", "\\?==\\?");
         subject = MimeUtility.unfold(subject);
-        //subject = subject.replaceAll("\\?=\\s+=\\?", "\\?==\\?");
         subject = new String(subject.getBytes(StandardCharsets.ISO_8859_1));
         subject = decodeMime(subject);
 
@@ -983,8 +983,6 @@ public class MessageHelper {
 
     Long getSize() throws MessagingException {
         long size = imessage.getSize();
-        //if (size == 0)
-        //    throw new MessagingException("Message empty");
         return (size < 0 ? null : size);
     }
 
@@ -1116,7 +1114,6 @@ public class MessageHelper {
             parts.add(new MimeTextPart(text.substring(i)));
 
         // Fold words to not break encoding
-        /*
         int p = 0;
         while (p + 1 < parts.size()) {
             MimeTextPart p1 = parts.get(p);
@@ -1128,7 +1125,6 @@ public class MessageHelper {
             } else
                 p++;
         }
-        */
 
         StringBuilder sb = new StringBuilder();
         for (MimeTextPart part : parts)
