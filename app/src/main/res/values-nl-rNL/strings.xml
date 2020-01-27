@@ -368,6 +368,7 @@
     <string name="title_advanced_gravatars_hint">Er is mogelijk een privacyrisico</string>
     <string name="title_advanced_name_email_hint">Indien uitgeschakeld, worden alleen namen weergegeven als deze beschikbaar zijn</string>
     <string name="title_advanced_preview_hint">Alleen beschikbaar wanneer de berichttekst werd gedownload</string>
+    <string name="title_advanced_preview_issue">Scrollen kan langzaam zijn vanwege een fout in sommige Android-versies wanneer het aantal regels meer dan één is</string>
     <string name="title_advanced_inline_hint">Inline afbeeldingen zijn afbeeldingen opgenomen in het bericht</string>
     <string name="title_advanced_autoexpand_hint">Bericht automatisch openen als er slechts één bericht of slechts één ongelezen bericht in een gesprek is</string>
     <string name="title_advanced_autoseen_hint">Berichten automatisch markeren als gelezen bij uitvouwen, kan worden uitgeschakeld in de individuele accountinstellingen</string>
@@ -897,6 +898,8 @@
     <string name="title_enabled">Ingeschakeld</string>
     <string name="title_executing">Aan het uitvoeren</string>
     <string name="title_completed">Voltooid</string>
+    <string name="title_clipboard_copy">Naar het klembord kopiëren</string>
+    <string name="title_clipboard_copied">Gekopieerd naar het klembord</string>
     <string name="title_ask_what">Vraag wat te doen</string>
     <string name="title_no_ask_again">Dit niet meer vragen</string>
     <string name="title_no_ask_for_again">Vraag dit niet opnieuw voor %1$s</string>

@@ -22,6 +22,8 @@ package eu.faircode.email;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.json.JSONArray;
+
 import java.util.Objects;
 
 public class TupleOperationEx extends EntityOperation {
@@ -43,19 +45,44 @@ public class TupleOperationEx extends EntityOperation {
             return false;
     }
 
-    PartitionKey getPartitionKey() {
+    PartitionKey getPartitionKey(boolean offline) {
         PartitionKey key = new PartitionKey();
-        key.id = (MOVE.equals(name) || FETCH.equals(name) ? 0 : this.id);
+
+        key.time = this.created;
+
+        if (offline) {
+            // open/close folder is expensive
+            key.priority = this.priority + 10;
+            return key;
+        }
+
         key.priority = this.priority;
+
+        if (FETCH.equals(name))
+            try {
+                JSONArray jargs = new JSONArray(args);
+                long uid = jargs.getLong(0);
+                key.id = "uid:" + uid;
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+        else if (!MOVE.equals(name))
+            key.id = "id:" + id;
+
         key.operation = this.name;
+
         return key;
     }
 
     class PartitionKey {
-        private long id;
+        public long time;
         private int priority;
-        @NonNull
+        private String id;
         private String operation;
+
+        long getTime() {
+            return time;
+        }
 
         int getPriority() {
             return this.priority;
@@ -70,9 +97,9 @@ public class TupleOperationEx extends EntityOperation {
         public boolean equals(@Nullable Object obj) {
             if (obj instanceof PartitionKey) {
                 PartitionKey other = (PartitionKey) obj;
-                return (this.id == other.id &&
-                        this.priority == other.priority &&
-                        this.operation.equals(other.operation));
+                return (this.priority == other.priority &&
+                        Objects.equals(this.id, other.id) &&
+                        Objects.equals(this.operation, other.operation));
             } else
                 return false;
         }
@@ -80,7 +107,9 @@ public class TupleOperationEx extends EntityOperation {
         @NonNull
         @Override
         public String toString() {
-            return operation + ":" + priority + ":" + id;
+            return (priority + ":" +
+                    (id == null ? "" : id) + ":" +
+                    (operation == null ? "" : operation));
         }
     }
 }

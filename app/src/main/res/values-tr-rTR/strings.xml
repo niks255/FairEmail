@@ -368,6 +368,7 @@
     <string name="title_advanced_gravatars_hint">Bir gizlilik riski olabilir</string>
     <string name="title_advanced_name_email_hint">Devre dışı bırakıldığında, yalnızca adlar mevcut olduğunda gösterilecektir</string>
     <string name="title_advanced_preview_hint">Yalnızca ileti metni indirildiğinde kullanılabilir</string>
+    <string name="title_advanced_preview_issue">Bazı Android sürümlerindeki bir hata nedeniyle satır sayısı birden fazla olduğunda kaydırma yavaş olabilir</string>
     <string name="title_advanced_inline_hint">Satıriçi resimler mesajın içine eklenen resimlerdir</string>
     <string name="title_advanced_autoexpand_hint">Bir sohbette yalnızca bir ileti veya yalnızca bir okunmamış ileti olduğunda iletiyi otomatik olarak aç</string>
     <string name="title_advanced_autoseen_hint">Genişletme sırasında okunan mesajları otomatik olarak işaretleme, bireysel hesap ayarlarında devre dışı bırakılabilir</string>
@@ -897,6 +898,8 @@
     <string name="title_enabled">Etkin</string>
     <string name="title_executing">Yürütülüyor</string>
     <string name="title_completed">Tamamlandı</string>
+    <string name="title_clipboard_copy">Panoya kopyala</string>
+    <string name="title_clipboard_copied">Panoya kopyalandı</string>
     <string name="title_ask_what">Ne yapılacağını sor</string>
     <string name="title_no_ask_again">Bunu bir daha sorma</string>
     <string name="title_no_ask_for_again">%1$s için bunu bir daha sorma</string>

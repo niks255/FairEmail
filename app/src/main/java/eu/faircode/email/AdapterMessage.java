@@ -27,6 +27,8 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -257,6 +259,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             "fbclid"
     ));
 
+    // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
+    private static final List<String> IMAP_KEYWORDS = Collections.unmodifiableList(Arrays.asList(
+            "$Phishing"
+    ));
+
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnKeyListener,
             View.OnClickListener,
@@ -359,6 +366,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private Group grpDownloading;
 
         private TextView tvCalendarSummary;
+        private TextView tvCalendarDescription;
+        private TextView tvCalendarLocation;
         private TextView tvCalendarStart;
         private TextView tvCalendarEnd;
         private TextView tvAttendees;
@@ -387,6 +396,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private boolean delete;
 
         private ScaleGestureDetector gestureDetector;
+
+        private SimpleTask taskContactInfo;
 
         ViewHolder(final View itemView, long viewType) {
             super(itemView);
@@ -492,6 +503,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvNoInternetHeaders = vsBody.findViewById(R.id.tvNoInternetHeaders);
 
             tvCalendarSummary = vsBody.findViewById(R.id.tvCalendarSummary);
+            tvCalendarDescription = vsBody.findViewById(R.id.tvCalendarDescription);
+            tvCalendarLocation = vsBody.findViewById(R.id.tvCalendarLocation);
             tvCalendarStart = vsBody.findViewById(R.id.tvCalendarStart);
             tvCalendarEnd = vsBody.findViewById(R.id.tvCalendarEnd);
             tvAttendees = vsBody.findViewById(R.id.tvAttendees);
@@ -855,8 +868,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             // Line 2
             tvSubject.setText(message.subject);
 
-            tvKeywords.setVisibility(message.keywords.length > 0 ? View.VISIBLE : View.GONE);
-            tvKeywords.setText(TextUtils.join(" ", message.keywords));
+            List<String> keywords = new ArrayList<>();
+            for (String keyword : message.keywords)
+                if (!keyword.startsWith("$") || IMAP_KEYWORDS.contains(keyword))
+                    keywords.add(keyword);
+
+            tvKeywords.setVisibility(keywords.size() > 0 ? View.VISIBLE : View.GONE);
+            tvKeywords.setText(TextUtils.join(" ", keywords));
 
             // Line 3
             int icon = (message.drafts > 0
@@ -911,7 +929,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (tvPreview.getTag() == null || (int) tvPreview.getTag() != textColor) {
                 tvPreview.setTag(textColor);
                 tvPreview.setTextColor(textColor);
-                tvPreview.setMaxLines(preview_lines);
+                if (preview_lines == 1)
+                    tvPreview.setSingleLine(true);
+                else
+                    tvPreview.setMaxLines(preview_lines);
             }
             tvPreview.setTypeface(
                     monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT,
@@ -950,12 +971,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             // Contact info
             ContactInfo info = ContactInfo.get(context, message.account, addresses, true);
             if (info == null) {
+                if (taskContactInfo != null)
+                    taskContactInfo.cancel(context);
+
                 Bundle aargs = new Bundle();
                 aargs.putLong("id", message.id);
                 aargs.putLong("account", message.account);
                 aargs.putSerializable("addresses", addresses);
 
-                new SimpleTask<ContactInfo>() {
+                taskContactInfo = new SimpleTask<ContactInfo>() {
                     @Override
                     protected ContactInfo onExecute(Context context, Bundle args) {
                         long account = args.getLong("account");
@@ -966,6 +990,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     @Override
                     protected void onExecuted(Bundle args, ContactInfo info) {
+                        taskContactInfo = null;
+
                         long id = args.getLong("id");
                         TupleMessageEx amessage = getMessage();
                         if (amessage == null || !amessage.id.equals(id))
@@ -978,7 +1004,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     protected void onException(Bundle args, Throwable ex) {
                         Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                     }
-                }.setLog(false).execute(context, owner, aargs, "message:avatar");
+                }.setLog(false);
+                taskContactInfo.execute(context, owner, aargs, "message:avatar");
             } else
                 bindContactInfo(info, addresses, name_email);
 
@@ -1055,11 +1082,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             pbHeaders.setVisibility(View.GONE);
             tvNoInternetHeaders.setVisibility(View.GONE);
 
-            tvCalendarSummary.setVisibility(View.GONE);
-            tvCalendarStart.setVisibility(View.GONE);
-            tvCalendarEnd.setVisibility(View.GONE);
-            tvAttendees.setVisibility(View.GONE);
-            pbCalendarWait.setVisibility(View.GONE);
+            clearCalendar();
 
             cbInline.setVisibility(View.GONE);
             btnSaveAttachments.setVisibility(View.GONE);
@@ -1081,6 +1104,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             pbBody.setVisibility(View.GONE);
             tvNoInternetBody.setVisibility(View.GONE);
             grpDownloading.setVisibility(View.GONE);
+        }
+
+        private void clearCalendar() {
+            tvCalendarSummary.setVisibility(View.GONE);
+            tvCalendarDescription.setVisibility(View.GONE);
+            tvCalendarLocation.setVisibility(View.GONE);
+            tvCalendarStart.setVisibility(View.GONE);
+            tvCalendarEnd.setVisibility(View.GONE);
+            tvAttendees.setVisibility(View.GONE);
+            pbCalendarWait.setVisibility(View.GONE);
         }
 
         private void bindFlagged(TupleMessageEx message, boolean expanded) {
@@ -1780,7 +1813,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (show_inline || !inline || !attachment.available)
                     a.add(attachment);
 
-                if (attachment.available && "text/calendar".equals(attachment.type)) {
+                if (attachment.available && "text/calendar".equals(attachment.getMimeType())) {
                     calendar = true;
                     bindCalendar(message, attachment);
                 }
@@ -1788,11 +1821,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             adapterAttachment.set(a);
 
             if (!calendar) {
-                tvCalendarSummary.setVisibility(View.GONE);
-                tvCalendarStart.setVisibility(View.GONE);
-                tvCalendarEnd.setVisibility(View.GONE);
-                tvAttendees.setVisibility(View.GONE);
-                pbCalendarWait.setVisibility(View.GONE);
+                clearCalendar();
                 grpCalendar.setVisibility(View.GONE);
                 grpCalendarResponse.setVisibility(View.GONE);
             }
@@ -1862,11 +1891,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (icalendar == null ||
                             icalendar.getMethod() == null ||
                             icalendar.getEvents().size() == 0) {
-                        tvCalendarSummary.setVisibility(View.GONE);
-                        tvCalendarStart.setVisibility(View.GONE);
-                        tvCalendarEnd.setVisibility(View.GONE);
-                        tvAttendees.setVisibility(View.GONE);
-                        pbCalendarWait.setVisibility(View.GONE);
+                        clearCalendar();
                         grpCalendar.setVisibility(View.GONE);
                         grpCalendarResponse.setVisibility(View.GONE);
                         return;
@@ -1876,10 +1901,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     VEvent event = icalendar.getEvents().get(0);
 
-                    String summary = event.getSummary() == null ? null : event.getSummary().getValue();
+                    String summary = (event.getSummary() == null ? null : event.getSummary().getValue());
+                    String description = (event.getDescription() == null ? null : event.getDescription().getValue());
+                    String location = (event.getLocation() == null ? null : event.getLocation().getValue());
 
-                    ICalDate start = event.getDateStart() == null ? null : event.getDateStart().getValue();
-                    ICalDate end = event.getDateEnd() == null ? null : event.getDateEnd().getValue();
+                    ICalDate start = (event.getDateStart() == null ? null : event.getDateStart().getValue());
+                    ICalDate end = (event.getDateEnd() == null ? null : event.getDateEnd().getValue());
 
                     List<String> attendee = new ArrayList<>();
                     for (Attendee a : event.getAttendees()) {
@@ -1900,6 +1927,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     tvCalendarSummary.setText(summary);
                     tvCalendarSummary.setVisibility(summary == null ? View.GONE : View.VISIBLE);
+
+                    tvCalendarDescription.setText(description);
+                    tvCalendarDescription.setVisibility(description == null ? View.GONE : View.VISIBLE);
+
+                    tvCalendarLocation.setText(location);
+                    tvCalendarLocation.setVisibility(location == null ? View.GONE : View.VISIBLE);
 
                     tvCalendarStart.setText(start == null ? null : DTF.format(start.getTime()));
                     tvCalendarStart.setVisibility(start == null ? View.GONE : View.VISIBLE);
@@ -1949,18 +1982,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     List<EntityAttachment> attachments = db.attachment().getAttachments(id);
                     for (EntityAttachment attachment : attachments)
-                        if (attachment.available && "text/calendar".equals(attachment.type)) {
+                        if (attachment.available && "text/calendar".equals(attachment.getMimeType())) {
                             File file = attachment.getFile(context);
                             ICalendar icalendar = Biweekly.parse(file).first();
                             VEvent event = icalendar.getEvents().get(0);
 
                             if (action == R.id.ibCalendar) {
-                                String summary = event.getSummary() == null ? null : event.getSummary().getValue();
+                                String summary = (event.getSummary() == null ? null : event.getSummary().getValue());
+                                String description = (event.getDescription() == null ? null : event.getDescription().getValue());
+                                String location = (event.getLocation() == null ? null : event.getLocation().getValue());
 
-                                ICalDate start = event.getDateStart() == null ? null : event.getDateStart().getValue();
-                                ICalDate end = event.getDateEnd() == null ? null : event.getDateEnd().getValue();
-
-                                String location = event.getLocation() == null ? null : event.getLocation().getValue();
+                                ICalDate start = (event.getDateStart() == null ? null : event.getDateStart().getValue());
+                                ICalDate end = (event.getDateEnd() == null ? null : event.getDateEnd().getValue());
 
                                 List<String> attendee = new ArrayList<>();
                                 for (Attendee a : event.getAttendees()) {
@@ -1972,21 +2005,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 // https://developer.android.com/guide/topics/providers/calendar-provider.html#intent-insert
                                 Intent intent = new Intent(Intent.ACTION_INSERT)
                                         .setData(CalendarContract.Events.CONTENT_URI)
-                                        .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                                        .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+                                        .putExtra(CalendarContract.Events.STATUS, CalendarContract.Events.STATUS_CONFIRMED);
 
                                 if (summary != null)
                                     intent.putExtra(CalendarContract.Events.TITLE, summary);
+
+                                if (description != null)
+                                    intent.putExtra(CalendarContract.Events.DESCRIPTION, description);
+
+                                if (location != null)
+                                    intent.putExtra(CalendarContract.Events.EVENT_LOCATION, location);
 
                                 if (start != null)
                                     intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.getTime());
 
                                 if (end != null)
                                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end.getTime());
-
-                                if (location != null)
-                                    intent.putExtra(CalendarContract.Events.EVENT_LOCATION, location);
-
-                                intent.putExtra(CalendarContract.Events.STATUS, CalendarContract.Events.STATUS_CONFIRMED);
 
                                 if (attendee.size() > 0)
                                     intent.putExtra(Intent.EXTRA_EMAIL, TextUtils.join(",", attendee));
@@ -1996,17 +2031,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             // https://tools.ietf.org/html/rfc5546#section-4.2.2
                             VEvent ev = new VEvent();
+
                             ev.setOrganizer(event.getOrganizer());
+
                             ev.setUid(event.getUid());
                             if (event.getSequence() != null)
                                 ev.setSequence(event.getSequence());
+
+                            ev.setSummary(event.getSummary());
+                            ev.setDescription(event.getDescription());
+                            ev.setLocation(event.getLocation());
+
                             if (event.getDateStart() != null)
                                 ev.setDateStart(event.getDateStart());
                             if (event.getDateEnd() != null)
                                 ev.setDateEnd(event.getDateEnd());
-                            ev.setSummary(event.getSummary());
-                            ev.setDescription(event.getDescription());
-                            ev.setLocation(event.getLocation());
 
                             InternetAddress to = (InternetAddress) message.to[0];
                             Attendee attendee = new Attendee(to.getPersonal(), to.getAddress());
@@ -4612,7 +4651,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             final Uri uri = getArguments().getParcelable("uri");
-            String title = getArguments().getString("title");
+            final String title = getArguments().getString("title");
 
             final Uri sanitized;
             if (uri.isOpaque())
@@ -4637,6 +4676,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_open_link, null);
             TextView tvTitle = dview.findViewById(R.id.tvTitle);
+            ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
             final EditText etLink = dview.findViewById(R.id.etLink);
             TextView tvDifferent = dview.findViewById(R.id.tvDifferent);
             final CheckBox cbSecure = dview.findViewById(R.id.cbSecure);
@@ -4647,6 +4687,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final TextView tvHost = dview.findViewById(R.id.tvHost);
             final TextView tvOwner = dview.findViewById(R.id.tvOwner);
             final Group grpOwner = dview.findViewById(R.id.grpOwner);
+
+            ibCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboard =
+                            (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (clipboard != null) {
+                        ClipData clip = ClipData.newPlainText(title, uri.toString());
+                        clipboard.setPrimaryClip(clip);
+
+                        ToastEx.makeText(getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
             etLink.addTextChangedListener(new TextWatcher() {
                 @Override

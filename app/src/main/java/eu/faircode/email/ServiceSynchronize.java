@@ -64,7 +64,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 
 import javax.mail.AuthenticationFailedException;
@@ -1122,44 +1121,64 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 db.operation().liveOperations(folder.id).observe(cowner, new Observer<List<TupleOperationEx>>() {
                                     private List<Long> handling = new ArrayList<>();
+                                    private final Map<TupleOperationEx.PartitionKey, List<TupleOperationEx>> partitions = new HashMap<>();
+
                                     private final PowerManager.WakeLock wlFolder = pm.newWakeLock(
                                             PowerManager.PARTIAL_WAKE_LOCK, BuildConfig.APPLICATION_ID + ":folder." + folder.id);
 
                                     @Override
                                     public void onChanged(final List<TupleOperationEx> _operations) {
+                                        // Get new operations
                                         List<Long> ops = new ArrayList<>();
-                                        List<TupleOperationEx> submit = new ArrayList<>();
+                                        List<TupleOperationEx> added = new ArrayList<>();
                                         for (TupleOperationEx op : _operations) {
                                             if (!handling.contains(op.id))
-                                                submit.add(op);
+                                                added.add(op);
                                             ops.add(op.id);
                                         }
                                         handling = ops;
 
-                                        if (submit.size() > 0) {
-                                            Log.i(folder.name + " queuing operations=" + submit.size() +
+                                        if (added.size() > 0) {
+                                            Log.i(folder.name + " queuing operations=" + added.size() +
                                                     " init=" + folder.initialize + " poll=" + folder.poll);
 
                                             // Partition operations by priority
-                                            Map<TupleOperationEx.PartitionKey, List<TupleOperationEx>> partitions = new TreeMap<>(new Comparator<TupleOperationEx.PartitionKey>() {
+                                            boolean offline = (mapFolders.get(folder) == null);
+                                            List<TupleOperationEx.PartitionKey> keys = new ArrayList<>();
+                                            synchronized (partitions) {
+                                                for (TupleOperationEx op : added) {
+                                                    TupleOperationEx.PartitionKey key = op.getPartitionKey(offline);
+
+                                                    if (!partitions.containsKey(key)) {
+                                                        partitions.put(key, new ArrayList<>());
+                                                        keys.add(key);
+                                                    }
+
+                                                    partitions.get(key).add(op);
+                                                }
+                                            }
+
+                                            Collections.sort(keys, new Comparator<TupleOperationEx.PartitionKey>() {
                                                 @Override
                                                 public int compare(TupleOperationEx.PartitionKey k1, TupleOperationEx.PartitionKey k2) {
                                                     Integer p1 = k1.getPriority();
                                                     Integer p2 = k2.getPriority();
-                                                    return p1.compareTo(p2);
+                                                    int priority = p1.compareTo(p2);
+                                                    if (priority == 0) {
+                                                        Long t1 = k1.getTime();
+                                                        Long t2 = k2.getTime();
+                                                        return t1.compareTo(t2);
+                                                    } else
+                                                        return priority;
                                                 }
                                             });
 
-                                            for (TupleOperationEx op : submit) {
-                                                TupleOperationEx.PartitionKey key = op.getPartitionKey();
-                                                if (!partitions.containsKey(key))
-                                                    partitions.put(key, new ArrayList<>());
-                                                partitions.get(key).add(op);
-                                            }
-
-                                            for (TupleOperationEx.PartitionKey key : partitions.keySet()) {
-                                                List<TupleOperationEx> partition = partitions.get(key);
-                                                Log.i(folder.name + " queuing operations=" + partition.size() + " key=" + key);
+                                            for (TupleOperationEx.PartitionKey key : keys) {
+                                                synchronized (partitions) {
+                                                    Log.i(folder.name +
+                                                            " queuing partition=" + key +
+                                                            " operations=" + partitions.get(key).size());
+                                                }
 
                                                 executor.submit(new Helper.PriorityRunnable(key.getPriority()) {
                                                     @Override
@@ -1167,7 +1186,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                         super.run();
                                                         try {
                                                             wlFolder.acquire();
-                                                            Log.i(folder.name + " process");
+
+                                                            List<TupleOperationEx> partition;
+                                                            synchronized (partitions) {
+                                                                partition = partitions.get(key);
+                                                                partitions.remove(key);
+                                                            }
+
+                                                            Log.i(folder.name +
+                                                                    " executing partition=" + key +
+                                                                    " operations=" + partition.size());
 
                                                             // Get folder
                                                             Folder ifolder = mapFolders.get(folder); // null when polling
@@ -1468,8 +1496,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private boolean isMaxConnections(String message) {
         return (message != null &&
                 (message.contains("Too many simultaneous connections") /* Gmail */ ||
-                        message.contains("Maximum number of connections") /* Dovecot */ ||
-                        message.contains("Too many concurrent connections") /* to this mailbox */));
+                        message.contains("Maximum number of connections") /* ... from user+IP exceeded */ /* Dovecot */ ||
+                        message.contains("Too many concurrent connections") /* ... to this mailbox */));
     }
 
     private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {

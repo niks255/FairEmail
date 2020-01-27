@@ -432,6 +432,7 @@
     <string name="title_advanced_gravatars_hint">There might be a privacy risk</string>
     <string name="title_advanced_name_email_hint">When disabled only names will be shown when available</string>
     <string name="title_advanced_preview_hint">Only available when message text has been downloaded</string>
+    <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
     <string name="title_advanced_inline_hint">Inline images are images included in the message</string>
 
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
@@ -1012,6 +1013,8 @@
     <string name="title_enabled">Enabled</string>
     <string name="title_executing">Executing</string>
     <string name="title_completed">Completed</string>
+    <string name="title_clipboard_copy">Copy to clipboard</string>
+    <string name="title_clipboard_copied">Copied to clipboard</string>
     <string name="title_ask_what">Ask what to do</string>
     <string name="title_no_ask_again">Do not ask this again</string>
     <string name="title_no_ask_for_again">Do not ask this again for %1$s</string>
