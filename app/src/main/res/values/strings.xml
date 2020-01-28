@@ -265,6 +265,7 @@
     <string name="title_advanced_prefix_once">Prefix subject only once on replying or forwarding</string>
     <string name="title_advanced_extended_reply">Use extended reply/forward header</string>
     <string name="title_advanced_quote_reply">Quote replied text</string>
+    <string name="title_advanced_signature_end">Add signature after quoted/forwarded message</string>
     <string name="title_advanced_plain_only">Send plain text only by default</string>
     <string name="title_advanced_usenet_signature">Usenet signature convention</string>
     <string name="title_advanced_resize_images">Automatically resize embedded images</string>
@@ -306,6 +307,7 @@
     <string name="title_advanced_subject_top">Show subject above sender</string>
     <string name="title_advanced_subject_italic">Show subject in italics</string>
     <string name="title_advanced_subject_elipsed">When needed, shorten the subject</string>
+    <string name="title_advanced_keywords">Show keywords in message header</string>
     <string name="title_advanced_flags">Show stars</string>
     <string name="title_advanced_flags_background">Show colored background instead of colored stars</string>
     <string name="title_advanced_preview">Show message preview</string>

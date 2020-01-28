@@ -3190,13 +3190,19 @@ public class FragmentCompose extends FragmentBase {
 
                         Document document = HtmlHelper.sanitize(context, doc.html(), true, false);
 
-                        if (data.draft.identity != null) {
-                            EntityIdentity identity = db.identity().getIdentity(data.draft.identity);
+                        EntityIdentity identity = null;
+                        if (data.draft.identity != null)
+                            identity = db.identity().getIdentity(data.draft.identity);
+                        boolean signature_end = prefs.getBoolean("signature_end", false);
+
+                        if (!signature_end && identity != null)
                             addSignature(context, document, data.draft, identity);
-                        }
 
                         for (Element e : ref)
                             document.body().appendChild(e);
+
+                        if (signature_end && identity != null)
+                            addSignature(context, document, data.draft, identity);
 
                         String html = JsoupEx.parse(document.html()).html();
                         Helper.writeText(file, html);
@@ -3583,22 +3589,37 @@ public class FragmentCompose extends FragmentBase {
                         Elements ref = doc.select("div[fairemail=reference]");
                         ref.remove();
 
+                        boolean signature_end = prefs.getBoolean("signature_end", false);
+
                         // Get saved body
                         Document d;
                         if (extras != null && extras.containsKey("html")) {
                             // Save current revision
                             Document c = JsoupEx.parse(body);
-                            addSignature(context, c, draft, identity);
+
+                            if (!signature_end)
+                                addSignature(context, c, draft, identity);
+
                             for (Element e : ref)
                                 c.body().appendChild(e);
+
+                            if (signature_end)
+                                addSignature(context, c, draft, identity);
+
                             Helper.writeText(draft.getFile(context, draft.revision), c.html());
 
                             d = JsoupEx.parse(extras.getString("html"));
                         } else {
                             d = JsoupEx.parse(body);
-                            addSignature(context, d, draft, identity);
+
+                            if (!signature_end)
+                                addSignature(context, d, draft, identity);
+
                             for (Element e : ref)
                                 d.body().appendChild(e);
+
+                            if (signature_end)
+                                addSignature(context, d, draft, identity);
                         }
 
                         body = d.html();
@@ -3681,6 +3702,7 @@ public class FragmentCompose extends FragmentBase {
 
                                 d.select("div[fairemail=signature]").remove();
                                 d.select("div[fairemail=reference]").remove();
+
                                 String text = d.text();
                                 for (String keyword : keywords)
                                     if (text.matches("(?si).*\\b" + Pattern.quote(keyword.trim()) + "\\b.*")) {
