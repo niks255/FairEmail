@@ -335,19 +335,21 @@ public class FragmentFolders extends FragmentBase {
                 try {
                     db.beginTransaction();
 
-                    if (aid < 0) {
-                        // Unified inbox
-                        List<EntityFolder> folders = db.folder().getFoldersUnified(null, true);
-                        for (EntityFolder folder : folders) {
-                            EntityOperation.sync(context, folder.id, true);
+                    List<EntityFolder> folders;
+                    if (aid < 0)
+                        folders = db.folder().getFoldersUnified(null, true);
+                    else
+                        folders = db.folder().getSynchronizingFolders(aid);
 
-                            if (folder.account == null)
-                                outbox = true;
-                            else {
-                                EntityAccount account = db.account().getAccount(folder.account);
-                                if (account != null && !"connected".equals(account.state))
-                                    now = false;
-                            }
+                    for (EntityFolder folder : folders) {
+                        EntityOperation.sync(context, folder.id, true);
+
+                        if (folder.account == null)
+                            outbox = true;
+                        else {
+                            EntityAccount account = db.account().getAccount(folder.account);
+                            if (account != null && !"connected".equals(account.state))
+                                now = false;
                         }
                     }
 
@@ -356,10 +358,7 @@ public class FragmentFolders extends FragmentBase {
                     db.endTransaction();
                 }
 
-                if (aid < 0)
-                    ServiceSynchronize.eval(context, "refresh/folders");
-                else
-                    ServiceSynchronize.reload(context, aid, "refresh/folders");
+                ServiceSynchronize.eval(context, "refresh/folders");
 
                 if (outbox)
                     ServiceSend.start(context);
@@ -576,10 +575,22 @@ public class FragmentFolders extends FragmentBase {
                 Log.i("Delete local messages browsed=" + browsed);
 
                 DB db = DB.getInstance(context);
-                if (browsed)
-                    db.message().deleteBrowsedMessages(fid);
-                else
-                    db.message().deleteLocalMessages(fid);
+
+                try {
+                    db.beginTransaction();
+
+                    if (browsed)
+                        db.message().deleteBrowsedMessages(fid);
+                    else {
+                        db.message().deleteLocalMessages(fid);
+                        db.folder().setFolderKeywords(fid, DB.Converters.fromStringArray(null));
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
                 return null;
             }
 

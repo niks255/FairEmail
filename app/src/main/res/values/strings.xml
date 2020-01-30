@@ -279,6 +279,7 @@
     <string name="title_advanced_download">Automatically download messages and attachments on a metered connection up to</string>
     <string name="title_advanced_roaming">Download messages and attachments while roaming</string>
     <string name="title_advanced_rlah">Roam like at home</string>
+    <string name="title_advanced_ssl_harden">Harden SSL connections</string>
     <string name="title_advanced_socks">Use SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
 
@@ -423,6 +424,7 @@
     <string name="title_advanced_metered_hint">Metered connections are generally mobile connections or paid Wi-Fi hotspots</string>
     <string name="title_advanced_metered_warning">Disabling this option will disable receiving and sending messages on mobile internet connections</string>
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
+    <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers</string>
     <string name="title_advanced_socks_hint">Using a remote proxy server is insecure because proxy connections are not encrypted</string>
     <string name="title_advanced_roaming_hint">Messages headers will always be fetched when roaming. You can use the device\'s roaming setting to disable internet while roaming.</string>
 
@@ -664,6 +666,8 @@
 
     <string name="title_no_answers">No reply templates defined</string>
     <string name="title_no_viewer">No viewer app available for %1$s</string>
+    <string name="title_no_recorder">No suitable audio recorder app available</string>
+    <string name="title_no_camera">No suitable camera app available</string>
     <string name="title_no_saf">Storage access framework not available</string>
     <string name="title_no_stream">An outdated app sent a file path instead of a file stream</string>
     <string name="title_no_contacts">Contact picker not available</string>
@@ -708,6 +712,7 @@
     <string name="title_download_message">Downloading &#8230;</string>
 
     <string name="title_compose">Compose</string>
+    <string name="title_submitter">Sent by:</string>
     <string name="title_from">From:</string>
     <string name="title_to">To:</string>
     <string name="title_reply_to">Reply to:</string>
@@ -785,6 +790,7 @@
     <string name="title_signature_valid">Message signature valid</string>
     <string name="title_signature_unconfirmed">Message signature valid but not confirmed</string>
     <string name="title_signature_invalid">Message signature invalid</string>
+    <string name="title_signature_invalid_reason">Message signature invalid: %1$s</string>
     <string name="title_signature_certificate_invalid">Certificate chain invalid</string>
     <string name="title_signature_sender">Sender\'s address</string>
     <string name="title_signature_email">Signature\'s address</string>

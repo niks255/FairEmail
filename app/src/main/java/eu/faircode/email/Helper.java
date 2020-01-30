@@ -163,12 +163,14 @@ public class Helper {
 
         if (threads == 0)
             return new ThreadPoolExecutorEx(
+                    name,
                     0, Integer.MAX_VALUE,
                     60L, TimeUnit.SECONDS,
                     new SynchronousQueue<Runnable>(),
                     factory);
         else if (threads == 1)
             return new ThreadPoolExecutorEx(
+                    name,
                     threads, threads,
                     0L, TimeUnit.MILLISECONDS,
                     new PriorityBlockingQueue<Runnable>(10, new PriorityComparator()),
@@ -184,6 +186,7 @@ public class Helper {
             };
         else
             return new ThreadPoolExecutorEx(
+                    name,
                     threads, threads,
                     0L, TimeUnit.MILLISECONDS,
                     new LinkedBlockingQueue<Runnable>(),
@@ -191,13 +194,28 @@ public class Helper {
     }
 
     private static class ThreadPoolExecutorEx extends ThreadPoolExecutor {
-        public ThreadPoolExecutorEx(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
+        String name;
+
+        public ThreadPoolExecutorEx(
+                String name,
+                int corePoolSize, int maximumPoolSize,
+                long keepAliveTime, TimeUnit unit,
+                BlockingQueue<Runnable> workQueue,
+                ThreadFactory threadFactory) {
             super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
+            this.name = name;
         }
 
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
             Log.d("Executing " + t.getName());
+        }
+
+        @Override
+        public void shutdown() {
+            Log.i("Shutdown " + name);
+            super.getQueue().clear();
+            super.shutdown();
         }
     }
 
@@ -1006,22 +1024,22 @@ public class Helper {
         prefs.edit().remove("last_authentication").apply();
     }
 
-    static void selectKeyAlias(final Activity activity, final LifecycleOwner owner, final String email, final IKeyAlias intf) {
+    static void selectKeyAlias(final Activity activity, final LifecycleOwner owner, final String alias, final IKeyAlias intf) {
         final Context context = activity.getApplicationContext();
         final Handler handler = new Handler();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (email != null)
+                if (alias != null)
                     try {
-                        if (KeyChain.getPrivateKey(context, email) != null) {
-                            Log.i("Private key available alias=" + email);
+                        if (KeyChain.getPrivateKey(context, alias) != null) {
+                            Log.i("Private key available alias=" + alias);
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (owner.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                                        intf.onSelected(email);
+                                        intf.onSelected(alias);
                                 }
                             });
                             return;
@@ -1063,7 +1081,7 @@ public class Helper {
                                         });
                                     }
                                 },
-                                null, null, null, -1, email);
+                                null, null, null, -1, alias);
                     }
                 });
             }

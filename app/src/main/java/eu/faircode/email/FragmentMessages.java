@@ -116,6 +116,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.sun.mail.util.FolderClosedIOException;
 
+import org.bouncycastle.asn1.cms.Attribute;
+import org.bouncycastle.asn1.cms.AttributeTable;
+import org.bouncycastle.asn1.cms.CMSAttributes;
+import org.bouncycastle.asn1.cms.Time;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cms.CMSEnvelopedData;
@@ -128,6 +132,7 @@ import org.bouncycastle.cms.KeyTransRecipientId;
 import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
+import org.bouncycastle.cms.SignerInformationVerifier;
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipient;
@@ -159,9 +164,11 @@ import java.security.cert.CertPathValidator;
 import java.security.cert.CertStore;
 import java.security.cert.CertStoreParameters;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CollectionCertStoreParameters;
 import java.security.cert.PKIXBuilderParameters;
+import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.text.Collator;
@@ -4773,7 +4780,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             X509Certificate cert = new JcaX509CertificateConverter()
                                     .getCertificate(certHolder);
                             try {
-                                if (signer.verify(new JcaSimpleSignerInfoVerifierBuilder().build(cert))) {
+                                Date signingTime;
+                                Attribute attr = signer.getSignedAttributes().get(CMSAttributes.signingTime);
+                                if (attr != null && attr.getAttrValues().size() == 1)
+                                    signingTime = Time.getInstance(attr.getAttrValues()
+                                            .getObjectAt(0).toASN1Primitive()).getDate();
+                                else
+                                    signingTime = new Date(message.received);
+                                args.putSerializable("time", signingTime);
+
+                                SignerInformationVerifier verifier = new JcaSimpleSignerInfoVerifierBuilder()
+                                        .build(cert);
+                                SignerInformation s = new SignerInformation(signer) {
+                                    @Override
+                                    public AttributeTable getSignedAttributes() {
+                                        // The certificate validity will be check below
+                                        return super.getSignedAttributes().remove(CMSAttributes.signingTime);
+                                    }
+                                };
+
+                                if (s.verify(verifier)) {
                                     boolean known = true;
                                     String fingerprint = EntityCertificate.getFingerprint(cert);
                                     List<String> emails = EntityCertificate.getAltSubjectName(cert);
@@ -4805,14 +4831,49 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         KeyStore ks = KeyStore.getInstance("AndroidCAStore");
                                         ks.load(null, null);
 
+                                        // https://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html
                                         X509CertSelector target = new X509CertSelector();
                                         target.setCertificate(cert);
 
+                                        // Load/store intermediate certificates
+                                        List<X509Certificate> local = new ArrayList<>();
+                                        try {
+                                            List<EntityCertificate> ecs = db.certificate().getIntermediateCertificate();
+                                            for (EntityCertificate ec : ecs)
+                                                local.add(ec.getCertificate());
+
+                                            for (X509Certificate c : certs) {
+                                                boolean[] usage = c.getKeyUsage();
+                                                boolean root = (usage != null && usage[5]);
+                                                if (root && ks.getCertificateAlias(c) == null) {
+                                                    boolean found = false;
+                                                    String issuer = (c.getIssuerDN() == null ? "" : c.getIssuerDN().getName());
+                                                    EntityCertificate record = EntityCertificate.from(c, true, issuer);
+                                                    for (EntityCertificate ec : ecs)
+                                                        if (ec.fingerprint.equals(record.fingerprint)) {
+                                                            found = true;
+                                                            break;
+                                                        }
+
+                                                    if (!found) {
+                                                        Log.i("Storing certificate subject=" + record.subject);
+                                                        local.add(record.getCertificate());
+                                                        db.certificate().insertCertificate(record);
+                                                    }
+                                                }
+                                            }
+                                        } catch (Throwable ex) {
+                                            Log.e(ex);
+                                            local = certs;
+                                        }
+
+                                        // Intermediate certificates
+                                        Log.i("Intermediate certificates=" + local.size());
                                         PKIXBuilderParameters params = new PKIXBuilderParameters(ks, target);
-                                        CertStoreParameters intermediates = new CollectionCertStoreParameters(certs);
+                                        CertStoreParameters intermediates = new CollectionCertStoreParameters(local);
                                         params.addCertStore(CertStore.getInstance("Collection", intermediates));
                                         params.setRevocationEnabled(false);
-                                        params.setDate(new Date(message.received));
+                                        params.setDate(signingTime);
 
                                         CertPathBuilder builder = CertPathBuilder.getInstance("PKIX");
                                         CertPathBuilderResult path = builder.build(params);
@@ -4820,22 +4881,46 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
                                         cpv.validate(path.getCertPath(), params);
 
-                                        args.putBoolean("valid", true);
+                                        List<Certificate> pcerts = new ArrayList<>();
+                                        pcerts.addAll(path.getCertPath().getCertificates());
+                                        if (path instanceof PKIXCertPathValidatorResult) {
+                                            X509Certificate root = ((PKIXCertPathValidatorResult) path).getTrustAnchor().getTrustedCert();
+                                            if (root != null)
+                                                pcerts.add(root);
+                                        }
 
                                         ArrayList<String> trace = new ArrayList<>();
-                                        for (Certificate c : path.getCertPath().getCertificates())
-                                            if (c instanceof X509Certificate) {
-                                                EntityCertificate record = EntityCertificate.from((X509Certificate) c, null);
-                                                trace.add(record.subject);
+                                        for (Certificate pcert : pcerts)
+                                            if (pcert instanceof X509Certificate) {
+                                                // https://tools.ietf.org/html/rfc5280#section-4.2.1.3
+                                                boolean[] usage = ((X509Certificate) pcert).getKeyUsage();
+                                                boolean root = (usage != null && usage[5]);
+                                                EntityCertificate record = EntityCertificate.from((X509Certificate) pcert, null);
+                                                trace.add(record.subject + (root ? " *" : ""));
                                             }
+
                                         args.putStringArrayList("trace", trace);
+
+                                        boolean valid = true;
+                                        for (Certificate pcert : pcerts)
+                                            try {
+                                                ((X509Certificate) pcert).checkValidity(signingTime);
+                                            } catch (CertificateException ex) {
+                                                Log.w(ex);
+                                                valid = false;
+                                                break;
+                                            }
+
+                                        args.putBoolean("valid", valid);
                                     } catch (Throwable ex) {
                                         Log.w(ex);
 
                                         ArrayList<String> trace = new ArrayList<>();
                                         for (X509Certificate c : certs) {
+                                            boolean[] usage = c.getKeyUsage();
+                                            boolean root = (usage != null && usage[5]);
                                             EntityCertificate record = EntityCertificate.from(c, null);
-                                            trace.add(record.subject);
+                                            trace.add(record.subject + (root ? " *" : ""));
                                         }
                                         args.putStringArrayList("trace", trace);
                                     }
@@ -4845,6 +4930,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 }
                             } catch (CMSException ex) {
                                 Log.w(ex);
+                                args.putString("reason", ex.getMessage());
                             }
                         }
                         if (result != null)
@@ -4974,16 +5060,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             protected void onExecuted(final Bundle args, X509Certificate cert) {
                 int type = args.getInt("type");
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
-                    String sender = args.getString("sender");
-                    boolean known = args.getBoolean("known");
-                    boolean valid = args.getBoolean("valid");
-                    final ArrayList<String> trace = args.getStringArrayList("trace");
-
-                    if (cert == null)
-                        Snackbar.make(view, R.string.title_signature_invalid, Snackbar.LENGTH_LONG).show();
-                    else
+                    if (cert == null) {
+                        String message;
+                        String reason = args.getString("reason");
+                        if (TextUtils.isEmpty(reason))
+                            message = getString(R.string.title_signature_invalid);
+                        else
+                            message = getString(R.string.title_signature_invalid_reason, reason);
+                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                    } else
                         try {
+                            String sender = args.getString("sender");
+                            Date time = (Date) args.getSerializable("time");
+                            boolean known = args.getBoolean("known");
+                            boolean valid = args.getBoolean("valid");
+                            final ArrayList<String> trace = args.getStringArrayList("trace");
                             EntityCertificate record = EntityCertificate.from(cert, null);
+
+                            if (time == null)
+                                time = new Date();
 
                             boolean match = false;
                             List<String> emails = EntityCertificate.getAltSubjectName(cert);
@@ -4993,7 +5088,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     break;
                                 }
 
-                            if (known && !record.isExpired() && match && valid)
+                            if (known && !record.isExpired(time) && match && valid)
                                 Snackbar.make(view, R.string.title_signature_valid, Snackbar.LENGTH_LONG).show();
                             else {
                                 LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -5016,7 +5111,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 DateFormat TF = Helper.getDateTimeInstance(getContext(), SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);
                                 tvAfter.setText(record.after == null ? null : TF.format(record.after));
                                 tvBefore.setText(record.before == null ? null : TF.format(record.before));
-                                tvExpired.setVisibility(record.isExpired() ? View.VISIBLE : View.GONE);
+                                tvExpired.setVisibility(record.isExpired(time) ? View.VISIBLE : View.GONE);
 
                                 if (trace != null && trace.size() > 0)
                                     tvSubject.setOnClickListener(new View.OnClickListener() {

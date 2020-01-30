@@ -274,6 +274,8 @@ FairEmail follows all the best practices for an email client as described in [th
 * [(141) How can I fix 'A drafts folder is required to send messages'?](#user-content-faq141)
 * [(142) How can I store sent messages in the inbox?](#user-content-faq142)
 * [(143) Can you add a trash folder for POP3 accounts?](#user-content-faq143)
+* [(144) How can I record voice notes?](#user-content-faq144)
+* [(145) How can I set a notification sound for an account, folder or sender?](#user-content-faq145)
 
 [I have another question.](#user-content-support)
 
@@ -553,6 +555,8 @@ Some providers allow you to have multiple aliases.
 You can configure these by setting the email address field of an additional identity to the alias address
 and setting the user name field to your main email address.
 
+Note that you can copy an identity by long pressing it.
+
 Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message,
 if your provider allows this.
 
@@ -651,6 +655,8 @@ Private keys are stored by Android and can be imported via the Android advanced 
 There is a shortcut (button) for this in the privacy settings.
 Android will ask you to set a PIN, pattern, or password if you didn't before.
 If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
+
+To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
 Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the privacy settings (PEM or DER format).
 
@@ -1526,12 +1532,16 @@ The following authentication methods are supported and used in this order:
 * LOGIN
 * PLAIN
 * CRAM-MD5
+* XOAUTH2 ([Gmail](https://developers.google.com/gmail/imap/xoauth2-protocol), [Yandex](https://tech.yandex.com/oauth/))
 * NTLM (untested)
 
 SASL authentication methods, besides CRAM-MD5, are not supported
 because [JavaMail for Android](https://javaee.github.io/javamail/Android) does not support SASL authentication.
 
 If your provider requires an unsupported authentication method, you'll likely get the error message *authentication failed*.
+
+[Server Name Indication](https://en.wikipedia.org/wiki/Server_Name_Indication) is supported
+by [all supported Android versions](https://developer.android.com/training/articles/security-ssl).
 
 <br />
 
@@ -2187,6 +2197,9 @@ This feature depends on support of your launcher.
 FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library.
 If it doesn't work, this cannot be fixed by changes in FairEmail.
 
+Some launchers incorrectly display '1' for [the monitoring notification](#user-content-faq2),
+despite FairEmail explicitly requesting not to show a badge for this notification.
+
 Note that Tesla Unread is [not supported anymore](https://forum.xda-developers.com/android/general/bad-news-tesla-unread-devoloper-t3920415).
 
 <br />
@@ -2674,6 +2687,48 @@ Basically only messages can be downloaded and deleted from the inbox.
 It is not even possible to mark a message read.
 
 Since POP3 does not allow access to the trash folder at all, there is no way to restore trashed messages.
+
+<br />
+
+<a name="faq144"></a>
+**(144) How can I record voice notes?**
+
+To record voice notes you can press this icon in the bottom action bar of the message composer:
+
+![External image](https://raw.githubusercontent.com/google/material-design-icons/master/action/1x_web/ic_record_voice_over_black_48dp.png)
+
+This requires a compatible audio recorder app to be installed.
+In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION)
+needs to be supported.
+
+For example [this audio recorder](https://f-droid.org/app/com.github.axet.audiorecorder) is compatible.
+
+Voice notes will automatically be attached.
+
+<br />
+
+<a name="faq145"></a>
+**(145) How can I set a notification sound for an account, folder or sender?**
+
+Account:
+
+* Enable *Separate notifications* in the advanced account settings (Setup, step 1, Manage, tap account, tap Advanced)
+* Long press the account in the account list (Setup, step 1, Manage) and select *Edit notification channel* to change the notification sound
+
+Folder:
+
+* Long press the folder in the folder list and select *Create notification channel*
+* Long press the folder in the folder list and select *Edit notification channel* to change the notification sound
+
+Sender:
+
+* Open a message from the sender and expand it
+* Expand the addresses section by tapping on the down arrow
+* Tap on the bell icon to create or edit a notification channel and to change the notification sound
+
+The order of precendence is: sender sound, folder sound, account sound and default sound.
+
+Setting a notification sound for an account, folder or sender requires Android 8 Oreo or later and is a pro feature.
 
 <br />
 

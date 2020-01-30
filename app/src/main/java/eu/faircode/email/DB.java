@@ -60,7 +60,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 135,
+        version = 137,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -1238,8 +1238,8 @@ public abstract class DB extends RoomDatabase {
                         int previous_version = prefs.getInt("previous_version", -1);
                         if (previous_version <= 848 && Helper.isPlayStoreInstall()) {
                             // JavaMail didn't check server certificates
-                            db.execSQL("UPDATE account SET insecure = 1 WHERE auth_type = " + MailService.AUTH_TYPE_PASSWORD);
-                            db.execSQL("UPDATE identity SET insecure = 1 WHERE auth_type = " + MailService.AUTH_TYPE_PASSWORD);
+                            db.execSQL("UPDATE account SET insecure = 1 WHERE auth_type = " + EmailService.AUTH_TYPE_PASSWORD);
+                            db.execSQL("UPDATE identity SET insecure = 1 WHERE auth_type = " + EmailService.AUTH_TYPE_PASSWORD);
                         }
                     }
                 })
@@ -1320,6 +1320,20 @@ public abstract class DB extends RoomDatabase {
                         db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " + TupleAccountView.query);
                         db.execSQL("CREATE VIEW IF NOT EXISTS `identity_view` AS " + TupleIdentityView.query);
                         db.execSQL("CREATE VIEW IF NOT EXISTS `folder_view` AS " + TupleFolderView.query);
+                    }
+                })
+                .addMigrations(new Migration(135, 136) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `certificate` ADD COLUMN `intermediate` INTEGER NOT NULL DEFAULT 0");
+                    }
+                })
+                .addMigrations(new Migration(136, 137) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `submitter` TEXT");
                     }
                 });
     }

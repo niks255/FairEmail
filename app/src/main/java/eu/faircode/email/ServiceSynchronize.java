@@ -108,6 +108,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int CONNECT_BACKOFF_AlARM = 15; // minutes
     private static final long RECONNECT_BACKOFF = 90 * 1000L; // milliseconds
     private static final int ACCOUNT_ERROR_AFTER = 60; // minutes
+    private static final int ACCOUNT_ERROR_AFTER_POLL = 3; // times
     private static final int BACKOFF_ERROR_AFTER = 16; // seconds
 
     private static final List<String> PREF_EVAL = Collections.unmodifiableList(Arrays.asList(
@@ -116,6 +117,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private static final List<String> PREF_RELOAD = Collections.unmodifiableList(Arrays.asList(
             "metered", "roaming", "rlah", // force reconnect
+            "ssl_harden", // force reconnect
             "socks_enabled", "socks_proxy", // force reconnect
             "subscribed_only", // force folder sync
             "badge", "unseen_ignored", // force update badge/widget
@@ -792,7 +794,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
-                final MailService iservice = new MailService(
+                final EmailService iservice = new EmailService(
                         this, account.getProtocol(), account.realm, account.insecure, false, debug);
                 iservice.setPartialFetch(account.partial_fetch);
                 iservice.setIgnoreBodyStructureSize(account.ignore_size);
@@ -822,6 +824,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             }
                     }
                 });
+
+                final ExecutorService executor =
+                        Helper.getBackgroundExecutor(1, "account_" + account.id);
 
                 final Map<EntityFolder, IMAPFolder> mapFolders = new HashMap<>();
                 List<Thread> idlers = new ArrayList<>();
@@ -860,8 +865,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             EntityLog.log(this, account.name + " last connected: " + new Date(account.last_connected));
 
                             long now = new Date().getTime();
+                            int pollInterval = prefs.getInt("poll_interval", 0);
                             long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
-                            if (delayed > ACCOUNT_ERROR_AFTER * 60 * 1000L && state.getBackoff() > BACKOFF_ERROR_AFTER) {
+                            long maxDelayed = (pollInterval > 0 && !account.poll_exempted
+                                    ? pollInterval * ACCOUNT_ERROR_AFTER_POLL : ACCOUNT_ERROR_AFTER) * 60 * 1000L;
+                            if (delayed > maxDelayed && state.getBackoff() > BACKOFF_ERROR_AFTER) {
                                 Log.i("Reporting sync error after=" + delayed);
                                 Throwable warning = new Throwable(
                                         getString(R.string.title_no_sync,
@@ -939,9 +947,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         Core.onSynchronizeFolders(this, account, iservice.getStore(), state);
 
                     // Open synchronizing folders
-                    final ExecutorService executor =
-                            Helper.getBackgroundExecutor(1, "account_" + account.id);
-
                     List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
                     Collections.sort(folders, new Comparator<EntityFolder>() {
                         @Override
@@ -1410,6 +1415,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 owner.destroy();
                         }
                     });
+
+                    executor.shutdown();
 
                     // Close folders
                     for (EntityFolder folder : mapFolders.keySet())
