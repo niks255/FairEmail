@@ -128,6 +128,8 @@
     <string name="title_setup_select_account">Válasszon fiókot</string>
     <string name="title_setup_instructions">Telepítési útmutató</string>
     <string name="title_setup_no_settings">Nem találhatók beállítások a következő domainhez: %1$s</string>
+    <string name="title_setup_no_settings_hint">Kérem állitson be egy fiókot és egy identitást a varázsló első két lépésével, az email szolgálatója által megadottaknak megfelelően</string>
+    <string name="title_setup_no_auth_hint">Ellenőrizze az email címét és jelszavát, illetve bizonyosodjon meg róla hogy a fiókja elérhető SMTP/IMAP protokollokon keresztül</string>
     <string name="title_setup_no_system_folders">Bejövő vagy piszkozatok mappa nem található</string>
     <string name="title_setup_quick_success">Egy fiók és egy identitás sikeresen hozzáadva</string>
     <string name="title_setup_quick_failed">Megpróbálhat beállítani egy fiókot és egy identitást lentebb is</string>
@@ -277,6 +279,7 @@
     <string name="title_advanced_autoscroll">Új üzenet érkezésekor automatikus tetejére görgetés</string>
     <string name="title_advanced_double_tap">Olvasott/olvasatlannak jelölés dupla koppintásra</string>
     <string name="title_advanced_swipenav">Következő/előző üzenetre váltás balra/jobbra csúsztatásra</string>
+    <string name="title_advanced_volumenav">Következő/előző üzenetre valtás a hangerő fel/le gombokkal</string>
     <string name="title_advanced_reversed">Navigációs irány megfordítása</string>
     <string name="title_advanced_autoexpand">Üzenetek automatikus kiterjesztett megjelenítése</string>
     <string name="title_advanced_expand_all">Összes olvasott üzenet automatikus kiterjesztett megjelenítése</string>
@@ -313,6 +316,9 @@
     <string name="title_advanced_biometrics_notify">Értesítés tartalmának megjelenítése biometrikus azonosítás használata mellett</string>
     <string name="title_advanced_light">Értesítő fény használata</string>
     <string name="title_advanced_sound">Válasszon értesítő hangot</string>
+    <string name="title_advanced_confirm_links">Linkek megnyitásának megerősítésehez kötése</string>
+    <string name="title_advanced_confirm_images">Képek megjelenítésének megerősítéshez kötése</string>
+    <string name="title_advanced_confirm_html">Üzenetek alapértelmezett újraformázása</string>
     <string name="title_advanced_tracking">Követésre használt képek automatikus felismerése és tiltása</string>
     <string name="title_advanced_display_hidden">Rejtett szövegrészletek megjelenítése</string>
     <string name="title_advanced_encrypt_method">Alapértelmezett titkosítási mód</string>
@@ -349,8 +355,15 @@
     <string name="title_advanced_subscribed_only_hint">Bekapcsolása eltávolítja az összes helyi mappát amelyhez nem tartozik feliratkozás</string>
     <string name="title_advanced_sync_delay_hint">Ez lelassítja az üzenetek szinkronizálását</string>
     <string name="title_advanced_usenet_hint">Elválasztó \'--\' beillesztése a szöveg törzs es az aláírás közé</string>
+    <string name="title_advanced_lookup_mx_hint">Ez a DNS MX bejegyzés ellenőrzésével jár</string>
     <string name="title_advanced_ssl_harden_hint">Bekapcsolása letiltja a gyenge SSL protokoll és titkosítás verziókat</string>
+    <string name="title_advanced_socks_hint">Távoli proxy szerver használata nem biztonságos, mert a proxy kapcsolatok nem titkosítottak</string>
+    <string name="title_advanced_browse_hint">Több üzenet letöltése lefelé görgetéssel</string>
+    <string name="title_advanced_date_hint">Az üzenetek dátum szerinti csoportosítása csak idő szerinti rendezéskor aktív</string>
+    <string name="title_advanced_threading_hint">Egymáshoz kapcsolódó üzenetek csoportosítása</string>
     <string name="title_advanced_gravatars_hint">Adatvédelmi szempontból aggályos a használata</string>
+    <string name="title_advanced_preview_hint">Csak az üzenetek szövegének letöltése után elérhető</string>
+    <string name="title_advanced_autoexpand_hint">Ütemez automatikus megnyitása, ha csak egy, vagy egy olvasatlan üzetetet tartalmaz a beszélgetés</string>
     <string name="title_advanced_notify_manage_hint">Koppintson a csatorna nevére a tulajdonságai beállításához</string>
     <string name="title_advanced_notify_no_grouping">Ez az Android verzió nem támogatja az értesítések csoportosítását</string>
     <string name="title_advanced_notify_no_channels">Ez az Android verzió nem támogatja az értesítés csatornákat</string>
@@ -417,6 +430,7 @@
     <string name="title_ask_delete_answer">Véglegesen törli a válasz sémát?</string>
     <string name="title_ask_delete_rule">Véglegesen törli a szabályt?</string>
     <string name="title_ask_delete_local">Törli a helyi üzeneteket? A szerver továbbra is megőrzi azokat.</string>
+    <string name="title_submitter">Feladó:</string>
     <string name="title_resync">Újraszinkronizálás</string>
     <string name="title_signature_invalid_reason">Az üzenet aláírása nem hiteles: %1$s</string>
     <string name="title_legend_junk">Spam</string>

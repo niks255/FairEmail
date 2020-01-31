@@ -1484,6 +1484,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 }
 
+            boolean confirm_images = prefs.getBoolean("confirm_images", true);
+            boolean confirm_html = prefs.getBoolean("confirm_html", true);
+
+            if (!confirm_images)
+                properties.setValue("images", message.id, true);
+            if (!confirm_html)
+                properties.setValue("full", message.id, true);
+
             boolean show_full = properties.getValue("full", message.id);
             boolean show_images = properties.getValue("images", message.id);
             boolean show_quotes = (properties.getValue("quotes", message.id) || !collapse_quotes);
@@ -1569,22 +1577,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             @Override
                             public boolean onOpenLink(String url) {
-                                Uri uri = Uri.parse(url);
-                                if ("cid".equals(uri.getScheme()) || "data".equals(uri.getScheme()))
-                                    return false;
-
                                 if (parentFragment == null)
                                     return false;
 
-                                Bundle args = new Bundle();
-                                args.putParcelable("uri", uri);
-                                args.putString("title", null);
-
-                                FragmentDialogLink fragment = new FragmentDialogLink();
-                                fragment.setArguments(args);
-                                fragment.show(parentFragment.getParentFragmentManager(), "open:link");
-
-                                return true;
+                                Uri uri = Uri.parse(url);
+                                return AdapterMessage.ViewHolder.this.onOpenLink(uri, null);
                             }
                         });
                 webView.setOnTouchListener(ViewHolder.this);
@@ -3340,10 +3337,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (image.length > 0 && image[0].getSource() != null) {
                             ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(image[0].getSource());
                             Uri uri = Uri.parse(a.getSource());
-                            if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
-                                onOpenLink(uri, null);
-                                return true;
-                            }
+                            if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme()))
+                                if (onOpenLink(uri, null))
+                                    return true;
                         }
                     }
 
@@ -3361,8 +3357,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (url.equals(title))
                             title = null;
 
-                        onOpenLink(uri, title);
-                        return true;
+                        if (onOpenLink(uri, title))
+                            return true;
                     }
 
                     ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
@@ -3385,8 +3381,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
         }
 
-        private void onOpenLink(final Uri uri, String title) {
-            Log.i("Opening uri=" + uri);
+        private boolean onOpenLink(final Uri uri, String title) {
+            Log.i("Opening uri=" + uri + " title=" + title);
 
             if (BuildConfig.APPLICATION_ID.equals(uri.getHost()) && "/activate/".equals(uri.getPath())) {
                 try {
@@ -3398,17 +3394,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             } else {
-                if ("cid".equals(uri.getScheme()))
-                    return;
+                if ("cid".equals(uri.getScheme()) || "data".equals(uri.getScheme()))
+                    return false;
 
-                Bundle args = new Bundle();
-                args.putParcelable("uri", uri);
-                args.putString("title", title);
+                boolean confirm_links = prefs.getBoolean("confirm_links", true);
+                if (confirm_links) {
+                    Bundle args = new Bundle();
+                    args.putParcelable("uri", uri);
+                    args.putString("title", title);
 
-                FragmentDialogLink fragment = new FragmentDialogLink();
-                fragment.setArguments(args);
-                fragment.show(parentFragment.getParentFragmentManager(), "open:link");
+                    FragmentDialogLink fragment = new FragmentDialogLink();
+                    fragment.setArguments(args);
+                    fragment.show(parentFragment.getParentFragmentManager(), "open:link");
+                } else
+                    Helper.view(context, uri, false);
             }
+
+            return true;
         }
 
         private void onOpenImage(long id, String source) {
