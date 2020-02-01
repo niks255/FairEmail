@@ -3029,6 +3029,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             menu.findItem(R.id.menu_sort_on_sender).setVisible(false);
             menu.findItem(R.id.menu_sort_on_subject).setVisible(false);
             menu.findItem(R.id.menu_sort_on_size).setVisible(false);
+            menu.findItem(R.id.menu_sort_on_attachments).setVisible(false);
             menu.findItem(R.id.menu_sort_on_snoozed).setVisible(false);
         }
 
@@ -3044,6 +3045,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             menu.findItem(R.id.menu_sort_on_subject).setChecked(true);
         else if ("size".equals(sort))
             menu.findItem(R.id.menu_sort_on_size).setChecked(true);
+        else if ("attachments".equals(sort))
+            menu.findItem(R.id.menu_sort_on_attachments).setChecked(true);
         else if ("snoozed".equals(sort))
             menu.findItem(R.id.menu_sort_on_snoozed).setChecked(true);
         menu.findItem(R.id.menu_ascending).setChecked(ascending);
@@ -3119,6 +3122,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             case R.id.menu_sort_on_size:
                 item.setChecked(true);
                 onMenuSort("size");
+                return true;
+
+            case R.id.menu_sort_on_attachments:
+                item.setChecked(true);
+                onMenuSort("attachments");
                 return true;
 
             case R.id.menu_sort_on_snoozed:
@@ -4880,7 +4888,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             for (X509Certificate c : certs) {
                                                 boolean[] usage = c.getKeyUsage();
                                                 boolean root = (usage != null && usage[5]);
-                                                if (root && ks.getCertificateAlias(c) == null) {
+                                                boolean selfSigned = c.getIssuerX500Principal().equals(c.getSubjectX500Principal());
+                                                if (root && !selfSigned && ks.getCertificateAlias(c) == null) {
                                                     boolean found = false;
                                                     String issuer = (c.getIssuerDN() == null ? "" : c.getIssuerDN().getName());
                                                     EntityCertificate record = EntityCertificate.from(c, true, issuer);
@@ -4928,10 +4937,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         for (Certificate pcert : pcerts)
                                             if (pcert instanceof X509Certificate) {
                                                 // https://tools.ietf.org/html/rfc5280#section-4.2.1.3
-                                                boolean[] usage = ((X509Certificate) pcert).getKeyUsage();
+                                                X509Certificate c = (X509Certificate) pcert;
+                                                boolean[] usage = c.getKeyUsage();
                                                 boolean root = (usage != null && usage[5]);
-                                                EntityCertificate record = EntityCertificate.from((X509Certificate) pcert, null);
-                                                trace.add((root ? "* " : "") + record.subject);
+                                                boolean selfSigned = c.getIssuerX500Principal().equals(c.getSubjectX500Principal());
+                                                EntityCertificate record = EntityCertificate.from(c, null);
+                                                trace.add((root ? "* " : "") + (selfSigned ? "# " : "") + record.subject);
                                             }
 
                                         args.putStringArrayList("trace", trace);
@@ -4954,8 +4965,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         for (X509Certificate c : certs) {
                                             boolean[] usage = c.getKeyUsage();
                                             boolean root = (usage != null && usage[5]);
+                                            boolean selfSigned = c.getIssuerX500Principal().equals(c.getSubjectX500Principal());
                                             EntityCertificate record = EntityCertificate.from(c, null);
-                                            trace.add(record.subject + (root ? " *" : ""));
+                                            trace.add((root ? "* " : "") + (selfSigned ? "# " : "") + record.subject);
                                         }
                                         args.putStringArrayList("trace", trace);
                                     }

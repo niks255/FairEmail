@@ -886,7 +886,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvFrom.setText(MessageHelper.formatAddresses(addresses, name_email, false));
             tvFrom.setPaintFlags(tvFrom.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
             tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize, true));
-            tvSize.setVisibility(message.totalSize != null && "size".equals(sort) ? View.VISIBLE : View.GONE);
+            tvSize.setVisibility(
+                    message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
+                            ? View.VISIBLE : View.GONE);
             tvTime.setText(date && "time".equals(sort)
                     ? TF.format(message.received)
                     : Helper.getRelativeTimeSpanString(context, message.received));
@@ -1485,12 +1487,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
 
             boolean confirm_images = prefs.getBoolean("confirm_images", true);
-            boolean confirm_html = prefs.getBoolean("confirm_html", true);
-
-            if (!confirm_images)
+            if (!confirm_images && !properties.getValue("images_asked", message.id)) {
                 properties.setValue("images", message.id, true);
-            if (!confirm_html)
+                properties.setValue("images_asked", message.id, true);
+            }
+
+            boolean confirm_html = prefs.getBoolean("confirm_html", true);
+            if (!confirm_html && !properties.getValue("full_asked", message.id)) {
                 properties.setValue("full", message.id, true);
+                properties.setValue("full_asked", message.id, true);
+            }
 
             boolean show_full = properties.getValue("full", message.id);
             boolean show_images = properties.getValue("images", message.id);

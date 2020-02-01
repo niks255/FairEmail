@@ -949,18 +949,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     // Open synchronizing folders
                     List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
-                    Collections.sort(folders, new Comparator<EntityFolder>() {
-                        @Override
-                        public int compare(EntityFolder f1, EntityFolder f2) {
-                            int s1 = EntityFolder.FOLDER_SORT_ORDER.indexOf(f1.type);
-                            int s2 = EntityFolder.FOLDER_SORT_ORDER.indexOf(f2.type);
-                            int s = Integer.compare(s1, s2);
-                            if (s != 0)
-                                return s;
-
-                            return f1.name.compareTo(f2.name);
-                        }
-                    });
+                    if (folders.size() > 0)
+                        Collections.sort(folders, folders.get(0).getComparator(ServiceSynchronize.this));
 
                     for (final EntityFolder folder : folders) {
                         if (folder.synchronize && !folder.poll && capIdle && sync) {
@@ -1171,9 +1161,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                     Integer p2 = k2.getPriority();
                                                     int priority = p1.compareTo(p2);
                                                     if (priority == 0) {
-                                                        Long t1 = k1.getTime();
-                                                        Long t2 = k2.getTime();
-                                                        return t1.compareTo(t2);
+                                                        Long o1 = k1.getOrder();
+                                                        Long o2 = k2.getOrder();
+                                                        return o1.compareTo(o2);
                                                     } else
                                                         return priority;
                                                 }
@@ -1187,7 +1177,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                 }
 
                                                 try {
-                                                    executor.submit(new Helper.PriorityRunnable(key.getPriority()) {
+                                                    executor.submit(new Helper.PriorityRunnable(key.getPriority(), key.getOrder()) {
                                                         @Override
                                                         public void run() {
                                                             super.run();
