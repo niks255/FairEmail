@@ -92,6 +92,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -304,6 +305,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibAuth;
         private ImageView ivPriorityHigh;
         private ImageView ivPriorityLow;
+        private ImageView ivImportance;
         private ImageView ivSigned;
         private ImageView ivEncrypted;
         private TextView tvFrom;
@@ -437,6 +439,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibAuth = itemView.findViewById(R.id.ibAuth);
             ivPriorityHigh = itemView.findViewById(R.id.ivPriorityHigh);
             ivPriorityLow = itemView.findViewById(R.id.ivPriorityLow);
+            ivImportance = itemView.findViewById(R.id.ivImportance);
             ivSigned = itemView.findViewById(R.id.ivSigned);
             ivEncrypted = itemView.findViewById(R.id.ivEncrypted);
             tvFrom = itemView.findViewById(subject_top ? R.id.tvSubject : R.id.tvFrom);
@@ -742,6 +745,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibAuth.setVisibility(View.GONE);
             ivPriorityHigh.setVisibility(View.GONE);
             ivPriorityLow.setVisibility(View.GONE);
+            ivImportance.setVisibility(View.GONE);
             ivSigned.setVisibility(View.GONE);
             ivEncrypted.setVisibility(View.GONE);
             tvFrom.setText(null);
@@ -813,6 +817,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibAuth.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivPriorityHigh.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivPriorityLow.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
+                ivImportance.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivSigned.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivEncrypted.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 tvFrom.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
@@ -879,8 +884,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             // Line 1
             ibAuth.setVisibility(authentication && !authenticated ? View.VISIBLE : View.GONE);
-            ivPriorityHigh.setVisibility(EntityMessage.PRIORITIY_HIGH.equals(message.priority) ? View.VISIBLE : View.GONE);
-            ivPriorityLow.setVisibility(EntityMessage.PRIORITIY_LOW.equals(message.priority) ? View.VISIBLE : View.GONE);
+            ivPriorityHigh.setVisibility(
+                    EntityMessage.PRIORITIY_HIGH.equals(message.ui_priority)
+                            ? View.VISIBLE : View.GONE);
+            ivPriorityLow.setVisibility(
+                    EntityMessage.PRIORITIY_LOW.equals(message.ui_priority)
+                            ? View.VISIBLE : View.GONE);
+            ivImportance.setImageLevel(
+                    EntityMessage.PRIORITIY_HIGH.equals(message.ui_importance) ? 0 : 1);
+            ivImportance.setVisibility(
+                    EntityMessage.PRIORITIY_LOW.equals(message.ui_importance) ||
+                            EntityMessage.PRIORITIY_HIGH.equals(message.ui_importance)
+                            ? View.VISIBLE : View.GONE);
             ivSigned.setVisibility(message.signed > 0 ? View.VISIBLE : View.GONE);
             ivEncrypted.setVisibility(message.encrypted > 0 ? View.VISIBLE : View.GONE);
             tvFrom.setText(MessageHelper.formatAddresses(addresses, name_email, false));
@@ -3124,6 +3139,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putLong("message", message.id);
             args.putBoolean("copy", copy);
             args.putBoolean("similar", false);
+            args.putBoolean("nocanundo", true);
 
             FragmentDialogFolder fragment = new FragmentDialogFolder();
             fragment.setArguments(args);
@@ -3287,6 +3303,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             return true;
                         case R.id.menu_create_rule:
                             onMenuCreateRule(message);
+                            return true;
+                        case R.id.menu_set_importance:
+                            onMenuSetImportance(message);
                             return true;
                         case R.id.menu_manage_keywords:
                             onMenuManageKeywords(message);
@@ -3613,6 +3632,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
             lbm.sendBroadcast(rule);
+        }
+
+        private void onMenuSetImportance(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            if (message.importance != null)
+                args.putInt("importance", message.importance);
+
+            FragmentDialogSetImportance fragment = new FragmentDialogSetImportance();
+            fragment.setArguments(args);
+            fragment.show(parentFragment.getParentFragmentManager(), "keyword:importance");
         }
 
         private void onMenuManageKeywords(TupleMessageEx message) {
@@ -3968,9 +3998,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         result.add(context.getString(R.string.title_accessibility_flagged));
                 }
 
-                if (EntityMessage.PRIORITIY_HIGH.equals(message.priority))
+                if (EntityMessage.PRIORITIY_HIGH.equals(message.ui_priority))
                     result.add(context.getString(R.string.title_legend_priority));
-                else if (EntityMessage.PRIORITIY_LOW.equals(message.priority))
+                else if (EntityMessage.PRIORITIY_LOW.equals(message.ui_priority))
                     result.add(context.getString(R.string.title_legend_priority_low));
 
                 if (message.attachments > 0)
@@ -4283,9 +4313,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         same = false;
                         Log.i("thread changed id=" + next.id);
                     }
-                    if (!Objects.equals(prev.priority, next.priority)) {
+                    if (!Objects.equals(prev.ui_priority, next.ui_priority)) {
                         same = false;
-                        Log.i("priority changed id=" + next.id);
+                        Log.i("ui_priority changed id=" + next.id);
+                    }
+                    if (!Objects.equals(prev.ui_importance, next.ui_importance)) {
+                        same = false;
+                        Log.i("ui_importance changed id=" + next.id);
                     }
                     if (!Objects.equals(prev.receipt_request, next.receipt_request)) {
                         same = false;
@@ -4932,18 +4966,72 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
             final TextView tvMessage = view.findViewById(R.id.tvMessage);
-            final CheckBox cbBlock = view.findViewById(R.id.cbBlock);
+            final CheckBox cbBlockSender = view.findViewById(R.id.cbBlockSender);
+            final CheckBox cbBlockDomain = view.findViewById(R.id.cbBlockDomain);
 
             tvMessage.setText(getString(R.string.title_ask_spam_who, from));
-            cbBlock.setEnabled(ActivityBilling.isPro(getContext()));
+            cbBlockSender.setEnabled(ActivityBilling.isPro(getContext()));
+            cbBlockDomain.setEnabled(false);
+
+            cbBlockSender.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    cbBlockDomain.setEnabled(isChecked);
+                }
+            });
 
             return new AlertDialog.Builder(getContext())
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            getArguments().putBoolean("block", cbBlock.isChecked());
+                            getArguments().putBoolean("block_sender", cbBlockSender.isChecked());
+                            getArguments().putBoolean("block_domain", cbBlockDomain.isChecked());
                             sendResult(RESULT_OK);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create();
+        }
+    }
+
+    public static class FragmentDialogSetImportance extends FragmentDialogBase {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            int importance = getArguments().getInt("importance", EntityMessage.PRIORITIY_NORMAL);
+
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_importance, null);
+            final Spinner spImportance = view.findViewById(R.id.spImportance);
+            spImportance.setSelection(importance);
+
+            return new AlertDialog.Builder(getContext())
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Bundle args = getArguments();
+                            args.putInt("importance", spImportance.getSelectedItemPosition());
+
+                            new SimpleTask<Void>() {
+                                @Override
+                                protected Void onExecute(Context context, Bundle args) throws Throwable {
+                                    long id = args.getLong("id");
+                                    Integer importance = args.getInt("importance");
+                                    if (EntityMessage.PRIORITIY_NORMAL.equals(importance))
+                                        importance = null;
+
+                                    DB db = DB.getInstance(context);
+                                    db.message().setMessageImportance(id, importance);
+
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onException(Bundle args, Throwable ex) {
+                                    Log.unexpectedError(getParentFragmentManager(), ex);
+                                }
+                            }.execute(getContext(), getViewLifecycleOwner(), args, "importance: set");
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)

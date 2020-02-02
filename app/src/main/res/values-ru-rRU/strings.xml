@@ -91,6 +91,7 @@
     <string name="title_ask_spam_who">Считать сообщение от %1$s спамом?</string>
     <string name="title_block">Блокировать %1$s</string>
     <string name="title_block_sender">Блокировать отправителя</string>
+    <string name="title_block_domain">Заблокировать домен отправителя</string>
     <string name="title_block_sender_hint">        Блокировка отправителя создаст правило для автоматического перемещения будущих сообщений в папку со спамом.
         Создание и использование правил является Pro-функцией.
     </string>
@@ -150,8 +151,8 @@
     <string name="title_setup_select_account">Выбрать учётную запись</string>
     <string name="title_setup_instructions">Инструкция по установке</string>
     <string name="title_setup_no_settings">Не найдено настроек для домена \'%1$s\'</string>
-    <string name="title_setup_no_settings_hint">Пожалуйста, попробуйте настроить учетную запись и идентификатор в шагах 1 и 2, используя настройки, предоставленные вашим провайдером электронной почты</string>
-    <string name="title_setup_no_auth_hint">Пожалуйста, проверьте свой адрес электронной почты и пароль и убедитесь, что внешний доступ (IMAP/SMTP) включен для вашей учетной записи</string>
+    <string name="title_setup_no_settings_hint">Пожалуйста, попробуйте настроить учётную запись и идентификатор в шагах 1 и 2, используя настройки, предоставленные вашим провайдером электронной почты</string>
+    <string name="title_setup_no_auth_hint">Пожалуйста, проверьте свой адрес электронной почты и пароль и убедитесь, что внешний доступ (IMAP/SMTP) включён для вашей учётной записи</string>
     <string name="title_setup_no_system_folders">Папка \"Входящие\" или \"Черновики\" не найдена</string>
     <string name="title_setup_quick_success">Учётная запись и идентификатор добавлены успешно</string>
     <string name="title_setup_quick_failed">Вы также можете настроить учётную запись и идентификатор ниже</string>
@@ -304,7 +305,7 @@
     <string name="title_advanced_autoscroll">Прокрутить к началу списка при получении новых сообщений</string>
     <string name="title_advanced_double_tap">Двойное нажатие для отметки сообщений прочитанными/непрочитанными</string>
     <string name="title_advanced_swipenav">Смахивание влево/вправо для перехода к следующему/предыдущему диалогу</string>
-    <string name="title_advanced_volumenav">Кнопки увеличения/уменьшения громкости, для перехода к следующему/предыдущему диалогу</string>
+    <string name="title_advanced_volumenav">Кнопки увеличения/уменьшения громкости для перехода к следующему/предыдущему диалогу</string>
     <string name="title_advanced_reversed">Обратное направление навигации</string>
     <string name="title_advanced_autoexpand">Автоматически разворачивать сообщения</string>
     <string name="title_advanced_expand_all">Автоматически разворачивать все прочитанные сообщения</string>
@@ -406,7 +407,7 @@
     <string name="title_advanced_autoseen_hint">Автоматическая пометка сообщений прочитанными при развёртывании может быть отключена в настройках учётной записи</string>
     <string name="title_advanced_autoclose_hint">Автоматически закрывать диалог, если все сообщения удалены, отправлены или помещены в архив</string>
     <string name="title_advanced_sender_hint">Большинство провайдеров не разрешают изменять адреса отправителей</string>
-    <string name="title_advanced_display_harmful_hint">Отключение этой опции может навредить вашей конфиденциальности</string>
+    <string name="title_advanced_display_harmful_hint">Отключение этой функции может навредить вашей конфиденциальности</string>
     <string name="title_advanced_display_hidden_hint">Это может вызвать странное отображение и дублирование текста</string>
     <string name="title_advanced_display_pin_hint">PIN-код имеет приоритет над биометрической аутентификацией</string>
     <string name="title_advanced_badge_hint">Доступно только на поддерживаемых лаунчерах</string>
@@ -740,9 +741,11 @@
     <string name="title_sort_on_time">Время</string>
     <string name="title_sort_on_unread">Не прочитано</string>
     <string name="title_sort_on_starred">Избранные</string>
+    <string name="title_sort_on_priority">Приоритет</string>
     <string name="title_sort_on_sender">Отправитель</string>
     <string name="title_sort_on_subject">Тема</string>
     <string name="title_sort_on_size">Размер</string>
+    <string name="title_sort_on_attachments">Вложения</string>
     <string name="title_sort_on_hidden">Скрытые</string>
     <string name="title_sort_ascending">Сначала старые</string>
     <string name="title_filter">Фильтровать</string>
@@ -772,6 +775,7 @@
     <string name="title_rule_ignore">Подавить уведомление</string>
     <string name="title_rule_snooze">Отложить</string>
     <string name="title_rule_flag">В избранное</string>
+    <string name="title_rule_importance">Установить важность</string>
     <string name="title_rule_keyword">Добавить ключ (слово)</string>
     <string name="title_rule_move">Переместить</string>
     <string name="title_rule_copy">Копировать (пометить)</string>

@@ -69,6 +69,7 @@
     <string name="title_ask_spam_who">Tratta il messaggio da %1$s come spam?</string>
     <string name="title_block">Blocca %1$s</string>
     <string name="title_block_sender">Blocco mittente</string>
+    <string name="title_block_domain">Blocca dominio mittente</string>
     <string name="title_block_sender_hint">        Bloccare un mittente creerà una regola per spostare automaticamente i messaggi futuri nella cartella spam.
         Creare e utilizzare le regole è una funzionalità pro.
     </string>
@@ -716,6 +717,7 @@
     <string name="title_sort_on_time">Ora</string>
     <string name="title_sort_on_unread">Non letti</string>
     <string name="title_sort_on_starred">Stellati</string>
+    <string name="title_sort_on_priority">Priorità</string>
     <string name="title_sort_on_sender">Mittente</string>
     <string name="title_sort_on_subject">Soggetto</string>
     <string name="title_sort_on_size">Dimensioni</string>
@@ -749,6 +751,7 @@
     <string name="title_rule_ignore">Sopprimi notifica</string>
     <string name="title_rule_snooze">Posticipa</string>
     <string name="title_rule_flag">Aggiungi ai preferiti</string>
+    <string name="title_rule_importance">Imposta l\'importanza</string>
     <string name="title_rule_keyword">Aggiungi parola chiave</string>
     <string name="title_rule_move">Muovi</string>
     <string name="title_rule_copy">Copia (etichetta)</string>

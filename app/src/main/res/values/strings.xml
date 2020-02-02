@@ -87,6 +87,7 @@
 
     <string name="title_block">Block %1$s</string>
     <string name="title_block_sender">Block sender</string>
+    <string name="title_block_domain">Block sender domain</string>
     <string name="title_block_sender_hint">
         Blocking a sender will create a rule to automatically move future messages to the spam folder.
         Creating and using rules is a pro feature.
@@ -816,6 +817,7 @@
     <string name="title_sort_on_time">Time</string>
     <string name="title_sort_on_unread">Unread</string>
     <string name="title_sort_on_starred">Starred</string>
+    <string name="title_sort_on_priority">Priority</string>
     <string name="title_sort_on_sender">Sender</string>
     <string name="title_sort_on_subject">Subject</string>
     <string name="title_sort_on_size">Size</string>
@@ -854,6 +856,7 @@
     <string name="title_rule_ignore">Suppress notification</string>
     <string name="title_rule_snooze">Snooze</string>
     <string name="title_rule_flag">Add star</string>
+    <string name="title_rule_importance">Set importance</string>
     <string name="title_rule_keyword">Add keyword</string>
     <string name="title_rule_move">Move</string>
     <string name="title_rule_copy">Copy (label)</string>

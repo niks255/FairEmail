@@ -60,7 +60,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 137,
+        version = 138,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -110,9 +110,9 @@ public abstract class DB extends RoomDatabase {
             Helper.getBackgroundExecutor(1, "query");
 
     private static final String DB_NAME = "fairemail";
-    private static final int DB_CHECKPOINT = 100;
+    private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
 
-    static final String[] DB_TABLES = new String[]{
+    private static final String[] DB_TABLES = new String[]{
             "identity", "account", "folder", "message", "attachment", "operation", "contact", "certificate", "answer", "rule", "log"};
 
     @Override
@@ -179,7 +179,7 @@ public abstract class DB extends RoomDatabase {
                 .databaseBuilder(context, DB.class, DB_NAME)
                 .openHelperFactory(new RequerySQLiteOpenHelperFactory())
                 .setQueryExecutor(executor)
-                .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
+                .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING) // using the latest sqlite
                 .addCallback(new Callback() {
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -1334,6 +1334,13 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `message` ADD COLUMN `submitter` TEXT");
+                    }
+                })
+                .addMigrations(new Migration(137, 138) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `importance` INTEGER");
                     }
                 });
     }

@@ -23,18 +23,18 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +43,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -52,7 +53,6 @@ public class FragmentAnswer extends FragmentBase {
     private CheckBox cbFavorite;
     private CheckBox cbHide;
     private EditTextCompose etText;
-    private ImageButton ibInfo;
     private BottomNavigationView style_bar;
     private BottomNavigationView bottom_navigation;
     private ContentLoadingProgressBar pbWait;
@@ -81,6 +81,7 @@ public class FragmentAnswer extends FragmentBase {
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setSubtitle(R.string.title_answer_caption);
+        setHasOptionsMenu(true);
 
         view = (ViewGroup) inflater.inflate(R.layout.fragment_answer, container, false);
 
@@ -89,7 +90,6 @@ public class FragmentAnswer extends FragmentBase {
         cbFavorite = view.findViewById(R.id.cbFavorite);
         cbHide = view.findViewById(R.id.cbHide);
         etText = view.findViewById(R.id.etText);
-        ibInfo = view.findViewById(R.id.ibInfo);
 
         style_bar = view.findViewById(R.id.style_bar);
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
@@ -97,28 +97,10 @@ public class FragmentAnswer extends FragmentBase {
         pbWait = view.findViewById(R.id.pbWait);
         grpReady = view.findViewById(R.id.grpReady);
 
-        int height = getContext().getResources().getDisplayMetrics().heightPixels;
-        View decor = getActivity().getWindow().getDecorView();
-        decor.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    public void onGlobalLayout() {
-                        Rect rect = new Rect();
-                        decor.getWindowVisibleDisplayFrame(rect);
-                        view.setPadding(0, 0, 0, height - rect.bottom);
-                    }
-                });
-
         etText.setSelectionListener(new EditTextCompose.ISelection() {
             @Override
             public void onSelected(boolean selection) {
                 style_bar.setVisibility(selection ? View.VISIBLE : View.GONE);
-            }
-        });
-
-        ibInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new FragmentInfo().show(getParentFragmentManager(), "rule:info");
             }
         });
 
@@ -186,6 +168,27 @@ public class FragmentAnswer extends FragmentBase {
         }.execute(this, args, "answer:get");
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_answer, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_help:
+                onMenuHelp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onMenuHelp() {
+        new FragmentInfo().show(getParentFragmentManager(), "answer:info");
+    }
+
     private void onActionDelete() {
         Bundle args = new Bundle();
         args.putString("question", getString(R.string.title_ask_delete_answer));
@@ -201,7 +204,7 @@ public class FragmentAnswer extends FragmentBase {
 
         Bundle args = new Bundle();
         args.putLong("id", id);
-        args.putString("name", etName.getText().toString());
+        args.putString("name", etName.getText().toString().trim());
         args.putBoolean("favorite", cbFavorite.isChecked());
         args.putBoolean("hide", cbHide.isChecked());
         args.putString("text", HtmlHelper.toHtml(etText.getText()));
@@ -224,6 +227,9 @@ public class FragmentAnswer extends FragmentBase {
                 boolean favorite = args.getBoolean("favorite");
                 boolean hide = args.getBoolean("hide");
                 String text = args.getString("text");
+
+                if (TextUtils.isEmpty(name))
+                    throw new IllegalArgumentException(context.getString(R.string.title_no_name));
 
                 DB db = DB.getInstance(context);
                 if (id < 0) {
@@ -252,7 +258,10 @@ public class FragmentAnswer extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
+                if (ex instanceof IllegalArgumentException)
+                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                else
+                    Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "answer:save");
     }

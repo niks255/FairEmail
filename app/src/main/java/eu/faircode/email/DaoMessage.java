@@ -56,6 +56,8 @@ public interface DaoMessage {
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", COUNT(DISTINCT CASE WHEN message.msgid IS NULL THEN message.id ELSE message.msgid END) AS visible" +
             ", SUM(message.total) AS totalSize" +
+            ", MAX(message.priority) AS ui_priority" +
+            ", MAX(message.importance) AS ui_importance" +
             ", MAX(CASE WHEN" +
             "   ((:found AND folder.type <> '" + EntityFolder.ARCHIVE + "' AND folder.type <> '" + EntityFolder.DRAFTS + "')" +
             "   OR (NOT :found AND :type IS NULL AND folder.unified)" +
@@ -76,16 +78,19 @@ public interface DaoMessage {
             " AND (NOT :filter_seen OR SUM(1 - message.ui_seen) > 0)" +
             " AND (NOT :filter_unflagged OR COUNT(message.id) - SUM(1 - message.ui_flagged) > 0)" +
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_drafts + ")" +
-            " ORDER BY CASE" +
-            "  WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
-            "  WHEN 'starred' = :sort THEN COUNT(message.id) - SUM(1 - message.ui_flagged) = 0" +
-            "  WHEN 'sender' = :sort THEN LOWER(message.sender)" +
-            "  WHEN 'subject' = :sort THEN LOWER(message.subject)" +
-            "  WHEN 'size' = :sort THEN -SUM(message.total)" +
-            "  WHEN 'attachments' = :sort THEN -SUM(message.attachments)" +
-            "  WHEN 'snoozed' = :sort THEN SUM(CASE WHEN message.ui_snoozed IS NULL THEN 0 ELSE 1 END) = 0" +
-            "  ELSE 0" +
-            " END, CASE WHEN :ascending THEN message.received ELSE -message.received END")
+            " ORDER BY -IFNULL(MAX(message.importance), 1)" +
+            ", CASE" +
+            "   WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
+            "   WHEN 'starred' = :sort THEN COUNT(message.id) - SUM(1 - message.ui_flagged) = 0" +
+            "   WHEN 'priority' = :sort THEN -IFNULL(MAX(message.priority), 1)" +
+            "   WHEN 'sender' = :sort THEN LOWER(message.sender)" +
+            "   WHEN 'subject' = :sort THEN LOWER(message.subject)" +
+            "   WHEN 'size' = :sort THEN -SUM(message.total)" +
+            "   WHEN 'attachments' = :sort THEN -SUM(message.attachments)" +
+            "   WHEN 'snoozed' = :sort THEN SUM(CASE WHEN message.ui_snoozed IS NULL THEN 0 ELSE 1 END) = 0" +
+            "   ELSE 0" +
+            "  END" +
+            ", CASE WHEN :ascending THEN message.received ELSE -message.received END")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     DataSource.Factory<Integer, TupleMessageEx> pagedUnified(
             String type,
@@ -109,6 +114,8 @@ public interface DaoMessage {
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", COUNT(DISTINCT CASE WHEN message.msgid IS NULL THEN message.id ELSE message.msgid END) AS visible" +
             ", SUM(message.total) AS totalSize" +
+            ", MAX(message.priority) AS ui_priority" +
+            ", MAX(message.importance) AS ui_importance" +
             ", MAX(CASE WHEN folder.id = :folder THEN message.received ELSE 0 END) AS dummy" +
             " FROM (SELECT * FROM message ORDER BY received DESC) AS message" +
             " JOIN account_view AS account ON account.id = message.account" +
@@ -124,16 +131,19 @@ public interface DaoMessage {
             " AND (NOT :filter_seen OR SUM(1 - message.ui_seen) > 0 OR " + is_outbox + ")" +
             " AND (NOT :filter_unflagged OR COUNT(message.id) - SUM(1 - message.ui_flagged) > 0 OR " + is_outbox + ")" +
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_outbox + " OR " + is_drafts + ")" +
-            " ORDER BY CASE" +
-            "  WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
-            "  WHEN 'starred' = :sort THEN COUNT(message.id) - SUM(1 - message.ui_flagged) = 0" +
-            "  WHEN 'sender' = :sort THEN LOWER(message.sender)" +
-            "  WHEN 'subject' = :sort THEN LOWER(message.subject)" +
-            "  WHEN 'size' = :sort THEN -SUM(message.total)" +
-            "  WHEN 'attachments' = :sort THEN -SUM(message.attachments)" +
-            "  WHEN 'snoozed' = :sort THEN SUM(CASE WHEN message.ui_snoozed IS NULL THEN 0 ELSE 1 END) = 0" +
-            "  ELSE 0" +
-            " END, CASE WHEN :ascending THEN message.received ELSE -message.received END")
+            " ORDER BY -IFNULL(MAX(message.importance), 1)" +
+            ", CASE" +
+            "   WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
+            "   WHEN 'starred' = :sort THEN COUNT(message.id) - SUM(1 - message.ui_flagged) = 0" +
+            "   WHEN 'priority' = :sort THEN -IFNULL(MAX(message.priority), 1)" +
+            "   WHEN 'sender' = :sort THEN LOWER(message.sender)" +
+            "   WHEN 'subject' = :sort THEN LOWER(message.subject)" +
+            "   WHEN 'size' = :sort THEN -SUM(message.total)" +
+            "   WHEN 'attachments' = :sort THEN -SUM(message.attachments)" +
+            "   WHEN 'snoozed' = :sort THEN SUM(CASE WHEN message.ui_snoozed IS NULL THEN 0 ELSE 1 END) = 0" +
+            "   ELSE 0" +
+            "  END" +
+            ", CASE WHEN :ascending THEN message.received ELSE -message.received END")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     DataSource.Factory<Integer, TupleMessageEx> pagedFolder(
             long folder, boolean threading,
@@ -156,6 +166,8 @@ public interface DaoMessage {
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", 1 AS visible" +
             ", message.total AS totalSize" +
+            ", message.priority AS ui_priority" +
+            ", message.importance AS ui_importance" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
             " LEFT JOIN identity_view AS identity ON identity.id = message.identity" +
@@ -310,6 +322,8 @@ public interface DaoMessage {
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", 1 AS visible" +
             ", message.total AS totalSize" +
+            ", message.priority AS ui_priority" +
+            ", message.importance AS ui_importance" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
             " LEFT JOIN identity_view AS identity ON identity.id = message.identity" +
@@ -361,6 +375,8 @@ public interface DaoMessage {
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", 1 AS visible" +
             ", message.total AS totalSize" +
+            ", message.priority AS ui_priority" +
+            ", message.importance AS ui_importance" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
             " LEFT JOIN identity_view AS identity ON identity.id = message.identity" +
@@ -453,6 +469,9 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET priority = :priority WHERE id = :id")
     int setMessagePriority(long id, Integer priority);
+
+    @Query("UPDATE message SET importance = :importance WHERE id = :id")
+    int setMessageImportance(long id, Integer importance);
 
     @Query("UPDATE message SET receipt_request = :receipt_request WHERE id = :id")
     int setMessageReceiptRequest(long id, Boolean receipt_request);

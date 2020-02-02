@@ -69,6 +69,7 @@
     <string name="title_ask_spam_who">Behandle melding fra %1$s som spam?</string>
     <string name="title_block">Blokkere %1$s</string>
     <string name="title_block_sender">Blokker avsender</string>
+    <string name="title_block_domain">Blokker avsenderdomenet</string>
     <string name="title_block_sender_hint">        Blokkering av avsender vil opprette en regel for automatisk å flytte fremtidige meldinger til spam-mappen.
         Å lage og bruke regler er en pro-funksjon.
     </string>
@@ -717,9 +718,11 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_sort_on_time">Tid</string>
     <string name="title_sort_on_unread">Ulest</string>
     <string name="title_sort_on_starred">Stjernemerkede</string>
+    <string name="title_sort_on_priority">Prioritet</string>
     <string name="title_sort_on_sender">Avsender</string>
     <string name="title_sort_on_subject">Emne</string>
     <string name="title_sort_on_size">Størrelse</string>
+    <string name="title_sort_on_attachments">Tillegg</string>
     <string name="title_sort_on_hidden">Skjult</string>
     <string name="title_sort_ascending">Eldst først</string>
     <string name="title_filter">Filtrere ut</string>
@@ -749,6 +752,7 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_rule_ignore">Undertrykke varsling</string>
     <string name="title_rule_snooze">Utsett</string>
     <string name="title_rule_flag">Legg til stjerne</string>
+    <string name="title_rule_importance">Sett viktighet</string>
     <string name="title_rule_keyword">Legg til nøkkelord</string>
     <string name="title_rule_move">Flytt</string>
     <string name="title_rule_copy">Kopier (etikett)</string>

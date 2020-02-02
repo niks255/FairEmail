@@ -43,12 +43,14 @@ import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
 
 import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
+import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
@@ -257,6 +259,32 @@ public class HtmlHelper {
 
         Document parsed = JsoupEx.parse(html);
 
+        // <!--[if ...]><!--> ... <!--<![endif]-->
+        if (!display_hidden && BuildConfig.DEBUG)
+            parsed.filter(new NodeFilter() {
+                private boolean remove = false;
+
+                @Override
+                public FilterResult head(Node node, int depth) {
+                    if (node instanceof Comment) {
+                        String data = ((Comment) node).getData().trim();
+                        if (data.startsWith("[if") && !data.endsWith("endif]")) {
+                            remove = true;
+                            return FilterResult.REMOVE;
+                        } else if (remove && data.endsWith("endif]")) {
+                            remove = false;
+                            return FilterResult.REMOVE;
+                        }
+                    }
+                    return (remove ? FilterResult.REMOVE : FilterResult.CONTINUE);
+                }
+
+                @Override
+                public FilterResult tail(Node node, int depth) {
+                    return FilterResult.CONTINUE;
+                }
+            });
+
         // <html xmlns:v="urn:schemas-microsoft-com:vml"
         //   xmlns:o="urn:schemas-microsoft-com:office:office"
         //   xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -331,7 +359,9 @@ public class HtmlHelper {
                     if (kv.length == 2) {
                         String key = kv[0].trim().toLowerCase(Locale.ROOT);
                         String value = kv[1].toLowerCase(Locale.ROOT)
-                                .replaceAll("\\s", "");
+                                .replace("!important", "")
+                                .trim()
+                                .replaceAll("\\s+", " ");
                         switch (key) {
                             case "color":
                                 Integer color = parseColor(value, dark);
@@ -353,7 +383,7 @@ public class HtmlHelper {
 
                             case "display":
                                 if (!display_hidden && "none".equals(value)) {
-                                    Log.i("Removing element " + element.tagName());
+                                    Log.i("Removing hidden element " + element.tagName());
                                     element.empty();
                                 }
                                 if ("inline".equals(value) || "inline-block".equals(value))
@@ -366,7 +396,7 @@ public class HtmlHelper {
                                 //case "line-height":
                                 if (!display_hidden &&
                                         ("0".equals(value) || "0px".equals(value))) {
-                                    Log.i("Removing element " + element.tagName());
+                                    Log.i("Removing hidden element " + element.tagName());
                                     element.empty();
                                 }
                                 break;
@@ -637,8 +667,7 @@ public class HtmlHelper {
                 .replace("initial", "")
                 .replace("windowtext", "")
                 .replace("transparent", "")
-                .replace("!important", "")
-                .replaceAll("[^a-z0-9(),.%]", "");
+                .replaceAll("[^a-z0-9(),.%#]", "");
 
         Integer color = null;
         try {
