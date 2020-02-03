@@ -69,6 +69,7 @@
     <string name="title_ask_spam_who">Jo %1$s erabiltzailearen mezua spamtzat?</string>
     <string name="title_block">Blokeatu %1$s</string>
     <string name="title_block_sender">Blokeatu igorlea</string>
+    <string name="title_block_domain">Blokeatu bidaltzailearen domeinua</string>
     <string name="title_block_sender_hint">Bidaltzaile bat blokeatzeak etorkizuneko mezuak automatikoki spam karpetara eramateko arau bat sortuko du. Arauak sortu eta erabiltzea ordainpeko ezaugarri bat da.
     </string>
     <string name="title_notification_waiting">Konexio erabilgarriaren zain</string>
@@ -828,6 +829,8 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_legend_draft">Zirriborroa du</string>
     <string name="title_legend_priority">Lehentasun altua du</string>
     <string name="title_legend_priority_low">Lehentasun baxua du</string>
+    <string name="title_legend_importance">Garrantzitsua da</string>
+    <string name="title_legend_importance_low">Ez da garrantzitsua</string>
     <string name="title_legend_signed">Sinatuta dago</string>
     <string name="title_legend_encrypted">Zifratuta dago</string>
     <string name="title_legend_auth">Autentifikazioak huts egin du</string>
