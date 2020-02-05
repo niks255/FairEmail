@@ -296,12 +296,14 @@ public class Log {
                 if (ex instanceof FileNotFoundException &&
                         ex.getMessage() != null &&
                         (ex.getMessage().startsWith("Download image failed") ||
-                                ex.getMessage().startsWith("https://ipinfo.io/") ||
-                                ex.getMessage().startsWith("https://autoconfig.thunderbird.net/")))
+                                ex.getMessage().startsWith("http://") ||
+                                ex.getMessage().startsWith("https://")))
                     return false;
 
                 if (ex instanceof IOException &&
-                        ("NetworkError".equals(ex.getMessage()) || // account manager
+                        ex.getMessage() != null &&
+                        (ex.getMessage().startsWith("HTTP status=") ||
+                                "NetworkError".equals(ex.getMessage()) || // account manager
                                 "Resetting to invalid mark".equals(ex.getMessage())))
                     return false;
 

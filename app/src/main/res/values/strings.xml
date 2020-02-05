@@ -290,7 +290,7 @@
     <string name="title_advanced_landscape">Use two columns in landscape mode</string>
     <string name="title_advanced_landscape3">Allow fixed navigation menu in landscape mode</string>
     <string name="title_advanced_startup">Show on start screen</string>
-    <string name="title_advanced_cards">Show cards</string>
+    <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
@@ -345,6 +345,7 @@
     <string name="title_advanced_quick_scroll">Show non-obtrusive quick scroll up/down icons</string>
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
+    <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
     <string name="title_advanced_automove">Confirm moving messages</string>
     <string name="title_advanced_discard_delete">On discard draft permanently delete draft</string>
     <string name="title_advanced_default_snooze">Default snooze time</string>
@@ -632,6 +633,10 @@
     <string name="title_flag">Add star</string>
     <string name="title_flag_color">Colored star &#8230;</string>
     <string name="title_unflag">Remove star</string>
+    <string name="title_set_importance">Set importance</string>
+    <string name="title_importance_low">Low</string>
+    <string name="title_importance_normal">Normal</string>
+    <string name="title_importance_high">High</string>
     <string name="title_forward">Forward</string>
     <string name="title_new_message">New message</string>
     <string name="title_editasnew">Edit as new</string>
@@ -797,7 +802,9 @@
 
     <string name="title_signature_none">Message not signed</string>
     <string name="title_signature_valid">Message signature valid</string>
+    <string name="title_signature_valid_from">Message signature valid: %1$s</string>
     <string name="title_signature_unconfirmed">Message signature valid but not confirmed</string>
+    <string name="title_signature_unconfirmed_from">Message signature valid but not confirmed: %1$s</string>
     <string name="title_signature_invalid">Message signature invalid</string>
     <string name="title_signature_invalid_reason">Message signature invalid: %1$s</string>
     <string name="title_signature_certificate_invalid">Certificate chain invalid</string>
@@ -829,6 +836,7 @@
     <string name="title_filter">Filter out</string>
     <string name="title_filter_seen">Read</string>
     <string name="title_filter_unflagged">Unstarred</string>
+    <string name="title_filter_unknown">Unknown senders</string>
     <string name="title_filter_hidden">Hidden</string>
     <string name="title_filter_duplicates">Duplicates</string>
 

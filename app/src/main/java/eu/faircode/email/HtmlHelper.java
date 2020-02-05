@@ -260,7 +260,8 @@ public class HtmlHelper {
         Document parsed = JsoupEx.parse(html);
 
         // <!--[if ...]><!--> ... <!--<![endif]-->
-        if (!display_hidden && BuildConfig.DEBUG)
+        // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/compatibility/hh801214(v=vs.85)
+        if (!display_hidden && false)
             parsed.filter(new NodeFilter() {
                 private boolean remove = false;
 
@@ -661,21 +662,29 @@ public class HtmlHelper {
     private static Integer parseColor(@NonNull String value, boolean dark) {
         // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
         String c = value
+                .replace("null", "")
                 .replace("none", "")
                 .replace("unset", "")
                 .replace("inherit", "")
                 .replace("initial", "")
                 .replace("windowtext", "")
                 .replace("transparent", "")
-                .replaceAll("[^a-z0-9(),.%#]", "");
+                .replaceAll("[^a-z0-9(),.%#]", "")
+                .replaceAll("#+", "#");
 
         Integer color = null;
         try {
             if (TextUtils.isEmpty(c))
                 return null;
-            else if (c.startsWith("#"))
-                color = Integer.decode(c) | 0xFF000000;
-            else if (c.startsWith("rgb") || c.startsWith("hsl")) {
+            else if (c.startsWith("#")) {
+                if (c.length() > 1) {
+                    String code = c.substring(1);
+                    if (x11ColorMap.containsKey(code)) // workaround
+                        color = x11ColorMap.get(code) | 0xFF000000;
+                    else
+                        color = Integer.decode(c) | 0xFF000000;
+                }
+            } else if (c.startsWith("rgb") || c.startsWith("hsl")) {
                 int s = c.indexOf("(");
                 int e = c.indexOf(")");
                 if (s > 0 && e > s) {
@@ -706,6 +715,7 @@ public class HtmlHelper {
                 try {
                     color = Color.parseColor(c);
                 } catch (IllegalArgumentException ex) {
+                    // Workaround
                     color = Integer.decode("#" + c) | 0xFF000000;
                 }
 
@@ -733,7 +743,9 @@ public class HtmlHelper {
             else if (node instanceof Element) {
                 Element element = (Element) node;
                 if (!element.isBlock() &&
-                        (element.hasText() || element.selectFirst("img") != null))
+                        (element.hasText() ||
+                                element.selectFirst("a") != null ||
+                                element.selectFirst("img") != null))
                     return true;
             }
         return false;

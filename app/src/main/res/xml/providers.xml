@@ -252,6 +252,7 @@
     </provider>
     <provider
         name="T-Online.de"
+        appPassword="true"
         domain="magenta\\.de,t-online\\.de"
         link="https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-server-e-mail-protokolle-und-e-mail-einrichtung/imap/einrichtung-imap">
         <imap
@@ -545,6 +546,18 @@
             starttls="false" />
         <smtp
             host="smtp.strato.de"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Servercow.de"
+        link="https://cp.servercow.de/plugin/support_manager/knowledgebase/view/13/imap-pop3-und-smtp-zugriff/3/">
+        <imap
+            host="hosted.mailcow.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="hosted.mailcow.de"
             port="465"
             starttls="false" />
     </provider>
