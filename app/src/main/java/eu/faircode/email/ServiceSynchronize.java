@@ -48,6 +48,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
+import com.sun.mail.iap.ConnectionException;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 
@@ -819,7 +820,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 EntityLog.log(ServiceSynchronize.this, account.name + " alert: " + message);
 
-                                if (!isMaxConnections(message) || state.getBackoff() > CONNECT_BACKOFF_MAX) {
+                                boolean max = isMaxConnections(message);
+                                if (max)
+                                    state.setMaxConnections();
+                                if (!max || state.getBackoff() > CONNECT_BACKOFF_MAX) {
                                     NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                     nm.notify("alert:" + account.id, 1,
                                             getNotificationAlert(account.name, message).build());
@@ -849,12 +853,21 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             boolean ioError = false;
                             Throwable c = ex;
                             while (c != null) {
-                                if (c instanceof IOException || isMaxConnections(c.getMessage())) {
+                                boolean max = isMaxConnections(c.getMessage());
+                                if (max)
+                                    state.setMaxConnections();
+                                if (max ||
+                                        c instanceof IOException ||
+                                        c instanceof ConnectionException ||
+                                        "failed to connect".equals(ex.getMessage())) {
                                     ioError = true;
                                     break;
                                 }
                                 c = c.getCause();
                             }
+
+                            if (!BuildConfig.PLAY_STORE_RELEASE)
+                                Log.e(ex);
 
                             if (!ioError) {
                                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1456,8 +1469,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         // Short back-off period, keep device awake
                         EntityLog.log(this, account.name + " backoff=" + backoff);
                         try {
-                            state.acquire(backoff *
-                                    ("imap.gmail.com".equalsIgnoreCase(account.host) ? 1500L : 1000L));
+                            state.acquire(backoff * 1000L * (state.getMaxConnections() ? 2 : 1));
                         } catch (InterruptedException ex) {
                             Log.w(account.name + " backoff " + ex.toString());
                         }

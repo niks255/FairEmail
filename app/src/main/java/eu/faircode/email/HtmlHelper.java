@@ -387,8 +387,10 @@ public class HtmlHelper {
                                     Log.i("Removing hidden element " + element.tagName());
                                     element.empty();
                                 }
-                                if ("inline".equals(value) || "inline-block".equals(value))
-                                    element.attr("inline", "true");
+                                if ("inline".equals(value) || "inline-block".equals(value)) {
+                                    if (element.nextSibling() != null)
+                                        element.attr("inline", "true");
+                                }
                                 break;
 
                             case "height":
@@ -444,7 +446,7 @@ public class HtmlHelper {
         // Pre formatted text
         for (Element pre : document.select("pre")) {
             pre.html(formatPre(pre.wholeText()));
-            pre.tagName("tt");
+            pre.tagName("div");
         }
 
         // Code
@@ -636,12 +638,20 @@ public class HtmlHelper {
         }
 
         // Selective new lines
-        for (Element div : document.select("div"))
-            if (!Boolean.parseBoolean(div.attr("inline")) &&
-                    div.children().select("div").size() == 0 &&
+        for (Element div : document.select("div")) {
+            Node prev = div.previousSibling();
+            if (prev instanceof Element && !((Element) prev).isBlock())
+                div.prependElement("br");
+
+            boolean inline = Boolean.parseBoolean(div.attr("inline"));
+            int childs = div.childNodeSize();
+            Node last = (childs > 0 ? div.childNode(childs - 1) : null);
+            if (!inline &&
+                    (last == null || !"div".equals(last.nodeName())) &&
                     hasVisibleContent(div.childNodes())) {
                 div.appendElement("br");
             }
+        }
 
         for (Element div : document.select("div"))
             div.tagName("span");

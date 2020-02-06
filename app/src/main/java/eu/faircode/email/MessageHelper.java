@@ -854,7 +854,10 @@ public class MessageHelper {
         if (header == null)
             return null;
 
-        header = new String(header.getBytes(StandardCharsets.ISO_8859_1));
+        if (!Helper.isUTF8(header)) {
+            Log.w("Converting header '" + name + "' to ISO8859-1");
+            header = new String(header.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
+        }
         Address[] addresses = InternetAddress.parseHeader(header, false);
 
         for (Address address : addresses) {
@@ -995,8 +998,10 @@ public class MessageHelper {
         if (subject == null)
             return null;
 
-        // https://github.com/eclipse-ee4j/mail/issues/423
-
+        if (!Helper.isUTF8(subject)) {
+            Log.w("Converting subject to ISO8859-1");
+            subject = new String(subject.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
+        }
         subject = subject.replaceAll("\\?=\\r?\\n\\s+=\\?", "\\?==\\?");
         subject = MimeUtility.unfold(subject);
         subject = decodeMime(subject);
@@ -1424,7 +1429,10 @@ public class MessageHelper {
                     throw new MessagingException("downloadAttachment", ex);
                 } catch (Throwable ex) {
                     // Reset progress on failure
-                    Log.e(ex);
+                    if (ex instanceof IOException)
+                        Log.i(ex);
+                    else
+                        Log.e(ex);
                     db.attachment().setError(local.id, Log.formatThrowable(ex));
                     throw ex;
                 }

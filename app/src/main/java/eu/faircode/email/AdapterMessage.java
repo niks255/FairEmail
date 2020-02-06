@@ -920,7 +920,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         keywords.append(message.keywords[i]);
 
-                        if (message.keyword_colors[i] != null) {
+                        if (message.keyword_colors != null &&
+                                message.keyword_colors[i] != null) {
                             int len = keywords.length();
                             keywords.setSpan(
                                     new ForegroundColorSpan(message.keyword_colors[i]),
@@ -1987,16 +1988,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
                     }
 
+                    if (summary != null)
+                        summary = summary.trim();
+                    if (description != null)
+                        description = description.trim();
+                    if (location != null)
+                        location = location.trim();
+
                     Organizer organizer = event.getOrganizer();
 
                     tvCalendarSummary.setText(summary);
-                    tvCalendarSummary.setVisibility(summary == null ? View.GONE : View.VISIBLE);
+                    tvCalendarSummary.setVisibility(TextUtils.isEmpty(summary) ? View.GONE : View.VISIBLE);
 
                     tvCalendarDescription.setText(description);
-                    tvCalendarDescription.setVisibility(description == null ? View.GONE : View.VISIBLE);
+                    tvCalendarDescription.setVisibility(TextUtils.isEmpty(description) ? View.GONE : View.VISIBLE);
 
                     tvCalendarLocation.setText(location);
-                    tvCalendarLocation.setVisibility(location == null ? View.GONE : View.VISIBLE);
+                    tvCalendarLocation.setVisibility(TextUtils.isEmpty(location) ? View.GONE : View.VISIBLE);
 
                     tvCalendarStart.setText(start == null ? null : DTF.format(start.getTime()));
                     tvCalendarStart.setVisibility(start == null ? View.GONE : View.VISIBLE);
@@ -2493,7 +2501,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 DateUtils.getRelativeTimeSpanString(
                                         message.ui_snoozed,
                                         System.currentTimeMillis(),
-                                        DateUtils.MINUTE_IN_MILLIS,
+                                        DateUtils.SECOND_IN_MILLIS,
                                         DateUtils.FORMAT_ABBREV_RELATIVE),
                         Toast.LENGTH_LONG).show();
             }
