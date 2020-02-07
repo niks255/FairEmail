@@ -197,7 +197,10 @@ public class EntityFolder extends EntityOrder implements Serializable {
     public EntityFolder(String fullName, String type) {
         this.name = fullName;
         this.type = type;
+        setProperties();
+    }
 
+    void setProperties() {
         int sync = EntityFolder.SYSTEM_FOLDER_SYNC.indexOf(type);
         this.synchronize = (sync >= 0);
         this.download = (sync < 0 || EntityFolder.SYSTEM_FOLDER_DOWNLOAD.get(sync));
@@ -283,6 +286,10 @@ public class EntityFolder extends EntityOrder implements Serializable {
     }
 
     static String getType(String[] attrs, String fullName, boolean selectable) {
+        // https://tools.ietf.org/html/rfc3501#section-5.1
+        if ("INBOX".equals(fullName.toUpperCase()))
+            return INBOX;
+
         // https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml
         for (String attr : attrs) {
             if ((selectable && "\\Noselect".equals(attr)) || "\\NonExistent".equals(attr))
@@ -294,10 +301,6 @@ public class EntityFolder extends EntityOrder implements Serializable {
                     return SYSTEM_FOLDER_TYPE.get(index);
             }
         }
-
-        // https://tools.ietf.org/html/rfc3501#section-5.1
-        if ("INBOX".equals(fullName.toUpperCase()))
-            return INBOX;
 
         return USER;
     }

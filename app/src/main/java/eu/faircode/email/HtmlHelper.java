@@ -637,20 +637,20 @@ public class HtmlHelper {
             }, document);
         }
 
+        for (Element div : document.select("div")) {
+            boolean inline = Boolean.parseBoolean(div.attr("inline"));
+            if (inline)
+                div.tagName("span");
+        }
+
         // Selective new lines
         for (Element div : document.select("div")) {
             Node prev = div.previousSibling();
-            if (prev instanceof Element && !((Element) prev).isBlock())
+            if (prev != null && hasVisibleContent(Arrays.asList(prev)))
                 div.prependElement("br");
 
-            boolean inline = Boolean.parseBoolean(div.attr("inline"));
-            int childs = div.childNodeSize();
-            Node last = (childs > 0 ? div.childNode(childs - 1) : null);
-            if (!inline &&
-                    (last == null || !"div".equals(last.nodeName())) &&
-                    hasVisibleContent(div.childNodes())) {
+            if (hasVisibleContent(div.childNodes()))
                 div.appendElement("br");
-            }
         }
 
         for (Element div : document.select("div"))
@@ -678,6 +678,7 @@ public class HtmlHelper {
                 .replace("inherit", "")
                 .replace("initial", "")
                 .replace("windowtext", "")
+                .replace("currentcolor", "")
                 .replace("transparent", "")
                 .replaceAll("[^a-z0-9(),.%#]", "")
                 .replaceAll("#+", "#");

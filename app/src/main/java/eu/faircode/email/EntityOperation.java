@@ -221,6 +221,7 @@ public class EntityOperation {
                     long id = message.id;
                     Long identity = message.identity;
                     long uid = message.uid;
+                    Boolean raw = message.raw;
                     int notifying = message.notifying;
                     boolean fts = message.fts;
                     Integer importance = message.importance;
@@ -238,6 +239,7 @@ public class EntityOperation {
                     message.folder = target.id;
                     message.identity = null;
                     message.uid = null;
+                    message.raw = null;
                     message.notifying = 0;
                     message.fts = false;
                     if (reset_importance)
@@ -264,6 +266,7 @@ public class EntityOperation {
                     message.folder = source.id;
                     message.identity = identity;
                     message.uid = uid;
+                    message.raw = raw;
                     message.notifying = notifying;
                     message.fts = fts;
                     message.importance = importance;
@@ -289,14 +292,15 @@ public class EntityOperation {
                 }
 
                 // Cross account move
-                long folder = source.id;
-                if (!source.account.equals(target.account))
-                    if (message.raw != null && message.raw) {
-                        name = ADD;
-                        folder = target.id;
-                    } else
-                        name = RAW;
-                queue(context, message.account, folder, message.id, name, jargs);
+                if (source.account.equals(target.account))
+                    queue(context, message.account, source.id, message.id, name, jargs);
+                else {
+                    if (message.raw != null && message.raw)
+                        queue(context, target.account, target.id, message.id, ADD, jargs);
+                    else
+                        queue(context, source.account, source.id, message.id, RAW, jargs);
+                }
+
                 return;
 
             } else if (DELETE.equals(name))
