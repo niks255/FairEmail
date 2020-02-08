@@ -347,7 +347,6 @@
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
-    <string name="title_advanced_automove">Confirm moving messages</string>
     <string name="title_advanced_discard_delete">On discard draft permanently delete draft</string>
     <string name="title_advanced_default_snooze">Default snooze time</string>
 
@@ -482,7 +481,7 @@
     <string name="title_identity_email">Your email address</string>
     <string name="title_identity_color_hint">Identity colors take precedence over folder and account colors</string>
     <string name="title_advanced_sender">Allow editing sender address</string>
-    <string name="title_advanced_sender_regex">Regex to match edited addresses</string>
+    <string name="title_advanced_sender_regex">Regex to match username of incoming email addresses</string>
     <string name="title_identity_reply_to">Reply to address</string>
     <string name="title_identity_receipt">Request delivery/read receipt by default</string>
     <string name="title_identity_use_ip_hint">In case of \'invalid greeting\', \'requires valid address\' or a similar error, try to change this setting</string>
@@ -728,6 +727,7 @@
 
     <string name="title_compose">Compose</string>
     <string name="title_submitter">Sent by:</string>
+    <string name="title_delivered_to">Delivered to:</string>
     <string name="title_from">From:</string>
     <string name="title_to">To:</string>
     <string name="title_reply_to">Reply to:</string>
@@ -798,6 +798,7 @@
     <string name="title_resync">Resync</string>
     <string name="title_no_openpgp">OpenKeychain not found</string>
     <string name="title_user_interaction">Transferring to OpenKeychain</string>
+    <string name="title_signed_data">Verify the signature to show the message text</string>
     <string name="title_not_encrypted">Message is not signed or encrypted</string>
     <string name="title_reset_sign_key">Reset sign key</string>
 

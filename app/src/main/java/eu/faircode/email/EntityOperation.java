@@ -439,6 +439,21 @@ public class EntityOperation {
             } catch (JSONException ex) {
                 Log.e(ex);
             }
+
+        if (EntityOperation.SYNC.equals(name))
+            db.folder().setFolderSyncState(folder, null);
+
+        if (message != null) {
+            EntityMessage m = db.message().getMessage(message);
+            if (m == null || m.uid == null)
+                return;
+
+            EntityFolder f = db.folder().getFolder(folder);
+            if (f == null)
+                return;
+
+            queue(context, f, FETCH, m.uid);
+        }
     }
 
     @Override

@@ -1078,8 +1078,8 @@ Note that this is independent of receiving messages.
 **(34) How are identities matched?**
 
 Identities are as expected matched by account.
-For incoming messages the *to*, *cc*, *bcc* and *from* addresses will be checked
-and for outgoing messages (drafts, outbox and sent) the *from* addresses will be checked.
+For incoming messages the *to*, *cc*, *bcc*, *(X-)delivered/envelope/original-to* and *from* addresses will be checked (in this order)
+and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked.
 
 The matched address will be shown as *via* in the addresses section.
 
@@ -1088,6 +1088,13 @@ and that identities of other accounts will not be considered.
 
 It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings
 to match the username of an email address (the part before the @ sign).
+
+If you like to match the special purpose email addresses abc@example.com and xyx@example.com
+and like to have a fallback email address main@example.com as well, you could do something like this:
+
+* Identity: abc@example.com; regex: **(?i)abc**
+* Identity: xyz@example.com; regex: **(?i)xyz**
+* Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
 
 Matched identities can be used to color code messages.
 The identity color takes precedence over the account color.

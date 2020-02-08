@@ -103,6 +103,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.search.ComparisonTerm;
@@ -125,33 +126,34 @@ class Core {
     private static final int DOWNLOAD_BATCH_SIZE = 20;
     private static final long YIELD_DURATION = 200L; // milliseconds
     private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
+    private static final int OPERATION_RETRY_MAX = 10;
+    private static final long OPERATION_RETRY_DELAY = 15 * 1000L; // milliseconds
 
     static void processOperations(
             Context context,
             EntityAccount account, EntityFolder folder, List<TupleOperationEx> ops,
             Store istore, Folder ifolder,
             State state)
-            throws MessagingException, JSONException, IOException {
+            throws JSONException {
         try {
             Log.i(folder.name + " start process");
 
             DB db = DB.getInstance(context);
 
-            List<Long> processed = new ArrayList<>();
+            int retry = 0;
+            boolean group = true;
             Log.i(folder.name + " executing operations=" + ops.size());
-            for (int i = 0; i < ops.size() && state.isRunning() && state.isRecoverable(); i++) {
-                EntityOperation op = ops.get(i);
-                if (processed.contains(op.id)) {
-                    Log.i(folder.name + " already processed op=" + op.id + "/" + op.name);
-                    continue;
-                }
+            while (retry < OPERATION_RETRY_MAX && ops.size() > 0 && state.isRunning() && state.isRecoverable()) {
+                TupleOperationEx op = ops.get(0);
 
                 try {
                     Log.i(folder.name +
                             " start op=" + op.id + "/" + op.name +
                             " folder=" + op.folder +
                             " msg=" + op.message +
-                            " args=" + op.args);
+                            " args=" + op.args +
+                            " group=" + group +
+                            " retry=" + retry);
 
                     // Fetch most recent copy of message
                     EntityMessage message = null;
@@ -159,7 +161,7 @@ class Core {
                         message = db.message().getMessage(op.message);
 
                     JSONArray jargs = new JSONArray(op.args);
-                    Map<EntityOperation, EntityMessage> similar = new HashMap<>();
+                    Map<TupleOperationEx, EntityMessage> similar = new HashMap<>();
 
                     try {
                         // Operations should use database transaction when needed
@@ -172,8 +174,8 @@ class Core {
 
                         // Process similar operations
                         boolean skip = false;
-                        for (int j = i + 1; j < ops.size(); j++) {
-                            EntityOperation next = ops.get(j);
+                        for (int j = 1; j < ops.size(); j++) {
+                            TupleOperationEx next = ops.get(j);
 
                             switch (op.name) {
                                 case EntityOperation.ADD:
@@ -194,16 +196,15 @@ class Core {
                                     break;
 
                                 case EntityOperation.MOVE:
-                                    if (message.uid != null &&
+                                    if (group &&
+                                            message.uid != null &&
                                             EntityOperation.MOVE.equals(next.name)) {
                                         JSONArray jnext = new JSONArray(next.args);
                                         // Same target
                                         if (jargs.getLong(0) == jnext.getLong(0)) {
                                             EntityMessage m = db.message().getMessage(next.message);
-                                            if (m != null && m.uid != null) {
-                                                processed.add(next.id);
+                                            if (m != null && m.uid != null)
                                                 similar.put(next, m);
-                                            }
                                         }
                                     }
                                     break;
@@ -215,11 +216,12 @@ class Core {
                                     " skipping op=" + op.id + "/" + op.name +
                                     " msg=" + op.message + " args=" + op.args);
                             db.operation().deleteOperation(op.id);
+                            ops.remove(op);
                             continue;
                         }
 
                         List<Long> sids = new ArrayList<>();
-                        for (EntityOperation s : similar.keySet())
+                        for (TupleOperationEx s : similar.keySet())
                             sids.add(s.id);
 
                         if (similar.size() > 0)
@@ -241,18 +243,13 @@ class Core {
                             db.beginTransaction();
 
                             db.operation().setOperationError(op.id, null);
-                            for (EntityOperation s : similar.keySet())
-                                db.operation().setOperationError(s.id, null);
 
-                            if (message != null) {
+                            if (message != null)
                                 db.message().setMessageError(message.id, null);
-                                for (EntityMessage m : similar.values())
-                                    db.message().setMessageError(m.id, null);
-                            }
 
                             if (!EntityOperation.SYNC.equals(op.name)) {
                                 db.operation().setOperationState(op.id, "executing");
-                                for (EntityOperation s : similar.keySet())
+                                for (TupleOperationEx s : similar.keySet())
                                     db.operation().setOperationState(s.id, "executing");
                             }
 
@@ -373,32 +370,38 @@ class Core {
                             db.beginTransaction();
 
                             db.operation().deleteOperation(op.id);
-                            for (EntityOperation s : similar.keySet())
+                            for (TupleOperationEx s : similar.keySet())
                                 db.operation().deleteOperation(s.id);
 
                             db.setTransactionSuccessful();
                         } finally {
                             db.endTransaction();
                         }
+
+                        ops.remove(op);
+                        for (TupleOperationEx s : similar.keySet())
+                            ops.remove(s);
                     } catch (Throwable ex) {
                         Log.e(folder.name, ex);
                         EntityLog.log(context, folder.name + " " + Log.formatThrowable(ex, false));
 
+                        state.error(ex);
+
+                        if (similar.size() > 0) {
+                            // Retry individually
+                            group = false;
+                            // Finally will reset state
+                            continue;
+                        }
+
                         try {
                             db.beginTransaction();
 
-                            db.operation().setOperationError(op.id, Log.formatThrowable(ex));
-                            for (EntityOperation s : similar.keySet())
-                                db.operation().setOperationError(s.id, Log.formatThrowable(ex));
+                            op.error = Log.formatThrowable(ex);
+                            db.operation().setOperationError(op.id, op.error);
 
-                            if (message != null && !(ex instanceof IllegalArgumentException)) {
+                            if (message != null && !(ex instanceof IllegalArgumentException))
                                 db.message().setMessageError(message.id, Log.formatThrowable(ex));
-                                for (EntityMessage m : similar.values())
-                                    db.message().setMessageError(m.id, Log.formatThrowable(ex));
-                            }
-
-                            if (similar.size() > 0 && !(ex instanceof IllegalArgumentException))
-                                db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
 
                             db.setTransactionSuccessful();
                         } finally {
@@ -430,48 +433,42 @@ class Core {
                             try {
                                 db.beginTransaction();
 
+                                // Cleanup operation
+                                op.cleanup(context);
+
                                 // There is no use in repeating
                                 db.operation().deleteOperation(op.id);
-                                for (EntityOperation s : similar.keySet())
-                                    db.operation().deleteOperation(s.id);
-
-                                // Cleanup folder
-                                if (EntityOperation.SYNC.equals(op.name))
-                                    db.folder().setFolderSyncState(folder.id, null);
 
                                 // Cleanup messages
                                 if (message != null &&
                                         (ex instanceof MessageRemovedException ||
                                                 ex instanceof MessageRemovedIOException ||
                                                 ex.getCause() instanceof MessageRemovedException ||
-                                                ex.getCause() instanceof MessageRemovedIOException)) {
-                                    // Failsafe: retry batch
-                                    if (similar.size() > 0)
-                                        throw ex;
-
+                                                ex.getCause() instanceof MessageRemovedIOException))
                                     db.message().deleteMessage(message.id);
-                                }
-
-                                // Cleanup operations
-                                op.cleanup(context);
-                                for (EntityOperation s : similar.keySet())
-                                    s.cleanup(context);
 
                                 db.setTransactionSuccessful();
                             } finally {
                                 db.endTransaction();
                             }
 
-                            continue;
+                            ops.remove(op);
+                        } else {
+                            retry++;
+                            if (retry < OPERATION_RETRY_MAX)
+                                try {
+                                    Thread.sleep(OPERATION_RETRY_DELAY);
+                                } catch (InterruptedException ex1) {
+                                    Log.w(ex1);
+                                }
                         }
-
-                        throw ex;
                     } finally {
+                        // Reset operation state
                         try {
                             db.beginTransaction();
 
                             db.operation().setOperationState(op.id, null);
-                            for (EntityOperation s : similar.keySet())
+                            for (TupleOperationEx s : similar.keySet())
                                 db.operation().setOperationState(s.id, null);
 
                             db.setTransactionSuccessful();
@@ -483,6 +480,21 @@ class Core {
                     Log.i(folder.name + " end op=" + op.id + "/" + op.name);
                 }
             }
+
+            if (state.isRunning() && state.isRecoverable())
+                try {
+                    db.beginTransaction();
+                    for (TupleOperationEx op : ops) {
+                        Log.e("Operation=" + op.name + " error=" + op.error);
+                        op.cleanup(context);
+                        db.operation().deleteOperation(op.id);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
         } finally {
             Log.i(folder.name + " end process state=" + state);
         }
@@ -2432,6 +2444,12 @@ class Core {
                 addresses.addAll(Arrays.asList(message.cc));
             if (message.bcc != null)
                 addresses.addAll(Arrays.asList(message.bcc));
+            if (message.deliveredto != null)
+                try {
+                    addresses.add(new InternetAddress(message.deliveredto));
+                } catch (AddressException ex) {
+                    Log.w(ex);
+                }
             if (message.from != null)
                 addresses.addAll(Arrays.asList(message.from));
         }
