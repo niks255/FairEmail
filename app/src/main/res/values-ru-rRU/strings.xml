@@ -248,12 +248,12 @@
     <string name="title_advanced_signature_end">Добавлять подпись после цитаты/пересылаемого сообщения</string>
     <string name="title_advanced_plain_only">По умолчанию отправлять простым текстом</string>
     <string name="title_advanced_usenet_signature">Стиль подписи Usenet</string>
-    <string name="title_advanced_remove_signatures">Удалить распознанные подписи</string>
+    <string name="title_advanced_remove_signatures">Удалять распознанные подписи</string>
     <string name="title_advanced_resize_images">Автоматически изменять размер встроенных изображений</string>
     <string name="title_advanced_resize_attachments">Автоматически изменять размер прикреплённых изображений</string>
     <string name="title_advanced_resize_pixels">&lt; %1$d пикселей</string>
     <string name="title_advanced_send_reminders">Показывать напоминания</string>
-    <string name="title_advanced_lookup_mx">Проверить адрес электронной почты получателя перед отправкой</string>
+    <string name="title_advanced_lookup_mx">Проверять адрес электронной почты получателя перед отправкой</string>
     <string name="title_advanced_send_delayed">Задержка отправки сообщений</string>
     <string name="title_advanced_metered">Использовать лимитированные подключения</string>
     <string name="title_advanced_download">Автоматически загружать сообщения и вложения для лимитного подключения до</string>
@@ -270,8 +270,7 @@
     <string name="title_advanced_threading">Связанные диалоги</string>
     <string name="title_advanced_indentation">Левый/правый отступ для полученных/отправленных сообщений в диалогах</string>
     <string name="title_advanced_highlight_unread">Выделять непрочитанные сообщения</string>
-    <string name="title_advanced_distinguish_contacts">Подчёркивать отправителя, если он известен как локальный контакт «кому»</string>
-    <string name="title_advanced_color_stripe">Показать цветовую полосу</string>
+    <string name="title_advanced_color_stripe">Показывать цветовую полосу</string>
     <string name="title_advanced_avatars">Показывать фотографии контакта</string>
     <string name="title_advanced_gravatars">Показывать Граватары</string>
     <string name="title_advanced_generated_icons">Показывать сгенерированные иконки</string>
@@ -281,6 +280,8 @@
     <string name="title_advanced_color_value">Яркость</string>
     <string name="title_advanced_color_threshold">Порог яркости отображения букв</string>
     <string name="title_advanced_name_email">Показывать имена и адреса электронной почты</string>
+    <string name="title_advanced_replace_name">Предпочитать имя контакта вместо имени отправителя</string>
+    <string name="title_advanced_distinguish_contacts">Подчёркивать отправителя, если он известен как локальный контакт «кому»</string>
     <string name="title_advanced_authentication">Показывать предупреждение, когда сервер не может аутентифицировать сообщение</string>
     <string name="title_advanced_font_size_sender">Размера шрифта поля \"Отправитель\"</string>
     <string name="title_advanced_font_size_subject">Размера шрифта поля \"Тема\"</string>
@@ -298,11 +299,11 @@
     <string name="title_advanced_contrast">Использовать высокий контраст для текста сообщений</string>
     <string name="title_advanced_monospaced">Использовать моноширинный шрифт для текста сообщения</string>
     <string name="title_advanced_text_color">Показывать цвета текста</string>
-    <string name="title_advanced_collapse_quotes">Свернуть цитируемый текст</string>
+    <string name="title_advanced_collapse_quotes">Сворачивать цитируемый текст</string>
     <string name="title_advanced_images_inline">Автоматически показывать встроенные изображения</string>
     <string name="title_advanced_seekbar">Показывать относительное положение диалога точкой</string>
     <string name="title_advanced_actionbar">Показывать панель управления диалогами</string>
-    <string name="title_advanced_double_back">Двойное \"Назад\" для выхода</string>
+    <string name="title_advanced_double_back">Двойное нажатие \"Назад\" для выхода</string>
     <string name="title_advanced_pull_refresh">Потянуть вниз для обновления</string>
     <string name="title_advanced_autoscroll">Прокрутить к началу списка при получении новых сообщений</string>
     <string name="title_advanced_double_tap">Двойное нажатие для отметки сообщений прочитанными/непрочитанными</string>
@@ -364,7 +365,7 @@
     <string name="title_advanced_import_key">Импорт приватного ключа</string>
     <string name="title_advanced_manage_keys">Управление приватными ключами</string>
     <string name="title_advanced_external_search">Разрешить другим приложениям искать в сообщениях</string>
-    <string name="title_advanced_fts">Построить индекс поиска</string>
+    <string name="title_advanced_fts">Строить индекс поиска</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d сообщений проиндексировано (%3$s)</string>
     <string name="title_advanced_english">Принудительно использовать английский язык</string>
     <string name="title_advanced_watchdog">Регулярно проверять, активен ли FairEmail</string>
@@ -462,6 +463,7 @@
     <string name="title_port">Номер порта</string>
     <string name="title_user">Имя пользователя</string>
     <string name="title_password">Пароль</string>
+    <string name="title_client_certificate">Сертификат клиента</string>
     <string name="title_realm">Реалм</string>
     <string name="title_use_ip">Использовать локальный IP-адрес вместо имени хоста</string>
     <string name="title_primary_account">Основная (учётная запись по умолчанию)</string>
@@ -626,7 +628,8 @@
     <string name="title_no_format">Оригинальное сообщение будет включено</string>
     <string name="title_no_image">Изображение не может быть декодировано</string>
     <string name="title_no_search">Поиск на сервере недоступен для этой учётной записи</string>
-    <string name="title_too_large">Сообщение слишком велико для переформатирования, попробуйте использовать оригинальный вид сообщения при помощи значка полноэкранного просмотра</string>
+    <string name="title_too_large">Сообщение слишком большое для полного переформатирования</string>
+    <string name="title_show_full">Показать сообщение полностью</string>
     <string name="title_unused_inline">Неиспользуемые встроенные изображения будут удалены при отправке</string>
     <string name="title_accross_remark">Сообщения, перемещаемые между учётными записями, будут загружены заново, порождая дополнительный трафик</string>
     <string name="title_raw_saved">Оригинал сообщения сохранён</string>
@@ -735,6 +738,7 @@
     <string name="title_signature_unconfirmed_from">Подпись сообщения верна, но не подтверждена: %1$s</string>
     <string name="title_signature_invalid">Подпись сообщения недействительна</string>
     <string name="title_signature_invalid_reason">Некорректная подпись сообщения: %1$s</string>
+    <string name="title_signature_key_missing">Ключ отсутствует</string>
     <string name="title_signature_certificate_invalid">Некорректная цепочка сертификатов</string>
     <string name="title_signature_sender">Адрес отправителя</string>
     <string name="title_signature_email">Адрес подписи</string>
@@ -852,7 +856,7 @@
     <string name="title_legend_trash">Корзина</string>
     <string name="title_legend_junk">Спам</string>
     <string name="title_legend_primary">Основной</string>
-    <string name="title_legend_subscribed">Подписка на</string>
+    <string name="title_legend_subscribed">Подписка</string>
     <string name="title_legend_rule">Имеет правила</string>
     <string name="title_legend_similar">Поиск похожих сообщений</string>
     <string name="title_legend_notify">Уведомлять о новых сообщениях</string>

@@ -270,7 +270,6 @@
     <string name="title_advanced_threading">Vlákna konverzací</string>
     <string name="title_advanced_indentation">Levé/pravé odsazení přijatých/odeslaných zpráv v konverzacích</string>
     <string name="title_advanced_highlight_unread">Zvýraznit nepřečtené zprávy</string>
-    <string name="title_advanced_distinguish_contacts">Podtrhnout odesílatele, je-li známý jako místní \"komu\" kontakt</string>
     <string name="title_advanced_color_stripe">Zobrazit barevný pruh</string>
     <string name="title_advanced_avatars">Zobrazit fotografie kontaktů</string>
     <string name="title_advanced_gravatars">Zobrazit Gravatary</string>
@@ -281,6 +280,7 @@
     <string name="title_advanced_color_value">Jas</string>
     <string name="title_advanced_color_threshold">Mezní hodnota barvy písmena</string>
     <string name="title_advanced_name_email">Zobrazit jména a e-mailové adresy</string>
+    <string name="title_advanced_distinguish_contacts">Podtrhnout odesílatele, je-li známý jako místní \"komu\" kontakt</string>
     <string name="title_advanced_authentication">Zobrazit upozornění, nemůže-li přijímající server zprávu ověřit</string>
     <string name="title_advanced_font_size_sender">Velikost písma odesílatele</string>
     <string name="title_advanced_font_size_subject">Velikost písma předmětu</string>
@@ -461,6 +461,7 @@
     <string name="title_port">Číslo portu</string>
     <string name="title_user">Uživatelské jméno</string>
     <string name="title_password">Heslo</string>
+    <string name="title_client_certificate">Klientský certifikát</string>
     <string name="title_realm">Sféra</string>
     <string name="title_use_ip">Použít lokální IP adresu namísto názvu hostitele</string>
     <string name="title_primary_account">Hlavní (výchozí účet)</string>
@@ -625,7 +626,6 @@
     <string name="title_no_format">Původní zpráva bude zahrnuta</string>
     <string name="title_no_image">Obrázek nemohl být dekódován</string>
     <string name="title_no_search">Vyhledávání na serveru není pro tento účet k dispozici</string>
-    <string name="title_too_large">Zpráva je příliš velká pro přeformátování, zkuste zobrazení původní zprávy skrze ikonu zobrazení na celou obrazovku</string>
     <string name="title_unused_inline">Nepoužité vložené obrázky budou při odeslání odebrány</string>
     <string name="title_accross_remark">Zprávy přesunuté napříč účty budou opětovně staženy, což povede ke spotřebě dat navíc</string>
     <string name="title_raw_saved">Zdrojová zpráva uložena</string>
@@ -732,6 +732,7 @@
     <string name="title_signature_unconfirmed_from">Podpis zprávy je platný, ale nepotvrzený: %1$s</string>
     <string name="title_signature_invalid">Neplatný podpis zprávy</string>
     <string name="title_signature_invalid_reason">Neplatný podpis zprávy: %1$s</string>
+    <string name="title_signature_key_missing">Chybí klíč</string>
     <string name="title_signature_certificate_invalid">Neplatný řetězec certifikátů</string>
     <string name="title_signature_sender">Adresa odesílatele</string>
     <string name="title_signature_email">Adresa podpisu</string>

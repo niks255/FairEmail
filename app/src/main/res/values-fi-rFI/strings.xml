@@ -246,7 +246,6 @@
     <string name="title_advanced_threading">Keskustelujen ketjuttaminen</string>
     <string name="title_advanced_indentation">Tasaa vastaanotetut/lähetetyt viestit keskusteluissa vasemmalle/oikealle</string>
     <string name="title_advanced_highlight_unread">Korosta lukemattomat viestit</string>
-    <string name="title_advanced_distinguish_contacts">Alleviivaa lähettäjä tämän ollessa paikallisesti tunnettu vastaanottaja</string>
     <string name="title_advanced_color_stripe">Näytä väriliuska</string>
     <string name="title_advanced_avatars">Näytä yhteystietojen kuvat</string>
     <string name="title_advanced_gravatars">Näytä Gravatarit</string>
@@ -257,6 +256,8 @@
     <string name="title_advanced_color_value">Kirkkaus</string>
     <string name="title_advanced_color_threshold">Kirjasimen värin kynnysarvo</string>
     <string name="title_advanced_name_email">Näytä nimet ja sähköpostiosoitteet</string>
+    <string name="title_advanced_replace_name">Käytä ensisijaisesti yhteystiedon nimeä lähettäjän nimen sijaan</string>
+    <string name="title_advanced_distinguish_contacts">Alleviivaa lähettäjä tämän ollessa paikallisesti tunnettu vastaanottaja</string>
     <string name="title_advanced_authentication">Näytä varoitus, kun vastaanottava palvelin ei voinut todentaa viestiä</string>
     <string name="title_advanced_font_size_sender">Viestin lähettäjän kirjaisimen koko</string>
     <string name="title_advanced_font_size_subject">Viestin aiheen kirjaisimen koko</string>
@@ -293,7 +294,7 @@
     <string name="title_advanced_onclose">Keskustelua suljettaessa</string>
     <string name="title_advanced_quick_filter">Näytä huomaamattomat pikasuodatuskuvakkeet</string>
     <string name="title_advanced_quick_scroll">Näytä huomaamattomat ylös-/alaspikavierityskuvakkeet</string>
-    <string name="title_advanced_autoread">Siirtäessä viestejä merkitse ne luetuiksi</string>
+    <string name="title_advanced_autoread">Merkitse viestit luetuiksi siirrettäessä</string>
     <string name="title_advanced_autounstar">Poista tähti viestejä siirrettäessä</string>
     <string name="title_advanced_reset_importance">Palauta oma tärkeysjärjestys oletusasetukseen siirrettäessä</string>
     <string name="title_advanced_discard_delete">Poista luonnos hylättäessä</string>
@@ -602,7 +603,6 @@
     <string name="title_no_format">Alkuperäinen vastaanotettu viesti sisällytetään</string>
     <string name="title_no_image">Kuvan koodauksen purku epäonnistui</string>
     <string name="title_no_search">Palvelimelta haku ei ole saatavilla tällä tilillä</string>
-    <string name="title_too_large">Viesti liian suuri uudelleenmuotoiltavaksi, yritä katsoa alkuperäinen viesti koko näytön kuvakkeesta</string>
     <string name="title_unused_inline">Käyttämättömät upotetut kuvat poistetaan lähetettäessä</string>
     <string name="title_accross_remark">Tilien välillä siirretyt viestit ladataan uudelleen, mikä lisää datan käyttöä</string>
     <string name="title_raw_saved">Raakaviesti tallennettu</string>

@@ -77,6 +77,7 @@ public class HtmlHelper {
     private static final float MIN_LUMINANCE = 0.5f;
     private static final int TAB_SIZE = 2;
     private static final int MAX_AUTO_LINK = 250;
+    private static final int MAX_TEXT_SIZE = 50 * 1024; // characters
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
 
     private static final List<String> heads = Collections.unmodifiableList(Arrays.asList(
@@ -257,6 +258,7 @@ public class HtmlHelper {
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
 
+        // https://chromium.googlesource.com/chromium/blink/+/master/Source/core/css/html.css
         Document parsed = JsoupEx.parse(html);
 
         // <!--[if ...]><!--> ... <!--<![endif]-->
@@ -322,7 +324,7 @@ public class HtmlHelper {
         }
 
         Whitelist whitelist = Whitelist.relaxed()
-                .addTags("hr", "abbr", "big", "font")
+                .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt")
                 .removeTags("col", "colgroup", "thead", "tbody")
                 .removeAttributes("table", "width")
                 .removeAttributes("td", "colspan", "rowspan", "width")
@@ -365,6 +367,7 @@ public class HtmlHelper {
                                 .replaceAll("\\s+", " ");
                         switch (key) {
                             case "color":
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/color
                                 Integer color = parseColor(value, dark);
                                 if (color != null) {
                                     // fromHtml does not support transparency
@@ -375,18 +378,43 @@ public class HtmlHelper {
                                 }
                                 break;
 
-                            case "background":
-                            case "background-color":
+                            case "font-size":
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/font-size
+                                if (element.parent() != null) {
+                                    Float fsize = getFontSize(value);
+                                    if (fsize != null && fsize != 0 &&
+                                            (fsize <= 0.8f || fsize >= 1.25)) {
+                                        Element e = new Element(fsize < 1 ? "small" : "big");
+                                        element.replaceWith(e);
+                                        e.appendChild(element);
+                                    }
+                                }
                                 break;
 
-                            case "line-through":
-                                sb.append(param).append(";");
+                            case "font-weight":
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight
+                                if (element.parent() != null) {
+                                    Integer fweight = getFontWeight(value);
+                                    if (fweight != null && fweight >= 600) {
+                                        Element strong = new Element("strong");
+                                        element.replaceWith(strong);
+                                        strong.appendChild(element);
+                                    }
+                                }
+                                break;
+
+                            case "text-decoration":
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration
+                                if (value.contains("line-through"))
+                                    sb.append("text-decoration:line-through;");
                                 break;
 
                             case "display":
-                                if (!display_hidden && "none".equals(value)) {
-                                    Log.i("Removing hidden element " + element.tagName());
-                                    element.empty();
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/display
+                                if (element.parent() != null &&
+                                        !display_hidden && "none".equals(value)) {
+                                    Log.i("Removing display none " + element.tagName());
+                                    element.remove();
                                 }
                                 if ("inline".equals(value) || "inline-block".equals(value)) {
                                     if (element.nextSibling() != null)
@@ -398,10 +426,12 @@ public class HtmlHelper {
                             case "width":
                                 //case "font-size":
                                 //case "line-height":
-                                if (!display_hidden &&
-                                        ("0".equals(value) || "0px".equals(value))) {
-                                    Log.i("Removing hidden element " + element.tagName());
-                                    element.empty();
+                                if (element.parent() != null && !display_hidden) {
+                                    Float s = getFontSize(value);
+                                    if (s != null && s == 0) {
+                                        Log.i("Removing no height/width " + element.tagName());
+                                        element.remove();
+                                    }
                                 }
                                 break;
                         }
@@ -437,29 +467,47 @@ public class HtmlHelper {
             p.tagName("div");
         }
 
-        // Short quotes
+        // Short inline quotes
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q
         for (Element q : document.select("q")) {
-            q.prependText("\"");
-            q.appendText("\"");
-            q.tagName("em");
+            q.tagName("a");
+            q.attr("href", q.attr("cite"));
+            q.removeAttr("cite");
         }
 
+        // Citation
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/cite
+        for (Element cite : document.select("cite")) {
+            cite.prependText("\"");
+            cite.appendText("\"");
+            cite.tagName("em");
+        }
+
+        // Definition
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dfn
+        for (Element dfn : document.select("dfn"))
+            dfn.tagName("em");
+
         // Pre formatted text
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre
         for (Element pre : document.select("pre")) {
             pre.html(formatPre(pre.wholeText()));
             pre.tagName("div");
         }
 
         // Code
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/code
         document.select("code").tagName("strong");
 
         // Lines
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr
         for (Element hr : document.select("hr")) {
             hr.tagName("div");
             hr.text("----------------------------------------");
         }
 
         // Descriptions
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl
         document.select("dl").tagName("div");
         for (Element dt : document.select("dt")) {
             dt.tagName("strong");
@@ -471,9 +519,12 @@ public class HtmlHelper {
         }
 
         // Abbreviations
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/abbr
         document.select("abbr").tagName("u");
 
         // Subscript/Superscript
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/sub
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/sup
         for (Element subp : document.select("sub,sup")) {
             Element small = document.createElement("small");
             small.html(subp.html());
@@ -481,6 +532,7 @@ public class HtmlHelper {
         }
 
         // Lists
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li
         for (Element li : document.select("li")) {
             li.tagName("span");
             Element parent = li.parent();
@@ -494,6 +546,7 @@ public class HtmlHelper {
         document.select("ul").tagName("div");
 
         // Tables
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table
         for (Element col : document.select("th,td")) {
             // separate columns
             if (hasVisibleContent(col.childNodes()))
@@ -528,6 +581,7 @@ public class HtmlHelper {
             removeTrackingPixels(context, document);
 
         // Images
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
         for (Element img : document.select("img")) {
             String alt = img.attr("alt");
             String src = img.attr("src");
@@ -535,7 +589,7 @@ public class HtmlHelper {
 
             if (!show_images && !TextUtils.isEmpty(alt))
                 if (TextUtils.isEmpty(tracking))
-                    img.appendText(" " + alt + " ");
+                    img.appendText("[" + alt + "]");
                 else {
                     img.append("&nbsp;");
                     Element a = document.createElement("a");
@@ -662,12 +716,79 @@ public class HtmlHelper {
                 if (!TextUtils.isEmpty(span.attr("color")))
                     span.tagName("font");
 
+        int length = 0;
+        for (Element elm : document.select("*")) {
+            for (Node child : elm.childNodes())
+                if (child instanceof TextNode)
+                    length += ((TextNode) child).text().length();
+            if (length > MAX_TEXT_SIZE)
+                elm.remove();
+        }
+
         if (document.body() == null) {
             Log.e("Sanitize without body");
             document.normalise();
         }
 
+        if (length > MAX_TEXT_SIZE) {
+            document.body()
+                    .appendElement("p")
+                    .appendElement("em")
+                    .text(context.getString(R.string.title_too_large));
+
+            document.body()
+                    .appendElement("p")
+                    .appendElement("big")
+                    .appendElement("a")
+                    .attr("href", "full:")
+                    .text(context.getString(R.string.title_show_full));
+        }
+
         return document;
+    }
+
+    private static Integer getFontWeight(String value) {
+        if (TextUtils.isEmpty(value))
+            return null;
+
+        value = value.toLowerCase(Locale.ROOT).trim();
+
+        switch (value) {
+            case "lighter":
+                return 300;
+            case "normal":
+                return 400;
+            case "bolder":
+                return 600;
+            case "bold":
+                return 700;
+        }
+
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ignored) {
+        }
+
+        return null;
+
+    }
+
+    private static Float getFontSize(String value) {
+        if (TextUtils.isEmpty(value))
+            return null;
+
+        value = value.toLowerCase(Locale.ROOT).trim();
+
+        try {
+            if (value.endsWith("em"))
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim());
+            if (value.endsWith("px"))
+                return Integer.parseInt(value.substring(0, value.length() - 2).trim()) / 16f;
+            return Integer.parseInt(value.trim()) / 16f;
+        } catch (NumberFormatException ignored) {
+        }
+
+        return null;
     }
 
     private static Integer parseColor(@NonNull String value, boolean dark) {
@@ -676,6 +797,7 @@ public class HtmlHelper {
                 .replace("null", "")
                 .replace("none", "")
                 .replace("unset", "")
+                .replace("auto", "")
                 .replace("inherit", "")
                 .replace("initial", "")
                 .replace("windowtext", "")

@@ -2774,9 +2774,11 @@ public class FragmentCompose extends FragmentBase {
                                 break;
                             }
 
-                    if (data.draft.from != null && data.draft.from.length > 0) {
+                    Address[] refto = (ref == null ? null
+                            : ref.replySelf(data.identities, ref.account) ? ref.from : ref.to);
+                    if (refto != null && refto.length > 0) {
                         if (selected == null)
-                            for (Address sender : data.draft.from)
+                            for (Address sender : refto)
                                 for (EntityIdentity identity : data.identities)
                                     if (identity.account.equals(aid) &&
                                             identity.sameAddress(sender)) {
@@ -2786,7 +2788,7 @@ public class FragmentCompose extends FragmentBase {
                                     }
 
                         if (selected == null)
-                            for (Address sender : data.draft.from)
+                            for (Address sender : refto)
                                 for (EntityIdentity identity : data.identities)
                                     if (identity.account.equals(aid) &&
                                             identity.similarAddress(sender)) {
@@ -2796,7 +2798,7 @@ public class FragmentCompose extends FragmentBase {
                                     }
 
                         if (selected == null)
-                            for (Address sender : data.draft.from)
+                            for (Address sender : refto)
                                 for (EntityIdentity identity : data.identities)
                                     if (identity.sameAddress(sender)) {
                                         selected = identity;
@@ -2805,7 +2807,7 @@ public class FragmentCompose extends FragmentBase {
                                     }
 
                         if (selected == null)
-                            for (Address sender : data.draft.from)
+                            for (Address sender : refto)
                                 for (EntityIdentity identity : data.identities)
                                     if (identity.similarAddress(sender)) {
                                         selected = identity;
@@ -2933,12 +2935,25 @@ public class FragmentCompose extends FragmentBase {
                                         if (recognized != null) {
                                             Address same = null;
                                             Address similar = null;
+
                                             for (Address from : data.draft.from) {
                                                 if (same == null && recognized.sameAddress(from))
                                                     same = from;
                                                 if (similar == null && recognized.similarAddress(from))
                                                     similar = from;
                                             }
+
+                                            if (ref.deliveredto != null)
+                                                try {
+                                                    Address deliveredto = new InternetAddress(ref.deliveredto);
+                                                    if (same == null && recognized.sameAddress(deliveredto))
+                                                        same = deliveredto;
+                                                    if (similar == null && recognized.similarAddress(deliveredto))
+                                                        similar = deliveredto;
+                                                } catch (AddressException ex) {
+                                                    Log.w(ex);
+                                                }
+
                                             preferred = (same == null ? similar : same);
                                         }
                                     }
@@ -2994,7 +3009,7 @@ public class FragmentCompose extends FragmentBase {
 
                         if (ref.plain_only != null && ref.plain_only)
                             data.draft.plain_only = true;
-                        if (ref.ui_encrypt != null && ref.ui_encrypt != EntityMessage.ENCRYPT_NONE) {
+                        if (ref.ui_encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(ref.ui_encrypt)) {
                             data.draft.encrypt = ref.ui_encrypt;
                             data.draft.ui_encrypt = ref.ui_encrypt;
                         }

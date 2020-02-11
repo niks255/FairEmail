@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.security.KeyChain;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -62,6 +63,8 @@ import javax.mail.Service;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.event.StoreListener;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -232,7 +235,11 @@ public class EmailService implements AutoCloseable {
     }
 
     public void connect(EntityAccount account) throws MessagingException {
-        String password = connect(account.host, account.port, account.auth_type, account.provider, account.user, account.password, account.fingerprint);
+        String password = connect(
+                account.host, account.port,
+                account.auth_type, account.provider,
+                account.user, account.password,
+                account.certificate_alias, account.fingerprint);
         if (password != null) {
             DB db = DB.getInstance(context);
             int count = db.account().setAccountPassword(account.id, account.password);
@@ -241,7 +248,11 @@ public class EmailService implements AutoCloseable {
     }
 
     public void connect(EntityIdentity identity) throws MessagingException {
-        String password = connect(identity.host, identity.port, identity.auth_type, identity.provider, identity.user, identity.password, identity.fingerprint);
+        String password = connect(
+                identity.host, identity.port,
+                identity.auth_type, identity.provider,
+                identity.user, identity.password,
+                identity.certificate_alias, identity.fingerprint);
         if (password != null) {
             DB db = DB.getInstance(context);
             int count = db.identity().setIdentityPassword(identity.id, identity.password);
@@ -252,10 +263,20 @@ public class EmailService implements AutoCloseable {
     public String connect(
             String host, int port,
             int auth, String provider, String user, String password,
-            String fingerprint) throws MessagingException {
+            String certificate, String fingerprint) throws MessagingException {
         SSLSocketFactoryService factory = null;
         try {
-            factory = new SSLSocketFactoryService(host, insecure, harden, fingerprint);
+            X509Certificate[] certs = null;
+            if (certificate != null) {
+                Log.i("Get client certificate alias=" + certificate);
+                try {
+                    certs = KeyChain.getCertificateChain(context, certificate);
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
+            }
+
+            factory = new SSLSocketFactoryService(host, insecure, harden, certs, fingerprint);
             properties.put("mail." + protocol + ".ssl.socketFactory", factory);
             properties.put("mail." + protocol + ".socketFactory.fallback", "false");
             properties.put("mail." + protocol + ".ssl.checkserveridentity", "false");
@@ -564,7 +585,7 @@ public class EmailService implements AutoCloseable {
         private SSLSocketFactory factory;
         private X509Certificate certificate;
 
-        SSLSocketFactoryService(String host, boolean insecure, boolean harden, String fingerprint) throws GeneralSecurityException {
+        SSLSocketFactoryService(String host, boolean insecure, boolean harden, X509Certificate[] certs, String fingerprint) throws GeneralSecurityException {
             this.server = host;
             this.secure = !insecure;
             this.harden = harden;
@@ -633,7 +654,26 @@ public class EmailService implements AutoCloseable {
                     }
                 };
 
-                sslContext.init(null, new TrustManager[]{tm}, null);
+                KeyManager[] km = null;
+                if (certs != null)
+                    try {
+                        Log.i("Client certificate init certs=" + certs.length);
+
+                        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+                        ks.load(null, null);
+
+                        for (int i = 0; i < certs.length; i++)
+                            ks.setCertificateEntry(server + ":" + i, certs[i]);
+
+                        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                        kmf.init(ks, null);
+                        km = kmf.getKeyManagers();
+
+                        Log.i("Client certificate initialized");
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                sslContext.init(km, new TrustManager[]{tm}, null);
             }
 
             factory = sslContext.getSocketFactory();

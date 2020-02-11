@@ -247,7 +247,6 @@
     <string name="title_advanced_threading">Elkarrizketak haritzea</string>
     <string name="title_advanced_indentation">Ezker/eskuin marjina elkarrizketetan jaso/bidalitako mezuetan</string>
     <string name="title_advanced_highlight_unread">Nabarmendu irakurri gabeko mezuak</string>
-    <string name="title_advanced_distinguish_contacts">Azpimarratu igorlea kontaktua jasotzaile lokalki ezaguna bada</string>
     <string name="title_advanced_color_stripe">Erakutsi kolorezko marra</string>
     <string name="title_advanced_avatars">Erakutsi kontaktuen argazkiak</string>
     <string name="title_advanced_gravatars">Erakutsi gravatarrak</string>
@@ -258,6 +257,8 @@
     <string name="title_advanced_color_value">Distira</string>
     <string name="title_advanced_color_threshold">Letren kolorearen atalasea</string>
     <string name="title_advanced_name_email">Erakutsi izenak eta e-mail helbideak</string>
+    <string name="title_advanced_replace_name">Nahiago kontaktu-izena bidaltzaile-izena baino</string>
+    <string name="title_advanced_distinguish_contacts">Azpimarratu igorlea kontaktua jasotzaile lokalki ezaguna bada</string>
     <string name="title_advanced_authentication">Erakutsi abisua zerbitzari jasotzaileak ezin izan badu mezua autentifikatu</string>
     <string name="title_advanced_font_size_sender">Igorlearen letra tamaina</string>
     <string name="title_advanced_font_size_subject">Gaiaren letra tamaina</string>
@@ -438,6 +439,7 @@
     <string name="title_port">Ataka zenbakia</string>
     <string name="title_user">Erabiltzaile izena</string>
     <string name="title_password">Pasahitza</string>
+    <string name="title_client_certificate">Bezero ziurtagiria</string>
     <string name="title_realm">Domeinua</string>
     <string name="title_use_ip">Erabili IP lokala ostalari izenaren ordez</string>
     <string name="title_primary_account">Nagusia (kontu lehenetsia)</string>
@@ -602,7 +604,6 @@
     <string name="title_no_format">Jasotako jatorrizko mezua gehituko da</string>
     <string name="title_no_image">Ezin izan da irudia deskodetu</string>
     <string name="title_no_search">Zerbitzariko bilaketa ez dago erabilgarri kontu honetarako</string>
-    <string name="title_too_large">Mezua handiegia da formateatzeko, saiatu haren ordez jatorrizko mezuaren ikuspegia erabiltzen pantaila osoaren ikonoaren bidez</string>
     <string name="title_unused_inline">Erabili gabeko txertatutako irudiak kenduko dira bidaltzean</string>
     <string name="title_accross_remark">Kontuen artean mugitutako mezuak berriro deskargatuko dira horrek dakarren datuen erabilera gehigarriarekin</string>
     <string name="title_raw_saved">Mezu gordina gorde da</string>
@@ -711,6 +712,7 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_signature_unconfirmed_from">Mezuaren sinadura baliozkoa da baina ez da baieztatu: %1$s</string>
     <string name="title_signature_invalid">Mezuaren sinadura baliogabea</string>
     <string name="title_signature_invalid_reason">Mezuaren sinadura baliogabea da: %1$s</string>
+    <string name="title_signature_key_missing">Gakoa falta da</string>
     <string name="title_signature_certificate_invalid">Ziurtagiri kate baliogabea</string>
     <string name="title_signature_sender">Igorlearen helbidea</string>
     <string name="title_signature_email">Sinaduraren helbidea</string>

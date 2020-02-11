@@ -247,6 +247,7 @@ public class Log {
 
         ignore.add("javax.mail.AuthenticationFailedException");
         ignore.add("javax.mail.internet.AddressException");
+        ignore.add("javax.mail.internet.ParseException");
         ignore.add("javax.mail.MessageRemovedException");
         ignore.add("javax.mail.FolderNotFoundException");
         ignore.add("javax.mail.ReadOnlyFolderException");
@@ -300,14 +301,16 @@ public class Log {
                         ex.getMessage() != null &&
                         (ex.getMessage().startsWith("Download image failed") ||
                                 ex.getMessage().startsWith("http://") ||
-                                ex.getMessage().startsWith("https://")))
+                                ex.getMessage().startsWith("https://") ||
+                                ex.getMessage().startsWith("content://")))
                     return false;
 
                 if (ex instanceof IOException &&
                         ex.getMessage() != null &&
                         (ex.getMessage().startsWith("HTTP status=") ||
                                 "NetworkError".equals(ex.getMessage()) || // account manager
-                                "Resetting to invalid mark".equals(ex.getMessage())))
+                                "Resetting to invalid mark".equals(ex.getMessage()) ||
+                                "Mark has been invalidated.".equals(ex.getMessage())))
                     return false;
 
                 if (ex instanceof SSLPeerUnverifiedException ||
@@ -317,6 +320,10 @@ public class Log {
                 if (ex instanceof SSLHandshakeException &&
                         ex.getCause() instanceof CertPathValidatorException)
                     return false; // checkUpdate!
+
+                if (ex instanceof RuntimeException &&
+                        "Illegal meta data value: the child service doesn't exist".equals(ex.getMessage()))
+                    return false;
 
                 // Rate limit
                 int count = prefs.getInt("crash_report_count", 0) + 1;
@@ -1008,11 +1015,13 @@ public class Log {
             DateFormat TF = Helper.getTimeInstance(context);
 
             for (EntityOperation op : db.operation().getOperations())
-                size += write(os, String.format("%s %d %s %s %s\r\n",
+                size += write(os, String.format("%s %d %s/%d %s %s %s\r\n",
                         TF.format(op.created),
                         op.message == null ? -1 : op.message,
                         op.name,
+                        op.tries,
                         op.args,
+                        op.state,
                         op.error));
         }
 

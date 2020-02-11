@@ -234,7 +234,6 @@
     <string name="title_advanced_threading">会話スレッド</string>
     <string name="title_advanced_indentation">会話の受信/送信メッセージの左/右インデント</string>
     <string name="title_advanced_highlight_unread">未読メッセージを強調表示</string>
-    <string name="title_advanced_distinguish_contacts">送信者がローカル(宛先)連絡先として知られている場合、送信者に下線を引く</string>
     <string name="title_advanced_color_stripe">カラーストライプを表示</string>
     <string name="title_advanced_avatars">連絡先の写真を表示</string>
     <string name="title_advanced_gravatars">Gravatar(アバター)を表示</string>
@@ -245,6 +244,8 @@
     <string name="title_advanced_color_value">明度</string>
     <string name="title_advanced_color_threshold">閾値の文字色</string>
     <string name="title_advanced_name_email">名前とメールアドレスを表示</string>
+    <string name="title_advanced_replace_name">送信名より連絡先名を優先する</string>
+    <string name="title_advanced_distinguish_contacts">送信者がローカル(宛先)連絡先として知られている場合、送信者に下線を引く</string>
     <string name="title_advanced_authentication">受信サーバがメッセージを認証出来なかった時に警告を表示</string>
     <string name="title_advanced_font_size_sender">送信者のフォントサイズ</string>
     <string name="title_advanced_font_size_subject">件名のフォントサイズ</string>
@@ -425,6 +426,7 @@
     <string name="title_port">ポート番号</string>
     <string name="title_user">ユーザー名</string>
     <string name="title_password">パスワード</string>
+    <string name="title_client_certificate">クライアント証明書</string>
     <string name="title_realm">Realm(Ntlm認証に使用)</string>
     <string name="title_use_ip">ホスト名の代わりにローカルIPアドレスを使用</string>
     <string name="title_primary_account">基本(デフォルトアカウント)</string>
@@ -589,7 +591,8 @@
     <string name="title_no_format">受信したメッセージを引用しています</string>
     <string name="title_no_image">画像をデコード出来ませんでした</string>
     <string name="title_no_search">サーバでの検索はこのアカウントでは利用出来ません</string>
-    <string name="title_too_large">再フォーマットするには大き過ぎるメッセージです。代わりにフルスクリーンアイコンを使用し元のメッセージビューを使用して下さい</string>
+    <string name="title_too_large">メッセージが大き過ぎて完全に再フォーマット出来ません</string>
+    <string name="title_show_full">メッセージ全体を表示</string>
     <string name="title_unused_inline">未使用のインライン画像は送信時に削除されます</string>
     <string name="title_accross_remark">アカウント間で移動されたメッセージは再度ダウンロードされる為、余分なデータが使用されます</string>
     <string name="title_raw_saved">素のメッセージを保存しました</string>
@@ -697,6 +700,7 @@ PlayストアでFairEmailを評価できれば幸いです。
     <string name="title_signature_unconfirmed_from">メッセージ署名は有効ですが確認されていません:%1$s</string>
     <string name="title_signature_invalid">メッセージ署名が無効です</string>
     <string name="title_signature_invalid_reason">メッセージ署名が無効です:%1$s</string>
+    <string name="title_signature_key_missing">キーが有りません</string>
     <string name="title_signature_certificate_invalid">証明書が無効</string>
     <string name="title_signature_sender">差出人のメールアドレス</string>
     <string name="title_signature_email">署名のアドレス</string>

@@ -30,11 +30,13 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.OperationCanceledException;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -126,14 +128,15 @@ class Core {
     private static final int DOWNLOAD_BATCH_SIZE = 20;
     private static final long YIELD_DURATION = 200L; // milliseconds
     private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
-    private static final int OPERATION_RETRY_MAX = 10;
-    private static final long OPERATION_RETRY_DELAY = 15 * 1000L; // milliseconds
+    private static final int LOCAL_RETRY_MAX = 3;
+    private static final long LOCAL_RETRY_DELAY = 10 * 1000L; // milliseconds
+    private static final int TOTAL_RETRY_MAX = LOCAL_RETRY_MAX * 10;
 
     static void processOperations(
             Context context,
             EntityAccount account, EntityFolder folder, List<TupleOperationEx> ops,
             Store istore, Folder ifolder,
-            State state)
+            State state, int priority, long sequence)
             throws JSONException {
         try {
             Log.i(folder.name + " start process");
@@ -143,7 +146,9 @@ class Core {
             int retry = 0;
             boolean group = true;
             Log.i(folder.name + " executing operations=" + ops.size());
-            while (retry < OPERATION_RETRY_MAX && ops.size() > 0 && state.isRunning() && state.isRecoverable()) {
+            while (retry < LOCAL_RETRY_MAX && ops.size() > 0 &&
+                    state.batchCanRun(folder.id, priority, sequence) &&
+                    state.isRunning() && state.isRecoverable()) {
                 TupleOperationEx op = ops.get(0);
 
                 try {
@@ -242,6 +247,7 @@ class Core {
                         try {
                             db.beginTransaction();
 
+                            db.operation().setOperationTries(op.id, ++op.tries);
                             db.operation().setOperationError(op.id, null);
 
                             if (message != null)
@@ -383,14 +389,22 @@ class Core {
                             ops.remove(s);
                     } catch (Throwable ex) {
                         Log.e(folder.name, ex);
-                        EntityLog.log(context, folder.name + " " + Log.formatThrowable(ex, false));
-
-                        state.error(ex);
+                        EntityLog.log(context, folder.name +
+                                " op=" + op.name + " " +
+                                " try=" + op.tries + " " +
+                                Log.formatThrowable(ex, false));
 
                         if (similar.size() > 0) {
                             // Retry individually
                             group = false;
                             // Finally will reset state
+                            continue;
+                        }
+
+                        if (op.tries >= TOTAL_RETRY_MAX) {
+                            // Giving up
+                            db.operation().deleteOperation(op.id);
+                            ops.remove(op);
                             continue;
                         }
 
@@ -455,9 +469,9 @@ class Core {
                             ops.remove(op);
                         } else {
                             retry++;
-                            if (retry < OPERATION_RETRY_MAX)
+                            if (retry < LOCAL_RETRY_MAX)
                                 try {
-                                    Thread.sleep(OPERATION_RETRY_DELAY);
+                                    Thread.sleep(LOCAL_RETRY_DELAY);
                                 } catch (InterruptedException ex1) {
                                     Log.w(ex1);
                                 }
@@ -481,22 +495,12 @@ class Core {
                 }
             }
 
-            if (state.isRunning() && state.isRecoverable())
-                try {
-                    db.beginTransaction();
-                    for (TupleOperationEx op : ops) {
-                        Log.e("Operation=" + op.name + " error=" + op.error);
-                        op.cleanup(context);
-                        db.operation().deleteOperation(op.id);
-                    }
-
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-
+            if (ops.size() == 0)
+                state.batchCompleted(folder.id, priority, sequence);
+            else // abort
+                state.error(new OperationCanceledException());
         } finally {
-            Log.i(folder.name + " end process state=" + state);
+            Log.i(folder.name + " end process state=" + state + " pending=" + ops.size());
         }
     }
 
@@ -891,7 +895,8 @@ class Core {
                                         icopy.setFlag(Flags.Flag.FLAGGED, false);
 
                                     // Set drafts flag
-                                    icopy.setFlag(Flags.Flag.DRAFT, EntityFolder.DRAFTS.equals(target.type));
+                                    if (flags.contains(Flags.Flag.DRAFT))
+                                        icopy.setFlag(Flags.Flag.DRAFT, EntityFolder.DRAFTS.equals(target.type));
                                 }
 
                                 if (fetch) {
@@ -2041,6 +2046,7 @@ class Core {
         // Find message by Message-ID (slow, headers required)
         // - messages in inbox have same id as message sent to self
         // - messages in archive have same id as original
+        Integer color = null;
         if (message == null) {
             String msgid = helper.getMessageID();
             Log.i(folder.name + " searching for " + msgid);
@@ -2072,6 +2078,9 @@ class Core {
                         process = true;
                     }
                 }
+
+                if (dup.flagged && dup.color != null)
+                    color = dup.color;
             }
         }
 
@@ -2140,6 +2149,9 @@ class Core {
             message.ui_ignored = seen;
             message.ui_browsed = browsed;
 
+            if (message.flagged)
+                message.color = color;
+
             if (MessageHelper.equal(message.submitter, message.from))
                 message.submitter = null;
 
@@ -2176,10 +2188,10 @@ class Core {
                 }
 
             boolean check_spam = prefs.getBoolean("check_spam", false);
-            if (check_spam)
-                try {
-                    String host = helper.getReceivedFromHost();
-                    if (host != null) {
+            if (check_spam) {
+                String host = helper.getReceivedFromHost();
+                if (host != null) {
+                    try {
                         InetAddress addr = InetAddress.getByName(host);
                         Log.i("Received from " + host + "=" + addr);
 
@@ -2208,13 +2220,15 @@ class Core {
                             else
                                 message.warning += ", " + lookup;
                         } catch (UnknownHostException ignore) {
+                            // Not blocked
                         }
+                    } catch (UnknownHostException ex) {
+                        Log.w(ex);
+                    } catch (Throwable ex) {
+                        Log.w(folder.name, ex);
                     }
-                } catch (UnknownHostException ex) {
-
-                } catch (Throwable ex) {
-                    Log.w(folder.name, ex);
                 }
+            }
 
             boolean check_reply = prefs.getBoolean("check_reply", false);
             if (check_reply &&
@@ -2864,9 +2878,9 @@ class Core {
         boolean alert_once = prefs.getBoolean("alert_once", true);
 
         // Get contact info
-        Map<Long, ContactInfo> messageContact = new HashMap<>();
+        Map<Long, ContactInfo[]> messageContact = new HashMap<>();
         for (TupleMessageEx message : messages)
-            messageContact.put(message.id, ContactInfo.get(context, message.account, message.from, false));
+            messageContact.put(message.id, ContactInfo.get(context, message.account, message.from));
 
         // Summary notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || notify_summary) {
@@ -2939,8 +2953,8 @@ class Core {
                     DateFormat DTF = Helper.getDateTimeInstance(context, SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);
                     StringBuilder sb = new StringBuilder();
                     for (EntityMessage message : messages) {
-                        ContactInfo info = messageContact.get(message.id);
-                        sb.append("<strong>").append(info.getDisplayName(name_email)).append("</strong>");
+                        ContactInfo[] info = messageContact.get(message.id);
+                        sb.append("<strong>").append(info[0].getDisplayName(name_email)).append("</strong>");
                         if (!TextUtils.isEmpty(message.subject))
                             sb.append(": ").append(message.subject);
                         sb.append(" ").append(DTF.format(message.received));
@@ -2964,7 +2978,7 @@ class Core {
 
         // Message notifications
         for (TupleMessageEx message : messages) {
-            ContactInfo info = messageContact.get(message.id);
+            ContactInfo[] info = messageContact.get(message.id);
 
             // Build arguments
             long id = (message.content ? message.id : -message.id);
@@ -3031,7 +3045,7 @@ class Core {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
                 setLightAndSound(mbuilder, light, sound);
 
-            mbuilder.setContentTitle(info.getDisplayName(name_email))
+            mbuilder.setContentTitle(info[0].getDisplayName(name_email))
                     .setSubText(message.accountName + " · " + message.getFolderName(context));
 
             DB db = DB.getInstance(context);
@@ -3239,11 +3253,11 @@ class Core {
                     mbuilder.setContentText(message.subject);
             }
 
-            if (info.hasPhoto())
-                mbuilder.setLargeIcon(info.getPhotoBitmap());
+            if (info[0].hasPhoto())
+                mbuilder.setLargeIcon(info[0].getPhotoBitmap());
 
-            if (info.hasLookupUri())
-                mbuilder.addPerson(info.getLookupUri().toString());
+            if (info[0].hasLookupUri())
+                mbuilder.addPerson(info[0].getLookupUri().toString());
 
             if (pro && message.accountColor != null) {
                 mbuilder.setColor(message.accountColor);
@@ -3336,6 +3350,9 @@ class Core {
         private boolean maxConnections = false;
         private Long lastActivity = null;
 
+        private Map<FolderPriority, Long> sequence = new HashMap<>();
+        private Map<FolderPriority, Long> batch = new HashMap<>();
+
         State(ConnectionHelper.NetworkState networkState) {
             this.networkState = networkState;
         }
@@ -3385,11 +3402,15 @@ class Core {
 
             if (ex instanceof FolderClosedException ||
                     ex instanceof FolderNotFoundException)
+                // Lost folder connection to server
                 recoverable = false;
 
             if (ex instanceof IllegalStateException && (
                     "Not connected".equals(ex.getMessage()) ||
                             "This operation is not allowed on a closed folder".equals(ex.getMessage())))
+                recoverable = false;
+
+            if (ex instanceof OperationCanceledException)
                 recoverable = false;
 
             thread.interrupt();
@@ -3408,6 +3429,13 @@ class Core {
             recoverable = true;
             maxConnections = false;
             lastActivity = null;
+            synchronized (this) {
+                for (FolderPriority key : sequence.keySet()) {
+                    batch.put(key, sequence.get(key));
+                    if (BuildConfig.DEBUG)
+                        Log.i("=== Reset " + key.folder + ":" + key.priority + " batch=" + batch.get(key));
+                }
+            }
         }
 
         private void yield() {
@@ -3460,12 +3488,71 @@ class Core {
             return (lastActivity == null ? 0 : SystemClock.elapsedRealtime() - lastActivity);
         }
 
+        long getSequence(long folder, int priority) {
+            synchronized (this) {
+                FolderPriority key = new FolderPriority(folder, priority);
+                if (!sequence.containsKey(key)) {
+                    sequence.put(key, 0L);
+                    batch.put(key, 0L);
+                }
+                long result = sequence.get(key);
+                sequence.put(key, result + 1);
+                if (BuildConfig.DEBUG)
+                    Log.i("=== Get " + folder + ":" + priority + " sequence=" + result);
+                return result;
+            }
+        }
+
+        boolean batchCanRun(long folder, int priority, long current) {
+            synchronized (this) {
+                FolderPriority key = new FolderPriority(folder, priority);
+                boolean can = batch.get(key).equals(current);
+                if (BuildConfig.DEBUG)
+                    Log.i("=== Can " + folder + ":" + priority + " can=" + can);
+                return can;
+            }
+        }
+
+        void batchCompleted(long folder, int priority, long current) {
+            synchronized (this) {
+                FolderPriority key = new FolderPriority(folder, priority);
+                if (batch.get(key).equals(current))
+                    batch.put(key, batch.get(key) + 1);
+                if (BuildConfig.DEBUG)
+                    Log.i("=== Completed " + folder + ":" + priority + " next=" + batch.get(key));
+            }
+        }
+
         @NonNull
         @Override
         public String toString() {
             return "[running=" + running +
                     ",recoverable=" + recoverable +
                     ",idle=" + getIdleTime() + "]";
+        }
+
+        private static class FolderPriority {
+            private long folder;
+            private int priority;
+
+            FolderPriority(long folder, int priority) {
+                this.folder = folder;
+                this.priority = priority;
+            }
+
+            @Override
+            public int hashCode() {
+                return (int) (this.folder * 37 + priority);
+            }
+
+            @Override
+            public boolean equals(@Nullable Object obj) {
+                if (obj instanceof FolderPriority) {
+                    FolderPriority other = (FolderPriority) obj;
+                    return (this.folder == other.folder && this.priority == other.priority);
+                } else
+                    return false;
+            }
         }
     }
 }

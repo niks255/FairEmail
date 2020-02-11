@@ -248,7 +248,6 @@
     <string name="title_advanced_threading">Hilos de conversación</string>
     <string name="title_advanced_indentation">Sangría izquierda/derecha para mensajes recibidos/enviados en conversaciones</string>
     <string name="title_advanced_highlight_unread">Resaltar mensajes no leídos</string>
-    <string name="title_advanced_distinguish_contacts">Subrayar el remitente cuando el remitente es conocido como contacto \'a:\' local</string>
     <string name="title_advanced_color_stripe">Mostrar raya de color</string>
     <string name="title_advanced_avatars">Mostrar fotos de contactos</string>
     <string name="title_advanced_gravatars">Mostrar Gravatares</string>
@@ -259,6 +258,8 @@
     <string name="title_advanced_color_value">Brillo</string>
     <string name="title_advanced_color_threshold">Umbral de color de letras</string>
     <string name="title_advanced_name_email">Mostrar nombres y direcciones de correo electrónico</string>
+    <string name="title_advanced_replace_name">Preferir un nombre de contacto sobre un nombre enviado</string>
+    <string name="title_advanced_distinguish_contacts">Subrayar el remitente cuando el remitente es conocido como contacto \'a:\' local</string>
     <string name="title_advanced_authentication">Mostrar una advertencia cuando el servidor de recepción no pudo autenticar el mensaje</string>
     <string name="title_advanced_font_size_sender">Tamaño de fuente de remitente</string>
     <string name="title_advanced_font_size_subject">Tamaño de fuente del asunto</string>
@@ -440,6 +441,7 @@
     <string name="title_port">Puerto</string>
     <string name="title_user">Nombre de usuario</string>
     <string name="title_password">Contraseña</string>
+    <string name="title_client_certificate">Certificado de cliente</string>
     <string name="title_realm">Dominio</string>
     <string name="title_use_ip">Usar dirección IP local en lugar de nombre de dominio</string>
     <string name="title_primary_account">Primaria (cuenta predeterminada)</string>
@@ -604,7 +606,8 @@
     <string name="title_no_format">El mensaje recibido originalmente será incluido</string>
     <string name="title_no_image">La imagen no se pudo decodificar</string>
     <string name="title_no_search">La búsqueda en el servidor no está disponible para esta cuenta</string>
-    <string name="title_too_large">El mensaje es demasiado grande para reformatearlo, intente usar la vista original del mensaje a través del icono de pantalla completa</string>
+    <string name="title_too_large">Mensaje demasiado grande para reformatear completamente</string>
+    <string name="title_show_full">Mostrar mensaje completo</string>
     <string name="title_unused_inline">Las imágenes embebidas no usadas serán eliminadas al enviar</string>
     <string name="title_accross_remark">Los mensajes movidos a otras cuentas serán descargados nuevamente causando uso adicional de datos</string>
     <string name="title_raw_saved">Mensaje raw guardado</string>
@@ -713,6 +716,7 @@
     <string name="title_signature_unconfirmed_from">Firma de mensaje válida pero no confirmada: %1$s</string>
     <string name="title_signature_invalid">Firma de mensaje no válida</string>
     <string name="title_signature_invalid_reason">Firma de mensaje inválida: %1$s</string>
+    <string name="title_signature_key_missing">Clave faltante</string>
     <string name="title_signature_certificate_invalid">Cadena de certificado inválida</string>
     <string name="title_signature_sender">Dirección del remitente</string>
     <string name="title_signature_email">Dirección de la firma</string>

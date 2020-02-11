@@ -297,7 +297,6 @@
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
     <string name="title_advanced_highlight_unread">Highlight unread messages</string>
-    <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
     <string name="title_advanced_color_stripe">Show color stripe</string>
     <string name="title_advanced_avatars">Show contact photos</string>
     <string name="title_advanced_gravatars">Show Gravatars</string>
@@ -308,6 +307,8 @@
     <string name="title_advanced_color_value">Brightness</string>
     <string name="title_advanced_color_threshold">Threshold letter color</string>
     <string name="title_advanced_name_email">Show names and email addresses</string>
+    <string name="title_advanced_replace_name">Prefer a contact name over a sent name</string>
+    <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
     <string name="title_advanced_authentication">Show a warning when the receiving server could not authenticate the message</string>
     <string name="title_advanced_font_size_sender">Font size sender</string>
     <string name="title_advanced_font_size_subject">Font size subject</string>
@@ -516,6 +517,7 @@
     <string name="title_port">Port number</string>
     <string name="title_user">User name</string>
     <string name="title_password">Password</string>
+    <string name="title_client_certificate">Client certificate</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">Use local IP address instead of host name</string>
     <string name="title_primary_account">Primary (default account)</string>
@@ -692,7 +694,8 @@
     <string name="title_no_format">The originally received message will be included</string>
     <string name="title_no_image">Image could not be decoded</string>
     <string name="title_no_search">Search on server is not available for this account</string>
-    <string name="title_too_large">Message too large to reformat, try to use the original message view via the full screen icon instead</string>
+    <string name="title_too_large">Message too large to completely reformat</string>
+    <string name="title_show_full">Show full message</string>
     <string name="title_unused_inline">Unused inline images will be removed on send</string>
     <string name="title_accross_remark">Messages moved across accounts will be downloaded again resulting in extra data usage</string>
     <string name="title_raw_saved">Raw message saved</string>
@@ -810,6 +813,7 @@
     <string name="title_signature_unconfirmed_from">Message signature valid but not confirmed: %1$s</string>
     <string name="title_signature_invalid">Message signature invalid</string>
     <string name="title_signature_invalid_reason">Message signature invalid: %1$s</string>
+    <string name="title_signature_key_missing">Key missing</string>
     <string name="title_signature_certificate_invalid">Certificate chain invalid</string>
     <string name="title_signature_sender">Sender\'s address</string>
     <string name="title_signature_email">Signature\'s address</string>

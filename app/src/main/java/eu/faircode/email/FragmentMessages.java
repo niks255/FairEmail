@@ -202,6 +202,7 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
+import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_KEY_MISSING;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_NO_SIGNATURE;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_VALID_KEY_CONFIRMED;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_VALID_KEY_UNCONFIRMED;
@@ -3851,7 +3852,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (!message.content)
                             EntityOperation.queue(context, message, EntityOperation.BODY);
 
-                        if (account.auto_seen && !folder.read_only)
+                        int ops = db.operation().getOperationCount(message.folder, message.id, EntityOperation.SEEN);
+                        if (account.auto_seen && !folder.read_only && (!message.seen || ops > 0))
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
                     }
 
@@ -4807,8 +4809,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             // Check signature status
                             OpenPgpSignatureResult sigResult = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
                             int sresult = (sigResult == null ? RESULT_NO_SIGNATURE : sigResult.getResult());
+                            if (sigResult == null)
+                                Log.w("PGP signature result missing");
+                            else
+                                Log.i("PGP signature result=" + sresult);
+
                             if (sresult == RESULT_NO_SIGNATURE)
-                                Snackbar.make(view, R.string.title_signature_none, Snackbar.LENGTH_LONG).show();
+                                args.putString("sigresult", context.getString(R.string.title_signature_none));
                             else if (sresult == RESULT_VALID_KEY_CONFIRMED || sresult == RESULT_VALID_KEY_UNCONFIRMED) {
                                 List<String> users = sigResult.getConfirmedUserIds();
                                 String text;
@@ -4821,9 +4828,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     text = getString(sresult == RESULT_VALID_KEY_UNCONFIRMED
                                             ? R.string.title_signature_unconfirmed
                                             : R.string.title_signature_valid);
-                                Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
-                            } else
-                                Snackbar.make(view, R.string.title_signature_invalid, Snackbar.LENGTH_LONG).show();
+                                args.putString("sigresult", text);
+                            } else if (sresult == RESULT_KEY_MISSING)
+                                args.putString("sigresult", context.getString(R.string.title_signature_key_missing));
+                            else {
+                                String text = getString(R.string.title_signature_invalid_reason, Integer.toString(sresult));
+                                args.putString("sigresult", text);
+                            }
 
                             break;
 
@@ -4851,6 +4862,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             @Override
             protected void onExecuted(Bundle args, PendingIntent pi) {
+                if (args.containsKey("sigresult")) {
+                    String text = args.getString("sigresult");
+                    Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
+                }
+
                 if (pi != null)
                     try {
                         Log.i("Executing pi=" + pi);
