@@ -360,6 +360,7 @@
     <string name="title_advanced_unseen_ignored">Let the number of new messages match the number of notifications</string>
     <string name="title_advanced_notify_summary">Show summary notification only</string>
     <string name="title_advanced_notify_preview">Show message preview in notifications</string>
+    <string name="title_advanced_notify_preview_all">Preview all text</string>
     <string name="title_advanced_notify_actions">Notification actions</string>
     <string name="title_advanced_notify_action_trash">Trash</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
@@ -465,6 +466,7 @@
     <string name="title_advanced_notify_manage_hint">Tap on the channel name to set the channel properties</string>
     <string name="title_advanced_notify_manage_default_hint">To set the default sound, etc</string>
     <string name="title_advanced_notify_manage_service_hint">To disable the permanent notification</string>
+    <string name="title_advanced_notify_preview_all_hint">For wearables that can show the full text (up to 5,000 characters)</string>
     <string name="title_advanced_wearable_hint">Notifications are only sent to a wearable after the message text has been downloaded</string>
     <string name="title_advanced_move_hint">The target folder can be configured in the account settings</string>
     <string name="title_advanced_notify_no_grouping">This Android version does not support notification grouping</string>
@@ -695,6 +697,7 @@
     <string name="title_no_image">Image could not be decoded</string>
     <string name="title_no_search">Search on server is not available for this account</string>
     <string name="title_too_large">Message too large to completely reformat</string>
+    <string name="title_truncated">Message too large to display completely</string>
     <string name="title_show_full">Show full message</string>
     <string name="title_unused_inline">Unused inline images will be removed on send</string>
     <string name="title_accross_remark">Messages moved across accounts will be downloaded again resulting in extra data usage</string>
@@ -1070,6 +1073,7 @@
     <string name="title_snooze_now">Snooze</string>
     <string name="title_loading">Loading &#8230;</string>
     <string name="title_set">Set</string>
+    <string name="title_fetching_again">Fetching message again from the server</string>
 
     <string name="title_icalendar_accept">Accept</string>
     <string name="title_icalendar_decline">Decline</string>

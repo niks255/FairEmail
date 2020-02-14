@@ -71,7 +71,7 @@ public class WorkerFts extends Worker {
 
                             File file = message.getFile(getApplicationContext());
                             String html = Helper.readText(file);
-                            String text = HtmlHelper.getText(html);
+                            String text = HtmlHelper.getFullText(html);
                             try {
                                 sdb.beginTransaction();
                                 FtsDbHelper.insert(sdb, message, text);
@@ -86,6 +86,8 @@ public class WorkerFts extends Worker {
                             if (ids.size() > INDEX_BATCH_SIZE)
                                 markIndexed(db, ids);
                         } catch (Throwable ex) {
+                            if (ex instanceof OutOfMemoryError)
+                                ids.add(id);
                             Log.e(ex);
                         }
                 }

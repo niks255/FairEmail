@@ -476,7 +476,7 @@ public class FragmentCompose extends FragmentBase {
                 if (activity != null)
                     activity.onUserInteraction();
 
-                if (before == 0 && count == 1 && text.charAt(start) == '\n') {
+                if (before == 0 && count == 1 && start > 0 && text.charAt(start) == '\n') {
                     // break block quotes
                     boolean broken = false;
                     SpannableStringBuilder ssb = new SpannableStringBuilder(text);
@@ -817,7 +817,8 @@ public class FragmentCompose extends FragmentBase {
                         boolean plain = args.getBoolean("plain");
                         String body = args.getString("body");
 
-                        Document doc = JsoupEx.parse(Helper.readText(EntityMessage.getFile(context, id)));
+                        String rhtml = Helper.readText(EntityMessage.getFile(context, id));
+                        Document doc = JsoupEx.parse(rhtml);
                         Elements ref = doc.select("div[fairemail=reference]");
                         ref.removeAttr("fairemail");
 
@@ -3078,7 +3079,8 @@ public class FragmentCompose extends FragmentBase {
                             div.appendChild(p);
 
                             // Get referenced message body
-                            Document d = JsoupEx.parse(Helper.readText(ref.getFile(context)));
+                            String rhtml = Helper.readText(ref.getFile(context));
+                            Document d = JsoupEx.parse(rhtml);
 
                             // Remove signature separators
                             boolean remove_signatures = prefs.getBoolean("remove_signatures", false);
@@ -3654,13 +3656,18 @@ public class FragmentCompose extends FragmentBase {
 
                     String p = Helper.readText(draft.getFile(context));
                     Document doc = JsoupEx.parse(p);
-                    if ((body != null && !body.equals(doc.html())) ||
+                    doc.select("div[fairemail=signature]").remove();
+                    Elements ref = doc.select("div[fairemail=reference]");
+                    ref.remove();
+
+                    if (body == null)
+                        body = Document.createShell("").html();
+                    Document b = HtmlHelper.sanitize(context, body, true, false);
+                    body = b.html();
+
+                    if (!b.body().html().equals(doc.body().html()) ||
                             (extras != null && extras.containsKey("html"))) {
                         dirty = true;
-
-                        doc.select("div[fairemail=signature]").remove();
-                        Elements ref = doc.select("div[fairemail=reference]");
-                        ref.remove();
 
                         boolean signature_end = prefs.getBoolean("signature_end", false);
 
@@ -3741,7 +3748,7 @@ public class FragmentCompose extends FragmentBase {
                             action == R.id.action_undo ||
                             action == R.id.action_redo ||
                             action == R.id.action_check) {
-                        if (BuildConfig.DEBUG || dirty)
+                        if (dirty)
                             EntityOperation.queue(context, draft, EntityOperation.ADD);
 
                         if (action == R.id.action_check) {

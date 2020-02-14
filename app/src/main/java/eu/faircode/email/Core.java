@@ -253,11 +253,9 @@ class Core {
                             if (message != null)
                                 db.message().setMessageError(message.id, null);
 
-                            if (!EntityOperation.SYNC.equals(op.name)) {
-                                db.operation().setOperationState(op.id, "executing");
-                                for (TupleOperationEx s : similar.keySet())
-                                    db.operation().setOperationState(s.id, "executing");
-                            }
+                            db.operation().setOperationState(op.id, "executing");
+                            for (TupleOperationEx s : similar.keySet())
+                                db.operation().setOperationState(s.id, "executing");
 
                             db.setTransactionSuccessful();
                         } finally {
@@ -844,7 +842,7 @@ class Core {
             itarget.appendMessages(icopies.toArray(new Message[0]));
         } else {
             for (Message imessage : map.keySet()) {
-                Log.i("Move seen=" + seen + " unflag=" + unflag);
+                Log.i("Move seen=" + seen + " unflag=" + unflag + " flags=" + imessage.getFlags());
 
                 // Mark read
                 if (seen && flags.contains(Flags.Flag.SEEN))
@@ -2458,14 +2456,14 @@ class Core {
                 addresses.addAll(Arrays.asList(message.cc));
             if (message.bcc != null)
                 addresses.addAll(Arrays.asList(message.bcc));
+            if (message.from != null)
+                addresses.addAll(Arrays.asList(message.from));
             if (message.deliveredto != null)
                 try {
                     addresses.add(new InternetAddress(message.deliveredto));
                 } catch (AddressException ex) {
                     Log.w(ex);
                 }
-            if (message.from != null)
-                addresses.addAll(Arrays.asList(message.from));
         }
 
         // Search for matching identity
@@ -2862,6 +2860,7 @@ class Core {
         boolean name_email = prefs.getBoolean("name_email", false);
         boolean flags = prefs.getBoolean("flags", true);
         boolean notify_preview = prefs.getBoolean("notify_preview", true);
+        boolean notify_preview_all = prefs.getBoolean("notify_preview_all", false);
         boolean wearable_preview = prefs.getBoolean("wearable_preview", false);
         boolean notify_trash = (prefs.getBoolean("notify_trash", true) || !pro);
         boolean notify_junk = (prefs.getBoolean("notify_junk", false) && pro);
@@ -3210,14 +3209,14 @@ class Core {
 
             if (message.content && notify_preview) {
                 // Android will truncate the text
-                String text = null;
-                try {
-                    String html = Helper.readText(message.getFile(context));
-                    text = HtmlHelper.getText(html);
-                } catch (Throwable ex) {
-                    Log.e(ex);
-                    text = message.preview;
-                }
+                String preview = message.preview;
+                if (notify_preview_all)
+                    try {
+                        String html = Helper.readText(message.getFile(context));
+                        preview = HtmlHelper.getFullText(html);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
 
                 // Wearables
                 StringBuilder sb = new StringBuilder();
@@ -3226,8 +3225,8 @@ class Core {
                 if (wearable_preview) {
                     if (sb.length() != 0)
                         sb.append(" - ");
-                    if (!TextUtils.isEmpty(text))
-                        sb.append(text);
+                    if (!TextUtils.isEmpty(preview))
+                        sb.append(preview);
                 }
                 if (sb.length() > 0)
                     mbuilder.setContentText(sb.toString());
@@ -3237,8 +3236,8 @@ class Core {
                 if (!TextUtils.isEmpty(message.subject))
                     sbm.append("<em>").append(message.subject).append("</em>").append("<br>");
 
-                if (!TextUtils.isEmpty(text))
-                    sbm.append(text);
+                if (!TextUtils.isEmpty(preview))
+                    sbm.append(preview);
 
                 if (sbm.length() > 0) {
                     NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()

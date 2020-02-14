@@ -613,6 +613,9 @@ FairEmail was tested with OpenKeychain version 5.4. Later versions will most lik
 The OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key.
 You can workaround this by trying to send a signed/encrypted message to a sender with an unknown public key.
 
+If the OpenKeychain app cannot find a key (anymore), you might need to reset a previously selected key.
+This can be done by long pressing an identity in the list of identities (Setup, step 2, Manage).
+
 To let apps like FairEmail reliably connect to the OpenKeychain service to encrypt/decrypt messages,
 it might be necessary to disable battery optimizations for the OpenKeychain app.
 
@@ -690,6 +693,7 @@ to check if the searched text is contained in the file, which is a relative expe
 
 In the *miscellaneous settings* you can enable *Build search index* to significantly increase the speed of searching on the device,
 but be aware that this will increase battery usage and significantly increase storage space usage too.
+The search index is based on words, so searching for partial text is not possible.
 Searching using the search index is by default AND, so searching for *apple orange* will search for apple AND orange.
 Words separated by commas results in searching for OR, so for example *apple, orange* will search for apple OR orange.
 Both can be combined, so searching for *apple, orange banana* will search for apple OR (orange AND banana).
@@ -1079,7 +1083,7 @@ Note that this is independent of receiving messages.
 **(34) How are identities matched?**
 
 Identities are as expected matched by account.
-For incoming messages the *to*, *cc*, *bcc*, *(X-)delivered/envelope/original-to* and *from* addresses will be checked (in this order)
+For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order)
 and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked.
 
 The matched address will be shown as *via* in the addresses section.
@@ -1204,7 +1208,7 @@ You can inspect the *Log* via the main navigation menu to check if there are fre
 You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes.
 Note that battery optimizations need to be disabled in setup step 4 to reliably keep connections alive.
 
-Some providers send every two minutes something like '*Still there*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage.
+Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage.
 You can inspect the *Log* via the main navigation menu to check if your provider is doing this.
 If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server,
 you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this.
@@ -2133,8 +2137,10 @@ category:forums
 category:promotions
 ```
 
-Pull down the folders list in FairEmail to refresh the folder list
-and long press the category folders to enable synchronization.
+Unfortunately, this is not possible for snoozed messages folder.
+
+You can use *Force sync* in the three-dots menu of the unified inbox to let FairEmail synchronize the folder list again
+and you can long press the folders to enable synchronization.
 
 <br />
 
@@ -2462,11 +2468,7 @@ Reformatting and displaying such messages will take too long. You can try to use
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-The current experimental features are:
-
-* Small, dimmed unread / read icon at the bottom of the messages to quicly toggle filtering of read messages
-* Small, dimmed starred / unstarred icon at the bottom of the messages to quicly toggle filtering of starred messages
-* Small, dimmed infinite / timelapse icon at the bottom of the messages to quicly toggle filtering of snoozed messages
+Currently, there are no experimental features.
 
 <br />
 
@@ -2488,6 +2490,9 @@ it is not possible to guarantee that a new message notification with a preview t
 If you think this is good enough, you can enable the notification option *Only send notifications with a message preview to wearables*.
 It is a good idea to review the connection setting *Automatically download messages and attachments on a metered connection up to ...* as well.
 For some odd reason notifications will work on [WearOS](https://wearos.google.com/) with this setting enabled only.
+
+If you want to have the full message text sent to your wearable, you can enable the notification option *Preview all text*.
+Note that some wearables are known to crash with this option enabled.
 
 <br />
 
