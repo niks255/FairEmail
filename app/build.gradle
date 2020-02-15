@@ -13,8 +13,8 @@ android {
         applicationId "eu.faircode.email"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 964
-        versionName "1.964"
+        versionCode 966
+        versionName "1.966"
         archivesBaseName = "FairEmail-v$versionName"
 
         // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -209,7 +209,7 @@ dependencies {
     def biometric_version = "1.0.1"
     def billingclient_version = "2.1.0"
     def javamail_version = "1.6.5-SNAPSHOT"
-    def jsoup_version = "1.12.1"
+    def jsoup_version = "1.12.2"
     def dnsjava_version = "2.1.9"
     def openpgp_version = "12.0"
     def requery_version = "3.31.0"
@@ -345,7 +345,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
     implementation "org.bouncycastle:bcpkix-jdk15to18:$bouncycastle_version"
-    //implementation "org.bouncycastle:bcmail-jdk15to18:$bouncycastle_version"
 
     // https://github.com/openid/AppAuth-Android
     // https://mvnrepository.com/artifact/net.openid/appauth?repo=bt-openid

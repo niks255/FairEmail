@@ -392,7 +392,7 @@ public class HtmlHelper {
                                 Integer color = parseColor(value, dark);
                                 if (color != null) {
                                     // fromHtml does not support transparency
-                                    String c = String.format("#%08x", color | 0xFF000000);
+                                    String c = String.format("#%06x", color);
                                     sb.append("color:").append(c).append(";");
                                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
                                         element.attr("color", c);
@@ -775,7 +775,10 @@ public class HtmlHelper {
         if (TextUtils.isEmpty(value))
             return null;
 
-        value = value.toLowerCase(Locale.ROOT).trim();
+        value = value
+                .toLowerCase(Locale.ROOT)
+                .trim()
+                .replace("rem", "em");
 
         try {
             if (value.endsWith("em"))
@@ -1198,11 +1201,13 @@ public class HtmlHelper {
     }
 
     static void cleanup(Document d) {
+        // https://www.chromestatus.com/feature/5756335865987072
+        // Some messages contain 100 thousands of Apple spaces
         for (Element aspace : d.select(".Apple-converted-space")) {
             Node next = aspace.nextSibling();
             if (next instanceof TextNode) {
                 TextNode tnode = (TextNode) next;
-                tnode.text(tnode.text() + " ");
+                tnode.text(" " + tnode.text());
                 aspace.remove();
             } else
                 aspace.replaceWith(new TextNode(" "));
