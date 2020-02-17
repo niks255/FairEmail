@@ -330,6 +330,7 @@ public class HtmlHelper {
         // Limit length
         if (truncate(parsed, true)) {
             parsed.body()
+                    .appendElement("br")
                     .appendElement("p")
                     .appendElement("em")
                     .text(context.getString(R.string.title_too_large));
@@ -817,7 +818,7 @@ public class HtmlHelper {
                     if (x11ColorMap.containsKey(code)) // workaround
                         color = x11ColorMap.get(code);
                     else
-                        color = Integer.decode(c);
+                        color = Long.decode(c).intValue();
                 }
             } else if (c.startsWith("rgb") || c.startsWith("hsl")) {
                 int s = c.indexOf("(");
@@ -851,7 +852,7 @@ public class HtmlHelper {
                     color = Color.parseColor(c);
                 } catch (IllegalArgumentException ex) {
                     // Workaround
-                    color = Integer.decode("#" + c);
+                    color = Long.decode("#" + c).intValue();
                 }
 
             if (BuildConfig.DEBUG)
@@ -1215,17 +1216,37 @@ public class HtmlHelper {
     }
 
     static boolean truncate(Document d, boolean reformat) {
-        int at = (reformat ? MAX_FORMAT_TEXT_SIZE : MAX_FULL_TEXT_SIZE);
+        int max = (reformat ? MAX_FORMAT_TEXT_SIZE : MAX_FULL_TEXT_SIZE);
 
         int length = 0;
         for (Element elm : d.select("*")) {
-            for (Node child : elm.childNodes())
-                if (child instanceof TextNode)
-                    length += ((TextNode) child).text().length();
-            if (length > at)
+            boolean skip = false;
+
+            for (Node child : elm.childNodes()) {
+                if (child instanceof TextNode) {
+                    TextNode tnode = ((TextNode) child);
+                    String text = tnode.getWholeText();
+
+                    if (length < max) {
+                        if (length + text.length() >= max) {
+                            text = text.substring(0, max - length) + " ...";
+                            tnode.text(text);
+                            skip = true;
+                        }
+                    } else {
+                        if (skip)
+                            tnode.text("");
+                    }
+
+                    length += text.length();
+                }
+            }
+
+            if (length >= max && !skip)
                 elm.remove();
         }
-        return (length > at);
+
+        return (length >= max);
     }
 
     static Spanned fromHtml(@NonNull String html) {

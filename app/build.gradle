@@ -13,12 +13,12 @@ android {
         applicationId "eu.faircode.email"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 966
-        versionName "1.966"
+        versionCode 971
+        versionName "1.971"
         archivesBaseName = "FairEmail-v$versionName"
 
         // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
-        buildConfigField "String", "RELEASE_NAME", "\"Pyroraptor\""
+        buildConfigField "String", "RELEASE_NAME", "\"Quetecsaurus\""
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -209,7 +209,7 @@ dependencies {
     def biometric_version = "1.0.1"
     def billingclient_version = "2.1.0"
     def javamail_version = "1.6.5-SNAPSHOT"
-    def jsoup_version = "1.12.2"
+    def jsoup_version = "1.12.1"
     def dnsjava_version = "2.1.9"
     def openpgp_version = "12.0"
     def requery_version = "3.31.0"
