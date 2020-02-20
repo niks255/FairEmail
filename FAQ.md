@@ -327,7 +327,7 @@ with the "side effect" that new messages are often not or late being reported an
 Android shows icons of high priority status bar notifications first and will hide the icon of FairEmail's notification if there is no space to show icons anymore.
 In practice this means that the status bar notification doesn't take space in the status bar, unless there is space available.
 
-In most cases it is possible to disable the status bar notification via the notification settings of FairEmail.
+In most cases it is possible to disable the status bar notification via the notification settings of FairEmail (service channel).
 
 You can switch to periodically synchronization of messages in the receive settings to remove the notification, but be aware that this might use more battery power.
 See [here](#user-content-faq39) for more details about battery usage.
@@ -620,6 +620,8 @@ This can be done by long pressing an identity in the list of identities (Setup, 
 
 To let apps like FairEmail reliably connect to the OpenKeychain service to encrypt/decrypt messages,
 it might be necessary to disable battery optimizations for the OpenKeychain app.
+On some Android versions / devices it is necessary to enable *Show popups while running in background*
+in the additional permissions of the Android app settings of the OpenKeychain app.
 
 FairEmail will send the [Autocrypt](https://autocrypt.org/) headers for use by other email clients
 and send received Autocrypt headers to the OpenKeychain app for storage.
@@ -1149,7 +1151,7 @@ Long version:
 <a name="faq37"></a>
 **(37) How are passwords stored?**
 
-All supported Android versions [encrypt all user data](https://source.android.com/security/encryption/full-disk.html),
+All supported Android versions [encrypt all user data](https://source.android.com/security/encryption),
 so all data, including usernames, passwords, messages, etc, is stored encrypted.
 
 <br />
@@ -2543,6 +2545,9 @@ FairEmail will workaround this is in most cases, so this message can mostly be c
 
 The error *...SendFailedException...* means that there was a problem while sending a message.
 The error will almost always include a reason. Common reasons are that the message was too big or that one or more recipient addresses were invalid.
+
+The warning *Message too large to fit into the available memory* means that the message was larger than 10 MiB.
+Even if your device has plenty of storage space Android provides limited working memory to apps, which limits the size of messages that can be handled.
 
 Please see [here](#user-content-faq22) for other error messages in the outbox.
 

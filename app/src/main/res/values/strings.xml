@@ -270,6 +270,7 @@
     <string name="title_advanced_prefix_once">Prefix subject only once on replying or forwarding</string>
     <string name="title_advanced_extended_reply">Use extended reply/forward header</string>
     <string name="title_advanced_quote_reply">Quote replied text</string>
+    <string name="title_advanced_signature_location">Signature position</string>
     <string name="title_advanced_signature_end">Add signature after quoted/forwarded message</string>
     <string name="title_advanced_plain_only">Send plain text only by default</string>
     <string name="title_advanced_usenet_signature">Usenet signature convention</string>
@@ -326,6 +327,7 @@
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text</string>
     <string name="title_advanced_text_color">Show text colors</string>
+    <string name="title_advanced_text_size">Show small and large texts</string>
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
     <string name="title_advanced_images_inline">Automatically show inline images</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
@@ -347,7 +349,9 @@
     <string name="title_advanced_quick_filter">Show non-obtrusive quick filter icons</string>
     <string name="title_advanced_quick_scroll">Show non-obtrusive quick scroll up/down icons</string>
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
+    <string name="title_advanced_star_snoozed">Automatically add star on snoozing messages</string>
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
+    <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
     <string name="title_advanced_discard_delete">On discard draft permanently delete draft</string>
     <string name="title_advanced_default_snooze">Default snooze time</string>
@@ -642,6 +646,7 @@
     <string name="title_importance_low">Low</string>
     <string name="title_importance_normal">Normal</string>
     <string name="title_importance_high">High</string>
+    <string name="title_search_in_text">Search in text &#8230;</string>
     <string name="title_forward">Forward</string>
     <string name="title_new_message">New message</string>
     <string name="title_editasnew">Edit as new</string>
@@ -698,6 +703,7 @@
     <string name="title_no_search">Search on server is not available for this account</string>
     <string name="title_too_large">Message too large to completely reformat</string>
     <string name="title_truncated">Message too large to display completely</string>
+    <string name="title_insufficient_memory">Message too large to fit into the available memory</string>
     <string name="title_show_full">Show full message</string>
     <string name="title_unused_inline">Unused inline images will be removed on send</string>
     <string name="title_accross_remark">Messages moved across accounts will be downloaded again resulting in extra data usage</string>
@@ -1322,6 +1328,12 @@
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
+    </string-array>
+
+    <string-array name="signatureNames">
+        <item>Above the text</item>
+        <item>Below the text</item>
+        <item>At the bottom</item>
     </string-array>
 
     <string-array name="encryptMethod" translatable="false">

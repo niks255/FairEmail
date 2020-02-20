@@ -382,13 +382,15 @@ public class FragmentBase extends Fragment {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                     if (ex instanceof RecoverableSecurityException) {
                         handle((RecoverableSecurityException) ex);
                         return;
                     }
 
-                if (ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException)
+                if (ex instanceof IllegalArgumentException ||
+                        ex instanceof FileNotFoundException ||
+                        ex instanceof SecurityException)
                     ToastEx.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
@@ -406,6 +408,11 @@ public class FragmentBase extends Fragment {
             protected Void onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
                 Uri uri = args.getParcelable("uri");
+
+                if (!"content".equals(uri.getScheme())) {
+                    Log.w("Save attachment uri=" + uri);
+                    throw new IllegalArgumentException(context.getString(R.string.title_no_stream));
+                }
 
                 DB db = DB.getInstance(context);
                 DocumentFile tree = DocumentFile.fromTreeUri(context, uri);
@@ -464,13 +471,15 @@ public class FragmentBase extends Fragment {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                     if (ex instanceof RecoverableSecurityException) {
                         handle((RecoverableSecurityException) ex);
                         return;
                     }
 
-                if (ex instanceof FileNotFoundException)
+                if (ex instanceof IllegalArgumentException ||
+                        ex instanceof FileNotFoundException ||
+                        ex instanceof SecurityException)
                     ToastEx.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
@@ -478,7 +487,7 @@ public class FragmentBase extends Fragment {
         }.execute(this, args, "attachments:save");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void handle(RecoverableSecurityException ex) {
         new AlertDialog.Builder(getContext())
                 .setMessage(ex.getMessage())

@@ -64,6 +64,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,6 +74,7 @@ import static androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
 public class HtmlHelper {
     private static final int PREVIEW_SIZE = 500; // characters
 
+    private static final int DEFAULT_FONT_SIZE = 16; // pixels
     private static final float MIN_LUMINANCE = 0.5f;
     private static final int TAB_SIZE = 2;
     private static final int MAX_AUTO_LINK = 250;
@@ -260,6 +262,7 @@ public class HtmlHelper {
     private static Document _sanitize(Context context, Document parsed, boolean show_images, boolean autolink, boolean more) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean text_color = prefs.getBoolean("text_color", true);
+        boolean text_size = prefs.getBoolean("text_size", true);
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
 
@@ -346,6 +349,7 @@ public class HtmlHelper {
 
         Whitelist whitelist = Whitelist.relaxed()
                 .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt")
+                .addAttributes(":all", "style")
                 .removeTags("col", "colgroup", "thead", "tbody")
                 .removeAttributes("table", "width")
                 .removeAttributes("td", "colspan", "rowspan", "width")
@@ -355,7 +359,6 @@ public class HtmlHelper {
                 .addProtocols("a", "href", "full");
         if (text_color)
             whitelist
-                    .addAttributes(":all", "style")
                     .addAttributes("font", "color");
 
         final Document document = new Cleaner(whitelist).clean(parsed);
@@ -390,6 +393,9 @@ public class HtmlHelper {
                         switch (key) {
                             case "color":
                                 // https://developer.mozilla.org/en-US/docs/Web/CSS/color
+                                if (!text_color)
+                                    continue;
+
                                 Integer color = parseColor(value, dark);
                                 if (color != null) {
                                     // fromHtml does not support transparency
@@ -398,19 +404,51 @@ public class HtmlHelper {
                                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
                                         element.attr("color", c);
                                 }
+
                                 break;
 
                             case "font-size":
                                 // https://developer.mozilla.org/en-US/docs/Web/CSS/font-size
-                                if (element.parent() != null) {
-                                    Float fsize = getFontSize(value);
+                                if (!text_size)
+                                    continue;
+
+                                Element parent = element.parent();
+                                if (parent != null) {
+                                    boolean set = false;
+                                    boolean small = false;
+                                    boolean big = false;
+                                    Integer current = null;
+                                    while (parent != null) {
+                                        if (!set) {
+                                            if ("small".equals(parent.tagName())) {
+                                                set = true;
+                                                small = true;
+                                            }
+                                            if ("big".equals(parent.tagName())) {
+                                                set = true;
+                                                big = true;
+                                            }
+                                        }
+
+                                        String xFontSize = parent.attr("x-font-size");
+                                        if (!TextUtils.isEmpty(xFontSize)) {
+                                            current = Integer.parseInt(xFontSize);
+                                            break;
+                                        }
+                                        parent = parent.parent();
+                                    }
+
+                                    Float fsize = getFontSize(value, current);
                                     if (fsize != null && fsize != 0 &&
-                                            (fsize <= 0.8f || fsize >= 1.25)) {
+                                            ((!small && fsize <= 0.8f) || (!big && fsize >= 1.25))) {
                                         Element e = new Element(fsize < 1 ? "small" : "big");
+                                        int px = Math.round(DEFAULT_FONT_SIZE * fsize);
+                                        e.attr("x-font-size", Integer.toString(px));
                                         element.replaceWith(e);
                                         e.appendChild(element);
                                     }
                                 }
+
                                 break;
 
                             case "font-weight":
@@ -449,7 +487,7 @@ public class HtmlHelper {
                                 //case "font-size":
                                 //case "line-height":
                                 if (element.parent() != null && !display_hidden) {
-                                    Float s = getFontSize(value);
+                                    Float s = getFontSize(value, null);
                                     if (s != null && s == 0) {
                                         Log.i("Removing no height/width " + element.tagName());
                                         element.remove();
@@ -481,6 +519,13 @@ public class HtmlHelper {
                 Node last = div.childNode(div.childNodeSize() - 1);
                 if (last != null && "br".equals(last.nodeName()))
                     last.remove();
+            }
+
+        if (!text_size)
+            for (Element h : document.select("h1,h2,h3,h4,h5,h6")) {
+                h.appendElement("br");
+                h.appendElement("br");
+                h.tagName("strong");
             }
 
         // Paragraphs
@@ -772,21 +817,21 @@ public class HtmlHelper {
 
     }
 
-    private static Float getFontSize(String value) {
+    private static Float getFontSize(String value, Integer current) {
         if (TextUtils.isEmpty(value))
             return null;
 
-        value = value
-                .toLowerCase(Locale.ROOT)
-                .trim()
-                .replace("rem", "em");
+        if (current == null)
+            current = DEFAULT_FONT_SIZE;
 
         try {
             if (value.endsWith("em"))
-                return Float.parseFloat(value.substring(0, value.length() - 2).trim());
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) * current / (float) DEFAULT_FONT_SIZE;
+            if (value.endsWith("rem"))
+                return Float.parseFloat(value.substring(0, value.length() - 3).trim());
             if (value.endsWith("px"))
-                return Integer.parseInt(value.substring(0, value.length() - 2).trim()) / 16f;
-            return Integer.parseInt(value.trim()) / 16f;
+                return Integer.parseInt(value.substring(0, value.length() - 2).trim()) / (float) DEFAULT_FONT_SIZE;
+            return Integer.parseInt(value.trim()) / (float) DEFAULT_FONT_SIZE;
         } catch (NumberFormatException ignored) {
         }
 
@@ -1055,30 +1100,53 @@ public class HtmlHelper {
         Log.i(document.head().html());
     }
 
+    static String getPreview(File file) throws IOException {
+        try {
+            Document d = JsoupEx.parse(file);
+            return _getText(d, false);
+        } catch (OutOfMemoryError ex) {
+            Log.e(ex);
+            return null;
+        }
+    }
+
+    @Deprecated
     static String getPreview(String body) {
         try {
-            return _getText(body, false);
+            if (body == null)
+                return null;
+            Document d = JsoupEx.parse(body);
+            return _getText(d, false);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             return null;
         }
     }
 
+    @Deprecated
     static String getFullText(String body) {
         try {
-            return _getText(body, true);
+            if (body == null)
+                return null;
+            Document d = JsoupEx.parse(body);
+            return _getText(d, true);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             return null;
         }
     }
 
-    private static String _getText(String body, boolean full) {
-        if (body == null)
+    static String getFullText(File file) throws IOException {
+        try {
+            Document d = JsoupEx.parse(file);
+            return _getText(d, true);
+        } catch (OutOfMemoryError ex) {
+            Log.e(ex);
             return null;
+        }
+    }
 
-        Document d = JsoupEx.parse(body);
-
+    private static String _getText(Document d, boolean full) {
         truncate(d, !full);
 
         String text = d.text();
@@ -1219,9 +1287,12 @@ public class HtmlHelper {
         int max = (reformat ? MAX_FORMAT_TEXT_SIZE : MAX_FULL_TEXT_SIZE);
 
         int length = 0;
+        int images = 0;
         for (Element elm : d.select("*")) {
-            boolean skip = false;
+            if ("img".equals(elm.tagName()))
+                images++;
 
+            boolean skip = false;
             for (Node child : elm.childNodes()) {
                 if (child instanceof TextNode) {
                     TextNode tnode = ((TextNode) child);
@@ -1246,7 +1317,39 @@ public class HtmlHelper {
                 elm.remove();
         }
 
+        Log.i("Message size=" + length + " images=" + images);
+
         return (length >= max);
+    }
+
+    static boolean contains(Document d, String[] texts) {
+        Map<String, Boolean> condition = new HashMap<>();
+        for (String t : texts)
+            condition.put(t, false);
+
+        for (Element elm : d.select("*"))
+            for (Node child : elm.childNodes()) {
+                if (child instanceof TextNode) {
+                    TextNode tnode = ((TextNode) child);
+                    String text = tnode.getWholeText();
+                    for (String t : texts)
+                        if (!condition.get(t) && text.contains(t)) {
+                            condition.put(t, true);
+
+                            boolean found = true;
+                            for (String c : texts)
+                                if (!condition.get(c)) {
+                                    found = false;
+                                    break;
+                                }
+
+                            if (found)
+                                return true;
+                        }
+                }
+            }
+
+        return false;
     }
 
     static Spanned fromHtml(@NonNull String html) {

@@ -1690,18 +1690,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (!file.exists())
                         return null;
 
-                    String body = Helper.readText(file);
-                    if (!TextUtils.isEmpty(body))
+                    if (file.length() > 0)
                         signed_data = false;
                     args.putBoolean("signed_data", signed_data);
 
-                    Document document = JsoupEx.parse(body);
+                    Document document = JsoupEx.parse(file);
                     HtmlHelper.cleanup(document);
 
                     // Check for inline encryption
-                    int begin = body.indexOf(Helper.PGP_BEGIN_MESSAGE);
-                    int end = body.indexOf(Helper.PGP_END_MESSAGE);
-                    args.putBoolean("inline_encrypted", begin >= 0 && begin < end);
+                    boolean iencrypted = HtmlHelper.contains(document, new String[]{
+                            Helper.PGP_BEGIN_MESSAGE,
+                            Helper.PGP_END_MESSAGE
+                    });
+                    args.putBoolean("inline_encrypted", iencrypted);
 
                     // Check for images
                     boolean has_images = false;
@@ -1752,7 +1753,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             HtmlHelper.removeTrackingPixels(context, document);
 
                         if (debug) {
-                            Document format = JsoupEx.parse(document.html());
+                            Document format = JsoupEx.parse(file);
                             format.outputSettings().prettyPrint(true).outline(true).indentAmount(1);
                             Element pre = document.createElement("pre");
                             pre.text(format.html());
@@ -4686,6 +4687,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         same = false;
                         Log.i("keyword colors changed id=" + next.id);
                     }
+                    if (prev.update) {
+                        Log.i("Always update");
+                        same = false;
+                    }
 
                     return same;
                 }
@@ -4723,6 +4728,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         if (filter_duplicates && message.duplicate) {
+            holder.card.setCardBackgroundColor(message.folderColor == null
+                    ? Color.TRANSPARENT
+                    : ColorUtils.setAlphaComponent(message.folderColor, 128));
             holder.tvFolder.setText(context.getString(R.string.title_duplicate_in, message.getFolderName(context)));
             holder.tvFolder.setTypeface(message.unseen > 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
             holder.tvFolder.setTextColor(message.unseen > 0 ? colorUnread : colorRead);

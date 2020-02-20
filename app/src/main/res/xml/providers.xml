@@ -126,8 +126,9 @@
             starttls="false" />
         <smtp
             host="smtp.fastmail.com"
-            port="465"
+            port="565"
             starttls="false" />
+        <!-- https://twitter.com/fastmail/status/569046903855271937 -->
     </provider>
     <!-- no IMAP IDLE -->
     <provider
@@ -573,5 +574,17 @@
             host="smtp.ziggo.nl"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="p≡p"
+        domain="pep.security">
+        <imap
+            host="mail.pep.security"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.pep.security"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>
