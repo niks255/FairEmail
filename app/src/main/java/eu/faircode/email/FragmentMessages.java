@@ -1508,6 +1508,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             });
         }
 
+        public void scrollTo(final int pos, final int y) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    LinearLayoutManager llm = (LinearLayoutManager) rvMessage.getLayoutManager();
+                    llm.scrollToPositionWithOffset(pos, -y);
+                }
+            });
+        }
+
         @Override
         public void move(long id, String type) {
             Bundle args = new Bundle();
@@ -1725,8 +1735,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 adapter.notifyDataSetChanged();
                 return;
             }
-
-            message.update = true;
 
             if (message.accountProtocol != EntityAccount.TYPE_IMAP)
                 if (direction == ItemTouchHelper.LEFT) {
@@ -1970,8 +1978,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private boolean onReply(String action) {
         if (values.containsKey("expanded") && values.get("expanded").size() > 0) {
+            Context context = getContext();
+            if (context == null)
+                return false;
             long id = values.get("expanded").get(0);
-            Intent reply = new Intent(getContext(), ActivityCompose.class)
+            Intent reply = new Intent(context, ActivityCompose.class)
                     .putExtra("action", action)
                     .putExtra("reference", id);
             startActivity(reply);
