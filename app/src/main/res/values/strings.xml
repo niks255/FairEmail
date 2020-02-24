@@ -501,7 +501,6 @@
     <string name="title_account_name_hint">Used to differentiate folders</string>
     <string name="title_account_interval_hint">Frequency of refreshing the connection for push messages or frequency of checking for new messages</string>
     <string name="title_account_partial_fetch_hint">Disable this only in case of empty messages or corrupt attachments</string>
-    <string name="title_account_signature">Signature text</string>
     <string name="title_color">Color</string>
     <string name="title_account_ondemand">Synchronize manually</string>
     <string name="title_account_notify">Separate notifications</string>
@@ -814,6 +813,7 @@
     <string name="title_user_interaction">Transferring to OpenKeychain</string>
     <string name="title_signed_data">Verify the signature to show the message text</string>
     <string name="title_not_encrypted">Message is not signed or encrypted</string>
+    <string name="title_no_sign_key">No sign key selected</string>
     <string name="title_reset_sign_key">Reset sign key</string>
 
     <string name="title_signature_none">Message not signed</string>
@@ -865,6 +865,10 @@
 
     <string name="title_previous">Previous</string>
     <string name="title_next">Next</string>
+
+    <string name="title_edit_signature">Edit signature</string>
+    <string name="title_edit_signature_text">Signature text</string>
+    <string name="title_edit_signature_image">Insert image</string>
 
     <string name="title_answer_caption">Edit template</string>
     <string name="title_answer_reply">Reply template</string>
@@ -1030,7 +1034,9 @@
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>
+    <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection and device and on the number of messages. While downloading messages the app might respond slower.</string>
+    <string name="title_hint_battery">Since FairEmail by default always receives messages, Android will report FairEmail to be always active. Therefore it might look like that FairEmail is always using battery power, but in fact this is not the case.</string>
     <string name="title_hint_contact_actions">Long press for options</string>
     <string name="title_hint_eml">This is a summary of the content of a raw message file. Save the raw message with the save icon in the action bar to view all content.</string>
 

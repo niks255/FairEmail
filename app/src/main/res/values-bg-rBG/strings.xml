@@ -207,7 +207,6 @@
     <string name="title_advanced_receive">Получени съобщения</string>
     <string name="title_advanced_when">Кога</string>
     <string name="title_advanced_always">Винаги синхронизирай тези профили</string>
-    <string name="title_advanced_optimize">Автоматично оптимизиране на настройките</string>
     <string name="title_advanced_schedule">График</string>
     <string name="title_advanced_unseen">Всички непрочетени съобщения</string>
     <string name="title_advanced_flagged">Всички съобщения със звезда</string>
@@ -352,6 +351,7 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d индексирани съобщения (%3$s)</string>
     <string name="title_advanced_english">Принудително на английски език</string>
     <string name="title_advanced_watchdog">Периодична проверка дали FairEmail е активен</string>
+    <string name="title_advanced_optimize">Автоматично оптимизиране на настройките</string>
     <string name="title_advanced_updates">Проверка за актуализация</string>
     <string name="title_advanced_experiments">Пробвай експерименталните функции</string>
     <string name="title_advanced_crash_reports">Изпрати репорт с грешки</string>
@@ -428,7 +428,6 @@
     <string name="title_account_name_hint">Използва се за разграничаване на папки</string>
     <string name="title_account_interval_hint">Честота на опресняване на връзката за push съобщения или честота на проверка за нови съобщения</string>
     <string name="title_account_partial_fetch_hint">Деактивирайте това само в случай на празни съобщения или повредени прикачени файлове</string>
-    <string name="title_account_signature">Текст на подписа</string>
     <string name="title_color">Цвят</string>
     <string name="title_account_ondemand">Синхронизирай ръчно</string>
     <string name="title_account_notify">Отделни известявания</string>
@@ -481,7 +480,7 @@
     <string name="title_edit_html">Редактиране като HTML</string>
     <string name="title_sign_key">Ключ за подписване:%1$s</string>
     <string name="title_last_connected">Последна проверка: %1$s</string>
-    <string name="title_storage_quota">Използване на сървъра за съхранение: %1$s/%2$s</string>
+    <string name="title_storage_quota">Използвано място на сървъра: %1$s/%2$s</string>
     <string name="title_pop_support">POP3 протокола поддържа изтегляне и изтриване на съобщенията само във входяща поща. POP3 не може да маркира съобщенията като прочетени, не може да премества съобщения, т. н. POP3 използва повече батерия и данни от IMAP. Моля използвайте IMAP протокола когато е възможно.</string>
     <string name="title_oauth_support">OAuth не се поддържа</string>
     <string name="title_review">Преглед</string>
@@ -716,6 +715,7 @@
     <string name="title_user_interaction">Прехвърляне към OpenKeychain</string>
     <string name="title_signed_data">Потвърдете подписа, за да се покаже текста на съобщението</string>
     <string name="title_not_encrypted">Съобщението не е подписано или криптирано</string>
+    <string name="title_no_sign_key">Няма избран ключ за подписване</string>
     <string name="title_reset_sign_key">Нулиране на ключ за подписване</string>
     <string name="title_signature_none">Съобщението не е подписано</string>
     <string name="title_signature_valid">Подписът на съобщението е валиден</string>
@@ -761,6 +761,9 @@
     <string name="title_force_sync">Принудително синхронизиране</string>
     <string name="title_previous">Предишен</string>
     <string name="title_next">Следващ</string>
+    <string name="title_edit_signature">Редактиране на подписа</string>
+    <string name="title_edit_signature_text">Текст на подписа</string>
+    <string name="title_edit_signature_image">Вмъкни изображение</string>
     <string name="title_answer_caption">Ред. шаблон</string>
     <string name="title_answer_reply">Отговор с шаблони</string>
     <string name="title_answer_name">Име на шаблон</string>
@@ -913,7 +916,9 @@
     <string name="title_hint_support">Ако имате въпрос или проблем, моля изполвайте меню поддръжка за да получите помощ</string>
     <string name="title_hint_message_actions">Плъзнете наляво за преместване в кошчето; Плъзнето надясно за архивирне (ако е налично); Плъзгането можете да конфигурирате в настройките на профила</string>
     <string name="title_hint_message_selection">Натиснете и задръжте по дълго върху съобщението, за да започнете да избирате няколко съобщения; Задръжте и прекарайте пръст нагоре или надолу, за да изберете няколко съобщения</string>
+    <string name="title_hint_important">Важно</string>
     <string name="title_hint_sync">Изтеглянето на съобщения може да отнеме известно време, в зависимост от скоростта на доставчика, интернет връзката и устройството и броя на съобщенията. Докато изтегляте съобщения, приложението може да реагира по-бавно.</string>
+    <string name="title_hint_battery">Тъй като FairEmail по подразбиране винаги получава съобщения, Android ще докладва, че FairEmail е винаги активен. Следователно може да изглежда, че FairEmail винаги консумира от батерията, но всъщност това не е така.</string>
     <string name="title_hint_contact_actions">Натиснете продължително за повече опции</string>
     <string name="title_hint_eml">Това е обобщение на съдържанието на необработен файл със съобщение. Запишете необработеното съобщение с иконата за запис в лентата за действие, за да видите цялото съдържание.</string>
     <string name="title_open_link">Отваряне не връзката</string>

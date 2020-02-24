@@ -338,6 +338,7 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d 的消息已索引(%3$s)</string>
     <string name="title_advanced_english">强制使用英语</string>
     <string name="title_advanced_watchdog">定期检查FairEmail是否仍在运行</string>
+    <string name="title_advanced_optimize">自动优化设置</string>
     <string name="title_advanced_updates">检查更新</string>
     <string name="title_advanced_experiments">尝试实验性功能</string>
     <string name="title_advanced_crash_reports">发送错误报告</string>
@@ -415,7 +416,6 @@
     <string name="title_account_name_hint">用于区分文件夹</string>
     <string name="title_account_interval_hint">刷新连接推送消息的频率或检查新消息的频率</string>
     <string name="title_account_partial_fetch_hint">仅在空消息或损坏的附件时禁用此功能</string>
-    <string name="title_account_signature">签名文本</string>
     <string name="title_color">颜色</string>
     <string name="title_account_ondemand">手动同步</string>
     <string name="title_account_notify">单独的通知</string>
@@ -703,6 +703,7 @@
     <string name="title_user_interaction">正传输到 OpenKeychain</string>
     <string name="title_signed_data">验证签名以显示消息文本</string>
     <string name="title_not_encrypted">消息未签名或加密</string>
+    <string name="title_no_sign_key">未选择签名密钥</string>
     <string name="title_reset_sign_key">重置签名密钥</string>
     <string name="title_signature_none">消息未签名</string>
     <string name="title_signature_valid">消息签名有效</string>
@@ -748,6 +749,9 @@
     <string name="title_force_sync">强制同步</string>
     <string name="title_previous">上一则</string>
     <string name="title_next">下一则</string>
+    <string name="title_edit_signature">编辑签名</string>
+    <string name="title_edit_signature_text">签名文本</string>
+    <string name="title_edit_signature_image">插入图片</string>
     <string name="title_answer_caption">编辑模板</string>
     <string name="title_answer_reply">回复模板</string>
     <string name="title_answer_name">模板名称</string>
@@ -900,7 +904,9 @@
     <string name="title_hint_support">如果您要提问或有疑问，请使用支持选项获取帮助</string>
     <string name="title_hint_message_actions">左滑移动到回收站; 右滑存档 (如果可用); 滑动操作可以在账户设置中配置</string>
     <string name="title_hint_message_selection">长按一则消息开始选择多条消息；按住并向上或向下滑动来选择更多消息</string>
+    <string name="title_hint_important">重要</string>
     <string name="title_hint_sync">下载邮件可能需要一些时间, 具体取决于提供商的速度、网络连接、设备以及邮件数量。在下载邮件时, 应用的响应速度可能会变慢。</string>
+    <string name="title_hint_battery">由于FairEmail默认总是接受消息，安卓系统会报告FairEmail始终处于活动状态。 因此，FairEmail似乎总在消耗电量，但事实上情况并非如此。</string>
     <string name="title_hint_contact_actions">长按以显示更多选项</string>
     <string name="title_hint_eml">这是一个原始消息文件内容的摘要。用操作栏中的保存图标保存原始消息以查看所有内容。</string>
     <string name="title_open_link">打开链接</string>

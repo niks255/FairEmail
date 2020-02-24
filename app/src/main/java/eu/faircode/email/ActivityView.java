@@ -41,6 +41,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -826,8 +827,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     builder.setContentIntent(piUpdate);
                 }
 
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                nm.notify(Helper.NOTIFICATION_UPDATE, builder.build());
+                try {
+                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    nm.notify(Helper.NOTIFICATION_UPDATE, builder.build());
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
             }
 
             @Override
@@ -1234,8 +1239,19 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View dview = inflater.inflate(R.layout.dialog_first, null);
+            Button btnInfo = dview.findViewById(R.id.btnInfo);
+
+            btnInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(getContext(), 39);
+                }
+            });
+
             return new AlertDialog.Builder(getContext())
-                    .setMessage(getString(R.string.title_hint_sync))
+                    .setView(dview)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

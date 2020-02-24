@@ -145,7 +145,7 @@
     <string name="title_setup_identity_hint">Ad, renk, imza vb. değiştirmek için</string>
     <string name="title_setup_permissions">Verilen izinler</string>
     <string name="title_setup_permissions_remark">İletişim bilgilerine erişim için (isteğe bağlı)</string>
-    <string name="title_setup_doze">Pil eniyileme ayarları</string>
+    <string name="title_setup_doze">Pil optimizasyonlarını ayarla</string>
     <string name="title_setup_doze_remark">Sürekli e-posta almak için (isteğe bağlı)</string>
     <string name="title_setup_doze_instructions">Sonraki iletişim kutusunda, en üstteki \"Tüm uygulamalar\" seçeneğini işaretleyin, bu uygulamayı seçin ve \"optimize etme\" seçeneğini onaylayın</string>
     <string name="title_setup_doze_battery">Yüksek pil kullanımı?</string>
@@ -207,7 +207,6 @@
     <string name="title_advanced_receive">Mesajları al</string>
     <string name="title_advanced_when">Ne zaman</string>
     <string name="title_advanced_always">Bu hesapları her zaman senkronize et</string>
-    <string name="title_advanced_optimize">Ayarları otomatik olarak optimize et</string>
     <string name="title_advanced_schedule">Program</string>
     <string name="title_advanced_unseen">Tüm okunmamış iletiler</string>
     <string name="title_advanced_flagged">Tüm yıldızlı iletiler</string>
@@ -352,6 +351,7 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d mesaj indekslendi (%3$s)</string>
     <string name="title_advanced_english">İngilizce Diline Zorla</string>
     <string name="title_advanced_watchdog">Düzenli aralıklarla FairEmail hala etkin mi diye kontrol et</string>
+    <string name="title_advanced_optimize">Ayarları otomatik olarak optimize et</string>
     <string name="title_advanced_updates">Güncellemelere bak</string>
     <string name="title_advanced_experiments">Deneysel özellikleri deneyin</string>
     <string name="title_advanced_crash_reports">Hata raporları gönder</string>
@@ -429,7 +429,6 @@
     <string name="title_account_name_hint">Klasörleri ayırt etmek için kullanılır</string>
     <string name="title_account_interval_hint">Anlık mesajlar için bağlantı yenileme frekansı ya da yeni mesajlar için kontrol etme frekansı</string>
     <string name="title_account_partial_fetch_hint">Bunu yalnızca boş iletiler veya bozuk ekler olması durumunda devre dışı bırakın</string>
-    <string name="title_account_signature">İmza Metni</string>
     <string name="title_color">Renk</string>
     <string name="title_account_ondemand">Manuel olarak senkronize et</string>
     <string name="title_account_notify">Ayrı bildirimler</string>
@@ -717,6 +716,7 @@
     <string name="title_user_interaction">OpenKeychain\'e gönderiliyor</string>
     <string name="title_signed_data">Mesaj metnini göstermek için imzayı doğrula</string>
     <string name="title_not_encrypted">Mesaj imzalı veya şifreli değil</string>
+    <string name="title_no_sign_key">Hiçbir imzalama anahtarı seçilmedi</string>
     <string name="title_reset_sign_key">İmzalama anahtarını sıfırla</string>
     <string name="title_signature_none">İleti imzalı değil</string>
     <string name="title_signature_valid">İleti imzası geçerli</string>
@@ -762,6 +762,9 @@
     <string name="title_force_sync">Eşzamanlamaya zorla</string>
     <string name="title_previous">Önceki</string>
     <string name="title_next">Sonraki</string>
+    <string name="title_edit_signature">İmzayı düzenle</string>
+    <string name="title_edit_signature_text">İmza metni</string>
+    <string name="title_edit_signature_image">Resim ekle</string>
     <string name="title_answer_caption">Kalıbı Düzenle</string>
     <string name="title_answer_reply">Yanıt kalıbı</string>
     <string name="title_answer_name">Kalıp adı</string>
@@ -914,7 +917,9 @@
     <string name="title_hint_support">Bir soru ya da bir probleminiz varsa, lütfen yardım almak için destek menüsünü kullanın</string>
     <string name="title_hint_message_actions">Çöp için sola kaydırın; Arşiv için sağa kaydırın (mevcut ise); Kaydırma eylemleri hesap ayarlarından yapılandırılabilir</string>
     <string name="title_hint_message_selection">Birden fazla ileti seçmeye başlamak için bir mesaja uzun basın; basılı tutarak ve yukarı veya aşağı kaydırın ve iletileri seçin</string>
+    <string name="title_hint_important">Önemli</string>
     <string name="title_hint_sync">Mesajların indirilmesi, sağlayıcının hızına, internet bağlantısına ve cihazın hızına ve mesaj sayısına bağlı olarak biraz zaman alabilir. Mesajları indirirken uygulama daha yavaş yanıt verebilir.</string>
+    <string name="title_hint_battery">FairEmail varsayılan olarak her zaman mesaj aldığından, Android FairEmail\'in her zaman etkin olduğunu bildirecektir. Bu nedenle, FairEmail sürekli pil gücünü kullanıyor gibi görünebilir, ancak aslında durum böyle değildir.</string>
     <string name="title_hint_contact_actions">Seçenekler için uzun basın</string>
     <string name="title_hint_eml">Bu, ham mesaj dosyasının içeriğinin bir özetidir. Tüm içeriği görüntülemek için ham iletiyi işlem çubuğundaki kaydet simgesiyle kaydedin.</string>
     <string name="title_open_link">Bağlantıyı aç</string>

@@ -206,7 +206,6 @@
     <string name="title_advanced_receive">Jaso mezuak</string>
     <string name="title_advanced_when">Noiz</string>
     <string name="title_advanced_always">Sinkronizatu beti kontu hauek</string>
-    <string name="title_advanced_optimize">Optimizatu ezarpenak automatikoki</string>
     <string name="title_advanced_schedule">Egitaraua</string>
     <string name="title_advanced_unseen">Irakurri gabeko mezu guztiak</string>
     <string name="title_advanced_flagged">Izardun mezu guztiak</string>
@@ -351,6 +350,7 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d mezu indexatuak (%3$s)</string>
     <string name="title_advanced_english">Behartu hizkuntza ingelesa</string>
     <string name="title_advanced_watchdog">Aldiro egiaztatu FairEmail aktibo dagoen</string>
+    <string name="title_advanced_optimize">Optimizatu ezarpenak automatikoki</string>
     <string name="title_advanced_updates">Egiaztatu eguneraketarik dagoen</string>
     <string name="title_advanced_experiments">Probatu ezaugarri esperimentalak</string>
     <string name="title_advanced_crash_reports">Bidali errore txostenak</string>
@@ -427,7 +427,6 @@
     <string name="title_account_name_hint">Karpetak bereizteko erabilia</string>
     <string name="title_account_interval_hint">Mezu berrien arazketa freskatzeko maiztasuna</string>
     <string name="title_account_partial_fetch_hint">Ezgaitu hau mezu hutsak edo eranskinak hondatuta badaude</string>
-    <string name="title_account_signature">Sinaduraren testua</string>
     <string name="title_color">Kolorea</string>
     <string name="title_account_ondemand">Sinkronizatu eskuz</string>
     <string name="title_account_notify">Banatutako jakinarazpenak</string>
@@ -715,6 +714,7 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_user_interaction">OpenKeychain-era transferitzen</string>
     <string name="title_signed_data">Egiaztatu sinadura mezuaren testua erakusteko</string>
     <string name="title_not_encrypted">Mezua ez dago ez zifratuta ez sinatuta</string>
+    <string name="title_no_sign_key">Sinatzeko gakorik ez da hautatu</string>
     <string name="title_reset_sign_key">Berrezarri sinadura gakoa</string>
     <string name="title_signature_none">Mezua ez dago sinatuta</string>
     <string name="title_signature_valid">Mezuaren sinadura baliozkoa</string>
@@ -760,6 +760,9 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_force_sync">Behartu sinkronizazioa</string>
     <string name="title_previous">Aurrekoa</string>
     <string name="title_next">Hurrengoa</string>
+    <string name="title_edit_signature">Editatu sinadura</string>
+    <string name="title_edit_signature_text">Sinaduraren testua</string>
+    <string name="title_edit_signature_image">Txertatu irudia</string>
     <string name="title_answer_caption">Editatu txantiloia</string>
     <string name="title_answer_reply">Erantzun txantiloia</string>
     <string name="title_answer_name">Txantiloi-izena</string>
@@ -912,7 +915,9 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_hint_support">Galdera edo arazoren bat baduzu, erabili laguntza menua laguntza jasotzeko</string>
     <string name="title_hint_message_actions">Pasatu hatza ezkerrera zakarrontzira botatzeko, pasatu hatza eskuinera artxibatzeko (eskuragarri badago). Hatza pasatzeko ekintzak kontuaren ezarpenetan konfiguratu daitezke</string>
     <string name="title_hint_message_selection">Sakatu luze mezu bat hainbat mezu hautatzen hasteko. Mantendu eta pasatu hatza gora edo behera mezu gehiago hautatzeko</string>
+    <string name="title_hint_important">Garrantzitsua</string>
     <string name="title_hint_sync">Mezuak deskargatzeak denbora hartu dezake, hornitzailearen abiadura, internet konexioa, gailua eta mezu kopuruaren arabera. Mezuak deskargatu bitartean aplikazioa motel erantzun lezake.</string>
+    <string name="title_hint_battery">FairEmail-ek berez mezuak beti jasotzen dituenez, Android-ek esaten du FairEmai beti aktibo dagoela. Ematen du FairEmail bateriako energia beti erabiltzen ari dela, baina hori ez da horrela.</string>
     <string name="title_hint_contact_actions">Sakatu luze aukeretarako</string>
     <string name="title_hint_eml">Hau mezu gordin fitxategi baten edukiaren laburpena da. Gorde mezu gordina ekintza-barrako \'gorde\' ikonoarekin eduki osoa ikusteko.</string>
     <string name="title_open_link">Ireki esteka</string>

@@ -25,12 +25,14 @@ import android.net.MailTo;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.util.FolderClosedIOException;
 import com.sun.mail.util.MessageRemovedIOException;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -294,8 +296,11 @@ public class MessageHelper {
 
                         final ContentType cts = new ContentType(attachment.type);
                         String micalg = cts.getParameter("micalg");
+                        if (TextUtils.isEmpty(micalg))
+                            Log.e("PGP micalg missing");
                         ParameterList params = cts.getParameterList();
-                        params.remove("micalg");
+                        if (params != null)
+                            params.remove("micalg");
                         cts.setParameterList(params);
 
                         // Build signature
@@ -375,8 +380,13 @@ public class MessageHelper {
 
                         final ContentType cts = new ContentType(attachment.type);
                         String micalg = cts.getParameter("micalg");
+                        if (TextUtils.isEmpty(micalg)) {
+                            Log.e("S/MIME micalg missing");
+                            micalg = "sha-256";
+                        }
                         ParameterList params = cts.getParameterList();
-                        params.remove("micalg");
+                        if (params != null)
+                            params.remove("micalg");
                         cts.setParameterList(params);
 
                         // Build signature
@@ -488,8 +498,61 @@ public class MessageHelper {
         Document document = JsoupEx.parse(message.getFile(context));
 
         // When sending message
-        if (identity != null)
+        if (identity != null) {
             document.select("div[fairemail=signature],div[fairemail=reference]").removeAttr("fairemail");
+
+            DB db = DB.getInstance(context);
+            try {
+                db.beginTransaction();
+
+                for (Element img : document.select("img")) {
+                    String source = img.attr("src");
+                    if (!source.startsWith("content:"))
+                        continue;
+
+                    Uri uri = Uri.parse(source);
+                    DocumentFile dfile = DocumentFile.fromSingleUri(context, uri);
+                    if (dfile == null)
+                        continue;
+
+                    String name = dfile.getName();
+                    String type = dfile.getType();
+
+                    if (TextUtils.isEmpty(name))
+                        name = uri.getLastPathSegment();
+                    if (TextUtils.isEmpty(type))
+                        type = "image/*";
+
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = message.id;
+                    attachment.sequence = db.attachment().getAttachmentSequence(message.id) + 1;
+                    attachment.name = name;
+                    attachment.type = type;
+                    attachment.disposition = Part.INLINE;
+                    attachment.cid = null;
+                    attachment.size = null;
+                    attachment.progress = 0;
+
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    String cid = BuildConfig.APPLICATION_ID + "." + attachment.id;
+                    attachment.cid = "<" + BuildConfig.APPLICATION_ID + "." + attachment.id + ">";
+                    db.attachment().setCid(attachment.id, attachment.cid);
+
+                    attachment.size = Helper.copy(context, uri, attachment.getFile(context));
+                    attachment.progress = null;
+                    attachment.available = true;
+                    db.attachment().setDownloaded(attachment.id, attachment.size);
+
+                    attachments.add(attachment);
+                    img.attr("src", "cid:" + cid);
+                }
+
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
 
         // multipart/mixed
         //   multipart/related

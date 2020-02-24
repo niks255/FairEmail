@@ -430,7 +430,6 @@
     <string name="title_account_name_hint">Folosit la diferențierea dosarelor</string>
     <string name="title_account_interval_hint">Frecvența de actualizare a conexiunii pentru mesaje push sau frecventa de verificare de mesaje noi</string>
     <string name="title_account_partial_fetch_hint">Dezactivați numai pentru mesaje goale sau atașamente corupte</string>
-    <string name="title_account_signature">Text semnătură</string>
     <string name="title_color">Culoare</string>
     <string name="title_account_ondemand">Sincronizare manuală</string>
     <string name="title_account_notify">Separă notificările</string>
@@ -561,6 +560,7 @@
     <string name="title_importance_low">Redusă</string>
     <string name="title_importance_normal">Normală</string>
     <string name="title_importance_high">Ridicată</string>
+    <string name="title_search_in_text">Caută în text &#8230;</string>
     <string name="title_forward">Redirecționează</string>
     <string name="title_new_message">Mesaj nou</string>
     <string name="title_editasnew">Editare ca nou</string>
@@ -756,6 +756,9 @@
     <string name="title_force_sync">Sincronizare forțată</string>
     <string name="title_previous">Precedent</string>
     <string name="title_next">Următor</string>
+    <string name="title_edit_signature">Editare semnătură</string>
+    <string name="title_edit_signature_text">Text semnătură</string>
+    <string name="title_edit_signature_image">Inserare imagine</string>
     <string name="title_answer_caption">Editare șablon</string>
     <string name="title_answer_reply">Șablon răspuns</string>
     <string name="title_answer_name">Nume șablon</string>
@@ -908,6 +911,7 @@
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>
     <string name="title_hint_message_selection">Atingeți lung un mesaj pentru a începe selecția multiplă. Țineți și glisați sus sau jos pentru a selecta mai multe mesaje</string>
+    <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Descărcarea mesajelor poate dura ceva timp, în funcție de viteza furnizorului, conexiunea la internet, de dispozitiv precum și de numărul de mesaje. În timpul descărcării mesajelor aplicația ar putea răspunde mai lent.</string>
     <string name="title_hint_contact_actions">Atingeți lung pentru opțiuni</string>
     <string name="title_hint_eml">Acesta este sumarul conținutului unui fișier cu mesajul original. Salvați mesajul original folosind iconița de salvare din bara de acțiuni pentru a putea vizualiza tot conținutul.</string>
@@ -1109,6 +1113,11 @@
         <item>Mică</item>
         <item>Medie</item>
         <item>Mare</item>
+    </string-array>
+    <string-array name="signatureNames">
+        <item>Deasupra textului</item>
+        <item>Sub text</item>
+        <item>În partea de jos</item>
     </string-array>
     <string-array name="encryptNames">
         <item>Fără</item>

@@ -47,6 +47,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.OperationCanceledException;
@@ -575,6 +576,12 @@ public class FragmentCompose extends FragmentBase {
 
         etBody.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
         tvReference.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            etBody.setRevealOnFocusHint(false); // Doesn't work
+            tvSignature.setRevealOnFocusHint(false);
+            tvReference.setRevealOnFocusHint(false);
+        }
 
         style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -1334,7 +1341,7 @@ public class FragmentCompose extends FragmentBase {
         Helper.openAdvanced(intent);
         PackageManager pm = getContext().getPackageManager();
         if (intent.resolveActivity(pm) == null)
-            Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG).show();
+            noStorageAccessFramework();
         else
             startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_IMAGE);
     }
@@ -1347,16 +1354,27 @@ public class FragmentCompose extends FragmentBase {
         Helper.openAdvanced(intent);
         PackageManager pm = getContext().getPackageManager();
         if (intent.resolveActivity(pm) == null)
-            Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG).show();
+            noStorageAccessFramework();
         else
             startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_ATTACHMENT);
+    }
+
+    private void noStorageAccessFramework() {
+        Snackbar snackbar = Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(getContext(), 25);
+            }
+        });
+        snackbar.show();
     }
 
     private void onActionLink() {
         Uri uri = null;
 
         ClipboardManager cbm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        if (cbm.hasPrimaryClip()) {
+        if (cbm != null && cbm.hasPrimaryClip()) {
             String link = cbm.getPrimaryClip().getItemAt(0).coerceToText(getContext()).toString();
             uri = Uri.parse(link);
             if (uri.getScheme() == null)
@@ -1863,8 +1881,11 @@ public class FragmentCompose extends FragmentBase {
                                     } else if (OpenPgpApi.ACTION_DETACHED_SIGN.equals(data.getAction())) {
                                         name = "signature.asc";
                                         encryption = EntityAttachment.PGP_SIGNATURE;
+                                        String micalg = result.getStringExtra(OpenPgpApi.RESULT_SIGNATURE_MICALG);
+                                        if (TextUtils.isEmpty(micalg))
+                                            throw new IllegalArgumentException("micalg missing");
                                         ct = new ContentType("application/pgp-signature");
-                                        ct.setParameter("micalg", result.getStringExtra(OpenPgpApi.RESULT_SIGNATURE_MICALG));
+                                        ct.setParameter("micalg", micalg);
                                     } else if (OpenPgpApi.ACTION_SIGN_AND_ENCRYPT.equals(data.getAction())) {
                                         name = "encrypted.asc";
                                         encryption = EntityAttachment.PGP_MESSAGE;
@@ -1927,6 +1948,8 @@ public class FragmentCompose extends FragmentBase {
                                 }
                             } else if (OpenPgpApi.ACTION_GET_SIGN_KEY_ID.equals(data.getAction())) {
                                 pgpSignKeyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, -1);
+                                if (pgpSignKeyId == 0)
+                                    throw new IllegalArgumentException(context.getString(R.string.title_no_sign_key));
                                 db.identity().setIdentitySignKey(identity.id, pgpSignKeyId);
 
                                 // Get public key
@@ -4183,11 +4206,7 @@ public class FragmentCompose extends FragmentBase {
                 signature = HtmlHelper.fromHtml(identity.signature, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
-                        int px = Helper.dp2pixels(getContext(), 24);
-                        Drawable d = getContext().getResources()
-                                .getDrawable(R.drawable.baseline_image_24, getContext().getTheme());
-                        d.setBounds(0, 0, px, px);
-                        return d;
+                        return ActivitySignature.getDrawableByUri(getContext(), Uri.parse(source));
                     }
                 }, null);
             tvSignature.setText(signature);

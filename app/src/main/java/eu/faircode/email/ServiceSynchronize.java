@@ -106,6 +106,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final long YIELD_DURATION = 200L; // milliseconds
     private static final long QUIT_DELAY = 5 * 1000L; // milliseconds
     private static final long STILL_THERE_THRESHOLD = 3 * 60 * 1000L; // milliseconds
+    static final int DEFAULT_POLL_INTERVAL = 0; // minutes
     private static final int STILL_THERE_POLL_INTERVAL = 15; // minutes
     private static final int CONNECT_BACKOFF_START = 8; // seconds
     private static final int CONNECT_BACKOFF_MAX = 64; // seconds (totally 2 minutes)
@@ -277,8 +278,24 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             fts = false;
                             WorkerFts.cancel(ServiceSynchronize.this);
                         }
-                        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+
+                        try {
+                            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+                        } catch (Throwable ex) {
+/*
+                            java.lang.NullPointerException: Attempt to invoke interface method 'java.util.Iterator java.lang.Iterable.iterator()' on a null object reference
+                                    at android.app.ApplicationPackageManager.getUserIfProfile(ApplicationPackageManager.java:2167)
+                                    at android.app.ApplicationPackageManager.getUserBadgeForDensity(ApplicationPackageManager.java:1002)
+                                    at android.app.Notification$Builder.getProfileBadgeDrawable(Notification.java:2890)
+                                    at android.app.Notification$Builder.hasThreeLines(Notification.java:3105)
+                                    at android.app.Notification$Builder.build(Notification.java:3659)
+                                    at androidx.core.app.NotificationCompatBuilder.buildInternal(SourceFile:355)
+                                    at androidx.core.app.NotificationCompatBuilder.build(SourceFile:247)
+                                    at androidx.core.app.NotificationCompat$Builder.build(SourceFile:1677)
+*/
+                            Log.w(ex);
+                        }
                     }
 
                     if (!runService)
@@ -833,7 +850,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 if (!auto_optimize)
                                     return;
 
-                                int pollInterval = prefs.getInt("poll_interval", 0);
+                                int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
                                 if (pollInterval == 0) {
                                     prefs.edit().putInt("poll_interval", STILL_THERE_POLL_INTERVAL).apply();
                                     try {
@@ -859,11 +876,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 boolean max = isMaxConnections(message);
                                 if (max)
                                     state.setMaxConnections();
-                                if (!max || state.getBackoff() > CONNECT_BACKOFF_MAX) {
-                                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                    nm.notify("alert:" + account.id, 1,
-                                            getNotificationAlert(account.name, message).build());
-                                }
+                                if (!max || state.getBackoff() > CONNECT_BACKOFF_MAX)
+                                    try {
+                                        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                        nm.notify("alert:" + account.id, 1,
+                                                getNotificationAlert(account.name, message).build());
+                                    } catch (Throwable ex) {
+                                        Log.w(ex);
+                                    }
                             } finally {
                                 wlFolder.release();
                             }
@@ -900,14 +920,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 c = c.getCause();
                             }
 
-                            if (!BuildConfig.PLAY_STORE_RELEASE)
-                                Log.e(ex);
-
                             if (!ioError) {
-                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                nm.notify("receive:" + account.id, 1,
-                                        Core.getNotificationError(this, "error", account.name, ex)
-                                                .build());
+                                Log.e(ex);
+                                try {
+                                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    nm.notify("receive:" + account.id, 1,
+                                            Core.getNotificationError(this, "error", account.name, ex)
+                                                    .build());
+                                } catch (Throwable ex1) {
+                                    Log.w(ex1);
+                                }
                                 throw ex;
                             }
                         }
@@ -917,7 +939,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             EntityLog.log(this, account.name + " last connected: " + new Date(account.last_connected));
 
                             long now = new Date().getTime();
-                            int pollInterval = prefs.getInt("poll_interval", 0);
+                            int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
                             long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
                             long maxDelayed = (pollInterval > 0 && !account.poll_exempted
                                     ? pollInterval * ACCOUNT_ERROR_AFTER_POLL : ACCOUNT_ERROR_AFTER) * 60 * 1000L;
@@ -927,10 +949,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         getString(R.string.title_no_sync,
                                                 Helper.getDateTimeInstance(this, DateFormat.SHORT, DateFormat.SHORT)
                                                         .format(account.last_connected)), ex);
-                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                nm.notify("receive:" + account.id, 1,
-                                        Core.getNotificationError(this, "warning", account.name, warning)
-                                                .build());
+                                try {
+                                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    nm.notify("receive:" + account.id, 1,
+                                            Core.getNotificationError(this, "warning", account.name, warning)
+                                                    .build());
+                                } catch (Throwable ex1) {
+                                    Log.w(ex1);
+                                }
                             }
                         }
 
@@ -1514,7 +1540,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             break;
 
                         // Stop retrying when polling
-                        int pollInterval = prefs.getInt("poll_interval", 0);
+                        int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
                         if (pollInterval > 0 && !account.poll_exempted)
                             break;
 
@@ -1601,8 +1627,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         "Updated network=" + network +
                                 " capabilities " + capabilities +
                                 " suitable=" + lastSuitable);
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+                try {
+                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
             }
         }
     };
@@ -1672,7 +1702,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
             boolean enabled = prefs.getBoolean("enabled", true);
-            int pollInterval = prefs.getInt("poll_interval", 0);
+            int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
 
             long[] schedule = getSchedule(ServiceSynchronize.this);
             long now = new Date().getTime();
