@@ -383,10 +383,10 @@ public class HtmlHelper {
 
                 String[] params = style.split(";");
                 for (String param : params) {
-                    String[] kv = param.split(":");
-                    if (kv.length == 2) {
-                        String key = kv[0].trim().toLowerCase(Locale.ROOT);
-                        String value = kv[1].toLowerCase(Locale.ROOT)
+                    int semi = param.indexOf(':');
+                    if (semi > 0) {
+                        String key = param.substring(0, semi).trim().toLowerCase(Locale.ROOT);
+                        String value = param.substring(semi + 1).toLowerCase(Locale.ROOT)
                                 .replace("!important", "")
                                 .trim()
                                 .replaceAll("\\s+", " ");
@@ -508,11 +508,7 @@ public class HtmlHelper {
             }
         }
 
-        // Remove new lines without surrounding content
-        //for (Element br : document.select("br"))
-        //    if (br.parent() != null && !hasVisibleContent(br.parent().childNodes()))
-        //        br.tagName("span");
-
+        // Remove trailing br from div
         for (Element div : document.select("div"))
             if (div.children().select("div").size() == 0 &&
                     hasVisibleContent(div.childNodes())) {
@@ -521,6 +517,7 @@ public class HtmlHelper {
                     last.remove();
             }
 
+        // Replace headings
         if (!text_size)
             for (Element h : document.select("h1,h2,h3,h4,h5,h6")) {
                 h.appendElement("br");

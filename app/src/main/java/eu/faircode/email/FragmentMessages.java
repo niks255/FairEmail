@@ -1115,7 +1115,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (query != null && query.startsWith(getString(R.string.title_search_special_prefix) + ":")) {
                 String special = query.split(":")[1];
                 if (getString(R.string.title_search_special_snoozed).equals(special) ||
-                        getString(R.string.title_search_special_encrypted).equals(special))
+                        getString(R.string.title_search_special_encrypted).equals(special) ||
+                        getString(R.string.title_search_special_attachments).equals(special))
                     fabSearch.hide();
                 else
                     fabSearch.show();
@@ -2387,7 +2388,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             continue;
 
                         List<EntityMessage> messages = db.message().getMessagesByThread(
-                                message.account, message.thread, threading ? null : id, null);
+                                message.account, message.thread, threading ? null : id, flagged ? message.folder : null);
                         for (EntityMessage threaded : messages)
                             if (threaded.ui_flagged != flagged || !Objects.equals(threaded.color, color))
                                 EntityOperation.queue(context, threaded, EntityOperation.FLAG, flagged, color);
@@ -5650,13 +5651,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 try {
                     db.beginTransaction();
 
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null)
+                        return wakeup;
+
                     List<EntityMessage> messages = db.message().getMessagesByThread(
                             account, thread, threading ? null : id, null);
                     for (EntityMessage threaded : messages) {
                         db.message().setMessageSnoozed(threaded.id, wakeup);
                         db.message().setMessageUiIgnored(threaded.id, true);
-                        if (flag_snoozed)
-                            EntityOperation.queue(context, threaded, EntityOperation.FLAG, true);
+                        if (flag_snoozed && threaded.folder.equals(message.folder))
+                            EntityOperation.queue(context, threaded, EntityOperation.FLAG, wakeup != null);
                         EntityMessage.snooze(context, threaded.id, wakeup);
                     }
 
@@ -5719,8 +5724,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         for (EntityMessage threaded : messages) {
                             db.message().setMessageSnoozed(threaded.id, wakeup);
                             db.message().setMessageUiIgnored(message.id, true);
-                            if (flag_snoozed)
-                                EntityOperation.queue(context, threaded, EntityOperation.FLAG, true);
+                            if (flag_snoozed && threaded.folder.equals(message.folder))
+                                EntityOperation.queue(context, threaded, EntityOperation.FLAG, wakeup != null);
                             EntityMessage.snooze(context, threaded.id, wakeup);
                         }
                     }
