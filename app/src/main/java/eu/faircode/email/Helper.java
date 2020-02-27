@@ -23,6 +23,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -75,7 +76,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
+import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -375,6 +378,13 @@ public class Helper {
         return BuildConfig.PLAY_STORE_RELEASE;
     }
 
+    static boolean isSecure(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean biometrics = prefs.getBoolean("biometrics", false);
+        String pin = prefs.getString("pin", null);
+        return (biometrics || !TextUtils.isEmpty(pin));
+    }
+
     // View
 
     static Intent getChooser(Context context, Intent intent) {
@@ -448,6 +458,29 @@ public class Helper {
                 Log.e(ex);
                 ToastEx.makeText(context, Log.formatThrowable(ex, false), Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    static void customTabsWarmup(Context context) {
+        try {
+            CustomTabsClient.bindCustomTabsService(context, "com.android.chrome", new CustomTabsServiceConnection() {
+                @Override
+                public void onCustomTabsServiceConnected(@NonNull ComponentName name, @NonNull CustomTabsClient client) {
+                    Log.i("Warming up custom tabs");
+                    try {
+                        client.warmup(0);
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    // Do nothing
+                }
+            });
+        } catch (Throwable ex) {
+            Log.w(ex);
         }
     }
 

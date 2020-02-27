@@ -55,6 +55,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -138,6 +139,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     static final String ACTION_MANAGE_CERTIFICATES = BuildConfig.APPLICATION_ID + ".MANAGE_CERTIFICATES";
     static final String ACTION_IMPORT_CERTIFICATE = BuildConfig.APPLICATION_ID + ".IMPORT_CERTIFICATE";
     static final String ACTION_SETUP_ADVANCED = BuildConfig.APPLICATION_ID + ".SETUP_ADVANCED";
+    static final String ACTION_SETUP_MORE = BuildConfig.APPLICATION_ID + ".SETUP_MORE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,6 +318,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         iff.addAction(ACTION_MANAGE_CERTIFICATES);
         iff.addAction(ACTION_IMPORT_CERTIFICATE);
         iff.addAction(ACTION_SETUP_ADVANCED);
+        iff.addAction(ACTION_SETUP_MORE);
         lbm.registerReceiver(receiver, iff);
     }
 
@@ -1010,7 +1013,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     ToastEx.makeText(ActivitySetup.this, R.string.title_setup_password_invalid, Toast.LENGTH_LONG).show();
                 else if (ex instanceof IOException && ex.getCause() instanceof IllegalBlockSizeException)
                     ToastEx.makeText(ActivitySetup.this, R.string.title_setup_import_invalid, Toast.LENGTH_LONG).show();
-                else if (ex instanceof IllegalArgumentException)
+                else if (ex instanceof IllegalArgumentException || ex instanceof JSONException)
                     ToastEx.makeText(ActivitySetup.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 else
                     Log.unexpectedError(getSupportFragmentManager(), ex);
@@ -1237,6 +1240,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 .show();
     }
 
+    private void onSetupMore(Intent intent) {
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+
     private static Intent getIntentExport() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -1338,6 +1345,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     onImportCertificate(intent);
                 else if (ACTION_SETUP_ADVANCED.equals(action))
                     onSetupAdvanced(intent);
+                else if (ACTION_SETUP_MORE.equals(action))
+                    onSetupMore(intent);
             }
         }
     };

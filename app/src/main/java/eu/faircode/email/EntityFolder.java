@@ -78,6 +78,10 @@ public class EntityFolder extends EntityOrder implements Serializable {
     @NonNull
     public Boolean poll = false;
     @NonNull
+    public Integer poll_factor = 1;
+    @NonNull
+    public Integer poll_count = 0;
+    @NonNull
     public Boolean download = true;
     public Boolean subscribed;
     @NonNull
@@ -175,7 +179,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
     }};
 
     static final int DEFAULT_SYNC = 7; // days
-    static final int DEFAULT_KEEP = 30; // days
+    static final int DEFAULT_KEEP = 60; // days
 
     private static final List<String> SYSTEM_FOLDER_SYNC = Collections.unmodifiableList(Arrays.asList(
             INBOX,

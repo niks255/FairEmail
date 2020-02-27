@@ -76,6 +76,7 @@
     <string name="title_notification_failed">%1$s(e)k huts egin du</string>
     <string name="title_notification_alert">\'%1$s\' zerbitzariko alerta</string>
     <string name="title_name_count">%1$s (%2$s)</string>
+    <string name="title_factor_minutes">%1$d minutu</string>
     <string name="menu_exit">Irten</string>
     <string name="menu_answers">Txantiloiak</string>
     <string name="menu_operations">Eragiketak</string>
@@ -356,6 +357,7 @@
     <string name="title_advanced_crash_reports">Bidali errore txostenak</string>
     <string name="title_advanced_debug">Arazketa modua</string>
     <string name="title_advanced_cleanup">Garbiketa</string>
+    <string name="title_advanced_more">Aukera gehiago</string>
     <string name="title_advanced_enabled_hint">Ezgaitu edo gaitu mezuak jasotzea orokorrean</string>
     <string name="title_advanced_manual_hint">Sinkronizazioa desgaituta badago, mezuen zerrendatik behera tiraka eskuz sinkroniza daiteke.</string>
     <string name="title_advanced_poll_hint">Aldizka sinkronizatzeak tokiko eta urruneko mezuak konparatuko ditu behin eta berriz, hau da, eragiketa neketsua izanik bateriaren gehiegizko erabilera eragin dezake, batez ere sinkronizatzeko mezu asko daudenean. Sinkronizazioak hau saihestuko du aldaketak bakarrik monitorizatuz.</string>
@@ -451,6 +453,7 @@
     <string name="title_primary_identity">Nagusia (identitate lehenetsia)</string>
     <string name="title_leave_on_server">Utzi mezuak zerbitzarian</string>
     <string name="title_leave_on_device">Utzi mezuak gailuan</string>
+    <string name="title_max_messages">Deskargatzeko gehienezko mezuen kopurua (guztientzako hutsik)</string>
     <string name="title_keep_alive_interval">Mantendu-bizirik/eskaera tartea (minutuak)</string>
     <string name="title_use_date">Erabili goiburuko datuetan bidalketa unea eta ez jasoketarena</string>
     <string name="title_related_identity">Gehitu lotutako identitatea</string>
@@ -587,11 +590,11 @@
     <string name="title_snooze">Atzeratu &#8230;</string>
     <string name="title_archive">Artxiboa</string>
     <string name="title_reply">Erantzun</string>
-    <string name="title_reply_to_sender">Igorlea</string>
-    <string name="title_reply_to_all">Denak</string>
-    <string name="title_reply_list">Zerrenda</string>
-    <string name="title_reply_receipt">Irakuragiria</string>
-    <string name="title_reply_template">Txantiloia</string>
+    <string name="title_reply_to_sender">Erantzun bidaltzaileari</string>
+    <string name="title_reply_to_all">Erantzun guztiei</string>
+    <string name="title_reply_list">Erantzun zerrendari</string>
+    <string name="title_reply_receipt">Bidali jaso izanaren agiria</string>
+    <string name="title_reply_template">Erantzun txantiloia erabiliz</string>
     <string name="title_moving">%1$s helburura mugitzen</string>
     <string name="title_open_with">Ireki honekin</string>
     <string name="title_authentication_failed">%1$s autentifikazioak huts egin du</string>

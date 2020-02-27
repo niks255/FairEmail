@@ -99,6 +99,7 @@
     <string name="title_notification_alert">\'%1$s\' server alert</string>
 
     <string name="title_name_count">%1$s (%2$s)</string>
+    <string name="title_factor_minutes">%1$d minutes</string>
 
     <string name="menu_exit">Exit</string>
     <string name="menu_answers">Templates</string>
@@ -415,6 +416,7 @@
     <string name="title_advanced_crash_reports">Send error reports</string>
     <string name="title_advanced_debug">Debug mode</string>
     <string name="title_advanced_cleanup">Cleanup</string>
+    <string name="title_advanced_more">More options</string>
     <string name="title_advanced_processors" translatable="false">Processors: %1$d</string>
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s</string>
     <string name="title_advanced_storage_space" translatable="false">Storage space: %1$s/%2$s</string>
@@ -530,6 +532,7 @@
     <string name="title_primary_identity">Primary (default identity)</string>
     <string name="title_leave_on_server">Leave messages on server</string>
     <string name="title_leave_on_device">Leave messages on device</string>
+    <string name="title_max_messages">Maximum number of messages to download (blank for all)</string>
     <string name="title_keep_alive_interval">Keep-alive/poll interval (minutes)</string>
     <string name="title_partial_fetch" translatable="false">Partial fetch</string>
     <string name="title_ignore_size" translatable="false">Ignore bodystructure size</string>
@@ -676,11 +679,11 @@
     <string name="title_snooze">Snooze &#8230;</string>
     <string name="title_archive">Archive</string>
     <string name="title_reply">Reply</string>
-    <string name="title_reply_to_sender">Sender</string>
-    <string name="title_reply_to_all">All</string>
-    <string name="title_reply_list">List</string>
-    <string name="title_reply_receipt">Read receipt</string>
-    <string name="title_reply_template">Template</string>
+    <string name="title_reply_to_sender">Reply to sender</string>
+    <string name="title_reply_to_all">Reply to all</string>
+    <string name="title_reply_list">Reply to list</string>
+    <string name="title_reply_receipt">Send read receipt</string>
+    <string name="title_reply_template">Reply with template</string>
     <string name="title_moving">Moving to %1$s</string>
     <string name="title_open_with">Open with</string>
     <string name="title_authentication_failed">%1$s authentication failed</string>
@@ -734,6 +737,8 @@
         It would be appreciated if you could rate FairEmail in the Play Store.
         This will help to maintain a balance between unfavorable and favorable reviews.
     </string>
+
+    <string name="title_third_party">You are using a version of a third party</string>
 
     <string name="title_expand_warning">Expanding this message will download %1$s</string>
     <string name="title_download_message">Downloading &#8230;</string>

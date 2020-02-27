@@ -56,6 +56,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
+import static com.google.android.material.textfield.TextInputLayout.END_ICON_NONE;
+import static com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE;
 
 public class FragmentPop extends FragmentBase {
     private ViewGroup view;
@@ -80,6 +82,7 @@ public class FragmentPop extends FragmentBase {
     private CheckBox cbPrimary;
     private CheckBox cbLeaveServer;
     private CheckBox cbLeaveDevice;
+    private EditText etMax;
     private EditText etInterval;
 
     private Button btnSave;
@@ -133,6 +136,7 @@ public class FragmentPop extends FragmentBase {
         tvNotifyPro = view.findViewById(R.id.tvNotifyPro);
         cbLeaveServer = view.findViewById(R.id.cbLeaveServer);
         cbLeaveDevice = view.findViewById(R.id.cbLeaveDevice);
+        etMax = view.findViewById(R.id.etMax);
         etInterval = view.findViewById(R.id.etInterval);
 
         btnSave = view.findViewById(R.id.btnSave);
@@ -151,7 +155,8 @@ public class FragmentPop extends FragmentBase {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Do nothing
+                if (TextUtils.isEmpty(s))
+                    tilPassword.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
             }
 
             @Override
@@ -209,6 +214,7 @@ public class FragmentPop extends FragmentBase {
         // Initialize
         Helper.setViewsEnabled(view, false);
 
+        tilPassword.setEndIconMode(id < 0 || Helper.isSecure(getContext()) ? END_ICON_PASSWORD_TOGGLE : END_ICON_NONE);
         tvCharacters.setVisibility(View.GONE);
         pbSave.setVisibility(View.GONE);
         grpError.setVisibility(View.GONE);
@@ -236,6 +242,7 @@ public class FragmentPop extends FragmentBase {
         args.putBoolean("notify", cbNotify.isChecked());
         args.putBoolean("leave_server", cbLeaveServer.isChecked());
         args.putBoolean("leave_device", cbLeaveDevice.isChecked());
+        args.putString("max", etMax.getText().toString());
         args.putString("interval", etInterval.getText().toString());
 
         new SimpleTask<Boolean>() {
@@ -275,6 +282,7 @@ public class FragmentPop extends FragmentBase {
                 boolean notify = args.getBoolean("notify");
                 boolean leave_server = args.getBoolean("leave_server");
                 boolean leave_device = args.getBoolean("leave_device");
+                String max = args.getString("max");
                 String interval = args.getString("interval");
 
                 boolean pro = ActivityBilling.isPro(context);
@@ -365,6 +373,7 @@ public class FragmentPop extends FragmentBase {
                     account.notify = notify;
                     account.leave_on_server = leave_server;
                     account.leave_on_device = leave_device;
+                    account.max_messages = (TextUtils.isEmpty(max) ? null : Integer.parseInt(max));
                     account.poll_interval = Integer.parseInt(interval);
 
                     if (!update)
@@ -524,6 +533,7 @@ public class FragmentPop extends FragmentBase {
                     cbPrimary.setChecked(account == null ? false : account.primary);
                     cbLeaveServer.setChecked(account == null ? true : account.leave_on_server);
                     cbLeaveDevice.setChecked(account == null ? false : account.leave_on_device);
+                    etMax.setText(account == null || account.max_messages == null ? null : Integer.toString(account.max_messages));
                     etInterval.setText(account == null ? "" : Long.toString(account.poll_interval));
 
                     new SimpleTask<EntityAccount>() {

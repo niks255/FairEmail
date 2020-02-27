@@ -77,6 +77,7 @@
     <string name="title_notification_failed">\'%1$s\' is mislukt</string>
     <string name="title_notification_alert">\'%1$s\' servermelding</string>
     <string name="title_name_count">%1$s (%2$s)</string>
+    <string name="title_factor_minutes">%1$d minuten</string>
     <string name="menu_exit">Afsluiten</string>
     <string name="menu_answers">Sjablonen</string>
     <string name="menu_operations">Bewerkingen</string>
@@ -357,6 +358,7 @@
     <string name="title_advanced_crash_reports">Foutrapporten verzenden</string>
     <string name="title_advanced_debug">Foutopsporing modus</string>
     <string name="title_advanced_cleanup">Opruimen</string>
+    <string name="title_advanced_more">Meer opties</string>
     <string name="title_advanced_last_cleanup">Laatste schoonmaak: %1$s</string>
     <string name="title_advanced_enabled_hint">Globaal in- of uitschakelen van het ontvangen van berichten</string>
     <string name="title_advanced_manual_hint">Als synchronisatie uitgeschakeld is, is het nog steeds mogelijk om handmatig te synchroniseren door het omlaag trekken van de berichtenlijst.</string>
@@ -453,6 +455,7 @@
     <string name="title_primary_identity">Primaire identiteit (standaard identiteit)</string>
     <string name="title_leave_on_server">Laat berichten achter op de server</string>
     <string name="title_leave_on_device">Laat berichten achter op apparaat</string>
+    <string name="title_max_messages">Maximum aantal berichten om te downloaden (leeg voor allen)</string>
     <string name="title_keep_alive_interval">Keep-alive/periodieke controle interval (minuten)</string>
     <string name="title_use_date">Gebruik datum header verzendtijd in plaats van server ontvangen tijd</string>
     <string name="title_related_identity">Voeg gerelateerde identiteit toe</string>
@@ -589,11 +592,11 @@
     <string name="title_snooze">Sluimeren &#8230;</string>
     <string name="title_archive">Archiveren</string>
     <string name="title_reply">Beantwoorden</string>
-    <string name="title_reply_to_sender">Afzender</string>
-    <string name="title_reply_to_all">Iedereen</string>
-    <string name="title_reply_list">Lijst</string>
-    <string name="title_reply_receipt">Leesbevestiging</string>
-    <string name="title_reply_template">Sjabloon</string>
+    <string name="title_reply_to_sender">Antwoord aan afzender</string>
+    <string name="title_reply_to_all">Antwoord aan iedereen</string>
+    <string name="title_reply_list">Antwoord aan lijst</string>
+    <string name="title_reply_receipt">Stuur leesbevestiging</string>
+    <string name="title_reply_template">Antwoord met sjabloon</string>
     <string name="title_moving">Verplaatsen naar %1$s</string>
     <string name="title_open_with">Openen met</string>
     <string name="title_authentication_failed">%1$s authenticatie mislukt</string>
@@ -643,6 +646,7 @@
         Het wordt gewaardeerd als u FairEmail in de Play Store zou beoordelen.
         Dit helpt ook om het evenwicht tussen ongunstige en gunstige beoordelingen te bewaren.
     </string>
+    <string name="title_third_party">U gebruikt een versie van een derde partij</string>
     <string name="title_expand_warning">Uitvouwen van dit bericht zal %1$s downloaden</string>
     <string name="title_download_message">Downloaden &#8230;</string>
     <string name="title_compose">Opstellen</string>
@@ -650,7 +654,7 @@
     <string name="title_delivered_to">Afgeleverd aan:</string>
     <string name="title_from">Van:</string>
     <string name="title_to">Aan:</string>
-    <string name="title_reply_to">Antwoord op:</string>
+    <string name="title_reply_to">Antwoord aan:</string>
     <string name="title_cc">CC:</string>
     <string name="title_bcc">BCC:</string>
     <string name="title_via_identity">Via:</string>

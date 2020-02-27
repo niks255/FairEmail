@@ -77,6 +77,7 @@
     <string name="title_notification_failed">\'%1$s\' a échoué</string>
     <string name="title_notification_alert">Alerte serveur \'%1$s\'</string>
     <string name="title_name_count">%1$s (%2$s)</string>
+    <string name="title_factor_minutes">%1$d minutes</string>
     <string name="menu_exit">Quitter</string>
     <string name="menu_answers">Modèles</string>
     <string name="menu_operations">Opérations</string>
@@ -357,6 +358,7 @@
     <string name="title_advanced_crash_reports">Envoyer des rapports d\'erreur</string>
     <string name="title_advanced_debug">Débogage</string>
     <string name="title_advanced_cleanup">Nettoyage</string>
+    <string name="title_advanced_more">Plus d\'options</string>
     <string name="title_advanced_last_cleanup">Dernier nettoyage : %1$s</string>
     <string name="title_advanced_enabled_hint">Désactiver ou activer globalement la réception de messages</string>
     <string name="title_advanced_manual_hint">Si la synchronisation est désactivée, il est toujours possible de synchroniser manuellement en tirant la liste des messages vers le bas.</string>
@@ -453,6 +455,7 @@
     <string name="title_primary_identity">Principal (identité par défaut)</string>
     <string name="title_leave_on_server">Laisser les messages sur le serveur</string>
     <string name="title_leave_on_device">Laisser les messages sur l\'appareil</string>
+    <string name="title_max_messages">Nombre maximum de messages à télécharger (laisser vide pour tous)</string>
     <string name="title_keep_alive_interval">Intervalle de maintien de connexion (minutes)</string>
     <string name="title_use_date">Utiliser l\'heure d\'envoi dans l\'entête au lieu de l\'heure de réception sur le serveur</string>
     <string name="title_related_identity">Ajouter une identité liée</string>
@@ -591,9 +594,9 @@
     <string name="title_reply">Répondre</string>
     <string name="title_reply_to_sender">Répondre à l\'expéditeur</string>
     <string name="title_reply_to_all">Répondre à tous</string>
-    <string name="title_reply_list">Liste</string>
-    <string name="title_reply_receipt">Accusé de réception</string>
-    <string name="title_reply_template">Modèle</string>
+    <string name="title_reply_list">Répondre à la liste</string>
+    <string name="title_reply_receipt">Envoyer une confirmation de lecture</string>
+    <string name="title_reply_template">Répondre avec un modèle</string>
     <string name="title_moving">Déplacement vers %1$s</string>
     <string name="title_open_with">Ouvrir avec</string>
     <string name="title_authentication_failed">L\'authentification %1$s a échoué</string>

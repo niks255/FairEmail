@@ -77,6 +77,7 @@
     <string name="title_notification_failed">\'%1$s\' mislyktes</string>
     <string name="title_notification_alert">\'%1$s\' servervarsling</string>
     <string name="title_name_count">%1$s (%2$s)</string>
+    <string name="title_factor_minutes">%1$d minutter</string>
     <string name="menu_exit">Avslutt</string>
     <string name="menu_answers">Maler</string>
     <string name="menu_operations">Aktiviteter</string>
@@ -357,6 +358,7 @@
     <string name="title_advanced_crash_reports">Send feilrapporter</string>
     <string name="title_advanced_debug">Feilsøkingsmodus</string>
     <string name="title_advanced_cleanup">Rydd opp</string>
+    <string name="title_advanced_more">Flere valg</string>
     <string name="title_advanced_last_cleanup">Siste opprydding: %1$s</string>
     <string name="title_advanced_enabled_hint">Globalt deaktivere eller aktivere mottak av meldinger</string>
     <string name="title_advanced_manual_hint">Hvis synkronisering er deaktivert, er det fortsatt mulig å synkronisere manuelt ved å trekke ned meldingslisten.</string>
@@ -453,6 +455,7 @@
     <string name="title_primary_identity">Primær (standardidentitet)</string>
     <string name="title_leave_on_server">Legg igjen meldingene på serveren</string>
     <string name="title_leave_on_device">Legg igjen meldinger på enheten</string>
+    <string name="title_max_messages">Maksimalt antall meldinger du vil laste ned (tomt for alle)</string>
     <string name="title_keep_alive_interval">Holde i live/avstemming intervall (minutter)</string>
     <string name="title_use_date">Bruk dato overskrift sendt tid i stedet for mottatt tid på serveren</string>
     <string name="title_related_identity">Legg til relatert identitet</string>
@@ -589,11 +592,11 @@
     <string name="title_snooze">Utsett &#8230;</string>
     <string name="title_archive">Arkiver</string>
     <string name="title_reply">Svar</string>
-    <string name="title_reply_to_sender">Avsender</string>
-    <string name="title_reply_to_all">Alle</string>
-    <string name="title_reply_list">Liste</string>
-    <string name="title_reply_receipt">Lesebekreftelse</string>
-    <string name="title_reply_template">Mal</string>
+    <string name="title_reply_to_sender">Svar</string>
+    <string name="title_reply_to_all">Svar alle</string>
+    <string name="title_reply_list">Svar på listen</string>
+    <string name="title_reply_receipt">Send lesekvittering</string>
+    <string name="title_reply_template">Svar med mal</string>
     <string name="title_moving">Flytter til %1$s</string>
     <string name="title_open_with">Åpne med</string>
     <string name="title_authentication_failed">%1$s godkjenning mislyktes</string>
