@@ -891,20 +891,68 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fabReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean reply_hint = prefs.getBoolean("reply_hint", false);
-                if (reply_hint)
-                    onReply("reply");
-                else
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.title_reply_hint)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                if (values.containsKey("expanded") && values.get("expanded").size() > 0) {
+                    Bundle args = new Bundle();
+                    args.putLong("id", values.get("expanded").get(0));
+
+                    new SimpleTask<Integer>() {
+                        @Override
+                        protected Integer onExecute(Context context, Bundle args) {
+                            long id = args.getLong("id");
+
+                            DB db = DB.getInstance(context);
+                            EntityMessage message = db.message().getMessage(id);
+                            if (message == null)
+                                return null;
+
+                            List<TupleIdentityEx> identities = db.identity().getComposableIdentities(message.account);
+                            if (identities == null)
+                                return null;
+
+                            Address[] recipients = message.getAllRecipients(identities, message.account);
+                            return recipients.length;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, Integer recipients) {
+                            if (recipients == null)
+                                return;
+
+                            PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), fabReply);
+                            popupMenu.inflate(R.menu.popup_reply);
+                            for (int i = 0; i < popupMenu.getMenu().size(); i++)
+                                popupMenu.getMenu().getItem(i).setVisible(false);
+                            popupMenu.getMenu().findItem(R.id.menu_reply_to_sender).setVisible(true);
+                            popupMenu.getMenu().findItem(R.id.menu_reply_to_all).setVisible(recipients > 1);
+                            popupMenu.getMenu().findItem(R.id.menu_forward).setVisible(true);
+
+                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    prefs.edit().putBoolean("reply_hint", true).apply();
-                                    onReply("reply");
+                                public boolean onMenuItemClick(MenuItem target) {
+                                    switch (target.getItemId()) {
+                                        case R.id.menu_reply_to_sender:
+                                            onReply("reply");
+                                            return true;
+                                        case R.id.menu_reply_to_all:
+                                            onReply("reply_all");
+                                            return true;
+                                        case R.id.menu_forward:
+                                            onReply("forward");
+                                            return true;
+                                        default:
+                                            return false;
+                                    }
                                 }
-                            })
-                            .show();
+                            });
+                            popupMenu.show();
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        }
+                    }.execute(FragmentMessages.this, args, "messages:reply");
+                }
             }
         });
 
@@ -1421,26 +1469,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     values.get(name).add(id);
             } else
                 values.get(name).remove(id);
-
-            if ("expanded".equals(name)) {
-                // Collapse other messages
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                boolean expand_all = prefs.getBoolean("expand_all", false);
-                boolean expand_one = prefs.getBoolean("expand_one", true);
-                if (!expand_all && expand_one) {
-                    for (Long other : new ArrayList<>(values.get(name)))
-                        if (!other.equals(id)) {
-                            values.get(name).remove(other);
-                            int pos = adapter.getPositionForKey(other);
-                            if (pos != RecyclerView.NO_POSITION)
-                                adapter.notifyItemChanged(pos);
-                        }
-                }
-
-                updateExpanded();
-                if (enabled)
-                    handleExpand(id);
-            }
         }
 
         @Override
@@ -1450,6 +1478,36 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else if ("addresses".equals(name))
                 return !addresses;
             return false;
+        }
+
+        public void setExpanded(TupleMessageEx message, boolean value) {
+            // Prevent flicker
+            if (value &&
+                    (message.accountProtocol != EntityAccount.TYPE_IMAP ||
+                            (message.accountAutoSeen && !message.ui_seen && !message.folderReadOnly))) {
+                message.unseen = 0;
+                message.ui_seen = true;
+            }
+
+            setValue("expanded", message.id, value);
+
+            // Collapse other messages
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean expand_all = prefs.getBoolean("expand_all", false);
+            boolean expand_one = prefs.getBoolean("expand_one", true);
+            if (!expand_all && expand_one) {
+                for (Long other : new ArrayList<>(values.get("expanded")))
+                    if (!other.equals(message.id)) {
+                        values.get("expanded").remove(other);
+                        int pos = adapter.getPositionForKey(other);
+                        if (pos != RecyclerView.NO_POSITION)
+                            adapter.notifyItemChanged(pos);
+                    }
+            }
+
+            updateExpanded();
+            if (value)
+                handleExpand(message.id);
         }
 
         @Override
@@ -3721,16 +3779,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     expand = messages.get(0);
 
                 if (expand != null &&
-                        (expand.content || unmetered || (expand.size != null && expand.size < download))) {
-                    // Prevent flicker
-                    if (expand.accountProtocol != EntityAccount.TYPE_IMAP ||
-                            (expand.accountAutoSeen && !expand.ui_seen && !expand.folderReadOnly)) {
-                        expand.unseen = 0;
-                        expand.ui_seen = true;
-                    }
-
-                    iProperties.setValue("expanded", expand.id, true);
-                }
+                        (expand.content || unmetered || (expand.size != null && expand.size < download)))
+                    iProperties.setExpanded(expand, true);
             }
 
             // Auto expand all seen messages
@@ -3738,7 +3788,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (expand_all)
                 for (TupleMessageEx message : messages)
                     if (message != null && message.ui_seen)
-                        iProperties.setValue("expanded", message.id, true);
+                        iProperties.setExpanded(message, true);
         } else {
             if (autoCloseCount > 0 && (autoclose || onclose != null)) {
                 int count = 0;
@@ -5843,7 +5893,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 Document document = JsoupEx.parse(file);
                 HtmlHelper.truncate(document, false);
-                HtmlHelper.embedInlineImages(context, id, document);
+                HtmlHelper.embedInlineImages(context, id, document, true);
 
                 Element p = document.createElement("p");
 

@@ -907,7 +907,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ? View.VISIBLE : View.GONE);
             ivSigned.setVisibility(message.signed > 0 ? View.VISIBLE : View.GONE);
             ivEncrypted.setVisibility(message.encrypted > 0 ? View.VISIBLE : View.GONE);
-            tvFrom.setText(MessageHelper.formatAddresses(addresses, name_email, false));
+            setFrom(message, addresses);
             tvFrom.setPaintFlags(tvFrom.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
             tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize, true));
             tvSize.setVisibility(
@@ -1048,7 +1048,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (amessage == null || !amessage.id.equals(id))
                             return;
 
-                        bindContactInfo(info, addresses, name_email);
+                        bindContactInfo(amessage, info, addresses, name_email);
                     }
 
                     @Override
@@ -1058,7 +1058,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }.setLog(false);
                 taskContactInfo.execute(context, owner, aargs, "message:avatar");
             } else
-                bindContactInfo(info, addresses, name_email);
+                bindContactInfo(message, info, addresses, name_email);
 
             if (viewType == ViewType.THREAD)
                 if (expanded)
@@ -1191,7 +1191,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibFlagged.setVisibility(View.GONE);
         }
 
-        private void bindContactInfo(ContactInfo[] info, Address[] addresses, boolean name_email) {
+        private void bindContactInfo(TupleMessageEx message, ContactInfo[] info, Address[] addresses, boolean name_email) {
             if (info[0].hasPhoto()) {
                 ibAvatar.setImageBitmap(info[0].getPhotoBitmap());
                 ibAvatar.setVisibility(View.VISIBLE);
@@ -1226,10 +1226,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             }
             if (updated)
-                tvFrom.setText(MessageHelper.formatAddresses(modified, name_email, false));
+                setFrom(message, modified);
 
             if (distinguish_contacts && known)
                 tvFrom.setPaintFlags(tvFrom.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
+
+        private void setFrom(TupleMessageEx message, Address[] addresses) {
+            int recipients = 0;
+            if (viewType == ViewType.THREAD) {
+                recipients = (message.to == null ? 0 : message.to.length) +
+                        (message.cc == null ? 0 : message.cc.length) + (message.bcc == null ? 0 : message.bcc.length);
+                if (message.to != null && message.to.length > 0)
+                    recipients--;
+            }
+
+            if (recipients == 0)
+                tvFrom.setText(MessageHelper.formatAddresses(addresses, name_email, false));
+            else
+                tvFrom.setText(context.getString(R.string.title_name_plus,
+                        MessageHelper.formatAddresses(addresses, name_email, false), recipients));
         }
 
         private void bindExpandWarning(TupleMessageEx message, boolean expanded) {
@@ -1475,8 +1491,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             bindBody(message);
 
             db.attachment().liveAttachments(message.id).observe(cowner, new Observer<List<EntityAttachment>>() {
-                private int lastInlineImages = 0;
-
                 @Override
                 public void onChanged(@Nullable List<EntityAttachment> attachments) {
                     bindAttachments(message, attachments);
@@ -1487,10 +1501,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (attachment.available && attachment.isInline() && attachment.isImage())
                                 inlineImages++;
 
-                    if (inlineImages != lastInlineImages) {
-                        lastInlineImages = inlineImages;
+                    int lastInlineImages = 0;
+                    List<EntityAttachment> lastAttachments = properties.getAttachments(message.id);
+                    if (lastAttachments != null)
+                        for (EntityAttachment attachment : lastAttachments)
+                            if (attachment.available && attachment.isInline() && attachment.isImage())
+                                lastInlineImages++;
+
+                    if (inlineImages != lastInlineImages)
                         bindBody(message);
-                    }
+
+                    properties.setAttachments(message.id, attachments);
 
                     if (scroll)
                         properties.scrollTo(getAdapterPosition());
@@ -1739,7 +1760,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         HtmlHelper.setViewport(document);
                         if (inline || show_images)
-                            HtmlHelper.embedInlineImages(context, message.id, document);
+                            HtmlHelper.embedInlineImages(context, message.id, document, show_images || !inline);
 
                         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
                         if (disable_tracking)
@@ -2824,18 +2845,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 .putExtra("id", message.id));
             else {
                 boolean expanded = !properties.getValue("expanded", message.id);
-                properties.setValue("expanded", message.id, expanded);
-
-                ibExpander.setTag(expanded);
-                ibExpander.setImageLevel(expanded ? 0 /* less*/ : 1 /* more */);
-
-                if (expanded)
-                    bindExpanded(message, true);
-                else
-                    clearExpanded(message);
-
-                bindFlagged(message, expanded);
-                bindExpandWarning(message, expanded);
+                properties.setExpanded(message, expanded);
+                bindTo(message, getAdapterPosition());
 
                 // Needed for expand one
                 properties.scrollTo(getAdapterPosition());
@@ -3585,7 +3596,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (amessage == null || !amessage.id.equals(id))
                         return;
 
-                    properties.setValue("expanded", message.id, false);
+                    properties.setExpanded(message, false);
                     message.ui_seen = args.getBoolean("seen");
                     message.unseen = (message.ui_seen ? 0 : message.count);
                     bindTo(message, getAdapterPosition());
@@ -4941,6 +4952,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void setValue(String name, long id, boolean enabled);
 
         boolean getValue(String name, long id);
+
+        void setExpanded(TupleMessageEx message, boolean expanded);
 
         void setSize(long id, Float size);
 

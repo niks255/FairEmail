@@ -99,6 +99,7 @@
     <string name="title_notification_alert">\'%1$s\' server alert</string>
 
     <string name="title_name_count">%1$s (%2$s)</string>
+    <string name="title_name_plus">%1$s +%2$d</string>
     <string name="title_factor_minutes">%1$d minutes</string>
 
     <string name="menu_exit">Exit</string>
@@ -509,6 +510,7 @@
     <string name="title_account_left">Swipe left</string>
     <string name="title_account_right">Swipe right</string>
     <string name="title_account_move">Default move to</string>
+    <string name="title_account_gmail">For reliable synchronisation of a Gmail account, the Gmail quick setup wizard should be used whenever possible</string>
     <string name="title_domain">Domain name</string>
     <string name="title_autoconfig">Get settings</string>
     <string name="title_imap" translatable="false">IMAP</string>
