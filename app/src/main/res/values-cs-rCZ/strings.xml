@@ -607,6 +607,7 @@
     <string name="title_more">Více</string>
     <string name="title_spam">Nevyžádané</string>
     <string name="title_move">Přesunout</string>
+    <string name="title_no_junk">Není spam</string>
     <string name="title_move_to_folder">Přesunout do &#8230;</string>
     <string name="title_move_to_account">Přesunout do %1$s &#8230;</string>
     <string name="title_snooze">Odložit &#8230;</string>
@@ -659,7 +660,6 @@
     <string name="title_ask_help">Pomozte vylepšit FairEmail</string>
     <string name="title_ask_reporting">Odeslat zprávy o chybách?</string>
     <string name="title_reporting_why">Zprávami o chybách pomůžete zlepšit FairEmail</string>
-    <string name="title_reply_hint">Stisk zdvojené šipky pod hlavičkou zprávy zobrazí nabídku pro odpovědět všem, přeposlat, atd.</string>
     <string name="title_ask_review">Prosím, ohodnoťte FairEmail</string>
     <string name="title_ask_review_rationale">        Již nějakou dobu FairEmail používáte.
         Vážil bych si, kdyby jste mohli FairEmail ohodnotit v Obchodě Play.
