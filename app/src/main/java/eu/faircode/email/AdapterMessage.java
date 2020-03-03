@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -382,9 +383,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibDecrypt;
         private ImageButton ibVerify;
         private ImageButton ibUndo;
+        private ImageButton ibArchive;
+        private ImageButton ibTrash;
+        private ImageButton ibJunk;
         private ImageButton ibRemove;
         private ImageButton ibMore;
         private TextView tvSignedData;
+        private TextView tvCrossHint;
+        private ImageButton ibAnswerHint;
+        private TextView tvAnswerHint;
 
         private TextView tvBody;
         private View wvBody;
@@ -565,9 +572,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibDecrypt = vsBody.findViewById(R.id.ibDecrypt);
             ibVerify = vsBody.findViewById(R.id.ibVerify);
             ibUndo = vsBody.findViewById(R.id.ibUndo);
+            ibArchive = vsBody.findViewById(R.id.ibArchive);
+            ibTrash = vsBody.findViewById(R.id.ibTrash);
+            ibJunk = vsBody.findViewById(R.id.ibJunk);
             ibRemove = vsBody.findViewById(R.id.ibRemove);
             ibMore = vsBody.findViewById(R.id.ibMore);
             tvSignedData = vsBody.findViewById(R.id.tvSignedData);
+            tvCrossHint = vsBody.findViewById(R.id.tvCrossHint);
+            ibAnswerHint = vsBody.findViewById(R.id.ibAnswerHint);
+            tvAnswerHint = vsBody.findViewById(R.id.tvAnswerHint);
 
             tvBody = vsBody.findViewById(R.id.tvBody);
             wvBody = vsBody.findViewById(R.id.wvBody);
@@ -643,8 +656,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibDecrypt.setOnClickListener(this);
                 ibVerify.setOnClickListener(this);
                 ibUndo.setOnClickListener(this);
+                ibArchive.setOnClickListener(this);
+                ibTrash.setOnClickListener(this);
+                ibJunk.setOnClickListener(this);
                 ibRemove.setOnClickListener(this);
                 ibMore.setOnClickListener(this);
+                ibAnswerHint.setOnClickListener(this);
 
                 ibDownloading.setOnClickListener(this);
 
@@ -711,8 +728,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibDecrypt.setOnClickListener(null);
                 ibVerify.setOnClickListener(null);
                 ibUndo.setOnClickListener(null);
+                ibArchive.setOnClickListener(null);
+                ibTrash.setOnClickListener(null);
+                ibJunk.setOnClickListener(null);
                 ibRemove.setOnClickListener(null);
                 ibMore.setOnClickListener(null);
+                ibAnswerHint.setOnClickListener(null);
 
                 ibDownloading.setOnClickListener(null);
 
@@ -1138,9 +1159,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibDecrypt.setVisibility(View.GONE);
             ibVerify.setVisibility(View.GONE);
             ibUndo.setVisibility(View.GONE);
+            ibArchive.setVisibility(View.GONE);
+            ibTrash.setVisibility(View.GONE);
+            ibJunk.setVisibility(View.GONE);
             ibRemove.setVisibility(View.GONE);
             ibMore.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
+            tvCrossHint.setVisibility(View.GONE);
+            ibAnswerHint.setVisibility(View.GONE);
+            tvAnswerHint.setVisibility(View.GONE);
 
             tvBody.setVisibility(View.GONE);
             wvBody.setVisibility(View.GONE);
@@ -1283,6 +1310,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvNoInternetHeaders.setVisibility(View.GONE);
             }
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean cross_hint = prefs.getBoolean("cross_hint", true);
+            boolean answer_hint = prefs.getBoolean("answer_hint", false);
+            boolean normal = context.getResources().getConfiguration()
+                    .isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_NORMAL);
+
             vSeparator.setVisibility(View.VISIBLE);
             ibFull.setEnabled(false);
             ibFull.setVisibility(View.VISIBLE);
@@ -1291,7 +1324,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibDecrypt.setVisibility(View.GONE);
             ibVerify.setVisibility(View.GONE);
             ibUndo.setVisibility(EntityFolder.OUTBOX.equals(message.folderType) ? View.VISIBLE : View.GONE);
-            ibRemove.setVisibility(message.folderReadOnly ? View.GONE : View.VISIBLE);
+
+            ibArchive.setVisibility(View.GONE);
+            ibTrash.setVisibility(View.GONE);
+            ibJunk.setVisibility(View.GONE);
+            ibRemove.setVisibility(normal || message.folderReadOnly ? View.GONE : View.VISIBLE);
+            tvCrossHint.setVisibility(!normal && cross_hint ? View.VISIBLE : View.GONE);
+            ibAnswerHint.setVisibility(answer_hint ? View.VISIBLE : View.GONE);
+            tvAnswerHint.setVisibility(answer_hint ? View.VISIBLE : View.GONE);
+
+            if (normal)
+                onActionRemove(message, true);
+
             ibMore.setVisibility(EntityFolder.OUTBOX.equals(message.folderType) ? View.GONE : View.VISIBLE);
             tvSignedData.setVisibility(View.GONE);
 
@@ -2277,11 +2321,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     case R.id.ibUndo:
                         onActionUndo(message);
                         break;
+                    case R.id.ibArchive:
+                        onActionArchive(message);
+                        break;
+                    case R.id.ibTrash:
+                        onActionTrash(message, (Boolean) ibTrash.getTag());
+                        break;
+                    case R.id.ibJunk:
+                        if (EntityFolder.JUNK.equals(message.folderType))
+                            onActionUnjunk(message);
+                        else
+                            onActionJunk(message);
+                        break;
                     case R.id.ibRemove:
-                        onActionRemove(message);
+                        onActionRemove(message, false);
                         break;
                     case R.id.ibMore:
                         onActionMore(message);
+                        break;
+                    case R.id.ibAnswerHint:
+                        onActionAnswerHint();
                         break;
 
                     case R.id.ibDownloading:
@@ -3005,7 +3064,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             properties.move(message.id, EntityFolder.INBOX);
         }
 
-        private void onActionRemove(TupleMessageEx message) {
+        private void onActionRemove(TupleMessageEx message, boolean normal) {
+            if (!normal) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                prefs.edit().putBoolean("cross_hint", false).apply();
+                tvCrossHint.setVisibility(View.GONE);
+
+                if (EntityFolder.OUTBOX.equals(message.folderType)) {
+                    onActionDelete(message);
+                    return;
+                }
+            }
+
             // Setup actions
             Bundle sargs = new Bundle();
             sargs.putLong("id", message.id);
@@ -3025,11 +3095,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (amessage == null || !amessage.id.equals(id))
                         return;
 
-                    if (EntityFolder.OUTBOX.equals(message.folderType)) {
-                        onActionDelete(message);
-                        return;
-                    }
-
                     boolean hasArchive = false;
                     boolean hasTrash = false;
                     boolean hasJunk = false;
@@ -3045,53 +3110,80 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean inArchive = EntityFolder.ARCHIVE.equals(message.folderType);
                     boolean inTrash = EntityFolder.TRASH.equals(message.folderType);
                     boolean inJunk = EntityFolder.JUNK.equals(message.folderType);
+                    boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
 
-                    final boolean delete = (inTrash || !hasTrash);
+                    boolean archive = (!message.folderReadOnly && message.uid != null && (hasArchive && !inArchive));
+                    boolean trash = ((!message.folderReadOnly && message.uid != null) || outbox || debug);
+                    boolean junk = (!message.folderReadOnly && message.uid != null && (hasJunk && !inJunk));
+                    boolean unjunk = (!message.folderReadOnly && message.uid != null && inJunk);
 
-                    if (!hasArchive && !hasJunk) {
-                        if (delete)
-                            onActionDelete(message);
-                        else
-                            properties.move(message.id, EntityFolder.TRASH);
-                        return;
-                    }
+                    final boolean delete = (inTrash || !hasTrash || outbox || message.uid == null);
 
-                    PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
-                    popupMenu.inflate(R.menu.popup_message_remove);
-                    popupMenu.getMenu().findItem(R.id.menu_archive).setEnabled(message.uid != null && (hasArchive && !inArchive));
-                    popupMenu.getMenu().findItem(R.id.menu_trash).setEnabled(message.uid != null);
-                    popupMenu.getMenu().findItem(R.id.menu_junk).setEnabled(message.uid != null && (hasJunk && !inJunk));
+                    if (normal) {
+                        ibTrash.setTag(delete);
+                        ibJunk.setImageResource(unjunk ? R.drawable.baseline_inbox_24 : R.drawable.baseline_flag_24);
+                        String title = context.getString(unjunk ? R.string.title_no_junk : R.string.title_spam);
+                        ibJunk.setContentDescription(title);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            ibJunk.setTooltipText(title);
 
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem target) {
-                            switch (target.getItemId()) {
-                                case R.id.menu_archive:
-                                    properties.move(message.id, EntityFolder.ARCHIVE);
-                                    return true;
-                                case R.id.menu_trash:
-                                    if (delete)
-                                        onActionDelete(message);
-                                    else
-                                        properties.move(message.id, EntityFolder.TRASH);
-                                    return true;
-                                case R.id.menu_junk:
-                                    onActionJunk(message);
-                                    return true;
-                                default:
-                                    return false;
-                            }
+                        ibArchive.setVisibility(archive ? View.VISIBLE : View.GONE);
+                        ibTrash.setVisibility(trash ? View.VISIBLE : View.GONE);
+                        ibJunk.setVisibility(junk || unjunk ? View.VISIBLE : View.GONE);
+                    } else {
+                        if (!hasArchive && !hasJunk) {
+                            if (delete)
+                                onActionDelete(message);
+                            else
+                                properties.move(message.id, EntityFolder.TRASH);
+                            return;
                         }
-                    });
 
-                    popupMenu.show();
+                        PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
+                        popupMenu.inflate(R.menu.popup_message_remove);
+                        popupMenu.getMenu().findItem(R.id.menu_archive).setEnabled(archive);
+                        popupMenu.getMenu().findItem(R.id.menu_trash).setEnabled(trash);
+                        popupMenu.getMenu().findItem(R.id.menu_junk).setEnabled(junk);
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem target) {
+                                switch (target.getItemId()) {
+                                    case R.id.menu_archive:
+                                        onActionArchive(message);
+                                        return true;
+                                    case R.id.menu_trash:
+                                        onActionTrash(message, delete);
+                                        return true;
+                                    case R.id.menu_junk:
+                                        onActionJunk(message);
+                                        return true;
+                                    default:
+                                        return false;
+                                }
+                            }
+                        });
+
+                        popupMenu.show();
+                    }
                 }
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
-            }.setLog(false).execute(context, owner, sargs, "message:actions");
+            }.setLog(false).execute(context, owner, sargs, "message:more");
+        }
+
+        private void onActionArchive(TupleMessageEx message) {
+            properties.move(message.id, EntityFolder.ARCHIVE);
+        }
+
+        private void onActionTrash(TupleMessageEx message, boolean delete) {
+            if (delete)
+                onActionDelete(message);
+            else
+                properties.move(message.id, EntityFolder.TRASH);
         }
 
         private void onActionDelete(TupleMessageEx message) {
@@ -3114,6 +3206,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ask.setArguments(aargs);
             ask.setTargetFragment(parentFragment, FragmentMessages.REQUEST_MESSAGE_JUNK);
             ask.show(parentFragment.getParentFragmentManager(), "message:junk");
+        }
+
+        private void onActionUnjunk(TupleMessageEx message) {
+            properties.move(message.id, EntityFolder.INBOX);
         }
 
         private void onActionMore(TupleMessageEx message) {
@@ -3243,6 +3339,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
             popupMenu.show();
+        }
+
+        private void onActionAnswerHint() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            prefs.edit().putBoolean("answer_hint", false).apply();
+            ibAnswerHint.setVisibility(View.GONE);
+            tvAnswerHint.setVisibility(View.GONE);
         }
 
         private class TouchHandler extends ArrowKeyMovementMethod {

@@ -497,8 +497,6 @@ class Core {
 
             if (ops.size() == 0)
                 state.batchCompleted(folder.id, priority, sequence);
-            else // abort
-                state.error(new OperationCanceledException());
         } finally {
             Log.i(folder.name + " end process state=" + state + " pending=" + ops.size());
         }
@@ -3501,6 +3499,10 @@ class Core {
 
         void join() {
             join(thread);
+        }
+
+        boolean isAlive() {
+            return thread.isAlive();
         }
 
         boolean isRunning() {

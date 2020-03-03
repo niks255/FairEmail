@@ -318,9 +318,14 @@
     <string name="title_advanced_notify_action_flag">Stjärna</string>
     <string name="title_advanced_notify_action_seen">Läst</string>
     <string name="title_advanced_notify_action_snooze">Slumra</string>
+    <string name="title_advanced_notify_remove">Ta bort aviseringar för nya meddelanden när du trycker på meddelandet</string>
+    <string name="title_advanced_notify_clear">Ta bort nya meddelandeaviseringar vid visning av meddelandelistan</string>
+    <string name="title_advanced_wearable_preview">Skicka endast aviseringar med en förhandsgranskning av meddelanden till bärbara enheter</string>
     <string name="title_advanced_biometrics_notify">Visa aviseringsinnehåll när du använder biometrisk autentisering</string>
     <string name="title_advanced_light">Använda aviseringslampan</string>
     <string name="title_advanced_sound">Välj aviseringsljud</string>
+    <string name="title_advanced_confirm_links">Bekräfta att länkar öppnas</string>
+    <string name="title_advanced_confirm_images">Bekräfta visning av bilder</string>
     <string name="title_advanced_confirm_html">Visa omformaterade meddelanden som standard</string>
     <string name="title_advanced_tracking">Automatiskt känna igen och inaktivera spårningsbilder</string>
     <string name="title_advanced_display_hidden">Visa dolda meddelandetexter</string>
@@ -354,6 +359,7 @@
     <string name="title_advanced_poll_hint">Synkronisering med jämna mellanrum kommer att jämföra lokala och fjärrmeddelanden varje gång, vilket är en dyr operation som eventuellt resulterar i extra batterianvändning, speciellt när det finns många meddelanden att synkronisera. Kontinuerlig synkronisering kommer att undvika detta genom kontinuerlig övervakning endast för ändringar.</string>
     <string name="title_advanced_schedule_hint">Tryck på en tid för att ställa in en tid</string>
     <string name="title_advanced_check_mx">Kontrollera avsändarens e-postadresser vid synkronisering av meddelanden</string>
+    <string name="title_advanced_check_reply">Kontrollera svarsadresser vid synkronisering av meddelanden</string>
     <string name="title_advanced_unseen_hint">Vissa leverantörer stöder inte detta korrekt, vilket kan orsaka synkronisering av inga eller alla meddelanden</string>
     <string name="title_advanced_deleted_unseen">När inaktiverad, behålls olästa meddelanden på enheten för alltid</string>
     <string name="title_advanced_sync_kept_hint">Detta kommer att överföra extra data och förbruka extra batterikraft, speciellt om många meddelanden lagras på enheten</string>
