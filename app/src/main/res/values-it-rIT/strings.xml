@@ -202,13 +202,15 @@
     <string name="title_advanced_section_connection">Connessione</string>
     <string name="title_advanced_section_display">Schermo</string>
     <string name="title_advanced_section_behavior">Comportamento</string>
-    <string name="title_advanced_section_notifications">Notifiche</string>
     <string name="title_advanced_section_privacy">Privacy</string>
+    <string name="title_advanced_section_encryption">Crittografia</string>
+    <string name="title_advanced_section_notifications">Notifiche</string>
     <string name="title_advanced_section_misc">Altro</string>
     <string name="title_advanced_receive">Ricevi messaggi</string>
     <string name="title_advanced_when">Quando</string>
     <string name="title_advanced_always">Sincronizza sempre questi account</string>
     <string name="title_advanced_schedule">Pianificazione</string>
+    <string name="title_advanced_advanced">Avanzato</string>
     <string name="title_advanced_unseen">Tutti i messaggi non letti</string>
     <string name="title_advanced_flagged">Tutti i messaggi preferiti</string>
     <string name="title_advanced_delete_unseen">Elimina i vecchi messaggi non letti</string>
@@ -226,6 +228,7 @@
     <string name="title_advanced_signature_location">Posizione della firma</string>
     <string name="title_advanced_signature_end">Aggiungi firma dopo il messaggio citato/inoltrato</string>
     <string name="title_advanced_plain_only">Invia solo in testo semplice per impostazione predefinita</string>
+    <string name="title_advanced_receipt">Quando si richiede una ricevuta</string>
     <string name="title_advanced_usenet_signature">Convenzione firma Usenet</string>
     <string name="title_advanced_remove_signatures">Rimuovi firme riconosciute</string>
     <string name="title_advanced_resize_images">Ridimensiona automaticamente le immagini incorporate</string>
@@ -241,6 +244,9 @@
     <string name="title_advanced_ssl_harden">Connessioni SSL Harden</string>
     <string name="title_advanced_socks">Usa SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Gestisci connettività</string>
+    <string name="title_advanced_caption_general">Generale</string>
+    <string name="title_advanced_caption_conversation">Conversazione</string>
+    <string name="title_advanced_caption_message">Messaggio</string>
     <string name="title_advanced_landscape">Usa due colonne in modalità orizzontale</string>
     <string name="title_advanced_landscape3">Consenti menu di navigazione fisso in modalità orizzontale</string>
     <string name="title_advanced_startup">Mostra nella schermata iniziale</string>
@@ -283,6 +289,7 @@
     <string name="title_advanced_images_inline">Mostra automaticamente le immagini in linea</string>
     <string name="title_advanced_seekbar">Mostra la posizione relativa della conversazione con un punto</string>
     <string name="title_advanced_actionbar">Mostra barra azione conversazione</string>
+    <string name="title_advanced_navbar_colorize">Colora la barra di navigazione di Android</string>
     <string name="title_advanced_double_back">Doppio \'indietro\' per uscire</string>
     <string name="title_advanced_pull_refresh">Trascina in basso per aggiornare</string>
     <string name="title_advanced_autoscroll">Scorri verso l\'alto quando ricevi nuovi messaggi</string>
@@ -644,6 +651,7 @@
     <string name="title_ask_help">Aiuta a migliorare FairEmail</string>
     <string name="title_ask_reporting">Inviare rapporti di errore?</string>
     <string name="title_reporting_why">Il report di errore aiuterà a migliorare FairEmail</string>
+    <string name="title_message_bar_hint">Tocca l\'icona a forma di croce per archiviare, eliminare o segnalare un messaggio come spam e per rimuovere questo avviso</string>
     <string name="title_ask_review">Si prega di valutare FairEmail</string>
     <string name="title_ask_review_rationale">        Stai usando FairEmail da un po\'.
         Ti saremmo grati se potessi valutare FairEmail nel Play Store.
@@ -699,7 +707,7 @@
     <string name="title_no_key">Nessuna chiave privata</string>
     <string name="title_invalid_key">Chiave privata non valida</string>
     <string name="title_send_plain_text">Solo testo semplice</string>
-    <string name="title_send_receipt">Richiedi ricevuta di consegna/lettura</string>
+    <string name="title_send_receipt">Richiedi ricevuta</string>
     <string name="title_send_receipt_remark">La maggior parte dei provider e dei client di posta elettronica ignora le richieste di ricevuta</string>
     <string name="title_from_missing">Mittente mancante</string>
     <string name="title_to_missing">Destinatario mancante</string>
@@ -1127,6 +1135,11 @@
         <item>Piccolo</item>
         <item>Medio</item>
         <item>Grande</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Conferma di lettura</item>
+        <item>Ricevuta di consegna</item>
+        <item>Lettura+ricevuta di consegna</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Sopra il testo</item>

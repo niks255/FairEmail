@@ -202,13 +202,15 @@
     <string name="title_advanced_section_connection">Forbindelse</string>
     <string name="title_advanced_section_display">Vis</string>
     <string name="title_advanced_section_behavior">Adfærd</string>
-    <string name="title_advanced_section_notifications">Notifikationer</string>
     <string name="title_advanced_section_privacy">Fortrolighed</string>
+    <string name="title_advanced_section_encryption">Kryptering</string>
+    <string name="title_advanced_section_notifications">Notifikationer</string>
     <string name="title_advanced_section_misc">Diverse</string>
     <string name="title_advanced_receive">Beskedmodtagelse</string>
     <string name="title_advanced_when">Når</string>
     <string name="title_advanced_always">Synkronisér altid disse konti</string>
     <string name="title_advanced_schedule">Planlægning</string>
+    <string name="title_advanced_advanced">Avanceret</string>
     <string name="title_advanced_unseen">Alle ulæste beskeder</string>
     <string name="title_advanced_flagged">Alle stjernemarkerede beskeder</string>
     <string name="title_advanced_delete_unseen">Slet gamle, ulæste beskeder</string>
@@ -241,6 +243,9 @@
     <string name="title_advanced_ssl_harden">Hærd SSL-forbindelser</string>
     <string name="title_advanced_socks">Benyt SOCKS-proxy</string>
     <string name="title_advanced_manage_connectivity">Håndtér konnektivitet</string>
+    <string name="title_advanced_caption_general">Generelt</string>
+    <string name="title_advanced_caption_conversation">Samtale</string>
+    <string name="title_advanced_caption_message">Besked</string>
     <string name="title_advanced_landscape">Benyt to kolonner i liggende tilstand</string>
     <string name="title_advanced_landscape3">Tillad fastgjort navigeringsmenu i liggende tilstand</string>
     <string name="title_advanced_startup">Vis på startskærmen</string>
@@ -283,6 +288,7 @@
     <string name="title_advanced_images_inline">Auto-vis indlejrede/vehæftede billeder</string>
     <string name="title_advanced_seekbar">Vis relativ samtaleposition med en prik</string>
     <string name="title_advanced_actionbar">Vis samtale-handlingsbjælke</string>
+    <string name="title_advanced_navbar_colorize">Farvelæg Abdroid-navigeringsbjælken</string>
     <string name="title_advanced_double_back">Dobbelttryk \"Tilbage\"/stryg for at lukke</string>
     <string name="title_advanced_pull_refresh">Træk ned for at opfriske</string>
     <string name="title_advanced_autoscroll">Rul til toppen, når ny besked modtages</string>
@@ -589,6 +595,8 @@
     <string name="title_more">Mere</string>
     <string name="title_spam">Spam</string>
     <string name="title_move">Flyt</string>
+    <string name="title_no_junk">Ikke spam</string>
+    <string name="title_move_to">Flyt til &#8230;</string>
     <string name="title_move_to_folder">Flyt til &#8230;</string>
     <string name="title_move_to_account">Flyt til %1$s &#8230;</string>
     <string name="title_snooze">Udsæt &#8230;</string>
@@ -642,6 +650,7 @@
     <string name="title_ask_help">Hjælp med at forbedre FairEmail</string>
     <string name="title_ask_reporting">Send fejlrapporter?</string>
     <string name="title_reporting_why">Rapportering af fejl vil hjælpe med at forbedre FairEmail</string>
+    <string name="title_message_bar_hint">Tryk på krydsikonet for at arkivere, slette eller rapportere en besked som spam og fjerne denne meddelelse</string>
     <string name="title_ask_review">Bedøm venligst FairEmail</string>
     <string name="title_ask_review_rationale">        Du har brugt FairEmail i et stykke tid nu.
         Det vil blive værdsat, hvis du kunne bedømme FairEmail i Play Butik.
@@ -698,7 +707,6 @@
     <string name="title_no_key">Ingen privat nøgle</string>
     <string name="title_invalid_key">Ugyldig privat nøgle</string>
     <string name="title_send_plain_text">Kun klartekst</string>
-    <string name="title_send_receipt">Bed om leverings-/læstkvittering</string>
     <string name="title_send_receipt_remark">De fleste udbydere og e-mailklienter ignorerer kvitteringsanmodninger</string>
     <string name="title_from_missing">Afsender mangler</string>
     <string name="title_to_missing">Modtager mangler</string>

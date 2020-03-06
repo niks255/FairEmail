@@ -203,13 +203,15 @@
     <string name="title_advanced_section_connection">Verbinding</string>
     <string name="title_advanced_section_display">Weergave</string>
     <string name="title_advanced_section_behavior">Gedrag</string>
-    <string name="title_advanced_section_notifications">Meldingen</string>
     <string name="title_advanced_section_privacy">Privacy</string>
+    <string name="title_advanced_section_encryption">Versleuteling</string>
+    <string name="title_advanced_section_notifications">Meldingen</string>
     <string name="title_advanced_section_misc">Diversen</string>
     <string name="title_advanced_receive">Berichten ontvangen</string>
     <string name="title_advanced_when">Wanneer</string>
     <string name="title_advanced_always">Synchroniseer deze accounts altijd</string>
     <string name="title_advanced_schedule">Schema</string>
+    <string name="title_advanced_advanced">Geavanceerd</string>
     <string name="title_advanced_unseen">Alle ongelezen berichten</string>
     <string name="title_advanced_flagged">Alle berichten met een ster</string>
     <string name="title_advanced_delete_unseen">Verwijder oude, ongelezen berichten</string>
@@ -227,6 +229,7 @@
     <string name="title_advanced_signature_location">Positie ondertekening</string>
     <string name="title_advanced_signature_end">Handtekening toevoegen na geciteerd/doorgestuurd bericht</string>
     <string name="title_advanced_plain_only">Verstuur standaard alleen tekst</string>
+    <string name="title_advanced_receipt">Bij het aanvragen van een bevestiging</string>
     <string name="title_advanced_usenet_signature">Usenet handtekening conventie</string>
     <string name="title_advanced_remove_signatures">Verwijder herkende handtekeningen</string>
     <string name="title_advanced_resize_images">Automatisch ingesloten afbeeldingen verkleinen</string>
@@ -242,6 +245,9 @@
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
     <string name="title_advanced_socks">Gebruik SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Beheer connectiviteit</string>
+    <string name="title_advanced_caption_general">Algemeen</string>
+    <string name="title_advanced_caption_conversation">Gesprek</string>
+    <string name="title_advanced_caption_message">Bericht</string>
     <string name="title_advanced_landscape">Twee kolommen gebruiken in liggende modus</string>
     <string name="title_advanced_landscape3">Vaste navigatiemenu toestaan in liggende modus</string>
     <string name="title_advanced_startup">Toon op het startscherm</string>
@@ -647,7 +653,6 @@
     <string name="title_ask_reporting">Foutrapporten verzenden?</string>
     <string name="title_reporting_why">Foutrapportage helpt om FairEmail te verbeteren</string>
     <string name="title_message_bar_hint">Klik op het kruisicoon om een bericht te archiveren, te verwijderen of te rapporteren als spam en om deze melding te verwijderen</string>
-    <string name="title_answer_hint">Allen beantwoorden, doorsturen, etc. zijn verplaatst naar de antwoordknop onderaan</string>
     <string name="title_ask_review">Beoordeel a.u.b. FairEmail</string>
     <string name="title_ask_review_rationale">        U heeft FairEmail al een tijdje gebruikt.
         Het wordt gewaardeerd als u FairEmail in de Play Store zou beoordelen.
@@ -704,7 +709,7 @@
     <string name="title_no_key">Geen privé sleutel</string>
     <string name="title_invalid_key">Ongeldige privé sleutel</string>
     <string name="title_send_plain_text">Alleen platte tekst</string>
-    <string name="title_send_receipt">Vraag ontvangst/leesbevestiging</string>
+    <string name="title_send_receipt">Vraag bevestiging</string>
     <string name="title_send_receipt_remark">De meeste aanbieders en e-mail clients negeren bevestigingsverzoeken</string>
     <string name="title_from_missing">Zender ontbreekt</string>
     <string name="title_to_missing">Ontvanger ontbreekt</string>
@@ -1129,6 +1134,11 @@
         <item>Klein</item>
         <item>Gemiddeld</item>
         <item>Groot</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Leesbevestiging</item>
+        <item>Ontvangstbevestiging</item>
+        <item>Lees+ontvangstbevestiging</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Boven de tekst</item>

@@ -203,13 +203,15 @@
     <string name="title_advanced_section_connection">Conexión</string>
     <string name="title_advanced_section_display">Mostrar</string>
     <string name="title_advanced_section_behavior">Comportamiento</string>
-    <string name="title_advanced_section_notifications">Notificaciones</string>
     <string name="title_advanced_section_privacy">Privacidad</string>
+    <string name="title_advanced_section_encryption">Cifrado</string>
+    <string name="title_advanced_section_notifications">Notificaciones</string>
     <string name="title_advanced_section_misc">Miscelánea</string>
     <string name="title_advanced_receive">Recibir mensajes</string>
     <string name="title_advanced_when">Cuando</string>
     <string name="title_advanced_always">Siempre sincronizar estas cuentas</string>
     <string name="title_advanced_schedule">Programar</string>
+    <string name="title_advanced_advanced">Avanzado</string>
     <string name="title_advanced_unseen">Todos los mensajes no leídos</string>
     <string name="title_advanced_flagged">Todos los mensajes destacados</string>
     <string name="title_advanced_delete_unseen">Eliminar mensajes no leídos antiguos</string>
@@ -242,6 +244,9 @@
     <string name="title_advanced_ssl_harden">Endurecer conexiones SSL</string>
     <string name="title_advanced_socks">Usar proxy SOCKS</string>
     <string name="title_advanced_manage_connectivity">Administrar conectividad</string>
+    <string name="title_advanced_caption_general">General</string>
+    <string name="title_advanced_caption_conversation">Conversación</string>
+    <string name="title_advanced_caption_message">Mensaje</string>
     <string name="title_advanced_landscape">Usar dos columnas en modo horizontal</string>
     <string name="title_advanced_landscape3">Permitir menú de navegación fijo en modo horizontal</string>
     <string name="title_advanced_startup">Mostrar en pantalla de inicio</string>
@@ -284,6 +289,7 @@
     <string name="title_advanced_images_inline">Mostrar imágenes embebidas automáticamente</string>
     <string name="title_advanced_seekbar">Mostrar posición relativa de conversación con un punto</string>
     <string name="title_advanced_actionbar">Mostrar barra de acción de conversación</string>
+    <string name="title_advanced_navbar_colorize">Colorear la barra de navegación de Android</string>
     <string name="title_advanced_double_back">Doble \'atrás\' para salir</string>
     <string name="title_advanced_pull_refresh">Tire hacia abajo para actualizar</string>
     <string name="title_advanced_autoscroll">Desplazar hacia arriba al recibir nuevos mensajes</string>
@@ -646,7 +652,6 @@
     <string name="title_ask_reporting">¿Enviar informes de error?</string>
     <string name="title_reporting_why">Informar de errores ayudará a mejorar FairEmail</string>
     <string name="title_message_bar_hint">Toque la cruz para archivar, borrar o reportar un mensaje como spam y eliminar este aviso</string>
-    <string name="title_answer_hint">Responder a todos, reenviar, etc. se han movido al botón de respuesta en la parte inferior</string>
     <string name="title_ask_review">Por favor califique FairEmail</string>
     <string name="title_ask_review_rationale">        Ha estado usando FairEmail durante un tiempo.
         Agradecería que pudiera calificar a FairEmail en Play Store.
@@ -703,7 +708,6 @@
     <string name="title_no_key">Ninguna clave privada</string>
     <string name="title_invalid_key">Clave privada inválida</string>
     <string name="title_send_plain_text">Sólo en texto plano</string>
-    <string name="title_send_receipt">Solicitar recibo de entrega/lectura</string>
     <string name="title_send_receipt_remark">La mayoría de los clientes y proveedores de email ignoran los pedidos de recibos</string>
     <string name="title_from_missing">Falta remitente</string>
     <string name="title_to_missing">Falta destinatario</string>

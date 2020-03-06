@@ -203,8 +203,8 @@
     <string name="title_advanced_section_connection">Свързване</string>
     <string name="title_advanced_section_display">Дисплей</string>
     <string name="title_advanced_section_behavior">Поведение</string>
-    <string name="title_advanced_section_notifications">Известия</string>
     <string name="title_advanced_section_privacy">Поверителност</string>
+    <string name="title_advanced_section_notifications">Известия</string>
     <string name="title_advanced_section_misc">Разни</string>
     <string name="title_advanced_receive">Получени съобщения</string>
     <string name="title_advanced_when">Кога</string>
@@ -284,6 +284,7 @@
     <string name="title_advanced_images_inline">Автоматично показване на вградени изображения</string>
     <string name="title_advanced_seekbar">Покажи позицията на разговора с точка</string>
     <string name="title_advanced_actionbar">Показжи панела за действив в разговори</string>
+    <string name="title_advanced_navbar_colorize">Цветна лентата за навигация на Android</string>
     <string name="title_advanced_double_back">Двойно назад за изход</string>
     <string name="title_advanced_pull_refresh">Плъзни надолу за опресняване</string>
     <string name="title_advanced_autoscroll">Превърти в началото при нови съобщения</string>
@@ -644,6 +645,7 @@
     <string name="title_ask_help">Помогнете за подобряване на FairEmail</string>
     <string name="title_ask_reporting">Изпрати репорт с грешки?</string>
     <string name="title_reporting_why">Докладе с грешки ще помогне да се подобри FairEmail</string>
+    <string name="title_message_bar_hint">Докоснете иконата, за да архивирате, изтриете или докладвате съобщение като спам и да премахнете това известие</string>
     <string name="title_ask_review">Моля, прегледайте FairEmail</string>
     <string name="title_ask_review_rationale">        Използвате FairEmail от известно време.
         Ще Ви бъде благодарен, ако можете да оцените FairEmail в Play Store.
@@ -700,7 +702,6 @@
     <string name="title_no_key">Няма частен ключ</string>
     <string name="title_invalid_key">Невалиден частен ключ</string>
     <string name="title_send_plain_text">Само обикновен текст</string>
-    <string name="title_send_receipt">Заявка за доставка/четене на полученото</string>
     <string name="title_send_receipt_remark">Повечето доставчици и имейл клиенти игнорират заявките за получаване</string>
     <string name="title_from_missing">Липсва изпращач</string>
     <string name="title_to_missing">Липсва получател</string>

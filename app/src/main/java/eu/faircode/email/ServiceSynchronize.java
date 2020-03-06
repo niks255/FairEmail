@@ -236,16 +236,15 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             // Some networks disallow email server connections:
                             // - reload on network type change when disconnected
-                            boolean isRunning = (state != null && state.isAlive());
                             if (reload ||
-                                    isRunning != current.canRun() ||
+                                    prev.canRun() != current.canRun() ||
                                     !prev.accountState.equals(current.accountState) ||
                                     (!"connected".equals(current.accountState.state) &&
                                             !Objects.equals(prev.networkState.getType(), current.networkState.getType()))) {
-                                if (isRunning || current.canRun())
+                                if (prev.canRun() || current.canRun())
                                     EntityLog.log(ServiceSynchronize.this, "### changed " + current +
                                             " reload=" + reload +
-                                            " stop=" + isRunning +
+                                            " stop=" + prev.canRun() +
                                             " start=" + current.canRun() +
                                             " sync=" + current.accountState.isEnabled(current.enabled) + "/" + sync +
                                             " changed=" + !prev.accountState.equals(current.accountState) +
@@ -256,7 +255,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             " tbd=" + current.accountState.tbd +
                                             " state=" + current.accountState.state +
                                             " type=" + prev.networkState.getType() + "/" + current.networkState.getType());
-                                if (isRunning)
+                                if (prev.canRun())
                                     stop(prev);
                                 if (current.canRun())
                                     start(current, current.accountState.isEnabled(current.enabled) || sync);
@@ -1487,6 +1486,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         }
                     });
 
+                    // Cancel running operations
+                    state.resetBatches();
+
                     // Close folders
                     for (EntityFolder folder : mapFolders.keySet())
                         if (folder.synchronize && !folder.poll && mapFolders.get(folder) != null) {
@@ -1530,19 +1532,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             Log.w(account.name + " backoff " + ex.toString());
                         }
                     } else {
-                        // Stop retrying when on manual sync
-                        if (account.ondemand)
-                            break;
-
-                        // Stop retrying when executing operations only
+                        // Cancel transient sync operations
                         boolean enabled = prefs.getBoolean("enabled", true);
-                        if (!enabled)
-                            break;
-
-                        // Stop retrying when polling
                         int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
-                        if (pollInterval > 0 && !account.poll_exempted)
-                            break;
+                        if (!enabled || account.ondemand || (pollInterval > 0 && !account.poll_exempted)) {
+                            int syncs = db.operation().deleteOperations(account.id, EntityOperation.SYNC);
+                            Log.i(account.name + " cancelled syncs=" + syncs);
+                        }
 
                         // Long back-off period, let device sleep
                         Intent intent = new Intent(ServiceSynchronize.this, ServiceSynchronize.class);

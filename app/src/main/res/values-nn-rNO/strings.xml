@@ -203,13 +203,15 @@
     <string name="title_advanced_section_connection">Forbindelse</string>
     <string name="title_advanced_section_display">Vis</string>
     <string name="title_advanced_section_behavior">Oppførsel</string>
-    <string name="title_advanced_section_notifications">Varslinger</string>
     <string name="title_advanced_section_privacy">Personvern</string>
+    <string name="title_advanced_section_encryption">Kryptering</string>
+    <string name="title_advanced_section_notifications">Varslinger</string>
     <string name="title_advanced_section_misc">Diverse</string>
     <string name="title_advanced_receive">Motta meldinger</string>
     <string name="title_advanced_when">Når</string>
     <string name="title_advanced_always">Synkroniser alltid disse kontoene</string>
     <string name="title_advanced_schedule">Tidsplan</string>
+    <string name="title_advanced_advanced">Avansert</string>
     <string name="title_advanced_unseen">Alle uleste meldinger</string>
     <string name="title_advanced_flagged">Alle stjernemerkede meldinger</string>
     <string name="title_advanced_delete_unseen">Slett gamle uleste meldinger</string>
@@ -227,6 +229,7 @@
     <string name="title_advanced_signature_location">Signaturposisjon</string>
     <string name="title_advanced_signature_end">Legg til signatur etter sitert/videresendt melding</string>
     <string name="title_advanced_plain_only">Send bare vanlig tekst som standard</string>
+    <string name="title_advanced_receipt">Når du ber om kvittering</string>
     <string name="title_advanced_usenet_signature">Usenet signaturkonvensjon</string>
     <string name="title_advanced_remove_signatures">Fjern gjenkjennte signaturer</string>
     <string name="title_advanced_resize_images">Endre størrelse på innebygde bilder automatisk</string>
@@ -242,6 +245,9 @@
     <string name="title_advanced_ssl_harden">Styrke SSL-tilkoblinger</string>
     <string name="title_advanced_socks">Bruk SOCKS-proxy</string>
     <string name="title_advanced_manage_connectivity">Administrer tilkobling</string>
+    <string name="title_advanced_caption_general">Generelt</string>
+    <string name="title_advanced_caption_conversation">Samtale</string>
+    <string name="title_advanced_caption_message">Melding</string>
     <string name="title_advanced_landscape">Bruk to kolonner i liggende modus</string>
     <string name="title_advanced_landscape3">Tillat fast navigasjonsmeny i liggende modus</string>
     <string name="title_advanced_startup">Vis på startskjermen</string>
@@ -284,6 +290,7 @@
     <string name="title_advanced_images_inline">Vis automatisk innebygde bilder</string>
     <string name="title_advanced_seekbar">Vis relativ samtaleposisjon med en prikk</string>
     <string name="title_advanced_actionbar">Vis samtale handlingslinje</string>
+    <string name="title_advanced_navbar_colorize">Fargelegg Android-navigasjonslinjen</string>
     <string name="title_advanced_double_back">Dobbel \'tilbake\' for å avslutte</string>
     <string name="title_advanced_pull_refresh">Dra ned for å oppdatere</string>
     <string name="title_advanced_autoscroll">Rull til toppen når du mottar nye meldinger</string>
@@ -645,6 +652,7 @@
     <string name="title_ask_help">Hjelp til å forbedre FairEmail</string>
     <string name="title_ask_reporting">Send feilrapporter?</string>
     <string name="title_reporting_why">Feilrapportering vil bidra til å forbedre FairEmail</string>
+    <string name="title_message_bar_hint">Trykk på kryssikonet for å arkivere, slette eller rapportere en melding som spam og for å fjerne dette varselet</string>
     <string name="title_ask_review">Vennligst anmeld FairEmail</string>
     <string name="title_ask_review_rationale">Du har brukt FairEmail en stund.
 Det vil bli satt pris på om du kunne rangere FairEmail i Play Store.
@@ -700,7 +708,7 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_no_key">Ingen privat nøkkel</string>
     <string name="title_invalid_key">Ugyldig privat nøkkel</string>
     <string name="title_send_plain_text">Bare vanlig tekst</string>
-    <string name="title_send_receipt">Be om levert/lest kvittering</string>
+    <string name="title_send_receipt">Be om kvittering</string>
     <string name="title_send_receipt_remark">De fleste tilbydere og e-post klienter ignorerer kvitterings forespørsler</string>
     <string name="title_from_missing">Avsender mangler</string>
     <string name="title_to_missing">Mottaker mangler</string>
@@ -1128,6 +1136,11 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
         <item>Liten</item>
         <item>Medium</item>
         <item>Stor</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Les kvittering</item>
+        <item>Leveringsbekreftelse</item>
+        <item>Les + leveringskvittering</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Over teksten</item>

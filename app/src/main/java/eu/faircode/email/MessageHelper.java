@@ -24,12 +24,16 @@ import android.content.SharedPreferences;
 import android.net.MailTo;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
+import com.sun.mail.util.ASCIIUtility;
+import com.sun.mail.util.BASE64DecoderStream;
 import com.sun.mail.util.FolderClosedIOException;
 import com.sun.mail.util.MessageRemovedIOException;
+import com.sun.mail.util.QDecoderStream;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,6 +41,7 @@ import org.jsoup.nodes.Element;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,6 +89,7 @@ import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimePart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.internet.ParameterList;
 import javax.mail.internet.ParseException;
@@ -225,11 +231,19 @@ public class MessageHelper {
             if (message.receipt_request != null && message.receipt_request) {
                 String to = (identity.replyto == null ? identity.email : identity.replyto);
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                int receipt_type = prefs.getInt("receipt_type", 2);
+                // 0=Read receipt
+                // 1=Delivery receipt
+                // 2=Read+delivery receipt
+
                 // defacto standard
-                imessage.addHeader("Return-Receipt-To", to);
+                if (receipt_type == 1 || receipt_type == 2) // Delivery receipt
+                    imessage.addHeader("Return-Receipt-To", to);
 
                 // https://tools.ietf.org/html/rfc3798
-                imessage.addHeader("Disposition-Notification-To", to);
+                if (receipt_type == 0 || receipt_type == 2) // Read receipt
+                    imessage.addHeader("Disposition-Notification-To", to);
             }
         }
 
@@ -1185,11 +1199,11 @@ public class MessageHelper {
         if (text == null)
             return null;
 
+        // https://tools.ietf.org/html/rfc2045
         // https://tools.ietf.org/html/rfc2047
         // encoded-word = "=?" charset "?" encoding "?" encoded-text "?="
 
         int i = 0;
-        boolean first = true;
         List<MimeTextPart> parts = new ArrayList<>();
 
         while (i < text.length()) {
@@ -1210,8 +1224,6 @@ public class MessageHelper {
                 break;
 
             String plain = text.substring(i, s);
-            if (!first)
-                plain = plain.replaceAll("[ \t\n\r]$", "");
             if (!TextUtils.isEmpty(plain))
                 parts.add(new MimeTextPart(plain));
 
@@ -1221,7 +1233,6 @@ public class MessageHelper {
                     text.substring(q2 + 1, e)));
 
             i = e + 2;
-            first = false;
         }
 
         if (i < text.length())
@@ -1234,6 +1245,20 @@ public class MessageHelper {
             MimeTextPart p2 = parts.get(p + 1);
             if (p1.charset != null && p1.charset.equalsIgnoreCase(p2.charset) &&
                     p1.encoding != null && p1.encoding.equalsIgnoreCase(p2.encoding)) {
+                try {
+                    byte[] b1 = decodeWord(p1.text, p1.encoding);
+                    byte[] b2 = decodeWord(p2.text, p2.encoding);
+                    byte[] b = new byte[b1.length + b2.length];
+                    System.arraycopy(b1, 0, b, 0, b1.length);
+                    System.arraycopy(b2, 0, b, b1.length, b2.length);
+                    p1.text = new String(b, p1.charset);
+                    p1.charset = null;
+                    p2.encoding = null;
+                    parts.remove(p + 1);
+                    continue;
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
                 p1.text += p2.text;
                 parts.remove(p + 1);
             } else
@@ -1244,6 +1269,24 @@ public class MessageHelper {
         for (MimeTextPart part : parts)
             sb.append(part);
         return sb.toString();
+    }
+
+    static byte[] decodeWord(String word, String encoding) throws IOException {
+        ByteArrayInputStream bis = new ByteArrayInputStream(ASCIIUtility.getBytes(word));
+
+        InputStream is;
+        if (encoding.equalsIgnoreCase("B"))
+            is = new BASE64DecoderStream(bis);
+        else if (encoding.equalsIgnoreCase("Q"))
+            is = new QDecoderStream(bis);
+        else
+            throw new UnsupportedEncodingException("Encoding=" + encoding);
+
+        int count = bis.available();
+        byte[] bytes = new byte[count];
+        count = is.read(bytes, 0, count);
+
+        return Arrays.copyOf(bytes, count);
     }
 
     private static class MimeTextPart {
@@ -1266,10 +1309,10 @@ public class MessageHelper {
             if (charset == null)
                 return text;
 
-            String word = "=?" + charset + "?" + encoding + "?" + text + "?=";
             try {
-                return decodeMime(MimeUtility.decodeWord(word));
+                return decodeMime(new String(decodeWord(text, encoding), charset));
             } catch (Throwable ex) {
+                String word = "=?" + charset + "?" + encoding + "?" + text + "?=";
                 Log.w(new IllegalArgumentException(word, ex));
                 return word;
             }
@@ -1587,13 +1630,26 @@ public class MessageHelper {
         }
 
         try {
-            if (imessage.isMimeType("multipart/signed")) {
-                ContentType ct = new ContentType(imessage.getContentType());
+            MimePart part = imessage;
+
+            if (part.isMimeType("multipart/mixed")) {
+                Multipart mp = (Multipart) part.getContent();
+                for (int i = 0; i < mp.getCount(); i++) {
+                    BodyPart bp = mp.getBodyPart(i);
+                    if (bp.isMimeType("multipart/signed") || bp.isMimeType("multipart/encrypted")) {
+                        part = (MimePart) bp;
+                        break;
+                    }
+                }
+            }
+
+            if (part.isMimeType("multipart/signed")) {
+                ContentType ct = new ContentType(part.getContentType());
                 String protocol = ct.getParameter("protocol");
                 if ("application/pgp-signature".equals(protocol) ||
                         "application/pkcs7-signature".equals(protocol) ||
                         "application/x-pkcs7-signature".equals(protocol)) {
-                    Multipart multipart = (Multipart) imessage.getContent();
+                    Multipart multipart = (Multipart) part.getContent();
                     if (multipart.getCount() == 2) {
                         getMessageParts(multipart.getBodyPart(0), parts, null);
                         getMessageParts(multipart.getBodyPart(1), parts,
@@ -1607,7 +1663,7 @@ public class MessageHelper {
                         apart.encrypt = "application/pgp-signature".equals(protocol)
                                 ? EntityAttachment.PGP_CONTENT
                                 : EntityAttachment.SMIME_CONTENT;
-                        apart.part = imessage;
+                        apart.part = part;
 
                         apart.attachment = new EntityAttachment();
                         apart.attachment.disposition = apart.disposition;
@@ -1621,26 +1677,26 @@ public class MessageHelper {
                         return parts;
                     }
                 }
-            } else if (imessage.isMimeType("multipart/encrypted")) {
-                ContentType ct = new ContentType(imessage.getContentType());
+            } else if (part.isMimeType("multipart/encrypted")) {
+                ContentType ct = new ContentType(part.getContentType());
                 String protocol = ct.getParameter("protocol");
                 if ("application/pgp-encrypted".equals(protocol)) {
-                    Multipart multipart = (Multipart) imessage.getContent();
+                    Multipart multipart = (Multipart) part.getContent();
                     if (multipart.getCount() == 2) {
                         // Ignore header
                         getMessageParts(multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
                         return parts;
                     }
                 }
-            } else if (imessage.isMimeType("application/pkcs7-mime") ||
-                    imessage.isMimeType("application/x-pkcs7-mime")) {
-                ContentType ct = new ContentType(imessage.getContentType());
+            } else if (part.isMimeType("application/pkcs7-mime") ||
+                    part.isMimeType("application/x-pkcs7-mime")) {
+                ContentType ct = new ContentType(part.getContentType());
                 String smimeType = ct.getParameter("smime-type");
                 if ("enveloped-data".equals(smimeType)) {
-                    getMessageParts(imessage, parts, EntityAttachment.SMIME_MESSAGE);
+                    getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
                     return parts;
                 } else if ("signed-data".equals(smimeType)) {
-                    getMessageParts(imessage, parts, EntityAttachment.SMIME_SIGNED_DATA);
+                    getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
                     return parts;
                 }
             }

@@ -213,13 +213,15 @@
     <string name="title_advanced_section_connection">Conexiune</string>
     <string name="title_advanced_section_display">Afișare</string>
     <string name="title_advanced_section_behavior">Comportament</string>
-    <string name="title_advanced_section_notifications">Notificări</string>
     <string name="title_advanced_section_privacy">Confidențialitate</string>
+    <string name="title_advanced_section_encryption">Criptare</string>
+    <string name="title_advanced_section_notifications">Notificări</string>
     <string name="title_advanced_section_misc">Diverse</string>
     <string name="title_advanced_receive">Primire mesaje</string>
     <string name="title_advanced_when">Când</string>
     <string name="title_advanced_always">Sincronizează mereu aceste conturi</string>
     <string name="title_advanced_schedule">Programat</string>
+    <string name="title_advanced_advanced">Avansate</string>
     <string name="title_advanced_unseen">Toate mesajele necitite</string>
     <string name="title_advanced_flagged">Toate mesajele marcate</string>
     <string name="title_advanced_delete_unseen">Șterge mesajele vechi necitite</string>
@@ -252,6 +254,9 @@
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
     <string name="title_advanced_socks">Utilizați proxy SOCKS</string>
     <string name="title_advanced_manage_connectivity">Gestionare conexiuni</string>
+    <string name="title_advanced_caption_general">Generale</string>
+    <string name="title_advanced_caption_conversation">Conversație</string>
+    <string name="title_advanced_caption_message">Mesaj</string>
     <string name="title_advanced_landscape">Folosește două coloane în modul portret</string>
     <string name="title_advanced_landscape3">Permite meniul de navigare fix în modul panoramă</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
@@ -294,6 +299,7 @@
     <string name="title_advanced_images_inline">Arată automat imaginile integrate</string>
     <string name="title_advanced_seekbar">Arată poziția relativă în conversație cu un punct</string>
     <string name="title_advanced_actionbar">Arată bara de acțiuni pentru conversație</string>
+    <string name="title_advanced_navbar_colorize">Colorează bara de navigație Android</string>
     <string name="title_advanced_double_back">Apăsați de două ori \'înapoi\' pentru a ieși</string>
     <string name="title_advanced_pull_refresh">Trageți în jos pentru a actualiza</string>
     <string name="title_advanced_autoscroll">Derulează sus când se primește un mesaj nou</string>
@@ -655,6 +661,7 @@
     <string name="title_ask_help">Ajută la îmbunătățirea FairEmail</string>
     <string name="title_ask_reporting">Trimite rapoarte de eroare?</string>
     <string name="title_reporting_why">Raportarea erorilor va ajuta la îmbunătățirea FairEmail</string>
+    <string name="title_message_bar_hint">Atingeți iconița plus pentru a arhiva, șterge sau raporta un mesaj ca spam și a elimina această notificare</string>
     <string name="title_ask_review">Vă rugăm să evaluați FairEmail</string>
     <string name="title_ask_review_rationale">        Utilizați FairEmail de ceva vreme.
         Vom aprecia dacă ați putea evalua FairEmail în Play Store.
@@ -711,7 +718,6 @@
     <string name="title_no_key">Nici o cheie privată</string>
     <string name="title_invalid_key">Cheie privată invalidă</string>
     <string name="title_send_plain_text">Doar text simplu</string>
-    <string name="title_send_receipt">Solicitare confirmare livrare/citire</string>
     <string name="title_send_receipt_remark">Majoritatea furnizorilor și clienților de email ignoră cererile de confirmare</string>
     <string name="title_from_missing">Expeditor lipsă</string>
     <string name="title_to_missing">Destinatar lipsă</string>

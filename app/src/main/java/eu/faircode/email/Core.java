@@ -149,8 +149,8 @@ class Core {
             boolean group = true;
             Log.i(folder.name + " executing operations=" + ops.size());
             while (retry < LOCAL_RETRY_MAX && ops.size() > 0 &&
-                    state.batchCanRun(folder.id, priority, sequence) &&
-                    state.isRunning() && state.isRecoverable()) {
+                    state.isRunning() &&
+                    state.batchCanRun(folder.id, priority, sequence)) {
                 TupleOperationEx op = ops.get(0);
 
                 try {
@@ -161,6 +161,9 @@ class Core {
                             " args=" + op.args +
                             " group=" + group +
                             " retry=" + retry);
+
+                    if (ifolder != null && !ifolder.isOpen())
+                        state.error(new FolderClosedException(ifolder));
 
                     // Fetch most recent copy of message
                     EntityMessage message = null;
@@ -3471,6 +3474,10 @@ class Core {
         void reset() {
             recoverable = true;
             lastActivity = null;
+            resetBatches();
+        }
+
+        void resetBatches() {
             synchronized (this) {
                 for (FolderPriority key : sequence.keySet()) {
                     batch.put(key, sequence.get(key));
@@ -3499,10 +3506,6 @@ class Core {
 
         void join() {
             join(thread);
-        }
-
-        boolean isAlive() {
-            return thread.isAlive();
         }
 
         boolean isRunning() {
