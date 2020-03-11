@@ -87,18 +87,24 @@ public interface DaoOperation {
             " AND (NOT folder.account IS NULL OR identity.synchronize IS NULL OR identity.synchronize)")
     LiveData<TupleOperationStats> liveStats();
 
-    @Query("SELECT COUNT(operation.id) FROM operation" +
+    @Query("SELECT" +
+            " COUNT(operation.id) AS count" +
+            ", SUM(CASE WHEN operation.state = 'executing' THEN 1 ELSE 0 END) AS busy" +
+            " FROM operation" +
             " JOIN message ON message.id = operation.message" +
             " JOIN identity ON identity.id = message.identity" +
             " WHERE operation.name = '" + EntityOperation.SEND + "'" +
             " AND identity.synchronize")
-    LiveData<Integer> liveUnsent();
+    LiveData<TupleUnsent> liveUnsent();
 
     @Query("SELECT * FROM operation ORDER BY id")
     List<EntityOperation> getOperations();
 
     @Query("SELECT * FROM operation WHERE name = :name")
     List<EntityOperation> getOperations(String name);
+
+    @Query("SELECT * FROM operation WHERE account = :account AND name = :name")
+    List<EntityOperation> getOperations(long account, String name);
 
     @Query("SELECT * FROM operation WHERE id = :id")
     EntityOperation getOperation(long id);
@@ -139,7 +145,4 @@ public interface DaoOperation {
 
     @Query("DELETE FROM operation WHERE id = :id")
     int deleteOperation(long id);
-
-    @Query("DELETE FROM operation WHERE account = :account AND name = :name")
-    int deleteOperations(long account, String name);
 }

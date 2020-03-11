@@ -94,8 +94,8 @@
     <string name="title_block_sender_hint">        Blokování odesílatele vytvoří pravidlo pro automatický přesun budoucích zpráv do složky nevyžádané pošty.
         Vytváření a používání pravidel je Pro funkcí.
     </string>
-    <string name="title_notification_waiting">Čekám na vyhovující připojení</string>
     <string name="title_notification_sending">Odesílání zpráv</string>
+    <string name="title_notification_waiting">Čekám na vyhovující připojení</string>
     <string name="title_notification_failed">\"%1$s\" selhalo</string>
     <string name="title_notification_alert">\'%1$s\' upozornění serveru</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -131,8 +131,9 @@
     <string name="title_setup">Nastavení</string>
     <string name="title_setup_help">Nápověda</string>
     <string name="title_setup_welcome">        Příjem a odesílání zpráv vyžaduje nastavení účtu a identity, stejně jako jakákoli jiná e-mailová aplikace.
-        Rychlé nastavení vytvoří současně účet i identitu pouhým dotazem na Vaše jméno, e-mailovou adresu a heslo.
+        Rychlé nastavení vytvoří současně účet i identitu, pouhým dotazem na Vaše jméno, e-mailovou adresu a heslo.
         Účty a identity (aliasy) lze v případě potřeby nastavit i ručně.
+        Nestandardní protokoly, jako jsou webové služby systému Microsoft Exchange a Microsoft ActiveSync, nejsou podporovány, viz. i popis této aplikace.
     </string>
     <string name="title_setup_quick">Rychlé nastavení</string>
     <string name="title_setup_quick_remark">Pro rychlé nastavení účtu a identity pro většinu poskytovatelů</string>
@@ -251,6 +252,8 @@
     <string name="title_advanced_signature_location">Umístění podpisu</string>
     <string name="title_advanced_signature_end">Připojit podpis za citovanou/přeposílanou zprávu</string>
     <string name="title_advanced_plain_only">Automaticky odeslat pouze prostý text</string>
+    <string name="title_advanced_flow">\'format flowed\' pro prostý text</string>
+    <string name="title_advanced_receipt">Při požadování potvrzení</string>
     <string name="title_advanced_usenet_signature">Používat Usenet konvenci pro podpisy</string>
     <string name="title_advanced_remove_signatures">Odebrat rozpoznané podpisy</string>
     <string name="title_advanced_resize_images">Automaticky upravit velikost vložených obrázků</string>
@@ -263,12 +266,12 @@
     <string name="title_advanced_download">Automaticky stahovat zprávy a přílohy na účtovaném připojení až do velikosti</string>
     <string name="title_advanced_roaming">Stahovat zprávy a přílohy během roamingu</string>
     <string name="title_advanced_rlah">Roaming jako doma (RLAH)</string>
+    <string name="title_advanced_timeout">Časový limit připojení (sekundy)</string>
     <string name="title_advanced_ssl_harden">Obrnit SSL připojení</string>
     <string name="title_advanced_socks">Použít SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Spravovat připojení</string>
     <string name="title_advanced_caption_general">Obecné</string>
     <string name="title_advanced_caption_conversation">Konverzace</string>
-    <string name="title_advanced_caption_message">Zpráva</string>
     <string name="title_advanced_landscape">Dvou-sloupcové rozvržení v režimu na šířku</string>
     <string name="title_advanced_landscape3">Povolit ukotvené navigační menu v režimu na šířku</string>
     <string name="title_advanced_startup">Na úvodní obrazovce zobrazit</string>
@@ -400,7 +403,7 @@
     <string name="title_advanced_sync_folders_hint">Vypnutí o něco sníží množství přenesených dat a spotřebu baterie, zároveň však znemožní aktualizovat seznam složek</string>
     <string name="title_advanced_subscribed_only_hint">Povolení této volby vymaže všechny místní složky bez přihlášeného odběru</string>
     <string name="title_advanced_sync_delay_hint">Zpomalí synchronizaci zpráv</string>
-    <string name="title_advanced_suggest_local_hint">Jako doplněk ke kontaktům poskytnutých Androidem. Pokud je povoleno, kontaktní údaje budou ukládány pro nově odeslané či přijaté zprávy.</string>
+    <string name="title_advanced_suggest_local_hint">Jako dodatek ke kontaktům poskytnutých Androidem. Je-li povoleno, kontaktní údaje budou ukládány pro nově odeslané či přijaté zprávy.</string>
     <string name="title_advanced_usenet_hint">Vložit \'-- \' mezi text a podpis</string>
     <string name="title_advanced_send_reminders_hint">Zobrazit upozornění, je-li text zprávy či předmět prázdný nebo může-li chybět příloha</string>
     <string name="title_advanced_lookup_mx_hint">Ověří existenci DNS MX záznamů</string>
@@ -408,12 +411,15 @@
     <string name="title_advanced_metered_hint">Účtovaná připojení jsou obecně mobilní připojení nebo placené Wi-Fi hotspoty</string>
     <string name="title_advanced_metered_warning">Vypnutí této volby zakáže přijímání a odesílání zpráv při mobilních datových přenosech</string>
     <string name="title_advanced_rlah_hint">Nepředpokládat žádný roaming v rámci EU</string>
-    <string name="title_advanced_ssl_harden_hint">Povolením zakážete slabé SSL protokoly a šifry</string>
+    <string name="title_advanced_timeout_hint">Časový limit čtení/zápisu bude nastaven na dvojnásobek časového limitu připojení. Vyšší hodnoty povedou k větší spotřebě baterie.</string>
+    <string name="title_advanced_ssl_harden_hint">Povolení této volby zakáže slabé SSL protokoly a šifry, což může vést k problémům s připojením</string>
     <string name="title_advanced_socks_hint">Použití vzdáleného proxy serveru není bezpečné, neboť proxy spojení nejsou šifrována</string>
     <string name="title_advanced_roaming_hint">Hlavičky zpráv budou během roamingu stahovány vždy. Použijte nastavení svého zařízení pro zakázání internetu při roamingu.</string>
     <string name="title_advanced_browse_hint">Načte další zprávy při posouvání dolů</string>
     <string name="title_advanced_layout_hint">Přepnutí na kompaktnější rozvržení a změnu velikosti textu lze provést v zobrazení zprávy skrze menu v horním panelu akcí</string>
+    <string name="title_advanced_startup_hint">Podržením libovolné složky v seznamu složek ji přidáte nebo odeberete ze seznamu sjednocených složek</string>
     <string name="title_advanced_date_hint">Zprávy jsou seskupovány podle data, pouze pokud jsou řazeny dle času</string>
+    <string name="title_advanced_navbar_colorize_hint">Zda volba funguje, závisí na verzi a variantě Androidu</string>
     <string name="title_advanced_threading_hint">Seskupit související zprávy</string>
     <string name="title_advanced_gravatars_hint">Může dojít k ohrožení soukromí</string>
     <string name="title_advanced_name_email_hint">Při vypnutí se zobrazí pouze jména, budou-li k dispozici</string>
@@ -449,6 +455,7 @@
     <string name="title_identity_email">Vaše e-mailová adresa</string>
     <string name="title_identity_color_hint">Barvy identit mají přednost před barvami složek a účtů</string>
     <string name="title_advanced_sender">Umožnit úpravu adresy odesílatele</string>
+    <string name="title_advanced_sender_regex">Reg. výraz odpovídající uživ. jménu příchozích e-mailových adres</string>
     <string name="title_identity_reply_to">Odpověď na adresu</string>
     <string name="title_identity_receipt">Automaticky požadovat potvrzení doručení/přečtení</string>
     <string name="title_identity_use_ip_hint">V případech \"neplatný pozdrav\", \"nutná platná adresa\" či podobné chyby zkuste změnit toto nastavení</string>
@@ -671,7 +678,6 @@
     <string name="title_ask_help">Pomozte vylepšit FairEmail</string>
     <string name="title_ask_reporting">Odeslat zprávy o chybách?</string>
     <string name="title_reporting_why">Zprávami o chybách pomůžete zlepšit FairEmail</string>
-    <string name="title_message_bar_hint">Stisk křížku archivuje, smaže či označí zprávu jako nevyžádanou, a odeberte toto oznámení</string>
     <string name="title_ask_review">Prosím, ohodnoťte FairEmail</string>
     <string name="title_ask_review_rationale">        Již nějakou dobu FairEmail používáte.
         Vážil bych si, kdyby jste mohli FairEmail ohodnotit v Obchodě Play.
@@ -693,6 +699,7 @@
     <string name="title_received">Přijato:</string>
     <string name="title_size">Velikost:</string>
     <string name="title_subject">Předmět:</string>
+    <string name="title_attachment">Příloha:</string>
     <string name="title_body_hint">Vaše zpráva</string>
     <string name="title_discard">Zahodit</string>
     <string name="title_save">Uložit</string>
@@ -728,6 +735,7 @@
     <string name="title_no_key">Žádný privátní klíč</string>
     <string name="title_invalid_key">Neplatný privátní klíč</string>
     <string name="title_send_plain_text">Pouze prostý text</string>
+    <string name="title_send_receipt">Požádat o potvrzení</string>
     <string name="title_send_receipt_remark">Většina poskytovatelů a e-mailových klientů ignoruje žádosti o potvrzení</string>
     <string name="title_from_missing">Chybí odesílatel</string>
     <string name="title_to_missing">Chybí příjemce</string>
@@ -1096,6 +1104,7 @@
     <string-array name="startupNames">
         <item>Sjednocené doručené</item>
         <item>Sjednocené složky</item>
+        <item>Složky hlavního účtu</item>
         <item>Účty</item>
     </string-array>
     <string-array name="downloadNames">
@@ -1155,6 +1164,11 @@
         <item>Malé</item>
         <item>Střední</item>
         <item>Velké</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Potvrzení přečtení</item>
+        <item>Potvrzení doručení</item>
+        <item>Potvrzení přečtení + doručení</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Nad textem</item>

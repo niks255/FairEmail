@@ -60,8 +60,9 @@
     <string name="title_block_domain">屏蔽发件人域名</string>
     <string name="title_block_sender_hint">        拉黑某发件人将创建一条规则来自动将未来消息移动至垃圾邮件文件夹
         创建和使用规则属于专业版功能</string>
-    <string name="title_notification_waiting">等待网络连接</string>
     <string name="title_notification_sending">正在发送消息</string>
+    <string name="title_notification_waiting">等待网络连接</string>
+    <string name="title_notification_idle">空闲</string>
     <string name="title_notification_failed">\'%1$s\' 失败</string>
     <string name="title_notification_alert">\'%1$s\' 服务器警告</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -96,9 +97,11 @@
     <string name="title_edit_folder">编辑文件夹</string>
     <string name="title_setup">设置</string>
     <string name="title_setup_help">帮助</string>
-    <string name="title_setup_welcome">跟其他电子邮件App一样，接受和发送消息需要先设置一个账户和身份。
-快速设置只需您的姓名、邮箱地址和密码来创建一个账户和身份。
-如有需要，您也可以手动设置账户和身份 (别名)。    </string>
+    <string name="title_setup_welcome">接收和发送消息需要像在其他任何电子邮件应用程序中一样设置一个帐户和一个身份。
+        快速设置将仅询问您的姓名，电子邮件地址和密码即可创建帐户和身份。
+        如果需要，也可以手动设置帐户和身份（别名）。
+        不支持非标准协议，例如Microsoft Exchange Web Services和Microsoft ActiveSync，另请参阅应用程序说明
+    </string>
     <string name="title_setup_quick">快速设置</string>
     <string name="title_setup_quick_remark">为大多数邮件服务提供商快速设置账户和身份</string>
     <string name="title_setup_quick_hint">快速设置将从autoconfig.thunderbird.net 获取配置信息</string>
@@ -216,6 +219,7 @@
     <string name="title_advanced_signature_location">签名位置</string>
     <string name="title_advanced_signature_end">在引用/转发消息后添加签名</string>
     <string name="title_advanced_plain_only">默认仅发送纯文本</string>
+    <string name="title_advanced_flow">对纯文本采用”格式流动式“（format flowed）引用文本换行</string>
     <string name="title_advanced_receipt">请求回执时</string>
     <string name="title_advanced_usenet_signature">Usenet签名公约（RFC3676）</string>
     <string name="title_advanced_remove_signatures">移除公认的签名</string>
@@ -229,12 +233,14 @@
     <string name="title_advanced_download">在计量的连接下自动下载邮件和附件, 最高可达</string>
     <string name="title_advanced_roaming">漫游时下载邮件和附件</string>
     <string name="title_advanced_rlah">国内漫游</string>
+    <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
     <string name="title_advanced_socks">使用 SOCKS 代理</string>
     <string name="title_advanced_manage_connectivity">管理连接</string>
     <string name="title_advanced_caption_general">常规​​​​​</string>
     <string name="title_advanced_caption_conversation">会话</string>
-    <string name="title_advanced_caption_message">消息</string>
+    <string name="title_advanced_caption_message_header">邮件标头</string>
+    <string name="title_advanced_caption_message_body">消息正文</string>
     <string name="title_advanced_landscape">在横屏模式下使用两列</string>
     <string name="title_advanced_landscape3">在横屏模式下允许固定的导航栏菜单</string>
     <string name="title_advanced_startup">在启动屏幕上显示</string>
@@ -277,7 +283,7 @@
     <string name="title_advanced_images_inline">自动显示内联图像</string>
     <string name="title_advanced_seekbar">在底部用一个圆点显示会话相对位置</string>
     <string name="title_advanced_actionbar">显示对话操作栏</string>
-    <string name="title_advanced_navbar_colorize">为安卓导航栏上色</string>
+    <string name="title_advanced_navbar_colorize">导航栏着色</string>
     <string name="title_advanced_double_back">双击返回键退出</string>
     <string name="title_advanced_pull_refresh">下拉刷新</string>
     <string name="title_advanced_autoscroll">在收到新消息时滚动至顶部</string>
@@ -362,7 +368,7 @@
     <string name="title_advanced_check_mx">同步消息时检查发送者电子邮件地址</string>
     <string name="title_advanced_check_reply">同步消息时检查回复邮件地址</string>
     <string name="title_advanced_unseen_hint">一些邮件服务提供商对该功能支持不佳，这可能导致同步所有消息或一条消息也不同步</string>
-    <string name="title_advanced_deleted_unseen">当禁用时，未读消息将永远保留在设备上</string>
+    <string name="title_advanced_deleted_unseen">禁用后未读消息将永远保留在设备上</string>
     <string name="title_advanced_sync_kept_hint">这将更耗数据与电量，特别是如果有大量消息存储在设备上</string>
     <string name="title_advanced_sync_folders_hint">禁用此功能某种程度上会减少数据和电量使用，但也会禁用更新文件夹列表</string>
     <string name="title_advanced_subscribed_only_hint">启用此功能将删除所有未订阅的本地文件夹</string>
@@ -375,12 +381,15 @@
     <string name="title_advanced_metered_hint">计量连接通常是指移动连接或付费WiFi热点</string>
     <string name="title_advanced_metered_warning">禁用此选项将禁止在使用移动互联网连接时接收和发送消息</string>
     <string name="title_advanced_rlah_hint">假定欧盟境内不漫游</string>
-    <string name="title_advanced_ssl_harden_hint">启用此选项将禁用弱的 SSL 协议和密码套件</string>
+    <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
+    <string name="title_advanced_ssl_harden_hint">启用此选项将禁用较弱的SSL协议和密码，这可能导致连接问题</string>
     <string name="title_advanced_socks_hint">使用远程代理服务器不安全，因为代理连接未加密</string>
     <string name="title_advanced_roaming_hint">当漫游时，将始终获取消息头。您可以使用设备的漫游设置在漫游时禁用互联网。</string>
     <string name="title_advanced_browse_hint">向下滚动时拉取更多邮件</string>
     <string name="title_advanced_layout_hint">切换到更为紧凑的布局，改变消息文本大小可以在邮件视图中的顶部动作栏菜单中完成</string>
+    <string name="title_advanced_startup_hint">长按文件夹列表中的任何文件夹可将该文件夹添加到统一文件夹列表中(或从列表中删除）</string>
     <string name="title_advanced_date_hint">若按时间对消息排序，将仅按日期对消息分组</string>
+    <string name="title_advanced_navbar_colorize_hint">这是否正常工作取决于Android版本和变体</string>
     <string name="title_advanced_threading_hint">合并相同主题为一封会话</string>
     <string name="title_advanced_gravatars_hint">可能存在隐私风险</string>
     <string name="title_advanced_name_email_hint">禁用该选项，将仅显示名称（如果可用）</string>
@@ -433,7 +442,7 @@
     <string name="title_account_left">左滑</string>
     <string name="title_account_right">右滑</string>
     <string name="title_account_move">默认移动到</string>
-    <string name="title_account_gmail">为了可靠地同步Gmail帐户，应尽可能使用Gmail快速设置向导</string>
+    <string name="title_account_gmail">为了更可靠地同步Gmail帐户，应尽可能使用Gmail快速设置向导</string>
     <string name="title_domain">域名</string>
     <string name="title_autoconfig">获取设置</string>
     <string name="title_aliases">別名</string>
@@ -639,7 +648,6 @@
     <string name="title_ask_help">帮助改进FairEmail</string>
     <string name="title_ask_reporting">发送错误报告?</string>
     <string name="title_reporting_why">错误报告将有助于改进FairEmail</string>
-    <string name="title_message_bar_hint">点击十字图标可将邮件存档，删除或报告为垃圾邮件，并删除此通知</string>
     <string name="title_ask_review">请给FairEmail评分</string>
     <string name="title_ask_review_rationale">        您已经使用FairEmail一段时间了。
         如果您能在谷歌商店为FairEmail评分，我将感激不尽。
@@ -661,6 +669,7 @@
     <string name="title_received">已接收：</string>
     <string name="title_size">大小：</string>
     <string name="title_subject">主题：</string>
+    <string name="title_attachment">附件：</string>
     <string name="title_body_hint">您的邮件内容……</string>
     <string name="title_discard">舍弃</string>
     <string name="title_save">保存</string>
@@ -1063,6 +1072,7 @@ FairEmail会显示一条消息来提醒您这一点，这条消息在您购买�
     <string-array name="startupNames">
         <item>聚合收件箱</item>
         <item>聚合文件夹</item>
+        <item>主账户文件夹</item>
         <item>账户</item>
     </string-array>
     <string-array name="downloadNames">
@@ -1124,9 +1134,9 @@ FairEmail会显示一条消息来提醒您这一点，这条消息在您购买�
         <item>大</item>
     </string-array>
     <string-array name="receiptNames">
-        <item>已读收据</item>
+        <item>已读回执</item>
         <item>送达回执</item>
-        <item>已读+送达收据：</item>
+        <item>已读+送达回执</item>
     </string-array>
     <string-array name="signatureNames">
         <item>文本上方</item>

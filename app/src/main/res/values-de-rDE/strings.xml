@@ -73,8 +73,9 @@
         von dieser Absenderadresse automatisch in den Spam-Ordner zu verschieben.
         Regeln erstellen und verwenden ist eine Pro-Funktion.
     </string>
-    <string name="title_notification_waiting">Auf eine geeignete Verbindung wird gewartet</string>
     <string name="title_notification_sending">Nachrichten werden gesendet</string>
+    <string name="title_notification_waiting">Auf eine geeignete Verbindung wird gewartet</string>
+    <string name="title_notification_idle">Leerlauf</string>
     <string name="title_notification_failed">\'%1$s\' fehlgeschlagen</string>
     <string name="title_notification_alert">\'%1$s\' Server-Warnung</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -109,9 +110,11 @@
     <string name="title_edit_folder">Ordner bearbeiten</string>
     <string name="title_setup">Einstellungen</string>
     <string name="title_setup_help">Hilfe</string>
-    <string name="title_setup_welcome">Das Empfangen und Senden von Nachrichten erfordert die Einrichtung eines Kontos und einer Identität wie in jeder anderen E-Mail-Anwendung.
-Die Schnelleinrichtung erstellt sowohl ein Konto als auch eine Identität, indem sie lediglich nach Ihrem Namen, Ihrer E-Mail-Adresse und Ihrem Passwort fragt.
-Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet werden.    </string>
+    <string name="title_setup_welcome">Das Empfangen und Senden von Nachrichten erfordert die Einrichtung eines Kontos und einer Identität, wie bei jeder anderen E-Mail-Anwendung.
+Der Assistent erstellt sowohl ein Konto als auch eine Identität, indem Sie nur nach Ihrem Namen, Ihrer E-Mail-Adresse und Ihrem Passwort gefragt werden.
+Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet werden.
+Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Services” und „Microsoft ActiveSync”, werden nicht unterstützt. (Siehe auch die Beschreibung der App).
+    </string>
     <string name="title_setup_quick">Schnelleinrichtung</string>
     <string name="title_setup_quick_remark">Um schnell ein Konto und eine Identität für die meisten Anbieter einzurichten</string>
     <string name="title_setup_quick_hint">Die Schnelleinrichtung wird Konfigurationsinformationen von autoconfig.thunderbird.net laden</string>
@@ -229,6 +232,8 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_advanced_signature_location">Signaturposition</string>
     <string name="title_advanced_signature_end">Signatur nach zitierter/weitergeleiteter Nachricht hinzufügen</string>
     <string name="title_advanced_plain_only">Immer als Reintext senden, nicht als HTML</string>
+    <string name="title_advanced_flow">„format flowed” für Reintext</string>
+    <string name="title_advanced_receipt">Wenn eine Bestätigung angefordert wird, dann</string>
     <string name="title_advanced_usenet_signature">Usenet-Signaturkonvention</string>
     <string name="title_advanced_remove_signatures">Erkannte Signaturen entfernen</string>
     <string name="title_advanced_resize_images">Größe eingebetteter Bilder automatisch anpassen</string>
@@ -241,12 +246,14 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_advanced_download">Automatisches Herunterladen von E-Mails und Anhängen auf getakteten Verbindungen bis zu einer Größe von</string>
     <string name="title_advanced_roaming">Nachrichten und Anhänge bei Roaming herunterladen</string>
     <string name="title_advanced_rlah">Roaming wie zu Hause</string>
+    <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
     <string name="title_advanced_socks">SOCKS Proxy verwenden</string>
     <string name="title_advanced_manage_connectivity">Konnektivität verwalten</string>
     <string name="title_advanced_caption_general">Allgemein</string>
     <string name="title_advanced_caption_conversation">Unterhaltung</string>
-    <string name="title_advanced_caption_message">Nachricht</string>
+    <string name="title_advanced_caption_message_header">Nachrichtenkopfzeilen</string>
+    <string name="title_advanced_caption_message_body">Nachrichtentext</string>
     <string name="title_advanced_landscape">Zwei Spalten im Querformat verwenden</string>
     <string name="title_advanced_landscape3">Festes Navigationsmenü im Querformat erlauben</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen</string>
@@ -380,19 +387,22 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_advanced_subscribed_only_hint">Wenn aktiviert, werden alle lokalen Ordner ohne Abonnement gelöscht</string>
     <string name="title_advanced_sync_delay_hint">Dies verzögert die Synchronisierung von Nachrichten</string>
     <string name="title_advanced_suggest_local_hint">Zusätzlich zu den von Android bereitgestellten Kontakten werden weitere Kontaktdaten für neue gesendete oder erhaltene Nachrichten nur dann gespeichert, wenn dies aktiviert ist.</string>
-    <string name="title_advanced_usenet_hint">Signaturtrenner »--« zwischen Text und Signatur einfügen</string>
+    <string name="title_advanced_usenet_hint">Signaturtrenner »-- « zwischen Text und Signatur einfügen</string>
     <string name="title_advanced_send_reminders_hint">Eine Warnung anzeigen, wenn der Nachrichtentext oder der Betreff leer ist oder wenn ein Anhang zu fehlen scheint</string>
     <string name="title_advanced_lookup_mx_hint">Überprüft, ob DNS-MX-Einträge vorhanden sind</string>
     <string name="title_advanced_check_reply_hint">Überprüft, ob die Domain des Absenders und der Antwort-An-Adresse gleich sind</string>
     <string name="title_advanced_metered_hint">Getaktete Verbindungen sind in der Regel mobile Verbindungen oder bezahlte WLAN-Zugangspunkte</string>
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
-    <string name="title_advanced_ssl_harden_hint">Wenn Sie dies aktivieren, werden schwache SSL-Protokolle und -Verschlüsselungen nicht zugelassen</string>
+    <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
+    <string name="title_advanced_ssl_harden_hint">Wenn dies eingeschaltet ist, werden schwache SSL-Protokolle und Chiffren deaktiviert, was zu Verbindungsproblemen führen kann</string>
     <string name="title_advanced_socks_hint">Die Benutzung eines Remote-Proxy-Servers ist unsicher, da Proxy-Verbindungen nicht verschlüsselt sind</string>
     <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgeholt. Sie können die Roaming-Einstellung des Geräts verwenden, um das Internet während des Roaming zu deaktivieren.</string>
     <string name="title_advanced_browse_hint">Durch Herunterziehen weitere Nachrichten abholen</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einem kompakteren Layout und Ändern der Nachrichtentextgröße kann im oberen Aktionsleisten-Menü in der Nachrichtenansicht vorgenommen werden</string>
+    <string name="title_advanced_startup_hint">Einen beliebigen Ordner in der Ordnerliste lange gedrückt halten, um ihn der Liste der Sammelordner hinzuzufügen oder ihn daraus zu entfernen</string>
     <string name="title_advanced_date_hint">Nachrichten werden nur nach Datum gruppiert, wenn sie nach Zeit sortiert sind</string>
+    <string name="title_advanced_navbar_colorize_hint">Ob dies funktioniert, hängt von der Android-Version und Variante ab</string>
     <string name="title_advanced_threading_hint">E-Mails gruppieren, die miteinander verwandt sind</string>
     <string name="title_advanced_gravatars_hint">Es könnte ein Datenschutzrisiko geben</string>
     <string name="title_advanced_name_email_hint">Wenn deaktiviert, werden nur Namen angezeigt, sofern verfügbar</string>
@@ -651,7 +661,6 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_ask_help">Helfen Sie mit, FairEmail zu verbessern</string>
     <string name="title_ask_reporting">Fehlerberichte senden?</string>
     <string name="title_reporting_why">Fehlerberichte helfen uns, FairEmail zu verbessern</string>
-    <string name="title_message_bar_hint">Tippen Sie auf das Kreuz-Symbol, um eine Nachricht zu archivieren, zu löschen oder als Spam zu melden und um diesen Hinweis auszublenden</string>
     <string name="title_ask_review">Bitte bewerten Sie FairEmail</string>
     <string name="title_ask_review_rationale">        Du benutzt FairEmail schon eine Weile.
         Sofern Du zufrieden bist, wäre es nett, wenn du FairEmail im Play Store positiv bewerten könntest.
@@ -673,6 +682,7 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_received">Empfangen:</string>
     <string name="title_size">Größe:</string>
     <string name="title_subject">Betreff:</string>
+    <string name="title_attachment">Anhang:</string>
     <string name="title_body_hint">Ihre Nachricht</string>
     <string name="title_discard">Verwerfen</string>
     <string name="title_save">Speichern</string>
@@ -883,7 +893,7 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_legend_browsed">Gesehen oder gesucht</string>
     <string name="title_legend_answered">Wurde beantwortet</string>
     <string name="title_legend_plain_only">Ist eine Nur-Text-Mail</string>
-    <string name="title_legend_receipt">Lesebestätigung wurde angefordert</string>
+    <string name="title_legend_receipt">Bestätigung wurde angefordert</string>
     <string name="title_legend_attachment">Anhang vorhanden</string>
     <string name="title_legend_flagged">Ist Favorit</string>
     <string name="title_legend_contacts">Kontakte verwalten</string>
@@ -902,7 +912,7 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_legend_picture">Bild hinzufügen</string>
     <string name="title_legend_photo">Foto aufnehmen</string>
     <string name="title_legend_audio">Audio aufnehmen</string>
-    <string name="title_legend_bold">\"Fett\" schreiben</string>
+    <string name="title_legend_bold">Fett schreiben</string>
     <string name="title_legend_italic">Kursiv schreiben</string>
     <string name="title_legend_underline">Text unterstreichen</string>
     <string name="title_legend_text_size">Textgröße festlegen</string>
@@ -1004,7 +1014,7 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string name="title_pro_activated">Alle Pro-Funktionen sind aktiviert</string>
     <string name="title_pro_valid">Alle Pro-Funktionen aktiviert</string>
     <string name="title_pro_invalid">Ungültige Antwort</string>
-    <string name="title_pro_support">FairEmail benötigt Ihre Unterstützung. Erwerben Sie die Pro-Funktionen, um das Projekt am laufen zu halten.</string>
+    <string name="title_pro_support">FairEmail benötigt Ihre Unterstützung. Erwerben Sie die Pro-Funktionen, um das Projekt am Laufen zu halten.</string>
     <string name="title_unexpected_error">Unerwarteter Fehler</string>
     <string name="title_log">Protokoll</string>
     <string name="title_auto_scroll">Automatisches Blättern</string>
@@ -1077,6 +1087,7 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
     <string-array name="startupNames">
         <item>Sammeleingang</item>
         <item>Sammelordner</item>
+        <item>Ordner des primären Kontos</item>
         <item>Konten</item>
     </string-array>
     <string-array name="downloadNames">
@@ -1138,9 +1149,9 @@ Konten und Identitäten (Aliase) können bei Bedarf auch manuell eingerichtet we
         <item>Groß</item>
     </string-array>
     <string-array name="receiptNames">
-        <item>Lesebestätigung</item>
-        <item>Zustellungsbestätigung</item>
-        <item>Zustellungs- und Lesebestätigung</item>
+        <item>Nur Lesebestätigung</item>
+        <item>Nur Übermittlungsbestätigung</item>
+        <item>Übermittlungs- und Lesebestätigung</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Über dem Text</item>

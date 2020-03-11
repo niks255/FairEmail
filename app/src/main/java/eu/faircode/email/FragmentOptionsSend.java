@@ -51,7 +51,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private SwitchCompat swExtendedReply;
     private SwitchCompat swQuoteReply;
     private SwitchCompat swPlainOnly;
-    private Spinner spReceiptType;
+    private SwitchCompat swFormatFlowed;
     private Spinner spSignatureLocation;
     private SwitchCompat swUsenetSignature;
     private SwitchCompat swRemoveSignatures;
@@ -61,14 +61,16 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private TextView tvAutoResize;
     private SwitchCompat swSendReminders;
     private SwitchCompat swReceipt;
+    private Spinner spReceiptType;
     private SwitchCompat swLookupMx;
     private Spinner spSendDelayed;
 
     private final static String[] RESET_OPTIONS = new String[]{
             "keyboard", "suggest_sent", "suggested_received",
             "prefix_once", "extended_reply", "quote_reply",
-            "plain_only", "receipt_type", "signature_location", "usenet_signature", "remove_signatures",
-            "resize_images", "resize_attachments", "send_reminders", "receipt_default", "resize", "lookup_mx", "send_delayed"
+            "plain_only", "format_flowed", "signature_location", "usenet_signature", "remove_signatures",
+            "resize_images", "resize_attachments", "resize",
+            "send_reminders", "receipt_default", "receipt_type", "lookup_mx", "send_delayed"
     };
 
     @Override
@@ -89,7 +91,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swExtendedReply = view.findViewById(R.id.swExtendedReply);
         swQuoteReply = view.findViewById(R.id.swQuoteReply);
         swPlainOnly = view.findViewById(R.id.swPlainOnly);
-        spReceiptType = view.findViewById(R.id.spReceiptType);
+        swFormatFlowed = view.findViewById(R.id.swFormatFlowed);
         spSignatureLocation = view.findViewById(R.id.spSignatureLocation);
         swUsenetSignature = view.findViewById(R.id.swUsenetSignature);
         swRemoveSignatures = view.findViewById(R.id.swRemoveSignatures);
@@ -99,6 +101,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         tvAutoResize = view.findViewById(R.id.tvAutoResize);
         swSendReminders = view.findViewById(R.id.swSendReminders);
         swReceipt = view.findViewById(R.id.swReceipt);
+        spReceiptType = view.findViewById(R.id.spReceiptType);
         swLookupMx = view.findViewById(R.id.swLookupMx);
         spSendDelayed = view.findViewById(R.id.spSendDelayed);
 
@@ -165,15 +168,10 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             }
         });
 
-        spReceiptType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        swFormatFlowed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                prefs.edit().putInt("receipt_type", position).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                prefs.edit().remove("receipt_type").apply();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("format_flowed", checked).apply();
             }
         });
 
@@ -237,6 +235,18 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("receipt_default", checked).apply();
+            }
+        });
+
+        spReceiptType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                prefs.edit().putInt("receipt_type", position).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                prefs.edit().remove("receipt_type").apply();
             }
         });
 
@@ -320,9 +330,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swExtendedReply.setChecked(prefs.getBoolean("extended_reply", false));
         swQuoteReply.setChecked(prefs.getBoolean("quote_reply", true));
         swPlainOnly.setChecked(prefs.getBoolean("plain_only", false));
-
-        int receipt_type = prefs.getInt("receipt_type", 2);
-        spReceiptType.setSelection(receipt_type);
+        swFormatFlowed.setChecked(prefs.getBoolean("format_flowed", false));
 
         int signature_location = prefs.getInt("signature_location", 1);
         spSignatureLocation.setSelection(signature_location);
@@ -344,6 +352,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         spAutoResize.setEnabled(swResizeImages.isChecked() || swResizeAttachments.isChecked());
 
         swSendReminders.setChecked(prefs.getBoolean("send_reminders", true));
+        int receipt_type = prefs.getInt("receipt_type", 2);
+        spReceiptType.setSelection(receipt_type);
         swReceipt.setChecked(prefs.getBoolean("receipt_default", false));
         swLookupMx.setChecked(prefs.getBoolean("lookup_mx", false));
 

@@ -94,8 +94,8 @@
     <string name="title_block_sender_hint">        Блокировка отправителя создаст правило для автоматического перемещения будущих сообщений в папку со спамом.
         Создание и использование правил является Pro-функцией.
     </string>
-    <string name="title_notification_waiting">Ожидание подходящего соединения</string>
     <string name="title_notification_sending">Отправка сообщений</string>
+    <string name="title_notification_waiting">Ожидание подходящего соединения</string>
     <string name="title_notification_failed">\"%1$s\" не удалось</string>
     <string name="title_notification_alert">\'%1$s\' предупреждение сервера</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -130,10 +130,6 @@
     <string name="title_edit_folder">Редактировать папку</string>
     <string name="title_setup">Настройки</string>
     <string name="title_setup_help">Справка</string>
-    <string name="title_setup_welcome">        Получение и отправка сообщений требует настройки учётной записи и идентификатора, как в любом другом приложении электронной почты.
-        Быстрая настройка создаст учётную запись и идентификатор, просто запросив имя, адрес электронной почты и пароль.
-        Учётные записи и идентификаторы (псевдонимы) могут быть также установлены вручную, если это необходимо.
-    </string>
     <string name="title_setup_quick">Быстрая настройка</string>
     <string name="title_setup_quick_remark">Быстрая настройка учётной записи и идентификатора для большинства провайдеров</string>
     <string name="title_setup_quick_hint">Быстрая настройка считывает информацию о конфигурации с autoconfig.thunderbird.net</string>
@@ -251,6 +247,8 @@
     <string name="title_advanced_signature_location">Расположение подписи</string>
     <string name="title_advanced_signature_end">Добавлять подпись после цитаты/пересылаемого сообщения</string>
     <string name="title_advanced_plain_only">По умолчанию отправлять простым текстом</string>
+    <string name="title_advanced_flow">\'пластичное\' форматирование обычного текста</string>
+    <string name="title_advanced_receipt">При запросе уведомления</string>
     <string name="title_advanced_usenet_signature">Стиль подписи Usenet</string>
     <string name="title_advanced_remove_signatures">Удалять распознанные подписи</string>
     <string name="title_advanced_resize_images">Автоматически изменять размер встроенных изображений</string>
@@ -263,12 +261,12 @@
     <string name="title_advanced_download">Автоматически загружать сообщения и вложения для лимитного подключения до</string>
     <string name="title_advanced_roaming">Загружать сообщения и вложения в роуминге</string>
     <string name="title_advanced_rlah">В роуминге как дома</string>
+    <string name="title_advanced_timeout">Время ожидания соединения (в секундах)</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-соединения</string>
     <string name="title_advanced_socks">Использовать SOCKS-прокси</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
     <string name="title_advanced_caption_conversation">Диалог</string>
-    <string name="title_advanced_caption_message">Сообщение</string>
     <string name="title_advanced_landscape">Использовать две колонки в альбомном режиме</string>
     <string name="title_advanced_landscape3">Разрешить фиксированное меню навигации в альбомном режиме</string>
     <string name="title_advanced_startup">При запуске показывать</string>
@@ -409,12 +407,14 @@
     <string name="title_advanced_metered_hint">Лимитированные подключения - это обычно мобильные сети или платные Wi-Fi</string>
     <string name="title_advanced_metered_warning">Отключение данной функции отключит получение и отправку сообщений при мобильном подключении к интернету</string>
     <string name="title_advanced_rlah_hint">Предполагать отсутствие роуминга внутри ЕС</string>
-    <string name="title_advanced_ssl_harden_hint">Включение этой функции отключит слабые протоколы и шифры SSL</string>
+    <string name="title_advanced_timeout_hint">Время ожидания для чтения/записи будет установлено в два раза больше времени ожидания соединения. Ещё большие значения могут увеличить расход аккумулятора.</string>
+    <string name="title_advanced_ssl_harden_hint">Включение этой функции отключит слабые протоколы и алгоритмы SSL, что может привести к проблемам с соединением</string>
     <string name="title_advanced_socks_hint">Использование удалённого прокси-сервера небезопасно, потому что прокси-соединения не зашифрованы</string>
     <string name="title_advanced_roaming_hint">Заголовки сообщений всегда будут загружаться в роуминге. Вы можете использовать настройки устройства для отключения интернета в роуминге.</string>
     <string name="title_advanced_browse_hint">Получать больше сообщений при прокрутке вниз</string>
     <string name="title_advanced_layout_hint">Переключиться на компактный вид и изменить размера текста сообщения можно через верхнее меню панели действий при просмотре сообщения</string>
     <string name="title_advanced_date_hint">Сообщения группируются только по дате, если они сортируются по времени</string>
+    <string name="title_advanced_navbar_colorize_hint">Это работает в зависимости от версии и варианта Android</string>
     <string name="title_advanced_threading_hint">Группировать сообщения, связанные друг с другом</string>
     <string name="title_advanced_gravatars_hint">Возможен риск нарушения конфиденциальности</string>
     <string name="title_advanced_name_email_hint">Если отключено, будут показаны только имена (при наличии)</string>
@@ -673,7 +673,6 @@
     <string name="title_ask_help">Помогите улучшить FairEmail</string>
     <string name="title_ask_reporting">Отправлять отчёты об ошибках?</string>
     <string name="title_reporting_why">Отчёты об ошибках помогут улучшить FairEmail</string>
-    <string name="title_message_bar_hint">Нажмите на значок ×, чтобы архивировать, удалить или пометить сообщение как спам, а также скрыть эту надпись</string>
     <string name="title_ask_review">Пожалуйста, оцените FairEmail</string>
     <string name="title_ask_review_rationale">        Вы давно используете FairEmail.
         Будем признательны, если вы сможете оценить FairEmail в Play Store.
@@ -695,6 +694,7 @@
     <string name="title_received">Получено:</string>
     <string name="title_size">Размер:</string>
     <string name="title_subject">Тема:</string>
+    <string name="title_attachment">Вложение:</string>
     <string name="title_body_hint">Ваше сообщение</string>
     <string name="title_discard">Отменить</string>
     <string name="title_save">Сохранить</string>
@@ -730,6 +730,7 @@
     <string name="title_no_key">Нет приватного ключа</string>
     <string name="title_invalid_key">Приватный ключ недействителен</string>
     <string name="title_send_plain_text">Только простой текст</string>
+    <string name="title_send_receipt">Запросить уведомление</string>
     <string name="title_send_receipt_remark">Большинство провайдеров и клиентов электронной почты игнорируют запросы о доставке</string>
     <string name="title_from_missing">Отсутствует отправитель</string>
     <string name="title_to_missing">Отсутствует получатель</string>
@@ -1100,7 +1101,8 @@
     <string-array name="startupNames">
         <item>Единый почтовый ящик</item>
         <item>Единые папки</item>
-        <item>Учётные записи</item>
+        <item>Primary account folders</item>
+        <item>Accounts</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 КБ</item>
@@ -1159,6 +1161,11 @@
         <item>Мелкий</item>
         <item>Средний</item>
         <item>Крупный</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Уведомление о прочтении</item>
+        <item>Уведомление о доставке</item>
+        <item>Уведомление о доставке и прочтении</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Над текстом</item>

@@ -72,8 +72,8 @@
     <string name="title_block_sender_hint">        Блокирането на подател ще създаде правило за автоматично преместване на бъдещи съобщения в папката със спам.
         Създаването и използването на правила е професионална функция.
     </string>
-    <string name="title_notification_waiting">Изчаква се подходяща връзка</string>
     <string name="title_notification_sending">Изпращане на съобщения</string>
+    <string name="title_notification_waiting">Изчаква се подходяща връзка</string>
     <string name="title_notification_failed">%1$s се провали</string>
     <string name="title_notification_alert">Сигнал от сървър \'%1$s\'</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -108,9 +108,10 @@
     <string name="title_edit_folder">Редактиране на папка</string>
     <string name="title_setup">Настройки</string>
     <string name="title_setup_help">Помощ</string>
-    <string name="title_setup_welcome">Получаването и изпращане на съобщения изисква настройка на профил и самоличност, както във всяко друго имейл приложение.
-        Бързата настройка ще създаде и профил и самоличност само като поиска вашето име, имейл адрес и парола.
-        Профилите и самоличността (псевдонимите) могат да се настройват и ръчно, ако е необходимо.
+    <string name="title_setup_welcome">        Получаването и изпращането на съобщения изисква настройка на профил и самоличност, като всяко друго имейл приложение.
+        Бързата настройка ще създаде както профил, така и самоличност, само като поиска вашето име, имейл адрес и парола.
+        Профилите и самоличносттите (псевдонимите) могат да се настройват и ръчно, ако е необходимо.
+        Нестандартни протоколи, като Microsoft Exchange Web Services и Microsoft ActiveSync, не се поддържат, вижте също описанието на приложението.
     </string>
     <string name="title_setup_quick">Бърза настройка</string>
     <string name="title_setup_quick_remark">За бърза настройка на профил и идентичност за повечето доставчици</string>
@@ -204,12 +205,14 @@
     <string name="title_advanced_section_display">Дисплей</string>
     <string name="title_advanced_section_behavior">Поведение</string>
     <string name="title_advanced_section_privacy">Поверителност</string>
+    <string name="title_advanced_section_encryption">Криптиране</string>
     <string name="title_advanced_section_notifications">Известия</string>
     <string name="title_advanced_section_misc">Разни</string>
     <string name="title_advanced_receive">Получени съобщения</string>
     <string name="title_advanced_when">Кога</string>
     <string name="title_advanced_always">Винаги синхронизирай тези профили</string>
     <string name="title_advanced_schedule">График</string>
+    <string name="title_advanced_advanced">Разширени</string>
     <string name="title_advanced_unseen">Всички непрочетени съобщения</string>
     <string name="title_advanced_flagged">Всички съобщения със звезда</string>
     <string name="title_advanced_delete_unseen">Изтрий старите непрочетени съобщения</string>
@@ -227,6 +230,8 @@
     <string name="title_advanced_signature_location">Позиция на подписа</string>
     <string name="title_advanced_signature_end">Добавете подпис след цитирано/препратено съобщение</string>
     <string name="title_advanced_plain_only">Изпращане на обикновен текст по подразбиране</string>
+    <string name="title_advanced_flow">\'форматиран поток\' за обикновен текст</string>
+    <string name="title_advanced_receipt">При искане на разписка</string>
     <string name="title_advanced_usenet_signature">Конвенция за подпис на Usenet</string>
     <string name="title_advanced_remove_signatures">Премахване на разпознатите подписи</string>
     <string name="title_advanced_resize_images">Автоматично оразмеряване на вградените изображения</string>
@@ -239,9 +244,12 @@
     <string name="title_advanced_download">Автоматично изтегляне на съобщения и прикачени файлове с големина до</string>
     <string name="title_advanced_roaming">Изтегляне на съобщения и прикачени файлове в роуминг</string>
     <string name="title_advanced_rlah">Роуминг като у дома</string>
+    <string name="title_advanced_timeout">Време на изчакване на връзката (секунди)</string>
     <string name="title_advanced_ssl_harden">Твърди SSL връзки</string>
     <string name="title_advanced_socks">Използване на SOCKS прокси</string>
     <string name="title_advanced_manage_connectivity">Управление на свързаност</string>
+    <string name="title_advanced_caption_general">Основни</string>
+    <string name="title_advanced_caption_conversation">Разговор</string>
     <string name="title_advanced_landscape">Две колони в легнал режим</string>
     <string name="title_advanced_landscape3">Разрешаване на фиксирано меню за навигация в пейзажен режим</string>
     <string name="title_advanced_startup">Показване при стартиране</string>
@@ -381,12 +389,15 @@
     <string name="title_advanced_metered_hint">Измерваните връзки обикновено са мобилен интернет или платени Wi-Fi точки</string>
     <string name="title_advanced_metered_warning">Деактивирането на тази опция ще деактивира получаването и изпращането на съобщения през мобилния интернет</string>
     <string name="title_advanced_rlah_hint">Ако не се допуска роуминг в рамките на ЕС</string>
-    <string name="title_advanced_ssl_harden_hint">Активирането на това ще деактивира слабите SSL протоколи и шифри</string>
+    <string name="title_advanced_timeout_hint">Времето за четене/запис ще бъде зададено двойно на времето за изчакване на връзката. По-високите стойности ще доведат до по-голяма консумация на батерията.</string>
+    <string name="title_advanced_ssl_harden_hint">Активирането на това ще деактивира слаби SSL протоколи и шифри, което може да доведе до проблеми с връзката</string>
     <string name="title_advanced_socks_hint">Използването на отдалечен прокси сървър е несигурно, тъй като прокси връзките не са криптирани</string>
     <string name="title_advanced_roaming_hint">Заглавките на съобщенията винаги ще се получават при роуминг. Можете да използвате настройката за роуминг на устройството, за да деактивирате интернет по време на роуминг.</string>
     <string name="title_advanced_browse_hint">Вземете още съобщения, когато превъртате надолу</string>
     <string name="title_advanced_layout_hint">Преминаване към по-компактно оформление и промяната на размера на текста на съобщение може да се извърши в менюто на горната лента за действие в изглед на съобщението</string>
+    <string name="title_advanced_startup_hint">Дълго натиснете която и да е папка в списъка с папки, за да я добавите или премахнете от списъка на обединените папки</string>
     <string name="title_advanced_date_hint">Съобщенията са групирани по дата само ако са сортирани по време</string>
+    <string name="title_advanced_navbar_colorize_hint">За да работи това зависи от версията и варианта на Android</string>
     <string name="title_advanced_threading_hint">Групови съобщения, свързани помежду си</string>
     <string name="title_advanced_gravatars_hint">Възможно е да съществува риск за поверителността</string>
     <string name="title_advanced_name_email_hint">Когато са деактивирани ще се показват само имената когато са налични</string>
@@ -645,7 +656,6 @@
     <string name="title_ask_help">Помогнете за подобряване на FairEmail</string>
     <string name="title_ask_reporting">Изпрати репорт с грешки?</string>
     <string name="title_reporting_why">Докладе с грешки ще помогне да се подобри FairEmail</string>
-    <string name="title_message_bar_hint">Докоснете иконата, за да архивирате, изтриете или докладвате съобщение като спам и да премахнете това известие</string>
     <string name="title_ask_review">Моля, прегледайте FairEmail</string>
     <string name="title_ask_review_rationale">        Използвате FairEmail от известно време.
         Ще Ви бъде благодарен, ако можете да оцените FairEmail в Play Store.
@@ -667,6 +677,7 @@
     <string name="title_received">Получаване:</string>
     <string name="title_size">Размер:</string>
     <string name="title_subject">Тема:</string>
+    <string name="title_attachment">Прикачен файл:</string>
     <string name="title_body_hint">Вашето съобщение</string>
     <string name="title_discard">Откажи</string>
     <string name="title_save">Запази</string>
@@ -702,6 +713,7 @@
     <string name="title_no_key">Няма частен ключ</string>
     <string name="title_invalid_key">Невалиден частен ключ</string>
     <string name="title_send_plain_text">Само обикновен текст</string>
+    <string name="title_send_receipt">Заявка за разписка</string>
     <string name="title_send_receipt_remark">Повечето доставчици и имейл клиенти игнорират заявките за получаване</string>
     <string name="title_from_missing">Липсва изпращач</string>
     <string name="title_to_missing">Липсва получател</string>
@@ -1070,6 +1082,7 @@
     <string-array name="startupNames">
         <item>Обединена входяща поща</item>
         <item>Обединени папки</item>
+        <item>Основни папки на профила</item>
         <item>Профили</item>
     </string-array>
     <string-array name="downloadNames">
@@ -1129,6 +1142,11 @@
         <item>Малък</item>
         <item>Среден</item>
         <item>Голям</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Разписка за прочетено</item>
+        <item>Разписка за доставено</item>
+        <item>Разписка за прочетено+доставено</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Над текста</item>

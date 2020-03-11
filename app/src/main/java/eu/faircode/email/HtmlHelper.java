@@ -84,11 +84,6 @@ public class HtmlHelper {
     private static final int MAX_FULL_TEXT_SIZE = 1024 * 1024; // characters
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
 
-    private static final List<String> heads = Collections.unmodifiableList(Arrays.asList(
-            "h1", "h2", "h3", "h4", "h5", "h6", "p", "ol", "ul", "table", "br", "hr"));
-    private static final List<String> tails = Collections.unmodifiableList(Arrays.asList(
-            "h1", "h2", "h3", "h4", "h5", "h6", "p", "ol", "ul", "li"));
-
     private static final HashMap<String, Integer> x11ColorMap = new HashMap<>();
 
     static {
@@ -1180,6 +1175,11 @@ public class HtmlHelper {
             private int plevel = 0;
             private int lindex = 0;
 
+            private final List<String> heads = Collections.unmodifiableList(Arrays.asList(
+                    "h1", "h2", "h3", "h4", "h5", "h6", "p", "ol", "ul", "table", "br", "hr"));
+            private final List<String> tails = Collections.unmodifiableList(Arrays.asList(
+                    "h1", "h2", "h3", "h4", "h5", "h6", "p", "ol", "ul", "li", "div"));
+
             public void head(Node node, int depth) {
                 if (node instanceof TextNode)
                     if (plevel > 0) {
@@ -1192,14 +1192,17 @@ public class HtmlHelper {
                         append(((TextNode) node).text());
                 else {
                     String name = node.nodeName();
-                    if ("li".equals(name))
-                        append("*");
+                    if ("li".equals(name) && node.parent() != null)
+                        append("ol".equals(node.parent().nodeName()) ? "-" : "*");
                     else if ("blockquote".equals(name))
                         qlevel++;
                     else if ("pre".equals(name))
                         plevel++;
 
-                    if (heads.contains(name))
+                    if (heads.contains(name) &&
+                            !("br".equals(name) &&
+                                    node.nextSibling() == null &&
+                                    node.parent() != null && "div".equals(node.parent().nodeName())))
                         newline();
                 }
             }
@@ -1257,6 +1260,47 @@ public class HtmlHelper {
         sb.append("\n");
 
         return sb.toString();
+    }
+
+    static void convertLists(Document document) {
+        for (Element p : document.select("p")) {
+            Element list = null;
+            for (int i = 0; i < p.childNodeSize(); i++) {
+                boolean item = false;
+                Node node = p.childNode(i);
+                if (node instanceof TextNode) {
+                    String text = ((TextNode) node).text().trim();
+                    Node next = node.nextSibling();
+                    if ((text.startsWith("* ") || text.startsWith("- ")) &&
+                            (next == null || "br".equals(next.nodeName()))) {
+                        item = true;
+                        String type = (text.startsWith("* ") ? "ul" : "ol");
+
+                        Element li = document.createElement("li");
+                        li.text(text.substring(2));
+
+                        if (list == null || !list.tagName().equals(type)) {
+                            list = document.createElement(type);
+                            list.appendChild(li);
+                            node.replaceWith(list);
+                        } else {
+                            list.appendChild(li);
+                            node.remove();
+                            i--;
+                        }
+
+                        if (next != null)
+                            next.remove();
+                    }
+                }
+                if (!item)
+                    list = null;
+            }
+
+            p.tagName("div");
+            if (p.parent() != null)
+                p.after(document.createElement("br"));
+        }
     }
 
     static Spanned highlightHeaders(Context context, String headers) {

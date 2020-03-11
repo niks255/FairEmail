@@ -93,8 +93,8 @@
     <string name="title_block_domain">Blokuj domenę nadawcy</string>
     <string name="title_block_sender_hint">        Blokowanie nadawcy utworzy regułę, aby automatycznie przenosić przyszłe wiadomości do folderu spam.
         Tworzenie i używanie reguł jest funkcją Pro.    </string>
-    <string name="title_notification_waiting">Oczekiwanie na odpowiednie połączenie</string>
     <string name="title_notification_sending">Wysyłanie wiadomości</string>
+    <string name="title_notification_waiting">Oczekiwanie na odpowiednie połączenie</string>
     <string name="title_notification_failed">%1$s nie powiodło się</string>
     <string name="title_notification_alert">Alert serwera \'%1$s\'</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -129,10 +129,6 @@
     <string name="title_edit_folder">Edytuj folder</string>
     <string name="title_setup">Ustawienia</string>
     <string name="title_setup_help">Pomoc</string>
-    <string name="title_setup_welcome">        Odbieranie i wysyłanie wiadomości wymaga skonfigurowania konta i tożsamości, jak w każdej innej aplikacji pocztowej.
-        Szybka konfiguracja spowoduje utworzenie konta i tożsamości, po prostu pytając o imię i nazwisko, adres e-mail i hasło.
-        W razie potrzeby konta i tożsamości (aliasy) można również skonfigurować ręcznie.
-    </string>
     <string name="title_setup_quick">Szybkie ustawienia</string>
     <string name="title_setup_quick_remark">W celu szybkiego ustawienia konta i tożsamości dla większości dostawców</string>
     <string name="title_setup_quick_hint">Szybka konfiguracja pobierze informacje o ustawieniach z autoconfig.thunderbird.net</string>
@@ -250,6 +246,7 @@
     <string name="title_advanced_signature_location">Pozycja podpisu</string>
     <string name="title_advanced_signature_end">Dodaj podpis po cytowanej/przesyłanej wiadomości</string>
     <string name="title_advanced_plain_only">Domyślnie wysyłaj czystym tekstem</string>
+    <string name="title_advanced_receipt">Podczas żądania potwierdzenia</string>
     <string name="title_advanced_usenet_signature">Konwencja podpisu Usenet</string>
     <string name="title_advanced_remove_signatures">Usuń rozpoznane podpisy</string>
     <string name="title_advanced_resize_images">Automatycznie zmień rozmiar osadzonych obrazów</string>
@@ -262,12 +259,12 @@
     <string name="title_advanced_download">Automatycznie pobieraj wiadomości i załączniki przy połączeniach taryfowych do</string>
     <string name="title_advanced_roaming">Pobieraj wiadomości i załączniki podczas roamingu</string>
     <string name="title_advanced_rlah">Roaming jak w domu</string>
+    <string name="title_advanced_timeout">Limit czasu połączenia (sekundy)</string>
     <string name="title_advanced_ssl_harden">Wzmocnij połączenia SSL</string>
     <string name="title_advanced_socks">Użyj serwera proxy SOCKS</string>
     <string name="title_advanced_manage_connectivity">Zarządzaj połączeniami</string>
     <string name="title_advanced_caption_general">Ogólne</string>
     <string name="title_advanced_caption_conversation">Wątek</string>
-    <string name="title_advanced_caption_message">Wiadomość</string>
     <string name="title_advanced_landscape">Użyj dwóch kolumn w trybie poziomym</string>
     <string name="title_advanced_landscape3">Zezwalaj na stałe menu nawigacji w trybie poziomym</string>
     <string name="title_advanced_startup">Pokaż na ekranie początkowym</string>
@@ -408,12 +405,14 @@
     <string name="title_advanced_metered_hint">Połączenia taryfowe to głównie połączenia komórkowe lub płatne hotspoty Wi-Fi</string>
     <string name="title_advanced_metered_warning">Wyłączenie tej opcji uniemożliwi odbieranie i wysyłanie wiadomości przy użyciu komórkowego połączenia internetowego</string>
     <string name="title_advanced_rlah_hint">Zakładając brak roamingu w UE</string>
-    <string name="title_advanced_ssl_harden_hint">Włączenie tego spowoduje wyłączenie słabych protokołów SSL i szyfrów</string>
+    <string name="title_advanced_timeout_hint">Limit czasu odczytu/zapisu zostanie ustawiony na dwukrotność limitu czasu połączenia. Wyższe wartości spowodują większe zużycie baterii.</string>
+    <string name="title_advanced_ssl_harden_hint">Włączenie tego spowoduje wyłączenie słabych protokołów SSL i szyfrowania, co może prowadzić do problemów z połączeniem</string>
     <string name="title_advanced_socks_hint">Korzystanie ze zdalnego serwera proxy jest niezabezpieczone, ponieważ połączenia proxy nie są szyfrowane</string>
     <string name="title_advanced_roaming_hint">Nagłówki wiadomości będą zawsze pobierane podczas roamingu. Możesz użyć ustawienia roamingu urządzenia, aby wyłączyć Internet podczas roamingu.</string>
     <string name="title_advanced_browse_hint">Pobierz więcej wiadomości podczas przewijania w dół</string>
     <string name="title_advanced_layout_hint">Przełączanie do bardziej zwartego układu i zmianę rozmiaru tekstu wiadomości można wykonać w menu górnego paska działań w widoku wiadomości</string>
     <string name="title_advanced_date_hint">Wiadomości są pogrupowane według daty, tylko jeśli są posortowane według czasu</string>
+    <string name="title_advanced_navbar_colorize_hint">To, czy to zadziała, zależy od wersji i wariantu Androida</string>
     <string name="title_advanced_threading_hint">Grupuj wiadomości powiązane ze sobą</string>
     <string name="title_advanced_gravatars_hint">Może istnieć ryzyko naruszenia prywatności</string>
     <string name="title_advanced_name_email_hint">Gdy wyłączone, tylko nazwy będą pokazywane, gdy dostępne</string>
@@ -672,7 +671,6 @@
     <string name="title_ask_help">Pomóż udoskonalić FairEmail</string>
     <string name="title_ask_reporting">Wyślij raport o błędach?</string>
     <string name="title_reporting_why">Raportowanie błędów pomoże poprawić FairEmail</string>
-    <string name="title_message_bar_hint">Stuknij ikonę krzyżyka, aby zarchiwizować, usunąć lub zgłosić wiadomość jako spam i usunąć to powiadomienie</string>
     <string name="title_ask_review">Oceń FairEmail</string>
     <string name="title_ask_review_rationale">        Od pewnego czasu korzystasz z FairEmail.
         Byłoby mile widziane, gdybyś mógł ocenić FairEmail w Sklepie Play..
@@ -694,6 +692,7 @@
     <string name="title_received">Odebrano:</string>
     <string name="title_size">Rozmiar:</string>
     <string name="title_subject">Temat:</string>
+    <string name="title_attachment">Załącznik:</string>
     <string name="title_body_hint">Twoja wiadomość</string>
     <string name="title_discard">Odrzuć</string>
     <string name="title_save">Zapisz</string>
@@ -729,6 +728,7 @@
     <string name="title_no_key">Brak klucza prywatnego</string>
     <string name="title_invalid_key">Nieprawidłowy klucz prywatny</string>
     <string name="title_send_plain_text">Tylko zwykły tekst</string>
+    <string name="title_send_receipt">Poproś o potwierdzenie</string>
     <string name="title_send_receipt_remark">Większość dostawców i klientów e-mail ignoruje prośby o potwierdzenie</string>
     <string name="title_from_missing">Brak nadawcy</string>
     <string name="title_to_missing">Brak adresata</string>
@@ -1098,7 +1098,8 @@ FairEmail wyświetla o tym małą wiadomość przypominającą, która zostanie 
     <string-array name="startupNames">
         <item>Wspólna skrzynka</item>
         <item>Wspólne foldery</item>
-        <item>Konta</item>
+        <item>Primary account folders</item>
+        <item>Accounts</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 KB</item>
@@ -1157,6 +1158,11 @@ FairEmail wyświetla o tym małą wiadomość przypominającą, która zostanie 
         <item>Mała</item>
         <item>Średnia</item>
         <item>Duża</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Potwierdzenie odczytu</item>
+        <item>Potwierdzenie dostarczenia</item>
+        <item>Potwierdzenie odczytu+dostarczenia</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Powyżej tekstu</item>

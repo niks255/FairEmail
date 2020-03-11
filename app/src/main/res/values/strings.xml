@@ -93,8 +93,9 @@
         Creating and using rules is a pro feature.
     </string>
 
-    <string name="title_notification_waiting">Waiting for suitable connection</string>
     <string name="title_notification_sending">Sending messages</string>
+    <string name="title_notification_waiting">Waiting for suitable connection</string>
+    <string name="title_notification_idle">Idle</string>
     <string name="title_notification_failed">\'%1$s\' failed</string>
     <string name="title_notification_alert">\'%1$s\' server alert</string>
 
@@ -141,8 +142,9 @@
     <string name="title_setup_help">Help</string>
     <string name="title_setup_welcome">
         Receiving and sending messages requires setting up an account and an identity like in any other email app.
-        The quick setup will create both an account and identity by just asking for your name, email address and password.
-        Accounts and identities (aliases) can be setup manually too if needed.
+        The quick setup will create both an account and an identity by just asking for your name, email address, and password.
+        Accounts and identities (aliases) can be set up manually too if needed.
+        Non-standard protocols, such as Microsoft Exchange Web Services and Microsoft ActiveSync, are not supported, also see the app description.
     </string>
     <string name="title_setup_quick">Quick setup</string>
     <string name="title_setup_quick_remark">To quickly setup an account and an identity for most providers</string>
@@ -277,6 +279,7 @@
     <string name="title_advanced_signature_location">Signature position</string>
     <string name="title_advanced_signature_end">Add signature after quoted/forwarded message</string>
     <string name="title_advanced_plain_only">Send plain text only by default</string>
+    <string name="title_advanced_flow">\'format flowed\' for plain text</string>
     <string name="title_advanced_receipt">When requesting a receipt</string>
     <string name="title_advanced_usenet_signature">Usenet signature convention</string>
     <string name="title_advanced_remove_signatures">Remove recognized signatures</string>
@@ -291,13 +294,15 @@
     <string name="title_advanced_download">Automatically download messages and attachments on a metered connection up to</string>
     <string name="title_advanced_roaming">Download messages and attachments while roaming</string>
     <string name="title_advanced_rlah">Roam like at home</string>
+    <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
     <string name="title_advanced_socks">Use SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
 
     <string name="title_advanced_caption_general">General</string>
     <string name="title_advanced_caption_conversation">Conversation</string>
-    <string name="title_advanced_caption_message">Message</string>
+    <string name="title_advanced_caption_message_header">Message header</string>
+    <string name="title_advanced_caption_message_body">Message body</string>
 
     <string name="title_advanced_landscape">Use two columns in landscape mode</string>
     <string name="title_advanced_landscape3">Allow fixed navigation menu in landscape mode</string>
@@ -455,14 +460,17 @@
     <string name="title_advanced_metered_hint">Metered connections are generally mobile connections or paid Wi-Fi hotspots</string>
     <string name="title_advanced_metered_warning">Disabling this option will disable receiving and sending messages on mobile internet connections</string>
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
-    <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers</string>
+    <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
+    <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers, which can lead to connection problems</string>
     <string name="title_advanced_socks_hint">Using a remote proxy server is insecure because proxy connections are not encrypted</string>
     <string name="title_advanced_roaming_hint">Messages headers will always be fetched when roaming. You can use the device\'s roaming setting to disable internet while roaming.</string>
 
     <string name="title_advanced_browse_hint">Fetch more messages when scrolling down</string>
 
     <string name="title_advanced_layout_hint">Switching to a more compact layout and changing the message text size can be done in the top action bar menu in the message view</string>
+    <string name="title_advanced_startup_hint">Long press any folder in the folder list to add or remove it from the list of unified folders</string>
     <string name="title_advanced_date_hint">Messages are only grouped by date if they are sorted by time</string>
+    <string name="title_advanced_navbar_colorize_hint">Whether this works depends on the Android version and variant</string>
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
     <string name="title_advanced_gravatars_hint">There might be a privacy risk</string>
     <string name="title_advanced_name_email_hint">When disabled only names will be shown when available</string>
@@ -744,7 +752,6 @@
     <string name="title_ask_help">Help improve FairEmail</string>
     <string name="title_ask_reporting">Send error reports?</string>
     <string name="title_reporting_why">Error reporting will help improve FairEmail</string>
-    <string name="title_message_bar_hint">Tap the cross icon to archive, delete or report a message as spam and to remove this notice</string>
 
     <string name="title_ask_review">Please review FairEmail</string>
     <string name="title_ask_review_rationale">
@@ -771,6 +778,7 @@
     <string name="title_received">Received:</string>
     <string name="title_size">Size:</string>
     <string name="title_subject">Subject:</string>
+    <string name="title_attachment">Attachment:</string>
     <string name="title_body_hint">Your message</string>
     <string name="title_discard">Discard</string>
     <string name="title_save">Save</string>
@@ -1236,12 +1244,14 @@
     <string-array name="startupValues" translatable="false">
         <item>unified</item>
         <item>folders</item>
+        <item>primary</item>
         <item>accounts</item>
     </string-array>
 
     <string-array name="startupNames">
         <item>Unified inbox</item>
         <item>Unified folders</item>
+        <item>Primary account folders</item>
         <item>Accounts</item>
     </string-array>
 
@@ -1359,8 +1369,8 @@
     </string-array>
 
     <string-array name="receiptNames">
-        <item>Read receipt</item>
-        <item>Delivery receipt</item>
+        <item>Read receipt only</item>
+        <item>Delivery receipt only</item>
         <item>Read+delivery receipt</item>
     </string-array>
 

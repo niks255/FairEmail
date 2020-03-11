@@ -122,6 +122,12 @@ public interface DaoAccount {
     @Query("UPDATE account SET synchronize = :synchronize WHERE id = :id")
     int setAccountSynchronize(long id, boolean synchronize);
 
+    @Query("UPDATE account SET thread = :thread WHERE id = :id")
+    int setAccountThread(long id, Long thread);
+
+    @Query("SELECT thread FROM account WHERE id = :id")
+    Long getAccountThread(long id);
+
     @Query("UPDATE account SET state = :state WHERE id = :id")
     int setAccountState(long id, String state);
 
@@ -148,6 +154,9 @@ public interface DaoAccount {
 
     @Query("UPDATE account SET `order` = :order WHERE id = :id")
     int setAccountOrder(long id, Integer order);
+
+    @Query("UPDATE account SET partial_fetch = :partial_fetch WHERE id = :id")
+    int setAccountPartialFetch(long id, boolean partial_fetch);
 
     @Query("UPDATE account SET warning = :warning WHERE id = :id")
     int setAccountWarning(long id, String warning);

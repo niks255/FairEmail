@@ -71,8 +71,8 @@
     <string name="title_block_domain">Estä lähettäjän verkkotunnus</string>
     <string name="title_block_sender_hint">Lähettäjän estäminen luo säännön viestien käsittelemiseksi roskapostina.
         Sääntöjen luominen ja käyttö ovat pro-ominaisuuksia.    </string>
-    <string name="title_notification_waiting">Odotetaan sopivaa yhteyttä</string>
     <string name="title_notification_sending">Lähetetään viestejä</string>
+    <string name="title_notification_waiting">Odotetaan sopivaa yhteyttä</string>
     <string name="title_notification_failed">\'%1$s\' epäonnistui</string>
     <string name="title_notification_alert">Palvelimen \'%1$s\' hälytys</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -110,6 +110,7 @@
     <string name="title_setup_welcome">        Viestien vastaanottaminen ja lähettäminen vaatii tilin ja identiteetin asettamisen, kuten missä tahansa sähköpostisovelluksessa.
         Pika-asennus luo sekä tilin että identiteetin nimesi, sähköpostiosoitteesi, ja salasanasi perusteella.
         Tilit ja identiteetit (aliakset) voi asettaa tarvittaessa myös erikseen.
+        Epästandardeja protokollia, kuten Microsoft Exchange Web Services ja Microsoft ActiveSync, ei tueta. Katso myös sovelluksen kuvaus.
     </string>
     <string name="title_setup_quick">Pika-asennus</string>
     <string name="title_setup_quick_remark">Tilin ja identiteetin nopeaan asettamiseen useimmille palveluntarjoajille</string>
@@ -227,6 +228,8 @@
     <string name="title_advanced_signature_location">Allekirjoituksen sijainti</string>
     <string name="title_advanced_signature_end">Lisää allekirjoitus lainatun/edelleenlähetetyn viestin jälkeen</string>
     <string name="title_advanced_plain_only">Lähetä muotoilemattomana tekstinä oletuksena</string>
+    <string name="title_advanced_flow">\'format flowed\' muotoilemattomalle tekstille</string>
+    <string name="title_advanced_receipt">Pyydettäessä kuittausta</string>
     <string name="title_advanced_usenet_signature">Usenetin allekirjoitustyyli</string>
     <string name="title_advanced_remove_signatures">Poista tunnistetut allekirjoitukset</string>
     <string name="title_advanced_resize_images">Muuta upotettujen kuvien koot</string>
@@ -239,12 +242,12 @@
     <string name="title_advanced_download">Ladattavien viestien ja liitteiden maksimikoko käytön mukaan laskutettavaa yhteyttä käytettäessä</string>
     <string name="title_advanced_roaming">Lataa viestit ja liitteet verkkovierailun aikana</string>
     <string name="title_advanced_rlah">Kotimaanhintaiset verkkovierailut</string>
+    <string name="title_advanced_timeout">Yhteyden aikakatkaisu (sekuntia)</string>
     <string name="title_advanced_ssl_harden">Koveta SSL-yhteydet</string>
     <string name="title_advanced_socks">Käytä SOCKS-proxypalvelinta</string>
     <string name="title_advanced_manage_connectivity">Hallitse verkkoyhteyksiä</string>
     <string name="title_advanced_caption_general">Yleiset</string>
     <string name="title_advanced_caption_conversation">Keskustelu</string>
-    <string name="title_advanced_caption_message">Viesti</string>
     <string name="title_advanced_landscape">Käytä kahta saraketta vaakatilassa</string>
     <string name="title_advanced_landscape3">Salli kiinteä navigointivalikko vaakatilassa</string>
     <string name="title_advanced_startup">Näytä aloitusnäytössä</string>
@@ -385,12 +388,15 @@
     <string name="title_advanced_metered_hint">Käytön mukaan laskutettavat yhteydet ovat yleensä mobiiliyhteyksiä tai maksullisia Wi-Fi-yhteyspisteitä</string>
     <string name="title_advanced_metered_warning">Tämän kytkeminen pois estää viestien vastaanoton ja lähetyksen mobiiliyhteyttä käytettessä</string>
     <string name="title_advanced_rlah_hint">Oletetaan, että EU:ssa on kotimaanhintaiset verkkovierailut</string>
-    <string name="title_advanced_ssl_harden_hint">Tämän käyttö poistaa käytöstä heikot SSL-protokollat ja salakirjoitukset</string>
+    <string name="title_advanced_timeout_hint">Luku-/kirjoitusaikakatkaisu asetetaan kaksi kertaa niin pitkäksi kuin yhteyden aikakatkaisu. Korkeat arvot aiheuttavat enemmän akun käyttöä.</string>
+    <string name="title_advanced_ssl_harden_hint">Tämän käyttöönotto kytkee heikot SSL-protokollat ja salakirjoitukset pois käytöstä, mikä voi aiheuttaa yhteysongelmia</string>
     <string name="title_advanced_socks_hint">Välityspalvelimen käyttö ei ole turvallista, koska yhteys ei ole salattu</string>
     <string name="title_advanced_roaming_hint">Viestien tunnistetiedot haetaan aina myös verkkovierailun aikana. Laitteen asetuksista voi kytkeä verkkoyhteyden pois verkkovieraillessa.</string>
     <string name="title_advanced_browse_hint">Hae lisää viestejä alaspäin vieritettäessä</string>
     <string name="title_advanced_layout_hint">Tiiviimpään näkymään vaihtaminen ja viestin tekstin koon vaihtaminen voidaan tehdä viestinäkymän yläreunan toimintopalkista</string>
+    <string name="title_advanced_startup_hint">Paina pitkään mitä tahansa kansiota kansiolistauksessa lisätäksesi tai poistaaksesi sen yhdistettyjen kansioiden listasta</string>
     <string name="title_advanced_date_hint">Viestit ryhmitellään päivämäärän mukaan vain, jos ne on lajiteltu ajan mukaan</string>
+    <string name="title_advanced_navbar_colorize_hint">Tämän toimivuus riippuu Android-versiosta ja -muunnelmasta</string>
     <string name="title_advanced_threading_hint">Ryhmittele toisiinsa liittyvät viestit</string>
     <string name="title_advanced_gravatars_hint">Mahdollinen uhka yksityisyydelle</string>
     <string name="title_advanced_name_email_hint">Vain saatavilla olevat nimet näytetään, kun pois käytöstä</string>
@@ -649,7 +655,6 @@
     <string name="title_ask_help">Auta parantamaan FairEmailia</string>
     <string name="title_ask_reporting">Lähetetäänkö virheraportteja?</string>
     <string name="title_reporting_why">Virheraportointi auttaa FairEmailin kehittämisessä</string>
-    <string name="title_message_bar_hint">Napauta ristikuvaketta arkistoidaksesi, poistaaksesi tai merkitäksesi viestin roskapostiksi ja poistaaksesi tämän huomautuksen</string>
     <string name="title_ask_review">Ole hyvä ja arvostele FairEmail</string>
     <string name="title_ask_review_rationale">Olet käyttänyt FairEmailia jonkin aikaa.
         Olisi hienoa, jos voisit arvioida FairEmailin Play Kaupassa.
@@ -671,6 +676,7 @@
     <string name="title_received">Vastaanotettu:</string>
     <string name="title_size">Koko:</string>
     <string name="title_subject">Aihe:</string>
+    <string name="title_attachment">Liite:</string>
     <string name="title_body_hint">Viestisi</string>
     <string name="title_discard">Hylkää</string>
     <string name="title_save">Tallenna</string>
@@ -706,6 +712,7 @@
     <string name="title_no_key">Ei yksityistä avainta</string>
     <string name="title_invalid_key">Virheellinen yksityinen avain</string>
     <string name="title_send_plain_text">Lähetä muotoilemattomana tekstinä</string>
+    <string name="title_send_receipt">Pyydä kuittausta</string>
     <string name="title_send_receipt_remark">Useimmat palveluntarjoajat ja sähköpostisovellukset jättävät kuittauspyynnöt huomioimatta</string>
     <string name="title_from_missing">Lähettäjä puuttuu</string>
     <string name="title_to_missing">Vastaanottaja puuttuu</string>
@@ -1074,6 +1081,7 @@
     <string-array name="startupNames">
         <item>Yhdistetty saapuneet</item>
         <item>Yhdistetyt kansiot</item>
+        <item>Ensisijaisen tilin kansiot</item>
         <item>Tilit</item>
     </string-array>
     <string-array name="downloadNames">
@@ -1133,6 +1141,11 @@
         <item>Pieni</item>
         <item>Keskikokoinen</item>
         <item>Suuri</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>Vastaanottokuittaus</item>
+        <item>Toimituskuittaus</item>
+        <item>Vastaanotto- ja toimituskuittaus</item>
     </string-array>
     <string-array name="signatureNames">
         <item>Tekstin yläpuolella</item>

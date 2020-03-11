@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
@@ -49,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -97,11 +100,9 @@ public class EmailService implements AutoCloseable {
     static final int PURPOSE_USE = 2;
     static final int PURPOSE_SEARCH = 3;
 
+    final static int DEFAULT_CONNECT_TIMEOUT = 20; // seconds
+
     private final static int SEARCH_TIMEOUT = 2 * 60 * 1000; // milliseconds
-    private final static int CONNECT_TIMEOUT = 60 * 1000; // milliseconds
-    private final static int CONNECT_TIMEOUT_CHECK = 30 * 1000; // milliseconds
-    private final static int WRITE_TIMEOUT = 60 * 1000; // milliseconds
-    private final static int READ_TIMEOUT = 60 * 1000; // milliseconds
     private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
     private final static int POOL_TIMEOUT = 45 * 1000; // milliseconds, default 45 sec
 
@@ -155,20 +156,17 @@ public class EmailService implements AutoCloseable {
         properties.put("mail." + protocol + ".sasl.realm", realm == null ? "" : realm);
         properties.put("mail." + protocol + ".auth.ntlm.domain", realm == null ? "" : realm);
 
-        // TODO: make timeouts configurable?
         // writetimeout: one thread overhead
+        int timeout = prefs.getInt("timeout", DEFAULT_CONNECT_TIMEOUT) * 1000;
+        Log.i("Timeout=" + timeout);
         if (purpose == PURPOSE_SEARCH) {
-            properties.put("mail." + protocol + ".connectiontimeout", Integer.toString(CONNECT_TIMEOUT));
+            properties.put("mail." + protocol + ".connectiontimeout", Integer.toString(timeout));
             properties.put("mail." + protocol + ".writetimeout", Integer.toString(SEARCH_TIMEOUT));
             properties.put("mail." + protocol + ".timeout", Integer.toString(SEARCH_TIMEOUT));
-        } else if (purpose == PURPOSE_CHECK) {
-            properties.put("mail." + protocol + ".connectiontimeout", Integer.toString(CONNECT_TIMEOUT_CHECK));
-            properties.put("mail." + protocol + ".writetimeout", Integer.toString(WRITE_TIMEOUT));
-            properties.put("mail." + protocol + ".timeout", Integer.toString(READ_TIMEOUT));
         } else {
-            properties.put("mail." + protocol + ".connectiontimeout", Integer.toString(CONNECT_TIMEOUT));
-            properties.put("mail." + protocol + ".writetimeout", Integer.toString(WRITE_TIMEOUT));
-            properties.put("mail." + protocol + ".timeout", Integer.toString(READ_TIMEOUT));
+            properties.put("mail." + protocol + ".connectiontimeout", Integer.toString(timeout));
+            properties.put("mail." + protocol + ".writetimeout", Integer.toString(timeout * 2));
+            properties.put("mail." + protocol + ".timeout", Integer.toString(timeout * 2));
         }
 
         if (debug && BuildConfig.DEBUG)
@@ -357,12 +355,17 @@ public class EmailService implements AutoCloseable {
     private void connect(
             String host, int port, String user, String password,
             SSLSocketFactoryService factory) throws MessagingException {
+        InetAddress main = null;
         try {
             //if (BuildConfig.DEBUG)
             //    throw new MailConnectException(
             //            new SocketConnectException("Debug", new IOException("Test"), host, port, 0));
 
-            _connect(host, port, user, password, factory);
+            main = InetAddress.getByName(host);
+            EntityLog.log(context, "Connecting to " + main);
+            _connect(main.getHostAddress(), port, user, password, factory);
+        } catch (UnknownHostException ex) {
+            throw new MessagingException("Unknown host " + host, ex);
         } catch (MessagingException ex) {
             boolean ioError = false;
             Throwable ce = ex;
@@ -378,16 +381,63 @@ public class EmailService implements AutoCloseable {
                 try {
                     // Some devices resolve IPv6 addresses while not having IPv6 connectivity
                     InetAddress[] iaddrs = InetAddress.getAllByName(host);
-                    Log.i("Fallback count=" + iaddrs.length);
-                    if (iaddrs.length > 1)
-                        for (InetAddress iaddr : iaddrs)
-                            try {
-                                Log.i("Falling back to " + iaddr.getHostAddress());
-                                _connect(iaddr.getHostAddress(), port, user, password, factory);
-                                return;
-                            } catch (MessagingException ex1) {
-                                Log.w(ex1);
-                            }
+                    boolean ip4 = (main instanceof Inet4Address);
+                    boolean ip6 = (main instanceof Inet6Address);
+
+                    boolean has4 = false;
+                    boolean has6 = false;
+                    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                    while (interfaces != null && interfaces.hasMoreElements()) {
+                        NetworkInterface ni = interfaces.nextElement();
+                        for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
+                            InetAddress addr = iaddr.getAddress();
+                            boolean local = (addr.isLoopbackAddress() || addr.isLinkLocalAddress());
+                            EntityLog.log(context, "Interface=" + ni + " addr=" + addr + " local=" + local);
+                            if (!local)
+                                if (addr instanceof Inet4Address)
+                                    has4 = true;
+                                else if (addr instanceof Inet6Address)
+                                    has6 = true;
+                        }
+                    }
+
+                    EntityLog.log(context, "Address main=" + main +
+                            " count=" + iaddrs.length +
+                            " ip4=" + ip4 + "/" + has4 +
+                            " ip6=" + ip6 + "/" + has6);
+
+                    for (InetAddress iaddr : iaddrs) {
+                        EntityLog.log(context, "Address resolved=" + iaddr);
+
+                        if (iaddr.equals(main))
+                            continue;
+
+                        if (iaddr instanceof Inet4Address) {
+                            if (ip4 || !has4)
+                                continue;
+                            ip4 = true;
+                        }
+
+                        if (iaddr instanceof Inet6Address) {
+                            if (ip6 || !has6)
+                                continue;
+                            ip6 = true;
+                        }
+
+                        String prop = "mail." + protocol + ".connectiontimeout";
+                        String timeout = properties.getProperty(prop);
+                        try {
+                            EntityLog.log(context, "Falling back to " + iaddr.getHostAddress());
+                            properties.put(prop, Integer.toString(DEFAULT_CONNECT_TIMEOUT / 2));
+                            _connect(iaddr.getHostAddress(), port, user, password, factory);
+                            return;
+                        } catch (MessagingException ex1) {
+                            Log.w(ex1);
+                        } finally {
+                            if (timeout != null)
+                                properties.put(prop, timeout);
+                        }
+                    }
                 } catch (Throwable ex1) {
                     Log.w(ex1);
                 }

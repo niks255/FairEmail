@@ -106,6 +106,7 @@ import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.StoreClosedException;
 import javax.mail.UIDFolder;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -123,6 +124,8 @@ import static androidx.core.app.NotificationCompat.DEFAULT_SOUND;
 import static javax.mail.Folder.READ_WRITE;
 
 class Core {
+    static final Map<Long, EntityFolder> newMessages = new HashMap<>();
+
     private static final int MAX_NOTIFICATION_COUNT = 25; // per group
     private static final long AFTER_SEND_DELAY = 15 * 1000L; // milliseconds
     private static final int SYNC_CHUNCK_SIZE = 200;
@@ -162,8 +165,10 @@ class Core {
                             " group=" + group +
                             " retry=" + retry);
 
-                    if (ifolder != null && !ifolder.isOpen())
+                    if (ifolder != null && !ifolder.isOpen()) {
                         state.error(new FolderClosedException(ifolder));
+                        break;
+                    }
 
                     // Fetch most recent copy of message
                     EntityMessage message = null;
@@ -1018,7 +1023,7 @@ class Core {
         // Delete message
         DB db = DB.getInstance(context);
 
-        if (!account.leave_on_server && EntityFolder.INBOX.equals(folder.type)) {
+        if (EntityFolder.INBOX.equals(folder.type)) {
             Map<String, String> caps = istore.capabilities();
 
             Message[] imessages = ifolder.getMessages();
@@ -2279,7 +2284,7 @@ class Core {
             }
 
             if (message.total != null && message.total == 0)
-                reportEmptyMessage(context, account, istore);
+                reportEmptyMessage(context, state, account, istore);
 
             try {
                 db.beginTransaction();
@@ -2300,6 +2305,10 @@ class Core {
 
                 // Prepare scroll to top
                 if (!message.ui_seen && message.received > account.created) {
+                    synchronized (newMessages) {
+                        newMessages.put(folder.id, folder);
+                    }
+
                     Intent report = new Intent(FragmentMessages.ACTION_NEW_MESSAGE);
                     report.putExtra("folder", folder.id);
                     report.putExtra("unified", folder.unified);
@@ -2352,7 +2361,7 @@ class Core {
 
                     Long size = parts.getBodySize();
                     if (TextUtils.isEmpty(body) && size != null && size > 0)
-                        reportEmptyMessage(context, account, istore);
+                        reportEmptyMessage(context, state, account, istore);
                 }
             }
 
@@ -2686,7 +2695,7 @@ class Core {
 
                     Long size = parts.getBodySize();
                     if (TextUtils.isEmpty(body) && size != null && size > 0)
-                        reportEmptyMessage(context, account, istore);
+                        reportEmptyMessage(context, state, account, istore);
                 }
             }
 
@@ -2703,7 +2712,7 @@ class Core {
         }
     }
 
-    private static void reportEmptyMessage(Context context, EntityAccount account, IMAPStore istore) {
+    private static void reportEmptyMessage(Context context, State state, EntityAccount account, IMAPStore istore) {
         try {
             if (istore.hasCapability("ID")) {
                 Map<String, String> id = new LinkedHashMap<>();
@@ -2720,6 +2729,14 @@ class Core {
                 Log.e("Empty message " + account.host + " partial=" + account.partial_fetch);
         } catch (Throwable ex) {
             Log.w(ex);
+        }
+
+        // Auto disable partial fetch
+        if (account.partial_fetch) {
+            account.partial_fetch = false;
+            DB db = DB.getInstance(context);
+            db.account().setAccountPartialFetch(account.id, account.partial_fetch);
+            state.error(new StoreClosedException(istore));
         }
     }
 
@@ -2939,7 +2956,7 @@ class Core {
             // Build pending intents
             Intent unified = new Intent(context, ActivityView.class)
                     .setAction("unified" + (notify_remove ? ":" + group : ""));
-            unified.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            unified.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent piUnified = PendingIntent.getActivity(context, ActivityView.REQUEST_UNIFIED, unified, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent clear = new Intent(context, ServiceUI.class).setAction("clear:" + group);
@@ -3454,7 +3471,8 @@ class Core {
                 // BYE, Socket is closed
                 recoverable = false;
 
-            if (ex instanceof FolderClosedException ||
+            if (ex instanceof StoreClosedException ||
+                    ex instanceof FolderClosedException ||
                     ex instanceof FolderNotFoundException)
                 // Lost folder connection to server
                 recoverable = false;

@@ -72,8 +72,8 @@
     <string name="title_block_sender_hint">        Göndereni engellemek, gelecekteki iletileri otomatik olarak spam klasörüne taşımak için bir kural oluşturacaktır.
         Kural oluşturma ve kullanma, pro sürümüne has bir özelliktir.
     </string>
-    <string name="title_notification_waiting">Uygun bağlantı bekleniyor</string>
     <string name="title_notification_sending">İletileri gönderiliyor</string>
+    <string name="title_notification_waiting">Uygun bağlantı bekleniyor</string>
     <string name="title_notification_failed">\'%1$s\' başarısız oldu</string>
     <string name="title_notification_alert">\'%1$s\' sunucu uyarısı</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -106,10 +106,6 @@
     <string name="title_edit_folder">Klasörü düzenle</string>
     <string name="title_setup">Ayarlar</string>
     <string name="title_setup_help">Yardım</string>
-    <string name="title_setup_welcome">Mesaj alma ve gönderme, başka bir e-posta uygulamasında olduğu gibi bir hesap ve kimlik kurmayı gerektirir.
-        Hızlı Kurulum, adınızı, e-posta adresinizi ve şifrenizi sorarak hem bir hesap hem de kimlik oluşturacaktır.
-        Hesaplar ve kimlikler (diğer adlar) gerekirse manüel olarak de kurulabilir.
-    </string>
     <string name="title_setup_quick">Hızlı Kurulum</string>
     <string name="title_setup_quick_remark">Bir hesabı çabucak kurmak için ve çoğu e posta sağlayıcı için kimlik ayarları</string>
     <string name="title_setup_quick_hint">Hızlı kurulum, yapılandırma bilgilerini autoconfig.thunderbird.net adresinden alır</string>
@@ -377,7 +373,6 @@
     <string name="title_advanced_metered_hint">Ölçülü bağlantılar genellikle mobil bağlantılar veya ücretli Wi-Fi noktalarıdır</string>
     <string name="title_advanced_metered_warning">Bu seçeneğin devre dışı bırakılması mobil internet bağlantısında ileti almayı ve göndermeyi devre dışı bırakacaktır</string>
     <string name="title_advanced_rlah_hint">AB içinde dolaşımda olmadığını varsayma</string>
-    <string name="title_advanced_ssl_harden_hint">Bunu etkinleştirmek zayıf SSL protokollerini ve şifrelemelerini devre dışı bırakacaktır</string>
     <string name="title_advanced_socks_hint">Proxy bağlantıları şifreli olmadığından uzak bir proxy sunucusu kullanmak güvensizdir</string>
     <string name="title_advanced_roaming_hint">Dolaşım halindeyken mesaj başlıkları her zaman alınacaktır. Cihazın dolaşım ayarlarından dolaşım halindeyken interneti devre dışı bırakabilirsiniz.</string>
     <string name="title_advanced_browse_hint">Aşağı doğru kaydırdığında daha çok ileti getirir</string>
@@ -1054,7 +1049,8 @@
     <string-array name="startupNames">
         <item>Birleşik Gelen Kutusu</item>
         <item>Birleşik klasörler</item>
-        <item>Hesaplar</item>
+        <item>Primary account folders</item>
+        <item>Accounts</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 KB</item>

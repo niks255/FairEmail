@@ -16,6 +16,18 @@
         android:layout_height="wrap_content"
         android:paddingBottom="24dp">
 
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvCaptionGeneral"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/title_advanced_caption_general"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swKeyboard"
             android:layout_width="0dp"
@@ -25,7 +37,7 @@
             android:text="@string/title_advanced_keyboard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCaptionGeneral"
             app:switchPadding="12dp" />
 
         <eu.faircode.email.FixedTextView
@@ -134,27 +146,16 @@
             app:layout_constraintTop_toBottomOf="@id/swQuoteReply"
             app:switchPadding="12dp" />
 
-        <eu.faircode.email.FixedTextView
-            android:id="@+id/tvReceiptType"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swFormatFlowed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="48dp"
-            android:text="@string/title_advanced_receipt"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="?android:attr/textColorPrimary"
+            android:text="@string/title_advanced_flow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swPlainOnly" />
-
-        <Spinner
-            android:id="@+id/spReceiptType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:entries="@array/receiptNames"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvReceiptType" />
+            app:layout_constraintTop_toBottomOf="@id/swPlainOnly"
+            app:switchPadding="12dp" />
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvSignatureLocation"
@@ -167,7 +168,7 @@
             android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spReceiptType" />
+            app:layout_constraintTop_toBottomOf="@id/swFormatFlowed" />
 
         <Spinner
             android:id="@+id/spSignatureLocation"
@@ -288,6 +289,28 @@
             app:layout_constraintTop_toBottomOf="@id/tvSendReminders"
             app:switchPadding="12dp" />
 
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvReceiptType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="48dp"
+            android:text="@string/title_advanced_receipt"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swReceipt" />
+
+        <Spinner
+            android:id="@+id/spReceiptType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:entries="@array/receiptNames"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvReceiptType" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swLookupMx"
             android:layout_width="0dp"
@@ -296,7 +319,7 @@
             android:text="@string/title_advanced_lookup_mx"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swReceipt"
+            app:layout_constraintTop_toBottomOf="@id/spReceiptType"
             app:switchPadding="12dp" />
 
         <eu.faircode.email.FixedTextView

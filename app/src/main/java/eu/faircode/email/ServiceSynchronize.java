@@ -790,6 +790,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         try {
             wlAccount.acquire();
 
+            final DB db = DB.getInstance(this);
+            final ExecutorService executor =
+                    Helper.getBackgroundExecutor(1, "account_" + account.id);
+
+            long thread = Thread.currentThread().getId();
+            Long currentThread = thread;
+            db.account().setAccountThread(account.id, thread);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (account.notify)
                     account.createNotificationChannel(ServiceSynchronize.this);
@@ -807,14 +815,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     Log.w(account.name + " backoff " + ex.toString());
                 }
 
-            final DB db = DB.getInstance(this);
-            final ExecutorService executor =
-                    Helper.getBackgroundExecutor(1, "account_" + account.id);
-
             state.setBackoff(CONNECT_BACKOFF_START);
-            while (state.isRunning()) {
+            while (state.isRunning() &&
+                    currentThread != null && currentThread.equals(thread)) {
                 state.reset();
-                Log.i(account.name + " run");
+                Log.i(account.name + " run thread=" + currentThread);
 
                 Handler handler = new Handler(getMainLooper());
                 final List<TwoStateOwner> cowners = new ArrayList<>();
@@ -843,29 +848,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             if ("Still here".equals(message) && !account.ondemand) {
                                 long now = new Date().getTime();
-                                if (now - start > STILL_THERE_THRESHOLD)
-                                    return;
-
-                                boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
-                                if (!auto_optimize)
-                                    return;
-
-                                int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
-                                if (pollInterval == 0) {
-                                    prefs.edit().putInt("poll_interval", STILL_THERE_POLL_INTERVAL).apply();
-                                    try {
-                                        db.beginTransaction();
-                                        for (EntityAccount a : db.account().getAccounts())
-                                            db.account().setAccountPollExempted(a.id, !a.id.equals(account.id));
-                                        db.setTransactionSuccessful();
-                                    } finally {
-                                        db.endTransaction();
-                                    }
-                                    ServiceSynchronize.eval(ServiceSynchronize.this, message);
-                                } else if (account.poll_exempted) {
-                                    db.account().setAccountPollExempted(account.id, false);
-                                    ServiceSynchronize.eval(ServiceSynchronize.this, message);
-                                }
+                                if (now - start < STILL_THERE_THRESHOLD)
+                                    optimizeAccount(ServiceSynchronize.this, account, message);
                             }
                         } else
                             try {
@@ -959,6 +943,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     final boolean capIdle = iservice.hasCapability("IDLE");
                     Log.i(account.name + " idle=" + capIdle);
+                    if (!capIdle)
+                        optimizeAccount(ServiceSynchronize.this, account, "IDLE");
 
                     db.account().setAccountState(account.id, "connected");
                     db.account().setAccountError(account.id, null);
@@ -1536,8 +1522,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         boolean enabled = prefs.getBoolean("enabled", true);
                         int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
                         if (!enabled || account.ondemand || (pollInterval > 0 && !account.poll_exempted)) {
-                            int syncs = db.operation().deleteOperations(account.id, EntityOperation.SYNC);
-                            Log.i(account.name + " cancelled syncs=" + syncs);
+                            List<EntityOperation> syncs = db.operation().getOperations(account.id, EntityOperation.SYNC);
+                            if (syncs != null) {
+                                for (EntityOperation op : syncs) {
+                                    db.folder().setFolderSyncState(op.folder, null);
+                                    db.operation().deleteOperation(op.id);
+                                }
+                                Log.i(account.name + " cancelled syncs=" + syncs.size());
+                            }
                         }
 
                         // Long back-off period, let device sleep
@@ -1573,7 +1565,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     else if (backoff < CONNECT_BACKOFF_AlARM_MAX * 60)
                         state.setBackoff(backoff * 2);
                 }
+
+                currentThread = Thread.currentThread().getId();
             }
+
+            if (currentThread == null || !currentThread.equals(thread))
+                Log.e(account.name + " orphan thread id=" + currentThread + "/" + thread);
         } finally {
             EntityLog.log(this, account.name + " stopped");
             wlAccount.release();
@@ -1584,7 +1581,34 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         return (message != null &&
                 (message.contains("Too many simultaneous connections") /* Gmail */ ||
                         message.contains("Maximum number of connections") /* ... from user+IP exceeded */ /* Dovecot */ ||
-                        message.contains("Too many concurrent connections") /* ... to this mailbox */));
+                        message.contains("Too many concurrent connections") /* ... to this mailbox */ ||
+                        message.contains("User is authenticated but not connected") /* Outlook */));
+    }
+
+    private void optimizeAccount(Context context, EntityAccount account, String reason) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
+        if (!auto_optimize)
+            return;
+
+        DB db = DB.getInstance(context);
+
+        int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+        if (pollInterval == 0) {
+            prefs.edit().putInt("poll_interval", STILL_THERE_POLL_INTERVAL).apply();
+            try {
+                db.beginTransaction();
+                for (EntityAccount a : db.account().getAccounts())
+                    db.account().setAccountPollExempted(a.id, !a.id.equals(account.id));
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);
+        } else if (account.poll_exempted) {
+            db.account().setAccountPollExempted(account.id, false);
+            ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);
+        }
     }
 
     private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {

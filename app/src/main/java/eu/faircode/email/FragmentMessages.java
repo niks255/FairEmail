@@ -2156,25 +2156,67 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             protected MoreResult onExecute(Context context, Bundle args) {
                 long[] ids = args.getLongArray("ids");
 
-                MoreResult result = new MoreResult();
+                Map<Long, EntityAccount> accounts = new HashMap<>();
+                Map<Long, EntityFolder> folders = new HashMap<>();
 
                 DB db = DB.getInstance(context);
 
                 boolean pop = false;
+                MoreResult result = new MoreResult();
                 result.folders = new ArrayList<>();
+
+                if (ids.length > 100) {
+                    result.seen = true;
+                    result.unseen = true;
+                    result.flagged = true;
+                    result.unflagged = true;
+                    result.importance = -1;
+                    result.visible = true;
+                    result.hidden = true;
+                }
+
                 for (long id : ids) {
                     EntityMessage message = db.message().getMessage(id);
                     if (message == null)
                         continue;
 
-                    EntityAccount account = db.account().getAccount(message.account);
-                    if (account == null)
-                        continue;
+                    EntityAccount account = accounts.get(message.account);
+                    if (account == null) {
+                        account = db.account().getAccount(message.account);
+                        if (account == null)
+                            continue;
+                        accounts.put(account.id, account);
+                    }
+
+                    EntityFolder folder = folders.get(message.folder);
+                    if (folder == null) {
+                        folder = db.folder().getFolder(message.folder);
+                        if (folder == null)
+                            continue;
+                        folders.put(folder.id, folder);
+                    }
+
                     if (account.protocol != EntityAccount.TYPE_IMAP)
                         pop = true;
 
                     if (!result.folders.contains(message.folder))
                         result.folders.add(message.folder);
+
+                    boolean isArchive = EntityFolder.ARCHIVE.equals(folder.type);
+                    boolean isTrash = (EntityFolder.TRASH.equals(folder.type) || account.protocol != EntityAccount.TYPE_IMAP);
+                    boolean isJunk = EntityFolder.JUNK.equals(folder.type);
+                    boolean isDrafts = EntityFolder.DRAFTS.equals(folder.type);
+
+                    result.isArchive = (result.isArchive == null ? isArchive : result.isArchive && isArchive);
+                    result.isTrash = (result.isTrash == null ? isTrash : result.isTrash && isTrash);
+                    result.isJunk = (result.isJunk == null ? isJunk : result.isJunk && isJunk);
+                    result.isDrafts = (result.isDrafts == null ? isDrafts : result.isDrafts && isDrafts);
+
+                    if (result.seen && result.unseen &&
+                            result.flagged && result.unflagged &&
+                            result.importance == -1 &&
+                            result.visible && result.hidden)
+                        continue;
 
                     List<EntityMessage> messages = db.message().getMessagesByThread(
                             message.account, message.thread, threading ? null : id, null);
@@ -2202,21 +2244,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             else
                                 result.hidden = true;
                     }
+                }
 
-                    EntityFolder folder = db.folder().getFolder(message.folder);
-                    boolean isArchive = EntityFolder.ARCHIVE.equals(folder.type);
-                    boolean isTrash = (EntityFolder.TRASH.equals(folder.type) || account.protocol != EntityAccount.TYPE_IMAP);
-                    boolean isJunk = EntityFolder.JUNK.equals(folder.type);
-                    boolean isDrafts = EntityFolder.DRAFTS.equals(folder.type);
-
-                    result.isArchive = (result.isArchive == null ? isArchive : result.isArchive && isArchive);
-                    result.isTrash = (result.isTrash == null ? isTrash : result.isTrash && isTrash);
-                    result.isJunk = (result.isJunk == null ? isJunk : result.isJunk && isJunk);
-                    result.isDrafts = (result.isDrafts == null ? isDrafts : result.isDrafts && isDrafts);
-
-                    boolean hasArchive = (db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE) != null);
-                    boolean hasTrash = (db.folder().getFolderByType(message.account, EntityFolder.TRASH) != null);
-                    boolean hasJunk = (db.folder().getFolderByType(message.account, EntityFolder.JUNK) != null);
+                for (EntityAccount account : accounts.values()) {
+                    boolean hasArchive = (db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE) != null);
+                    boolean hasTrash = (db.folder().getFolderByType(account.id, EntityFolder.TRASH) != null);
+                    boolean hasJunk = (db.folder().getFolderByType(account.id, EntityFolder.JUNK) != null);
 
                     result.hasArchive = (result.hasArchive == null ? hasArchive : result.hasArchive && hasArchive);
                     result.hasTrash = (result.hasTrash == null ? hasTrash : result.hasTrash && hasTrash);
@@ -3751,6 +3784,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (handleThreadActions(messages))
                     return;
 
+            checkNewMessages();
+
             Log.i("Submit messages=" + messages.size());
             adapter.submitList(messages);
 
@@ -3867,7 +3902,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             boolean expand_all = prefs.getBoolean("expand_all", false);
             if (expand_all)
                 for (TupleMessageEx message : messages)
-                    if (message != null && message.ui_seen)
+                    if (message != null && message.ui_seen && !message.duplicate)
                         iProperties.setExpanded(message, true);
         } else {
             if (autoCloseCount > 0 && (autoclose || onclose != null)) {
@@ -4476,12 +4511,37 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         long fid = intent.getLongExtra("folder", -1);
         boolean unified = intent.getBooleanExtra("unified", false);
 
+        synchronized (Core.newMessages) {
+            Core.newMessages.remove(fid);
+        }
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean autoscroll = prefs.getBoolean("autoscroll", true);
 
         if (autoscroll &&
                 ((viewType == AdapterMessage.ViewType.UNIFIED && unified) ||
                         (viewType == AdapterMessage.ViewType.FOLDER && folder == fid)))
+            adapter.gotoTop();
+    }
+
+    private void checkNewMessages() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean autoscroll = prefs.getBoolean("autoscroll", true);
+
+        boolean newMessages = false;
+        synchronized (Core.newMessages) {
+            for (long fid : new ArrayList<>(Core.newMessages.keySet())) {
+                EntityFolder f = Core.newMessages.get(fid);
+                if (f != null &&
+                        ((viewType == AdapterMessage.ViewType.UNIFIED && f.unified) ||
+                                (viewType == AdapterMessage.ViewType.FOLDER && folder == f.id))) {
+                    newMessages = true;
+                    Core.newMessages.remove(fid);
+                }
+            }
+        }
+
+        if (autoscroll && newMessages)
             adapter.gotoTop();
     }
 
@@ -5137,7 +5197,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     .getCertificate(certHolder);
                             try {
                                 Date signingTime;
-                                Attribute attr = signer.getSignedAttributes().get(CMSAttributes.signingTime);
+                                AttributeTable at = signer.getSignedAttributes();
+                                Attribute attr = (at == null ? null : at.get(CMSAttributes.signingTime));
                                 if (attr != null && attr.getAttrValues().size() == 1)
                                     signingTime = Time.getInstance(attr.getAttrValues()
                                             .getObjectAt(0).toASN1Primitive()).getDate();
@@ -5550,7 +5611,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException)
+                if (ex instanceof IllegalArgumentException || ex instanceof CMSException)
                     Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
@@ -5978,11 +6039,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (!file.exists())
                     return null;
 
+                List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+                if (attachments == null)
+                    return null;
+
                 Document document = JsoupEx.parse(file);
                 HtmlHelper.truncate(document, false);
                 HtmlHelper.embedInlineImages(context, id, document, true);
 
-                Element p = document.createElement("p");
+                Element header = document.createElement("p");
 
                 if (message.from != null && message.from.length > 0) {
                     Element span = document.createElement("span");
@@ -5991,7 +6056,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     span.appendChild(strong);
                     span.appendText(" " + MessageHelper.formatAddresses(message.from));
                     span.appendElement("br");
-                    p.appendChild(span);
+                    header.appendChild(span);
                 }
 
                 if (message.to != null && message.to.length > 0) {
@@ -6001,7 +6066,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     span.appendChild(strong);
                     span.appendText(" " + MessageHelper.formatAddresses(message.to));
                     span.appendElement("br");
-                    p.appendChild(span);
+                    header.appendChild(span);
                 }
 
                 if (message.cc != null && message.cc.length > 0) {
@@ -6011,7 +6076,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     span.appendChild(strong);
                     span.appendText(" " + MessageHelper.formatAddresses(message.cc));
                     span.appendElement("br");
-                    p.appendChild(span);
+                    header.appendChild(span);
                 }
 
                 {
@@ -6023,26 +6088,45 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     span.appendChild(strong);
                     span.appendText(" " + DTF.format(message.received));
                     span.appendElement("br");
-                    p.appendChild(span);
+                    header.appendChild(span);
                 }
 
                 if (!TextUtils.isEmpty(message.subject)) {
                     Element span = document.createElement("span");
                     span.appendText(message.subject);
                     span.appendElement("br");
-                    p.appendChild(span);
+                    header.appendChild(span);
                 }
 
                 if (headers && message.headers != null) {
-                    p.appendElement("hr");
+                    header.appendElement("hr");
                     Element pre = document.createElement("pre");
                     pre.text(message.headers);
-                    p.appendChild(pre);
+                    header.appendChild(pre);
                 }
 
-                p.appendElement("hr").appendElement("br");
+                header.appendElement("hr").appendElement("br");
 
-                document.prependChild(p);
+                document.prependChild(header);
+
+                boolean hasAttachments = false;
+                Element footer = document.createElement("p");
+                footer.appendElement("br").appendElement("hr");
+                for (EntityAttachment attachment : attachments)
+                    if (!attachment.isInline()) {
+                        hasAttachments = true;
+                        Element strong = document.createElement("strong");
+                        strong.text(getString(R.string.title_attachment));
+                        footer.appendChild(strong);
+                        if (!TextUtils.isEmpty(attachment.name))
+                            footer.appendText(" " + attachment.name);
+                        if (attachment.size != null)
+                            footer.appendText(" " + Helper.humanReadableByteCount(attachment.size, true));
+                        footer.appendElement("br");
+                    }
+
+                if (hasAttachments)
+                    document.appendChild(footer);
 
                 return new String[]{message.subject, document.html()};
             }

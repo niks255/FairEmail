@@ -72,8 +72,9 @@
     <string name="title_block_sender_hint">        Bloquer un expéditeur créera une règle pour déplacer automatiquement les futurs messages vers le dossier spam.
         La création et l\'utilisation des règles sont des fonctionnalités Pro.
     </string>
-    <string name="title_notification_waiting">En attente d\'une connexion réseau suffisante</string>
     <string name="title_notification_sending">Envoi des messages en cours</string>
+    <string name="title_notification_waiting">En attente d\'une connexion réseau suffisante</string>
+    <string name="title_notification_idle">Inactif</string>
     <string name="title_notification_failed">\'%1$s\' a échoué</string>
     <string name="title_notification_alert">Alerte serveur \'%1$s\'</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -108,9 +109,10 @@
     <string name="title_edit_folder">Modifier le dossier</string>
     <string name="title_setup">Paramètres</string>
     <string name="title_setup_help">Aide</string>
-    <string name="title_setup_welcome">        Recevoir et envoyer des messages nécessite la création d\'un compte et d\'une identité comme dans toute autre application de messagerie.
+    <string name="title_setup_welcome">        La réception et l\'envoi de messages nécessitent la mise en place d\'un compte et d\'une identité comme dans toute autre application de messagerie.
         La configuration rapide créera à la fois un compte et une identité en demandant simplement votre nom, votre adresse e-mail et votre mot de passe.
-        Les comptes et identités (alias) peuvent être configurés manuellement si nécessaire.
+        Les comptes et les identités (alias) peuvent aussi être configurés manuellement si nécessaire.
+        Les protocoles non standard comme Microsoft Exchange Web Services et Microsoft ActiveSync ne sont pas pris en charge ; voir également la description de l\'application.
     </string>
     <string name="title_setup_quick">Configuration rapide</string>
     <string name="title_setup_quick_remark">Pour configurer rapidement un compte et une identité pour la plupart des fournisseurs</string>
@@ -229,6 +231,7 @@
     <string name="title_advanced_signature_location">Emplacement de la signature</string>
     <string name="title_advanced_signature_end">Ajouter la signature après le message cité/transféré</string>
     <string name="title_advanced_plain_only">Envoyer le texte brut uniquement par défaut</string>
+    <string name="title_advanced_flow">Utiliser \'format flowed\' pour le texte brut</string>
     <string name="title_advanced_receipt">Lorsque vous demandez une confirmation</string>
     <string name="title_advanced_usenet_signature">Utiliser la convention de signature Usenet</string>
     <string name="title_advanced_remove_signatures">Supprimer les signatures reconnues</string>
@@ -242,12 +245,14 @@
     <string name="title_advanced_download">Télécharger automatiquement les messages et les pièces jointes avec une connexion limitée jusqu\'à</string>
     <string name="title_advanced_roaming">Télécharger les messages et les pièces jointes en itinérance</string>
     <string name="title_advanced_rlah">Ignorer l\'itinérance en Europe</string>
+    <string name="title_advanced_timeout">Délai de connexion (secondes)</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
     <string name="title_advanced_socks">Utiliser un proxy SOCKS</string>
     <string name="title_advanced_manage_connectivity">Gérer la connectivité</string>
     <string name="title_advanced_caption_general">Général</string>
     <string name="title_advanced_caption_conversation">Conversation</string>
-    <string name="title_advanced_caption_message">Message</string>
+    <string name="title_advanced_caption_message_header">En-tête du message</string>
+    <string name="title_advanced_caption_message_body">Contenu du message</string>
     <string name="title_advanced_landscape">Utiliser deux colonnes en mode paysage</string>
     <string name="title_advanced_landscape3">Afficher le menu de navigation fixe en mode paysage</string>
     <string name="title_advanced_startup">Afficher sur l\'écran de démarrage</string>
@@ -388,12 +393,15 @@
     <string name="title_advanced_metered_hint">Les connexions limitées sont généralement des connexions mobiles ou des points d\'accès Wi-Fi payants</string>
     <string name="title_advanced_metered_warning">Désactiver cette option désactivera la réception et l\'envoi de messages sur les connexions Internet mobiles</string>
     <string name="title_advanced_rlah_hint">On considère qu\'il n\'y a pas d\'itinérance au sein de l\'UE (roam like at home)</string>
-    <string name="title_advanced_ssl_harden_hint">Activer ceci désactivera les protocoles et algorithmes SSL faibles</string>
+    <string name="title_advanced_timeout_hint">Le délai d\'attente de lecture/écriture sera fixé au double du délai de connexion. Des valeurs plus élevées entraîneront une plus grande utilisation de la batterie.</string>
+    <string name="title_advanced_ssl_harden_hint">Activer ceci désactivera les protocoles et algorithmes SSL faibles, ce qui peut entraîner des problèmes de connexion</string>
     <string name="title_advanced_socks_hint">L\'utilisation d\'un serveur proxy distant n\'est pas sécurisée car les connexions proxy ne sont pas chiffrées</string>
     <string name="title_advanced_roaming_hint">Les en-têtes des messages seront toujours récupérés en itinérance. Vous pouvez utiliser le paramètre d\'itinérance de l\'appareil pour désactiver internet pendant l\'itinérance.</string>
     <string name="title_advanced_browse_hint">Télécharger plus de messages en faisant défiler vers le bas</string>
     <string name="title_advanced_layout_hint">Passer à une disposition plus compacte et changer la taille du texte des messages peut être fait dans le menu de la barre d\'action en haut dans la vue message</string>
+    <string name="title_advanced_startup_hint">Appuyez longuement sur n\'importe quel dossier de la liste de dossiers pour l\'ajouter ou le supprimer de la liste des dossiers unifiés</string>
     <string name="title_advanced_date_hint">Les messages ne sont regroupés par date que s\'ils sont triés par ordre chronologique</string>
+    <string name="title_advanced_navbar_colorize_hint">Ceci fonctionne suivant la version et la variante d\'Android</string>
     <string name="title_advanced_threading_hint">Grouper les messages liés les uns aux autres</string>
     <string name="title_advanced_gravatars_hint">Il pourrait y avoir un risque pour la confidentialité</string>
     <string name="title_advanced_name_email_hint">Si désactivé, seuls les noms seront affichés si disponibles</string>
@@ -652,7 +660,6 @@
     <string name="title_ask_help">Aider à améliorer FairEmail</string>
     <string name="title_ask_reporting">Envoyer des rapports d\'erreur ?</string>
     <string name="title_reporting_why">Un rapport d\'erreur aidera à améliorer FairEmail</string>
-    <string name="title_message_bar_hint">Appuyez sur l\'icône de la croix pour archiver, supprimer ou marquer un message comme spam et pour supprimer cet avis</string>
     <string name="title_ask_review">Veuillez évaluer FairEmail</string>
     <string name="title_ask_review_rationale">        Vous utilisez FairEmail depuis un moment.
         Je vous serais reconnaissant si vous pouviez noter FairEmail dans le Play Store.
@@ -674,6 +681,7 @@
     <string name="title_received">Reçu :</string>
     <string name="title_size">Taille :</string>
     <string name="title_subject">Objet :</string>
+    <string name="title_attachment">Pièce jointe :</string>
     <string name="title_body_hint">Votre message</string>
     <string name="title_discard">Supprimer</string>
     <string name="title_save">Enregistrer</string>
@@ -1078,6 +1086,7 @@
     <string-array name="startupNames">
         <item>Boîte de réception unifiée</item>
         <item>Dossiers unifiés</item>
+        <item>Dossiers du compte principal</item>
         <item>Comptes</item>
     </string-array>
     <string-array name="downloadNames">

@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.net.MailTo;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Base64;
 
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
@@ -37,6 +36,7 @@ import com.sun.mail.util.QDecoderStream;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -104,6 +104,7 @@ public class MessageHelper {
     static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
     static final int DEFAULT_ATTACHMENT_DOWNLOAD_SIZE = 256 * 1024; // bytes
     static final long ATTACHMENT_PROGRESS_UPDATE = 1500L; // milliseconds
+    static final int FORMAT_FLOWED_LINE_LENGTH = 72;
 
     // https://tools.ietf.org/html/rfc4021
 
@@ -513,7 +514,20 @@ public class MessageHelper {
 
         // When sending message
         if (identity != null) {
-            document.select("div[fairemail=signature],div[fairemail=reference]").removeAttr("fairemail");
+            Elements sig = document.select("div[fairemail=signature]");
+            Elements ref = document.select("div[fairemail=reference]");
+            sig.remove();
+            ref.remove();
+
+            HtmlHelper.convertLists(document);
+
+            sig.removeAttr("fairemail");
+            ref.removeAttr("fairemail");
+
+            for (Element e : sig)
+                document.body().appendChild(e);
+            for (Element e : ref)
+                document.body().appendChild(e);
 
             DB db = DB.getInstance(context);
             try {
@@ -570,6 +584,9 @@ public class MessageHelper {
             }
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean format_flowed = prefs.getBoolean("format_flowed", false);
+
         // multipart/mixed
         //   multipart/related
         //     multipart/alternative
@@ -579,13 +596,40 @@ public class MessageHelper {
         //  attachments
 
         String htmlContent = document.html();
+        String htmlContentType = "text/html; charset=" + Charset.defaultCharset().name();
+
         String plainContent = HtmlHelper.getText(htmlContent);
+        String plainContentType = "text/plain; charset=" + Charset.defaultCharset().name();
+
+        if (format_flowed) {
+            List<String> flowed = new ArrayList<>();
+            for (String line : plainContent.split("\\r?\\n")) {
+                if (line.contains(" ")) {
+                    StringBuffer sb = new StringBuffer();
+                    for (String word : line.split(" ")) {
+                        if (sb.length() + word.length() > FORMAT_FLOWED_LINE_LENGTH) {
+                            sb.append(' ');
+                            flowed.add(sb.toString());
+                            sb = new StringBuffer();
+                        }
+                        if (sb.length() > 0)
+                            sb.append(' ');
+                        sb.append(word);
+                    }
+                    if (sb.length() > 0)
+                        flowed.add(sb.toString());
+                } else
+                    flowed.add(line);
+            }
+            plainContent = TextUtils.join("\r\n", flowed);
+            plainContentType += "; format=flowed";
+        }
 
         BodyPart plainPart = new MimeBodyPart();
-        plainPart.setContent(plainContent, "text/plain; charset=" + Charset.defaultCharset().name());
+        plainPart.setContent(plainContent, plainContentType);
 
         BodyPart htmlPart = new MimeBodyPart();
-        htmlPart.setContent(htmlContent, "text/html; charset=" + Charset.defaultCharset().name());
+        htmlPart.setContent(htmlContent, htmlContentType);
 
         Multipart altMultiPart = new MimeMultipart("alternative");
         altMultiPart.addBodyPart(plainPart);
@@ -602,7 +646,7 @@ public class MessageHelper {
 
         if (availableAttachments == 0)
             if (message.plain_only != null && message.plain_only)
-                imessage.setContent(plainContent, "text/plain; charset=" + Charset.defaultCharset().name());
+                imessage.setContent(plainContent, plainContentType);
             else
                 imessage.setContent(altMultiPart);
         else {
@@ -1397,17 +1441,53 @@ public class MessageHelper {
                     return null;
                 }
 
+                // Get content type
+                ContentType ct;
                 try {
-                    ContentType ct = new ContentType(part.getContentType());
-                    String charset = ct.getParameter("charset");
-                    if (UnknownCharsetProvider.charsetForMime(charset) == null)
-                        warnings.add(context.getString(R.string.title_no_charset, charset));
+                    ct = new ContentType(part.getContentType());
                 } catch (ParseException ex) {
                     Log.e(ex);
+                    ct = new ContentType();
                 }
 
-                if (part.isMimeType("text/plain"))
+                // Check character set
+                String charset = ct.getParameter("charset");
+                if (UnknownCharsetProvider.charsetForMime(charset) == null)
+                    warnings.add(context.getString(R.string.title_no_charset, charset));
+
+                if (part.isMimeType("text/plain")) {
+                    // https://tools.ietf.org/html/rfc3676
+                    if ("flowed".equalsIgnoreCase(ct.getParameter("format")))
+                        result = result.replaceAll(" \\r?\\n", " ");
                     result = "<div>" + HtmlHelper.formatPre(result) + "</div>";
+                } else if (part.isMimeType("text/html")) {
+                    if (TextUtils.isEmpty(charset)) {
+                        // <meta charset="utf-8" />
+                        // <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                        String excerpt = result.substring(0, Math.min(1000, result.length()));
+                        Document d = JsoupEx.parse(excerpt);
+                        for (Element meta : d.select("meta")) {
+                            if ("Content-Type".equalsIgnoreCase(meta.attr("http-equiv"))) {
+                                try {
+                                    ct = new ContentType(meta.attr("content"));
+                                    charset = ct.getParameter("charset");
+                                } catch (ParseException ex) {
+                                    Log.w(ex);
+                                }
+                            } else
+                                charset = meta.attr("charset");
+
+                            if (!TextUtils.isEmpty(charset))
+                                try {
+                                    Log.i("Charset=" + meta);
+                                    result = new String(result.getBytes(StandardCharsets.ISO_8859_1), charset);
+                                    break;
+                                } catch (UnsupportedEncodingException ex) {
+                                    Log.w(ex);
+                                }
+                        }
+                    }
+                }
 
                 sb.append(result);
             }

@@ -60,8 +60,9 @@
     <string name="title_block_domain">送信者ドメインをブロック</string>
     <string name="title_block_sender_hint">送信者をブロックすると次以降のメッセージを迷惑メールフォルダーに自動的に移動するルールが作成されます。
 ルールの作成と使用はプロ機能です。</string>
-    <string name="title_notification_waiting">接続を待機中</string>
     <string name="title_notification_sending">メールを送信中</string>
+    <string name="title_notification_waiting">接続を待機中</string>
+    <string name="title_notification_idle">待機</string>
     <string name="title_notification_failed">\'%1$s\' 失敗</string>
     <string name="title_notification_alert">%1$s サーバアラート</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -96,9 +97,11 @@
     <string name="title_edit_folder">フォルダの編集</string>
     <string name="title_setup">設定</string>
     <string name="title_setup_help">ヘルプ</string>
-    <string name="title_setup_welcome">メッセージの送受信には他のメールアプリと同様にアカウントとIDを設定する必要があります。
-クイックセットアップでは、名前、メールアドレス、パスワードを要求するだけでアカウントとIDの両方が作成されます。
-必要に応じてアカウントとID(エイリアス)も手動でセットアップできます。</string>
+    <string name="title_setup_welcome">メッセージの送受信には他のメールアプリと同様にアカウントとIDを設定する必要が有ります。
+クイックセットアップでは、名前、メールアドレス、パスワードを入力するだけでアカウントとIDの両方が作成されます。
+必要に応じてアカウントとID(エイリアス)も手動でセットアップ出来ます。
+Microsoft Exchange WebサービスやMicrosoft ActiveSyncなどの非標準プロトコルはサポートされていません。
+アプリの説明もご覧ください</string>
     <string name="title_setup_quick">クイックセットアップ</string>
     <string name="title_setup_quick_remark">殆どのプロバイダーでアカウントとIDを素早く設定します</string>
     <string name="title_setup_quick_hint">クイックセットアップはautoconfig.thunderbird.netから構成情報を取得します</string>
@@ -215,6 +218,8 @@
     <string name="title_advanced_signature_location">署名の場所</string>
     <string name="title_advanced_signature_end">引用/転送されたメッセージの後に署名を追加</string>
     <string name="title_advanced_plain_only">デフォルトでプレーンテキストのみを送信</string>
+    <string name="title_advanced_flow">プレーンテキストの \'フォーマットフロー\'</string>
+    <string name="title_advanced_receipt">受取をリクエストする時</string>
     <string name="title_advanced_usenet_signature">署名の区切</string>
     <string name="title_advanced_remove_signatures">認識された署名を削除</string>
     <string name="title_advanced_resize_images">埋込画像のサイズを自動的に変更</string>
@@ -227,12 +232,14 @@
     <string name="title_advanced_download">従量制課金接続でメッセージと添付ファイルを自動的にダウンロードします</string>
     <string name="title_advanced_roaming">ローミング中にメッセージと添付ファイルをダウンロードします</string>
     <string name="title_advanced_rlah">EU内無制限ローミング(EUのみ)</string>
+    <string name="title_advanced_timeout">接続タイムアウト(秒)</string>
     <string name="title_advanced_ssl_harden">SSL接続を有効</string>
     <string name="title_advanced_socks">SOCKS proxyを使用</string>
     <string name="title_advanced_manage_connectivity">接続の管理</string>
     <string name="title_advanced_caption_general">全般</string>
     <string name="title_advanced_caption_conversation">会話</string>
-    <string name="title_advanced_caption_message">メッセージ</string>
+    <string name="title_advanced_caption_message_header">メッセージヘッダー</string>
+    <string name="title_advanced_caption_message_body">本文</string>
     <string name="title_advanced_landscape">横向きモードで2列を使用</string>
     <string name="title_advanced_landscape3">横向きモードで固定ナビゲーションメニューを許可</string>
     <string name="title_advanced_startup">スタート画面に表示</string>
@@ -372,12 +379,15 @@
     <string name="title_advanced_metered_hint">従量制課金接続とは一般的にモバイル接続または有料Wi-Fiホットスポットの事です</string>
     <string name="title_advanced_metered_warning">このオプションを無効にするとモバイルネットワークでのメッセージの送受信が無効になります</string>
     <string name="title_advanced_rlah_hint">EU内でのローミングのみ</string>
-    <string name="title_advanced_ssl_harden_hint">有効にすると弱いSSLプロトコルと暗号が無効になります</string>
+    <string name="title_advanced_timeout_hint">読み取り/書き込みタイムアウトは接続タイムアウトの2倍に設定されます。値を大きくするとバッテリーの使用量が増えます</string>
+    <string name="title_advanced_ssl_harden_hint">有効にすると弱いSSLプロトコルと暗号が無効になり接続の問題が発生する可能性が有ります</string>
     <string name="title_advanced_socks_hint">プロキシ接続は暗号化されていない為、リモートプロキシサーバ使用は安全ではありません</string>
     <string name="title_advanced_roaming_hint">ローミング時メッセージヘッダーが常に取得されます。 デバイスのローミング設定を使用して、ローミング中にインターネットを無効にする事が出来ます</string>
     <string name="title_advanced_browse_hint">下にスクロール時に、更にメッセージを取得</string>
     <string name="title_advanced_layout_hint">よりコンパクトなレイアウトへの切り替えとメッセージのテキストサイズの変更はメッセージビューの上部アクションバーメニューで行えます</string>
+    <string name="title_advanced_startup_hint">フォルダーリストの任意のフォルダーを長押して統合フォルダーのリストに追加又は削除します</string>
     <string name="title_advanced_date_hint">時間で並び替えをしている場合にのみ、メッセージは日付でグループ化されます</string>
+    <string name="title_advanced_navbar_colorize_hint">これが機能するかはAndroidのバージョンとバリアントによって異なります</string>
     <string name="title_advanced_threading_hint">互いに関連するグループメッセージ</string>
     <string name="title_advanced_gravatars_hint">プライバシーリスクが有るかもしれません</string>
     <string name="title_advanced_name_email_hint">無効にすると利用可能な場合にのみ名前が表示されます</string>
@@ -636,7 +646,6 @@
     <string name="title_ask_help">FairEmailの改善にご協力下さい</string>
     <string name="title_ask_reporting">エラーレポートを送信しますか？</string>
     <string name="title_reporting_why">エラー報告はFairEmailの改善に役立ちます</string>
-    <string name="title_message_bar_hint">十字アイコンをタップしメッセージをスパムとしてアーカイブ、削除、又は報告し、この通知を削除します</string>
     <string name="title_ask_review">FairEmailを確認して下さい</string>
     <string name="title_ask_review_rationale">FairEmailをしばらく使用しています。
 PlayストアでFairEmailを評価できれば幸いです。
@@ -657,6 +666,7 @@ PlayストアでFairEmailを評価できれば幸いです。
     <string name="title_received">受信:</string>
     <string name="title_size">サイズ:</string>
     <string name="title_subject">件名:</string>
+    <string name="title_attachment">添付ファイル:</string>
     <string name="title_body_hint">メッセージ欄</string>
     <string name="title_discard">破棄</string>
     <string name="title_save">保存</string>
@@ -692,6 +702,7 @@ PlayストアでFairEmailを評価できれば幸いです。
     <string name="title_no_key">秘密鍵無し</string>
     <string name="title_invalid_key">秘密鍵が無効です</string>
     <string name="title_send_plain_text">プレーンテキストのみ</string>
+    <string name="title_send_receipt">受取をリクエストする</string>
     <string name="title_send_receipt_remark">殆どのプロバイダーと電子メールクライアントは受信要求を無視します</string>
     <string name="title_from_missing">送信者がいません</string>
     <string name="title_to_missing">受信者がいません</string>
@@ -1058,6 +1069,7 @@ FairEmailは、Pro機能購入の為に上部に小さなメッセージを表�
     <string-array name="startupNames">
         <item>統合受信トレイ</item>
         <item>統合フォルダー</item>
+        <item>プライマリアカウントフォルダー</item>
         <item>アカウント</item>
     </string-array>
     <string-array name="downloadNames">
@@ -1117,6 +1129,11 @@ FairEmailは、Pro機能購入の為に上部に小さなメッセージを表�
         <item>小</item>
         <item>標準</item>
         <item>大</item>
+    </string-array>
+    <string-array name="receiptNames">
+        <item>受取を読む</item>
+        <item>送達通知</item>
+        <item>読み取り+配信確認</item>
     </string-array>
     <string-array name="signatureNames">
         <item>テキスト上</item>

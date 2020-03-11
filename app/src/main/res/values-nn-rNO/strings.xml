@@ -72,8 +72,9 @@
     <string name="title_block_sender_hint">        Blokkering av avsender vil opprette en regel for automatisk å flytte fremtidige meldinger til spam-mappen.
         Å lage og bruke regler er en pro-funksjon.
     </string>
-    <string name="title_notification_waiting">Venter på passende tilkobling</string>
     <string name="title_notification_sending">Sender melding</string>
+    <string name="title_notification_waiting">Venter på passende tilkobling</string>
+    <string name="title_notification_idle">Inaktiv</string>
     <string name="title_notification_failed">\'%1$s\' mislyktes</string>
     <string name="title_notification_alert">\'%1$s\' servervarsling</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -108,9 +109,10 @@
     <string name="title_edit_folder">Rediger mappe</string>
     <string name="title_setup">Innstillinger</string>
     <string name="title_setup_help">Hjelp</string>
-    <string name="title_setup_welcome">Motta og sende meldinger krever at du oppretter en konto og en identitet som i en annen e-postprogram.
-        Det raske oppsettet vil skape både en konto og en identitet ved bare å be om navn, e-postadresse og passord.
-         Kontoer og identiteter (aliaser) kan også konfigureres manuelt hvis det er nødvendig.
+    <string name="title_setup_welcome">Motta og sende meldinger krever å sette opp en konto og en identitet som i alle andre e-postapper.
+       Det raske oppsettet vil opprette både en konto og identitet ved bare å be om navn, e-postadresse og passord.
+       Kontoer og identiteter (aliaser) kan også konfigureres manuelt hvis det er nødvendig.
+       Ikke-standardprotokoller, som Microsoft Exchange Web Services og Microsoft ActiveSync, støttes ikke, se også beskrivelsen av appen.
     </string>
     <string name="title_setup_quick">Hurtig oppsett</string>
     <string name="title_setup_quick_remark">For å raskt sette opp en konto og en identitet for de fleste tilbydere</string>
@@ -229,6 +231,7 @@
     <string name="title_advanced_signature_location">Signaturposisjon</string>
     <string name="title_advanced_signature_end">Legg til signatur etter sitert/videresendt melding</string>
     <string name="title_advanced_plain_only">Send bare vanlig tekst som standard</string>
+    <string name="title_advanced_flow">\'format strømmet\' for ren tekst</string>
     <string name="title_advanced_receipt">Når du ber om kvittering</string>
     <string name="title_advanced_usenet_signature">Usenet signaturkonvensjon</string>
     <string name="title_advanced_remove_signatures">Fjern gjenkjennte signaturer</string>
@@ -242,12 +245,14 @@
     <string name="title_advanced_download">Last ned meldinger og vedlegg automatisk på en målingstilkobling opp til</string>
     <string name="title_advanced_roaming">Laste ned meldinger og vedlegg under roaming</string>
     <string name="title_advanced_rlah">Roam som hjemme</string>
+    <string name="title_advanced_timeout">Tilkoblingsavbrudd (sekunder)</string>
     <string name="title_advanced_ssl_harden">Styrke SSL-tilkoblinger</string>
     <string name="title_advanced_socks">Bruk SOCKS-proxy</string>
     <string name="title_advanced_manage_connectivity">Administrer tilkobling</string>
     <string name="title_advanced_caption_general">Generelt</string>
     <string name="title_advanced_caption_conversation">Samtale</string>
-    <string name="title_advanced_caption_message">Melding</string>
+    <string name="title_advanced_caption_message_header">Meldingstittel</string>
+    <string name="title_advanced_caption_message_body">Meldingstekst</string>
     <string name="title_advanced_landscape">Bruk to kolonner i liggende modus</string>
     <string name="title_advanced_landscape3">Tillat fast navigasjonsmeny i liggende modus</string>
     <string name="title_advanced_startup">Vis på startskjermen</string>
@@ -388,12 +393,15 @@
     <string name="title_advanced_metered_hint">Målte tilkoblinger er vanligvis mobile tilkoblinger eller betalte Wi-Fi-hotspots</string>
     <string name="title_advanced_metered_warning">Deaktivering av dette alternativet deaktiverer mottak og sending av meldinger på mobile internettforbindelser</string>
     <string name="title_advanced_rlah_hint">Forutsatt ingen roaming i EU</string>
-    <string name="title_advanced_ssl_harden_hint">Aktivering av dette vil deaktivere svake SSL-protokoller og krypteringer</string>
+    <string name="title_advanced_timeout_hint">Tidsavbrudd for lese/skriving blir satt til den doble av tilkoblings avbruddstiden. Høyere verdier vil føre til mer batteribruk.</string>
+    <string name="title_advanced_ssl_harden_hint">Aktivering av dette vil deaktivere svake SSL-protokoller og chiffer, noe som kan føre til tilkoblingsproblemer</string>
     <string name="title_advanced_socks_hint">Å bruke en ekstern proxy-server er usikker fordi proxy-tilkoblinger ikke er kryptert</string>
     <string name="title_advanced_roaming_hint">Meldingsoverskrifter vil alltid bli hentet når du roamer. Du kan bruke enhetens roaming-innstilling for å deaktivere Internett mens du roamer.</string>
     <string name="title_advanced_browse_hint">Hent flere meldinger når du ruller ned</string>
     <string name="title_advanced_layout_hint">Å bytte til en mer kompakt layout og endre meldingens tekststørrelse kan gjøres i den øverste handlingslinje menyen i meldingsvisningen</string>
+    <string name="title_advanced_startup_hint">Trykk lenge på en hvilken som helst mappe i mappelisten for å legge til eller fjerne den fra listen over enhetlige mapper</string>
     <string name="title_advanced_date_hint">Meldinger grupperes bare etter dato hvis de er sortert etter tid</string>
+    <string name="title_advanced_navbar_colorize_hint">Om dette fungerer avhenger av Android-versjonen og varianten</string>
     <string name="title_advanced_threading_hint">Gruppemeldinger knyttet til hverandre</string>
     <string name="title_advanced_gravatars_hint">Det kan være en personvernrisiko</string>
     <string name="title_advanced_name_email_hint">Når deaktivert, vil bare navn bli vist når det er tilgjengelig</string>
@@ -652,7 +660,6 @@
     <string name="title_ask_help">Hjelp til å forbedre FairEmail</string>
     <string name="title_ask_reporting">Send feilrapporter?</string>
     <string name="title_reporting_why">Feilrapportering vil bidra til å forbedre FairEmail</string>
-    <string name="title_message_bar_hint">Trykk på kryssikonet for å arkivere, slette eller rapportere en melding som spam og for å fjerne dette varselet</string>
     <string name="title_ask_review">Vennligst anmeld FairEmail</string>
     <string name="title_ask_review_rationale">Du har brukt FairEmail en stund.
 Det vil bli satt pris på om du kunne rangere FairEmail i Play Store.
@@ -673,6 +680,7 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_received">Mottatt:</string>
     <string name="title_size">Størrelse:</string>
     <string name="title_subject">Emne:</string>
+    <string name="title_attachment">Vedlegg:</string>
     <string name="title_body_hint">Din melding</string>
     <string name="title_discard">Forkast</string>
     <string name="title_save">Lagre</string>
@@ -1077,6 +1085,7 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string-array name="startupNames">
         <item>Enhetlig innboks</item>
         <item>Enhetlige mapper</item>
+        <item>Mapper til primærkontoer</item>
         <item>Kontoer</item>
     </string-array>
     <string-array name="downloadNames">
