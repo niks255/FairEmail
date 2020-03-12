@@ -294,6 +294,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
 
+    private static final int MAX_MORE = 100; // messages
     private static final int UNDO_TIMEOUT = 5000; // milliseconds
     private static final int SWIPE_DISABLE_SELECT_DURATION = 1500; // milliseconds
 
@@ -2165,7 +2166,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 MoreResult result = new MoreResult();
                 result.folders = new ArrayList<>();
 
-                if (ids.length > 100) {
+                if (ids.length > MAX_MORE) {
                     result.seen = true;
                     result.unseen = true;
                     result.flagged = true;
@@ -3784,8 +3785,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (handleThreadActions(messages))
                     return;
 
-            checkNewMessages();
-
             Log.i("Submit messages=" + messages.size());
             adapter.submitList(messages);
 
@@ -4511,37 +4510,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         long fid = intent.getLongExtra("folder", -1);
         boolean unified = intent.getBooleanExtra("unified", false);
 
-        synchronized (Core.newMessages) {
-            Core.newMessages.remove(fid);
-        }
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean autoscroll = prefs.getBoolean("autoscroll", true);
 
         if (autoscroll &&
                 ((viewType == AdapterMessage.ViewType.UNIFIED && unified) ||
                         (viewType == AdapterMessage.ViewType.FOLDER && folder == fid)))
-            adapter.gotoTop();
-    }
-
-    private void checkNewMessages() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean autoscroll = prefs.getBoolean("autoscroll", true);
-
-        boolean newMessages = false;
-        synchronized (Core.newMessages) {
-            for (long fid : new ArrayList<>(Core.newMessages.keySet())) {
-                EntityFolder f = Core.newMessages.get(fid);
-                if (f != null &&
-                        ((viewType == AdapterMessage.ViewType.UNIFIED && f.unified) ||
-                                (viewType == AdapterMessage.ViewType.FOLDER && folder == f.id))) {
-                    newMessages = true;
-                    Core.newMessages.remove(fid);
-                }
-            }
-        }
-
-        if (autoscroll && newMessages)
             adapter.gotoTop();
     }
 
@@ -5422,7 +5396,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (is == null) {
                         if (message.identity != null)
                             db.identity().setIdentitySignKeyAlias(message.identity, null);
-                        throw new IllegalArgumentException(context.getString(R.string.title_invalid_key));
+                        throw new IllegalArgumentException(context.getString(R.string.title_unknown_key));
                     }
                 }
 

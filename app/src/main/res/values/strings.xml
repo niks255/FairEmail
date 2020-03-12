@@ -589,6 +589,8 @@
     <string name="title_oauth_support">OAuth is not supported</string>
     <string name="title_review">Review</string>
     <string name="title_hint_alias">Long press for options, like copy to create alias identities</string>
+    <string name="title_service_vpn">This might be caused by the VPN that is being used</string>
+    <string name="title_service_port">Please double check the port number</string>
 
     <string name="title_advanced_browse">Browse messages on the server</string>
     <string name="title_advanced_expand_read">Mark messages read on expanding</string>
@@ -815,6 +817,7 @@
     <string name="title_certificate_invalid">Public key of %1$s is invalid</string>
     <string name="title_no_key">No private key</string>
     <string name="title_invalid_key">Invalid private key</string>
+    <string name="title_unknown_key">Private key does not match any encryption keys</string>
     <string name="title_send_plain_text">Plain text only</string>
     <string name="title_send_receipt">Request receipt</string>
     <string name="title_send_receipt_remark">Most providers and email clients ignore receipt requests</string>
@@ -1264,7 +1267,7 @@
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
-        <item>&#8734;</item>
+        <item>∞</item>
     </string-array>
 
     <integer-array name="downloadValues" translatable="false">

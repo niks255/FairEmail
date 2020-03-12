@@ -508,6 +508,8 @@
     <string name="title_oauth_support">OAuth no está soportado</string>
     <string name="title_review">Revisar</string>
     <string name="title_hint_alias">Dejar pulsado para opciones, como copiar para crear identidades de alias</string>
+    <string name="title_service_vpn">Esto podría ser causado por la VPN que está siendo usada</string>
+    <string name="title_service_port">Por favor, compruebe el número de puerto</string>
     <string name="title_advanced_browse">Explorar mensajes en el servidor</string>
     <string name="title_advanced_expand_read">Marcar mensajes leídos al expandir</string>
     <string name="title_synchronize_now">Sincronizar ahora</string>
@@ -717,6 +719,7 @@
     <string name="title_certificate_invalid">La clave pública de %1$s no es válida</string>
     <string name="title_no_key">Ninguna clave privada</string>
     <string name="title_invalid_key">Clave privada inválida</string>
+    <string name="title_unknown_key">La clave privada no coincide con ninguna clave de cifrado</string>
     <string name="title_send_plain_text">Sólo en texto plano</string>
     <string name="title_send_receipt">Solicitar acuse</string>
     <string name="title_send_receipt_remark">La mayoría de los clientes y proveedores de email ignoran los pedidos de recibos</string>
@@ -1099,7 +1102,7 @@
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
-        <item>&#8734;</item>
+        <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">
         <item>No hacer nada</item>

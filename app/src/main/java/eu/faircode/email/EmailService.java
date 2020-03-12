@@ -320,13 +320,13 @@ public class EmailService implements AutoCloseable {
                             am.invalidateAuthToken(type, password);
                             String token = am.blockingGetAuthToken(account, getAuthTokenType(type), true);
                             if (token == null)
-                                throw new AuthenticatorException("No token on refresh");
+                                throw new AuthenticatorException("No token on refresh for " + user);
 
                             connect(host, port, user, token, factory);
                             return token;
                         }
 
-                    throw new AuthenticatorException("Account not found");
+                    throw new AuthenticatorException("Account not found for " + user);
                 } catch (Exception ex1) {
                     Log.e(ex1);
                     throw new AuthenticationFailedException(ex.getMessage(), ex1);
@@ -340,7 +340,7 @@ public class EmailService implements AutoCloseable {
         } catch (MailConnectException ex) {
             if (ConnectionHelper.vpnActive(context)) {
                 MailConnectException mex = new MailConnectException(new SocketConnectException(
-                        "The might be caused by the VPN in use",
+                        context.getString(R.string.title_service_vpn),
                         new Exception(),
                         ex.getHost(),
                         ex.getPort(),
@@ -348,6 +348,11 @@ public class EmailService implements AutoCloseable {
                 mex.setNextException(ex.getNextException());
                 throw mex;
             } else
+                throw ex;
+        } catch (MessagingException ex) {
+            if (port == 995 && !("pop3".equals(protocol) || "pop3s".equals(protocol)))
+                throw new MessagingException(context.getString(R.string.title_service_port), ex);
+            else
                 throw ex;
         }
     }

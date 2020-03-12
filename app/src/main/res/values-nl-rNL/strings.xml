@@ -506,6 +506,8 @@
     <string name="title_oauth_support">OAuth wordt niet ondersteund</string>
     <string name="title_review">Review</string>
     <string name="title_hint_alias">Druk lang voor opties, zoals kopiëren om alias identiteiten te maken</string>
+    <string name="title_service_vpn">Dit kan worden veroorzaakt door de VPN die in gebruik is</string>
+    <string name="title_service_port">Controleer het poortnummer a.u.b.</string>
     <string name="title_advanced_browse">Blader door berichten op de server</string>
     <string name="title_advanced_expand_read">Markeer berichten gelezen bij uitvouwen</string>
     <string name="title_synchronize_now">Nu synchroniseren</string>
@@ -715,6 +717,7 @@
     <string name="title_certificate_invalid">Publieke sleutel van %1$s is ongeldig</string>
     <string name="title_no_key">Geen privé sleutel</string>
     <string name="title_invalid_key">Ongeldige privé sleutel</string>
+    <string name="title_unknown_key">Privésleutel komt niet overeen met coderingssleutels</string>
     <string name="title_send_plain_text">Alleen platte tekst</string>
     <string name="title_send_receipt">Vraag bevestiging</string>
     <string name="title_send_receipt_remark">De meeste aanbieders en e-mail clients negeren bevestigingsverzoeken</string>
@@ -1094,7 +1097,7 @@
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
-        <item>&#8734;</item>
+        <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">
         <item>Doe niets</item>
