@@ -95,6 +95,7 @@
     </provider>
     <provider
         name="free.fr"
+        appPassword="true"
         link="https://www.free.fr/assistance/597.html">
         <imap
             host="imap.free.fr"
@@ -267,7 +268,7 @@
     </provider>
     <provider
         name="Ionos (1und1)"
-        domain="ionos\\.de,online\\.de"
+        domain="ionos\\.de,ionos\\.com,online\\.de"
         link="https://www.ionos.de/hilfe/e-mail/allgemeine-themen/einstellungen-fuer-ihr-e-mail-programm/">
         <imap
             host="imap.ionos.de"
@@ -572,6 +573,19 @@
             starttls="false" />
         <smtp
             host="smtp.ziggo.nl"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="Lilo"
+        domain="lilo\\.org"
+        link="https://mail.lilo.org/imap">
+        <imap
+            host="mail.lilo.org"
+            port="143"
+            starttls="true" />
+        <smtp
+            host="mail.lilo.org"
             port="587"
             starttls="true" />
     </provider>

@@ -100,7 +100,7 @@ public class EmailService implements AutoCloseable {
     static final int PURPOSE_USE = 2;
     static final int PURPOSE_SEARCH = 3;
 
-    final static int DEFAULT_CONNECT_TIMEOUT = 20; // seconds
+    final static int DEFAULT_CONNECT_TIMEOUT = 15; // seconds
 
     private final static int SEARCH_TIMEOUT = 2 * 60 * 1000; // milliseconds
     private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
@@ -360,17 +360,13 @@ public class EmailService implements AutoCloseable {
     private void connect(
             String host, int port, String user, String password,
             SSLSocketFactoryService factory) throws MessagingException {
-        InetAddress main = null;
         try {
             //if (BuildConfig.DEBUG)
             //    throw new MailConnectException(
             //            new SocketConnectException("Debug", new IOException("Test"), host, port, 0));
 
-            main = InetAddress.getByName(host);
-            EntityLog.log(context, "Connecting to " + main);
-            _connect(main.getHostAddress(), port, user, password, factory);
-        } catch (UnknownHostException ex) {
-            throw new MessagingException("Unknown host " + host, ex);
+            EntityLog.log(context, "Connecting to " + host);
+            _connect(host, port, user, password, factory);
         } catch (MessagingException ex) {
             boolean ioError = false;
             Throwable ce = ex;
@@ -383,8 +379,10 @@ public class EmailService implements AutoCloseable {
             }
 
             if (ioError) {
+                EntityLog.log(context, "Connect ex=" + ex.getMessage());
                 try {
                     // Some devices resolve IPv6 addresses while not having IPv6 connectivity
+                    InetAddress main = InetAddress.getByName(host);
                     InetAddress[] iaddrs = InetAddress.getAllByName(host);
                     boolean ip4 = (main instanceof Inet4Address);
                     boolean ip6 = (main instanceof Inet6Address);
@@ -418,29 +416,23 @@ public class EmailService implements AutoCloseable {
                             continue;
 
                         if (iaddr instanceof Inet4Address) {
-                            if (ip4 || !has4)
+                            if (!has4 || ip4)
                                 continue;
                             ip4 = true;
                         }
 
                         if (iaddr instanceof Inet6Address) {
-                            if (ip6 || !has6)
+                            if (!has6 || ip6)
                                 continue;
                             ip6 = true;
                         }
 
-                        String prop = "mail." + protocol + ".connectiontimeout";
-                        String timeout = properties.getProperty(prop);
                         try {
                             EntityLog.log(context, "Falling back to " + iaddr.getHostAddress());
-                            properties.put(prop, Integer.toString(DEFAULT_CONNECT_TIMEOUT / 2));
                             _connect(iaddr.getHostAddress(), port, user, password, factory);
                             return;
                         } catch (MessagingException ex1) {
-                            Log.w(ex1);
-                        } finally {
-                            if (timeout != null)
-                                properties.put(prop, timeout);
+                            EntityLog.log(context, "Fallback ex=" + ex1.getMessage());
                         }
                     }
                 } catch (Throwable ex1) {

@@ -55,7 +55,7 @@
             android:value="true" />
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
-            android:value="false" />
+            android:value="true" />
         <meta-data
             android:name="android.allow_multiple_resumed_activities"
             android:value="true" />
@@ -70,6 +70,9 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
+            <meta-data
+                android:name="android.service.chooser.chooser_target_service"
+                android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -232,7 +235,7 @@
         <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
             tools:node="replace">
-            <intent-filter android:autoVerify="true">
+            <intent-filter> <!--android:autoVerify="true"-->
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />

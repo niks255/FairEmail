@@ -740,19 +740,20 @@ Mobile connections are almost always metered and some (paid) Wi-Fi hotspots are 
 Possible causes of messages not being synchronized (sent or received) are:
 
 * The account or folder(s) are not set to synchronize
-* The number of days to synchronize is set too low
+* The number of days to synchronize message for is set too low
 * There is no usable internet connection
 * The email server is temporarily not available
 * Android stopped the synchronization service
 
-So, check your account and folder settings and check if the accounts/folders are connected (see the legend menu for the meaning of the icons).
+So, check your account and folder settings and check if the accounts/folders are connected (see the legend in the navigation menu for the meaning of the icons).
+
+If there are any error messages, please see [this FAQ](#user-content-faq22).
 
 On some devices, where there are lots of applications competing for memory, Android may stop the synchronization service as a last resort.
-Some Android versions,
-in particular of Huawei (see [here](https://www.forbes.com/sites/bensin/2016/07/04/push-notifications-not-coming-through-to-your-huawei-phone-heres-how-to-fix-it/) for a fix)
-or Xiaomi (see [here](https://www.forbes.com/sites/bensin/2016/11/17/how-to-fix-push-notifications-on-xiaomis-miui-8-for-real/) for a fix)
-stop apps and services too aggressively.
-See also [this dedicated website](https://dontkillmyapp.com/).
+
+Some Android versions stop apps and services too aggressively. See [this dedicated website](https://dontkillmyapp.com/) for more information.
+
+Disabling battery optimizations (setup step 4) reduces the chance Android will stop the synchronization service.
 
 <br />
 
@@ -1230,8 +1231,6 @@ consider switching to a modern provider which supports push messages (IMAP IDLE)
 If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen,
 you can save battery usage while viewing messages by switching to the black theme.
 
-Finally, make sure you are using [the latest version](https://github.com/M66B/FairEmail/releases/).
-
 <br />
 
 <a name="faq40"></a>
@@ -1671,7 +1670,7 @@ You can set or disable the maximum message size on the 'connection' settings tab
 
 Duplicate (archived) messages, trashed messages and draft messages are not counted.
 
-Messages will automatically be marked read on expanding, unless this was disabled in the behavior settings.
+Messages will automatically be marked read on expanding, unless this was disabled in the individual account settings.
 
 <br />
 

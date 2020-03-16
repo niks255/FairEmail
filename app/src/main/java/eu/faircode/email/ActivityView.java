@@ -112,14 +112,13 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private boolean searching = false;
 
     static final int REQUEST_UNIFIED = 1;
-    static final int REQUEST_FOLDER = 2;
-    static final int REQUEST_WHY = 3;
-    static final int REQUEST_ALERT = 4;
-    static final int REQUEST_THREAD = 5;
-    static final int REQUEST_OUTBOX = 6;
-    static final int REQUEST_ERROR = 7;
-    static final int REQUEST_UPDATE = 8;
-    static final int REQUEST_WIDGET = 9;
+    static final int REQUEST_WHY = 2;
+    static final int REQUEST_ALERT = 3;
+    static final int REQUEST_THREAD = 4;
+    static final int REQUEST_OUTBOX = 5;
+    static final int REQUEST_ERROR = 6;
+    static final int REQUEST_UPDATE = 7;
+    static final int REQUEST_WIDGET = 8;
 
     static final String ACTION_VIEW_FOLDERS = BuildConfig.APPLICATION_ID + ".VIEW_FOLDERS";
     static final String ACTION_VIEW_MESSAGES = BuildConfig.APPLICATION_ID + ".VIEW_MESSAGES";
@@ -317,34 +316,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     }
 
     private void init() {
-        if ("primary".equals(startup)) {
-            new SimpleTask<EntityAccount>() {
-                @Override
-                protected EntityAccount onExecute(Context context, Bundle args) {
-                    DB db = DB.getInstance(context);
-                    return db.account().getPrimaryAccount();
-                }
-
-                @Override
-                protected void onExecuted(Bundle args, EntityAccount account) {
-                    Bundle aargs = new Bundle();
-                    aargs.putLong("account", account == null ? -1 : account.id);
-                    aargs.putBoolean("primary", true);
-                    FragmentBase fragment = new FragmentFolders();
-                    fragment.setArguments(aargs);
-                    init(fragment);
-                }
-
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
-                }
-            }.execute(this, new Bundle(), "view:primary");
-
-            return;
-        }
-
         Bundle args = new Bundle();
+
+        long account = getIntent().getLongExtra("account", -1);
 
         FragmentBase fragment;
         switch (startup) {
@@ -354,16 +328,21 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 break;
             case "folders":
                 fragment = new FragmentFolders();
+                args.putLong("account", account);
+                break;
+            case "primary":
+                fragment = new FragmentFolders();
+                if (account < 0)
+                    args.putBoolean("primary", true);
+                else
+                    args.putLong("account", account);
                 break;
             default:
                 fragment = new FragmentMessages();
         }
 
         fragment.setArguments(args);
-        init(fragment);
-    }
 
-    private void init(FragmentBase fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         for (Fragment existing : fm.getFragments())

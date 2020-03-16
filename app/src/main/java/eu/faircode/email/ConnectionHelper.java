@@ -177,7 +177,7 @@ public class ConnectionHelper {
         if (cm == null)
             return null;
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             NetworkInfo ani = cm.getActiveNetworkInfo();
             if (ani == null || !ani.isConnected())
                 return null;

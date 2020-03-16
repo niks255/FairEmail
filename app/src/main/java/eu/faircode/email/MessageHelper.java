@@ -36,7 +36,6 @@ import com.sun.mail.util.QDecoderStream;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -516,20 +515,10 @@ public class MessageHelper {
 
         // When sending message
         if (identity != null) {
-            Elements sig = document.select("div[fairemail=signature]");
-            Elements ref = document.select("div[fairemail=reference]");
-            sig.remove();
-            ref.remove();
-
             HtmlHelper.convertLists(document);
 
-            sig.removeAttr("fairemail");
-            ref.removeAttr("fairemail");
-
-            for (Element e : sig)
-                document.body().appendChild(e);
-            for (Element e : ref)
-                document.body().appendChild(e);
+            document.select("div[fairemail=signature]").removeAttr("fairemail");
+            document.select("div[fairemail=reference]").removeAttr("fairemail");
 
             DB db = DB.getInstance(context);
             try {
@@ -1482,9 +1471,12 @@ public class MessageHelper {
                             if (!TextUtils.isEmpty(charset))
                                 try {
                                     Log.i("Charset=" + meta);
+                                    Charset c = Charset.forName(charset);
+                                    if (c.equals(StandardCharsets.UTF_8) && !Helper.isUTF8(result))
+                                        break;
                                     result = new String(result.getBytes(StandardCharsets.ISO_8859_1), charset);
                                     break;
-                                } catch (UnsupportedEncodingException ex) {
+                                } catch (Throwable ex) {
                                     Log.w(ex);
                                 }
                         }
