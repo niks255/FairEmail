@@ -19,9 +19,6 @@ package eu.faircode.email;
     Copyright 2018-2020 by Marcel Bokhorst (M66B)
 */
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -43,8 +40,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Date;
 
 public class FragmentPro extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private TextView tvPending;
@@ -83,30 +78,13 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
         tvInfo.setText(getString(R.string.title_pro_info)
                 .replaceAll("^\\s+", "").replaceAll("\\s+", " "));
 
-        boolean banner = prefs.getBoolean("banner", true);
-        cbHide.setChecked(!banner);
+        long banner_hidden = prefs.getLong("banner_hidden", 0);
+        cbHide.setChecked(banner_hidden > 0);
 
         cbHide.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                prefs.edit().putBoolean("banner", !isChecked).apply();
-
-                Intent banner = new Intent(getContext(), ServiceUI.class);
-                banner.setAction("banner");
-                PendingIntent pi = PendingIntent.getService(getContext(), ServiceUI.PI_BANNER, banner, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-                if (isChecked) {
-                    long now = new Date().getTime();
-                    long interval = AlarmManager.INTERVAL_DAY * 7;
-                    long due = interval - (now % interval);
-                    long trigger = now + due;
-                    Log.i("Set banner alarm at " + new Date(trigger) + " due=" + due);
-                    am.set(AlarmManager.RTC, trigger, pi);
-                } else {
-                    Log.i("Cancel banner alarm");
-                    am.cancel(pi);
-                }
+                ServiceUI.scheduleBanner(getContext(), isChecked);
             }
         });
 
@@ -225,7 +203,9 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
             boolean pro = ActivityBilling.isPro(getContext());
             tvActivated.setVisibility(pro ? View.VISIBLE : View.GONE);
             cbHide.setVisibility(pro ? View.GONE : View.VISIBLE);
-        } else if ("banner".equals(key))
-            cbHide.setChecked(!prefs.getBoolean(key, true));
+        } else if ("banner_hidden".equals(key)) {
+            long banner_hidden = prefs.getLong("banner_hidden", 0);
+            cbHide.setChecked(banner_hidden > 0);
+        }
     }
 }

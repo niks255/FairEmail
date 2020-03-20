@@ -32,6 +32,7 @@ For authorizing:
 * Outlook / Hotmail: see [question 14](#user-content-faq14)
 * Microsoft Exchange: see [question 8](#user-content-faq8)
 * Yahoo!: see [question 88](#user-content-faq88)
+* Apple iCloud: see [question 148](#user-content-faq148)
 
 Please see [here](#user-content-faq22) for common error messages.
 
@@ -262,6 +263,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(145) How can I set a notification sound for an account, folder or sender?](#user-content-faq145)
 * [(146) How can I fix incorrect message times?](#user-content-faq146)
 * [(147) What should I know about third party versions?](#user-content-faq147)
+* [(148) How can I use an Apple iCloud account?](#user-content-faq148)
 
 [I have another question.](#user-content-support)
 
@@ -851,6 +853,9 @@ can likely be solved by changing the advanced identity setting *Use local IP add
 The errors *... Couldn't connect to host ...*, *... Connection refused ...* or *... Network unreachable ...*
 mean that FairEmail was not able to connect to the email server.
 
+The error *... Host is unresolved ...* means that the address of the email server could not be resolved.
+This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
+
 The error *... Software caused connection abort ...*
 means that the email server or something between FairEmail and the email server actively terminated an existing connection.
 This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
@@ -905,6 +910,7 @@ means that the Android account manager was not able to refresh the authorization
 The error *... Authentication failed ... Invalid credentials ...* could be caused by having revoked the required account/contacts permissions.
 Just start the wizard (but do not select an account) to grant the required permissions again.
 
+The eror *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/).
 
 When in doubt, you can ask for [support](#user-content-support).
 
@@ -1697,7 +1703,7 @@ The following rule conditions are available:
 
 All the conditions of a rule need to be true for the rule action to be executed.
 All conditions are optional, but there needs to be at least one condition, to prevent matching all messages.
-Matching all messages is still possible by using a regex for the sender or recipient address, if you really want to.
+If you want to match all senders or all recipients, you can just use the @ character as condition because all email address will contain this character.
 
 You can use multiple rules, possibly with a *stop processing*, for an *or* or a *not* condition.
 
@@ -2723,6 +2729,9 @@ It is not even possible to mark a message read.
 
 Since POP3 does not allow access to the trash folder at all, there is no way to restore trashed messages.
 
+Note that you can hide messages and search for hidden messages, which is similar to a local trash folder,
+without suggesting that trashed messages can be restored, while this is actually not possible.
+
 <br />
 
 <a name="faq144"></a>
@@ -2803,6 +2812,15 @@ When desired, this can be turned off in the miscellaneous settings.
 Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#user-content-downloads) for all download options.
 
 If you have a problem with the F-Droid build, please check if there is a newer version first.
+
+<br />
+
+<a name="faq148"></a>
+**(148) How can I use an Apple iCloud account?**
+
+There is a built-in profile for Apple iCloud, but if needed you can find the right settings [here](https://support.apple.com/en-us/HT202304).
+
+When using two-factor authentication you might need to use an [app-specific password](https://support.apple.com/en-us/HT204397).
 
 <br />
 

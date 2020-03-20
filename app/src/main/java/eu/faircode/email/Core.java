@@ -125,7 +125,7 @@ import static javax.mail.Folder.READ_WRITE;
 
 class Core {
     private static final int MAX_NOTIFICATION_COUNT = 25; // per group
-    private static final long AFTER_SEND_DELAY = 15 * 1000L; // milliseconds
+    private static final long AFTER_SEND_DELAY = 20 * 1000L; // milliseconds
     private static final int SYNC_CHUNCK_SIZE = 200;
     private static final int SYNC_BATCH_SIZE = 20;
     private static final int DOWNLOAD_BATCH_SIZE = 20;
@@ -409,6 +409,7 @@ class Core {
 
                         if (op.tries >= TOTAL_RETRY_MAX) {
                             // Giving up
+                            op.cleanup(context);
                             db.operation().deleteOperation(op.id);
                             ops.remove(op);
                             continue;
@@ -2087,7 +2088,11 @@ class Core {
                             " uid=" + dup.uid + "/" + uid +
                             " msgid=" + msgid + " thread=" + thread);
 
-                    if (dup.uid == null) {
+                    if (dup.uid == null || dup.uid <= uid) {
+                        message = dup;
+                        update = true;
+                        process = (dup.uid == null);
+
                         Log.i(folder.name + " set uid=" + uid);
                         dup.uid = uid;
                         dup.thread = thread;
@@ -2098,10 +2103,8 @@ class Core {
                         }
 
                         dup.error = null;
-
-                        message = dup;
-                        process = true;
-                    }
+                    } else
+                        return null;
                 }
 
                 if (dup.flagged && dup.color != null)
@@ -2717,10 +2720,13 @@ class Core {
                     StringBuilder sb = new StringBuilder();
                     for (String key : sid.keySet())
                         sb.append(" ").append(key).append("=").append(sid.get(key));
-                    Log.e("Empty message" + sb.toString() + " partial=" + account.partial_fetch);
+                    if (!account.partial_fetch)
+                        Log.e("Empty message" + sb.toString());
                 }
-            } else
-                Log.e("Empty message " + account.host + " partial=" + account.partial_fetch);
+            } else {
+                if (!account.partial_fetch)
+                    Log.e("Empty message " + account.host);
+            }
         } catch (Throwable ex) {
             Log.w(ex);
         }

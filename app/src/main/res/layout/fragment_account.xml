@@ -66,7 +66,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDomain" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etDomain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,12 +78,10 @@
 
         <Button
             android:id="@+id/btnAutoConfig"
-            style="@style/buttonStyleSmall"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:tag="disable"
             android:text="@string/title_autoconfig"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,7 +122,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvImap" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etHost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -192,7 +190,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvInsecureRemark" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etPort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,7 +214,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etPort" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -266,12 +264,10 @@
 
         <Button
             android:id="@+id/btnCertificate"
-            style="@style/buttonStyleSmall"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:tag="disable"
             android:text="@string/title_client_certificate"
             app:layout_constraintStart_toStartOf="parent"
@@ -291,12 +287,10 @@
 
         <Button
             android:id="@+id/btnOAuth"
-            style="@style/buttonStyleSmall"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:tag="disable"
             android:text="@string/title_setup_authentication"
             app:layout_constraintEnd_toEndOf="parent"
@@ -325,7 +319,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvOAuthSupport" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etRealm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -358,7 +352,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -380,12 +374,10 @@
 
         <eu.faircode.email.ViewButtonColor
             android:id="@+id/btnColor"
-            style="@style/buttonStyleSmall"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:tag="disable"
             android:text="@string/title_select"
             app:layout_constraintStart_toStartOf="parent"
@@ -415,12 +407,10 @@
 
         <Button
             android:id="@+id/btnAdvanced"
-            style="@style/buttonStyleSmall"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:text="@string/title_setup_advanced"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvColorPro" />
@@ -512,7 +502,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbAutoSeen" />
 
-        <EditText
+        <eu.faircode.email.EditTextPlain
             android:id="@+id/etInterval"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
