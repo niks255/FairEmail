@@ -1253,10 +1253,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     }
 
     private void onImportCertificate(Intent intent) {
-        Intent open = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent open = new Intent(Intent.ACTION_GET_CONTENT);
         open.addCategory(Intent.CATEGORY_OPENABLE);
         open.setType("*/*");
-        Helper.openAdvanced(open);
         if (open.resolveActivity(getPackageManager()) == null)
             ToastEx.makeText(this, R.string.title_no_saf, Toast.LENGTH_LONG).show();
         else
@@ -1286,10 +1285,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     }
 
     private static Intent getIntentImport() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        Helper.openAdvanced(intent);
         return intent;
     }
 
@@ -1312,7 +1310,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_password, null);
             etPassword1 = dview.findViewById(R.id.tilPassword1);
             etPassword2 = dview.findViewById(R.id.tilPassword2);
-            TextView tvImportHint = dview.findViewById(R.id.tvImporthint);
+            TextView tvExportHint = dview.findViewById(R.id.tvExportHint);
+            TextView tvImportHint = dview.findViewById(R.id.tvImportHint);
 
             if (savedInstanceState != null) {
                 etPassword1.getEditText().setText(savedInstanceState.getString("fair:password1"));
@@ -1320,6 +1319,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
 
             etPassword2.setVisibility(export ? View.VISIBLE : View.GONE);
+            tvExportHint.setVisibility(export ? View.VISIBLE : View.GONE);
             tvImportHint.setVisibility(export ? View.GONE : View.VISIBLE);
 
             return new AlertDialog.Builder(getContext())

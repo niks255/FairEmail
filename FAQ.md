@@ -6,7 +6,7 @@ At the bottom you can find how to ask other questions, request features and repo
 ## Index
 
 * [Authorizing accounts](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [How to ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-how-to-)
+* [How to ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
 * [Known problems](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
 * [Planned features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Frequently requested features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
@@ -41,16 +41,18 @@ Related questions:
 * [Is OAuth supported?](#user-content-faq111)
 * [Why is ActiveSync not supported?](#user-content-faq133)
 
+<a name="howto">
+
 ## How to ...?
 
 * Change the account name: Setup, step 1, Manage, tap account
 * Change the swipe left/right target: Setup, step 1, Manage, tap account, at the bottom
-* Set a signature: Setup, step 2, Manage, tap identity. See [this FAQ](#user-content-faq57) about how to insert an image, etc.
+* Set a signature: Setup, step 2, Manage, tap identity, Edit signature. See [this FAQ](#user-content-faq57) about how to insert an image, etc.
 * Add CC and BCC addresses: tap the people's icon at the end of the subject
 * Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
 * Add a folder to the unified inbox: long press the folder in the folder list and check *Show in unified inbox*
 * Add a folder to the navigation menu: long press the folder in the folder list and check *Show in navigation menu*
-* Load older messages: long press a folder in the folder list, select *Edit properties* and change the number of days to sync/keep messages for; please [read this FAQ](#user-content-faq39)
+* Load more messages: long press a folder in the folder list, select *Synchronize more messages*
 * Delete a message, skipping trash: in the 3-dots menu of the action bar just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
 * Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
 * Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
@@ -66,7 +68,7 @@ Related questions:
 * A [bug in Android](https://issuetracker.google.com/issues/119872129) lets FairEmail crash with "*... Bad notification posted ...*" on some devices once after updating FairEmail and tapping on a notification.
 * A [bug in Android](https://issuetracker.google.com/issues/62427912) sometimes causes a crash with "*... ActivityRecord not found for ...*" after updating FairEmail. Reinstalling ([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) might fix the problem.
 * A [bug in Android](https://issuetracker.google.com/issues/37018931) sometimes causes a crash with *... InputChannel is not initialized ...* on some devices.
-* A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) sometimes causes a crash with *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.
+* ~~A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) sometimes causes a crash with *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
 * A bug in Nova Launcher on Android 5.x lets FairEmail crash with a *java.lang.StackOverflowError* when Nova Launcher has access to the accessibility service.
 * ~~The folder selector sometimes shows no folders for yet unknown reasons. This seems to be fixed.~~
 * ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
@@ -793,7 +795,7 @@ Note that only some convenience and advanced features need to be purchased which
 Also note that most free apps will appear not to be sustainable in the end, whereas FairEmail is properly maintained and supported,
 and that free apps may have a catch, like sending privacy sensitive information to the internet.
 
-I have been working on FairEmail almost every day for about a year, so I think the price is more than reasonable.
+I have been working on FairEmail almost every day for more than one and a half a year, so I think the price is more than reasonable.
 For this reason there won't be discounts either.
 
 <br />
@@ -1270,13 +1272,13 @@ or by a too short DH key on the email server and can unfortunately not be fixed 
 The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4,
 which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
-The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' might be caused by enabling hardening connections in the connection settings.
+The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' might be caused by enabling hardening connections in the connection settings
+or by Android not supporting older protocols anymore, like SSLv3.
 
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore.
-
 There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
 
-You can use [this website](https://ssl-tools.net/mailservers) to check for SSL/TLS problems of IMAP/SMTP servers.
+You can use [this website](https://ssl-tools.net/mailservers) to check for SSL/TLS problems of email servers.
 
 <br />
 

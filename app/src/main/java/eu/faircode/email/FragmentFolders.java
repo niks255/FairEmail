@@ -240,6 +240,15 @@ public class FragmentFolders extends FragmentBase {
             }
         });
 
+        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
+            @Override
+            public boolean canChildScrollUp(@NonNull SwipeRefreshLayout parent, @Nullable View child) {
+                if (!prefs.getBoolean("pull", true))
+                    return true;
+                return rvFolder.canScrollVertically(-1);
+            }
+        });
+
         // Initialize
 
         if (cards && !Helper.isDarkTheme(getContext()))
@@ -514,10 +523,10 @@ public class FragmentFolders extends FragmentBase {
         new SimpleTask<Void>() {
             @Override
             protected Void onExecute(Context context, Bundle args) {
-                boolean all = args.getBoolean("all");
+                int months = args.getInt("months", -1);
                 long fid = args.getLong("folder");
 
-                if (!ConnectionHelper.getNetworkState(context).isSuitable())
+                if (months < 0 && !ConnectionHelper.getNetworkState(context).isSuitable())
                     throw new IllegalStateException(context.getString(R.string.title_no_internet));
 
                 boolean now = true;
@@ -530,9 +539,12 @@ public class FragmentFolders extends FragmentBase {
                     if (folder == null)
                         return null;
 
-                    if (all) {
+                    if (months == 0) {
                         db.folder().setFolderInitialize(folder.id, Integer.MAX_VALUE);
                         db.folder().setFolderKeep(folder.id, Integer.MAX_VALUE);
+                    } else if (months > 0) {
+                        db.folder().setFolderInitialize(folder.id, months * 30);
+                        db.folder().setFolderKeep(folder.id, months * 30);
                     }
 
                     EntityOperation.sync(context, folder.id, true);

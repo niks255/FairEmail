@@ -42,13 +42,15 @@ public class FragmentOptions extends FragmentBase {
     private PagerAdapter adapter;
 
     static String[] OPTIONS_RESTART = new String[]{
+            "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "subscriptions",
-            "landscape", "landscape3", "startup", "cards", "indentation", "date", "threading", "highlight_unread", "color_stripe",
+            "landscape", "landscape3", "startup", "cards", "indentation", "date", "threading",
+            "highlight_unread", "color_stripe",
             "avatars", "gravatars", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
             "name_email", "prefer_contact", "distinguish_contacts", "authentication",
-            "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "subject_ellipsize", "keywords_header",
-            "flags", "flags_background", "preview", "preview_italic", "preview_lines",
-            "addresses", "attachments_alt",
+            "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
+            "keywords_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines",
+            "addresses", "button_archive_trash", "button_move", "attachments_alt",
             "contrast", "monospaced", "text_color", "text_size",
             "inline_images", "collapse_quotes", "seekbar", "actionbar", "navbar_colorize",
             "autoscroll", "swipenav", "autoexpand", "autoclose", "onclose",

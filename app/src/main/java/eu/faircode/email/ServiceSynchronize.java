@@ -382,19 +382,20 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             private void quit(final Integer startId) {
+                if (startId != null && lastOperations > 0)
+                    return;
+
                 if (lastQuitId != null && lastQuitId.equals(startId))
                     return;
+
                 lastQuitId = startId;
 
-                EntityLog.log(ServiceSynchronize.this,
-                        "Service quit startId=" + startId + " ops=" + lastOperations);
+                EntityLog.log(ServiceSynchronize.this, "Service quit startId=" + startId);
 
                 queue.submit(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("### quit startId=" + startId + "/" + lastQuitId + " ops=" + lastOperations);
-                        if (lastOperations != 0)
-                            return;
+                        Log.i("### quit startId=" + startId);
 
                         if (startId == null) {
                             // Service destroy
@@ -411,9 +412,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             }
 
                             // Stop service
-                            boolean stopped = (lastOperations == 0 && stopSelfResult(startId));
-                            EntityLog.log(ServiceSynchronize.this, "Service quited=" + stopped +
-                                    " startId=" + startId + "/" + lastQuitId + " ops=" + lastOperations);
+                            boolean stopped = stopSelfResult(startId);
+                            EntityLog.log(ServiceSynchronize.this,
+                                    "Service quited=" + stopped + " startId=" + startId);
                         }
                     }
                 });
@@ -1804,25 +1805,25 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pi);
 
-        boolean enabled;
+        boolean poll;
         long[] schedule = getSchedule(context);
         if (schedule == null)
-            enabled = false;
+            poll = true;
         else {
             long now = new Date().getTime();
             long next = (now < schedule[0] ? schedule[0] : schedule[1]);
-            enabled = (now >= schedule[0] && now < schedule[1]);
+            poll = (now >= schedule[0] && now < schedule[1]);
 
             Log.i("Schedule now=" + new Date(now));
             Log.i("Schedule start=" + new Date(schedule[0]));
             Log.i("Schedule end=" + new Date(schedule[1]));
             Log.i("Schedule next=" + new Date(next));
-            Log.i("Schedule enabled=" + enabled);
+            Log.i("Schedule poll=" + poll);
 
             AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, pi);
         }
 
-        ServiceUI.schedule(context, enabled);
+        ServiceUI.schedule(context, poll);
     }
 
     static long[] getSchedule(Context context) {

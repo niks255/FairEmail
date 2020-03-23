@@ -1429,9 +1429,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 for (Long other : new ArrayList<>(values.get("expanded")))
                     if (!other.equals(message.id)) {
                         values.get("expanded").remove(other);
+
                         int pos = adapter.getPositionForKey(other);
-                        if (pos != NO_POSITION)
-                            adapter.notifyItemChanged(pos);
+                        if (pos == NO_POSITION)
+                            continue;
+                        AdapterMessage.ViewHolder holder =
+                                (AdapterMessage.ViewHolder) rvMessage.findViewHolderForAdapterPosition(pos);
+                        if (holder == null)
+                            continue;
+                        adapter.collapse(holder, pos);
                     }
             }
 
@@ -1485,16 +1491,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         @Override
         public List<EntityAttachment> getAttachments(long id) {
             return attachments.get(id);
-        }
-
-        @Override
-        public void scrollTo(final int pos) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    rvMessage.scrollToPosition(pos);
-                }
-            });
         }
 
         public void scrollTo(final int pos, final int y) {
@@ -4438,25 +4434,52 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             boolean up = (event.getAction() == ACTION_UP);
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean volumenav = prefs.getBoolean("volumenav", false);
+
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_VOLUME_UP:
-                    return (!up || onNext(context));
+                    return (volumenav && onNext(context));
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    return (!up || onPrevious(context));
-                case KeyEvent.KEYCODE_ENTER:
-                case KeyEvent.KEYCODE_NUMPAD_ENTER:
-                    return (!up || onViewThread(context));
+                    return (volumenav && onPrevious(context));
                 case KeyEvent.KEYCODE_A:
-                    return (up && onArchive(context));
+                    if (viewType == AdapterMessage.ViewType.THREAD)
+                        return (up && onArchive(context));
+                    break;
                 case KeyEvent.KEYCODE_C:
                     return (up && onCompose(context));
                 case KeyEvent.KEYCODE_D:
-                    return (up && onDelete(context));
+                    if (viewType == AdapterMessage.ViewType.THREAD)
+                        return (up && onDelete(context));
+                    break;
+                case KeyEvent.KEYCODE_M:
+                    return (up && onMore(context));
+                case KeyEvent.KEYCODE_N:
+                    if (viewType == AdapterMessage.ViewType.THREAD)
+                        return (up && onNext(context));
+                    break;
+                case KeyEvent.KEYCODE_P:
+                    if (viewType == AdapterMessage.ViewType.THREAD)
+                        return (up && onPrevious(context));
+                    break;
                 case KeyEvent.KEYCODE_R:
                     return (up && onReply(context));
-                default:
-                    return false;
             }
+
+            if (!up)
+                return false;
+
+            View focused = rvMessage.getFocusedChild();
+            if (focused == null)
+                return false;
+            int pos = rvMessage.getChildAdapterPosition(focused);
+            if (pos == NO_POSITION)
+                return false;
+            AdapterMessage.ViewHolder holder =
+                    (AdapterMessage.ViewHolder) rvMessage.getChildViewHolder(focused);
+            if (holder == null)
+                return false;
+            return holder.onKeyPressed(event);
         }
 
         @Override
@@ -4488,10 +4511,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         private boolean onNext(Context context) {
-            if (!canNavigate(context))
-                return false;
             if (next == null) {
-                Animation bounce = AnimationUtils.loadAnimation(getContext(), R.anim.bounce_left);
+                Animation bounce = AnimationUtils.loadAnimation(context, R.anim.bounce_left);
                 view.startAnimation(bounce);
             } else
                 navigate(next, false);
@@ -4499,52 +4520,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         private boolean onPrevious(Context context) {
-            if (!canNavigate(context))
-                return false;
             if (prev == null) {
-                Animation bounce = AnimationUtils.loadAnimation(getContext(), R.anim.bounce_right);
+                Animation bounce = AnimationUtils.loadAnimation(context, R.anim.bounce_right);
                 view.startAnimation(bounce);
             } else
                 navigate(prev, true);
             return true;
         }
 
-        private boolean canNavigate(Context context) {
-            if (viewType != AdapterMessage.ViewType.THREAD)
-                return false;
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return prefs.getBoolean("volumenav", false);
-        }
-
-        private boolean onViewThread(Context context) {
-            if (viewType == AdapterMessage.ViewType.THREAD)
-                return false;
-            View focussed = rvMessage.getFocusedChild();
-            if (focussed == null)
-                return false;
-            int pos = rvMessage.getChildAdapterPosition(focussed);
-            if (pos == NO_POSITION)
-                return false;
-            PagedList<TupleMessageEx> list = ((AdapterMessage) rvMessage.getAdapter()).getCurrentList();
-            if (pos >= list.size())
-                return false;
-            TupleMessageEx message = list.get(pos);
-            if (message == null)
-                return false;
-
-            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-            Intent viewThread = new Intent(ActivityView.ACTION_VIEW_THREAD)
-                    .putExtra("account", message.account)
-                    .putExtra("thread", message.thread)
-                    .putExtra("id", message.id)
-                    .putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(message.folderType))
-                    .putExtra("found", viewType == AdapterMessage.ViewType.SEARCH);
-            lbm.sendBroadcast(viewThread);
-            return true;
-        }
-
         private boolean onArchive(Context context) {
-            if (bottom_navigation == null)
+            if (bottom_navigation == null ||
+                    !bottom_navigation.isEnabled() ||
+                    bottom_navigation.getVisibility() != View.VISIBLE)
                 return false;
             MenuItem archive = bottom_navigation.getMenu().findItem(R.id.action_archive);
             if (archive == null || !archive.isVisible() || !archive.isEnabled())
@@ -4554,7 +4541,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         private boolean onDelete(Context context) {
-            if (bottom_navigation == null)
+            if (bottom_navigation == null ||
+                    !bottom_navigation.isEnabled() ||
+                    bottom_navigation.getVisibility() != View.VISIBLE)
                 return false;
             MenuItem delete = bottom_navigation.getMenu().findItem(R.id.action_delete);
             if (delete == null || !delete.isVisible() || !delete.isEnabled())
@@ -4574,6 +4563,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (!fabCompose.isOrWillBeShown())
                 return false;
             fabCompose.performClick();
+            return true;
+        }
+
+        private boolean onMore(Context context) {
+            if (!fabMore.isOrWillBeShown())
+                return false;
+            fabMore.performClick();
             return true;
         }
     };

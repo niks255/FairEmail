@@ -35,7 +35,7 @@
     </plurals>
     <plurals name="title_notification_operations">
         <item quantity="one">%1$d åtgärd väntar</item>
-        <item quantity="other">%1$d åtgärd väntar</item>
+        <item quantity="other">%1$d åtgärder väntar</item>
     </plurals>
     <plurals name="title_notification_unseen">
         <item quantity="one">%1$d nytt meddelande</item>
@@ -82,7 +82,7 @@
     <string name="title_factor_minutes">%1$d minuter</string>
     <string name="menu_exit">Avsluta</string>
     <string name="menu_answers">Mallar</string>
-    <string name="menu_operations">Aktiviteter</string>
+    <string name="menu_operations">Åtgärder</string>
     <string name="menu_contacts">Lokala kontakter</string>
     <string name="menu_setup">Inställningar</string>
     <string name="menu_legend">Förklaring</string>
@@ -162,6 +162,7 @@
     <string name="title_setup_error">Fel</string>
     <string name="title_setup_export">Exportera inställningar</string>
     <string name="title_setup_import">Importera inställningar</string>
+    <string name="title_setup_export_do">Gmail-konton som är länkade till Google-konton på enheten kan inte exporteras</string>
     <string name="title_setup_import_do">Importerade konton kommer att läggas till utan att skriva över några befintliga</string>
     <string name="title_setup_password">Lösenord</string>
     <string name="title_setup_password_chars">Lösenordet innehåller CTRL- eller blanksteg</string>
@@ -262,6 +263,7 @@
     <string name="title_advanced_threading">Konversationstrådar</string>
     <string name="title_advanced_indentation">Vänster/höger indrag mottaget/skickade meddelanden i konversationer</string>
     <string name="title_advanced_highlight_unread">Markera olästa meddelanden</string>
+    <string name="title_advanced_highlight_subject">Markera ämnet</string>
     <string name="title_advanced_color_stripe">Visa färgrand</string>
     <string name="title_advanced_avatars">Visa kontaktfoton</string>
     <string name="title_advanced_gravatars">Visa Gravatars</string>
@@ -313,12 +315,12 @@
     <string name="title_advanced_quick_filter">Visa icke-påträngande snabbfilter-ikoner</string>
     <string name="title_advanced_quick_scroll">Visa icke-påträngande snabba scrolla upp/ner ikoner</string>
     <string name="title_advanced_autoread">Märk automatiskt meddelanden som lästa vid flyttning av meddelanden</string>
-    <string name="title_advanced_star_snoozed">Stjänrmarkera automatiskt vid snoozing av meddelanden</string>
+    <string name="title_advanced_star_snoozed">Stjärnmarkera automatiskt vid slumring av meddelanden</string>
     <string name="title_advanced_autounstar">Ta automatiskt bort stjärnmarkeringar från meddelanden när meddelanden flyttas</string>
     <string name="title_advanced_auto_important">Gör automatiskt stjärnmärkta meddelanden viktiga</string>
     <string name="title_advanced_reset_importance">Återställ betydelsen när du flyttar meddelanden</string>
     <string name="title_advanced_discard_delete">Ta bort utkastet permanent om du kastar det</string>
-    <string name="title_advanced_default_snooze">Standardsnoozelängd</string>
+    <string name="title_advanced_default_snooze">Standardlängd på slumra</string>
     <string name="title_advanced_notifications">Hantera aviseringar</string>
     <string name="title_advanced_notifications_default">Standard kanal</string>
     <string name="title_advanced_notifications_service">Servicekanal</string>
@@ -363,6 +365,8 @@
     <string name="title_advanced_manage_keys">Hantera privata nycklar</string>
     <string name="title_advanced_external_search">Tillåt andra appar att söka i meddelanden</string>
     <string name="title_advanced_shortcuts">Visa ofta använda kontakter i Android dela-menyn</string>
+    <string name="title_advanced_conversation_actions">Föreslå åtgärder</string>
+    <string name="title_advanced_conversation_actions_replies">Föreslå svarstext</string>
     <string name="title_advanced_fts">Bygg sökindex</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d meddelanden indexerade (%3$s)</string>
     <string name="title_advanced_english">Tvinga användning av engelska</string>
@@ -414,6 +418,7 @@
     <string name="title_advanced_autoseen_hint">Automatisk markering av meddelanden som läses vid utökning kan inaktiveras i de enskilda kontoinställningarna</string>
     <string name="title_advanced_autoclose_hint">Stäng automatiskt konversationstrådar när alla meddelanden arkiveras, skickas eller kastas</string>
     <string name="title_advanced_sender_hint">De flesta leverantörer tillåter inte ändrade avsändaradresser</string>
+    <string name="title_advanced_bcc_hint">Adressen kommer inte att visas, men kommer att läggas till vid sändning</string>
     <string name="title_advanced_display_harmful_hint">Inaktivera detta alternativ kan vara skadligt för din integritet</string>
     <string name="title_advanced_display_hidden_hint">Detta kan resultera i udda utseende och dubbla texter</string>
     <string name="title_advanced_display_pin_hint">En PIN-kod har företräde framför biometrisk autentisering</string>
@@ -514,25 +519,25 @@
     <string name="title_advanced_browse">Bläddra bland meddelanden på servern</string>
     <string name="title_advanced_expand_read">Markera meddelanden som lästa vid expanderande</string>
     <string name="title_synchronize_now">Synkronisera nu</string>
-    <string name="title_synchronize_all">Synkronisera alla meddelanden</string>
+    <string name="title_synchronize_more">Synkronisera fler meddelanden</string>
     <string name="title_synchronize_enabled">Synkronisera</string>
     <string name="title_delete_local">Ta bort lokala meddelanden</string>
     <string name="title_delete_browsed">Ta bort bläddrade/sökta meddelanden</string>
-    <string name="title_empty_trash">Töm papperskorgen</string>
-    <string name="title_empty_spam">Töm skräppost</string>
+    <string name="title_empty_trash">Töm den lokala papperskorgen</string>
+    <string name="title_empty_spam">Töm den lokala skräpposten</string>
     <string name="title_edit_properties">Redigera egenskaper</string>
     <string name="title_edit_rules">Redigera regler</string>
     <string name="title_create_channel">Skapa aviseringskanal</string>
     <string name="title_edit_channel">Redigera aviseringskanal</string>
     <string name="title_delete_channel">Ta bort aviseringskanal</string>
     <string name="title_create_sub_folder">Skapa undermapp</string>
-    <string name="title_empty_trash_ask">Ta bort alla meddelanden i papperskorgen permanent?</string>
-    <string name="title_empty_spam_ask">Ta bort all skräppost permanent?</string>
-    <string name="title_empty_trash_all_ask">Ta bort alla borttagna meddelanden från alla konton permanent?</string>
-    <string name="title_empty_spam_all_ask">Ta bort all skräppost från alla konton permanent?</string>
+    <string name="title_empty_trash_ask">Ta bort alla meddelanden i den lokala papperskorgen permanent?</string>
+    <string name="title_empty_spam_ask">Ta bort alla meddelanden i den lokala skräppostensmappen permanent?</string>
+    <string name="title_empty_trash_all_ask">Ta bort alla lokala borttagna meddelanden från alla konton permanent?</string>
+    <string name="title_empty_spam_all_ask">Ta bort alla lokala skräppostmeddelanden från alla konton permanent?</string>
     <string name="title_delete_operation">Ta bort åtgärder med ett felmeddelande?</string>
     <string name="title_delete_contacts">Ta bort alla lokala kontakter?</string>
-    <string name="title_no_operations">Inga pågående operationer</string>
+    <string name="title_no_operations">Inga pågående åtgärder</string>
     <string name="title_hint_operations">Ta bort pågående åtgärder kan resultera i försvinnande meddelanden och synkroniseringsproblem</string>
     <string name="title_folder_name">Mappnamn</string>
     <string name="title_display_name">Visningsnamn</string>
@@ -555,6 +560,8 @@
     <string name="title_folder_name_missing">Mappnamn saknas</string>
     <string name="title_folder_exists">Mappen %1$s finns</string>
     <string name="title_folder_delete">Ta bort denna mapp och alla meddelanden permanent?</string>
+    <string name="title_months">Månader</string>
+    <string name="title_months_all">Alla</string>
     <string name="title_folder_unified">Samlad inkorg</string>
     <string name="title_folder_inbox">Inkorg</string>
     <string name="title_folder_outbox">Utkorg</string>
@@ -591,6 +598,7 @@
     <string name="title_editasnew">Redigera som ny</string>
     <string name="title_create_rule">Skapa regel &#8230;</string>
     <string name="title_share">Dela</string>
+    <string name="title_pin">Lägg till genväg</string>
     <string name="title_print">Skriv ut</string>
     <string name="title_show_headers">Visa rubriker</string>
     <string name="title_raw_save">Spara rent meddelande</string>
@@ -661,7 +669,6 @@
     <string name="title_ask_show_html_images">Visa alltid bilder när originalmeddelanden visas</string>
     <string name="title_ask_show_image">Att visa bilder kan läcka sekretesskänslig information</string>
     <string name="title_ask_show_image_hint">Bilder som känns igen som spårningsbilder kommer inte att visas</string>
-    <string name="title_ask_sync_all">Synkronisera alla meddelanden i %1$s?</string>
     <string name="title_ask_delete_local">Ta bort lokala meddelanden? Meddelanden kommer att finnas kvar på fjärrservern.</string>
     <string name="title_ask_help">Hjälp till att förbättra FairEmail</string>
     <string name="title_ask_reporting">Skicka felrapporter?</string>
@@ -854,6 +861,7 @@
     <string name="title_legend_section_folders">Mappar</string>
     <string name="title_legend_section_messages">Meddelanden</string>
     <string name="title_legend_section_compose">Skriv</string>
+    <string name="title_legend_section_keyboard">Tangentbord</string>
     <string name="title_legend_oauth">OAuth auktorisering</string>
     <string name="title_legend_primary_connected">Kontot anslutet</string>
     <string name="title_legend_primary_disconnected">Kontot frånkopplat</string>
@@ -864,7 +872,7 @@
     <string name="title_legend_disconnected">Frånkopplad</string>
     <string name="title_legend_connecting">Ansluter</string>
     <string name="title_legend_connected">Ansluten</string>
-    <string name="title_legend_executing">Utföra operationer</string>
+    <string name="title_legend_executing">Utför åtgärder</string>
     <string name="title_legend_synchronizing">Synkroniserar</string>
     <string name="title_legend_downloading">Hämtar</string>
     <string name="title_legend_closing">Stänger</string>
@@ -943,6 +951,16 @@
     <string name="title_legend_delete">Ta bort</string>
     <string name="title_legend_count">Antal</string>
     <string name="title_legend_folder_type">Mapptyp</string>
+    <string name="title_legend_enter">Öppna</string>
+    <string name="title_legend_a">Arkivera</string>
+    <string name="title_legend_c">Nytt meddelande</string>
+    <string name="title_legend_d">Papperskorg (ta bort)</string>
+    <string name="title_legend_m">Meny (multipla val)</string>
+    <string name="title_legend_n">Nästa</string>
+    <string name="title_legend_p">Föregående</string>
+    <string name="title_legend_r">Svara</string>
+    <string name="title_legend_s">Markera/avmarkera</string>
+    <string name="title_legend_t">Fokus på text</string>
     <string name="title_hint_folder_actions">Tryck länge på en mapp för alternativ, som att lägga till en mapp till navigationsmenyn för snabb åtkomst</string>
     <string name="title_hint_folder_sync">För att begränsa batteri- och nätverksanvändning synkroniseras inte alla mappar och inte alla meddelanden som standard</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
@@ -1000,6 +1018,9 @@
     <string name="title_loading">Läser in &#8230;</string>
     <string name="title_set">Ställ in</string>
     <string name="title_fetching_again">Hämtar meddelande igen från servern</string>
+    <string name="title_conversation_actions">Åtgärder</string>
+    <string name="title_conversation_action_reply">Svara med: \'%1$s\'</string>
+    <string name="title_conversation_action_copy">Kopiera: \'%1$s\'</string>
     <string name="title_icalendar_accept">Godkänn</string>
     <string name="title_icalendar_decline">Avfärda</string>
     <string name="title_icalendar_maybe">Kanske</string>
@@ -1056,7 +1077,7 @@
     <string name="title_accessibility_expand">Expandera</string>
     <string name="title_accessibility_view_contact">Visa kontakt</string>
     <string name="title_accessibility_show_authentication_result">Visa autentiseringsresultat</string>
-    <string name="title_accessibility_show_snooze_time">Visa snooze-tid</string>
+    <string name="title_accessibility_show_snooze_time">Visa slumra-tid</string>
     <string name="title_accessibility_view_help">Se hjälp</string>
     <string name="title_accessibility_selected">Vald</string>
     <string name="title_accessibility_answered">Svarade</string>
@@ -1064,7 +1085,7 @@
     <string name="title_accessibility_scroll_up">Skrolla upp</string>
     <string name="title_accessibility_filter_out_seen">Växla filter för lästa meddelanden</string>
     <string name="title_accessibility_filter_out_unflagged">Växla filter för stjärnmärkta meddelanden</string>
-    <string name="title_accessibility_filter_out_snoozed">Växla filter för snoozade meddelanden</string>
+    <string name="title_accessibility_filter_out_snoozed">Växla filter för slumrade meddelanden</string>
     <string name="title_accessibility_edit">Redigera</string>
     <string name="title_accessibility_show_addresses">Visa adresser</string>
     <string name="title_accessibility_hide_addresses">Dölj adresser</string>

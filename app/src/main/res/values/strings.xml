@@ -198,6 +198,7 @@
 
     <string name="title_setup_export">Export settings</string>
     <string name="title_setup_import">Import settings</string>
+    <string name="title_setup_export_do">Gmail accounts linked to on-device Google accounts cannot be exported</string>
     <string name="title_setup_import_do">Imported accounts will be added without overwriting any existing ones</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
@@ -314,6 +315,7 @@
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
     <string name="title_advanced_highlight_unread">Highlight unread messages</string>
+    <string name="title_advanced_highlight_subject">Highlight subject</string>
     <string name="title_advanced_color_stripe">Show color stripe</string>
     <string name="title_advanced_avatars">Show contact photos</string>
     <string name="title_advanced_gravatars">Show Gravatars</string>
@@ -338,6 +340,8 @@
     <string name="title_advanced_preview">Show message preview</string>
     <string name="title_advanced_preview_italic">Show message preview in italics</string>
     <string name="title_advanced_preview_lines">Number of preview lines</string>
+    <string name="title_advanced_archive_trash">Show buttons to archive or trash a message</string>
+    <string name="title_advanced_move">Show button to move a message</string>
     <string name="title_advanced_addresses">Show address details by default</string>
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
@@ -489,6 +493,7 @@
     <string name="title_advanced_autoseen_hint">Automatically marking messages read on expanding can be disabled in the individual account settings</string>
     <string name="title_advanced_autoclose_hint">Automatically close conversations when all messages are archived, sent or trashed</string>
     <string name="title_advanced_sender_hint">Most providers do not allow modified sender addresses</string>
+    <string name="title_advanced_bcc_hint">The address won\'t be shown, but will be added on sending</string>
 
     <string name="title_advanced_display_harmful_hint">Disabling this option might be harmful to your privacy</string>
     <string name="title_advanced_display_hidden_hint">This can result in odd looking and double texts</string>
@@ -603,12 +608,12 @@
     <string name="title_advanced_expand_read">Mark messages read on expanding</string>
 
     <string name="title_synchronize_now">Synchronize now</string>
-    <string name="title_synchronize_all">Synchronize all messages</string>
+    <string name="title_synchronize_more">Synchronize more messages</string>
     <string name="title_synchronize_enabled">Synchronize</string>
     <string name="title_delete_local">Delete local messages</string>
     <string name="title_delete_browsed">Delete browsed/searched messages</string>
-    <string name="title_empty_trash">Empty trash</string>
-    <string name="title_empty_spam">Empty spam</string>
+    <string name="title_empty_trash">Empty local trash</string>
+    <string name="title_empty_spam">Empty local spam</string>
     <string name="title_edit_properties">Edit properties</string>
     <string name="title_edit_rules">Edit rules</string>
     <string name="title_create_channel">Create notification channel</string>
@@ -616,10 +621,10 @@
     <string name="title_delete_channel">Delete notification channel</string>
     <string name="title_create_sub_folder">Create sub folder</string>
 
-    <string name="title_empty_trash_ask">Delete all trashed messages permanently?</string>
-    <string name="title_empty_spam_ask">Delete all spam messages permanently?</string>
-    <string name="title_empty_trash_all_ask">Delete all trashed messages of all accounts permanently?</string>
-    <string name="title_empty_spam_all_ask">Delete all spam messages of all accounts permanently?</string>
+    <string name="title_empty_trash_ask">Delete all local trashed messages permanently?</string>
+    <string name="title_empty_spam_ask">Delete all local spam messages permanently?</string>
+    <string name="title_empty_trash_all_ask">Delete all local trashed messages of all accounts permanently?</string>
+    <string name="title_empty_spam_all_ask">Delete all local spam messages of all accounts permanently?</string>
     <string name="title_delete_operation">Delete operations with an error message?</string>
     <string name="title_delete_contacts">Delete all local contacts?</string>
     <string name="title_no_operations">No pending operations</string>
@@ -646,6 +651,8 @@
     <string name="title_folder_name_missing">Folder name missing</string>
     <string name="title_folder_exists">Folder %1$s exists</string>
     <string name="title_folder_delete">Permanently delete this folder and any messages it contains?</string>
+    <string name="title_months">Months</string>
+    <string name="title_months_all">All</string>
 
     <string name="title_folder_unified">Unified inbox</string>
     <string name="title_folder_inbox">Inbox</string>
@@ -685,6 +692,7 @@
     <string name="title_editasnew">Edit as new</string>
     <string name="title_create_rule">Create rule &#8230;</string>
     <string name="title_share">Share</string>
+    <string name="title_pin">Add shortcut</string>
     <string name="title_print">Print</string>
     <string name="title_show_headers">Show headers</string>
     <string name="title_raw_save">Save raw message</string>
@@ -758,7 +766,6 @@
     <string name="title_ask_show_html_images">Always show images on showing original messages</string>
     <string name="title_ask_show_image">Showing images can leak privacy sensitive information</string>
     <string name="title_ask_show_image_hint">Images recognized as tracking images will not be shown</string>
-    <string name="title_ask_sync_all">Synchronize all messages in %1$s?</string>
     <string name="title_ask_delete_local">Delete local messages? Messages will remain on the remote server.</string>
     <string name="title_ask_help">Help improve FairEmail</string>
     <string name="title_ask_reporting">Send error reports?</string>
@@ -973,6 +980,7 @@
     <string name="title_legend_section_folders">Folders</string>
     <string name="title_legend_section_messages">Messages</string>
     <string name="title_legend_section_compose">Compose</string>
+    <string name="title_legend_section_keyboard">Keyboard</string>
 
     <string name="title_legend_oauth">OAuth authorization</string>
     <string name="title_legend_primary_connected">Account connected</string>
@@ -1069,6 +1077,17 @@
     <string name="title_legend_count">Count</string>
     <string name="title_legend_folder_type">Folder type</string>
 
+    <string name="title_legend_enter">Open</string>
+    <string name="title_legend_a">Archive</string>
+    <string name="title_legend_c">Compose</string>
+    <string name="title_legend_d">Trash (delete)</string>
+    <string name="title_legend_m">Menu (multiple select)</string>
+    <string name="title_legend_n">Next</string>
+    <string name="title_legend_p">Previous</string>
+    <string name="title_legend_r">Reply</string>
+    <string name="title_legend_s">Select/deselect</string>
+    <string name="title_legend_t">Focus text</string>
+
     <string name="title_hint_folder_actions">Long press a folder for options, like adding a folder to the navigation menu for quick access</string>
     <string name="title_hint_folder_sync">To limit battery and network usage not all folders and not all messages will be synchronized by default</string>
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
@@ -1130,6 +1149,7 @@
 
     <string name="title_conversation_actions">Actions</string>
     <string name="title_conversation_action_reply">Reply with: \'%1$s\'</string>
+    <string name="title_conversation_action_copy">Copy: \'%1$s\'</string>
 
     <string name="title_icalendar_accept">Accept</string>
     <string name="title_icalendar_decline">Decline</string>
