@@ -546,6 +546,18 @@ public class Helper {
         return intent;
     }
 
+    static long getInstallTime(Context context) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(BuildConfig.APPLICATION_ID, 0);
+            if (pi != null)
+                return pi.firstInstallTime;
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+        return 0;
+    }
+
     // Graphics
 
     static int dp2pixels(Context context, int dp) {
@@ -740,24 +752,48 @@ public class Helper {
         }
     }
 
-    static String[] getStrings(Context context, int resid, Object... formatArgs) {
-        List<String> result = new ArrayList<>();
+    static String getString(Context context, String language, int resid, Object... formatArgs) {
+        if (language == null)
+            return context.getString(resid, formatArgs);
 
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(new Locale(language));
+        Resources res = context.createConfigurationContext(configuration).getResources();
+        return res.getString(resid, formatArgs);
+    }
+
+    static String[] getStrings(Context context, int resid, Object... formatArgs) {
+        return getStrings(context, null, resid, formatArgs);
+    }
+
+    static String[] getStrings(Context context, String language, int resid, Object... formatArgs) {
+        List<Locale> locales = new ArrayList<>();
+
+        if (language != null)
+            locales.add(new Locale(language));
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            result.add(context.getString(resid, formatArgs));
-            if (!Locale.getDefault().getLanguage().equals("en")) {
-                configuration.setLocale(new Locale("en"));
-                Resources res = context.createConfigurationContext(configuration).getResources();
-                result.add(res.getString(resid, formatArgs));
-            }
+            Locale l = Locale.getDefault();
+            if (!l.getLanguage().equals(language))
+                locales.add(l);
+            if (!"en".equals(language) && !"en".equals(l.getLanguage()))
+                locales.add(new Locale("en"));
         } else {
             LocaleList ll = context.getResources().getConfiguration().getLocales();
             for (int i = 0; i < ll.size(); i++) {
-                configuration.setLocale(ll.get(i));
-                Resources res = context.createConfigurationContext(configuration).getResources();
-                result.add(res.getString(resid, formatArgs));
+                Locale l = ll.get(i);
+                if (!l.getLanguage().equals(language))
+                    locales.add(l);
             }
+        }
+
+        List<String> result = new ArrayList<>();
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        for (Locale locale : locales) {
+            configuration.setLocale(locale);
+            Resources res = context.createConfigurationContext(configuration).getResources();
+            String text = res.getString(resid, formatArgs);
+            result.add(text);
         }
 
         return result.toArray(new String[0]);

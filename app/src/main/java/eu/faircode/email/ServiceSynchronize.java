@@ -19,7 +19,6 @@ package eu.faircode.email;
     Copyright 2018-2020 by Marcel Bokhorst (M66B)
 */
 
-import android.accounts.AccountsException;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -49,11 +48,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
-import com.sun.mail.iap.ConnectionException;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -436,50 +433,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
         });
 
-        db.message().liveUnseenWidget(null).observe(cowner, new Observer<List<TupleMessageStats>>() {
-            private List<TupleMessageStats> last = null;
-
-            @Override
-            public void onChanged(List<TupleMessageStats> stats) {
-                if (stats == null)
-                    stats = new ArrayList<>();
-
-                boolean changed = false;
-                if (last == null || last.size() != stats.size())
-                    changed = true;
-                else
-                    for (int i = 0; i < stats.size(); i++)
-                        if (!last.get(i).equals(stats.get(i))) {
-                            changed = true;
-                            break;
-                        }
-
-                if (!changed)
-                    return;
-
-                Widget.update(ServiceSynchronize.this);
-
-                boolean badge = prefs.getBoolean("badge", true);
-                boolean unseen_ignored = prefs.getBoolean("unseen_ignored", false);
-
-                int count = 0;
-                for (TupleMessageStats stat : stats) {
-                    Integer unseen = (unseen_ignored ? stat.notifying : stat.unseen);
-                    if (unseen != null)
-                        count += unseen;
-                }
-
-                try {
-                    if (count == 0 || !badge)
-                        ShortcutBadger.removeCount(ServiceSynchronize.this);
-                    else
-                        ShortcutBadger.applyCount(ServiceSynchronize.this, count);
-                } catch (Throwable ex) {
-                    Log.e(ex);
-                }
-            }
-        });
-
         Map<Long, List<Long>> groupNotifying = new HashMap<>();
 
         // Get existing notifications
@@ -535,6 +488,50 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         }
                     }
                 });
+            }
+        });
+
+        db.message().liveWidgetUnseen(null).observe(cowner, new Observer<List<TupleMessageStats>>() {
+            private List<TupleMessageStats> last = null;
+
+            @Override
+            public void onChanged(List<TupleMessageStats> stats) {
+                if (stats == null)
+                    stats = new ArrayList<>();
+
+                boolean changed = false;
+                if (last == null || last.size() != stats.size())
+                    changed = true;
+                else
+                    for (int i = 0; i < stats.size(); i++)
+                        if (!last.get(i).equals(stats.get(i))) {
+                            changed = true;
+                            break;
+                        }
+
+                if (!changed)
+                    return;
+
+                Widget.update(ServiceSynchronize.this);
+
+                boolean badge = prefs.getBoolean("badge", true);
+                boolean unseen_ignored = prefs.getBoolean("unseen_ignored", false);
+
+                int count = 0;
+                for (TupleMessageStats stat : stats) {
+                    Integer unseen = (unseen_ignored ? stat.notifying : stat.unseen);
+                    if (unseen != null)
+                        count += unseen;
+                }
+
+                try {
+                    if (count == 0 || !badge)
+                        ShortcutBadger.removeCount(ServiceSynchronize.this);
+                    else
+                        ShortcutBadger.applyCount(ServiceSynchronize.this, count);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
             }
         });
 
@@ -665,6 +662,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         onAlarm(intent);
                         break;
 
+                    case "watchdog":
+                        onWatchdog(intent);
+                        break;
+
                     default:
                         Log.w("Unknown action: " + action);
                 }
@@ -684,7 +685,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private void onReload(Intent intent) {
-        lastLost = 0;
+        if (intent.getBooleanExtra("force", false))
+            lastLost = 0;
         Bundle command = new Bundle();
         command.putString("name", "reload");
         command.putLong("account", intent.getLongExtra("account", -1));
@@ -714,6 +716,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         command.putString("name", "eval");
         command.putBoolean("sync", true);
         liveAccountNetworkState.post(command);
+    }
+
+    private void onWatchdog(Intent intent) {
+        schedule(this);
+        onEval(intent);
     }
 
     private NotificationCompat.Builder getNotificationService(Integer accounts, Integer operations) {
@@ -858,7 +865,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 EntityLog.log(ServiceSynchronize.this, account.name + " alert: " + message);
 
-                                if (!isMaxConnections(message))
+                                if (!ConnectionHelper.isMaxConnections(message))
                                     try {
                                         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                         nm.notify("alert:" + account.id, 1,
@@ -885,21 +892,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     } catch (Throwable ex) {
                         // Immediately report auth errors
                         if (ex instanceof AuthenticationFailedException) {
-                            boolean ioError = false;
-                            Throwable c = ex;
-                            while (c != null) {
-                                if (isMaxConnections(c.getMessage()) ||
-                                        c instanceof IOException ||
-                                        c instanceof ConnectionException ||
-                                        c instanceof AccountsException ||
-                                        "failed to connect".equals(ex.getMessage())) {
-                                    ioError = true;
-                                    break;
-                                }
-                                c = c.getCause();
-                            }
-
-                            if (!ioError) {
+                            if (!ConnectionHelper.isIoError(ex)) {
                                 Log.e(ex);
                                 try {
                                     NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -962,7 +955,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 String name = e.getFolder().getFullName();
                                 Log.i("Folder created=" + name);
                                 if (db.folder().getFolderByName(account.id, name) == null)
-                                    reload(ServiceSynchronize.this, account.id, "folder created");
+                                    reload(ServiceSynchronize.this, account.id, false, "folder created");
                             } finally {
                                 wlFolder.release();
                             }
@@ -980,7 +973,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 int count = db.folder().renameFolder(account.id, old, name);
                                 Log.i("Renamed to " + name + " count=" + count);
                                 if (count == 0)
-                                    reload(ServiceSynchronize.this, account.id, "folder renamed");
+                                    reload(ServiceSynchronize.this, account.id, false, "folder renamed");
                             } finally {
                                 wlFolder.release();
                             }
@@ -994,7 +987,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 String name = e.getFolder().getFullName();
                                 Log.i("Folder deleted=" + name);
                                 if (db.folder().getFolderByName(account.id, name) != null)
-                                    reload(ServiceSynchronize.this, account.id, "folder deleted");
+                                    reload(ServiceSynchronize.this, account.id, false, "folder deleted");
                             } finally {
                                 wlFolder.release();
                             }
@@ -1578,14 +1571,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         }
     }
 
-    private boolean isMaxConnections(String message) {
-        return (message != null &&
-                (message.contains("Too many simultaneous connections") /* Gmail */ ||
-                        message.contains("Maximum number of connections") /* ... from user+IP exceeded */ /* Dovecot */ ||
-                        message.contains("Too many concurrent connections") /* ... to this mailbox */ ||
-                        message.contains("User is authenticated but not connected") /* Outlook */));
-    }
-
     private void optimizeAccount(Context context, EntityAccount account, String reason) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
@@ -1606,7 +1591,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 db.endTransaction();
             }
             ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);
-        } else if (account.poll_exempted) {
+        } else if (pollInterval <= 60 && account.poll_exempted) {
             db.account().setAccountPollExempted(account.id, false);
             ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);
         }
@@ -1615,7 +1600,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(@NonNull Network network) {
-            EntityLog.log(ServiceSynchronize.this, "Available network=" + network);
+            try {
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo ni = cm.getNetworkInfo(network);
+                EntityLog.log(ServiceSynchronize.this, "Available network=" + network + " info=" + ni);
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
             updateState(network, null);
         }
 
@@ -1628,9 +1619,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         public void onLost(@NonNull Network network) {
             try {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo active = cm.getActiveNetworkInfo();
-                EntityLog.log(ServiceSynchronize.this, "Lost network=" + network + " active=" + active);
-                if (active == null)
+                NetworkInfo ani = cm.getActiveNetworkInfo();
+                EntityLog.log(ServiceSynchronize.this, "Lost network=" + network + " active=" + ani);
+                if (ani == null)
                     lastLost = new Date().getTime();
             } catch (Throwable ex) {
                 Log.w(ex);
@@ -1922,11 +1913,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         .putExtra("reason", reason));
     }
 
-    static void reload(Context context, Long account, String reason) {
+    static void reload(Context context, Long account, boolean force, String reason) {
         ContextCompat.startForegroundService(context,
                 new Intent(context, ServiceSynchronize.class)
                         .setAction("reload")
                         .putExtra("account", account == null ? -1 : account)
+                        .putExtra("force", force)
                         .putExtra("reason", reason));
     }
 
@@ -1934,5 +1926,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         ContextCompat.startForegroundService(context,
                 new Intent(context, ServiceSynchronize.class)
                         .setAction("alarm"));
+    }
+
+    static void watchdog(Context context) {
+        ContextCompat.startForegroundService(context,
+                new Intent(context, ServiceSynchronize.class)
+                        .setAction("watchdog"));
     }
 }

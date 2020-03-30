@@ -243,6 +243,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean inline;
     private boolean collapse_quotes;
     private boolean authentication;
+    private boolean language_detection;
     private static boolean debug;
 
     private boolean gotoTop = false;
@@ -375,6 +376,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvSentTitle;
         private TextView tvReceivedTitle;
         private TextView tvSizeExTitle;
+        private TextView tvLanguageTitle;
 
         private TextView tvSubmitter;
         private TextView tvDeliveredTo;
@@ -387,6 +389,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvSent;
         private TextView tvReceived;
         private TextView tvSizeEx;
+        private TextView tvLanguage;
 
         private TextView tvSubjectEx;
         private TextView tvFlags;
@@ -546,6 +549,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSentTitle = vsBody.findViewById(R.id.tvSentTitle);
             tvReceivedTitle = vsBody.findViewById(R.id.tvReceivedTitle);
             tvSizeExTitle = vsBody.findViewById(R.id.tvSizeExTitle);
+            tvLanguageTitle = vsBody.findViewById(R.id.tvLanguageTitle);
 
             tvSubmitter = vsBody.findViewById(R.id.tvSubmitter);
             tvDeliveredTo = vsBody.findViewById(R.id.tvDeliveredTo);
@@ -558,6 +562,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSent = vsBody.findViewById(R.id.tvSent);
             tvReceived = vsBody.findViewById(R.id.tvReceived);
             tvSizeEx = vsBody.findViewById(R.id.tvSizeEx);
+            tvLanguage = vsBody.findViewById(R.id.tvLanguage);
 
             tvSubjectEx = vsBody.findViewById(R.id.tvSubjectEx);
             tvFlags = vsBody.findViewById(R.id.tvFlags);
@@ -1159,6 +1164,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSentTitle.setVisibility(View.GONE);
             tvReceivedTitle.setVisibility(View.GONE);
             tvSizeExTitle.setVisibility(View.GONE);
+            tvLanguageTitle.setVisibility(View.GONE);
 
             tvSubmitter.setVisibility(View.GONE);
             tvDeliveredTo.setVisibility(View.GONE);
@@ -1171,6 +1177,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSent.setVisibility(View.GONE);
             tvReceived.setVisibility(View.GONE);
             tvSizeEx.setVisibility(View.GONE);
+            tvLanguage.setVisibility(View.GONE);
+
             tvSubjectEx.setVisibility(View.GONE);
             tvFlags.setVisibility(View.GONE);
             tvKeywordsEx.setVisibility(View.GONE);
@@ -1320,7 +1328,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             cowner.recreate();
 
-            boolean show_addresses = !properties.getValue("addresses", message.id);
+            boolean show_addresses = properties.getValue("addresses", message.id);
             boolean show_headers = properties.getValue("headers", message.id);
 
             boolean hasFrom = (message.from != null && message.from.length > 0);
@@ -1415,6 +1423,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     .append("/")
                     .append(message.total == null ? "-" : Helper.humanReadableByteCount(message.total, true));
             tvSizeEx.setText(size.toString());
+
+            tvLanguageTitle.setVisibility(
+                    show_addresses && language_detection && message.language != null
+                            ? View.VISIBLE : View.GONE);
+            tvLanguage.setVisibility(
+                    show_addresses && language_detection && message.language != null
+                            ? View.VISIBLE : View.GONE);
+            tvLanguage.setText(message.language == null ? null : new Locale(message.language).getDisplayLanguage());
 
             tvSubjectEx.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
             tvSubjectEx.setText(message.subject);
@@ -1858,7 +1874,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return document.html();
                     } else {
                         // Cleanup message
-                        document = HtmlHelper.sanitize(context, document, show_images, true, true);
+                        document = HtmlHelper.sanitizeView(context, document, show_images);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                             args.putParcelable("actions", getConversationActions(message, document));
@@ -1988,9 +2004,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             for (final ConversationAction action : actions) {
                                 final CharSequence text;
                                 final CharSequence title;
+                                final String type = action.getType();
                                 final RemoteAction raction = action.getAction();
 
-                                switch (action.getType()) {
+                                switch (type) {
                                     case ConversationAction.TYPE_TEXT_REPLY:
                                         text = action.getTextReply();
                                         title = context.getString(R.string.title_conversation_action_reply, text);
@@ -2004,13 +2021,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         break;
                                     default:
                                         if (raction == null) {
-                                            Log.e("Unknown action type=" + action.getType());
+                                            // This seems to happen when there is no app available for the action
+                                            if (!ConversationAction.TYPE_VIEW_MAP.equals(type) &&
+                                                    !ConversationAction.TYPE_TRACK_FLIGHT.equals(type))
+                                                Log.e("Unknown action type=" + type);
                                             continue;
                                         }
                                         text = null;
                                         title = raction.getTitle();
                                         if (TextUtils.isEmpty(title)) {
-                                            Log.e("Empty action type=" + action.getType());
+                                            Log.e("Empty action type=" + type);
                                             continue;
                                         }
                                 }
@@ -2022,7 +2042,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     @Override
                                     public void onClick(View v) {
                                         try {
-                                            switch (action.getType()) {
+                                            switch (type) {
                                                 case ConversationAction.TYPE_TEXT_REPLY:
                                                     onReply();
                                                     break;
@@ -3036,50 +3056,103 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onAddContact(TupleMessageEx message) {
-            for (Address address : message.from) {
-                InternetAddress ia = (InternetAddress) address;
-                String name = ia.getPersonal();
-                String email = ia.getAddress();
+            InternetAddress ia = (InternetAddress) message.from[0];
+            String name = ia.getPersonal();
+            String email = ia.getAddress();
 
-                // https://developer.android.com/training/contacts-provider/modify-data
-                Intent edit = new Intent();
-                if (!TextUtils.isEmpty(name))
-                    edit.putExtra(ContactsContract.Intents.Insert.NAME, name);
-                if (!TextUtils.isEmpty(email))
-                    edit.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+            Uri lookupUri = null;
+            ContentResolver resolver = context.getContentResolver();
+            try (Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                    new String[]{
+                            ContactsContract.CommonDataKinds.Photo.CONTACT_ID,
+                            ContactsContract.Contacts.LOOKUP_KEY
+                    },
+                    ContactsContract.CommonDataKinds.Email.ADDRESS + " = ?",
+                    new String[]{email}, null)) {
+                if (cursor != null && cursor.moveToNext()) {
+                    int colContactId = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.CONTACT_ID);
+                    int colLookupKey = cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY);
 
-                ContentResolver resolver = context.getContentResolver();
-                try (Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        new String[]{
-                                ContactsContract.CommonDataKinds.Photo.CONTACT_ID,
-                                ContactsContract.Contacts.LOOKUP_KEY
-                        },
-                        ContactsContract.CommonDataKinds.Email.ADDRESS + " = ?",
-                        new String[]{email}, null)) {
-                    if (cursor != null && cursor.moveToNext()) {
-                        int colContactId = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.CONTACT_ID);
-                        int colLookupKey = cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY);
+                    long contactId = cursor.getLong(colContactId);
+                    String lookupKey = cursor.getString(colLookupKey);
 
-                        long contactId = cursor.getLong(colContactId);
-                        String lookupKey = cursor.getString(colLookupKey);
-
-                        Uri lookupUri = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
-
-                        edit.setAction(Intent.ACTION_EDIT);
-                        edit.setDataAndTypeAndNormalize(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-                    } else {
-                        edit.setAction(Intent.ACTION_INSERT);
-                        edit.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                    }
+                    lookupUri = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
                 }
-
-                PackageManager pm = context.getPackageManager();
-                if (edit.resolveActivity(pm) == null)
-                    Snackbar.make(parentFragment.getView(),
-                            R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
-                else
-                    context.startActivity(edit);
             }
+
+            if (lookupUri == null) {
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibAddContact);
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_insert_contact, 1, R.string.title_insert_contact);
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_contact, 2, R.string.title_edit_contact);
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.string.title_insert_contact:
+                                onInsertContact(name, email);
+                                return true;
+
+                            case R.string.title_edit_contact:
+                                onPickContact(name, email);
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
+                });
+
+                popupMenu.show();
+
+            } else
+                onEditContact(name, email, lookupUri);
+        }
+
+        private void onPickContact(String name, String email) {
+            Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            if (pick.resolveActivity(context.getPackageManager()) == null)
+                Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+            else {
+                properties.setValue("name", name);
+                properties.setValue("email", email);
+                parentFragment.startActivityForResult(
+                        Helper.getChooser(context, pick), FragmentMessages.REQUEST_PICK_CONTACT);
+            }
+        }
+
+        private void onInsertContact(String name, String email) {
+            // https://developer.android.com/training/contacts-provider/modify-data
+            Intent insert = new Intent();
+            insert.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+            if (!TextUtils.isEmpty(name))
+                insert.putExtra(ContactsContract.Intents.Insert.NAME, name);
+            insert.setAction(Intent.ACTION_INSERT);
+            insert.setType(ContactsContract.Contacts.CONTENT_TYPE);
+
+            PackageManager pm = context.getPackageManager();
+            if (insert.resolveActivity(pm) == null)
+                Snackbar.make(parentFragment.getView(),
+                        R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+            else
+                context.startActivity(insert);
+        }
+
+        private void onEditContact(String name, String email, Uri lookupUri) {
+            // https://developer.android.com/training/contacts-provider/modify-data
+            Intent edit = new Intent();
+            edit.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+            if (!TextUtils.isEmpty(name))
+                edit.putExtra(ContactsContract.Intents.Insert.NAME, name);
+            edit.setAction(Intent.ACTION_EDIT);
+            edit.setDataAndTypeAndNormalize(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+
+            PackageManager pm = context.getPackageManager();
+            if (edit.resolveActivity(pm) == null)
+                Snackbar.make(parentFragment.getView(),
+                        R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+            else
+                context.startActivity(edit);
         }
 
         private void onToggleMessage(TupleMessageEx message) {
@@ -3297,7 +3370,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionAnswer(TupleMessageEx message, View anchor) {
-            ((FragmentMessages) parentFragment).onReply(message, anchor);
+            ((FragmentMessages) parentFragment).onReply(message, getSelectedText(), anchor);
         }
 
         private void onActionMove(TupleMessageEx message, final boolean copy) {
@@ -4224,6 +4297,29 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             return getKeyAtPosition(getAdapterPosition());
         }
 
+        String getSelectedText() {
+            if (tvBody == null)
+                return null;
+
+            int start = tvBody.getSelectionStart();
+            int end = tvBody.getSelectionEnd();
+            if (start == end)
+                return null;
+
+            if (start < 0)
+                start = 0;
+            if (end < 0)
+                end = 0;
+
+            if (start > end) {
+                int tmp = start;
+                start = end;
+                end = tmp;
+            }
+
+            return tvBody.getText().subSequence(start, end).toString();
+        }
+
         private View.AccessibilityDelegate accessibilityDelegateHeader = new View.AccessibilityDelegate() {
             @Override
             public void onInitializeAccessibilityEvent(View host, AccessibilityEvent event) {
@@ -4493,6 +4589,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.inline = prefs.getBoolean("inline_images", false);
         this.collapse_quotes = prefs.getBoolean("collapse_quotes", false);
         this.authentication = prefs.getBoolean("authentication", true);
+        this.language_detection = prefs.getBoolean("language_detection", false);
 
         debug = prefs.getBoolean("debug", false);
 
@@ -4624,6 +4721,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!prev.content.equals(next.content)) {
                     same = false;
                     log("content changed", next.id);
+                }
+                if (!Objects.equals(prev.language, next.language)) {
+                    same = false;
+                    log("language changed", next.id);
                 }
                 if (!Objects.equals(prev.plain_only, next.plain_only)) {
                     same = false;
@@ -4986,6 +5087,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     }
 
     public void collapse(@NonNull ViewHolder holder, int position) {
+        int type = holder.getItemViewType();
+        if (type != R.layout.item_message_compact && type != R.layout.item_message_normal)
+            return;
+
         TupleMessageEx message = getItemAtPosition(position);
         if (message != null)
             holder.clearExpanded(message);
@@ -5054,6 +5159,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     }
 
     interface IProperties {
+        void setValue(String key, String value);
+
         void setValue(String name, long id, boolean enabled);
 
         boolean getValue(String name, long id);

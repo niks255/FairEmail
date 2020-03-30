@@ -62,8 +62,13 @@ public class WorkerFts extends Worker {
             List<Long> ids = new ArrayList<>(INDEX_BATCH_SIZE);
             DB db = DB.getInstance(getApplicationContext());
             SQLiteDatabase sdb = FtsDbHelper.getInstance(getApplicationContext());
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             try (Cursor cursor = db.message().getMessageFts()) {
                 while (cursor.moveToNext()) {
+                    boolean fts = prefs.getBoolean("fts", false);
+                    if (!fts)
+                        break;
+
                     long id = cursor.getLong(0);
                     EntityMessage message = db.message().getMessage(id);
                     if (message != null)
@@ -72,6 +77,7 @@ public class WorkerFts extends Worker {
 
                             File file = message.getFile(getApplicationContext());
                             String text = HtmlHelper.getFullText(file);
+
                             try {
                                 sdb.beginTransaction();
                                 FtsDbHelper.insert(sdb, message, text);

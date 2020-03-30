@@ -1022,7 +1022,8 @@ class Core {
         // Delete message
         DB db = DB.getInstance(context);
 
-        if (EntityFolder.INBOX.equals(folder.type)) {
+        if (!account.leave_deleted &&
+                EntityFolder.INBOX.equals(folder.type)) {
             Map<String, String> caps = istore.capabilities();
 
             Message[] imessages = ifolder.getMessages();
@@ -1135,8 +1136,9 @@ class Core {
         Helper.writeText(file, body);
         db.message().setMessageContent(message.id,
                 true,
+                HtmlHelper.getLanguage(context, body),
                 parts.isPlainOnly(),
-                HtmlHelper.getPreview(file),
+                HtmlHelper.getPreview(body),
                 parts.getWarnings(message.warning));
     }
 
@@ -1389,16 +1391,16 @@ class Core {
             if (parent == null && parentName != null) {
                 parent = db.folder().getFolderByName(account.id, parentName);
                 if (parent == null) {
+                    Log.i("Creating parent name=" + parentName);
                     parent = new EntityFolder();
                     parent.account = account.id;
                     parent.name = parentName;
                     parent.type = EntityFolder.SYSTEM;
-                    parent.synchronize = false;
                     parent.subscribed = false;
-                    parent.poll = false;
-                    parent.sync_days = 0;
-                    parent.keep_days = 0;
                     parent.selectable = false;
+                    parent.inferiors = false;
+                    parent.setProperties();
+                    parent.display = parentName + "*";
                     parent.id = db.folder().insertFolder(parent);
                 }
                 nameFolder.put(parentName, parent);
@@ -1609,8 +1611,9 @@ class Core {
                     Helper.writeText(file, body);
                     db.message().setMessageContent(message.id,
                             true,
+                            HtmlHelper.getLanguage(context, body),
                             parts.isPlainOnly(),
-                            HtmlHelper.getPreview(file),
+                            HtmlHelper.getPreview(body),
                             parts.getWarnings(message.warning));
 
                     for (EntityAttachment attachment : parts.getAttachments())
@@ -2088,11 +2091,7 @@ class Core {
                             " uid=" + dup.uid + "/" + uid +
                             " msgid=" + msgid + " thread=" + thread);
 
-                    if (dup.uid == null || dup.uid <= uid) {
-                        message = dup;
-                        update = true;
-                        process = (dup.uid == null);
-
+                    if (dup.uid == null) {
                         Log.i(folder.name + " set uid=" + uid);
                         dup.uid = uid;
                         dup.thread = thread;
@@ -2103,8 +2102,10 @@ class Core {
                         }
 
                         dup.error = null;
-                    } else
-                        return null;
+
+                        message = dup;
+                        process = true;
+                    }
                 }
 
                 if (dup.flagged && dup.color != null)
@@ -2350,8 +2351,9 @@ class Core {
                     Helper.writeText(file, body);
                     db.message().setMessageContent(message.id,
                             true,
+                            HtmlHelper.getLanguage(context, body),
                             parts.isPlainOnly(),
-                            HtmlHelper.getPreview(file),
+                            HtmlHelper.getPreview(body),
                             parts.getWarnings(message.warning));
                     Log.i(folder.name + " inline downloaded message id=" + message.id +
                             " size=" + message.size + "/" + (body == null ? null : body.length()));
@@ -2684,8 +2686,9 @@ class Core {
                     Helper.writeText(file, body);
                     db.message().setMessageContent(message.id,
                             true,
+                            HtmlHelper.getLanguage(context, body),
                             parts.isPlainOnly(),
-                            HtmlHelper.getPreview(file),
+                            HtmlHelper.getPreview(body),
                             parts.getWarnings(message.warning));
                     Log.i(folder.name + " downloaded message id=" + message.id +
                             " size=" + message.size + "/" + (body == null ? null : body.length()));

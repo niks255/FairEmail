@@ -13,12 +13,12 @@ android {
         applicationId "eu.faircode.email"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1050
-        versionName "1.1050"
+        versionCode 1067
+        versionName "1.1067"
         archivesBaseName = "FairEmail-v$versionName"
 
         // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
-        buildConfigField "String", "RELEASE_NAME", "\"Xiaotingia\""
+        buildConfigField "String", "RELEASE_NAME", "\"Yaleosaurus\""
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -114,7 +114,7 @@ android {
         }
         play_beta {
             dimension "all"
-            minSdkVersion 23
+            //minSdkVersion 23
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "true"
             buildConfigField "String", "INVITE_URI", "\"https://play.google.com/store/apps/details?id=eu.faircode.email\""
@@ -128,7 +128,7 @@ android {
         }
         play_release {
             dimension "all"
-            minSdkVersion 23
+            //minSdkVersion 23
             buildConfigField "boolean", "BETA_RELEASE", "false"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "true"
             buildConfigField "String", "INVITE_URI", "\"https://play.google.com/store/apps/details?id=eu.faircode.email\""
@@ -164,7 +164,7 @@ android {
         autoUpload false
         autoReportBuilds false
         sourceControl {
-            repository "https://github.com/M66B/open-source-email"
+            repository "https://github.com/M66B/FairEmail/"
         }
     }
 }
@@ -242,7 +242,7 @@ dependencies {
     def exif_version = "1.3.0-alpha01"
     def biometric_version = "1.0.1"
     def textclassifier_version = "1.0.0-alpha03"
-    def billingclient_version = "2.1.0"
+    def billingclient_version = "2.2.0"
     def javamail_version = "1.6.5"
     def jsoup_version = "1.13.1"
     def dnsjava_version = "2.1.9"
@@ -335,8 +335,8 @@ dependencies {
     // https://javaee.github.io/javamail/
     // https://projects.eclipse.org/projects/ee4j.javamail
     // https://mvnrepository.com/artifact/com.sun.mail
-    //implementation "com.sun.mail:android-mail:$javamail_version"
-    //implementation "com.sun.mail:android-activation:$javamail_version"
+    implementation "com.sun.mail:android-mail:$javamail_version"
+    implementation "com.sun.mail:android-activation:$javamail_version"
 
     // https://jsoup.org/news/
     implementation "org.jsoup:jsoup:$jsoup_version"

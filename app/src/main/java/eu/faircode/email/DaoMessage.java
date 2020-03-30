@@ -71,7 +71,7 @@ public interface DaoMessage {
             " WHERE account.`synchronize`" +
             " AND (:threading OR (:type IS NULL AND (folder.unified OR :found)) OR (:type IS NOT NULL AND folder.type = :type))" +
             " AND (NOT message.ui_hide OR :debug)" +
-            " AND (NOT :found OR ui_found = :found)" +
+            " AND (NOT :found OR message.ui_found = :found)" +
             " GROUP BY account.id, CASE WHEN message.thread IS NULL OR NOT :threading THEN message.id ELSE message.thread END" +
             " HAVING (:found OR" +
             "   CASE WHEN :type IS NULL THEN SUM(folder.unified) > 0" +
@@ -80,6 +80,7 @@ public interface DaoMessage {
             " AND (NOT :filter_unflagged OR COUNT(message.id) - SUM(1 - message.ui_flagged) > 0)" +
             " AND (NOT :filter_unknown OR SUM(message.avatar IS NOT NULL AND message.sender <> identity.email) > 0)" +
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_drafts + ")" +
+            " AND (:filter_language IS NULL OR SUM(message.language = :filter_language) > 0)" +
             " ORDER BY -IFNULL(MAX(message.importance), 1)" +
             ", CASE" +
             "   WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
@@ -98,7 +99,7 @@ public interface DaoMessage {
             String type,
             boolean threading,
             String sort, boolean ascending,
-            boolean filter_seen, boolean filter_unflagged, boolean filter_unknown, boolean filter_snoozed,
+            boolean filter_seen, boolean filter_unflagged, boolean filter_unknown, boolean filter_snoozed, String filter_language,
             boolean found,
             boolean debug);
 
@@ -127,7 +128,7 @@ public interface DaoMessage {
             " WHERE (message.account = f.account OR " + is_outbox + ")" +
             " AND (:threading OR folder.id = :folder)" +
             " AND (NOT message.ui_hide OR :debug)" +
-            " AND (NOT :found OR ui_found = :found)" +
+            " AND (NOT :found OR message.ui_found = :found)" +
             " GROUP BY CASE WHEN message.thread IS NULL OR NOT :threading THEN message.id ELSE message.thread END" +
             " HAVING SUM(CASE WHEN folder.id = :folder THEN 1 ELSE 0 END) > 0" +
             " AND (NOT :filter_seen OR SUM(1 - message.ui_seen) > 0 OR " + is_outbox + ")" +
@@ -135,6 +136,7 @@ public interface DaoMessage {
             " AND (NOT :filter_unknown OR SUM(message.avatar IS NOT NULL AND message.sender <> identity.email) > 0" +
             "   OR " + is_outbox + " OR " + is_drafts + " OR " + is_sent + ")" +
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_outbox + " OR " + is_drafts + ")" +
+            " AND (:filter_language IS NULL OR SUM(message.language = :filter_language) > 0 OR " + is_outbox + ")" +
             " ORDER BY -IFNULL(MAX(message.importance), 1)" +
             ", CASE" +
             "   WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
@@ -152,7 +154,7 @@ public interface DaoMessage {
     DataSource.Factory<Integer, TupleMessageEx> pagedFolder(
             long folder, boolean threading,
             String sort, boolean ascending,
-            boolean filter_seen, boolean filter_unflagged, boolean filter_unknown, boolean filter_snoozed,
+            boolean filter_seen, boolean filter_unflagged, boolean filter_unknown, boolean filter_snoozed, String filter_language,
             boolean found,
             boolean debug);
 
@@ -349,29 +351,6 @@ public interface DaoMessage {
     LiveData<TupleKeyword.Persisted> liveMessageKeywords(long id);
 
     @Transaction
-    @Query("SELECT account.id AS account, COUNT(message.id) AS unseen, SUM(ABS(notifying)) AS notifying" +
-            " FROM message" +
-            " JOIN account_view AS account ON account.id = message.account" +
-            " JOIN folder_view AS folder ON folder.id = message.folder" +
-            " WHERE (:account IS NULL OR account.id = :account)" +
-            " AND account.`synchronize`" +
-            " AND folder.notify" +
-            " AND NOT (message.ui_seen OR message.ui_hide)" +
-            " GROUP BY account.id" +
-            " ORDER BY account.id")
-    LiveData<List<TupleMessageStats>> liveUnseenWidget(Long account);
-
-    @Query("SELECT :account AS account, COUNT(message.id) AS unseen, SUM(ABS(notifying)) AS notifying" +
-            " FROM message" +
-            " JOIN account_view AS account ON account.id = message.account" +
-            " JOIN folder_view AS folder ON folder.id = message.folder" +
-            " WHERE (:account IS NULL OR account.id = :account)" +
-            " AND account.`synchronize`" +
-            " AND folder.notify" +
-            " AND NOT (message.ui_seen OR message.ui_hide)")
-    TupleMessageStats getUnseenWidget(Long account);
-
-    @Transaction
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
             ", account.notify AS accountNotify, account.auto_seen AS accountAutoSeen" +
@@ -398,6 +377,29 @@ public interface DaoMessage {
             " AND (notifying <> 0 OR NOT (message.ui_seen OR message.ui_hide))" +
             " ORDER BY message.received")
     LiveData<List<TupleMessageEx>> liveUnseenNotify();
+
+    @Transaction
+    @Query("SELECT account.id AS account, COUNT(message.id) AS unseen, SUM(ABS(notifying)) AS notifying" +
+            " FROM message" +
+            " JOIN account_view AS account ON account.id = message.account" +
+            " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " WHERE (:account IS NULL OR account.id = :account)" +
+            " AND account.`synchronize`" +
+            " AND folder.notify" +
+            " AND NOT (message.ui_seen OR message.ui_hide)" +
+            " GROUP BY account.id" +
+            " ORDER BY account.id")
+    LiveData<List<TupleMessageStats>> liveWidgetUnseen(Long account);
+
+    @Query("SELECT :account AS account, COUNT(message.id) AS unseen, SUM(ABS(notifying)) AS notifying" +
+            " FROM message" +
+            " JOIN account_view AS account ON account.id = message.account" +
+            " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " WHERE (:account IS NULL OR account.id = :account)" +
+            " AND account.`synchronize`" +
+            " AND folder.notify" +
+            " AND NOT (message.ui_seen OR message.ui_hide)")
+    TupleMessageStats getWidgetUnseen(Long account);
 
     @Transaction
     @Query("SELECT folder, COUNT(*) AS total" +
@@ -455,13 +457,24 @@ public interface DaoMessage {
 
     @Query("SELECT id AS _id, subject AS suggestion FROM message" +
             " WHERE subject LIKE :query" +
+            " AND NOT message.ui_hide" +
             " GROUP BY subject" +
             " UNION" +
             " SELECT id AS _id, sender AS suggestion FROM message" +
             " WHERE sender LIKE :query" +
+            " AND NOT message.ui_hide" +
             " GROUP BY sender" +
             " ORDER BY sender, subject")
     Cursor getSuggestions(String query);
+
+    @Query("SELECT language FROM message" +
+            " WHERE (:account IS NULL OR message.account = :account)" +
+            " AND (:folder IS NULL OR message.folder = :folder)" +
+            " AND NOT message.ui_hide" +
+            " AND NOT message.language IS NULL" +
+            " GROUP BY language" +
+            " ORDER BY COUNT(*) DESC")
+    List<String> getLanguages(Long account, Long folder);
 
     @Insert
     long insertMessage(EntityMessage message);
@@ -539,14 +552,19 @@ public interface DaoMessage {
     int setMessageRevisions(long id, Integer revisions);
 
     @Query("UPDATE message" +
-            " SET content = :content, fts = 0, preview = CASE WHEN :content THEN preview ELSE NULL END" +
+            " SET content = 0, fts = 0, language = NULL, plain_only = NULL, preview = NULL" +
             " WHERE id = :id")
-    int setMessageContent(long id, boolean content);
+    int resetMessageContent(long id);
 
     @Query("UPDATE message" +
-            " SET content = :content, fts = 0, plain_only = :plain_only, preview = :preview, warning = :warning" +
+            " SET content = :content" +
+            ", fts = 0" +
+            ", language = :language" +
+            ", plain_only = :plain_only" +
+            ", preview = :preview" +
+            ", warning = :warning" +
             " WHERE id = :id")
-    int setMessageContent(long id, boolean content, Boolean plain_only, String preview, String warning);
+    int setMessageContent(long id, boolean content, String language, Boolean plain_only, String preview, String warning);
 
     @Query("UPDATE message SET size = :size, total = :total WHERE id = :id")
     int setMessageSize(long id, Long size, Long total);

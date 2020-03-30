@@ -221,6 +221,16 @@ public class EntityFolder extends EntityOrder implements Serializable {
         }
     }
 
+    static EntityFolder getOutbox() {
+        EntityFolder outbox = new EntityFolder();
+        outbox.name = "OUTBOX";
+        outbox.type = EntityFolder.OUTBOX;
+        outbox.synchronize = false;
+        outbox.sync_days = 0;
+        outbox.keep_days = 0;
+        return outbox;
+    }
+
     static String getNotificationChannelId(long id) {
         return "notification.folder." + id;
     }
@@ -367,6 +377,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
                     Objects.equals(this.sync_state, other.sync_state) &&
                     this.read_only == other.read_only &&
                     this.selectable == other.selectable &&
+                    this.inferiors == other.inferiors &&
                     Objects.equals(this.error, other.error) &&
                     Objects.equals(this.last_sync, other.last_sync));
         } else

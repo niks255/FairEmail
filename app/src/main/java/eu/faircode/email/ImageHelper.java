@@ -37,6 +37,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -69,13 +72,16 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 class ImageHelper {
-    private static final ExecutorService executor =
-            Helper.getBackgroundExecutor(1, "image");
+    private static final ExecutorService executor_1 =
+            Helper.getBackgroundExecutor(1, "image_1");
+    private static final ExecutorService executor_n =
+            Helper.getBackgroundExecutor(0, "image_n");
 
     private static final int DOWNLOAD_TIMEOUT = 15 * 1000; // milliseconds
     private static final int MAX_REDIRECTS = 10;
     private static final long FIT_DRAWABLE_WARNING = 10 * 1000L; // milliseconds
     private static final long FIT_DRAWABLE_TIMEOUT = 20 * 1000L; // milliseconds
+    private static final int SLOW_CONNECTION = 2 * 1024; // Kbps
 
     static Bitmap generateIdenticon(@NonNull String email, int size, int pixels, Context context) {
         byte[] hash = getHash(email);
@@ -336,6 +342,30 @@ class ImageHelper {
             lld.setBounds(0, 0, px, px);
             lld.setLevel(1);
 
+            boolean slow = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                try {
+                    // 2G GSM ~14.4 Kbps
+                    // G GPRS ~26.8 Kbps
+                    // E EDGE ~108.8 Kbps
+                    // 3G UMTS ~128 Kbps
+                    // H HSPA ~3.6 Mbps
+                    // H+ HSPA+ ~14.4 Mbps-23.0 Mbps
+                    // 4G LTE ~50 Mbps
+                    // 4G LTE-A ~500 Mbps
+                    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    Network active = (cm == null ? null : cm.getActiveNetwork());
+                    NetworkCapabilities caps = (active == null ? null : cm.getNetworkCapabilities(active));
+                    if (caps != null) {
+                        int kbps = caps.getLinkDownstreamBandwidthKbps();
+                        slow = (kbps < SLOW_CONNECTION);
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+
+            ExecutorService executor = (slow ? executor_1 : executor_n);
+
             executor.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -490,12 +520,20 @@ class ImageHelper {
             int redirects = 0;
             URL url = new URL(source);
             while (true) {
+                // https://developer.chrome.com/multidevice/user-agent
+                String ua = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv)" +
+                        " AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0" +
+                        " Chrome/43.0.2357.65" +
+                        " Mobile Safari/537.36";
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setDoOutput(false);
                 urlConnection.setReadTimeout(DOWNLOAD_TIMEOUT);
                 urlConnection.setConnectTimeout(DOWNLOAD_TIMEOUT);
                 urlConnection.setInstanceFollowRedirects(true);
+                if (BuildConfig.DEBUG)
+                    urlConnection.setRequestProperty("User-Agent", ua);
                 urlConnection.connect();
 
                 int status = urlConnection.getResponseCode();

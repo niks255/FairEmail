@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -97,6 +98,7 @@ public class ViewModelMessages extends ViewModel {
                                     args.filter_unflagged,
                                     args.filter_unknown,
                                     args.filter_snoozed,
+                                    args.filter_language,
                                     false,
                                     args.debug),
                             LOCAL_PAGE_SIZE);
@@ -116,6 +118,7 @@ public class ViewModelMessages extends ViewModel {
                                     args.filter_unflagged,
                                     args.filter_unknown,
                                     args.filter_snoozed,
+                                    args.filter_language,
                                     false,
                                     args.debug),
                             configFolder);
@@ -144,6 +147,7 @@ public class ViewModelMessages extends ViewModel {
                                         args.threading,
                                         "time", false,
                                         false, false, false, false,
+                                        null,
                                         true,
                                         args.debug),
                                 configSearch);
@@ -153,6 +157,7 @@ public class ViewModelMessages extends ViewModel {
                                         args.folder, args.threading,
                                         "time", false,
                                         false, false, false, false,
+                                        null,
                                         true,
                                         args.debug),
                                 configSearch);
@@ -205,6 +210,12 @@ public class ViewModelMessages extends ViewModel {
         dump();
 
         return model;
+    }
+
+    void retry(AdapterMessage.ViewType viewType) {
+        Model model = models.get(viewType);
+        if (model != null && model.boundary != null)
+            model.boundary.retry();
     }
 
     @Override
@@ -324,6 +335,7 @@ public class ViewModelMessages extends ViewModel {
         private boolean filter_unknown;
         private boolean filter_snoozed;
         private boolean filter_archive;
+        private String filter_language;
         private boolean debug;
 
         Args(Context context,
@@ -350,6 +362,13 @@ public class ViewModelMessages extends ViewModel {
             this.filter_unflagged = prefs.getBoolean("filter_unflagged", false);
             this.filter_unknown = prefs.getBoolean("filter_unknown", false);
             this.filter_snoozed = prefs.getBoolean("filter_snoozed", true);
+
+            boolean language_detection = prefs.getBoolean("language_detection", false);
+            if (!language_detection || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                this.filter_language = null;
+            else
+                this.filter_language = prefs.getString("filter_language", null);
+
             this.debug = prefs.getBoolean("debug", false);
         }
 
@@ -373,6 +392,7 @@ public class ViewModelMessages extends ViewModel {
                         this.filter_unknown == other.filter_unknown &&
                         this.filter_snoozed == other.filter_snoozed &&
                         this.filter_archive == other.filter_archive &&
+                        Objects.equals(this.filter_language, other.filter_language) &&
                         this.debug == other.debug);
             } else
                 return false;
@@ -391,6 +411,7 @@ public class ViewModelMessages extends ViewModel {
                     " unknown=" + filter_unknown +
                     " snoozed=" + filter_snoozed +
                     " archive=" + filter_archive +
+                    " language=" + filter_language +
                     " debug=" + debug;
         }
     }

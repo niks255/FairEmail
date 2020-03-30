@@ -33,6 +33,8 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.view.textclassifier.TextClassificationManager;
+import android.view.textclassifier.TextLanguage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -237,14 +239,10 @@ public class HtmlHelper {
         x11ColorMap.put("yellowgreen", 0x9ACD32);
     }
 
-    static Document sanitize(Context context, String html, boolean show_images, boolean autolink) {
-        Document parsed = JsoupEx.parse(html);
-        return sanitize(context, parsed, show_images, autolink, false);
-    }
-
-    static Document sanitize(Context context, Document parsed, boolean show_images, boolean autolink, boolean more) {
+    static Document sanitizeCompose(Context context, String html, boolean show_images) {
         try {
-            return _sanitize(context, parsed, show_images, autolink, more);
+            Document parsed = JsoupEx.parse(html);
+            return sanitize(context, parsed, false, show_images);
         } catch (Throwable ex) {
             // OutOfMemoryError
             Log.e(ex);
@@ -256,7 +254,21 @@ public class HtmlHelper {
         }
     }
 
-    private static Document _sanitize(Context context, Document parsed, boolean show_images, boolean autolink, boolean more) {
+    static Document sanitizeView(Context context, Document parsed, boolean show_images) {
+        try {
+            return sanitize(context, parsed, true, show_images);
+        } catch (Throwable ex) {
+            // OutOfMemoryError
+            Log.e(ex);
+            Document document = Document.createShell("");
+            Element strong = document.createElement("strong");
+            strong.text(Log.formatThrowable(ex));
+            document.body().appendChild(strong);
+            return document;
+        }
+    }
+
+    private static Document sanitize(Context context, Document parsed, boolean view, boolean show_images) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean text_color = prefs.getBoolean("text_color", true);
         boolean text_size = prefs.getBoolean("text_size", true);
@@ -328,20 +340,18 @@ public class HtmlHelper {
         }
 
         // Limit length
-        if (truncate(parsed, true)) {
+        if (view && truncate(parsed, true)) {
             parsed.body()
                     .appendElement("br")
                     .appendElement("p")
                     .appendElement("em")
                     .text(context.getString(R.string.title_too_large));
-
-            if (more)
-                parsed.body()
-                        .appendElement("p")
-                        .appendElement("big")
-                        .appendElement("a")
-                        .attr("href", "full:")
-                        .text(context.getString(R.string.title_show_full));
+            parsed.body()
+                    .appendElement("p")
+                    .appendElement("big")
+                    .appendElement("a")
+                    .attr("href", "full:")
+                    .text(context.getString(R.string.title_show_full));
         }
 
         Whitelist whitelist = Whitelist.relaxed()
@@ -688,7 +698,7 @@ public class HtmlHelper {
         }
 
         // Autolink
-        if (autolink) {
+        if (view) {
             final Pattern pattern = Pattern.compile(
                     PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern() + "|" +
                             PatternsCompat.AUTOLINK_WEB_URL.pattern());
@@ -1095,17 +1105,36 @@ public class HtmlHelper {
         Log.i(document.head().html());
     }
 
-    static String getPreview(File file) throws IOException {
+    static String getLanguage(Context context, String body) {
         try {
-            Document d = JsoupEx.parse(file);
-            return _getText(d, false);
-        } catch (OutOfMemoryError ex) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean language_detection = prefs.getBoolean("language_detection", false);
+            if (!language_detection)
+                return null;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                TextClassificationManager tcm =
+                        (TextClassificationManager) context.getSystemService(Context.TEXT_CLASSIFICATION_SERVICE);
+                if (tcm == null)
+                    return null;
+
+                String text = getPreview(body);
+                if (body == null)
+                    return null;
+
+                TextLanguage.Request trequest = new TextLanguage.Request.Builder(text).build();
+                TextLanguage tlanguage = tcm.getTextClassifier().detectLanguage(trequest);
+                if (tlanguage.getLocaleHypothesisCount() > 0)
+                    return tlanguage.getLocale(0).toLocale().getLanguage();
+            }
+
+            return null;
+        } catch (Throwable ex) {
             Log.e(ex);
             return null;
         }
     }
 
-    @Deprecated
     static String getPreview(String body) {
         try {
             if (body == null)

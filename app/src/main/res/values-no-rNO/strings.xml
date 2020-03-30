@@ -236,9 +236,6 @@
     <string name="title_advanced_receipt">Når du ber om kvittering</string>
     <string name="title_advanced_usenet_signature">Usenet signaturkonvensjon</string>
     <string name="title_advanced_remove_signatures">Fjern gjenkjennte signaturer</string>
-    <string name="title_advanced_resize_images">Endre størrelse på innebygde bilder automatisk</string>
-    <string name="title_advanced_resize_attachments">Endre størrelse på bilder i vedlegg automatisk</string>
-    <string name="title_advanced_resize_pixels">&lt; %1$d piksler</string>
     <string name="title_advanced_send_reminders">Vis påminnelser</string>
     <string name="title_advanced_lookup_mx">Sjekk mottakerens e-postadresser før du sender</string>
     <string name="title_advanced_send_delayed">Forsink sending av meldinger</string>
@@ -482,6 +479,7 @@
     <string name="title_primary_account">Primær (standardkonto)</string>
     <string name="title_primary_identity">Primær (standardidentitet)</string>
     <string name="title_leave_on_server">Legg igjen meldingene på serveren</string>
+    <string name="title_leave_deleted">Legg igjen slettede meldinger på serveren</string>
     <string name="title_leave_on_device">Legg igjen meldinger på enheten</string>
     <string name="title_max_messages">Maksimalt antall meldinger du vil laste ned (tomt for alle)</string>
     <string name="title_keep_alive_interval">Holde i live/avstemming intervall (minutter)</string>
@@ -526,18 +524,12 @@
     <string name="title_synchronize_enabled">Synkroniser</string>
     <string name="title_delete_local">Slett lokale meldinger</string>
     <string name="title_delete_browsed">Slett bladde/søkte meldinger</string>
-    <string name="title_empty_trash">Tøm lokalt søppel</string>
-    <string name="title_empty_spam">Tøm lokal spam</string>
     <string name="title_edit_properties">Redigere egenskaper</string>
     <string name="title_edit_rules">Redigere regler</string>
     <string name="title_create_channel">Opprett varselkanal</string>
     <string name="title_edit_channel">Rediger varselkanal</string>
     <string name="title_delete_channel">Slett varselkanal</string>
     <string name="title_create_sub_folder">Lag undermappe</string>
-    <string name="title_empty_trash_ask">Vil du slette alle lokale søppelmeldinger permanent?</string>
-    <string name="title_empty_spam_ask">Vil du slette alle lokale spammeldinger permanent?</string>
-    <string name="title_empty_trash_all_ask">Vil du slette alle lokale søppelmeldinger på alle kontoer permanent?</string>
-    <string name="title_empty_spam_all_ask">Vil du slette alle lokale spam-meldinger på alle kontoer permanent?</string>
     <string name="title_delete_operation">Slett operasjoner med en feilmelding?</string>
     <string name="title_delete_contacts">Slette alle lokale kontakter?</string>
     <string name="title_no_operations">Ingen ventende operasjoner</string>
@@ -703,7 +695,6 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_send">Send</string>
     <string name="title_send_now">Send nå</string>
     <string name="title_send_via">Send via</string>
-    <string name="title_send_with_options">Send &#8230;</string>
     <string name="title_send_at">Sender &#8230;</string>
     <string name="title_send_encryption">Kryptering</string>
     <string name="title_send_priority">Prioritet</string>
@@ -715,7 +706,6 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_style_color">Farge</string>
     <string name="title_style_clear">Fjern formatering</string>
     <string name="title_style_link">Sett inn lenke</string>
-    <string name="title_style_image">Sett inn bilde</string>
     <string name="title_add_attachment">Legg ved fil</string>
     <string name="title_attachment_file">Legg ved fil</string>
     <string name="title_attachment_photo">Ta bilde</string>
@@ -742,7 +732,6 @@ Dette vil bidra til å opprettholde en balanse mellom ugunstige og gunstige anme
     <string name="title_attachment_keywords">festet, feste, vedlegg, inkludert</string>
     <string name="title_attachment_reminder">Hadde du tenkt å legge til et vedlegg?</string>
     <string name="title_attachments_missing">Ikke alle vedlegg er lastet ned</string>
-    <string name="title_send_dialog_hint">Denne dialogboksen vil fremdeles være tilgjengelig via trepunkts menyen i handlingslinjen</string>
     <string name="title_draft_deleted">Utkast forkastet</string>
     <string name="title_draft_saved">Utkast lagret</string>
     <string name="title_ask_send_via">Send meldingen til %1$s via %2$s?</string>

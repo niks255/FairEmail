@@ -82,7 +82,7 @@ public class WorkerCleanup extends Worker {
                         File file = message.getFile(context);
                         if (!file.exists()) {
                             Log.w("Message file missing id=" + mid);
-                            db.message().setMessageContent(mid, false);
+                            db.message().resetMessageContent(mid);
                         }
                     }
                 }
@@ -113,6 +113,9 @@ public class WorkerCleanup extends Worker {
 
                 // Clear last search
                 prefs.edit().remove("last_search").apply();
+
+                // Contact info cache
+                ContactInfo.clearCache();
             }
 
             long now = new Date().getTime();

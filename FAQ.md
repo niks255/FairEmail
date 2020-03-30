@@ -133,7 +133,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [~~(10) What does 'UIDPLUS not supported' mean?~~](#user-content-faq10)
 * [(12) How does encryption/decryption work?](#user-content-faq12)
 * [(13) How does search on device/server work?](#user-content-faq13)
-* [(14) How can I setup Outlook / Hotmail with 2FA?](#user-content-faq14)
+* [(14) How can I setup Outlook / Live / Hotmail with 2FA?](#user-content-faq14)
 * [(15) Why does the message text keep loading?](#user-content-faq15)
 * [(16) Why are messages not being synchronized?](#user-content-faq16)
 * [~~(17) Why does manual synchronize not work?~~](#user-content-faq17)
@@ -266,6 +266,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(146) How can I fix incorrect message times?](#user-content-faq146)
 * [(147) What should I know about third party versions?](#user-content-faq147)
 * [(148) How can I use an Apple iCloud account?](#user-content-faq148)
+* [(149) How does the unread message count widget work?](#user-content-faq149)
 
 [I have another question.](#user-content-support)
 
@@ -379,7 +380,9 @@ See also [this FAQ](#user-content-faq16).
 <a name="faq4"></a>
 **(4) How can I use an invalid security certificate / empty password / plain text connection?**
 
-*Invalid security certificate* (Can't verify identity of server)
+*... Untrusted ... not in certificate ...*
+<br />
+*... Invalid security certificate (Can't verify identity of server) ...*
 
 You should try to fix this by contacting your provider or by getting a valid security certificate
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
@@ -657,6 +660,13 @@ To allow different private keys for the same email address, FairEmail will alway
 
 Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the privacy settings (PEM or DER format).
 
+FairEmail verifies both the signature and the complete certificate chain.
+
+Common errors:
+
+* *No certificate found matching targetContraints*: this likely means you are using an old version of FairEmail
+* *unable to find valid certification path to requested target*: basically this means one or more intermediate or root certificates were not found
+
 The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.
 
 How to extract a public key from a S/MIME certificate:
@@ -713,9 +723,9 @@ Searching messages on the device is a free feature, searching messages on the se
 <br />
 
 <a name="faq14"></a>
-**(14) How can I setup Outlook / Hotmail with 2FA?**
+**(14) How can I setup Outlook / Live / Hotmail with 2FA?**
 
-To use Outlook or Hotmail with two factor authentication enabled, you need to create an app password.
+To use an Outlook, Live or Hotmail account with two factor authentication enabled, you need to create an app password.
 See [here](https://support.microsoft.com/en-us/help/12409/microsoft-account-app-passwords-two-step-verification) for the details.
 
 See [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for Microsoft's instructions.
@@ -874,7 +884,7 @@ The error *... Unexpected end of zlib input stream ...* means that not all data 
 The warning *... Unsupported encoding ...* means that the character set of the message is unknown or not supported.
 FairEmail will assume ISO-8859-1 (Latin1), which will in most cases result in showing the message correctly.
 
-Please [see here](#user-content-faq4) for the error *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
+Please [see here](#user-content-faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
 Please [see here](#user-content-faq127) for the error *... Syntactically invalid HELO argument(s) ...*.
 
@@ -935,9 +945,10 @@ Possible causes are:
 * The same email client is connected multiple times to the same account
 * Previous connections were terminated abruptly for example by abruptly losing internet connectivity
 
-First try to wait some time to see if the problem resolves itself,
-else try to enable the folder setting *Poll instead of synchronize* for some folders (long press folder in the folder list, edit properties).
-The poll interval can be configured in the account settings.
+First try to wait some time to see if the problem resolves itself, else:
+
+* either switch to periodically checking for messages in the receive settings, which will result in opening folders one at a time
+* or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
 
 The maximum number of simultaneous folder connections for Gmail is 15,
 so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time.
@@ -1109,6 +1120,8 @@ and that identities of other accounts will not be considered.
 
 It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings
 to match the username of an email address (the part before the @ sign).
+
+Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
 
 If you like to match the special purpose email addresses abc@example.com and xyx@example.com
 and like to have a fallback email address main@example.com as well, you could do something like this:
@@ -1618,7 +1631,8 @@ FairEmail shows all attachment types. To distinguish inline and regular attachme
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-There are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %,
+The price of FairEmail is too low, lower than that of most similar apps,
+and there are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %,
 to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852).
 
 <br />
@@ -2052,8 +2066,14 @@ The sender might use [this tool](https://www.mail-tester.com/) to check authenti
 **(93) Can you allow installation/data storage on external storage media (sdcard)?**
 
 FairEmail uses services and alarms, provides widgets and listens for the boot completed event to be started on device start,
-so it is not possible to store FairEmail or its data on external storage media, like an sdcard.
+so it is not possible to store the app on external storage media, like an sdcard.
 See also [here](https://developer.android.com/guide/topics/data/install-location).
+
+Messages, attachments, etc stored on external storage media, like an scard, can be accessed by other apps and is therefore not safe.
+See [here](https://developer.android.com/training/data-storage) for the details.
+
+When needed you can save (raw) messages via the three-dots menu just above the message text
+and save attachments by tapping on the floppy icon.
 
 If you need to save on storage space, you can limit the number of days messages are being synchronized and kept for.
 You can change these settings by long pressing a folder in the folder list and selecting *Edit properties*.
@@ -2414,6 +2434,8 @@ The widget is designed to look good on most home/launcher screens by making it m
 This way the widget will nicely blend in, while still being properly readable.
 
 Adding (account) colors will cause problems with some backgrounds and will cause readability problems, which is why this won't be added.
+
+Due to Android limitations it is not possible to dynamically set the opacity of the background and to have rounded corners at the same time.
 
 <br />
 
@@ -2826,7 +2848,24 @@ When using two-factor authentication you might need to use an [app-specific pass
 
 <br />
 
+<a name="faq149"></a>
+**(149) How does the unread message count widget work?**
+
+The unread message count widget shows the number of unread messages either for all accounts or for a selected account,
+but only for the folders for which new message notifications are enabled.
+
+Tapping on the notification will synchronize all folders for which synchronization is enabled and will open:
+
+* the start screen when all accounts were selected
+* a folder list when a specific account was selected and when new message notifications are enabled for multiple folders
+* a list of messages when a specific account was selected and when new message notifications are enabled for one folder
+
+<br />
+
 ## Support
+
+Only the latest Play store version and latest GitHub release are supported.
+This also means that downgrading is not supported.
 
 Requested features should:
 

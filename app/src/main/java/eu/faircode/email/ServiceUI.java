@@ -239,9 +239,9 @@ public class ServiceUI extends IntentService {
         boolean plain_only = prefs.getBoolean("plain_only", false);
 
         Bundle results = RemoteInput.getResultsFromIntent(intent);
-        String text = results.getString("text");
-        if (text != null)
-            text = "<p>" + text.replaceAll("\\r?\\n", "<br>") + "</p>";
+        String body = results.getString("text");
+        if (body != null)
+            body = "<p>" + body.replaceAll("\\r?\\n", "<br>") + "</p>";
 
         DB db = DB.getInstance(this);
         try {
@@ -281,12 +281,13 @@ public class ServiceUI extends IntentService {
             reply.id = db.message().insertMessage(reply);
 
             File file = reply.getFile(this);
-            Helper.writeText(file, text);
+            Helper.writeText(file, body);
 
             db.message().setMessageContent(reply.id,
                     true,
+                    HtmlHelper.getLanguage(this, body),
                     plain_only || ref.plain_only,
-                    HtmlHelper.getPreview(file),
+                    HtmlHelper.getPreview(body),
                     null);
 
             EntityOperation.queue(this, reply, EntityOperation.SEND);
@@ -499,7 +500,7 @@ public class ServiceUI extends IntentService {
         if (poll && enabled && pollInterval > 0) {
             long now = new Date().getTime();
             long interval = pollInterval * 60 * 1000L;
-            long next = now + interval - now % interval;
+            long next = now + interval - now % interval + 30 * 1000L;
 
             EntityLog.log(context, "Poll next=" + new Date(next));
 
