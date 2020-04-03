@@ -122,7 +122,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "metered", "roaming", "rlah", // force reconnect
             "ssl_harden", // force reconnect
             "socks_enabled", "socks_proxy", // force reconnect
-            "subscribed_only", // force folder sync
             "badge", "unseen_ignored", // force update badge/widget
             "debug" // force reconnect
     ));
@@ -149,7 +148,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         iif.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         iif.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         registerReceiver(connectionChangedReceiver, iif);
-        registerReceiver(onScreenOff, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
         DB db = DB.getInstance(this);
 
@@ -583,7 +581,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
 
-        unregisterReceiver(onScreenOff);
         unregisterReceiver(connectionChangedReceiver);
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1318,6 +1315,15 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     // Keep alive
                     boolean first = true;
                     while (state.isRunning()) {
+                        long idleTime = state.getIdleTime();
+                        boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
+                        boolean optimize = (auto_optimize && !first &&
+                                !account.keep_alive_ok && account.poll_interval > 9 &&
+                                Math.abs(idleTime - account.poll_interval * 60 * 1000L) < 60 * 1000L);
+                        if (auto_optimize && !first && !account.keep_alive_ok)
+                            EntityLog.log(ServiceSynchronize.this, account.name +
+                                    " Optimize interval=" + account.poll_interval +
+                                    " idle=" + idleTime + "/" + optimize);
                         try {
                             if (!state.isRecoverable())
                                 throw new StoreClosedException(iservice.getStore(), "Unrecoverable");
@@ -1348,32 +1354,42 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             Log.i(folder.name + " poll count=" + folder.poll_count);
                                         }
                         } catch (Throwable ex) {
-                            if (BuildConfig.DEBUG &&
-                                    !first && !account.keep_alive_ok &&
-                                    account.poll_interval > 9 &&
-                                    Math.abs(state.getIdleTime() - account.poll_interval * 60 * 1000L) < 60 * 1000L) {
+                            if (optimize) {
                                 account.keep_alive_failed++;
+                                account.keep_alive_succeeded = 0;
                                 if (account.keep_alive_failed >= 3) {
                                     account.keep_alive_failed = 0;
                                     account.poll_interval--;
                                     db.account().setAccountKeepAliveInterval(account.id, account.poll_interval);
                                 }
-                                db.account().setAccountKeepAliveFailed(account.id, account.keep_alive_failed);
-                                EntityLog.log(ServiceSynchronize.this, account.name +
-                                        " keep alive failed=" + account.keep_alive_failed +
-                                        " keep alive interval=" + account.poll_interval +
-                                        " max idle=" + state.getIdleTime());
+                                db.account().setAccountKeepAliveValues(account.id,
+                                        account.keep_alive_failed, account.keep_alive_succeeded);
+                                EntityLog.log(ServiceSynchronize.this, account.name + " keep alive" +
+                                        " failed=" + account.keep_alive_failed +
+                                        " succeeded=" + account.keep_alive_succeeded +
+                                        " interval=" + account.poll_interval +
+                                        " idle=" + idleTime);
                             }
                             throw ex;
                         }
 
-                        if (BuildConfig.DEBUG &&
-                                !first && !account.keep_alive_ok &&
-                                account.poll_interval > 9 &&
-                                Math.abs(state.getIdleTime() - account.poll_interval * 60 * 1000L) < 60 * 1000L) {
-                            account.keep_alive_ok = true;
-                            db.account().setAccountKeepAliveOk(account.id, true);
-                            EntityLog.log(ServiceSynchronize.this, account.name + " keep alive ok");
+                        if (optimize) {
+                            account.keep_alive_failed = 0;
+                            account.keep_alive_succeeded++;
+                            db.account().setAccountKeepAliveValues(account.id,
+                                    account.keep_alive_failed, account.keep_alive_succeeded);
+                            if (account.keep_alive_succeeded >= 3) {
+                                account.keep_alive_ok = true;
+                                db.account().setAccountKeepAliveOk(account.id, true);
+                                if (!BuildConfig.PLAY_STORE_RELEASE)
+                                    Log.e(account.host + " set keep-alive=" + account.poll_interval);
+                                EntityLog.log(ServiceSynchronize.this, account.name + " keep alive ok");
+                            } else
+                                EntityLog.log(ServiceSynchronize.this, account.name + " keep alive" +
+                                        " failed=" + account.keep_alive_failed +
+                                        " succeeded=" + account.keep_alive_succeeded +
+                                        " interval=" + account.poll_interval +
+                                        " idle=" + idleTime);
                         }
 
                         // Successfully connected: reset back off time
@@ -1665,15 +1681,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         }
     };
 
-    private BroadcastReceiver onScreenOff = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i("Received " + intent);
-            Log.logExtras(intent);
-            Helper.clearAuthentication(ServiceSynchronize.this);
-        }
-    };
-
     private class MediatorState extends MediatorLiveData<List<TupleAccountNetworkState>> {
         boolean running = true;
         private ConnectionHelper.NetworkState lastNetworkState = null;
@@ -1763,7 +1770,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         db.message().clearNotifyingMessages();
 
                         // Restore snooze timers
-                        for (EntityMessage message : db.message().getSnoozed())
+                        for (EntityMessage message : db.message().getSnoozed(null))
                             EntityMessage.snooze(context, message.id, message.ui_snoozed);
 
                         db.setTransactionSuccessful();

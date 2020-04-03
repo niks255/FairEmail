@@ -54,6 +54,7 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.provider.ContactsContract;
 import android.security.KeyChain;
+import android.security.KeyChainException;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -1732,6 +1733,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (dX > 0) {
                 // Right swipe
                 d.setAlpha(Math.round(255 * Math.min(dX / (2 * margin + size), 1.0f)));
+                if (swipes.right_color != null)
+                    d.setTint(swipes.right_color);
                 int padding = (rect.height() - size);
                 d.setBounds(
                         rect.left + margin,
@@ -1742,6 +1745,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             } else if (dX < 0) {
                 // Left swipe
                 d.setAlpha(Math.round(255 * Math.min(-dX / (2 * margin + size), 1.0f)));
+                if (swipes.left_color != null)
+                    d.setTint(swipes.left_color);
                 int padding = (rect.height() - size);
                 d.setBounds(
                         rect.left + rect.width() - size - margin,
@@ -3065,7 +3070,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 break;
 
             case THREAD:
-                db.message().liveThreadStats(account, thread, null).observe(getViewLifecycleOwner(), new Observer<TupleThreadStats>() {
+                db.message().liveThreadStats(account, thread, null, filter_archive).observe(getViewLifecycleOwner(), new Observer<TupleThreadStats>() {
                     @Override
                     public void onChanged(TupleThreadStats stats) {
                         if (stats == null)
@@ -5863,7 +5868,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException || ex instanceof CMSException)
+                if (ex instanceof IllegalArgumentException ||
+                        ex instanceof CMSException || ex instanceof KeyChainException)
                     Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);

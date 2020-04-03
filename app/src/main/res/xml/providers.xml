@@ -96,7 +96,7 @@
     <provider
         name="free.fr"
         appPassword="true"
-        link="https://www.free.fr/assistance/597.html">
+        link="http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr">
         <imap
             host="imap.free.fr"
             port="993"
@@ -158,6 +158,7 @@
     </provider>
     <provider
         name="gmx.com"
+        domain="gmx\\.com,gmx\\.us"
         keepalive="9"
         link="https://support.gmx.com/pop-imap/imap/index.html#breadcrumb_help_pop-imap_imap_server">
         <imap
@@ -169,8 +170,27 @@
             port="587"
             starttls="true" />
     </provider>
+    <!--select>
+        <optgroup label="FreeMail">
+            <option value="gmx.de">@gmx.de</option>
+            <option value="gmx.net">@gmx.net</option>
+            <option value="mein.gmx">@mein.gmx</option>
+            <option value="gmx.at">@gmx.at</option>
+            <option value="gmx.ch">@gmx.ch</option>
+        </optgroup>
+        <optgroup label="Premium">
+            <option value="mail.gmx">@mail.gmx</option>
+            <option value="email.gmx">@email.gmx</option>
+            <option value="gmx.eu">@gmx.eu</option>
+            <option value="gmx.org">@gmx.org</option>
+            <option value="gmx.info">@gmx.info</option>
+            <option value="gmx.biz">@gmx.biz</option>
+            <option value="gmx.com">@gmx.com</option>
+        </optgroup>
+    </select-->
     <provider
-        name="gmx.net"
+        name="gmx.de"
+        domain="gmx\\.de,gmx\\.net,mein\\.gmx,gmx\\.at,gmx\\.ch,mail\\.gmx,email\\.gmx,gmx\\.eu,gmx\\.org,gmx\\.info,gmx\\.biz"
         keepalive="9"
         link="https://hilfe.gmx.net/pop-imap/imap/imap-serverdaten.html#indexlink_help_pop-imap_imap">
         <imap
@@ -269,6 +289,7 @@
     <provider
         name="Ionos (1und1)"
         domain="ionos\\.de,ionos\\.com,online\\.de"
+        keepalive="9"
         link="https://www.ionos.de/hilfe/e-mail/allgemeine-themen/einstellungen-fuer-ihr-e-mail-programm/">
         <imap
             host="imap.ionos.de"

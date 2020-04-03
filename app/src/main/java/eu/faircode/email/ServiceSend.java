@@ -284,7 +284,7 @@ public class ServiceSend extends ServiceBase {
 
                         switch (op.name) {
                             case EntityOperation.SYNC:
-                                db.folder().setFolderError(outbox.id, null);
+                                onSync(outbox);
                                 break;
 
                             case EntityOperation.SEND:
@@ -344,6 +344,16 @@ public class ServiceSend extends ServiceBase {
         }
     }
 
+    private void onSync(EntityFolder outbox) {
+        DB db = DB.getInstance(this);
+
+        db.folder().setFolderError(outbox.id, null);
+
+        // Restore snooze timers
+        for (EntityMessage message : db.message().getSnoozed(outbox.id))
+            EntityMessage.snooze(this, message.id, message.ui_snoozed);
+    }
+
     private void onSend(EntityMessage message) throws MessagingException, IOException {
         DB db = DB.getInstance(this);
 
@@ -369,7 +379,7 @@ public class ServiceSend extends ServiceBase {
         // Create message
         Properties props = MessageHelper.getSessionProperties();
         Session isession = Session.getInstance(props, null);
-        MimeMessage imessage = MessageHelper.from(this, message, ident, isession);
+        MimeMessage imessage = MessageHelper.from(this, message, ident, isession, true);
 
         // Prepare sent message
         Long sid = null;
@@ -545,6 +555,7 @@ public class ServiceSend extends ServiceBase {
             public void run() {
                 try {
                     DB db = DB.getInstance(context);
+
                     EntityFolder outbox = db.folder().getOutbox();
                     if (outbox != null) {
                         int operations = db.operation().getOperations(outbox.id).size();

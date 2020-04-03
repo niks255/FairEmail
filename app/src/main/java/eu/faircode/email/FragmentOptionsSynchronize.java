@@ -68,6 +68,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private TextView tvScheduleStart;
     private TextView tvScheduleEnd;
     private CheckBox[] cbDay;
+    private SwitchCompat swNodate;
     private SwitchCompat swUnseen;
     private SwitchCompat swFlagged;
     private SwitchCompat swDeleteUnseen;
@@ -75,7 +76,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private SwitchCompat swSyncFolders;
     private SwitchCompat swSubscriptions;
     private TextView tvSubscriptionPro;
-    private SwitchCompat swSubscribedOnly;
     private SwitchCompat swCheckMx;
     private SwitchCompat swCheckReply;
     private Group grpExempted;
@@ -84,7 +84,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
 
     private final static String[] RESET_OPTIONS = new String[]{
             "enabled", "poll_interval", "schedule", "schedule_start", "schedule_end",
-            "sync_unseen", "sync_flagged", "delete_unseen", "sync_kept", "sync_folders", "subscriptions", "subscribed_only",
+            "sync_nodate", "sync_unseen", "sync_flagged", "delete_unseen", "sync_kept", "sync_folders", "subscriptions",
             "check_mx", "check_reply"
     };
 
@@ -114,6 +114,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
                 view.findViewById(R.id.cbDay5),
                 view.findViewById(R.id.cbDay6)
         };
+        swNodate = view.findViewById(R.id.swNodate);
         swUnseen = view.findViewById(R.id.swUnseen);
         swFlagged = view.findViewById(R.id.swFlagged);
         swDeleteUnseen = view.findViewById(R.id.swDeleteUnseen);
@@ -121,7 +122,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swSyncFolders = view.findViewById(R.id.swSyncFolders);
         swSubscriptions = view.findViewById(R.id.swSubscriptions);
         tvSubscriptionPro = view.findViewById(R.id.tvSubscriptionPro);
-        swSubscribedOnly = view.findViewById(R.id.swSubscribedOnly);
         swCheckMx = view.findViewById(R.id.swCheckMx);
         swCheckReply = view.findViewById(R.id.swCheckReply);
         grpExempted = view.findViewById(R.id.grpExempted);
@@ -216,6 +216,14 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             });
         }
 
+        swNodate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("sync_nodate", checked).apply();
+                ServiceSynchronize.reload(getContext(), null, false, "sync_nodate=" + checked);
+            }
+        });
+
         swUnseen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -264,14 +272,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         });
 
         Helper.linkPro(tvSubscriptionPro);
-
-        swSubscribedOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("subscribed_only", checked).apply();
-                ServiceSynchronize.reload(getContext(), null, false, "subscribed_only");
-            }
-        });
 
         swCheckMx.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -363,6 +363,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         for (int i = 0; i < 7; i++)
             cbDay[i].setChecked(prefs.getBoolean("schedule_day" + i, true));
 
+        swNodate.setChecked(prefs.getBoolean("sync_nodate", false));
         swUnseen.setChecked(prefs.getBoolean("sync_unseen", false));
         swFlagged.setChecked(prefs.getBoolean("sync_flagged", false));
         swDeleteUnseen.setChecked(prefs.getBoolean("delete_unseen", false));
@@ -370,7 +371,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swSyncFolders.setChecked(prefs.getBoolean("sync_folders", true));
         swSubscriptions.setChecked(prefs.getBoolean("subscriptions", false) && pro);
         swSubscriptions.setEnabled(pro);
-        swSubscribedOnly.setChecked(prefs.getBoolean("subscribed_only", false));
         swCheckMx.setChecked(prefs.getBoolean("check_mx", false));
         swCheckReply.setChecked(prefs.getBoolean("check_reply", false));
     }

@@ -102,8 +102,8 @@ public interface DaoAccount {
     LiveData<List<TupleAccountView>> liveAccountView();
 
     @Query("SELECT account.id" +
-            ", account.swipe_left, l.type AS left_type, l.name AS left_name" +
-            ", account.swipe_right, r.type AS right_type, r.name AS right_name" +
+            ", account.swipe_left, l.type AS left_type, l.name AS left_name, l.color AS left_color" +
+            ", account.swipe_right, r.type AS right_type, r.name AS right_name, r.color AS right_color" +
             " FROM account" +
             " LEFT JOIN folder l ON l.id = account.swipe_left" +
             " LEFT JOIN folder r ON r.id = account.swipe_right" +
@@ -149,8 +149,10 @@ public interface DaoAccount {
     @Query("UPDATE account SET keep_alive_ok = :ok WHERE id = :id")
     int setAccountKeepAliveOk(long id, boolean ok);
 
-    @Query("UPDATE account SET keep_alive_failed = :value WHERE id = :id")
-    int setAccountKeepAliveFailed(long id, int value);
+    @Query("UPDATE account" +
+            " SET keep_alive_failed = :failed, keep_alive_succeeded = :succeeded" +
+            " WHERE id = :id")
+    int setAccountKeepAliveValues(long id, int failed, int succeeded);
 
     @Query("UPDATE account SET poll_exempted = :value WHERE id = :id")
     int setAccountPollExempted(long id, boolean value);

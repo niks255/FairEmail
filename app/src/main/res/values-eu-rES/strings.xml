@@ -213,13 +213,13 @@
     <string name="title_advanced_always">Sinkronizatu beti kontu hauek</string>
     <string name="title_advanced_schedule">Egitaraua</string>
     <string name="title_advanced_advanced">Aurreratua</string>
+    <string name="title_advanced_no_date">Datarik gabeko mezuak</string>
     <string name="title_advanced_unseen">Irakurri gabeko mezu guztiak</string>
     <string name="title_advanced_flagged">Izardun mezu guztiak</string>
     <string name="title_advanced_delete_unseen">Ezabatu irakurri gabeko mezu zaharrak</string>
     <string name="title_advanced_kept_removed">Egiaztatu mezu zaharrak zerbitzaritik ezabatu diren</string>
     <string name="title_advanced_sync_folders">Sinkronizatu karpeten zerrenda</string>
     <string name="title_advanced_subscriptions">Kudeatu karpeten harpidetzak</string>
-    <string name="title_advanced_sync_subscribed">Sinkronizatu harpidetutako karpetak besterik ez</string>
     <string name="title_advanced_keyboard">Erakutsi teklatua lehenetsita</string>
     <string name="title_advanced_suggest_local">Proposatu lokalean gordetako kontaktuak</string>
     <string name="title_advanced_suggest_sent">Proposatu bidalitako mezuetan aurkitutako helbideak</string>
@@ -386,11 +386,11 @@
     <string name="title_advanced_schedule_hint">Sakatu orduren batean ordua ezartzeko</string>
     <string name="title_advanced_check_mx">Egiaztatu bidaltzailearen helbide elektronikoak mezuak sinkronizatzean</string>
     <string name="title_advanced_check_reply">Egiaztatu erantzuteko helbide elektronikoak mezuak sinkronizatzean</string>
+    <string name="title_advanced_no_date_hint">Hornitzaile batzuek ezezaguna, baliogabea edo etorkizuneko data duten mezuak datarik gabe gordetzen dituzte</string>
     <string name="title_advanced_unseen_hint">Hornitzaile batzuek ez dute hori behar bezala onartzen, eta horrek mezu bat edo guztiak ez sinkronizatzea eragin dezake</string>
     <string name="title_advanced_deleted_unseen">Desaktibatuta dagoenean, irakurri gabeko mezuak gailuan gordeko dira betiko</string>
     <string name="title_advanced_sync_kept_hint">Honek datu gehigarriak transferituko ditu eta bateriaren energia gehigarria kontsumituko du, batez ere telefonoan mezu asko gordetzen badira</string>
     <string name="title_advanced_sync_folders_hint">Hori ezgaitzeak datuak eta bateriaren erabilera zertxobait murriztuko ditu, baina karpeten zerrenda eguneratzea ere ezgaituko du</string>
-    <string name="title_advanced_subscribed_only_hint">Hori gaitzen baduzu, harpidetzarik ez duten tokiko karpeta guztiak ezabatu egingo dira</string>
     <string name="title_advanced_sync_delay_hint">Honek mezuen sinkronizazioa motelduko du</string>
     <string name="title_advanced_suggest_local_hint">Android-en kontaktuez gain. Kontaktuen datuak gordeko dira mezuak bidali edo jasotzean soilik baimenduta badago.</string>
     <string name="title_advanced_usenet_hint">Txertatu \'-- \' testua eta sinaduraren artean</string>
@@ -550,6 +550,7 @@
     <string name="title_folder_name">Karpetaren izena</string>
     <string name="title_display_name">Pantaila-izena</string>
     <string name="title_show_folders">Erakutsi karpeta ezkutuak</string>
+    <string name="title_subscribed_only">Harpidetuta bakarrik</string>
     <string name="title_apply_to_all">Aplikatu guztiei &#8230;</string>
     <string name="title_hide_folder">Ezkutatu karpeta</string>
     <string name="title_unified_folder">Erakutsi sarrera ontzi bateratuan</string>

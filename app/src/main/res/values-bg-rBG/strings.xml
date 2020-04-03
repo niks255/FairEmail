@@ -215,13 +215,13 @@
     <string name="title_advanced_always">Винаги синхронизирай тези профили</string>
     <string name="title_advanced_schedule">График</string>
     <string name="title_advanced_advanced">Разширени</string>
+    <string name="title_advanced_no_date">Съобщения без дата</string>
     <string name="title_advanced_unseen">Всички непрочетени съобщения</string>
     <string name="title_advanced_flagged">Всички съобщения със звезда</string>
     <string name="title_advanced_delete_unseen">Изтрий старите непрочетени съобщения</string>
     <string name="title_advanced_kept_removed">Проверете дали старите съобщения са премахнати от сървъра</string>
     <string name="title_advanced_sync_folders">Синхронизиране на списъка с папки</string>
     <string name="title_advanced_subscriptions">Управление на абонирани папки</string>
-    <string name="title_advanced_sync_subscribed">Синхронизиране само на абонирани папки</string>
     <string name="title_advanced_keyboard">Клавиатура по подразбиране</string>
     <string name="title_advanced_suggest_local">Предложи локални контакти</string>
     <string name="title_advanced_suggest_sent">Предложи адреси, намерени в изпратените съобщения</string>
@@ -388,11 +388,11 @@
     <string name="title_advanced_schedule_hint">Докосни за настройка</string>
     <string name="title_advanced_check_mx">Проверка имейл адреса на изпращача при синхронизиране на съобщенията</string>
     <string name="title_advanced_check_reply">Проверка имейл адреса на изпращача при синхронизиране на съобщенията</string>
+    <string name="title_advanced_no_date_hint">Някои доставчици съхраняват съобщения с неизвестна, невалидна или бъдеща дата като съобщения без дата</string>
     <string name="title_advanced_unseen_hint">Някои доставчици не поддържат това правилно, което може да доведе до синхронизиране всички или нито едно съобщение</string>
     <string name="title_advanced_deleted_unseen">Когато са деактивирани, непрочетените съобщения се съхраняват на устройството завинаги</string>
     <string name="title_advanced_sync_kept_hint">Това ще прехвърли допълнителни данни и ще консумира допълнително батерията, особено ако на устройството се съхраняват много съобщения</string>
     <string name="title_advanced_sync_folders_hint">Деактивирането на това ще намали донякъде използването на данни и батерията, но ще деактивира и актуализирането на списъка с папки</string>
-    <string name="title_advanced_subscribed_only_hint">Активирането ще изтрие всички локални папки без абонамент</string>
     <string name="title_advanced_sync_delay_hint">Това ще забави синхронизирането на съобщенията</string>
     <string name="title_advanced_suggest_local_hint">В допълнение към контактите, осигурени от Android. Данните за контакт ще бъдат съхранявани за нови изпратени или получени съобщения, само когато са активирани.</string>
     <string name="title_advanced_usenet_hint">Вмъкнете \'-\' между текста и подписа</string>
@@ -552,6 +552,7 @@
     <string name="title_folder_name">Име на папка</string>
     <string name="title_display_name">Име</string>
     <string name="title_show_folders">Показвана не скрити папки</string>
+    <string name="title_subscribed_only">Само абонирани</string>
     <string name="title_apply_to_all">Приложи на всички &#8230;</string>
     <string name="title_hide_folder">Скриване на папката</string>
     <string name="title_unified_folder">Показване в обединената входяща поща</string>

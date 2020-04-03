@@ -55,7 +55,10 @@ public interface DaoMessage {
             ", SUM(folder.type = '" + EntityFolder.DRAFTS + "') AS drafts" +
             ", (message.ui_encrypt IN (2, 4)) AS signed" +
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
-            ", COUNT(DISTINCT CASE WHEN message.msgid IS NULL THEN message.id ELSE message.msgid END) AS visible" +
+            ", COUNT(DISTINCT" +
+            "   CASE WHEN NOT message.message.hash IS NULL THEN message.hash" +
+            "   WHEN NOT message.msgid IS NULL THEN message.msgid" +
+            "   ELSE message.id END) AS visible" +
             ", SUM(message.total) AS totalSize" +
             ", MAX(message.priority) AS ui_priority" +
             ", MAX(message.importance) AS ui_importance" +
@@ -115,7 +118,10 @@ public interface DaoMessage {
             ", SUM(folder.type = '" + EntityFolder.DRAFTS + "') AS drafts" +
             ", (message.ui_encrypt IN (2, 4)) AS signed" +
             ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
-            ", COUNT(DISTINCT CASE WHEN message.msgid IS NULL THEN message.id ELSE message.msgid END) AS visible" +
+            ", COUNT(DISTINCT" +
+            "   CASE WHEN NOT message.message.hash IS NULL THEN message.hash" +
+            "   WHEN NOT message.msgid IS NULL THEN message.msgid" +
+            "   ELSE message.id END) AS visible" +
             ", SUM(message.total) AS totalSize" +
             ", MAX(message.priority) AS ui_priority" +
             ", MAX(message.importance) AS ui_importance" +
@@ -182,7 +188,9 @@ public interface DaoMessage {
             " AND message.thread = :thread" +
             " AND (:id IS NULL OR message.id = :id)" +
             " AND (NOT :filter_archive OR folder.type <> '" + EntityFolder.ARCHIVE +
-            "' OR (SELECT COUNT(m.id) FROM message m WHERE m.account = message.account AND m.msgid = message.msgid) = 1)" +
+            "' OR (SELECT COUNT(m.id) FROM message m" +
+            "   WHERE m.account = message.account" +
+            "   AND (m.hash = message.hash OR m.msgid = message.msgid)) = 1)" +
             " AND (NOT message.ui_hide OR :debug)" +
             " ORDER BY CASE WHEN :ascending THEN message.received ELSE -message.received END" +
             ", CASE" +
@@ -207,12 +215,17 @@ public interface DaoMessage {
             ", SUM(message.ui_seen) AS seen" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
+            " JOIN folder_view AS folder ON folder.id = message.folder" +
             " WHERE message.account = :account" +
             " AND message.thread = :thread" +
             " AND (:id IS NULL OR message.id = :id)" +
+            " AND (NOT :filter_archive OR folder.type <> '" + EntityFolder.ARCHIVE +
+            "' OR (SELECT COUNT(m.id) FROM message m" +
+            "   WHERE m.account = message.account" +
+            "   AND (m.hash = message.hash OR m.msgid = message.msgid)) = 1)" +
             " AND NOT message.ui_hide" +
             " GROUP BY account.id")
-    LiveData<TupleThreadStats> liveThreadStats(long account, String thread, Long id);
+    LiveData<TupleThreadStats> liveThreadStats(long account, String thread, Long id, boolean filter_archive);
 
     @Query("SELECT message.id FROM folder" +
             " JOIN message ON message.folder = folder.id" +
@@ -452,8 +465,10 @@ public interface DaoMessage {
             "  AND operation.name = '" + EntityOperation.ADD + "')")
     List<EntityMessage> getOrphans(long folder);
 
-    @Query("SELECT * FROM message WHERE NOT ui_snoozed IS NULL")
-    List<EntityMessage> getSnoozed();
+    @Query("SELECT * FROM message" +
+            " WHERE (:folder IS NULL OR folder = :folder)" +
+            " AND NOT ui_snoozed IS NULL")
+    List<EntityMessage> getSnoozed(Long folder);
 
     @Query("SELECT id AS _id, subject AS suggestion FROM message" +
             " WHERE subject LIKE :query" +
@@ -490,6 +505,9 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET msgid = :msgid WHERE id = :id")
     int setMessageMsgId(long id, String msgid);
+
+    @Query("UPDATE message SET hash = :hash WHERE id = :id")
+    int setMessageHash(long id, String hash);
 
     @Query("UPDATE message SET priority = :priority WHERE id = :id")
     int setMessagePriority(long id, Integer priority);
@@ -584,8 +602,8 @@ public interface DaoMessage {
     @Query("UPDATE message SET encrypt = :encrypt WHERE id = :id")
     int setMessageEncrypt(long id, Integer encrypt);
 
-    @Query("UPDATE message SET encrypt = :encrypt, ui_encrypt = :encrypt WHERE id = :id")
-    int setMessageUiEncrypt(long id, Integer encrypt);
+    @Query("UPDATE message SET ui_encrypt = :ui_encrypt WHERE id = :id")
+    int setMessageUiEncrypt(long id, Integer ui_encrypt);
 
     @Query("UPDATE message SET last_attempt = :last_attempt WHERE id = :id")
     int setMessageLastAttempt(long id, long last_attempt);

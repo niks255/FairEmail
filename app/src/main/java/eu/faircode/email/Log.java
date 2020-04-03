@@ -85,6 +85,7 @@ import java.security.cert.CertPathValidatorException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -466,6 +467,21 @@ public class Log {
                   at java.lang.Runtime.loadLibrary0(Runtime.java:1016)
                   at java.lang.System.loadLibrary(System.java:1657)
                   at io.requery.android.database.sqlite.SQLiteDatabase.<clinit>(SourceFile:91)
+             */
+            return false;
+
+        if (ex instanceof InternalError &&
+                "Thread starting during runtime shutdown".equals(ex.getMessage()))
+            /*
+                java.lang.InternalError: Thread starting during runtime shutdown
+                java.lang.InternalError: Thread starting during runtime shutdown
+                  at java.lang.Thread.nativeCreate(Native Method)
+                  at java.lang.Thread.start(Thread.java:1063)
+                  at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:921)
+                  at java.util.concurrent.ThreadPoolExecutor.processWorkerExit(ThreadPoolExecutor.java:989)
+                  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)
+                  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)
+                  at java.lang.Thread.run(Thread.java:818)
              */
             return false;
 
@@ -1013,7 +1029,9 @@ public class Log {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             Map<String, ?> settings = prefs.getAll();
-            for (String key : settings.keySet())
+            List<String> keys = new ArrayList<>(settings.keySet());
+            Collections.sort(keys);
+            for (String key : keys)
                 size += write(os, key + "=" + settings.get(key) + "\r\n");
         }
 
@@ -1044,6 +1062,24 @@ public class Log {
                     jaccount.remove("password");
                     size += write(os, "==========\r\n");
                     size += write(os, jaccount.toString(2) + "\r\n");
+
+                    List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
+                    if (folders.size() > 0)
+                        Collections.sort(folders, folders.get(0).getComparator(context));
+                    for (EntityFolder folder : folders)
+                        size += write(os,
+                                folder.name + ":" + folder.type + ":" + folder.level +
+                                        " sync=" + folder.synchronize + "/" + folder.download +
+                                        " poll=" + folder.poll + ":" + folder.poll_factor +
+                                        " days=" + folder.sync_days + "/" + folder.keep_days + "/" + folder.initialize + "\r\n" +
+                                        "   unified=" + folder.unified + "/" + folder.notify +
+                                        " hide=" + folder.hide + "/" + folder.collapsed + "/" + folder.subscribed + "\r\n" +
+                                        "   read-only=" + folder.read_only +
+                                        " selectable=" + folder.selectable + "/" + folder.inferiors +
+                                        " auto-delete=" + folder.auto_delete + "\r\n" +
+                                        "   state=" + folder.state + "/" + folder.total +
+                                        " error=" + folder.error +
+                                        " last_sync=" + (folder.last_sync == null ? "" : new Date(folder.last_sync)) + "\r\n");
 
                     List<EntityIdentity> identities = db.identity().getIdentities(account.id);
                     for (EntityIdentity identity : identities)

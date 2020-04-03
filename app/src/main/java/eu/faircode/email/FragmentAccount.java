@@ -24,6 +24,7 @@ import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -58,6 +59,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -651,6 +653,8 @@ public class FragmentAccount extends FragmentBase {
                 if (TextUtils.isEmpty(realm))
                     realm = null;
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
                 DB db = DB.getInstance(context);
 
                 CheckResult result = new CheckResult();
@@ -680,7 +684,13 @@ public class FragmentAccount extends FragmentBase {
                         Log.i(fullName + " attrs=" + TextUtils.join(" ", attrs));
                         String type = EntityFolder.getType(attrs, fullName, true);
 
-                        if (type != null) {
+                        boolean selectable = true;
+                        for (String attr : attrs)
+                            if (attr.equalsIgnoreCase("\\NoSelect"))
+                                selectable = false;
+                        selectable = selectable && ((ifolder.getType() & IMAPFolder.HOLDS_MESSAGES) != 0);
+
+                        if (type != null && selectable) {
                             // Create entry
                             EntityFolder folder = db.folder().getFolderByName(id, fullName);
                             if (folder == null)
@@ -913,8 +923,8 @@ public class FragmentAccount extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_no_user));
                 if (synchronize && TextUtils.isEmpty(password) && !insecure && certificate == null && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));
-                if (TextUtils.isEmpty(interval))
-                    interval = Integer.toString(EntityAccount.DEFAULT_KEEP_ALIVE_INTERVAL);
+                int poll_interval = (TextUtils.isEmpty(interval)
+                        ? EntityAccount.DEFAULT_KEEP_ALIVE_INTERVAL : Integer.parseInt(interval));
 
                 if (TextUtils.isEmpty(realm))
                     realm = null;
@@ -970,7 +980,7 @@ public class FragmentAccount extends FragmentBase {
                         return true;
                     if (!Objects.equals(account.auto_seen, auto_seen))
                         return true;
-                    if (!Objects.equals(account.poll_interval, Integer.parseInt(interval)))
+                    if (!Objects.equals(account.poll_interval, poll_interval))
                         return true;
                     if (!Objects.equals(account.partial_fetch, partial_fetch))
                         return true;
@@ -1098,7 +1108,14 @@ public class FragmentAccount extends FragmentBase {
                     account.notify = notify;
                     account.browse = browse;
                     account.auto_seen = auto_seen;
-                    account.poll_interval = Integer.parseInt(interval);
+
+                    if (account.poll_interval != poll_interval) {
+                        account.keep_alive_ok = false;
+                        account.keep_alive_failed = 0;
+                        account.keep_alive_succeeded = 0;
+                    }
+                    account.poll_interval = poll_interval;
+
                     account.partial_fetch = partial_fetch;
                     account.ignore_size = ignore_size;
                     account.use_date = use_date;

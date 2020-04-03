@@ -54,6 +54,7 @@ import android.os.OperationCanceledException;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.security.KeyChain;
+import android.security.KeyChainException;
 import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -247,8 +248,9 @@ public class FragmentCompose extends FragmentBase {
     private State state = State.NONE;
     private boolean show_images = false;
     private boolean autosave = false;
-    private boolean busy = false;
+    private boolean busy = true;
     private boolean saved = false;
+    private int last_available = 0; // attachments
 
     private Uri photoURI = null;
 
@@ -278,7 +280,6 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_LINK = 13;
     private static final int REQUEST_DISCARD = 14;
     private static final int REQUEST_SEND = 15;
-    private static final int REQUEST_CERTIFICATE = 16;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -554,7 +555,8 @@ public class FragmentCompose extends FragmentBase {
                 Object tag = cbSignature.getTag();
                 if (tag == null || !tag.equals(checked)) {
                     cbSignature.setTag(checked);
-                    onAction(R.id.action_save);
+                    if (tag != null)
+                        onAction(R.id.action_save, "signature");
                 }
             }
         });
@@ -639,7 +641,7 @@ public class FragmentCompose extends FragmentBase {
                         onActionCheck();
                         break;
                     default:
-                        onAction(action);
+                        onAction(action, "navigation");
                 }
                 return true;
             }
@@ -959,7 +961,7 @@ public class FragmentCompose extends FragmentBase {
                         Bundle extras = new Bundle();
                         extras.putString("html", html);
                         extras.putBoolean("show", true);
-                        onAction(R.id.action_save, extras);
+                        onAction(R.id.action_save, extras, "refedit");
                     }
 
                     @Override
@@ -973,7 +975,7 @@ public class FragmentCompose extends FragmentBase {
                 Bundle extras = new Bundle();
                 extras.putString("html", HtmlHelper.toHtml(etBody.getText()));
                 extras.putBoolean("show", true);
-                onAction(R.id.action_save, extras);
+                onAction(R.id.action_save, extras, "refdelete");
             }
         });
 
@@ -984,7 +986,7 @@ public class FragmentCompose extends FragmentBase {
         show_images = true;
         Bundle extras = new Bundle();
         extras.putBoolean("show", true);
-        onAction(R.id.action_save, extras);
+        onAction(R.id.action_save, extras, "refimages");
     }
 
     @Override
@@ -1074,8 +1076,8 @@ public class FragmentCompose extends FragmentBase {
 
     @Override
     public void onPause() {
-        if (autosave && state == State.LOADED)
-            onAction(R.id.action_save);
+        if (autosave && state == State.LOADED && !busy)
+            onAction(R.id.action_save, "pause");
 
         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.unregisterNetworkCallback(networkCallback);
@@ -1146,17 +1148,17 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_zoom).setVisible(state == State.LOADED);
         menu.findItem(R.id.menu_media).setVisible(state == State.LOADED);
         menu.findItem(R.id.menu_compact).setVisible(state == State.LOADED);
-        menu.findItem(R.id.menu_clear).setVisible(state == State.LOADED);
         menu.findItem(R.id.menu_contact_group).setVisible(state == State.LOADED);
         menu.findItem(R.id.menu_answer).setVisible(state == State.LOADED);
+        menu.findItem(R.id.menu_clear).setVisible(state == State.LOADED);
 
         menu.findItem(R.id.menu_encrypt).setEnabled(!busy);
         menu.findItem(R.id.menu_zoom).setEnabled(!busy);
         menu.findItem(R.id.menu_media).setEnabled(!busy);
         menu.findItem(R.id.menu_compact).setEnabled(!busy);
-        menu.findItem(R.id.menu_clear).setEnabled(!busy);
         menu.findItem(R.id.menu_contact_group).setEnabled(!busy && hasPermission(Manifest.permission.READ_CONTACTS));
         menu.findItem(R.id.menu_answer).setEnabled(!busy);
+        menu.findItem(R.id.menu_clear).setEnabled(!busy);
 
         int colorEncrypt = Helper.resolveColor(getContext(), R.attr.colorEncrypt);
         ImageButton ib = (ImageButton) menu.findItem(R.id.menu_encrypt).getActionView();
@@ -1212,17 +1214,17 @@ public class FragmentCompose extends FragmentBase {
             case R.id.menu_compact:
                 onMenuCompact();
                 return true;
-            case R.id.menu_clear:
-                StyleHelper.apply(R.id.menu_clear, etBody);
-                return true;
-            case R.id.menu_legend:
-                onMenuLegend();
-                return true;
             case R.id.menu_contact_group:
                 onMenuContactGroup();
                 return true;
             case R.id.menu_answer:
                 onMenuAnswer();
+                return true;
+            case R.id.menu_clear:
+                StyleHelper.apply(R.id.menu_clear, etBody);
+                return true;
+            case R.id.menu_legend:
+                onMenuLegend();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1508,7 +1510,7 @@ public class FragmentCompose extends FragmentBase {
 
     private void onActionDiscard() {
         if (isEmpty())
-            onAction(R.id.action_delete);
+            onAction(R.id.action_delete, "discard");
         else {
             Bundle args = new Bundle();
             args.putString("question", getString(R.string.title_ask_discard));
@@ -1526,19 +1528,19 @@ public class FragmentCompose extends FragmentBase {
 
         Bundle extras = new Bundle();
         extras.putBoolean("dialog", send_dialog);
-        onAction(R.id.action_check, extras);
+        onAction(R.id.action_check, extras, "check");
     }
 
-    private void onEncrypt(final EntityMessage draft) {
-        if (EntityMessage.SMIME_SIGNONLY.equals(draft.encrypt) ||
-                EntityMessage.SMIME_SIGNENCRYPT.equals(draft.encrypt)) {
+    private void onEncrypt(final EntityMessage draft, final int action, final boolean interactive) {
+        if (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt) ||
+                EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt)) {
             Bundle args = new Bundle();
             args.putLong("id", draft.id);
-            args.putInt("type", draft.encrypt);
+            args.putInt("type", draft.ui_encrypt);
 
             new SimpleTask<EntityIdentity>() {
                 @Override
-                protected EntityIdentity onExecute(Context context, Bundle args) {
+                protected EntityIdentity onExecute(Context context, Bundle args) throws KeyChainException, InterruptedException {
                     long id = args.getLong("id");
 
                     DB db = DB.getInstance(context);
@@ -1546,32 +1548,57 @@ public class FragmentCompose extends FragmentBase {
                     if (draft == null || draft.identity == null)
                         return null;
 
-                    return db.identity().getIdentity(draft.identity);
+                    EntityIdentity identity = db.identity().getIdentity(draft.identity);
+                    if (identity != null && identity.sign_key_alias != null)
+                        try {
+                            PrivateKey key = KeyChain.getPrivateKey(context, identity.sign_key_alias);
+                            args.putBoolean("available", key != null);
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
+
+                    return identity;
                 }
 
                 @Override
                 protected void onExecuted(final Bundle args, EntityIdentity identity) {
-                    Helper.selectKeyAlias(getActivity(), getViewLifecycleOwner(), identity.sign_key_alias, new Helper.IKeyAlias() {
-                        @Override
-                        public void onSelected(String alias) {
-                            args.putString("alias", alias);
-                            onSmime(args);
-                        }
+                    if (identity == null)
+                        return;
 
-                        @Override
-                        public void onNothingSelected() {
-                            Snackbar snackbar = Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG);
-                            final Intent intent = KeyChain.createInstallIntent();
-                            if (intent.resolveActivity(getContext().getPackageManager()) != null)
-                                snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        startActivity(intent);
-                                    }
-                                });
-                            snackbar.show();
-                        }
-                    });
+                    boolean available = args.getBoolean("available");
+                    if (available) {
+                        args.putString("alias", identity.sign_key_alias);
+                        onSmime(args, action);
+                        return;
+                    }
+
+                    if (interactive)
+                        Helper.selectKeyAlias(getActivity(), getViewLifecycleOwner(), identity.sign_key_alias, new Helper.IKeyAlias() {
+                            @Override
+                            public void onSelected(String alias) {
+                                args.putString("alias", alias);
+                                if (alias != null)
+                                    onSmime(args, action);
+                            }
+
+                            @Override
+                            public void onNothingSelected() {
+                                setBusy(false);
+
+                                Snackbar snackbar = Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG);
+                                final Intent intent = KeyChain.createInstallIntent();
+                                if (intent.resolveActivity(getContext().getPackageManager()) != null)
+                                    snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            startActivity(intent);
+                                        }
+                                    });
+                                snackbar.show();
+                            }
+                        });
+                    else
+                        setBusy(false);
                 }
 
                 @Override
@@ -1602,18 +1629,23 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                     Intent intent;
-                    if (EntityMessage.PGP_SIGNONLY.equals(draft.encrypt))
+                    if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt))
                         intent = new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID);
-                    else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.encrypt)) {
+                    else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
                         intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
                         intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, pgpUserIds);
                     } else
-                        throw new IllegalArgumentException("Invalid encrypt=" + draft.encrypt);
+                        throw new IllegalArgumentException("Invalid encrypt=" + draft.ui_encrypt);
 
-                    intent.putExtra(BuildConfig.APPLICATION_ID, working);
+                    Bundle largs = new Bundle();
+                    largs.putLong("id", working);
+                    largs.putInt("action", action);
+                    largs.putBoolean("interactive", interactive);
+                    intent.putExtra(BuildConfig.APPLICATION_ID, largs);
 
                     onPgp(intent);
                 } catch (Throwable ex) {
+                    setBusy(false);
                     if (ex instanceof IllegalArgumentException)
                         Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
                     else {
@@ -1669,6 +1701,8 @@ public class FragmentCompose extends FragmentBase {
                 case REQUEST_OPENPGP:
                     if (resultCode == RESULT_OK && data != null)
                         onPgp(data);
+                    else
+                        setBusy(false);
                     break;
                 case REQUEST_CONTACT_GROUP:
                     if (resultCode == RESULT_OK && data != null)
@@ -1692,13 +1726,12 @@ public class FragmentCompose extends FragmentBase {
                     break;
                 case REQUEST_SEND:
                     if (resultCode == RESULT_OK)
-                        onActionSend(false);
-                    else if (resultCode == RESULT_FIRST_USER)
-                        onActionSend(true);
-                    break;
-                case REQUEST_CERTIFICATE:
-                    if (resultCode == RESULT_OK && data != null)
-                        onSmime(data.getBundleExtra("args"));
+                        onAction(R.id.action_send, "send");
+                    else if (resultCode == RESULT_FIRST_USER) {
+                        Bundle extras = new Bundle();
+                        extras.putBoolean("now", true);
+                        onAction(R.id.action_send, extras, "sendnow");
+                    }
                     break;
             }
         } catch (Throwable ex) {
@@ -1907,7 +1940,7 @@ public class FragmentCompose extends FragmentBase {
                 }
 
                 // Save text & update remote draft
-                onAction(R.id.action_save);
+                onAction(R.id.action_save, "addattachment");
             }
 
             @Override
@@ -1952,7 +1985,8 @@ public class FragmentCompose extends FragmentBase {
             protected Object onExecute(Context context, Bundle args) throws Throwable {
                 // Get arguments
                 Intent data = args.getParcelable("data");
-                long id = data.getLongExtra(BuildConfig.APPLICATION_ID, -1);
+                Bundle largs = data.getBundleExtra(BuildConfig.APPLICATION_ID);
+                long id = largs.getLong("id", -1);
 
                 DB db = DB.getInstance(context);
 
@@ -1971,9 +2005,9 @@ public class FragmentCompose extends FragmentBase {
                 File output = new File(context.getCacheDir(), "pgp_output." + draft.id);
 
                 // Serializing messages is NOT reproducible
-                if ((EntityMessage.PGP_SIGNONLY.equals(draft.encrypt) &&
+                if ((EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt) &&
                         OpenPgpApi.ACTION_GET_SIGN_KEY_ID.equals(data.getAction())) ||
-                        (EntityMessage.PGP_SIGNENCRYPT.equals(draft.encrypt) &&
+                        (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt) &&
                                 OpenPgpApi.ACTION_GET_KEY_IDS.equals(data.getAction()))) {
                     // Get/clean attachments
                     List<EntityAttachment> attachments = db.attachment().getAttachments(draft.id);
@@ -1987,7 +2021,7 @@ public class FragmentCompose extends FragmentBase {
                     Properties props = MessageHelper.getSessionProperties();
                     Session isession = Session.getInstance(props, null);
                     MimeMessage imessage = new MimeMessage(isession);
-                    MessageHelper.build(context, draft, attachments, identity, imessage);
+                    MessageHelper.build(context, draft, attachments, identity, false, imessage);
 
                     if (OpenPgpApi.ACTION_GET_SIGN_KEY_ID.equals(data.getAction())) {
                         // Serialize content
@@ -2116,12 +2150,12 @@ public class FragmentCompose extends FragmentBase {
                                     Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                     intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
                                     intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-                                    intent.putExtra(BuildConfig.APPLICATION_ID, draft.id);
+                                    intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
                                 } else {
                                     // Get sign key
                                     Intent intent = new Intent(OpenPgpApi.ACTION_GET_SIGN_KEY_ID);
-                                    intent.putExtra(BuildConfig.APPLICATION_ID, draft.id);
+                                    intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
                                 }
                             } else if (OpenPgpApi.ACTION_GET_SIGN_KEY_ID.equals(data.getAction())) {
@@ -2134,26 +2168,26 @@ public class FragmentCompose extends FragmentBase {
                                 Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                 intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
                                 intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-                                intent.putExtra(BuildConfig.APPLICATION_ID, draft.id);
+                                intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                 return intent;
                             } else if (OpenPgpApi.ACTION_GET_KEY.equals(data.getAction())) {
-                                if (EntityMessage.PGP_SIGNONLY.equals(draft.encrypt)) {
+                                if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt)) {
                                     // Get signature
                                     Intent intent = new Intent(OpenPgpApi.ACTION_DETACHED_SIGN);
                                     intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, pgpSignKeyId);
                                     intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-                                    intent.putExtra(BuildConfig.APPLICATION_ID, draft.id);
+                                    intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
-                                } else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.encrypt)) {
+                                } else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
                                     // Encrypt message
                                     Intent intent = new Intent(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
                                     intent.putExtra(OpenPgpApi.EXTRA_KEY_IDS, pgpKeyIds);
                                     intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, pgpSignKeyId);
                                     intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-                                    intent.putExtra(BuildConfig.APPLICATION_ID, draft.id);
+                                    intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
                                 } else
-                                    throw new IllegalArgumentException("Invalid encrypt=" + draft.encrypt);
+                                    throw new IllegalArgumentException("Invalid encrypt=" + draft.ui_encrypt);
                             } else if (OpenPgpApi.ACTION_DETACHED_SIGN.equals(data.getAction())) {
                                 EntityAttachment attachment = new EntityAttachment();
                                 attachment.message = draft.id;
@@ -2170,16 +2204,19 @@ public class FragmentCompose extends FragmentBase {
                                 db.attachment().setDownloaded(attachment.id, file.length());
 
                                 // send message
+                                args.putInt("action", largs.getInt("action"));
                                 return null;
                             } else if (OpenPgpApi.ACTION_SIGN_AND_ENCRYPT.equals(data.getAction())) {
                                 input.delete();
 
                                 // send message
+                                args.putInt("action", largs.getInt("action"));
                                 return null;
                             } else
                                 throw new IllegalStateException("Unknown action=" + data.getAction());
 
                         case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED:
+                            args.putBoolean("interactive", largs.getBoolean("interactive"));
                             return result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
 
                         case OpenPgpApi.RESULT_CODE_ERROR:
@@ -2202,27 +2239,37 @@ public class FragmentCompose extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, Object result) {
                 Log.i("Result= " + result);
-                if (result == null)
-                    onAction(R.id.action_send);
-                else if (result instanceof Intent) {
+                if (result == null) {
+                    int action = args.getInt("action");
+                    Bundle extras = new Bundle();
+                    extras.putBoolean("encrypted", true);
+                    onAction(action, extras, "pgp");
+                } else if (result instanceof Intent) {
                     Intent intent = (Intent) result;
                     onPgp(intent);
                 } else if (result instanceof PendingIntent)
-                    try {
-                        ToastEx.makeText(getContext(), R.string.title_user_interaction, Toast.LENGTH_SHORT).show();
-                        PendingIntent pi = (PendingIntent) result;
-                        startIntentSenderForResult(
-                                pi.getIntentSender(),
-                                REQUEST_OPENPGP,
-                                null, 0, 0, 0, null);
-                    } catch (IntentSender.SendIntentException ex) {
-                        Log.e(ex);
-                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    if (args.getBoolean("interactive"))
+                        try {
+                            ToastEx.makeText(getContext(), R.string.title_user_interaction, Toast.LENGTH_SHORT).show();
+                            PendingIntent pi = (PendingIntent) result;
+                            startIntentSenderForResult(
+                                    pi.getIntentSender(),
+                                    REQUEST_OPENPGP,
+                                    null, 0, 0, 0, null);
+                        } catch (IntentSender.SendIntentException ex) {
+                            Log.e(ex);
+                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        }
+                    else {
+                        setBusy(false);
+                        if (BuildConfig.DEBUG)
+                            ToastEx.makeText(getContext(), "Non interactive", Toast.LENGTH_SHORT).show();
                     }
             }
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
+                setBusy(false);
                 if (ex instanceof OperationCanceledException)
                     ; // Do nothing
                 else if (ex instanceof IllegalArgumentException) {
@@ -2234,7 +2281,7 @@ public class FragmentCompose extends FragmentBase {
         }.execute(this, args, "compose:pgp");
     }
 
-    private void onSmime(Bundle args) {
+    private void onSmime(Bundle args, final int action) {
         new SimpleTask<Void>() {
             @Override
             protected Void onExecute(Context context, Bundle args) throws Throwable {
@@ -2264,7 +2311,7 @@ public class FragmentCompose extends FragmentBase {
                 Properties props = MessageHelper.getSessionProperties();
                 Session isession = Session.getInstance(props, null);
                 MimeMessage imessage = new MimeMessage(isession);
-                MessageHelper.build(context, draft, attachments, identity, imessage);
+                MessageHelper.build(context, draft, attachments, identity, false, imessage);
                 imessage.saveChanges();
                 BodyPart bpContent = new MimeBodyPart() {
                     @Override
@@ -2453,11 +2500,14 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, Void result) {
-                onAction(R.id.action_send);
+                Bundle extras = new Bundle();
+                extras.putBoolean("encrypted", true);
+                onAction(action, extras, "smime");
             }
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
+                setBusy(false);
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
                     Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG);
@@ -2602,63 +2652,17 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onActionDiscardConfirmed() {
-        onAction(R.id.action_delete);
-    }
-
-    private void onActionSend(boolean now) {
-        Bundle args = new Bundle();
-        args.putLong("id", working);
-        args.putBoolean("now", now);
-
-        new SimpleTask<EntityMessage>() {
-            @Override
-            protected EntityMessage onExecute(Context context, Bundle args) {
-                long id = args.getLong("id");
-                boolean now = args.getBoolean("now");
-
-                DB db = DB.getInstance(context);
-                EntityMessage draft = db.message().getMessage(id);
-                if (draft != null && now)
-                    db.message().setMessageSnoozed(draft.id, new Date().getTime());
-                return draft;
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, EntityMessage draft) {
-                if (draft != null)
-                    onActionSend(draft);
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
-            }
-        }.execute(this, args, "draft:get");
-
-    }
-
-    private void onActionSend(EntityMessage draft) {
-        if (EntityMessage.SMIME_SIGNONLY.equals(draft.encrypt) ||
-                EntityMessage.SMIME_SIGNENCRYPT.equals(draft.encrypt))
-            if (!ActivityBilling.isPro(getContext())) {
-                startActivity(new Intent(getContext(), ActivityBilling.class));
-                return;
-            }
-
-        if (draft.encrypt == null || EntityMessage.ENCRYPT_NONE.equals(draft.encrypt))
-            onAction(R.id.action_send);
-        else
-            onEncrypt(draft);
+        onAction(R.id.action_delete, "delete");
     }
 
     private void onExit() {
         if (state != State.LOADED)
             finish();
         else if (isEmpty() && !saved)
-            onAction(R.id.action_delete);
+            onAction(R.id.action_delete, "empty");
         else {
             autosave = false;
-            onAction(R.id.action_save);
+            onAction(R.id.action_save, "exit");
             finish();
         }
     }
@@ -2671,11 +2675,11 @@ public class FragmentCompose extends FragmentBase {
         return true;
     }
 
-    private void onAction(int action) {
-        onAction(action, new Bundle());
+    private void onAction(int action, String reason) {
+        onAction(action, new Bundle(), reason);
     }
 
-    private void onAction(int action, @NonNull Bundle extras) {
+    private void onAction(int action, @NonNull Bundle extras, String reason) {
         EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
 
         // Workaround underlines left by Android
@@ -2694,9 +2698,10 @@ public class FragmentCompose extends FragmentBase {
         args.putString("body", HtmlHelper.toHtml(etBody.getText()));
         args.putBoolean("signature", cbSignature.isChecked());
         args.putBoolean("empty", isEmpty());
+        args.putBoolean("interactive", getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED));
         args.putBundle("extras", extras);
 
-        Log.i("Run execute id=" + working);
+        Log.i("Run execute id=" + working + " reason=" + reason);
         actionLoader.execute(this, args, "compose:action:" + action);
     }
 
@@ -2934,15 +2939,14 @@ public class FragmentCompose extends FragmentBase {
                         data.draft.plain_only = true;
                     if (encrypt_default)
                         if ("s/mime".equals(encrypt_method))
-                            data.draft.encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                            data.draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
                         else
-                            data.draft.encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                            data.draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
                     else if (sign_default)
                         if ("s/mime".equals(encrypt_method))
-                            data.draft.encrypt = EntityMessage.SMIME_SIGNONLY;
+                            data.draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
                         else
-                            data.draft.encrypt = EntityMessage.PGP_SIGNONLY;
-                    data.draft.ui_encrypt = data.draft.encrypt;
+                            data.draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
                     if (receipt_default)
                         data.draft.receipt_request = true;
 
@@ -3217,10 +3221,8 @@ public class FragmentCompose extends FragmentBase {
                         if (ref.plain_only != null && ref.plain_only)
                             data.draft.plain_only = true;
                         if (ref.ui_encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(ref.ui_encrypt)) {
-                            if (ActivityBilling.isPro(context)) {
-                                data.draft.encrypt = ref.ui_encrypt;
+                            if (ActivityBilling.isPro(context))
                                 data.draft.ui_encrypt = ref.ui_encrypt;
-                            }
                         }
 
                         if (answer > 0) {
@@ -3410,6 +3412,8 @@ public class FragmentCompose extends FragmentBase {
                         File file = attachment.getFile(context);
                         ics.renameTo(file);
 
+                        last_available++;
+
                         ICalendar icalendar = Biweekly.parse(file).first();
                         VEvent event = icalendar.getEvents().get(0);
                         Organizer organizer = event.getOrganizer();
@@ -3465,14 +3469,14 @@ public class FragmentCompose extends FragmentBase {
                                     File target = attachment.getFile(context);
                                     Helper.copy(source, target);
 
+                                    last_available++;
+
                                     if (resize_reply && !"forward".equals(action))
                                         resizeAttachment(context, attachment, REDUCED_IMAGE_SIZE);
                                 } else
                                     args.putBoolean("incomplete", true);
                             }
                     }
-
-                    EntityOperation.queue(context, data.draft, EntityOperation.ADD);
                 } else {
                     if (data.draft.revision == null) {
                         data.draft.revision = 1;
@@ -3524,7 +3528,10 @@ public class FragmentCompose extends FragmentBase {
 
                     List<EntityAttachment> attachments = db.attachment().getAttachments(data.draft.id);
                     for (EntityAttachment attachment : attachments)
-                        if (!attachment.available)
+                        if (attachment.available) {
+                            if (attachment.encryption == null)
+                                last_available++;
+                        } else
                             EntityOperation.queue(context, data.draft, EntityOperation.ATTACHMENT, attachment.id);
 
                     args.putBoolean("saved", true);
@@ -3546,8 +3553,9 @@ public class FragmentCompose extends FragmentBase {
             final String action = getArguments().getString("action");
             Log.i("Loaded draft id=" + data.draft.id + " action=" + action + " saved=" + saved);
 
+            busy = false;
             working = data.draft.id;
-            encrypt = data.draft.encrypt;
+            encrypt = data.draft.ui_encrypt;
             getActivity().invalidateOptionsMenu();
 
             // Show identities
@@ -3603,6 +3611,8 @@ public class FragmentCompose extends FragmentBase {
                             boolean downloading = false;
                             boolean inline_images = false;
                             for (EntityAttachment attachment : attachments) {
+                                if (attachment.encryption != null)
+                                    continue;
                                 if (attachment.available)
                                     available++;
                                 if (attachment.progress != null)
@@ -3616,7 +3626,7 @@ public class FragmentCompose extends FragmentBase {
 
                             // Attachment deleted: update remote draft
                             if (available < last_available)
-                                onAction(R.id.action_save);
+                                onAction(R.id.action_save, "delattachment");
 
                             last_available = available;
 
@@ -3636,7 +3646,7 @@ public class FragmentCompose extends FragmentBase {
                     if (draft == null || draft.ui_hide)
                         finish();
                     else {
-                        encrypt = draft.encrypt;
+                        encrypt = draft.ui_encrypt;
                         getActivity().invalidateOptionsMenu();
 
                         Log.i("Draft content=" + draft.content);
@@ -3688,8 +3698,6 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private SimpleTask<EntityMessage> actionLoader = new SimpleTask<EntityMessage>() {
-        int last_available = 0;
-
         @Override
         protected void onPreExecute(Bundle args) {
             setBusy(true);
@@ -3698,7 +3706,8 @@ public class FragmentCompose extends FragmentBase {
         @Override
         protected void onPostExecute(Bundle args) {
             int action = args.getInt("action");
-            if (action != R.id.action_check)
+            boolean needsEncryption = args.getBoolean("needsEncryption");
+            if (action != R.id.action_check && !needsEncryption)
                 setBusy(false);
         }
 
@@ -3751,6 +3760,8 @@ public class FragmentCompose extends FragmentBase {
                         }
                     });
                 } else {
+                    boolean dirty = false;
+
                     // Move draft to new account
                     if (draft.account != aid && aid >= 0) {
                         Log.i("Account changed");
@@ -3785,7 +3796,7 @@ public class FragmentCompose extends FragmentBase {
                         db.message().updateMessage(draft);
 
                         if (draft.content)
-                            EntityOperation.queue(context, draft, EntityOperation.ADD);
+                            dirty = true;
                     }
 
                     Map<String, String> crumb = new HashMap<>();
@@ -3852,12 +3863,34 @@ public class FragmentCompose extends FragmentBase {
                         extra = null;
 
                     int available = 0;
+                    List<Integer> eparts = new ArrayList<>();
                     for (EntityAttachment attachment : attachments)
                         if (attachment.available)
-                            available++;
+                            if (attachment.encryption == null)
+                                available++;
+                            else
+                                eparts.add(attachment.encryption);
+
+                    if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt)) {
+                        if (!eparts.contains(EntityAttachment.PGP_KEY) ||
+                                !eparts.contains(EntityAttachment.PGP_SIGNATURE) ||
+                                !eparts.contains(EntityAttachment.PGP_CONTENT))
+                            dirty = true;
+                    } else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
+                        if (!eparts.contains(EntityAttachment.PGP_KEY) ||
+                                !eparts.contains(EntityAttachment.PGP_MESSAGE))
+                            dirty = true;
+                    } else if (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt)) {
+                        if (!eparts.contains(EntityAttachment.SMIME_SIGNATURE) ||
+                                !eparts.contains(EntityAttachment.SMIME_CONTENT))
+                            dirty = true;
+                    } else if (EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt)) {
+                        if (!eparts.contains(EntityAttachment.SMIME_MESSAGE))
+                            dirty = true;
+                    }
 
                     Long ident = (identity == null ? null : identity.id);
-                    boolean dirty = (!Objects.equals(draft.identity, ident) ||
+                    if (!Objects.equals(draft.identity, ident) ||
                             !Objects.equals(draft.extra, extra) ||
                             !MessageHelper.equal(draft.from, afrom) ||
                             !MessageHelper.equal(draft.to, ato) ||
@@ -3865,7 +3898,8 @@ public class FragmentCompose extends FragmentBase {
                             !MessageHelper.equal(draft.bcc, abcc) ||
                             !Objects.equals(draft.subject, subject) ||
                             !draft.signature.equals(signature) ||
-                            last_available != available);
+                            last_available != available)
+                        dirty = true;
 
                     last_available = available;
 
@@ -3916,7 +3950,7 @@ public class FragmentCompose extends FragmentBase {
 
                             d = JsoupEx.parse(extras.getString("html"));
                         } else {
-                            d = JsoupEx.parse(body);
+                            d = HtmlHelper.sanitizeCompose(context, body, true);
 
                             for (Element e : ref)
                                 d.body().appendChild(e);
@@ -3948,6 +3982,8 @@ public class FragmentCompose extends FragmentBase {
                         // Restore revision
                         Log.i("Restoring revision=" + draft.revision);
                         body = Helper.readText(draft.getFile(context, draft.revision));
+
+                        dirty = true;
                     }
 
                     Helper.writeText(draft.getFile(context), body);
@@ -3968,6 +4004,14 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                     // Execute action
+                    boolean encrypted = extras.getBoolean("encrypted");
+                    boolean shouldEncrypt =
+                            (draft.ui_encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt));
+                    if (dirty && !encrypted && shouldEncrypt) {
+                        args.putBoolean("needsEncryption", true);
+                        return draft;
+                    }
+
                     if (action == R.id.action_save ||
                             action == R.id.action_undo ||
                             action == R.id.action_redo ||
@@ -4071,13 +4115,11 @@ public class FragmentCompose extends FragmentBase {
                         // Delay sending message
                         int send_delayed = prefs.getInt("send_delayed", 0);
                         if (draft.ui_snoozed == null && send_delayed != 0) {
-                            draft.ui_snoozed = new Date().getTime() + send_delayed * 1000L;
+                            if (extras.getBoolean("now"))
+                                draft.ui_snoozed = null;
+                            else
+                                draft.ui_snoozed = new Date().getTime() + send_delayed * 1000L;
                             db.message().setMessageSnoozed(draft.id, draft.ui_snoozed);
-                        }
-
-                        if (draft.ui_snoozed != null && draft.ui_snoozed <= new Date().getTime()) {
-                            draft.ui_snoozed = null;
-                            db.message().setMessageSnoozed(draft.id, null);
                         }
 
                         // Send message
@@ -4122,9 +4164,11 @@ public class FragmentCompose extends FragmentBase {
         @Override
         protected void onExecuted(Bundle args, EntityMessage draft) {
             boolean wasSaved = args.getBoolean("saved");
+            boolean needsEncryption = args.getBoolean("needsEncryption");
             int action = args.getInt("action");
             Log.i("Loaded action id=" + (draft == null ? null : draft.id) +
-                    " action=" + getActionName(action) + " saved=" + wasSaved);
+                    " action=" + getActionName(action) +
+                    " saved=" + wasSaved + " encryption=" + needsEncryption);
 
             if (wasSaved)
                 saved = true;
@@ -4133,8 +4177,23 @@ public class FragmentCompose extends FragmentBase {
             etCc.setText(MessageHelper.formatAddressesCompose(draft.cc));
             etBcc.setText(MessageHelper.formatAddressesCompose(draft.bcc));
 
+            Bundle extras = args.getBundle("extras");
+            boolean show = extras.getBoolean("show");
+            boolean html = extras.containsKey("html");
+            if (show)
+                showDraft(draft, html);
+
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(draft.revision > 1);
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
+
+            if (needsEncryption) {
+                if (ActivityBilling.isPro(getContext())) {
+                    boolean interactive = args.getBoolean("interactive");
+                    onEncrypt(draft, action, interactive);
+                } else
+                    startActivity(new Intent(getContext(), ActivityBilling.class));
+                return;
+            }
 
             if (action == R.id.action_delete) {
                 autosave = false;
@@ -4144,11 +4203,7 @@ public class FragmentCompose extends FragmentBase {
                 showDraft(draft, false);
 
             } else if (action == R.id.action_save) {
-                Bundle extras = args.getBundle("extras");
-                boolean show = extras.getBoolean("show");
-                boolean html = extras.containsKey("html");
-                if (show)
-                    showDraft(draft, html);
+                // Do nothing
 
             } else if (action == R.id.action_check) {
                 boolean dialog = args.getBundle("extras").getBoolean("dialog");
@@ -4173,7 +4228,7 @@ public class FragmentCompose extends FragmentBase {
                     fragment.setTargetFragment(FragmentCompose.this, REQUEST_SEND);
                     fragment.show(getParentFragmentManager(), "compose:send");
                 } else
-                    onActionSend(draft);
+                    onAction(R.id.action_send, "dialog");
 
             } else if (action == R.id.action_send) {
                 autosave = false;
@@ -4183,10 +4238,6 @@ public class FragmentCompose extends FragmentBase {
 
         @Override
         protected void onException(Bundle args, Throwable ex) {
-            int action = args.getInt("action");
-            if (action == R.id.action_check)
-                setBusy(false);
-
             if (ex instanceof MessageRemovedException)
                 finish();
             else if (ex instanceof AddressException) {
@@ -4222,13 +4273,13 @@ public class FragmentCompose extends FragmentBase {
                     return Integer.toString(id);
             }
         }
-
-        private void setBusy(boolean busy) {
-            FragmentCompose.this.busy = busy;
-            Helper.setViewsEnabled(view, !busy);
-            getActivity().invalidateOptionsMenu();
-        }
     };
+
+    private void setBusy(boolean busy) {
+        FragmentCompose.this.busy = busy;
+        Helper.setViewsEnabled(view, !busy);
+        getActivity().invalidateOptionsMenu();
+    }
 
     private static String unprefix(String subject, String prefix) {
         subject = subject.trim();
@@ -4459,7 +4510,7 @@ public class FragmentCompose extends FragmentBase {
         @Override
         public boolean onKeyPressed(KeyEvent event) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.isCtrlPressed()) {
-                onActionSend(false);
+                onAction(R.id.action_send, "enter");
                 return true;
             }
             return false;
@@ -4939,7 +4990,7 @@ public class FragmentCompose extends FragmentBase {
                     cbPlainOnly.setVisibility(draft.receipt != null && draft.receipt ? View.GONE : View.VISIBLE);
                     cbReceipt.setVisibility(draft.receipt != null && draft.receipt ? View.GONE : View.VISIBLE);
 
-                    int encrypt = (draft.encrypt == null ? EntityMessage.ENCRYPT_NONE : draft.encrypt);
+                    int encrypt = (draft.ui_encrypt == null ? EntityMessage.ENCRYPT_NONE : draft.ui_encrypt);
                     for (int i = 0; i < encryptValues.length; i++)
                         if (encryptValues[i] == encrypt) {
                             spEncrypt.setTag(i);
