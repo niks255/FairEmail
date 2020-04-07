@@ -212,7 +212,8 @@ class Core {
                                 case EntityOperation.MOVE:
                                     if (group &&
                                             message.uid != null &&
-                                            EntityOperation.MOVE.equals(next.name)) {
+                                            EntityOperation.MOVE.equals(next.name) &&
+                                            account.protocol == EntityAccount.TYPE_IMAP) {
                                         JSONArray jnext = new JSONArray(next.args);
                                         // Same target
                                         if (jargs.getLong(0) == jnext.getLong(0)) {
@@ -285,6 +286,10 @@ class Core {
                                 case EntityOperation.ADD:
                                 case EntityOperation.EXISTS:
                                     // Do nothing
+                                    break;
+
+                                case EntityOperation.MOVE:
+                                    onMove(context, jargs, folder, message);
                                     break;
 
                                 case EntityOperation.DELETE:
@@ -871,7 +876,6 @@ class Core {
             ifolder.expunge();
         }
 
-
         // Fetch appended/copied when needed
         boolean fetch = !"connected".equals(target.state);
         if (draft || fetch)
@@ -927,6 +931,34 @@ class Core {
                         Log.i("Deleted contact email=" + email + " count=" + count);
                     }
             }
+    }
+
+    private static void onMove(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message) throws JSONException, FolderNotFoundException {
+        // Move message
+        DB db = DB.getInstance(context);
+
+        // Get arguments
+        long id = jargs.getLong(0);
+        boolean seen = jargs.optBoolean(1);
+        boolean unflag = jargs.optBoolean(3);
+
+        // Move from trash only
+        if (!EntityFolder.TRASH.equals(folder.type))
+            throw new IllegalArgumentException("Invalid POP3 folder type=" + folder.type);
+
+        // Get target folder
+        EntityFolder target = db.folder().getFolder(id);
+        if (target == null)
+            throw new FolderNotFoundException();
+
+        message.folder = target.id;
+        if (seen)
+            message.ui_seen = seen;
+        if (unflag)
+            message.ui_flagged = false;
+        message.ui_hide = false;
+
+        db.message().updateMessage(message);
     }
 
     private static void onFetch(Context context, JSONArray jargs, EntityFolder folder, IMAPStore istore, IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
@@ -1050,15 +1082,53 @@ class Core {
                 try {
                     ifolder.close(true);
                     ifolder.open(Folder.READ_WRITE);
+                    db.message().deleteMessage(folder.id, message.id);
                 } catch (Throwable ex) {
                     Log.e(ex);
                     state.error(new FolderClosedException(ifolder, "POP"));
                 }
             else
                 db.message().deleteMessage(folder.id, message.id);
+        } else {
+            if (!EntityFolder.INBOX.equals(folder.type))
+                db.message().deleteMessage(folder.id, message.id);
+        }
 
-        } else
-            db.message().deleteMessage(folder.id, message.id);
+        if (!EntityFolder.TRASH.equals(folder.type)) {
+            EntityFolder trash = db.folder().getFolderByType(message.account, EntityFolder.TRASH);
+            if (trash == null) {
+                trash = new EntityFolder();
+                trash.account = account.id;
+                trash.name = context.getString(R.string.title_folder_trash);
+                trash.type = EntityFolder.TRASH;
+                trash.synchronize = false;
+                trash.unified = false;
+                trash.notify = false;
+                trash.sync_days = Integer.MAX_VALUE;
+                trash.keep_days = Integer.MAX_VALUE;
+                trash.initialize = 0;
+                trash.id = db.folder().insertFolder(trash);
+            }
+
+            long id = message.id;
+
+            message.id = null;
+            message.folder = trash.id;
+            message.msgid = null; // virtual message
+            message.ui_hide = false;
+            message.ui_seen = true;
+            message.id = db.message().insertMessage(message);
+
+            try {
+                File source = EntityMessage.getFile(context, id);
+                File target = message.getFile(context);
+                Helper.copy(source, target);
+            } catch (IOException ex) {
+                Log.e(ex);
+            }
+
+            EntityAttachment.copy(context, id, message.id);
+        }
     }
 
     private static void onHeaders(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException {
@@ -1515,6 +1585,7 @@ class Core {
                     message.uid = null;
 
                     message.msgid = helper.getMessageID();
+                    message.hash = helper.getHash();
                     message.references = TextUtils.join(" ", helper.getReferences());
                     message.inreplyto = helper.getInReplyTo();
                     message.deliveredto = helper.getDeliveredTo();
@@ -2070,7 +2141,8 @@ class Core {
         if (message == null) {
             String msgid = helper.getMessageID();
             Log.i(folder.name + " searching for " + msgid);
-            for (EntityMessage dup : db.message().getMessagesByMsgId(folder.account, msgid)) {
+            List<EntityMessage> dups = db.message().getMessagesByMsgId(folder.account, msgid);
+            for (EntityMessage dup : dups) {
                 EntityFolder dfolder = db.folder().getFolder(dup.folder);
                 Log.i(folder.name + " found as id=" + dup.id + "/" + dup.uid +
                         " folder=" + dfolder.type + ":" + dup.folder + "/" + folder.type + ":" + folder.id +
@@ -2871,6 +2943,7 @@ class Core {
             for (NotificationCompat.Builder builder : notifications) {
                 long id = builder.getExtras().getLong("id", 0);
                 if ((id == 0 && add.size() + remove.size() > 0) || add.contains(id)) {
+                    // https://developer.android.com/training/wearables/notifications/creating
                     if (id == 0) {
                         if (!notify_summary)
                             builder.setLocalOnly(true);

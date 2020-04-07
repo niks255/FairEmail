@@ -265,25 +265,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     // https://github.com/newhouse/url-tracking-stripper
     private static final List<String> PARANOID_QUERY = Collections.unmodifiableList(Arrays.asList(
             // https://en.wikipedia.org/wiki/UTM_parameters
-            "utm_source",
-            "utm_medium",
-            "utm_campaign",
-            "utm_term",
-            "utm_content",
-
-            "utm_name",
-            "utm_cid",
-            "utm_reader",
-            "utm_viz_id",
-            "utm_pubreferrer",
-            "utm_swu",
-
-            "utm_datesent",
-            "utm_emailtype",
-            "utm_segment",
-            "utm_campaigntheme",
-            "utm_subjecttone",
-
             "icid", // Adobe
             "gclid", // Google
             "gclsrc", // Google ads
@@ -429,6 +410,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibSeen;
         private Flow flow;
 
+        private ImageButton ibCalendar;
         private TextView tvCalendarSummary;
         private TextView tvCalendarDescription;
         private TextView tvCalendarLocation;
@@ -438,7 +420,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private Button btnCalendarAccept;
         private Button btnCalendarDecline;
         private Button btnCalendarMaybe;
-        private ImageButton ibCalendar;
         private ContentLoadingProgressBar pbCalendarWait;
 
         private RecyclerView rvImage;
@@ -572,6 +553,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             pbHeaders = vsBody.findViewById(R.id.pbHeaders);
             tvNoInternetHeaders = vsBody.findViewById(R.id.tvNoInternetHeaders);
 
+            ibCalendar = vsBody.findViewById(R.id.ibCalendar);
             tvCalendarSummary = vsBody.findViewById(R.id.tvCalendarSummary);
             tvCalendarDescription = vsBody.findViewById(R.id.tvCalendarDescription);
             tvCalendarLocation = vsBody.findViewById(R.id.tvCalendarLocation);
@@ -581,7 +563,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             btnCalendarAccept = vsBody.findViewById(R.id.btnCalendarAccept);
             btnCalendarDecline = vsBody.findViewById(R.id.btnCalendarDecline);
             btnCalendarMaybe = vsBody.findViewById(R.id.btnCalendarMaybe);
-            ibCalendar = vsBody.findViewById(R.id.ibCalendar);
             pbCalendarWait = vsBody.findViewById(R.id.pbCalendarWait);
 
             rvAttachment = attachments.findViewById(R.id.rvAttachment);
@@ -703,10 +684,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvBody.setOnTouchListener(this);
                 tvBody.addOnLayoutChangeListener(this);
 
+                ibCalendar.setOnClickListener(this);
                 btnCalendarAccept.setOnClickListener(this);
                 btnCalendarDecline.setOnClickListener(this);
                 btnCalendarMaybe.setOnClickListener(this);
-                ibCalendar.setOnClickListener(this);
 
                 btnCalendarAccept.setOnLongClickListener(this);
                 btnCalendarDecline.setOnLongClickListener(this);
@@ -1229,6 +1210,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void clearCalendar() {
+            ibCalendar.setVisibility(View.GONE);
             tvCalendarSummary.setVisibility(View.GONE);
             tvCalendarDescription.setVisibility(View.GONE);
             tvCalendarLocation.setVisibility(View.GONE);
@@ -1564,13 +1546,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean inJunk = EntityFolder.JUNK.equals(message.folderType);
                     boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
 
-                    boolean move = !(message.folderReadOnly || message.uid == null);
+                    boolean move = !(message.folderReadOnly || message.uid == null) ||
+                            (message.accountProtocol == EntityAccount.TYPE_POP &&
+                                    EntityFolder.TRASH.equals(message.folderType));
                     boolean archive = (move && (hasArchive && !inArchive));
-                    boolean trash = (move || outbox || debug);
+                    boolean trash = (move || outbox || debug ||
+                            message.accountProtocol == EntityAccount.TYPE_POP);
                     boolean junk = (move && (hasJunk && !inJunk));
                     boolean unjunk = (move && inJunk);
 
-                    final boolean delete = (inTrash || !hasTrash || outbox || message.uid == null);
+                    final boolean delete = (inTrash || !hasTrash || outbox ||
+                            message.uid == null || message.accountProtocol == EntityAccount.TYPE_POP);
 
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     boolean button_archive_trash = prefs.getBoolean("button_archive_trash", true);
@@ -2318,6 +2304,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     Organizer organizer = event.getOrganizer();
 
+                    ibCalendar.setVisibility(View.VISIBLE);
+
                     tvCalendarSummary.setText(summary);
                     tvCalendarSummary.setVisibility(TextUtils.isEmpty(summary) ? View.GONE : View.VISIBLE);
 
@@ -2351,7 +2339,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionCalendar(TupleMessageEx message, int action, boolean share) {
-            if (!ActivityBilling.isPro(context)) {
+            if (action != R.id.ibCalendar && !ActivityBilling.isPro(context)) {
                 context.startActivity(new Intent(context, ActivityBilling.class));
                 return;
             }
@@ -2395,11 +2383,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         attendee.add(email);
                                 }
 
+                                int status;
+                                if (icalendar.getMethod().isRequest())
+                                    status = CalendarContract.Events.STATUS_TENTATIVE;
+                                else if (icalendar.getMethod().isCancel())
+                                    status = CalendarContract.Events.STATUS_CANCELED;
+                                else
+                                    status = CalendarContract.Events.STATUS_CONFIRMED;
+
                                 // https://developer.android.com/guide/topics/providers/calendar-provider.html#intent-insert
                                 Intent intent = new Intent(Intent.ACTION_INSERT)
                                         .setData(CalendarContract.Events.CONTENT_URI)
                                         .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
-                                        .putExtra(CalendarContract.Events.STATUS, CalendarContract.Events.STATUS_CONFIRMED);
+                                        .putExtra(CalendarContract.Events.STATUS, status);
 
                                 if (summary != null)
                                     intent.putExtra(CalendarContract.Events.TITLE, summary);
@@ -3735,8 +3731,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     FragmentDialogLink fragment = new FragmentDialogLink();
                     fragment.setArguments(args);
                     fragment.show(parentFragment.getParentFragmentManager(), "open:link");
-                } else
-                    Helper.view(context, uri, false);
+                } else {
+                    boolean browse_links = prefs.getBoolean("browse_links", false);
+                    Helper.view(context, uri, browse_links);
+                }
             }
 
             return true;
@@ -5206,8 +5204,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final Uri uri = getArguments().getParcelable("uri");
             final String title = getArguments().getString("title");
 
+            // Preload web view
             Helper.customTabsWarmup(getContext());
 
+            // Process link
             final Uri sanitized;
             if (uri.isOpaque())
                 sanitized = uri;
@@ -5218,7 +5218,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 boolean changed = false;
                 builder.clearQuery();
                 for (String key : uri.getQueryParameterNames())
-                    if (PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)))
+                    if (key.toLowerCase(Locale.ROOT).startsWith("utm_") ||
+                            PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)))
                         changed = true;
                     else if (!TextUtils.isEmpty(key))
                         for (String value : uri.getQueryParameters(key)) {
@@ -5229,43 +5230,29 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 sanitized = (changed ? builder.build() : uri);
             }
 
-            View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_open_link, null);
-            TextView tvTitle = dview.findViewById(R.id.tvTitle);
-            ImageButton ibShare = dview.findViewById(R.id.ibShare);
-            ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
+            final Uri uriTitle = Uri.parse(title == null ? "" : title);
+
+            // Get views
+            final View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_open_link, null);
+            final TextView tvTitle = dview.findViewById(R.id.tvTitle);
+            final ImageButton ibDifferent = dview.findViewById(R.id.ibDifferent);
             final EditText etLink = dview.findViewById(R.id.etLink);
-            TextView tvDifferent = dview.findViewById(R.id.tvDifferent);
+            final ImageButton ibShare = dview.findViewById(R.id.ibShare);
+            final ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
             final CheckBox cbSecure = dview.findViewById(R.id.cbSecure);
-            CheckBox cbSanitize = dview.findViewById(R.id.cbSanitize);
+            final CheckBox cbSanitize = dview.findViewById(R.id.cbSanitize);
             final Button btnOwner = dview.findViewById(R.id.btnOwner);
-            TextView tvOwnerRemark = dview.findViewById(R.id.tvOwnerRemark);
+            final TextView tvOwnerRemark = dview.findViewById(R.id.tvOwnerRemark);
             final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
             final TextView tvHost = dview.findViewById(R.id.tvHost);
             final TextView tvOwner = dview.findViewById(R.id.tvOwner);
+            final Group grpDifferent = dview.findViewById(R.id.grpDifferent);
             final Group grpOwner = dview.findViewById(R.id.grpOwner);
 
-            ibShare.setOnClickListener(new View.OnClickListener() {
+            ibDifferent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent send = new Intent();
-                    send.setAction(Intent.ACTION_SEND);
-                    send.putExtra(Intent.EXTRA_TEXT, uri.toString());
-                    send.setType("text/plain");
-                    startActivity(Intent.createChooser(send, title));
-                }
-            });
-
-            ibCopy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ClipboardManager clipboard =
-                            (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (clipboard != null) {
-                        ClipData clip = ClipData.newPlainText(title, uri.toString());
-                        clipboard.setPrimaryClip(clip);
-
-                        ToastEx.makeText(getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
-                    }
+                    etLink.setText(uriTitle.toString());
                 }
             });
 
@@ -5298,6 +5285,31 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             secure ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD);
 
                     cbSecure.setVisibility(hyperlink ? View.VISIBLE : View.GONE);
+                }
+            });
+
+            ibShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent send = new Intent();
+                    send.setAction(Intent.ACTION_SEND);
+                    send.putExtra(Intent.EXTRA_TEXT, etLink.getText().toString());
+                    send.setType("text/plain");
+                    startActivity(Intent.createChooser(send, title));
+                }
+            });
+
+            ibCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboard =
+                            (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (clipboard != null) {
+                        ClipData clip = ClipData.newPlainText(title, etLink.getText().toString());
+                        clipboard.setPrimaryClip(clip);
+
+                        ToastEx.makeText(getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
@@ -5345,7 +5357,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Bundle args = new Bundle();
                     args.putParcelable("uri", uri);
 
-                    new SimpleTask<String[]>() {
+                    new SimpleTask<Pair<String, IPInfo.Organization>>() {
                         @Override
                         protected void onPreExecute(Bundle args) {
                             btnOwner.setEnabled(false);
@@ -5361,17 +5373,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
 
                         @Override
-                        protected String[] onExecute(Context context, Bundle args) throws Throwable {
+                        protected Pair<String, IPInfo.Organization> onExecute(Context context, Bundle args) throws Throwable {
                             Uri uri = args.getParcelable("uri");
                             return IPInfo.getOrganization(uri, context);
                         }
 
                         @Override
-                        protected void onExecuted(Bundle args, String[] data) {
-                            String host = data[0];
-                            String organization = data[1];
-                            tvHost.setText(host);
-                            tvOwner.setText(organization == null ? "?" : organization);
+                        protected void onExecuted(Bundle args, Pair<String, IPInfo.Organization> data) {
+                            tvHost.setText(data.first);
+                            tvOwner.setText(data.second.name == null ? "?" : data.second.name);
                             new Handler().post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -5392,8 +5402,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
             etLink.setText(uri.toString());
 
-            Uri uriTitle = Uri.parse(title == null ? "" : title);
-            tvDifferent.setVisibility(uriTitle.getHost() == null || uri.getHost() == null ||
+            grpDifferent.setVisibility(uriTitle.getHost() == null || uri.getHost() == null ||
                     uriTitle.getHost().equalsIgnoreCase(uri.getHost())
                     ? View.GONE : View.VISIBLE);
 

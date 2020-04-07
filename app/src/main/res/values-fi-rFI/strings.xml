@@ -379,8 +379,8 @@
     <string name="title_advanced_crash_reports">Lähetä virheraportit</string>
     <string name="title_advanced_debug">Debug-tila</string>
     <string name="title_advanced_cleanup">Siistiminen</string>
-    <string name="title_advanced_more">Lisää asetuksia</string>
     <string name="title_advanced_last_cleanup">Viimeisin puhdistus: %1$s</string>
+    <string name="title_advanced_more">Lisää asetuksia</string>
     <string name="title_advanced_enabled_hint">Estä tai salli viestien vastaanotto globaalisti</string>
     <string name="title_advanced_manual_hint">Jos automaattinen synkronointi on pois käytöstä, synkronoinnin voi tehdä manuaalisesti vetämällä alaspäin viestilistassa.</string>
     <string name="title_advanced_poll_hint">Ajoittainen synkronointi vertaa paikallisia ja palvelimen viestejä joka kerta ja voi aiheuttaa ylimääräistä akun käyttöä varsinkin, kun synkronoitavia viestejä on paljon. Koko ajan synkronointi välttää tämän synkronoimalla jatkuvasti vain muutokset.</string>
@@ -753,6 +753,7 @@
     <string name="title_from_missing">Lähettäjä puuttuu</string>
     <string name="title_extra_missing">Käyttäjätunnus puuttuu</string>
     <string name="title_to_missing">Vastaanottaja puuttuu</string>
+    <string name="title_pgp_reminder">PGP-avaimet saatavilla</string>
     <string name="title_subject_reminder">Aihe puuttuu</string>
     <string name="title_text_reminder">Viesti on tyhjä</string>
     <string name="title_attachment_keywords">liite,liitteet,liitetty,liitetyt,sisällytetty,lisätty,liitin,sisällytin,lisäsin</string>

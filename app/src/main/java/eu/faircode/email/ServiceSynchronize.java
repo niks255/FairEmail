@@ -565,10 +565,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (PREF_EVAL.contains(key)) {
             Bundle command = new Bundle();
+            command.putString("pref", key);
             command.putString("name", "eval");
             liveAccountNetworkState.post(command);
         } else if (PREF_RELOAD.contains(key)) {
             Bundle command = new Bundle();
+            command.putString("pref", key);
             command.putString("name", "reload");
             liveAccountNetworkState.post(command);
         }
@@ -1783,8 +1785,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     // Init service
                     int accounts = db.account().getSynchronizingAccounts().size();
-                    if (accounts > 0)
-                        eval(context, "boot");
+                    if (accounts > 0) {
+                        // Reload: watchdog or user might have started service already
+                        reload(context, null, false, "boot");
+                    }
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }

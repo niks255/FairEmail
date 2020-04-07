@@ -192,16 +192,20 @@ public class FragmentOAuth extends FragmentBase {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case ActivitySetup.REQUEST_OAUTH:
-                if (resultCode == RESULT_OK && data != null)
-                    onHandleOAuth(data);
-                else
-                    onHandleCancel();
-                break;
-            case ActivitySetup.REQUEST_DONE:
-                finish();
-                break;
+        try {
+            switch (requestCode) {
+                case ActivitySetup.REQUEST_OAUTH:
+                    if (resultCode == RESULT_OK && data != null)
+                        onHandleOAuth(data);
+                    else
+                        onHandleCancel();
+                    break;
+                case ActivitySetup.REQUEST_DONE:
+                    finish();
+                    break;
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
     }
 
@@ -493,6 +497,8 @@ public class FragmentOAuth extends FragmentBase {
                             folder.account = account.id;
                             folder.id = db.folder().insertFolder(folder);
                             EntityLog.log(context, "OAuth folder=" + folder.name + " type=" + folder.type);
+                            if (folder.synchronize)
+                                EntityOperation.sync(context, folder.id, false);
                         }
                     }
 

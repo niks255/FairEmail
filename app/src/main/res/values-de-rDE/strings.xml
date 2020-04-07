@@ -160,6 +160,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_go">Los</string>
     <string name="title_setup_to_do">Nicht erledigt</string>
     <string name="title_setup_done">Erledigt</string>
+    <string name="title_setup_still">Noch zu tun</string>
     <string name="title_setup_error">Fehler</string>
     <string name="title_setup_export">Einstellungen exportieren</string>
     <string name="title_setup_import">Einstellungen importieren</string>
@@ -234,8 +235,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_resize_reply">Bilder im Antworttext skalieren</string>
     <string name="title_advanced_signature_location">Signaturposition</string>
     <string name="title_advanced_signature_end">Signatur nach zitierter/weitergeleiteter Nachricht hinzufügen</string>
-    <string name="title_advanced_plain_only">Immer als Reintext senden, nicht als HTML</string>
-    <string name="title_advanced_flow">„format flowed” für Reintext</string>
+    <string name="title_advanced_plain_only">Standardmäßig als Reintext senden</string>
+    <string name="title_advanced_flow">Format fließend für einfachen Text</string>
     <string name="title_advanced_receipt">Wenn eine Bestätigung angefordert wird, dann</string>
     <string name="title_advanced_usenet_signature">Usenet-Signaturkonvention</string>
     <string name="title_advanced_remove_signatures">Erkannte Signaturen entfernen</string>
@@ -299,22 +300,22 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_text_size">Kleine und große Texte anzeigen</string>
     <string name="title_advanced_collapse_quotes">Zitierten Text ausblenden</string>
     <string name="title_advanced_images_inline">Eingebettete Grafiken automatisch anzeigen</string>
-    <string name="title_advanced_seekbar">Relative Themenposition mit einem Punkt kennzeichnen</string>
-    <string name="title_advanced_actionbar">Navigationsleiste in Themen anzeigen</string>
+    <string name="title_advanced_seekbar">Relative Unterhaltungsposition mit einem Punkt kennzeichnen</string>
+    <string name="title_advanced_actionbar">Aktionsleiste in Unterhaltung anzeigen</string>
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
     <string name="title_advanced_navbar_colorize">Android-Navigationsleiste farbig darstellen</string>
     <string name="title_advanced_double_back">Zweifaches „Zurück” zum Beenden</string>
     <string name="title_advanced_pull_refresh">Zum Aktualisieren nach unten ziehen</string>
     <string name="title_advanced_autoscroll">Beim Empfang neuer Nachrichten nach oben rollen</string>
     <string name="title_advanced_double_tap">Doppelt antippen, um die Nachricht als gelesen bzw. ungelesen zu kennzeichnen</string>
-    <string name="title_advanced_swipenav">Nach links/rechts wischen, um zum nächsten/vorherigen Thema zu wechseln</string>
+    <string name="title_advanced_swipenav">Nach links/rechts wischen, um nächste/vorige Unterhaltung anzuzeigen</string>
     <string name="title_advanced_volumenav">Lautstärke hoch/runter, um zur nächsten/vorherigen Unterhaltung zu wechseln</string>
     <string name="title_advanced_reversed">Navigationsrichtung umkehren</string>
     <string name="title_advanced_autoexpand">Nachrichten automatisch erweitern</string>
     <string name="title_advanced_expand_all">Alle gelesenen Nachrichten automatisch erweitern</string>
     <string name="title_advanced_expand_one">Jeweils nur eine Nachricht erweitern</string>
     <string name="title_advanced_collapse_multiple">Nachrichten in einem Thema mit mehreren Nachrichten bei „Zurück” zusammenfassen</string>
-    <string name="title_advanced_autoclose">Themen automatisch schließen</string>
+    <string name="title_advanced_autoclose">Unterhaltungen automatisch schließen</string>
     <string name="title_advanced_onclose">Beim Schließen einer Unterhaltung</string>
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
     <string name="title_advanced_quick_scroll">Nicht aufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
@@ -350,6 +351,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_light">Benachrichtigungslicht verwenden</string>
     <string name="title_advanced_sound">Benachrichtigungston auswählen</string>
     <string name="title_advanced_confirm_links">Öffnende Verknüpfungen bestätigen</string>
+    <string name="title_advanced_browse_links">Links an Android übertragen</string>
     <string name="title_advanced_confirm_images">Bilder anzeigen bestätigen</string>
     <string name="title_advanced_confirm_html">Standardmäßig reformatierte Nachrichten anzeigen</string>
     <string name="title_advanced_tracking">Tracking-Bilder automatisch erkennen und deaktivieren</string>
@@ -378,12 +380,12 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_optimize">Einstellungen automatisch optimieren</string>
     <string name="title_advanced_updates">Nach Aktualisierungen suchen</string>
-    <string name="title_advanced_experiments">Experimentelle Funktionen ermöglichen</string>
+    <string name="title_advanced_experiments">Experimentelle Funktionen ausprobieren</string>
     <string name="title_advanced_crash_reports">Fehlerberichte senden</string>
     <string name="title_advanced_debug">Debugmodus</string>
     <string name="title_advanced_cleanup">Bereinigen</string>
-    <string name="title_advanced_more">Weitere Optionen</string>
     <string name="title_advanced_last_cleanup">Letzte Bereinigung: %1$s</string>
+    <string name="title_advanced_more">Weitere Optionen</string>
     <string name="title_advanced_enabled_hint">Nachrichtenempfang global deaktivieren oder aktivieren</string>
     <string name="title_advanced_manual_hint">Selbst wenn die Synchronisation deaktiviert ist, ist es möglich, manuell zu synchronisieren, indem Sie die Nachrichtenliste herunterziehen.</string>
     <string name="title_advanced_poll_hint">Die regelmäßige Synchronisation vergleicht jedes Mal lokale und entfernte Nachrichten, was ein aufwendiger Vorgang ist, der möglicherweise zu einem zusätzlichen Batterieverbrauch führt, besonders wenn es viele zu synchronisierende Nachrichten gibt. Durch die ständige Synchronisation wird dies vermieden, indem man ständig nur auf Änderungen achtet.</string>
@@ -644,7 +646,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_reply_list">An Liste antworten</string>
     <string name="title_reply_receipt">Lesebestätigung senden</string>
     <string name="title_reply_template">Mit Vorlage antworten</string>
-    <string name="title_moving">Verschiebe nach %1$s</string>
+    <string name="title_moving">verschoben nach %1$s</string>
     <string name="title_open_with">Öffnen mit</string>
     <string name="title_authentication_failed">%1$s Authentifizierung fehlgeschlagen</string>
     <string name="title_receipt_subject">Lesebestätigung: %1$s</string>
@@ -742,20 +744,21 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_media_toolbar">Mediensymbolleiste</string>
     <string name="title_insert_contact_group">Kontaktgruppe einfügen</string>
     <string name="title_insert_template">Vorlage einfügen</string>
-    <string name="title_edit_plain_text">Als Plain Text bearbeiten</string>
-    <string name="title_edit_formatted_text">Als reformierten Text bearbeiten</string>
+    <string name="title_edit_plain_text">Als einfachen Text bearbeiten</string>
+    <string name="title_edit_formatted_text">Als neu formatierten Text bearbeiten</string>
     <string name="title_select_certificate">Öffentlichen Schlüssel auswählen</string>
     <string name="title_certificate_missing">Kein öffentlicher Schlüssel für %1$s</string>
     <string name="title_certificate_invalid">Öffentlicher Schlüssel von %1$s ist ungültig</string>
     <string name="title_no_key">Kein privater Schlüssel</string>
     <string name="title_invalid_key">Ungültiger privater Schlüssel</string>
     <string name="title_unknown_key">Der private Schlüssel passt zu keinem der verwendeten Schlüssel</string>
-    <string name="title_send_plain_text">Nur Text</string>
+    <string name="title_send_plain_text">Nur einfacher Text</string>
     <string name="title_send_receipt">Bestätigung anfordern</string>
     <string name="title_send_receipt_remark">Die meisten Anbieter und E-Mail-Programme ignorieren Empfangsanforderungen</string>
     <string name="title_from_missing">Absender fehlt</string>
     <string name="title_extra_missing">Benutzername fehlt</string>
     <string name="title_to_missing">Empfänger fehlt</string>
+    <string name="title_pgp_reminder">PGP-Schlüssel verfügbar</string>
     <string name="title_subject_reminder">Betreff ist leer</string>
     <string name="title_text_reminder">Nachricht ist leer</string>
     <string name="title_attachment_keywords">angehängt,Anhang,Anhänge,beigefügt,Anlage,Anlagen,anbei</string>
@@ -1156,8 +1159,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     </string-array>
     <string-array name="onCloseNames">
         <item>Nichts tun</item>
-        <item>Zur vorherigen Thema wechseln</item>
-        <item>Zum nächsten Thema wechseln</item>
+        <item>Zur vorherigen Unterhaltung wechseln</item>
+        <item>Zur nächsten Unterhaltung wechseln</item>
     </string-array>
     <string-array name="resizeNames">
         <item>Klein</item>

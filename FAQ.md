@@ -53,7 +53,7 @@ Related questions:
 * Add a folder to the unified inbox: long press the folder in the folder list and check *Show in unified inbox*
 * Add a folder to the navigation menu: long press the folder in the folder list and check *Show in navigation menu*
 * Load more messages: long press a folder in the folder list, select *Synchronize more messages*
-* Delete a message, skipping trash: in the 3-dots menu of the action bar just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
+* Delete a message, skipping trash: in the 3-dots menu just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
 * Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
 * Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
 * Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
@@ -260,13 +260,14 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(140) Why does the message text contain strange characters?](#user-content-faq140)
 * [(141) How can I fix 'A drafts folder is required to send messages'?](#user-content-faq141)
 * [(142) How can I store sent messages in the inbox?](#user-content-faq142)
-* [(143) Can you add a trash folder for POP3 accounts?](#user-content-faq143)
+* [~~(143) Can you add a trash folder for POP3 accounts?~~](#user-content-faq143)
 * [(144) How can I record voice notes?](#user-content-faq144)
 * [(145) How can I set a notification sound for an account, folder or sender?](#user-content-faq145)
 * [(146) How can I fix incorrect message times?](#user-content-faq146)
 * [(147) What should I know about third party versions?](#user-content-faq147)
 * [(148) How can I use an Apple iCloud account?](#user-content-faq148)
 * [(149) How does the unread message count widget work?](#user-content-faq149)
+* [(150) Can you add cancelling calendar invites?](#user-content-faq150)
 
 [I have another question.](#user-content-support)
 
@@ -1207,7 +1208,7 @@ In this case you might want to synchronize periodically, for example each hour, 
 Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always
 because connecting to the server and comparing the local and remotes messages are expensive operations.
 
-On some devices it is necessary to *disable* battery optimizations (setup step 4) to keep connections to email servers open.
+[On some devices](https://dontkillmyapp.com/) it is necessary to *disable* battery optimizations (setup step 4) to keep connections to email servers open.
 
 Most of the battery usage, not considering viewing messages, is due to synchronization (receiving and sending) of messages.
 So, to reduce the battery usage, set the number of days to synchronize message for to a lower value,
@@ -2747,7 +2748,7 @@ If this is not an option, you can [create a rule](#user-content-faq71) to automa
 <br />
 
 <a name="faq143"></a>
-**(143) Can you add a trash folder for POP3 accounts?**
+**~~(143) Can you add a trash folder for POP3 accounts?~~**
 
 [POP3](https://en.wikipedia.org/wiki/Post_Office_Protocol) is a very limited protocol.
 Basically only messages can be downloaded and deleted from the inbox.
@@ -2757,6 +2758,9 @@ Since POP3 does not allow access to the trash folder at all, there is no way to 
 
 Note that you can hide messages and search for hidden messages, which is similar to a local trash folder,
 without suggesting that trashed messages can be restored, while this is actually not possible.
+
+Version 1.1082 added a local trash folder.
+Note that trashing a message will permanently remove it from the server and that trashed messages cannot be restored to the server anymore.
 
 <br />
 
@@ -2829,6 +2833,10 @@ The F-Droid build is supported, but any other unofficial build is not supported.
 F-Droid builds irregularly, which can be problematic when there is an important update.
 Therefore you are advised to switch to the GitHub release.
 
+The F-Droid version is built from the same source code, but signed differently.
+This means that all features are available in the F-Droid version too,
+except for using the Gmail quick setup wizard because Google approved (and allows) one signature only.
+
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
 because Android refuses to install the same app with a different signature for security reasons.
 
@@ -2861,6 +2869,20 @@ Tapping on the notification will synchronize all folders for which synchronizati
 * the start screen when all accounts were selected
 * a folder list when a specific account was selected and when new message notifications are enabled for multiple folders
 * a list of messages when a specific account was selected and when new message notifications are enabled for one folder
+
+<br />
+
+<a name="faq150"></a>
+**(150) Can you add cancelling calendar invites?**
+
+Cancelling calendar invites (removing calendar events) requires write calendar permission,
+which will result in effectively granting permission to read and write *all* calendar events of *all* calendars.
+
+Given the goal of FairEmail, privacy and security, and given that it is easy to remove a calendar event manually,
+it is not a good idea to request this permission for just this reason.
+
+Inserting new calendar events can be done without permissions with special [intents](https://developer.android.com/guide/topics/providers/calendar-provider.html#intents).
+Unfortunately, there exists no intent to delete existing calendar events.
 
 <br />
 

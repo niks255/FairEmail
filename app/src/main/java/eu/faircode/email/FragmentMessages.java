@@ -142,7 +142,6 @@ import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipient;
 import org.bouncycastle.util.Store;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openintents.openpgp.AutocryptPeerUpdate;
@@ -1632,12 +1631,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (EntityFolder.OUTBOX.equals(message.folderType))
                 return 0;
 
-            if (message.accountProtocol != EntityAccount.TYPE_IMAP)
-                return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-
             TupleAccountSwipes swipes = accountSwipes.get(message.account);
             if (swipes == null)
                 return 0;
+
+            if (message.accountProtocol != EntityAccount.TYPE_IMAP)
+                return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
 
             int flags = 0;
             if (swipes.swipe_left != null &&
@@ -1684,16 +1683,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (message == null)
                 return;
 
-            TupleAccountSwipes swipes;
+            TupleAccountSwipes swipes = accountSwipes.get(message.account);
+            if (swipes == null)
+                return;
+
             if (message.accountProtocol != EntityAccount.TYPE_IMAP) {
-                swipes = new TupleAccountSwipes();
                 swipes.swipe_right = FragmentAccount.SWIPE_ACTION_SEEN;
-                swipes.swipe_left = 0L;
-                swipes.left_type = EntityFolder.TRASH;
-            } else {
-                swipes = accountSwipes.get(message.account);
-                if (swipes == null)
-                    return;
+                swipes.swipe_left = FragmentAccount.SWIPE_ACTION_DELETE;
             }
 
             Long action = (dX > 0 ? swipes.swipe_right : swipes.swipe_left);
@@ -1727,6 +1723,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 icon = R.drawable.baseline_delete_forever_24;
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
+
             Drawable d = getResources().getDrawable(icon, getContext().getTheme()).mutate();
             d.setTint(Helper.resolveColor(getContext(), android.R.attr.textColorSecondary));
 
@@ -1777,16 +1774,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return;
             }
 
-            if (message.accountProtocol != EntityAccount.TYPE_IMAP)
+            TupleAccountSwipes swipes = accountSwipes.get(message.account);
+            if (swipes == null) {
+                adapter.notifyDataSetChanged();
+                return;
+            }
+
+            if (message.accountProtocol != EntityAccount.TYPE_IMAP) {
                 if (direction == ItemTouchHelper.LEFT) {
                     adapter.notifyItemChanged(pos);
                     onSwipeDelete(message);
                 } else
                     onActionSeenSelection(!message.ui_seen, message.id);
-
-            TupleAccountSwipes swipes = accountSwipes.get(message.account);
-            if (swipes == null) {
-                adapter.notifyDataSetChanged();
                 return;
             }
 
@@ -4162,7 +4161,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
 
                     return new Boolean[]{
-                            trash == null,
+                            trash == null || account.protocol == EntityAccount.TYPE_POP,
                             trashable,
                             snoozable,
                             archivable && archive != null};
@@ -5997,36 +5996,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                     if ((block_sender || block_domain) &&
                             (message.from != null && message.from.length > 0)) {
-                        String sender = ((InternetAddress) message.from[0]).getAddress();
-                        String name = MessageHelper.formatAddresses(new Address[]{message.from[0]});
-
-                        if (block_domain) {
-                            int at = sender.indexOf('@');
-                            if (at > 0)
-                                sender = sender.substring(at);
-                        }
-
-                        JSONObject jsender = new JSONObject();
-                        jsender.put("value", sender);
-                        jsender.put("regex", false);
-
-                        JSONObject jcondition = new JSONObject();
-                        jcondition.put("sender", jsender);
-
-                        JSONObject jaction = new JSONObject();
-                        jaction.put("type", EntityRule.TYPE_MOVE);
-                        jaction.put("target", junk.id);
-
-                        EntityRule rule = new EntityRule();
-                        rule.folder = message.folder;
-                        rule.name = context.getString(R.string.title_block, name);
-                        rule.order = 1000;
-                        rule.enabled = true;
-                        rule.stop = true;
-                        rule.condition = jcondition.toString();
-                        rule.action = jaction.toString();
+                        EntityRule rule = EntityRule.blockSender(context, message, junk, block_sender);
                         rule.id = db.rule().insertRule(rule);
                     }
+
 
                     db.setTransactionSuccessful();
                 } finally {

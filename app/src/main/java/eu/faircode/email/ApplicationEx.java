@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Printer;
 import android.webkit.CookieManager;
 
 import androidx.lifecycle.Observer;
@@ -69,6 +70,13 @@ public class ApplicationEx extends Application {
         long start = new Date().getTime();
         Log.logMemory(this, "App create version=" + BuildConfig.VERSION_NAME);
 
+        getMainLooper().setMessageLogging(new Printer() {
+            @Override
+            public void println(String msg) {
+                Log.d("Loop: " + msg);
+            }
+        });
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean crash_reports = prefs.getBoolean("crash_reports", false);
 
@@ -93,7 +101,7 @@ public class ApplicationEx extends Application {
             }
         });
 
-        Log.setupBugsnag(this);
+        Log.setup(this);
 
         upgrade(this);
 

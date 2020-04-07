@@ -215,7 +215,7 @@ public class Helper {
     }
 
     private static class ThreadPoolExecutorEx extends ThreadPoolExecutor {
-        String name;
+        private String name;
 
         public ThreadPoolExecutorEx(
                 String name,
@@ -230,6 +230,11 @@ public class Helper {
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
             Log.d("Executing " + t.getName());
+        }
+
+        @Override
+        protected void afterExecute(Runnable r, Throwable t) {
+            Log.d("Executed " + name + " pending=" + getQueue().size());
         }
     }
 
@@ -848,6 +853,19 @@ public class Helper {
                     return false;
         }
 
+        return true;
+    }
+
+    static boolean isISO8859(String text) {
+        // https://en.wikipedia.org/wiki/ISO/IEC_8859-1
+        byte[] octets = text.getBytes(StandardCharsets.ISO_8859_1);
+        for (byte b : octets) {
+            int c = b & 0xFF;
+            if (c < 32)
+                return false;
+            if (c >= 127 && c < 160)
+                return false;
+        }
         return true;
     }
 

@@ -23,7 +23,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -88,7 +87,26 @@ public class FragmentDialogFolder extends FragmentDialogBase {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
-                    etSearch.showDropDown();
+                    try {
+                        etSearch.showDropDown();
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                        /*
+                            Caused by: android.view.WindowManager$BadTokenException: Unable to add window -- token null is not valid; is your activity running?
+                                    at android.view.ViewRootImpl.setView(ViewRootImpl.java:958)
+                                    at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:381)
+                                    at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:100)
+                                    at android.widget.PopupWindow.invokePopup(PopupWindow.java:1467)
+                                    at android.widget.PopupWindow.showAsDropDown(PopupWindow.java:1316)
+                                    at android.widget.ListPopupWindow.show(ListPopupWindow.java:740)
+                                    at android.widget.AutoCompleteTextView.showDropDown(AutoCompleteTextView.java:1226)
+                                    at eu.faircode.email.FragmentDialogFolder$1.onFocusChange(SourceFile:91)
+                                    at android.view.View.onFocusChanged(View.java:7573)
+                                    at android.widget.TextView.onFocusChanged(TextView.java:10958)
+                                    at android.widget.EditText.onFocusChanged(EditText.java:277)
+                                    at android.widget.AutoCompleteTextView.onFocusChanged(AutoCompleteTextView.java:1125)
+                         */
+                    }
             }
         });
 
@@ -168,13 +186,6 @@ public class FragmentDialogFolder extends FragmentDialogBase {
                         ibNext.setEnabled(false);
                     }
                 });
-            }
-        });
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                etSearch.clearFocus();
             }
         });
 

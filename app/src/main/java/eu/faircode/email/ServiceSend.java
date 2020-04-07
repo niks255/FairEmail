@@ -229,10 +229,10 @@ public class ServiceSend extends ServiceBase {
     };
 
     private void checkConnectivity() {
-        boolean suitable = ConnectionHelper.getNetworkState(ServiceSend.this).isSuitable();
+        boolean suitable = ConnectionHelper.getNetworkState(this).isSuitable();
         if (lastSuitable != suitable) {
             lastSuitable = suitable;
-            EntityLog.log(ServiceSend.this, "Service send suitable=" + suitable);
+            EntityLog.log(this, "Service send suitable=" + suitable);
 
             try {
                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -240,15 +240,15 @@ public class ServiceSend extends ServiceBase {
             } catch (Throwable ex) {
                 Log.w(ex);
             }
-
-            if (suitable)
-                executor.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        processOperations();
-                    }
-                });
         }
+
+        if (suitable)
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    processOperations();
+                }
+            });
     }
 
     private void processOperations() {
@@ -410,6 +410,8 @@ public class ServiceSend extends ServiceBase {
                 message.cc = helper.getCc();
                 message.bcc = helper.getBcc();
                 message.reply = helper.getReply();
+                message.encrypt = parts.getEncryption();
+                message.ui_encrypt = message.encrypt;
                 message.received = new Date().getTime();
                 message.seen = true;
                 message.ui_seen = true;

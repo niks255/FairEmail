@@ -23,6 +23,7 @@ import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -41,12 +42,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
+
+import java.nio.charset.Charset;
+import java.util.SortedMap;
 
 import io.requery.android.database.sqlite.SQLiteDatabase;
 
@@ -74,6 +79,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvMemoryClass;
     private TextView tvStorageSpace;
     private TextView tvFingerprint;
+    private Button btnCharsets;
 
     private Group grpDebug;
 
@@ -87,7 +93,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "reply_hint", "html_always_images", "print_html_confirmed",
             "selected_folders", "move_1_confirmed", "move_n_confirmed",
             "identities_asked", "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
-            "setup_advanced"
+            "setup_reminder", "setup_advanced"
     };
 
     @Override
@@ -123,6 +129,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
         tvStorageSpace = view.findViewById(R.id.tvStorageSpace);
         tvFingerprint = view.findViewById(R.id.tvFingerprint);
+        btnCharsets = view.findViewById(R.id.btnCharsets);
 
         grpDebug = view.findViewById(R.id.grpDebug);
 
@@ -252,6 +259,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("debug", checked).apply();
+                Log.setDebug(checked);
                 grpDebug.setVisibility(checked || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
             }
         });
@@ -275,6 +283,40 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             public void onClick(View v) {
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
                 lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_SETUP_MORE));
+            }
+        });
+
+        btnCharsets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTask<SortedMap<String, Charset>>() {
+                    @Override
+                    protected SortedMap<String, Charset> onExecute(Context context, Bundle args) {
+                        return Charset.availableCharsets();
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, SortedMap<String, Charset> charsets) {
+                        StringBuilder sb = new StringBuilder();
+                        for (String key : charsets.keySet())
+                            sb.append(charsets.get(key).displayName()).append("\r\n");
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(R.string.title_advanced_charsets)
+                                .setMessage(sb.toString())
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Do nothing
+                                    }
+                                })
+                                .show();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    }
+                }.execute(FragmentOptionsMisc.this, new Bundle(), "setup:charsets");
             }
         });
 

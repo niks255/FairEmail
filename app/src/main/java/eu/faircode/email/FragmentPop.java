@@ -422,6 +422,9 @@ public class FragmentPop extends FragmentBase {
                         inbox.keep_days = Integer.MAX_VALUE;
                         inbox.initialize = 0;
                         inbox.id = db.folder().insertFolder(inbox);
+
+                        if (account.synchronize)
+                            EntityOperation.sync(context, inbox.id, false);
                     }
 
                     EntityFolder drafts = db.folder().getFolderByType(account.id, EntityFolder.DRAFTS);
@@ -454,12 +457,27 @@ public class FragmentPop extends FragmentBase {
                         sent.id = db.folder().insertFolder(sent);
                     }
 
+                    EntityFolder trash = db.folder().getFolderByType(account.id, EntityFolder.TRASH);
+                    if (trash == null) {
+                        trash = new EntityFolder();
+                        trash.account = account.id;
+                        trash.name = context.getString(R.string.title_folder_trash);
+                        trash.type = EntityFolder.TRASH;
+                        trash.synchronize = false;
+                        trash.unified = false;
+                        trash.notify = false;
+                        trash.sync_days = Integer.MAX_VALUE;
+                        trash.keep_days = Integer.MAX_VALUE;
+                        trash.initialize = 0;
+                        trash.id = db.folder().insertFolder(trash);
+                    }
+
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
                 }
 
-                ServiceSynchronize.eval(context, "save account");
+                ServiceSynchronize.eval(context, "POP3");
 
                 if (!synchronize) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
