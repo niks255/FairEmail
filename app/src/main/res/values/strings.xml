@@ -903,9 +903,30 @@
     <string name="title_signature_store">Store</string>
 
     <string name="title_search">Search</string>
+    <string name="title_search_for_hint">Enter text</string>
+    <string name="title_search_more">More options</string>
+    <string name="title_search_use_index">Use search index</string>
+    <string name="title_search_in_senders">In senders (from)</string>
+    <string name="title_search_in_recipients">In recipients (to, cc)</string>
+    <string name="title_search_in_subject">In subject</string>
+    <string name="title_search_in_keywords">In keywords (if supported)</string>
+    <string name="title_search_in_message">In message text</string>
+    <string name="title_search_with">Limit search to</string>
+    <string name="title_search_with_unseen">Unread</string>
+    <string name="title_search_with_flagged">Starred</string>
+    <string name="title_search_with_hidden">Hidden (on device only)</string>
+    <string name="title_search_with_encrypted">Encrypted (on device only)</string>
+    <string name="title_search_with_attachments">With attachments (on device only)</string>
+    <string name="title_search_with_before">Before</string>
+    <string name="title_search_with_after">After</string>
+    <string name="title_search_flag_unseen">unread</string>
+    <string name="title_search_flag_flagged">starred</string>
+    <string name="title_search_flag_hidden">hidden</string>
+    <string name="title_search_flag_encrypted">encrypted</string>
+    <string name="title_search_flag_attachments">attachments</string>
+
     <string name="title_search_device">Search on device</string>
     <string name="title_search_server">Search on server</string>
-    <string name="title_search_text">Search in text</string>
     <string name="title_search_in">Search in</string>
 
     <string name="title_sort_on">Sort on</string>
@@ -1122,6 +1143,7 @@
     <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection and device and on the number of messages. While downloading messages the app might respond slower.</string>
     <string name="title_hint_battery">Since FairEmail by default always receives messages, Android will report FairEmail as always being active. Therefore it might look as if FairEmail is always consuming battery power although this is in fact not the case.</string>
+    <string name="title_hint_reformat">By default, FairEmail reformats messages for privacy and security reasons. To view the original message, tap the "full screen" icon above the message text.</string>
     <string name="title_hint_contact_actions">Long press for options</string>
     <string name="title_hint_eml">This is a summary of the content of a raw message file. Save the raw message with the save icon in the action bar to view all content.</string>
 
@@ -1214,13 +1236,6 @@
     <string name="title_crash_info_remark">Please describe what you were doing when the app crashed:</string>
     <string name="title_issue_subject" translatable="false">FairEmail %1$s issue</string>
 
-    <string name="title_search_special_prefix">special</string>
-    <string name="title_search_special_unseen">unread</string>
-    <string name="title_search_special_flagged">starred</string>
-    <string name="title_search_special_snoozed">hidden</string>
-    <string name="title_search_special_encrypted">encrypted</string>
-    <string name="title_search_special_attachments">attachments</string>
-
     <string name="title_widget_title_count">New message count</string>
     <string name="title_widget_title_list">Message list</string>
 
@@ -1230,6 +1245,7 @@
     <string name="title_widget_folder_unified">Unified inbox folders</string>
     <string name="title_widget_unseen">Unread messages only</string>
     <string name="title_widget_flagged">Starred messages only</string>
+    <string name="title_widget_semi_transparent">Semi transparent background</string>
 
     <string name="title_accessibility_collapsed">Collapsed</string>
     <string name="title_accessibility_expanded">Expanded</string>
@@ -1240,6 +1256,13 @@
         <item quantity="one">%1$d message</item>
         <item quantity="other">%1$d messages</item>
     </plurals>
+
+    <!-- Thunderbird -->
+    <string name="title_keyword_label1">Important</string>
+    <string name="title_keyword_label2">Work</string>
+    <string name="title_keyword_label3">Personal</string>
+    <string name="title_keyword_label4">To do</string>
+    <string name="title_keyword_label5">Later</string>
 
     <string name="title_accessibility_flagged">Starred</string>
     <string name="title_accessibility_unflagged">Unstarred</string>

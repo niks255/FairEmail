@@ -164,10 +164,8 @@ class Core {
                             " group=" + group +
                             " retry=" + retry);
 
-                    if (ifolder != null && !ifolder.isOpen()) {
-                        state.error(new FolderClosedException(ifolder));
+                    if (ifolder != null && !ifolder.isOpen())
                         break;
-                    }
 
                     // Fetch most recent copy of message
                     EntityMessage message = null;
@@ -510,8 +508,6 @@ class Core {
 
             if (ops.size() == 0)
                 state.batchCompleted(folder.id, priority, sequence);
-            else
-                state.error(new FolderClosedException(ifolder));
         } finally {
             Log.i(folder.name + " end process state=" + state + " pending=" + ops.size());
         }
@@ -577,6 +573,17 @@ class Core {
 
         Log.i(name + " got uid=" + uid + " for msgid=" + msgid);
         return uid;
+    }
+
+    private static void noop(IMAPFolder ifolder) throws MessagingException {
+        // https://tools.ietf.org/html/rfc3501#section-6.3.11
+        ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+            @Override
+            public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                protocol.noop();
+                return null;
+            }
+        });
     }
 
     private static void onSeen(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException {
@@ -749,6 +756,9 @@ class Core {
         // Add message
         ifolder.appendMessages(new Message[]{imessage});
 
+        // Send no operation
+        noop(ifolder);
+
         // Delete previous (external) version
         if (message.uid != null) {
             db.message().setMessageUid(message.id, null);
@@ -849,7 +859,11 @@ class Core {
                 icopies.add(icopy);
             }
 
+            // Add message
             itarget.appendMessages(icopies.toArray(new Message[0]));
+
+            // Send no operation
+            noop(itarget);
         } else {
             for (Message imessage : map.keySet()) {
                 Log.i("Move seen=" + seen + " unflag=" + unflag + " flags=" + imessage.getFlags());
@@ -3205,6 +3219,7 @@ class Core {
             List<NotificationCompat.Action> wactions = new ArrayList<>();
 
             if (notify_trash &&
+                    message.accountProtocol == EntityAccount.TYPE_IMAP &&
                     db.folder().getFolderByType(message.account, EntityFolder.TRASH) != null) {
                 Intent trash = new Intent(context, ServiceUI.class)
                         .setAction("trash:" + message.id)
@@ -3222,6 +3237,7 @@ class Core {
             }
 
             if (notify_junk &&
+                    message.accountProtocol == EntityAccount.TYPE_IMAP &&
                     db.folder().getFolderByType(message.account, EntityFolder.JUNK) != null) {
                 Intent junk = new Intent(context, ServiceUI.class)
                         .setAction("junk:" + message.id)
@@ -3238,6 +3254,7 @@ class Core {
             }
 
             if (notify_archive &&
+                    message.accountProtocol == EntityAccount.TYPE_IMAP &&
                     db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE) != null) {
                 Intent archive = new Intent(context, ServiceUI.class)
                         .setAction("archive:" + message.id)
@@ -3254,7 +3271,8 @@ class Core {
                 wactions.add(actionArchive.build());
             }
 
-            if (notify_move) {
+            if (notify_move &&
+                    message.accountProtocol == EntityAccount.TYPE_IMAP) {
                 EntityAccount account = db.account().getAccount(message.account);
                 if (account != null && account.move_to != null) {
                     EntityFolder folder = db.folder().getFolder(account.move_to);

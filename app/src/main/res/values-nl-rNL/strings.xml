@@ -795,9 +795,29 @@
     <string name="title_signature_outdated">Deze publieke sleutel is momenteel niet geldig</string>
     <string name="title_signature_store">Opslaan</string>
     <string name="title_search">Zoek</string>
+    <string name="title_search_for_hint">Voer tekst in</string>
+    <string name="title_search_more">Meer opties</string>
+    <string name="title_search_use_index">Gebruik zoekindex</string>
+    <string name="title_search_in_senders">In afzenders (van)</string>
+    <string name="title_search_in_recipients">In geadresseerden (aan, cc)</string>
+    <string name="title_search_in_subject">In onderwerp</string>
+    <string name="title_search_in_keywords">In trefwoorden (indien ondersteund)</string>
+    <string name="title_search_in_message">In bericht tekst</string>
+    <string name="title_search_with">Zoekopdracht beperken tot</string>
+    <string name="title_search_with_unseen">Ongelezen</string>
+    <string name="title_search_with_flagged">Met ster</string>
+    <string name="title_search_with_hidden">Verborgen (alleen op apparaat)</string>
+    <string name="title_search_with_encrypted">Versleuteld (alleen op apparaat)</string>
+    <string name="title_search_with_attachments">Met bijlagen (alleen op apparaat)</string>
+    <string name="title_search_with_before">Voor</string>
+    <string name="title_search_with_after">Na</string>
+    <string name="title_search_flag_unseen">ongelezen</string>
+    <string name="title_search_flag_flagged">met ster</string>
+    <string name="title_search_flag_hidden">verborgen</string>
+    <string name="title_search_flag_encrypted">versleuteld</string>
+    <string name="title_search_flag_attachments">bijlagen</string>
     <string name="title_search_device">Zoeken op apparaat</string>
     <string name="title_search_server">Zoek op server</string>
-    <string name="title_search_text">Zoeken in tekst</string>
     <string name="title_search_in">Zoeken in</string>
     <string name="title_sort_on">Sorteer op</string>
     <string name="title_sort_on_time">Tijd</string>
@@ -994,6 +1014,7 @@
     <string name="title_hint_important">Belangrijk</string>
     <string name="title_hint_sync">Het downloaden van berichten kan enige tijd duren, afhankelijk van de snelheid van de provider, de internet-verbinding en het apparaat en van het aantal berichten. Tijdens het downloaden van berichten kan de app trager reageren.</string>
     <string name="title_hint_battery">Aangezien FairEmail standaard altijd berichten ontvangt, meldt Android dat FairEmail altijd actief is. Daarom lijkt het erop dat FairEmail altijd batterijvermogen gebruikt, maar in feite is dit niet het geval.</string>
+    <string name="title_hint_reformat">Standaard formatteert FairEmail berichten opnieuw om privacy- en veiligheidsredenen. Tik op het \"volledig scherm\" pictogram boven de berichttekst om het oorspronkelijke bericht te bekijken.</string>
     <string name="title_hint_contact_actions">Druk lang voor opties</string>
     <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtbestand. Sla het ruwe bericht op met het \'bewaar\' icoon in de actiebalk om alle inhoud te bekijken.</string>
     <string name="title_open_link">Koppeling openen</string>
@@ -1073,12 +1094,6 @@
     <string name="title_debug_info">Foutopsporing</string>
     <string name="title_debug_info_remark">Beschrijf alstublieft het probleem en de tijd van het probleem:</string>
     <string name="title_crash_info_remark">Beschrijf alstublieft wat u aan het doen was toen de app crashte:</string>
-    <string name="title_search_special_prefix">speciaal</string>
-    <string name="title_search_special_unseen">ongelezen</string>
-    <string name="title_search_special_flagged">ster</string>
-    <string name="title_search_special_snoozed">verborgen</string>
-    <string name="title_search_special_encrypted">versleuteld</string>
-    <string name="title_search_special_attachments">bijlagen</string>
     <string name="title_widget_title_count">Aantal nieuwe berichten</string>
     <string name="title_widget_title_list">Berichtenlijst</string>
     <string name="title_widget_account">Account</string>
@@ -1087,6 +1102,7 @@
     <string name="title_widget_folder_unified">Gecombineerde postvak in mappen</string>
     <string name="title_widget_unseen">Alleen ongelezen berichten</string>
     <string name="title_widget_flagged">Alleen berichten met een ster</string>
+    <string name="title_widget_semi_transparent">Semi transparante achtergrond</string>
     <string name="title_accessibility_collapsed">Ingevouwen</string>
     <string name="title_accessibility_expanded">Uitgevouwen</string>
     <string name="title_accessibility_seen">Gelezen</string>
@@ -1095,6 +1111,12 @@
         <item quantity="one">%1$d bericht</item>
         <item quantity="other">%1$d berichten</item>
     </plurals>
+    <!-- Thunderbird -->
+    <string name="title_keyword_label1">Belangrijk</string>
+    <string name="title_keyword_label2">Werk</string>
+    <string name="title_keyword_label3">Persoonlijk</string>
+    <string name="title_keyword_label4">Te doen</string>
+    <string name="title_keyword_label5">Later</string>
     <string name="title_accessibility_flagged">Met ster</string>
     <string name="title_accessibility_unflagged">Zonder ster</string>
     <string name="title_accessibility_collapse">Samenvouwen</string>

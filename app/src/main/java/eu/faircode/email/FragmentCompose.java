@@ -4098,20 +4098,30 @@ public class FragmentCompose extends FragmentBase {
                         }
 
                     } else if (action == R.id.action_send) {
-                        // Remove unused inline images
-                        List<String> cids = new ArrayList<>();
-                        if (draft.plain_only == null || !draft.plain_only)
-                            for (Element element : JsoupEx.parse(body).select("img")) {
+                        if (draft.plain_only == null || !draft.plain_only) {
+                            // Remove unused inline images
+                            List<String> cids = new ArrayList<>();
+                            Document d = JsoupEx.parse(body);
+                            for (Element element : d.select("img")) {
                                 String src = element.attr("src");
                                 if (src.startsWith("cid:"))
                                     cids.add("<" + src.substring(4) + ">");
                             }
 
-                        for (EntityAttachment attachment : new ArrayList<>(attachments))
-                            if (attachment.isInline() && !cids.contains(attachment.cid)) {
-                                Log.i("Removing unused inline attachment cid=" + attachment.cid);
-                                db.attachment().deleteAttachment(attachment.id);
-                            }
+                            for (EntityAttachment attachment : new ArrayList<>(attachments))
+                                if (attachment.isInline() && !cids.contains(attachment.cid)) {
+                                    Log.i("Removing unused inline attachment cid=" + attachment.cid);
+                                    db.attachment().deleteAttachment(attachment.id);
+                                }
+                        } else {
+                            // Convert inline images to attachments
+                            for (EntityAttachment attachment : new ArrayList<>(attachments))
+                                if (attachment.isInline()) {
+                                    Log.i("Converting to attachment cid=" + attachment.cid);
+                                    attachment.disposition = Part.ATTACHMENT;
+                                    db.attachment().setDisposition(attachment.id, attachment.disposition);
+                                }
+                        }
 
                         // Delete draft (cannot move to outbox)
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
@@ -4804,6 +4814,7 @@ public class FragmentCompose extends FragmentBase {
             final CheckBox cbReceipt = dview.findViewById(R.id.cbReceipt);
             final TextView tvReceipt = dview.findViewById(R.id.tvReceiptType);
             final Spinner spEncrypt = dview.findViewById(R.id.spEncrypt);
+            final ImageButton ibEncryption = dview.findViewById(R.id.ibEncryption);
             final Spinner spPriority = dview.findViewById(R.id.spPriority);
             final TextView tvSendAt = dview.findViewById(R.id.tvSendAt);
             final ImageButton ibSendAt = dview.findViewById(R.id.ibSendAt);
@@ -4932,6 +4943,13 @@ public class FragmentCompose extends FragmentBase {
                             Log.unexpectedError(getParentFragmentManager(), ex);
                         }
                     }.execute(FragmentDialogSend.this, args, "compose:encrypt");
+                }
+            });
+
+            ibEncryption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(getContext(), 12);
                 }
             });
 

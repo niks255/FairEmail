@@ -25,10 +25,12 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.PagedList;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.iap.Argument;
+import com.sun.mail.iap.ProtocolException;
 import com.sun.mail.iap.Response;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
@@ -38,11 +40,13 @@ import com.sun.mail.imap.protocol.IMAPResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
 import javax.mail.FetchProfile;
@@ -57,9 +61,11 @@ import javax.mail.UIDFolder;
 import javax.mail.internet.MimeMessage;
 import javax.mail.search.AndTerm;
 import javax.mail.search.BodyTerm;
+import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.FromStringTerm;
 import javax.mail.search.OrTerm;
+import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
@@ -71,17 +77,17 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     private Long account;
     private Long folder;
     private boolean server;
-    private String query;
+    private SearchCriteria criteria;
     private int pageSize;
 
     private IBoundaryCallbackMessages intf;
 
     private Handler handler;
-    private ExecutorService executor = Helper.getBackgroundExecutor(1, "boundary");
 
     private State state;
 
     private static final int SEARCH_LIMIT = 1000;
+    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "boundary");
 
     interface IBoundaryCallbackMessages {
         void onLoading();
@@ -91,12 +97,12 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         void onException(@NonNull Throwable ex);
     }
 
-    BoundaryCallbackMessages(Context context, long account, long folder, boolean server, String query, int pageSize) {
+    BoundaryCallbackMessages(Context context, long account, long folder, boolean server, SearchCriteria criteria, int pageSize) {
         this.context = context.getApplicationContext();
         this.account = (account < 0 ? null : account);
         this.folder = (folder < 0 ? null : folder);
         this.server = server;
-        this.query = query;
+        this.criteria = criteria;
         this.pageSize = pageSize;
     }
 
@@ -109,23 +115,26 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     @Override
     public void onZeroItemsLoaded() {
         Log.i("Boundary zero loaded");
-        queue_load();
+        queue_load(state);
     }
 
     @Override
     public void onItemAtEndLoaded(@NonNull final TupleMessageEx itemAtEnd) {
         Log.i("Boundary at end");
-        queue_load();
+        queue_load(state);
     }
 
     void retry() {
-        state.reset();
-        queue_load();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                close(state);
+            }
+        });
+        queue_load(state);
     }
 
-    private void queue_load() {
-        final State state = this.state;
-
+    private void queue_load(final State state) {
         executor.submit(new Runnable() {
             @Override
             public void run() {
@@ -148,8 +157,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                                 throw ex;
 
                             Log.w("Boundary", ex);
-                            close();
-                            state.reset();
+                            close(state);
 
                             // Retry
                             load_server(state);
@@ -182,35 +190,15 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     private int load_device(State state) {
         DB db = DB.getInstance(context);
 
-        Boolean seen = null;
-        Boolean flagged = null;
-        Boolean snoozed = null;
-        Boolean encrypted = null;
-        Boolean attachments = null;
-        String find = (TextUtils.isEmpty(query) ? null : query.toLowerCase());
-        if (find != null && find.startsWith(context.getString(R.string.title_search_special_prefix) + ":")) {
-            String special = find.split(":")[1];
-            if (context.getString(R.string.title_search_special_unseen).equals(special))
-                seen = false;
-            else if (context.getString(R.string.title_search_special_flagged).equals(special))
-                flagged = true;
-            else if (context.getString(R.string.title_search_special_snoozed).equals(special))
-                snoozed = true;
-            else if (context.getString(R.string.title_search_special_encrypted).equals(special))
-                encrypted = true;
-            else if (context.getString(R.string.title_search_special_attachments).equals(special))
-                attachments = true;
-        }
-
         int found = 0;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean fts = prefs.getBoolean("fts", false);
         boolean pro = ActivityBilling.isPro(context);
-        if (fts && pro && seen == null && flagged == null && snoozed == null && encrypted == null && attachments == null) {
+        if (fts && pro && criteria.isQueryOnly()) {
             if (state.ids == null) {
                 SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
-                state.ids = FtsDbHelper.match(sdb, account, folder, query);
+                state.ids = FtsDbHelper.match(sdb, account, folder, criteria);
             }
 
             try {
@@ -237,16 +225,17 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         (state.matches.size() > 0 && state.index >= state.matches.size())) {
                     state.matches = db.message().matchMessages(
                             account, folder,
-                            "%" + find + "%",
-                            seen, flagged, snoozed, encrypted, attachments,
+                            criteria.query == null ? null : "%" + criteria.query + "%",
+                            criteria.with_unseen,
+                            criteria.with_flagged,
+                            criteria.with_hidden,
+                            criteria.with_encrypted,
+                            criteria.with_attachments,
+                            criteria.after,
+                            criteria.before,
                             SEARCH_LIMIT, state.offset);
                     Log.i("Boundary device folder=" + folder +
-                            " query=" + query +
-                            " seen=" + seen +
-                            " flagged=" + flagged +
-                            " snoozed=" + snoozed +
-                            " encrypted=" + encrypted +
-                            " attachments=" + attachments +
+                            " criteria=" + criteria +
                             " offset=" + state.offset +
                             " size=" + state.matches.size());
                     state.offset += Math.min(state.matches.size(), SEARCH_LIMIT);
@@ -260,25 +249,20 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     state.index = i + 1;
 
                     TupleMatch match = state.matches.get(i);
-
-                    if (find == null || seen != null || flagged != null || snoozed != null || encrypted != null || attachments != null)
-                        match.matched = true;
-                    else {
-                        if (match.matched == null || !match.matched)
-                            try {
-                                File file = EntityMessage.getFile(context, match.id);
-                                if (file.exists()) {
-                                    String html = Helper.readText(file);
-                                    if (html.toLowerCase().contains(find)) {
-                                        String text = HtmlHelper.getFullText(html);
-                                        if (text.toLowerCase().contains(find))
-                                            match.matched = true;
-                                    }
+                    if (criteria.query != null && (match.matched == null || !match.matched))
+                        try {
+                            File file = EntityMessage.getFile(context, match.id);
+                            if (file.exists()) {
+                                String html = Helper.readText(file);
+                                if (html.toLowerCase().contains(criteria.query)) {
+                                    String text = HtmlHelper.getFullText(html);
+                                    if (text.toLowerCase().contains(criteria.query))
+                                        match.matched = true;
                                 }
-                            } catch (IOException ex) {
-                                Log.e(ex);
                             }
-                    }
+                        } catch (IOException ex) {
+                            Log.e(ex);
+                        }
 
                     if (match.matched != null && match.matched) {
                         found++;
@@ -303,10 +287,9 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         DB db = DB.getInstance(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        final boolean search_text = prefs.getBoolean("search_text", false);
         final boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.BETA_RELEASE);
 
-        final EntityFolder browsable = db.folder().getBrowsableFolder(folder, query != null);
+        final EntityFolder browsable = db.folder().getBrowsableFolder(folder, criteria != null);
         if (browsable == null || !browsable.selectable) {
             Log.w("Boundary not browsable=" + (folder != null));
             return 0;
@@ -344,88 +327,49 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 int count = state.ifolder.getMessageCount();
                 db.folder().setFolderTotal(browsable.id, count < 0 ? null : count);
 
-                Log.i("Boundary server query=" + query);
-                if (query == null) {
+                if (criteria == null) {
                     boolean filter_seen = prefs.getBoolean("filter_seen", false);
                     boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
                     Log.i("Boundary filter seen=" + filter_seen + " unflagged=" + filter_unflagged);
 
-                    SearchTerm searchUnseen = null;
-                    if (filter_seen && state.ifolder.getPermanentFlags().contains(Flags.Flag.SEEN))
-                        searchUnseen = new FlagTerm(new Flags(Flags.Flag.SEEN), false);
+                    List<SearchTerm> and = new ArrayList<>();
 
-                    SearchTerm searchFlagged = null;
-                    if (filter_unflagged && state.ifolder.getPermanentFlags().contains(Flags.Flag.FLAGGED))
-                        searchFlagged = new FlagTerm(new Flags(Flags.Flag.FLAGGED), true);
+                    if (filter_seen &&
+                            state.ifolder.getPermanentFlags().contains(Flags.Flag.SEEN))
+                        and.add(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 
-                    if (searchUnseen != null && searchFlagged != null)
-                        state.imessages = state.ifolder.search(new AndTerm(searchUnseen, searchFlagged));
-                    else if (searchUnseen != null)
-                        state.imessages = state.ifolder.search(searchUnseen);
-                    else if (searchFlagged != null)
-                        state.imessages = state.ifolder.search(searchFlagged);
-                    else
+                    if (filter_unflagged &&
+                            state.ifolder.getPermanentFlags().contains(Flags.Flag.FLAGGED))
+                        and.add(new FlagTerm(new Flags(Flags.Flag.FLAGGED), true));
+
+                    if (and.size() == 0)
                         state.imessages = state.ifolder.getMessages();
-                } else if (query.startsWith(context.getString(R.string.title_search_special_prefix) + ":")) {
-                    String special = query.split(":")[1];
-                    if (context.getString(R.string.title_search_special_unseen).equals(special))
-                        state.imessages = state.ifolder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
-                    else if (context.getString(R.string.title_search_special_flagged).equals(special))
-                        state.imessages = state.ifolder.search(new FlagTerm(new Flags(Flags.Flag.FLAGGED), true));
                     else
-                        state.imessages = new Message[0];
+                        state.imessages = state.ifolder.search(new AndTerm(and.toArray(new SearchTerm[0])));
                 } else {
                     Object result = state.ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
                         @Override
-                        public Object doCommand(IMAPProtocol protocol) {
-                            // Yahoo! does not support keyword search, but uses the flags $Forwarded $Junk $NotJunk
-                            boolean keywords = false;
-                            for (String keyword : browsable.keywords)
-                                if (!keyword.startsWith("$")) {
-                                    keywords = true;
-                                    break;
-                                }
-
+                        public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
                             try {
                                 // https://tools.ietf.org/html/rfc3501#section-6.4.4
                                 Argument arg = new Argument();
-                                if (query.startsWith("raw:") && state.iservice.hasCapability("X-GM-EXT-1")) {
+                                if (criteria.query != null &&
+                                        criteria.query.startsWith("raw:") &&
+                                        state.iservice.hasCapability("X-GM-EXT-1")) {
                                     // https://support.google.com/mail/answer/7190
                                     // https://developers.google.com/gmail/imap/imap-extensions#extension_of_the_search_command_x-gm-raw
                                     arg.writeAtom("X-GM-RAW");
-                                    arg.writeString(query.substring(4));
-                                } else {
-                                    if (!protocol.supportsUtf8()) {
-                                        arg.writeAtom("CHARSET");
-                                        arg.writeAtom(StandardCharsets.UTF_8.name());
-                                    }
-                                    arg.writeAtom("OR");
-                                    arg.writeAtom("OR");
-                                    if (search_text)
-                                        arg.writeAtom("OR");
-                                    if (keywords)
-                                        arg.writeAtom("OR");
-                                    arg.writeAtom("FROM");
-                                    arg.writeBytes(query.getBytes());
-                                    arg.writeAtom("TO");
-                                    arg.writeBytes(query.getBytes());
-                                    arg.writeAtom("SUBJECT");
-                                    arg.writeBytes(query.getBytes());
-                                    if (search_text) {
-                                        arg.writeAtom("BODY");
-                                        arg.writeBytes(query.getBytes());
-                                    }
-                                    if (keywords) {
-                                        arg.writeAtom("KEYWORD");
-                                        arg.writeBytes(query.getBytes());
-                                    }
-                                }
+                                    arg.writeString(criteria.query.substring(4));
 
-                                Log.i("Boundary UTF8 search=" + query);
-                                Response[] responses = protocol.command("SEARCH", arg);
-                                if (responses.length > 0 && responses[responses.length - 1].isOK()) {
+                                    Response[] responses = protocol.command("SEARCH", arg);
+                                    if (responses.length == 0)
+                                        throw new ProtocolException("No response");
+                                    if (!responses[responses.length - 1].isOK())
+                                        throw new ProtocolException(responses[responses.length - 1]);
+
+                                    Log.i("Boundary raw search=" + criteria.query);
+
                                     List<Integer> msgnums = new ArrayList<>();
-
                                     for (Response response : responses)
                                         if (((IMAPResponse) response).keyEquals("SEARCH")) {
                                             int msgnum;
@@ -439,38 +383,78 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                                     return imessages;
                                 } else {
-                                    // Assume no UTF-8 support
-                                    String search = query.replace("ß", "ss"); // Eszett
-                                    search = Normalizer.normalize(search, Normalizer.Form.NFD)
-                                            .replaceAll("[^\\p{ASCII}]", "");
+                                    Log.i("Boundary server search=" + criteria);
 
-                                    Log.i("Boundary ASCII search=" + search);
-                                    SearchTerm term = new OrTerm(
-                                            new OrTerm(
-                                                    new FromStringTerm(search),
-                                                    new RecipientStringTerm(Message.RecipientType.TO, search)
-                                            ),
-                                            new OrTerm(
-                                                    new SubjectTerm(search),
-                                                    new BodyTerm(search)
-                                            )
-                                    );
+                                    List<SearchTerm> or = new ArrayList<>();
+                                    List<SearchTerm> and = new ArrayList<>();
+                                    if (criteria.query != null) {
+                                        String search = criteria.query;
 
-                                    if (keywords)
-                                        term = new OrTerm(term, new FlagTerm(
-                                                new Flags(MessageHelper.sanitizeKeyword(search)), true));
+                                        if (!protocol.supportsUtf8()) {
+                                            search = search.replace("ß", "ss"); // Eszett
+                                            search = Normalizer.normalize(search, Normalizer.Form.NFKD)
+                                                    .replaceAll("[^\\p{ASCII}]", "");
+                                        }
+
+                                        // Yahoo! does not support keyword search, but uses the flags $Forwarded $Junk $NotJunk
+                                        boolean keywords = false;
+                                        for (String keyword : browsable.keywords)
+                                            if (!keyword.startsWith("$")) {
+                                                keywords = true;
+                                                break;
+                                            }
+
+                                        if (criteria.in_senders)
+                                            or.add(new FromStringTerm(search));
+                                        if (criteria.in_receipients) {
+                                            or.add(new RecipientStringTerm(Message.RecipientType.TO, search));
+                                            or.add(new RecipientStringTerm(Message.RecipientType.CC, search));
+                                            or.add(new RecipientStringTerm(Message.RecipientType.BCC, search));
+                                        }
+                                        if (criteria.in_subject)
+                                            or.add(new SubjectTerm(search));
+                                        if (criteria.in_keywords && keywords)
+                                            or.add(new FlagTerm(new Flags(MessageHelper.sanitizeKeyword(search)), true));
+                                        if (criteria.in_message)
+                                            or.add(new BodyTerm(search));
+                                    }
+
+                                    if (criteria.with_unseen &&
+                                            state.ifolder.getPermanentFlags().contains(Flags.Flag.SEEN))
+                                        and.add(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+                                    if (criteria.with_flagged &&
+                                            state.ifolder.getPermanentFlags().contains(Flags.Flag.FLAGGED))
+                                        and.add(new FlagTerm(new Flags(Flags.Flag.FLAGGED), true));
+
+                                    if (criteria.after != null)
+                                        and.add(new ReceivedDateTerm(ComparisonTerm.GT, new Date(criteria.after)));
+                                    if (criteria.before != null)
+                                        and.add(new ReceivedDateTerm(ComparisonTerm.LT, new Date(criteria.before)));
+
+                                    SearchTerm term = null;
+
+                                    if (or.size() > 0)
+                                        term = new OrTerm(or.toArray(new SearchTerm[0]));
+
+                                    if (and.size() > 0)
+                                        if (term == null)
+                                            term = new AndTerm(and.toArray(new SearchTerm[0]));
+                                        else
+                                            term = new AndTerm(term, new AndTerm(and.toArray(new SearchTerm[0])));
+
+                                    if (term == null)
+                                        return new Message[0];
 
                                     return state.ifolder.search(term);
                                 }
                             } catch (MessagingException ex) {
-                                Log.e(ex);
-                                return ex;
+                                ProtocolException pex = new ProtocolException(
+                                        "Search " + account.host + " " + criteria, ex);
+                                Log.e(pex);
+                                throw pex;
                             }
                         }
                     });
-
-                    if (result instanceof MessagingException)
-                        throw (MessagingException) result;
 
                     state.imessages = (Message[]) result;
                 }
@@ -540,7 +524,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                                     rules, astate);
                             found++;
                         }
-                        if (message != null && query != null /* browsed */)
+                        if (message != null && criteria != null /* browsed */)
                             db.message().setMessageFound(message.id);
                     } catch (MessageRemovedException ex) {
                         Log.w(browsable.name + " boundary server", ex);
@@ -570,32 +554,37 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     }
 
     void destroy() {
-        final State state = this.state;
+        final State old = this.state;
+        old.destroyed = true;
+
         this.state = new State();
-        state.destroyed = true;
 
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                close();
+                close(old);
             }
         });
     }
 
-    private void close() {
+    private void close(State state) {
         Log.i("Boundary close");
+
         try {
             if (state.ifolder != null)
                 state.ifolder.close();
         } catch (Throwable ex) {
             Log.e("Boundary", ex);
         }
+
         try {
             if (state.iservice != null)
                 state.iservice.close();
         } catch (Throwable ex) {
             Log.e("Boundary", ex);
         }
+
+        state.reset();
     }
 
     private class State {
@@ -611,6 +600,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         Message[] imessages = null;
 
         void reset() {
+            Log.i("Boundary reset");
             destroyed = false;
             error = false;
             index = 0;
@@ -620,6 +610,101 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             iservice = null;
             ifolder = null;
             imessages = null;
+        }
+    }
+
+    static class SearchCriteria implements Serializable {
+        String query;
+        boolean in_senders = true;
+        boolean in_receipients = true;
+        boolean in_subject = true;
+        boolean in_keywords = true;
+        boolean in_message = true;
+        boolean with_unseen;
+        boolean with_flagged;
+        boolean with_hidden;
+        boolean with_encrypted;
+        boolean with_attachments;
+        Long after = null;
+        Long before = null;
+
+        SearchCriteria() {
+        }
+
+        SearchCriteria(String query) {
+            this.query = query;
+        }
+
+        boolean isQueryOnly() {
+            return (!TextUtils.isEmpty(query) &&
+                    in_senders &&
+                    in_receipients &&
+                    in_subject &&
+                    in_keywords &&
+                    in_message &&
+                    isWithout());
+        }
+
+        boolean isWithout() {
+            return !(with_unseen ||
+                    with_flagged ||
+                    with_hidden ||
+                    with_encrypted ||
+                    with_attachments);
+        }
+
+        String getTitle(Context context) {
+            List<String> flags = new ArrayList<>();
+            if (with_unseen)
+                flags.add(context.getString(R.string.title_search_flag_unseen));
+            if (with_flagged)
+                flags.add(context.getString(R.string.title_search_flag_flagged));
+            if (with_hidden)
+                flags.add(context.getString(R.string.title_search_flag_hidden));
+            if (with_encrypted)
+                flags.add(context.getString(R.string.title_search_flag_encrypted));
+            if (with_attachments)
+                flags.add(context.getString(R.string.title_search_flag_attachments));
+            return (query == null ? "" : query)
+                    + (flags.size() > 0 ? " +" : "")
+                    + TextUtils.join(",", flags);
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj instanceof SearchCriteria) {
+                SearchCriteria other = (SearchCriteria) obj;
+                return (Objects.equals(this.query, other.query) &&
+                        this.in_senders == other.in_senders &&
+                        this.in_receipients == other.in_receipients &&
+                        this.in_subject == other.in_subject &&
+                        this.in_keywords == other.in_keywords &&
+                        this.in_message == other.in_message &&
+                        this.with_unseen == other.with_unseen &&
+                        this.with_flagged == other.with_flagged &&
+                        this.with_hidden == other.with_hidden &&
+                        this.with_encrypted == other.with_encrypted &&
+                        this.with_attachments == other.with_attachments &&
+                        Objects.equals(this.after, other.after) &&
+                        Objects.equals(this.before, other.before));
+            } else
+                return false;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return query +
+                    " senders=" + in_senders +
+                    " receipients=" + in_receipients +
+                    " subject=" + in_subject +
+                    " keywords=" + in_keywords +
+                    " message=" + in_message +
+                    " unseen=" + with_unseen +
+                    " flagged=" + with_flagged +
+                    " hidden=" + with_hidden +
+                    " encrypted=" + with_encrypted +
+                    " attachments=" + with_attachments;
         }
     }
 }

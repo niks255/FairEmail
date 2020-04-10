@@ -82,6 +82,8 @@ public class FtsDbHelper extends SQLiteOpenHelper {
             address.addAll(Arrays.asList(message.to));
         if (message.cc != null)
             address.addAll(Arrays.asList(message.cc));
+        if (message.bcc != null)
+            address.addAll(Arrays.asList(message.bcc));
 
         delete(db, message.id);
 
@@ -105,9 +107,12 @@ public class FtsDbHelper extends SQLiteOpenHelper {
         db.delete("message", "rowid = ?", new Object[]{id});
     }
 
-    static List<Long> match(SQLiteDatabase db, Long account, Long folder, String query) {
+    static List<Long> match(
+            SQLiteDatabase db,
+            Long account, Long folder,
+            BoundaryCallbackMessages.SearchCriteria criteria) {
         StringBuilder sb = new StringBuilder();
-        for (String or : query.split(",")) {
+        for (String or : criteria.query.split(",")) {
             if (sb.length() > 0)
                 sb.append(" OR ");
 
@@ -135,6 +140,10 @@ public class FtsDbHelper extends SQLiteOpenHelper {
             select += "account = " + account + " AND ";
         if (folder != null)
             select += "folder = " + folder + " AND ";
+        if (criteria.after != null)
+            select += "time > " + criteria.after + " AND ";
+        if (criteria.before != null)
+            select += "time < " + criteria.before + " AND ";
 
         Log.i("FTS select=" + select + " search=" + search);
         List<Long> result = new ArrayList<>();

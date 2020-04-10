@@ -350,6 +350,7 @@
     <string name="title_advanced_light">Светлинна индикация на известия</string>
     <string name="title_advanced_sound">Избери звук за известяване</string>
     <string name="title_advanced_confirm_links">Потвърдете отварянето на връзката</string>
+    <string name="title_advanced_browse_links">Изпращане на отварящите връзки към Android</string>
     <string name="title_advanced_confirm_images">Потвърдете показването на изображения</string>
     <string name="title_advanced_confirm_html">Показване на преформатирани съобщения по подразбиране</string>
     <string name="title_advanced_tracking">Автоматично разпознаване и деактивиране на проследяващи изображения</string>
@@ -794,9 +795,28 @@
     <string name="title_signature_outdated">Към момента този публичен ключ не е валиден</string>
     <string name="title_signature_store">Хранилище</string>
     <string name="title_search">Търсене</string>
+    <string name="title_search_for_hint">Въведете текст</string>
+    <string name="title_search_more">Още опции</string>
+    <string name="title_search_use_index">Използвай индекс за търсене</string>
+    <string name="title_search_in_senders">В подетели (от)</string>
+    <string name="title_search_in_recipients">В получатели (до, cc)</string>
+    <string name="title_search_in_subject">В темата</string>
+    <string name="title_search_in_keywords">В ключови думи (ако се поддържа)</string>
+    <string name="title_search_in_message">В текста на съобщението</string>
+    <string name="title_search_with_unseen">Непрочетени</string>
+    <string name="title_search_with_flagged">Със звезда</string>
+    <string name="title_search_with_hidden">Скрито (само на устройство)</string>
+    <string name="title_search_with_encrypted">Шифровано (само на устройство)</string>
+    <string name="title_search_with_attachments">С прикачени файлове (само на устройство)</string>
+    <string name="title_search_with_before">Преди</string>
+    <string name="title_search_with_after">След</string>
+    <string name="title_search_flag_unseen">непрочетени</string>
+    <string name="title_search_flag_flagged">със звезда</string>
+    <string name="title_search_flag_hidden">скрити</string>
+    <string name="title_search_flag_encrypted">шифровани</string>
+    <string name="title_search_flag_attachments">прикачени файлове</string>
     <string name="title_search_device">Търсене в устройството</string>
     <string name="title_search_server">Търсене в сървъра</string>
-    <string name="title_search_text">Търсене в текст</string>
     <string name="title_search_in">Търсене в</string>
     <string name="title_sort_on">Сортирай по</string>
     <string name="title_sort_on_time">Време</string>
@@ -993,6 +1013,7 @@
     <string name="title_hint_important">Важно</string>
     <string name="title_hint_sync">Изтеглянето на съобщения може да отнеме известно време, в зависимост от скоростта на доставчика, интернет връзката и устройството и броя на съобщенията. Докато изтегляте съобщения, приложението може да реагира по-бавно.</string>
     <string name="title_hint_battery">Тъй като FairEmail по подразбиране винаги получава съобщения, Android ще докладва, че FairEmail е винаги активен. Следователно може да изглежда, че FairEmail винаги консумира от батерията, но всъщност това не е така.</string>
+    <string name="title_hint_reformat">По подразбиране FairEmail преформатира съобщения от съображения за поверителност и сигурност. За да видите оригиналното съобщение, докоснете иконата \"цял екран\" над текста на съобщението.</string>
     <string name="title_hint_contact_actions">Натиснете продължително за повече опции</string>
     <string name="title_hint_eml">Това е обобщение на съдържанието на необработен файл със съобщение. Запишете необработеното съобщение с иконата за запис в панела за действие, за да видите цялото съдържание.</string>
     <string name="title_open_link">Отваряне не връзката</string>
@@ -1075,12 +1096,6 @@
     <string name="title_debug_info">Инфо за отстраняване на грешки</string>
     <string name="title_debug_info_remark">Моля, опишете проблема и отбележете часа на възникването му:</string>
     <string name="title_crash_info_remark">Моля, опишете какво правихте, когато приложението се срина:</string>
-    <string name="title_search_special_prefix">специални</string>
-    <string name="title_search_special_unseen">непрочетени</string>
-    <string name="title_search_special_flagged">със звезда</string>
-    <string name="title_search_special_snoozed">скрити</string>
-    <string name="title_search_special_encrypted">шифровани</string>
-    <string name="title_search_special_attachments">прикачени файлове</string>
     <string name="title_widget_title_count">Брой нови съобщения</string>
     <string name="title_widget_title_list">Списък на съобщенията</string>
     <string name="title_widget_account">Профил</string>
@@ -1089,6 +1104,7 @@
     <string name="title_widget_folder_unified">Обща папка входящи</string>
     <string name="title_widget_unseen">Непрочетени съобщения</string>
     <string name="title_widget_flagged">Само съобщения със звезда</string>
+    <string name="title_widget_semi_transparent">Полупрозрачен фон</string>
     <string name="title_accessibility_collapsed">Свиване</string>
     <string name="title_accessibility_expanded">Разширен</string>
     <string name="title_accessibility_seen">Прочетено</string>
@@ -1097,6 +1113,12 @@
         <item quantity="one">%1$d съобщение</item>
         <item quantity="other">%1$d съобщения</item>
     </plurals>
+    <!-- Thunderbird -->
+    <string name="title_keyword_label1">Важно</string>
+    <string name="title_keyword_label2">Служебен</string>
+    <string name="title_keyword_label3">Личен</string>
+    <string name="title_keyword_label4">Да се направи</string>
+    <string name="title_keyword_label5">По-късно</string>
     <string name="title_accessibility_flagged">Със звезда</string>
     <string name="title_accessibility_unflagged">Без звезда</string>
     <string name="title_accessibility_collapse">Свий</string>

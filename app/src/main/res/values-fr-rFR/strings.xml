@@ -796,9 +796,28 @@
     <string name="title_signature_outdated">Cette clé publique n\'est actuellement pas valide</string>
     <string name="title_signature_store">Enregistrer</string>
     <string name="title_search">Rechercher</string>
+    <string name="title_search_for_hint">Saisir le texte</string>
+    <string name="title_search_more">Plus d\'options</string>
+    <string name="title_search_use_index">Utiliser l\'index de recherche</string>
+    <string name="title_search_in_senders">Dans les expéditeurs (De)</string>
+    <string name="title_search_in_recipients">Dans les destinataires (À, Cc)</string>
+    <string name="title_search_in_subject">Dans l\'objet</string>
+    <string name="title_search_in_keywords">Dans les mots-clés (si pris en charge)</string>
+    <string name="title_search_in_message">Dans le texte du message</string>
+    <string name="title_search_with_unseen">Non lus</string>
+    <string name="title_search_with_flagged">Suivis</string>
+    <string name="title_search_with_hidden">Masqués (uniquement sur l\'appareil)</string>
+    <string name="title_search_with_encrypted">Chiffrés (uniquement sur l\'appareil)</string>
+    <string name="title_search_with_attachments">Avec des pièces jointes (uniquement sur l\'appareil)</string>
+    <string name="title_search_with_before">Avant</string>
+    <string name="title_search_with_after">Après</string>
+    <string name="title_search_flag_unseen">non lus</string>
+    <string name="title_search_flag_flagged">suivis</string>
+    <string name="title_search_flag_hidden">masqués</string>
+    <string name="title_search_flag_encrypted">chiffrés</string>
+    <string name="title_search_flag_attachments">pièces jointes</string>
     <string name="title_search_device">Rechercher sur l\'appareil</string>
     <string name="title_search_server">Rechercher sur le serveur</string>
-    <string name="title_search_text">Rechercher dans le texte</string>
     <string name="title_search_in">Rechercher dans</string>
     <string name="title_sort_on">Trier par</string>
     <string name="title_sort_on_time">Date</string>
@@ -995,6 +1014,7 @@
     <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Le téléchargement des messages peut prendre du temps selon la vitesse du fournisseur d\'accès, la connexion internet et le périphérique ainsi que selon le nombre de messages. Lors du téléchargement des messages, l\'application peut répondre plus lentement.</string>
     <string name="title_hint_battery">Étant donné que FairEmail par défaut reçoit toujours des messages, Android signalera que FairEmail est toujours actif. Par conséquent, FairEmail semble utiliser de la batterie en permanence mais en fait, ce n\'est pas le cas.</string>
+    <string name="title_hint_reformat">Par défaut, FairEmail reformate les messages pour des raisons de confidentialité et de sécurité. Pour afficher le message original, appuyez sur l\'icône \"plein écran\" au-dessus du texte du message.</string>
     <string name="title_hint_contact_actions">Appui long pour les options</string>
     <string name="title_hint_eml">Ceci est un résumé du contenu d\'un fichier de message brut. Enregistrez le message brut au moyen de l\'icône de sauvegarde dans la barre d\'action pour afficher tout le contenu.</string>
     <string name="title_open_link">Ouvrir le lien</string>
@@ -1077,12 +1097,6 @@
     <string name="title_debug_info">Information de débogage</string>
     <string name="title_debug_info_remark">Veuillez décrire le problème et indiquer l\'heure à laquelle il est survenu :</string>
     <string name="title_crash_info_remark">Veuillez décrire ce que vous faisiez lorsque l\'application s\'est arrêtée :</string>
-    <string name="title_search_special_prefix">spécial</string>
-    <string name="title_search_special_unseen">non_lus</string>
-    <string name="title_search_special_flagged">suivis</string>
-    <string name="title_search_special_snoozed">masqués</string>
-    <string name="title_search_special_encrypted">chiffrés</string>
-    <string name="title_search_special_attachments">pièces jointes</string>
     <string name="title_widget_title_count">Nombre de nouveaux messages</string>
     <string name="title_widget_title_list">Liste des messages</string>
     <string name="title_widget_account">Compte</string>
@@ -1091,6 +1105,7 @@
     <string name="title_widget_folder_unified">Dossiers de boîte de réception unifiés</string>
     <string name="title_widget_unseen">Messages non lus seulement</string>
     <string name="title_widget_flagged">Messages suivis seulement</string>
+    <string name="title_widget_semi_transparent">Arrière-plan semi-transparent</string>
     <string name="title_accessibility_collapsed">Réduit</string>
     <string name="title_accessibility_expanded">Étendu</string>
     <string name="title_accessibility_seen">Lu</string>
@@ -1099,6 +1114,12 @@
         <item quantity="one">%1$d message</item>
         <item quantity="other">%1$d messages</item>
     </plurals>
+    <!-- Thunderbird -->
+    <string name="title_keyword_label1">Important</string>
+    <string name="title_keyword_label2">Travail</string>
+    <string name="title_keyword_label3">Personnel</string>
+    <string name="title_keyword_label4">À faire</string>
+    <string name="title_keyword_label5">Plus tard</string>
     <string name="title_accessibility_flagged">Suivi</string>
     <string name="title_accessibility_unflagged">Non suivi</string>
     <string name="title_accessibility_collapse">Réduire</string>

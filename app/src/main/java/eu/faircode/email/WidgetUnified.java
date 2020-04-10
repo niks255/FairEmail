@@ -26,8 +26,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.preference.PreferenceManager;
@@ -37,11 +37,12 @@ public class WidgetUnified extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        boolean pro = ActivityBilling.isPro(context);
         for (int appWidgetId : appWidgetIds) {
+            String name = prefs.getString("widget." + appWidgetId + ".name", null);
             long account = prefs.getLong("widget." + appWidgetId + ".account", -1L);
             long folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
             String type = prefs.getString("widget." + appWidgetId + ".type", null);
+            boolean semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
 
             Intent view = new Intent(context, ActivityView.class);
             view.setAction("folder:" + folder);
@@ -53,32 +54,30 @@ public class WidgetUnified extends AppWidgetProvider {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_unified);
 
-            views.setViewVisibility(R.id.pro, pro ? View.GONE : View.VISIBLE);
-            if (pro) {
-                String name = prefs.getString("widget." + appWidgetId + ".name", null);
-                if (name == null)
-                    views.setTextViewText(R.id.title, context.getString(R.string.title_folder_unified));
-                else
-                    views.setTextViewText(R.id.title, name);
+            if (!semi)
+                views.setInt(R.id.widget, "setBackgroundColor", Color.TRANSPARENT);
 
-                views.setOnClickPendingIntent(R.id.title, pi);
+            if (name == null)
+                views.setTextViewText(R.id.title, context.getString(R.string.title_folder_unified));
+            else
+                views.setTextViewText(R.id.title, name);
 
-                Intent service = new Intent(context, WidgetUnifiedService.class);
-                service.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                service.setData(Uri.parse(service.toUri(Intent.URI_INTENT_SCHEME)));
+            views.setOnClickPendingIntent(R.id.title, pi);
 
-                views.setRemoteAdapter(R.id.lv, service);
+            Intent service = new Intent(context, WidgetUnifiedService.class);
+            service.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            service.setData(Uri.parse(service.toUri(Intent.URI_INTENT_SCHEME)));
 
-                Intent thread = new Intent(context, ActivityView.class);
-                thread.setAction("widget");
-                thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(type));
-                thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent piItem = PendingIntent.getActivity(
-                        context, ActivityView.REQUEST_WIDGET, thread, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setRemoteAdapter(R.id.lv, service);
 
-                views.setPendingIntentTemplate(R.id.lv, piItem);
-            } else
-                views.setTextViewText(R.id.pro, context.getText(R.string.title_pro_feature));
+            Intent thread = new Intent(context, ActivityView.class);
+            thread.setAction("widget");
+            thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(type));
+            thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent piItem = PendingIntent.getActivity(
+                    context, ActivityView.REQUEST_WIDGET, thread, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            views.setPendingIntentTemplate(R.id.lv, piItem);
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }

@@ -1590,6 +1590,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void bindBody(TupleMessageEx message, final boolean scroll) {
             tvBody.setText(null);
+            clearActions();
 
             ibSeen.setImageResource(message.ui_seen
                     ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_visibility_24);
@@ -4281,14 +4282,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (keywords.length() > 0)
                         keywords.append(" ");
 
-                    keywords.append(message.keywords[i]);
+                    // Thunderbird
+                    String keyword = EntityMessage.getKeywordAlias(context, message.keywords[i]);
+                    keywords.append(keyword);
 
                     if (message.keyword_colors != null &&
                             message.keyword_colors[i] != null) {
                         int len = keywords.length();
                         keywords.setSpan(
                                 new ForegroundColorSpan(message.keyword_colors[i]),
-                                len - message.keywords[i].length(), len,
+                                len - keyword.length(), len,
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                 }
@@ -5212,17 +5215,28 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (uri.isOpaque())
                 sanitized = uri;
             else {
-                // https://en.wikipedia.org/wiki/UTM_parameters
-                Uri.Builder builder = uri.buildUpon();
-
                 boolean changed = false;
+
+                Uri url;
+                Uri.Builder builder;
+                if (uri.getHost() != null &&
+                        uri.getHost().endsWith("safelinks.protection.outlook.com") &&
+                        !TextUtils.isEmpty(uri.getQueryParameter("url"))) {
+                    changed = true;
+                    url = Uri.parse(uri.getQueryParameter("url"));
+                } else
+                    url = uri;
+
+                builder = url.buildUpon();
+
                 builder.clearQuery();
-                for (String key : uri.getQueryParameterNames())
+                for (String key : url.getQueryParameterNames())
+                    // https://en.wikipedia.org/wiki/UTM_parameters
                     if (key.toLowerCase(Locale.ROOT).startsWith("utm_") ||
                             PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)))
                         changed = true;
                     else if (!TextUtils.isEmpty(key))
-                        for (String value : uri.getQueryParameters(key)) {
+                        for (String value : url.getQueryParameters(key)) {
                             Log.i("Query " + key + "=" + value);
                             builder.appendQueryParameter(key, value);
                         }

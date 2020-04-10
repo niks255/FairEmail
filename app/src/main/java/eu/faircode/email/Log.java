@@ -505,6 +505,21 @@ public class Log {
             */
             return false;
 
+        if ("android.view.WindowManager$BadTokenException".equals(ex.getClass().getName()))
+            /*
+                android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@e9084db is not valid; is your activity running?
+                android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@e9084db is not valid; is your activity running?
+                  at android.view.ViewRootImpl.setView(ViewRootImpl.java:827)
+                  at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:356)
+                  at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:93)
+                  at android.app.ActivityThread.handleResumeActivity(ActivityThread.java:4084)
+                  at android.app.servertransaction.ResumeActivityItem.execute(ResumeActivityItem.java:51)
+                  at android.app.servertransaction.TransactionExecutor.executeLifecycleState(TransactionExecutor.java:145)
+                  at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:70)
+                  at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1976)
+             */
+            return false;
+
         if (ex instanceof NoSuchMethodError)
             /*
                 java.lang.NoSuchMethodError: No direct method ()V in class Landroid/security/IKeyChainService$Stub; or its super classes (declaration of 'android.security.IKeyChainService$Stub' appears in /system/framework/framework.jar!classes2.dex)
@@ -531,21 +546,6 @@ public class Log {
                 at android.os.Handler.handleCallback(Handler.java:873)
             */
             return false;
-
-        if (ex instanceof ArrayIndexOutOfBoundsException) {
-            /*
-                java.lang.ArrayIndexOutOfBoundsException: length=74; index=74
-                at android.text.TextLine.measure(TextLine.java:343)
-                at android.text.TextLine.metrics(TextLine.java:298)
-                at android.text.Layout.measurePara(Layout.java:2118)
-                at android.text.Layout.getDesiredWidthWithLimit(Layout.java:196)
-                at android.widget.TextView.onMeasure(TextView.java:8511)
-                at androidx.appcompat.widget.AppCompatTextView.onMeasure(SourceFile:551)
-                at android.view.View.measure(View.java:23190)
-                at androidx.constraintlayout.widget.ConstraintLayout$Measurer.measure(SourceFile:724)
-            */
-            return false;
-        }
 
         if (ex instanceof IllegalArgumentException &&
                 ex.getCause() instanceof RemoteException)

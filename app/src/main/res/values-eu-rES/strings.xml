@@ -348,6 +348,7 @@
     <string name="title_advanced_light">Erabili jakinarazpen-argia</string>
     <string name="title_advanced_sound">Aukeratu jakinarazpenen soinua</string>
     <string name="title_advanced_confirm_links">Berretsi estekak irekitzea</string>
+    <string name="title_advanced_browse_links">Delegatu Androiden estekak irekitzea</string>
     <string name="title_advanced_confirm_images">Berretsi irudiak erakustea</string>
     <string name="title_advanced_confirm_html">Berez erakutsi erreformatutako mezuak</string>
     <string name="title_advanced_tracking">Antzeman eta desgaitu jarraipen irudiak automatikoki</string>
@@ -792,9 +793,25 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_signature_outdated">Gako publiko hori une honetan ez da baliozkoa</string>
     <string name="title_signature_store">Biltegiratu</string>
     <string name="title_search">Bilatu</string>
+    <string name="title_search_for_hint">Sartu testua</string>
+    <string name="title_search_use_index">Erabili bilaketa indizea</string>
+    <string name="title_search_in_senders">Igorleetan (nork)</string>
+    <string name="title_search_in_recipients">Hartzaileetan (nori, cc)</string>
+    <string name="title_search_in_subject">Mintzagaian</string>
+    <string name="title_search_in_keywords">Hitz-gakoetan (onartuz gero)</string>
+    <string name="title_search_in_message">Mezuen testuan</string>
+    <string name="title_search_with_unseen">Irakurri gabea</string>
+    <string name="title_search_with_flagged">Izarduna</string>
+    <string name="title_search_with_hidden">Ezkutatuta (gailuan soilik)</string>
+    <string name="title_search_with_encrypted">Zifratuta (gailuan soilik)</string>
+    <string name="title_search_with_attachments">Eranskinekin (gailuan soilik)</string>
+    <string name="title_search_flag_unseen">irakurri gabea</string>
+    <string name="title_search_flag_flagged">izarduna</string>
+    <string name="title_search_flag_hidden">ezkutuan</string>
+    <string name="title_search_flag_encrypted">zifratuta</string>
+    <string name="title_search_flag_attachments">eranskinak</string>
     <string name="title_search_device">Bilatu gailuan</string>
     <string name="title_search_server">Bilatu zerbitzarian</string>
-    <string name="title_search_text">Bilatu testuan</string>
     <string name="title_search_in">Bilatu hemen</string>
     <string name="title_sort_on">Ordenatzeko irizpidea</string>
     <string name="title_sort_on_time">Denbora</string>
@@ -991,6 +1008,7 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_hint_important">Garrantzitsua</string>
     <string name="title_hint_sync">Mezuak deskargatzeak denbora hartu dezake, hornitzailearen abiadura, internet konexioa, gailua eta mezu kopuruaren arabera. Mezuak deskargatu bitartean aplikazioa motel erantzun lezake.</string>
     <string name="title_hint_battery">FairEmail-ek berez mezuak beti jasotzen dituenez, Android-ek esaten du FairEmai beti aktibo dagoela. Ematen du FairEmail bateriako energia beti erabiltzen ari dela, baina hori ez da horrela.</string>
+    <string name="title_hint_reformat">Besterik esan ezean, FairEmail-ek mezuen formatua aldatzen du pribatutasuna eta segurtasuna babesteko. Jatorrizko mezua ikusteko, sakatu mezuaren gaineko \"pantaila osoa\" ikonoa.</string>
     <string name="title_hint_contact_actions">Sakatu luze aukeretarako</string>
     <string name="title_hint_eml">Hau mezu gordin fitxategi baten edukiaren laburpena da. Gorde mezu gordina ekintza-barrako \'gorde\' ikonoarekin eduki osoa ikusteko.</string>
     <string name="title_open_link">Ireki esteka</string>
@@ -1073,12 +1091,6 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_debug_info">Arazketa informazioa</string>
     <string name="title_debug_info_remark">Azaldu arazoa eta esan noiz gertatu den:</string>
     <string name="title_crash_info_remark">Zaldu zer egiten ari zinen aplikazioak kraskatu duenean:</string>
-    <string name="title_search_special_prefix">berezia</string>
-    <string name="title_search_special_unseen">irakurri gabea</string>
-    <string name="title_search_special_flagged">izarduna</string>
-    <string name="title_search_special_snoozed">ezkutuan</string>
-    <string name="title_search_special_encrypted">zifratuta</string>
-    <string name="title_search_special_attachments">eranskinak</string>
     <string name="title_widget_title_count">Mezu berrien kopurua</string>
     <string name="title_widget_title_list">Mezuen zerrenda</string>
     <string name="title_widget_account">Kontua</string>
@@ -1087,6 +1099,7 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
     <string name="title_widget_folder_unified">Bateratutako sarrera-ontziko karpetak</string>
     <string name="title_widget_unseen">Irakurri gabeko mezuak soilik</string>
     <string name="title_widget_flagged">Izardun mezuak soilik</string>
+    <string name="title_widget_semi_transparent">Atzeko plano erdi gardena</string>
     <string name="title_accessibility_collapsed">Tolestuta</string>
     <string name="title_accessibility_expanded">Hedatua</string>
     <string name="title_accessibility_seen">Irakurri</string>
@@ -1095,6 +1108,12 @@ Honekin aldeko eta kontrako botoen arteko oreka mantenduko da.
         <item quantity="one">Mezu %1$d</item>
         <item quantity="other">%1$d mezu</item>
     </plurals>
+    <!-- Thunderbird -->
+    <string name="title_keyword_label1">Garrantzitsua</string>
+    <string name="title_keyword_label2">Lanekoa</string>
+    <string name="title_keyword_label3">Pertsonala</string>
+    <string name="title_keyword_label4">Egiteke</string>
+    <string name="title_keyword_label5">Geroago</string>
     <string name="title_accessibility_flagged">Izarduna</string>
     <string name="title_accessibility_unflagged">Izarrik gabe</string>
     <string name="title_accessibility_collapse">Tolestu</string>

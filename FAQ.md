@@ -358,7 +358,7 @@ The low priority status bar notification shows the number of pending operations,
 * *add*: add message to remote folder
 * *move*: move message to another remote folder
 * *copy*: copy message to another remote folder
-* *fetch*: fetch (pushed) message
+* *fetch*: fetch changed (pushed) message
 * *delete*: delete message from remote folder
 * *seen*: mark message as read/unread in remote folder
 * *answered*: mark message as answered in remote folder
@@ -670,6 +670,10 @@ Common errors:
 
 The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.
 
+If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options.
+Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219)
+if you want to request an S/MIME Actalis certificate.
+
 How to extract a public key from a S/MIME certificate:
 
 ```
@@ -685,16 +689,14 @@ S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations ar
 <a name="faq13"></a>
 **(13) How does search on device/server work?**
 
-You can start searching for messages on sender, recipient, subject, keyword or message text by using the magnify glass in the action bar of a folder.
-You can also search from any app by select *Search email* in the copy/paste popup menu.
+You can start searching for messages on sender (from), recipient (to, cc), subject, keywords or message text by using the magnify glass in the action bar of a folder.
+You can also search from any app by selecting *Search email* in the copy/paste popup menu.
 
 Searching in the unified inbox will search in all folders, searching in a folder will search in that folder only.
 
-Messages will be searched on the device first (all accounts, all folders).
-There will be an action button with a search again icon at the bottom to search on the server.
-When the search was started in a specific folder,
-the same folder will be searched in on the server,
-else you can select which folder to search in on the server.
+Messages will be searched for on the device first.
+There will be an action button with a search again icon at the bottom to continue searching on the server.
+You can select in which folder to continue the search.
 
 The IMAP protocol doesn't support searching in more than one folder at the same time.
 Searching on the server is an expensive operation, therefore it is not possible to select multiple folders.
@@ -703,19 +705,22 @@ Searching local messages is case insensitive and on partial text.
 The message text of local messages will not be searched if the message text was not downloaded yet.
 Searching on the server might be case sensitive or case insensitive and might be on partial text or whole words, depending on the provider.
 
+Some servers cannot handle searching in the message text when there are a large number of messages.
+For this case there is an option to disable searching in the message text.
+
 Searching through a large number of messages is not very fast because of two limitations:
 
 * [sqlite](https://www.sqlite.org/), the database engine of Android has a record size limit, preventing message texts from being stored in the database
 * Android apps get only limited memory to work with, even if the device has plenty memory available
 
 This means that searching for a message text requires that files containing the message texts need to be opened one by one
-to check if the searched text is contained in the file, which is a relative expensive process.
+to check if the searched text is contained in the file, which is a relatively expensive process.
 
 In the *miscellaneous settings* you can enable *Build search index* to significantly increase the speed of searching on the device,
-but be aware that this will increase battery usage and significantly increase storage space usage too.
+but be aware that this will increase battery and storage space usage.
 The search index is based on words, so searching for partial text is not possible.
 Searching using the search index is by default AND, so searching for *apple orange* will search for apple AND orange.
-Words separated by commas results in searching for OR, so for example *apple, orange* will search for apple OR orange.
+Words separated by commas result in searching for OR, so for example *apple, orange* will search for apple OR orange.
 Both can be combined, so searching for *apple, orange banana* will search for apple OR (orange AND banana).
 Using the search index is a pro feature.
 
@@ -883,6 +888,8 @@ see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/)
 The errors *... Read error ...*, *... Write error ...*, *... Read timed out ...* mean that the email server is not responding anymore or that the internet connection is bad.
 
 The error *... Unexpected end of zlib input stream ...* means that not all data was received, possibly due to a bad or interrupted connection.
+
+The error *... connection failure ...* could indicate [Too many simultaneous connections](#user-content-faq23).
 
 The warning *... Unsupported encoding ...* means that the character set of the message is unknown or not supported.
 FairEmail will assume ISO-8859-1 (Latin1), which will in most cases result in showing the message correctly.

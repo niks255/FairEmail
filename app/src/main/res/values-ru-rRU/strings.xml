@@ -818,9 +818,28 @@
     <string name="title_signature_outdated">Этот публичный ключ недействителен в настоящее время</string>
     <string name="title_signature_store">Хранилище</string>
     <string name="title_search">Поиск</string>
+    <string name="title_search_for_hint">Введите текст</string>
+    <string name="title_search_more">Дополнительные параметры</string>
+    <string name="title_search_use_index">Использовать поисковый индекс</string>
+    <string name="title_search_in_senders">В отправителях (от)</string>
+    <string name="title_search_in_recipients">В получателях (кому, скрытые)</string>
+    <string name="title_search_in_subject">В теме</string>
+    <string name="title_search_in_keywords">В ключевых словах (если возможно)</string>
+    <string name="title_search_in_message">В тексте сообщения</string>
+    <string name="title_search_with_unseen">Не прочитано</string>
+    <string name="title_search_with_flagged">Избранное</string>
+    <string name="title_search_with_hidden">Скрыто (только на устройстве)</string>
+    <string name="title_search_with_encrypted">Зашифровано (только на устройстве)</string>
+    <string name="title_search_with_attachments">С вложениями (только на устройстве)</string>
+    <string name="title_search_with_before">Перед</string>
+    <string name="title_search_with_after">После</string>
+    <string name="title_search_flag_unseen">не прочитано</string>
+    <string name="title_search_flag_flagged">избранное</string>
+    <string name="title_search_flag_hidden">скрыто</string>
+    <string name="title_search_flag_encrypted">зашифровано</string>
+    <string name="title_search_flag_attachments">вложения</string>
     <string name="title_search_device">Поиск на устройстве</string>
     <string name="title_search_server">Поиск на сервере</string>
-    <string name="title_search_text">Поиск в тексте</string>
     <string name="title_search_in">Поиск в</string>
     <string name="title_sort_on">Сортировать по</string>
     <string name="title_sort_on_time">Время</string>
@@ -1017,6 +1036,7 @@
     <string name="title_hint_important">Важное</string>
     <string name="title_hint_sync">Загрузка сообщений может занять некоторое время в зависимости от скорости провайдера, интернет-соединения и устройства, а также от количества сообщений. Во время загрузки сообщений приложение может реагировать медленнее.</string>
     <string name="title_hint_battery">Поскольку FairEmail по умолчанию всегда получает сообщения, Android считает его всё время активным. Поэтому может показаться, что FairEmail всегда использует батарею, хотя на самом деле это не так.</string>
+    <string name="title_hint_reformat">По умолчанию FairEmail переформатирует сообщения по соображениям конфиденциальности и безопасности. Чтобы просмотреть исходное сообщение, нажмите значок \"полный экран\" над текстом сообщения.</string>
     <string name="title_hint_contact_actions">Длительное нажатие для других действий</string>
     <string name="title_hint_eml">Это обзор содержимого файла оригинального сообщения. Сохраните его с помощью значка \"Сохранить\" на панели действий, чтобы просмотреть содержимое полностью.</string>
     <string name="title_open_link">Открыть ссылку</string>
@@ -1099,12 +1119,6 @@
     <string name="title_debug_info">Отладочная информация</string>
     <string name="title_debug_info_remark">Пожалуйста, опишите проблему и укажите момент её возникновения:</string>
     <string name="title_crash_info_remark">Пожалуйста, опишите, что вы делали, когда в приложении произошёл сбой:</string>
-    <string name="title_search_special_prefix">особый</string>
-    <string name="title_search_special_unseen">непрочитано</string>
-    <string name="title_search_special_flagged">избранное</string>
-    <string name="title_search_special_snoozed">скрыто</string>
-    <string name="title_search_special_encrypted">зашифровано</string>
-    <string name="title_search_special_attachments">вложения</string>
     <string name="title_widget_title_count">Количество новых сообщений</string>
     <string name="title_widget_title_list">Список сообщений</string>
     <string name="title_widget_account">Учётная запись</string>
@@ -1113,6 +1127,7 @@
     <string name="title_widget_folder_unified">Папки единого почтового ящика</string>
     <string name="title_widget_unseen">Только непрочитанные сообщения</string>
     <string name="title_widget_flagged">Только избранные сообщения</string>
+    <string name="title_widget_semi_transparent">Полупрозрачный фон</string>
     <string name="title_accessibility_collapsed">Свёрнуто</string>
     <string name="title_accessibility_expanded">Развёрнуто</string>
     <string name="title_accessibility_seen">Прочитано</string>
@@ -1123,6 +1138,12 @@
         <item quantity="many">%1$d сообщений</item>
         <item quantity="other">%1$d сообщений</item>
     </plurals>
+    <!-- Thunderbird -->
+    <string name="title_keyword_label1">Важное</string>
+    <string name="title_keyword_label2">Работа</string>
+    <string name="title_keyword_label3">Личное</string>
+    <string name="title_keyword_label4">Выполнить</string>
+    <string name="title_keyword_label5">Позже</string>
     <string name="title_accessibility_flagged">Избранное</string>
     <string name="title_accessibility_unflagged">Не избранное</string>
     <string name="title_accessibility_collapse">Свернуть</string>
