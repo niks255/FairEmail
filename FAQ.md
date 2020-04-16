@@ -268,6 +268,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(148) How can I use an Apple iCloud account?](#user-content-faq148)
 * [(149) How does the unread message count widget work?](#user-content-faq149)
 * [(150) Can you add cancelling calendar invites?](#user-content-faq150)
+* [(151) Can you add backup/restore messages?](#user-content-faq150)
 
 [I have another question.](#user-content-support)
 
@@ -689,7 +690,7 @@ S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations ar
 <a name="faq13"></a>
 **(13) How does search on device/server work?**
 
-You can start searching for messages on sender (from), recipient (to, cc), subject, keywords or message text by using the magnify glass in the action bar of a folder.
+You can start searching for messages on sender (from), recipient (to, cc, bcc), subject, keywords or message text by using the magnify glass in the action bar of a folder.
 You can also search from any app by selecting *Search email* in the copy/paste popup menu.
 
 Searching in the unified inbox will search in all folders, searching in a folder will search in that folder only.
@@ -1761,6 +1762,8 @@ Since message headers are not downloaded and stored by default to save on batter
 it is not possible to preview which messages would match the header rule condition.
 
 In the *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
+
+Rules are available for IMAP accounts only because the POP3 protocol allows downloading and permanently deleting messages from the inbox only.
 
 Using rules is a pro feature.
 
@@ -2890,6 +2893,15 @@ it is not a good idea to request this permission for just this reason.
 
 Inserting new calendar events can be done without permissions with special [intents](https://developer.android.com/guide/topics/providers/calendar-provider.html#intents).
 Unfortunately, there exists no intent to delete existing calendar events.
+
+<br />
+
+<a name="faq151"></a>
+**(151) Can you add backup/restore messages?**
+
+An email client is meant to read and write messages, not to backup and restore messages.
+The email server is responsible for backups.
+If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
 
 <br />
 

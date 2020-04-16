@@ -145,6 +145,7 @@ import org.json.JSONException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openintents.openpgp.AutocryptPeerUpdate;
+import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -1251,9 +1252,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
-        String pkg = Helper.getOpenKeychainPackage(getContext());
-        Log.i("Binding to " + pkg);
-        pgpService = new OpenPgpServiceConnection(getContext(), pkg);
+        final String pkg = Helper.getOpenKeychainPackage(getContext());
+        Log.i("PGP binding to " + pkg);
+        pgpService = new OpenPgpServiceConnection(getContext(), pkg, new OpenPgpServiceConnection.OnBound() {
+            @Override
+            public void onBound(IOpenPgpService2 service) {
+                Log.i("PGP bound to " + pkg);
+            }
+
+            @Override
+            public void onError(Exception ex) {
+                if ("bindService() returned false!".equals(ex.getMessage()))
+                    Log.i("PGP", ex);
+                else
+                    Log.e("PGP", ex);
+            }
+        });
         pgpService.bindToService();
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
@@ -1576,6 +1590,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         @Override
+        public void reply(TupleMessageEx message, String selected, View anchor) {
+            onReply(message, selected, anchor);
+        }
+
+        @Override
         public void finish() {
             FragmentMessages.this.finish();
         }
@@ -1603,6 +1622,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return 0;
 
             if (message.folderReadOnly)
+                return 0;
+
+            if (EntityFolder.JUNK.equals(message.folderType))
                 return 0;
 
             if (EntityFolder.OUTBOX.equals(message.folderType))
@@ -2032,36 +2054,42 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
     }
 
-    void onReply(final TupleMessageEx message, final String selected, final View anchor) {
+    private void onReply(final TupleMessageEx message, final String selected, final View anchor) {
         Bundle args = new Bundle();
         args.putLong("id", message.id);
 
-        new SimpleTask<List<TupleIdentityEx>>() {
+        new SimpleTask<ReplyData>() {
             @Override
-            protected List<TupleIdentityEx> onExecute(Context context, Bundle args) {
+            protected ReplyData onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
 
+                ReplyData result = new ReplyData();
+
                 DB db = DB.getInstance(context);
+
                 EntityMessage message = db.message().getMessage(id);
                 if (message == null)
-                    return null;
+                    return result;
 
                 args.putInt("answers", db.answer().getAnswerCount());
 
-                return db.identity().getComposableIdentities(message.account);
+                result.identities = db.identity().getComposableIdentities(message.account);
+                result.answers = db.answer().getAnswersByFavorite(true);
+
+                return result;
             }
 
             @Override
-            protected void onExecuted(Bundle args, List<TupleIdentityEx> identities) {
-                if (identities == null)
-                    identities = new ArrayList<>();
+            protected void onExecuted(Bundle args, ReplyData data) {
+                if (data.identities == null)
+                    data.identities = new ArrayList<>();
 
                 final Address[] to =
-                        message.replySelf(identities, message.account)
+                        message.replySelf(data.identities, message.account)
                                 ? message.to
                                 : (message.reply == null || message.reply.length == 0 ? message.from : message.reply);
 
-                Address[] recipients = message.getAllRecipients(identities, message.account);
+                Address[] recipients = message.getAllRecipients(data.identities, message.account);
 
                 int answers = args.getInt("answers");
 
@@ -2079,9 +2107,27 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 popupMenu.getMenu().findItem(R.id.menu_editasnew).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_reply_answer).setEnabled(message.content);
 
+                if (data.answers != null) {
+                    int order = 100;
+                    for (EntityAnswer answer : data.answers) {
+                        order++;
+                        popupMenu.getMenu().add(1, order, order, answer.toString())
+                                .setIntent(new Intent().putExtra("id", answer.id));
+                    }
+                }
+
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem target) {
+                        if (target.getGroupId() == 1) {
+                            startActivity(new Intent(getContext(), ActivityCompose.class)
+                                    .putExtra("action", "reply")
+                                    .putExtra("reference", message.id)
+                                    .putExtra("answer", target.getIntent().getLongExtra("id", -1)));
+
+                            return true;
+                        }
+
                         switch (target.getItemId()) {
                             case R.id.menu_reply_to_sender:
                                 onMenuReply(message, "reply", selected);
@@ -2145,7 +2191,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         new SimpleTask<List<EntityAnswer>>() {
             @Override
             protected List<EntityAnswer> onExecute(Context context, Bundle args) {
-                return DB.getInstance(context).answer().getAnswers(false);
+                return DB.getInstance(context).answer().getAnswersByFavorite(false);
             }
 
             @Override
@@ -2164,8 +2210,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), fabReply);
 
                     int order = 0;
-                    for (EntityAnswer answer : answers)
-                        popupMenu.getMenu().add(Menu.NONE, answer.id.intValue(), order++, answer.toString());
+                    for (EntityAnswer answer : answers) {
+                        order++;
+                        popupMenu.getMenu().add(Menu.NONE, order, order++, answer.toString())
+                                .setIntent(new Intent().putExtra("id", answer.id));
+                    }
 
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
@@ -2178,7 +2227,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             startActivity(new Intent(getContext(), ActivityCompose.class)
                                     .putExtra("action", "reply")
                                     .putExtra("reference", message.id)
-                                    .putExtra("answer", (long) target.getItemId()));
+                                    .putExtra("answer", target.getIntent().getLongExtra("id", -1)));
                             return true;
                         }
                     });
@@ -2383,13 +2432,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 importance.add(Menu.NONE, R.string.title_importance_low, 3, R.string.title_importance_low)
                         .setEnabled(!EntityMessage.PRIORITIY_LOW.equals(result.importance));
 
-                if (result.hasArchive && !result.isArchive) // has archive and not is archive/drafts
+                if (result.hasArchive && !result.isArchive) // has archive and not is archive
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_archive, order++, R.string.title_archive);
 
-                if (result.isTrash || !result.hasTrash) // is trash or no trash
+                if (result.isTrash || !result.hasTrash || result.isJunk) // is trash or no trash or is junk
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, order++, R.string.title_delete);
 
-                if (!result.isTrash && result.hasTrash) // not trash and has trash
+                if (!result.isTrash && result.hasTrash && !result.isJunk) // not trash and has trash and not is junk
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_trash, order++, R.string.title_trash);
 
                 if (result.hasJunk && !result.isJunk && !result.isDrafts) // has junk and not junk/drafts
@@ -4397,12 +4446,23 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 ArrayList<MessageTarget> result = args.getParcelableArrayList("result");
 
                 DB db = DB.getInstance(context);
-                long busy = new Date().getTime() + UNDO_TIMEOUT * 2;
-                for (MessageTarget target : result) {
-                    db.message().setMessageUiBusy(target.id, busy);
-                    db.message().setMessageUiHide(target.id, true);
-                    // Prevent new message notification on undo
-                    db.message().setMessageUiIgnored(target.id, true);
+
+                long now = new Date().getTime();
+                long busy = now + UNDO_TIMEOUT * 2;
+                try {
+                    db.beginTransaction();
+
+                    for (MessageTarget target : result) {
+                        db.message().setMessageUiBusy(target.id, busy);
+                        db.message().setMessageUiHide(target.id, true);
+                        // Prevent new message notification on undo
+                        db.message().setMessageUiIgnored(target.id, true);
+                        db.message().setMessageLastAttempt(target.id, now);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
                 }
 
                 return result;
@@ -4438,6 +4498,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         Log.i("Move undo id=" + target.id);
                                         db.message().setMessageUiBusy(target.id, null);
                                         db.message().setMessageUiHide(target.id, false);
+                                        db.message().setMessageLastAttempt(target.id, new Date().getTime());
                                     }
 
                                     db.setTransactionSuccessful();
@@ -4486,6 +4547,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                                         Log.i("Move id=" + id + " target=" + target.folder.name);
                                         db.message().setMessageUiBusy(target.id, null);
+                                        db.message().setMessageLastAttempt(target.id, new Date().getTime());
                                         EntityOperation.queue(context, message, EntityOperation.MOVE, target.folder.id);
                                     }
 
@@ -5434,7 +5496,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 if (s.verify(verifier)) {
                                     boolean known = true;
                                     String fingerprint = EntityCertificate.getFingerprint(cert);
-                                    List<String> emails = EntityCertificate.getAltSubjectName(cert);
+                                    List<String> emails = EntityCertificate.getEmailAddresses(cert);
                                     for (String email : emails) {
                                         EntityCertificate record = db.certificate().getCertificate(fingerprint, email);
                                         if (record == null)
@@ -5719,7 +5781,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 time = new Date();
 
                             boolean match = false;
-                            List<String> emails = EntityCertificate.getAltSubjectName(cert);
+                            List<String> emails = EntityCertificate.getEmailAddresses(cert);
                             for (String email : emails)
                                 if (email.equalsIgnoreCase(sender)) {
                                     match = true;
@@ -5803,7 +5865,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                                             return null;
 
                                                         String fingerprint = EntityCertificate.getFingerprint(cert);
-                                                        List<String> emails = EntityCertificate.getAltSubjectName(cert);
+                                                        List<String> emails = EntityCertificate.getEmailAddresses(cert);
                                                         for (String email : emails) {
                                                             EntityCertificate record = db.certificate().getCertificate(fingerprint, email);
                                                             if (record == null) {
@@ -6317,7 +6379,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Element footer = document.createElement("p");
                 footer.appendElement("br").appendElement("hr");
                 for (EntityAttachment attachment : attachments)
-                    if (!attachment.isInline()) {
+                    if (attachment.isAttachment()) {
                         hasAttachments = true;
                         Element strong = document.createElement("strong");
                         strong.text(getString(R.string.title_attachment));
@@ -6420,7 +6482,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         for (Long id : ids) {
                             EntityMessage message = db.message().getMessage(id);
                             if (message != null &&
-                                    (message.uid != null || !TextUtils.isEmpty(message.msgid))) {
+                                    (account.protocol == EntityAccount.TYPE_POP ||
+                                            message.uid != null || !TextUtils.isEmpty(message.msgid))) {
                                 Log.i("Deleting account=" + account.id + " folder=" + folder.id + " message=" + message.id);
                                 EntityOperation.queue(context, message, EntityOperation.DELETE);
                             }
@@ -6497,6 +6560,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("search");
         fragmentTransaction.commit();
+    }
+
+    private class ReplyData {
+        List<TupleIdentityEx> identities;
+        List<EntityAnswer> answers;
     }
 
     private class MoreResult {

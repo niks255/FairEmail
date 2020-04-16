@@ -47,7 +47,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.OperationCanceledException;
@@ -136,6 +135,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
+import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -585,12 +585,6 @@ public class FragmentCompose extends FragmentBase {
         etBody.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
         tvReference.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            etBody.setRevealOnFocusHint(false); // Doesn't work
-            tvSignature.setRevealOnFocusHint(false);
-            tvReference.setRevealOnFocusHint(false);
-        }
-
         style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -889,9 +883,22 @@ public class FragmentCompose extends FragmentBase {
         tvNoInternetAttachments.setVisibility(View.GONE);
         grpUnusedImagesHint.setVisibility(View.GONE);
 
-        String pkg = Helper.getOpenKeychainPackage(getContext());
-        Log.i("Binding to " + pkg);
-        pgpService = new OpenPgpServiceConnection(getContext(), pkg);
+        final String pkg = Helper.getOpenKeychainPackage(getContext());
+        Log.i("PGP binding to " + pkg);
+        pgpService = new OpenPgpServiceConnection(getContext(), pkg, new OpenPgpServiceConnection.OnBound() {
+            @Override
+            public void onBound(IOpenPgpService2 service) {
+                Log.i("PGP bound to " + pkg);
+            }
+
+            @Override
+            public void onError(Exception ex) {
+                if ("bindService() returned false!".equals(ex.getMessage()))
+                    Log.i(ex);
+                else
+                    Log.e("PGP", ex);
+            }
+        });
         pgpService.bindToService();
 
         return view;
@@ -2008,7 +2015,7 @@ public class FragmentCompose extends FragmentBase {
                     // Get/clean attachments
                     List<EntityAttachment> attachments = db.attachment().getAttachments(draft.id);
                     for (EntityAttachment attachment : new ArrayList<>(attachments))
-                        if (attachment.encryption != null) {
+                        if (attachment.isEncryption()) {
                             db.attachment().deleteAttachment(attachment.id);
                             attachments.remove(attachment);
                         }
@@ -3456,7 +3463,7 @@ public class FragmentCompose extends FragmentBase {
                         int sequence = 0;
                         List<EntityAttachment> attachments = db.attachment().getAttachments(ref.id);
                         for (EntityAttachment attachment : attachments)
-                            if (attachment.encryption == null &&
+                            if (!attachment.isEncryption() &&
                                     ("forward".equals(action) || "editasnew".equals(action) ||
                                             (cid.contains(attachment.cid) ||
                                                     (attachment.isInline() && attachment.isImage())))) {
@@ -3504,12 +3511,12 @@ public class FragmentCompose extends FragmentBase {
 
                         Document document = HtmlHelper.sanitizeCompose(context, doc.html(), true);
 
+                        for (Element e : ref)
+                            document.body().appendChild(e);
+
                         EntityIdentity identity = null;
                         if (data.draft.identity != null)
                             identity = db.identity().getIdentity(data.draft.identity);
-
-                        for (Element e : ref)
-                            document.body().appendChild(e);
 
                         addSignature(context, document, data.draft, identity);
 
@@ -3533,7 +3540,7 @@ public class FragmentCompose extends FragmentBase {
                 List<EntityAttachment> attachments = db.attachment().getAttachments(data.draft.id);
                 for (EntityAttachment attachment : attachments)
                     if (attachment.available) {
-                        if (attachment.encryption == null)
+                        if (!attachment.isEncryption())
                             last_available++;
                     } else
                         EntityOperation.queue(context, data.draft, EntityOperation.ATTACHMENT, attachment.id);
@@ -3607,7 +3614,7 @@ public class FragmentCompose extends FragmentBase {
                             boolean downloading = false;
                             boolean inline_images = false;
                             for (EntityAttachment attachment : attachments) {
-                                if (attachment.encryption != null)
+                                if (attachment.isEncryption())
                                     continue;
                                 if (attachment.progress != null)
                                     downloading = true;
@@ -3693,7 +3700,8 @@ public class FragmentCompose extends FragmentBase {
         @Override
         protected void onPostExecute(Bundle args) {
             int action = args.getInt("action");
-            if (action != R.id.action_check)
+            boolean needsEncryption = args.getBoolean("needsEncryption");
+            if (action != R.id.action_check || needsEncryption)
                 setBusy(false);
         }
 
@@ -3810,7 +3818,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (InternetAddress address : ato)
                                     address.validate();
                                 if (lookup_mx)
-                                    ConnectionHelper.lookupMx(ato, context);
+                                    DNSHelper.lookupMx(context, ato);
                             }
                         } catch (AddressException ex) {
                             throw new AddressException(context.getString(R.string.title_address_parse_error,
@@ -3824,7 +3832,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (InternetAddress address : acc)
                                     address.validate();
                                 if (lookup_mx)
-                                    ConnectionHelper.lookupMx(acc, context);
+                                    DNSHelper.lookupMx(context, acc);
                             }
                         } catch (AddressException ex) {
                             throw new AddressException(context.getString(R.string.title_address_parse_error,
@@ -3838,7 +3846,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (InternetAddress address : abcc)
                                     address.validate();
                                 if (lookup_mx)
-                                    ConnectionHelper.lookupMx(abcc, context);
+                                    DNSHelper.lookupMx(context, abcc);
                             }
                         } catch (AddressException ex) {
                             throw new AddressException(context.getString(R.string.title_address_parse_error,
@@ -3852,10 +3860,10 @@ public class FragmentCompose extends FragmentBase {
                     List<Integer> eparts = new ArrayList<>();
                     for (EntityAttachment attachment : attachments)
                         if (attachment.available)
-                            if (attachment.encryption == null)
-                                available++;
-                            else
+                            if (attachment.isEncryption())
                                 eparts.add(attachment.encryption);
+                            else
+                                available++;
 
                     if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt)) {
                         if (!eparts.contains(EntityAttachment.PGP_KEY) ||
@@ -4027,8 +4035,6 @@ public class FragmentCompose extends FragmentBase {
                             if (pgpService.isBound() &&
                                     !EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
                                 List<Address> recipients = new ArrayList<>();
-                                if (draft.from != null)
-                                    recipients.addAll(Arrays.asList(draft.from));
                                 if (draft.to != null)
                                     recipients.addAll(Arrays.asList(draft.to));
                                 if (draft.cc != null)
@@ -4069,7 +4075,7 @@ public class FragmentCompose extends FragmentBase {
                             for (EntityAttachment attachment : attachments)
                                 if (!attachment.available)
                                     throw new IllegalArgumentException(context.getString(R.string.title_attachments_missing));
-                                else if (!attachment.isInline() && attachment.encryption == null)
+                                else if (!attachment.isInline() && !attachment.isEncryption())
                                     attached++;
 
                             // Check for missing attachments
@@ -4471,21 +4477,23 @@ public class FragmentCompose extends FragmentBase {
                 ibReferenceEdit.setVisibility(text[1] == null ? View.GONE : View.VISIBLE);
                 ibReferenceImages.setVisibility(ref_has_images && !show_images ? View.VISIBLE : View.GONE);
 
+                setBodyPadding();
+
                 state = State.LOADED;
 
                 final Context context = getContext();
 
+                final View target;
+                if (TextUtils.isEmpty(etTo.getText().toString().trim()))
+                    target = etTo;
+                else if (TextUtils.isEmpty(etSubject.getText().toString()))
+                    target = etSubject;
+                else
+                    target = etBody;
+
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
-                        View target;
-                        if (TextUtils.isEmpty(etTo.getText().toString().trim()))
-                            target = etTo;
-                        else if (TextUtils.isEmpty(etSubject.getText().toString()))
-                            target = etSubject;
-                        else
-                            target = etBody;
-
                         target.requestFocus();
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -4505,6 +4513,14 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "compose:show");
+    }
+
+    private void setBodyPadding() {
+        // Keep room for the style toolbar
+        boolean pad =
+                (grpSignature.getVisibility() == View.GONE &&
+                        tvReference.getVisibility() == View.GONE);
+        etBody.setPadding(0, 0, 0, pad ? Helper.dp2pixels(getContext(), 36) : 0);
     }
 
     private AdapterView.OnItemSelectedListener identitySelected = new AdapterView.OnItemSelectedListener() {
@@ -4527,6 +4543,8 @@ public class FragmentCompose extends FragmentBase {
                 }, null);
             tvSignature.setText(signature);
             grpSignature.setVisibility(signature == null ? View.GONE : View.VISIBLE);
+
+            setBodyPadding();
         }
 
         @Override
@@ -4536,6 +4554,8 @@ public class FragmentCompose extends FragmentBase {
 
             tvSignature.setText(null);
             grpSignature.setVisibility(View.GONE);
+
+            setBodyPadding();
         }
     };
 
@@ -4551,9 +4571,11 @@ public class FragmentCompose extends FragmentBase {
 
         @Override
         public boolean onBackPressed() {
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                 onExit();
-            return true;
+                return true;
+            } else
+                return false;
         }
     };
 

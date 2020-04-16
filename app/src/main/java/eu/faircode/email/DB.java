@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.room.Database;
 import androidx.room.DatabaseConfiguration;
@@ -60,7 +61,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 152,
+        version = 153,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -133,6 +134,89 @@ public abstract class DB extends RoomDatabase {
         super.init(configuration);
     }
 
+    static void setupViewInvalidation(Context context) {
+        // This needs to be done on a foreground thread
+        DB db = DB.getInstance(context);
+
+        db.account().liveAccountView().observeForever(new Observer<List<TupleAccountView>>() {
+            private List<TupleAccountView> last = null;
+
+            @Override
+            public void onChanged(List<TupleAccountView> accounts) {
+                if (accounts == null)
+                    accounts = new ArrayList<>();
+
+                boolean changed = false;
+                if (last == null || last.size() != accounts.size())
+                    changed = true;
+                else
+                    for (int i = 0; i < accounts.size(); i++)
+                        if (!accounts.get(i).equals(last.get(i))) {
+                            changed = true;
+                            last = accounts;
+                        }
+
+                if (changed) {
+                    Log.i("Invalidating account view");
+                    last = accounts;
+                    db.getInvalidationTracker().notifyObserversByTableNames("message");
+                }
+            }
+        });
+
+        db.identity().liveIdentityView().observeForever(new Observer<List<TupleIdentityView>>() {
+            private List<TupleIdentityView> last = null;
+
+            @Override
+            public void onChanged(List<TupleIdentityView> identities) {
+                if (identities == null)
+                    identities = new ArrayList<>();
+
+                boolean changed = false;
+                if (last == null || last.size() != identities.size())
+                    changed = true;
+                else
+                    for (int i = 0; i < identities.size(); i++)
+                        if (!identities.get(i).equals(last.get(i))) {
+                            changed = true;
+                            last = identities;
+                        }
+
+                if (changed) {
+                    Log.i("Invalidating identity view");
+                    last = identities;
+                    db.getInvalidationTracker().notifyObserversByTableNames("message");
+                }
+            }
+        });
+
+        db.folder().liveFolderView().observeForever(new Observer<List<TupleFolderView>>() {
+            private List<TupleFolderView> last = null;
+
+            @Override
+            public void onChanged(List<TupleFolderView> folders) {
+                if (folders == null)
+                    folders = new ArrayList<>();
+
+                boolean changed = false;
+                if (last == null || last.size() != folders.size())
+                    changed = true;
+                else
+                    for (int i = 0; i < folders.size(); i++)
+                        if (!folders.get(i).equals(last.get(i))) {
+                            changed = true;
+                            last = folders;
+                        }
+
+                if (changed) {
+                    Log.i("Invalidating folder view");
+                    last = folders;
+                    db.getInvalidationTracker().notifyObserversByTableNames("message");
+                }
+            }
+        });
+    }
+
     public static synchronized DB getInstance(Context context) {
         if (sInstance == null) {
             Context acontext = context.getApplicationContext();
@@ -141,18 +225,21 @@ public abstract class DB extends RoomDatabase {
 
             try {
                 Log.i("Disabling view invalidation");
+
                 Field fmViewTables = InvalidationTracker.class.getDeclaredField("mViewTables");
                 fmViewTables.setAccessible(true);
+
                 Map<String, Set<String>> mViewTables = (Map) fmViewTables.get(sInstance.getInvalidationTracker());
                 mViewTables.get("account_view").clear();
                 mViewTables.get("identity_view").clear();
                 mViewTables.get("folder_view").clear();
+
                 Log.i("Disabled view invalidation");
             } catch (ReflectiveOperationException ex) {
                 Log.e(ex);
             }
 
-            sInstance.getInvalidationTracker().addObserver(new InvalidationTracker.Observer(DB.DB_TABLES) {
+            sInstance.getInvalidationTracker().addObserver(new InvalidationTracker.Observer(DB_TABLES) {
                 @Override
                 public void onInvalidated(@NonNull Set<String> tables) {
                     Log.d("ROOM invalidated=" + TextUtils.join(",", tables));
@@ -1443,6 +1530,13 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `message` ADD COLUMN `hash` TEXT");
+                    }
+                })
+                .addMigrations(new Migration(152, 153) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `unicode` INTEGER NOT NULL DEFAULT 0");
                     }
                 });
     }

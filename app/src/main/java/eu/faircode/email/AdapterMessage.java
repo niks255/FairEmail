@@ -288,6 +288,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             "$Submitted".toLowerCase(Locale.ROOT),
             "$Junk".toLowerCase(Locale.ROOT),
             "$NotJunk".toLowerCase(Locale.ROOT),
+            "Junk".toLowerCase(Locale.ROOT),
+            "NonJunk".toLowerCase(Locale.ROOT),
             "$recent".toLowerCase(Locale.ROOT),
             "DTAG_document".toLowerCase(Locale.ROOT),
             "DTAG_image".toLowerCase(Locale.ROOT),
@@ -1484,8 +1486,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             db.attachment().liveAttachments(message.id).observe(cowner, new Observer<List<EntityAttachment>>() {
                 @Override
                 public void onChanged(@Nullable List<EntityAttachment> attachments) {
-                    bindAttachments(message, attachments);
-
                     int inlineImages = 0;
                     if (attachments != null)
                         for (EntityAttachment attachment : attachments)
@@ -1499,10 +1499,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (attachment.available && attachment.isInline() && attachment.isImage())
                                 lastInlineImages++;
 
-                    if (inlineImages != lastInlineImages)
+                    if (inlineImages > lastInlineImages)
                         bindBody(message, false);
 
-                    properties.setAttachments(message.id, attachments);
+                    bindAttachments(message, attachments);
                 }
             });
 
@@ -1555,7 +1555,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean junk = (move && (hasJunk && !inJunk));
                     boolean unjunk = (move && inJunk);
 
-                    final boolean delete = (inTrash || !hasTrash || outbox ||
+                    final boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
                             message.uid == null || message.accountProtocol == EntityAccount.TYPE_POP);
 
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -2169,7 +2169,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             List<EntityAttachment> a = new ArrayList<>();
             for (EntityAttachment attachment : attachments) {
-                boolean inline = ((attachment.isInline() && attachment.isImage()) || attachment.encryption != null);
+                boolean inline = (attachment.isEncryption() ||
+                        (attachment.isInline() && attachment.isImage()));
                 if (inline)
                     has_inline = true;
                 if (attachment.progress == null && !attachment.available)
@@ -2219,7 +2220,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             List<EntityAttachment> images = new ArrayList<>();
             for (EntityAttachment attachment : attachments)
-                if (!attachment.isInline() && attachment.isImage())
+                if (attachment.isAttachment() && attachment.isImage())
                     images.add(attachment);
             adapterImage.set(images);
             grpImages.setVisibility(images.size() > 0 ? View.VISIBLE : View.GONE);
@@ -3376,7 +3377,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionAnswer(TupleMessageEx message, View anchor) {
-            ((FragmentMessages) parentFragment).onReply(message, getSelectedText(), anchor);
+            properties.reply(message, getSelectedText(), anchor);
         }
 
         private void onActionMove(TupleMessageEx message, final boolean copy) {
@@ -4821,7 +4822,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("error changed", next.id);
                 }
-                // last_attempt
+                if (!Objects.equals(prev.last_attempt, next.last_attempt)) {
+                    same = false;
+                    log("last_attempt changed " + prev.last_attempt + "/" + next.last_attempt, next.id);
+                }
 
                 // accountPop
                 if (!Objects.equals(prev.accountName, next.accountName)) {
@@ -4909,7 +4913,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             private void log(String msg, long id) {
                 Log.i(msg + " id=" + id);
-                if (debug)
+                if (BuildConfig.DEBUG || debug)
                     parentFragment.getView().post(new Runnable() {
                         @Override
                         public void run() {
@@ -5196,6 +5200,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void scrollTo(int pos, int y);
 
         void move(long id, String type);
+
+        void reply(TupleMessageEx message, String selected, View anchor);
 
         void finish();
     }

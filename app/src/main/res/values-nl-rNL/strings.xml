@@ -381,6 +381,7 @@
     <string name="title_advanced_experiments">Probeer experimentele functies</string>
     <string name="title_advanced_crash_reports">Foutrapporten verzenden</string>
     <string name="title_advanced_debug">Foutopsporing modus</string>
+    <string name="title_advanced_cleanup_attachments">Bijlagen van oude berichten verwijderen</string>
     <string name="title_advanced_cleanup">Opruimen</string>
     <string name="title_advanced_last_cleanup">Laatste schoonmaak: %1$s</string>
     <string name="title_advanced_more">Meer opties</string>
@@ -414,6 +415,7 @@
     <string name="title_advanced_date_hint">Berichten worden alleen op datum gegroepeerd als ze op tijd zijn gesorteerd</string>
     <string name="title_advanced_navbar_colorize_hint">Of dit werkt hangt af van de Android-versie en -variant</string>
     <string name="title_advanced_threading_hint">Groepeer gerelateerde berichten</string>
+    <string name="title_advanced_highlight_hint">De accentkleur van het thema wordt gebruikt voor markering</string>
     <string name="title_advanced_gravatars_hint">Er is mogelijk een privacyrisico</string>
     <string name="title_advanced_name_email_hint">Indien uitgeschakeld, worden alleen namen weergegeven als deze beschikbaar zijn</string>
     <string name="title_advanced_preview_hint">Alleen beschikbaar wanneer de berichttekst werd gedownload</string>
@@ -443,6 +445,7 @@
     <string name="title_advanced_optimize_hint">Dit inschakelen kan automatisch de ontvangstinstellingen wijzigen om het batterijverbruik te verminderen</string>
     <string name="title_advanced_experiments_hint">Lijst van huidige experimentele functies</string>
     <string name="title_advanced_debug_hint">Extra logging inschakelen en debug informatie tonen op verschillende plaatsen</string>
+    <string name="title_advanced_cleanup_attachments_hint">Dit zal bijlagen verwijderen van berichten die niet meer worden gesynchroniseerd bij handmatig opruimen</string>
     <string name="title_advanced_cleanup_hint">Dit zal alle tijdelijke bestanden verwijderen</string>
     <string name="title_advanced_never_favorite">Nooit favoriet</string>
     <string name="title_advanced_swipe_actions">Stel veegacties in</string>
@@ -454,6 +457,7 @@
     <string name="title_advanced_sender">Bewerken verzendadres toestaan</string>
     <string name="title_advanced_sender_regex">Regex om gebruikersnaam deel van inkomende e-mailadressen te matchen</string>
     <string name="title_identity_reply_to">Antwoord op adres</string>
+    <string name="title_identity_unicode">Sta Unicode toe in e-mailadressen</string>
     <string name="title_identity_receipt">Standaard ontvangst/leesbevestiging vragen</string>
     <string name="title_identity_use_ip_hint">In geval van \'invalid greeting\', \'requires valid address\' of een soortgelijke fout, probeer deze instelling te wijzigen</string>
     <string name="title_optional">Optioneel</string>
@@ -570,6 +574,7 @@
     <string name="title_keep_all">Bewaar alle berichten</string>
     <string name="title_auto_trash">Automatisch oude berichten verplaatsen naar de prullenbak</string>
     <string name="title_auto_delete">Automatisch oude berichten definitief verwijderen</string>
+    <string name="title_auto_delete_hint">Oude berichten zijn berichten die niet meer op het apparaat worden bewaard</string>
     <string name="title_folder_name_missing">Mapnaam ontbreekt</string>
     <string name="title_folder_exists">Map %1$s bestaat</string>
     <string name="title_folder_delete">Deze map en de berichten die het bevat definitief verwijderen?</string>
@@ -796,6 +801,9 @@
     <string name="title_signature_store">Opslaan</string>
     <string name="title_search">Zoek</string>
     <string name="title_search_for_hint">Voer tekst in</string>
+    <string name="title_search_hint">        Zoeken zal in eerste instantie berichten bekijken die op uw apparaat zijn opgeslagen.
+        Tik op de \'Opnieuw zoeken\' knop om ook op de server te zoeken.
+    </string>
     <string name="title_search_more">Meer opties</string>
     <string name="title_search_use_index">Gebruik zoekindex</string>
     <string name="title_search_in_senders">In afzenders (van)</string>
@@ -1014,7 +1022,7 @@
     <string name="title_hint_important">Belangrijk</string>
     <string name="title_hint_sync">Het downloaden van berichten kan enige tijd duren, afhankelijk van de snelheid van de provider, de internet-verbinding en het apparaat en van het aantal berichten. Tijdens het downloaden van berichten kan de app trager reageren.</string>
     <string name="title_hint_battery">Aangezien FairEmail standaard altijd berichten ontvangt, meldt Android dat FairEmail altijd actief is. Daarom lijkt het erop dat FairEmail altijd batterijvermogen gebruikt, maar in feite is dit niet het geval.</string>
-    <string name="title_hint_reformat">Standaard formatteert FairEmail berichten opnieuw om privacy- en veiligheidsredenen. Tik op het \"volledig scherm\" pictogram boven de berichttekst om het oorspronkelijke bericht te bekijken.</string>
+    <string name="title_hint_reformat">Standaard formatteert FairEmail berichten opnieuw om privacy- en veiligheidsredenen. Tik op het \'volledig scherm\' pictogram boven de berichttekst om het oorspronkelijke bericht te bekijken.</string>
     <string name="title_hint_contact_actions">Druk lang voor opties</string>
     <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtbestand. Sla het ruwe bericht op met het \'bewaar\' icoon in de actiebalk om alle inhoud te bekijken.</string>
     <string name="title_open_link">Koppeling openen</string>

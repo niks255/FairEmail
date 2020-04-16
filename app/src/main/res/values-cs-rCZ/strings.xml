@@ -404,6 +404,7 @@
     <string name="title_advanced_experiments">Vyzkoušet experimentální funkce</string>
     <string name="title_advanced_crash_reports">Odesílat zprávy o chybách</string>
     <string name="title_advanced_debug">Režim ladění</string>
+    <string name="title_advanced_cleanup_attachments">Odstranit přílohy starých zpráv</string>
     <string name="title_advanced_cleanup">Úklid</string>
     <string name="title_advanced_last_cleanup">Poslední čištění: %1$s</string>
     <string name="title_advanced_more">Více možností</string>
@@ -415,7 +416,7 @@
     <string name="title_advanced_check_reply">Kontrolovat e-mailové adresy pro odpověď při synchronizaci zpráv</string>
     <string name="title_advanced_no_date_hint">Někteří poskytovatelé ukládají zprávy s neznámým, neplatným nebo budoucím datem jako zprávy bez data</string>
     <string name="title_advanced_unseen_hint">Někteří poskytovatelé toto nepodporují korektně, což může způsobit synchronizaci všech nebo žádných zpráv</string>
-    <string name="title_advanced_deleted_unseen">Je-li vypnuto, nepřečtené zprávy jsou v zařízení ponechány navždy</string>
+    <string name="title_advanced_deleted_unseen">Je-li vypnuto, nepřečtené zprávy zůstanou ponechány v zařízení navždy</string>
     <string name="title_advanced_sync_kept_hint">Zvýší spotřebu dat a baterie, zvláště pokud v zařízení uchováváte velké množství zpráv</string>
     <string name="title_advanced_sync_folders_hint">Vypnutí o něco sníží množství přenesených dat a spotřebu baterie, zároveň však znemožní aktualizovat seznam složek</string>
     <string name="title_advanced_sync_delay_hint">Zpomalí synchronizaci zpráv</string>
@@ -437,6 +438,7 @@
     <string name="title_advanced_date_hint">Zprávy jsou seskupovány podle data, pouze pokud jsou řazeny dle času</string>
     <string name="title_advanced_navbar_colorize_hint">Zda volba funguje, závisí na verzi a variantě Androidu</string>
     <string name="title_advanced_threading_hint">Seskupit související zprávy</string>
+    <string name="title_advanced_highlight_hint">Sekundární barva motivu bude použita pro zvýrazňování</string>
     <string name="title_advanced_gravatars_hint">Může dojít k ohrožení soukromí</string>
     <string name="title_advanced_name_email_hint">Při vypnutí se zobrazí pouze jména, budou-li k dispozici</string>
     <string name="title_advanced_preview_hint">K dispozici pouze pokud byl stažen text zprávy</string>
@@ -466,6 +468,7 @@
     <string name="title_advanced_optimize_hint">Povolení umožní automatickou změnu nastavení příjmu pro snížení spotřeby baterie</string>
     <string name="title_advanced_experiments_hint">Seznam aktuálních experimentálních funkcí</string>
     <string name="title_advanced_debug_hint">Zapnout rozšířený záznam a zobrazit ladící informace na různých místech</string>
+    <string name="title_advanced_cleanup_attachments_hint">Při ručním čištění odebere přílohy ze zpráv, které již nejsou synchronizovány</string>
     <string name="title_advanced_cleanup_hint">Smaže dočasné soubory</string>
     <string name="title_advanced_never_favorite">Nikdy oblíbený</string>
     <string name="title_advanced_swipe_actions">Nastavit akce tažení prstem</string>
@@ -477,6 +480,7 @@
     <string name="title_advanced_sender">Umožnit úpravu adresy odesílatele</string>
     <string name="title_advanced_sender_regex">Reg. výraz odpovídající uživ. jménu příchozích e-mailových adres</string>
     <string name="title_identity_reply_to">Odpověď na adresu</string>
+    <string name="title_identity_unicode">Povolit Unicode v e-mailových adresách</string>
     <string name="title_identity_receipt">Automaticky požadovat potvrzení doručení/přečtení</string>
     <string name="title_identity_use_ip_hint">V případech \"neplatný pozdrav\", \"nutná platná adresa\" či podobné chyby zkuste změnit toto nastavení</string>
     <string name="title_optional">Nepovinné</string>
@@ -593,6 +597,7 @@
     <string name="title_keep_all">Uchovávat všechny zprávy</string>
     <string name="title_auto_trash">Automaticky přesouvat staré zprávy do koše</string>
     <string name="title_auto_delete">Automaticky trvale mazat staré zprávy</string>
+    <string name="title_auto_delete_hint">Staré zprávy jsou zprávy, které již nejsou uchovány v zařízení</string>
     <string name="title_folder_name_missing">Chybí název složky</string>
     <string name="title_folder_exists">Složka %1$s již existuje</string>
     <string name="title_folder_delete">Trvale odstranit tuto složku a všechny její zprávy?</string>
@@ -819,6 +824,9 @@
     <string name="title_signature_store">Uložit</string>
     <string name="title_search">Hledat</string>
     <string name="title_search_for_hint">Zadejte text</string>
+    <string name="title_search_hint">        Hledání se zpočátku zaměří na zprávy uložené ve vašem zařízení.
+        Pro hledání i na serveru, stiskněte tlačítko \"Hledat znovu\".
+    </string>
     <string name="title_search_more">Více možností</string>
     <string name="title_search_use_index">Použít index vyhledávání</string>
     <string name="title_search_in_senders">V odesílatelích (od)</string>
@@ -826,6 +834,7 @@
     <string name="title_search_in_subject">V předmětu</string>
     <string name="title_search_in_keywords">V klíčových slovech (je-li podporováno)</string>
     <string name="title_search_in_message">V textu zprávy</string>
+    <string name="title_search_with">Omezit hledání na</string>
     <string name="title_search_with_unseen">Nepřečteno</string>
     <string name="title_search_with_flagged">S hvězdičkou</string>
     <string name="title_search_with_hidden">Skryto (pouze v zařízení)</string>
@@ -956,7 +965,7 @@
     <string name="title_legend_rule">Má pravidla</string>
     <string name="title_legend_similar">Hledat podobné zprávy</string>
     <string name="title_legend_notify">Oznamovat nové zprávy</string>
-    <string name="title_legend_sync_keep">Počet dní k synchronizaci / ponechání zpráv</string>
+    <string name="title_legend_sync_keep">Počet dní k synchronizaci / uchování zpráv</string>
     <string name="title_legend_download_fetch">Počet stažených zpráv / načtených hlaviček</string>
     <string name="title_legend_stop">Zastavit zpracování pravidel</string>
     <string name="title_legend_thread">Konverzace</string>
@@ -1036,7 +1045,7 @@
     <string name="title_hint_important">Důležité</string>
     <string name="title_hint_sync">Stažení zpráv může nějakou dobu trvat, v závislosti na rychlosti poskytovatele, internetového připojení a zařízení a na počtu zpráv. V průběhu stahování může aplikace reagovat pomaleji.</string>
     <string name="title_hint_battery">Neboť FairEmail ve výchozím nastavení přijímá zprávy neustále, Android bude hlásit, že je stále aktivní. Díky tomu se může zdát, jako by FairEmail konstantně spotřebovával baterii, ačkoli tomu tak ve skutečnosti není.</string>
-    <string name="title_hint_reformat">FairEmail ve výchozím nastavení přeformátuje zprávy z důvodů bezpečnosti a ochrany soukromí. Pro zobrazení původní zprávy stiskněte ikonu \"zobrazení na celou obrazovku\" nad textem zprávy.</string>
+    <string name="title_hint_reformat">FairEmail ve výchozím nastavení přeformátuje zprávy z důvodů bezpečnosti a ochrany soukromí. Pro zobrazení původní zprávy, stiskněte ikonu \'zobrazení na celou obrazovku\' nad textem zprávy.</string>
     <string name="title_hint_contact_actions">Dlouze podržet pro možnosti</string>
     <string name="title_hint_eml">Toto je souhrn obsahu souboru zdrojové zprávy. Uložte zdrojovou zprávu pomocí ikony uložit v panelu akcí pro zobrazení celého obsahu.</string>
     <string name="title_open_link">Otevřít odkaz</string>

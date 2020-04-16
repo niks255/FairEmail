@@ -404,6 +404,7 @@
     <string name="title_advanced_experiments">Попробовать экспериментальные функции</string>
     <string name="title_advanced_crash_reports">Отправлять отчёты об ошибках</string>
     <string name="title_advanced_debug">Режим отладки</string>
+    <string name="title_advanced_cleanup_attachments">Удалить вложения старых сообщений</string>
     <string name="title_advanced_cleanup">Очистка</string>
     <string name="title_advanced_last_cleanup">Последняя очистка: %1$s</string>
     <string name="title_advanced_more">Другие возможности</string>
@@ -437,6 +438,7 @@
     <string name="title_advanced_date_hint">Сообщения группируются только по дате, если они сортируются по времени</string>
     <string name="title_advanced_navbar_colorize_hint">Это работает в зависимости от версии и варианта Android</string>
     <string name="title_advanced_threading_hint">Группировать сообщения, связанные друг с другом</string>
+    <string name="title_advanced_highlight_hint">Цвет акцента темы будет использован для подсветки</string>
     <string name="title_advanced_gravatars_hint">Возможен риск нарушения конфиденциальности</string>
     <string name="title_advanced_name_email_hint">Если отключено, будут показаны только имена (при наличии)</string>
     <string name="title_advanced_preview_hint">Доступно, только если был загружен текст сообщения</string>
@@ -466,6 +468,7 @@
     <string name="title_advanced_optimize_hint">Включение этого параметра автоматически изменит настройки получения, чтобы уменьшить расход заряда батареи</string>
     <string name="title_advanced_experiments_hint">Список текущих экспериментальных функций</string>
     <string name="title_advanced_debug_hint">Включить дополнительное журналирование и показывать отладочную информацию в различных местах</string>
+    <string name="title_advanced_cleanup_attachments_hint">При ручной очистке будут удалены вложения сообщений, которые больше не синхронизируются</string>
     <string name="title_advanced_cleanup_hint">Это действие удалит все временные файлы</string>
     <string name="title_advanced_never_favorite">Никогда не помечать избранным</string>
     <string name="title_advanced_swipe_actions">Настройка жестов</string>
@@ -477,6 +480,7 @@
     <string name="title_advanced_sender">Разрешить редактирование адреса отправителя</string>
     <string name="title_advanced_sender_regex">Регулярное выражение для имени в адресе входящей электронной почты</string>
     <string name="title_identity_reply_to">Обратный адрес</string>
+    <string name="title_identity_unicode">Использовать Юникод в адресах электронной почты</string>
     <string name="title_identity_receipt">Запрашивать уведомление о доставке/прочтении по умолчанию</string>
     <string name="title_identity_use_ip_hint">В случае ошибки \'invalid greeting\', \'requires valid address\' или аналогичной, попробуйте изменить этот параметр</string>
     <string name="title_optional">Необязательно</string>
@@ -593,6 +597,7 @@
     <string name="title_keep_all">Хранить все сообщения</string>
     <string name="title_auto_trash">Автоматически перемещать старые сообщения в корзину</string>
     <string name="title_auto_delete">Автоматически навсегда удалять старые сообщения</string>
+    <string name="title_auto_delete_hint">Старые сообщения - это сообщения, которые больше не хранятся на устройстве</string>
     <string name="title_folder_name_missing">Отсутствует название папки</string>
     <string name="title_folder_exists">Папка %1$s существует</string>
     <string name="title_folder_delete">Удалить эту папку и сообщения, которые она содержит?</string>
@@ -819,6 +824,9 @@
     <string name="title_signature_store">Хранилище</string>
     <string name="title_search">Поиск</string>
     <string name="title_search_for_hint">Введите текст</string>
+    <string name="title_search_hint">        Поиск изначально ищет сообщения, хранящиеся на вашем устройстве.
+        Чтобы также выполнить поиск на сервере, нажмите кнопку \"Новый поиск\".
+    </string>
     <string name="title_search_more">Дополнительные параметры</string>
     <string name="title_search_use_index">Использовать поисковый индекс</string>
     <string name="title_search_in_senders">В отправителях (от)</string>
@@ -826,6 +834,7 @@
     <string name="title_search_in_subject">В теме</string>
     <string name="title_search_in_keywords">В ключевых словах (если возможно)</string>
     <string name="title_search_in_message">В тексте сообщения</string>
+    <string name="title_search_with">Ограничение поиска</string>
     <string name="title_search_with_unseen">Не прочитано</string>
     <string name="title_search_with_flagged">Избранное</string>
     <string name="title_search_with_hidden">Скрыто (только на устройстве)</string>

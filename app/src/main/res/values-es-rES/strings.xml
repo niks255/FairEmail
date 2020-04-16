@@ -383,6 +383,7 @@
     <string name="title_advanced_experiments">Probar características experimentales</string>
     <string name="title_advanced_crash_reports">Enviar informes de errores</string>
     <string name="title_advanced_debug">Modo de depuración</string>
+    <string name="title_advanced_cleanup_attachments">Eliminar archivos adjuntos de mensajes antiguos</string>
     <string name="title_advanced_cleanup">Limpieza</string>
     <string name="title_advanced_last_cleanup">Última limpieza: %1$s</string>
     <string name="title_advanced_more">Más opciones</string>
@@ -416,6 +417,7 @@
     <string name="title_advanced_date_hint">Los mensajes sólo se agrupan por fecha si se ordenan por antigüedad</string>
     <string name="title_advanced_navbar_colorize_hint">Que esto funcione dependerá de la versión y variante de Android</string>
     <string name="title_advanced_threading_hint">Agrupar mensajes relacionados entre sí</string>
+    <string name="title_advanced_highlight_hint">El color de acento del tema se utilizará para resaltar</string>
     <string name="title_advanced_gravatars_hint">Puede haber un riesgo para la privacidad</string>
     <string name="title_advanced_name_email_hint">Si está desactivado, solo se mostrarán los nombres cuando estén disponibles</string>
     <string name="title_advanced_preview_hint">Sólo disponible cuando el texto del mensaje fue descargado</string>
@@ -445,6 +447,7 @@
     <string name="title_advanced_optimize_hint">Activar esto puede cambiar automáticamente los ajustes de recepción para reducir el uso de la batería</string>
     <string name="title_advanced_experiments_hint">Lista de características experimentales actuales</string>
     <string name="title_advanced_debug_hint">Activar registro adicional y mostrar información de depuración en varios lugares</string>
+    <string name="title_advanced_cleanup_attachments_hint">Esto eliminará los archivos adjuntos de los mensajes que ya no están sincronizados al limpiar manualmente</string>
     <string name="title_advanced_cleanup_hint">Esto eliminará todos los archivos temporales</string>
     <string name="title_advanced_never_favorite">Nunca favorito</string>
     <string name="title_advanced_swipe_actions">Establecer acciones de deslizamiento</string>
@@ -456,6 +459,7 @@
     <string name="title_advanced_sender">Permitir editar dirección del remitente</string>
     <string name="title_advanced_sender_regex">Expresión regular que coincida con el nombre de usuario de las direcciones de correo entrantes</string>
     <string name="title_identity_reply_to">Responder a la dirección</string>
+    <string name="title_identity_unicode">Permitir Unicode en direcciones de correo electrónico</string>
     <string name="title_identity_receipt">Solicitar acuse de recibo/lectura por defecto</string>
     <string name="title_identity_use_ip_hint">En caso de \'saludo inválido\', \'requiere dirección válida\' o un error similar, intente cambiar esta configuración</string>
     <string name="title_optional">Opcional</string>
@@ -572,6 +576,7 @@
     <string name="title_keep_all">Mantener todos los mensajes</string>
     <string name="title_auto_trash">Mover mensajes antiguos a la papelera de manera automática</string>
     <string name="title_auto_delete">Eliminar mensajes antiguos permanentemente de manera automática</string>
+    <string name="title_auto_delete_hint">Los mensajes antiguos son mensajes que ya no se almacenan en el dispositivo</string>
     <string name="title_folder_name_missing">Falta nombre de carpeta</string>
     <string name="title_folder_exists">La carpeta %1$s ya existe</string>
     <string name="title_folder_delete">¿Eliminar permanentemente esta carpeta y los mensajes que contenga?</string>
@@ -798,6 +803,9 @@
     <string name="title_signature_store">Almacenar</string>
     <string name="title_search">Buscar</string>
     <string name="title_search_for_hint">Ingrese texto</string>
+    <string name="title_search_hint">        La búsqueda comenzará por los mensajes almacenados en su dispositivo.
+        Para buscar también en el servidor, toque el botón \'Buscar de nuevo\'.
+    </string>
     <string name="title_search_more">Más opciones</string>
     <string name="title_search_use_index">Usar índice de búsqueda</string>
     <string name="title_search_in_senders">En remitentes (de)</string>
@@ -805,6 +813,7 @@
     <string name="title_search_in_subject">En asunto</string>
     <string name="title_search_in_keywords">En palabras clave (si es compatible)</string>
     <string name="title_search_in_message">En texto del mensaje</string>
+    <string name="title_search_with">Limitar búsqueda a</string>
     <string name="title_search_with_unseen">No leído</string>
     <string name="title_search_with_flagged">Destacado</string>
     <string name="title_search_with_hidden">Oculto (en el dispositivo solamente)</string>
@@ -1015,7 +1024,7 @@
     <string name="title_hint_important">Importante</string>
     <string name="title_hint_sync">Descargar mensajes puede llevar algún tiempo, dependiendo de la velocidad del proveedor, la conexión a internet, dispositivo y el número de mensajes. Mientras se descargan mensajes, la aplicación puede responder más lentamente.</string>
     <string name="title_hint_battery">Dado que por defecto FairEmail recibe mensajes permanentemente, Android reportará a FairEmail como siempre activo. Por lo tanto, puede parecer que FairEmail siempre está usando la batería, pero de hecho no es así.</string>
-    <string name="title_hint_reformat">Por defecto, FairEmail reformatea los mensajes por razones de privacidad y seguridad. Para ver el mensaje original, toque el icono de \"pantalla completa\" sobre el texto del mensaje.</string>
+    <string name="title_hint_reformat">Por defecto, FairEmail reformatea los mensajes por razones de privacidad y seguridad. Para ver el mensaje original, pulse el icono \'pantalla completa\' sobre el texto del mensaje.</string>
     <string name="title_hint_contact_actions">Mantenga pulsado para opciones</string>
     <string name="title_hint_eml">Este es un resumen del contenido de un archivo de mensaje crudo. Guarde el mensaje raw con el icono guardar en la barra de acción para ver todo el contenido.</string>
     <string name="title_open_link">Abrir enlace</string>

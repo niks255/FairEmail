@@ -19,27 +19,40 @@ package eu.faircode.email;
     Copyright 2018-2020 by Marcel Bokhorst (M66B)
 */
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.Lifecycle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.adapter.FragmentViewHolder;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.List;
 
 public class FragmentOptions extends FragmentBase {
-    private ViewPager pager;
-    private PagerAdapter adapter;
+    private ViewPager2 pager;
+    private FragmentStateAdapter adapter;
 
     static String[] OPTIONS_RESTART = new String[]{
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
@@ -66,17 +79,46 @@ public class FragmentOptions extends FragmentBase {
         View view = inflater.inflate(R.layout.fragment_options, container, false);
 
         pager = view.findViewById(R.id.pager);
-        adapter = new PagerAdapter(getChildFragmentManager());
-        pager.setAdapter(adapter);
 
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        adapter = new FragmentStateAdapter(this) {
+            @NonNull
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Do nothing
+            public Fragment createFragment(int position) {
+                switch (position) {
+                    case 0:
+                        return new FragmentSetup();
+                    case 1:
+                        return new FragmentOptionsSynchronize();
+                    case 2:
+                        return new FragmentOptionsSend();
+                    case 3:
+                        return new FragmentOptionsConnection();
+                    case 4:
+                        return new FragmentOptionsDisplay();
+                    case 5:
+                        return new FragmentOptionsBehavior();
+                    case 6:
+                        return new FragmentOptionsPrivacy();
+                    case 7:
+                        return new FragmentOptionsEncryption();
+                    case 8:
+                        return new FragmentOptionsNotifications();
+                    case 9:
+                        return new FragmentOptionsMisc();
+                    default:
+                        throw new IllegalArgumentException();
+                }
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public int getItemCount() {
+                return 10;
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
+                super.onBindViewHolder(holder, position, payloads);
+
                 if (position > 0) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                     boolean setup_advanced = prefs.getBoolean("setup_advanced", false);
@@ -87,10 +129,24 @@ public class FragmentOptions extends FragmentBase {
                     }
                 }
             }
+        };
+
+        pager.setAdapter(adapter);
+
+        addKeyPressedListener(new ActivityBase.IKeyPressedListener() {
+            @Override
+            public boolean onKeyPressed(KeyEvent event) {
+                return false;
+            }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-                // Do nothing
+            public boolean onBackPressed() {
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                    onExit();
+                    return true;
+                } else
+                    return false;
+
             }
         });
 
@@ -100,7 +156,45 @@ public class FragmentOptions extends FragmentBase {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(pager);
+        new TabLayoutMediator(tabLayout, pager, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                switch (position) {
+                    case 0:
+                        tab.setText(R.string.title_advanced_section_main);
+                        break;
+                    case 1:
+                        tab.setText(R.string.title_advanced_section_synchronize);
+                        break;
+                    case 2:
+                        tab.setText(R.string.title_advanced_section_send);
+                        break;
+                    case 3:
+                        tab.setText(R.string.title_advanced_section_connection);
+                        break;
+                    case 4:
+                        tab.setText(R.string.title_advanced_section_display);
+                        break;
+                    case 5:
+                        tab.setText(R.string.title_advanced_section_behavior);
+                        break;
+                    case 6:
+                        tab.setText(R.string.title_advanced_section_privacy);
+                        break;
+                    case 7:
+                        tab.setText(R.string.title_advanced_section_encryption);
+                        break;
+                    case 8:
+                        tab.setText(R.string.title_advanced_section_notifications);
+                        break;
+                    case 9:
+                        tab.setText(R.string.title_advanced_section_misc);
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            }
+        }).attach();
 
         String tab = getActivity().getIntent().getStringExtra("tab");
         if ("connection".equals(tab))
@@ -112,75 +206,79 @@ public class FragmentOptions extends FragmentBase {
         getActivity().getIntent().removeExtra("tab");
     }
 
-    private class PagerAdapter extends FragmentStatePagerAdapter {
-        public PagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    @Override
+    protected void finish() {
+        onExit();
+    }
 
-        @Override
-        public int getCount() {
-            return 10;
-        }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new FragmentSetup();
-                case 1:
-                    return new FragmentOptionsSynchronize();
-                case 2:
-                    return new FragmentOptionsSend();
-                case 3:
-                    return new FragmentOptionsConnection();
-                case 4:
-                    return new FragmentOptionsDisplay();
-                case 5:
-                    return new FragmentOptionsBehavior();
-                case 6:
-                    return new FragmentOptionsPrivacy();
-                case 7:
-                    return new FragmentOptionsEncryption();
-                case 8:
-                    return new FragmentOptionsNotifications();
-                case 9:
-                    return new FragmentOptionsMisc();
-                default:
-                    throw new IllegalArgumentException();
+        try {
+            switch (requestCode) {
+                case ActivitySetup.REQUEST_STILL:
+                    if (resultCode == Activity.RESULT_OK)
+                        pager.setCurrentItem(0);
+                    else
+                        super.finish();
+                    break;
             }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
+    }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_advanced_section_main);
-                case 1:
-                    return getString(R.string.title_advanced_section_synchronize);
-                case 2:
-                    return getString(R.string.title_advanced_section_send);
-                case 3:
-                    return getString(R.string.title_advanced_section_connection);
-                case 4:
-                    return getString(R.string.title_advanced_section_display);
-                case 5:
-                    return getString(R.string.title_advanced_section_behavior);
-                case 6:
-                    return getString(R.string.title_advanced_section_privacy);
-                case 7:
-                    return getString(R.string.title_advanced_section_encryption);
-                case 8:
-                    return getString(R.string.title_advanced_section_notifications);
-                case 9:
-                    return getString(R.string.title_advanced_section_misc);
-                default:
-                    throw new IllegalArgumentException();
-            }
+    private void onExit() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean setup_reminder = prefs.getBoolean("setup_reminder", true);
+
+        boolean hasPermissions = hasPermission(Manifest.permission.READ_CONTACTS);
+        Boolean isIgnoring = Helper.isIgnoringOptimizations(getContext());
+
+        if (!setup_reminder ||
+                (hasPermissions && (isIgnoring == null || isIgnoring)))
+            super.finish();
+        else {
+            FragmentDialogStill fragment = new FragmentDialogStill();
+            fragment.setTargetFragment(this, ActivitySetup.REQUEST_STILL);
+            fragment.show(getParentFragmentManager(), "setup:still");
         }
+    }
 
+    public static class FragmentDialogStill extends FragmentDialogBase {
+        @NonNull
         @Override
-        public int getItemPosition(@NonNull Object object) {
-            return POSITION_NONE; // always recreate fragment
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_setup, null);
+            CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
+            Group grp3 = dview.findViewById(R.id.grp3);
+            Group grp4 = dview.findViewById(R.id.grp4);
+
+            cbNotAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    prefs.edit().putBoolean("setup_reminder", !isChecked).apply();
+                }
+            });
+
+            boolean hasPermissions = Helper.hasPermission(getContext(), Manifest.permission.READ_CONTACTS);
+            Boolean isIgnoring = Helper.isIgnoringOptimizations(getContext());
+
+            grp3.setVisibility(hasPermissions ? View.GONE : View.VISIBLE);
+            grp4.setVisibility(isIgnoring == null || isIgnoring ? View.GONE : View.VISIBLE);
+
+            return new AlertDialog.Builder(getContext())
+                    .setView(dview)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendResult(Activity.RESULT_OK);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create();
         }
     }
 }

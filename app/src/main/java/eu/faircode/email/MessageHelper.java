@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.IDN;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -187,13 +188,13 @@ public class MessageHelper {
         }
 
         if (message.to != null && message.to.length > 0)
-            imessage.setRecipients(Message.RecipientType.TO, message.to);
+            imessage.setRecipients(Message.RecipientType.TO, convertAddress(message.to, identity));
 
         if (message.cc != null && message.cc.length > 0)
-            imessage.setRecipients(Message.RecipientType.CC, message.cc);
+            imessage.setRecipients(Message.RecipientType.CC, convertAddress(message.cc, identity));
 
         if (message.bcc != null && message.bcc.length > 0)
-            imessage.setRecipients(Message.RecipientType.BCC, message.bcc);
+            imessage.setRecipients(Message.RecipientType.BCC, convertAddress(message.bcc, identity));
 
         if (message.subject != null)
             imessage.setSubject(message.subject);
@@ -202,15 +203,15 @@ public class MessageHelper {
         if (identity != null) {
             // Add reply to
             if (identity.replyto != null)
-                imessage.setReplyTo(InternetAddress.parse(identity.replyto));
+                imessage.setReplyTo(convertAddress(InternetAddress.parse(identity.replyto), identity));
 
             // Add extra cc
             if (identity.cc != null)
-                addAddress(identity.cc, Message.RecipientType.CC, imessage);
+                addAddress(identity.cc, Message.RecipientType.CC, imessage, identity);
 
             // Add extra bcc
             if (identity.bcc != null)
-                addAddress(identity.bcc, Message.RecipientType.BCC, imessage);
+                addAddress(identity.bcc, Message.RecipientType.BCC, imessage, identity);
 
             // Delivery/read request
             if (message.receipt_request != null && message.receipt_request) {
@@ -457,7 +458,7 @@ public class MessageHelper {
         return imessage;
     }
 
-    private static void addAddress(String email, Message.RecipientType type, MimeMessage imessage) throws MessagingException {
+    private static void addAddress(String email, Message.RecipientType type, MimeMessage imessage, EntityIdentity identity) throws MessagingException {
         List<Address> result = new ArrayList<>();
 
         Address[] existing = imessage.getRecipients(type);
@@ -465,7 +466,7 @@ public class MessageHelper {
             result.addAll(Arrays.asList(existing));
 
         Address[] all = imessage.getAllRecipients();
-        Address[] addresses = InternetAddress.parse(email);
+        Address[] addresses = convertAddress(InternetAddress.parse(email), identity);
         for (Address address : addresses) {
             boolean found = false;
             if (all != null)
@@ -479,6 +480,19 @@ public class MessageHelper {
         }
 
         imessage.setRecipients(type, result.toArray(new Address[0]));
+    }
+
+    private static Address[] convertAddress(Address[] addresses, EntityIdentity identity) {
+        if (identity != null && identity.unicode)
+            return addresses;
+
+        // https://en.wikipedia.org/wiki/International_email
+        for (Address address : addresses) {
+            String email = ((InternetAddress) address).getAddress();
+            email = punyCode(email);
+            ((InternetAddress) address).setAddress(email);
+        }
+        return addresses;
     }
 
     static void build(Context context, EntityMessage message, List<EntityAttachment> attachments, EntityIdentity identity, boolean send, MimeMessage imessage) throws IOException, MessagingException {
@@ -1021,8 +1035,15 @@ public class MessageHelper {
 
         for (Address address : addresses) {
             InternetAddress iaddress = (InternetAddress) address;
-            iaddress.setAddress(decodeMime(iaddress.getAddress()));
+            String email = iaddress.getAddress();
             String personal = iaddress.getPersonal();
+
+            email = decodeMime(email);
+            if (!Helper.isSingleScript(email))
+                email = punyCode(email);
+
+            iaddress.setAddress(email);
+
             if (personal != null) {
                 try {
                     iaddress.setPersonal(decodeMime(personal));
@@ -1236,9 +1257,11 @@ public class MessageHelper {
 
             if (addresses[i] instanceof InternetAddress) {
                 InternetAddress address = (InternetAddress) addresses[i];
+                String email = address.getAddress();
                 String personal = address.getPersonal();
+
                 if (TextUtils.isEmpty(personal))
-                    formatted.add(address.getAddress());
+                    formatted.add(email);
                 else {
                     if (compose) {
                         boolean quote = false;
@@ -1253,7 +1276,7 @@ public class MessageHelper {
                     }
 
                     if (full)
-                        formatted.add(personal + " <" + address.getAddress() + ">");
+                        formatted.add(personal + " <" + email + ">");
                     else
                         formatted.add(personal);
                 }
@@ -1261,6 +1284,31 @@ public class MessageHelper {
                 formatted.add(addresses[i].toString());
         }
         return TextUtils.join(", ", formatted);
+    }
+
+    static String punyCode(String email) {
+        int at = email.indexOf('@');
+        if (at > 0) {
+            String user = email.substring(0, at);
+            String domain = email.substring(at + 1);
+
+            try {
+                user = IDN.toASCII(user);
+            } catch (IllegalArgumentException ex) {
+                Log.e(ex);
+            }
+
+            String[] parts = domain.split("\\.");
+            for (int p = 0; p < parts.length; p++)
+                try {
+                    parts[p] = IDN.toASCII(parts[p]);
+                } catch (IllegalArgumentException ex) {
+                    Log.e(ex);
+                }
+
+            email = user + '@' + TextUtils.join(".", parts);
+        }
+        return email;
     }
 
     static String decodeMime(String text) {
@@ -1424,6 +1472,17 @@ public class MessageHelper {
                     else
                         size += (long) s;
             }
+
+            for (EntityAttachment attachment : getAttachments())
+                if (attachment.size != null &&
+                        (EntityAttachment.PGP_MESSAGE.equals(attachment.encryption) ||
+                                EntityAttachment.SMIME_MESSAGE.equals(attachment.encryption) ||
+                                EntityAttachment.SMIME_SIGNED_DATA.equals(attachment.encryption)))
+                    if (size == null)
+                        size = attachment.size;
+                    else
+                        size += attachment.size;
+
             return size;
         }
 

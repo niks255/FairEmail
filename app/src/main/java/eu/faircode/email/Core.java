@@ -956,14 +956,16 @@ class Core {
         boolean seen = jargs.optBoolean(1);
         boolean unflag = jargs.optBoolean(3);
 
-        // Move from trash only
-        if (!EntityFolder.TRASH.equals(folder.type))
-            throw new IllegalArgumentException("Invalid POP3 folder type=" + folder.type);
-
         // Get target folder
         EntityFolder target = db.folder().getFolder(id);
         if (target == null)
             throw new FolderNotFoundException();
+
+        // Move from trash/drafts only
+        if (!EntityFolder.TRASH.equals(folder.type) &&
+                !EntityFolder.DRAFTS.equals(folder.type))
+            throw new IllegalArgumentException("Invalid POP3 folder" +
+                    " source=" + folder.type + " target=" + target.type);
 
         message.folder = target.id;
         if (seen)
@@ -2282,9 +2284,9 @@ class Core {
             boolean check_mx = prefs.getBoolean("check_mx", false);
             if (check_mx)
                 try {
-                    if (ConnectionHelper.lookupMx(
-                            message.reply == null || message.reply.length == 0
-                                    ? message.from : message.reply, context))
+                    if (DNSHelper.lookupMx(
+                            context, message.reply == null || message.reply.length == 0
+                                    ? message.from : message.reply))
                         message.mx = true;
                 } catch (UnknownHostException ex) {
                     message.mx = false;
@@ -2345,12 +2347,12 @@ class Core {
                     String r = ((InternetAddress) reply).getAddress();
                     int rat = (r == null ? -1 : r.indexOf('@'));
                     if (rat > 0) {
-                        String rdomain = ConnectionHelper.getParentDomain(r.substring(rat + 1));
+                        String rdomain = DNSHelper.getParentDomain(r.substring(rat + 1));
                         for (Address from : message.from) {
                             String f = ((InternetAddress) from).getAddress();
                             int fat = (f == null ? -1 : f.indexOf('@'));
                             if (fat > 0) {
-                                String fdomain = ConnectionHelper.getParentDomain(f.substring(fat + 1));
+                                String fdomain = DNSHelper.getParentDomain(f.substring(fat + 1));
                                 if (!rdomain.equalsIgnoreCase(fdomain)) {
                                     if (message.warning == null)
                                         message.warning = context.getString(R.string.title_reply_domain, fdomain, rdomain);
@@ -2520,11 +2522,13 @@ class Core {
             }
 
             Uri uri = ContactInfo.getLookupUri(context, message.from);
-            String avatar = (uri == null ? null : uri.toString());
-            if (!Objects.equals(message.avatar, avatar)) {
-                update = true;
-                message.avatar = avatar;
-                Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid + " avatar=" + avatar);
+            if (uri != null) {
+                String avatar = uri.toString();
+                if (!Objects.equals(message.avatar, avatar)) {
+                    update = true;
+                    message.avatar = avatar;
+                    Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid + " avatar=" + avatar);
+                }
             }
 
             if (update || process)

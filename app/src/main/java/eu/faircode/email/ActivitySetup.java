@@ -1100,7 +1100,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     }
 
                     String fingerprint = EntityCertificate.getFingerprint(cert);
-                    List<String> emails = EntityCertificate.getAltSubjectName(cert);
+                    List<String> emails = EntityCertificate.getEmailAddresses(cert);
+
+                    if (emails.size() == 0)
+                        throw new IllegalArgumentException("No email address found in key");
 
                     DB db = DB.getInstance(context);
                     for (String email : emails) {
