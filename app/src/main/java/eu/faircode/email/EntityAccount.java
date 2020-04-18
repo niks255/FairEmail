@@ -52,6 +52,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
     // https://tools.ietf.org/html/rfc2177
     static final int DEFAULT_KEEP_ALIVE_INTERVAL = 15; // minutes
     static final int DEFAULT_POLL_INTERVAL = 15; // minutes
+    static final int DEFAULT_MAX_MESSAGES = 100; // POP3
 
     static final int TYPE_IMAP = 0;
     static final int TYPE_POP = 1;
@@ -221,6 +222,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
         json.put("browse", browse);
         json.put("leave_on_server", leave_on_server);
         json.put("leave_on_device", leave_on_device);
+        json.put("max_messages", max_messages);
         json.put("auto_seen", auto_seen);
         // not separator
 
@@ -291,6 +293,8 @@ public class EntityAccount extends EntityOrder implements Serializable {
             account.leave_on_server = json.getBoolean("leave_on_server");
         if (json.has("leave_on_device"))
             account.leave_on_device = json.getBoolean("leave_on_device");
+        if (json.has("max_messages"))
+            account.max_messages = json.getInt("max_messages");
         if (json.has("auto_seen"))
             account.auto_seen = json.getBoolean("auto_seen");
 
@@ -333,6 +337,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
                     this.browse.equals(other.browse) &&
                     this.leave_on_server.equals(other.leave_on_server) &&
                     this.leave_on_device.equals(other.leave_on_device) &&
+                    Objects.equals(this.max_messages, other.max_messages) &&
                     this.auto_seen.equals(other.auto_seen) &&
                     Objects.equals(this.swipe_left, other.swipe_left) &&
                     Objects.equals(this.swipe_right, other.swipe_right) &&

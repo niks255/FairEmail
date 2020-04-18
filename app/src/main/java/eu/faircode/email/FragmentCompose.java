@@ -97,6 +97,7 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.content.FileProvider;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.documentfile.provider.DocumentFile;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -460,7 +461,7 @@ public class FragmentCompose extends FragmentBase {
         etBody.setInputContentListener(new EditTextCompose.IInputContentListener() {
             @Override
             public void onInputContent(Uri uri) {
-                onAddAttachment(Arrays.asList(uri), true, 0);
+                onAddAttachment(Arrays.asList(uri), true, 0, false);
             }
         });
 
@@ -1701,7 +1702,7 @@ public class FragmentCompose extends FragmentBase {
                 case REQUEST_ATTACHMENT:
                 case REQUEST_RECORD_AUDIO:
                     if (resultCode == RESULT_OK && data != null)
-                        onAddAttachment(getUris(data), false, 0);
+                        onAddAttachment(getUris(data), false, 0, false);
                     break;
                 case REQUEST_OPENPGP:
                     if (resultCode == RESULT_OK && data != null)
@@ -1876,16 +1877,18 @@ public class FragmentCompose extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean add_inline = prefs.getBoolean("add_inline", true);
         boolean resize_images = prefs.getBoolean("resize_images", true);
+        boolean privacy_images = prefs.getBoolean("privacy_images", false);
         int resize = prefs.getInt("resize", FragmentCompose.REDUCED_IMAGE_SIZE);
-        onAddAttachment(uri, add_inline, resize_images ? resize : 0);
+        onAddAttachment(uri, add_inline, resize_images ? resize : 0, privacy_images);
     }
 
-    private void onAddAttachment(List<Uri> uris, boolean image, int resize) {
+    private void onAddAttachment(List<Uri> uris, boolean image, int resize, boolean privacy) {
         Bundle args = new Bundle();
         args.putLong("id", working);
         args.putParcelableArrayList("uris", new ArrayList<>(uris));
         args.putBoolean("image", image);
         args.putInt("resize", resize);
+        args.putBoolean("privacy", privacy);
         args.putCharSequence("body", etBody.getText());
         args.putInt("start", etBody.getSelectionStart());
 
@@ -1896,13 +1899,14 @@ public class FragmentCompose extends FragmentBase {
                 List<Uri> uris = args.getParcelableArrayList("uris");
                 boolean image = args.getBoolean("image");
                 int resize = args.getInt("resize");
+                boolean privacy = args.getBoolean("privacy");
                 CharSequence body = args.getCharSequence("body");
                 int start = args.getInt("start");
 
                 SpannableStringBuilder s = new SpannableStringBuilder(body);
 
                 for (Uri uri : uris) {
-                    EntityAttachment attachment = addAttachment(context, id, uri, image, resize);
+                    EntityAttachment attachment = addAttachment(context, id, uri, image, resize, privacy);
                     if (!image)
                         continue;
 
@@ -1912,17 +1916,18 @@ public class FragmentCompose extends FragmentBase {
                     Drawable d = Drawable.createFromPath(file.getAbsolutePath());
                     if (d == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_image));
-                    d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
 
-                    s.insert(start, "   ");
+                    s.insert(start, " \uFFFC"); // Object replacement character
                     ImageSpan is = new ImageSpan(context, cid);
                     s.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    start += 3;
+                    start += 2;
                 }
 
                 if (!image)
                     return null;
+
+                args.putInt("start", start);
 
                 return HtmlHelper.fromHtml(HtmlHelper.toHtml(s), new Html.ImageGetter() {
                     @Override
@@ -2709,8 +2714,8 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private static EntityAttachment addAttachment(
-            Context context, long id, Uri uri, boolean image, int resize) throws IOException {
-        Log.w("Add attachment uri=" + uri + " image=" + image + " resize=" + resize);
+            Context context, long id, Uri uri, boolean image, int resize, boolean privacy) throws IOException {
+        Log.w("Add attachment uri=" + uri + " image=" + image + " resize=" + resize + " privacy=" + privacy);
 
         if (!"content".equals(uri.getScheme()) &&
                 !Helper.hasPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -2830,6 +2835,20 @@ public class FragmentCompose extends FragmentBase {
 
             if (resize > 0)
                 resizeAttachment(context, attachment, resize);
+
+            if (privacy)
+                try {
+                    ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, null);
+                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, null);
+                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, null);
+                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, null);
+                    exif.setAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF, null);
+                    exif.setAttribute(ExifInterface.TAG_GPS_ALTITUDE, null);
+                    exif.saveAttributes();
+                } catch (IOException ex) {
+                    Log.w(ex);
+                }
 
         } catch (Throwable ex) {
             // Reset progress on failure
@@ -3445,7 +3464,7 @@ public class FragmentCompose extends FragmentBase {
                         if (uris != null)
                             for (Uri uri : uris)
                                 try {
-                                    addAttachment(context, data.draft.id, uri, false, 0);
+                                    addAttachment(context, data.draft.id, uri, false, 0, false);
                                 } catch (IOException ex) {
                                     Log.e(ex);
                                 }
@@ -3542,8 +3561,10 @@ public class FragmentCompose extends FragmentBase {
                     if (attachment.available) {
                         if (!attachment.isEncryption())
                             last_available++;
-                    } else
-                        EntityOperation.queue(context, data.draft, EntityOperation.ATTACHMENT, attachment.id);
+                    } else {
+                        if (attachment.progress == null)
+                            EntityOperation.queue(context, data.draft, EntityOperation.ATTACHMENT, attachment.id);
+                    }
 
                 db.setTransactionSuccessful();
             } finally {
@@ -3818,7 +3839,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (InternetAddress address : ato)
                                     address.validate();
                                 if (lookup_mx)
-                                    DNSHelper.lookupMx(context, ato);
+                                    DnsHelper.checkMx(context, ato);
                             }
                         } catch (AddressException ex) {
                             throw new AddressException(context.getString(R.string.title_address_parse_error,
@@ -3832,7 +3853,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (InternetAddress address : acc)
                                     address.validate();
                                 if (lookup_mx)
-                                    DNSHelper.lookupMx(context, acc);
+                                    DnsHelper.checkMx(context, acc);
                             }
                         } catch (AddressException ex) {
                             throw new AddressException(context.getString(R.string.title_address_parse_error,
@@ -3846,7 +3867,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (InternetAddress address : abcc)
                                     address.validate();
                                 if (lookup_mx)
-                                    DNSHelper.lookupMx(context, abcc);
+                                    DnsHelper.checkMx(context, abcc);
                             }
                         } catch (AddressException ex) {
                             throw new AddressException(context.getString(R.string.title_address_parse_error,
@@ -4075,7 +4096,7 @@ public class FragmentCompose extends FragmentBase {
                             for (EntityAttachment attachment : attachments)
                                 if (!attachment.available)
                                     throw new IllegalArgumentException(context.getString(R.string.title_attachments_missing));
-                                else if (!attachment.isInline() && !attachment.isEncryption())
+                                else if (attachment.isAttachment())
                                     attached++;
 
                             // Check for missing attachments
@@ -4115,14 +4136,15 @@ public class FragmentCompose extends FragmentBase {
                             }
 
                             for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (attachment.isInline() && !cids.contains(attachment.cid)) {
+                                if (attachment.isInline() && attachment.isImage() &&
+                                        !cids.contains(attachment.cid)) {
                                     Log.i("Removing unused inline attachment cid=" + attachment.cid);
                                     db.attachment().deleteAttachment(attachment.id);
                                 }
                         } else {
                             // Convert inline images to attachments
                             for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (attachment.isInline()) {
+                                if (attachment.isInline() && attachment.isImage()) {
                                     Log.i("Converting to attachment cid=" + attachment.cid);
                                     attachment.disposition = Part.ATTACHMENT;
                                     db.attachment().setDisposition(attachment.id, attachment.disposition);
@@ -4225,7 +4247,9 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
 
             if (needsEncryption) {
-                if (ActivityBilling.isPro(getContext())) {
+                if (ActivityBilling.isPro(getContext()) ||
+                        EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt) ||
+                        EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
                     boolean interactive = args.getBoolean("interactive");
                     onEncrypt(draft, action, interactive);
                 } else
@@ -4691,6 +4715,7 @@ public class FragmentCompose extends FragmentBase {
             boolean add_inline = prefs.getBoolean("add_inline", true);
             boolean resize_images = prefs.getBoolean("resize_images", true);
             int resize = prefs.getInt("resize", FragmentCompose.REDUCED_IMAGE_SIZE);
+            boolean privacy_images = prefs.getBoolean("privacy_images", false);
             boolean image_dialog = prefs.getBoolean("image_dialog", true);
 
             final ViewGroup dview = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_image, null);
@@ -4698,12 +4723,14 @@ public class FragmentCompose extends FragmentBase {
             final CheckBox cbResize = dview.findViewById(R.id.cbResize);
             final Spinner spResize = dview.findViewById(R.id.spResize);
             final TextView tvResize = dview.findViewById(R.id.tvResize);
+            final CheckBox cbPrivacy = dview.findViewById(R.id.cbPrivacy);
             final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             final TextView tvNotAgain = dview.findViewById(R.id.tvNotAgain);
 
             rgAction.check(add_inline ? R.id.rbInline : R.id.rbAttach);
             cbResize.setChecked(resize_images);
             spResize.setEnabled(resize_images);
+            cbPrivacy.setChecked(privacy_images);
 
             final int[] resizeValues = getResources().getIntArray(R.array.resizeValues);
             for (int pos = 0; pos < resizeValues.length; pos++)
@@ -4738,6 +4765,14 @@ public class FragmentCompose extends FragmentBase {
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     prefs.edit().remove("resize").apply();
+                }
+            });
+
+            cbPrivacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    prefs.edit().putBoolean("privacy_images", isChecked).apply();
+                    spResize.setEnabled(isChecked);
                 }
             });
 
@@ -5146,7 +5181,7 @@ public class FragmentCompose extends FragmentBase {
         }
     }
 
-    private class DraftData {
+    private static class DraftData {
         private EntityMessage draft;
         private List<TupleIdentityEx> identities;
     }

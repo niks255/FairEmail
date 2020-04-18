@@ -99,8 +99,6 @@ public class FragmentPop extends FragmentBase {
     private static final int REQUEST_COLOR = 1;
     private static final int REQUEST_DELETE = 2;
 
-    private static final int MAX_MESSAGES = 100;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -351,7 +349,7 @@ public class FragmentPop extends FragmentBase {
                     db.beginTransaction();
 
                     if (account != null && !account.password.equals(password)) {
-                        String domain = DNSHelper.getParentDomain(account.host);
+                        String domain = DnsHelper.getParentDomain(account.host);
                         String match = (Objects.equals(account.host, domain) ? account.host : "%." + domain);
                         int count = db.identity().setIdentityPassword(account.id, account.user, password, match);
                         Log.i("Updated passwords=" + count + " match=" + match);
@@ -560,7 +558,7 @@ public class FragmentPop extends FragmentBase {
                     cbLeaveDeleted.setChecked(account == null ? true : account.leave_deleted);
                     cbLeaveDevice.setChecked(account == null ? false : account.leave_on_device);
                     etMax.setText(Integer.toString(account == null || account.max_messages == null
-                            ? MAX_MESSAGES : account.max_messages));
+                            ? EntityAccount.DEFAULT_MAX_MESSAGES : account.max_messages));
                     etInterval.setText(account == null ? "" : Long.toString(account.poll_interval));
 
                     new SimpleTask<EntityAccount>() {

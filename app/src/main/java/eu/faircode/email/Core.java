@@ -586,6 +586,16 @@ class Core {
         });
     }
 
+    static boolean isAlive(IMAPFolder ifolder) {
+        try {
+            noop(ifolder);
+        } catch (MessagingException ex) {
+            Log.i(ifolder.getFullName(), ex);
+            return false;
+        }
+        return true;
+    }
+
     private static void onSeen(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException {
         // Mark message (un)seen
         DB db = DB.getInstance(context);
@@ -2284,10 +2294,10 @@ class Core {
             boolean check_mx = prefs.getBoolean("check_mx", false);
             if (check_mx)
                 try {
-                    if (DNSHelper.lookupMx(
-                            context, message.reply == null || message.reply.length == 0
-                                    ? message.from : message.reply))
-                        message.mx = true;
+                    Address[] addresses = (message.reply == null || message.reply.length == 0
+                            ? message.from : message.reply);
+                    DnsHelper.checkMx(context, addresses);
+                    message.mx = true;
                 } catch (UnknownHostException ex) {
                     message.mx = false;
                     message.warning = ex.getMessage();
@@ -2347,12 +2357,12 @@ class Core {
                     String r = ((InternetAddress) reply).getAddress();
                     int rat = (r == null ? -1 : r.indexOf('@'));
                     if (rat > 0) {
-                        String rdomain = DNSHelper.getParentDomain(r.substring(rat + 1));
+                        String rdomain = DnsHelper.getParentDomain(r.substring(rat + 1));
                         for (Address from : message.from) {
                             String f = ((InternetAddress) from).getAddress();
                             int fat = (f == null ? -1 : f.indexOf('@'));
                             if (fat > 0) {
-                                String fdomain = DNSHelper.getParentDomain(f.substring(fat + 1));
+                                String fdomain = DnsHelper.getParentDomain(f.substring(fat + 1));
                                 if (!rdomain.equalsIgnoreCase(fdomain)) {
                                     if (message.warning == null)
                                         message.warning = context.getString(R.string.title_reply_domain, fdomain, rdomain);
@@ -2364,9 +2374,6 @@ class Core {
                     }
                 }
             }
-
-            if (message.total != null && message.total == 0)
-                reportEmptyMessage(context, state, account, istore);
 
             try {
                 db.beginTransaction();
@@ -2438,8 +2445,7 @@ class Core {
                     Log.i(folder.name + " inline downloaded message id=" + message.id +
                             " size=" + message.size + "/" + (body == null ? null : body.length()));
 
-                    Long size = parts.getBodySize();
-                    if (TextUtils.isEmpty(body) && size != null && size > 0)
+                    if (TextUtils.isEmpty(body) && parts.hasBody())
                         reportEmptyMessage(context, state, account, istore);
                 }
             }
@@ -2786,8 +2792,7 @@ class Core {
                     Log.i(folder.name + " downloaded message id=" + message.id +
                             " size=" + message.size + "/" + (body == null ? null : body.length()));
 
-                    Long size = parts.getBodySize();
-                    if (TextUtils.isEmpty(body) && size != null && size > 0)
+                    if (TextUtils.isEmpty(body) && parts.hasBody())
                         reportEmptyMessage(context, state, account, istore);
                 }
             }
@@ -3065,7 +3070,7 @@ class Core {
 
             // Build notification
             NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(context, "notification")
+                    new NotificationCompat.Builder(context, EntityAccount.getNotificationChannelId(group))
                             .setSmallIcon(messages.size() > 1
                                     ? R.drawable.baseline_mail_more_white_24
                                     : R.drawable.baseline_mail_white_24)

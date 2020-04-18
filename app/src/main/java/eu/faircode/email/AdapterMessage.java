@@ -409,6 +409,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvNoInternetBody;
         private ImageButton ibDownloading;
         private Group grpDownloading;
+        private ImageButton ibTrashBottom;
+        private ImageButton ibArchiveBottom;
         private ImageButton ibSeen;
         private Flow flow;
 
@@ -602,6 +604,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvNoInternetBody = vsBody.findViewById(R.id.tvNoInternetBody);
             ibDownloading = vsBody.findViewById(R.id.ibDownloading);
             grpDownloading = vsBody.findViewById(R.id.grpDownloading);
+            ibTrashBottom = vsBody.findViewById(R.id.ibTrashBottom);
+            ibArchiveBottom = vsBody.findViewById(R.id.ibArchiveBottom);
             ibSeen = vsBody.findViewById(R.id.ibSeen);
             flow = vsBody.findViewById(R.id.flow);
 
@@ -681,6 +685,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibMore.setOnClickListener(this);
 
                 ibDownloading.setOnClickListener(this);
+                ibTrashBottom.setOnClickListener(this);
+                ibArchiveBottom.setOnClickListener(this);
                 ibSeen.setOnClickListener(this);
 
                 tvBody.setOnTouchListener(this);
@@ -754,6 +760,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibMore.setOnClickListener(null);
 
                 ibDownloading.setOnClickListener(null);
+                ibTrashBottom.setOnClickListener(null);
+                ibArchiveBottom.setOnClickListener(null);
                 ibSeen.setOnClickListener(null);
 
                 tvBody.setOnTouchListener(null);
@@ -940,7 +948,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSize.setVisibility(
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
-            tvTime.setText(date && "time".equals(sort)
+            tvTime.setText(date && FragmentMessages.SORT_DATE_HEADER.contains(sort)
                     ? TF.format(message.received)
                     : Helper.getRelativeTimeSpanString(context, message.received));
 
@@ -982,7 +990,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (viewType == ViewType.FOLDER)
                 tvFolder.setText(outbox ? message.identityEmail : message.accountName);
             else if (viewType == ViewType.THREAD || viewType == ViewType.SEARCH)
-                tvFolder.setText(message.getFolderName(context));
+                tvFolder.setText(message.getFolderName(context) +
+                        (BuildConfig.DEBUG ? ":" + message.id : ""));
             else
                 tvFolder.setText(message.accountName + "/" + message.getFolderName(context));
 
@@ -1199,6 +1208,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             pbBody.setVisibility(View.GONE);
             grpAction.setVisibility(View.GONE);
             clearActions();
+            ibTrashBottom.setVisibility(View.GONE);
+            ibArchiveBottom.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
         }
 
@@ -1476,11 +1487,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             // Message text
             tvNoInternetBody.setVisibility(suitable || message.content ? View.GONE : View.VISIBLE);
             grpDownloading.setVisibility(message.content ? View.GONE : View.VISIBLE);
-            tvBody.setVisibility(View.GONE);
-            wvBody.setVisibility(View.GONE);
+
+            int height = properties.getHeight(message.id, 0);
+            if (height == 0) {
+                tvBody.setVisibility(View.GONE);
+                wvBody.setVisibility(View.GONE);
+            } else {
+                boolean show_full = properties.getValue("full", message.id);
+                if (show_full) {
+                    wvBody.setVisibility(View.INVISIBLE);
+                    wvBody.setMinimumHeight(height);
+                } else {
+                    tvBody.setVisibility(View.INVISIBLE);
+                    tvBody.setMinHeight(height);
+                }
+            }
             pbBody.setVisibility(View.GONE);
             grpAction.setVisibility(View.GONE);
             clearActions();
+            ibTrashBottom.setVisibility(View.GONE);
+            ibArchiveBottom.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
 
             db.attachment().liveAttachments(message.id).observe(cowner, new Observer<List<EntityAttachment>>() {
@@ -1577,6 +1603,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibArchive.setVisibility(archive && button_archive_trash ? View.VISIBLE : View.GONE);
                     ibTrash.setVisibility(trash && button_archive_trash ? View.VISIBLE : View.GONE);
                     ibJunk.setVisibility(junk || unjunk ? View.VISIBLE : View.GONE);
+
+                    ibTrashBottom.setVisibility(trash && button_archive_trash ? View.VISIBLE : View.GONE);
+                    ibArchiveBottom.setVisibility(archive && button_archive_trash ? View.VISIBLE : View.GONE);
 
                     bindBody(message, scroll);
                 }
@@ -2623,9 +2652,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         onActionMove(message, false);
                         break;
                     case R.id.ibArchive:
+                    case R.id.ibArchiveBottom:
                         onActionArchive(message);
                         break;
                     case R.id.ibTrash:
+                    case R.id.ibTrashBottom:
                         onActionTrash(message, (Boolean) ibTrash.getTag());
                         break;
                     case R.id.ibJunk:
@@ -2690,7 +2721,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     boolean doubletap = prefs.getBoolean("doubletap", false);
 
-                    if (!doubletap || message.folderReadOnly || EntityFolder.OUTBOX.equals(message.folderType)) {
+                    if (!doubletap ||
+                            message.folderReadOnly ||
+                            (message.uid == null && message.accountProtocol == EntityAccount.TYPE_IMAP) ||
+                            EntityFolder.OUTBOX.equals(message.folderType)) {
                         lbm.sendBroadcast(viewThread);
                         return;
                     }
@@ -3174,7 +3208,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 // Prevent flicker
                 if (expanded &&
                         (message.accountProtocol != EntityAccount.TYPE_IMAP ||
-                                (message.accountAutoSeen && !message.ui_seen && !message.folderReadOnly))) {
+                                (message.accountAutoSeen && !message.folderReadOnly))) {
                     message.unseen = 0;
                     message.ui_seen = true;
                 }
@@ -4920,7 +4954,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (properties.getValue("expanded", id)) {
                                 Context context = parentFragment.getContext();
                                 if (context != null)
-                                    ToastEx.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                    ToastEx.makeText(context, msg + " id=" + id, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -5044,7 +5078,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (this.suitable != state.isSuitable() || this.unmetered != state.isUnmetered()) {
             this.suitable = state.isSuitable();
             this.unmetered = state.isUnmetered();
-            notifyDataSetChanged();
+            PagedList<TupleMessageEx> list = differ.getCurrentList();
+            if (list != null)
+                for (int i = 0; i < list.size(); i++) {
+                    TupleMessageEx message = list.get(i);
+                    if (message != null &&
+                            (!message.content || message.attachments > 0) &&
+                            properties.getValue("expanded", message.id))
+                        notifyItemChanged(i);
+                }
         }
     }
 
