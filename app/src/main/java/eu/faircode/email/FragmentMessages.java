@@ -1474,11 +1474,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         int pos = adapter.getPositionForKey(other);
                         if (pos == NO_POSITION)
                             continue;
-                        AdapterMessage.ViewHolder holder =
-                                (AdapterMessage.ViewHolder) rvMessage.findViewHolderForAdapterPosition(pos);
-                        if (holder == null)
-                            continue;
-                        adapter.collapse(holder, pos);
+
+                        adapter.notifyItemChanged(pos);
                     }
             }
 
@@ -1628,9 +1625,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (message.folderReadOnly)
                 return 0;
 
-            if (EntityFolder.JUNK.equals(message.folderType))
-                return 0;
-
             if (EntityFolder.OUTBOX.equals(message.folderType))
                 return 0;
 
@@ -1696,6 +1690,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
 
             Long action = (dX > 0 ? swipes.swipe_right : swipes.swipe_left);
+            String actionType = (dX > 0 ? swipes.right_type : swipes.left_type);
             if (action == null)
                 return;
 
@@ -1722,7 +1717,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else if (FragmentAccount.SWIPE_ACTION_JUNK.equals(action))
                 icon = R.drawable.baseline_flag_24;
             else if (FragmentAccount.SWIPE_ACTION_DELETE.equals(action) ||
-                    (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)))
+                    (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
+                    (EntityFolder.TRASH.equals(actionType) && EntityFolder.JUNK.equals(message.folderType)))
                 icon = R.drawable.baseline_delete_forever_24;
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
@@ -1793,6 +1789,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
 
             Long action = (direction == ItemTouchHelper.LEFT ? swipes.swipe_left : swipes.swipe_right);
+            String actionType = (direction == ItemTouchHelper.LEFT ? swipes.left_type : swipes.right_type);
             if (action == null) {
                 adapter.notifyDataSetChanged();
                 return;
@@ -1818,7 +1815,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 adapter.notifyItemChanged(pos);
                 onSwipeJunk(message);
             } else if (FragmentAccount.SWIPE_ACTION_DELETE.equals(action) ||
-                    (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType))) {
+                    (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
+                    (EntityFolder.TRASH.equals(actionType) && EntityFolder.JUNK.equals(message.folderType))) {
                 adapter.notifyItemChanged(pos);
                 onSwipeDelete(message);
             } else
@@ -3415,9 +3413,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         (viewType == AdapterMessage.ViewType.FOLDER && !outbox));
 
         MenuItem menuSearch = menu.findItem(R.id.menu_search);
-        menuSearch.setVisible(
-                (viewType == AdapterMessage.ViewType.UNIFIED && type == null)
-                        || viewType == AdapterMessage.ViewType.FOLDER);
+        menuSearch.setVisible(folder);
 
         menu.findItem(R.id.menu_folders).setVisible(viewType == AdapterMessage.ViewType.UNIFIED && primary >= 0);
         ImageButton ib = (ImageButton) menu.findItem(R.id.menu_folders).getActionView();
@@ -4857,8 +4853,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         return null;
 
                     List<EntityIdentity> duplicates = db.identity().getIdentities(identity.account, identity.email);
-                    if (duplicates == null || duplicates.size() > 1)
+                    if (duplicates != null && duplicates.size() > 1) {
+                        args.putBoolean("duplicate", true);
                         return null;
+                    }
 
                     return identity;
                 }
@@ -5424,6 +5422,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 InputStream is = null;
                 X509Certificate result = null;
                 String alias = args.getString("alias");
+                boolean duplicate = args.getBoolean("duplicate");
 
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
                     // Get content/signature
@@ -5745,7 +5744,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         db.message().setMessageStored(message.id, new Date().getTime());
                         db.message().setMessageFts(message.id, false);
 
-                        if (alias != null && message.identity != null)
+                        if (alias != null && !duplicate && message.identity != null)
                             db.identity().setIdentitySignKeyAlias(message.identity, alias);
 
                         db.setTransactionSuccessful();

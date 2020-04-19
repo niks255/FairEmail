@@ -1203,7 +1203,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             tvNoInternetBody.setVisibility(View.GONE);
             grpDownloading.setVisibility(View.GONE);
+            tvBody.setText(null);
             tvBody.setVisibility(View.GONE);
+            // TO DO: clear web view?
             wvBody.setVisibility(View.GONE);
             pbBody.setVisibility(View.GONE);
             grpAction.setVisibility(View.GONE);
@@ -5140,16 +5142,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         holder.unwire();
         holder.bindTo(message, false);
         holder.wire();
-    }
-
-    public void collapse(@NonNull ViewHolder holder, int position) {
-        int type = holder.getItemViewType();
-        if (type != R.layout.item_message_compact && type != R.layout.item_message_normal)
-            return;
-
-        TupleMessageEx message = getItemAtPosition(position);
-        if (message != null)
-            holder.clearExpanded(message);
     }
 
     public void onItemSelected(@NonNull ViewHolder holder, boolean selected) {
