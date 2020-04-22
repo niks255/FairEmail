@@ -275,7 +275,6 @@
     <string name="title_advanced_name_email">Näytä nimet ja sähköpostiosoitteet</string>
     <string name="title_advanced_replace_name">Käytä ensisijaisesti yhteystiedon nimeä lähettäjän nimen sijaan</string>
     <string name="title_advanced_distinguish_contacts">Alleviivaa lähettäjä tämän ollessa paikallisesti tunnettu vastaanottaja</string>
-    <string name="title_advanced_authentication">Näytä varoitus, kun vastaanottava palvelin ei voinut todentaa viestiä</string>
     <string name="title_advanced_font_size_sender">Viestin lähettäjän kirjaisimen koko</string>
     <string name="title_advanced_font_size_subject">Viestin aiheen kirjaisimen koko</string>
     <string name="title_advanced_subject_top">Näytä aihe lähettäjän yläpuolella</string>
@@ -301,6 +300,7 @@
     <string name="title_advanced_actionbar">Näytä keskustelun toimintopalkki</string>
     <string name="title_advanced_actionbar_color">Käytä tilin väriä taustavärinä keskustelun toimintopalkissa</string>
     <string name="title_advanced_navbar_colorize">Väritä Androidin navigointipalkki</string>
+    <string name="title_advanced_authentication">Näytä varoitus, kun vastaanottava palvelin ei voinut todentaa viestiä</string>
     <string name="title_advanced_double_back">\'Takaisin\' kaksi kertaa sulkee sovelluksen</string>
     <string name="title_advanced_pull_refresh">Vedä alas päivittääksesi</string>
     <string name="title_advanced_autoscroll">Vieritä ylös, kun uusi viesti saapuu</string>
@@ -487,6 +487,7 @@
     <string name="title_client_certificate">Asiakasvarmenne</string>
     <string name="title_realm">Toimialue</string>
     <string name="title_use_ip">Käytä paikallista IP-osoitetta verkkotunnuksen sijaan</string>
+    <string name="title_ehlo">Mukautettu HELO/EHLO tunnistaminen</string>
     <string name="title_primary">Ensisijainen</string>
     <string name="title_primary_account">Ensisijainen (oletustili)</string>
     <string name="title_primary_identity">Ensisijainen (oletusidentiteetti)</string>
@@ -734,6 +735,7 @@
     <string name="title_add_image_inline">Lisää</string>
     <string name="title_add_image_attach">Liitä</string>
     <string name="title_add_image_resize">Muuta kokoa</string>
+    <string name="title_add_image_privacy">Poista sijaintitiedot</string>
     <string name="title_add_resize_pixels">&lt; %1$d kuvapistettä</string>
     <string name="title_add_image_select">Valitse tiedosto</string>
     <string name="title_add_attachment">Lisää liite</string>

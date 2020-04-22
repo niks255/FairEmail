@@ -915,7 +915,9 @@ Possible causes are:
 Many public Wi-Fi networks block outgoing email to prevent spam.
 Sometimes you can workaround this by using another SMTP port. See the documentation of the provider for the usable port numbers.
 
-If you are using a VPN, the VPN provider might block the connection because it is too aggressively trying to prevent spam.
+If you are using a [VPN](https://en.wikipedia.org/wiki/Virtual_private_network),
+the VPN provider might block the connection because it is too aggressively trying to prevent spam.
+Note that [Google Fi](https://fi.google.com/) is using a VPN too.
 
 **Gmail errors**
 
@@ -1168,7 +1170,7 @@ this is even less secure because Google is involved too without providing much b
 
 You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
 
-If you want to reset the default *Open with* apps, please [see here](https://support.google.com/android/answer/9415055)).
+If you want to reset the default *Open with* apps, please [see here](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
 
 <br />
 
@@ -1736,7 +1738,10 @@ You can use multiple rules, possibly with a *stop processing*, for an *or* or a 
 
 Matching is not case sensitive, unless you use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression).
 Please see [here](https://developer.android.com/reference/java/util/regex/Pattern) for the documentation of Java regular expressions.
-Note that *dot all mode* is enabled to be able to match unfolded headers.
+You can test a regex [here](https://regexr.com/).
+
+Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled
+to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
 
 You can select one of these actions to apply to matching messages:
 
@@ -2075,7 +2080,7 @@ This can be done automatically with [filter rules](#user-content-faq71) too.
 
 Also, FairEmail can show a small red warning flag
 when DKIM, SPF or [DMARC](https://en.wikipedia.org/wiki/DMARC) authentication failed on the receiving server.
-You can enable/disable [authentication verification](https://en.wikipedia.org/wiki/Email_authentication) in the behavior settings.
+You can enable/disable [authentication verification](https://en.wikipedia.org/wiki/Email_authentication) in the display settings.
 
 FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server.
 This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.

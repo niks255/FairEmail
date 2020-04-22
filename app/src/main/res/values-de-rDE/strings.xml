@@ -236,7 +236,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_signature_location">Signaturposition</string>
     <string name="title_advanced_signature_end">Signatur nach zitierter/weitergeleiteter Nachricht hinzufügen</string>
     <string name="title_advanced_plain_only">Standardmäßig als Reintext senden</string>
-    <string name="title_advanced_flow">Format fließend für einfachen Text</string>
+    <string name="title_advanced_flow">Format fließend für Reintext</string>
     <string name="title_advanced_receipt">Wenn eine Bestätigung angefordert wird, dann</string>
     <string name="title_advanced_usenet_signature">Usenet-Signaturkonvention</string>
     <string name="title_advanced_remove_signatures">Erkannte Signaturen entfernen</string>
@@ -278,7 +278,6 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_name_email">Namen und E-Mail-Adressen anzeigen</string>
     <string name="title_advanced_replace_name">Einen Kontaktnamen gegenüber einem gesendeten Namen bevorzugen</string>
     <string name="title_advanced_distinguish_contacts">Den Sender unterstrichen darstellen, wenn er ein bekannter lokaler \'An\'-Kontakt ist</string>
-    <string name="title_advanced_authentication">Warnung anzeigen, wenn der empfangende Server die Nachricht nicht authentifizieren konnte</string>
     <string name="title_advanced_font_size_sender">Schriftgröße für den Absender</string>
     <string name="title_advanced_font_size_subject">Schriftgröße für den Betreff</string>
     <string name="title_advanced_subject_top">Betreff oberhalb des Absenders anzeigen</string>
@@ -304,6 +303,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_actionbar">Aktionsleiste in Unterhaltung anzeigen</string>
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
     <string name="title_advanced_navbar_colorize">Android-Navigationsleiste farbig darstellen</string>
+    <string name="title_advanced_parse_classes">Stylesheets analysieren</string>
+    <string name="title_advanced_authentication">Warnung anzeigen, wenn der empfangende Server die Nachricht nicht authentifizieren konnte</string>
     <string name="title_advanced_double_back">Zweifaches „Zurück” zum Beenden</string>
     <string name="title_advanced_pull_refresh">Zum Aktualisieren nach unten ziehen</string>
     <string name="title_advanced_autoscroll">Beim Empfang neuer Nachrichten nach oben rollen</string>
@@ -355,7 +356,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_confirm_images">Bilder anzeigen bestätigen</string>
     <string name="title_advanced_confirm_html">Standardmäßig reformatierte Nachrichten anzeigen</string>
     <string name="title_advanced_tracking">Tracking-Bilder automatisch erkennen und deaktivieren</string>
-    <string name="title_advanced_display_hidden">Versteckte Nachrichtentexte anzeigen</string>
+    <string name="title_advanced_display_hidden">Verborgene Nachrichtentexte anzeigen</string>
     <string name="title_advanced_secure">Im Anwendungsverlauf verbergen und das Aufnehmen von Bildschirmfotos verhindern</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Gültigkeitsdauer der biometrischen Authentifizierung</string>
@@ -423,6 +424,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_preview_hint">Nur verfügbar, wenn der E-Mail-Text heruntergeladen wurde</string>
     <string name="title_advanced_preview_issue">Rollen kann aufgrund eines Fehlers in einigen Android-Versionen langsam sein, wenn die Anzahl der Zeilen mehr als eine ist</string>
     <string name="title_advanced_inline_hint">Eingebettete Grafiken sind Grafiken, die innerhalb der Nachricht enthalten sind</string>
+    <string name="title_advanced_parse_classes_hint">Dies wird die Nachrichten genauer anzeigen, aber möglicherweise mit einer Verzögerung</string>
     <string name="title_advanced_autoexpand_hint">Nachricht automatisch öffnen, wenn nur eine gelesene/ungelesene Nachricht in einem Thema enthalten ist</string>
     <string name="title_advanced_autoseen_hint">Das automatische Markieren von Nachrichten bei ihrer Erweiterung als gelesen kann in den einzelnen Kontoeinstellungen deaktiviert werden</string>
     <string name="title_advanced_autoclose_hint">Themen automatisch schließen, wenn alle Nachrichten archiviert, gesendet oder gelöscht werden</string>
@@ -490,6 +492,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_client_certificate">Clientzertifikat</string>
     <string name="title_realm">Bereich</string>
     <string name="title_use_ip">Lokale IP-Adresse anstelle des Domain-Namens verwenden</string>
+    <string name="title_ehlo">Benutzerdefinierte HELO/EHLO-Identifikation</string>
     <string name="title_primary">Hauptkonto</string>
     <string name="title_primary_account">Hauptkonto</string>
     <string name="title_primary_identity">Hauptidentität</string>
@@ -605,9 +608,9 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_unseen">Als ungelesen kennzeichnen</string>
     <string name="title_hide">Ausblenden</string>
     <string name="title_unhide">Anzeigen</string>
-    <string name="title_flag">Kennzeichnen</string>
+    <string name="title_flag">Stern hinzufügen</string>
     <string name="title_flag_color">Farbigen Stern &#8230;</string>
-    <string name="title_unflag">Kennzeichnung entfernen</string>
+    <string name="title_unflag">Stern entfernen</string>
     <string name="title_set_importance">Wichtigkeit festlegen</string>
     <string name="title_importance_low">Niedrig</string>
     <string name="title_importance_normal">Normal</string>
@@ -733,7 +736,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_style_color">Farbe</string>
     <string name="title_style_clear">Formatierung entfernen</string>
     <string name="title_style_link">Link einfügen</string>
-    <string name="title_add_image">Grafik / Bild hinzufügen</string>
+    <string name="title_add_image">Bild hinzufügen</string>
     <string name="title_add_image_inline">Einfügen</string>
     <string name="title_add_image_attach">Anhängen</string>
     <string name="title_add_image_resize">Größe ändern</string>
@@ -814,15 +817,15 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_search_in_message">Im Nachrichtentext</string>
     <string name="title_search_with">Suche beschränken auf</string>
     <string name="title_search_with_unseen">Ungelesen</string>
-    <string name="title_search_with_flagged">Gekennzeichnet</string>
-    <string name="title_search_with_hidden">Ausgeblendet (nur auf dem Gerät)</string>
+    <string name="title_search_with_flagged">Markiert</string>
+    <string name="title_search_with_hidden">Verborgen (nur auf dem Gerät)</string>
     <string name="title_search_with_encrypted">Verschlüsselt (nur auf dem Gerät)</string>
     <string name="title_search_with_attachments">Mit Anhängen (nur auf dem Gerät)</string>
     <string name="title_search_with_before">Vor</string>
     <string name="title_search_with_after">Nach</string>
     <string name="title_search_flag_unseen">ungelesen</string>
-    <string name="title_search_flag_flagged">gekennzeichnet</string>
-    <string name="title_search_flag_hidden">ausgeblendet</string>
+    <string name="title_search_flag_flagged">markiert</string>
+    <string name="title_search_flag_hidden">verborgen</string>
     <string name="title_search_flag_encrypted">verschlüsselt</string>
     <string name="title_search_flag_attachments">Anhänge</string>
     <string name="title_search_device">Gerät durchsuchen</string>
@@ -831,7 +834,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_sort_on">Sortieren nach</string>
     <string name="title_sort_on_time">Uhrzeit</string>
     <string name="title_sort_on_unread">Ungelesen</string>
-    <string name="title_sort_on_starred">Gekennzeichnet</string>
+    <string name="title_sort_on_starred">Markiert</string>
     <string name="title_sort_on_priority">Priorität</string>
     <string name="title_sort_on_sender">Absender</string>
     <string name="title_sort_on_subject">Betreff</string>

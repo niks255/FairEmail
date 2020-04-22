@@ -126,7 +126,7 @@ import org.bouncycastle.asn1.cms.CMSAttributes;
 import org.bouncycastle.asn1.cms.Time;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cms.CMSEnvelopedData;
+import org.bouncycastle.cms.CMSEnvelopedDataParser;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableFile;
@@ -159,6 +159,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -194,6 +195,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 import javax.mail.Address;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -1267,7 +1269,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             @Override
             public void onError(Exception ex) {
                 if ("bindService() returned false!".equals(ex.getMessage()))
-                    Log.i("PGP", ex);
+                    Log.i("PGP " + ex.getMessage());
                 else
                     Log.e("PGP", ex);
             }
@@ -3434,6 +3436,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             menu.findItem(R.id.menu_sort_on_snoozed).setVisible(false);
         }
 
+        menu.findItem(R.id.menu_empty_trash).setVisible(EntityFolder.TRASH.equals(type) && folder);
+        menu.findItem(R.id.menu_empty_spam).setVisible(EntityFolder.JUNK.equals(type) && folder);
+
         if ("time".equals(sort))
             menu.findItem(R.id.menu_sort_on_time).setChecked(true);
         else if ("unread".equals(sort))
@@ -3473,8 +3478,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 language_detection && folder && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
         menu.findItem(R.id.menu_select_all).setVisible(folder);
         menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
-        menu.findItem(R.id.menu_empty_trash).setVisible(EntityFolder.TRASH.equals(type) && folder);
-        menu.findItem(R.id.menu_empty_spam).setVisible(EntityFolder.JUNK.equals(type) && folder);
 
         menu.findItem(R.id.menu_force_sync).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
 
@@ -3499,6 +3502,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             case R.id.menu_folders:
                 // Obsolete
                 onMenuFolders(primary);
+                return true;
+
+            case R.id.menu_empty_trash:
+                onMenuEmpty(EntityFolder.TRASH);
+                return true;
+
+            case R.id.menu_empty_spam:
+                onMenuEmpty(EntityFolder.JUNK);
                 return true;
 
             case R.id.menu_sort_on_time:
@@ -3587,14 +3598,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 onMenuSelectAll();
                 return true;
 
-            case R.id.menu_empty_trash:
-                onMenuEmpty(EntityFolder.TRASH);
-                return true;
-
-            case R.id.menu_empty_spam:
-                onMenuEmpty(EntityFolder.JUNK);
-                return true;
-
             case R.id.menu_force_sync:
                 onMenuForceSync();
                 return true;
@@ -3627,6 +3630,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("folders");
         fragmentTransaction.commit();
+    }
+
+    private void onMenuEmpty(String type) {
+        Bundle aargs = new Bundle();
+        if (EntityFolder.TRASH.equals(type))
+            aargs.putString("question", getString(
+                    account < 0 ? R.string.title_empty_trash_all_ask : R.string.title_empty_trash_ask));
+        else if (EntityFolder.JUNK.equals(type))
+            aargs.putString("question", getString(
+                    account < 0 ? R.string.title_empty_spam_all_ask : R.string.title_empty_spam_ask));
+        else
+            throw new IllegalArgumentException("Invalid folder type=" + type);
+        aargs.putLong("account", account);
+        aargs.putString("type", type);
+
+        FragmentDialogAsk ask = new FragmentDialogAsk();
+        ask.setArguments(aargs);
+        ask.setTargetFragment(this, FragmentMessages.REQUEST_EMPTY_FOLDER);
+        ask.show(getParentFragmentManager(), "messages:empty");
     }
 
     private void onMenuSort(String sort) {
@@ -3762,25 +3784,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 });
             }
         });
-    }
-
-    private void onMenuEmpty(String type) {
-        Bundle aargs = new Bundle();
-        if (EntityFolder.TRASH.equals(type))
-            aargs.putString("question", getString(
-                    account < 0 ? R.string.title_empty_trash_all_ask : R.string.title_empty_trash_ask));
-        else if (EntityFolder.JUNK.equals(type))
-            aargs.putString("question", getString(
-                    account < 0 ? R.string.title_empty_spam_all_ask : R.string.title_empty_spam_ask));
-        else
-            throw new IllegalArgumentException("Invalid folder type=" + type);
-        aargs.putLong("account", account);
-        aargs.putString("type", type);
-
-        FragmentDialogAsk ask = new FragmentDialogAsk();
-        ask.setArguments(aargs);
-        ask.setTargetFragment(this, FragmentMessages.REQUEST_EMPTY_FOLDER);
-        ask.show(getParentFragmentManager(), "messages:empty");
     }
 
     private void onMenuForceSync() {
@@ -5419,11 +5422,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (message == null)
                     return null;
 
-                InputStream is = null;
                 X509Certificate result = null;
-                String alias = args.getString("alias");
-                boolean duplicate = args.getBoolean("duplicate");
-
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
                     // Get content/signature
                     boolean sdata = false;
@@ -5452,8 +5451,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         throw new IllegalArgumentException("Signature missing");
 
                     // Build signed data
+                    InputStream is = null;
                     FileInputStream fis = new FileInputStream(signature);
                     CMSSignedData signedData;
+                    // TODO: CMSSignedDataParser
                     if (sdata) {
                         signedData = new CMSSignedData(fis);
 
@@ -5638,8 +5639,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (result != null)
                             break;
                     }
+
+                    if (is != null)
+                        decodeMessage(context, is, message, args);
                 } else {
                     // Check alias
+                    String alias = args.getString("alias");
                     if (alias == null)
                         throw new IllegalArgumentException("Key alias missing");
 
@@ -5667,92 +5672,57 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (input == null)
                         throw new IllegalArgumentException("Encrypted message missing");
 
-                    // Build enveloped data
-                    CMSEnvelopedData envelopedData;
-                    try (FileInputStream fis = new FileInputStream(input)) {
-                        envelopedData = new CMSEnvelopedData(fis);
-                    }
+                    int count = -1;
+                    boolean decoded = false;
+                    while (!decoded)
+                        try (FileInputStream fis = new FileInputStream(input)) {
+                            // Create parser
+                            CMSEnvelopedDataParser envelopedData = new CMSEnvelopedDataParser(fis);
 
-                    // Get recipient info
-                    JceKeyTransRecipient recipient = new JceKeyTransEnvelopedRecipient(privkey);
-                    Collection<RecipientInformation> recipients = envelopedData.getRecipientInfos().getRecipients(); // KeyTransRecipientInformation
+                            // Get recipient info
+                            JceKeyTransRecipient recipient = new JceKeyTransEnvelopedRecipient(privkey);
+                            Collection<RecipientInformation> recipients = envelopedData.getRecipientInfos().getRecipients(); // KeyTransRecipientInformation
 
-                    // Find recipient
-                    is = null;
-                    if (chain[0].getSerialNumber() != null)
-                        for (RecipientInformation recipientInfo : recipients) {
-                            KeyTransRecipientId recipientId = (KeyTransRecipientId) recipientInfo.getRID();
-                            if (chain[0].getSerialNumber().equals(recipientId.getSerialNumber()))
-                                try {
-                                    is = recipientInfo.getContentStream(recipient).getContentStream();
-                                } catch (CMSException ex) {
-                                    Log.w(ex);
+                            // Find recipient
+                            if (count < 0) {
+                                BigInteger serialno = chain[0].getSerialNumber();
+                                for (RecipientInformation recipientInfo : recipients) {
+                                    KeyTransRecipientId recipientId = (KeyTransRecipientId) recipientInfo.getRID();
+                                    if (serialno != null && serialno.equals(recipientId.getSerialNumber())) {
+                                        try {
+                                            InputStream is = recipientInfo.getContentStream(recipient).getContentStream();
+                                            decodeMessage(context, is, message, args);
+                                            decoded = true;
+                                        } catch (CMSException ex) {
+                                            Log.w(ex);
+                                        }
+                                        break; // only one try
+                                    }
                                 }
-                        }
-
-                    // Fallback: try all recipients
-                    if (is == null)
-                        for (RecipientInformation recipientInfo : recipients)
-                            try {
-                                is = recipientInfo.getContentStream(recipient).getContentStream();
-                            } catch (CMSException ex) {
-                                Log.w(ex);
+                            } else {
+                                List<RecipientInformation> list = new ArrayList<>(recipients);
+                                if (count < list.size()) {
+                                    RecipientInformation recipientInfo = list.get(count);
+                                    try {
+                                        InputStream is = recipientInfo.getContentStream(recipient).getContentStream();
+                                        decodeMessage(context, is, message, args);
+                                        decoded = true;
+                                        break;
+                                    } catch (CMSException ex) {
+                                        Log.w(ex);
+                                    }
+                                } else
+                                    break; // out of recipients
                             }
 
-                    if (is == null) {
+                            count++;
+                        }
+
+                    if (!decoded) {
                         if (message.identity != null)
                             db.identity().setIdentitySignKeyAlias(message.identity, null);
                         throw new IllegalArgumentException(context.getString(R.string.title_unknown_key));
                     }
-                }
-
-                if (is != null) {
-                    // Decode message
-                    Properties props = MessageHelper.getSessionProperties();
-                    Session isession = Session.getInstance(props, null);
-                    MimeMessage imessage = new MimeMessage(isession, is);
-                    MessageHelper helper = new MessageHelper(imessage);
-                    MessageHelper.MessageParts parts = helper.getMessageParts(context);
-
-                    try {
-                        db.beginTransaction();
-
-                        // Write decrypted body
-                        String html = parts.getHtml(context);
-                        Helper.writeText(message.getFile(context), html);
-                        Log.i("s/mime html=" + (html == null ? null : html.length()));
-
-                        // Remove existing attachments
-                        db.attachment().deleteAttachments(message.id);
-
-                        // Add decrypted attachments
-                        List<EntityAttachment> remotes = parts.getAttachments();
-                        for (int index = 0; index < remotes.size(); index++) {
-                            EntityAttachment remote = remotes.get(index);
-                            remote.message = message.id;
-                            remote.sequence = index + 1;
-                            remote.id = db.attachment().insertAttachment(remote);
-                            try {
-                                parts.downloadAttachment(context, index, remote);
-                            } catch (Throwable ex) {
-                                Log.e(ex);
-                            }
-                            Log.i("s/mime attachment=" + remote);
-                        }
-
-                        db.message().setMessageEncrypt(message.id, parts.getEncryption());
-                        db.message().setMessageStored(message.id, new Date().getTime());
-                        db.message().setMessageFts(message.id, false);
-
-                        if (alias != null && !duplicate && message.identity != null)
-                            db.identity().setIdentitySignKeyAlias(message.identity, alias);
-
-                        db.setTransactionSuccessful();
-                    } finally {
-                        db.endTransaction();
-                    }
-
-                    WorkerFts.init(context, false);
                 }
 
                 return result;
@@ -5907,6 +5877,60 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
+
+            private void decodeMessage(Context context, InputStream is, EntityMessage message, Bundle args) throws MessagingException, IOException {
+                String alias = args.getString("alias");
+                boolean duplicate = args.getBoolean("duplicate");
+
+                // Decode message
+                Properties props = MessageHelper.getSessionProperties();
+                Session isession = Session.getInstance(props, null);
+                MimeMessage imessage = new MimeMessage(isession, is);
+                MessageHelper helper = new MessageHelper(imessage);
+                MessageHelper.MessageParts parts = helper.getMessageParts(context);
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    // Write decrypted body
+                    String html = parts.getHtml(context);
+                    Helper.writeText(message.getFile(context), html);
+                    Log.i("s/mime html=" + (html == null ? null : html.length()));
+
+                    // Remove existing attachments
+                    db.attachment().deleteAttachments(message.id);
+
+                    // Add decrypted attachments
+                    List<EntityAttachment> remotes = parts.getAttachments();
+                    for (int index = 0; index < remotes.size(); index++) {
+                        EntityAttachment remote = remotes.get(index);
+                        remote.message = message.id;
+                        remote.sequence = index + 1;
+                        remote.id = db.attachment().insertAttachment(remote);
+                        try {
+                            parts.downloadAttachment(context, index, remote);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                        Log.i("s/mime attachment=" + remote);
+                    }
+
+                    db.message().setMessageEncrypt(message.id, parts.getEncryption());
+                    db.message().setMessageStored(message.id, new Date().getTime());
+                    db.message().setMessageFts(message.id, false);
+
+                    if (alias != null && !duplicate && message.identity != null)
+                        db.identity().setIdentitySignKeyAlias(message.identity, alias);
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                WorkerFts.init(context, false);
+            }
+
         }.execute(this, args, "decrypt:s/mime");
     }
 
@@ -6013,6 +6037,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 long id = args.getLong("id");
                 boolean block_sender = args.getBoolean("block_sender");
                 boolean block_domain = args.getBoolean("block_domain");
+                List<String> whitelist = EmailProvider.getDomainNames(context);
 
                 DB db = DB.getInstance(context);
                 try {
@@ -6030,7 +6055,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                     if ((block_sender || block_domain) &&
                             (message.from != null && message.from.length > 0)) {
-                        EntityRule rule = EntityRule.blockSender(context, message, junk, block_sender);
+                        EntityRule rule = EntityRule.blockSender(context, message, junk, block_sender, whitelist);
                         rule.id = db.rule().insertRule(rule);
                     }
 

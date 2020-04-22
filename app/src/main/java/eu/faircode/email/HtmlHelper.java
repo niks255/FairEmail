@@ -45,6 +45,15 @@ import androidx.core.text.HtmlCompat;
 import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
 
+import com.steadystate.css.dom.CSSMediaRuleImpl;
+import com.steadystate.css.dom.CSSStyleRuleImpl;
+import com.steadystate.css.dom.MediaListImpl;
+import com.steadystate.css.parser.CSSOMParser;
+import com.steadystate.css.parser.SACParserCSS3;
+import com.steadystate.css.parser.selectors.ClassConditionImpl;
+import com.steadystate.css.parser.selectors.ConditionalSelectorImpl;
+import com.steadystate.css.parser.selectors.ElementSelectorImpl;
+
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
@@ -56,15 +65,26 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
+import org.w3c.css.sac.CSSException;
+import org.w3c.css.sac.CSSParseException;
+import org.w3c.css.sac.ErrorHandler;
+import org.w3c.css.sac.InputSource;
+import org.w3c.css.sac.Selector;
+import org.w3c.dom.css.CSSRule;
+import org.w3c.dom.css.CSSRuleList;
+import org.w3c.dom.css.CSSStyleSheet;
+import org.w3c.dom.stylesheets.MediaList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -74,11 +94,14 @@ import java.util.regex.Pattern;
 
 import static androidx.core.text.HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM;
 import static androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
+import static org.w3c.css.sac.Condition.SAC_CLASS_CONDITION;
 
 public class HtmlHelper {
     private static final int PREVIEW_SIZE = 500; // characters
 
     private static final int DEFAULT_FONT_SIZE = 16; // pixels
+    private static final float FONT_SMALL = 0.8f;
+    private static final float FONT_LARGE = 1.25f;
     private static final float MIN_LUMINANCE = 0.5f;
     private static final int TAB_SIZE = 2;
     private static final int MAX_AUTO_LINK = 250;
@@ -274,6 +297,7 @@ public class HtmlHelper {
         boolean text_size = prefs.getBoolean("text_size", true);
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
+        boolean parse_classes = prefs.getBoolean("parse_classes", false);
 
         // https://chromium.googlesource.com/chromium/blink/+/master/Source/core/css/html.css
 
@@ -354,9 +378,50 @@ public class HtmlHelper {
                     .text(context.getString(R.string.title_show_full));
         }
 
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style
+        List<CSSStyleSheet> sheets = new ArrayList<>();
+        if (parse_classes)
+            for (Element style : parsed.head().select("style")) {
+                if (BuildConfig.DEBUG)
+                    Log.i("Style=" + style.data());
+                try {
+                    InputSource source = new InputSource(new StringReader(style.data()));
+                    String media = style.attr("media");
+                    if (!TextUtils.isEmpty(media))
+                        source.setMedia(media);
+
+                    CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
+                    parser.setErrorHandler(new ErrorHandler() {
+                        @Override
+                        public void warning(CSSParseException ex) throws CSSException {
+                            Log.i("CSS warning=" + ex.getMessage());
+                        }
+
+                        @Override
+                        public void error(CSSParseException ex) throws CSSException {
+                            Log.i("CSS error=" + ex.getMessage());
+                        }
+
+                        @Override
+                        public void fatalError(CSSParseException ex) throws CSSException {
+                            Log.w(ex);
+                        }
+                    });
+
+                    long start = new Date().getTime();
+                    sheets.add(parser.parseStyleSheet(source, null, null));
+                    long elapsed = new Date().getTime() - start;
+                    Log.i("Style parse=" + elapsed + " ms");
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
+            }
+
         Whitelist whitelist = Whitelist.relaxed()
                 .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt")
+                .addAttributes(":all", "class")
                 .addAttributes(":all", "style")
+                .addAttributes("font", "size")
                 .removeTags("col", "colgroup", "thead", "tbody")
                 .removeAttributes("table", "width")
                 .removeAttributes("td", "colspan", "rowspan", "width")
@@ -374,26 +439,66 @@ public class HtmlHelper {
 
         // Font
         for (Element font : document.select("font")) {
+            // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/font
             String color = font.attr("color");
+            String size = font.attr("size");
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 font.removeAttr("color");
-            font.removeAttr("face");
-            font.attr("style", "color:" + color + ";");
+            font.removeAttr("size");
+
+            StringBuilder sb = new StringBuilder();
+
+            if (!TextUtils.isEmpty(color))
+                sb.append("color:").append(color).append(";");
+
+            if (!TextUtils.isEmpty(size)) {
+                try {
+                    int s = Integer.parseInt(size);
+                    if (s < 3)
+                        size = "small";
+                    else if (s > 3)
+                        size = "large";
+                    else
+                        size = "medium";
+                    sb.append("font-size:").append(size).append(";");
+                } catch (NumberFormatException ex) {
+                    Log.w(ex);
+                }
+            }
+
+            font.attr("style", sb.toString());
+
             font.tagName("span");
         }
 
         // Sanitize styles
         for (Element element : document.select("*")) {
-            String style = element.attr("style");
+            String style = null;
+            String clazz = element.attr("class");
+
+            // Workaround TextView not supporting nested colors
+            List<Element> parents = element.parents();
+            Collections.reverse(parents);
+            for (Element parent : parents)
+                style = mergeStyles(style, parent.attr("style"), "color");
+
+            // Class style
+            style = processStyles(element.tagName(), clazz, style, sheets);
+
+            // Element style
+            style = mergeStyles(style, element.attr("style"));
+
+            // Process style
             if (!TextUtils.isEmpty(style)) {
                 StringBuilder sb = new StringBuilder();
 
                 String[] params = style.split(";");
                 for (String param : params) {
-                    int semi = param.indexOf(':');
-                    if (semi > 0) {
-                        String key = param.substring(0, semi).trim().toLowerCase(Locale.ROOT);
-                        String value = param.substring(semi + 1).toLowerCase(Locale.ROOT)
+                    int colon = param.indexOf(':');
+                    if (colon > 0) {
+                        String key = param.substring(0, colon).trim().toLowerCase(Locale.ROOT);
+                        String value = param.substring(colon + 1).toLowerCase(Locale.ROOT)
                                 .replace("!important", "")
                                 .trim()
                                 .replaceAll("\\s+", " ");
@@ -447,7 +552,7 @@ public class HtmlHelper {
 
                                     Float fsize = getFontSize(value, current);
                                     if (fsize != null && fsize != 0 &&
-                                            ((!small && fsize <= 0.8f) || (!big && fsize >= 1.25))) {
+                                            ((!small && fsize <= FONT_SMALL) || (!big && fsize >= FONT_LARGE))) {
                                         Element e = new Element(fsize < 1 ? "small" : "big");
                                         int px = Math.round(DEFAULT_FONT_SIZE * fsize);
                                         e.attr("x-font-size", Integer.toString(px));
@@ -502,19 +607,39 @@ public class HtmlHelper {
                                 }
                                 break;
 
+                            case "margin":
+                            case "padding":
+                            case "margin-top":
+                            case "margin-bottom":
                             case "padding-top":
-                                if (element.isBlock() && hasVisibleContent(element.childNodes())) {
-                                    Float pt = getFontSize(value, null);
-                                    if (pt != null && pt >= 0.5)
-                                        element.attr("line", "before");
-                                }
-                                break;
-
                             case "padding-bottom":
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/margin
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/padding
                                 if (element.isBlock() && hasVisibleContent(element.childNodes())) {
-                                    Float pb = getFontSize(value, null);
-                                    if (pb != null && pb >= 0.5)
-                                        element.attr("line", "after");
+                                    Float[] p = new Float[4];
+
+                                    String[] v = value.split(" ");
+                                    for (int i = 0; i < v.length; i++)
+                                        p[i] = getFontSize(v[i], null);
+
+                                    if (v.length == 1) {
+                                        p[1] = p[0];
+                                        p[2] = p[0];
+                                        p[3] = p[0];
+                                    } else if (v.length == 2) {
+                                        p[2] = p[0];
+                                        p[3] = p[1];
+                                    }
+
+                                    if (key.endsWith("top"))
+                                        p[2] = null;
+                                    else if (key.endsWith("bottom"))
+                                        p[0] = null;
+
+                                    if (p[0] != null && p[0] > 0.5)
+                                        element.attr("line-before", "true");
+                                    if (p[2] != null && p[2] > 0.5)
+                                        element.attr("line-after", "true");
                                 }
                                 break;
                         }
@@ -798,11 +923,19 @@ public class HtmlHelper {
         for (Element div : document.select("div"))
             div.tagName("span");
 
-        for (Element e : document.select("*[line]"))
-            if ("before".equals(e.attr("line")))
-                e.prependElement("br");
-            else
-                e.appendElement("br");
+        for (Element e : document.select("*[line-before],*[line-after]")) {
+            if (!TextUtils.isEmpty(e.attr("line-before"))) {
+                Element prev = e.previousElementSibling();
+                if (prev == null || !"br".equals(prev.tagName()))
+                    e.prependElement("br");
+            }
+
+            if (!TextUtils.isEmpty(e.attr("line-after"))) {
+                Element next = e.nextElementSibling();
+                if (next == null || !"br".equals(next.tagName()))
+                    e.appendElement("br");
+            }
+        }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             for (Element span : document.select("span"))
@@ -815,6 +948,98 @@ public class HtmlHelper {
         }
 
         return document;
+    }
+
+    private static String processStyles(String tag, String clazz, String style, List<CSSStyleSheet> sheets) {
+        for (CSSStyleSheet sheet : sheets)
+            if (isScreenMedia(sheet.getMedia())) {
+                style = processStyles(null, clazz, style, sheet.getCssRules(), Selector.SAC_ELEMENT_NODE_SELECTOR);
+                style = processStyles(tag, clazz, style, sheet.getCssRules(), Selector.SAC_ELEMENT_NODE_SELECTOR);
+                style = processStyles(tag, clazz, style, sheet.getCssRules(), Selector.SAC_CONDITIONAL_SELECTOR);
+            }
+        return style;
+    }
+
+    private static String processStyles(String tag, String clazz, String style, CSSRuleList rules, int stype) {
+        for (int i = 0; rules != null && i < rules.getLength(); i++) {
+            CSSRule rule = rules.item(i);
+            switch (rule.getType()) {
+                case CSSRule.STYLE_RULE:
+                    CSSStyleRuleImpl srule = (CSSStyleRuleImpl) rule;
+                    for (int j = 0; j < srule.getSelectors().getLength(); j++) {
+                        Selector selector = srule.getSelectors().item(j);
+                        if (selector.getSelectorType() != stype)
+                            continue;
+                        switch (selector.getSelectorType()) {
+                            case Selector.SAC_ELEMENT_NODE_SELECTOR:
+                                ElementSelectorImpl eselector = (ElementSelectorImpl) selector;
+                                if (tag == null
+                                        ? eselector.getLocalName() == null
+                                        : tag.equals(eselector.getLocalName()))
+                                    style = mergeStyles(style, srule.getStyle().getCssText());
+                                break;
+                            case Selector.SAC_CONDITIONAL_SELECTOR:
+                                ConditionalSelectorImpl cselector = (ConditionalSelectorImpl) selector;
+                                if (cselector.getCondition().getConditionType() == SAC_CLASS_CONDITION) {
+                                    ClassConditionImpl ccondition = (ClassConditionImpl) cselector.getCondition();
+                                    if (clazz.equals(ccondition.getValue()))
+                                        style = mergeStyles(style, srule.getStyle().getCssText());
+                                }
+                                break;
+                        }
+                    }
+                    break;
+
+                case CSSRule.MEDIA_RULE:
+                    CSSMediaRuleImpl mrule = (CSSMediaRuleImpl) rule;
+                    if (isScreenMedia(mrule.getMedia()))
+                        style = processStyles(tag, clazz, style, mrule.getCssRules(), stype);
+                    break;
+            }
+        }
+        return style;
+    }
+
+    private static boolean isScreenMedia(MediaList media) {
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries
+        // https://developers.google.com/gmail/design/reference/supported_css#supported_types
+        if (media instanceof MediaListImpl) {
+            MediaListImpl _media = (MediaListImpl) media;
+            for (int i = 0; i < _media.getLength(); i++) {
+                String query = _media.mediaQuery(i).getCssText(null);
+                if ("all".equals(query) ||
+                        "screen".equals(query) || "only screen".equals(query))
+                    return true;
+            }
+        } else
+            Log.e("Media class=" + media.getClass().getName());
+        return false;
+    }
+
+    private static String mergeStyles(String base, String style) {
+        return mergeStyles(base, style, null);
+    }
+
+    private static String mergeStyles(String base, String style, String selector) {
+        Map<String, String> result = new HashMap<>();
+
+        List<String> params = new ArrayList<>();
+        if (!TextUtils.isEmpty(base))
+            params.addAll(Arrays.asList(base.split(";")));
+        if (!TextUtils.isEmpty(style))
+            params.addAll(Arrays.asList(style.split(";")));
+
+        for (String param : params) {
+            int colon = param.indexOf(':');
+            if (colon > 0) {
+                String key = param.substring(0, colon).trim().toLowerCase(Locale.ROOT);
+                if (selector == null || selector.equals(key))
+                    result.put(key, param);
+            } else
+                Log.w("Invalid style param=" + param);
+        }
+
+        return TextUtils.join(";", result.values());
     }
 
     private static Integer getFontWeight(String value) {
@@ -844,24 +1069,57 @@ public class HtmlHelper {
     }
 
     private static Float getFontSize(String value, Integer current) {
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/font-size
         if (TextUtils.isEmpty(value))
             return null;
 
-        if (current == null)
-            current = DEFAULT_FONT_SIZE;
+        if (value.contains("calc") ||
+                "auto".equals(value) ||
+                "initial".equals(value) ||
+                "inherit".equals(value))
+            return null;
 
-        try {
-            if (value.endsWith("em"))
-                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) * current / (float) DEFAULT_FONT_SIZE;
-            if (value.endsWith("rem"))
-                return Float.parseFloat(value.substring(0, value.length() - 3).trim());
-            if (value.endsWith("px"))
-                return Integer.parseInt(value.substring(0, value.length() - 2).trim()) / (float) DEFAULT_FONT_SIZE;
-            return Integer.parseInt(value.trim()) / (float) DEFAULT_FONT_SIZE;
-        } catch (NumberFormatException ignored) {
+        float _current = (current == null ? 1.0f : current / (float) DEFAULT_FONT_SIZE);
+
+        // Absolute
+        switch (value) {
+            case "xx-small":
+            case "x-small":
+            case "small":
+                return FONT_SMALL;
+            case "medium":
+                return 1.0f;
+            case "large":
+            case "x-large":
+            case "xx-large":
+            case "xxx-large":
+                return FONT_LARGE;
         }
 
-        return null;
+        // Relative
+        switch (value) {
+            case "smaller":
+                return FONT_SMALL * _current;
+            case "larger":
+                return FONT_LARGE * _current;
+        }
+
+        try {
+            if (value.endsWith("%"))
+                return Integer.parseInt(value.substring(0, value.length() - 1).trim()) / 100f * _current;
+            if (value.endsWith("em"))
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) * _current;
+            if (value.endsWith("rem"))
+                return Float.parseFloat(value.substring(0, value.length() - 3).trim());
+            if (value.endsWith("px") || value.endsWith("pt"))
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / DEFAULT_FONT_SIZE;
+            if (value.endsWith("cm") || value.endsWith("in"))
+                return null;
+            return Float.parseFloat(value.trim()) / DEFAULT_FONT_SIZE;
+        } catch (NumberFormatException ex) {
+            Log.w(ex);
+            return null;
+        }
     }
 
     private static Integer parseColor(@NonNull String value, boolean dark) {
@@ -1335,10 +1593,10 @@ public class HtmlHelper {
     }
 
     static void convertLists(Document document) {
-        for (Element p : document.select("p")) {
+        for (Element span : document.select("span")) {
             // Skip signature and referenced message
             boolean body = true;
-            Element parent = p.parent();
+            Element parent = span.parent();
             while (parent != null) {
                 if ("div".equals(parent.tagName()) &&
                         !TextUtils.isEmpty(parent.attr("fairemail"))) {
@@ -1351,9 +1609,9 @@ public class HtmlHelper {
                 continue;
 
             Element list = null;
-            for (int i = 0; i < p.childNodeSize(); i++) {
+            for (int i = 0; i < span.childNodeSize(); i++) {
                 boolean item = false;
-                Node node = p.childNode(i);
+                Node node = span.childNode(i);
                 if (node instanceof TextNode) {
                     String text = ((TextNode) node).text().trim();
                     Node next = node.nextSibling();
@@ -1366,9 +1624,16 @@ public class HtmlHelper {
                         li.text(text.substring(2));
 
                         if (list == null || !list.tagName().equals(type)) {
+                            Node before = node.previousSibling();
+                            if (before != null && "br".equals(before.nodeName())) {
+                                before.remove();
+                                i--;
+                            }
+
                             list = document.createElement(type);
                             list.appendChild(li);
                             node.replaceWith(list);
+
                         } else {
                             list.appendChild(li);
                             node.remove();
@@ -1378,14 +1643,15 @@ public class HtmlHelper {
                         if (next != null)
                             next.remove();
                     }
+                } else {
+                    if (list != null && "br".equals(node.nodeName())) {
+                        node.remove();
+                        i--;
+                    }
                 }
                 if (!item)
                     list = null;
             }
-
-            p.tagName("div");
-            if (p.parent() != null)
-                p.after(document.createElement("br"));
         }
     }
 
