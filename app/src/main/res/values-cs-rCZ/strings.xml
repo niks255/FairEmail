@@ -324,6 +324,7 @@
     <string name="title_advanced_actionbar">Zobrazit panel akcí konverzací</string>
     <string name="title_advanced_actionbar_color">Použít barvu účtu jako barvu pozadí pro panel akcí konverzace</string>
     <string name="title_advanced_navbar_colorize">Obarvit navigační panel Androidu</string>
+    <string name="title_advanced_parse_classes">Parsovat šablony stylů</string>
     <string name="title_advanced_authentication">Zobrazit upozornění, nemůže-li přijímající server zprávu ověřit</string>
     <string name="title_advanced_double_back">Dvakrát \"zpět\" pro ukončení</string>
     <string name="title_advanced_pull_refresh">Aktualizovat tažením dolů</string>
@@ -376,6 +377,7 @@
     <string name="title_advanced_confirm_images">Potvrzovat zobrazení obrázků</string>
     <string name="title_advanced_confirm_html">Automaticky zobrazit zprávy přeformátované</string>
     <string name="title_advanced_tracking">Automaticky rozpoznat a zakázat sledovací obrázky</string>
+    <string name="title_advanced_hide_timezone">Zprávy odesílat bez časového pásma</string>
     <string name="title_advanced_display_hidden">Zobrazit skryté texty zpráv</string>
     <string name="title_advanced_secure">Skrýt z obrazovky nedávných aplikací a zabránit pořizování snímků obrazovky</string>
     <string name="title_advanced_pin">PIN</string>
@@ -444,6 +446,7 @@
     <string name="title_advanced_preview_hint">K dispozici pouze pokud byl stažen text zprávy</string>
     <string name="title_advanced_preview_issue">Je-li počet řádků větší než jeden, může být posouvání pomalé díky chybě v některých verzích Androidu</string>
     <string name="title_advanced_inline_hint">Vložené obrázky jsou obrázky v těle zprávy</string>
+    <string name="title_advanced_parse_classes_hint">Zprávy budou zobrazovány přesněji, ale s potencionálním zpožděním</string>
     <string name="title_advanced_autoexpand_hint">Automaticky otevřít zprávu, je-li v konverzaci pouze jediná zpráva nebo jediná nepřečtená</string>
     <string name="title_advanced_autoseen_hint">Automatické označování zpráv jako přečtených při rozbalení lze zakázat v nastavení jednotlivých účtů</string>
     <string name="title_advanced_autoclose_hint">Automaticky zavírat konverzace, když jsou všechny zprávy archivovány, odeslány nebo v koši</string>
@@ -829,6 +832,7 @@
     <string name="title_search_hint">        Hledání se zpočátku zaměří na zprávy uložené ve vašem zařízení.
         Pro hledání i na serveru, stiskněte tlačítko \"Hledat znovu\".
     </string>
+    <string name="title_search_index_hint">Hledání s pomocí indexu vyhledávání je rychlé, ale najde pouze celá slova</string>
     <string name="title_search_more">Více možností</string>
     <string name="title_search_use_index">Použít index vyhledávání</string>
     <string name="title_search_in_senders">V odesílatelích (od)</string>

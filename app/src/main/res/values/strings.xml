@@ -414,6 +414,7 @@
     <string name="title_advanced_confirm_images">Confirm showing images</string>
     <string name="title_advanced_confirm_html">Show reformatted messages by default</string>
     <string name="title_advanced_tracking">Automatically recognize and disable tracking images</string>
+    <string name="title_advanced_hide_timezone">Send messages without timezone data</string>
     <string name="title_advanced_display_hidden">Display hidden message texts</string>
     <string name="title_advanced_secure">Hide from recent apps screen and prevent taking screenshots</string>
     <string name="title_advanced_pin">PIN</string>
@@ -917,6 +918,7 @@
         Searching will initially look at messages stored on your device.
         To search the server too, tap on the \'search again\' button.
     </string>
+    <string name="title_search_index_hint">Searching via the search index is fast, but will only find whole words</string>
     <string name="title_search_more">More options</string>
     <string name="title_search_use_index">Use search index</string>
     <string name="title_search_in_senders">In senders (from)</string>

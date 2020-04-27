@@ -40,8 +40,8 @@ import android.graphics.drawable.LevelListDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -59,6 +59,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -226,9 +227,9 @@ class ImageHelper {
 
             boolean embedded = a.source.startsWith("cid:");
             boolean data = a.source.startsWith("data:");
+            boolean content = a.source.startsWith("content:");
 
-            Log.d("Image show=" + show + " inline=" + inline +
-                    " embedded=" + embedded + " data=" + data + " source=" + a.source);
+            Log.d("Image show=" + show + " inline=" + inline + " source=" + a.source);
 
             // Embedded images
             if (embedded && (show || inline)) {
@@ -311,6 +312,26 @@ class ImageHelper {
                     d.setBounds(0, 0, px, px);
                     return d;
                 }
+
+            if (content && (show || inline)) {
+                Drawable d;
+                try {
+                    Uri uri = Uri.parse(a.source);
+                    Log.i("Loading image source=" + uri);
+                    InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                    d = Drawable.createFromStream(inputStream, uri.toString());
+                } catch (Throwable ex) {
+                    // FileNotFound, Security
+                    Log.w(ex);
+                    d = context.getResources().getDrawable(R.drawable.baseline_broken_image_24);
+                }
+
+                int w = Helper.dp2pixels(context, d.getIntrinsicWidth());
+                int h = Helper.dp2pixels(context, d.getIntrinsicHeight());
+
+                d.setBounds(0, 0, w, h);
+                return d;
+            }
 
             if (!show) {
                 // Show placeholder icon
@@ -396,7 +417,7 @@ class ImageHelper {
                 private void post(final Drawable d, String source) {
                     Log.i("Posting image=" + source);
 
-                    new Handler(context.getMainLooper()).post(new Runnable() {
+                    view.post(new Runnable() {
                         @Override
                         public void run() {
                             Rect bounds = d.getBounds();
@@ -406,7 +427,6 @@ class ImageHelper {
                             lld.setLevel(0);
 
                             view.requestLayout();
-                            view.invalidate();
                         }
                     });
                 }
@@ -493,6 +513,9 @@ class ImageHelper {
     }
 
     private static Drawable getCachedImage(Context context, long id, String source) {
+        if (id < 0)
+            return null;
+
         File file = getCacheFile(context, id, source);
         if (file.exists()) {
             Log.i("Using cached " + file);
@@ -598,9 +621,11 @@ class ImageHelper {
 
         Log.i("Downloaded image source=" + source);
 
-        File file = getCacheFile(context, id, source);
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
-            bm.compress(Bitmap.CompressFormat.PNG, 90, os);
+        if (id >= 0) {
+            File file = getCacheFile(context, id, source);
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                bm.compress(Bitmap.CompressFormat.PNG, 90, os);
+            }
         }
 
         Drawable d = new BitmapDrawable(res, bm);

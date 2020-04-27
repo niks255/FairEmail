@@ -24,14 +24,30 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
+import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
+import android.text.style.LeadingMarginSpan;
+import android.text.style.QuoteSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
+import android.text.style.SubscriptSpan;
+import android.text.style.SuperscriptSpan;
+import android.text.style.TypefaceSpan;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.view.textclassifier.TextClassificationManager;
 import android.view.textclassifier.TextLanguage;
@@ -108,7 +124,7 @@ public class HtmlHelper {
     private static final int MAX_FORMAT_TEXT_SIZE = 50 * 1024; // characters
     private static final int MAX_FULL_TEXT_SIZE = 1024 * 1024; // characters
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
-
+    private static final float[] HEADING_SIZES = {1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f};
     private static final HashMap<String, Integer> x11ColorMap = new HashMap<>();
 
     static {
@@ -298,6 +314,8 @@ public class HtmlHelper {
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
         boolean parse_classes = prefs.getBoolean("parse_classes", false);
+        boolean experiments = prefs.getBoolean("experiments", false);
+
 
         // https://chromium.googlesource.com/chromium/blink/+/master/Source/core/css/html.css
 
@@ -430,8 +448,9 @@ public class HtmlHelper {
                 .addProtocols("img", "src", "data")
                 .addProtocols("a", "href", "full");
         if (text_color)
-            whitelist
-                    .addAttributes("font", "color");
+            whitelist.addAttributes("font", "color");
+        if (!view)
+            whitelist.addProtocols("img", "src", "content");
 
         final Document document = new Cleaner(whitelist).clean(parsed);
 
@@ -440,14 +459,18 @@ public class HtmlHelper {
         // Font
         for (Element font : document.select("font")) {
             // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/font
+            String style = font.attr("style");
             String color = font.attr("color");
             String size = font.attr("size");
 
+            style = style.trim();
+            if (!TextUtils.isEmpty(style) && !style.endsWith(";"))
+                style += ";";
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 font.removeAttr("color");
             font.removeAttr("size");
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(style);
 
             if (!TextUtils.isEmpty(color))
                 sb.append("color:").append(color).append(";");
@@ -476,12 +499,6 @@ public class HtmlHelper {
         for (Element element : document.select("*")) {
             String style = null;
             String clazz = element.attr("class");
-
-            // Workaround TextView not supporting nested colors
-            List<Element> parents = element.parents();
-            Collections.reverse(parents);
-            for (Element parent : parents)
-                style = mergeStyles(style, parent.attr("style"), "color");
 
             // Class style
             style = processStyles(element.tagName(), clazz, style, sheets);
@@ -737,25 +754,25 @@ public class HtmlHelper {
         // Subscript/Superscript
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/sub
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/sup
-        for (Element subp : document.select("sub,sup")) {
-            Element small = document.createElement("small");
-            small.html(subp.html());
-            subp.html(small.outerHtml());
-        }
+        if (!experiments || !view)
+            for (Element subp : document.select("sub,sup"))
+                subp.tagName("small");
 
         // Lists
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li
-        for (Element li : document.select("li")) {
-            li.tagName("span");
-            Element parent = li.parent();
-            if (parent == null || "ul".equals(parent.tagName()))
-                li.prependText("• ");
-            else
-                li.prependText((li.elementSiblingIndex() + 1) + ". ");
-            li.appendElement("br"); // line break after list item
+        if (!experiments || !view) {
+            for (Element li : document.select("li")) {
+                li.tagName("span");
+                Element parent = li.parent();
+                if (parent == null || "ul".equals(parent.tagName()))
+                    li.prependText("• ");
+                else
+                    li.prependText((li.elementSiblingIndex() + 1) + ". ");
+                li.appendElement("br"); // line break after list item
+            }
+            document.select("ol").tagName("div");
+            document.select("ul").tagName("div");
         }
-        document.select("ol").tagName("div");
-        document.select("ul").tagName("div");
 
         // Tables
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table
@@ -1049,6 +1066,7 @@ public class HtmlHelper {
         value = value.toLowerCase(Locale.ROOT).trim();
 
         switch (value) {
+            case "light":
             case "lighter":
                 return 300;
             case "normal":
@@ -1061,11 +1079,11 @@ public class HtmlHelper {
 
         try {
             return Integer.parseInt(value);
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException ex) {
+            Log.w(ex);
         }
 
         return null;
-
     }
 
     private static Float getFontSize(String value, Integer current) {
@@ -1106,7 +1124,7 @@ public class HtmlHelper {
 
         try {
             if (value.endsWith("%"))
-                return Integer.parseInt(value.substring(0, value.length() - 1).trim()) / 100f * _current;
+                return Float.parseFloat(value.substring(0, value.length() - 1).trim()) / 100 * _current;
             if (value.endsWith("em"))
                 return Float.parseFloat(value.substring(0, value.length() - 2).trim()) * _current;
             if (value.endsWith("rem"))
@@ -1117,7 +1135,7 @@ public class HtmlHelper {
                 return null;
             return Float.parseFloat(value.trim()) / DEFAULT_FONT_SIZE;
         } catch (NumberFormatException ex) {
-            Log.w(ex);
+            Log.i(ex);
             return null;
         }
     }
@@ -1753,6 +1771,303 @@ public class HtmlHelper {
         return false;
     }
 
+    static Spanned fromDocument(Context context, @NonNull Document document) {
+        return fromDocument(context, document, null, null);
+    }
+
+    static Spanned fromDocument(Context context, @NonNull Document document, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean experiments = prefs.getBoolean("experiments", false);
+        boolean debug = prefs.getBoolean("debug", false);
+        int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
+        int dp3 = Helper.dp2pixels(context, 3);
+        int dp6 = Helper.dp2pixels(context, 6);
+        int dp24 = Helper.dp2pixels(context, 24);
+
+        if (experiments) {
+            // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
+            NodeTraversor.traverse(new NodeVisitor() {
+                private int pre = 0;
+                private Element element;
+                private List<TextNode> block = new ArrayList<>();
+
+                private String WHITESPACE = " \t\f\u00A0";
+                private String WHITESPACE_NL = WHITESPACE + "\r\n";
+                private Pattern TRIM_WHITESPACE_NL =
+                        Pattern.compile("[" + WHITESPACE + "]*\\r?\\n[" + WHITESPACE + "]*");
+
+                private List<String> BLOCK_START = Collections.unmodifiableList(Arrays.asList(
+                        "body", "blockquote", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ol", "ul", "pre"
+                ));
+                private List<String> BLOCK_END = Collections.unmodifiableList(Arrays.asList(
+                        "body", "blockquote", "br", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ol", "ul", "pre"
+                ));
+
+                @Override
+                public void head(Node node, int depth) {
+                    if (node instanceof TextNode) {
+                        if (pre == 0)
+                            block.add((TextNode) node);
+                    } else if (node instanceof Element) {
+                        element = (Element) node;
+                        if (BLOCK_START.contains(element.tagName())) {
+                            normalizeText(block);
+                            block.clear();
+                        }
+                        if ("pre".equals(element.tagName()))
+                            pre++;
+                    }
+                }
+
+                @Override
+                public void tail(Node node, int depth) {
+                    if (node instanceof Element) {
+                        element = (Element) node;
+                        if (BLOCK_END.contains(element.tagName())) {
+                            normalizeText(block);
+                            block.clear();
+                        }
+                        if ("pre".equals(element.tagName()))
+                            pre--;
+                    }
+                }
+
+                private void normalizeText(List<TextNode> block) {
+                    // https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace
+                    TextNode tnode;
+                    String text;
+                    for (int i = 0; i < block.size(); ) {
+                        tnode = block.get(i);
+                        text = tnode.getWholeText();
+
+                        // Remove whitespace before/after newlines
+                        TRIM_WHITESPACE_NL.matcher(text).replaceAll(" ");
+
+                        if (i == 0 || endsWithWhitespace(block.get(i - 1).text()))
+                            while (startsWithWhiteSpace(text))
+                                text = text.substring(1);
+
+                        if (i == block.size() - 1)
+                            while (endsWithWhitespace(text))
+                                text = text.substring(0, text.length() - 1);
+
+                        tnode.text(text);
+
+                        if (TextUtils.isEmpty(text))
+                            block.remove(i);
+                        else
+                            i++;
+                    }
+
+                    if (debug) {
+                        if (block.size() > 0) {
+                            block.get(0).text("(" + block.get(0));
+                            block.get(block.size() - 1).text(block.get(block.size() - 1) + ")");
+                        }
+                    }
+                }
+
+                boolean startsWithWhiteSpace(String text) {
+                    int len = text.length();
+                    if (len == 0)
+                        return false;
+                    return WHITESPACE_NL.contains(text.substring(0, 1));
+                }
+
+                boolean endsWithWhitespace(String text) {
+                    int len = text.length();
+                    if (len == 0)
+                        return false;
+                    return WHITESPACE_NL.contains(text.substring(len - 1));
+                }
+            }, document.body());
+
+            // https://developer.android.com/guide/topics/text/spans
+            SpannableStringBuilder ssb = new SpannableStringBuilder();
+
+            NodeTraversor.traverse(new NodeVisitor() {
+                private Element element;
+                private TextNode tnode;
+
+                @Override
+                public void head(Node node, int depth) {
+                    if (node instanceof Element) {
+                        element = (Element) node;
+                        element.attr("start-index", Integer.toString(ssb.length()));
+                        if (debug)
+                            ssb.append("[" + element.tagName() + "]");
+                    } else if (node instanceof TextNode) {
+                        tnode = (TextNode) node;
+                        ssb.append(tnode.text());
+                    }
+                }
+
+                @Override
+                public void tail(Node node, int depth) {
+                    if (node instanceof Element) {
+                        element = (Element) node;
+                        int start = Integer.parseInt(element.attr("start-index"));
+                        if (debug)
+                            ssb.append("[/" + element.tagName() + "]");
+                        switch (element.tagName()) {
+                            case "a":
+                                String href = element.attr("href");
+                                ssb.setSpan(new URLSpan(href), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "body":
+                                // Do nothing
+                                break;
+                            case "big":
+                                ssb.setSpan(new RelativeSizeSpan(FONT_LARGE), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "blockquote":
+                                ssb.setSpan(new QuoteSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "br":
+                                newline(ssb.length());
+                                break;
+                            case "i":
+                            case "em":
+                                ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "font":
+                                // Do nothing
+                                break;
+                            case "h1":
+                            case "h2":
+                            case "h3":
+                            case "h4":
+                            case "h5":
+                            case "h6":
+                                int level = element.tagName().charAt(1) - '1';
+                                ssb.setSpan(new RelativeSizeSpan(HEADING_SIZES[level]), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                newline(start);
+                                newline(ssb.length());
+                                break;
+                            case "img":
+                                String src = element.attr("src");
+                                Drawable d = (imageGetter == null
+                                        ? context.getDrawable(R.drawable.baseline_broken_image_24)
+                                        : imageGetter.getDrawable(src));
+                                ssb.insert(start, "\uFFFC"); // Object replacement character
+                                ssb.setSpan(new ImageSpan(d, src), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "li":
+                                newline(ssb.length());
+                                Element parent = element.parent();
+                                if (parent == null || "ul".equals(parent.tagName()))
+                                    // TODO BulletSpanCompat
+                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                                        ssb.setSpan(new BulletSpan(dp6, colorAccent), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    else
+                                        ssb.setSpan(new BulletSpan(dp6, colorAccent, dp3), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                else {
+                                    int index = 0;
+                                    for (Node child : parent.childNodes()) {
+                                        if (child instanceof Element) {
+                                            index++;
+                                            if (child == element)
+                                                break;
+                                        }
+                                    }
+                                    ssb.setSpan(new NumberSpan(dp6, colorAccent, index), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                }
+                                break;
+                            case "ol":
+                            case "ul":
+                                int llevel = 0;
+                                Element lparent = element.parent();
+                                while (lparent != null) {
+                                    if (lparent.tagName().equals(element.tagName()))
+                                        llevel++;
+                                    lparent = lparent.parent();
+                                }
+                                if (llevel > 0)
+                                    ssb.setSpan(new LeadingMarginSpan.Standard(llevel * dp24), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                newline(start);
+                                newline(ssb.length());
+                                break;
+                            case "pre":
+                                // Do nothing
+                                break;
+                            case "small":
+                                ssb.setSpan(new RelativeSizeSpan(FONT_SMALL), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "span":
+                                // Do nothing
+                                break;
+                            case "sub":
+                                ssb.setSpan(new SubscriptSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                ssb.setSpan(new RelativeSizeSpan(FONT_SMALL), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "sup":
+                                ssb.setSpan(new SuperscriptSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                ssb.setSpan(new RelativeSizeSpan(FONT_SMALL), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "b":
+                            case "strong":
+                                ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "s":
+                            case "del":
+                                ssb.setSpan(new StrikethroughSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "tt":
+                                ssb.setSpan(new TypefaceSpan("monospace"), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            case "u":
+                                ssb.setSpan(new UnderlineSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            default:
+                                Log.e("Unknown tag=" + element.tagName());
+                        }
+
+                        String style = element.attr("style");
+                        if (!TextUtils.isEmpty(style)) {
+                            String[] params = style.split(";");
+                            for (String param : params) {
+                                int semi = param.indexOf(":");
+                                if (semi < 0)
+                                    continue;
+                                String key = param.substring(0, semi);
+                                String value = param.substring(semi + 1);
+                                switch (key) {
+                                    case "color":
+                                        int color = Integer.parseInt(value.substring(1), 16) | 0xFF000000;
+                                        ssb.setSpan(new ForegroundColorSpan(color), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        break;
+                                    case "text-decoration":
+                                        if ("line-through".equals(value))
+                                            ssb.setSpan(new StrikethroughSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                private void newline(int index) {
+                    int len = ssb.length();
+                    if (len > 2 &&
+                            ssb.charAt(len - 1) == '\n' &&
+                            ssb.charAt(len - 2) == '\n')
+                        return;
+                    ssb.insert(index, "\n");
+                }
+
+            }, document.body());
+
+            if (debug)
+                for (int i = ssb.length() - 1; i >= 0; i--)
+                    if (ssb.charAt(i) == '\n')
+                        ssb.insert(i, "|");
+
+            return reverseSpans(ssb);
+        } else
+            return fromHtml(document.html(), imageGetter, null);
+    }
+
     static Spanned fromHtml(@NonNull String html) {
         return fromHtml(html, null, null);
     }
@@ -1766,7 +2081,7 @@ public class HtmlHelper {
         if (i != spanned.length())
             spanned = (Spanned) spanned.subSequence(0, i);
 
-        return spanned;
+        return reverseSpans(spanned);
     }
 
     static String toHtml(Spanned spanned) {
@@ -1792,5 +2107,58 @@ public class HtmlHelper {
         }
 
         return doc.html();
+    }
+
+    private static Spanned reverseSpans(Spanned spanned) {
+        Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
+        Spannable reverse = Spannable.Factory.getInstance().newSpannable(spanned.toString());
+        if (spans != null && spans.length > 0)
+            for (int i = spans.length - 1; i >= 0; --i)
+                reverse.setSpan(
+                        spans[i],
+                        spanned.getSpanStart(spans[i]),
+                        spanned.getSpanEnd(spans[i]),
+                        spanned.getSpanFlags(spans[i]));
+        return reverse;
+    }
+
+    private static class NumberSpan implements LeadingMarginSpan {
+        private final int gapWidth;
+        private int color;
+        private final int index;
+        private float textWidth;
+
+        public NumberSpan(int gapWidth, int color, int index) {
+            this.gapWidth = gapWidth;
+            this.color = color;
+            this.index = index;
+        }
+
+        @Override
+        public int getLeadingMargin(boolean first) {
+            return Math.round(textWidth + gapWidth);
+        }
+
+        @Override
+        public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
+            if (first) {
+                Paint.Style ostyle = p.getStyle();
+                int ocolor = p.getColor();
+                Typeface oface = p.getTypeface();
+
+                p.setStyle(Paint.Style.FILL);
+                p.setColor(color);
+                p.setTypeface(Typeface.MONOSPACE);
+
+                String number = index + ".";
+                textWidth = p.measureText(number);
+
+                c.drawText(number, x, bottom - p.descent(), p);
+
+                p.setStyle(ostyle);
+                p.setColor(ocolor);
+                p.setTypeface(oface);
+            }
+        }
     }
 }

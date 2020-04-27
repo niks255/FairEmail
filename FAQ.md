@@ -268,7 +268,8 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(148) How can I use an Apple iCloud account?](#user-content-faq148)
 * [(149) How does the unread message count widget work?](#user-content-faq149)
 * [(150) Can you add cancelling calendar invites?](#user-content-faq150)
-* [(151) Can you add backup/restore messages?](#user-content-faq150)
+* [(151) Can you add backup/restore messages?](#user-content-faq151)
+* [(152) How can I insert a contact group?](#user-content-faq152)
 
 [I have another question.](#user-content-support)
 
@@ -390,7 +391,9 @@ You should try to fix this by contacting your provider or by getting a valid sec
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
 If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
-Alternatively, you can safely accept the fingerprint shown below the error message.
+Alternatively, you can accept the fingerprint shown below the error message
+if you set up the account and/or identity in setup step 1 and 2 (this is not possible when using the quick setup wizard).
+Note that you should make sure the internet connection you are using is safe.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure,
 see also [here](https://developer.android.com/training/articles/security-ssl).
@@ -1130,6 +1133,9 @@ The matched address will be shown as *via* in the addresses section.
 
 Note that identities needs to be enabled to be able to be matched
 and that identities of other accounts will not be considered.
+
+Matching will be done only once on receiving a message, so changing the configuration will not change existing messages.
+You could clear local messages by long pressing a folder in the folder list and synchronize the messages again though.
 
 It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings
 to match the username of an email address (the part before the @ sign).
@@ -2534,7 +2540,7 @@ Reformatting and displaying such messages will take too long. You can try to use
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-Currently, there are no experimental features.
+* Custom rendering of reformatted messages
 
 <br />
 
@@ -2918,6 +2924,15 @@ Unfortunately, there exists no intent to delete existing calendar events.
 An email client is meant to read and write messages, not to backup and restore messages.
 The email server is responsible for backups.
 If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
+
+<br />
+
+<a name="faq152"></a>
+**(152) How can I insert a contact group?**
+
+You can insert the email addresses of all contacts in a contact group via the three dots menu of the message composer.
+
+You can define contact groups with the Android contacts app, please see [here](https://support.google.com/contacts/answer/30970) for instructions.
 
 <br />
 

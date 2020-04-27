@@ -301,6 +301,7 @@
     <string name="title_advanced_actionbar">Visa konversationsåtgärdsfältet</string>
     <string name="title_advanced_actionbar_color">Använd kontofärg som bakgrundsfärg för konversationsfältet</string>
     <string name="title_advanced_navbar_colorize">Färglägg navigeringsfältet för Android</string>
+    <string name="title_advanced_parse_classes">Tolka stilmallar</string>
     <string name="title_advanced_authentication">Visa en varning när den mottagande servern inte kunde autentisera meddelandet</string>
     <string name="title_advanced_double_back">Dubbel \"tillbaka\" för att avsluta</string>
     <string name="title_advanced_pull_refresh">Dra ner för att uppdatera</string>
@@ -353,6 +354,7 @@
     <string name="title_advanced_confirm_images">Bekräfta visning av bilder</string>
     <string name="title_advanced_confirm_html">Visa omformaterade meddelanden som standard</string>
     <string name="title_advanced_tracking">Automatiskt känna igen och inaktivera spårningsbilder</string>
+    <string name="title_advanced_hide_timezone">Skicka meddelanden utan tidszon</string>
     <string name="title_advanced_display_hidden">Visa dolda meddelandetexter</string>
     <string name="title_advanced_secure">Dölj dig från senaste appar-skärmen och förhindra tagning av skärmdumpar</string>
     <string name="title_advanced_pin">PIN-kod</string>
@@ -421,6 +423,7 @@
     <string name="title_advanced_preview_hint">Endast tillgängligt när meddelandetexten hämtades</string>
     <string name="title_advanced_preview_issue">Scrollningen kan vara långsam på grund av en bugg i vissa Android-versioner när antalet rader är mer än en</string>
     <string name="title_advanced_inline_hint">Infogade bilder är bilder som ingår i meddelandet</string>
+    <string name="title_advanced_parse_classes_hint">Detta kommer att visa meddelanden mer korrekt, men möjligen med en fördröjning</string>
     <string name="title_advanced_autoexpand_hint">Öppna automatiskt meddelandet när det bara finns ett meddelande eller bara ett oläst meddelande i en konversation</string>
     <string name="title_advanced_autoseen_hint">Automatisk markering av meddelanden som läses vid utökning kan inaktiveras i de enskilda kontoinställningarna</string>
     <string name="title_advanced_autoclose_hint">Stäng automatiskt konversationstrådar när alla meddelanden arkiveras, skickas eller kastas</string>
@@ -488,6 +491,7 @@
     <string name="title_client_certificate">Klientcertifikat</string>
     <string name="title_realm">Domän</string>
     <string name="title_use_ip">Använd lokal IP-adress istället för värdnamn</string>
+    <string name="title_ehlo">Anpassad HELO/EHLO identifiering</string>
     <string name="title_primary">Primär</string>
     <string name="title_primary_account">Primär (standardkonto)</string>
     <string name="title_primary_identity">Primär (standardidentitet)</string>
@@ -805,6 +809,7 @@
     <string name="title_search_hint">        Sökning kommer initialt att titta på meddelanden som lagras på din enhet.
         För att söka på servern också, tryck på knappen \"Sök igen\".
     </string>
+    <string name="title_search_index_hint">Sökning via index är snabbt, men kommer bara att hitta hela ord</string>
     <string name="title_search_more">Fler alternativ</string>
     <string name="title_search_use_index">Använd sökindex</string>
     <string name="title_search_in_senders">I avsändare (från)</string>

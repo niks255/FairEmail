@@ -188,9 +188,8 @@ public class EntityOperation {
                             db.message().setMessageImportance(similar.id, null);
                     }
 
-
                 EntityAccount account = db.account().getAccount(message.account);
-                if (!"imap.gmail.com".equalsIgnoreCase(account == null ? null : account.host) ||
+                if ((account != null && !account.isGmail()) ||
                         !EntityFolder.ARCHIVE.equals(source.type) ||
                         EntityFolder.TRASH.equals(target.type) || EntityFolder.JUNK.equals(target.type))
                     db.message().setMessageUiHide(message.id, true);
@@ -199,6 +198,13 @@ public class EntityOperation {
                         (EntityFolder.ARCHIVE.equals(target.type) || EntityFolder.TRASH.equals(target.type))) {
                     message.ui_snoozed = null;
                     EntityMessage.snooze(context, message.id, null);
+                }
+
+                if (EntityFolder.JUNK.equals(source.type) && EntityFolder.INBOX.equals(target.type)) {
+                    List<EntityRule> rules = db.rule().getRules(target.id);
+                    for (EntityRule rule : rules)
+                        if (rule.isBlockingSender(message, source))
+                            db.rule().deleteRule(rule.id);
                 }
 
                 // Create copy without uid in target folder

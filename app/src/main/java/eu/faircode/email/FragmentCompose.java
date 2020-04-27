@@ -115,7 +115,7 @@ import org.bouncycastle.cert.jcajce.JcaCertStore;
 import org.bouncycastle.cms.CMSAlgorithm;
 import org.bouncycastle.cms.CMSEnvelopedData;
 import org.bouncycastle.cms.CMSEnvelopedDataGenerator;
-import org.bouncycastle.cms.CMSProcessableByteArray;
+import org.bouncycastle.cms.CMSProcessableFile;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.cms.CMSTypedData;
@@ -136,13 +136,11 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
-import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -885,20 +883,7 @@ public class FragmentCompose extends FragmentBase {
 
         final String pkg = Helper.getOpenKeychainPackage(getContext());
         Log.i("PGP binding to " + pkg);
-        pgpService = new OpenPgpServiceConnection(getContext(), pkg, new OpenPgpServiceConnection.OnBound() {
-            @Override
-            public void onBound(IOpenPgpService2 service) {
-                Log.i("PGP bound to " + pkg);
-            }
-
-            @Override
-            public void onError(Exception ex) {
-                if ("bindService() returned false!".equals(ex.getMessage()))
-                    Log.i("PGP " + ex.getMessage());
-                else
-                    Log.e("PGP", ex);
-            }
-        });
+        pgpService = new OpenPgpServiceConnection(getContext(), pkg);
         pgpService.bindToService();
 
         return view;
@@ -1016,8 +1001,11 @@ public class FragmentCompose extends FragmentBase {
     public void onDestroyView() {
         adapter = null;
 
-        if (pgpService != null && pgpService.isBound())
+        if (pgpService != null && pgpService.isBound()) {
+            Log.i("PGP unbinding");
             pgpService.unbindFromService();
+        }
+        pgpService = null;
 
         super.onDestroyView();
     }
@@ -1894,7 +1882,7 @@ public class FragmentCompose extends FragmentBase {
         new SimpleTask<Spanned>() {
             @Override
             protected Spanned onExecute(Context context, Bundle args) throws IOException {
-                long id = args.getLong("id");
+                final long id = args.getLong("id");
                 List<Uri> uris = args.getParcelableArrayList("uris");
                 boolean image = args.getBoolean("image");
                 int resize = args.getInt("resize");
@@ -2387,12 +2375,16 @@ public class FragmentCompose extends FragmentBase {
                         .build(contentSigner, chain[0]);
                 cmsGenerator.addSignerInfoGenerator(signerInfoGenerator);
 
-                ByteArrayOutputStream osContent = new ByteArrayOutputStream();
-                bpContent.writeTo(osContent);
+                File sinput = new File(context.getCacheDir(), "smime_sign." + draft.id);
+                try (FileOutputStream fos = new FileOutputStream(sinput)) {
+                    bpContent.writeTo(fos);
+                }
 
-                CMSTypedData cmsData = new CMSProcessableByteArray(osContent.toByteArray());
+                CMSTypedData cmsData = new CMSProcessableFile(sinput);
                 CMSSignedData cmsSignedData = cmsGenerator.generate(cmsData);
                 byte[] signedMessage = cmsSignedData.getEncoded();
+
+                sinput.delete();
 
                 // Build signature
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
@@ -2475,9 +2467,11 @@ public class FragmentCompose extends FragmentBase {
                     cmsEnvelopedDataGenerator.addRecipientInfoGenerator(gen);
                 }
 
-                ByteArrayOutputStream osMessage = new ByteArrayOutputStream();
-                imessage.writeTo(osMessage);
-                CMSTypedData msg = new CMSProcessableByteArray(osMessage.toByteArray());
+                File einput = new File(context.getCacheDir(), "smime_encrypt." + draft.id);
+                try (FileOutputStream fos = new FileOutputStream(einput)) {
+                    imessage.writeTo(fos);
+                }
+                CMSTypedData msg = new CMSProcessableFile(einput);
 
                 OutputEncryptor encryptor = new JceCMSContentEncryptorBuilder(CMSAlgorithm.AES128_CBC)
                         .build();
@@ -2497,6 +2491,8 @@ public class FragmentCompose extends FragmentBase {
                 try (OutputStream os = new FileOutputStream(encrypted)) {
                     cmsEnvelopedData.toASN1Structure().encodeTo(os);
                 }
+
+                einput.delete();
 
                 db.attachment().setDownloaded(attachment.id, encrypted.length());
 
@@ -2638,7 +2634,12 @@ public class FragmentCompose extends FragmentBase {
 
         String text = EntityAnswer.replacePlaceholders(answer, to);
 
-        Spanned spanned = HtmlHelper.fromHtml(text);
+        Spanned spanned = HtmlHelper.fromHtml(text, new Html.ImageGetter() {
+            @Override
+            public Drawable getDrawable(String source) {
+                return ImageHelper.decodeImage(getContext(), working, source, true, zoom, etBody);
+            }
+        }, null);
         etBody.getText().insert(etBody.getSelectionStart(), spanned);
     }
 
@@ -3927,7 +3928,8 @@ public class FragmentCompose extends FragmentBase {
                     else
                         b = HtmlHelper.sanitizeCompose(context, body, true);
 
-                    if (TextUtils.isEmpty(body) ||
+                    if (dirty ||
+                            TextUtils.isEmpty(body) ||
                             !b.body().html().equals(doc.body().html()) ||
                             (extras != null && extras.containsKey("html"))) {
                         dirty = true;
@@ -4571,7 +4573,7 @@ public class FragmentCompose extends FragmentBase {
                 signature = HtmlHelper.fromHtml(identity.signature, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
-                        return ActivitySignature.getDrawableByUri(getContext(), Uri.parse(source));
+                        return ImageHelper.decodeImage(getContext(), working, source, true, 0, tvSignature);
                     }
                 }, null);
             tvSignature.setText(signature);

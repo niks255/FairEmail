@@ -163,6 +163,8 @@ public class Helper {
                     ")+"
     );
 
+    private static final ExecutorService executor = getBackgroundExecutor(1, "helper");
+
     static ExecutorService getBackgroundExecutor(int threads, final String name) {
         ThreadFactory factory = new ThreadFactory() {
             private final AtomicInteger threadId = new AtomicInteger();
@@ -327,8 +329,6 @@ public class Helper {
         }
     }
 
-    private static final ExecutorService executor = getBackgroundExecutor(1, "helper");
-
     // Features
 
     static boolean hasPermission(Context context, String name) {
@@ -456,8 +456,13 @@ public class Helper {
         Log.i("View=" + uri);
 
         if (browse || !hasCustomTabs(context, uri)) {
-            Intent view = new Intent(Intent.ACTION_VIEW, uri);
-            context.startActivity(getChooser(context, view));
+            try {
+                Intent view = new Intent(Intent.ACTION_VIEW, uri);
+                context.startActivity(getChooser(context, view));
+            } catch (Throwable ex) {
+                Log.e(ex);
+                ToastEx.makeText(context, Log.formatThrowable(ex, false), Toast.LENGTH_LONG).show();
+            }
         } else {
             // https://developer.chrome.com/multidevice/android/customtabs
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -793,8 +798,9 @@ public class Helper {
     }
 
     static boolean containsControlChars(String text) {
+        int codePoint;
         for (int offset = 0; offset < text.length(); ) {
-            int codePoint = text.codePointAt(offset);
+            codePoint = text.codePointAt(offset);
             offset += Character.charCount(codePoint);
             switch (Character.getType(codePoint)) {
                 case Character.CONTROL:     // \p{Cc}
@@ -812,8 +818,8 @@ public class Helper {
         // Get extended ASCII characters
         byte[] octets = text.getBytes(StandardCharsets.ISO_8859_1);
 
+        int bytes;
         for (int i = 0; i < octets.length; i++) {
-            int bytes;
             if ((octets[i] & 0b10000000) == 0b00000000)
                 bytes = 1;
             else if ((octets[i] & 0b11100000) == 0b11000000)
@@ -842,9 +848,10 @@ public class Helper {
 
     static boolean isISO8859(String text) {
         // https://en.wikipedia.org/wiki/ISO/IEC_8859-1
+        int c;
         byte[] octets = text.getBytes(StandardCharsets.ISO_8859_1);
         for (byte b : octets) {
-            int c = b & 0xFF;
+            c = b & 0xFF;
             if (c < 32)
                 return false;
             if (c >= 127 && c < 160)
@@ -858,11 +865,13 @@ public class Helper {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             return true;
 
+        int codepoint;
+        Character.UnicodeScript us;
         Character.UnicodeScript script = null;
         for (int i = 0; i < s.length(); ) {
-            int codepoint = s.codePointAt(i);
+            codepoint = s.codePointAt(i);
             i += Character.charCount(codepoint);
-            Character.UnicodeScript us = Character.UnicodeScript.of(codepoint);
+            us = Character.UnicodeScript.of(codepoint);
             if (us.equals(Character.UnicodeScript.COMMON))
                 continue;
             if (script == null)

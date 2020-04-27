@@ -3280,7 +3280,8 @@ class Core {
                     db.identity().getComposableIdentities(message.account).size() > 0) {
                 Intent reply = new Intent(context, ActivityCompose.class)
                         .putExtra("action", "reply")
-                        .putExtra("reference", message.id);
+                        .putExtra("reference", message.id)
+                        .putExtra("group", group);
                 reply.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent piReply = PendingIntent.getActivity(context, ActivityCompose.PI_REPLY, reply, PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Action.Builder actionReply = new NotificationCompat.Action.Builder(
@@ -3309,7 +3310,8 @@ class Core {
                         .setAllowGeneratedReplies(false);
                 RemoteInput.Builder input = new RemoteInput.Builder("text")
                         .setLabel(context.getString(R.string.title_advanced_notify_action_reply));
-                actionReply.addRemoteInput(input.build()).setAllowGeneratedReplies(false);
+                actionReply.addRemoteInput(input.build())
+                        .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionReply.build());
             }
 

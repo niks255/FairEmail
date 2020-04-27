@@ -61,7 +61,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 154,
+        version = 155,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -108,7 +108,7 @@ public abstract class DB extends RoomDatabase {
 
     private static DB sInstance;
     private static final ExecutorService executor =
-            Helper.getBackgroundExecutor(1, "query");
+            Helper.getBackgroundExecutor(4, "query"); // AndroidX default thread count
 
     private static final String DB_NAME = "fairemail";
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
@@ -211,7 +211,7 @@ public abstract class DB extends RoomDatabase {
                 if (changed) {
                     Log.i("Invalidating folder view");
                     last = folders;
-                    db.getInvalidationTracker().notifyObserversByTableNames("message");
+                    db.getInvalidationTracker().notifyObserversByTableNames("account", "message");
                 }
             }
         });
@@ -1544,6 +1544,13 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `ehlo` TEXT");
+                    }
+                })
+                .addMigrations(new Migration(154, 155) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("UPDATE `folder` SET `poll` = 1 WHERE `synchronize` = 0");
                     }
                 });
     }

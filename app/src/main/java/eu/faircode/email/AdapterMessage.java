@@ -245,6 +245,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean authentication;
     private boolean language_detection;
     private static boolean debug;
+    private boolean experiments;
 
     private boolean gotoTop = false;
     private boolean firstClick = false;
@@ -1263,8 +1264,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (info[0].hasPhoto()) {
                 ibAvatar.setImageBitmap(info[0].getPhotoBitmap());
                 ibAvatar.setVisibility(View.VISIBLE);
-            } else
+            } else {
+                ibAvatar.setImageDrawable(null);
                 ibAvatar.setVisibility(View.GONE);
+            }
 
             Uri lookupUri = info[0].getLookupUri();
             ibAvatar.setTag(lookupUri);
@@ -1911,18 +1914,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
 
                         // Add debug info
-                        if (debug) {
+                        if (debug && !experiments) {
                             document.outputSettings().prettyPrint(true).outline(true).indentAmount(1);
                             String[] lines = document.html().split("\\r?\\n");
                             for (int i = 0; i < lines.length; i++)
                                 lines[i] = Html.escapeHtml(lines[i]);
                             Element pre = document.createElement("pre");
                             pre.html(TextUtils.join("<br>", lines));
-                            document.appendChild(pre);
+                            document.body().appendChild(pre);
                         }
 
                         // Draw images
-                        Spanned spanned = HtmlHelper.fromHtml(document.html(), new Html.ImageGetter() {
+                        Spanned spanned = HtmlHelper.fromDocument(context, document, new Html.ImageGetter() {
                             @Override
                             public Drawable getDrawable(String source) {
                                 Drawable drawable = ImageHelper.decodeImage(context, message.id, source, show_images, zoom, tvBody);
@@ -4644,6 +4647,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.language_detection = prefs.getBoolean("language_detection", false);
 
         debug = prefs.getBoolean("debug", false);
+        this.experiments = prefs.getBoolean("experiments", false);
 
         DiffUtil.ItemCallback<TupleMessageEx> callback = new DiffUtil.ItemCallback<TupleMessageEx>() {
             @Override
@@ -5167,6 +5171,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         holder.powner.recreate();
     }
 
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        if (holder.ibAvatar != null)
+            holder.ibAvatar.setImageDrawable(null);
+        if (holder.tvBody != null)
+            holder.tvBody.setText(null);
+        if (holder.wvBody instanceof WebView)
+            ((WebView) holder.wvBody).loadDataWithBaseURL(null, "", "text/html", StandardCharsets.UTF_8.name(), null);
+    }
+
     void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
         this.selectionTracker = selectionTracker;
     }
@@ -5250,7 +5264,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             final Uri uri = getArguments().getParcelable("uri");
-            final String title = getArguments().getString("title");
+            String _title = getArguments().getString("title");
+            if (_title != null)
+                _title = _title.replace("\uFFFC", ""); // Object replacement character
+            if (TextUtils.isEmpty(_title))
+                _title = null;
+            final String title = _title;
 
             // Preload web view
             Helper.customTabsWarmup(getContext());
@@ -5260,33 +5279,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (uri.isOpaque())
                 sanitized = uri;
             else {
-                boolean changed = false;
-
-                Uri url;
-                Uri.Builder builder;
-                if (uri.getHost() != null &&
-                        uri.getHost().endsWith("safelinks.protection.outlook.com") &&
-                        !TextUtils.isEmpty(uri.getQueryParameter("url"))) {
-                    changed = true;
-                    url = Uri.parse(uri.getQueryParameter("url"));
-                } else
-                    url = uri;
-
-                builder = url.buildUpon();
-
-                builder.clearQuery();
-                for (String key : url.getQueryParameterNames())
-                    // https://en.wikipedia.org/wiki/UTM_parameters
-                    if (key.toLowerCase(Locale.ROOT).startsWith("utm_") ||
-                            PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)))
-                        changed = true;
-                    else if (!TextUtils.isEmpty(key))
-                        for (String value : url.getQueryParameters(key)) {
-                            Log.i("Query " + key + "=" + value);
-                            builder.appendQueryParameter(key, value);
-                        }
-
-                sanitized = (changed ? builder.build() : uri);
+                Uri s = sanitize(uri);
+                sanitized = (s == null ? uri : s);
             }
 
             final Uri uriTitle = Uri.parse(title == null ? "" : title);
@@ -5478,24 +5472,66 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     uriTitle.getHost().equalsIgnoreCase(uri.getHost())
                     ? View.GONE : View.VISIBLE);
 
-            return new AlertDialog.Builder(getContext())
+            final Context context = getContext();
+
+            return new AlertDialog.Builder(context)
                     .setView(dview)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Uri uri = Uri.parse(etLink.getText().toString());
-                            Helper.view(getContext(), uri, false);
+                            Helper.view(context, uri, false);
                         }
                     })
                     .setNeutralButton(R.string.title_browse, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Uri uri = Uri.parse(etLink.getText().toString());
-                            Helper.view(getContext(), uri, true);
+                            Helper.view(context, uri, true);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
+        }
+
+        private static Uri sanitize(Uri uri) {
+            boolean changed = false;
+
+            Uri url;
+            Uri.Builder builder;
+            if (uri.getHost() != null &&
+                    uri.getHost().endsWith("safelinks.protection.outlook.com") &&
+                    !TextUtils.isEmpty(uri.getQueryParameter("url"))) {
+                changed = true;
+                url = Uri.parse(uri.getQueryParameter("url"));
+            } else
+                url = uri;
+
+            builder = url.buildUpon();
+
+            builder.clearQuery();
+            for (String key : url.getQueryParameterNames())
+                // https://en.wikipedia.org/wiki/UTM_parameters
+                // https://docs.oracle.com/en/cloud/saas/marketing/eloqua-user/Help/EloquaAsynchronousTrackingScripts/EloquaTrackingParameters.htm
+                if (key.toLowerCase(Locale.ROOT).startsWith("utm_") ||
+                        key.toLowerCase(Locale.ROOT).startsWith("elq") ||
+                        PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)))
+                    changed = true;
+                else if (!TextUtils.isEmpty(key))
+                    for (String value : url.getQueryParameters(key)) {
+                        Log.i("Query " + key + "=" + value);
+                        Uri suri = Uri.parse(value);
+                        if ("http".equals(suri.getScheme()) || "https".equals(suri.getScheme())) {
+                            Uri s = sanitize(suri);
+                            if (s != null) {
+                                changed = true;
+                                value = s.toString();
+                            }
+                        }
+                        builder.appendQueryParameter(key, value);
+                    }
+
+            return (changed ? builder.build() : null);
         }
     }
 

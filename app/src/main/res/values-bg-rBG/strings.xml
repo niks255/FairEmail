@@ -302,6 +302,7 @@
     <string name="title_advanced_actionbar">Показжи панела за действиe в разговори</string>
     <string name="title_advanced_actionbar_color">Използвайте цвета на профила като цвят на фона за панела за действие на разговора</string>
     <string name="title_advanced_navbar_colorize">Цветна лентата за навигация на Android</string>
+    <string name="title_advanced_parse_classes">Листове за избор на стилове</string>
     <string name="title_advanced_authentication">Покажи предупреждение, когато получаващият сървър не може да удостовери съобщението</string>
     <string name="title_advanced_double_back">Двойно назад за изход</string>
     <string name="title_advanced_pull_refresh">Плъзни надолу за опресняване</string>
@@ -354,6 +355,7 @@
     <string name="title_advanced_confirm_images">Потвърдете показването на изображения</string>
     <string name="title_advanced_confirm_html">Показване на преформатирани съобщения по подразбиране</string>
     <string name="title_advanced_tracking">Автоматично разпознаване и деактивиране на проследяващи изображения</string>
+    <string name="title_advanced_hide_timezone">Изпращане на съобщения без данни за часовата зона</string>
     <string name="title_advanced_display_hidden">Показване на скрит текст в съобщение</string>
     <string name="title_advanced_secure">Скриване от екрана на последно използвани приложения и предотвратяване правенето снимка на екрана</string>
     <string name="title_advanced_pin">ПИН</string>
@@ -421,6 +423,7 @@
     <string name="title_advanced_preview_hint">Достъпно е само когато текстът на съобщението е изтеглен</string>
     <string name="title_advanced_preview_issue">Превъртането може да е бавно поради грешка в някои версии на Android, когато броят на линиите е повече от един</string>
     <string name="title_advanced_inline_hint">Вградените изображения са изображения, включени в съобщението</string>
+    <string name="title_advanced_parse_classes_hint">Това ще показва по-точно съобщенията, но със закъснение</string>
     <string name="title_advanced_autoexpand_hint">Автоматично отваряне на съобщение, когато има само едно съобщение или само едно непрочетено съобщение в разговор</string>
     <string name="title_advanced_autoseen_hint">Автоматичното маркиране на съобщенията, прочетени при разширяване, може да бъде деактивирано в настройките на отделните профили</string>
     <string name="title_advanced_autoclose_hint">Автоматично затваряй разговорите, когато всички съобщения са архивирани, изпратени или преместени в кошчето</string>
@@ -806,6 +809,7 @@
     <string name="title_search_hint">        Първоначално търсенето ще прегледа съобщенията, съхранявани на вашето устройство.
         За да търсите и в сървъра, натиснете бутона „търсене отново“.
     </string>
+    <string name="title_search_index_hint">Търсене чрез индекса за търсене е бързо, но ще намери само цели думи</string>
     <string name="title_search_more">Още опции</string>
     <string name="title_search_use_index">Използвай индекс за търсене</string>
     <string name="title_search_in_senders">В подетели (от)</string>

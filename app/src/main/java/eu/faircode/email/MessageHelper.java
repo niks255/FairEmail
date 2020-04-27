@@ -140,6 +140,12 @@ public class MessageHelper {
     static MimeMessageEx from(Context context, EntityMessage message, EntityIdentity identity, Session isession, boolean send)
             throws MessagingException, IOException {
         DB db = DB.getInstance(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int receipt_type = prefs.getInt("receipt_type", 2);
+        boolean hide_timezone = prefs.getBoolean("hide_timezone", true);
+        boolean autocrypt = prefs.getBoolean("autocrypt", true);
+        boolean mutual = prefs.getBoolean("autocrypt_mutual", true);
+
         MimeMessageEx imessage = new MimeMessageEx(isession, message.msgid);
 
         // Flags
@@ -217,8 +223,6 @@ public class MessageHelper {
             if (message.receipt_request != null && message.receipt_request) {
                 String to = (identity.replyto == null ? identity.email : identity.replyto);
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                int receipt_type = prefs.getInt("receipt_type", 2);
                 // 0=Read receipt
                 // 1=Delivery receipt
                 // 2=Read+delivery receipt
@@ -238,9 +242,8 @@ public class MessageHelper {
             imessage.addHeader("List-Unsubscribe", "<" + message.unsubscribe + ">");
 
         MailDateFormat mdf = new MailDateFormat();
-        mdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        mdf.setTimeZone(hide_timezone ? TimeZone.getTimeZone("UTC") : TimeZone.getDefault());
         imessage.setHeader("Date", mdf.format(new Date()));
-        //imessage.setSentDate(new Date());
 
         List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
 
@@ -248,10 +251,6 @@ public class MessageHelper {
             for (EntityAttachment attachment : attachments)
                 if (EntityAttachment.PGP_KEY.equals(attachment.encryption)) {
                     InternetAddress from = (InternetAddress) message.from[0];
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean autocrypt = prefs.getBoolean("autocrypt", true);
-                    boolean mutual = prefs.getBoolean("autocrypt_mutual", true);
 
                     if (autocrypt) {
                         String mode = (mutual ? "mutual" : "nopreference");
@@ -381,7 +380,7 @@ public class MessageHelper {
                         final ContentType cts = new ContentType(attachment.type);
                         String micalg = cts.getParameter("micalg");
                         if (TextUtils.isEmpty(micalg)) {
-                            Log.e("S/MIME micalg missing");
+                            Log.e("S/MIME micalg missing type=" + attachment.type);
                             micalg = "sha-256";
                         }
                         ParameterList params = cts.getParameterList();
@@ -1319,23 +1318,22 @@ public class MessageHelper {
         // https://tools.ietf.org/html/rfc2047
         // encoded-word = "=?" charset "?" encoding "?" encoded-text "?="
 
-        int i = 0;
+        int s, q1, q2, e, i = 0;
         List<MimeTextPart> parts = new ArrayList<>();
-
         while (i < text.length()) {
-            int s = text.indexOf("=?", i);
+            s = text.indexOf("=?", i);
             if (s < 0)
                 break;
 
-            int q1 = text.indexOf("?", s + 2);
+            q1 = text.indexOf("?", s + 2);
             if (q1 < 0)
                 break;
 
-            int q2 = text.indexOf("?", q1 + 1);
+            q2 = text.indexOf("?", q1 + 1);
             if (q2 < 0)
                 break;
 
-            int e = text.indexOf("?=", q2 + 1);
+            e = text.indexOf("?=", q2 + 1);
             if (e < 0)
                 break;
 
