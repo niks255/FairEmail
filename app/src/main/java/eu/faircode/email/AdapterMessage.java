@@ -245,7 +245,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean authentication;
     private boolean language_detection;
     private static boolean debug;
-    private boolean experiments;
 
     private boolean gotoTop = false;
     private boolean firstClick = false;
@@ -1882,7 +1881,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         HtmlHelper.setViewport(document);
                         if (inline || show_images)
-                            HtmlHelper.embedInlineImages(context, message.id, document, show_images || !inline);
+                            HtmlHelper.embedInlineImages(context, message.id, document, true);
 
                         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
                         if (disable_tracking)
@@ -1911,17 +1910,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (!show_quotes) {
                             for (Element quote : document.select("blockquote"))
                                 quote.html("&#8230;");
-                        }
-
-                        // Add debug info
-                        if (debug && !experiments) {
-                            document.outputSettings().prettyPrint(true).outline(true).indentAmount(1);
-                            String[] lines = document.html().split("\\r?\\n");
-                            for (int i = 0; i < lines.length; i++)
-                                lines[i] = Html.escapeHtml(lines[i]);
-                            Element pre = document.createElement("pre");
-                            pre.html(TextUtils.join("<br>", lines));
-                            document.body().appendChild(pre);
                         }
 
                         // Draw images
@@ -3379,12 +3367,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             owner.getLifecycle().addObserver(new LifecycleObserver() {
                 @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
                 public void onCreate() {
-                    dialog.show();
+                    try {
+                        dialog.show();
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
                 }
 
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 public void onDestroyed() {
-                    dialog.dismiss();
+                    try {
+                        dialog.dismiss();
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
                 }
             });
         }
@@ -4256,7 +4252,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
                 lbm.sendBroadcast(
                         new Intent(FragmentMessages.ACTION_STORE_RAW)
-                                .putExtra("id", message.id));
+                                .putExtra("id", message.id)
+                                .putExtra("subject", message.subject));
             }
         }
 
@@ -4647,7 +4644,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.language_detection = prefs.getBoolean("language_detection", false);
 
         debug = prefs.getBoolean("debug", false);
-        this.experiments = prefs.getBoolean("experiments", false);
 
         DiffUtil.ItemCallback<TupleMessageEx> callback = new DiffUtil.ItemCallback<TupleMessageEx>() {
             @Override
