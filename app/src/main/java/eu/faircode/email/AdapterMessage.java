@@ -4139,7 +4139,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         from = ((InternetAddress) message.from[0]).getAddress();
 
                     String html = Helper.readText(file);
-                    String text = HtmlHelper.getText(html);
+                    String text = HtmlHelper.getText(context, html);
 
                     return new String[]{from, message.subject, text};
                 }
@@ -5500,6 +5500,30 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     !TextUtils.isEmpty(uri.getQueryParameter("url"))) {
                 changed = true;
                 url = Uri.parse(uri.getQueryParameter("url"));
+            } else if ("https".equals(uri.getScheme()) &&
+                    "www.google.com".equals(uri.getHost()) &&
+                    uri.getPath() != null &&
+                    uri.getPath().startsWith("/amp/")) {
+                // https://blog.amp.dev/2017/02/06/whats-in-an-amp-url/
+                Uri result = null;
+
+                String u = uri.toString();
+                u = u.replace("https://www.google.com/amp/", "");
+
+                int p = u.indexOf("/");
+                while (p > 0) {
+                    String segment = u.substring(0, p);
+                    if (segment.contains(".")) {
+                        result = Uri.parse("https://" + u);
+                        break;
+                    }
+
+                    u = u.substring(p + 1);
+                    p = u.indexOf("/");
+                }
+
+                changed = (result != null);
+                url = (result == null ? uri : result);
             } else
                 url = uri;
 
@@ -5511,7 +5535,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 // https://docs.oracle.com/en/cloud/saas/marketing/eloqua-user/Help/EloquaAsynchronousTrackingScripts/EloquaTrackingParameters.htm
                 if (key.toLowerCase(Locale.ROOT).startsWith("utm_") ||
                         key.toLowerCase(Locale.ROOT).startsWith("elq") ||
-                        PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)))
+                        PARANOID_QUERY.contains(key.toLowerCase(Locale.ROOT)) ||
+                        ("snr".equals(key) && "store.steampowered.com".equals(uri.getHost())))
                     changed = true;
                 else if (!TextUtils.isEmpty(key))
                     for (String value : url.getQueryParameters(key)) {

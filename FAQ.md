@@ -271,6 +271,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(151) Can you add backup/restore messages?](#user-content-faq151)
 * [(152) How can I insert a contact group?](#user-content-faq152)
 * [(153) Why does permanently deleting Gmail message not work?](#user-content-faq153)
+* [(154) Can you add favicons as contact photos?](#user-content-faq154)
 
 [I have another question.](#user-content-support)
 
@@ -2776,7 +2777,8 @@ The best solution would be to enable showing the sent folder in the unified inbo
 by long pressing the sent folder in the folder list and enabling *Show in unified inbox*.
 This way all messages can stay where they belong, while allowing to see both incoming and outgoing messages at one place.
 
-If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox.
+If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox
+or set a default CC/BCC address in the advanced identity settings to send yourself a copy.
 
 <br />
 
@@ -2940,12 +2942,22 @@ You can define contact groups with the Android contacts app, please see [here](h
 <a name="faq153"></a>
 **(153) Why does permanently deleting Gmail message not work?**
 
-You might need to change [the delete setting](https://mail.google.com/mail/u/0/#settings/fwdandpop) to make it work.
+You might need to change [the delete setting](https://mail.google.com/mail/u/0/#settings/fwdandpop) on a desktop browser to make it work:
+
+* When I mark a message in IMAP as deleted: Auto-Expunge off - Wait for the client to update the server.
+* When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever
 
 Note that archived messages can be deleted only by moving them to the trash folder first.
 
 <br />
 
+<a name="faq154"></a>
+**(154) Can you add favicons as contact photos?**
+
+Besides that a [favicon](https://en.wikipedia.org/wiki/Favicon) might be shared by many email addresses with the same domain name
+and therefore is not directly related to an email address, favicons can be used to track you.
+
+<br />
 
 ## Support
 

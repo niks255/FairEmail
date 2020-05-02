@@ -34,6 +34,7 @@ import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
@@ -799,12 +800,10 @@ public class HtmlHelper {
                 if (TextUtils.isEmpty(tracking))
                     img.appendText("[" + alt + "]");
                 else {
-                    img.append("&nbsp;");
                     Element a = document.createElement("a");
                     a.attr("href", tracking);
-                    a.text(alt);
+                    a.text("[" + alt + "]");
                     img.appendChild(a);
-                    img.appendText(" ");
                 }
 
             // Annotate source with width and height
@@ -1275,32 +1274,19 @@ public class HtmlHelper {
             for (int j = 0; j < line.length(); j++) {
                 char kar = line.charAt(j);
                 if (kar == '\t') {
-                    l.append(' ');
+                    l.append('\u00A0');
                     while (l.length() % TAB_SIZE != 0)
-                        l.append(' ');
+                        l.append('\u00A0');
                 } else
                     l.append(kar);
             }
             line = l.toString();
 
             // Html characters
+            // This will handle spaces / word wrapping as well
             line = Html.escapeHtml(line);
 
-            // Space characters
-            int len = line.length();
-            for (int j = 0; j < len; j++) {
-                char kar = line.charAt(j);
-                if (kar == ' ') {
-                    // Prevent trimming start
-                    // Keep one space for word wrapping
-                    if (j == 0 || (j + 1 < len && line.charAt(j + 1) == ' '))
-                        sb.append("&nbsp;");
-                    else
-                        sb.append(' ');
-                } else
-                    sb.append(kar);
-            }
-
+            sb.append(line);
             sb.append("<br>");
         }
 
@@ -1500,106 +1486,61 @@ public class HtmlHelper {
         return preview;
     }
 
-    static String getText(String html) {
+    static String getText(Context context, String html) {
         final StringBuilder sb = new StringBuilder();
-
-        html = html.replace("<br> ", "<br>");
 
         Document d = JsoupEx.parse(html);
 
         truncate(d, true);
 
-        NodeTraversor.traverse(new NodeVisitor() {
-            private int qlevel = 0;
-            private int tlevel = 0;
-            private int plevel = 0;
-            private int lindex = 0;
+        SpannableStringBuilder ssb = fromDocument(context, d, false, null, null);
 
-            private final List<String> tails = Collections.unmodifiableList(Arrays.asList(
-                    "h1", "h2", "h3", "h4", "h5", "h6", "p", "ol", "ul", "li", "div", "table", "br", "hr"));
+        for (URLSpan span : ssb.getSpans(0, ssb.length(), URLSpan.class)) {
+            String url = span.getURL();
+            if (TextUtils.isEmpty(url))
+                continue;
+            if (url.toLowerCase(Locale.ROOT).startsWith("mailto:"))
+                url = url.substring("mailto:".length());
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            String text = ssb.subSequence(start, end).toString();
+            if (!text.contains(url))
+                ssb.insert(end, "[" + url + "]");
+        }
 
-            public void head(Node node, int depth) {
-                if (node instanceof TextNode)
-                    if (plevel > 0) {
-                        String[] lines = ((TextNode) node).getWholeText().split("\\r?\\n");
-                        for (String line : lines) {
-                            append(line, true);
-                            newline();
-                        }
-                    } else
-                        append(((TextNode) node).text());
-                else {
-                    String name = node.nodeName();
-                    if ("li".equals(name) && node.parent() != null)
-                        append("ol".equals(node.parent().nodeName()) ? "-" : "*");
-                    else if ("blockquote".equals(name))
-                        qlevel++;
-                    else if ("pre".equals(name))
-                        plevel++;
-                }
-            }
+        for (ImageSpan span : ssb.getSpans(0, ssb.length(), ImageSpan.class)) {
+            String source = span.getSource();
+            if (TextUtils.isEmpty(source))
+                continue;
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            for (int i = start; i < end; i++)
+                if (ssb.charAt(i) == '\uFFFC')
+                    ssb.replace(i, i + 1, " ");
+            ssb.insert(end, "[" + source + "]");
+        }
 
-            public void tail(Node node, int depth) {
-                String name = node.nodeName();
-                if ("a".equals(name)) {
-                    String addr = node.attr("href").toLowerCase();
-                    if (addr.startsWith("mailto:"))
-                        addr = addr.substring("mailto:".length());
-                    String text = ((Element) node).text().toLowerCase();
-                    if (!text.contains(addr))
-                        append("[" + node.attr("href") + "]");
-                } else if ("img".equals(name))
-                    append("[" + node.attr("src") + "]");
-                else if ("th".equals(name) || "td".equals(name)) {
-                    Node next = node.nextSibling();
-                    if (next == null || !("th".equals(next.nodeName()) || "td".equals(next.nodeName())))
-                        newline();
-                    else
-                        append(" ");
-                } else if ("blockquote".equals(name))
-                    qlevel--;
-                else if ("pre".equals(name))
-                    plevel--;
+        for (QuoteSpan span : ssb.getSpans(0, ssb.length(), QuoteSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            for (int i = end - 1; i >= start; i--)
+                if (ssb.charAt(i) == '\n')
+                    ssb.insert(i + 1, "> ");
+            if (ssb.charAt(start) != '\n')
+                ssb.insert(start, "> ");
+        }
 
-                if (tails.contains(name) &&
-                        !("br".equals(name) &&
-                                node.nextSibling() == null &&
-                                node.parent() != null && "div".equals(node.parent().nodeName())))
-                    newline();
-            }
+        for (BulletSpan span : ssb.getSpans(0, ssb.length(), BulletSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            ssb.insert(start, "* ");
+        }
 
-            private void append(String text) {
-                append(text, false);
-            }
+        for (NumberSpan span : ssb.getSpans(0, ssb.length(), NumberSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            ssb.insert(start, "- ");
+        }
 
-            private void append(String text, boolean raw) {
-                if (tlevel != qlevel) {
-                    newline();
-                    tlevel = qlevel;
-                }
-
-                if (!raw && !"-- ".equals(text)) {
-                    text = text.trim();
-                    if (lindex > 0)
-                        text = " " + text;
-                }
-
-                sb.append(text);
-                lindex += text.length();
-            }
-
-            private void newline() {
-                lindex = 0;
-                sb.append("\n");
-
-                for (int i = 0; i < qlevel; i++)
-                    sb.append("> ");
-            }
-        }, d);
-
-        sb.append("\n");
-
-        return sb.toString();
+        return ssb.toString();
     }
 
     static void convertLists(Document document) {
@@ -1763,13 +1704,18 @@ public class HtmlHelper {
         return false;
     }
 
-    static Spanned fromDocument(Context context, @NonNull Document document) {
+    static SpannableStringBuilder fromDocument(Context context, @NonNull Document document) {
         return fromDocument(context, document, null, null);
     }
 
-    static Spanned fromDocument(Context context, @NonNull Document document, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+    static SpannableStringBuilder fromDocument(Context context, @NonNull Document document, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+        return fromDocument(context, document, true, imageGetter, tagHandler);
+    }
+
+    private static SpannableStringBuilder fromDocument(Context context, @NonNull Document document, final boolean warn, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
+
         int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
         int dp3 = Helper.dp2pixels(context, 3);
         int dp6 = Helper.dp2pixels(context, 6);
@@ -1777,35 +1723,31 @@ public class HtmlHelper {
 
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
         NodeTraversor.traverse(new NodeVisitor() {
-            private int pre = 0;
             private Element element;
             private List<TextNode> block = new ArrayList<>();
 
-            private String WHITESPACE = " \t\f\u00A0";
+            private String WHITESPACE = " \t\f";
             private String WHITESPACE_NL = WHITESPACE + "\r\n";
             private Pattern TRIM_WHITESPACE_NL =
                     Pattern.compile("[" + WHITESPACE + "]*\\r?\\n[" + WHITESPACE + "]*");
 
             private List<String> BLOCK_START = Collections.unmodifiableList(Arrays.asList(
-                    "body", "blockquote", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ol", "ul", "pre"
+                    "body", "blockquote", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ol", "ul"
             ));
             private List<String> BLOCK_END = Collections.unmodifiableList(Arrays.asList(
-                    "body", "blockquote", "br", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ol", "ul", "pre"
+                    "body", "blockquote", "br", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ol", "ul"
             ));
 
             @Override
             public void head(Node node, int depth) {
-                if (node instanceof TextNode) {
-                    if (pre == 0)
-                        block.add((TextNode) node);
-                } else if (node instanceof Element) {
+                if (node instanceof TextNode)
+                    block.add((TextNode) node);
+                else if (node instanceof Element) {
                     element = (Element) node;
                     if (BLOCK_START.contains(element.tagName())) {
                         normalizeText(block);
                         block.clear();
                     }
-                    if ("pre".equals(element.tagName()))
-                        pre++;
                 }
             }
 
@@ -1817,8 +1759,6 @@ public class HtmlHelper {
                         normalizeText(block);
                         block.clear();
                     }
-                    if ("pre".equals(element.tagName()))
-                        pre--;
                 }
             }
 
@@ -1829,6 +1769,11 @@ public class HtmlHelper {
                 for (int i = 0; i < block.size(); ) {
                     tnode = block.get(i);
                     text = tnode.getWholeText();
+
+                    if ("-- ".equals(text)) {
+                        i++;
+                        continue;
+                    }
 
                     // Remove whitespace before/after newlines
                     TRIM_WHITESPACE_NL.matcher(text).replaceAll(" ");
@@ -1888,7 +1833,7 @@ public class HtmlHelper {
                         ssb.append("[" + element.tagName() + ":" + element.attr("x-font-size-rel") + "]");
                 } else if (node instanceof TextNode) {
                     tnode = (TextNode) node;
-                    ssb.append(tnode.text());
+                    ssb.append(tnode.getWholeText());
                 }
             }
 
@@ -1912,8 +1857,12 @@ public class HtmlHelper {
                             String value = param.substring(semi + 1);
                             switch (key) {
                                 case "color":
-                                    int color = Integer.parseInt(value.substring(1), 16) | 0xFF000000;
-                                    ssb.setSpan(new ForegroundColorSpan(color), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    try {
+                                        int color = Integer.parseInt(value.substring(1), 16) | 0xFF000000;
+                                        ssb.setSpan(new ForegroundColorSpan(color), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    } catch (NumberFormatException ex) {
+                                        Log.w(ex);
+                                    }
                                     break;
                                 case "text-decoration":
                                     if ("line-through".equals(value))
@@ -1947,6 +1896,8 @@ public class HtmlHelper {
                             if (start > 0 && ssb.charAt(start - 1) != '\n')
                                 ssb.insert(start++, "\n");
                             ssb.setSpan(new QuoteSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            if (ssb.length() > 1 && ssb.charAt(ssb.length() - 1) != '\n')
+                                ssb.append("\n");
                             break;
                         case "br":
                             newline(ssb.length());
@@ -1990,13 +1941,16 @@ public class HtmlHelper {
                             else {
                                 int index = 0;
                                 for (Node child : parent.childNodes()) {
-                                    if (child instanceof Element) {
+                                    if (child instanceof Element &&
+                                            child.nodeName().equals(element.tagName())) {
                                         index++;
                                         if (child == element)
                                             break;
                                     }
                                 }
-                                ssb.setSpan(new NumberSpan(dp6, colorAccent, index), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                float textSize = Helper.getTextSize(context, 0);
+                                ssb.setSpan(new NumberSpan(dp6, colorAccent, textSize, index), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             }
                             break;
                         case "ol":
@@ -2012,9 +1966,6 @@ public class HtmlHelper {
                                 ssb.setSpan(new LeadingMarginSpan.Standard(llevel * dp24), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             newline(start);
                             newline(ssb.length());
-                            break;
-                        case "pre":
-                            // Do nothing
                             break;
                         case "small":
                             ssb.setSpan(new RelativeSizeSpan(FONT_SMALL), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -2046,7 +1997,8 @@ public class HtmlHelper {
                             ssb.setSpan(new UnderlineSpan(), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             break;
                         default:
-                            Log.e("Unknown tag=" + element.tagName());
+                            if (warn)
+                                Log.e("Unknown tag=" + element.tagName());
                     }
                 }
             }
@@ -2066,7 +2018,20 @@ public class HtmlHelper {
                 if (ssb.charAt(i) == '\n')
                     ssb.insert(i, "|");
 
-        return reverseSpans(ssb);
+        Object[] spans = ssb.getSpans(0, ssb.length(), Object.class);
+        Map<Object, Integer> start = new HashMap<>();
+        Map<Object, Integer> end = new HashMap<>();
+        Map<Object, Integer> flags = new HashMap<>();
+        for (Object span : spans) {
+            start.put(span, ssb.getSpanStart(span));
+            end.put(span, ssb.getSpanEnd(span));
+            flags.put(span, ssb.getSpanFlags(span));
+            ssb.removeSpan(span);
+        }
+        for (int i = spans.length - 1; i >= 0; --i)
+            ssb.setSpan(spans[i], start.get(spans[i]), end.get(spans[i]), flags.get(spans[i]));
+
+        return ssb;
     }
 
     static Spanned fromHtml(@NonNull String html) {
@@ -2124,41 +2089,37 @@ public class HtmlHelper {
     }
 
     private static class NumberSpan implements LeadingMarginSpan {
-        private final int gapWidth;
-        private int color;
-        private final int index;
-        private float textWidth;
+        private TextPaint tp;
+        private String number;
+        private int margin;
 
-        public NumberSpan(int gapWidth, int color, int index) {
-            this.gapWidth = gapWidth;
-            this.color = color;
-            this.index = index;
+        public NumberSpan(int gapWidth, int color, float textSize, int index) {
+            tp = new TextPaint();
+            tp.setStyle(Paint.Style.FILL);
+            tp.setColor(color);
+            tp.setTypeface(Typeface.MONOSPACE);
+            tp.setTextSize(textSize);
+
+            number = index + ".";
+            margin = Math.round(tp.measureText(number) + gapWidth);
         }
 
         @Override
         public int getLeadingMargin(boolean first) {
-            return Math.round(textWidth + gapWidth);
+            // https://issuetracker.google.com/issues/36956124
+            // This is called before drawLeadingMargin to justify the text
+            return margin;
         }
 
         @Override
         public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
-            if (first) {
-                Paint.Style ostyle = p.getStyle();
-                int ocolor = p.getColor();
-                Typeface oface = p.getTypeface();
-
-                p.setStyle(Paint.Style.FILL);
-                p.setColor(color);
-                p.setTypeface(Typeface.MONOSPACE);
-
-                String number = index + ".";
-                textWidth = p.measureText(number);
-
-                c.drawText(number, x, bottom - p.descent(), p);
-
-                p.setStyle(ostyle);
-                p.setColor(ocolor);
-                p.setTypeface(oface);
+            if (text instanceof Spanned &&
+                    ((Spanned) text).getSpanStart(this) == start) {
+                float textSize = tp.getTextSize();
+                if (textSize > p.getTextSize())
+                    tp.setTextSize(p.getTextSize());
+                c.drawText(number, x + dir, baseline, tp);
+                tp.setTextSize(textSize);
             }
         }
     }
