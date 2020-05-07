@@ -49,6 +49,7 @@ public interface DaoMessage {
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.synchronize AS identitySynchronize" +
             ", '[' || group_concat(message.`from`, ',') || ']' AS senders" +
+            ", '[' || group_concat(message.`to`, ',') || ']' AS recipients" +
             ", COUNT(message.id) AS count" +
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", SUM(1 - message.ui_flagged) AS unflagged" +
@@ -67,7 +68,7 @@ public interface DaoMessage {
             "   OR (NOT :found AND :type IS NULL AND folder.unified)" +
             "   OR (NOT :found AND folder.type = :type))" +
             "   THEN message.received ELSE 0 END) AS dummy" +
-            " FROM message" +
+            " FROM (SELECT * FROM message ORDER BY received DESC) AS message" + // group_concat
             " JOIN account_view AS account ON account.id = message.account" +
             " LEFT JOIN identity_view AS identity ON identity.id = message.identity" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
@@ -116,6 +117,7 @@ public interface DaoMessage {
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.synchronize AS identitySynchronize" +
             ", '[' || group_concat(message.`from`, ',') || ']' AS senders" +
+            ", '[' || group_concat(message.`to`, ',') || ']' AS recipients" +
             ", COUNT(message.id) AS count" +
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", SUM(1 - message.ui_flagged) AS unflagged" +
@@ -130,7 +132,7 @@ public interface DaoMessage {
             ", message.priority AS ui_priority" +
             ", message.importance AS ui_importance" +
             ", MAX(CASE WHEN folder.id = :folder THEN message.received ELSE 0 END) AS dummy" +
-            " FROM message" +
+            " FROM (SELECT * FROM message ORDER BY received DESC) AS message" + // group_concat
             " JOIN account_view AS account ON account.id = message.account" +
             " LEFT JOIN identity_view AS identity ON identity.id = message.identity" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
@@ -178,6 +180,7 @@ public interface DaoMessage {
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.synchronize AS identitySynchronize" +
             ", message.`from` AS senders" +
+            ", message.`to` AS recipients" +
             ", 1 AS count" +
             ", CASE WHEN message.ui_seen THEN 0 ELSE 1 END AS unseen" +
             ", CASE WHEN message.ui_flagged THEN 0 ELSE 1 END AS unflagged" +
@@ -289,13 +292,13 @@ public interface DaoMessage {
     Cursor getMessageFts();
 
     @Query("SELECT id, account, thread, (:find IS NULL" +
-            " OR `from` LIKE :find COLLATE NOCASE" +
-            " OR `to` LIKE :find COLLATE NOCASE" +
-            " OR `cc` LIKE :find COLLATE NOCASE" +
-            " OR `bcc` LIKE :find COLLATE NOCASE" +
-            " OR `subject` LIKE :find COLLATE NOCASE" +
-            " OR `keywords` LIKE :find COLLATE NOCASE" +
-            " OR `preview` LIKE :find COLLATE NOCASE) AS matched" +
+            " OR `from` LIKE :find COLLATE NOCASE" + // no index
+            " OR `to` LIKE :find COLLATE NOCASE" + // no index
+            " OR `cc` LIKE :find COLLATE NOCASE" + // no index
+            " OR `bcc` LIKE :find COLLATE NOCASE" + // no index
+            " OR `subject` LIKE :find COLLATE NOCASE" + // unsuitable index
+            " OR `keywords` LIKE :find COLLATE NOCASE" + // no index
+            " OR `preview` LIKE :find COLLATE NOCASE) AS matched" + // no index
             " FROM message" +
             " WHERE NOT ui_hide" +
             " AND (:account IS NULL OR account = :account)" +
@@ -363,6 +366,7 @@ public interface DaoMessage {
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.synchronize AS identitySynchronize" +
             ", message.`from` AS senders" +
+            ", message.`to` AS recipients" +
             ", 1 AS count" +
             ", CASE WHEN message.ui_seen THEN 0 ELSE 1 END AS unseen" +
             ", CASE WHEN message.ui_flagged THEN 0 ELSE 1 END AS unflagged" +
@@ -393,6 +397,7 @@ public interface DaoMessage {
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.synchronize AS identitySynchronize" +
             ", message.`from` AS senders" +
+            ", message.`to` AS recipients" +
             ", 1 AS count" +
             ", 1 AS unseen" +
             ", 0 AS unflagged" +

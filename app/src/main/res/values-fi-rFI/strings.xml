@@ -50,8 +50,8 @@
         <item quantity="other">%1$d uutta</item>
     </plurals>
     <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d keskustelu valittu</item>
-        <item quantity="other">%1$d keskustelua valittu</item>
+        <item quantity="one">Valittuna %1$d keskustelu</item>
+        <item quantity="other">Valittuna %1$d keskustelua</item>
     </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Siirrä %1$d viesti kansioon %2$s?</item>
@@ -78,14 +78,15 @@
     <string name="title_notification_alert">Palvelimen \'%1$s\' hälytys</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d minuuttia</string>
     <string name="menu_exit">Poistu</string>
     <string name="menu_answers">Viestipohjat</string>
     <string name="menu_operations">Toimenpiteet</string>
     <string name="menu_contacts">Paikalliset yhteystiedot</string>
     <string name="menu_setup">Asetukset</string>
-    <string name="menu_legend">Seloste</string>
-    <string name="menu_test">Testaa ohjelmaa</string>
+    <string name="menu_legend">Selite</string>
+    <string name="menu_test">Testausohjelma</string>
     <string name="menu_faq">Tuki</string>
     <string name="menu_translate">Auta kääntämisessä</string>
     <string name="menu_issue">Ilmoita ongelmasta</string>
@@ -123,9 +124,9 @@
     <string name="title_setup_wizard_remark">Mene \'takaisin\' palataksesi saapuneet-kansioon</string>
     <string name="title_setup_other">Muu palveluntarjoaja</string>
     <string name="title_setup_gmail_support">Google-tilien valtuuttaminen toimii vain virallisissa versioissa, koska Android tarkistaa sovelluksen allekirjoituksen</string>
-    <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet, että tili voidaan valita ja nimesi voidaan lukea</string>
+    <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
     <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
-    <string name="title_setup_gmail_drafts">Jos luonnokset-kansio ei ole IMAP:lla saatavilla, asia voidaan korjata Gmailin tunnisteiden asetuksissa</string>
+    <string name="title_setup_gmail_drafts">Jos luonnokset-kansio ei ole IMAPin saatavilla, asia voidaan korjata Gmailin tunnisteiden asetuksissa</string>
     <string name="title_setup_oauth_rationale">Valtuuta pääsy tilillesi %1$s</string>
     <string name="title_setup_oauth_authorize">Valtuuta</string>
     <string name="title_setup_select_account">Valitse tili</string>
@@ -256,7 +257,7 @@
     <string name="title_advanced_caption_message_header">Viestin tunnistetiedot</string>
     <string name="title_advanced_caption_message_body">Viestin sisältö</string>
     <string name="title_advanced_landscape">Käytä kahta saraketta vaakatilassa</string>
-    <string name="title_advanced_landscape3">Salli kiinteä navigointivalikko vaakatilassa</string>
+    <string name="title_advanced_landscape3">Näytä navigointivalikko vaakatilassa oletusarvoisesti</string>
     <string name="title_advanced_startup">Näytä aloitusnäytössä</string>
     <string name="title_advanced_cards">Käytä korttityyliä taulukkotyylin sijaan</string>
     <string name="title_advanced_date_header">Ryhmittely päivämäärän mukaan</string>
@@ -276,6 +277,7 @@
     <string name="title_advanced_name_email">Näytä nimet ja sähköpostiosoitteet</string>
     <string name="title_advanced_replace_name">Käytä ensisijaisesti yhteystiedon nimeä lähettäjän nimen sijaan</string>
     <string name="title_advanced_distinguish_contacts">Alleviivaa lähettäjä tämän ollessa paikallisesti tunnettu vastaanottaja</string>
+    <string name="title_advanced_show_recipients">Näytä vastaanottajat viestin tunnistetiedoissa</string>
     <string name="title_advanced_font_size_sender">Viestin lähettäjän kirjaisimen koko</string>
     <string name="title_advanced_font_size_subject">Viestin aiheen kirjaisimen koko</string>
     <string name="title_advanced_subject_top">Näytä aihe lähettäjän yläpuolella</string>
@@ -295,6 +297,7 @@
     <string name="title_advanced_monospaced">Käytä kiinteävälistä kirjaisinta viestien tekstille</string>
     <string name="title_advanced_text_color">Näytä tekstin värit</string>
     <string name="title_advanced_text_size">Näytä pienet ja suuret tekstit</string>
+    <string name="title_advanced_text_align">Näytä vasemmalle/keskelle/oikealle tasatut tekstit</string>
     <string name="title_advanced_collapse_quotes">Tiivistä lainattu teksti</string>
     <string name="title_advanced_images_inline">Näytä tekstiin upotetut kuvat oletuksena</string>
     <string name="title_advanced_seekbar">Näytä suhteellinen sijainti keskustelussa pisteellä</string>
@@ -810,6 +813,7 @@
         Palvelimelta hakeaksesi näpäytä uudelleenhakupainiketta.
     </string>
     <string name="title_search_index_hint">Hakuindeksin kautta etsiminen on nopeampaa, mutta se löytää vain kokonaisia sanoja</string>
+    <string name="title_search_text_hint">Joillain sähköpostipalvelimilla on vaikeuksia löytää tekstiä monista viesteistä</string>
     <string name="title_search_more">Lisää asetuksia</string>
     <string name="title_search_use_index">Käytä haun indeksiä</string>
     <string name="title_search_in_senders">Lähettäjistä</string>
@@ -856,6 +860,7 @@
     <string name="title_select_all">Valitse kaikki</string>
     <string name="title_select_found">Valitse löytyneet</string>
     <string name="title_force_sync">Pakota synkronointi</string>
+    <string name="title_force_send">Pakota lähetys</string>
     <string name="title_language_all">Kaikki</string>
     <string name="title_previous">Edellinen</string>
     <string name="title_next">Seuraava</string>
@@ -965,6 +970,7 @@
     <string name="title_legend_snoozed">Torkutettu</string>
     <string name="title_legend_browsed">Selattu tai haettu</string>
     <string name="title_legend_answered">Vastattu</string>
+    <string name="title_legend_forwarded">Edelleenlähetetty</string>
     <string name="title_legend_plain_only">Muotoilematon teksti</string>
     <string name="title_legend_receipt">Kuittaus pyydetty</string>
     <string name="title_legend_attachment">Sisältää liitteen</string>

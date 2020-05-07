@@ -79,6 +79,7 @@
     <string name="title_notification_alert">Alerta del servidor \'%1$s\'</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d minutos</string>
     <string name="menu_exit">Salir</string>
     <string name="menu_answers">Plantillas</string>
@@ -259,7 +260,7 @@
     <string name="title_advanced_caption_message_header">Encabezado del mensaje</string>
     <string name="title_advanced_caption_message_body">Cuerpo del mensaje</string>
     <string name="title_advanced_landscape">Usar dos columnas en modo horizontal</string>
-    <string name="title_advanced_landscape3">Permitir menú de navegación fijo en modo horizontal</string>
+    <string name="title_advanced_landscape3">Mostrar el menú de navegación en modo apaisado por defecto</string>
     <string name="title_advanced_startup">Mostrar en pantalla de inicio</string>
     <string name="title_advanced_cards">Usar estilo de tarjeta en lugar del estilo tabular</string>
     <string name="title_advanced_date_header">Agrupar por fecha</string>
@@ -279,6 +280,7 @@
     <string name="title_advanced_name_email">Mostrar nombres y direcciones de correo electrónico</string>
     <string name="title_advanced_replace_name">Preferir un nombre de contacto sobre un nombre enviado</string>
     <string name="title_advanced_distinguish_contacts">Subrayar el remitente cuando el remitente es conocido como contacto \'a:\' local</string>
+    <string name="title_advanced_show_recipients">Mostrar destinatarios en el encabezado del mensaje</string>
     <string name="title_advanced_font_size_sender">Tamaño de fuente de remitente</string>
     <string name="title_advanced_font_size_subject">Tamaño de fuente del asunto</string>
     <string name="title_advanced_subject_top">Mostrar asunto arriba del remitente</string>
@@ -298,6 +300,7 @@
     <string name="title_advanced_monospaced">Usar fuente monoespaciada para texto de mensaje</string>
     <string name="title_advanced_text_color">Mostrar colores de texto</string>
     <string name="title_advanced_text_size">Mostrar textos pequeños y grandes</string>
+    <string name="title_advanced_text_align">Mostrar textos alineados a la izquierda/centro/derecha</string>
     <string name="title_advanced_collapse_quotes">Colapsar texto citado</string>
     <string name="title_advanced_images_inline">Mostrar imágenes embebidas automáticamente</string>
     <string name="title_advanced_seekbar">Mostrar posición relativa de conversación con un punto</string>
@@ -813,6 +816,7 @@
         Para buscar también en el servidor, toque el botón \'Buscar de nuevo\'.
     </string>
     <string name="title_search_index_hint">Buscar a través del índice de búsqueda es rápido, pero sólo encontrará palabras completas</string>
+    <string name="title_search_text_hint">Algunos servidores de correo electrónico tienen problemas para encontrar texto en muchos mensajes</string>
     <string name="title_search_more">Más opciones</string>
     <string name="title_search_use_index">Usar índice de búsqueda</string>
     <string name="title_search_in_senders">En remitentes (de)</string>
@@ -859,6 +863,7 @@
     <string name="title_select_all">Seleccionar todo</string>
     <string name="title_select_found">Seleccionar lo encontrado</string>
     <string name="title_force_sync">Forzar sincronización</string>
+    <string name="title_force_send">Forzar envío</string>
     <string name="title_language_all">Todos</string>
     <string name="title_previous">Anterior</string>
     <string name="title_next">Siguiente</string>
@@ -968,6 +973,7 @@
     <string name="title_legend_snoozed">Está postergado</string>
     <string name="title_legend_browsed">Está navegado o buscado</string>
     <string name="title_legend_answered">Ha sido respondido</string>
+    <string name="title_legend_forwarded">Fue reenviado</string>
     <string name="title_legend_plain_only">Sólo es texto plano</string>
     <string name="title_legend_receipt">Se solicitó confirmación de lectura</string>
     <string name="title_legend_attachment">Tiene adjunto</string>

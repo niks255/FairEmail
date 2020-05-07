@@ -101,6 +101,7 @@
     <string name="title_notification_alert">\'%1$s\' upozornění serveru</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d minut</string>
     <string name="menu_exit">Ukončit</string>
     <string name="menu_answers">Šablony</string>
@@ -280,7 +281,7 @@
     <string name="title_advanced_caption_message_header">Hlavička zprávy</string>
     <string name="title_advanced_caption_message_body">Tělo zprávy</string>
     <string name="title_advanced_landscape">Dvou-sloupcové rozvržení v režimu na šířku</string>
-    <string name="title_advanced_landscape3">Ukotvit navigační menu v režimu na šířku</string>
+    <string name="title_advanced_landscape3">Automaticky zobrazit navigační menu v režimu na šířku</string>
     <string name="title_advanced_startup">Na úvodní obrazovce zobrazit</string>
     <string name="title_advanced_cards">Použít styl karet namísto tabulkového zobrazení</string>
     <string name="title_advanced_date_header">Seskupit podle data</string>
@@ -300,6 +301,7 @@
     <string name="title_advanced_name_email">Zobrazit jména a e-mailové adresy</string>
     <string name="title_advanced_replace_name">Preferovat jméno z kontaktu namísto z hlavičky</string>
     <string name="title_advanced_distinguish_contacts">Podtrhnout odesílatele, je-li známý jako lokální \"komu\" kontakt</string>
+    <string name="title_advanced_show_recipients">Zobrazit příjemce v hlavičce zprávy</string>
     <string name="title_advanced_font_size_sender">Velikost písma odesílatele</string>
     <string name="title_advanced_font_size_subject">Velikost písma předmětu</string>
     <string name="title_advanced_subject_top">Zobrazit předmět nad odesílatelem</string>
@@ -319,6 +321,7 @@
     <string name="title_advanced_monospaced">Použít neproporcionální písmo pro text zprávy</string>
     <string name="title_advanced_text_color">Zobrazit barvy textu</string>
     <string name="title_advanced_text_size">Zobrazit malé a velké texty</string>
+    <string name="title_advanced_text_align">Zobrazit vlevo/na střed/vpravo zarovnané texty</string>
     <string name="title_advanced_collapse_quotes">Sbalit citovaný text</string>
     <string name="title_advanced_images_inline">Automaticky zobrazit vložené obrázky</string>
     <string name="title_advanced_seekbar">Zobrazit relativní pozici v konverzaci puntíkem</string>
@@ -834,6 +837,7 @@
         Pro hledání i na serveru, stiskněte tlačítko \"Hledat znovu\".
     </string>
     <string name="title_search_index_hint">Hledání s pomocí indexu vyhledávání je rychlé, ale najde pouze celá slova</string>
+    <string name="title_search_text_hint">Některé e-mailové servery mají potíže s hledáním textu ve velkém množství zpráv</string>
     <string name="title_search_more">Více možností</string>
     <string name="title_search_use_index">Použít index vyhledávání</string>
     <string name="title_search_in_senders">V odesílatelích (od)</string>
@@ -880,6 +884,7 @@
     <string name="title_select_all">Vybrat vše</string>
     <string name="title_select_found">Vybrat nalezené</string>
     <string name="title_force_sync">Vynutit synchronizaci</string>
+    <string name="title_force_send">Vynutit odeslání</string>
     <string name="title_language_all">Všechny</string>
     <string name="title_previous">Předchozí</string>
     <string name="title_next">Další</string>
@@ -989,6 +994,7 @@
     <string name="title_legend_snoozed">Je odloženo</string>
     <string name="title_legend_browsed">Je prohlédnuto/vyhledáno</string>
     <string name="title_legend_answered">Bylo odpovězeno</string>
+    <string name="title_legend_forwarded">Bylo přeposláno</string>
     <string name="title_legend_plain_only">Je pouze prostý text</string>
     <string name="title_legend_receipt">Potvrzení o přečtení bylo vyžádáno</string>
     <string name="title_legend_attachment">Má přílohu</string>

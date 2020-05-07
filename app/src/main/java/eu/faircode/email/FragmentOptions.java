@@ -60,7 +60,7 @@ public class FragmentOptions extends FragmentBase {
             "landscape", "landscape3", "startup", "cards", "indentation", "date", "threading",
             "highlight_unread", "color_stripe",
             "avatars", "gravatars", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
-            "name_email", "prefer_contact", "distinguish_contacts", "authentication",
+            "name_email", "prefer_contact", "distinguish_contacts", "show_recipients", "authentication",
             "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
             "keywords_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines",
             "addresses", "button_archive_trash", "button_move", "attachments_alt",
@@ -201,8 +201,8 @@ public class FragmentOptions extends FragmentBase {
             pager.setCurrentItem(3);
         else if ("display".equals(tab))
             pager.setCurrentItem(4);
-        else if ("privacy".equals(tab))
-            pager.setCurrentItem(6);
+        else if ("encryption".equals(tab))
+            pager.setCurrentItem(7);
         getActivity().getIntent().removeExtra("tab");
     }
 

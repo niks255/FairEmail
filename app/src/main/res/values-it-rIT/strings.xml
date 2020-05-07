@@ -79,6 +79,7 @@
     <string name="title_notification_alert">\'%1$s\' avvisi sul server</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d minuti</string>
     <string name="menu_exit">Esci</string>
     <string name="menu_answers">Modelli</string>
@@ -257,7 +258,6 @@
     <string name="title_advanced_caption_message_header">Intestazione messaggio</string>
     <string name="title_advanced_caption_message_body">Corpo del messaggio</string>
     <string name="title_advanced_landscape">Usa due colonne in modalità orizzontale</string>
-    <string name="title_advanced_landscape3">Consenti menu di navigazione fisso in modalità orizzontale</string>
     <string name="title_advanced_startup">Mostra nella schermata iniziale</string>
     <string name="title_advanced_cards">Utilizza lo stile della carta al posto dello stile tabulare</string>
     <string name="title_advanced_date_header">Raggruppa per data</string>

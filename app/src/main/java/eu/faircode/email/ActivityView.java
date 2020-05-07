@@ -130,6 +130,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     static final String ACTION_EDIT_ANSWER = BuildConfig.APPLICATION_ID + ".EDIT_ANSWER";
     static final String ACTION_EDIT_RULES = BuildConfig.APPLICATION_ID + ".EDIT_RULES";
     static final String ACTION_EDIT_RULE = BuildConfig.APPLICATION_ID + ".EDIT_RULE";
+    static final String ACTION_NEW_MESSAGE = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE";
 
     private static final int UPDATE_TIMEOUT = 15 * 1000; // milliseconds
     private static final long EXIT_DELAY = 2500L; // milliseconds
@@ -139,6 +140,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     @SuppressLint("MissingSuperCall")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, false);
+
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(creceiver, new IntentFilter(ACTION_NEW_MESSAGE));
 
         if (savedInstanceState != null)
             searching = savedInstanceState.getBoolean("fair:searching");
@@ -627,6 +631,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         super.onPause();
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.unregisterReceiver(receiver);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.unregisterReceiver(creceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -1127,6 +1139,32 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, new FragmentLogs()).addToBackStack("logs");
         fragmentTransaction.commit();
+    }
+
+    private BroadcastReceiver creceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onNewMessage(intent);
+        }
+    };
+
+    private List<Long> updatedFolders = new ArrayList<>();
+
+    boolean isFolderUpdated(long folder) {
+        boolean value = updatedFolders.contains(folder);
+        if (value)
+            updatedFolders.remove(folder);
+        return value;
+    }
+
+    private void onNewMessage(Intent intent) {
+        long folder = intent.getLongExtra("folder", -1);
+        boolean unified = intent.getBooleanExtra("unified", false);
+
+        if (!updatedFolders.contains(folder))
+            updatedFolders.add(folder);
+        if (unified && !updatedFolders.contains(-1L))
+            updatedFolders.add(-1L);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {

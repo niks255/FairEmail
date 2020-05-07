@@ -75,21 +75,28 @@ public class EditTextCompose extends FixedEditText {
                         CharSequence text = item.getText();
                         if (text == null)
                             return false;
-                        html = "<div>" + HtmlHelper.formatPre(text.toString()) + "</div>";
+                        html = "<div x-plain=\"true\">" + HtmlHelper.formatPre(text.toString()) + "</div>";
                     }
+
                     Document document = HtmlHelper.sanitizeCompose(context, html, false);
-                    Spanned paste = HtmlHelper.fromDocument(context, document);
+                    Spanned paste = HtmlHelper.fromHtml(document.html());
 
                     int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
+                    int dp3 = Helper.dp2pixels(context, 3);
+                    int dp6 = Helper.dp2pixels(context, 6);
 
                     SpannableStringBuilder ssb = new SpannableStringBuilder(paste);
                     QuoteSpan[] spans = ssb.getSpans(0, ssb.length(), QuoteSpan.class);
                     for (QuoteSpan span : spans) {
-                        ssb.setSpan(
-                                new StyledQuoteSpan(context, colorPrimary),
+                        QuoteSpan q;
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                            q = new QuoteSpan(colorPrimary);
+                        else
+                            q = new QuoteSpan(colorPrimary, dp3, dp6);
+                        ssb.setSpan(q,
                                 ssb.getSpanStart(span),
                                 ssb.getSpanEnd(span),
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                ssb.getSpanFlags(span));
                         ssb.removeSpan(span);
                     }
 

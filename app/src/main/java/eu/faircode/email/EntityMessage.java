@@ -107,6 +107,7 @@ public class EntityMessage implements Serializable {
     public String references;
     public String deliveredto;
     public String inreplyto;
+    public String wasforwardedfrom;
     public String thread; // compose = null
     public Integer priority;
     public Integer importance;
@@ -216,6 +217,14 @@ public class EntityMessage implements Serializable {
                         addresses.remove(address);
 
         return addresses.toArray(new Address[0]);
+    }
+
+    boolean isForwarded() {
+        if (keywords != null)
+            for (String keyword : keywords)
+                if ("$Forwarded".equalsIgnoreCase(keyword))
+                    return true;
+        return false;
     }
 
     String getNotificationChannelId() {

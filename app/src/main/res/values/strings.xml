@@ -101,6 +101,7 @@
 
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d minutes</string>
 
     <string name="menu_exit">Exit</string>
@@ -228,12 +229,12 @@
     <string name="title_setup_theme_grey">Grey</string>
     <string name="title_setup_theme_black">Black</string>
 
-    <string name="title_setup_theme_reverse">Reverse colors</string>
+    <string name="title_setup_theme_reverse">Swap colors</string>
     <string name="title_setup_theme_dark">Dark</string>
     <string name="title_setup_theme_black_background">Black background</string>
     <string name="title_setup_theme_system">Follow system</string>
 
-    <string name="title_setup_theme_system_hint">Follow system theme will automatically switch to light/dark on day/night, if supported by Android</string>
+    <string name="title_setup_theme_system_hint">This will automatically switch to a light/dark theme on day/night mode, if supported by Android</string>
 
     <string name="title_setup_advanced">Advanced</string>
 
@@ -286,7 +287,7 @@
     <string name="title_advanced_plain_only">Send plain text only by default</string>
     <string name="title_advanced_flow">\'format flowed\' for plain text</string>
     <string name="title_advanced_receipt">When requesting a receipt</string>
-    <string name="title_advanced_usenet_signature">Usenet signature convention</string>
+    <string name="title_advanced_usenet_signature">Follow Usenet signature convention</string>
     <string name="title_advanced_remove_signatures">Remove recognized signatures</string>
     <string name="title_advanced_send_reminders">Show reminders</string>
     <string name="title_advanced_lookup_mx">Check recipient email addresses before sending</string>
@@ -309,7 +310,7 @@
     <string name="title_advanced_caption_message_body">Message body</string>
 
     <string name="title_advanced_landscape">Use two columns in landscape mode</string>
-    <string name="title_advanced_landscape3">Allow fixed navigation menu in landscape mode</string>
+    <string name="title_advanced_landscape3">Show navigation menu in landscape mode by default</string>
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_date_header">Group by date</string>
@@ -329,6 +330,7 @@
     <string name="title_advanced_name_email">Show names and email addresses</string>
     <string name="title_advanced_replace_name">Prefer a contact name over a sent name</string>
     <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
+    <string name="title_advanced_show_recipients">Show recipients in message header</string>
     <string name="title_advanced_font_size_sender">Font size sender</string>
     <string name="title_advanced_font_size_subject">Font size subject</string>
     <string name="title_advanced_subject_top">Show subject above sender</string>
@@ -342,12 +344,13 @@
     <string name="title_advanced_preview_lines">Number of preview lines</string>
     <string name="title_advanced_archive_trash">Show buttons to archive or trash a message</string>
     <string name="title_advanced_move">Show button to move a message</string>
-    <string name="title_advanced_addresses">Show address details by default</string>
+    <string name="title_advanced_addresses">Expand address details by default</string>
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text</string>
     <string name="title_advanced_text_color">Show text colors</string>
     <string name="title_advanced_text_size">Show small and large texts</string>
+    <string name="title_advanced_text_align">Show left/center/right aligned texts</string>
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
     <string name="title_advanced_images_inline">Automatically show inline images</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
@@ -619,7 +622,7 @@
     <string name="title_pop_support">The POP3 protocol supports downloading and deleting messages from the inbox only. POP3 cannot mark messages as read, move messages, etc. POP3 will use more battery power and data than IMAP. So, consider using the IMAP protocol whenever possible.</string>
     <string name="title_oauth_support">OAuth is not supported</string>
     <string name="title_review">Review</string>
-    <string name="title_hint_alias">Long press for options, like copy to create alias identities</string>
+    <string name="title_hint_alias">Long press an identity to display options, like copy to create alias identities</string>
     <string name="title_service_vpn">This might be caused by the VPN that is being used</string>
     <string name="title_service_port">Please double check the port number</string>
 
@@ -785,7 +788,7 @@
     <string name="title_ask_delete_rule">Delete rule permanently?</string>
     <string name="title_ask_discard">Discard draft?</string>
     <string name="title_ask_show_html">Showing the original message can leak privacy sensitive information</string>
-    <string name="title_ask_show_html_remark">Displaying the original message with a dark background is not possible because it can cause invisible dark texts and images</string>
+    <string name="title_ask_show_html_remark">Displaying the original message on a dark background is not possible as it may make dark texts and images invisible</string>
     <string name="title_ask_show_html_images">Always show images on showing original messages</string>
     <string name="title_ask_show_image">Showing images can leak privacy sensitive information</string>
     <string name="title_ask_show_image_hint">Images recognized as tracking images will not be shown</string>
@@ -877,7 +880,7 @@
     <string name="title_text_reminder">Message is empty</string>
     <string name="title_attachment_keywords">attached,attachment,attachments,included</string>
     <string name="title_attachment_reminder">Did you intend to add an attachment?</string>
-    <string name="title_attachments_missing">Not all attachments are downloaded</string>
+    <string name="title_attachments_missing">Not all attachments have been downloaded</string>
     <string name="title_dialog_hint">This dialog can be enabled again via the three-dots menu in the top action bar</string>
     <string name="title_draft_deleted">Draft discarded</string>
     <string name="title_draft_saved">Draft saved</string>
@@ -920,6 +923,7 @@
         To search the server too, tap on the \'search again\' button.
     </string>
     <string name="title_search_index_hint">Searching via the search index is fast, but will only find whole words</string>
+    <string name="title_search_text_hint">Some email servers have trouble finding text in many messages</string>
     <string name="title_search_more">More options</string>
     <string name="title_search_use_index">Use search index</string>
     <string name="title_search_in_senders">In senders (from)</string>
@@ -970,6 +974,7 @@
     <string name="title_select_all">Select all</string>
     <string name="title_select_found">Select found</string>
     <string name="title_force_sync">Force sync</string>
+    <string name="title_force_send">Force send</string>
 
     <string name="title_language_all">All</string>
 
@@ -1090,7 +1095,8 @@
     <string name="title_legend_found">Was found</string>
     <string name="title_legend_snoozed">Is snoozed</string>
     <string name="title_legend_browsed">Is browsed or searched</string>
-    <string name="title_legend_answered">Has been answered</string>
+    <string name="title_legend_answered">Was answered</string>
+    <string name="title_legend_forwarded">Was forwarded</string>
     <string name="title_legend_plain_only">Is plain text only</string>
     <string name="title_legend_receipt">Receipt was requested</string>
     <string name="title_legend_attachment">Has attachment</string>
@@ -1157,7 +1163,7 @@
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>
     <string name="title_hint_important">Important</string>
-    <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection and device and on the number of messages. While downloading messages the app might respond slower.</string>
+    <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection, the device and on the number of messages. While downloading messages the app might respond slower.</string>
     <string name="title_hint_battery">Since FairEmail by default always receives messages, Android will report FairEmail as always being active. Therefore it might look as if FairEmail is always consuming battery power although this is in fact not the case.</string>
     <string name="title_hint_reformat">By default, FairEmail reformats messages for privacy and security reasons. To view the original message, tap the \'full screen\' icon above the message text.</string>
     <string name="title_hint_contact_actions">Long press for options</string>

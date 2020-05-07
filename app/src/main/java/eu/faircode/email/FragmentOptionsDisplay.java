@@ -86,6 +86,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swNameEmail;
     private SwitchCompat swPreferContact;
     private SwitchCompat swDistinguishContacts;
+    private SwitchCompat swShowRecipients;
     private SwitchCompat swSubjectTop;
     private Spinner spFontSizeSender;
     private Spinner spFontSizeSubject;
@@ -107,6 +108,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swMonospaced;
     private SwitchCompat swTextColor;
     private SwitchCompat swTextSize;
+    private SwitchCompat swTextAlign;
     private SwitchCompat swCollapseQuotes;
     private SwitchCompat swImagesInline;
     private SwitchCompat swAttachmentsAlt;
@@ -119,12 +121,12 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "threading", "indentation", "seekbar", "actionbar", "actionbar_color",
             "highlight_unread", "color_stripe",
             "avatars", "gravatars", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
-            "name_email", "prefer_contact", "distinguish_contacts",
+            "name_email", "prefer_contact", "distinguish_contacts", "show_recipients",
             "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
             "keywords_header", "flags", "flags_background",
             "preview", "preview_italic", "preview_lines",
             "addresses", "button_archive_trash", "button_move",
-            "contrast", "monospaced", "text_color", "text_size",
+            "contrast", "monospaced", "text_color", "text_size", "text_align",
             "inline_images", "collapse_quotes", "attachments_alt",
             "parse_classes", "authentication"
     };
@@ -170,6 +172,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swNameEmail = view.findViewById(R.id.swNameEmail);
         swPreferContact = view.findViewById(R.id.swPreferContact);
         swDistinguishContacts = view.findViewById(R.id.swDistinguishContacts);
+        swShowRecipients = view.findViewById(R.id.swShowRecipients);
         swSubjectTop = view.findViewById(R.id.swSubjectTop);
         spFontSizeSender = view.findViewById(R.id.spFontSizeSender);
         spFontSizeSubject = view.findViewById(R.id.spFontSizeSubject);
@@ -189,6 +192,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swMonospaced = view.findViewById(R.id.swMonospaced);
         swTextColor = view.findViewById(R.id.swTextColor);
         swTextSize = view.findViewById(R.id.swTextSize);
+        swTextAlign = view.findViewById(R.id.swTextAlign);
         swCollapseQuotes = view.findViewById(R.id.swCollapseQuotes);
         swImagesInline = view.findViewById(R.id.swImagesInline);
         swAttachmentsAlt = view.findViewById(R.id.swAttachmentsAlt);
@@ -442,6 +446,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swShowRecipients.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("show_recipients", checked).apply();
+            }
+        });
+
         swSubjectTop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -602,6 +613,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swTextAlign.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("text_align", checked).apply();
+            }
+        });
+
         swCollapseQuotes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -732,6 +750,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swNameEmail.setChecked(prefs.getBoolean("name_email", false));
         swPreferContact.setChecked(prefs.getBoolean("prefer_contact", false));
         swDistinguishContacts.setChecked(prefs.getBoolean("distinguish_contacts", false));
+        swShowRecipients.setChecked(prefs.getBoolean("show_recipients", false));
         swSubjectTop.setChecked(prefs.getBoolean("subject_top", false));
 
         int[] fontSizeValues = getResources().getIntArray(R.array.fontSizeValues);
@@ -776,6 +795,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swMonospaced.setChecked(prefs.getBoolean("monospaced", false));
         swTextColor.setChecked(prefs.getBoolean("text_color", true));
         swTextSize.setChecked(prefs.getBoolean("text_size", true));
+        swTextAlign.setChecked(prefs.getBoolean("text_align", true));
         swCollapseQuotes.setChecked(prefs.getBoolean("collapse_quotes", false));
         swImagesInline.setChecked(prefs.getBoolean("inline_images", false));
         swAttachmentsAlt.setChecked(prefs.getBoolean("attachments_alt", false));

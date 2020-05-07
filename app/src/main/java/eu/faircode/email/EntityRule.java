@@ -358,6 +358,8 @@ public class EntityRule {
         for (EntityMessage threaded : messages)
             EntityOperation.queue(context, threaded, EntityOperation.MOVE, target, seen);
 
+        message.ui_hide = true;
+
         if (seen) {
             message.ui_seen = true;
             message.ui_ignored = true;
@@ -412,7 +414,7 @@ public class EntityRule {
         reply.received = new Date().getTime();
 
         reply.sender = MessageHelper.getSortKey(reply.from);
-        Uri lookupUri = ContactInfo.getLookupUri(context, reply.from);
+        Uri lookupUri = ContactInfo.getLookupUri(reply.from);
         reply.avatar = (lookupUri == null ? null : lookupUri.toString());
 
         reply.id = db.message().insertMessage(reply);

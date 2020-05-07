@@ -101,6 +101,7 @@
     <string name="title_notification_alert">\'%1$s\' предупреждение сервера</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d мин.</string>
     <string name="menu_exit">Выход</string>
     <string name="menu_answers">Шаблоны</string>
@@ -280,7 +281,7 @@
     <string name="title_advanced_caption_message_header">Заголовок сообщения</string>
     <string name="title_advanced_caption_message_body">Текст сообщения</string>
     <string name="title_advanced_landscape">Использовать две колонки в альбомном режиме</string>
-    <string name="title_advanced_landscape3">Разрешить фиксированное меню навигации в альбомном режиме</string>
+    <string name="title_advanced_landscape3">Показывать навигационное меню в альбомном режиме по умолчанию</string>
     <string name="title_advanced_startup">При запуске показывать</string>
     <string name="title_advanced_cards">Использовать карточный стиль вместо табличного</string>
     <string name="title_advanced_date_header">Группировать по дате</string>
@@ -300,6 +301,7 @@
     <string name="title_advanced_name_email">Показывать имена и адреса электронной почты</string>
     <string name="title_advanced_replace_name">Предпочитать имя контакта вместо имени отправителя</string>
     <string name="title_advanced_distinguish_contacts">Подчёркивать отправителя, если он известен как локальный контакт \"кому\"</string>
+    <string name="title_advanced_show_recipients">Показывать получателей в заголовке сообщения</string>
     <string name="title_advanced_font_size_sender">Размера шрифта поля \"Отправитель\"</string>
     <string name="title_advanced_font_size_subject">Размера шрифта поля \"Тема\"</string>
     <string name="title_advanced_subject_top">Показывать тему выше отправителя</string>
@@ -319,6 +321,7 @@
     <string name="title_advanced_monospaced">Использовать моноширинный шрифт для текста сообщения</string>
     <string name="title_advanced_text_color">Показывать цвета текста</string>
     <string name="title_advanced_text_size">Показывать маленькие и большие тексты</string>
+    <string name="title_advanced_text_align">Показывать выравнивание текста по левому/правому краю или центру</string>
     <string name="title_advanced_collapse_quotes">Сворачивать цитируемый текст</string>
     <string name="title_advanced_images_inline">Автоматически показывать встроенные изображения</string>
     <string name="title_advanced_seekbar">Показывать относительное положение диалога точкой</string>
@@ -834,6 +837,7 @@
         Чтобы также выполнить поиск на сервере, нажмите кнопку \"Новый поиск\".
     </string>
     <string name="title_search_index_hint">Индексированный поиск быстрый, но ищет только целые слова</string>
+    <string name="title_search_text_hint">Некоторые почтовые серверы не могут найти текст во множестве сообщений</string>
     <string name="title_search_more">Дополнительные параметры</string>
     <string name="title_search_use_index">Использовать поисковый индекс</string>
     <string name="title_search_in_senders">В отправителях (от)</string>
@@ -880,6 +884,7 @@
     <string name="title_select_all">Выбрать все</string>
     <string name="title_select_found">Выбрать найденное</string>
     <string name="title_force_sync">Принудительная синхронизация</string>
+    <string name="title_force_send">Принудительная отправка</string>
     <string name="title_language_all">Все</string>
     <string name="title_previous">Назад</string>
     <string name="title_next">Вперёд</string>
@@ -989,6 +994,7 @@
     <string name="title_legend_snoozed">Отложено</string>
     <string name="title_legend_browsed">Сообщение на сервере</string>
     <string name="title_legend_answered">Был дан ответ</string>
+    <string name="title_legend_forwarded">Было переслано</string>
     <string name="title_legend_plain_only">Только простой текст</string>
     <string name="title_legend_receipt">Запрошено уведомление</string>
     <string name="title_legend_attachment">Имеет вложение</string>

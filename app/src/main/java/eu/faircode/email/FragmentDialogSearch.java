@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -56,6 +57,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_search, null);
 
         final AutoCompleteTextView etQuery = dview.findViewById(R.id.etQuery);
+        final ImageButton ibUnseen = dview.findViewById(R.id.ibUnseen);
+        final ImageButton ibFlagged = dview.findViewById(R.id.ibFlagged);
         final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
         final ImageButton ibMore = dview.findViewById(R.id.ibMore);
         final TextView tvMore = dview.findViewById(R.id.tvMore);
@@ -243,7 +246,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
 
                         if (!cbSearchIndex.isChecked()) {
                             criteria.in_senders = cbSenders.isChecked();
-                            criteria.in_receipients = cbRecipients.isChecked();
+                            criteria.in_recipients = cbRecipients.isChecked();
                             criteria.in_subject = cbSubject.isChecked();
                             criteria.in_keywords = cbKeywords.isChecked();
                             criteria.in_message = cbMessage.isChecked();
@@ -275,13 +278,31 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                         // Do nothing
                     }
                 })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        imm.hideSoftInputFromWindow(etQuery.getWindowToken(), 0);
-                    }
-                })
                 .create();
+
+        View.OnClickListener onClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
+                switch (v.getId()) {
+                    case R.id.ibUnseen:
+                        criteria.with_unseen = true;
+                        break;
+                    case R.id.ibFlagged:
+                        criteria.with_flagged = true;
+                        break;
+                }
+
+                FragmentMessages.search(
+                        getContext(), getViewLifecycleOwner(), getParentFragmentManager(),
+                        account, folder, false, criteria);
+            }
+        };
+
+        ibUnseen.setOnClickListener(onClick);
+        ibFlagged.setOnClickListener(onClick);
 
         etQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -294,6 +315,12 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         });
 
         return dialog;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void pickDate(TextView tv) {

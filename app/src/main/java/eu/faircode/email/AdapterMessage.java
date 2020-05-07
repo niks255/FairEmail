@@ -90,6 +90,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.view.textclassifier.ConversationAction;
 import android.view.textclassifier.ConversationActions;
 import android.view.textclassifier.TextClassificationManager;
@@ -204,7 +205,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean suitable;
     private boolean unmetered;
 
-    private int colorPrimary;
     private int colorAccent;
     private int textColorPrimary;
     private int textColorSecondary;
@@ -225,6 +225,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean name_email;
     private boolean prefer_contact;
     private boolean distinguish_contacts;
+    private boolean show_recipients;
     private Float font_size_sender;
     private Float font_size_subject;
     private boolean subject_top;
@@ -324,6 +325,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageView ivFound;
         private ImageButton ibSnoozed;
         private ImageView ivAnswered;
+        private ImageView ivForwarded;
         private ImageView ivAttachments;
         private TextView tvSubject;
         private TextView tvKeywords;
@@ -471,6 +473,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ivFound = itemView.findViewById(R.id.ivFound);
             ibSnoozed = itemView.findViewById(R.id.ibSnoozed);
             ivAnswered = itemView.findViewById(R.id.ivAnswered);
+            ivForwarded = itemView.findViewById(R.id.ivForwarded);
             ivAttachments = itemView.findViewById(R.id.ivAttachments);
             tvSubject = itemView.findViewById(subject_top ? R.id.tvFrom : R.id.tvSubject);
             tvKeywords = itemView.findViewById(R.id.tvKeywords);
@@ -803,6 +806,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ivFound.setVisibility(View.GONE);
             ibSnoozed.setVisibility(View.GONE);
             ivAnswered.setVisibility(View.GONE);
+            ivForwarded.setVisibility(View.GONE);
             ivAttachments.setVisibility(View.GONE);
             tvSubject.setText(null);
             tvKeywords.setVisibility(View.GONE);
@@ -822,7 +826,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean inbox = EntityFolder.INBOX.equals(message.folderType);
             boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
             boolean outgoing = isOutgoing(message);
-            Address[] addresses = (outgoing && (viewType != ViewType.THREAD || !threading) ? message.to : message.senders);
+            boolean reverse = (outgoing && (viewType != ViewType.THREAD || !threading) && !show_recipients);
+            Address[] senders = ContactInfo.fillIn(reverse ? message.to : message.senders, prefer_contact);
+            Address[] recipients = ContactInfo.fillIn(reverse ? message.from : message.recipients, prefer_contact);
             boolean authenticated =
                     !(Boolean.FALSE.equals(message.dkim) ||
                             Boolean.FALSE.equals(message.spf) ||
@@ -840,12 +846,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvFolder.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 0.9f);
                 tvPreview.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 0.9f);
 
-                int px = Math.round(fz_sender + fz_subject + (compact ? 0 : textSize * 0.9f));
-                ViewGroup.LayoutParams lparams = ibAvatar.getLayoutParams();
-                if (lparams.height != px) {
-                    lparams.width = px;
-                    lparams.height = px;
-                    ibAvatar.requestLayout();
+                if (avatars) {
+                    int px = Math.round(fz_sender + fz_subject + (compact ? 0 : textSize * 0.9f));
+                    ViewGroup.LayoutParams lparams = ibAvatar.getLayoutParams();
+                    if (lparams.height != px) {
+                        lparams.width = px;
+                        lparams.height = px;
+                        ibAvatar.requestLayout();
+                    }
                 }
             }
 
@@ -875,6 +883,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ivFound.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ibSnoozed.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivAnswered.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
+                ivForwarded.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivAttachments.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 tvSubject.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 tvKeywords.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
@@ -946,7 +955,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ? View.VISIBLE : View.GONE);
             ivSigned.setVisibility(message.signed > 0 ? View.VISIBLE : View.GONE);
             ivEncrypted.setVisibility(message.encrypted > 0 ? View.VISIBLE : View.GONE);
-            setFrom(message, addresses);
+            if (show_recipients && recipients != null && recipients.length > 0)
+                tvFrom.setText(context.getString(R.string.title_from_to,
+                        MessageHelper.formatAddresses(senders, name_email, false),
+                        MessageHelper.formatAddresses(recipients, name_email, false)));
+            else
+                tvFrom.setText(MessageHelper.formatAddresses(senders, name_email, false));
             tvFrom.setPaintFlags(tvFrom.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
             tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize, true));
             tvSize.setVisibility(
@@ -989,6 +1003,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ibSnoozed.setVisibility(message.ui_snoozed == null ? View.GONE : View.VISIBLE);
             ivAnswered.setVisibility(message.ui_answered ? View.VISIBLE : View.GONE);
+            ivForwarded.setVisibility(message.isForwarded() ? View.VISIBLE : View.GONE);
             ivAttachments.setVisibility(message.attachments > 0 ? View.VISIBLE : View.GONE);
 
             if (viewType == ViewType.FOLDER)
@@ -1061,7 +1076,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             // Contact info
-            ContactInfo[] info = ContactInfo.getCached(context, message.account, addresses);
+            List<Address> all = new ArrayList<>();
+            if (senders != null)
+                all.addAll(Arrays.asList(senders));
+            if (show_recipients && recipients != null)
+                all.addAll(Arrays.asList(recipients));
+            ContactInfo[] info = ContactInfo.getCached(context, message.account, all.toArray(new Address[0]));
             if (info == null) {
                 if (taskContactInfo != null)
                     taskContactInfo.cancel(context);
@@ -1069,15 +1089,31 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 Bundle aargs = new Bundle();
                 aargs.putLong("id", message.id);
                 aargs.putLong("account", message.account);
-                aargs.putSerializable("addresses", addresses);
+                aargs.putSerializable("senders", senders);
+                aargs.putSerializable("recipients", show_recipients ? recipients : null);
 
                 taskContactInfo = new SimpleTask<ContactInfo[]>() {
                     @Override
                     protected ContactInfo[] onExecute(Context context, Bundle args) {
                         long account = args.getLong("account");
-                        Address[] addresses = (Address[]) args.getSerializable("addresses");
+                        Address[] senders = (Address[]) args.getSerializable("senders");
+                        Address[] recipients = (Address[]) args.getSerializable("recipients");
 
-                        return ContactInfo.get(context, account, addresses);
+                        Map<String, Address> map = new HashMap<>();
+                        if (senders != null)
+                            for (Address a : senders) {
+                                String email = ((InternetAddress) a).getAddress();
+                                if (!TextUtils.isEmpty(email))
+                                    map.put(email, a);
+                            }
+                        if (recipients != null)
+                            for (Address a : recipients) {
+                                String email = ((InternetAddress) a).getAddress();
+                                if (!TextUtils.isEmpty(email))
+                                    map.put(email, a);
+                            }
+
+                        return ContactInfo.get(context, account, map.values().toArray(new Address[0]));
                     }
 
                     @Override
@@ -1089,7 +1125,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (amessage == null || !amessage.id.equals(id))
                             return;
 
-                        bindContactInfo(amessage, info, addresses, name_email);
+                        bindContactInfo(amessage, info, senders, recipients);
                     }
 
                     @Override
@@ -1099,7 +1135,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }.setLog(false);
                 taskContactInfo.execute(context, owner, aargs, "message:avatar");
             } else
-                bindContactInfo(message, info, addresses, name_email);
+                bindContactInfo(message, info, senders, show_recipients ? recipients : null);
 
             if (viewType == ViewType.THREAD)
                 if (expanded)
@@ -1259,63 +1295,46 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibFlagged.setVisibility(View.GONE);
         }
 
-        private void bindContactInfo(TupleMessageEx message, ContactInfo[] info, Address[] addresses, boolean name_email) {
-            if (info[0].hasPhoto()) {
-                ibAvatar.setImageBitmap(info[0].getPhotoBitmap());
-                ibAvatar.setVisibility(View.VISIBLE);
-            } else {
-                ibAvatar.setImageDrawable(null);
-                ibAvatar.setVisibility(View.GONE);
-            }
+        private void bindContactInfo(TupleMessageEx message, ContactInfo[] info, Address[] senders, Address[] recipients) {
+            Map<String, ContactInfo> map = new HashMap<>();
+            for (ContactInfo c : info)
+                map.put(c.getEmailAddress(), c);
 
-            Uri lookupUri = info[0].getLookupUri();
-            ibAvatar.setTag(lookupUri);
-            ibAvatar.setEnabled(lookupUri != null);
-
-            if (addresses == null)
-                return;
-
-            boolean known = false;
-            boolean updated = false;
-            Address[] modified = Arrays.copyOf(addresses, addresses.length);
-            for (int i = 0; i < info.length; i++) {
-                if (info[i].isKnown())
-                    known = true;
-                String displayName = info[i].getDisplayName();
-                if (!TextUtils.isEmpty(displayName)) {
-                    String email = ((InternetAddress) modified[i]).getAddress();
-                    String personal = ((InternetAddress) modified[i]).getPersonal();
-                    if (TextUtils.isEmpty(personal) ||
-                            (prefer_contact && !personal.equals(displayName)))
-                        try {
-                            modified[i] = new InternetAddress(email, displayName, StandardCharsets.UTF_8.name());
-                            updated = true;
-                        } catch (UnsupportedEncodingException ex) {
-                            Log.w(ex);
-                        }
+            if (avatars) {
+                ContactInfo main = null;
+                if (senders != null && senders.length > 0) {
+                    String email = ((InternetAddress) senders[0]).getAddress();
+                    if (!TextUtils.isEmpty(email))
+                        main = map.get(email);
                 }
-            }
-            if (updated)
-                setFrom(message, modified);
 
-            if (distinguish_contacts && known)
-                tvFrom.setPaintFlags(tvFrom.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        }
+                if (main == null || !main.hasPhoto()) {
+                    ibAvatar.setImageDrawable(null);
+                    ibAvatar.setTag(null);
+                } else {
+                    ibAvatar.setImageBitmap(main.getPhotoBitmap());
 
-        private void setFrom(TupleMessageEx message, Address[] addresses) {
-            int recipients = 0;
-            if (viewType == ViewType.THREAD) {
-                recipients = (message.to == null ? 0 : message.to.length) +
-                        (message.cc == null ? 0 : message.cc.length) + (message.bcc == null ? 0 : message.bcc.length);
-                if (message.to != null && message.to.length > 0)
-                    recipients--;
+                    Uri lookupUri = main.getLookupUri();
+                    ibAvatar.setTag(lookupUri);
+                    ibAvatar.setEnabled(lookupUri != null);
+                }
+                ibAvatar.setVisibility(main == null || !main.hasPhoto() ? View.GONE : View.VISIBLE);
             }
 
-            if (recipients == 0)
-                tvFrom.setText(MessageHelper.formatAddresses(addresses, name_email, false));
-            else
-                tvFrom.setText(context.getString(R.string.title_name_plus,
-                        MessageHelper.formatAddresses(addresses, name_email, false), recipients));
+            if (distinguish_contacts) {
+                boolean known = false;
+                if (senders != null)
+                    for (Address sender : senders) {
+                        String email = ((InternetAddress) sender).getAddress();
+                        if (!TextUtils.isEmpty(email) &&
+                                map.containsKey(email) && map.get(email).isKnown()) {
+                            known = true;
+                            break;
+                        }
+                    }
+                if (known)
+                    tvFrom.setPaintFlags(tvFrom.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            }
         }
 
         private void bindExpandWarning(TupleMessageEx message, boolean expanded) {
@@ -1333,20 +1352,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             cowner.recreate();
 
-            boolean show_addresses = properties.getValue("addresses", message.id);
-            boolean show_headers = properties.getValue("headers", message.id);
-
-            boolean hasFrom = (message.from != null && message.from.length > 0);
-            boolean hasTo = (message.to != null && message.to.length > 0);
-            boolean hasChannel = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
-
-            String submitter = MessageHelper.formatAddresses(message.submitter);
-            String from = MessageHelper.formatAddresses(message.senders);
-            String to = MessageHelper.formatAddresses(message.to);
-            String replyto = MessageHelper.formatAddresses(message.reply);
-            String cc = MessageHelper.formatAddresses(message.cc);
-            String bcc = MessageHelper.formatAddresses(message.bcc);
-
             if (compact) {
                 tvFrom.setSingleLine(false);
                 tvSubject.setSingleLine(false);
@@ -1356,124 +1361,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ensureExpanded();
 
-            // Addresses
-            grpAddresses.setVisibility(View.VISIBLE);
-
-            ibExpanderAddress.setImageLevel(show_addresses ? 0 /* less */ : 1 /* more */);
-            ibExpanderAddress.setContentDescription(context.getString(show_addresses ? R.string.title_accessibility_hide_addresses : R.string.title_accessibility_show_addresses));
-
-            ivPlain.setVisibility(show_addresses && message.plain_only != null && message.plain_only ? View.VISIBLE : View.GONE);
-            ivReceipt.setVisibility(show_addresses && message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
-            ivBrowsed.setVisibility(show_addresses && message.ui_browsed ? View.VISIBLE : View.GONE);
-
-            ibSearchContact.setVisibility(show_addresses && (hasFrom || hasTo) ? View.VISIBLE : View.GONE);
-            ibNotifyContact.setVisibility(show_addresses && hasChannel && hasFrom ? View.VISIBLE : View.GONE);
-            ibPinContact.setVisibility(show_addresses && pin && hasFrom ? View.VISIBLE : View.GONE);
-            ibAddContact.setVisibility(show_addresses && contacts && hasFrom ? View.VISIBLE : View.GONE);
-
-            tvSubmitterTitle.setVisibility(show_addresses && !TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
-            tvSubmitter.setVisibility(show_addresses && !TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
-            tvSubmitter.setText(submitter);
-
-            tvDeliveredToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
-            tvDeliveredTo.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
-            tvDeliveredTo.setText(message.deliveredto);
-
-            tvFromExTitle.setVisibility(show_addresses && !TextUtils.isEmpty(from) ? View.VISIBLE : View.GONE);
-            tvFromEx.setVisibility(show_addresses && !TextUtils.isEmpty(from) ? View.VISIBLE : View.GONE);
-            tvFromEx.setText(from);
-
-            tvToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(to) ? View.VISIBLE : View.GONE);
-            tvTo.setVisibility(show_addresses && !TextUtils.isEmpty(to) ? View.VISIBLE : View.GONE);
-            tvTo.setText(to);
-
-            tvReplyToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(replyto) ? View.VISIBLE : View.GONE);
-            tvReplyTo.setVisibility(show_addresses && !TextUtils.isEmpty(replyto) ? View.VISIBLE : View.GONE);
-            tvReplyTo.setText(replyto);
-
-            tvCcTitle.setVisibility(show_addresses && !TextUtils.isEmpty(cc) ? View.VISIBLE : View.GONE);
-            tvCc.setVisibility(show_addresses && !TextUtils.isEmpty(cc) ? View.VISIBLE : View.GONE);
-            tvCc.setText(cc);
-
-            tvBccTitle.setVisibility(show_addresses && !TextUtils.isEmpty(bcc) ? View.VISIBLE : View.GONE);
-            tvBcc.setVisibility(show_addresses && !TextUtils.isEmpty(bcc) ? View.VISIBLE : View.GONE);
-            tvBcc.setText(bcc);
-
-            InternetAddress via = null;
-            if (message.identityEmail != null)
-                try {
-                    via = new InternetAddress(message.identityEmail, message.identityName);
-                } catch (UnsupportedEncodingException ignored) {
-                }
-
-            tvIdentityTitle.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
-            tvIdentity.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
-            tvIdentity.setText(via == null ? null : MessageHelper.formatAddresses(new Address[]{via}));
-
-            tvSentTitle.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
-            tvSent.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
-            tvSent.setText(message.sent == null ? null : DTF.format(message.sent));
-
-            tvReceivedTitle.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
-            tvReceived.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
-            tvReceived.setText(DTF.format(message.received));
-
-            if (!message.duplicate)
-                tvSizeEx.setAlpha(message.content ? 1.0f : Helper.LOW_LIGHT);
-            tvSizeExTitle.setVisibility(!show_addresses || message.size == null ? View.GONE : View.VISIBLE);
-            tvSizeEx.setVisibility(!show_addresses || (message.size == null && message.total == null) ? View.GONE : View.VISIBLE);
-            StringBuilder size = new StringBuilder();
-            size
-                    .append(message.size == null ? "-" : Helper.humanReadableByteCount(message.size, true))
-                    .append("/")
-                    .append(message.total == null ? "-" : Helper.humanReadableByteCount(message.total, true));
-            tvSizeEx.setText(size.toString());
-
-            tvLanguageTitle.setVisibility(
-                    show_addresses && language_detection && message.language != null
-                            ? View.VISIBLE : View.GONE);
-            tvLanguage.setVisibility(
-                    show_addresses && language_detection && message.language != null
-                            ? View.VISIBLE : View.GONE);
-            tvLanguage.setText(message.language == null ? null : new Locale(message.language).getDisplayLanguage());
-
-            tvSubjectEx.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
-            tvSubjectEx.setText(message.subject);
-            if (subject_italic)
-                tvSubjectEx.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
-            else
-                tvSubjectEx.setTypeface(Typeface.DEFAULT);
-
-            // Flags
-            tvFlags.setVisibility(show_addresses && debug ? View.VISIBLE : View.GONE);
-            tvFlags.setText(message.flags);
-
-            // Keywords
-            if (keywords_header) {
-                tvKeywordsEx.setVisibility(show_addresses && message.keywords.length > 0 ? View.VISIBLE : View.GONE);
-                tvKeywordsEx.setText(TextUtils.join(" ", message.keywords));
-            } else {
-                SpannableStringBuilder keywords = getKeywords(message);
-                tvKeywordsEx.setVisibility(show_addresses && keywords.length() > 0 ? View.VISIBLE : View.GONE);
-                tvKeywordsEx.setText(keywords);
-            }
-
-            // Headers
-            grpHeaders.setVisibility(show_headers ? View.VISIBLE : View.GONE);
-            if (show_headers && message.headers == null) {
-                pbHeaders.setVisibility(suitable ? View.VISIBLE : View.GONE);
-                tvNoInternetHeaders.setVisibility(suitable ? View.GONE : View.VISIBLE);
-            } else {
-                pbHeaders.setVisibility(View.GONE);
-                tvNoInternetHeaders.setVisibility(View.GONE);
-            }
-
-            if (show_headers && message.headers != null)
-                tvHeaders.setText(HtmlHelper.highlightHeaders(context, message.headers));
-            else
-                tvHeaders.setText(null);
-
-            // Attachments
+            bindAddresses(message);
+            bindHeaders(message, false);
             bindAttachments(message, properties.getAttachments(message.id));
 
             // Actions
@@ -1522,21 +1411,25 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             db.attachment().liveAttachments(message.id).observe(cowner, new Observer<List<EntityAttachment>>() {
                 @Override
                 public void onChanged(@Nullable List<EntityAttachment> attachments) {
-                    int inlineImages = 0;
-                    if (attachments != null)
-                        for (EntityAttachment attachment : attachments)
-                            if (attachment.available && attachment.isInline() && attachment.isImage())
-                                inlineImages++;
+                    boolean show_images = properties.getValue("images", message.id);
+                    boolean inline = prefs.getBoolean("inline_images", false);
+                    if (show_images || inline) {
+                        int inlineImages = 0;
+                        if (attachments != null)
+                            for (EntityAttachment attachment : attachments)
+                                if (attachment.available && attachment.isInline() && attachment.isImage())
+                                    inlineImages++;
 
-                    int lastInlineImages = 0;
-                    List<EntityAttachment> lastAttachments = properties.getAttachments(message.id);
-                    if (lastAttachments != null)
-                        for (EntityAttachment attachment : lastAttachments)
-                            if (attachment.available && attachment.isInline() && attachment.isImage())
-                                lastInlineImages++;
+                        int lastInlineImages = 0;
+                        List<EntityAttachment> lastAttachments = properties.getAttachments(message.id);
+                        if (lastAttachments != null)
+                            for (EntityAttachment attachment : lastAttachments)
+                                if (attachment.available && attachment.isInline() && attachment.isImage())
+                                    lastInlineImages++;
 
-                    if (inlineImages > lastInlineImages)
-                        bindBody(message, false);
+                        if (inlineImages > lastInlineImages)
+                            bindBody(message, false);
+                    }
 
                     bindAttachments(message, attachments);
                 }
@@ -1621,6 +1514,154 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.setLog(false).execute(context, owner, sargs, "message:more");
+        }
+
+        private void bindAddresses(TupleMessageEx message) {
+            boolean show_addresses = properties.getValue("addresses", message.id);
+
+            int froms = (message.from == null ? 0 : message.from.length);
+            int tos = (message.to == null ? 0 : message.to.length);
+            boolean hasChannel = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
+
+            String submitter = MessageHelper.formatAddresses(message.submitter);
+            String from = MessageHelper.formatAddresses(message.senders);
+            String to = MessageHelper.formatAddresses(message.to);
+            String replyto = MessageHelper.formatAddresses(message.reply);
+            String cc = MessageHelper.formatAddresses(message.cc);
+            String bcc = MessageHelper.formatAddresses(message.bcc);
+
+            grpAddresses.setVisibility(View.VISIBLE);
+
+            ibExpanderAddress.setImageLevel(show_addresses ? 0 /* less */ : 1 /* more */);
+            ibExpanderAddress.setContentDescription(context.getString(show_addresses ? R.string.title_accessibility_hide_addresses : R.string.title_accessibility_show_addresses));
+
+            ivPlain.setVisibility(show_addresses && message.plain_only != null && message.plain_only ? View.VISIBLE : View.GONE);
+            ivReceipt.setVisibility(show_addresses && message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
+            ivBrowsed.setVisibility(show_addresses && message.ui_browsed ? View.VISIBLE : View.GONE);
+
+            ibSearchContact.setVisibility(show_addresses && (froms > 0 || tos > 0) ? View.VISIBLE : View.GONE);
+            ibNotifyContact.setVisibility(show_addresses && hasChannel && froms > 0 ? View.VISIBLE : View.GONE);
+            ibPinContact.setVisibility(show_addresses && pin && froms > 0 ? View.VISIBLE : View.GONE);
+            ibAddContact.setVisibility(show_addresses && contacts && froms > 0 ? View.VISIBLE : View.GONE);
+
+            tvSubmitterTitle.setVisibility(show_addresses && !TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
+            tvSubmitter.setVisibility(show_addresses && !TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
+            tvSubmitter.setText(submitter);
+
+            tvDeliveredToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
+            tvDeliveredTo.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
+            tvDeliveredTo.setText(message.deliveredto);
+
+            tvFromExTitle.setVisibility((froms > 1 || show_addresses) && !TextUtils.isEmpty(from) ? View.VISIBLE : View.GONE);
+            tvFromEx.setVisibility((froms > 1 || show_addresses) && !TextUtils.isEmpty(from) ? View.VISIBLE : View.GONE);
+            tvFromEx.setText(from);
+
+            tvToTitle.setVisibility((!show_recipients || show_addresses) && !TextUtils.isEmpty(to) ? View.VISIBLE : View.GONE);
+            tvTo.setVisibility((!show_recipients || show_addresses) && !TextUtils.isEmpty(to) ? View.VISIBLE : View.GONE);
+            tvTo.setText(to);
+
+            tvReplyToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(replyto) ? View.VISIBLE : View.GONE);
+            tvReplyTo.setVisibility(show_addresses && !TextUtils.isEmpty(replyto) ? View.VISIBLE : View.GONE);
+            tvReplyTo.setText(replyto);
+
+            tvCcTitle.setVisibility(!TextUtils.isEmpty(cc) ? View.VISIBLE : View.GONE);
+            tvCc.setVisibility(!TextUtils.isEmpty(cc) ? View.VISIBLE : View.GONE);
+            tvCc.setText(cc);
+
+            tvBccTitle.setVisibility(!TextUtils.isEmpty(bcc) ? View.VISIBLE : View.GONE);
+            tvBcc.setVisibility(!TextUtils.isEmpty(bcc) ? View.VISIBLE : View.GONE);
+            tvBcc.setText(bcc);
+
+            InternetAddress via = null;
+            if (message.identityEmail != null)
+                try {
+                    via = new InternetAddress(message.identityEmail, message.identityName);
+                } catch (UnsupportedEncodingException ignored) {
+                }
+
+            tvIdentityTitle.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
+            tvIdentity.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
+            tvIdentity.setText(via == null ? null : MessageHelper.formatAddresses(new Address[]{via}));
+
+            tvSentTitle.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
+            tvSent.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
+            tvSent.setText(message.sent == null ? null : DTF.format(message.sent));
+
+            tvReceivedTitle.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
+            tvReceived.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
+            tvReceived.setText(DTF.format(message.received));
+
+            if (!message.duplicate)
+                tvSizeEx.setAlpha(message.content ? 1.0f : Helper.LOW_LIGHT);
+            tvSizeExTitle.setVisibility(!show_addresses || message.size == null ? View.GONE : View.VISIBLE);
+            tvSizeEx.setVisibility(!show_addresses || (message.size == null && message.total == null) ? View.GONE : View.VISIBLE);
+            StringBuilder size = new StringBuilder();
+            size
+                    .append(message.size == null ? "-" : Helper.humanReadableByteCount(message.size, true))
+                    .append("/")
+                    .append(message.total == null ? "-" : Helper.humanReadableByteCount(message.total, true));
+            tvSizeEx.setText(size.toString());
+
+            tvLanguageTitle.setVisibility(
+                    show_addresses && language_detection && message.language != null
+                            ? View.VISIBLE : View.GONE);
+            tvLanguage.setVisibility(
+                    show_addresses && language_detection && message.language != null
+                            ? View.VISIBLE : View.GONE);
+            tvLanguage.setText(message.language == null ? null : new Locale(message.language).getDisplayLanguage());
+
+            tvSubjectEx.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
+            tvSubjectEx.setText(message.subject);
+            if (subject_italic)
+                tvSubjectEx.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
+            else
+                tvSubjectEx.setTypeface(Typeface.DEFAULT);
+
+            // Flags
+            tvFlags.setVisibility(show_addresses && debug ? View.VISIBLE : View.GONE);
+            tvFlags.setText(message.flags);
+
+            // Keywords
+            if (keywords_header) {
+                tvKeywordsEx.setVisibility(show_addresses && message.keywords.length > 0 ? View.VISIBLE : View.GONE);
+                tvKeywordsEx.setText(TextUtils.join(" ", message.keywords));
+            } else {
+                SpannableStringBuilder keywords = getKeywords(message);
+                tvKeywordsEx.setVisibility(show_addresses && keywords.length() > 0 ? View.VISIBLE : View.GONE);
+                tvKeywordsEx.setText(keywords);
+            }
+        }
+
+        private void bindHeaders(TupleMessageEx message, boolean scroll) {
+            boolean show_headers = properties.getValue("headers", message.id);
+
+            grpHeaders.setVisibility(show_headers ? View.VISIBLE : View.GONE);
+            if (show_headers && message.headers == null) {
+                pbHeaders.setVisibility(suitable ? View.VISIBLE : View.GONE);
+                tvNoInternetHeaders.setVisibility(suitable ? View.GONE : View.VISIBLE);
+            } else {
+                pbHeaders.setVisibility(View.GONE);
+                tvNoInternetHeaders.setVisibility(View.GONE);
+            }
+
+            if (show_headers && message.headers != null)
+                tvHeaders.setText(HtmlHelper.highlightHeaders(context, message.headers));
+            else
+                tvHeaders.setText(null);
+
+            if (scroll)
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        View inHeaders = itemView.findViewById(R.id.inHeaders);
+
+                        Rect rect = new Rect();
+                        inHeaders.getDrawingRect(rect);
+                        ((ViewGroup) itemView).offsetDescendantRectToMyCoords(inHeaders, rect);
+
+                        properties.scrollTo(getAdapterPosition(), rect.top);
+                    }
+                });
         }
 
         private void bindBody(TupleMessageEx message, final boolean scroll) {
@@ -1813,6 +1854,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     DB db = DB.getInstance(context);
                     List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+                    properties.setAttachments(message.id, attachments);
 
                     boolean signed_data = false;
                     for (EntityAttachment attachment : attachments)
@@ -1913,7 +1955,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
 
                         // Draw images
-                        Spanned spanned = HtmlHelper.fromDocument(context, document, new Html.ImageGetter() {
+                        SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, document, new Html.ImageGetter() {
                             @Override
                             public Drawable getDrawable(String source) {
                                 Drawable drawable = ImageHelper.decodeImage(context, message.id, source, show_images, zoom, tvBody);
@@ -1927,34 +1969,29 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             }
                         }, null);
 
+                        if (show_quotes)
+                            return ssb;
+
                         // Replace quote spans
                         final int px = Helper.dp2pixels(context, 24 + (zoom) * 8);
-                        SpannableStringBuilder builder = new SpannableStringBuilder(spanned);
-                        QuoteSpan[] quoteSpans = builder.getSpans(0, builder.length(), QuoteSpan.class);
+                        QuoteSpan[] quoteSpans = ssb.getSpans(0, ssb.length(), QuoteSpan.class);
                         for (QuoteSpan quoteSpan : quoteSpans) {
-                            int s = builder.getSpanStart(quoteSpan);
-                            int e = builder.getSpanEnd(quoteSpan);
-
-                            builder.removeSpan(quoteSpan);
-
-                            StyledQuoteSpan squote = new StyledQuoteSpan(context, colorPrimary);
-                            builder.setSpan(squote, s, e, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-
-                            if (!show_quotes)
-                                builder.setSpan(
-                                        new DynamicDrawableSpan() {
-                                            @Override
-                                            public Drawable getDrawable() {
-                                                Drawable d = context.getDrawable(R.drawable.baseline_format_quote_24);
-                                                d.setTint(colorAccent);
-                                                d.setBounds(0, 0, px, px);
-                                                return d;
-                                            }
-                                        },
-                                        s, e, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                            int s = ssb.getSpanStart(quoteSpan);
+                            int e = ssb.getSpanEnd(quoteSpan);
+                            ssb.setSpan(
+                                    new DynamicDrawableSpan() {
+                                        @Override
+                                        public Drawable getDrawable() {
+                                            Drawable d = context.getDrawable(R.drawable.baseline_format_quote_24);
+                                            d.setTint(colorAccent);
+                                            d.setBounds(0, 0, px, px);
+                                            return d;
+                                        }
+                                    },
+                                    s, e, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         }
 
-                        return builder;
+                        return ssb;
                     }
                 }
 
@@ -1989,9 +2026,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
                             ? R.drawable.baseline_lock_24 : R.drawable.baseline_lock_open_24
                     );
-                    ibDecrypt.setVisibility(args.getBoolean("inline_encrypted") ||
-                            EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) ||
-                            EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt)
+                    ibDecrypt.setVisibility(!EntityFolder.OUTBOX.equals(message.folderType) &&
+                            (args.getBoolean("inline_encrypted") ||
+                                    EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) ||
+                                    EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt))
                             ? View.VISIBLE : View.GONE);
 
                     boolean signed_data = args.getBoolean("signed_data");
@@ -3221,7 +3259,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onToggleAddresses(TupleMessageEx message) {
             boolean addresses = !properties.getValue("addresses", message.id);
             properties.setValue("addresses", message.id, addresses);
-            bindExpanded(message, false);
+            bindAddresses(message);
         }
 
         private void onDownloadAttachments(final TupleMessageEx message) {
@@ -4040,6 +4078,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
             pw.showAtLocation(parentFragment.getView(), Gravity.TOP | Gravity.END, 0, 0);
+
+            etSearch.requestFocus();
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null)
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
 
         private int find(String query, int result) {
@@ -4074,13 +4117,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     public void run() {
                         try {
                             int line = tvBody.getLayout().getLineForOffset(pos);
-                            int y = Math.round(line * tvBody.getLineHeight());
+                            int y = tvBody.getLayout().getLineTop(line);
+
+                            int dy = Helper.dp2pixels(context, 48);
 
                             Rect rect = new Rect();
                             tvBody.getDrawingRect(rect);
-                            ((ViewGroup) view).offsetDescendantRectToMyCoords(tvBody, rect);
+                            ((ViewGroup) itemView).offsetDescendantRectToMyCoords(tvBody, rect);
 
-                            properties.scrollTo(apos, rect.top + y);
+                            properties.scrollTo(apos, rect.top + y - dy);
                         } catch (Throwable ex) {
                             Log.e(ex);
                         }
@@ -4200,13 +4245,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onMenuShowHeaders(TupleMessageEx message) {
             boolean show_headers = !properties.getValue("headers", message.id);
             properties.setValue("headers", message.id, show_headers);
-            if (show_headers && message.headers == null) {
-                grpHeaders.setVisibility(View.VISIBLE);
-                if (suitable)
-                    pbHeaders.setVisibility(View.VISIBLE);
-                else
-                    tvNoInternetHeaders.setVisibility(View.VISIBLE);
 
+            bindHeaders(message, true);
+
+            if (show_headers && message.headers == null) {
                 Bundle args = new Bundle();
                 args.putLong("id", message.id);
 
@@ -4240,8 +4282,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                     }
                 }.execute(context, owner, args, "message:headers");
-            } else
-                bindExpanded(message, false);
+            }
         }
 
         private void onMenuRawSave(TupleMessageEx message) {
@@ -4586,7 +4627,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.suitable = state.isSuitable();
         this.unmetered = state.isUnmetered();
 
-        this.colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
         this.colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
         this.textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
         this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
@@ -4616,6 +4656,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.name_email = prefs.getBoolean("name_email", false);
         this.prefer_contact = prefs.getBoolean("prefer_contact", false);
         this.distinguish_contacts = prefs.getBoolean("distinguish_contacts", false);
+        this.show_recipients = prefs.getBoolean("show_recipients", false);
 
         this.subject_top = prefs.getBoolean("subject_top", false);
 
@@ -4975,7 +5016,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.differ.addPagedListListener(new AsyncPagedListDiffer.PagedListListener<TupleMessageEx>() {
             @Override
             public void onCurrentListChanged(@Nullable PagedList<TupleMessageEx> previousList, @Nullable PagedList<TupleMessageEx> currentList) {
-                if (gotoTop) {
+                if (gotoTop && previousList != null) {
                     gotoTop = false;
                     properties.scrollTo(0, 0);
                 }

@@ -47,6 +47,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.OperationCanceledException;
@@ -485,8 +486,8 @@ public class FragmentCompose extends FragmentBase {
                     // break block quotes
                     boolean broken = false;
                     SpannableStringBuilder ssb = new SpannableStringBuilder(text);
-                    StyledQuoteSpan[] spans = ssb.getSpans(start + 1, start + 1, StyledQuoteSpan.class);
-                    for (StyledQuoteSpan span : spans) {
+                    QuoteSpan[] spans = ssb.getSpans(start + 1, start + 1, QuoteSpan.class);
+                    for (QuoteSpan span : spans) {
                         int s = ssb.getSpanStart(span);
                         int e = ssb.getSpanEnd(span);
                         int f = ssb.getSpanFlags(span);
@@ -497,11 +498,19 @@ public class FragmentCompose extends FragmentBase {
                                 ssb.charAt(start) == '\n' && ssb.charAt(e - 1) == '\n') {
                             broken = true;
 
-                            StyledQuoteSpan q1 = new StyledQuoteSpan(getContext(), span.getColor());
+                            QuoteSpan q1;
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                                q1 = new QuoteSpan(span.getColor());
+                            else
+                                q1 = new QuoteSpan(span.getColor(), span.getStripeWidth(), span.getGapWidth());
                             ssb.setSpan(q1, s, start, f);
                             Log.i("Span " + s + "..." + start);
 
-                            StyledQuoteSpan q2 = new StyledQuoteSpan(getContext(), span.getColor());
+                            QuoteSpan q2;
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                                q2 = new QuoteSpan(span.getColor());
+                            else
+                                q2 = new QuoteSpan(span.getColor(), span.getStripeWidth(), span.getGapWidth());
                             ssb.setSpan(q2, start + 1, e, f);
                             Log.i("Span " + (start + 1) + "..." + e);
 
@@ -1529,7 +1538,7 @@ public class FragmentCompose extends FragmentBase {
         }
     }
 
-    private void onEncrypt(final EntityMessage draft, final int action, final boolean interactive) {
+    private void onEncrypt(final EntityMessage draft, final int action, final Bundle extras, final boolean interactive) {
         if (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt) ||
                 EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt)) {
             Bundle args = new Bundle();
@@ -1566,7 +1575,7 @@ public class FragmentCompose extends FragmentBase {
                     boolean available = args.getBoolean("available");
                     if (available) {
                         args.putString("alias", identity.sign_key_alias);
-                        onSmime(args, action);
+                        onSmime(args, action, extras);
                         return;
                     }
 
@@ -1576,7 +1585,7 @@ public class FragmentCompose extends FragmentBase {
                             public void onSelected(String alias) {
                                 args.putString("alias", alias);
                                 if (alias != null)
-                                    onSmime(args, action);
+                                    onSmime(args, action, extras);
                             }
 
                             @Override
@@ -1634,6 +1643,7 @@ public class FragmentCompose extends FragmentBase {
                     Bundle largs = new Bundle();
                     largs.putLong("id", working);
                     largs.putInt("action", action);
+                    largs.putBundle("extras", extras);
                     largs.putBoolean("interactive", interactive);
                     intent.putExtra(BuildConfig.APPLICATION_ID, largs);
 
@@ -2200,12 +2210,14 @@ public class FragmentCompose extends FragmentBase {
 
                                 // send message
                                 args.putInt("action", largs.getInt("action"));
+                                args.putBundle("extras", largs.getBundle("extras"));
                                 return null;
                             } else if (OpenPgpApi.ACTION_SIGN_AND_ENCRYPT.equals(data.getAction())) {
                                 input.delete();
 
                                 // send message
                                 args.putInt("action", largs.getInt("action"));
+                                args.putBundle("extras", largs.getBundle("extras"));
                                 return null;
                             } else
                                 throw new IllegalStateException("Unknown action=" + data.getAction());
@@ -2236,7 +2248,7 @@ public class FragmentCompose extends FragmentBase {
                 Log.i("Result= " + result);
                 if (result == null) {
                     int action = args.getInt("action");
-                    Bundle extras = new Bundle();
+                    Bundle extras = args.getBundle("extras");
                     extras.putBoolean("encrypted", true);
                     onAction(action, extras, "pgp");
                 } else if (result instanceof Intent) {
@@ -2274,7 +2286,7 @@ public class FragmentCompose extends FragmentBase {
         }.execute(this, args, "compose:pgp");
     }
 
-    private void onSmime(Bundle args, final int action) {
+    private void onSmime(Bundle args, final int action, final Bundle extras) {
         new SimpleTask<Void>() {
             @Override
             protected Void onExecute(Context context, Bundle args) throws Throwable {
@@ -2422,23 +2434,30 @@ public class FragmentCompose extends FragmentBase {
                 certs.add(chain[0]); // Allow sender to decrypt own message
 
                 for (Address address : addresses) {
+                    boolean found = false;
+                    Throwable cex = null;
                     String email = ((InternetAddress) address).getAddress();
-
                     List<EntityCertificate> acertificates = db.certificate().getCertificateByEmail(email);
-                    if (acertificates == null || acertificates.size() == 0)
-                        throw new IllegalArgumentException(
-                                context.getString(R.string.title_certificate_missing, email), new CertificateException());
-
-                    for (EntityCertificate acertificate : acertificates) {
-                        X509Certificate cert = acertificate.getCertificate();
-                        try {
-                            cert.checkValidity();
-                        } catch (CertificateException ex) {
-                            throw new IllegalArgumentException(
-                                    context.getString(R.string.title_certificate_invalid, email), ex);
+                    if (acertificates != null)
+                        for (EntityCertificate acertificate : acertificates) {
+                            X509Certificate cert = acertificate.getCertificate();
+                            try {
+                                cert.checkValidity();
+                                certs.add(cert);
+                                found = true;
+                            } catch (CertificateException ex) {
+                                Log.w(ex);
+                                cex = ex;
+                            }
                         }
-                        certs.add(cert);
-                    }
+
+                    if (!found)
+                        if (cex == null)
+                            throw new IllegalArgumentException(
+                                    context.getString(R.string.title_certificate_missing, email));
+                        else
+                            throw new IllegalArgumentException(
+                                    context.getString(R.string.title_certificate_invalid, email), cex);
                 }
 
                 // Build signature
@@ -2501,7 +2520,6 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, Void result) {
-                Bundle extras = new Bundle();
                 extras.putBoolean("encrypted", true);
                 onAction(action, extras, "smime");
             }
@@ -2517,7 +2535,7 @@ public class FragmentCompose extends FragmentBase {
                             public void onClick(View v) {
                                 startActivity(
                                         new Intent(getContext(), ActivitySetup.class)
-                                                .putExtra("tab", "privacy"));
+                                                .putExtra("tab", "encryption"));
                             }
                         });
                     snackbar.show();
@@ -3213,8 +3231,11 @@ public class FragmentCompose extends FragmentBase {
                                 data.draft.receipt_request = false;
                             }
 
-                        } else if ("forward".equals(action) || "editasnew".equals(action))
+                        } else if ("forward".equals(action)) {
                             data.draft.thread = data.draft.msgid; // new thread
+                            data.draft.wasforwardedfrom = ref.msgid;
+                        } else if ("editasnew".equals(action))
+                            data.draft.thread = data.draft.msgid;
 
                         String subject = (ref.subject == null ? "" : ref.subject);
                         if ("reply".equals(action) || "reply_all".equals(action)) {
@@ -3429,7 +3450,7 @@ public class FragmentCompose extends FragmentBase {
                     data.draft.from = new InternetAddress[]{new InternetAddress(selected.email, selected.name)};
 
                     data.draft.sender = MessageHelper.getSortKey(data.draft.from);
-                    Uri lookupUri = ContactInfo.getLookupUri(context, data.draft.from);
+                    Uri lookupUri = ContactInfo.getLookupUri(data.draft.from);
                     data.draft.avatar = (lookupUri == null ? null : lookupUri.toString());
 
                     data.draft.received = new Date().getTime();
@@ -3786,8 +3807,10 @@ public class FragmentCompose extends FragmentBase {
                     EntityFolder trash = db.folder().getFolderByType(draft.account, EntityFolder.TRASH);
                     if (empty || trash == null || discard_delete)
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
-                    else
+                    else {
+                        EntityOperation.queue(context, draft, EntityOperation.ADD);
                         EntityOperation.queue(context, draft, EntityOperation.MOVE, trash.id);
+                    }
 
                     Handler handler = new Handler(context.getMainLooper());
                     handler.post(new Runnable() {
@@ -3912,7 +3935,7 @@ public class FragmentCompose extends FragmentBase {
                         draft.subject = subject;
                         draft.signature = signature;
                         draft.sender = MessageHelper.getSortKey(draft.from);
-                        Uri lookupUri = ContactInfo.getLookupUri(context, draft.from);
+                        Uri lookupUri = ContactInfo.getLookupUri(draft.from);
                         draft.avatar = (lookupUri == null ? null : lookupUri.toString());
                         db.message().updateMessage(draft);
                     }
@@ -4244,7 +4267,7 @@ public class FragmentCompose extends FragmentBase {
                         EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt) ||
                         EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
                     boolean interactive = args.getBoolean("interactive");
-                    onEncrypt(draft, action, interactive);
+                    onEncrypt(draft, action, extras, interactive);
                 } else
                     startActivity(new Intent(getContext(), ActivityBilling.class));
                 return;
@@ -4426,6 +4449,8 @@ public class FragmentCompose extends FragmentBase {
                 final boolean show_images = args.getBoolean("show_images", false);
 
                 int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
+                int dp3 = Helper.dp2pixels(context, 3);
+                int dp6 = Helper.dp2pixels(context, 6);
 
                 DB db = DB.getInstance(context);
                 EntityMessage draft = db.message().getMessage(id);
@@ -4447,8 +4472,12 @@ public class FragmentCompose extends FragmentBase {
                 SpannableStringBuilder bodyBuilder = new SpannableStringBuilder(spannedBody);
                 QuoteSpan[] bodySpans = bodyBuilder.getSpans(0, bodyBuilder.length(), QuoteSpan.class);
                 for (QuoteSpan quoteSpan : bodySpans) {
-                    bodyBuilder.setSpan(
-                            new StyledQuoteSpan(context, colorPrimary),
+                    QuoteSpan q;
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                        q = new QuoteSpan(colorPrimary);
+                    else
+                        q = new QuoteSpan(colorPrimary, dp3, dp6);
+                    bodyBuilder.setSpan(q,
                             bodyBuilder.getSpanStart(quoteSpan),
                             bodyBuilder.getSpanEnd(quoteSpan),
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -4461,7 +4490,7 @@ public class FragmentCompose extends FragmentBase {
                 if (!ref.isEmpty()) {
                     Document dref = JsoupEx.parse(ref.outerHtml());
                     Document quote = HtmlHelper.sanitizeView(context, dref, show_images);
-                    SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, quote,
+                    spannedRef = HtmlHelper.fromDocument(context, quote,
                             new Html.ImageGetter() {
                                 @Override
                                 public Drawable getDrawable(String source) {
@@ -4469,18 +4498,6 @@ public class FragmentCompose extends FragmentBase {
                                 }
                             },
                             null);
-
-                    QuoteSpan[] refSpans = ssb.getSpans(0, ssb.length(), QuoteSpan.class);
-                    for (QuoteSpan quoteSpan : refSpans) {
-                        ssb.setSpan(
-                                new StyledQuoteSpan(context, colorPrimary),
-                                ssb.getSpanStart(quoteSpan),
-                                ssb.getSpanEnd(quoteSpan),
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        ssb.removeSpan(quoteSpan);
-                    }
-
-                    spannedRef = ssb;
                 }
 
                 args.putBoolean("ref_has_images", spannedRef != null &&

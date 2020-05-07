@@ -576,7 +576,7 @@
     </provider>
     <provider
         name="AOL"
-        domain="aol\\.com"
+        domain="aol\\..*"
         link="https://help.aol.com/articles/how-do-i-use-other-email-applications-to-send-and-receive-my-aol-mail">
         <imap
             host="imap.aol.com"
@@ -749,6 +749,18 @@
             starttls="false" />
         <smtp
             host="send.one.com"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Acor.de"
+        link="https://www.vodafone.de/hilfe/email/abrufen-senden.html">
+        <imap
+            host="imap.arcor.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.arcor.de"
             port="465"
             starttls="false" />
     </provider>

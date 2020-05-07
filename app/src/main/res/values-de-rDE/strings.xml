@@ -80,6 +80,7 @@
     <string name="title_notification_alert">\'%1$s\' Server-Warnung</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d Minuten</string>
     <string name="menu_exit">Beenden</string>
     <string name="menu_answers">Vorlagen</string>
@@ -222,7 +223,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_flagged">Alle markierten Nachrichten</string>
     <string name="title_advanced_delete_unseen">Alte ungelesene Nachrichten löschen</string>
     <string name="title_advanced_kept_removed">Überprüfen, ob alte Nachrichten vom Server entfernt wurden</string>
-    <string name="title_advanced_gmail_thread">Nachrichten im Stil von Gmail-Konten gruppieren</string>
+    <string name="title_advanced_gmail_thread">Die Nachrichten in Gmail-Konten im Stil von Gmail gruppieren</string>
     <string name="title_advanced_sync_folders">Ordnerliste synchronisieren</string>
     <string name="title_advanced_subscriptions">Abonnierte Ordner verwalten</string>
     <string name="title_advanced_keyboard">Tastatur immer anzeigen</string>
@@ -259,7 +260,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_caption_message_header">Nachrichtenkopfzeilen</string>
     <string name="title_advanced_caption_message_body">Nachrichtentext</string>
     <string name="title_advanced_landscape">Zwei Spalten im Querformat verwenden</string>
-    <string name="title_advanced_landscape3">Festes Navigationsmenü im Querformat erlauben</string>
+    <string name="title_advanced_landscape3">Navigationsmenü standardmäßig im Querformat anzeigen</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
     <string name="title_advanced_cards">Ordner und Unterhaltungen mit Rahmen (breit) statt in Tabellendesign (schmal) zeigen</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
@@ -279,6 +280,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_name_email">Namen und E-Mail-Adressen anzeigen</string>
     <string name="title_advanced_replace_name">Einen Kontaktnamen gegenüber einem gesendeten Namen bevorzugen</string>
     <string name="title_advanced_distinguish_contacts">Den Sender unterstrichen darstellen, wenn er ein bekannter lokaler \'An\'-Kontakt ist</string>
+    <string name="title_advanced_show_recipients">Empfänger im Nachrichtenkopf anzeigen</string>
     <string name="title_advanced_font_size_sender">Schriftgröße für den Absender</string>
     <string name="title_advanced_font_size_subject">Schriftgröße für den Betreff</string>
     <string name="title_advanced_subject_top">Betreff oberhalb des Absenders anzeigen</string>
@@ -298,6 +300,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_monospaced">Unproportionale Schriftart für den Nachrichtentext verwenden</string>
     <string name="title_advanced_text_color">Textfarben anzeigen</string>
     <string name="title_advanced_text_size">Kleine und große Texte anzeigen</string>
+    <string name="title_advanced_text_align">links-/rechtsbündige/zentrierte Texte anzeigen</string>
     <string name="title_advanced_collapse_quotes">Zitierten Text ausblenden</string>
     <string name="title_advanced_images_inline">Eingebettete Grafiken automatisch anzeigen</string>
     <string name="title_advanced_seekbar">Relative Unterhaltungsposition mit einem Punkt kennzeichnen</string>
@@ -400,7 +403,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_unseen_hint">Einige Anbieter unterstützen dies nicht richtig, was möglicherweise zu einer Synchronisierung von keiner oder allen Nachrichten führen kann</string>
     <string name="title_advanced_deleted_unseen">Wenn deaktiviert, bleiben ungelesene Nachrichten dauerhaft auf dem Gerät erhalten</string>
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
-    <string name="title_advanced_sync_folders_hint">Wenn Sie dies deaktivieren, wird der Daten- und Akkubedarf etwas reduziert, aber auch die Aktualisierung der Ordnerliste deaktiviert.</string>
+    <string name="title_advanced_sync_folders_hint">Die Deaktivierung dieser Funktion verringert den Daten- und Akkuverbrauch etwas, deaktiviert aber auch die Aktualisierung der Ordnerliste.</string>
     <string name="title_advanced_sync_delay_hint">Dies verzögert die Synchronisierung von Nachrichten</string>
     <string name="title_advanced_suggest_local_hint">Zusätzlich zu den von Android bereitgestellten Kontakten werden weitere Kontaktdaten für neue gesendete oder erhaltene Nachrichten nur dann gespeichert, wenn dies aktiviert ist.</string>
     <string name="title_advanced_usenet_hint">Signaturtrenner »-- « zwischen Text und Signatur einfügen</string>
@@ -742,7 +745,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_add_image_inline">Einfügen</string>
     <string name="title_add_image_attach">Anhängen</string>
     <string name="title_add_image_resize">Größe ändern</string>
-    <string name="title_add_image_privacy">Geografischen Standort entfernen</string>
+    <string name="title_add_image_privacy">Standort entfernen</string>
     <string name="title_add_resize_pixels">&lt; %1$d Pixel</string>
     <string name="title_add_image_select">Datei auswählen</string>
     <string name="title_add_attachment">Anhang hinzufügen</string>
@@ -811,6 +814,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_search_for_hint">Text eingeben</string>
     <string name="title_search_hint">Bei der Suche werden zunächst die auf Ihrem Gerät gespeicherten Nachrichten durchsucht. Um auch die Nachrichten auf dem Server zu durchsuchen, tippen Sie auf die Schaltfläche „Erneut suchen“.    </string>
     <string name="title_search_index_hint">Die Suche über den Suchindex ist schnell, wird aber nur für ganze Wörter durchgeführt</string>
+    <string name="title_search_text_hint">Einige E-Mail-Server haben Probleme, Text in einer großen Anzahl von Nachrichten zu finden</string>
     <string name="title_search_more">Weitere Optionen</string>
     <string name="title_search_use_index">Suchindex verwenden</string>
     <string name="title_search_in_senders">In Absendern (von)</string>
@@ -857,6 +861,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_select_all">Alle auswählen</string>
     <string name="title_select_found">Alle gefundenen Nachrichten auswählen</string>
     <string name="title_force_sync">Synchronisation erzwingen</string>
+    <string name="title_force_send">Senden erzwingen</string>
     <string name="title_language_all">Alle</string>
     <string name="title_previous">Vorherige</string>
     <string name="title_next">Nächste</string>
@@ -966,6 +971,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_legend_snoozed">Wurde zurückgestellt</string>
     <string name="title_legend_browsed">Gesehen oder gesucht</string>
     <string name="title_legend_answered">Wurde beantwortet</string>
+    <string name="title_legend_forwarded">Wurde weitergeleitet</string>
     <string name="title_legend_plain_only">Ist eine Nur-Text-Mail</string>
     <string name="title_legend_receipt">Bestätigung wurde angefordert</string>
     <string name="title_legend_attachment">Anhang vorhanden</string>

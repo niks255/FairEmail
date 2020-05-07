@@ -79,6 +79,7 @@
     <string name="title_notification_alert">\"%1$s\" servermeddelande</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
+    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_factor_minutes">%1$d minuter</string>
     <string name="menu_exit">Avsluta</string>
     <string name="menu_answers">Mallar</string>
@@ -257,7 +258,7 @@
     <string name="title_advanced_caption_message_header">Meddelandehuvud</string>
     <string name="title_advanced_caption_message_body">Meddelande-text</string>
     <string name="title_advanced_landscape">Använd två kolumner i landskapsläge</string>
-    <string name="title_advanced_landscape3">Tillåt fast navigeringsmeny i landskapsläge</string>
+    <string name="title_advanced_landscape3">Visa navigeringsmenyn i liggande läge som standard</string>
     <string name="title_advanced_startup">Visa på startskärmen</string>
     <string name="title_advanced_cards">Använd kortstil istället för tabellstil</string>
     <string name="title_advanced_date_header">Gruppera efter datum</string>
@@ -277,12 +278,13 @@
     <string name="title_advanced_name_email">Visa namn och e-postadresser</string>
     <string name="title_advanced_replace_name">Föredrar ett kontaktnamn över ett skickat namn</string>
     <string name="title_advanced_distinguish_contacts">Understryk avsändaren när avsändaren är känd som lokal \"till\" kontakt</string>
+    <string name="title_advanced_show_recipients">Visa mottagare i meddelandehuvudet</string>
     <string name="title_advanced_font_size_sender">Teckenstorlek på avsändare</string>
     <string name="title_advanced_font_size_subject">Teckenstorlek på ämnesrad</string>
     <string name="title_advanced_subject_top">Visa ämne ovanför avsändaren</string>
     <string name="title_advanced_subject_italic">Visa ämnet kursivt</string>
     <string name="title_advanced_subject_elipsed">När det behövs, förkorta ämnet</string>
-    <string name="title_advanced_keywords">Visa nyckelord i meddelandehuvudet (header)</string>
+    <string name="title_advanced_keywords">Visa nyckelord i sidhuvudet för meddelandet</string>
     <string name="title_advanced_flags">Visa stjärnor</string>
     <string name="title_advanced_flags_background">Visa färgad bakgrund istället för färgade stjärnor</string>
     <string name="title_advanced_preview">Förhandsvisning av meddelande</string>
@@ -296,6 +298,7 @@
     <string name="title_advanced_monospaced">Använd monospace-typsnitt för meddelandetexten</string>
     <string name="title_advanced_text_color">Visa textfärger</string>
     <string name="title_advanced_text_size">Visa små och stora texter</string>
+    <string name="title_advanced_text_align">Visa vänster/mitten/högerinriktade texter</string>
     <string name="title_advanced_collapse_quotes">Kollapsa citerad text</string>
     <string name="title_advanced_images_inline">Visa automatiskt infogade bilder</string>
     <string name="title_advanced_seekbar">Visa relativ konversationsposition med en punkt</string>
@@ -501,7 +504,7 @@
     <string name="title_leave_on_device">Spara meddelanden på enheten</string>
     <string name="title_max_messages">Maximalt antal meddelanden att ladda ner (lämna tomt för alla)</string>
     <string name="title_keep_alive_interval">Keep-alive/frågeintervall (minuter)</string>
-    <string name="title_use_date">Använd datum och tid från header istället för mottagen tid för servern</string>
+    <string name="title_use_date">Använd datumet i sidhuvudet istället för mottagen tid på servern</string>
     <string name="title_related_identity">Lägg till relaterad identitet</string>
     <string name="title_check">Kontrollera</string>
     <string name="title_trust">Lita på servercertifikat med fingeravtryck %1$s</string>
@@ -623,7 +626,7 @@
     <string name="title_share">Dela</string>
     <string name="title_pin">Lägg till genväg</string>
     <string name="title_print">Skriv ut</string>
-    <string name="title_show_headers">Visa rubriker</string>
+    <string name="title_show_headers">Visa sidhuvuden</string>
     <string name="title_raw_save">Spara rent meddelande</string>
     <string name="title_raw_send">Skicka som bilaga</string>
     <string name="title_manage_keywords">Hantera nyckelord</string>
@@ -811,6 +814,7 @@
         För att söka på servern också, tryck på knappen \"Sök igen\".
     </string>
     <string name="title_search_index_hint">Sökning via index är snabbt, men kommer bara att hitta hela ord</string>
+    <string name="title_search_text_hint">Vissa e-postservrar har svårt att hitta text i många meddelanden</string>
     <string name="title_search_more">Fler alternativ</string>
     <string name="title_search_use_index">Använd sökindex</string>
     <string name="title_search_in_senders">I avsändare (från)</string>
@@ -857,6 +861,7 @@
     <string name="title_select_all">Markera alla</string>
     <string name="title_select_found">Välj hittade</string>
     <string name="title_force_sync">Tvinga synkronisering</string>
+    <string name="title_force_send">Tvinga skickning</string>
     <string name="title_language_all">Alla</string>
     <string name="title_previous">Föregående</string>
     <string name="title_next">Nästa</string>
@@ -895,7 +900,7 @@
     <string name="title_rule_recipient">Mottagare innehåller</string>
     <string name="title_rule_subject">Ämnet innehåller</string>
     <string name="title_rule_attachments">Har bilagor</string>
-    <string name="title_rule_header">Rubriken innhåller</string>
+    <string name="title_rule_header">Sidhuvud innehåller</string>
     <string name="title_rule_time">Tid mellan</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">OCH</string>
@@ -914,7 +919,7 @@
     <string name="title_rule_execute">Verkställ nu</string>
     <string name="title_rule_applied">Berörda meddelanden: %1$d</string>
     <string name="title_rule_check">Kontrollera</string>
-    <string name="title_rule_no_headers">Rubrikvillkor kan inte kontrolleras</string>
+    <string name="title_rule_no_headers">Sidhuvudvillkor kan inte kontrolleras</string>
     <string name="title_rule_matched">Matchande meddelanden</string>
     <string name="title_rule_no_matches">Inga matchande meddelanden</string>
     <string name="title_legend_section_synchronize">Synkronisera</string>
@@ -966,6 +971,7 @@
     <string name="title_legend_snoozed">Slumrar</string>
     <string name="title_legend_browsed">Bläddrat eller sökt</string>
     <string name="title_legend_answered">Har besvarats</string>
+    <string name="title_legend_forwarded">Vidarebefordrades</string>
     <string name="title_legend_plain_only">Är endast oformaterad text</string>
     <string name="title_legend_receipt">Kvitto begärdes</string>
     <string name="title_legend_attachment">Har bilaga</string>

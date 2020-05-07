@@ -54,6 +54,7 @@ import java.net.IDN;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -339,8 +340,9 @@ public class MessageHelper {
                 Log.i("Sending PGP encrypted message");
 
                 // Build header
+                // https://tools.ietf.org/html/rfc3156
                 BodyPart bpHeader = new MimeBodyPart();
-                bpHeader.setContent("", "application/pgp-encrypted");
+                bpHeader.setContent("Version: 1\n", "application/pgp-encrypted");
 
                 // Build content
                 BodyPart bpContent = new MimeBodyPart();
@@ -1589,7 +1591,7 @@ public class MessageHelper {
                 if (part.isMimeType("text/plain")) {
                     if ("flowed".equalsIgnoreCase(ct.getParameter("format")))
                         result = HtmlHelper.flow(result);
-                    result = "<div>" + HtmlHelper.formatPre(result) + "</div>";
+                    result = "<div x-plain=\"true\">" + HtmlHelper.formatPre(result) + "</div>";
                 } else if (part.isMimeType("text/html")) {
                     if (TextUtils.isEmpty(charset)) {
                         // <meta charset="utf-8" />
@@ -2063,7 +2065,9 @@ public class MessageHelper {
                 continue;
             sb.append(kar);
         }
-        return sb.toString();
+
+        return Normalizer.normalize(sb.toString(), Normalizer.Form.NFKD)
+                .replaceAll("[^\\p{ASCII}]", "");
     }
 
     static String sanitizeEmail(String email) {

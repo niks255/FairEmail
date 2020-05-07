@@ -267,7 +267,7 @@
     <string name="title_advanced_caption_message_header">Antet mesaj</string>
     <string name="title_advanced_caption_message_body">Corp mesaj</string>
     <string name="title_advanced_landscape">Folosește două coloane în modul portret</string>
-    <string name="title_advanced_landscape3">Permite meniul de navigare fix în modul panoramă</string>
+    <string name="title_advanced_landscape3">Afișează implicit meniul de navigare în modul peisaj</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
     <string name="title_advanced_cards">Folosește stilul carduri în loc de cel tabular</string>
     <string name="title_advanced_date_header">Grupare după dată</string>
@@ -287,6 +287,7 @@
     <string name="title_advanced_name_email">Arată nume și adrese de e-mail</string>
     <string name="title_advanced_replace_name">Preferă nume contact în loc de nume trimis</string>
     <string name="title_advanced_distinguish_contacts">Subliniază expeditorul atunci când este cunoscut drept un contact `către`</string>
+    <string name="title_advanced_show_recipients">Arată destinatarii în antetul mesajului</string>
     <string name="title_advanced_font_size_sender">Mărime font expeditor</string>
     <string name="title_advanced_font_size_subject">Mărime font subiect</string>
     <string name="title_advanced_subject_top">Arată subiectul desupra expeditorului</string>
@@ -306,6 +307,7 @@
     <string name="title_advanced_monospaced">Folosește fontul proporțional pentru textul mesajului</string>
     <string name="title_advanced_text_color">Arată culori text</string>
     <string name="title_advanced_text_size">Arată mărimile mici și mari de text</string>
+    <string name="title_advanced_text_align">Arată textele aliniate stânga/centru/dreapta</string>
     <string name="title_advanced_collapse_quotes">Restrânge textul citat</string>
     <string name="title_advanced_images_inline">Arată automat imaginile integrate</string>
     <string name="title_advanced_seekbar">Arată poziția relativă în conversație cu un punct</string>
@@ -821,6 +823,7 @@
         Pentru a căuta și pe server apăsați butonul \'căutare din nou\'.
     </string>
     <string name="title_search_index_hint">Căutarea prin indexul de căutare este rapidă, dar va găsi doar cuvinte întregi</string>
+    <string name="title_search_text_hint">Unele servere de e-mail au probleme în a găsi text în multe mesaje</string>
     <string name="title_search_more">Mai multe opțiuni</string>
     <string name="title_search_use_index">Folosește index de căutare</string>
     <string name="title_search_in_senders">În expeditori (de la)</string>
@@ -867,6 +870,7 @@
     <string name="title_select_all">Selectează tot</string>
     <string name="title_select_found">Selectare găsite</string>
     <string name="title_force_sync">Sincronizare forțată</string>
+    <string name="title_force_send">Trimite forțat</string>
     <string name="title_language_all">Toate</string>
     <string name="title_previous">Precedent</string>
     <string name="title_next">Următor</string>
