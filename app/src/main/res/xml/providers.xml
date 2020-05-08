@@ -340,6 +340,7 @@
     </provider>
     <provider
         name="Apple iCloud"
+        appPassword="true"
         domain="icloud\\.com"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq148"
         user="local">
@@ -761,6 +762,19 @@
             starttls="false" />
         <smtp
             host="mail.arcor.de"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Kabel Mail &amp; Cloud"
+        link="https://sso.kabelmail.de/portal/info/IMAP_und_SMTP"
+        useip="false">
+        <imap
+            host="imap.kabelmail.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.kabelmail.de"
             port="465"
             starttls="false" />
     </provider>

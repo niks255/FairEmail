@@ -789,7 +789,8 @@ If there are any error messages, please see [this FAQ](#user-content-faq22).
 
 On some devices, where there are lots of applications competing for memory, Android may stop the synchronization service as a last resort.
 
-Some Android versions stop apps and services too aggressively. See [this dedicated website](https://dontkillmyapp.com/) for more information.
+Some Android versions stop apps and services too aggressively.
+See [this dedicated website](https://dontkillmyapp.com/) and [this Android issue](https://issuetracker.google.com/issues/122098785) for more information.
 
 Disabling battery optimizations (setup step 4) reduces the chance Android will stop the synchronization service.
 
@@ -2347,7 +2348,7 @@ Empty messages and/or corrupt attachments are probably being caused by a bug in 
 Older Microsoft Exchange software is known to cause this problem.
 Mostly you can workaround this by disabling *Partial fetch* in the advanced account settings:
 
-Setup > Step 1 > Manage > Tap account > Tap advanced > Partial fetch > check
+Setup > Step 1 > Manage > Tap account > Tap advanced > Partial fetch > uncheck
 
 After disabling this setting, you can use the message 'more' (three dots) menu to 'resync' empty messages.
 Alternatively, you can *Delete local messages* by long pressing the folder(s) in the folder list and synchronize all messages again.
