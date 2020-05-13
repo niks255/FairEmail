@@ -282,6 +282,9 @@ public class FragmentOAuth extends FragmentBase {
             if ("gmail".equals(provider.id))
                 authRequestBuilder.setPrompt("consent");
 
+            if ("outlook".equals(provider.id))
+                authRequestBuilder.setPrompt("select_account");
+
             AuthorizationRequest authRequest = authRequestBuilder.build();
 
             Log.i("OAuth request provider=" + provider.id);
@@ -564,7 +567,7 @@ public class FragmentOAuth extends FragmentBase {
         pbOAuth.setVisibility(View.GONE);
     }
 
-    void showError(Throwable ex) {
+    private void showError(Throwable ex) {
         Log.e(ex);
 
         pbOAuth.setVisibility(View.GONE);
@@ -590,7 +593,7 @@ public class FragmentOAuth extends FragmentBase {
         });
     }
 
-    void hideError() {
+    private void hideError() {
         grpError.setVisibility(View.GONE);
         tvGmailDraftsHint.setVisibility(View.GONE);
     }

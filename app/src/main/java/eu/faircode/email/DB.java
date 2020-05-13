@@ -60,7 +60,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 157,
+        version = 158,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -107,7 +107,7 @@ public abstract class DB extends RoomDatabase {
 
     private static DB sInstance;
     private static final ExecutorService executor =
-            Helper.getBackgroundExecutor(4, "query"); // AndroidX default thread count
+            Helper.getBackgroundExecutor(2, "query"); // AndroidX default thread count
 
     private static final String DB_NAME = "fairemail";
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
@@ -1564,6 +1564,13 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `message` ADD COLUMN `wasforwardedfrom` TEXT");
+                    }
+                })
+                .addMigrations(new Migration(157, 158) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `uidl` TEXT");
                     }
                 });
     }

@@ -958,6 +958,10 @@ class Core {
             message.ui_flagged = false;
         message.ui_hide = false;
 
+        // Prevent deleting message from inbox
+        if (message.uidl == null)
+            message.uidl = message.msgid;
+
         db.message().updateMessage(message);
     }
 
@@ -1529,8 +1533,15 @@ class Core {
 
             db.folder().setFolderSyncState(folder.id, "downloading");
 
-            List<String> existing = db.message().getMsgIds(folder.id);
-            Log.i(folder.name + " POP existing=" + existing.size());
+            List<TupleUidl> ids = db.message().getUidls(folder.id);
+            Log.i(folder.name + " POP existing=" + ids.size());
+
+            Map<String, TupleUidl> uidls = new HashMap<>();
+            for (TupleUidl id : ids)
+                if (id.uidl == null)
+                    db.message().deleteMessage(id.id);
+                else
+                    uidls.put(id.uidl, id);
 
             for (Message imessage : imessages)
                 try {
@@ -1538,23 +1549,23 @@ class Core {
                         return;
 
                     MessageHelper helper = new MessageHelper((MimeMessage) imessage);
-                    String msgid = caps.containsKey("UIDL")
+                    String uidl = caps.containsKey("UIDL")
                             ? ifolder.getUID(imessage)
                             : helper.getMessageID();
 
-                    if (TextUtils.isEmpty(msgid)) {
+                    if (TextUtils.isEmpty(uidl)) {
                         Log.w(folder.name + " POP no message ID");
                         continue;
                     }
 
-                    if (existing.contains(msgid)) {
-                        existing.remove(msgid);
-                        Log.i(folder.name + " POP having=" + msgid);
+                    if (uidls.containsKey(uidl)) {
+                        uidls.remove(uidl);
+                        Log.i(folder.name + " POP having=" + uidl);
                         continue;
                     }
 
                     try {
-                        Log.i(folder.name + " POP sync=" + msgid);
+                        Log.i(folder.name + " POP sync=" + uidl);
 
                         Long sent = helper.getSent();
                         if (sent == null)
@@ -1567,8 +1578,8 @@ class Core {
                         message.account = folder.account;
                         message.folder = folder.id;
                         message.uid = null;
-
-                        message.msgid = msgid;
+                        message.uidl = uidl;
+                        message.msgid = helper.getMessageID();
                         message.hash = helper.getHash();
                         message.references = TextUtils.join(" ", helper.getReferences());
                         message.inreplyto = helper.getInReplyTo();
@@ -1671,9 +1682,9 @@ class Core {
                 }
 
             if (!account.leave_on_device)
-                for (String msgid : existing) {
-                    Log.i(folder.name + " POP deleted=" + msgid);
-                    db.message().deleteMessage(folder.id, msgid);
+                for (TupleUidl id : uidls.values()) {
+                    Log.i(folder.name + " POP deleting=" + id.msgid);
+                    db.message().deleteMessage(folder.id, id.msgid);
                 }
 
             Log.i(folder.name + " POP done");

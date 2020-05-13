@@ -135,6 +135,7 @@
     <string name="title_setup_no_settings">Nessuna impostazione trovata per il dominio \'%1$s\'</string>
     <string name="title_setup_no_settings_hint">Prova a configurare un account e un\'identità nei passaggi 1 e 2 del setup utilizzando le impostazioni fornite dal tuo provider di posta elettronica</string>
     <string name="title_setup_no_auth_hint">Controlla nuovamente l\'indirizzo email e la password e assicurati che l\'accesso esterno (IMAP/SMTP) sia abilitato per il tuo account</string>
+    <string name="title_setup_app_password_hint">Questo provider richiede una password dell\'app invece della password dell\'account, per favore controlla le istruzioni del tuo provider</string>
     <string name="title_setup_no_system_folders">Cartella in arrivo o bozza non trovata</string>
     <string name="title_setup_quick_success">Un account e un\'identità sono stati aggiunti con successo</string>
     <string name="title_setup_quick_failed">Puoi provare a configurare un account e un\'identità qui sotto</string>
@@ -221,6 +222,7 @@
     <string name="title_advanced_flagged">Tutti i messaggi preferiti</string>
     <string name="title_advanced_delete_unseen">Elimina i vecchi messaggi non letti</string>
     <string name="title_advanced_kept_removed">Controlla se i vecchi messaggi sono stati rimossi dal server</string>
+    <string name="title_advanced_gmail_thread">Raggruppamento messaggi Gmail per account Gmail</string>
     <string name="title_advanced_sync_folders">Sincronizza elenco cartelle</string>
     <string name="title_advanced_subscriptions">Gestisci abbonamenti cartelle</string>
     <string name="title_advanced_keyboard">Mostra tastiera di default</string>
@@ -257,6 +259,7 @@
     <string name="title_advanced_caption_message_header">Intestazione messaggio</string>
     <string name="title_advanced_caption_message_body">Corpo del messaggio</string>
     <string name="title_advanced_landscape">Usa due colonne in modalità orizzontale</string>
+    <string name="title_advanced_landscape3">Mostra il menu di navigazione in modalità orizzontale per impostazione predefinita</string>
     <string name="title_advanced_startup">Mostra nella schermata iniziale</string>
     <string name="title_advanced_cards">Utilizza lo stile della carta al posto dello stile tabulare</string>
     <string name="title_advanced_date_header">Raggruppa per data</string>
@@ -276,6 +279,7 @@
     <string name="title_advanced_name_email">Mostra nomi e indirizzi email</string>
     <string name="title_advanced_replace_name">Preferisci un nome di contatto a un nome inviato</string>
     <string name="title_advanced_distinguish_contacts">Sottolinea il mittente quando il mittente è conosciuto come contatto locale \'a\"</string>
+    <string name="title_advanced_show_recipients">Mostra i destinatari nell\'intestazione del messaggio</string>
     <string name="title_advanced_font_size_sender">Dimensione font mittente</string>
     <string name="title_advanced_font_size_subject">Dimensione carattere oggetto</string>
     <string name="title_advanced_subject_top">Mostra oggetto sopra il mittente</string>
@@ -295,6 +299,7 @@
     <string name="title_advanced_monospaced">Usa il carattere monospazio per il testo del messaggio</string>
     <string name="title_advanced_text_color">Mostra colori testo</string>
     <string name="title_advanced_text_size">Mostra testi piccoli e grandi</string>
+    <string name="title_advanced_text_align">Mostra testi allineati sinistra/centro/destra</string>
     <string name="title_advanced_collapse_quotes">Comprimi testo citato</string>
     <string name="title_advanced_images_inline">Mostra automaticamente le immagini in linea</string>
     <string name="title_advanced_seekbar">Mostra la posizione relativa della conversazione con un punto</string>
@@ -738,6 +743,7 @@
     <string name="title_add_image_inline">Inserisci</string>
     <string name="title_add_image_attach">Allega</string>
     <string name="title_add_image_resize">Ridimensiona</string>
+    <string name="title_add_image_privacy">Rimuovi posizione geografica</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Seleziona file</string>
     <string name="title_add_attachment">Aggiungi allegato</string>
@@ -808,6 +814,7 @@
         Per cercare anche sul server, tocca il pulsante \"cerca di nuovo\".
     </string>
     <string name="title_search_index_hint">La ricerca tramite l\'indice di ricerca è veloce, ma troverà solo parole intere</string>
+    <string name="title_search_text_hint">Alcuni server di posta elettronica hanno problemi a trovare testo in molti messaggi</string>
     <string name="title_search_more">Altre opzioni</string>
     <string name="title_search_use_index">Usa indice di ricerca</string>
     <string name="title_search_in_senders">Nei mittenti (da)</string>
@@ -854,6 +861,7 @@
     <string name="title_select_all">Seleziona tutti</string>
     <string name="title_select_found">Seleziona trovato</string>
     <string name="title_force_sync">Forza sincronizzazione</string>
+    <string name="title_force_send">Forza invio</string>
     <string name="title_language_all">Tutti</string>
     <string name="title_previous">Precedente</string>
     <string name="title_next">Successivo</string>
@@ -963,6 +971,7 @@
     <string name="title_legend_snoozed">È posticipato</string>
     <string name="title_legend_browsed">È browser o ricercato</string>
     <string name="title_legend_answered">Ha ricevuto risposta</string>
+    <string name="title_legend_forwarded">È stato inoltrato</string>
     <string name="title_legend_plain_only">È solo testo semplice</string>
     <string name="title_legend_receipt">La ricevuta è stata richiesta</string>
     <string name="title_legend_attachment">Ha allegato</string>
