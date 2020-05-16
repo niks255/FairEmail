@@ -958,10 +958,6 @@ class Core {
             message.ui_flagged = false;
         message.ui_hide = false;
 
-        // Prevent deleting message from inbox
-        if (message.uidl == null)
-            message.uidl = message.msgid;
-
         db.message().updateMessage(message);
     }
 
@@ -1536,12 +1532,14 @@ class Core {
             List<TupleUidl> ids = db.message().getUidls(folder.id);
             Log.i(folder.name + " POP existing=" + ids.size());
 
+            // Map identifiers
             Map<String, TupleUidl> uidls = new HashMap<>();
+            Map<String, TupleUidl> msgids = new HashMap<>();
             for (TupleUidl id : ids)
-                if (id.uidl == null)
-                    db.message().deleteMessage(id.id);
-                else
+                if (id.uidl != null)
                     uidls.put(id.uidl, id);
+                else if (id.msgid != null)
+                    msgids.put(id.msgid, id);
 
             for (Message imessage : imessages)
                 try {
@@ -1560,8 +1558,17 @@ class Core {
 
                     if (uidls.containsKey(uidl)) {
                         uidls.remove(uidl);
-                        Log.i(folder.name + " POP having=" + uidl);
+                        Log.i(folder.name + " POP having uidl=" + uidl);
                         continue;
+                    }
+
+                    if (caps.containsKey("UIDL")) {
+                        String msgid = helper.getMessageID();
+                        if (msgids.containsKey(msgid)) {
+                            Log.i(folder.name + " POP having msgid=" + msgid);
+                            db.message().setMessageUidl(msgids.get(msgid).id, uidl);
+                            continue;
+                        }
                     }
 
                     try {

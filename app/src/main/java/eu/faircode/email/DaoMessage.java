@@ -460,12 +460,14 @@ public interface DaoMessage {
 
     @Query("SELECT message.*" +
             ", account.name AS accountName" +
+            ", COALESCE(identity.color, folder.color, account.color) AS accountColor" +
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", COUNT(message.id) - SUM(message.ui_flagged) AS unflagged" +
             ", MAX(message.received) AS dummy" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " LEFT JOIN identity ON identity.id = message.identity" +
             " WHERE account.`synchronize`" +
             " AND (:account IS NULL OR account.id = :account)" +
             " AND ((:folder IS NULL AND folder.unified) OR folder.id = :folder)" +
@@ -664,9 +666,11 @@ public interface DaoMessage {
     @Query("UPDATE message SET ui_found = 0")
     int resetSearch();
 
-    @Query("UPDATE message SET ui_snoozed = :wakeup" +
-            " WHERE id = :id")
+    @Query("UPDATE message SET ui_snoozed = :wakeup WHERE id = :id")
     int setMessageSnoozed(long id, Long wakeup);
+
+    @Query("UPDATE message SET uidl = :uidl WHERE id = :id")
+    int setMessageUidl(long id, String uidl);
 
     @Query("UPDATE message SET notifying = 0")
     int clearNotifyingMessages();
