@@ -179,6 +179,8 @@ public class EntityMessage implements Serializable {
     public Boolean ui_browsed = false;
     public Long ui_busy;
     public Long ui_snoozed;
+    @NonNull
+    public Boolean ui_unsnoozed = false;
     public Integer color;
     public Integer revision; // compose
     public Integer revisions; // compose
@@ -187,7 +189,11 @@ public class EntityMessage implements Serializable {
     public Long last_attempt; // send
 
     static String generateMessageId() {
-        return "<" + UUID.randomUUID() + "@localhost" + '>';
+        return generateMessageId("localhost");
+    }
+
+    static String generateMessageId(String domain) {
+        return "<" + UUID.randomUUID() + "@" + domain + '>';
     }
 
     boolean replySelf(List<TupleIdentityEx> identities, long account) {
@@ -364,7 +370,9 @@ public class EntityMessage implements Serializable {
                     this.ui_found.equals(other.ui_found) &&
                     this.ui_ignored.equals(other.ui_ignored) &&
                     this.ui_browsed.equals(other.ui_browsed) &&
+                    Objects.equals(this.ui_busy, other.ui_busy) &&
                     Objects.equals(this.ui_snoozed, other.ui_snoozed) &&
+                    this.ui_unsnoozed.equals(other.ui_unsnoozed) &&
                     Objects.equals(this.color, other.color) &&
                     Objects.equals(this.revision, other.revision) &&
                     Objects.equals(this.revisions, other.revisions) &&

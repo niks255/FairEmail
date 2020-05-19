@@ -244,7 +244,7 @@
     <string name="title_advanced_caption_list">列表</string>
     <string name="title_advanced_caption_conversation">会话</string>
     <string name="title_advanced_caption_message">消息</string>
-    <string name="title_advanced_caption_message_header">邮件头</string>
+    <string name="title_advanced_caption_message_header">邮件标头</string>
     <string name="title_advanced_caption_message_body">消息正文</string>
     <string name="title_advanced_landscape">在横屏模式下使用两列</string>
     <string name="title_advanced_landscape3">默认在横屏模式下显示导航菜单</string>
@@ -555,6 +555,7 @@
     <string name="title_folder_name">文件夹名</string>
     <string name="title_display_name">显示昵称</string>
     <string name="title_show_folders">显示隐藏文件夹</string>
+    <string name="title_show_flagged">显示星标消息</string>
     <string name="title_subscribed_only">只显示已订阅的</string>
     <string name="title_apply_to_all">应用到所有文件夹 &#8230;</string>
     <string name="title_hide_folder">隐藏文件夹</string>

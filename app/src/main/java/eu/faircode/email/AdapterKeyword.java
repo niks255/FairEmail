@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -166,40 +168,8 @@ public class AdapterKeyword extends RecyclerView.Adapter<AdapterKeyword.ViewHold
             else
                 prefs.edit().putInt("keyword." + keyword.name, keyword.color).apply();
 
-            Bundle args = new Bundle();
-            args.putLong("id", id);
-
-            new SimpleTask<Void>() {
-                @Override
-                protected Void onExecute(Context context, Bundle args) {
-                    long id = args.getLong("id");
-
-                    DB db = DB.getInstance(context);
-
-                    EntityMessage message = db.message().getMessage(id);
-                    if (message == null)
-                        return null;
-
-                    // Update keyword colors
-                    try {
-                        db.beginTransaction();
-
-                        db.message().setMessageKeywords(message.id, DB.Converters.fromStringArray(null));
-                        db.message().setMessageKeywords(message.id, DB.Converters.fromStringArray(message.keywords));
-
-                        db.setTransactionSuccessful();
-                    } finally {
-                        db.endTransaction();
-                    }
-
-                    return null;
-                }
-
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.e(ex);
-                }
-            }.execute(context, owner, args, "keyword:set");
+            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+            lbm.sendBroadcast(new Intent(FragmentMessages.ACTION_KEYWORDS));
         }
     }
 

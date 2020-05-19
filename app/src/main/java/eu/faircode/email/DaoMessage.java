@@ -459,8 +459,7 @@ public interface DaoMessage {
     LiveData<List<TupleMessageWidgetCount>> liveWidgetUnified();
 
     @Query("SELECT message.*" +
-            ", account.name AS accountName" +
-            ", COALESCE(identity.color, folder.color, account.color) AS accountColor" +
+            ", account.name AS accountName, account.color AS accountColor" +
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", COUNT(message.id) - SUM(message.ui_flagged) AS unflagged" +
             ", MAX(message.received) AS dummy" +
@@ -668,6 +667,9 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET ui_snoozed = :wakeup WHERE id = :id")
     int setMessageSnoozed(long id, Long wakeup);
+
+    @Query("UPDATE message SET ui_unsnoozed = :unsnoozed WHERE id = :id")
+    int setMessageUnsnoozed(long id, boolean unsnoozed);
 
     @Query("UPDATE message SET uidl = :uidl WHERE id = :id")
     int setMessageUidl(long id, String uidl);

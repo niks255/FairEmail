@@ -81,6 +81,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
     private boolean primary;
     private boolean show_compact;
     private boolean show_hidden;
+    private boolean show_flagged;
     private boolean subscribed_only;
     private IFolderSelectedListener listener;
 
@@ -89,7 +90,6 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
     private LayoutInflater inflater;
 
     private boolean subscriptions;
-    private boolean debug;
 
     private int dp12;
     private float textSize;
@@ -128,9 +128,13 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
         private ImageView ivSync;
 
         private TextView tvKeywords;
+        private TextView tvFlagged;
+        private ImageView ibFlagged;
+
         private TextView tvError;
         private Button btnHelp;
 
+        private Group grpFlagged;
         private Group grpExtended;
 
         private TwoStateOwner powner = new TwoStateOwner(owner, "FolderPopup");
@@ -162,15 +166,23 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             ivSync = itemView.findViewById(R.id.ivSync);
 
             tvKeywords = itemView.findViewById(R.id.tvKeywords);
+            tvFlagged = itemView.findViewById(R.id.tvFlagged);
+            ibFlagged = itemView.findViewById(R.id.ibFlagged);
+
             tvError = itemView.findViewById(R.id.tvError);
             btnHelp = itemView.findViewById(R.id.btnHelp);
 
+            grpFlagged = itemView.findViewById(R.id.grpFlagged);
             grpExtended = itemView.findViewById(R.id.grpExtended);
         }
 
         private void wire() {
             view.setOnClickListener(this);
             ibExpander.setOnClickListener(this);
+            if (tvFlagged != null)
+                tvFlagged.setOnClickListener(this);
+            if (ibFlagged != null)
+                ibFlagged.setOnClickListener(this);
             if (listener == null)
                 view.setOnLongClickListener(this);
             if (btnHelp != null)
@@ -180,6 +192,10 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
         private void unwire() {
             view.setOnClickListener(null);
             ibExpander.setOnClickListener(null);
+            if (tvFlagged != null)
+                tvFlagged.setOnClickListener(null);
+            if (ibFlagged != null)
+                ibFlagged.setOnClickListener(null);
             if (listener == null)
                 view.setOnLongClickListener(null);
             if (btnHelp != null)
@@ -327,14 +343,19 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                         folder.synchronize && folder.initialize != 0 && !EntityFolder.OUTBOX.equals(folder.type)
                                 ? textColorPrimary : textColorSecondary));
 
-                tvKeywords.setText(TextUtils.join(" ", folder.keywords));
-                tvKeywords.setVisibility(debug && folder.keywords.length > 0 ? View.VISIBLE : View.GONE);
+                tvKeywords.setText(BuildConfig.DEBUG ? TextUtils.join(" ", folder.keywords) : null);
+                tvKeywords.setVisibility(show_flagged ? View.VISIBLE : View.GONE);
+
+                tvFlagged.setText(NF.format(folder.flagged));
+                ibFlagged.setImageResource(folder.flagged == 0
+                        ? R.drawable.baseline_star_border_24 : R.drawable.baseline_star_24);
 
                 tvError.setText(folder.error);
                 tvError.setVisibility(folder.error != null ? View.VISIBLE : View.GONE);
                 if (btnHelp != null)
                     btnHelp.setVisibility(folder.error == null ? View.GONE : View.VISIBLE);
 
+                grpFlagged.setVisibility(show_compact || !show_flagged ? View.GONE : View.VISIBLE);
                 grpExtended.setVisibility(show_compact ? View.GONE : View.VISIBLE);
             }
         }
@@ -352,23 +373,29 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 if (folder.tbd != null)
                     return;
 
-                if (view.getId() == R.id.ibExpander)
-                    onCollapse(folder);
-                else if (folder.selectable) {
-                    if (listener == null) {
-                        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-                        lbm.sendBroadcast(
-                                new Intent(ActivityView.ACTION_VIEW_MESSAGES)
-                                        .putExtra("account", folder.account)
-                                        .putExtra("folder", folder.id)
-                                        .putExtra("type", folder.type));
-                    } else {
-                        if (folder.read_only)
-                            return;
-                        if (disabledIds.contains(folder.id))
-                            return;
-                        listener.onFolderSelected(folder);
-                    }
+                switch (view.getId()) {
+                    case R.id.ibExpander:
+                        onCollapse(folder);
+                        break;
+                    case R.id.tvFlagged:
+                    case R.id.ibFlagged:
+                        onFlagged(folder);
+                        break;
+                    default:
+                        if (listener == null) {
+                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+                            lbm.sendBroadcast(
+                                    new Intent(ActivityView.ACTION_VIEW_MESSAGES)
+                                            .putExtra("account", folder.account)
+                                            .putExtra("folder", folder.id)
+                                            .putExtra("type", folder.type));
+                        } else {
+                            if (folder.read_only)
+                                return;
+                            if (disabledIds.contains(folder.id))
+                                return;
+                            listener.onFolderSelected(folder);
+                        }
                 }
             }
         }
@@ -401,6 +428,19 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "folder:collapse");
+        }
+
+        private void onFlagged(TupleFolderEx folder) {
+            BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
+            criteria.in_senders = false;
+            criteria.in_recipients = false;
+            criteria.in_subject = false;
+            criteria.in_keywords = false;
+            criteria.in_message = false;
+            criteria.with_flagged = true;
+            FragmentMessages.search(
+                    context, owner, parentFragment.getParentFragmentManager(),
+                    folder.account, folder.id, false, criteria);
         }
 
         @Override
@@ -741,16 +781,17 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
         }
     }
 
-    AdapterFolder(Fragment parentFragment, long account, boolean primary, boolean show_compact, boolean show_hidden, IFolderSelectedListener listener) {
-        this(parentFragment.getContext(), parentFragment.getViewLifecycleOwner(), account, primary, show_compact, show_hidden, listener);
+    AdapterFolder(Fragment parentFragment, long account, boolean primary, boolean show_compact, boolean show_hidden, boolean show_flagged, IFolderSelectedListener listener) {
+        this(parentFragment.getContext(), parentFragment.getViewLifecycleOwner(), account, primary, show_compact, show_hidden, show_flagged, listener);
         this.parentFragment = parentFragment;
     }
 
-    AdapterFolder(Context context, LifecycleOwner owner, long account, boolean primary, boolean show_compact, boolean show_hidden, IFolderSelectedListener listener) {
+    AdapterFolder(Context context, LifecycleOwner owner, long account, boolean primary, boolean show_compact, boolean show_hidden, boolean show_flagged, IFolderSelectedListener listener) {
         this.account = account;
         this.primary = primary;
         this.show_compact = show_compact;
         this.show_hidden = show_hidden;
+        this.show_flagged = show_flagged;
         this.listener = listener;
 
         this.context = context;
@@ -765,7 +806,6 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
         this.subscriptions = prefs.getBoolean("subscriptions", false);
         this.subscribed_only = prefs.getBoolean("subscribed_only", false) && subscriptions;
-        this.debug = prefs.getBoolean("debug", false);
 
         this.dp12 = Helper.dp2pixels(context, 12);
         this.textSize = Helper.getTextSize(context, zoom);
@@ -797,6 +837,13 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
         if (this.show_hidden != show_hidden) {
             this.show_hidden = show_hidden;
             set(all);
+        }
+    }
+
+    void setShowFlagged(boolean show_flagged) {
+        if (this.show_flagged != show_flagged) {
+            this.show_flagged = show_flagged;
+            notifyDataSetChanged();
         }
     }
 

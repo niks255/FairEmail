@@ -71,7 +71,9 @@ public class FragmentQuickSetup extends FragmentBase {
     private TextView tvInstructions;
 
     private TextView tvImap;
+    private TextView tvImapFingerprint;
     private TextView tvSmtp;
+    private TextView tvSmtpFingerprint;
     private Button btnSave;
     private ContentLoadingProgressBar pbSave;
 
@@ -102,7 +104,9 @@ public class FragmentQuickSetup extends FragmentBase {
         tvInstructions = view.findViewById(R.id.tvInstructions);
 
         tvImap = view.findViewById(R.id.tvImap);
+        tvImapFingerprint = view.findViewById(R.id.tvImapFingerprint);
         tvSmtp = view.findViewById(R.id.tvSmtp);
+        tvSmtpFingerprint = view.findViewById(R.id.tvSmtpFingerprint);
         btnSave = view.findViewById(R.id.btnSave);
         pbSave = view.findViewById(R.id.pbSave);
 
@@ -177,6 +181,8 @@ public class FragmentQuickSetup extends FragmentBase {
 
         // Initialize
         tvCharacters.setVisibility(View.GONE);
+        tvImapFingerprint.setText(null);
+        tvSmtpFingerprint.setText(null);
         pbCheck.setVisibility(View.GONE);
         pbSave.setVisibility(View.GONE);
         btnHelp.setVisibility(View.GONE);
@@ -220,6 +226,8 @@ public class FragmentQuickSetup extends FragmentBase {
         args.putString("name", etName.getText().toString().trim());
         args.putString("email", etEmail.getText().toString().trim());
         args.putString("password", tilPassword.getEditText().getText().toString());
+        args.putString("imap_fingerprint", tvImapFingerprint.getText().toString());
+        args.putString("smtp_fingerprint", tvSmtpFingerprint.getText().toString());
         args.putBoolean("check", check);
 
         new SimpleTask<EmailProvider>() {
@@ -250,6 +258,8 @@ public class FragmentQuickSetup extends FragmentBase {
                 String email = args.getString("email");
                 String password = args.getString("password");
                 boolean check = args.getBoolean("check");
+                String imap_fingerprint = args.getString("imap_fingerprint");
+                String smtp_fingerprint = args.getString("smtp_fingerprint");
 
                 if (TextUtils.isEmpty(name))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_name));
@@ -259,6 +269,10 @@ public class FragmentQuickSetup extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_email_invalid, email));
                 if (TextUtils.isEmpty(password))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));
+                if (TextUtils.isEmpty(imap_fingerprint))
+                    imap_fingerprint = null;
+                if (TextUtils.isEmpty(smtp_fingerprint))
+                    smtp_fingerprint = null;
 
                 EmailProvider provider = EmailProvider.fromEmail(context, email, EmailProvider.Discover.ALL);
                 args.putBoolean("appPassword", provider.appPassword);
@@ -284,7 +298,17 @@ public class FragmentQuickSetup extends FragmentBase {
                                 provider.imap.host, provider.imap.port,
                                 EmailService.AUTH_TYPE_PASSWORD, null,
                                 user, password,
-                                null, null);
+                                null, imap_fingerprint);
+                    } catch (EmailService.UntrustedException ex) {
+                        if (check) {
+                            imap_fingerprint = ex.getFingerprint();
+                            iservice.connect(
+                                    provider.imap.host, provider.imap.port,
+                                    EmailService.AUTH_TYPE_PASSWORD, null,
+                                    user, password,
+                                    null, imap_fingerprint);
+                        } else
+                            throw ex;
                     } catch (AuthenticationFailedException ex) {
                         if (!user.equals(username)) {
                             Log.w(ex);
@@ -313,11 +337,19 @@ public class FragmentQuickSetup extends FragmentBase {
                             provider.smtp.host, provider.smtp.port,
                             EmailService.AUTH_TYPE_PASSWORD, null,
                             user, password,
-                            null, null);
+                            null, smtp_fingerprint);
+                } catch (EmailService.UntrustedException ex) {
+                    if (check)
+                        smtp_fingerprint = ex.getFingerprint();
+                    else
+                        throw ex;
                 }
 
-                if (check)
+                if (check) {
+                    args.putString("imap_fingerprint", imap_fingerprint);
+                    args.putString("smtp_fingerprint", smtp_fingerprint);
                     return provider;
+                }
 
                 DB db = DB.getInstance(context);
                 try {
@@ -334,6 +366,7 @@ public class FragmentQuickSetup extends FragmentBase {
                     account.auth_type = EmailService.AUTH_TYPE_PASSWORD;
                     account.user = user;
                     account.password = password;
+                    account.fingerprint = imap_fingerprint;
 
                     account.name = provider.name;
 
@@ -383,6 +416,7 @@ public class FragmentQuickSetup extends FragmentBase {
                     identity.auth_type = EmailService.AUTH_TYPE_PASSWORD;
                     identity.user = user;
                     identity.password = password;
+                    identity.fingerprint = smtp_fingerprint;
                     identity.use_ip = provider.useip;
                     identity.synchronize = true;
                     identity.primary = true;
@@ -406,8 +440,10 @@ public class FragmentQuickSetup extends FragmentBase {
                 if (check) {
                     tvImap.setText(result == null ? null
                             : result.imap.host + ":" + result.imap.port + (result.imap.starttls ? " starttls" : " ssl"));
+                    tvImapFingerprint.setText(args.getString("imap_fingerprint"));
                     tvSmtp.setText(result == null ? null
                             : result.smtp.host + ":" + result.smtp.port + (result.smtp.starttls ? " starttls" : " ssl"));
+                    tvSmtpFingerprint.setText(args.getString("smtp_fingerprint"));
                     grpSetup.setVisibility(result == null ? View.GONE : View.VISIBLE);
                 } else {
                     FragmentReview fragment = new FragmentReview();

@@ -1823,6 +1823,7 @@ public class HtmlHelper {
                 // https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace
                 TextNode tnode;
                 String text;
+                int index;
                 for (int i = 0; i < block.size(); ) {
                     tnode = block.get(i);
                     text = tnode.getWholeText();
@@ -1835,13 +1836,23 @@ public class HtmlHelper {
                     // Remove whitespace before/after newlines
                     text = TRIM_WHITESPACE_NL.matcher(text).replaceAll(" ");
 
-                    if (i == 0 || endsWithWhitespace(block.get(i - 1).text()))
-                        while (startsWithWhiteSpace(text))
-                            text = text.substring(1);
+                    // Remove leading whitespace
+                    if (i == 0 || endsWithWhitespace(block.get(i - 1).text())) {
+                        index = 0;
+                        while (isWhiteSpace(text, index))
+                            index++;
 
-                    if (i == block.size() - 1)
-                        while (endsWithWhitespace(text))
-                            text = text.substring(0, text.length() - 1);
+                        if (index > 0)
+                            text = text.substring(index);
+                    }
+
+                    // Remove multiple trailing whitespace
+                    index = text.length() - 1;
+                    while (isWhiteSpace(text, index) &&
+                            (isWhiteSpace(text, index - 1) || i == block.size() - 1))
+                        index--;
+
+                    text = text.substring(0, index + 1);
 
                     tnode.text(text);
 
@@ -1849,6 +1860,16 @@ public class HtmlHelper {
                         block.remove(i);
                     else
                         i++;
+                }
+
+                // Remove last trailing whitespace
+                if (block.size() > 0) {
+                    tnode = block.get(block.size() - 1);
+                    text = tnode.getWholeText();
+                    if (endsWithWhitespace(text)) {
+                        text = text.substring(0, text.length() - 1);
+                        tnode.text(text);
+                    }
                 }
 
                 if (debug) {
@@ -1861,18 +1882,15 @@ public class HtmlHelper {
                 }
             }
 
-            boolean startsWithWhiteSpace(String text) {
-                int len = text.length();
-                if (len == 0)
+            boolean isWhiteSpace(String text, int index) {
+                if (index < 0 || index >= text.length())
                     return false;
-                return WHITESPACE_NL.contains(text.substring(0, 1));
+                char kar = text.charAt(index);
+                return (WHITESPACE_NL.indexOf(kar) >= 0);
             }
 
             boolean endsWithWhitespace(String text) {
-                int len = text.length();
-                if (len == 0)
-                    return false;
-                return WHITESPACE_NL.contains(text.substring(len - 1));
+                return isWhiteSpace(text, text.length() - 1);
             }
         }, document.body());
 
@@ -1916,12 +1934,13 @@ public class HtmlHelper {
                             String value = param.substring(semi + 1);
                             switch (key) {
                                 case "color":
-                                    try {
-                                        int color = Integer.parseInt(value.substring(1), 16) | 0xFF000000;
-                                        ssb.setSpan(new ForegroundColorSpan(color), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                    } catch (NumberFormatException ex) {
-                                        Log.w(ex);
-                                    }
+                                    if (!TextUtils.isEmpty(value))
+                                        try {
+                                            int color = Integer.parseInt(value.substring(1), 16) | 0xFF000000;
+                                            ssb.setSpan(new ForegroundColorSpan(color), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        } catch (NumberFormatException ex) {
+                                            Log.w(ex);
+                                        }
                                     break;
                                 case "text-decoration":
                                     if ("line-through".equals(value))

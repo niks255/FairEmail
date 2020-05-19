@@ -252,6 +252,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int searchResult = 0;
     private AsyncPagedListDiffer<TupleMessageEx> differ;
     private Map<Long, Integer> keyPosition = new HashMap<>();
+    private Map<Integer, Long> positionKey = new HashMap<>();
     private SelectionTracker<Long> selectionTracker = null;
 
     enum ViewType {UNIFIED, FOLDER, THREAD, SEARCH}
@@ -1000,8 +1001,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSnoozed.setImageResource(
                     message.ui_snoozed != null && message.ui_snoozed == Long.MAX_VALUE
                             ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_timelapse_24);
+            if (message.ui_unsnoozed)
+                ibSnoozed.setColorFilter(colorAccent);
+            else
+                ibSnoozed.clearColorFilter();
 
-            ibSnoozed.setVisibility(message.ui_snoozed == null ? View.GONE : View.VISIBLE);
+            ibSnoozed.setVisibility(message.ui_snoozed == null && !message.ui_unsnoozed ? View.GONE : View.VISIBLE);
             ivAnswered.setVisibility(message.ui_answered ? View.VISIBLE : View.GONE);
             ivForwarded.setVisibility(message.isForwarded() ? View.VISIBLE : View.GONE);
             ivAttachments.setVisibility(message.attachments > 0 ? View.VISIBLE : View.GONE);
@@ -1016,13 +1021,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             tvFolder.setVisibility(compact && viewType != ViewType.THREAD ? View.GONE : View.VISIBLE);
 
-            if (viewType == ViewType.THREAD || !threading) {
+            boolean selected = properties.getValue("selected", message.id);
+            if (viewType == ViewType.THREAD || (!threading && !selected)) {
                 tvCount.setVisibility(View.GONE);
                 ivThread.setVisibility(View.GONE);
             } else {
-                tvCount.setText(NF.format(message.visible));
+                tvCount.setVisibility(threading ? View.VISIBLE : View.GONE);
                 ivThread.setVisibility(View.VISIBLE);
-                if (properties.getValue("selected", message.id))
+
+                tvCount.setText(NF.format(message.visible));
+
+                if (selected)
                     ivThread.setColorFilter(colorAccent);
                 else
                     ivThread.clearColorFilter();
@@ -2742,13 +2751,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 if (EntityFolder.DRAFTS.equals(message.folderType) && message.visible == 1 &&
                         !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) &&
-                        !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt)) {
+                        !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
                     context.startActivity(
                             new Intent(context, ActivityCompose.class)
                                     .putExtra("action", "edit")
                                     .putExtra("id", message.id));
-                    properties.setValue("selected", message.id, true);
-                } else {
+                else {
                     final LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
                     final Intent viewThread = new Intent(ActivityView.ACTION_VIEW_THREAD)
                             .putExtra("account", message.account)
@@ -4897,6 +4905,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("ui_snoozed changed", next.id);
                 }
+                if (!Objects.equals(prev.ui_unsnoozed, next.ui_unsnoozed)) {
+                    same = false;
+                    log("ui_unsnoozed changed", next.id);
+                }
                 if (!Objects.equals(prev.color, next.color)) {
                     same = false;
                     log("color changed", next.id);
@@ -4992,10 +5004,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("duplicate changed", next.id);
                 }
-                if (!Arrays.equals(prev.keyword_colors, next.keyword_colors)) {
-                    same = false;
-                    log("keyword colors changed", next.id);
-                }
 
                 return same;
             }
@@ -5069,12 +5077,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     }
 
     void submitList(PagedList<TupleMessageEx> list) {
-        keyPosition.clear();
-
         for (int i = 0; i < list.size(); i++) {
             TupleMessageEx message = list.get(i);
             if (message != null) {
                 keyPosition.put(message.id, i);
+                positionKey.put(i, message.id);
                 message.resolveKeywordColors(context);
             }
         }
@@ -5176,6 +5183,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (message == null || context == null)
             return;
 
+        Integer p = keyPosition.get(message.id);
+        Long i = positionKey.get(position);
+        if (p != null)
+            positionKey.remove(p);
+        if (i != null)
+            keyPosition.remove(i);
+
+        keyPosition.put(message.id, position);
+        positionKey.put(position, message.id);
+
+        message.resolveKeywordColors(context);
+
         if (viewType == ViewType.THREAD) {
             boolean outgoing = holder.isOutgoing(message);
             holder.card.setOutgoing(outgoing);
@@ -5263,8 +5282,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     }
 
     Long getKeyAtPosition(int pos) {
-        TupleMessageEx message = getItemAtPosition(pos);
-        Long key = (message == null ? null : message.id);
+        Long key = positionKey.get(pos);
         Log.d("Key=" + key + " @Position=" + pos);
         return key;
     }
