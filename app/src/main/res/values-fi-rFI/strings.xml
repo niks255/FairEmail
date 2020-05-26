@@ -362,7 +362,6 @@
     <string name="title_advanced_secure">Piilota viimeisimpien sovellusten listasta ja estä kuvankaappausten ottaminen</string>
     <string name="title_advanced_pin">PIN-koodi</string>
     <string name="title_advanced_biometrics_timeout">Biometrisen tunnistautumisen aikakatkaisu</string>
-    <string name="title_advanced_encrypt_method">Oletussalausmenetelmä</string>
     <string name="title_advanced_sign_default">Allekirjoita oletuksena</string>
     <string name="title_advanced_encrypt_default">Salaa oletuksena</string>
     <string name="title_advanced_auto_decrypt">Pura viestien salaus automaattisesti</string>
@@ -565,6 +564,7 @@
     <string name="title_folder_name">Kansion nimi</string>
     <string name="title_display_name">Näyttönimi</string>
     <string name="title_show_folders">Näytä piilotetut kansiot</string>
+    <string name="title_show_flagged">Näytä tähdellisten viestien lukumäärä</string>
     <string name="title_subscribed_only">Vain tilatut</string>
     <string name="title_apply_to_all">Käytä kaikille &#8230;</string>
     <string name="title_hide_folder">Piilota kansio</string>
@@ -582,6 +582,9 @@
     <string name="title_auto_trash">Siirrä vanhat viestit automaattisesti roskakoriin</string>
     <string name="title_auto_delete">Poista vanhat viestit automaattisesti</string>
     <string name="title_auto_delete_hint">Vanhoilla viesteillä tarkoitetaan viestejä, joita ei enää pidetä laitteessa</string>
+    <string name="title_inbox_root_hint">Jotkut palveluntarjoajat edellyttävät, että uudet kansiot luodaan saapuneet-kansion alle.
+        Voit painaa pitkään saapuneet-kansiota kansiolistauksessa ja valita \'Luo alikansio\'.
+    </string>
     <string name="title_folder_name_missing">Kansion nimi puuttuu</string>
     <string name="title_folder_exists">Kansio %1$s on olemassa</string>
     <string name="title_folder_delete">Poistetaanko tämä kansio ja sen sisältämät viestit pysyvästi?</string>
@@ -623,6 +626,7 @@
     <string name="title_editasnew">Muokkaa uutena</string>
     <string name="title_create_rule">Luo sääntö &#8230;</string>
     <string name="title_share">Jaa</string>
+    <string name="title_event">Lisää kalenteriin</string>
     <string name="title_pin">Lisää pikakuvake</string>
     <string name="title_print">Tulosta</string>
     <string name="title_show_headers">Näytä tunnistetiedot</string>
@@ -1100,7 +1104,7 @@
         Jotta FairEmailin kehittäminen olisi mahdollista, jotkin mukavuutta tuovat ja edistyneemmät ominaisuudet eivät ole ilmaisia.
         FairEmail näyttää pienen viestin muistuttaakseen sinua tästä. Viesti poistuu, jos ostat pro-ominaisuudet.
     </string>
-    <string name="title_pro_hide">Piilota pieni viesti viikon ajaksi</string>
+    <string name="title_pro_hide">Piilota pieni viesti kahden viikon ajaksi</string>
     <string name="title_pro_hint">Pro-ominaisuuksien ostaminen antaa oikeudet käyttää nykyisiä ja tulevia pro-ominaisuuksia sekä auttaa ylläpitämään ja tukemaan tätä sovellusta</string>
     <string name="title_pro_price">Katso <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">nämä usein kysytyt kysymykset</a> pro-ominaisuuksien hinnasta</string>
     <string name="title_pro_pending">Ostos odottaa vahvistusta</string>

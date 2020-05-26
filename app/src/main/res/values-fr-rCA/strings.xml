@@ -364,7 +364,6 @@
     <string name="title_advanced_secure">Masquer FairEmail de la liste des applications récentes et empêcher la prise de captures d’écran</string>
     <string name="title_advanced_pin">Code NIP</string>
     <string name="title_advanced_biometrics_timeout">Délai d’expiration de l’authentification biométrique</string>
-    <string name="title_advanced_encrypt_method">Méthode de chiffrement par défaut</string>
     <string name="title_advanced_sign_default">Signer par défaut</string>
     <string name="title_advanced_encrypt_default">Chiffrer par défaut</string>
     <string name="title_advanced_auto_decrypt">Déchiffrer automatiquement les messages</string>
@@ -374,6 +373,7 @@
     <string name="title_advanced_manage_certificates">Gérer les clés publiques</string>
     <string name="title_advanced_import_key">Importer une clé privée</string>
     <string name="title_advanced_manage_keys">Gérer les clés privées</string>
+    <string name="title_advanced_ca">Certificats AC installés</string>
     <string name="title_advanced_external_search">Autoriser les autres applications à rechercher dans les messages</string>
     <string name="title_advanced_shortcuts">Afficher les contacts fréquemment utilisés dans le menu « Partager » d’Android</string>
     <string name="title_advanced_conversation_actions">Suggérer des actions</string>
@@ -567,7 +567,7 @@
     <string name="title_folder_name">Nom du dossier</string>
     <string name="title_display_name">Nom affiché</string>
     <string name="title_show_folders">Afficher les dossiers cachés</string>
-    <string name="title_show_flagged">Afficher les messages suivis</string>
+    <string name="title_show_flagged">Afficher le nombre de messages suivis</string>
     <string name="title_subscribed_only">Abonnés uniquement</string>
     <string name="title_apply_to_all">Appliquer à tous&#8230;</string>
     <string name="title_hide_folder">Masquer le dossier</string>
@@ -585,6 +585,9 @@
     <string name="title_auto_trash">Déplacer automatiquement les anciens messages vers la corbeille</string>
     <string name="title_auto_delete">Supprimer automatiquement et définitivement les anciens messages</string>
     <string name="title_auto_delete_hint">Les anciens messages sont ceux qui ne sont plus conservés sur l\'appareil</string>
+    <string name="title_inbox_root_hint">        Certains fournisseurs exigent que les nouveaux dossiers soient créés dans la boîte de réception.
+        Dans ce cas, vous pouvez appuyer longuement sur la boîte de réception dans la liste des dossiers et sélectionner « Créer un sous-dossier ».
+    </string>
     <string name="title_folder_name_missing">Nom de dossier manquant</string>
     <string name="title_folder_exists">Le dossier %1$s existe</string>
     <string name="title_folder_delete">Supprimer définitivement ce dossier et tous les messages qu’il contient?</string>
@@ -626,6 +629,7 @@
     <string name="title_editasnew">Modifier comme nouveau message</string>
     <string name="title_create_rule">Créer une règle&#8230;</string>
     <string name="title_share">Partager</string>
+    <string name="title_event">Ajouter au calendrier</string>
     <string name="title_pin">Ajouter un raccourci</string>
     <string name="title_print">Imprimer</string>
     <string name="title_show_headers">Afficher les en-têtes</string>
@@ -915,6 +919,7 @@
     <string name="title_rule_identity">Identité</string>
     <string name="title_rule_template">Répondre avec un modèle</string>
     <string name="title_rule_cc">Répondre aux adresses CC</string>
+    <string name="title_rule_answer_remark">Une seule réponse par conversation sera envoyée afin d\'éviter les réponses en boucle</string>
     <string name="title_rule_name_missing">Nom de règle manquant</string>
     <string name="title_rule_condition_missing">Condition manquante</string>
     <string name="title_rule_automation_hint">Ceci enverra l’intent \'%1$s\' avec les extras \'%2$s\'</string>
@@ -1103,7 +1108,7 @@
         Pour rendre FairEmail durable à long terme, certaines fonctionnalités pratiques et avancées ne sont pas gratuites.
         FairEmail affiche une bannière pour vous le rappeler, laquelle sera retirée si vous achetez les fonctionnalités pro.
     </string>
-    <string name="title_pro_hide">Masquer la bannière pendant une semaine</string>
+    <string name="title_pro_hide">Masquer la bannière pendant deux semaines</string>
     <string name="title_pro_hint">L’achat des fonctionnalités pro vous autorisera à utiliser toutes les fonctionnalités Pro actuelles et futures et permettra de maintenir et de soutenir cette application.</string>
     <string name="title_pro_price">Veuillez voir <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">cette FAQ</a> à propos du prix des fonctionnalités pro</string>
     <string name="title_pro_pending">Achat en attente</string>
@@ -1128,6 +1133,8 @@
     <string name="title_widget_folder_unified">Dossiers de la boîte de réception unifiée</string>
     <string name="title_widget_unseen">Messages non lus seulement</string>
     <string name="title_widget_flagged">Messages suivis seulement</string>
+    <string name="title_widget_font_size">Taille de police</string>
+    <string name="title_widget_padding">Taille de l\'espace autour des messages</string>
     <string name="title_widget_semi_transparent">Arrière-plan semi-transparent</string>
     <string name="title_accessibility_collapsed">Réduit</string>
     <string name="title_accessibility_expanded">Développé</string>

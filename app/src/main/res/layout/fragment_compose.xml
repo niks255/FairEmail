@@ -78,7 +78,7 @@
                     android:background="@null"
                     android:hint="@string/title_to"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textNoSuggestions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintEnd_toStartOf="@+id/ivToAdd"
                     app:layout_constraintStart_toEndOf="@id/ivToLegend"
@@ -117,7 +117,7 @@
                     android:background="@null"
                     android:hint="@string/title_cc"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textNoSuggestions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintEnd_toStartOf="@+id/ivCcAdd"
                     app:layout_constraintStart_toEndOf="@id/ivCcLegend"
@@ -156,7 +156,7 @@
                     android:background="@null"
                     android:hint="@string/title_bcc"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textNoSuggestions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintEnd_toStartOf="@+id/ivBccAdd"
                     app:layout_constraintStart_toEndOf="@id/ivBccLegend"
@@ -318,11 +318,11 @@
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
                     android:fontFamily="monospace"
-                    android:minHeight="24dp"
+                    android:minHeight="75dp"
                     android:text="Signature"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textIsSelectable="true"
-                    app:layout_constraintEnd_toStartOf="@+id/cbSignature"
+                    app:layout_constraintEnd_toStartOf="@+id/ibSignature"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/vSeparatorBody" />
 
@@ -330,10 +330,22 @@
                     android:id="@+id/cbSignature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvSignature"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/ibSignature"
+                    app:layout_constraintStart_toStartOf="@id/ibSignature"
                     app:layout_constraintTop_toTopOf="@+id/tvSignature" />
+
+                <ImageButton
+                    android:id="@+id/ibSignature"
+                    android:layout_width="36dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/title_legend_show_images"
+                    android:padding="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cbSignature"
+                    app:srcCompat="@drawable/baseline_file_copy_24" />
 
                 <View
                     android:id="@+id/vSeparatorSignature"
@@ -458,7 +470,7 @@
                     android:id="@+id/grpSignature"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:constraint_referenced_ids="vSeparatorSignature,tvSignature,cbSignature" />
+                    app:constraint_referenced_ids="vSeparatorSignature,tvSignature,cbSignature,ibSignature" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpReferenceHint"

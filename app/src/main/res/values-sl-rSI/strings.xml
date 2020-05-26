@@ -381,7 +381,6 @@
     <string name="title_advanced_secure">Skrij z zaslona nedavnih programov in prepreči zaslonske slike</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Časovna omejitev biometrične overitve</string>
-    <string name="title_advanced_encrypt_method">Privzeti način šifriranja</string>
     <string name="title_advanced_sign_default">Privzeto podpiši</string>
     <string name="title_advanced_encrypt_default">Privzeto šifriraj</string>
     <string name="title_advanced_auto_decrypt">Samodejno odšifriraj sporočila</string>
@@ -1115,7 +1114,6 @@
         Zaradi vzdržljivosti FairEmaila na dolgi rok nekatere priročne in napredne značilnosti niso brezplačne.
         FairEmail za ta namen prikaže majhno sporočilo, ki bo odstranjeno, če kupite značilnosti Pro.
     </string>
-    <string name="title_pro_hide">Skrij majhno sporočil za en teden</string>
     <string name="title_pro_hint">Nakup značilnosti Pro bo omogočil uporabo vseh trenutnih in prihodnjih značilnosti, vzdrževanje in podporo tega programa.</string>
     <string name="title_pro_price">Oglejte si <a href="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq19">ta pogosta vprašanja</a> glede cene značilnosti Pro.</string>
     <string name="title_pro_pending">Nakup je na čakanju.</string>

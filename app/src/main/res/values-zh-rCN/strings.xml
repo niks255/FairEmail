@@ -352,7 +352,6 @@
     <string name="title_advanced_secure">从\"最近应用\"列表中隐藏并阻止截屏</string>
     <string name="title_advanced_pin">PIN 码</string>
     <string name="title_advanced_biometrics_timeout">生物认证超时时间</string>
-    <string name="title_advanced_encrypt_method">默认加密方法</string>
     <string name="title_advanced_sign_default">使用默认签名</string>
     <string name="title_advanced_encrypt_default">使用默认加密</string>
     <string name="title_advanced_auto_decrypt">自动解密消息</string>
@@ -362,6 +361,7 @@
     <string name="title_advanced_manage_certificates">管理公钥</string>
     <string name="title_advanced_import_key">导入私钥</string>
     <string name="title_advanced_manage_keys">管理私钥</string>
+    <string name="title_advanced_ca">已安装的 CA 证书</string>
     <string name="title_advanced_external_search">允许其他应用在消息中搜索</string>
     <string name="title_advanced_shortcuts">在安卓共享菜单中显示常用联系人</string>
     <string name="title_advanced_conversation_actions">建议操作</string>
@@ -555,7 +555,7 @@
     <string name="title_folder_name">文件夹名</string>
     <string name="title_display_name">显示昵称</string>
     <string name="title_show_folders">显示隐藏文件夹</string>
-    <string name="title_show_flagged">显示星标消息</string>
+    <string name="title_show_flagged">显示星标消息计数</string>
     <string name="title_subscribed_only">只显示已订阅的</string>
     <string name="title_apply_to_all">应用到所有文件夹 &#8230;</string>
     <string name="title_hide_folder">隐藏文件夹</string>
@@ -573,6 +573,9 @@
     <string name="title_auto_trash">自动移动旧消息到回收站</string>
     <string name="title_auto_delete">自动永久删除旧消息</string>
     <string name="title_auto_delete_hint">旧消息是不再保留在设备上的消息</string>
+    <string name="title_inbox_root_hint">        某些供应商需要在收件箱下方创建新文件夹
+        在这种情况下, 您可以长按文件夹列表中的收件箱并选择\"创建子文件夹\"
+    </string>
     <string name="title_folder_name_missing">缺少文件夹名</string>
     <string name="title_folder_exists">文件夹 %1$s 存在</string>
     <string name="title_folder_delete">是否永久删除此文件夹及其包含的任何邮件？</string>
@@ -614,6 +617,7 @@
     <string name="title_editasnew">作为新邮件编辑</string>
     <string name="title_create_rule">创建规则 &#8230;</string>
     <string name="title_share">分享</string>
+    <string name="title_event">添加到日历</string>
     <string name="title_pin">添加快捷方式</string>
     <string name="title_print">打印</string>
     <string name="title_show_headers">显示邮件头</string>
@@ -903,6 +907,7 @@
     <string name="title_rule_identity">身份</string>
     <string name="title_rule_template">回复模板</string>
     <string name="title_rule_cc">回信给邮件抄送地址</string>
+    <string name="title_rule_answer_remark">对于任何会话，仅一个回复会被发送，以避免回复循环</string>
     <string name="title_rule_name_missing">缺少规则名称</string>
     <string name="title_rule_condition_missing">条件缺失</string>
     <string name="title_rule_automation_hint">将使用参数 \'%2$s\' 发送 \'%1$s\' 的 intent</string>
@@ -1083,14 +1088,14 @@
     <string name="title_icalendar_maybe">待定</string>
     <string name="title_icalendar_calendar">日历</string>
     <string name="title_try">请试下FairEmail吧！一个安卓平台上开源、隐私友好的邮件客户端</string>
-    <string name="title_pro_feature">这是专业版功能</string>
+    <string name="title_pro_feature">此为 Pro 版功能，请升级至 Pro 版后使用</string>
     <string name="title_pro_list">专业版功能列表</string>
     <string name="title_pro_purchase">购买</string>
     <string name="title_pro_once">仅一次</string>
     <string name="title_pro_info">毫不夸张地说，我在开发FairEmail上花费了数千小时，尽管如此，多数功能依旧可免费使用。
 为了让FairEmail开发维持下去，免费版无法使用一些便利和高级的功能。
 FairEmail会显示一条消息来提醒您这一点，这条消息在您购买专业版后将被移除。</string>
-    <string name="title_pro_hide">将升级Pro横幅隐藏一周</string>
+    <string name="title_pro_hide">将升级为 Pro 版横幅隐藏两周</string>
     <string name="title_pro_hint">购买专业版将获得现在以及未来更新中全部专业版功能，并将支持开发者维护这个应用</string>
     <string name="title_pro_price">请参见<a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">常见问题</a>关于专业版的价格</string>
     <string name="title_pro_pending">购买待处理</string>
@@ -1115,6 +1120,8 @@ FairEmail会显示一条消息来提醒您这一点，这条消息在您购买�
     <string name="title_widget_folder_unified">聚合收件箱文件夹</string>
     <string name="title_widget_unseen">仅未读信息</string>
     <string name="title_widget_flagged">仅带有星标的邮件</string>
+    <string name="title_widget_font_size">字体大小</string>
+    <string name="title_widget_padding">内边距</string>
     <string name="title_widget_semi_transparent">半透明背景</string>
     <string name="title_accessibility_collapsed">折叠</string>
     <string name="title_accessibility_expanded">展开</string>

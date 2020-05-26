@@ -333,6 +333,7 @@ public class ServiceSend extends ServiceBase {
                         if (ex instanceof OutOfMemoryError ||
                                 ex instanceof MessageRemovedException ||
                                 ex instanceof FileNotFoundException ||
+                                ex instanceof AuthenticationFailedException ||
                                 ex instanceof SendFailedException ||
                                 ex instanceof IllegalArgumentException) {
                             Log.w("Unrecoverable");
@@ -430,14 +431,14 @@ public class ServiceSend extends ServiceBase {
             long id = message.id;
 
             imessage.saveChanges();
-            MessageHelper helper = new MessageHelper(imessage);
+            MessageHelper helper = new MessageHelper(imessage, ServiceSend.this);
 
             if (message.uid != null) {
                 Log.e("Outbox id=" + message.id + " uid=" + message.uid);
                 message.uid = null;
             }
 
-            MessageHelper.MessageParts parts = helper.getMessageParts(this);
+            MessageHelper.MessageParts parts = helper.getMessageParts();
             String body = parts.getHtml(this);
 
             try {

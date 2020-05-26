@@ -365,7 +365,6 @@
     <string name="title_advanced_secure">Ocultar de la pantalla de aplicaciones recientes e impedir capturas de pantallas</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Límite de tiempo para autenticación biométrica</string>
-    <string name="title_advanced_encrypt_method">Método de cifrado por defecto</string>
     <string name="title_advanced_sign_default">Firmar por defecto</string>
     <string name="title_advanced_encrypt_default">Cifrar por defecto</string>
     <string name="title_advanced_auto_decrypt">Descifrar automáticamente los mensajes</string>
@@ -375,6 +374,7 @@
     <string name="title_advanced_manage_certificates">Administrar claves públicas</string>
     <string name="title_advanced_import_key">Importar clave privada</string>
     <string name="title_advanced_manage_keys">Administrar claves privadas</string>
+    <string name="title_advanced_ca">Certificados CA instalados</string>
     <string name="title_advanced_external_search">Permitir que otras aplicaciones busquen en mensajes</string>
     <string name="title_advanced_shortcuts">Mostrar contactos frecuentes en el menú compartir de Android</string>
     <string name="title_advanced_conversation_actions">Sugerir acciones</string>
@@ -568,7 +568,7 @@
     <string name="title_folder_name">Nombre de carpeta</string>
     <string name="title_display_name">Nombre para mostrar</string>
     <string name="title_show_folders">Mostrar carpetas ocultas</string>
-    <string name="title_show_flagged">Mostrar mensajes destacados</string>
+    <string name="title_show_flagged">Mostrar cantidad de mensajes destacados</string>
     <string name="title_subscribed_only">Sólo suscritas</string>
     <string name="title_apply_to_all">Aplicar a todos/as los/las &#8230;</string>
     <string name="title_hide_folder">Ocultar carpeta</string>
@@ -586,6 +586,9 @@
     <string name="title_auto_trash">Mover mensajes antiguos a la papelera de manera automática</string>
     <string name="title_auto_delete">Eliminar mensajes antiguos permanentemente de manera automática</string>
     <string name="title_auto_delete_hint">Los mensajes antiguos son mensajes que ya no se almacenan en el dispositivo</string>
+    <string name="title_inbox_root_hint">        Algunos proveedores requieren que se creen nuevas carpetas debajo de la bandeja de entrada.
+        En este caso, puede mantener presionada la bandeja de entrada en la lista de carpetas y seleccionar \'Crear subcarpeta\'.
+    </string>
     <string name="title_folder_name_missing">Falta nombre de carpeta</string>
     <string name="title_folder_exists">La carpeta %1$s ya existe</string>
     <string name="title_folder_delete">¿Eliminar permanentemente esta carpeta y los mensajes que contenga?</string>
@@ -627,6 +630,7 @@
     <string name="title_editasnew">Editar como nuevo</string>
     <string name="title_create_rule">Crear regla &#8230;</string>
     <string name="title_share">Compartir</string>
+    <string name="title_event">Añadir al calendario</string>
     <string name="title_pin">Añadir acceso directo</string>
     <string name="title_print">Imprimir</string>
     <string name="title_show_headers">Mostrar encabezados</string>
@@ -916,6 +920,7 @@
     <string name="title_rule_identity">Identidad</string>
     <string name="title_rule_template">Plantilla de respuesta</string>
     <string name="title_rule_cc">Responder a direcciones en CC</string>
+    <string name="title_rule_answer_remark">Sólo se enviará una respuesta por conversación, para evitar bucles de respuesta</string>
     <string name="title_rule_name_missing">Falta nombre de regla</string>
     <string name="title_rule_condition_missing">Falta condición</string>
     <string name="title_rule_automation_hint">Esto enviará el intento \'%1$s\' con los extras \'%2$s\'</string>
@@ -1104,7 +1109,7 @@
         Para hacer a Fairemail sostenible en el largo plazo, algunas funciones de conveniencia y avanzadas no son de uso libre.
         FairEmail muestra un pequeño mensaje para recordarte esto, que dejará de mostrarse si compras las funciones avanzadas.
     </string>
-    <string name="title_pro_hide">Ocultar mensaje pequeño durante una semana</string>
+    <string name="title_pro_hide">Ocultar mensaje pequeño durante dos semanas</string>
     <string name="title_pro_hint">La compra de características Pro le permitirá usar todas las características Pro actuales y futuras, y ayudará al mantenimiento y desarrollo de esta aplicación</string>
     <string name="title_pro_price">Por favor vea <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">estas Preguntas Frecuentes</a> acerca del precio de las características Pro</string>
     <string name="title_pro_pending">Compra pendiente</string>
@@ -1129,6 +1134,8 @@
     <string name="title_widget_folder_unified">Carpetas de bandeja de entrada unificadas</string>
     <string name="title_widget_unseen">Sólo mensajes no leídos</string>
     <string name="title_widget_flagged">Sólo mensajes destacados</string>
+    <string name="title_widget_font_size">Tamaño de la fuente</string>
+    <string name="title_widget_padding">Margen interno</string>
     <string name="title_widget_semi_transparent">Fondo semi transparente</string>
     <string name="title_accessibility_collapsed">Oculto</string>
     <string name="title_accessibility_expanded">Expandido</string>

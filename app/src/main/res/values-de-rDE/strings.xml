@@ -365,7 +365,6 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_secure">Im Anwendungsverlauf verbergen und das Aufnehmen von Bildschirmfotos verhindern</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Gültigkeitsdauer der biometrischen Authentifizierung</string>
-    <string name="title_advanced_encrypt_method">Standard-Verschlüsselungsmethode</string>
     <string name="title_advanced_sign_default">Standardmäßig signieren</string>
     <string name="title_advanced_encrypt_default">Standardmäßig verschlüsseln</string>
     <string name="title_advanced_auto_decrypt">Nachrichten automatisch entschlüsseln</string>
@@ -375,6 +374,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_manage_certificates">Öffentliche Schlüssel verwalten</string>
     <string name="title_advanced_import_key">Privaten Schlüssel importieren</string>
     <string name="title_advanced_manage_keys">Private Schlüssel verwalten</string>
+    <string name="title_advanced_ca">Installierte CA-Zertifikate</string>
     <string name="title_advanced_external_search">Anderen Apps erlauben in Nachrichten zu suchen</string>
     <string name="title_advanced_shortcuts">Häufig verwendete Kontakte im Android-Teilen-Menü anzeigen</string>
     <string name="title_advanced_conversation_actions">Aktionen vorschlagen</string>
@@ -568,7 +568,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_folder_name">Ordnername</string>
     <string name="title_display_name">Anzeigename</string>
     <string name="title_show_folders">Ausgeblendete Ordner anzeigen</string>
-    <string name="title_show_flagged">Markierte Nachrichten anzeigen</string>
+    <string name="title_show_flagged">Anzahl markierter Nachrichten anzeigen</string>
     <string name="title_subscribed_only">Nur abonnierte</string>
     <string name="title_apply_to_all">Auf alle anwenden &#8230;</string>
     <string name="title_hide_folder">Ordner ausblenden</string>
@@ -586,6 +586,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_auto_trash">Alte Nachrichten automatisch in den Papierkorb verschieben</string>
     <string name="title_auto_delete">Automatisch alte Nachrichten dauerhaft löschen</string>
     <string name="title_auto_delete_hint">Alte Nachrichten sind Nachrichten, die nicht mehr auf dem Gerät vorgehalten werden</string>
+    <string name="title_inbox_root_hint">Bei einigen Anbietern müssen neue Ordner unterhalb des Posteingangs angelegt werden. In diesem Fall können Sie den Posteingang in der Ordnerliste lange drücken und „Unterordner erstellen“ wählen.
+    </string>
     <string name="title_folder_name_missing">Ordnername fehlt</string>
     <string name="title_folder_exists">Ordner %1$s bereits vorhanden</string>
     <string name="title_folder_delete">Diesen Ordner und alle darin enthaltenen E-Mails dauerhaft löschen?</string>
@@ -627,6 +629,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_editasnew">Als neu bearbeiten</string>
     <string name="title_create_rule">Regel erstellen &#8230;</string>
     <string name="title_share">Teilen</string>
+    <string name="title_event">Zum Kalender hinzufügen</string>
     <string name="title_pin">Verknüpfung hinzufügen</string>
     <string name="title_print">Drucken</string>
     <string name="title_show_headers">Kopfzeilen anzeigen</string>
@@ -914,6 +917,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_rule_identity">Identität</string>
     <string name="title_rule_template">Antwortvorlage</string>
     <string name="title_rule_cc">Den CC-Adressen antworten</string>
+    <string name="title_rule_answer_remark">Für jede Unterhaltung wird per Antwortregel nur eine Antwort gesendet, um Antwortschleifen zu vermeiden</string>
     <string name="title_rule_name_missing">Regelname fehlt</string>
     <string name="title_rule_condition_missing">Voraussetzung fehlt</string>
     <string name="title_rule_automation_hint">Das wird den Intent »%1$s« mit den Extras »%2$s« senden</string>
@@ -1102,7 +1106,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
         Um FairEmail langfristig mit Support verfügbar zu halten, sind einige Komfort- und erweiterte Funktionen nicht kostenlos.
         Zur Erinnerung zeigt FairEmail ein kleines Banner an, dies verschwindet beim Kauf der Pro-Funktionen.
     </string>
-    <string name="title_pro_hide">Kleine Hinweisnachricht für eine Woche ausblenden</string>
+    <string name="title_pro_hide">Kleine Hinweisnachricht für zwei Wochen ausblenden</string>
     <string name="title_pro_hint">Der Erwerb der Pro-Funktionen erlaubt es Ihnen alle momentan und zukünftig verfügbaren Pro-Funktionen zu nutzen und ermöglicht die Weiterentwicklung und Pflege der App.</string>
     <string name="title_pro_price">Informationen zum Preis der Pro-Funktionen finden Sie in der <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">Hilfe</a></string>
     <string name="title_pro_pending">Kauf ausstehend</string>
@@ -1127,6 +1131,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_widget_folder_unified">Sammeleingangsordner</string>
     <string name="title_widget_unseen">Nur ungelesene Nachrichten</string>
     <string name="title_widget_flagged">Nur markierte Nachrichten</string>
+    <string name="title_widget_font_size">Schriftgröße</string>
+    <string name="title_widget_padding">Abstände zwischen den Texten</string>
     <string name="title_widget_semi_transparent">Halbtransparenter Hintergrund</string>
     <string name="title_accessibility_collapsed">Eingeklappt</string>
     <string name="title_accessibility_expanded">Erweitert</string>

@@ -364,7 +364,6 @@
     <string name="title_advanced_secure">Скриване от екрана на последно използвани приложения и предотвратяване правенето снимка на екрана</string>
     <string name="title_advanced_pin">ПИН</string>
     <string name="title_advanced_biometrics_timeout">Време на изчакване за биометрично удостоверяване</string>
-    <string name="title_advanced_encrypt_method">Метод на криптиране по подразбиране</string>
     <string name="title_advanced_sign_default">Подписване по подразбиране</string>
     <string name="title_advanced_encrypt_default">Криптиране по подразбиране</string>
     <string name="title_advanced_auto_decrypt">Автоматично декриптиране на съобщение</string>
@@ -374,6 +373,7 @@
     <string name="title_advanced_manage_certificates">Управление на публични ключове</string>
     <string name="title_advanced_import_key">Импортиране на частен ключ</string>
     <string name="title_advanced_manage_keys">Управление на частни ключове</string>
+    <string name="title_advanced_ca">Инсталирани на CA сертификати</string>
     <string name="title_advanced_external_search">Разрешаване на други приложения да търсят в съобщения</string>
     <string name="title_advanced_shortcuts">Показвайте често използвани контакти в менюто за споделяне на Android</string>
     <string name="title_advanced_conversation_actions">Предложения за действия</string>
@@ -566,6 +566,7 @@
     <string name="title_folder_name">Име на папка</string>
     <string name="title_display_name">Име</string>
     <string name="title_show_folders">Показвана не скрити папки</string>
+    <string name="title_show_flagged">Показване на броя на съобщенията със звезда</string>
     <string name="title_subscribed_only">Само абонирани</string>
     <string name="title_apply_to_all">Приложи на всички &#8230;</string>
     <string name="title_hide_folder">Скриване на папката</string>
@@ -583,6 +584,9 @@
     <string name="title_auto_trash">Автоматично преместване на старите съобщения в коша</string>
     <string name="title_auto_delete">Автоматично изтриване на старите съобщения завинаги</string>
     <string name="title_auto_delete_hint">Старите съобщения са съобщения, които вече не се съхраняват на устройството</string>
+    <string name="title_inbox_root_hint">        Някои доставчици изискват създаване на нови папки под входящата поща.
+        В този случай можете с дълго натискане на входяща поща в списъка с папки да изберете \'Създаване на подпапка\'.
+    </string>
     <string name="title_folder_name_missing">Липсва име на папка</string>
     <string name="title_folder_exists">Папката %1$s съществува</string>
     <string name="title_folder_delete">Да изтрия ли тази папка и съобщенията в нея завинаги?</string>
@@ -624,6 +628,7 @@
     <string name="title_editasnew">Редактирай като нов</string>
     <string name="title_create_rule">Създай правило &#8230;</string>
     <string name="title_share">Споделяне</string>
+    <string name="title_event">Добавяне в календара</string>
     <string name="title_pin">Добавяне на пряк път</string>
     <string name="title_print">Отпечатване</string>
     <string name="title_show_headers">Покажи заглавки</string>
@@ -913,6 +918,7 @@
     <string name="title_rule_identity">Идентичност</string>
     <string name="title_rule_template">Отговор с шаблон</string>
     <string name="title_rule_cc">Отговори на CC адрес</string>
+    <string name="title_rule_answer_remark">Само един отговор ще бъде изпратен за всеки разговор, за да се избегне цикъл на отговоряне</string>
     <string name="title_rule_name_missing">Няма име на правило</string>
     <string name="title_rule_condition_missing">Липсва условие</string>
     <string name="title_rule_automation_hint">Това ще изпрати намерението %1$s с екстрите %2$s</string>
@@ -1101,7 +1107,7 @@
         За да бъде FairEmail устойчив в дългосрочен план, някои удобства и разширени функции не са безплатни.
         FairEmail показва малко съобщение, което да ви напомня за това, което ще бъде премахнато, ако закупите pro функциите.
     </string>
-    <string name="title_pro_hide">Скрийте малко съобщение за седмица</string>
+    <string name="title_pro_hide">Скрийте малко съобщения за две седмици</string>
     <string name="title_pro_hint">Купуването на професионалните функции ще ви позволи да използвате всички настоящи и бъдещи професионални функции, ще поддържа това приложение поддържано.</string>
     <string name="title_pro_price">Моля вижте <a href="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq19">ЧЗВ</a> за цената на PRO функциите</string>
     <string name="title_pro_pending">Чакащо плащане</string>
@@ -1126,6 +1132,8 @@
     <string name="title_widget_folder_unified">Обща папка входящи</string>
     <string name="title_widget_unseen">Непрочетени съобщения</string>
     <string name="title_widget_flagged">Само съобщения със звезда</string>
+    <string name="title_widget_font_size">Размер на шрифта</string>
+    <string name="title_widget_padding">Разстояние</string>
     <string name="title_widget_semi_transparent">Полупрозрачен фон</string>
     <string name="title_accessibility_collapsed">Свиване</string>
     <string name="title_accessibility_expanded">Разширен</string>

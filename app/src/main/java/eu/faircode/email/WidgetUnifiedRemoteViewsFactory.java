@@ -28,6 +28,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -50,10 +51,13 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private long account;
     private boolean unseen;
     private boolean flagged;
+    private int font;
+    private int padding;
     private int colorWidgetForeground;
     private int colorWidgetRead;
     private int colorSeparator;
     private boolean pro;
+    private boolean hasColor;
     private List<TupleMessageWidget> messages = new ArrayList<>();
 
     WidgetUnifiedRemoteViewsFactory(final Context context, Intent intent) {
@@ -81,6 +85,8 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
         unseen = prefs.getBoolean("widget." + appWidgetId + ".unseen", false);
         flagged = prefs.getBoolean("widget." + appWidgetId + ".flagged", false);
+        font = prefs.getInt("widget." + appWidgetId + ".font", 0);
+        padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
         colorWidgetForeground = ContextCompat.getColor(context, R.color.colorWidgetForeground);
         colorWidgetRead = ContextCompat.getColor(context, R.color.colorWidgetRead);
         colorSeparator = ContextCompat.getColor(context, R.color.lightColorSeparator);
@@ -100,6 +106,14 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         } finally {
             db.endTransaction();
         }
+
+        hasColor = false;
+        if (account < 0)
+            for (TupleMessageWidget message : messages)
+                if (message.accountColor != null) {
+                    hasColor = true;
+                    break;
+                }
     }
 
     @Override
@@ -120,6 +134,19 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         int idSubject = (subject_top ? R.id.tvFrom : R.id.tvSubject);
         int idAccount = (subject_top ? R.id.tvTime : R.id.tvAccount);
 
+        if (font > 0) {
+            int sp = WidgetUnified.getFontSizeSp(font);
+            views.setTextViewTextSize(idFrom, TypedValue.COMPLEX_UNIT_SP, sp);
+            views.setTextViewTextSize(idTime, TypedValue.COMPLEX_UNIT_SP, sp);
+            views.setTextViewTextSize(idSubject, TypedValue.COMPLEX_UNIT_SP, sp);
+            views.setTextViewTextSize(idAccount, TypedValue.COMPLEX_UNIT_SP, sp);
+        }
+
+        if (padding > 0) {
+            int px = WidgetUnified.getPaddingPx(padding, context);
+            views.setViewPadding(R.id.llMessage, px, px, px, px);
+        }
+
         if (position >= messages.size())
             return views;
 
@@ -135,7 +162,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             int colorBackground =
                     (message.accountColor == null || !pro ? colorSeparator : message.accountColor);
             views.setInt(R.id.stripe, "setBackgroundColor", colorBackground);
-            views.setViewVisibility(R.id.stripe, account < 0 && color_stripe ? View.VISIBLE : View.GONE);
+            views.setViewVisibility(R.id.stripe, hasColor && color_stripe ? View.VISIBLE : View.GONE);
 
             SpannableString ssFrom = new SpannableString(pro
                     ? MessageHelper.formatAddressesShort(message.from)

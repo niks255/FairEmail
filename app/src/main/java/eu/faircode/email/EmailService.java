@@ -117,6 +117,9 @@ public class EmailService implements AutoCloseable {
     private static final Pattern SSL_CIPHER_BLACKLIST =
             Pattern.compile(".*(_DES|DH_|DSS|EXPORT|MD5|NULL|RC4|TLS_FALLBACK_SCSV).*");
 
+    // TLS_FALLBACK_SCSV https://tools.ietf.org/html/rfc7507
+    // TLS_EMPTY_RENEGOTIATION_INFO_SCSV https://tools.ietf.org/html/rfc5746
+
     private EmailService() {
         // Prevent instantiation
     }
@@ -769,28 +772,48 @@ public class EmailService implements AutoCloseable {
         }
 
         private Socket configure(Socket socket) {
-            if (harden && socket instanceof SSLSocket) {
-                // https://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+            if (socket instanceof SSLSocket) {
                 SSLSocket sslSocket = (SSLSocket) socket;
 
-                List<String> protocols = new ArrayList<>();
-                for (String protocol : sslSocket.getEnabledProtocols())
-                    if (SSL_PROTOCOL_BLACKLIST.contains(protocol))
-                        Log.i("SSL disabling protocol=" + protocol);
-                    else
-                        protocols.add(protocol);
-                Log.i("SSL protocols=" + TextUtils.join(",", protocols));
-                sslSocket.setEnabledProtocols(protocols.toArray(new String[0]));
+                if (!secure) {
+                    sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
 
-                ArrayList<String> ciphers = new ArrayList<>();
-                for (String cipher : sslSocket.getEnabledCipherSuites()) {
-                    if (SSL_CIPHER_BLACKLIST.matcher(cipher).matches())
-                        Log.i("SSL disabling cipher=" + cipher);
-                    else
-                        ciphers.add(cipher);
+                    List<String> ciphers = new ArrayList<>();
+                    for (String cipher : sslSocket.getSupportedCipherSuites())
+                        if (!cipher.endsWith("_SCSV"))
+                            ciphers.add(cipher);
+                    sslSocket.setEnabledCipherSuites(ciphers.toArray(new String[0]));
+                } else if (harden) {
+                    List<String> protocols = new ArrayList<>();
+                    for (String protocol : sslSocket.getEnabledProtocols())
+                        if (SSL_PROTOCOL_BLACKLIST.contains(protocol))
+                            Log.i("SSL disabling protocol=" + protocol);
+                        else
+                            protocols.add(protocol);
+                    sslSocket.setEnabledProtocols(protocols.toArray(new String[0]));
+
+                    List<String> ciphers = new ArrayList<>();
+                    for (String cipher : sslSocket.getEnabledCipherSuites()) {
+                        if (SSL_CIPHER_BLACKLIST.matcher(cipher).matches())
+                            Log.i("SSL disabling cipher=" + cipher);
+                        else
+                            ciphers.add(cipher);
+                    }
+                    sslSocket.setEnabledCipherSuites(ciphers.toArray(new String[0]));
+                } else {
+                    List<String> ciphers = new ArrayList<>();
+                    ciphers.addAll(Arrays.asList(sslSocket.getEnabledCipherSuites()));
+                    for (String cipher : sslSocket.getSupportedCipherSuites())
+                        if (cipher.contains("3DES")) {
+                            // Some servers support 3DES and RC4 only
+                            Log.i("SSL enabling cipher=" + cipher);
+                            ciphers.add(cipher);
+                        }
+                    sslSocket.setEnabledCipherSuites(ciphers.toArray(new String[0]));
                 }
-                Log.i("SSL ciphers=" + TextUtils.join(",", ciphers));
-                sslSocket.setEnabledCipherSuites(ciphers.toArray(new String[0]));
+
+                Log.i("SSL protocols=" + TextUtils.join(",", sslSocket.getEnabledProtocols()));
+                Log.i("SSL ciphers=" + TextUtils.join(",", sslSocket.getEnabledCipherSuites()));
             }
 
             return socket;

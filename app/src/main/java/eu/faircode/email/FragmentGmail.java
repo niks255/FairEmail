@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2020 by Marcel Bokhorst (M66B)
 */
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -49,7 +50,9 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.accounts.AccountManager.newChooseAccountIntent;
 import static android.app.Activity.RESULT_OK;
@@ -248,10 +251,13 @@ public class FragmentGmail extends FragmentBase {
         String name = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String type = data.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
 
+        boolean found = false;
         AccountManager am = AccountManager.get(getContext());
         Account[] accounts = am.getAccountsByType(type);
         for (final Account account : accounts)
-            if (name.equals(account.name)) {
+            if (name.equalsIgnoreCase(account.name)) {
+                found = true;
+                Log.i("Requesting token name=" + account.name);
                 am.getAuthToken(
                         account,
                         EmailService.getAuthTokenType(type),
@@ -265,7 +271,7 @@ public class FragmentGmail extends FragmentBase {
                                     String token = bundle.getString(AccountManager.KEY_AUTHTOKEN);
                                     if (token == null)
                                         throw new IllegalArgumentException("no token");
-                                    Log.i("Got token");
+                                    Log.i("Got token name=" + account.name);
 
                                     onAuthorized(name, token);
                                 } catch (Throwable ex) {
@@ -285,6 +291,21 @@ public class FragmentGmail extends FragmentBase {
                         null);
                 break;
             }
+
+        if (!found) {
+            boolean permission = Helper.hasPermission(getContext(), Manifest.permission.GET_ACCOUNTS);
+
+            Map<String, String> crumb = new HashMap<>();
+            crumb.put("type", type);
+            crumb.put("count", Integer.toString(accounts.length));
+            crumb.put("permission", Boolean.toString(permission));
+            Log.breadcrumb("Gmail", crumb);
+
+            Log.e("Account missing");
+
+            tvError.setText(getString(R.string.title_no_account));
+            grpError.setVisibility(View.VISIBLE);
+        }
     }
 
     private void onAuthorized(String user, String password) {

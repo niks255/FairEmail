@@ -363,7 +363,6 @@
     <string name="title_advanced_secure">Verbergen van recente apps scherm en voorkomen dat screenshots worden gemaakt</string>
     <string name="title_advanced_pin">Pincode</string>
     <string name="title_advanced_biometrics_timeout">Biometrische verificatie verloopt na</string>
-    <string name="title_advanced_encrypt_method">Standaard versleutelingsmethode</string>
     <string name="title_advanced_sign_default">Standaard ondertekenen</string>
     <string name="title_advanced_encrypt_default">Standaard versleutelen</string>
     <string name="title_advanced_auto_decrypt">Berichten automatisch ontsleutelen</string>
@@ -373,6 +372,7 @@
     <string name="title_advanced_manage_certificates">Publieke sleutels beheren</string>
     <string name="title_advanced_import_key">Importeer privé sleutel</string>
     <string name="title_advanced_manage_keys">Privé sleutels beheren</string>
+    <string name="title_advanced_ca">Geïnstalleerde CA-certificaten</string>
     <string name="title_advanced_external_search">Andere apps mogen zoeken in berichten</string>
     <string name="title_advanced_shortcuts">Toon veelgebruikte contacten in het Android-deelmenu</string>
     <string name="title_advanced_conversation_actions">Stel acties voor</string>
@@ -566,7 +566,7 @@
     <string name="title_folder_name">Mapnaam</string>
     <string name="title_display_name">Weergavenaam</string>
     <string name="title_show_folders">Toon verborgen mappen</string>
-    <string name="title_show_flagged">Toon berichten met ster</string>
+    <string name="title_show_flagged">Toon aantal berichten met ster</string>
     <string name="title_subscribed_only">Alleen geabonneerde</string>
     <string name="title_apply_to_all">Toepassen op alle &#8230;</string>
     <string name="title_hide_folder">Verberg map</string>
@@ -584,6 +584,9 @@
     <string name="title_auto_trash">Automatisch oude berichten verplaatsen naar de prullenbak</string>
     <string name="title_auto_delete">Automatisch oude berichten definitief verwijderen</string>
     <string name="title_auto_delete_hint">Oude berichten zijn berichten die niet meer op het apparaat worden bewaard</string>
+    <string name="title_inbox_root_hint">        Sommige aanbieders vereisen dat nieuwe mappen aangemaakt worden onder de inbox.
+        In dit geval u kunt de inbox in de mappenlijst lang indrukken en kiezen voor \'Maak submap\'.
+    </string>
     <string name="title_folder_name_missing">Mapnaam ontbreekt</string>
     <string name="title_folder_exists">Map %1$s bestaat</string>
     <string name="title_folder_delete">Deze map en de berichten die het bevat definitief verwijderen?</string>
@@ -625,6 +628,7 @@
     <string name="title_editasnew">Bewerken als nieuw</string>
     <string name="title_create_rule">Maak regel &#8230;</string>
     <string name="title_share">Delen</string>
+    <string name="title_event">Toevoegen aan agenda</string>
     <string name="title_pin">Snelkoppeling toevoegen</string>
     <string name="title_print">Afdrukken</string>
     <string name="title_show_headers">Toon koppen</string>
@@ -914,6 +918,7 @@
     <string name="title_rule_identity">Identiteit</string>
     <string name="title_rule_template">Antwoord sjabloon</string>
     <string name="title_rule_cc">Antwoord op CC adressen</string>
+    <string name="title_rule_answer_remark">Slechts één antwoord zal worden verzonden voor elk gesprek, om lussen te voorkomen</string>
     <string name="title_rule_name_missing">Regelnaam ontbreekt</string>
     <string name="title_rule_condition_missing">Conditie ontbreekt</string>
     <string name="title_rule_automation_hint">Dit zal de intent \'%1$s\' sturen met de extra\'s \'%2$s\'</string>
@@ -1099,7 +1104,7 @@
     <string name="title_pro_purchase">Koop</string>
     <string name="title_pro_once">Eenmalig</string>
     <string name="title_pro_info">Het ontwikkelen van FairEmail kostte letterlijk duizenden uren en ondanks dat zijn de meeste functies gratis te gebruiken. Om FairEmail op de lange termijn duurzaam te maken, zijn sommige gebruiksgemak en geavanceerde functies niet gratis te gebruiken. FairEmail geeft een klein bericht weer om u hieraan te herinneren, dat wordt verwijderd als u de pro functies aanschaft.</string>
-    <string name="title_pro_hide">Verberg het kleine bericht voor een week</string>
+    <string name="title_pro_hide">Verberg het kleine bericht voor twee weken</string>
     <string name="title_pro_hint">Het kopen van pro functies geeft toegang tot alle huidige en toekomstige pro functies en zorgt voor onderhoud en ondersteuning van deze app.</string>
     <string name="title_pro_price">Zie <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">deze FAQ</a> over de prijs van de pro-functies</string>
     <string name="title_pro_pending">Aankoop in behandeling</string>
@@ -1124,6 +1129,8 @@
     <string name="title_widget_folder_unified">Gecombineerde postvak in mappen</string>
     <string name="title_widget_unseen">Alleen ongelezen berichten</string>
     <string name="title_widget_flagged">Alleen berichten met een ster</string>
+    <string name="title_widget_font_size">Tekengrootte</string>
+    <string name="title_widget_padding">Opvulling</string>
     <string name="title_widget_semi_transparent">Semi transparante achtergrond</string>
     <string name="title_accessibility_collapsed">Ingevouwen</string>
     <string name="title_accessibility_expanded">Uitgevouwen</string>

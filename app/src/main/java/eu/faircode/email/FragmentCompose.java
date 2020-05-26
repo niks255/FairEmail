@@ -219,6 +219,7 @@ public class FragmentCompose extends FragmentBase {
     private TextView tvNoInternet;
     private TextView tvSignature;
     private CheckBox cbSignature;
+    private ImageButton ibSignature;
     private TextView tvReference;
     private ImageButton ibCloseRefHint;
     private ImageButton ibReferenceEdit;
@@ -318,6 +319,7 @@ public class FragmentCompose extends FragmentBase {
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         tvSignature = view.findViewById(R.id.tvSignature);
         cbSignature = view.findViewById(R.id.cbSignature);
+        ibSignature = view.findViewById(R.id.ibSignature);
         tvReference = view.findViewById(R.id.tvReference);
         ibCloseRefHint = view.findViewById(R.id.ibCloseRefHint);
         ibReferenceEdit = view.findViewById(R.id.ibReferenceEdit);
@@ -567,6 +569,27 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        ibSignature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
+                if (identity == null || TextUtils.isEmpty(identity.signature))
+                    return;
+
+                ClipboardManager clipboard =
+                        (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboard != null) {
+                    ClipData clip = ClipData.newHtmlText(
+                            getContext().getString(R.string.title_edit_signature_text),
+                            HtmlHelper.getText(getContext(), identity.signature),
+                            identity.signature);
+                    clipboard.setPrimaryClip(clip);
+
+                    ToastEx.makeText(getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         ibCloseRefHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -699,39 +722,43 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                int id = view.getId();
-                if (id == R.id.tvName) {
-                    if (colName < 0)
-                        colName = cursor.getColumnIndex("name");
+                try {
+                    int id = view.getId();
+                    if (id == R.id.tvName) {
+                        if (colName < 0)
+                            colName = cursor.getColumnIndex("name");
 
-                    if (cursor.isNull(colName)) {
-                        ((TextView) view).setText("-");
+                        if (cursor.isNull(colName)) {
+                            ((TextView) view).setText("-");
+                            return true;
+                        }
+                    } else if (id == R.id.ivPhoto) {
+                        if (colLocal < 0)
+                            colLocal = cursor.getColumnIndex("local");
+
+                        ImageView photo = (ImageView) view;
+
+                        GradientDrawable bg = new GradientDrawable();
+                        if (circular)
+                            bg.setShape(GradientDrawable.OVAL);
+                        else
+                            bg.setCornerRadius(dp3);
+                        photo.setBackground(bg);
+                        photo.setClipToOutline(true);
+
+                        if (cursor.getInt(colLocal) == 1)
+                            photo.setImageDrawable(null);
+                        else {
+                            String uri = cursor.getString(columnIndex);
+                            if (uri == null)
+                                photo.setImageResource(R.drawable.baseline_person_24);
+                            else
+                                photo.setImageURI(Uri.parse(uri));
+                        }
                         return true;
                     }
-                } else if (id == R.id.ivPhoto) {
-                    if (colLocal < 0)
-                        colLocal = cursor.getColumnIndex("local");
-
-                    ImageView photo = (ImageView) view;
-
-                    GradientDrawable bg = new GradientDrawable();
-                    if (circular)
-                        bg.setShape(GradientDrawable.OVAL);
-                    else
-                        bg.setCornerRadius(dp3);
-                    photo.setBackground(bg);
-                    photo.setClipToOutline(true);
-
-                    if (cursor.getInt(colLocal) == 1)
-                        photo.setImageDrawable(null);
-                    else {
-                        String uri = cursor.getString(columnIndex);
-                        if (uri == null)
-                            photo.setImageResource(R.drawable.baseline_person_24);
-                        else
-                            photo.setImageURI(Uri.parse(uri));
-                    }
-                    return true;
+                } catch (Throwable ex) {
+                    Log.e(ex);
                 }
                 return false;
             }
@@ -742,132 +769,143 @@ public class FragmentCompose extends FragmentBase {
             private int colEmail = -1;
 
             public CharSequence convertToString(Cursor cursor) {
-                if (colName < 0)
-                    colName = cursor.getColumnIndex("name");
-                if (colEmail < 0)
-                    colEmail = cursor.getColumnIndex("email");
+                try {
+                    if (colName < 0)
+                        colName = cursor.getColumnIndex("name");
+                    if (colEmail < 0)
+                        colEmail = cursor.getColumnIndex("email");
 
-                String name = cursor.getString(colName);
-                String email = MessageHelper.sanitizeEmail(cursor.getString(colEmail));
-                StringBuilder sb = new StringBuilder();
-                if (name == null)
-                    sb.append(email);
-                else {
-                    sb.append("\"").append(name).append("\" ");
-                    sb.append("<").append(email).append(">");
+                    String name = cursor.getString(colName);
+                    String email = MessageHelper.sanitizeEmail(cursor.getString(colEmail));
+                    StringBuilder sb = new StringBuilder();
+                    if (name == null)
+                        sb.append(email);
+                    else {
+                        sb.append("\"").append(name).append("\" ");
+                        sb.append("<").append(email).append(">");
+                    }
+                    return sb.toString();
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    return ex.toString();
                 }
-                return sb.toString();
             }
         });
 
         cadapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence typed) {
-                Log.i("Suggest contact=" + typed);
-
                 MatrixCursor result = new MatrixCursor(new String[]{"_id", "name", "email", "photo", "local"});
-                if (typed == null)
-                    return result;
 
-                String wildcard = "%" + typed + "%";
-                Map<String, EntityContact> map = new HashMap<>();
+                try {
+                    Log.i("Suggest contact=" + typed);
+                    if (typed == null)
+                        return result;
 
-                boolean contacts = Helper.hasPermission(getContext(), Manifest.permission.READ_CONTACTS);
-                if (contacts) {
-                    Cursor cursor = resolver.query(
-                            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                            new String[]{
-                                    ContactsContract.Contacts.DISPLAY_NAME,
-                                    ContactsContract.CommonDataKinds.Email.DATA,
-                                    ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
-                            },
-                            ContactsContract.CommonDataKinds.Email.DATA + " <> ''" +
-                                    " AND (" + ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?" +
-                                    " OR " + ContactsContract.CommonDataKinds.Email.DATA + " LIKE ?)",
-                            new String[]{wildcard, wildcard},
-                            null);
+                    String wildcard = "%" + typed + "%";
+                    Map<String, EntityContact> map = new HashMap<>();
 
-                    while (cursor != null && cursor.moveToNext()) {
-                        EntityContact item = new EntityContact();
-                        item.id = 0L;
-                        item.name = cursor.getString(0);
-                        item.email = cursor.getString(1);
-                        item.avatar = cursor.getString(2);
-                        item.times_contacted = 0;
-                        item.last_contacted = 0L;
-                        EntityContact existing = map.get(item.email);
-                        if (existing == null ||
-                                (existing.avatar == null && item.avatar != null))
-                            map.put(item.email, item);
-                    }
-                }
+                    boolean contacts = Helper.hasPermission(getContext(), Manifest.permission.READ_CONTACTS);
+                    if (contacts) {
+                        Cursor cursor = resolver.query(
+                                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                                new String[]{
+                                        ContactsContract.Contacts.DISPLAY_NAME,
+                                        ContactsContract.CommonDataKinds.Email.DATA,
+                                        ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
+                                        ContactsContract.Contacts.STARRED
+                                },
+                                ContactsContract.CommonDataKinds.Email.DATA + " <> ''" +
+                                        " AND (" + ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?" +
+                                        " OR " + ContactsContract.CommonDataKinds.Email.DATA + " LIKE ?)",
+                                new String[]{wildcard, wildcard},
+                                null);
 
-                List<EntityContact> items = new ArrayList<>();
-                if (suggest_sent)
-                    items.addAll(db.contact().searchContacts(null, EntityContact.TYPE_TO, wildcard));
-                if (suggest_received)
-                    items.addAll(db.contact().searchContacts(null, EntityContact.TYPE_FROM, wildcard));
-                for (EntityContact item : items) {
-                    EntityContact existing = map.get(item.email);
-                    if (existing == null)
-                        map.put(item.email, item);
-                    else {
-                        existing.times_contacted = Math.max(existing.times_contacted, item.times_contacted);
-                        existing.last_contacted = Math.max(existing.last_contacted, item.last_contacted);
-                    }
-                }
-
-                items = new ArrayList<>(map.values());
-
-                final Collator collator = Collator.getInstance(Locale.getDefault());
-                collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-
-                Collections.sort(items, new Comparator<EntityContact>() {
-                    @Override
-                    public int compare(EntityContact i1, EntityContact i2) {
-                        try {
-                            if (suggest_frequently) {
-                                int t = -i1.times_contacted.compareTo(i2.times_contacted);
-                                if (t != 0)
-                                    return t;
-
-                                int l = -i1.last_contacted.compareTo(i2.last_contacted);
-                                if (l != 0)
-                                    return l;
-                            } else {
-                                int a = -Boolean.compare(i1.id == 0, i2.id == 0);
-                                if (a != 0)
-                                    return a;
-                            }
-
-                            if (TextUtils.isEmpty(i1.name) && TextUtils.isEmpty(i2.name))
-                                return 0;
-                            if (TextUtils.isEmpty(i1.name) && !TextUtils.isEmpty(i2.name))
-                                return 1;
-                            if (!TextUtils.isEmpty(i1.name) && TextUtils.isEmpty(i2.name))
-                                return -1;
-
-                            int n = collator.compare(i1.name, i2.name);
-                            if (n != 0)
-                                return n;
-
-                            return collator.compare(i1.email, i2.email);
-                        } catch (Throwable ex) {
-                            Log.e(ex);
-                            return 0;
+                        while (cursor != null && cursor.moveToNext()) {
+                            EntityContact item = new EntityContact();
+                            item.id = 0L;
+                            item.name = cursor.getString(0);
+                            item.email = cursor.getString(1);
+                            item.avatar = cursor.getString(2);
+                            item.times_contacted = (cursor.getInt(3) == 0 ? 0 : Integer.MAX_VALUE);
+                            item.last_contacted = 0L;
+                            EntityContact existing = map.get(item.email);
+                            if (existing == null ||
+                                    (existing.avatar == null && item.avatar != null))
+                                map.put(item.email, item);
                         }
                     }
-                });
 
-                for (int i = 0; i < items.size(); i++) {
-                    EntityContact item = items.get(i);
-                    result.newRow()
-                            .add(i + 1) // id
-                            .add(item.name)
-                            .add(item.email)
-                            .add(item.avatar)
-                            .add(item.id == 0 ? 0 : 1);
+                    List<EntityContact> items = new ArrayList<>();
+                    if (suggest_sent)
+                        items.addAll(db.contact().searchContacts(null, EntityContact.TYPE_TO, wildcard));
+                    if (suggest_received)
+                        items.addAll(db.contact().searchContacts(null, EntityContact.TYPE_FROM, wildcard));
+                    for (EntityContact item : items) {
+                        EntityContact existing = map.get(item.email);
+                        if (existing == null)
+                            map.put(item.email, item);
+                        else {
+                            existing.times_contacted = Math.max(existing.times_contacted, item.times_contacted);
+                            existing.last_contacted = Math.max(existing.last_contacted, item.last_contacted);
+                        }
+                    }
+
+                    items = new ArrayList<>(map.values());
+
+                    final Collator collator = Collator.getInstance(Locale.getDefault());
+                    collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
+
+                    Collections.sort(items, new Comparator<EntityContact>() {
+                        @Override
+                        public int compare(EntityContact i1, EntityContact i2) {
+                            try {
+                                if (suggest_frequently) {
+                                    int t = -i1.times_contacted.compareTo(i2.times_contacted);
+                                    if (t != 0)
+                                        return t;
+
+                                    int l = -i1.last_contacted.compareTo(i2.last_contacted);
+                                    if (l != 0)
+                                        return l;
+                                } else {
+                                    int a = -Boolean.compare(i1.id == 0, i2.id == 0);
+                                    if (a != 0)
+                                        return a;
+                                }
+
+                                if (TextUtils.isEmpty(i1.name) && TextUtils.isEmpty(i2.name))
+                                    return 0;
+                                if (TextUtils.isEmpty(i1.name) && !TextUtils.isEmpty(i2.name))
+                                    return 1;
+                                if (!TextUtils.isEmpty(i1.name) && TextUtils.isEmpty(i2.name))
+                                    return -1;
+
+                                int n = collator.compare(i1.name, i2.name);
+                                if (n != 0)
+                                    return n;
+
+                                return collator.compare(i1.email, i2.email);
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                                return 0;
+                            }
+                        }
+                    });
+
+                    for (int i = 0; i < items.size(); i++) {
+                        EntityContact item = items.get(i);
+                        result.newRow()
+                                .add(i + 1) // id
+                                .add(item.name)
+                                .add(item.email)
+                                .add(item.avatar)
+                                .add(item.id == 0 ? 0 : 1);
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
                 }
 
+                Log.i("Suggesting contacts=" + result.getCount());
                 return result;
             }
         });
@@ -1264,10 +1302,8 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onMenuEncrypt() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String encrypt_method = prefs.getString("default_encrypt_method", "pgp");
-
-        if ("pgp".equals(encrypt_method)) {
+        EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
+        if (identity == null || identity.encrypt == 0) {
             if (EntityMessage.ENCRYPT_NONE.equals(encrypt) || encrypt == null)
                 encrypt = EntityMessage.PGP_SIGNENCRYPT;
             else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt))
@@ -2547,7 +2583,7 @@ public class FragmentCompose extends FragmentBase {
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
-        }.execute(this, args, "compose:s/mimem");
+        }.execute(this, args, "compose:s/mime");
     }
 
     private void onContactGroupSelected(Bundle args) {
@@ -2970,7 +3006,6 @@ public class FragmentCompose extends FragmentBase {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean plain_only = prefs.getBoolean("plain_only", false);
             boolean resize_reply = prefs.getBoolean("resize_reply", true);
-            String encrypt_method = prefs.getString("default_encrypt_method", "pgp");
             boolean sign_default = prefs.getBoolean("sign_default", false);
             boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
             boolean receipt_default = prefs.getBoolean("receipt_default", false);
@@ -3003,21 +3038,6 @@ public class FragmentCompose extends FragmentBase {
 
                     data.draft = new EntityMessage();
                     data.draft.msgid = EntityMessage.generateMessageId();
-
-                    if (plain_only)
-                        data.draft.plain_only = true;
-                    if (encrypt_default)
-                        if ("s/mime".equals(encrypt_method))
-                            data.draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
-                        else
-                            data.draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
-                    else if (sign_default)
-                        if ("s/mime".equals(encrypt_method))
-                            data.draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
-                        else
-                            data.draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
-                    if (receipt_default)
-                        data.draft.receipt_request = true;
 
                     // Select identity matching from address
                     EntityIdentity selected = null;
@@ -3117,6 +3137,23 @@ public class FragmentCompose extends FragmentBase {
 
                     if (selected == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_identities));
+
+                    if (plain_only)
+                        data.draft.plain_only = true;
+
+                    if (encrypt_default)
+                        if (selected.encrypt == 0)
+                            data.draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                        else
+                            data.draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                    else if (sign_default)
+                        if (selected.encrypt == 0)
+                            data.draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
+                        else
+                            data.draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
+
+                    if (receipt_default)
+                        data.draft.receipt_request = true;
 
                     Document document = Document.createShell("");
 
@@ -4076,8 +4113,9 @@ public class FragmentCompose extends FragmentBase {
                                     identity != null && identity.sender_extra)
                                 args.putBoolean("remind_extra", true);
 
-                            if (pgpService.isBound() &&
-                                    !EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)) {
+                            if (pgpService != null && pgpService.isBound() &&
+                                    (draft.ui_encrypt == null ||
+                                            EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))) {
                                 List<Address> recipients = new ArrayList<>();
                                 if (draft.to != null)
                                     recipients.addAll(Arrays.asList(draft.to));
@@ -4611,6 +4649,8 @@ public class FragmentCompose extends FragmentBase {
             grpSignature.setVisibility(signature == null ? View.GONE : View.VISIBLE);
 
             setBodyPadding();
+
+            updateEncryption();
         }
 
         @Override
@@ -4622,6 +4662,64 @@ public class FragmentCompose extends FragmentBase {
             grpSignature.setVisibility(View.GONE);
 
             setBodyPadding();
+
+            updateEncryption();
+        }
+
+        private void updateEncryption() {
+            EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
+            if (identity == null)
+                return;
+
+            Bundle args = new Bundle();
+            args.putLong("id", working);
+            args.putLong("identity", identity.id);
+
+            new SimpleTask<Integer>() {
+                @Override
+                protected Integer onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+                    long iid = args.getLong("identity");
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage draft = db.message().getMessage(id);
+                    if (draft == null ||
+                            draft.ui_encrypt == null || EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))
+                        return null;
+
+                    EntityIdentity identity = db.identity().getIdentity(iid);
+                    if (identity == null)
+                        return null;
+
+                    int encrypt = draft.ui_encrypt;
+                    if (identity.encrypt == 0) {
+                        if (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt))
+                            encrypt = EntityMessage.PGP_SIGNONLY;
+                        else if (EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt))
+                            encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                    } else {
+                        if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt))
+                            encrypt = EntityMessage.SMIME_SIGNONLY;
+                        else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt))
+                            encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                    }
+
+                    if (draft.ui_encrypt != encrypt)
+                        db.message().setMessageUiEncrypt(draft.id, encrypt);
+
+                    return encrypt;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Integer encrypt) {
+                    FragmentCompose.this.encrypt = encrypt;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(FragmentCompose.this, args, "compose:identity");
         }
     };
 
@@ -4979,6 +5077,9 @@ public class FragmentCompose extends FragmentBase {
             cbPlainOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    cbPlainOnly.setTextColor(Helper.resolveColor(getContext(),
+                            checked ? R.attr.colorAccent : android.R.attr.textColorSecondary));
+
                     Bundle args = new Bundle();
                     args.putLong("id", id);
                     args.putBoolean("plain_only", checked);
@@ -5060,7 +5161,27 @@ public class FragmentCompose extends FragmentBase {
                             int encrypt = args.getInt("encrypt");
 
                             DB db = DB.getInstance(context);
-                            db.message().setMessageUiEncrypt(id, encrypt);
+                            try {
+                                db.beginTransaction();
+
+                                EntityMessage message = db.message().getMessage(id);
+                                if (message == null)
+                                    return null;
+
+                                db.message().setMessageUiEncrypt(message.id, encrypt);
+
+                                if (message.identity != null) {
+                                    int iencrypt =
+                                            (encrypt == EntityMessage.SMIME_SIGNONLY ||
+                                                    encrypt == EntityMessage.SMIME_SIGNENCRYPT
+                                                    ? 1 : 0);
+                                    db.identity().setIdentityEncrypt(message.identity, iencrypt);
+                                }
+
+                                db.setTransactionSuccessful();
+                            } finally {
+                                db.endTransaction();
+                            }
 
                             return null;
                         }

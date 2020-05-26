@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
 
 import androidx.preference.PreferenceManager;
@@ -43,6 +44,8 @@ public class WidgetUnified extends AppWidgetProvider {
             long folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
             String type = prefs.getString("widget." + appWidgetId + ".type", null);
             boolean semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
+            int font = prefs.getInt("widget." + appWidgetId + ".font", 0);
+            int padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
 
             Intent view = new Intent(context, ActivityView.class);
             view.setAction("folder:" + folder);
@@ -56,6 +59,14 @@ public class WidgetUnified extends AppWidgetProvider {
 
             if (!semi)
                 views.setInt(R.id.widget, "setBackgroundColor", Color.TRANSPARENT);
+
+            if (font > 0)
+                views.setTextViewTextSize(R.id.title, TypedValue.COMPLEX_UNIT_SP, getFontSizeSp(font));
+
+            if (padding > 0) {
+                int px = getPaddingPx(padding, context);
+                views.setViewPadding(R.id.title, px, px, px, px);
+            }
 
             if (name == null)
                 views.setTextViewText(R.id.title, context.getString(R.string.title_folder_unified));
@@ -80,6 +91,28 @@ public class WidgetUnified extends AppWidgetProvider {
             views.setPendingIntentTemplate(R.id.lv, piItem);
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
+    }
+
+    static int getFontSizeSp(int size) {
+        switch (size) {
+            case 1: // small
+                return 14;
+            case 3: // large
+                return 22;
+            default: // medium
+                return 18;
+        }
+    }
+
+    static int getPaddingPx(int padding, Context context) {
+        switch (padding) {
+            case 1: // small
+                return Helper.dp2pixels(context, 3);
+            case 3: // large
+                return Helper.dp2pixels(context, 9);
+            default: // medium
+                return Helper.dp2pixels(context, 6);
         }
     }
 

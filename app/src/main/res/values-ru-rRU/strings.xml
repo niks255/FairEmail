@@ -386,7 +386,6 @@
     <string name="title_advanced_secure">Скрыть с экрана недавних приложений и запретить создание снимков экрана</string>
     <string name="title_advanced_pin">PIN-код</string>
     <string name="title_advanced_biometrics_timeout">Таймаут биометрической аутентификации</string>
-    <string name="title_advanced_encrypt_method">Метод шифрования по умолчанию</string>
     <string name="title_advanced_sign_default">Подписать по умолчанию</string>
     <string name="title_advanced_encrypt_default">Шифровать по умолчанию</string>
     <string name="title_advanced_auto_decrypt">Автоматически расшифровывать сообщения</string>
@@ -396,6 +395,7 @@
     <string name="title_advanced_manage_certificates">Управление публичными ключами</string>
     <string name="title_advanced_import_key">Импорт приватного ключа</string>
     <string name="title_advanced_manage_keys">Управление приватными ключами</string>
+    <string name="title_advanced_ca">Установленные сертификаты ЦС</string>
     <string name="title_advanced_external_search">Разрешить другим приложениям искать в сообщениях</string>
     <string name="title_advanced_shortcuts">Показывать часто используемые контакты в меню \"Поделиться\" Android</string>
     <string name="title_advanced_conversation_actions">Предлагать действия</string>
@@ -589,7 +589,7 @@
     <string name="title_folder_name">Название папки</string>
     <string name="title_display_name">Отображаемое имя</string>
     <string name="title_show_folders">Показывать скрытые папки</string>
-    <string name="title_show_flagged">Показать избранные сообщения</string>
+    <string name="title_show_flagged">Показывать количество избранных сообщений</string>
     <string name="title_subscribed_only">Только подписки</string>
     <string name="title_apply_to_all">Применить ко всем&#8230;</string>
     <string name="title_hide_folder">Скрыть папку</string>
@@ -607,6 +607,9 @@
     <string name="title_auto_trash">Автоматически перемещать старые сообщения в корзину</string>
     <string name="title_auto_delete">Автоматически навсегда удалять старые сообщения</string>
     <string name="title_auto_delete_hint">Старые сообщения - это сообщения, которые больше не хранятся на устройстве</string>
+    <string name="title_inbox_root_hint">        Некоторые провайдеры требуют создания новых папок внутри папки «Входящие».
+        Для этого в списке папок удерживайте нажатие на «Входящие» и выберите «Создать вложенную папку».
+    </string>
     <string name="title_folder_name_missing">Отсутствует название папки</string>
     <string name="title_folder_exists">Папка %1$s существует</string>
     <string name="title_folder_delete">Удалить эту папку и сообщения, которые она содержит?</string>
@@ -648,6 +651,7 @@
     <string name="title_editasnew">Редактировать как новое</string>
     <string name="title_create_rule">Создать правило&#8230;</string>
     <string name="title_share">Поделиться</string>
+    <string name="title_event">Добавить в календарь</string>
     <string name="title_pin">Добавить ярлык</string>
     <string name="title_print">Печать</string>
     <string name="title_show_headers">Показать заголовки</string>
@@ -937,6 +941,7 @@
     <string name="title_rule_identity">Идентификатор</string>
     <string name="title_rule_template">Шаблон ответа</string>
     <string name="title_rule_cc">Ответить на адреса копий (CC)</string>
+    <string name="title_rule_answer_remark">Только один ответ будет отправлен в каждый диалог, чтобы избежать петель ответов</string>
     <string name="title_rule_name_missing">Отсутствует название правила</string>
     <string name="title_rule_condition_missing">Отсутствует условие</string>
     <string name="title_rule_automation_hint">Это отправит цель \"%1$s\" с дополнениями \"%2$s\"</string>
@@ -1125,7 +1130,7 @@
         Чтобы сделать проект FairEmail устойчивым в долгосрочной перспективе, некоторые удобства и расширенные функции являются платными.
         FairEmail показывает небольшое сообщение, чтобы напоминать вам об этом. Оно будет удалено, если вы приобретёте функционал Pro.
     </string>
-    <string name="title_pro_hide">Скрыть маленькое сообщение на неделю</string>
+    <string name="title_pro_hide">Скрыть маленькое сообщение на две недели</string>
     <string name="title_pro_hint">Покупка функций Pro позволит вам использовать все реализованные и будущие Pro-функции.</string>
     <string name="title_pro_price">Ознакомьтесь с <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">​​этим часто задаваемым вопросом</a> о цене функций Pro.</string>
     <string name="title_pro_pending">Ожидание обработки покупки</string>
@@ -1150,6 +1155,8 @@
     <string name="title_widget_folder_unified">Папки единого почтового ящика</string>
     <string name="title_widget_unseen">Только непрочитанные сообщения</string>
     <string name="title_widget_flagged">Только избранные сообщения</string>
+    <string name="title_widget_font_size">Размер шрифта</string>
+    <string name="title_widget_padding">Отступы</string>
     <string name="title_widget_semi_transparent">Полупрозрачный фон</string>
     <string name="title_accessibility_collapsed">Свёрнуто</string>
     <string name="title_accessibility_expanded">Развёрнуто</string>

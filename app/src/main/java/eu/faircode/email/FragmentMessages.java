@@ -213,7 +213,7 @@ import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_VALID_KEY_UN
 
 public class FragmentMessages extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private ViewGroup view;
-    private SwipeRefreshLayout swipeRefresh;
+    private SwipeRefreshLayoutEx swipeRefresh;
     private TextView tvSupport;
     private ImageButton ibHintSupport;
     private ImageButton ibHintSwipe;
@@ -1334,20 +1334,21 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onSwipeRefresh() {
+        swipeRefresh.onRefresh();
+
         Bundle args = new Bundle();
         args.putLong("folder", folder);
         args.putString("type", type);
 
-        new SimpleTask<Integer>() {
+        new SimpleTask<Void>() {
             @Override
-            protected Integer onExecute(Context context, Bundle args) {
+            protected Void onExecute(Context context, Bundle args) {
                 long fid = args.getLong("folder");
                 String type = args.getString("type");
 
                 if (!ConnectionHelper.getNetworkState(context).isSuitable())
                     throw new IllegalStateException(context.getString(R.string.title_no_internet));
 
-                int count;
                 boolean now = true;
                 boolean force = false;
 
@@ -1369,8 +1370,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (folder != null)
                             folders.add(folder);
                     }
-
-                    count = folders.size();
 
                     for (EntityFolder folder : folders) {
                         EntityOperation.sync(context, folder.id, true);
@@ -1399,13 +1398,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (!now)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_connection));
 
-                return count;
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, Integer count) {
-                if (count > 0)
-                    swipeRefresh.setRefreshing(true);
+                return null;
             }
 
             @Override
@@ -2357,11 +2350,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (!result.folders.contains(message.folder))
                         result.folders.add(message.folder);
 
+                    boolean isInbox = EntityFolder.INBOX.equals(folder.type);
                     boolean isArchive = EntityFolder.ARCHIVE.equals(folder.type);
                     boolean isTrash = (EntityFolder.TRASH.equals(folder.type) || account.protocol != EntityAccount.TYPE_IMAP);
                     boolean isJunk = EntityFolder.JUNK.equals(folder.type);
                     boolean isDrafts = EntityFolder.DRAFTS.equals(folder.type);
 
+                    result.isInbox = (result.isInbox == null ? isInbox : result.isInbox && isInbox);
                     result.isArchive = (result.isArchive == null ? isArchive : result.isArchive && isArchive);
                     result.isTrash = (result.isTrash == null ? isTrash : result.isTrash && isTrash);
                     result.isJunk = (result.isJunk == null ? isJunk : result.isJunk && isJunk);
@@ -2411,6 +2406,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     result.hasJunk = (result.hasJunk == null ? hasJunk : result.hasJunk && hasJunk);
                 }
 
+                if (result.isInbox == null) result.isInbox = false;
                 if (result.isArchive == null) result.isArchive = false;
                 if (result.isTrash == null) result.isTrash = false;
                 if (result.isJunk == null) result.isJunk = false;
@@ -2462,6 +2458,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         .setEnabled(!EntityMessage.PRIORITIY_NORMAL.equals(result.importance));
                 importance.add(Menu.NONE, R.string.title_importance_low, 3, R.string.title_importance_low)
                         .setEnabled(!EntityMessage.PRIORITIY_LOW.equals(result.importance));
+
+                if (!result.isInbox) // not is inbox
+                    popupMenu.getMenu().add(Menu.NONE, R.string.title_folder_inbox, order++, R.string.title_folder_inbox);
 
                 if (result.hasArchive && !result.isArchive) // has archive and not is archive
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_archive, order++, R.string.title_archive);
@@ -2522,6 +2521,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 return true;
                             case R.string.title_importance_high:
                                 onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH);
+                                return true;
+                            case R.string.title_folder_inbox:
+                                onActionMoveSelection(EntityFolder.INBOX);
                                 return true;
                             case R.string.title_archive:
                                 onActionMoveSelection(EntityFolder.ARCHIVE);
@@ -2639,6 +2641,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         args.putLong("id", message.id);
         args.putLong("duration", message.ui_snoozed == null ? Long.MAX_VALUE : 0);
         args.putLong("time", message.ui_snoozed == null ? Long.MAX_VALUE : 0);
+        args.putBoolean("hide", true);
 
         onSnooze(args);
     }
@@ -3200,10 +3203,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         adapter.setZoom(zoom);
 
         // Restart spinner
-        if (swipeRefresh.isRefreshing()) {
-            swipeRefresh.setRefreshing(false);
-            swipeRefresh.setRefreshing(true);
-        }
+        swipeRefresh.resetRefreshing();
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "pro");
@@ -3839,10 +3839,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (folder.error != null && folder.account != null /* outbox */)
                 errors = true;
             if (folder.sync_state != null &&
-                    (folder.account == null || "connected".equals(folder.accountState))) {
+                    (folder.account == null || "connected".equals(folder.accountState)))
                 refreshing = true;
-                break;
-            }
         }
 
         // Get name
@@ -3872,8 +3870,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         else
             fabError.hide();
 
-        if (refreshing != swipeRefresh.isRefreshing())
-            swipeRefresh.setRefreshing(refreshing);
+        swipeRefresh.setRefreshing(refreshing);
     }
 
     private void loadMessages(final boolean top) {
@@ -5318,8 +5315,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     Session isession = Session.getInstance(props, null);
                                     try (InputStream fis = new FileInputStream(plain)) {
                                         MimeMessage imessage = new MimeMessage(isession, fis);
-                                        MessageHelper helper = new MessageHelper(imessage);
-                                        parts = helper.getMessageParts(context);
+                                        MessageHelper helper = new MessageHelper(imessage, context);
+                                        parts = helper.getMessageParts();
                                     }
 
                                     try {
@@ -5527,7 +5524,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     @Override
                                     public AttributeTable getSignedAttributes() {
                                         // The certificate validity will be check below
-                                        return super.getSignedAttributes().remove(CMSAttributes.signingTime);
+                                        AttributeTable at = super.getSignedAttributes();
+                                        return (at == null ? null : at.remove(CMSAttributes.signingTime));
                                     }
                                 };
 
@@ -5558,9 +5556,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         Log.w(ex);
                                     }
 
+                                    KeyStore ks = null;
                                     try {
                                         // https://tools.ietf.org/html/rfc3852#section-10.2.3
-                                        KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+                                        ks = KeyStore.getInstance("AndroidCAStore");
                                         ks.load(null, null);
 
                                         // https://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html
@@ -5613,27 +5612,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
                                         cpv.validate(path.getCertPath(), params);
 
-                                        List<Certificate> pcerts = new ArrayList<>();
-                                        pcerts.addAll(path.getCertPath().getCertificates());
+                                        List<X509Certificate> pcerts = new ArrayList<>();
+                                        for (Certificate c : path.getCertPath().getCertificates())
+                                            if (c instanceof X509Certificate)
+                                                pcerts.add((X509Certificate) c);
                                         if (path instanceof PKIXCertPathValidatorResult) {
                                             X509Certificate root = ((PKIXCertPathValidatorResult) path).getTrustAnchor().getTrustedCert();
                                             if (root != null)
                                                 pcerts.add(root);
                                         }
 
-                                        ArrayList<String> trace = new ArrayList<>();
-                                        for (Certificate pcert : pcerts)
-                                            if (pcert instanceof X509Certificate) {
-                                                // https://tools.ietf.org/html/rfc5280#section-4.2.1.3
-                                                X509Certificate c = (X509Certificate) pcert;
-                                                boolean[] usage = c.getKeyUsage();
-                                                boolean root = (usage != null && usage[5]);
-                                                boolean selfSigned = c.getIssuerX500Principal().equals(c.getSubjectX500Principal());
-                                                EntityCertificate record = EntityCertificate.from(c, null);
-                                                trace.add((root ? "* " : "") + (selfSigned ? "# " : "") + record.subject);
-                                            }
-
-                                        args.putStringArrayList("trace", trace);
+                                        args.putStringArrayList("trace", getTrace(pcerts, ks));
 
                                         boolean valid = true;
                                         for (Certificate pcert : pcerts)
@@ -5649,16 +5638,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     } catch (Throwable ex) {
                                         Log.w(ex);
                                         args.putString("reason", ex.getMessage());
-
-                                        ArrayList<String> trace = new ArrayList<>();
-                                        for (X509Certificate c : certs) {
-                                            boolean[] usage = c.getKeyUsage();
-                                            boolean root = (usage != null && usage[5]);
-                                            boolean selfSigned = c.getIssuerX500Principal().equals(c.getSubjectX500Principal());
-                                            EntityCertificate record = EntityCertificate.from(c, null);
-                                            trace.add((root ? "* " : "") + (selfSigned ? "# " : "") + record.subject);
-                                        }
-                                        args.putStringArrayList("trace", trace);
+                                        args.putStringArrayList("trace", getTrace(certs, ks));
                                     }
 
                                     result = cert;
@@ -5806,6 +5786,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 TextView tvEmail = dview.findViewById(R.id.tvEmail);
                                 TextView tvEmailInvalid = dview.findViewById(R.id.tvEmailInvalid);
                                 TextView tvSubject = dview.findViewById(R.id.tvSubject);
+                                ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
                                 TextView tvAfter = dview.findViewById(R.id.tvAfter);
                                 TextView tvBefore = dview.findViewById(R.id.tvBefore);
                                 TextView tvExpired = dview.findViewById(R.id.tvExpired);
@@ -5823,22 +5804,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 tvBefore.setText(record.before == null ? null : TF.format(record.before));
                                 tvExpired.setVisibility(record.isExpired(time) ? View.VISIBLE : View.GONE);
 
-                                if (trace != null && trace.size() > 0)
-                                    tvSubject.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            StringBuilder sb = new StringBuilder();
-                                            for (int i = 0; i < trace.size(); i++) {
-                                                if (i > 0)
-                                                    sb.append("\n\n");
-                                                sb.append(i + 1).append(") ").append(trace.get(i));
-                                            }
-
-                                            new AlertDialog.Builder(getContext())
-                                                    .setMessage(sb.toString())
-                                                    .show();
+                                ibInfo.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        StringBuilder sb = new StringBuilder();
+                                        for (int i = 0; i < trace.size(); i++) {
+                                            if (i > 0)
+                                                sb.append("\n\n");
+                                            sb.append(i + 1).append(") ").append(trace.get(i));
                                         }
-                                    });
+
+                                        new AlertDialog.Builder(getContext())
+                                                .setMessage(sb.toString())
+                                                .show();
+                                    }
+                                });
+                                ibInfo.setVisibility(trace != null && trace.size() > 0 ? View.VISIBLE : View.GONE);
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                                         .setView(dview)
@@ -5920,8 +5901,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Properties props = MessageHelper.getSessionProperties();
                 Session isession = Session.getInstance(props, null);
                 MimeMessage imessage = new MimeMessage(isession, is);
-                MessageHelper helper = new MessageHelper(imessage);
-                MessageHelper.MessageParts parts = helper.getMessageParts(context);
+                MessageHelper helper = new MessageHelper(imessage, context);
+                MessageHelper.MessageParts parts = helper.getMessageParts();
 
                 DB db = DB.getInstance(context);
                 try {
@@ -5965,6 +5946,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 WorkerFts.init(context, false);
             }
 
+            private ArrayList<String> getTrace(List<X509Certificate> certs, KeyStore ks) {
+                // https://tools.ietf.org/html/rfc5280#section-4.2.1.3
+                ArrayList<String> trace = new ArrayList<>();
+                for (Certificate c : certs)
+                    try {
+                        X509Certificate cert = (X509Certificate) c;
+                        boolean[] usage = cert.getKeyUsage();
+                        boolean keyCertSign = (usage != null && usage[5]);
+                        boolean selfSigned = cert.getIssuerX500Principal().equals(cert.getSubjectX500Principal());
+                        EntityCertificate record = EntityCertificate.from(cert, null);
+                        trace.add(record.subject +
+                                " (" + (selfSigned ? "selfSigned" : cert.getIssuerX500Principal()) + ")" +
+                                (keyCertSign ? " (keyCertSign)" : "") +
+                                (ks != null && ks.getCertificateAlias(cert) != null ? " (Android)" : ""));
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        trace.add(ex.toString());
+                    }
+                return trace;
+            }
         }.execute(this, args, "decrypt:s/mime");
     }
 
@@ -6186,6 +6187,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Long wakeup = args.getLong("wakeup");
                 if (wakeup < 0)
                     wakeup = null;
+                boolean hide = args.getBoolean("hide");
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean flag_snoozed = prefs.getBoolean("flag_snoozed", false);
@@ -6203,7 +6205,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     for (EntityMessage threaded : messages) {
                         db.message().setMessageSnoozed(threaded.id, wakeup);
                         db.message().setMessageUiIgnored(threaded.id, true);
-                        if (flag_snoozed && threaded.folder.equals(message.folder))
+                        if (!hide && flag_snoozed && threaded.folder.equals(message.folder))
                             EntityOperation.queue(context, threaded, EntityOperation.FLAG, wakeup != null);
                         EntityMessage.snooze(context, threaded.id, wakeup);
                     }
@@ -6640,6 +6642,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         Boolean hasArchive;
         Boolean hasTrash;
         Boolean hasJunk;
+        Boolean isInbox;
         Boolean isArchive;
         Boolean isTrash;
         Boolean isJunk;

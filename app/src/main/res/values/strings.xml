@@ -425,7 +425,6 @@
     <string name="title_advanced_biometrics_timeout">Biometric authentication timeout</string>
     <string name="title_advanced_safe_browsing" translatable="false">Google Safe browsing</string>
 
-    <string name="title_advanced_encrypt_method">Default encryption method</string>
     <string name="title_advanced_sign_default">Sign by default</string>
     <string name="title_advanced_encrypt_default">Encrypt by default</string>
     <string name="title_advanced_auto_decrypt">Automatically decrypt messages</string>
@@ -435,6 +434,7 @@
     <string name="title_advanced_manage_certificates">Manage public keys</string>
     <string name="title_advanced_import_key">Import private key</string>
     <string name="title_advanced_manage_keys">Manage private keys</string>
+    <string name="title_advanced_ca">Installed CA certificates</string>
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$d</string>
 
     <string name="title_advanced_external_search">Allow other apps to search in messages</string>
@@ -459,6 +459,7 @@
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s</string>
     <string name="title_advanced_storage_space" translatable="false">Storage space: %1$s/%2$s</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
+    <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
 
     <string name="title_advanced_enabled_hint">Globally disable or enable receiving of messages</string>
     <string name="title_advanced_manual_hint">If synchronization is disabled, it is still possible to synchronize manually by pulling down the message list.</string>
@@ -657,7 +658,7 @@
     <string name="title_folder_name">Folder name</string>
     <string name="title_display_name">Display name</string>
     <string name="title_show_folders">Show hidden folders</string>
-    <string name="title_show_flagged">Show starred messages</string>
+    <string name="title_show_flagged">Show starred message count</string>
     <string name="title_subscribed_only">Subscribed only</string>
     <string name="title_apply_to_all">Apply to all &#8230;</string>
     <string name="title_hide_folder">Hide folder</string>
@@ -675,6 +676,10 @@
     <string name="title_auto_trash">Automatically move old messages to trash</string>
     <string name="title_auto_delete">Automatically permanently delete old messages</string>
     <string name="title_auto_delete_hint">Old messages are messages that are no longer kept on the device</string>
+    <string name="title_inbox_root_hint">
+        Some providers require new folders to be created below the inbox.
+        In this case, you can long press the inbox in the folder list and select \'Create sub folder\'.
+    </string>
     <string name="title_folder_name_missing">Folder name missing</string>
     <string name="title_folder_exists">Folder %1$s exists</string>
     <string name="title_folder_delete">Permanently delete this folder and any messages it contains?</string>
@@ -719,6 +724,7 @@
     <string name="title_editasnew">Edit as new</string>
     <string name="title_create_rule">Create rule &#8230;</string>
     <string name="title_share">Share</string>
+    <string name="title_event">Add to calendar</string>
     <string name="title_pin">Add shortcut</string>
     <string name="title_print">Print</string>
     <string name="title_show_headers">Show headers</string>
@@ -1033,6 +1039,7 @@
     <string name="title_rule_identity">Identity</string>
     <string name="title_rule_template">Reply template</string>
     <string name="title_rule_cc">Reply to CC addresses</string>
+    <string name="title_rule_answer_remark">Only one reply will be sent for any conversation, to avoid reply loops</string>
     <string name="title_rule_name_missing">Rule name missing</string>
     <string name="title_rule_condition_missing">Condition missing</string>
     <string name="title_rule_automation_hint">This will send the intent \'%1$s\' with the extras \'%2$s\'</string>
@@ -1238,7 +1245,7 @@
         To make FairEmail sustainable in the long term, some convenience and advanced features are not free to use.
         FairEmail displays a small message to remind you of this, which will be removed if you purchase the pro features.
     </string>
-    <string name="title_pro_hide">Hide small message for a week</string>
+    <string name="title_pro_hide">Hide small message for two weeks</string>
     <string name="title_pro_hint">Buying pro features will allow you to use all current and future pro features, will keep this app maintained, and supported.</string>
     <string name="title_pro_price">Please see <a href="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq19">this FAQ</a> about the price of the pro features</string>
     <string name="title_pro_pending">Purchase pending</string>
@@ -1268,6 +1275,8 @@
     <string name="title_widget_folder_unified">Unified inbox folders</string>
     <string name="title_widget_unseen">Unread messages only</string>
     <string name="title_widget_flagged">Starred messages only</string>
+    <string name="title_widget_font_size">Font size</string>
+    <string name="title_widget_padding">Padding</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
 
     <string name="title_accessibility_collapsed">Collapsed</string>
@@ -1488,11 +1497,6 @@
         <item>Above the text</item>
         <item>Below the text</item>
         <item>At the bottom</item>
-    </string-array>
-
-    <string-array name="encryptMethod" translatable="false">
-        <item>PGP</item>
-        <item>S/MIME</item>
     </string-array>
 
     <string-array name="encryptNames">

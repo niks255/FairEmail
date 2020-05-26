@@ -364,7 +364,6 @@
     <string name="title_advanced_secure">Skjul fra seneste apps-skærm og forhindr skærmfotofunktion</string>
     <string name="title_advanced_pin">PIN-kode</string>
     <string name="title_advanced_biometrics_timeout">Biometrisk godkendelse fik timeout</string>
-    <string name="title_advanced_encrypt_method">Standardkrypteringsmetode</string>
     <string name="title_advanced_sign_default">Signér som standard</string>
     <string name="title_advanced_encrypt_default">Kryptér som standard</string>
     <string name="title_advanced_auto_decrypt">Auto-dekryptér beskeder</string>
@@ -374,6 +373,7 @@
     <string name="title_advanced_manage_certificates">Håndtér offentlige nøgler</string>
     <string name="title_advanced_import_key">Importér privat nøgle</string>
     <string name="title_advanced_manage_keys">Håndtér private nøgler</string>
+    <string name="title_advanced_ca">Installerede CA-certifikater</string>
     <string name="title_advanced_external_search">Tillad andre apps at søge i beskeder</string>
     <string name="title_advanced_shortcuts">Vis ofte anvendte kontakter i Android-delingsmenuen</string>
     <string name="title_advanced_conversation_actions">Foreslå handlinger</string>
@@ -567,6 +567,7 @@
     <string name="title_folder_name">Mappenavn</string>
     <string name="title_display_name">Visningsnavn</string>
     <string name="title_show_folders">Vis skjulte mapper</string>
+    <string name="title_show_flagged">Vis stjernemarkerede beskedantal</string>
     <string name="title_subscribed_only">Abonnér på</string>
     <string name="title_apply_to_all">Anvend for alle &#8230;</string>
     <string name="title_hide_folder">Skjul mappe</string>
@@ -584,6 +585,9 @@
     <string name="title_auto_trash">Auto-flyt gamle beskeder til Papirkurv</string>
     <string name="title_auto_delete">Auto-slet gamle beskeder permanent</string>
     <string name="title_auto_delete_hint">Gamle beskeder er beskeder, som ikke længere opbevares på enheden</string>
+    <string name="title_inbox_root_hint">        Visse udbydere kræver, at nye mapper oprettes under indbakken.
+         Er dette tilfældet, så tryk og hold på indbakken i mappelisten og vælg \'Opret undermappe\'.
+    </string>
     <string name="title_folder_name_missing">Mappenavn manngler</string>
     <string name="title_folder_exists">Mappen %1$s findes</string>
     <string name="title_folder_delete">Slet denne mappe samt evt. beskedindhold permanent?</string>
@@ -625,6 +629,7 @@
     <string name="title_editasnew">Redigér som ny</string>
     <string name="title_create_rule">Opret regel &#8230;</string>
     <string name="title_share">Del</string>
+    <string name="title_event">Føj til kalender</string>
     <string name="title_pin">Tilføj genvej</string>
     <string name="title_print">Udskriv</string>
     <string name="title_show_headers">Vis overskrifter</string>
@@ -914,6 +919,7 @@
     <string name="title_rule_identity">Identitet</string>
     <string name="title_rule_template">Besvarelsesskabelon</string>
     <string name="title_rule_cc">Svar til Cc-adresser</string>
+    <string name="title_rule_answer_remark">For at undgå svarsløjfer, sendes kun ét svar til en given samtale</string>
     <string name="title_rule_name_missing">Regelnavn mangler</string>
     <string name="title_rule_condition_missing">Betingelse mangler</string>
     <string name="title_rule_automation_hint">Dette vil sende intent \'%1$s\' med ekstra \'%2$s\'</string>
@@ -1101,7 +1107,7 @@
     <string name="title_pro_info">Udvikling af FairEmail tog bogstaveligt talt tusinder af timer, også selvom de fleste funktioner er gratis at benytte.
          For at gøre FairEmail bæredygtig langsigtet, er visse bekvemmeligheds- og avancerede funktioner ikke gratis at bruge.
          FairEmail viser en lille besked for at minde dig om dette. Denne fjernes, hvis du køber Pro-funktionerne.    </string>
-    <string name="title_pro_hide">Skjul små beskeder i én uge</string>
+    <string name="title_pro_hide">Skjul små beskeder i to uger</string>
     <string name="title_pro_hint">Køb af Pro-funktioner vil tillade brug alle aktuelle og fremtidige Pro-funktioner samt sikre denne apps vedligeholdelse og understøttelse</string>
     <string name="title_pro_price">Se venligst <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">denne FAQ</a> ang. prisen for Pro-funktionerne</string>
     <string name="title_pro_pending">Afventende køb</string>
@@ -1126,6 +1132,8 @@
     <string name="title_widget_folder_unified">Samlede Indbakkemapper</string>
     <string name="title_widget_unseen">Kun ulæste beskeder</string>
     <string name="title_widget_flagged">Kun stjerne-beskeder</string>
+    <string name="title_widget_font_size">Skriftypetstørrelse</string>
+    <string name="title_widget_padding">Afstand</string>
     <string name="title_widget_semi_transparent">Halvgennemsigtig baggrund</string>
     <string name="title_accessibility_collapsed">Sammenfoldet</string>
     <string name="title_accessibility_expanded">Udfoldet</string>

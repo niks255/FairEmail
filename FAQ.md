@@ -611,10 +611,17 @@ So, unless your provider can enable this extension, you cannot use FairEmail for
 
 *General*
 
-Please [see here](https://en.wikipedia.org/wiki/Public-key_cryptography) about how public/private key encryption works. In short:
+Please [see here](https://en.wikipedia.org/wiki/Public-key_cryptography) about how public/private key encryption works.
 
-* **Outgoing** messages are encrypted with the **public key** of the other party
-* **Incoming** messages are decrypted with your own **private key**
+Encryption in short:
+
+* **Outgoing** messages are encrypted with the **public key** of the recipient
+* **Incoming** messages are decrypted with the **private key** of the recipient
+
+Signing in short:
+
+* **Outgoing** messages are signed with the **private key** of the sender
+* **Incoming** messages are verified with the **public key** of the sender
 
 To sign/encrypt a message, just select the appropriate method in the send dialog.
 You can always open the send dialog using the three-dots overflow menu in case you selected *Don't show again* before.
@@ -685,6 +692,23 @@ Common errors:
 
 * *No certificate found matching targetContraints*: this likely means you are using an old version of FairEmail
 * *unable to find valid certification path to requested target*: basically this means one or more intermediate or root certificates were not found
+
+In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates.
+After the certificate details the issuer or "selfSign" is shown.
+A certificate is self signed when the subject and the issuer are the same.
+Certificates from a certificate authority (CA) are marked with "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)".
+Certificates found in the Android key store are marked with "Android".
+
+A valid chain looks like this:
+
+```
+Your certificate > zero or more intermediate certificates > CA (root) certificate marked with "Android"
+```
+
+Note that a certificate chain will always be invalid when no anchor certificate can be found in the Android key store,
+which is fundamental to S/MIME certificate validation.
+
+Please see [here](https://support.google.com/pixelphone/answer/2844832?hl=en) how you can import certificates into the Android key store.
 
 The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.
 
@@ -1325,7 +1349,7 @@ or by Android not supporting older protocols anymore, like SSLv3.
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore.
 There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
 
-You can use [this website](https://ssl-tools.net/mailservers) to check for SSL/TLS problems of email servers.
+You can use [this website](https://ssl-tools.net/mailservers) or [this website](https://www.immuniweb.com/ssl/) to check for SSL/TLS problems of email servers.
 
 <br />
 
@@ -2281,9 +2305,12 @@ So, you don't have to disable this option if you don't have an EU SIM or are not
 **(106) Which launchers can show a badge count with the number of unread messages?**
 
 Please [see here](https://github.com/leolin310148/ShortcutBadger#supported-launchers)
-for a list of launchers which can show the number of new messages.
+for a list of launchers which can show the number of unread messages.
 
 Note that the notification setting *Show launcher icon with number of new messages* needs to be enabled (default enabled).
+
+Only *new* unread messages in folders set to show new message notifications will be counted,
+so messages marked unread again and messages in folders set to not show new message notification will not be counted.
 
 Depending on what you want, the notification settings *Let the number of new messages match the number of notifications* needs to be enabled or disabled.
 

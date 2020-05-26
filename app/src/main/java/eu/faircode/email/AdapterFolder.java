@@ -349,13 +349,15 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 tvFlagged.setText(NF.format(folder.flagged));
                 ibFlagged.setImageResource(folder.flagged == 0
                         ? R.drawable.baseline_star_border_24 : R.drawable.baseline_star_24);
+                tvFlagged.setEnabled(folder.flagged > 0);
+                ibFlagged.setEnabled(folder.flagged > 0);
 
                 tvError.setText(folder.error);
                 tvError.setVisibility(folder.error != null ? View.VISIBLE : View.GONE);
                 if (btnHelp != null)
                     btnHelp.setVisibility(folder.error == null ? View.GONE : View.VISIBLE);
 
-                grpFlagged.setVisibility(show_compact || !show_flagged ? View.GONE : View.VISIBLE);
+                grpFlagged.setVisibility(show_flagged ? View.VISIBLE : View.GONE);
                 grpExtended.setVisibility(show_compact ? View.GONE : View.VISIBLE);
             }
         }
