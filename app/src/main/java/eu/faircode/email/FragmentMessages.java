@@ -120,6 +120,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.cms.Attribute;
 import org.bouncycastle.asn1.cms.AttributeTable;
 import org.bouncycastle.asn1.cms.CMSAttributes;
@@ -134,6 +135,7 @@ import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSTypedData;
 import org.bouncycastle.cms.KeyTransRecipientId;
 import org.bouncycastle.cms.RecipientInformation;
+import org.bouncycastle.cms.SignerId;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
 import org.bouncycastle.cms.SignerInformationVerifier;
@@ -1737,7 +1739,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else if (FragmentAccount.SWIPE_ACTION_MOVE.equals(action))
                 icon = R.drawable.baseline_folder_24;
             else if (FragmentAccount.SWIPE_ACTION_JUNK.equals(action))
-                icon = R.drawable.baseline_flag_24;
+                icon = R.drawable.baseline_report_problem_24;
             else if (FragmentAccount.SWIPE_ACTION_DELETE.equals(action) ||
                     (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
                     (EntityFolder.TRASH.equals(actionType) && EntityFolder.JUNK.equals(message.folderType)))
@@ -2397,9 +2399,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 }
 
                 for (EntityAccount account : accounts.values()) {
-                    boolean hasArchive = (db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE) != null);
-                    boolean hasTrash = (db.folder().getFolderByType(account.id, EntityFolder.TRASH) != null);
-                    boolean hasJunk = (db.folder().getFolderByType(account.id, EntityFolder.JUNK) != null);
+                    boolean hasArchive = (account.protocol == EntityAccount.TYPE_IMAP &&
+                            db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE) != null);
+                    boolean hasTrash = (account.protocol == EntityAccount.TYPE_IMAP &&
+                            db.folder().getFolderByType(account.id, EntityFolder.TRASH) != null);
+                    boolean hasJunk = (account.protocol == EntityAccount.TYPE_IMAP &&
+                            db.folder().getFolderByType(account.id, EntityFolder.JUNK) != null);
 
                     result.hasArchive = (result.hasArchive == null ? hasArchive : result.hasArchive && hasArchive);
                     result.hasTrash = (result.hasTrash == null ? hasTrash : result.hasTrash && hasTrash);
@@ -4188,45 +4193,58 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     String thread = args.getString("thread");
                     long id = args.getLong("id");
 
-                    DB db = DB.getInstance(context);
-
-                    EntityAccount account = db.account().getAccount(aid);
-                    if (account != null && account.color != null)
-                        args.putInt("color", account.color);
-
-                    EntityFolder trash = db.folder().getFolderByType(aid, EntityFolder.TRASH);
-                    EntityFolder archive = db.folder().getFolderByType(aid, EntityFolder.ARCHIVE);
-
-                    List<EntityMessage> messages = db.message().getMessagesByThread(
-                            aid, thread, threading ? null : id, null);
+                    EntityAccount account;
+                    EntityFolder trash;
+                    EntityFolder archive;
 
                     boolean trashable = false;
                     boolean snoozable = false;
                     boolean archivable = false;
-                    for (EntityMessage message : messages) {
-                        EntityFolder folder = db.folder().getFolder(message.folder);
 
-                        if (!folder.read_only &&
-                                !EntityFolder.DRAFTS.equals(folder.type) &&
-                                !EntityFolder.OUTBOX.equals(folder.type) &&
-                                // allow sent
-                                !EntityFolder.TRASH.equals(folder.type) &&
-                                !EntityFolder.JUNK.equals(folder.type))
-                            trashable = true;
+                    DB db = DB.getInstance(context);
+                    try {
+                        db.beginTransaction();
 
-                        if (!EntityFolder.OUTBOX.equals(folder.type))
-                            snoozable = true;
+                        account = db.account().getAccount(aid);
+                        if (account != null && account.color != null)
+                            args.putInt("color", account.color);
 
-                        if (!folder.read_only &&
-                                !EntityFolder.isOutgoing(folder.type) &&
-                                !EntityFolder.TRASH.equals(folder.type) &&
-                                !EntityFolder.JUNK.equals(folder.type) &&
-                                !EntityFolder.ARCHIVE.equals(folder.type))
-                            archivable = true;
+                        trash = db.folder().getFolderByType(aid, EntityFolder.TRASH);
+                        archive = db.folder().getFolderByType(aid, EntityFolder.ARCHIVE);
+
+                        List<EntityMessage> messages = db.message().getMessagesByThread(
+                                aid, thread, threading ? null : id, null);
+
+                        for (EntityMessage message : messages) {
+                            EntityFolder folder = db.folder().getFolder(message.folder);
+
+                            if (!folder.read_only &&
+                                    !EntityFolder.DRAFTS.equals(folder.type) &&
+                                    !EntityFolder.OUTBOX.equals(folder.type) &&
+                                    // allow sent
+                                    !EntityFolder.TRASH.equals(folder.type) &&
+                                    !EntityFolder.JUNK.equals(folder.type))
+                                trashable = true;
+
+                            if (!EntityFolder.OUTBOX.equals(folder.type))
+                                snoozable = true;
+
+                            if (!folder.read_only &&
+                                    !EntityFolder.isOutgoing(folder.type) &&
+                                    !EntityFolder.TRASH.equals(folder.type) &&
+                                    !EntityFolder.JUNK.equals(folder.type) &&
+                                    !EntityFolder.ARCHIVE.equals(folder.type))
+                                archivable = true;
+                        }
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
                     }
 
                     return new Boolean[]{
-                            trash == null || account.protocol == EntityAccount.TYPE_POP,
+                            trash == null ||
+                                    (account != null && account.protocol == EntityAccount.TYPE_POP),
                             trashable,
                             snoozable,
                             archivable && archive != null};
@@ -5500,13 +5518,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
 
                     // Check signature
+                    boolean matching = false;
                     Store store = signedData.getCertificates();
                     SignerInformationStore signerInfos = signedData.getSignerInfos();
-                    for (SignerInformation signer : signerInfos.getSigners()) {
-                        for (Object match : store.getMatches(signer.getSID())) {
+                    Collection<SignerInformation> signers = signerInfos.getSigners();
+                    Log.i("Signers count=" + signers.size());
+                    for (SignerInformation signer : signers) {
+                        SignerId sid = signer.getSID();
+                        Log.i("Checking signer=" + (sid == null ? null : sid.getIssuer()));
+                        Collection<Object> matches = store.getMatches(sid);
+                        Log.i("Matching certificates count=" + matches.size());
+                        for (Object match : matches) {
+                            matching = true;
                             X509CertificateHolder certHolder = (X509CertificateHolder) match;
                             X509Certificate cert = new JcaX509CertificateConverter()
                                     .getCertificate(certHolder);
+                            Log.i("Checking certificate subject=" + cert.getSubjectDN());
                             try {
                                 Date signingTime;
                                 AttributeTable at = signer.getSignedAttributes();
@@ -5526,6 +5553,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         // The certificate validity will be check below
                                         AttributeTable at = super.getSignedAttributes();
                                         return (at == null ? null : at.remove(CMSAttributes.signingTime));
+                                    }
+
+                                    @Override
+                                    public byte[] getEncodedSignedAttributes() throws IOException {
+                                        // http://www.bouncycastle.org/jira/browse/BJA-587
+                                        // http://luca.ntop.org/Teaching/Appunti/asn1.html
+                                        return signedAttributeSet.getEncoded(ASN1Encoding.DL);
                                     }
                                 };
 
@@ -5653,6 +5687,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (result != null)
                             break;
                     }
+
+                    if (result == null)
+                        args.putString("reason", matching
+                                ? "Signature could not be verified"
+                                : "Certificates and signatures do not match");
+
 
                     if (is != null)
                         decodeMessage(context, is, message, args);

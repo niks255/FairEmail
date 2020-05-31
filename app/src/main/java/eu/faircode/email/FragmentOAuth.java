@@ -282,14 +282,12 @@ public class FragmentOAuth extends FragmentBase {
             if ("gmail".equals(provider.id))
                 authRequestBuilder.setPrompt("consent");
 
-            if ("outlook".equals(provider.id))
+            if ("office365".equals(provider.id))
                 authRequestBuilder.setPrompt("select_account");
 
             AuthorizationRequest authRequest = authRequestBuilder.build();
 
-            Log.i("OAuth request provider=" + provider.id);
-            if (BuildConfig.DEBUG)
-                Log.i("OAuth uri=" + authRequest.toUri());
+            Log.i("OAuth request provider=" + provider.id + " uri=" + authRequest.toUri());
             Intent authIntent = authService.getAuthorizationRequestIntent(authRequest);
             if (authIntent.resolveActivity(getContext().getPackageManager()) == null)
                 throw new ActivityNotFoundException(authIntent.toString());
@@ -385,7 +383,7 @@ public class FragmentOAuth extends FragmentBase {
                 if (askAccount) {
                     primaryEmail = address;
                     identities.add(new Pair<>(address, personal));
-                } else if ("outlook".equals(id)) {
+                } else if ("office365".equals(id)) {
                     // https://docs.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http#http-request
                     URL url = new URL("https://graph.microsoft.com/v1.0/me?$select=displayName,otherMails");
                     Log.i("Fetching " + url);

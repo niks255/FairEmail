@@ -333,6 +333,8 @@
     <string name="title_advanced_notifications">Gérer les notifications</string>
     <string name="title_advanced_notifications_default">Canal par défaut</string>
     <string name="title_advanced_notifications_service">Canal « Service »</string>
+    <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
+    <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
     <string name="title_advanced_badge">Afficher le nombre de nouveaux messages sur l’icône de lancement</string>
     <string name="title_advanced_unseen_ignored">Faire correspondre le nombre de nouveaux messages et le nombre de notifications</string>
     <string name="title_advanced_notify_summary">Afficher seulement une notification récapitulative</string>
@@ -381,7 +383,7 @@
     <string name="title_advanced_language_detection">Détecter la langue du texte du message</string>
     <string name="title_advanced_fts">Construire l\'index de recherche</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexés (%3$s)</string>
-    <string name="title_advanced_english">Forcer la langue anglaise</string>
+    <string name="title_advanced_english">Utiliser les paramètres des États-Unis</string>
     <string name="title_advanced_watchdog">Vérifier périodiquement si FairEmail est toujours actif</string>
     <string name="title_advanced_optimize">Optimiser automatiquement les paramètres</string>
     <string name="title_advanced_updates">Rechercher des mises à jour</string>
@@ -1134,7 +1136,7 @@
     <string name="title_widget_unseen">Messages non lus seulement</string>
     <string name="title_widget_flagged">Messages suivis seulement</string>
     <string name="title_widget_font_size">Taille de police</string>
-    <string name="title_widget_padding">Taille de l\'espace autour des messages</string>
+    <string name="title_widget_padding">Taille de l\'espacement des messages</string>
     <string name="title_widget_semi_transparent">Arrière-plan semi-transparent</string>
     <string name="title_accessibility_collapsed">Replié</string>
     <string name="title_accessibility_expanded">Étendu</string>

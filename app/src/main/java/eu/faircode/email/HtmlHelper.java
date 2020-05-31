@@ -497,7 +497,7 @@ public class HtmlHelper {
                         size = "medium";
                     sb.append("font-size:").append(size).append(";");
                 } catch (NumberFormatException ex) {
-                    Log.w(ex);
+                    Log.i(ex);
                 }
             }
 
@@ -1110,7 +1110,7 @@ public class HtmlHelper {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException ex) {
-            Log.w(ex);
+            Log.i(ex);
         }
 
         return null;
@@ -1238,7 +1238,7 @@ public class HtmlHelper {
                 Log.i("Color " + c + "=" + (color == null ? null : Long.toHexString(color)));
 
         } catch (Throwable ex) {
-            Log.e("Color=" + c + ": " + ex);
+            Log.i("Color=" + c + ": " + ex);
         }
 
         if (color != null) {
@@ -1581,7 +1581,7 @@ public class HtmlHelper {
             int start = ssb.getSpanStart(span);
             int end = ssb.getSpanEnd(span);
 
-            for (int i = end - 1; i >= start; i--)
+            for (int i = end - 2; i >= start; i--)
                 if (ssb.charAt(i) == '\n')
                     if (i + 1 < ssb.length() && ssb.charAt(i + 1) == '>')
                         ssb.insert(i + 1, ">");
@@ -1837,13 +1837,14 @@ public class HtmlHelper {
                     tnode = block.get(i);
                     text = tnode.getWholeText();
 
+                    // Remove whitespace before/after newlines
+                    text = TRIM_WHITESPACE_NL.matcher(text).replaceAll(" ");
+
                     if ("-- ".equals(text)) {
+                        tnode.text(text);
                         i++;
                         continue;
                     }
-
-                    // Remove whitespace before/after newlines
-                    text = TRIM_WHITESPACE_NL.matcher(text).replaceAll(" ");
 
                     // Remove leading whitespace
                     if (i == 0 || endsWithWhitespace(block.get(i - 1).text())) {
@@ -1948,7 +1949,7 @@ public class HtmlHelper {
                                             int color = Integer.parseInt(value.substring(1), 16) | 0xFF000000;
                                             ssb.setSpan(new ForegroundColorSpan(color), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                         } catch (NumberFormatException ex) {
-                                            Log.w(ex);
+                                            Log.i(ex);
                                         }
                                     break;
                                 case "text-decoration":

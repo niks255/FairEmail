@@ -156,6 +156,7 @@
     <string name="title_setup_wizard_multiple">The installation wizard can be used multiple times to set up multiple accounts</string>
     <string name="title_setup_wizard_remark">Go \'back\' to go to the inbox</string>
     <string name="title_setup_gmail" translatable="false">Gmail</string>
+    <string name="title_setup_outlook" translatable="false">Outlook</string>
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
     <string name="title_setup_activesync" translatable="false">Exchange ActiveSync</string>
     <string name="title_setup_other">Other provider</string>
@@ -386,6 +387,8 @@
     <string name="title_advanced_notifications">Manage notifications</string>
     <string name="title_advanced_notifications_default">Default channel</string>
     <string name="title_advanced_notifications_service">Service channel</string>
+    <string name="title_advanced_notifications_background">Use background service to synchronize messages</string>
+    <string name="title_advanced_notifications_background_hint">A background service can be stopped by Android at any time, but doesn\'t require a status bar notification</string>
 
     <string name="title_advanced_badge">Show launcher icon with number of new messages</string>
     <string name="title_advanced_unseen_ignored">Let the number of new messages match the number of notifications</string>
@@ -444,7 +447,7 @@
     <string name="title_advanced_language_detection">Detect message text language</string>
     <string name="title_advanced_fts">Build search index</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexed (%3$s)</string>
-    <string name="title_advanced_english">Force English language</string>
+    <string name="title_advanced_english">Use US country settings</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_optimize">Automatically optimize settings</string>
     <string name="title_advanced_updates">Check for updates</string>
@@ -1276,7 +1279,7 @@
     <string name="title_widget_unseen">Unread messages only</string>
     <string name="title_widget_flagged">Starred messages only</string>
     <string name="title_widget_font_size">Font size</string>
-    <string name="title_widget_padding">Padding</string>
+    <string name="title_widget_padding">Padding size</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
 
     <string name="title_accessibility_collapsed">Collapsed</string>

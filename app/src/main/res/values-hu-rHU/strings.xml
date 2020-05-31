@@ -379,7 +379,6 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_advanced_language_detection">Üzenetszöveg nyelvének észlelése</string>
     <string name="title_advanced_fts">Keresési index létrehozása</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d üzenet indexelve (%3$s)</string>
-    <string name="title_advanced_english">Angol nyelv kényszerítése</string>
     <string name="title_advanced_watchdog">A FairEmail futásának időszakos ellenőrzése</string>
     <string name="title_advanced_optimize">Automatikusan optimizálja a beállításokat</string>
     <string name="title_advanced_updates">Frissítések keresése</string>
@@ -1126,7 +1125,6 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_widget_unseen">Csak olvasatlan üzenetek</string>
     <string name="title_widget_flagged">Csak csillagozott üzenetek</string>
     <string name="title_widget_font_size">Betűméret</string>
-    <string name="title_widget_padding">Helykitöltés</string>
     <string name="title_widget_semi_transparent">Félig átlátszó háttér</string>
     <string name="title_accessibility_collapsed">Összecsukott</string>
     <string name="title_accessibility_expanded">Kinyitott</string>

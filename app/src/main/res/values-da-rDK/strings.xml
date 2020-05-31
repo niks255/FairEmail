@@ -333,6 +333,8 @@
     <string name="title_advanced_notifications">Håndtér notifikationer</string>
     <string name="title_advanced_notifications_default">Standardkanal</string>
     <string name="title_advanced_notifications_service">Tjenestekanal</string>
+    <string name="title_advanced_notifications_background">Benyt baggrundstjeneste til beskedsynkronisering</string>
+    <string name="title_advanced_notifications_background_hint">En baggrundstjeneste kan til enhver tid stoppes af Android, men behøver ingen statusbjælkenotifikation</string>
     <string name="title_advanced_badge">Vis launcher-ikon med antal nye beskeder</string>
     <string name="title_advanced_unseen_ignored">Lad antal Nye beskeder matche notifikationsantal</string>
     <string name="title_advanced_notify_summary">Vis kun resuménotifikationer</string>
@@ -381,7 +383,7 @@
     <string name="title_advanced_language_detection">Registrér beskedtekstsprog</string>
     <string name="title_advanced_fts">Opbyg søgeindeks</string>
     <string name="title_advanced_fts_indexed">%1$d/%2$d beskeder indekseret (%3$s)</string>
-    <string name="title_advanced_english">Gennemtving engelsk sprog</string>
+    <string name="title_advanced_english">Benyt landeinstillinger fra U.S.A.</string>
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_optimize">Optimér indstillinger automarisk</string>
     <string name="title_advanced_updates">Søg efter opdateringer</string>
@@ -1133,7 +1135,7 @@
     <string name="title_widget_unseen">Kun ulæste beskeder</string>
     <string name="title_widget_flagged">Kun stjerne-beskeder</string>
     <string name="title_widget_font_size">Skriftypetstørrelse</string>
-    <string name="title_widget_padding">Afstand</string>
+    <string name="title_widget_padding">Polstringsstørrelse</string>
     <string name="title_widget_semi_transparent">Halvgennemsigtig baggrund</string>
     <string name="title_accessibility_collapsed">Sammenfoldet</string>
     <string name="title_accessibility_expanded">Udfoldet</string>

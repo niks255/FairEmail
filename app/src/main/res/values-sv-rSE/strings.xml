@@ -332,6 +332,8 @@
     <string name="title_advanced_notifications">Hantera aviseringar</string>
     <string name="title_advanced_notifications_default">Standard kanal</string>
     <string name="title_advanced_notifications_service">Servicekanal</string>
+    <string name="title_advanced_notifications_background">Använd en bakgrundstjänst för att synkronisera meddelanden</string>
+    <string name="title_advanced_notifications_background_hint">En bakgrundstjänst kan stoppas av Android när som helst, men kräver inte ett meddelande i statusfältet</string>
     <string name="title_advanced_badge">Visa programstartarikon med antal nya meddelanden</string>
     <string name="title_advanced_unseen_ignored">Låt antalet nya meddelanden matcha antalet aviseringar</string>
     <string name="title_advanced_notify_summary">Visa enbart en sammanställning av aviseringar</string>
@@ -380,7 +382,7 @@
     <string name="title_advanced_language_detection">Detektera textens språk</string>
     <string name="title_advanced_fts">Bygg sökindex</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d meddelanden indexerade (%3$s)</string>
-    <string name="title_advanced_english">Tvinga användning av engelska</string>
+    <string name="title_advanced_english">Använd amerikanska (US) inställningar</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_optimize">Optimera inställningarna automatiskt</string>
     <string name="title_advanced_updates">Sök efter uppdateringar</string>
@@ -1133,7 +1135,7 @@
     <string name="title_widget_unseen">Endast olästa meddelanden</string>
     <string name="title_widget_flagged">Endast stjärnmärkta meddelanden</string>
     <string name="title_widget_font_size">Teckenstorlek</string>
-    <string name="title_widget_padding">Utfyllnad</string>
+    <string name="title_widget_padding">Utfyllnadsstorlek</string>
     <string name="title_widget_semi_transparent">Semi transparent bakgrund</string>
     <string name="title_accessibility_collapsed">Ihopfälld</string>
     <string name="title_accessibility_expanded">Expanderad</string>
