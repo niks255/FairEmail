@@ -29,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 public class SwipeRefreshLayoutEx extends SwipeRefreshLayout {
     private boolean refreshing = false;
 
+    private static final int DELAY_MUTE = 45 * 1000; // milliseconds
     private static final int DELAY_DISABLE = 1500; // milliseconds
 
     public SwipeRefreshLayoutEx(@NonNull Context context) {
@@ -44,13 +45,17 @@ public class SwipeRefreshLayoutEx extends SwipeRefreshLayout {
         if (this.refreshing == refreshing)
             return;
 
+        Log.i("Refreshing=" + this.refreshing + "/" + refreshing + " event=set");
+
         this.refreshing = refreshing;
 
         removeCallbacks(delayedDisable);
+        removeCallbacks(delayedMute);
 
-        if (refreshing)
+        if (refreshing) {
             super.setRefreshing(refreshing);
-        else
+            postDelayed(delayedMute, DELAY_MUTE);
+        } else
             postDelayed(delayedDisable, DELAY_DISABLE);
     }
 
@@ -60,13 +65,15 @@ public class SwipeRefreshLayoutEx extends SwipeRefreshLayout {
     }
 
     public void onRefresh() {
+        // User initiated
         this.refreshing = true;
-        setRefreshing(false);
+        setRefreshing(false); // disable, unless confirmed by folder update
     }
 
     public void resetRefreshing() {
         // Restart spinner after screen off, etc
         if (super.isRefreshing()) {
+            Log.i("Refreshing=" + refreshing + " event=reset");
             super.setRefreshing(false);
             super.setRefreshing(true);
         }
@@ -75,8 +82,18 @@ public class SwipeRefreshLayoutEx extends SwipeRefreshLayout {
     private final Runnable delayedDisable = new Runnable() {
         @Override
         public void run() {
+            Log.i("Refreshing=" + refreshing + " event=disable");
             if (!refreshing)
                 SwipeRefreshLayoutEx.super.setRefreshing(refreshing);
+        }
+    };
+
+    private final Runnable delayedMute = new Runnable() {
+        @Override
+        public void run() {
+            Log.i("Refreshing=" + refreshing + " event=mute");
+            if (refreshing)
+                SwipeRefreshLayoutEx.super.setRefreshing(false);
         }
     };
 }

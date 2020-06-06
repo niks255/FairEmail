@@ -130,6 +130,7 @@ import androidx.paging.AsyncPagedListDiffer;
 import androidx.paging.PagedList;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.Selection;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.AsyncDifferConfig;
@@ -214,6 +215,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int colorUnread;
     private int colorRead;
     private int colorSubject;
+    private int colorEncrypt;
     private int colorSeparator;
 
     private boolean hasWebView;
@@ -223,6 +225,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     private boolean date;
     private boolean threading;
+    private boolean threading_unread;
     private boolean avatars;
     private boolean color_stripe;
     private boolean name_email;
@@ -266,6 +269,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     private static final ExecutorService executor =
             Helper.getBackgroundExecutor(2, "differ");
+
+    private static final int MAX_RECIPIENTS = 10;
 
     // https://github.com/newhouse/url-tracking-stripper
     private static final List<String> PARANOID_QUERY = Collections.unmodifiableList(Arrays.asList(
@@ -492,13 +497,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (tvSubject != null) {
                 tvSubject.setTextColor(colorSubject);
 
-                if (compact)
+                if (compact) {
+                    tvSubject.setSingleLine(!"full".equals(subject_ellipsize));
                     if ("start".equals(subject_ellipsize))
                         tvSubject.setEllipsize(TextUtils.TruncateAt.START);
                     else if ("end".equals(subject_ellipsize))
                         tvSubject.setEllipsize(TextUtils.TruncateAt.END);
                     else
                         tvSubject.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+                }
             }
 
             if (viewType != R.layout.item_message_compact && viewType != R.layout.item_message_normal)
@@ -967,6 +974,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             EntityMessage.PRIORITIY_HIGH.equals(message.ui_importance)
                             ? View.VISIBLE : View.GONE);
             ivSigned.setVisibility(message.signed > 0 ? View.VISIBLE : View.GONE);
+            if (message.verified)
+                ivSigned.setColorFilter(colorEncrypt);
+            else
+                ivSigned.clearColorFilter();
             ivEncrypted.setVisibility(message.encrypted > 0 ? View.VISIBLE : View.GONE);
             if (show_recipients && recipients != null && recipients.length > 0)
                 tvFrom.setText(context.getString(R.string.title_from_to,
@@ -1040,7 +1051,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvCount.setVisibility(threading ? View.VISIBLE : View.GONE);
                 ivThread.setVisibility(View.VISIBLE);
 
-                tvCount.setText(NF.format(message.visible));
+                if (threading_unread)
+                    tvCount.setText(context.getString(R.string.title_of,
+                            NF.format(message.visible_unseen),
+                            NF.format(message.visible)));
+                else
+                    tvCount.setText(NF.format(message.visible));
 
                 if (selected)
                     ivThread.setColorFilter(colorAccent);
@@ -1181,7 +1197,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void clearExpanded(TupleMessageEx message) {
             if (compact) {
                 tvFrom.setSingleLine(true);
-                tvSubject.setSingleLine(true);
+                tvSubject.setSingleLine(!"full".equals(subject_ellipsize));
             }
 
             tvPreview.setVisibility(
@@ -1582,7 +1598,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             tvToTitle.setVisibility((!show_recipients || show_addresses) && !TextUtils.isEmpty(to) ? View.VISIBLE : View.GONE);
             tvTo.setVisibility((!show_recipients || show_addresses) && !TextUtils.isEmpty(to) ? View.VISIBLE : View.GONE);
-            tvTo.setText(to);
+            if (show_addresses || (message.to == null || message.to.length < MAX_RECIPIENTS))
+                tvTo.setText(to);
+            else
+                tvTo.setText(context.getString(R.string.title_recipients, message.to.length));
 
             tvReplyToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(replyto) ? View.VISIBLE : View.GONE);
             tvReplyTo.setVisibility(show_addresses && !TextUtils.isEmpty(replyto) ? View.VISIBLE : View.GONE);
@@ -1590,11 +1609,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             tvCcTitle.setVisibility(!TextUtils.isEmpty(cc) ? View.VISIBLE : View.GONE);
             tvCc.setVisibility(!TextUtils.isEmpty(cc) ? View.VISIBLE : View.GONE);
-            tvCc.setText(cc);
+            if (show_addresses || (message.cc == null || message.cc.length < MAX_RECIPIENTS))
+                tvCc.setText(cc);
+            else
+                tvCc.setText(context.getString(R.string.title_recipients, message.cc.length));
 
             tvBccTitle.setVisibility(!TextUtils.isEmpty(bcc) ? View.VISIBLE : View.GONE);
             tvBcc.setVisibility(!TextUtils.isEmpty(bcc) ? View.VISIBLE : View.GONE);
-            tvBcc.setText(bcc);
+            if (show_addresses || (message.bcc == null || message.bcc.length < MAX_RECIPIENTS))
+                tvBcc.setText(bcc);
+            else
+                tvBcc.setText(context.getString(R.string.title_recipients, message.bcc.length));
 
             InternetAddress via = null;
             if (message.identityEmail != null)
@@ -3652,8 +3677,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_print).setVisible(Helper.canPrint(context));
 
             popupMenu.getMenu().findItem(R.id.menu_show_headers).setChecked(show_headers);
-            popupMenu.getMenu().findItem(R.id.menu_show_headers).setEnabled(message.uid != null);
-            popupMenu.getMenu().findItem(R.id.menu_show_headers).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_show_headers).setEnabled(message.uid != null ||
+                    (message.accountProtocol == EntityAccount.TYPE_POP && message.headers != null));
 
             popupMenu.getMenu().findItem(R.id.menu_raw_save).setEnabled(message.uid != null);
             popupMenu.getMenu().findItem(R.id.menu_raw_send).setEnabled(message.uid != null);
@@ -4754,7 +4779,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorUnread = Helper.resolveColor(context, highlight_unread ? R.attr.colorUnreadHighlight : R.attr.colorUnread);
         this.colorRead = Helper.resolveColor(context, R.attr.colorRead);
         this.colorSubject = Helper.resolveColor(context, highlight_subject ? R.attr.colorUnreadHighlight : R.attr.colorRead);
-
+        this.colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         this.colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);
 
         this.hasWebView = Helper.hasWebView(context);
@@ -4768,6 +4793,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         this.date = prefs.getBoolean("date", true);
         this.threading = prefs.getBoolean("threading", true);
+        this.threading_unread = threading && prefs.getBoolean("threading_unread", false);
         this.avatars = (contacts && avatars) || generated;
         this.color_stripe = prefs.getBoolean("color_stripe", true);
         this.name_email = prefs.getBoolean("name_email", false);
@@ -4950,6 +4976,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("encrypt changed", next.id);
                 }
+                if (!Objects.equals(prev.ui_encrypt, next.ui_encrypt)) {
+                    same = false;
+                    log("ui_encrypt changed", next.id);
+                }
+                if (!Objects.equals(prev.verified, next.verified)) {
+                    same = false;
+                    log("verified changed", next.id);
+                }
                 if (!Objects.equals(prev.preview, next.preview)) {
                     same = false;
                     log("preview changed", next.id);
@@ -5104,6 +5138,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("visible changed " + prev.visible + "/" + next.visible, next.id);
                 }
+                if (prev.visible_unseen != next.visible_unseen) {
+                    same = false;
+                    log("visible_unseen changed " + prev.visible_unseen + "/" + next.visible_unseen, next.id);
+                }
                 if (!Objects.equals(prev.totalSize, next.totalSize)) {
                     same = false;
                     log("totalSize changed", next.id);
@@ -5142,6 +5180,51 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (gotoTop && previousList != null) {
                     gotoTop = false;
                     properties.scrollTo(0, 0);
+                }
+
+                if (selectionTracker != null && selectionTracker.hasSelection()) {
+                    Selection<Long> selection = selectionTracker.getSelection();
+
+                    long[] ids = new long[selection.size()];
+                    int i = 0;
+                    for (Long id : selection)
+                        ids[i++] = id;
+
+                    Bundle args = new Bundle();
+                    args.putLongArray("ids", ids);
+
+                    new SimpleTask<List<Long>>() {
+                        @Override
+                        protected List<Long> onExecute(Context context, Bundle args) throws Throwable {
+                            long[] ids = args.getLongArray("ids");
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                            boolean filter_seen = prefs.getBoolean("filter_seen", false);
+                            boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
+                            boolean filter_snoozed = prefs.getBoolean("filter_snoozed", true);
+
+                            List<Long> removed = new ArrayList<>();
+
+                            DB db = DB.getInstance(context);
+                            for (long id : ids)
+                                if (db.message().countVisible(id, filter_seen, filter_unflagged, filter_snoozed) == 0)
+                                    removed.add(id);
+
+                            return removed;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, List<Long> removed) {
+                            Log.i("Selection removed=" + removed.size());
+                            for (long id : removed)
+                                selectionTracker.deselect(id);
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                        }
+                    }.execute(context, owner, args, "selection:update");
                 }
             }
         });

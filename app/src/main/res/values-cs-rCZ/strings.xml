@@ -99,6 +99,7 @@
     <string name="title_notification_idle">Nečinný</string>
     <string name="title_notification_failed">\"%1$s\" selhalo</string>
     <string name="title_notification_alert">\'%1$s\' upozornění serveru</string>
+    <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
     <string name="title_from_to">%1$s ➤ %2$s</string>
@@ -286,6 +287,7 @@
     <string name="title_advanced_cards">Použít styl karet namísto tabulkového zobrazení</string>
     <string name="title_advanced_date_header">Seskupit podle data</string>
     <string name="title_advanced_threading">Vlákna konverzací</string>
+    <string name="title_advanced_threading_unread">Zobrazit počet nepřečtených zpráv v konverzacích</string>
     <string name="title_advanced_indentation">Levé/pravé odsazení přijatých/odeslaných zpráv v konverzacích</string>
     <string name="title_advanced_highlight_unread">Zvýraznit nepřečtené zprávy</string>
     <string name="title_advanced_highlight_subject">Zvýraznit předmět</string>
@@ -306,7 +308,7 @@
     <string name="title_advanced_font_size_subject">Velikost písma předmětu</string>
     <string name="title_advanced_subject_top">Zobrazit předmět nad odesílatelem</string>
     <string name="title_advanced_subject_italic">Zobrazit předmět kurzívou</string>
-    <string name="title_advanced_subject_elipsed">V případě potřeby zestručnit předmět</string>
+    <string name="title_advanced_subject_elipsed">Zestručnit předmět v případě potřeby</string>
     <string name="title_advanced_keywords">Zobrazit klíčová slova v hlavičce zprávy</string>
     <string name="title_advanced_flags">Zobrazit hvězdičky</string>
     <string name="title_advanced_flags_background">Obarvit pozadí, namísto barevných hvězdiček</string>
@@ -315,7 +317,7 @@
     <string name="title_advanced_preview_lines">Počet řádků náhledu</string>
     <string name="title_advanced_archive_trash">Zobrazit tlačítka pro archivaci nebo přesun zprávy do koše</string>
     <string name="title_advanced_move">Zobrazit tlačítko pro přesun zprávy</string>
-    <string name="title_advanced_addresses">Automaticky zobrazit detaily adresy</string>
+    <string name="title_advanced_addresses">Zobrazit detaily adresy automaticky</string>
     <string name="title_advanced_attachments_alt">Přesunout zobrazení příloh pod text zprávy</string>
     <string name="title_advanced_contrast">Použít vysoký kontrast pro text zprávy</string>
     <string name="title_advanced_monospaced">Použít neproporcionální písmo pro text zprávy</string>
@@ -337,17 +339,17 @@
     <string name="title_advanced_swipenav">Tahem vlevo/vpravo přejít na další/předešlou konverzaci</string>
     <string name="title_advanced_volumenav">Hlasitostí nahoru/dolů přejít na další/předešlou konverzaci</string>
     <string name="title_advanced_reversed">Obrátit směr navigace</string>
-    <string name="title_advanced_autoexpand">Automaticky rozbalovat zprávy</string>
-    <string name="title_advanced_expand_all">Automaticky rozbalovat všechny přečtené zprávy</string>
+    <string name="title_advanced_autoexpand">Rozbalovat zprávy automaticky</string>
+    <string name="title_advanced_expand_all">Rozbalovat všechny přečtené zprávy automaticky</string>
     <string name="title_advanced_expand_one">Rozbalit vždy pouze jednu zprávu</string>
     <string name="title_advanced_collapse_multiple">Při pohybu \"zpět\" sbalit zprávy v konverzaci s vícero zprávami</string>
-    <string name="title_advanced_autoclose">Automaticky zavírat konverzace</string>
+    <string name="title_advanced_autoclose">Zavírat konverzace automaticky</string>
     <string name="title_advanced_onclose">Při zavření konverzace</string>
     <string name="title_advanced_quick_filter">Zobrazit neobtěžující ikony pro rychlé filtrování</string>
     <string name="title_advanced_quick_scroll">Zobrazit neobtěžující ikony pro rychlý posun nahoru/dolů</string>
-    <string name="title_advanced_autoread">Při přesunu automaticky označit zprávy jako přečtené</string>
-    <string name="title_advanced_star_snoozed">Automaticky přidat hvězdičku při odložení zpráv</string>
-    <string name="title_advanced_autounstar">Při přesunu automaticky odebrat zprávám hvězdičku</string>
+    <string name="title_advanced_autoread">Při přesunu označit zprávy jako přečtené automaticky</string>
+    <string name="title_advanced_star_snoozed">Při odložení zpráv přidat hvězdičku automaticky</string>
+    <string name="title_advanced_autounstar">Při přesunu odebrat zprávám hvězdičku automaticky</string>
     <string name="title_advanced_auto_important">Automaticky činit zprávy s hvězdičkou důležitými</string>
     <string name="title_advanced_reset_importance">Obnovit důležitost při přesunu zpráv</string>
     <string name="title_advanced_discard_delete">Při zahození konceptu jej permanentně smazat</string>
@@ -405,6 +407,7 @@
     <string name="title_advanced_language_detection">Rozpoznat jazyk textu zprávy</string>
     <string name="title_advanced_fts">Sestavit index vyhledávání</string>
     <string name="title_advanced_fts_indexed">Indexováno %1$d / %2$d zpráv (%3$s)</string>
+    <string name="title_advanced_english">Použít nastavení země USA</string>
     <string name="title_advanced_watchdog">Pravidelně kontrolovat, zda je FairEmail stále aktivní</string>
     <string name="title_advanced_optimize">Automaticky optimalizovat nastavení</string>
     <string name="title_advanced_updates">Kontrolovat aktualizace</string>
@@ -418,6 +421,7 @@
     <string name="title_advanced_enabled_hint">Globálně zakáže nebo povolí příjem zpráv</string>
     <string name="title_advanced_manual_hint">Je-li synchronizace vypnuta, stále je možné synchronizovat ručně tažením dolů v seznamu zpráv.</string>
     <string name="title_advanced_poll_hint">Synchronizování periodicky bude pokaždé porovnávat lokální a vzdálené zprávy, což je náročná operace, potencionálně vedoucí ke zvýšené spotřebě baterie, zvláště při velkém množství zpráv k synchronizaci. Synchronizování nepřetržitě tomuto předchází průběžným nasloucháním pouze změnám.</string>
+    <string name="title_advanced_optimized_hint">Tuto možnost lze optimalizovat automaticky (ostatní nastavení)</string>
     <string name="title_advanced_schedule_hint">Pro změnu času se jej dotkněte</string>
     <string name="title_advanced_check_mx">Kontrolovat e-mailové adresy odesílatelů při synchronizaci zpráv</string>
     <string name="title_advanced_check_reply">Kontrolovat e-mailové adresy pro odpověď při synchronizaci zpráv</string>
@@ -744,6 +748,7 @@
     <string name="title_reply_to">Odpovědět na:</string>
     <string name="title_cc">Kopie:</string>
     <string name="title_bcc">Skrytá kopie:</string>
+    <string name="title_recipients">%1$d příjemců</string>
     <string name="title_via_identity">Přes:</string>
     <string name="title_sent">Odesláno:</string>
     <string name="title_received">Přijato:</string>
@@ -1036,7 +1041,7 @@
     <string name="title_legend_show_junk">Považovat za nevyžádané</string>
     <string name="title_legend_show_unsubscribe">Ukončit odebírání kanálu</string>
     <string name="title_legend_show_images">Zobrazit obrázky</string>
-    <string name="title_legend_show_full">Zobrazit na celou obrazovku</string>
+    <string name="title_legend_show_full">Zobrazit původní zprávu</string>
     <string name="title_legend_edit">Upravit</string>
     <string name="title_legend_default_color">Výchozí barva</string>
     <string name="title_legend_close_hint">Zavřít tip</string>
@@ -1260,6 +1265,7 @@
         <item>Na začátku</item>
         <item>Uprostřed</item>
         <item>Na konci</item>
+        <item>Show completely</item>
     </string-array>
     <string-array name="priorityNames">
         <item>Nízká</item>

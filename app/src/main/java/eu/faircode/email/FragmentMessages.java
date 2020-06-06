@@ -240,6 +240,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private FloatingActionButton fabReply;
     private FloatingActionButton fabCompose;
     private FloatingActionButton fabMore;
+    private TextView tvSelectedCount;
     private FloatingActionButton fabSearch;
     private FloatingActionButton fabError;
 
@@ -444,6 +445,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fabReply = view.findViewById(R.id.fabReply);
         fabCompose = view.findViewById(R.id.fabCompose);
         fabMore = view.findViewById(R.id.fabMore);
+        tvSelectedCount = view.findViewById(R.id.tvSelectedCount);
         fabSearch = view.findViewById(R.id.fabSearch);
         fabError = view.findViewById(R.id.fabError);
 
@@ -975,6 +977,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
+        tvSelectedCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMore();
+            }
+        });
+
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1117,6 +1126,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             fabSearch.hide();
 
         fabMore.hide();
+        tvSelectedCount.setVisibility(View.GONE);
         fabError.hide();
 
         if (viewType == AdapterMessage.ViewType.THREAD) {
@@ -1226,10 +1236,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (activity != null)
                         activity.invalidateOptionsMenu();
 
-                    if (selectionTracker != null && selectionTracker.hasSelection())
-                        fabMore.show();
-                    else
-                        fabMore.hide();
+                    updateMore();
                 }
 
                 @Override
@@ -3090,11 +3097,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         loadMessages(false);
 
         updateExpanded();
-
-        if (selectionTracker != null && selectionTracker.hasSelection())
-            fabMore.show();
-        else
-            fabMore.hide();
+        updateMore();
 
         // Folder
         switch (viewType) {
@@ -3108,14 +3111,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         updateState(folders);
                     }
                 });
-                db.message().liveHiddenFolder(null, type).observe(getViewLifecycleOwner(), new Observer<List<Long>>() {
-                    @Override
-                    public void onChanged(List<Long> ids) {
-                        if (ids != null && selectionTracker != null)
-                            for (long id : ids)
-                                selectionTracker.deselect(id);
-                    }
-                });
                 break;
 
             case FOLDER:
@@ -3127,14 +3122,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             folders.add(folder);
 
                         updateState(folders);
-                    }
-                });
-                db.message().liveHiddenFolder(folder, null).observe(getViewLifecycleOwner(), new Observer<List<Long>>() {
-                    @Override
-                    public void onChanged(List<Long> ids) {
-                        if (ids != null && selectionTracker != null)
-                            for (long id : ids)
-                                selectionTracker.deselect(id);
                     }
                 });
                 break;
@@ -3854,7 +3841,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (type == null)
                 name = getString(R.string.title_folder_unified);
             else
-                name = Helper.localizeFolderType(getContext(), type);
+                name = EntityFolder.localizeType(getContext(), type);
         else {
             name = (folders.size() > 0 ? folders.get(0).getDisplayName(getContext()) : "");
             if (folders.size() == 1) {
@@ -3876,6 +3863,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             fabError.hide();
 
         swipeRefresh.setRefreshing(refreshing);
+    }
+
+    private void updateMore() {
+        if (selectionTracker != null && selectionTracker.hasSelection()) {
+            fabMore.show();
+            tvSelectedCount.setText(NF.format(selectionTracker.getSelection().size()));
+            tvSelectedCount.setVisibility(View.VISIBLE);
+        } else {
+            fabMore.hide();
+            tvSelectedCount.setVisibility(View.GONE);
+        }
     }
 
     private void loadMessages(final boolean top) {
@@ -3994,7 +3992,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return;
 
             if (viewType == AdapterMessage.ViewType.THREAD) {
-                if (handleThreadActions(messages))
+                if (handleThreadActions(messages, null, null))
                     return;
             } else {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -4057,7 +4055,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 " no=" + (tvNoEmail.getVisibility() == View.VISIBLE));
     }
 
-    private boolean handleThreadActions(@NonNull PagedList<TupleMessageEx> messages) {
+    private boolean handleThreadActions(
+            @NonNull PagedList<TupleMessageEx> messages,
+            ArrayList<MessageTarget> targets, List<Long> removed) {
         // Auto close / next
         if (messages.size() == 0 && (autoclose || onclose != null)) {
             handleAutoClose();
@@ -4124,6 +4124,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 if (!(EntityFolder.OUTBOX.equals(message.folderType) && message.ui_snoozed != null) &&
                         !(EntityFolder.ARCHIVE.equals(message.folderType) && filter_archive) &&
+                        !EntityFolder.DRAFTS.equals(message.folderType) &&
                         !EntityFolder.SENT.equals(message.folderType) &&
                         !EntityFolder.TRASH.equals(message.folderType) &&
                         !EntityFolder.JUNK.equals(message.folderType))
@@ -4159,13 +4160,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 int count = 0;
                 for (int i = 0; i < messages.size(); i++) {
                     TupleMessageEx message = messages.get(i);
-                    if (message == null)
+                    if (message == null ||
+                            (removed != null && removed.contains(message.id)))
                         continue;
-                    if (!(EntityFolder.OUTBOX.equals(message.folderType) && message.ui_snoozed != null) &&
-                            !(EntityFolder.ARCHIVE.equals(message.folderType) && filter_archive) &&
-                            !EntityFolder.SENT.equals(message.folderType) &&
-                            !EntityFolder.TRASH.equals(message.folderType) &&
-                            !EntityFolder.JUNK.equals(message.folderType))
+
+                    String folderType = message.folderType;
+                    if (targets != null)
+                        for (MessageTarget target : targets)
+                            if (!target.across && message.id.equals(target.id)) {
+                                folderType = target.folder.type;
+                                Log.i("Eval thread target=" + folderType);
+                                break;
+                            }
+
+                    if (!(EntityFolder.OUTBOX.equals(folderType) && message.ui_snoozed != null) &&
+                            !(EntityFolder.ARCHIVE.equals(folderType) && filter_archive) &&
+                            !EntityFolder.DRAFTS.equals(folderType) &&
+                            !EntityFolder.SENT.equals(folderType) &&
+                            !EntityFolder.TRASH.equals(folderType) &&
+                            !EntityFolder.JUNK.equals(folderType))
                         count++;
                 }
                 Log.i("Auto close=" + count);
@@ -4331,7 +4344,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 if (!message.seen || ops > 0)
                                     EntityOperation.queue(context, message, EntityOperation.SEEN, true);
                             } else {
-                                if (!message.ui_ignored)
+                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                boolean notify_remove = prefs.getBoolean("notify_remove", true);
+                                if (notify_remove && !message.ui_ignored)
                                     db.message().setMessageUiIgnored(message.id, true);
                             }
                     }
@@ -4494,6 +4509,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 ServiceSynchronize.eval(context, "move");
 
                 return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                if (viewType == AdapterMessage.ViewType.THREAD) {
+                    PagedList<TupleMessageEx> messages = adapter.getCurrentList();
+                    if (messages != null && result.size() > 0) {
+                        Log.i("Eval thread messages=" + messages.size() + " targets=" + result.size());
+                        handleThreadActions(messages, result, null);
+                    }
+                }
             }
 
             @Override
@@ -5396,6 +5422,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             ? R.string.title_signature_unconfirmed
                                             : R.string.title_signature_valid);
                                 args.putString("sigresult", text);
+                                if (sresult == RESULT_VALID_KEY_CONFIRMED)
+                                    db.message().setMessageVerified(message.id, true);
                             } else if (sresult == RESULT_KEY_MISSING)
                                 args.putString("sigresult", context.getString(R.string.title_signature_key_missing));
                             else {
@@ -5669,6 +5697,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             }
 
                                         args.putBoolean("valid", valid);
+                                        if (known)
+                                            db.message().setMessageVerified(message.id, true);
                                     } catch (Throwable ex) {
                                         Log.w(ex);
                                         args.putString("reason", ex.getMessage());
@@ -5902,6 +5932,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                                             }
                                                         }
 
+                                                        db.message().setMessageVerified(message.id, true);
+
                                                         return null;
                                                     }
 
@@ -6061,6 +6093,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
 
             @Override
+            protected void onExecuted(Bundle args, Void data) {
+                if (viewType == AdapterMessage.ViewType.THREAD) {
+                    PagedList<TupleMessageEx> messages = adapter.getCurrentList();
+                    if (messages != null) {
+                        Log.i("Eval thread messages=" + messages.size() + " id=" + id);
+                        handleThreadActions(adapter.getCurrentList(), null, Arrays.asList(id));
+                    }
+                }
+            }
+
+            @Override
             protected void onException(Bundle args, Throwable ex) {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -6096,6 +6139,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 ServiceSynchronize.eval(context, "delete");
 
                 return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                if (viewType == AdapterMessage.ViewType.THREAD) {
+                    long[] ids = args.getLongArray("ids");
+                    PagedList<TupleMessageEx> messages = adapter.getCurrentList();
+                    if (messages != null && ids.length > 0) {
+                        Log.i("Eval thread messages=" + messages.size() + " ids=" + ids.length);
+                        handleThreadActions(adapter.getCurrentList(), null, Helper.fromLongArray(ids));
+                    }
+                }
             }
 
             @Override

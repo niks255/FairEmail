@@ -734,7 +734,51 @@ public class Log {
                 ex.getMessage().contains("finalize"))
             return false;
 
-        if (ex instanceof CursorWindowAllocationException)
+        if (ex instanceof CursorWindowAllocationException ||
+                "android.database.CursorWindowAllocationException".equals(ex.getClass().getName()))
+            /*
+                android.database.CursorWindowAllocationException: Could not allocate CursorWindow '/data/user/0/eu.faircode.email/no_backup/androidx.work.workdb' of size 2097152 due to error -12.
+                at android.database.CursorWindow.nativeCreate(Native Method)
+                at android.database.CursorWindow.<init>(CursorWindow.java:139)
+                at android.database.CursorWindow.<init>(CursorWindow.java:120)
+                at android.database.AbstractWindowedCursor.clearOrCreateWindow(AbstractWindowedCursor.java:202)
+                at android.database.sqlite.SQLiteCursor.fillWindow(SQLiteCursor.java:147)
+                at android.database.sqlite.SQLiteCursor.getCount(SQLiteCursor.java:140)
+                at android.database.AbstractCursor.moveToPosition(AbstractCursor.java:232)
+                at android.database.AbstractCursor.moveToNext(AbstractCursor.java:281)
+                at androidx.room.InvalidationTracker$1.checkUpdatedTable(SourceFile:417)
+                at androidx.room.InvalidationTracker$1.run(SourceFile:388)
+                at androidx.work.impl.utils.SerialExecutor$Task.run(SourceFile:91)
+             */
+            return false;
+
+        if ("android.util.SuperNotCalledException".equals(ex.getClass().getName()))
+            /*
+                android.util.SuperNotCalledException: Activity {eu.faircode.email/eu.faircode.email.ActivityView} did not call through to super.onResume()
+                  at android.app.Activity.performResume(Activity.java:7304)
+                  at android.app.ActivityThread.performNewIntents(ActivityThread.java:3165)
+                  at android.app.ActivityThread.handleNewIntent(ActivityThread.java:3180)
+                  at android.app.servertransaction.NewIntentItem.execute(NewIntentItem.java:49)
+             */
+            return false;
+
+        if ("android.view.WindowManager$InvalidDisplayException".equals(ex.getClass().getName()))
+            /*
+                android.view.WindowManager$InvalidDisplayException: Unable to add window android.view.ViewRootImpl$W@d7b5a0b -- the specified display can not be found
+                  at android.view.ViewRootImpl.setView(ViewRootImpl.java:854)
+                  at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:356)
+                  at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:93)
+                  at android.widget.PopupWindow.invokePopup(PopupWindow.java:1492)
+                  at android.widget.PopupWindow.showAsDropDown(PopupWindow.java:1342)
+                  at androidx.appcompat.widget.AppCompatPopupWindow.showAsDropDown(SourceFile:77)
+                  at androidx.core.widget.PopupWindowCompat.showAsDropDown(SourceFile:69)
+                  at androidx.appcompat.widget.ListPopupWindow.show(SourceFile:754)
+                  at androidx.appcompat.view.menu.CascadingMenuPopup.showMenu(SourceFile:486)
+                  at androidx.appcompat.view.menu.CascadingMenuPopup.show(SourceFile:265)
+                  at androidx.appcompat.view.menu.MenuPopupHelper.showPopup(SourceFile:290)
+                  at androidx.appcompat.view.menu.MenuPopupHelper.tryShow(SourceFile:177)
+                  at androidx.appcompat.widget.ActionMenuPresenter$OpenOverflowRunnable.run(SourceFile:792)
+               */
             return false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

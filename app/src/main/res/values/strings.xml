@@ -99,6 +99,7 @@
     <string name="title_notification_failed">\'%1$s\' failed</string>
     <string name="title_notification_alert">\'%1$s\' server alert</string>
 
+    <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
     <string name="title_from_to">%1$s ➤ %2$s</string>
@@ -316,6 +317,7 @@
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_threading">Conversation threading</string>
+    <string name="title_advanced_threading_unread">Show number of unread messages in conversations</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
     <string name="title_advanced_highlight_unread">Highlight unread messages</string>
     <string name="title_advanced_highlight_subject">Highlight subject</string>
@@ -449,6 +451,7 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexed (%3$s)</string>
     <string name="title_advanced_english">Use US country settings</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
+    <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_optimize">Automatically optimize settings</string>
     <string name="title_advanced_updates">Check for updates</string>
     <string name="title_advanced_experiments">Try experimental features</string>
@@ -467,6 +470,7 @@
     <string name="title_advanced_enabled_hint">Globally disable or enable receiving of messages</string>
     <string name="title_advanced_manual_hint">If synchronization is disabled, it is still possible to synchronize manually by pulling down the message list.</string>
     <string name="title_advanced_poll_hint">Synchronizing periodically will compare local and remote messages each and every time, which is an expensive operation possibly resulting in extra battery usage, especially when there are a lot of messages to synchronize. Always synchronizing will avoid this by continuous monitoring for changes only.</string>
+    <string name="title_advanced_optimized_hint">This option can be optimized automatically (miscellaneous settings)</string>
     <string name="title_advanced_schedule_hint">Tap on a time to set a time</string>
     <string name="title_advanced_check_mx">Check sender email addresses on synchronizing messages</string>
     <string name="title_advanced_check_reply">Check reply email addresses on synchronizing messages</string>
@@ -827,6 +831,7 @@
     <string name="title_reply_to">Reply to:</string>
     <string name="title_cc">CC:</string>
     <string name="title_bcc">BCC:</string>
+    <string name="title_recipients">%1$d recipients</string>
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Sent:</string>
     <string name="title_received">Received:</string>
@@ -1145,7 +1150,7 @@
     <string name="title_legend_show_junk">Treat as spam</string>
     <string name="title_legend_show_unsubscribe">Unsubscribe from list</string>
     <string name="title_legend_show_images">Show images</string>
-    <string name="title_legend_show_full">Show fullscreen</string>
+    <string name="title_legend_show_full">Show original message</string>
     <string name="title_legend_edit">Edit</string>
     <string name="title_legend_default_color">Default color</string>
     <string name="title_legend_close_hint">Close hint</string>
@@ -1455,12 +1460,14 @@
         <item>start</item>
         <item>middle</item>
         <item>end</item>
+        <item>full</item>
     </string-array>
 
     <string-array name="ellipsizeNames">
         <item>At the start</item>
         <item>In the middle</item>
         <item>At the end</item>
+        <item>Show completely</item>
     </string-array>
 
     <string-array name="priorityNames">
