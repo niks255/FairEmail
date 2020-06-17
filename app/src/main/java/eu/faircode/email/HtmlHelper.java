@@ -659,10 +659,16 @@ public class HtmlHelper {
                                     else if (key.endsWith("bottom"))
                                         p[0] = null;
 
-                                    if (p[0] != null && p[0] > 0.5)
-                                        element.attr("x-line-before", "true");
-                                    if (p[2] != null && p[2] > 0.5)
-                                        element.attr("x-line-after", "true");
+                                    if (p[0] != null)
+                                        if (p[0] == 0)
+                                            element.attr("x-line-before", "false");
+                                        else if (p[0] > 0.5)
+                                            element.attr("x-line-before", "true");
+                                    if (p[2] != null)
+                                        if (p[2] == 0)
+                                            element.attr("x-line-after", "false");
+                                        else if (p[2] > 0.5)
+                                            element.attr("x-line-after", "true");
                                 }
                                 break;
 
@@ -704,7 +710,8 @@ public class HtmlHelper {
 
         // Paragraphs
         for (Element p : document.select("p")) {
-            p.appendElement("br");
+            if (!"false".equals(p.attr("x-line-after")))
+                p.appendElement("br");
             p.tagName("div");
         }
 
@@ -958,13 +965,13 @@ public class HtmlHelper {
             div.tagName("span");
 
         for (Element e : document.select("*[x-line-before],*[x-line-after]")) {
-            if (!TextUtils.isEmpty(e.attr("x-line-before"))) {
+            if ("true".equals(e.attr("x-line-before"))) {
                 Element prev = e.previousElementSibling();
                 if (prev == null || !"br".equals(prev.tagName()))
                     e.prependElement("br");
             }
 
-            if (!TextUtils.isEmpty(e.attr("x-line-after"))) {
+            if ("true".equals(e.attr("x-line-after"))) {
                 Element next = e.nextElementSibling();
                 if (next == null || !"br".equals(next.tagName()))
                     e.appendElement("br");
@@ -1163,8 +1170,14 @@ public class HtmlHelper {
                 return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / DEFAULT_FONT_SIZE_PT;
             if (value.endsWith("px"))
                 return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / DEFAULT_FONT_SIZE;
-            if (value.endsWith("cm") || value.endsWith("in"))
-                return null;
+
+            // https://www.w3.org/Style/Examples/007/units.en.html
+            if (value.endsWith("pc")) // 6 pc = 72 pt
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 12 / DEFAULT_FONT_SIZE_PT;
+            if (value.endsWith("cm")) // 1 inch = 2.54 cm
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 2.54f / 72 / DEFAULT_FONT_SIZE_PT;
+            if (value.endsWith("in")) // 1 inch = 72pt
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 72 / DEFAULT_FONT_SIZE_PT;
             return Float.parseFloat(value.trim()) / DEFAULT_FONT_SIZE;
         } catch (NumberFormatException ex) {
             Log.i(ex);

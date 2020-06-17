@@ -3512,6 +3512,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 language_detection && folder && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
         menu.findItem(R.id.menu_select_all).setVisible(folder);
         menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
+        menu.findItem(R.id.menu_mark_all_read).setVisible(folder);
 
         menu.findItem(R.id.menu_force_sync).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
         menu.findItem(R.id.menu_force_send).setVisible(outbox);
@@ -3631,6 +3632,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             case R.id.menu_select_all:
             case R.id.menu_select_found:
                 onMenuSelectAll();
+                return true;
+
+            case R.id.menu_mark_all_read:
+                onMenuMarkAllRead();
                 return true;
 
             case R.id.menu_force_sync:
@@ -3826,6 +3831,54 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 });
             }
         });
+    }
+
+    private void onMenuMarkAllRead() {
+        Bundle args = new Bundle();
+        args.putString("type", type);
+        args.putLong("folder", folder);
+
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                String type = args.getString("type");
+                long folder = args.getLong("folder");
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
+                boolean filter_unknown = prefs.getBoolean("filter_unknown", false);
+                boolean filter_snoozed = prefs.getBoolean("filter_snoozed", true);
+                String filter_language = prefs.getString("filter_language", null);
+                boolean language_detection = prefs.getBoolean("language_detection", false);
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    List<Long> ids = db.message().getMessageUnseen(
+                            folder < 0 ? null : folder,
+                            folder < 0 ? type : null,
+                            filter_unflagged, filter_unknown, filter_snoozed,
+                            language_detection ? filter_language : null);
+                    for (long id : ids) {
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message != null)
+                            EntityOperation.queue(context, message, EntityOperation.SEEN, true);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(FragmentMessages.this, args, "message:read");
     }
 
     private void onMenuForceSync() {

@@ -59,6 +59,7 @@ Related questions:
 * Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
 * Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
 * Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
+* Change system folders: Setup, step 1, Manage, tap account, at the bottom
 * Export/import settings: Setup, navigation/hamburger menu
 
 ## Known problems
