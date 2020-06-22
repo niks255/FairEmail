@@ -129,7 +129,7 @@
     <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
     <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
     <string name="title_setup_gmail_drafts">Jos luonnokset-kansio ei ole IMAPin saatavilla, asia voidaan korjata Gmailin tunnisteiden asetuksissa</string>
-    <string name="title_setup_office_auth">Virhe \'AUTHENTICATE failed\' voi aiheutua ylläpitotason IMAP/SMTP-estosta</string>
+    <string name="title_setup_office_auth">Virhe \'AUTHENTICATE failed\' voi aiheutua siitä, että järjestelmän ylläpitäjän on poistanut IMAP/SMTP-protokollat käytöstä</string>
     <string name="title_setup_oauth_rationale">Valtuuta pääsy tilillesi %1$s</string>
     <string name="title_setup_oauth_authorize">Valtuuta</string>
     <string name="title_setup_select_account">Valitse tili</string>
@@ -236,6 +236,7 @@
     <string name="title_advanced_suggest_sent">Ehdota lähetetyistä viesteistä löytyviä osoitteita</string>
     <string name="title_advanced_suggest_received">Ehdota saapuneista viesteistä löytyviä osoitteita</string>
     <string name="title_advanced_suggest_frequently">Järjestä ehdotetut osoitteet käytetyimmät ensin</string>
+    <string name="title_advanced_auto_list">Luo listoja automaattisesti</string>
     <string name="title_advanced_prefix_once">Lisää aiheeseen etuliite vain kerran vastatessa ja edelleenlähetettäessä</string>
     <string name="title_advanced_extended_reply">Käytä laajennettuja tunnistetietoja vastauksessa/edelleenlähetettäessä</string>
     <string name="title_advanced_quote_reply">Lainaa vastattu teksti</string>
@@ -398,6 +399,7 @@
     <string name="title_advanced_optimize">Optimoi automaattisesti</string>
     <string name="title_advanced_updates">Päivitysten tarkastus</string>
     <string name="title_advanced_experiments">Käytä kokeellisia ominaisuuksia</string>
+    <string name="title_advanced_query_threads">Rajoita rinnakkaisia tietokantayhteyksiä</string>
     <string name="title_advanced_crash_reports">Lähetä virheraportit</string>
     <string name="title_advanced_debug">Debug-tila</string>
     <string name="title_advanced_cleanup_attachments">Poista vanhojen viestien liitteet</string>
@@ -502,6 +504,7 @@
     <string name="title_port">Porttinumero</string>
     <string name="title_user">Käyttäjätunnus</string>
     <string name="title_password">Salasana</string>
+    <string name="title_case_sensitive">Käyttäjätunnukset ja salasanat ovat yleensä merkkikokoriippuvaisia</string>
     <string name="title_client_certificate">Asiakasvarmenne</string>
     <string name="title_realm">Toimialue</string>
     <string name="title_use_ip">Käytä paikallista IP-osoitetta verkkotunnuksen sijaan</string>
@@ -548,6 +551,7 @@
     <string name="title_hint_alias">Pitkä painallus näyttää vaihtoehdot, kuten kopioinnin aliasten luomiseksi</string>
     <string name="title_service_vpn">Tämä voi olla käytössä olevan VPN-palvelun aiheuttama</string>
     <string name="title_service_port">Tarkista porttinumero uudelleen</string>
+    <string name="title_service_protocol">Tarkista uudelleen protokolla (SSL/TLS tai STARTTLS)</string>
     <string name="title_advanced_browse">Selaa palvelimella olevia viestejä</string>
     <string name="title_advanced_expand_read">Merkitse viestit luetuiksi laajennettaessa</string>
     <string name="title_synchronize_now">Synkronoi nyt</string>
@@ -780,6 +784,7 @@
     <string name="title_no_key">Ei yksityistä avainta</string>
     <string name="title_invalid_key">Virheellinen yksityinen avain</string>
     <string name="title_unknown_key">Yksityinen avain ei vastaa mitään salausavainta</string>
+    <string name="title_send_reminder_remark">Muistutukset voidaan ottaa uudelleen käyttöön lähetysasetuksissa</string>
     <string name="title_send_plain_text">Lähetä muotoilemattomana tekstinä</string>
     <string name="title_send_receipt">Pyydä kuittausta</string>
     <string name="title_send_receipt_remark">Useimmat palveluntarjoajat ja sähköpostisovellukset jättävät kuittauspyynnöt huomioimatta</string>
@@ -853,6 +858,7 @@
     <string name="title_search_flag_hidden">piilotettu</string>
     <string name="title_search_flag_encrypted">salattu</string>
     <string name="title_search_flag_attachments">liitteet</string>
+    <string name="title_search_flag_invite">kutsu</string>
     <string name="title_search_flag_size">koko &gt; %1$s</string>
     <string name="title_search_device">Hae laitteesta</string>
     <string name="title_search_server">Hae palvelimelta</string>
@@ -879,6 +885,7 @@
     <string name="title_select_language">Valitse kieli</string>
     <string name="title_select_all">Valitse kaikki</string>
     <string name="title_select_found">Valitse löytyneet</string>
+    <string name="title_mark_all_read">Merkitse kaikki luetuiksi</string>
     <string name="title_force_sync">Pakota synkronointi</string>
     <string name="title_force_send">Pakota lähetys</string>
     <string name="title_language_all">Kaikki</string>

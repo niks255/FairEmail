@@ -166,7 +166,7 @@
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
     <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
     <string name="title_setup_gmail_drafts">If the drafts folder is not accessible by IMAP, this can be fixed in the Gmail label settings</string>
-    <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled administratively</string>
+    <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
     <string name="title_setup_oauth_rationale">Authorize access to your %1$s account</string>
     <string name="title_setup_oauth_authorize">Authorize</string>
     <string name="title_setup_select_account">Select account</string>
@@ -287,6 +287,7 @@
     <string name="title_advanced_suggest_sent">Suggest addresses found in sent messages</string>
     <string name="title_advanced_suggest_received">Suggest addresses found in received messages</string>
     <string name="title_advanced_suggest_frequently">Sort suggested addresses on frequency of use</string>
+    <string name="title_advanced_auto_list">Automatically create lists</string>
     <string name="title_advanced_prefix_once">Prefix subject only once on replying or forwarding</string>
     <string name="title_advanced_extended_reply">Use extended reply/forward header</string>
     <string name="title_advanced_quote_reply">Quote replied text</string>
@@ -465,6 +466,7 @@
     <string name="title_advanced_optimize">Automatically optimize</string>
     <string name="title_advanced_updates">Check for updates</string>
     <string name="title_advanced_experiments">Try experimental features</string>
+    <string name="title_advanced_query_threads">Limit parallel database access</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
     <string name="title_advanced_debug">Debug mode</string>
     <string name="title_advanced_cleanup_attachments">Delete attachments of old messages</string>
@@ -539,6 +541,7 @@
     <string name="title_advanced_notify_no_grouping">This Android version does not support notification grouping</string>
     <string name="title_advanced_notify_no_channels">This Android version does not support notification channels</string>
 
+    <string name="title_advanced_queries_hint">Enabling this will decrease performance, however, enabling is required on some devices</string>
     <string name="title_advanced_fts_hint">Enabling this improves search performance, but also increases battery and storage space usage</string>
     <string name="title_advanced_english_hint">This will restart the app</string>
     <string name="title_advanced_experiments_hint">List of current experimental features</string>
@@ -640,6 +643,7 @@
     <string name="title_hint_alias">Long press an identity to display options, like copy to create alias identities</string>
     <string name="title_service_vpn">This might be caused by the VPN that is being used</string>
     <string name="title_service_port">Please double check the port number</string>
+    <string name="title_service_protocol">Please double check the protocol (SSL/TLS or STARTTLS)</string>
 
     <string name="title_advanced_browse">Browse messages on the server</string>
     <string name="title_advanced_expand_read">Mark messages read on expanding</string>
@@ -969,6 +973,7 @@
     <string name="title_search_flag_hidden">hidden</string>
     <string name="title_search_flag_encrypted">encrypted</string>
     <string name="title_search_flag_attachments">attachments</string>
+    <string name="title_search_flag_invite">invitation</string>
     <string name="title_search_flag_size">size &gt; %1$s</string>
 
     <string name="title_search_device">Search on device</string>
@@ -1046,6 +1051,7 @@
     <string name="title_rule_recipient">Recipient contains</string>
     <string name="title_rule_subject">Subject contains</string>
     <string name="title_rule_attachments">Has attachments</string>
+    <string name="title_rule_mime_type" translatable="false">Mime type</string>
     <string name="title_rule_header">Header contains</string>
     <string name="title_rule_time">Time between</string>
     <string name="title_rule_regex">Regex</string>

@@ -92,6 +92,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
+import org.openintents.openpgp.util.OpenPgpApi;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -408,6 +409,18 @@ public class Helper {
         return (biometrics || !TextUtils.isEmpty(pin));
     }
 
+    static boolean isOpenKeychainInstalled(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String provider = prefs.getString("openpgp_provider", "org.sufficientlysecure.keychain");
+
+        PackageManager pm = context.getPackageManager();
+        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
+        intent.setPackage(provider);
+        List<ResolveInfo> ris = pm.queryIntentServices(intent, 0);
+
+        return (ris.size() > 0);
+    }
+
     // View
 
     static Intent getChooser(Context context, Intent intent) {
@@ -483,11 +496,17 @@ public class Helper {
     }
 
     static void view(Context context, Uri uri, boolean browse) {
+        view(context, uri, browse, false);
+    }
+
+    static void view(Context context, Uri uri, boolean browse, boolean task) {
         Log.i("View=" + uri);
 
         if (browse || !hasCustomTabs(context, uri)) {
             try {
                 Intent view = new Intent(Intent.ACTION_VIEW, uri);
+                if (task)
+                    view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(getChooser(context, view));
             } catch (Throwable ex) {
                 Log.e(ex);

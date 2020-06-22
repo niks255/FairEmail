@@ -130,7 +130,7 @@
     <string name="title_setup_gmail_rationale">Si prega di concedere i permessi per selezionare un account e leggere il tuo nome</string>
     <string name="title_setup_gmail_permissions">Google chiederà le autorizzazioni per leggere, comporre, inviare e eliminare definitivamente tutte le tue email. FairEmail non eliminerà mai i tuoi messaggi senza il tuo esplicito consenso.</string>
     <string name="title_setup_gmail_drafts">Se la cartella bozze non è accessibile da IMAP, questo può essere corretto nelle impostazioni dell\'etichetta Gmail</string>
-    <string name="title_setup_office_auth">L\'errore «AUTENTICA fallita» può essere causato dalla disattivazione amministrativa di IMAP/SMTP</string>
+    <string name="title_setup_office_auth">L\'errore «AUTENTICA fallita» può essere causato dalla disattivazione di IMAP/SMTP da parte dell\'amministratore di sistema</string>
     <string name="title_setup_oauth_rationale">Autorizza l\'accesso al tuo account %1$s</string>
     <string name="title_setup_oauth_authorize">Autorizza</string>
     <string name="title_setup_select_account">Seleziona account</string>
@@ -238,6 +238,7 @@
     <string name="title_advanced_suggest_sent">Suggerisci indirizzi trovati nei messaggi inviati</string>
     <string name="title_advanced_suggest_received">Suggerisci indirizzi trovati nei messaggi ricevuti</string>
     <string name="title_advanced_suggest_frequently">Ordina gli indirizzi suggeriti in base alla frequenza d\'uso</string>
+    <string name="title_advanced_auto_list">Crea automaticamente liste</string>
     <string name="title_advanced_prefix_once">Prefissa l\'oggetto solo una volta per rispondere o inoltrare</string>
     <string name="title_advanced_extended_reply">Usa intestazione estesa di risposta/inoltro</string>
     <string name="title_advanced_quote_reply">Cita il testo nella risposta</string>
@@ -400,6 +401,7 @@
     <string name="title_advanced_optimize">Ottimizza automaticamente</string>
     <string name="title_advanced_updates">Controlla aggiornamenti</string>
     <string name="title_advanced_experiments">Prova le funzionalità sperimentali</string>
+    <string name="title_advanced_query_threads">Limita l\'accesso alla banca dati parallela</string>
     <string name="title_advanced_crash_reports">Invia rapporti di errore</string>
     <string name="title_advanced_debug">Modalità debug</string>
     <string name="title_advanced_cleanup_attachments">Elimina allegati dei vecchi messaggi</string>
@@ -551,6 +553,7 @@
     <string name="title_hint_alias">Premi a lungo per le opzioni, come copia per creare le identità alias</string>
     <string name="title_service_vpn">Questo potrebbe essere causato dalla VPN in uso</string>
     <string name="title_service_port">Per favore ricontrolla il numero della porta</string>
+    <string name="title_service_protocol">Si prega di controllare di nuovo il protocollo (SSL/TLS o STARTTLS)</string>
     <string name="title_advanced_browse">Sfoglia i messaggi sul server</string>
     <string name="title_advanced_expand_read">Segna i messaggi come letti in fase di espansione</string>
     <string name="title_synchronize_now">Sincronizza ora</string>
@@ -856,6 +859,7 @@
     <string name="title_search_flag_hidden">nascosto</string>
     <string name="title_search_flag_encrypted">crittografato</string>
     <string name="title_search_flag_attachments">allegati</string>
+    <string name="title_search_flag_invite">invito</string>
     <string name="title_search_flag_size">dimensione &gt; %1$s</string>
     <string name="title_search_device">Cerca sul dispositivo</string>
     <string name="title_search_server">Cerca sul server</string>
@@ -882,6 +886,7 @@
     <string name="title_select_language">Seleziona lingua</string>
     <string name="title_select_all">Seleziona tutti</string>
     <string name="title_select_found">Seleziona trovato</string>
+    <string name="title_mark_all_read">Segna tutto come letto</string>
     <string name="title_force_sync">Forza sincronizzazione</string>
     <string name="title_force_send">Forza invio</string>
     <string name="title_language_all">Tutti</string>

@@ -727,6 +727,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         return super.onOptionsItemSelected(item);
     }
 
+    View getContentView() {
+        if (drawerLayout == null || drawerLayout.getChildCount() == 0)
+            return null;
+        return drawerLayout.getChildAt(0);
+    }
+
     private void checkFirst() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("first", true))
@@ -1263,6 +1269,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         Bundle args = new Bundle();
         args.putLong("account", intent.getLongExtra("account", -1));
+        args.putLong("folder", intent.getLongExtra("folder", -1));
         args.putString("thread", intent.getStringExtra("thread"));
         args.putLong("id", intent.getLongExtra("id", -1));
         args.putBoolean("filter_archive", intent.getBooleanExtra("filter_archive", true));

@@ -60,7 +60,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 164,
+        version = 166,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -106,8 +106,6 @@ public abstract class DB extends RoomDatabase {
     public abstract DaoLog log();
 
     private static DB sInstance;
-    private static final ExecutorService executor =
-            Helper.getBackgroundExecutor(2, "query"); // AndroidX default thread count: 4
 
     private static final String DB_NAME = "fairemail";
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
@@ -260,6 +258,11 @@ public abstract class DB extends RoomDatabase {
         } catch (Throwable ex) {
             Log.e(ex);
         }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int threads = prefs.getInt("query_threads", 4); // AndroidX default thread count: 4
+        Log.i("Query threads=" + threads);
+        ExecutorService executor = Helper.getBackgroundExecutor(threads, "query");
 
         return Room
                 .databaseBuilder(context, DB.class, DB_NAME)
@@ -1624,6 +1627,19 @@ public abstract class DB extends RoomDatabase {
                         db.execSQL("DROP TRIGGER attachment_insert");
                         db.execSQL("DROP TRIGGER attachment_delete");
                         createTriggers(db);
+                    }
+                })
+                .addMigrations(new Migration(164, 165) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("CREATE INDEX IF NOT EXISTS `index_attachment_message_type` ON `attachment` (`message`, `type`)");
+                    }
+                })
+                .addMigrations(new Migration(165, 166) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        db.execSQL("DROP INDEX `index_attachment_message_type`");
                     }
                 });
     }

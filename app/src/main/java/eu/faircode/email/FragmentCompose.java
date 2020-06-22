@@ -252,6 +252,8 @@ public class FragmentCompose extends FragmentBase {
     private State state = State.NONE;
     private boolean show_images = false;
     private int last_available = 0; // attachments
+    private boolean saved = false;
+    private String subject = null;
 
     private Uri photoURI = null;
 
@@ -664,6 +666,10 @@ public class FragmentCompose extends FragmentBase {
                         break;
                     case R.id.action_send:
                         onAction(R.id.action_check, "check");
+                        break;
+                    case R.id.action_save:
+                        saved = true;
+                        onAction(action, "save");
                         break;
                     default:
                         onAction(action, "navigation");
@@ -2755,7 +2761,7 @@ public class FragmentCompose extends FragmentBase {
     private void onExit() {
         if (state == State.LOADED) {
             state = State.NONE;
-            if (isEmpty())
+            if (!saved && isEmpty())
                 onAction(R.id.action_delete, "empty");
             else {
                 Bundle extras = new Bundle();
@@ -2768,10 +2774,15 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private boolean isEmpty() {
+        if (!etSubject.getText().toString().equals(subject))
+            return false;
+
         if (!TextUtils.isEmpty(JsoupEx.parse(HtmlHelper.toHtml(etBody.getText())).text().trim()))
             return false;
+
         if (rvAttachment.getAdapter().getItemCount() > 0)
             return false;
+
         return true;
     }
 
@@ -3377,7 +3388,7 @@ public class FragmentCompose extends FragmentBase {
 
                         // Encryption
                         if (ref.ui_encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(ref.ui_encrypt)) {
-                            if (ActivityBilling.isPro(context))
+                            if (ActivityBilling.isPro(context) && Helper.isOpenKeychainInstalled(context))
                                 data.draft.ui_encrypt = ref.ui_encrypt;
                         }
 
@@ -3642,6 +3653,8 @@ public class FragmentCompose extends FragmentBase {
                             }
                     }
                 } else {
+                    args.putBoolean("saved", true);
+
                     if (data.draft.revision == null) {
                         data.draft.revision = 1;
                         data.draft.revisions = 1;
@@ -3719,6 +3732,9 @@ public class FragmentCompose extends FragmentBase {
             working = data.draft.id;
             encrypt = data.draft.ui_encrypt;
             getActivity().invalidateOptionsMenu();
+
+            subject = data.draft.subject;
+            saved = args.getBoolean("saved");
 
             // Show identities
             AdapterIdentitySelect iadapter = new AdapterIdentitySelect(getContext(), data.identities);
@@ -4155,9 +4171,9 @@ public class FragmentCompose extends FragmentBase {
                                     (identity == null || (identity.cc == null && identity.bcc == null)))
                                 args.putBoolean("remind_to", true);
 
-                            if (TextUtils.isEmpty(draft.extra) &&
-                                    identity != null && identity.sender_extra)
-                                args.putBoolean("remind_extra", true);
+                            //if (TextUtils.isEmpty(draft.extra) &&
+                            //        identity != null && identity.sender_extra)
+                            //    args.putBoolean("remind_extra", true);
 
                             if (pgpService != null && pgpService.isBound() &&
                                     (draft.ui_encrypt == null ||
@@ -4397,10 +4413,8 @@ public class FragmentCompose extends FragmentBase {
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
-                if (send_dialog || (send_reminders &&
-                        (address_error != null || remind_to || remind_extra || remind_pgp ||
-                                remind_subject || remind_text || remind_plain || remind_attachment ||
-                                recipients > RECIPIENTS_WARNING))) {
+                if (send_dialog || address_error != null || recipients > RECIPIENTS_WARNING || (send_reminders &&
+                        (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_plain || remind_attachment))) {
                     setBusy(false);
 
                     FragmentDialogSend fragment = new FragmentDialogSend();
@@ -5059,6 +5073,7 @@ public class FragmentCompose extends FragmentBase {
             final boolean remind_pgp = args.getBoolean("remind_pgp", false);
             final boolean remind_subject = args.getBoolean("remind_subject", false);
             final boolean remind_text = args.getBoolean("remind_text", false);
+            final boolean remind_plain = args.getBoolean("remind_plain", false);
             final boolean remind_attachment = args.getBoolean("remind_attachment", false);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -5115,7 +5130,7 @@ public class FragmentCompose extends FragmentBase {
 
             Helper.setViewsEnabled(dview, false);
 
-            boolean reminder = (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment);
+            boolean reminder = (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_plain || remind_attachment);
             swSendReminders.setChecked(send_reminders);
             swSendReminders.setVisibility(send_reminders && reminder ? View.VISIBLE : View.GONE);
             tvSendRemindersHint.setVisibility(View.GONE);
@@ -5130,6 +5145,9 @@ public class FragmentCompose extends FragmentBase {
                     tvRemindText.setVisibility(checked && remind_text ? View.VISIBLE : View.GONE);
                     tvRemindAttachment.setVisibility(checked && remind_attachment ? View.VISIBLE : View.GONE);
                     tvSendRemindersHint.setVisibility(checked ? View.GONE : View.VISIBLE);
+
+                    cbPlainOnly.setTextColor(Helper.resolveColor(getContext(),
+                            checked && cbPlainOnly.isChecked() ? R.attr.colorWarning : android.R.attr.textColorSecondary));
                 }
             });
 
@@ -5145,7 +5163,7 @@ public class FragmentCompose extends FragmentBase {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                     cbPlainOnly.setTextColor(Helper.resolveColor(getContext(),
-                            checked ? R.attr.colorAccent : android.R.attr.textColorSecondary));
+                            checked ? R.attr.colorWarning : android.R.attr.textColorSecondary));
 
                     Bundle args = new Bundle();
                     args.putLong("id", id);

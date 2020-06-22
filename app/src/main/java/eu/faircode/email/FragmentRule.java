@@ -100,6 +100,7 @@ public class FragmentRule extends FragmentBase {
     private CheckBox cbSubject;
 
     private CheckBox cbAttachments;
+    private EditText etMimeType;
 
     private EditText etHeader;
     private CheckBox cbHeader;
@@ -211,6 +212,7 @@ public class FragmentRule extends FragmentBase {
         cbSubject = view.findViewById(R.id.cbSubject);
 
         cbAttachments = view.findViewById(R.id.cbAttachments);
+        etMimeType = view.findViewById(R.id.etMimeType);
 
         etHeader = view.findViewById(R.id.etHeader);
         cbHeader = view.findViewById(R.id.cbHeader);
@@ -291,6 +293,13 @@ public class FragmentRule extends FragmentBase {
             }
         });
 
+        cbAttachments.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                etMimeType.setEnabled(isChecked);
+            }
+        });
+
         adapterDay = new ArrayAdapter<>(getContext(), R.layout.spinner_item1, android.R.id.text1, new ArrayList<String>());
         adapterDay.setDropDownViewResource(R.layout.spinner_item1_dropdown);
         spScheduleDayStart.setAdapter(adapterDay);
@@ -322,7 +331,7 @@ public class FragmentRule extends FragmentBase {
                 parent.post(new Runnable() {
                     @Override
                     public void run() {
-                        parent.requestFocusFromTouch();
+                        //parent.requestFocusFromTouch();
                     }
                 });
             }
@@ -391,7 +400,7 @@ public class FragmentRule extends FragmentBase {
                 adapterView.post(new Runnable() {
                     @Override
                     public void run() {
-                        adapterView.requestFocusFromTouch();
+                        //adapterView.requestFocusFromTouch();
                     }
                 });
             }
@@ -737,6 +746,8 @@ public class FragmentRule extends FragmentBase {
                         cbSubject.setChecked(jsubject != null && jsubject.getBoolean("regex"));
 
                         cbAttachments.setChecked(jcondition.optBoolean("attachments"));
+                        etMimeType.setText(jcondition.optString("mimetype"));
+                        etMimeType.setEnabled(cbAttachments.isChecked());
 
                         etHeader.setText(jheader == null ? null : jheader.getString("value"));
                         cbHeader.setChecked(jheader != null && jheader.getBoolean("regex"));
@@ -1037,6 +1048,7 @@ public class FragmentRule extends FragmentBase {
         }
 
         jcondition.put("attachments", cbAttachments.isChecked());
+        jcondition.put("mimetype", etMimeType.getText().toString().trim());
 
         String header = etHeader.getText().toString();
         if (!TextUtils.isEmpty(header)) {
@@ -1267,6 +1279,7 @@ public class FragmentRule extends FragmentBase {
                             if (applied > 0)
                                 ServiceSynchronize.eval(getContext(), "rules/manual");
 
+                            dismiss();
                             ToastEx.makeText(getContext(), getString(R.string.title_rule_applied, applied), Toast.LENGTH_LONG).show();
                         }
 

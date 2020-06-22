@@ -538,12 +538,17 @@ public class MessageHelper {
             return;
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean autolist = prefs.getBoolean("autolist", true);
+        boolean format_flowed = prefs.getBoolean("format_flowed", false);
+
         // Build html body
         Document document = JsoupEx.parse(message.getFile(context));
 
         // When sending message
         if (identity != null) {
-            HtmlHelper.convertLists(document);
+            if (autolist)
+                HtmlHelper.convertLists(document);
 
             if (send) {
                 document.select("div[fairemail=signature]").removeAttr("fairemail");
@@ -604,9 +609,6 @@ public class MessageHelper {
                 db.endTransaction();
             }
         }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean format_flowed = prefs.getBoolean("format_flowed", false);
 
         // multipart/mixed
         //   multipart/related
@@ -974,9 +976,11 @@ public class MessageHelper {
             priority = EntityMessage.PRIORITIY_HIGH;
         else if ("normal".equalsIgnoreCase(header) ||
                 "medium".equalsIgnoreCase(header) ||
-                "med".equalsIgnoreCase(header))
+                "med".equalsIgnoreCase(header) ||
+                "none".equalsIgnoreCase(header))
             priority = EntityMessage.PRIORITIY_NORMAL;
         else if ("low".equalsIgnoreCase(header) ||
+                "lowest".equalsIgnoreCase(header) ||
                 "non-urgent".equalsIgnoreCase(header) ||
                 "marketing".equalsIgnoreCase(header) ||
                 "bulk".equalsIgnoreCase(header) ||
