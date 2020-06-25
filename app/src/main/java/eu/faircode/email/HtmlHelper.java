@@ -52,6 +52,7 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
+import android.util.Patterns;
 import android.view.View;
 import android.view.textclassifier.TextClassificationManager;
 import android.view.textclassifier.TextLanguage;
@@ -455,7 +456,8 @@ public class HtmlHelper {
                 .removeAttributes("th", "colspan", "rowspan", "width")
                 .addProtocols("img", "src", "cid")
                 .addProtocols("img", "src", "data")
-                .addProtocols("a", "href", "full");
+                .removeProtocols("a", "href", "ftp")
+                .addProtocols("a", "href", "full", "xmpp", "geo", "tel");
         if (text_color)
             whitelist.addAttributes("font", "color");
         if (text_align)
@@ -881,9 +883,17 @@ public class HtmlHelper {
 
         // Autolink
         if (view) {
+            // https://en.wikipedia.org/wiki/List_of_URI_schemes
+            // xmpp:[<user>]@<host>[:<port>]/[<resource>][?<query>]
+            // geo:<lat>,<lon>[,<alt>][;u=<uncertainty>]
+            // tel:<phonenumber>
             final Pattern pattern = Pattern.compile(
-                    PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern() + "|" +
-                            PatternsCompat.AUTOLINK_WEB_URL.pattern());
+                    "(((?i:mailto):)?" + PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern() + ")|" +
+                            PatternsCompat.AUTOLINK_WEB_URL.pattern()
+                                    .replace("(?i:http|https|rtsp)://",
+                                            "(((?i:http|https)://)|((?i:xmpp):))") + "|" +
+                            "(?i:geo:\\d+,\\d+(,\\d+)?(;u=\\d+)?)|" +
+                            "(?i:tel:" + Patterns.PHONE.pattern() + ")");
 
             NodeTraversor.traverse(new NodeVisitor() {
                 private int links = 0;
@@ -1485,7 +1495,7 @@ public class HtmlHelper {
                     return null;
 
                 String text = getPreview(body);
-                if (body == null)
+                if (text == null)
                     return null;
 
                 TextLanguage.Request trequest = new TextLanguage.Request.Builder(text).build();

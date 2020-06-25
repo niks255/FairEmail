@@ -43,6 +43,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.gimap.GmailFolder;
+import com.sun.mail.gimap.GmailMessage;
 import com.sun.mail.iap.BadCommandException;
 import com.sun.mail.iap.CommandFailedException;
 import com.sun.mail.iap.ConnectionException;
@@ -322,6 +323,10 @@ class Core {
 
                                 case EntityOperation.KEYWORD:
                                     onKeyword(context, jargs, folder, message, (IMAPFolder) ifolder);
+                                    break;
+
+                                case EntityOperation.LABEL:
+                                    onLabel(context, jargs, folder, message, (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
                                 case EntityOperation.ADD:
@@ -688,6 +693,26 @@ class Core {
         imessage.setFlags(flags, set);
     }
 
+    private static void onLabel(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
+        // Set/clear Gmail label
+        String label = jargs.getString(0);
+        boolean set = jargs.getBoolean(1);
+
+        Message imessage = ifolder.getMessageByUID(message.uid);
+        if (imessage == null)
+            throw new MessageRemovedException();
+
+        if (!(imessage instanceof GmailMessage))
+            throw new IllegalArgumentException("GmailMessage");
+
+        ((GmailMessage) imessage).setLabels(new String[]{label}, set);
+
+        // Gmail does not push label changes
+        JSONArray fargs = new JSONArray();
+        fargs.put(message.uid);
+        onFetch(context, fargs, folder, istore, ifolder, state);
+    }
+
     private static void onAdd(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException {
         // Add message
         DB db = DB.getInstance(context);
@@ -985,8 +1010,10 @@ class Core {
                 //fp.add(IMAPFolder.FetchProfileItem.MESSAGE);
                 fp.add(FetchProfile.Item.SIZE);
                 fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
-                if (account.isGmail())
+                if (account.isGmail()) {
                     fp.add(GmailFolder.FetchProfileItem.THRID);
+                    fp.add(GmailFolder.FetchProfileItem.LABELS);
+                }
                 ifolder.fetch(new Message[]{imessage}, fp);
 
                 EntityMessage message = synchronizeMessage(context, account, folder, istore, ifolder, imessage, false, download, rules, state);
@@ -1267,7 +1294,7 @@ class Core {
                 imessages = ifolder.search(
                         new AndTerm(
                                 new SentDateTerm(ComparisonTerm.GE, new Date()),
-                                new HeaderTerm("X-Correlation-ID", message.msgid)));
+                                new HeaderTerm(MessageHelper.HEADER_CORRELATION_ID, message.msgid)));
             } catch (MessagingException ex) {
                 Log.e(ex);
             }
@@ -1364,10 +1391,22 @@ class Core {
         try {
             Folder[] isubscribed = defaultFolder.listSubscribed("*");
             for (Folder ifolder : isubscribed) {
-                subscription.add(ifolder.getFullName());
-                Log.i("Subscribed " + defaultFolder.getFullName() + ":" + ifolder.getFullName());
+                String fullName = ifolder.getFullName();
+                if (TextUtils.isEmpty(fullName)) {
+                    Log.e("Subscribed folder name empty namespace=" + defaultFolder.getFullName());
+                    continue;
+                }
+                subscription.add(fullName);
+                Log.i("Subscribed " + defaultFolder.getFullName() + ":" + fullName);
             }
-        } catch (MessagingException ex) {
+        } catch (Throwable ex) {
+            /*
+                06-21 10:02:38.035  9927 10024 E fairemail: java.lang.NullPointerException: Folder name is null
+                06-21 10:02:38.035  9927 10024 E fairemail: 	at com.sun.mail.imap.IMAPFolder.<init>(SourceFile:372)
+                06-21 10:02:38.035  9927 10024 E fairemail: 	at com.sun.mail.imap.IMAPFolder.<init>(SourceFile:411)
+                06-21 10:02:38.035  9927 10024 E fairemail: 	at com.sun.mail.imap.IMAPStore.newIMAPFolder(SourceFile:1809)
+                06-21 10:02:38.035  9927 10024 E fairemail: 	at com.sun.mail.imap.DefaultFolder.listSubscribed(SourceFile:89)
+             */
             Log.e(account.name, ex);
         }
 
@@ -1387,10 +1426,15 @@ class Core {
                     try {
                         Folder[] isubscribed = namespace.listSubscribed("*");
                         for (Folder ifolder : isubscribed) {
-                            subscription.add(ifolder.getFullName());
-                            Log.i("Subscribed " + namespace.getFullName() + ":" + ifolder.getFullName());
+                            String fullName = ifolder.getFullName();
+                            if (TextUtils.isEmpty(fullName)) {
+                                Log.e("Subscribed folder name empty namespace=" + namespace.getFullName());
+                                continue;
+                            }
+                            subscription.add(fullName);
+                            Log.i("Subscribed " + namespace.getFullName() + ":" + fullName);
                         }
-                    } catch (MessagingException ex) {
+                    } catch (Throwable ex) {
                         Log.e(account.name, ex);
                     }
                 } else
@@ -1409,6 +1453,11 @@ class Core {
         Map<String, List<EntityFolder>> parentFolders = new HashMap<>();
         for (Folder ifolder : ifolders) {
             String fullName = ifolder.getFullName();
+            if (TextUtils.isEmpty(fullName)) {
+                Log.e("Folder name empty");
+                continue;
+            }
+
             String[] attrs = ((IMAPFolder) ifolder).getAttributes();
             String type = EntityFolder.getType(attrs, fullName, false);
             boolean subscribed = subscription.contains(fullName);
@@ -1711,6 +1760,8 @@ class Core {
 
                             // No rules
 
+                            reportNewMessage(context, account, folder, message);
+
                             db.setTransactionSuccessful();
                         } finally {
                             db.endTransaction();
@@ -1871,6 +1922,8 @@ class Core {
             FetchProfile fp = new FetchProfile();
             fp.add(UIDFolder.FetchProfileItem.UID); // To check if message exists
             fp.add(FetchProfile.Item.FLAGS); // To update existing messages
+            if (account.isGmail())
+                fp.add(GmailFolder.FetchProfileItem.LABELS);
             ifolder.fetch(imessages, fp);
 
             long fetch = SystemClock.elapsedRealtime();
@@ -2189,6 +2242,7 @@ class Core {
         boolean flagged = helper.getFlagged();
         String flags = helper.getFlags();
         String[] keywords = helper.getKeywords();
+        String[] labels = helper.getLabels();
         boolean update = false;
         boolean process = false;
 
@@ -2300,6 +2354,7 @@ class Core {
             message.flagged = flagged;
             message.flags = flags;
             message.keywords = keywords;
+            message.labels = labels;
             message.ui_seen = seen;
             message.ui_answered = answered;
             message.ui_flagged = flagged;
@@ -2433,6 +2488,7 @@ class Core {
                 }
 
                 runRules(context, imessage, account, folder, message, rules);
+                reportNewMessage(context, account, folder, message);
 
                 db.setTransactionSuccessful();
             } catch (SQLiteConstraintException ex) {
@@ -2532,6 +2588,13 @@ class Core {
                         " keywords=" + TextUtils.join(" ", keywords));
             }
 
+            if (!Helper.equal(message.labels, labels)) {
+                update = true;
+                message.labels = labels;
+                Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid +
+                        " labels=" + (labels == null ? null : TextUtils.join(" ", labels)));
+            }
+
             if (message.hash == null || process) {
                 update = true;
                 message.hash = helper.getHash();
@@ -2574,8 +2637,10 @@ class Core {
 
                     db.message().updateMessage(message);
 
-                    if (process)
+                    if (process) {
                         runRules(context, imessage, account, folder, message, rules);
+                        reportNewMessage(context, account, folder, message);
+                    }
 
                     db.setTransactionSuccessful();
                 } finally {
@@ -2667,6 +2732,20 @@ class Core {
             db.message().setMessageError(message.id, Log.formatThrowable(ex));
         }
 
+        if (BuildConfig.DEBUG &&
+                message.sender != null && EntityFolder.INBOX.equals(folder.type)) {
+            EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
+            if (junk != null) {
+                int senders = db.message().countSender(junk.id, message.sender);
+                if (senders > 0) {
+                    EntityLog.log(context, "JUNK sender=" + message.sender + " count=" + senders);
+                    EntityOperation.queue(context, message, EntityOperation.KEYWORD, "$MoreJunk", true);
+                }
+            }
+        }
+    }
+
+    private static void reportNewMessage(Context context, EntityAccount account, EntityFolder folder, EntityMessage message) {
         // Prepare scroll to top
         if (!message.ui_seen && !message.ui_hide &&
                 message.received > account.created) {
@@ -2818,8 +2897,10 @@ class Core {
             //fp.add(IMAPFolder.FetchProfileItem.MESSAGE);
             //fp.add(FetchProfile.Item.SIZE);
             //fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
-            //if (account.isGmail())
+            //if (account.isGmail()) {
             //    fp.add(GmailFolder.FetchProfileItem.THRID);
+            //    fp.add(GmailFolder.FetchProfileItem.LABELS);
+            //}
             //ifolder.fetch(new Message[]{imessage}, fp);
 
             MessageHelper helper = new MessageHelper(imessage, context);

@@ -97,11 +97,9 @@
     <string name="menu_privacy">حریم خصوصی</string>
     <string name="menu_about">درباره</string>
     <string name="menu_pro">ویژگی‌ نسخه‌ی حرفه‌ای</string>
-    <string name="menu_invite">دعوت کردن</string>
     <string name="menu_rate">به این برنامه امتیاز دهید</string>
-    <string name="menu_other">دیگر برنامه‌ها</string>
     <string name="title_welcome">خوش آمدید</string>
-    <string name="title_eula">توافقنامه مجوز نهایی کاربر</string>
+    <string name="title_eula">توافقنامه مجوز کاربر نهایی</string>
     <string name="title_agree">موافقم</string>
     <string name="title_disagree">مخالفم</string>
     <string name="title_version">نگارش %1$s</string>
@@ -118,16 +116,17 @@
         پروتکل‌های غیر استاندارد،مانند Microsoft Exchange Web Services و Microsoft ActiveSync پشتیبانی نمی‌شوند، همچنین شرح برنامه را ببینید.
     </string>
     <string name="title_setup_quick">راه‌اندازی سریع</string>
-    <string name="title_setup_quick_remark">برای راه‌اندازی سریع یک حساب و شناسه برای بیشتر ارائه دهندگان</string>
-    <string name="title_setup_quick_hint">راه‌اندازی سریع اطلاعات پیکربندی را از autoconfig.thunderbird.net بدست خواهد آورد</string>
+    <string name="title_setup_quick_remark">برای راه‌اندازی سریع یک حساب و شناسه برای بیشتر فراهم کنندگان</string>
+    <string name="title_setup_quick_hint">راه‌اندازی سریع اطلاعات پیکربندی را از autoconfig.thunderbird.net واکشی خواهد کرد</string>
     <string name="title_setup_quick_imap">سرور IMAP برای دریافت پیام‌ها</string>
     <string name="title_setup_quick_smtp">سرور SMTP برای ارسال پیام‌ها</string>
     <string name="title_setup_wizard">جادوگر</string>
     <string name="title_setup_wizard_multiple">جادوگر نصب می‌تواند چندین بار برای راه‌اندازی چندین حساب‌ مورد استفاده قرار بگیرد</string>
     <string name="title_setup_wizard_remark">برای رفتن به صندوق ورودی به عقب بروید</string>
-    <string name="title_setup_other">ارائه دهنده دیگر</string>
+    <string name="title_setup_other">فراهم کننده دیگر</string>
     <string name="title_setup_gmail_support">حساب های گوگل فقط در نسخه‌های رسمی مجاز می‌شوند چون اندروید امضای برنامه را بررسی می‌کند</string>
     <string name="title_setup_gmail_rationale">لطفا مجوز برای انتخاب حساب و خواندن نام شما را اعطا کنید</string>
+    <string name="title_setup_gmail_permissions">گوگل برای خواندن، نوشتن، فرستادن و حذف همیشگی همه ایمیل‌های شما درخواست دسترسی خواهد کرد. FairEmail هیچ‌وقت بدون رضایت آشکار شما پیام‌های شما را حذف نخواهد کرد.</string>
     <string name="title_setup_gmail_drafts">اگر پوشه پیش‌نویس‌ها به‌وسیله IMAP قابل دسترسی نیست، می‌توان آن را در تنظیمات برچسب‌های جیمیل درست کرد</string>
     <string name="title_setup_oauth_rationale">برای دسترسی به %1$s حسابتان اجازه دهید</string>
     <string name="title_setup_oauth_authorize">اجازه دهید</string>
@@ -138,7 +137,7 @@
     <string name="title_setup_quick_success">یک حساب و یک هویت با موفقیت اضافه شد</string>
     <string name="title_setup_quick_failed">می‌توانید برای پیکربندی حساب و هویت در زیر نیز اقدام کنید</string>
     <string name="title_setup_manage">مدیریت</string>
-    <string name="title_setup_grant">اجازه دادن</string>
+    <string name="title_setup_grant">دادن</string>
     <string name="title_setup_grant_again">مجوزهای مورد نیاز را اعطا کنید</string>
     <string name="title_setup_account">راه اندازی حساب‌ها</string>
     <string name="title_setup_account_remark">برای دریافت ایمیل</string>
@@ -146,7 +145,7 @@
     <string name="title_setup_identity">راه اندازی هویت‌ها</string>
     <string name="title_setup_identity_remark">برای ارسال ایمیل</string>
     <string name="title_setup_identity_hint">برای تغییر نام، رنگ، امضاء، وغیره</string>
-    <string name="title_setup_permissions">اجازه دادن دسترسی‌ها</string>
+    <string name="title_setup_permissions">دادن دسترسی</string>
     <string name="title_setup_permissions_remark">برای دسترسی به اطلاعات مخاطبین (اختیاری)</string>
     <string name="title_setup_doze">راه‌اندازی بهینه‌سازی‌ باتری</string>
     <string name="title_setup_doze_remark">برای دریافت مداوم ایمیل (اختیاری)</string>
@@ -279,8 +278,6 @@
     <string name="title_advanced_preview">نمایش دادن پیش‌نمایش پیام</string>
     <string name="title_advanced_preview_italic">پیش‌نمایش پیام را به‌صورت ایتالیک نمایش بده</string>
     <string name="title_advanced_preview_lines">شمار خط‌های پیش‌نمایش</string>
-    <string name="title_advanced_archive_trash">نمایش دکمه‌ها برای بایگانی یا حذف پیام</string>
-    <string name="title_advanced_move">نمایش دکمه برای انتقال پیام</string>
     <string name="title_advanced_addresses">نمایش جزئیات آدرس به صورت پیش‌فرض</string>
     <string name="title_advanced_attachments_alt">نمایش پیوست‌ها بعد از متن پیام</string>
     <string name="title_advanced_contrast">از کنتراست زیاد برای متن پیام استفاده کن</string>
@@ -322,7 +319,9 @@
     <string name="title_advanced_light">استفاده از چراغ اعلان‌ها</string>
     <string name="title_advanced_sound">انتخاب صدای اعلان‌ها</string>
     <string name="title_advanced_confirm_links">تایید بازکردن پیوندها</string>
+    <string name="title_advanced_browse_links">بازکردن پیوند‌ها را به اندروید واگذار کن</string>
     <string name="title_advanced_confirm_images">تایید نمایش تصاویر</string>
+    <string name="title_advanced_tracking">تصاویر ردیاب را، خودکار شناسایی و غیرفعال کن</string>
     <string name="title_advanced_hide_timezone">پیام‌ها را بدون داده منطقه زمانی بفرست</string>
     <string name="title_advanced_display_hidden">نمایش متن پیام‌های پنهان</string>
     <string name="title_advanced_secure">از صفحه برنامه های اخیر پنهان شو و از گرفتن اسکرین‌شات جلوگیری کن</string>
@@ -331,7 +330,7 @@
     <string name="title_advanced_sign_default">امضاء به‌صورت پیشفرض</string>
     <string name="title_advanced_encrypt_default">رمزگذاری به‌صورت پیشفرض</string>
     <string name="title_advanced_auto_decrypt">رمزگشایی خودکار پیام‌ها</string>
-    <string name="title_advanced_openpgp">ارائه دهنده OpenPGP</string>
+    <string name="title_advanced_openpgp">فراهم کننده OpenPGP</string>
     <string name="title_advanced_autocrypt">استفاده از Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">حالت دستی Autocrypt</string>
     <string name="title_advanced_check_certificate">بررسی کلید عمومی هنگام فرستادن</string>
@@ -362,13 +361,13 @@
     <string name="title_advanced_sync_delay_hint">این سرعت همگام‌سازی پیام‌ها را کاهش خواهد داد</string>
     <string name="title_advanced_usenet_hint">بین متن و امضا \'-- \' درج کنید</string>
     <string name="title_advanced_metered_hint">اتصال‌های حجمی عموما شبکه‌های موبایل یا یک هات اسپات غیر رایگان می‌باشند</string>
-    <string name="title_advanced_browse_hint">گرفتن و دریافت پیام‌های بیشتر پیمایش به سمت پایین</string>
+    <string name="title_advanced_browse_hint">واکشی پیام‌های بیشتر هنگام پیمایش به پایین</string>
     <string name="title_advanced_threading_hint">پیام‌های گروهی مرتبط با یکدیگر</string>
     <string name="title_advanced_gravatars_hint">شاید خطر حریم خصوصی وجود داشته باشد</string>
     <string name="title_advanced_preview_hint">فقط زمانی در دسترس است که متن پیام دانلود شده باشد</string>
     <string name="title_advanced_autoexpand_hint">باز کردن خودکار پیام وقتی فقط یک پیام یا فقط یک پیام خوانده نشده در مکالمه وجود دارد</string>
     <string name="title_advanced_autoclose_hint">بسته شدن خودکار مکالمات زمانی که همه پیام‌ها آرشیو شده، فرستاده شده و یا به به سطل آشغال فرستاده شده است</string>
-    <string name="title_advanced_sender_hint">اکثر سرویس دهندگان اجازه اصلاح یا تغییر آدرس فرستنده را نمی‌دهند</string>
+    <string name="title_advanced_sender_hint">بیشتر فراهم‌کنندگان نشانی‌های ویرایش شده فرستنده را قبول نمی‌کنند</string>
     <string name="title_advanced_display_pin_hint">یک پین بر تایید هویت بیومتریک اولویت دارد</string>
     <string name="title_advanced_badge_hint">تنها روی راه‌اندازهای پشتیبانی‌شده در دسترس است</string>
     <string name="title_advanced_notify_action_hint">حداکثر سه کنش نشان داده خواهد شد</string>
@@ -402,7 +401,7 @@
     <string name="title_domain">نام دامنه</string>
     <string name="title_autoconfig">دریافت تنظیمات</string>
     <string name="title_aliases">نام‌های مستعار</string>
-    <string name="title_provider">سرویس دهنده</string>
+    <string name="title_provider">فراهم کننده</string>
     <string name="title_custom">سفارشی</string>
     <string name="title_host">نام میزبان</string>
     <string name="title_allow_insecure">اجازه اتصال ناامن</string>
@@ -421,6 +420,7 @@
     <string name="title_leave_deleted">رهاکردن پیام‌های حذف شده روی سرور</string>
     <string name="title_leave_on_device">رها کردن پیام‌ها روی دستگاه</string>
     <string name="title_keep_alive_interval">فعال ماندن/فاصله اخذ (دقایق)</string>
+    <string name="title_related_identity">افزودن هویت مرتبط</string>
     <string name="title_check">بررسی</string>
     <string name="title_no_name">نام وجود ندارد</string>
     <string name="title_no_email">ایمیل آدرس وجود ندارد</string>
@@ -432,7 +432,7 @@
     <string name="title_no_password">گذرواژه موجود نیست</string>
     <string name="title_no_inbox">صندوق دریافتی پیدا نشد</string>
     <string name="title_no_primary_drafts">عدم وجود حساب اصلی یا پوشه پیش‌نویس‌ها</string>
-    <string name="title_no_idle">این سرویس دهنده از قابلیت نشاندن پیام‌ها پشتیبانی نمی‌کند. به همین منظور تاخیر در وصول پیام‌های جدید وجود خواهد داشت و موجب افزایش مصرف باتری می‌شود.</string>
+    <string name="title_no_idle">این فراهم‌کننده از قابلیت نشاندن پیام‌ها پشتیبانی نمی‌کند. برای همین دریافت پیام‌های تازه با دیرکرد همراه خواهد بود و مصرف باتری افزایش خواهد یافت.</string>
     <string name="title_no_utf8">فراهم‌کننده از UTF-8 پشتیبانی نمی‌کند</string>
     <string name="title_no_sync">خطای همگام سازی از %1$s</string>
     <string name="title_drafts_required">برای ارسال پیام‌ها به پوشه پیش‌نویس‌ها نیاز است</string>
@@ -465,6 +465,7 @@
     <string name="title_delete_operation">حذف عملیات با دریافت پیام خطا؟</string>
     <string name="title_delete_contacts">حذف همه مخاطبین محلی؟</string>
     <string name="title_no_operations">عملیاتی در انتظار وجود ندارد </string>
+    <string name="title_hint_operations">عملیات‌های حذف می‌تواند موجب ناپدید شدن پیام‌ها و مشکلات همگام‌سازی شود</string>
     <string name="title_folder_name">نام پوشه</string>
     <string name="title_display_name">نامی که نمایش داده می شود</string>
     <string name="title_show_folders">نمایش پوشه‌های پنهان</string>
@@ -481,7 +482,10 @@
     <string name="title_sync_days">همگام سازی پیام‌ها (روزها)</string>
     <string name="title_sync_days_remark">افزایش مقدار این باعث افزایش مصرف باتری می‌شود</string>
     <string name="title_keep_days">نگهداری پیام‌ها (روزها)</string>
+    <string name="title_keep_days_remark">پیام‌های قدیمی از این دستگاه حذف خواهند شد، ولی بر روی سرور باقی خواهند ماند</string>
     <string name="title_keep_all">نگهداری تمامی پیام‌ها</string>
+    <string name="title_auto_trash">پیام‌های قدیمی را، خودکار به زباله‌دان منتقل کن</string>
+    <string name="title_auto_delete">پیام‌های قدیمی را برای همیشه، خودکار حذف کن</string>
     <string name="title_folder_name_missing">نام پوشه موجود نیست</string>
     <string name="title_folder_exists">پوشه %1$s موجود است</string>
     <string name="title_folder_delete">حذف همیشگی این پوشه با تمامی پیام‌های همراه آن؟</string>
@@ -556,7 +560,7 @@
     <string name="title_reply_list">پاسخ به لیست</string>
     <string name="title_reply_receipt">فرستادن رسید خواندن</string>
     <string name="title_reply_template">پاسخ با قالب</string>
-    <string name="title_moving">انتقال می‌یابد به %1$s</string>
+    <string name="title_move_undo">در حال انتقال به %1$s (%2$d)</string>
     <string name="title_open_with">باز کردن با</string>
     <string name="title_authentication_failed">تایید %1$s ناموفق بود</string>
     <string name="title_receipt_subject">رسید خواندن: %1$s</string>
@@ -653,7 +657,7 @@
     <string name="title_unknown_key">کلید خصوصی با هیچ کلید رمزنگاری همخوانی ندارد</string>
     <string name="title_send_plain_text">فقط متن ساده</string>
     <string name="title_send_receipt">درخواست رسید دریافت</string>
-    <string name="title_send_receipt_remark">بیشتر ارائه دهندگان و کارخواه‌ها، درخواست‌های رسید دریافت را نادیده می‌گیرند</string>
+    <string name="title_send_receipt_remark">بیشتر فراهم‌کنندگان و کارخواه‌ها، درخواست‌های رسید دریافت را نادیده می‌گیرند</string>
     <string name="title_from_missing">فرستنده وجود ندارد</string>
     <string name="title_extra_missing">نام کاربری وجود ندارد</string>
     <string name="title_to_missing">گیرنده وجود ندارد</string>
@@ -794,6 +798,7 @@
     <string name="title_rule_name_missing">نام دستور موجود نیست</string>
     <string name="title_rule_condition_missing">فاقد شرایط</string>
     <string name="title_rule_execute">اکنون اجرا کن</string>
+    <string name="title_rule_applied">پیام‌های متأثر: %1$d</string>
     <string name="title_rule_check">بررسی</string>
     <string name="title_rule_matched">پیام‌های مطابق</string>
     <string name="title_rule_no_matches">هیچ پیام مطابقی وجود ندارد</string>
@@ -830,7 +835,7 @@
     <string name="title_legend_similar">جستجوی پیام‌های مشابه</string>
     <string name="title_legend_notify">آگاه‌سازی از پیام‌های جدید</string>
     <string name="title_legend_sync_keep">تعداد روزهای همگام سازی / برای نگه داشتن پیام ها</string>
-    <string name="title_legend_download_fetch">شمار پیام‌های بارگیری شده/ سرتیتر بدست آورده شده</string>
+    <string name="title_legend_download_fetch">شمار پیام‌های بارگیری شده/ سرتیترهای واکشی شده</string>
     <string name="title_legend_stop">توقف پردازش دستورات</string>
     <string name="title_legend_thread">گفتگو</string>
     <string name="title_legend_zoom">تغییر اندازه متن</string>
@@ -951,6 +956,7 @@
     <string name="title_snooze_now">تعویق</string>
     <string name="title_loading">درحال بارگذاری &#8230;</string>
     <string name="title_set">تنظیم</string>
+    <string name="title_fetching_again">در حال واکشی دوباره پیام از سرور</string>
     <string name="title_conversation_actions">کنش‌ها</string>
     <string name="title_conversation_action_reply">پاسخ با: \'%1$s\'</string>
     <string name="title_conversation_action_copy">کپی: \'%1$s\'</string>
@@ -958,7 +964,6 @@
     <string name="title_icalendar_decline">رد کردن</string>
     <string name="title_icalendar_maybe">شاید</string>
     <string name="title_icalendar_calendar">تقویم</string>
-    <string name="title_try">FairEmail را امتحان کنید، برنامه‌ ایمیل منبع‌باز و دوستدار حریم خصوصی برای اندروید</string>
     <string name="title_pro_feature">این یکی از ویژگی‌های نسخه حرفه‌ای است</string>
     <string name="title_pro_list">لیست ویژگی‌های نسخه حرفه‌ای</string>
     <string name="title_pro_purchase">خرید</string>

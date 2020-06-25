@@ -119,9 +119,7 @@
     <string name="menu_privacy">Soukromí</string>
     <string name="menu_about">O aplikaci</string>
     <string name="menu_pro">Pro funkce</string>
-    <string name="menu_invite">Pozvat</string>
     <string name="menu_rate">Ohodnotit aplikaci</string>
-    <string name="menu_other">Další aplikace</string>
     <string name="title_welcome">Vítejte</string>
     <string name="title_eula">Licenční ujednání s koncovým uživatelem</string>
     <string name="title_agree">Souhlasím</string>
@@ -324,8 +322,6 @@
     <string name="title_advanced_preview">Zobrazit náhled zprávy</string>
     <string name="title_advanced_preview_italic">Zobrazit náhled zprávy kurzívou</string>
     <string name="title_advanced_preview_lines">Počet řádků náhledu</string>
-    <string name="title_advanced_archive_trash">Zobrazit tlačítka pro archivaci nebo přesun zprávy do koše</string>
-    <string name="title_advanced_move">Zobrazit tlačítko pro přesun zprávy</string>
     <string name="title_advanced_addresses">Zobrazit detaily adresy automaticky</string>
     <string name="title_advanced_attachments_alt">Přesunout zobrazení příloh pod text zprávy</string>
     <string name="title_advanced_contrast">Použít vysoký kontrast pro text zprávy</string>
@@ -484,6 +480,7 @@
     <string name="title_advanced_move_hint">Cílovou složku lze změnit v nastavení účtu</string>
     <string name="title_advanced_notify_no_grouping">Tato verze Androidu nepodporuje seskupování oznámení</string>
     <string name="title_advanced_notify_no_channels">Tato verze Androidu nepodporuje kanály oznámení</string>
+    <string name="title_advanced_queries_hint">Povolením se sníží výkonnost, avšak na některých zařízeních je povolení nezbytné</string>
     <string name="title_advanced_fts_hint">Povolením se zlepší výkon vyhledávání, ale také se zvýší využití baterie a místa v úložišti</string>
     <string name="title_advanced_english_hint">Restartuje aplikaci</string>
     <string name="title_advanced_experiments_hint">Seznam aktuálních experimentálních funkcí</string>
@@ -700,7 +697,7 @@
     <string name="title_reply_list">Odpovědět seznamu</string>
     <string name="title_reply_receipt">Odeslat potvrzení o přečtení</string>
     <string name="title_reply_template">Odpovědět šablonou</string>
-    <string name="title_moving">Přesouvám do %1$s</string>
+    <string name="title_move_undo">Přesouvání do %1$s (%2$d)</string>
     <string name="title_open_with">Otevřít v aplikaci</string>
     <string name="title_authentication_failed">%1$s ověření se nezdařilo</string>
     <string name="title_receipt_subject">Potvrzení o přečtení: %1$s</string>
@@ -1055,6 +1052,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Zobrazit citace</string>
     <string name="title_legend_show_junk">Považovat za nevyžádané</string>
+    <string name="title_legend_create_rule">Vytvořit pravidlo</string>
     <string name="title_legend_show_unsubscribe">Ukončit odebírání kanálu</string>
     <string name="title_legend_show_images">Zobrazit obrázky</string>
     <string name="title_legend_show_full">Zobrazit původní zprávu</string>
@@ -1143,7 +1141,6 @@
     <string name="title_icalendar_decline">Odmítnout</string>
     <string name="title_icalendar_maybe">Nezávazně</string>
     <string name="title_icalendar_calendar">Kalendář</string>
-    <string name="title_try">Vyzkoušej FairEmail, e-mailový klient pro Android s otevřeným zdrojovým kódem respektující soukromí</string>
     <string name="title_pro_feature">Toto je Pro funkce</string>
     <string name="title_pro_list">Seznam Pro funkcí</string>
     <string name="title_pro_purchase">Koupit</string>

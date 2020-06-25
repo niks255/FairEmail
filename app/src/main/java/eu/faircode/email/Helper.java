@@ -491,7 +491,7 @@ public class Helper {
                 context.startActivity(intent);
             } catch (ActivityNotFoundException ex) {
                 Log.w(ex);
-                ToastEx.makeText(context, context.getString(R.string.title_no_viewer, uri.toString()), Toast.LENGTH_LONG).show();
+                ToastEx.makeText(context, context.getString(R.string.title_no_viewer, uri), Toast.LENGTH_LONG).show();
             }
     }
 
@@ -528,7 +528,7 @@ public class Helper {
                 customTabsIntent.launchUrl(context, uri);
             } catch (ActivityNotFoundException ex) {
                 Log.w(ex);
-                ToastEx.makeText(context, context.getString(R.string.title_no_viewer, uri.toString()), Toast.LENGTH_LONG).show();
+                ToastEx.makeText(context, context.getString(R.string.title_no_viewer, uri), Toast.LENGTH_LONG).show();
             } catch (Throwable ex) {
                 Log.e(ex);
                 ToastEx.makeText(context, Log.formatThrowable(ex, false), Toast.LENGTH_LONG).show();
@@ -564,12 +564,6 @@ public class Helper {
             view(context, Uri.parse(FAQ_URI), false);
         else
             view(context, Uri.parse(FAQ_URI + "#user-content-faq" + question), false);
-    }
-
-    static Intent getIntentOpenKeychain() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(BuildConfig.OPENKEYCHAIN_URI));
-        return intent;
     }
 
     static String getOpenKeychainPackage(Context context) {
@@ -1393,6 +1387,12 @@ public class Helper {
     }
 
     static boolean equal(String[] a1, String[] a2) {
+        if (a1 == null && a2 == null)
+            return true;
+
+        if (a1 == null || a2 == null)
+            return false;
+
         if (a1.length != a2.length)
             return false;
 

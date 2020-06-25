@@ -311,8 +311,8 @@ public interface DaoMessage {
             " OR (:subject AND `subject` LIKE :find COLLATE NOCASE)" + // unsuitable index
             " OR (:keywords AND `keywords` LIKE :find COLLATE NOCASE)" + // no index
             " OR (:message AND `preview` LIKE :find COLLATE NOCASE)" + // no index
-            " OR (:attachments AND attachment.name LIKE :find COLLATE NOCASE)" + // no index
-            " OR (:attachments AND attachment.type LIKE :find COLLATE NOCASE)) AS matched" + // no index
+            " OR (attachment.name LIKE :find COLLATE NOCASE)" + // no index
+            " OR (attachment.type LIKE :find COLLATE NOCASE)) AS matched" + // no index
             " FROM message" +
             " LEFT JOIN attachment ON attachment.message = message.id" +
             " WHERE NOT ui_hide" +
@@ -408,6 +408,12 @@ public interface DaoMessage {
             " AND (NOT :filter_unflagged OR message.ui_flagged)" +
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_drafts + ")")
     int countVisible(long id, boolean filter_seen, boolean filter_unflagged, boolean filter_snoozed);
+
+    @Query("SELECT COUNT(id)" +
+            " FROM message" +
+            " WHERE folder = :folder" +
+            " AND sender = :sender")
+    int countSender(long folder, String sender);
 
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, identity.color AS accountColor" +

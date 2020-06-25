@@ -662,6 +662,17 @@
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swLabels"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_advanced_labels"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swKeywords"
+            app:switchPadding="12dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swFlags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -670,7 +681,7 @@
             android:text="@string/title_advanced_flags"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swKeywords"
+            app:layout_constraintTop_toBottomOf="@id/swLabels"
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -777,30 +788,6 @@
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swArchiveTrash"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:checked="true"
-            android:text="@string/title_advanced_archive_trash"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swAddresses"
-            app:switchPadding="12dp" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swMove"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:checked="true"
-            android:text="@string/title_advanced_move"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swArchiveTrash"
-            app:switchPadding="12dp" />
-
-        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swContrast"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -808,7 +795,7 @@
             android:text="@string/title_advanced_contrast"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swMove"
+            app:layout_constraintTop_toBottomOf="@id/swAddresses"
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat

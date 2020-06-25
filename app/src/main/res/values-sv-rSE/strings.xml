@@ -97,9 +97,7 @@
     <string name="menu_privacy">Sekretess</string>
     <string name="menu_about">Om</string>
     <string name="menu_pro">Pro-funktioner</string>
-    <string name="menu_invite">Bjud in</string>
     <string name="menu_rate">Betygsätt denna app</string>
-    <string name="menu_other">Andra appar</string>
     <string name="title_welcome">Välkommen</string>
     <string name="title_eula">Licensavtal för slutanvändare</string>
     <string name="title_agree">Jag samtycker</string>
@@ -296,13 +294,12 @@
     <string name="title_advanced_subject_italic">Visa ämnet kursivt</string>
     <string name="title_advanced_subject_elipsed">När det behövs, förkorta ämnet</string>
     <string name="title_advanced_keywords">Visa nyckelord i sidhuvudet för meddelandet</string>
+    <string name="title_advanced_labels">Visa Gmail-etiketter i meddelandehuvud</string>
     <string name="title_advanced_flags">Visa stjärnor</string>
     <string name="title_advanced_flags_background">Visa färgad bakgrund istället för färgade stjärnor</string>
     <string name="title_advanced_preview">Förhandsvisning av meddelande</string>
     <string name="title_advanced_preview_italic">Visa förhandsgranskning av meddelande i kursiv stil</string>
     <string name="title_advanced_preview_lines">Antal förhandsgranskningsrader</string>
-    <string name="title_advanced_archive_trash">Visa knappar för att arkivera eller kasta i papperskorgen för meddelanden</string>
-    <string name="title_advanced_move">Visa knappen för att flytta ett meddelande</string>
     <string name="title_advanced_addresses">Visa adressuppgifter som standard</string>
     <string name="title_advanced_attachments_alt">Visa bilagor efter meddelandetexten</string>
     <string name="title_advanced_contrast">Använd hög kontrast för meddelandetext</string>
@@ -461,6 +458,7 @@
     <string name="title_advanced_move_hint">Målmappen kan konfigureras i kontoinställningarna</string>
     <string name="title_advanced_notify_no_grouping">Den här Android-versionen stödjer inte notifikationsgruppering</string>
     <string name="title_advanced_notify_no_channels">Den här Android-versionen stödjer inte notifikationsgruppering</string>
+    <string name="title_advanced_queries_hint">Aktivering av detta kommer att minska prestandan, men aktivering krävs på vissa enheter</string>
     <string name="title_advanced_fts_hint">Att aktivera detta förbättrar sökprestandan, men ökar både batteri- och utrymmesanvändingen</string>
     <string name="title_advanced_english_hint">Detta startar om appen</string>
     <string name="title_advanced_experiments_hint">Lista över aktuella experimentella funktioner</string>
@@ -626,6 +624,7 @@
     <string name="title_duplicate_in">Duplicerade meddelande i %1$s</string>
     <string name="title_subject_reply">Sv: %1$s</string>
     <string name="title_subject_forward">Vb: %1$s</string>
+    <string name="title_extras">Extra knappar</string>
     <string name="title_seen">Märk som läst</string>
     <string name="title_unseen">Märk som oläst</string>
     <string name="title_hide">Dölj</string>
@@ -650,6 +649,7 @@
     <string name="title_raw_save">Spara rent meddelande</string>
     <string name="title_raw_send">Skicka som bilaga</string>
     <string name="title_manage_keywords">Hantera nyckelord</string>
+    <string name="title_manage_labels">Hantera Gmail-etiketter</string>
     <string name="title_add_keyword">Lägg till nyckelord</string>
     <string name="title_show_inline">Visa infogade bilagor</string>
     <string name="title_download_all">Hämta alla</string>
@@ -677,7 +677,7 @@
     <string name="title_reply_list">Svara på listan</string>
     <string name="title_reply_receipt">Skicka läskvitto</string>
     <string name="title_reply_template">Svara med mall</string>
-    <string name="title_moving">Flyttar till %1$s</string>
+    <string name="title_move_undo">Flyttar till %1$s (%2$d)</string>
     <string name="title_open_with">Öppna med</string>
     <string name="title_authentication_failed">%1$s autentisering misslyckades</string>
     <string name="title_receipt_subject">Läs kvitto: %1$s</string>
@@ -1032,6 +1032,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Visa citat</string>
     <string name="title_legend_show_junk">Behandla som skräppost</string>
+    <string name="title_legend_create_rule">Skapa regel</string>
     <string name="title_legend_show_unsubscribe">Avregistrera dig från listan</string>
     <string name="title_legend_show_images">Visa bilder</string>
     <string name="title_legend_show_full">Visa originalmeddelande</string>
@@ -1120,7 +1121,6 @@
     <string name="title_icalendar_decline">Avfärda</string>
     <string name="title_icalendar_maybe">Kanske</string>
     <string name="title_icalendar_calendar">Kalender</string>
-    <string name="title_try">Prova FairEmail, en e-postapp för Android med öppen källkod som respekterar din integritet</string>
     <string name="title_pro_feature">Detta är en pro-funktion</string>
     <string name="title_pro_list">Lista över pro-funktioner</string>
     <string name="title_pro_purchase">Köp</string>

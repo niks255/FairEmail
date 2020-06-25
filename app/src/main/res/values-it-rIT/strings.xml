@@ -97,9 +97,7 @@
     <string name="menu_privacy">Privacy</string>
     <string name="menu_about">Al riguardo</string>
     <string name="menu_pro">Funzionalità versione Pro</string>
-    <string name="menu_invite">Invita</string>
     <string name="menu_rate">Valuta questa app</string>
-    <string name="menu_other">Altre app</string>
     <string name="title_welcome">Benvenuto</string>
     <string name="title_eula">Contratto di licenza con l\'utente finale</string>
     <string name="title_agree">Accetto</string>
@@ -302,8 +300,6 @@
     <string name="title_advanced_preview">Mostra l\'anteprima del messaggio</string>
     <string name="title_advanced_preview_italic">Mostra anteprima messaggio in corsivo</string>
     <string name="title_advanced_preview_lines">Numero di linee di anteprima</string>
-    <string name="title_advanced_archive_trash">Mostra i pulsanti per archiviare o cestinare un messaggio</string>
-    <string name="title_advanced_move">Mostra il pulsante per spostare un messaggio</string>
     <string name="title_advanced_addresses">Mostra i dettagli dell\'indirizzo per impostazione predefinita</string>
     <string name="title_advanced_attachments_alt">Mostra allegati dopo il testo del messaggio</string>
     <string name="title_advanced_contrast">Usa il contrasto elevato per il testo del messaggio</string>
@@ -462,6 +458,7 @@
     <string name="title_advanced_move_hint">La cartella di destinazione può essere configurata nelle impostazioni dell\'account</string>
     <string name="title_advanced_notify_no_grouping">Questa versione Android non supporta il raggruppamento di notifiche</string>
     <string name="title_advanced_notify_no_channels">Questa versione Android non supporta i canali di notifica</string>
+    <string name="title_advanced_queries_hint">Abilitare questo diminuirà le prestazioni, tuttavia, l\'attivazione è necessaria su alcuni dispositivi</string>
     <string name="title_advanced_fts_hint">Abilitando questa opzione migliora le prestazioni di ricerca, ma aumenta anche l\'utilizzo dello spazio di batteria e archiviazione</string>
     <string name="title_advanced_english_hint">Questo riavvierà l\'app</string>
     <string name="title_advanced_experiments_hint">Elenco delle attuali funzionalità sperimentali</string>
@@ -678,7 +675,7 @@
     <string name="title_reply_list">Rispondi alla lista</string>
     <string name="title_reply_receipt">Invia conferma di lettura</string>
     <string name="title_reply_template">Rispondi con modello</string>
-    <string name="title_moving">Spostamento in %1$s</string>
+    <string name="title_move_undo">Spostamento verso %1$s (%2$d)</string>
     <string name="title_open_with">Apri con</string>
     <string name="title_authentication_failed">%1$s autenticazione fallita</string>
     <string name="title_receipt_subject">Conferma di lettura: %1$s</string>
@@ -1032,6 +1029,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Mostra citazioni</string>
     <string name="title_legend_show_junk">Tratta come spam</string>
+    <string name="title_legend_create_rule">Crea regola</string>
     <string name="title_legend_show_unsubscribe">Cancellare dalla lista</string>
     <string name="title_legend_show_images">Mostra immagini</string>
     <string name="title_legend_show_full">Mostra il messaggio originale</string>
@@ -1120,7 +1118,6 @@
     <string name="title_icalendar_decline">Rifiuta</string>
     <string name="title_icalendar_maybe">Forse</string>
     <string name="title_icalendar_calendar">Calendario</string>
-    <string name="title_try">Prova FairEmail, un\'app email per Android open source e rispettosa della privacy</string>
     <string name="title_pro_feature">Questa è una funzionalità a pagamento</string>
     <string name="title_pro_list">Elenco delle funzionalità a pagamento</string>
     <string name="title_pro_purchase">Acquista</string>
