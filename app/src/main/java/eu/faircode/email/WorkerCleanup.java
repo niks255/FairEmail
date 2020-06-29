@@ -25,9 +25,7 @@ import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
@@ -62,7 +60,7 @@ public class WorkerCleanup extends Worker {
         Log.i("Running " + getName());
 
         Thread.currentThread().setPriority(THREAD_PRIORITY_BACKGROUND);
-        cleanup(getApplicationContext(), getInputData().getBoolean("manual", false));
+        cleanup(getApplicationContext(), false);
 
         return Result.success();
     }
@@ -109,6 +107,10 @@ public class WorkerCleanup extends Worker {
                 if (cleanup_attachments) {
                     int purged = db.attachment().purge(new Date().getTime());
                     Log.i("Attachments purged=" + purged);
+
+                    // Clear raw headers
+                    int headers = db.message().clearMessageHeaders();
+                    Log.i("Cleared message headers=" + headers);
                 }
 
                 // Restore alarms
@@ -231,12 +233,17 @@ public class WorkerCleanup extends Worker {
             if (manual) {
                 // https://www.sqlite.org/lang_vacuum.html
                 long size = context.getDatabasePath(db.getOpenHelper().getDatabaseName()).length();
-                long space = Helper.getAvailableStorageSpace();
-                if (size * 2 < space) {
-                    Log.i("Running VACUUM");
+                long available = Helper.getAvailableStorageSpace();
+                if (size > 0 && size * 2.5 < available) {
+                    Log.i("Running VACUUM" +
+                            " size=" + Helper.humanReadableByteCount(size, true) +
+                            "/" + Helper.humanReadableByteCount(available, true));
                     db.getOpenHelper().getWritableDatabase().execSQL("VACUUM;");
                 } else
-                    Log.w("Insufficient space for VACUUM");
+                    Log.w("Insufficient space for VACUUM" +
+                            " size=" + Helper.humanReadableByteCount(size, true) +
+                            "/" + Helper.humanReadableByteCount(available, true));
+
             }
 
         } catch (Throwable ex) {
@@ -263,24 +270,6 @@ public class WorkerCleanup extends Worker {
                     .enqueueUniquePeriodicWork(getName(), ExistingPeriodicWorkPolicy.KEEP, workRequest);
 
             Log.i("Queued " + getName());
-        } catch (IllegalStateException ex) {
-            // https://issuetracker.google.com/issues/138465476
-            Log.w(ex);
-        }
-    }
-
-    static void queueOnce(Context context) {
-        try {
-            Log.i("Queuing " + getName() + " once");
-
-            Data data = new Data.Builder().putBoolean("manual", true).build();
-
-            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(WorkerCleanup.class)
-                    .setInputData(data)
-                    .build();
-            WorkManager.getInstance(context).enqueue(workRequest);
-
-            Log.i("Queued " + getName() + " once");
         } catch (IllegalStateException ex) {
             // https://issuetracker.google.com/issues/138465476
             Log.w(ex);

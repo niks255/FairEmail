@@ -155,11 +155,12 @@ public class ContactInfo {
         boolean identicons = prefs.getBoolean("identicons", false);
         boolean circular = prefs.getBoolean("circular", true);
 
-        if (Helper.hasPermission(context, Manifest.permission.READ_CONTACTS)) {
+        if (!TextUtils.isEmpty(info.email) &&
+                Helper.hasPermission(context, Manifest.permission.READ_CONTACTS)) {
             ContentResolver resolver = context.getContentResolver();
             Uri uri = Uri.withAppendedPath(
                     ContactsContract.CommonDataKinds.Email.CONTENT_LOOKUP_URI,
-                    Uri.encode(address.getAddress()));
+                    Uri.encode(info.email.toLowerCase(Locale.ROOT)));
             try (Cursor cursor = resolver.query(uri,
                     new String[]{
                             ContactsContract.CommonDataKinds.Photo.CONTACT_ID,
@@ -195,8 +196,8 @@ public class ContactInfo {
         }
 
         if (info.bitmap == null) {
-            if (gravatars) {
-                String gkey = address.getAddress().toLowerCase(Locale.ROOT);
+            if (gravatars && !TextUtils.isEmpty(info.email)) {
+                String gkey = info.email.toLowerCase(Locale.ROOT);
                 boolean lookup;
                 synchronized (emailGravatar) {
                     Avatar avatar = emailGravatar.get(gkey);
@@ -245,14 +246,14 @@ public class ContactInfo {
         boolean identicon = false;
         if (info.bitmap == null) {
             int dp = Helper.dp2pixels(context, 96);
-            if (generated) {
+            if (generated && !TextUtils.isEmpty(info.email)) {
                 if (identicons) {
                     identicon = true;
                     info.bitmap = ImageHelper.generateIdenticon(
-                            address.getAddress(), dp, 5, context);
+                            info.email, dp, 5, context);
                 } else
                     info.bitmap = ImageHelper.generateLetterIcon(
-                            address.getAddress(), address.getPersonal(), dp, context);
+                            info.email, address.getPersonal(), dp, context);
             }
         }
 
@@ -262,7 +263,7 @@ public class ContactInfo {
         if (info.displayName == null)
             info.displayName = address.getPersonal();
 
-        if (!info.known) {
+        if (!info.known && !TextUtils.isEmpty(info.email)) {
             DB db = DB.getInstance(context);
             EntityContact contact = db.contact().getContact(account, EntityContact.TYPE_TO, info.email);
             info.known = (contact != null);
@@ -308,9 +309,21 @@ public class ContactInfo {
                 }
             });
 
-            Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-            Log.i("Observing uri=" + uri);
-            context.getContentResolver().registerContentObserver(uri, true, observer);
+            try {
+                Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+                Log.i("Observing uri=" + uri);
+                context.getContentResolver().registerContentObserver(uri, true, observer);
+            } catch (SecurityException ex) {
+                Log.w(ex);
+                /*
+                    Should never happen, but:
+                    Caused by: android.os.RemoteException:
+                      at com.android.server.content.ContentService.registerContentObserver (ContentService.java:340)
+                      at android.content.IContentService$Stub.onTransact (IContentService.java:76)
+                      at com.android.server.content.ContentService.onTransact (ContentService.java:262)
+                      at android.os.Binder.execTransact (Binder.java:731)
+                 */
+            }
         }
     }
 
@@ -320,8 +333,11 @@ public class ContactInfo {
 
         for (Address from : addresses) {
             String email = ((InternetAddress) from).getAddress();
-            if (emailLookup.containsKey(email))
-                return emailLookup.get(email).uri;
+            if (!TextUtils.isEmpty(email)) {
+                Lookup lookup = emailLookup.get(email.toLowerCase(Locale.ROOT));
+                if (lookup != null)
+                    return lookup.uri;
+            }
         }
 
         return null;
@@ -336,10 +352,10 @@ public class ContactInfo {
             InternetAddress address = (InternetAddress) addresses[i];
             String email = address.getAddress();
             String personal = address.getPersonal();
-            if (!TextUtils.isEmpty(email) && emailLookup.containsKey(email)) {
-                Lookup lookup = emailLookup.get(email);
-                if (TextUtils.isEmpty(personal) ||
-                        (prefer_contact && !personal.equals(lookup.displayName)))
+            if (!TextUtils.isEmpty(email)) {
+                Lookup lookup = emailLookup.get(email.toLowerCase(Locale.ROOT));
+                if (lookup != null &&
+                        (TextUtils.isEmpty(personal) || prefer_contact))
                     personal = lookup.displayName;
             }
             try {
@@ -378,7 +394,7 @@ public class ContactInfo {
                     Lookup lookup = new Lookup();
                     lookup.uri = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
                     lookup.displayName = displayName;
-                    all.put(email, lookup);
+                    all.put(email.toLowerCase(Locale.ROOT), lookup);
                 }
             } catch (Throwable ex) {
                 Log.e(ex);

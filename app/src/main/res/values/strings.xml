@@ -9,7 +9,7 @@
     <string name="app_crash">FairEmail is not supported on this device because bugs in Android cause crashes</string>
     <string name="app_exit">Go \'back\' again to exit</string>
 
-    <string name="channel_service">Service</string>
+    <string name="channel_service">Receive</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">Notifications</string>
     <string name="channel_update">Updates</string>
@@ -98,6 +98,7 @@
     <string name="title_notification_idle">Idle</string>
     <string name="title_notification_failed">\'%1$s\' failed</string>
     <string name="title_notification_alert">\'%1$s\' server alert</string>
+    <string name="title_notification_sending_failed">Sending to %1$s failed</string>
 
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -308,7 +309,6 @@
     <string name="title_advanced_rlah">Roam like at home</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
-    <string name="title_advanced_socks">Use SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
 
     <string name="title_advanced_caption_general">General</string>
@@ -356,10 +356,11 @@
     <string name="title_advanced_addresses">Expand address details by default</string>
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
-    <string name="title_advanced_monospaced">Use monospaced font for message text</string>
-    <string name="title_advanced_text_color">Show text colors</string>
-    <string name="title_advanced_text_size">Show small and large texts</string>
-    <string name="title_advanced_text_align">Show left/center/right aligned texts</string>
+    <string name="title_advanced_monospaced">Use monospaced font for message text by default</string>
+    <string name="title_advanced_text_color">Use text colors</string>
+    <string name="title_advanced_text_size">Use text sizes</string>
+    <string name="title_advanced_text_font">Use fonts</string>
+    <string name="title_advanced_text_align">Use text alignment</string>
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
     <string name="title_advanced_images_inline">Automatically show inline images</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
@@ -498,7 +499,6 @@
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
     <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
     <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers, which can lead to connection problems</string>
-    <string name="title_advanced_socks_hint">Using a remote proxy server is insecure because proxy connections are not encrypted</string>
     <string name="title_advanced_roaming_hint">Messages headers will always be fetched when roaming. You can use the device\'s roaming setting to disable internet while roaming.</string>
 
     <string name="title_advanced_browse_hint">Fetch more messages when scrolling down</string>
@@ -722,7 +722,7 @@
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
 
-    <string name="title_extras">Extra buttons</string>
+    <string name="title_buttons">Buttons</string>
     <string name="title_seen">Mark read</string>
     <string name="title_unseen">Mark unread</string>
     <string name="title_hide">Hide</string>
@@ -762,6 +762,9 @@
     <string name="title_more">More</string>
     <string name="title_spam">Spam</string>
     <string name="title_move">Move</string>
+    <string name="title_copy_btn">Copy</string>
+    <string name="title_unsubscribe">Unsubscribe</string>
+    <string name="title_message_rule">Create rule</string>
     <string name="title_no_junk">Not spam</string>
     <string name="title_move_to">Move to &#8230;</string>
     <string name="title_move_to_folder">Move to &#8230;</string>
@@ -860,13 +863,28 @@
     <string name="title_send_priority">Priority</string>
     <string name="title_no_server">No server found at \'%1$s\'</string>
 
+    <string name="title_style">Style</string>
+
     <string name="title_style_bold">Bold</string>
     <string name="title_style_italic">Italic</string>
     <string name="title_style_underline">Underline</string>
+
     <string name="title_style_size">Size</string>
-    <string name="title_style_color">Color</string>
+    <string name="title_style_size_small">Small</string>
+    <string name="title_style_size_medium">Medium</string>
+    <string name="title_style_size_large">Large</string>
+
+    <string name="title_style_font">Font</string>
+    <string name="title_style_font_cursive">Cursive</string>
+    <string name="title_style_font_serif">Serif</string>
+    <string name="title_style_font_sans_serif">Sans-serif</string>
+    <string name="title_style_font_monospace">Monospace</string>
+    <string name="title_style_font_default">Default</string>
+
+    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_clear">Clear formatting</string>
     <string name="title_style_link">Insert link</string>
+
     <string name="title_add_image">Add image</string>
     <string name="title_add_image_inline">Insert</string>
     <string name="title_add_image_attach">Attach</string>
@@ -1154,8 +1172,7 @@
     <string name="title_legend_bold">Make text bold</string>
     <string name="title_legend_italic">Make text italic</string>
     <string name="title_legend_underline">Underline text</string>
-    <string name="title_legend_text_size">Set text size</string>
-    <string name="title_legend_text_color">Set text color</string>
+    <string name="title_legend_text_style">Set text style</string>
 
     <string name="title_legend_metered">Connection is metered</string>
     <string name="title_legend_unmetered">Connection is unmetered</string>
@@ -1248,7 +1265,6 @@
     <string name="title_dismiss">Dismiss</string>
     <string name="title_snooze_now">Snooze</string>
     <string name="title_loading">Loading &#8230;</string>
-    <string name="title_set">Set</string>
     <string name="title_fetching_again">Fetching message again from the server</string>
 
     <string name="title_conversation_actions">Actions</string>

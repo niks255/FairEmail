@@ -14,51 +14,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAttachment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSeparatorAttachments" />
-
     <CheckBox
         android:id="@+id/cbInline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:text="@string/title_show_inline"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ibDownloadAttachments"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvAttachment" />
+        app:layout_constraintTop_toBottomOf="@+id/vSeparatorAttachments" />
 
-    <Button
-        android:id="@+id/btnSaveAttachments"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_save_all"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbInline" />
+    <ImageButton
+        android:id="@+id/ibDownloadAttachments"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/title_download_all"
+        android:paddingVertical="6dp"
+        android:paddingStart="9dp"
+        android:paddingEnd="6dp"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/title_download_all"
+        app:layout_constraintEnd_toStartOf="@id/ibSaveAttachments"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparatorAttachments"
+        app:srcCompat="@drawable/baseline_cloud_download_24" />
 
-    <Button
-        android:id="@+id/btnDownloadAttachments"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_download_all"
+    <ImageButton
+        android:id="@+id/ibSaveAttachments"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/title_save_all"
+        android:paddingVertical="6dp"
+        android:paddingStart="9dp"
+        android:paddingEnd="6dp"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/title_save_all"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbInline" />
+        app:layout_constraintTop_toBottomOf="@+id/vSeparatorAttachments"
+        app:srcCompat="@drawable/baseline_save_24" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier_internet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="btnDownloadAttachments,btnSaveAttachments" />
+        app:constraint_referenced_ids="cbInline,ibSaveAttachments,ibDownloadAttachments" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAttachment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_internet" />
 
     <eu.faircode.email.FixedTextView
         android:id="@+id/tvNoInternetAttachments"
@@ -70,7 +80,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toEndOf="@id/rvAttachment"
         app:layout_constraintStart_toStartOf="@id/rvAttachment"
-        app:layout_constraintTop_toBottomOf="@id/barrier_internet" />
+        app:layout_constraintTop_toBottomOf="@id/rvAttachment" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/grpAttachments"

@@ -6,7 +6,6 @@
     <string name="app_limitations">Per exemple, els missatges sempre es reformataran per eliminar elements no segurs i per millorar la llegibilitat i s\'hauran de confirmar l’obertura d’enllaços per afegir seguretat.</string>
     <string name="app_crash">FairMail no és compatible en aquest dispositiu perquè els errors a Android causen bloqueigs</string>
     <string name="app_exit">Premeu «Enrere» novament per sortir</string>
-    <string name="channel_service">Servei</string>
     <string name="channel_send">Enviar</string>
     <string name="channel_notification">Notificacions</string>
     <string name="channel_update">Actualitzacions</string>
@@ -253,7 +252,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_rlah">Itinerant com a casa</string>
     <string name="title_advanced_timeout">Temps d\'espera de la connexió (segons)</string>
     <string name="title_advanced_ssl_harden">Connexions SSL \"endurides\"</string>
-    <string name="title_advanced_socks">Utilitza el servidor intermediari com a SOCKS</string>
     <string name="title_advanced_manage_connectivity">Gestiona la connectivitat</string>
     <string name="title_advanced_caption_general">General</string>
     <string name="title_advanced_caption_list">Llista</string>
@@ -298,10 +296,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_addresses">Mostra els detalls de les adreces per defecte</string>
     <string name="title_advanced_attachments_alt">Mostra fitxers adjunts després del text del missatge</string>
     <string name="title_advanced_contrast">Utilitzeu un alt contrast per al text del missatge</string>
-    <string name="title_advanced_monospaced">Utilitzeu tipus de lletra mono per al text del missatge</string>
-    <string name="title_advanced_text_color">Mostra els colors del text</string>
-    <string name="title_advanced_text_size">Mostrar textos petits i grans</string>
-    <string name="title_advanced_text_align">Mostra els textos alineats a l\'esquerra/al centre/a la dreta</string>
     <string name="title_advanced_collapse_quotes">Aplega el text citat</string>
     <string name="title_advanced_images_inline">Mostra automàticament imatges en línia</string>
     <string name="title_advanced_seekbar">Mostra la posició de conversa relativa amb un punt</string>
@@ -414,7 +408,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_rlah_hint">Si no se suposa una itinerància a la UE</string>
     <string name="title_advanced_timeout_hint">El temps d\'espera de lectura/escriptura s\'establirà en el doble del temps d\'espera de la connexió. Valors més alts produiran un major ús de bateries.</string>
     <string name="title_advanced_ssl_harden_hint">Si activeu això, desactivareu els protocols i xifratges SSL febles, la qual cosa pot comportar problemes de connexió</string>
-    <string name="title_advanced_socks_hint">L\'ús del Servidor intermediari remot es insegur perquè les connexions del Servidor intermediari no son xifrades</string>
     <string name="title_advanced_roaming_hint">Les capçaleres de missatges sempre es recuperaran en itinerància. Podeu utilitzar la configuració d\'itinerància del dispositiu per desactivar Internet durant la itinerància de dades.</string>
     <string name="title_advanced_browse_hint">Obteniu més missatges en desplaçar-vos cap avall</string>
     <string name="title_advanced_layout_hint">Podeu canviar a un disseny més compacte i canviar la mida del text del missatge al menú de la barra d’acció superior de la vista de missatges</string>
@@ -743,7 +736,8 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_style_italic">Cursiva</string>
     <string name="title_style_underline">Subratllat</string>
     <string name="title_style_size">Mida</string>
-    <string name="title_style_color">Color</string>
+    <string name="title_style_font">Font</string>
+    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_clear">Esborra el format</string>
     <string name="title_style_link">Insereix enllaç</string>
     <string name="title_add_image">Afegir una imatge</string>
@@ -989,8 +983,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_legend_bold">Fes negreta el text</string>
     <string name="title_legend_italic">Fes cursiva el text</string>
     <string name="title_legend_underline">Text subratllat</string>
-    <string name="title_legend_text_size">Definiu la mida del text</string>
-    <string name="title_legend_text_color">Definiu el color del text</string>
     <string name="title_legend_metered">La connexió és mesurada</string>
     <string name="title_legend_unmetered">La connexió no es mesurada</string>
     <string name="title_legend_roaming">Itinerància</string>
@@ -1072,7 +1064,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_dismiss">Descartar</string>
     <string name="title_snooze_now">Posposa</string>
     <string name="title_loading">S\'està carregant&#8230;</string>
-    <string name="title_set">Estableix</string>
     <string name="title_conversation_action_reply">Respon amb \'%1$s\'</string>
     <string name="title_conversation_action_copy">Copia: \'%1$s\'</string>
     <string name="title_icalendar_accept">Acceptar</string>

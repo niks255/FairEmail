@@ -143,8 +143,6 @@ public class EntityAttachment {
         for (EntityAttachment attachment : attachments) {
             File source = attachment.getFile(context);
 
-            long aid = attachment.id;
-
             attachment.id = null;
             attachment.message = newid;
             attachment.progress = null;
@@ -156,7 +154,6 @@ public class EntityAttachment {
                     Helper.copy(source, target);
                 } catch (IOException ex) {
                     Log.e(ex);
-                    db.attachment().setError(aid, Log.formatThrowable(ex, false));
                     db.attachment().setError(attachment.id, Log.formatThrowable(ex, false));
                 }
             }
@@ -202,6 +199,10 @@ public class EntityAttachment {
 
         if ("text/plain".equals(type) && "ovpn".equals(extension))
             return "application/x-openvpn-profile";
+
+        // https://www.rfc-editor.org/rfc/rfc3555.txt
+        if ("video/jpeg".equals(type))
+            return "image/jpeg";
 
         if ("application/x-pdf".equals(type))
             return "application/pdf";

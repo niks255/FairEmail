@@ -62,7 +62,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.text.HtmlCompat;
 import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
 
@@ -112,7 +111,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static androidx.core.text.HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM;
 import static androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
 import static org.w3c.css.sac.Condition.SAC_CLASS_CONDITION;
 
@@ -319,6 +317,7 @@ public class HtmlHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean text_color = prefs.getBoolean("text_color", true);
         boolean text_size = prefs.getBoolean("text_size", true);
+        boolean text_font = prefs.getBoolean("text_font", true);
         boolean text_align = prefs.getBoolean("text_align", true);
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
@@ -448,7 +447,6 @@ public class HtmlHelper {
                 .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt")
                 .addAttributes(":all", "class")
                 .addAttributes(":all", "style")
-                .addAttributes("font", "size")
                 .addAttributes("div", "x-plain")
                 .removeTags("col", "colgroup", "thead", "tbody")
                 .removeAttributes("table", "width")
@@ -460,6 +458,10 @@ public class HtmlHelper {
                 .addProtocols("a", "href", "full", "xmpp", "geo", "tel");
         if (text_color)
             whitelist.addAttributes("font", "color");
+        if (text_size)
+            whitelist.addAttributes("font", "size");
+        if (text_font)
+            whitelist.addAttributes("font", "face");
         if (text_align)
             whitelist.addTags("center").addAttributes(":all", "align");
         if (!view)
@@ -475,6 +477,7 @@ public class HtmlHelper {
             String style = font.attr("style");
             String color = font.attr("color");
             String size = font.attr("size");
+            String face = font.attr("face");
 
             style = style.trim();
             if (!TextUtils.isEmpty(style) && !style.endsWith(";"))
@@ -482,6 +485,7 @@ public class HtmlHelper {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 font.removeAttr("color");
             font.removeAttr("size");
+            font.removeAttr("face");
 
             StringBuilder sb = new StringBuilder(style);
 
@@ -502,6 +506,9 @@ public class HtmlHelper {
                     Log.i(ex);
                 }
             }
+
+            if (!TextUtils.isEmpty(face))
+                sb.append("font-family:").append(face).append(";");
 
             font.attr("style", sb.toString());
 
@@ -598,6 +605,14 @@ public class HtmlHelper {
                                         strong.appendChild(element);
                                     }
                                 }
+                                break;
+
+                            case "font-family":
+                                if (!text_font)
+                                    continue;
+
+                                // https://developer.mozilla.org/en-US/docs/Web/CSS/font-family
+                                sb.append(key).append(":").append(value).append(";");
                                 break;
 
                             case "text-decoration":
@@ -1572,7 +1587,7 @@ public class HtmlHelper {
 
         truncate(d, true);
 
-        SpannableStringBuilder ssb = fromDocument(context, d, false, null, null);
+        SpannableStringBuilder ssb = fromDocument(context, d, false, true, null, null);
 
         for (URLSpan span : ssb.getSpans(0, ssb.length(), URLSpan.class)) {
             String url = span.getURL();
@@ -1789,15 +1804,16 @@ public class HtmlHelper {
         return false;
     }
 
-    static SpannableStringBuilder fromDocument(Context context, @NonNull Document document) {
-        return fromDocument(context, document, null, null);
+    static SpannableStringBuilder fromDocument(
+            Context context, @NonNull Document document, boolean compress,
+            @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+        return fromDocument(context, document, true, compress, imageGetter, tagHandler);
     }
 
-    static SpannableStringBuilder fromDocument(Context context, @NonNull Document document, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
-        return fromDocument(context, document, true, imageGetter, tagHandler);
-    }
-
-    private static SpannableStringBuilder fromDocument(Context context, @NonNull Document document, final boolean warn, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+    private static SpannableStringBuilder fromDocument(
+            Context context, @NonNull Document document,
+            final boolean warn, final boolean compress,
+            @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
 
@@ -1974,6 +1990,10 @@ public class HtmlHelper {
                                         } catch (NumberFormatException ex) {
                                             Log.i(ex);
                                         }
+                                    break;
+                                case "font-family":
+                                    String face = value.toLowerCase(Locale.ROOT);
+                                    ssb.setSpan(new TypefaceSpan(face), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                     break;
                                 case "text-decoration":
                                     if ("line-through".equals(value))
@@ -2161,14 +2181,17 @@ public class HtmlHelper {
 
             private void newline(int index) {
                 int count = 0;
-                int i = Math.min(index, ssb.length() - 1);
-                while (i >= 0) {
-                    char kar = ssb.charAt(i);
-                    if (kar == '\n')
-                        count++;
-                    else if (kar != ' ' && kar != '\u00A0')
-                        break;
-                    i--;
+
+                if (compress) {
+                    int i = Math.min(index, ssb.length() - 1);
+                    while (i >= 0) {
+                        char kar = ssb.charAt(i);
+                        if (kar == '\n')
+                            count++;
+                        else if (kar != ' ' && kar != '\u00A0')
+                            break;
+                        i--;
+                    }
                 }
 
                 if (count < 2)
@@ -2201,24 +2224,18 @@ public class HtmlHelper {
         return ssb;
     }
 
-    static Spanned fromHtml(@NonNull String html) {
-        return fromHtml(html, null, null);
+    static Spanned fromHtml(@NonNull String html, boolean compress, Context context) {
+        return fromHtml(html, compress, null, null, context);
     }
 
-    static Spanned fromHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
-        Spanned spanned = HtmlCompat.fromHtml(html, FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM, imageGetter, tagHandler);
-
-        int i = spanned.length();
-        while (i > 1 && spanned.charAt(i - 2) == '\n' && spanned.charAt(i - 1) == '\n')
-            i--;
-        if (i != spanned.length())
-            spanned = (Spanned) spanned.subSequence(0, i);
-
-        return reverseSpans(spanned);
+    static Spanned fromHtml(@NonNull String html, boolean compress, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler, Context context) {
+        Document document = JsoupEx.parse(html);
+        return fromDocument(context, document, false, compress, imageGetter, tagHandler);
     }
 
-    static String toHtml(Spanned spanned) {
-        String html = HtmlCompat.toHtml(spanned, TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
+    static String toHtml(Spanned spanned, Context context) {
+        HtmlEx converter = new HtmlEx(context);
+        String html = converter.toHtml(spanned, TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
 
         // @Google: why convert size to and from in a different way?
         Document doc = JsoupEx.parse(html);

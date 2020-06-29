@@ -37,7 +37,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -275,12 +274,11 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_TAKE_PHOTO = 7;
     private static final int REQUEST_RECORD_AUDIO = 8;
     private static final int REQUEST_OPENPGP = 9;
-    private static final int REQUEST_COLOR = 10;
-    private static final int REQUEST_CONTACT_GROUP = 11;
-    private static final int REQUEST_ANSWER = 12;
-    private static final int REQUEST_LINK = 13;
-    private static final int REQUEST_DISCARD = 14;
-    private static final int REQUEST_SEND = 15;
+    private static final int REQUEST_CONTACT_GROUP = 10;
+    private static final int REQUEST_ANSWER = 11;
+    private static final int REQUEST_LINK = 12;
+    private static final int REQUEST_DISCARD = 13;
+    private static final int REQUEST_SEND = 14;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -440,7 +438,7 @@ public class FragmentCompose extends FragmentBase {
 
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
                 PackageManager pm = getContext().getPackageManager();
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&  // should be system whitelisted
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                         pick.resolveActivity(pm) == null)
                     Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
                 else
@@ -969,7 +967,7 @@ public class FragmentCompose extends FragmentBase {
                 Bundle args = new Bundle();
                 args.putLong("id", working);
                 args.putBoolean("plain", plain);
-                args.putString("body", HtmlHelper.toHtml(etBody.getText()));
+                args.putString("body", HtmlHelper.toHtml(etBody.getText(), getContext()));
 
                 new SimpleTask<String>() {
                     @Override
@@ -1029,7 +1027,7 @@ public class FragmentCompose extends FragmentBase {
 
             private void deleteRef() {
                 Bundle extras = new Bundle();
-                extras.putString("html", HtmlHelper.toHtml(etBody.getText()));
+                extras.putString("html", HtmlHelper.toHtml(etBody.getText(), getContext()));
                 extras.putBoolean("show", true);
                 onAction(R.id.action_save, extras, "refdelete");
             }
@@ -1276,7 +1274,7 @@ public class FragmentCompose extends FragmentBase {
                 onMenuAnswer();
                 return true;
             case R.id.menu_clear:
-                StyleHelper.apply(R.id.menu_clear, etBody);
+                StyleHelper.apply(R.id.menu_clear, null, etBody);
                 return true;
             case R.id.menu_legend:
                 onMenuLegend();
@@ -1446,25 +1444,7 @@ public class FragmentCompose extends FragmentBase {
 
     private boolean onActionStyle(int action) {
         Log.i("Style action=" + action);
-
-        if (action == R.id.menu_color) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            if (imm != null)
-                imm.hideSoftInputFromWindow(etBody.getWindowToken(), 0);
-
-            Bundle args = new Bundle();
-            args.putInt("color", Color.TRANSPARENT);
-            args.putString("title", getString(R.string.title_style_color));
-            args.putInt("start", etBody.getSelectionStart());
-            args.putInt("end", etBody.getSelectionEnd());
-
-            FragmentDialogColor fragment = new FragmentDialogColor();
-            fragment.setArguments(args);
-            fragment.setTargetFragment(FragmentCompose.this, REQUEST_COLOR);
-            fragment.show(getParentFragmentManager(), "account:color");
-            return true;
-        } else
-            return StyleHelper.apply(action, etBody);
+        return StyleHelper.apply(action, view.findViewById(action), etBody);
     }
 
     private void onActionRecordAudio() {
@@ -1752,10 +1732,6 @@ public class FragmentCompose extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onAnswerSelected(data.getBundleExtra("args"));
                     break;
-                case REQUEST_COLOR:
-                    if (resultCode == RESULT_OK && data != null)
-                        onColorSelected(data.getBundleExtra("args"));
-                    break;
                 case REQUEST_LINK:
                     if (resultCode == RESULT_OK && data != null)
                         onLinkSelected(data.getBundleExtra("args"));
@@ -1965,12 +1941,13 @@ public class FragmentCompose extends FragmentBase {
 
                 args.putInt("start", start);
 
-                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s), new Html.ImageGetter() {
+                // TODO: double conversion
+                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, getContext()), false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(context, id, source, true, zoom, etBody);
                     }
-                }, null);
+                }, null, getContext());
             }
 
             @Override
@@ -2594,16 +2571,47 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
-                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG);
-                    if (ex.getCause() instanceof CertificateException)
-                        snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (ex.getCause() instanceof CertificateException)
                                 startActivity(
                                         new Intent(getContext(), ActivitySetup.class)
                                                 .putExtra("tab", "encryption"));
+                            else {
+                                View vwAnchor = view.findViewById(R.id.vwAnchor);
+                                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
+                                popupMenu.getMenu().add(Menu.NONE, R.string.title_send_dialog, 1, R.string.title_send_dialog);
+                                popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_manage_certificates, 2, R.string.title_advanced_manage_certificates);
+
+                                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        switch (item.getItemId()) {
+                                            case R.string.title_send_dialog:
+                                                FragmentDialogSend fragment = new FragmentDialogSend();
+                                                fragment.setArguments(args);
+                                                fragment.setTargetFragment(FragmentCompose.this, REQUEST_SEND);
+                                                fragment.show(getParentFragmentManager(), "compose:send");
+                                                return true;
+
+                                            case R.string.title_advanced_manage_certificates:
+                                                startActivity(
+                                                        new Intent(getContext(), ActivitySetup.class)
+                                                                .putExtra("tab", "encryption"));
+                                                return true;
+
+                                            default:
+                                                return false;
+                                        }
+                                    }
+                                });
+
+                                popupMenu.show();
                             }
-                        });
+                        }
+                    });
                     snackbar.show();
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
@@ -2708,7 +2716,11 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onAnswerSelected(Bundle args) {
+        String name = args.getString("name");
         String answer = args.getString("answer");
+
+        if (etSubject.getText().length() == 0)
+            etSubject.setText(name);
 
         InternetAddress[] to = null;
         try {
@@ -2716,23 +2728,16 @@ public class FragmentCompose extends FragmentBase {
         } catch (AddressException ignored) {
         }
 
-        String text = EntityAnswer.replacePlaceholders(answer, to);
+        String html = EntityAnswer.replacePlaceholders(answer, to);
 
-        Spanned spanned = HtmlHelper.fromHtml(text, new Html.ImageGetter() {
+        Spanned spanned = HtmlHelper.fromHtml(html, false, new Html.ImageGetter() {
             @Override
             public Drawable getDrawable(String source) {
                 return ImageHelper.decodeImage(getContext(), working, source, true, zoom, etBody);
             }
-        }, null);
-        etBody.getText().insert(etBody.getSelectionStart(), spanned);
-    }
+        }, null, getContext());
 
-    private void onColorSelected(Bundle args) {
-        int color = args.getInt("color");
-        int start = args.getInt("start");
-        int end = args.getInt("end");
-        etBody.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_color, etBody, color);
+        etBody.getText().insert(etBody.getSelectionStart(), spanned);
     }
 
     private void onLinkSelected(Bundle args) {
@@ -2740,7 +2745,7 @@ public class FragmentCompose extends FragmentBase {
         int start = args.getInt("start");
         int end = args.getInt("end");
         etBody.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, etBody, link);
+        StyleHelper.apply(R.id.menu_link, null, etBody, link);
     }
 
     private void onActionDiscardConfirmed() {
@@ -2766,7 +2771,7 @@ public class FragmentCompose extends FragmentBase {
         if (!etSubject.getText().toString().equals(subject))
             return false;
 
-        if (!TextUtils.isEmpty(JsoupEx.parse(HtmlHelper.toHtml(etBody.getText())).text().trim()))
+        if (!TextUtils.isEmpty(JsoupEx.parse(HtmlHelper.toHtml(etBody.getText(), getContext())).text().trim()))
             return false;
 
         if (rvAttachment.getAdapter().getItemCount() > 0)
@@ -2795,7 +2800,7 @@ public class FragmentCompose extends FragmentBase {
         args.putString("cc", etCc.getText().toString().trim());
         args.putString("bcc", etBcc.getText().toString().trim());
         args.putString("subject", etSubject.getText().toString().trim());
-        args.putString("body", HtmlHelper.toHtml(etBody.getText()));
+        args.putString("body", HtmlHelper.toHtml(etBody.getText(), getContext()));
         args.putBoolean("signature", cbSignature.isChecked());
         args.putBoolean("empty", isEmpty());
         args.putBoolean("interactive", getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED));
@@ -4593,7 +4598,7 @@ public class FragmentCompose extends FragmentBase {
                 Elements ref = doc.select("div[fairemail=reference]");
                 ref.remove();
 
-                Spanned spannedBody = HtmlHelper.fromHtml(doc.html(), new Html.ImageGetter() {
+                Spanned spannedBody = HtmlHelper.fromDocument(context, doc, false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(context, id, source, true, zoom, etBody);
@@ -4621,7 +4626,7 @@ public class FragmentCompose extends FragmentBase {
                 if (!ref.isEmpty()) {
                     Document dref = JsoupEx.parse(ref.outerHtml());
                     Document quote = HtmlHelper.sanitizeView(context, dref, show_images);
-                    spannedRef = HtmlHelper.fromDocument(context, quote,
+                    spannedRef = HtmlHelper.fromDocument(context, quote, true,
                             new Html.ImageGetter() {
                                 @Override
                                 public Drawable getDrawable(String source) {
@@ -4718,12 +4723,12 @@ public class FragmentCompose extends FragmentBase {
 
             Spanned signature = null;
             if (identity != null && !TextUtils.isEmpty(identity.signature))
-                signature = HtmlHelper.fromHtml(identity.signature, new Html.ImageGetter() {
+                signature = HtmlHelper.fromHtml(identity.signature, false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(getContext(), working, source, true, 0, tvSignature);
                     }
-                }, null);
+                }, null, getContext());
             tvSignature.setText(signature);
             grpSignature.setVisibility(signature == null ? View.GONE : View.VISIBLE);
 
@@ -4812,17 +4817,17 @@ public class FragmentCompose extends FragmentBase {
                         return true;
                     case KeyEvent.KEYCODE_B:
                         if (etBody.hasSelection())
-                            return StyleHelper.apply(R.id.menu_bold, etBody);
+                            return StyleHelper.apply(R.id.menu_bold, null, etBody);
                         else
                             return false;
                     case KeyEvent.KEYCODE_I:
                         if (etBody.hasSelection())
-                            return StyleHelper.apply(R.id.menu_italic, etBody);
+                            return StyleHelper.apply(R.id.menu_italic, null, etBody);
                         else
                             return false;
                     case KeyEvent.KEYCODE_U:
                         if (etBody.hasSelection())
-                            return StyleHelper.apply(R.id.menu_underline, etBody);
+                            return StyleHelper.apply(R.id.menu_underline, null, etBody);
                         else
                             return false;
                 }
@@ -4959,6 +4964,7 @@ public class FragmentCompose extends FragmentBase {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             EntityAnswer answer = adapter.getItem(which);
+                            getArguments().putString("name", answer.name);
                             getArguments().putString("answer", answer.text);
 
                             sendResult(RESULT_OK);

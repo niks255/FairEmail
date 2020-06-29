@@ -634,6 +634,9 @@ public interface DaoMessage {
     @Query("UPDATE message SET keywords = :keywords WHERE id = :id")
     int setMessageKeywords(long id, String keywords);
 
+    @Query("UPDATE message SET labels = :labels WHERE id = :id")
+    int setMessageLabels(long id, String labels);
+
     @Query("UPDATE message SET ui_seen = :ui_seen WHERE id = :id")
     int setMessageUiSeen(long id, boolean ui_seen);
 
@@ -731,6 +734,11 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET notifying = 0")
     int clearNotifyingMessages();
+
+    @Query("UPDATE message SET headers = NULL" +
+            " WHERE headers IS NOT NULL" +
+            " AND account IN (SELECT id FROM account WHERE pop = " + EntityAccount.TYPE_IMAP + ")")
+    int clearMessageHeaders();
 
     @Query("UPDATE message SET fts = 0")
     int resetFts();

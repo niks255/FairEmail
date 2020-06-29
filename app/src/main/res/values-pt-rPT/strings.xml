@@ -6,7 +6,6 @@
     <string name="app_limitations">Por exemplo, as mensagens serão sempre reformatadas para remover elementos não seguros e para melhorar a legibilidade bem como a abertura de links terá de ser confirmada por razões de segurança.</string>
     <string name="app_crash">O FairEmail não é suportado neste dispositivo porque bugs no Android causam falhas</string>
     <string name="app_exit"> Clique novamente em \'voltar\' para sair</string>
-    <string name="channel_service">Serviço</string>
     <string name="channel_send">Enviar</string>
     <string name="channel_notification">Notificações</string>
     <string name="channel_update">Actualizações</string>
@@ -33,6 +32,7 @@
     <string name="title_notification_idle">Inactivo</string>
     <string name="title_notification_failed">\'%1$s\' falhou</string>
     <string name="title_notification_alert">\'%1$s\' alerta do servidor</string>
+    <string name="title_notification_sending_failed">Falha ao enviar para %1$s</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -212,7 +212,6 @@
     <string name="title_advanced_rlah">Faça roaming como no país de origem</string>
     <string name="title_advanced_timeout">Conexão expira em (segundos)</string>
     <string name="title_advanced_ssl_harden">Fortificar conexões SSL</string>
-    <string name="title_advanced_socks">Usar proxy SOCKS</string>
     <string name="title_advanced_manage_connectivity">Gerir conectividade</string>
     <string name="title_advanced_caption_general">Geral</string>
     <string name="title_advanced_caption_list">Lista</string>
@@ -257,10 +256,6 @@
     <string name="title_advanced_addresses">Mostrar detalhes do endereço por pré-definição</string>
     <string name="title_advanced_attachments_alt">Mostrar anexos após o texto da mensagem</string>
     <string name="title_advanced_contrast">Usar alto contraste para o texto da mensagem</string>
-    <string name="title_advanced_monospaced">Usar fonte monoespaçada para o texto da mensagem</string>
-    <string name="title_advanced_text_color">Mostrar cores do texto</string>
-    <string name="title_advanced_text_size">Mostrar textos pequenos e grandes</string>
-    <string name="title_advanced_text_align">Mostrar textos alinhados à esquerda/centro/direita</string>
     <string name="title_advanced_collapse_quotes">Encolher texto cidado</string>
     <string name="title_advanced_images_inline">Mostrar automaticamente imagens embutidas</string>
     <string name="title_advanced_seekbar">Exibir posição relativa de conversa com um ponto</string>
@@ -364,6 +359,8 @@
     <string name="title_advanced_never_favorite">Nunca favoritar</string>
     <string name="title_identity_name">Seu Nome</string>
     <string name="title_identity_email">Seu endereço de e-mail</string>
+    <string name="title_duplicate_in">Mensagem duplicada em %1$s</string>
+    <string name="title_filter_duplicates">Duplicados</string>
     <!-- Thunderbird -->
     <!-- https://en.wikipedia.org/wiki/Display_resolution -->
     <!-- https://en.wikipedia.org/wiki/Comparison_of_high-definition_smartphone_displays -->

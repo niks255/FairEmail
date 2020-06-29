@@ -21,7 +21,6 @@ package eu.faircode.email;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -898,11 +897,6 @@ public class FragmentIdentity extends FragmentBase {
                     db.endTransaction();
                 }
 
-                if (!synchronize) {
-                    NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.cancel("send:" + identity.id, 1);
-                }
-
                 return false;
             }
 
@@ -1001,7 +995,7 @@ public class FragmentIdentity extends FragmentBase {
         btnSupport.setVisibility(View.VISIBLE);
 
         if (provider != null && provider.documentation != null) {
-            tvInstructions.setText(HtmlHelper.fromHtml(provider.documentation.toString()));
+            tvInstructions.setText(HtmlHelper.fromHtml(provider.documentation.toString(), true, getContext()));
             tvInstructions.setVisibility(View.VISIBLE);
         }
 

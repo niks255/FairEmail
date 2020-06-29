@@ -69,12 +69,11 @@ public class ServiceSend extends ServiceBase {
 
     private PowerManager.WakeLock wlOutbox;
     private TwoStateOwner owner = new TwoStateOwner("send");
-
+    private List<Long> handling = new ArrayList<>();
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "send");
 
     private static final int PI_SEND = 1;
     private static final long CONNECTIVITY_DELAY = 5000L; // milliseconds
-    private static final int IDENTITY_ERROR_AFTER = 30; // minutes
     private static final int RETRY_MAX = 3;
 
     @Override
@@ -106,32 +105,41 @@ public class ServiceSend extends ServiceBase {
 
         // Observe send operations
         db.operation().liveOperations(null).observe(owner, new Observer<List<TupleOperationEx>>() {
-            private List<Long> handling = new ArrayList<>();
-
             @Override
-            public void onChanged(final List<TupleOperationEx> operations) {
-                boolean process = false;
+            public void onChanged(List<TupleOperationEx> operations) {
+                if (operations == null)
+                    operations = new ArrayList<>();
+
+                if (operations.size() == 0)
+                    stopSelf();
+
+                final List<TupleOperationEx> process = new ArrayList<>();
+
                 List<Long> ops = new ArrayList<>();
-                for (EntityOperation op : operations) {
+                for (TupleOperationEx op : operations) {
                     if (!handling.contains(op.id))
-                        process = true;
+                        process.add(op);
                     ops.add(op.id);
                 }
-
                 handling = ops;
 
-                if (process) {
-                    Log.i("OUTBOX operations=" + operations.size());
+                if (process.size() > 0) {
+                    Log.i("OUTBOX process=" + TextUtils.join(",", process) +
+                            " handling=" + TextUtils.join(",", handling));
 
                     executor.submit(new Runnable() {
                         @Override
                         public void run() {
-                            processOperations();
+                            processOperations(process);
                         }
                     });
                 }
             }
         });
+
+        lastSuitable = ConnectionHelper.getNetworkState(this).isSuitable();
+        if (lastSuitable)
+            owner.start();
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
@@ -153,6 +161,9 @@ public class ServiceSend extends ServiceBase {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.unregisterNetworkCallback(networkCallback);
 
+        owner.stop();
+        handling.clear();
+
         stopForeground(true);
 
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -169,18 +180,11 @@ public class ServiceSend extends ServiceBase {
     }
 
     NotificationCompat.Builder getNotificationService() {
-        // Build pending intent
-        Intent intent = new Intent(this, ActivityView.class);
-        intent.setAction("outbox");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pi = PendingIntent.getActivity(
-                this, ActivityView.REQUEST_OUTBOX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "send")
                         .setSmallIcon(R.drawable.baseline_send_24)
                         .setContentTitle(getString(R.string.title_notification_sending))
-                        .setContentIntent(pi)
+                        .setContentIntent(getPendingIntent(this))
                         .setAutoCancel(false)
                         .setShowWhen(true)
                         .setDefaults(0) // disable sound on pre Android 8
@@ -198,6 +202,29 @@ public class ServiceSend extends ServiceBase {
             builder.setSubText(getString(R.string.title_notification_waiting));
 
         return builder;
+    }
+
+    NotificationCompat.Builder getNotificationError(String recipient, Throwable ex) {
+        return new NotificationCompat.Builder(this, "error")
+                .setSmallIcon(R.drawable.baseline_warning_white_24)
+                .setContentTitle(getString(R.string.title_notification_sending_failed, recipient))
+                .setContentText(Log.formatThrowable(ex, false))
+                .setContentIntent(getPendingIntent(this))
+                .setAutoCancel(false)
+                .setShowWhen(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setOnlyAlertOnce(true)
+                .setCategory(NotificationCompat.CATEGORY_ERROR)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(Log.formatThrowable(ex, "\n", false)));
+    }
+
+    private static PendingIntent getPendingIntent(Context context) {
+        Intent intent = new Intent(context, ActivityView.class);
+        intent.setAction("outbox");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivity(context, ActivityView.REQUEST_OUTBOX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
@@ -252,25 +279,16 @@ public class ServiceSend extends ServiceBase {
 
             if (suitable)
                 owner.start();
-            else
+            else {
                 owner.stop();
+                handling.clear();
+            }
         }
-
-        if (suitable)
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    processOperations();
-                }
-            });
     }
 
-    private void processOperations() {
+    private void processOperations(List<TupleOperationEx> ops) {
         try {
             wlOutbox.acquire();
-
-            if (!ConnectionHelper.getNetworkState(this).isSuitable())
-                return;
 
             DB db = DB.getInstance(this);
             EntityFolder outbox = db.folder().getOutbox();
@@ -278,10 +296,12 @@ public class ServiceSend extends ServiceBase {
                 db.folder().setFolderError(outbox.id, null);
                 db.folder().setFolderSyncState(outbox.id, "syncing");
 
-                List<TupleOperationEx> ops = db.operation().getOperations(outbox.id);
-                Log.i(outbox.name + " pending operations=" + ops.size());
+                Log.i(outbox.name + " processing operations=" + ops.size());
 
                 while (ops.size() > 0) {
+                    if (!ConnectionHelper.getNetworkState(this).isSuitable())
+                        break;
+
                     TupleOperationEx op = ops.get(0);
 
                     EntityMessage message = null;
@@ -292,6 +312,7 @@ public class ServiceSend extends ServiceBase {
                         Log.i(outbox.name +
                                 " start op=" + op.id + "/" + op.name +
                                 " msg=" + op.message +
+                                " tries=" + op.tries +
                                 " args=" + op.args);
 
                         db.operation().setOperationTries(op.id, ++op.tries);
@@ -349,6 +370,17 @@ public class ServiceSend extends ServiceBase {
                             Log.w("Unrecoverable");
                             db.operation().deleteOperation(op.id);
                             ops.remove(op);
+
+                            if (message != null) {
+                                try {
+                                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    nm.notify("send:" + message.id, 1, getNotificationError(
+                                            MessageHelper.formatAddressesShort(message.to), ex).build());
+                                } catch (Throwable ex1) {
+                                    Log.w(ex1);
+                                }
+                            }
+
                             continue;
                         } else
                             throw ex;
@@ -356,13 +388,7 @@ public class ServiceSend extends ServiceBase {
                         Log.i(outbox.name + " end op=" + op.id + "/" + op.name);
                         db.operation().setOperationState(op.id, null);
                     }
-
-                    if (!ConnectionHelper.getNetworkState(this).isSuitable())
-                        break;
                 }
-
-                if (db.operation().getOperations(outbox.id).size() == 0)
-                    stopSelf();
 
             } catch (Throwable ex) {
                 Log.e(outbox.name, ex);
@@ -379,20 +405,30 @@ public class ServiceSend extends ServiceBase {
     private void onSync(EntityFolder outbox) {
         DB db = DB.getInstance(this);
 
-        db.folder().setFolderError(outbox.id, null);
+        try {
+            db.beginTransaction();
 
-        // Restore snooze timers
-        for (EntityMessage message : db.message().getSnoozed(outbox.id))
-            EntityMessage.snooze(this, message.id, message.ui_snoozed);
+            db.folder().setFolderError(outbox.id, null);
 
-        // Retry failed message
-        for (long id : db.message().getMessageByFolder(outbox.id)) {
-            int ops = db.operation().getOperationCount(outbox.id, id, EntityOperation.SEND);
-            if (ops == 0) {
+            // Delete pending operations
+            db.operation().deleteOperations(outbox.id);
+
+            // Requeue operations
+            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            for (long id : db.message().getMessageByFolder(outbox.id)) {
                 EntityMessage message = db.message().getMessage(id);
-                if (message != null && message.ui_snoozed == null)
-                    EntityOperation.queue(this, message, EntityOperation.SEND);
+                if (message != null) {
+                    nm.cancel("send:" + message.id, 1);
+                    if (message.ui_snoozed == null)
+                        EntityOperation.queue(this, message, EntityOperation.SEND);
+                    else
+                        EntityMessage.snooze(this, message.id, message.ui_snoozed);
+                }
             }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 
@@ -515,6 +551,8 @@ public class ServiceSend extends ServiceBase {
             // Connect transport
             db.identity().setIdentityState(ident.id, "connecting");
             iservice.connect(ident);
+            if (BuildConfig.DEBUG && false)
+                throw new IOException("Test");
             db.identity().setIdentityState(ident.id, "connected");
 
             Address[] to = imessage.getAllRecipients();
@@ -570,7 +608,7 @@ public class ServiceSend extends ServiceBase {
             ServiceSynchronize.eval(ServiceSend.this, "sent");
 
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.cancel("send:" + message.identity, 1);
+            nm.cancel("send:" + message.id, 1);
         } catch (MessagingException ex) {
             Log.e(ex);
 
@@ -578,34 +616,6 @@ public class ServiceSend extends ServiceBase {
                 db.message().deleteMessage(sid);
 
             db.identity().setIdentityError(ident.id, Log.formatThrowable(ex));
-
-            if (ex instanceof AuthenticationFailedException ||
-                    ex instanceof SendFailedException) {
-                try {
-                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify("send:" + message.identity, 1,
-                            Core.getNotificationError(this, "error", ident.name, ex)
-                                    .build());
-                } catch (Throwable ex1) {
-                    Log.w(ex1);
-                }
-                throw ex;
-            }
-
-            EntityLog.log(this, ident.name + " last attempt: " + new Date(message.last_attempt));
-
-            long now = new Date().getTime();
-            long delayed = now - message.last_attempt;
-            if (delayed > IDENTITY_ERROR_AFTER * 60 * 1000L) {
-                Log.i("Reporting send error after=" + delayed);
-                try {
-                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify("send:" + message.identity, 1,
-                            Core.getNotificationError(this, "warning", ident.name, ex).build());
-                } catch (Throwable ex1) {
-                    Log.w(ex1);
-                }
-            }
 
             throw ex;
         } finally {

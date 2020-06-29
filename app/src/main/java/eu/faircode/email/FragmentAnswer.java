@@ -166,12 +166,12 @@ public class FragmentAnswer extends FragmentBase {
                     if (answer == null)
                         etText.setText(null);
                     else
-                        etText.setText(HtmlHelper.fromHtml(answer.text, new Html.ImageGetter() {
+                        etText.setText(HtmlHelper.fromHtml(answer.text, false, new Html.ImageGetter() {
                             @Override
                             public Drawable getDrawable(String source) {
                                 return ImageHelper.decodeImage(getContext(), -1, source, true, 0, etText);
                             }
-                        }, null));
+                        }, null, getContext()));
                 }
 
                 bottom_navigation.findViewById(R.id.action_delete).setVisibility(answer == null ? View.GONE : View.VISIBLE);
@@ -236,7 +236,7 @@ public class FragmentAnswer extends FragmentBase {
         args.putString("name", etName.getText().toString().trim());
         args.putBoolean("favorite", cbFavorite.isChecked());
         args.putBoolean("hide", cbHide.isChecked());
-        args.putString("text", HtmlHelper.toHtml(etText.getText()));
+        args.putString("text", HtmlHelper.toHtml(etText.getText(), getContext()));
 
         new SimpleTask<Void>() {
             @Override
@@ -351,7 +351,7 @@ public class FragmentAnswer extends FragmentBase {
         int start = args.getInt("start");
         int end = args.getInt("end");
         etText.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, etText, link);
+        StyleHelper.apply(R.id.menu_link, null, etText, link);
     }
 
     private void onDelete() {
@@ -414,7 +414,7 @@ public class FragmentAnswer extends FragmentBase {
 
             return true;
         } else
-            return StyleHelper.apply(action, etText);
+            return StyleHelper.apply(action, view.findViewById(action), etText);
     }
 
     public static class FragmentInfo extends FragmentDialogBase {
@@ -425,7 +425,7 @@ public class FragmentAnswer extends FragmentBase {
                     getString(R.string.title_answer_template_name) +
                     "<br>" +
                     getString(R.string.title_answer_template_email) +
-                    "</p>");
+                    "</p>", false, getContext());
 
             View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_ask_again, null);
             TextView tvMessage = dview.findViewById(R.id.tvMessage);

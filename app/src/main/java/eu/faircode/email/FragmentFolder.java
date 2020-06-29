@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Lifecycle;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -234,8 +236,11 @@ public class FragmentFolder extends FragmentBase {
 
                 if (folder != null) {
                     EntityAccount account = db.account().getAccount(folder.account);
-                    if (account != null)
+                    if (account != null) {
                         args.putInt("interval", account.poll_interval);
+                        args.putBoolean("exempted", account.poll_exempted);
+                        args.putBoolean("ondemand", account.ondemand);
+                    }
                 }
 
                 return folder;
@@ -243,8 +248,13 @@ public class FragmentFolder extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, EntityFolder folder) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                int pollInterval = prefs.getInt("poll_interval", ServiceSynchronize.DEFAULT_POLL_INTERVAL);
+                int interval = args.getInt("interval", EntityAccount.DEFAULT_KEEP_ALIVE_INTERVAL);
+                boolean exempted = args.getBoolean("exempted", false);
+                boolean ondemand = args.getBoolean("ondemand", false);
+
                 if (savedInstanceState == null) {
-                    int interval = args.getInt("interval", EntityAccount.DEFAULT_KEEP_ALIVE_INTERVAL);
                     etName.setText(folder == null ? null : folder.name);
                     etDisplay.setText(folder == null ? null : folder.display);
                     etDisplay.setHint(folder == null ? null : EntityFolder.localizeName(getContext(), folder.name));
@@ -281,10 +291,12 @@ public class FragmentFolder extends FragmentBase {
 
                 Helper.setViewsEnabled(view, true);
 
+                boolean always = (!ondemand && (pollInterval == 0 || exempted));
+
                 etName.setEnabled(folder == null || EntityFolder.USER.equals(folder.type));
-                cbPoll.setEnabled(cbSynchronize.isChecked());
-                etPoll.setEnabled(cbSynchronize.isChecked());
-                tvPoll.setEnabled(cbSynchronize.isChecked());
+                cbPoll.setEnabled(cbSynchronize.isChecked() && always);
+                etPoll.setEnabled(cbSynchronize.isChecked() && always);
+                tvPoll.setEnabled(cbSynchronize.isChecked() && always);
                 grpPoll.setVisibility(cbPoll.isEnabled() && cbPoll.isChecked() ? View.VISIBLE : View.GONE);
                 etKeepDays.setEnabled(!cbKeepAll.isChecked());
                 cbAutoDelete.setEnabled(!cbKeepAll.isChecked());

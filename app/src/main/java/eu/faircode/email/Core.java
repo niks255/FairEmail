@@ -675,15 +675,20 @@ class Core {
     private static void onKeyword(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException {
         // Set/reset user flag
         DB db = DB.getInstance(context);
+        // https://tools.ietf.org/html/rfc3501#section-2.3.2
+        String keyword = jargs.getString(0);
+        boolean set = jargs.getBoolean(1);
+
+        if (TextUtils.isEmpty(keyword))
+            throw new IllegalArgumentException("keyword/empty");
 
         if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
             db.message().setMessageKeywords(message.id, DB.Converters.fromStringArray(null));
             return;
         }
 
-        // https://tools.ietf.org/html/rfc3501#section-2.3.2
-        String keyword = jargs.getString(0);
-        boolean set = jargs.getBoolean(1);
+        if (message.uid == null)
+            throw new IllegalArgumentException("keyword/uid");
 
         Message imessage = ifolder.getMessageByUID(message.uid);
         if (imessage == null)
@@ -695,22 +700,76 @@ class Core {
 
     private static void onLabel(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
         // Set/clear Gmail label
+        // Gmail does not push label changes
         String label = jargs.getString(0);
         boolean set = jargs.getBoolean(1);
 
-        Message imessage = ifolder.getMessageByUID(message.uid);
-        if (imessage == null)
-            throw new MessageRemovedException();
+        if (TextUtils.isEmpty(label))
+            throw new IllegalArgumentException("label/empty");
 
-        if (!(imessage instanceof GmailMessage))
-            throw new IllegalArgumentException("GmailMessage");
+        if (message.uid == null)
+            throw new IllegalArgumentException("label/uid");
 
-        ((GmailMessage) imessage).setLabels(new String[]{label}, set);
+        DB db = DB.getInstance(context);
 
-        // Gmail does not push label changes
-        JSONArray fargs = new JSONArray();
-        fargs.put(message.uid);
-        onFetch(context, fargs, folder, istore, ifolder, state);
+        if (!set && label.equals(folder.name)) {
+            if (TextUtils.isEmpty(message.msgid))
+                throw new IllegalArgumentException("label/msgid");
+
+            // Prevent deleting message
+            EntityFolder archive = db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE);
+            if (archive == null)
+                throw new IllegalArgumentException("label/archive");
+
+            Message[] imessages;
+            Folder iarchive = istore.getFolder(archive.name);
+            try {
+                iarchive.open(Folder.READ_ONLY);
+                imessages = ifolder.search(new MessageIDTerm(message.msgid));
+            } finally {
+                if (iarchive.isOpen())
+                    iarchive.close();
+            }
+
+            if (imessages != null && imessages.length > 0)
+                try {
+                    Message imessage = ifolder.getMessageByUID(message.uid);
+                    imessage.setFlag(Flags.Flag.DELETED, true);
+                    ifolder.expunge();
+                } catch (MessagingException ex) {
+                    Log.w(ex);
+                }
+            else
+                throw new IllegalArgumentException("label/delete folder=" + folder.name);
+        } else {
+            try {
+                Message imessage = ifolder.getMessageByUID(message.uid);
+                if (imessage instanceof GmailMessage)
+                    ((GmailMessage) imessage).setLabels(new String[]{label}, set);
+            } catch (MessagingException ex) {
+                Log.w(ex);
+            }
+        }
+
+        try {
+            db.beginTransaction();
+
+            List<EntityMessage> messages = db.message().getMessagesByMsgId(message.account, message.msgid);
+            if (messages == null)
+                return;
+
+            for (EntityMessage m : messages) {
+                EntityFolder f = db.folder().getFolder(m.folder);
+                if (!label.equals(f.name) && m.setLabel(label, set)) {
+                    Log.i("Set " + label + "=" + set + " id=" + m.id + " folder=" + f.name);
+                    db.message().setMessageLabels(m.id, DB.Converters.fromStringArray(m.labels));
+                }
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     private static void onAdd(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException {
@@ -1017,13 +1076,39 @@ class Core {
                 ifolder.fetch(new Message[]{imessage}, fp);
 
                 EntityMessage message = synchronizeMessage(context, account, folder, istore, ifolder, imessage, false, download, rules, state);
-                if (download && message != null)
-                    downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state);
+                if (message != null) {
+                    if (account.isGmail() && EntityFolder.USER.equals(folder.type))
+                        try {
+                            JSONArray jlabel = new JSONArray();
+                            jlabel.put(0, folder.name);
+                            jlabel.put(1, true);
+                            onLabel(context, jlabel, folder, message, istore, ifolder, state);
+                        } catch (Throwable ex1) {
+                            Log.e(ex1);
+                        }
+
+                    if (download)
+                        downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state);
+                }
             } finally {
                 ((IMAPMessage) imessage).invalidateHeaders();
             }
         } catch (MessageRemovedException ex) {
             Log.i(ex);
+
+            if (account.isGmail() && EntityFolder.USER.equals(folder.type)) {
+                EntityMessage message = db.message().getMessageByUid(folder.id, uid);
+                if (message != null)
+                    try {
+                        JSONArray jlabel = new JSONArray();
+                        jlabel.put(0, folder.name);
+                        jlabel.put(1, false);
+                        onLabel(context, jlabel, folder, message, istore, ifolder, state);
+                    } catch (Throwable ex1) {
+                        Log.e(ex1);
+                    }
+            }
+
             db.message().deleteMessage(folder.id, uid);
         } finally {
             int count = ifolder.getMessageCount();
@@ -3289,7 +3374,7 @@ class Core {
 
                     // Device
                     builder.setStyle(new NotificationCompat.BigTextStyle()
-                            .bigText(HtmlHelper.fromHtml(sb.toString()))
+                            .bigText(HtmlHelper.fromHtml(sb.toString(), true, context))
                             .setSummaryText(title));
                 }
 
@@ -3578,7 +3663,7 @@ class Core {
 
                 if (sbm.length() > 0) {
                     NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()
-                            .bigText(HtmlHelper.fromHtml(sbm.toString()));
+                            .bigText(HtmlHelper.fromHtml(sbm.toString(), true, context));
                     if (!TextUtils.isEmpty(message.subject))
                         bigText.setSummaryText(message.subject);
 

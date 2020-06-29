@@ -20,6 +20,7 @@ package eu.faircode.email;
 */
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.SpannableString;
@@ -40,6 +42,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
@@ -217,7 +220,8 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
 
             if (contact.state != EntityContact.STATE_IGNORE)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_never_favorite, 1, R.string.title_advanced_never_favorite);
-            if (share.resolveActivity(context.getPackageManager()) != null)  // system whitelisted
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
+                    share.resolveActivity(context.getPackageManager()) != null)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_share, 2, R.string.title_share);
             if (ShortcutManagerCompat.isRequestPinShortcutSupported(context))
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_pin, 3, R.string.title_pin);
@@ -274,8 +278,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 private void onActionShare() {
                     try {
                         context.startActivity(share);
-                    } catch (Throwable ex) {
-                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    } catch (ActivityNotFoundException ex) {
+                        Log.w(ex);
+                        ToastEx.makeText(context, context.getString(R.string.title_no_viewer, share), Toast.LENGTH_LONG).show();
                     }
                 }
 

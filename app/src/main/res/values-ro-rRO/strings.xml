@@ -6,7 +6,7 @@
     <string name="app_limitations">De exemplu, mesajele vor fi mereu rescrise pentru a înlătura elementele nesigure și a îmbunătății lizibilitatea iar deschiderea legăturilor trebuie, pentru siguranță, confirmată.</string>
     <string name="app_crash">FairEmail nu suportă acest dispozitiv din cauza erorilor din Android ce duc la blocaje</string>
     <string name="app_exit">Apăsați din nou \'Înapoi\' pentru a ieși</string>
-    <string name="channel_service">Serviciu</string>
+    <string name="channel_service">Primește</string>
     <string name="channel_send">Trimite</string>
     <string name="channel_notification">Notificări</string>
     <string name="channel_update">Actualizări</string>
@@ -88,6 +88,7 @@
     <string name="title_notification_idle">Inactiv</string>
     <string name="title_notification_failed">\'%1$s\' a eșuat</string>
     <string name="title_notification_alert">Alertă server %1$s</string>
+    <string name="title_notification_sending_failed">Trimiterea către %1$s a eșuat</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -100,6 +101,7 @@
     <string name="menu_contacts">Contacte locale</string>
     <string name="menu_setup">Setări</string>
     <string name="menu_legend">Legendă</string>
+    <string name="menu_test">Programul de testare</string>
     <string name="menu_faq">Suport tehnic</string>
     <string name="menu_translate">Ajută la traducere</string>
     <string name="menu_issue">Raportaţi o problemă</string>
@@ -267,7 +269,6 @@
     <string name="title_advanced_rlah">Consideră roamingul ca național</string>
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
-    <string name="title_advanced_socks">Utilizați proxy SOCKS</string>
     <string name="title_advanced_manage_connectivity">Gestionare conexiuni</string>
     <string name="title_advanced_caption_general">Generale</string>
     <string name="title_advanced_caption_list">Listă</string>
@@ -304,6 +305,7 @@
     <string name="title_advanced_subject_italic">Arată subiectul cursiv</string>
     <string name="title_advanced_subject_elipsed">La nevoie, scurtează subiectul</string>
     <string name="title_advanced_keywords">Arată cuvinte cheie în antetul mesajului</string>
+    <string name="title_advanced_labels">Arată etichetele Gmail în antetul mesajului</string>
     <string name="title_advanced_flags">Arată cu stea</string>
     <string name="title_advanced_flags_background">Arată fundalul colorat în loc de stea colorată</string>
     <string name="title_advanced_preview">Arată previzualizare mesaj</string>
@@ -312,10 +314,6 @@
     <string name="title_advanced_addresses">Implicit arată detaliile adreselor</string>
     <string name="title_advanced_attachments_alt">Arată atașamentele după textul mesajului</string>
     <string name="title_advanced_contrast">Folosește contrast ridicat pentru text</string>
-    <string name="title_advanced_monospaced">Folosește fontul proporțional pentru textul mesajului</string>
-    <string name="title_advanced_text_color">Arată culori text</string>
-    <string name="title_advanced_text_size">Arată mărimile mici și mari de text</string>
-    <string name="title_advanced_text_align">Arată textele aliniate stânga/centru/dreapta</string>
     <string name="title_advanced_collapse_quotes">Restrânge textul citat</string>
     <string name="title_advanced_images_inline">Arată automat imaginile integrate</string>
     <string name="title_advanced_seekbar">Arată poziția relativă în conversație cu un punct</string>
@@ -433,7 +431,6 @@
     <string name="title_advanced_rlah_hint">În zona UE nu se tratează ca roaming</string>
     <string name="title_advanced_timeout_hint">Timpul de expirare a citirii/scrierii va fi setat la dublul intervalului de expirare a conexiunii. Valori mai mari au ca rezultat o utilizare mai mare a bateriei.</string>
     <string name="title_advanced_ssl_harden_hint">Activând această setare se vor dezactiva protocoalele și cifrările SSL slabe, putând duce la probleme de conectare</string>
-    <string name="title_advanced_socks_hint">Este nesigură folosirea unui server proxy pentru că aceste conexiuni nu sunt criptate</string>
     <string name="title_advanced_roaming_hint">Antetele mesajelor vor fi mereu descărcate și în roaming. Puteți folosi setările roaming ale dispozitivului pentru a dezactiva internetul atunci când sunteți în roaming.</string>
     <string name="title_advanced_browse_hint">Descarcă mai multe mesaje când se derulează în jos</string>
     <string name="title_advanced_layout_hint">Selectarea unui aspect mai compact și mărimea textului se poate face din meniul paginii de mesaje</string>
@@ -633,6 +630,7 @@
     <string name="title_duplicate_in">Mesaj duplicat în %1$s</string>
     <string name="title_subject_reply">Răsp: %1$s</string>
     <string name="title_subject_forward">Redir: %1$s</string>
+    <string name="title_buttons">Butoane</string>
     <string name="title_seen">Marcare ca citit</string>
     <string name="title_unseen">Marcare ca necitit</string>
     <string name="title_hide">Ascunde</string>
@@ -657,6 +655,7 @@
     <string name="title_raw_save">Salvează mesaj original</string>
     <string name="title_raw_send">Trimite ca atașament</string>
     <string name="title_manage_keywords">Gestionare cuvinte cheie</string>
+    <string name="title_manage_labels">Gestionare etichete Gmail</string>
     <string name="title_add_keyword">Adăugă cuvânt cheie</string>
     <string name="title_show_inline">Arată atașamentele integrate</string>
     <string name="title_download_all">Descarcă tot</string>
@@ -764,7 +763,6 @@
     <string name="title_style_italic">Cursiv</string>
     <string name="title_style_underline">Subliniere</string>
     <string name="title_style_size">Mărime</string>
-    <string name="title_style_color">Culoare</string>
     <string name="title_style_clear">Elimină toate formatările</string>
     <string name="title_style_link">Inserare legătură</string>
     <string name="title_add_image">Adăugare imagine</string>
@@ -1030,8 +1028,6 @@
     <string name="title_legend_bold">Face textul aldin</string>
     <string name="title_legend_italic">Face textul cursiv</string>
     <string name="title_legend_underline">Subliniere text</string>
-    <string name="title_legend_text_size">Setare mărime text</string>
-    <string name="title_legend_text_color">Setare culoare text</string>
     <string name="title_legend_metered">Conexiunea este contorizată</string>
     <string name="title_legend_unmetered">Conexiunea este necontorizată</string>
     <string name="title_legend_roaming">Roaming</string>
@@ -1119,7 +1115,6 @@
     <string name="title_dismiss">Renunță</string>
     <string name="title_snooze_now">Amână</string>
     <string name="title_loading">Se încarcă &#8230;</string>
-    <string name="title_set">Setează</string>
     <string name="title_fetching_again">Se descarcă iar mesajele de pe server</string>
     <string name="title_conversation_actions">Acțiuni</string>
     <string name="title_conversation_action_reply">Răspunde cu: \'%1$s\'</string>

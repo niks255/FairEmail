@@ -6,7 +6,7 @@
     <string name="app_limitations">Například, zprávy budou vždy přeformátovány pro odstranění prvků které nejsou bezpečné a zároveň pro zlepšení čitelnosti, a otevření odkazů je nutné z důvodu bezpečnosti potvrdit.</string>
     <string name="app_crash">FairEmail není na tomto zařízení podporován, protože chyby v Androidu způsobují jeho pády</string>
     <string name="app_exit">Znovu \"zpět\" pro ukončení</string>
-    <string name="channel_service">Služba</string>
+    <string name="channel_service">Přijmout</string>
     <string name="channel_send">Odesílání</string>
     <string name="channel_notification">Oznámení</string>
     <string name="channel_update">Aktualizace</string>
@@ -99,6 +99,7 @@
     <string name="title_notification_idle">Nečinný</string>
     <string name="title_notification_failed">\"%1$s\" selhalo</string>
     <string name="title_notification_alert">\'%1$s\' upozornění serveru</string>
+    <string name="title_notification_sending_failed">Odesílání na %1$s se nezdařilo</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -280,7 +281,6 @@
     <string name="title_advanced_rlah">Roaming jako doma (RLAH)</string>
     <string name="title_advanced_timeout">Časový limit připojení (sekundy)</string>
     <string name="title_advanced_ssl_harden">Obrnit SSL připojení</string>
-    <string name="title_advanced_socks">Použít SOCKS proxy</string>
     <string name="title_advanced_manage_connectivity">Spravovat připojení</string>
     <string name="title_advanced_caption_general">Obecné</string>
     <string name="title_advanced_caption_list">Seznam</string>
@@ -317,6 +317,7 @@
     <string name="title_advanced_subject_italic">Zobrazit předmět kurzívou</string>
     <string name="title_advanced_subject_elipsed">Zestručnit předmět v případě potřeby</string>
     <string name="title_advanced_keywords">Zobrazit klíčová slova v hlavičce zprávy</string>
+    <string name="title_advanced_labels">Zobrazit Gmail štítky v hlavičce zprávy</string>
     <string name="title_advanced_flags">Zobrazit hvězdičky</string>
     <string name="title_advanced_flags_background">Obarvit pozadí, namísto barevných hvězdiček</string>
     <string name="title_advanced_preview">Zobrazit náhled zprávy</string>
@@ -325,10 +326,11 @@
     <string name="title_advanced_addresses">Zobrazit detaily adresy automaticky</string>
     <string name="title_advanced_attachments_alt">Přesunout zobrazení příloh pod text zprávy</string>
     <string name="title_advanced_contrast">Použít vysoký kontrast pro text zprávy</string>
-    <string name="title_advanced_monospaced">Použít neproporcionální písmo pro text zprávy</string>
-    <string name="title_advanced_text_color">Zobrazit barvy textu</string>
-    <string name="title_advanced_text_size">Zobrazit malé a velké texty</string>
-    <string name="title_advanced_text_align">Zobrazit vlevo/na střed/vpravo zarovnané texty</string>
+    <string name="title_advanced_monospaced">Automaticky použít neproporcionální písmo pro text zprávy</string>
+    <string name="title_advanced_text_color">Použít barvy textu</string>
+    <string name="title_advanced_text_size">Použít velikost textu</string>
+    <string name="title_advanced_text_font">Použít fonty písma</string>
+    <string name="title_advanced_text_align">Použít zarovnání textu</string>
     <string name="title_advanced_collapse_quotes">Sbalit citovaný text</string>
     <string name="title_advanced_images_inline">Automaticky zobrazit vložené obrázky</string>
     <string name="title_advanced_seekbar">Zobrazit relativní pozici v konverzaci puntíkem</string>
@@ -446,7 +448,6 @@
     <string name="title_advanced_rlah_hint">Nepředpokládat žádný roaming v rámci EU</string>
     <string name="title_advanced_timeout_hint">Časový limit čtení/zápisu bude nastaven na dvojnásobek časového limitu připojení. Vyšší hodnoty povedou k větší spotřebě baterie.</string>
     <string name="title_advanced_ssl_harden_hint">Povolení této volby zakáže slabé SSL protokoly a šifry, což může vést k problémům s připojením</string>
-    <string name="title_advanced_socks_hint">Použití vzdáleného proxy serveru není bezpečné, neboť proxy spojení nejsou šifrována</string>
     <string name="title_advanced_roaming_hint">Hlavičky zpráv budou během roamingu stahovány vždy. Použijte nastavení svého zařízení pro zakázání internetu při roamingu.</string>
     <string name="title_advanced_browse_hint">Načte další zprávy při posouvání dolů</string>
     <string name="title_advanced_layout_hint">Přepnutí na kompaktnější rozvržení a změnu velikosti textu lze provést v zobrazení zprávy skrze menu v horním panelu akcí</string>
@@ -646,6 +647,7 @@
     <string name="title_duplicate_in">Duplikát zprávy v %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
+    <string name="title_buttons">Tlačítka</string>
     <string name="title_seen">Označit přečtené</string>
     <string name="title_unseen">Označit nepřečtené</string>
     <string name="title_hide">Skrýt</string>
@@ -670,6 +672,7 @@
     <string name="title_raw_save">Uložit zdrojovou zprávu</string>
     <string name="title_raw_send">Odeslat jako přílohu</string>
     <string name="title_manage_keywords">Spravovat klíčová slova</string>
+    <string name="title_manage_labels">Spravovat Gmail štítky</string>
     <string name="title_add_keyword">Přidat klíčové slovo</string>
     <string name="title_show_inline">Zobrazit vložené přílohy</string>
     <string name="title_download_all">Stáhnout vše</string>
@@ -683,6 +686,9 @@
     <string name="title_more">Více</string>
     <string name="title_spam">Nevyžádané</string>
     <string name="title_move">Přesunout</string>
+    <string name="title_copy_btn">Kopírovat</string>
+    <string name="title_unsubscribe">Odhlásit odběr</string>
+    <string name="title_message_rule">Vytvořit pravidlo</string>
     <string name="title_no_junk">Není spam</string>
     <string name="title_move_to">Přesunout do &#8230;</string>
     <string name="title_move_to_folder">Přesunout do &#8230;</string>
@@ -777,7 +783,9 @@
     <string name="title_style_italic">Kurzíva</string>
     <string name="title_style_underline">Podtržení</string>
     <string name="title_style_size">Velikost</string>
-    <string name="title_style_color">Barva</string>
+    <string name="title_style_size_small">Malý</string>
+    <string name="title_style_size_medium">Střední</string>
+    <string name="title_style_size_large">Velký</string>
     <string name="title_style_clear">Vymazat formátování</string>
     <string name="title_style_link">Vložit odkaz</string>
     <string name="title_add_image">Přidat obrázek</string>
@@ -1043,8 +1051,6 @@
     <string name="title_legend_bold">Změnit text na tučný</string>
     <string name="title_legend_italic">Změnit text na kurzívu</string>
     <string name="title_legend_underline">Podtrhnout text</string>
-    <string name="title_legend_text_size">Nastavit velikost textu</string>
-    <string name="title_legend_text_color">Nastavit barvu textu</string>
     <string name="title_legend_metered">Současné připojení je účtováno</string>
     <string name="title_legend_unmetered">Současné připojení není účtováno</string>
     <string name="title_legend_roaming">Roaming</string>
@@ -1132,7 +1138,6 @@
     <string name="title_dismiss">Zavřít</string>
     <string name="title_snooze_now">Odložit</string>
     <string name="title_loading">Načítání &#8230;</string>
-    <string name="title_set">Nastavit</string>
     <string name="title_fetching_again">Opětovné získávání zprávy ze serveru</string>
     <string name="title_conversation_actions">Akce</string>
     <string name="title_conversation_action_reply">Odpovědět s: \'%1$s\'</string>

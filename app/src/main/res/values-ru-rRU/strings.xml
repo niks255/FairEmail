@@ -6,7 +6,7 @@
     <string name="app_limitations">Например, сообщения всегда будут переформатированы, чтобы удалить небезопасные элементы и улучшить читабельность, а также открытие ссылок требует подтверждения в целях безопасности.</string>
     <string name="app_crash">FairEmail не поддерживается на этом устройстве, так как ошибки в Android вызывают сбои</string>
     <string name="app_exit">Для выхода снова перейдите \"назад\"</string>
-    <string name="channel_service">Служба</string>
+    <string name="channel_service">Получение</string>
     <string name="channel_send">Отправка</string>
     <string name="channel_notification">Уведомления</string>
     <string name="channel_update">Обновления</string>
@@ -99,6 +99,7 @@
     <string name="title_notification_idle">Низкий</string>
     <string name="title_notification_failed">\"%1$s\" не удалось</string>
     <string name="title_notification_alert">\'%1$s\' предупреждение сервера</string>
+    <string name="title_notification_sending_failed">Отправка для %1$s не удалась</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -280,7 +281,6 @@
     <string name="title_advanced_rlah">В роуминге как дома</string>
     <string name="title_advanced_timeout">Время ожидания соединения (сек.)</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-соединения</string>
-    <string name="title_advanced_socks">Использовать SOCKS-прокси</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
     <string name="title_advanced_caption_list">Список</string>
@@ -317,6 +317,7 @@
     <string name="title_advanced_subject_italic">Показывать тему сообщения курсивом</string>
     <string name="title_advanced_subject_elipsed">При необходимости сокращать тему сообщения</string>
     <string name="title_advanced_keywords">Показывать ключевые слова в заголовке сообщения</string>
+    <string name="title_advanced_labels">Показывать метки Gmail в заголовке сообщения</string>
     <string name="title_advanced_flags">Показывать метки избранного</string>
     <string name="title_advanced_flags_background">Цветной фон вместо цветных меток избранного</string>
     <string name="title_advanced_preview">Показывать предпросмотр сообщения</string>
@@ -325,10 +326,11 @@
     <string name="title_advanced_addresses">По умолчанию показывать подробную информацию об адресах</string>
     <string name="title_advanced_attachments_alt">Показывать вложения после текста сообщения</string>
     <string name="title_advanced_contrast">Использовать высокий контраст для текста сообщений</string>
-    <string name="title_advanced_monospaced">Использовать моноширинный шрифт для текста сообщения</string>
+    <string name="title_advanced_monospaced">По умолчанию использовать моношированный шрифт для текста сообщения</string>
     <string name="title_advanced_text_color">Использовать цвета текста</string>
-    <string name="title_advanced_text_size">Использовать размеры шрифта текста</string>
-    <string name="title_advanced_text_align">Использовать выравнивание текста по центру/краям</string>
+    <string name="title_advanced_text_size">Использовать размер текста</string>
+    <string name="title_advanced_text_font">Использовать шрифты</string>
+    <string name="title_advanced_text_align">Использовать выравнивание текста</string>
     <string name="title_advanced_collapse_quotes">Сворачивать цитируемый текст</string>
     <string name="title_advanced_images_inline">Автоматически показывать встроенные изображения</string>
     <string name="title_advanced_seekbar">Показывать относительное положение диалога точкой</string>
@@ -446,7 +448,6 @@
     <string name="title_advanced_rlah_hint">Предполагать отсутствие роуминга внутри ЕС</string>
     <string name="title_advanced_timeout_hint">Время ожидания для чтения/записи будет установлено в два раза больше времени ожидания соединения. Ещё большие значения могут увеличить расход аккумулятора.</string>
     <string name="title_advanced_ssl_harden_hint">Включение этой функции отключит слабые протоколы и алгоритмы SSL, что может привести к проблемам с соединением</string>
-    <string name="title_advanced_socks_hint">Использование удалённого прокси-сервера небезопасно, потому что прокси-соединения не зашифрованы</string>
     <string name="title_advanced_roaming_hint">Заголовки сообщений всегда будут загружаться в роуминге. Вы можете использовать настройки устройства для отключения интернета в роуминге.</string>
     <string name="title_advanced_browse_hint">Получать больше сообщений при прокрутке вниз</string>
     <string name="title_advanced_layout_hint">Переключиться на компактный вид и изменить размера текста сообщения можно через верхнее меню панели действий при просмотре сообщения</string>
@@ -646,6 +647,7 @@
     <string name="title_duplicate_in">Дубликат сообщения в %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
+    <string name="title_buttons">Кнопки</string>
     <string name="title_seen">Отметить как прочитанное</string>
     <string name="title_unseen">Отметить как непрочитанное</string>
     <string name="title_hide">Скрыть</string>
@@ -670,6 +672,7 @@
     <string name="title_raw_save">Сохранить оригинал сообщения</string>
     <string name="title_raw_send">Отправить как вложение</string>
     <string name="title_manage_keywords">Управление ключами (словами)</string>
+    <string name="title_manage_labels">Управление метками Gmail</string>
     <string name="title_add_keyword">Добавить ключ (слово)</string>
     <string name="title_show_inline">Показывать встроенные вложения</string>
     <string name="title_download_all">Загрузить все</string>
@@ -683,6 +686,9 @@
     <string name="title_more">Ещё</string>
     <string name="title_spam">Спам</string>
     <string name="title_move">Переместить</string>
+    <string name="title_copy_btn">Копировать</string>
+    <string name="title_unsubscribe">Отписаться</string>
+    <string name="title_message_rule">Создать правило</string>
     <string name="title_no_junk">Не спам</string>
     <string name="title_move_to">Переместить в&#8230;</string>
     <string name="title_move_to_folder">Переместить в&#8230;</string>
@@ -773,11 +779,21 @@
     <string name="title_send_encryption">Шифрование</string>
     <string name="title_send_priority">Приоритет</string>
     <string name="title_no_server">Сервер не найден на \'%1$s\'</string>
+    <string name="title_style">Стиль</string>
     <string name="title_style_bold">Жирный</string>
     <string name="title_style_italic">Курсив</string>
     <string name="title_style_underline">Подчёркнутый</string>
     <string name="title_style_size">Размер</string>
-    <string name="title_style_color">Цвет</string>
+    <string name="title_style_size_small">Маленький</string>
+    <string name="title_style_size_medium">Средний</string>
+    <string name="title_style_size_large">Большой</string>
+    <string name="title_style_font">Шрифт</string>
+    <string name="title_style_font_cursive">Курсив</string>
+    <string name="title_style_font_serif">С засечками</string>
+    <string name="title_style_font_sans_serif">Без засечек</string>
+    <string name="title_style_font_monospace">Моноширинный</string>
+    <string name="title_style_font_default">По умолчанию</string>
+    <string name="title_style_color">Цвет &#8230;</string>
     <string name="title_style_clear">Очистить форматирование</string>
     <string name="title_style_link">Вставить ссылку</string>
     <string name="title_add_image">Добавить изображение</string>
@@ -1043,8 +1059,7 @@
     <string name="title_legend_bold">Выделить текст жирным шрифтом</string>
     <string name="title_legend_italic">Выделить текст курсивом</string>
     <string name="title_legend_underline">Выделить текст подчёркиванием</string>
-    <string name="title_legend_text_size">Установить размер текста</string>
-    <string name="title_legend_text_color">Установить цвет текста</string>
+    <string name="title_legend_text_style">Задать стиль текста</string>
     <string name="title_legend_metered">Подключение лимитировано</string>
     <string name="title_legend_unmetered">Подключение безлимитное</string>
     <string name="title_legend_roaming">Роуминг</string>
@@ -1132,7 +1147,6 @@
     <string name="title_dismiss">Отклонить</string>
     <string name="title_snooze_now">Отложить</string>
     <string name="title_loading">Загрузка&#8230;</string>
-    <string name="title_set">Применить</string>
     <string name="title_fetching_again">Заново загружаем сообщения с сервера</string>
     <string name="title_conversation_actions">Действия</string>
     <string name="title_conversation_action_reply">Ответить на: \'%1$s\'</string>
