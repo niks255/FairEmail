@@ -249,6 +249,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean preview_italic;
     private int preview_lines;
     private boolean attachments_alt;
+    private boolean thumbnails;
     private boolean contrast;
     private boolean monospaced;
     private boolean inline;
@@ -1536,7 +1537,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean expand_all = prefs.getBoolean("expand_all", false);
                     boolean expand_one = prefs.getBoolean("expand_one", true);
                     boolean tools = prefs.getBoolean("message_tools", true);
-                    boolean button_inbox = prefs.getBoolean("button_inbox", true);
                     boolean button_junk = prefs.getBoolean("button_junk", true);
                     boolean button_trash = prefs.getBoolean("button_trash", true);
                     boolean button_archive = prefs.getBoolean("button_archive", true);
@@ -1560,7 +1560,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibArchive.setVisibility(tools && button_archive && archive ? View.VISIBLE : View.GONE);
                     ibTrash.setVisibility(outbox || (tools && button_trash && trash) ? View.VISIBLE : View.GONE);
                     ibJunk.setVisibility(tools && button_junk && junk ? View.VISIBLE : View.GONE);
-                    ibInbox.setVisibility(tools && button_inbox && inbox ? View.VISIBLE : View.GONE);
+                    ibInbox.setVisibility(tools && inbox ? View.VISIBLE : View.GONE);
                     ibMore.setVisibility(tools && !outbox ? View.VISIBLE : View.GONE);
                     ibTools.setImageLevel(tools ? 0 : 1);
                     ibTools.setVisibility(outbox ? View.GONE : View.VISIBLE);
@@ -1581,6 +1581,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void bindAddresses(TupleMessageEx message) {
             boolean show_addresses = properties.getValue("addresses", message.id);
+            boolean full = (show_addresses || name_email);
 
             int froms = (message.from == null ? 0 : message.from.length);
             int tos = (message.to == null ? 0 : message.to.length);
@@ -1588,10 +1589,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             String submitter = MessageHelper.formatAddresses(message.submitter);
             String from = MessageHelper.formatAddresses(message.senders);
-            String to = MessageHelper.formatAddresses(message.to);
+            String to = MessageHelper.formatAddresses(message.to, full, false);
             String replyto = MessageHelper.formatAddresses(message.reply);
-            String cc = MessageHelper.formatAddresses(message.cc);
-            String bcc = MessageHelper.formatAddresses(message.bcc);
+            String cc = MessageHelper.formatAddresses(message.cc, full, false);
+            String bcc = MessageHelper.formatAddresses(message.bcc, full, false);
 
             grpAddresses.setVisibility(View.VISIBLE);
 
@@ -2353,9 +2354,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             });
 
             List<EntityAttachment> images = new ArrayList<>();
-            for (EntityAttachment attachment : attachments)
-                if (attachment.isAttachment() && attachment.isImage())
-                    images.add(attachment);
+            if (thumbnails)
+                for (EntityAttachment attachment : attachments)
+                    if (attachment.isAttachment() && attachment.isImage())
+                        images.add(attachment);
             adapterImage.set(images);
             grpImages.setVisibility(images.size() > 0 ? View.VISIBLE : View.GONE);
         }
@@ -3750,7 +3752,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean full = properties.getValue("full", message.id);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean button_inbox = prefs.getBoolean("button_inbox", true);
             boolean button_junk = prefs.getBoolean("button_junk", true);
             boolean button_trash = prefs.getBoolean("button_trash", true);
             boolean button_archive = prefs.getBoolean("button_archive", true);
@@ -3763,7 +3764,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
             popupMenu.inflate(R.menu.popup_message_more);
 
-            popupMenu.getMenu().findItem(R.id.menu_button_inbox).setChecked(button_inbox);
             popupMenu.getMenu().findItem(R.id.menu_button_junk).setChecked(button_junk);
             popupMenu.getMenu().findItem(R.id.menu_button_trash).setChecked(button_trash);
             popupMenu.getMenu().findItem(R.id.menu_button_archive).setChecked(button_archive);
@@ -3825,9 +3825,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 public boolean onMenuItemClick(MenuItem target) {
                     switch (target.getItemId()) {
-                        case R.id.menu_button_inbox:
-                            onMenuButton(message, "inbox", target.isChecked());
-                            return true;
                         case R.id.menu_button_junk:
                             onMenuButton(message, "junk", target.isChecked());
                             return true;
@@ -4428,6 +4425,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Intent rule = new Intent(ActivityView.ACTION_EDIT_RULE);
             rule.putExtra("account", message.account);
             rule.putExtra("folder", message.folder);
+            rule.putExtra("protocol", message.accountProtocol);
             if (message.from != null && message.from.length > 0)
                 rule.putExtra("sender", ((InternetAddress) message.from[0]).getAddress());
             if (message.to != null && message.to.length > 0)
@@ -4965,12 +4963,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         boolean contacts = Helper.hasPermission(context, Manifest.permission.READ_CONTACTS);
         boolean avatars = prefs.getBoolean("avatars", true);
+        boolean gravatars = prefs.getBoolean("gravatars", false);
+        boolean favicons = prefs.getBoolean("favicons", false);
         boolean generated = prefs.getBoolean("generated_icons", true);
 
         this.date = prefs.getBoolean("date", true);
         this.threading = prefs.getBoolean("threading", true);
         this.threading_unread = threading && prefs.getBoolean("threading_unread", false);
-        this.avatars = (contacts && avatars) || generated;
+        this.avatars = (contacts && avatars) || (gravatars || favicons || generated);
         this.color_stripe = prefs.getBoolean("color_stripe", true);
         this.name_email = prefs.getBoolean("name_email", false);
         this.prefer_contact = prefs.getBoolean("prefer_contact", false);
@@ -4997,6 +4997,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.preview_italic = prefs.getBoolean("preview_italic", true);
         this.preview_lines = prefs.getInt("preview_lines", 2);
         this.attachments_alt = prefs.getBoolean("attachments_alt", false);
+        this.thumbnails = prefs.getBoolean("thumbnails", true);
         this.contrast = prefs.getBoolean("contrast", false);
         this.monospaced = prefs.getBoolean("monospaced", false);
         this.inline = prefs.getBoolean("inline_images", false);

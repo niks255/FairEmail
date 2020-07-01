@@ -265,6 +265,7 @@
     <string name="title_advanced_caption_message">Meddelande</string>
     <string name="title_advanced_caption_message_header">Meddelandehuvud</string>
     <string name="title_advanced_caption_message_body">Meddelande-text</string>
+    <string name="title_advanced_portrait2">Använd två rader i porträttläge</string>
     <string name="title_advanced_landscape">Använd två kolumner i landskapsläge</string>
     <string name="title_advanced_landscape3">Visa navigeringsmenyn i liggande läge som standard</string>
     <string name="title_advanced_startup">Visa på startskärmen</string>
@@ -278,6 +279,7 @@
     <string name="title_advanced_color_stripe">Visa färgrand</string>
     <string name="title_advanced_avatars">Visa kontaktfoton</string>
     <string name="title_advanced_gravatars">Visa Gravatars</string>
+    <string name="title_advanced_favicons" comment="title_advanced_favicons&#10;https://en.wikipedia.org/wiki/Favicon">Visa favicons</string>
     <string name="title_advanced_generated_icons">Visa genererade ikoner</string>
     <string name="title_advanced_identicons">Visa identicons</string>
     <string name="title_advanced_circular">Visa runda ikoner</string>
@@ -302,6 +304,7 @@
     <string name="title_advanced_preview_lines">Antal förhandsgranskningsrader</string>
     <string name="title_advanced_addresses">Visa adressuppgifter som standard</string>
     <string name="title_advanced_attachments_alt">Visa bilagor efter meddelandetexten</string>
+    <string name="title_advanced_thumbnails">Visa miniatyrbilder efter meddelandetexten</string>
     <string name="title_advanced_contrast">Använd hög kontrast för meddelandetext</string>
     <string name="title_advanced_monospaced">Använd monospaced typsnitt för meddelandetext som standard</string>
     <string name="title_advanced_text_color">Använd textfärger</string>
@@ -511,6 +514,7 @@
     <string name="title_primary">Primär</string>
     <string name="title_primary_account">Primär (standardkonto)</string>
     <string name="title_primary_identity">Primär (standardidentitet)</string>
+    <string name="title_self_identity">Ta bort e-postadresser vid svar</string>
     <string name="title_leave_on_server">Spara alla meddelanden på servern</string>
     <string name="title_leave_deleted">Lämna raderade meddelanden på servern</string>
     <string name="title_leave_on_device">Spara meddelanden på enheten</string>
@@ -765,10 +769,6 @@
     <string name="title_style_size_medium">Medel</string>
     <string name="title_style_size_large">Stor</string>
     <string name="title_style_font">Typsnitt</string>
-    <string name="title_style_font_cursive">Kursivt</string>
-    <string name="title_style_font_serif">Serif</string>
-    <string name="title_style_font_sans_serif">Sans-serif</string>
-    <string name="title_style_font_monospace">Monospace</string>
     <string name="title_style_font_default">Standard</string>
     <string name="title_style_color">Färg &#8230;</string>
     <string name="title_style_clear">Rensa formatering</string>
@@ -1315,5 +1315,11 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="fontNameNames">
+        <item>Kursivt</item>
+        <item>Serif</item>
+        <item>Sans-serif</item>
+        <item>Monospace</item>
     </string-array>
 </resources>

@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -194,11 +195,7 @@ public class ViewModelMessages extends ViewModel {
         owner.getLifecycle().addObserver(new LifecycleObserver() {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             public void onDestroyed() {
-                int free_mb = Log.getFreeMemMb();
-                boolean lowmem = (free_mb < LOW_MEM_MB);
-
-                Log.d("Destroy model=" + viewType +
-                        " lowmem=" + lowmem + " free=" + free_mb + " MB");
+                Log.d("Destroy model=" + viewType);
 
                 Model model = models.get(viewType);
                 if (model != null) {
@@ -206,7 +203,7 @@ public class ViewModelMessages extends ViewModel {
                     model.list.removeObservers(owner);
                 }
 
-                if (viewType == AdapterMessage.ViewType.THREAD || lowmem) {
+                if (viewType == AdapterMessage.ViewType.THREAD) {
                     Log.d("Remove model=" + viewType);
                     models.remove(viewType);
                 }
@@ -244,10 +241,10 @@ public class ViewModelMessages extends ViewModel {
             models.remove(viewType);
     }
 
-    void observePrevNext(LifecycleOwner owner, final long id, final IPrevNext intf) {
+    void observePrevNext(Context context, LifecycleOwner owner, final long id, final IPrevNext intf) {
         Log.d("Observe prev/next model=" + last);
 
-        Model model = models.get(last);
+        final Model model = models.get(last);
         if (model == null) {
             // When showing accounts or folders
             intf.onPrevious(false, null);
@@ -258,6 +255,8 @@ public class ViewModelMessages extends ViewModel {
 
         Log.d("Observe previous/next id=" + id);
         model.list.observe(owner, new Observer<PagedList<TupleMessageEx>>() {
+            private boolean fallback = false;
+
             @Override
             public void onChanged(PagedList<TupleMessageEx> messages) {
                 Log.d("Observe previous/next id=" + id + " messages=" + messages.size());
@@ -265,6 +264,8 @@ public class ViewModelMessages extends ViewModel {
                 for (int pos = 0; pos < messages.size(); pos++) {
                     TupleMessageEx item = messages.get(pos);
                     if (item != null && id == item.id) {
+                        fallback = true;
+
                         if (pos - 1 >= 0) {
                             TupleMessageEx next = messages.get(pos - 1);
                             intf.onNext(true, next == null ? null : next.id);
@@ -284,6 +285,67 @@ public class ViewModelMessages extends ViewModel {
                 }
 
                 Log.w("Observe previous/next gone id=" + id);
+
+                if (fallback)
+                    return;
+
+                fallback = true;
+
+                Bundle args = new Bundle();
+                args.putLong("id", id);
+
+                new SimpleTask<Pair<Long, Long>>() {
+                    @Override
+                    protected Pair<Long, Long> onExecute(Context context, Bundle args) {
+                        long id = args.getLong("id");
+
+                        PagedList<TupleMessageEx> plist = model.list.getValue();
+                        if (plist == null)
+                            return null;
+
+                        LimitOffsetDataSource<TupleMessageEx> ds = (LimitOffsetDataSource<TupleMessageEx>) plist.getDataSource();
+                        int count = ds.countItems();
+                        for (int i = 0; i < count; i += 100) {
+                            List<TupleMessageEx> messages = ds.loadRange(i, Math.min(100, count - i));
+                            for (int j = 0; j < messages.size(); j++)
+                                if (messages.get(j).id == id) {
+                                    int pos = i + j;
+                                    model.list.getValue().loadAround(pos);
+
+                                    List<TupleMessageEx> lprev = null;
+                                    if (pos - 1 >= 0)
+                                        lprev = ds.loadRange(pos - 1, 1);
+
+                                    List<TupleMessageEx> lnext = null;
+                                    if (pos + 1 < count)
+                                        lnext = ds.loadRange(pos + 1, 1);
+
+                                    TupleMessageEx prev = (lprev != null && lprev.size() > 0 ? lprev.get(0) : null);
+                                    TupleMessageEx next = (lnext != null && lnext.size() > 0 ? lnext.get(0) : null);
+
+                                    Pair<Long, Long> result = new Pair<>(
+                                            prev == null ? null : prev.id,
+                                            next == null ? null : next.id);
+                                    Log.i("Observe previous/next fallback=" + result);
+                                    return result;
+                                }
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Pair<Long, Long> data) {
+                        intf.onPrevious(data != null && data.first != null, data == null ? null : data.first);
+                        intf.onNext(data != null && data.second != null, data == null ? null : data.second);
+                        intf.onFound(-1, messages.size());
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        // No nothing
+                    }
+                }.execute(context, owner, args, "model:fallback");
             }
         });
     }

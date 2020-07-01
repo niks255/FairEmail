@@ -64,12 +64,8 @@ import net.openid.appauth.browser.Browsers;
 import net.openid.appauth.browser.VersionRange;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -230,6 +226,8 @@ public class FragmentOAuth extends FragmentBase {
                     throw new IllegalArgumentException(getString(R.string.title_email_invalid, email));
             }
 
+            etName.setEnabled(false);
+            etEmail.setEnabled(false);
             btnOAuth.setEnabled(false);
             pbOAuth.setVisibility(View.VISIBLE);
             hideError();
@@ -307,6 +305,9 @@ public class FragmentOAuth extends FragmentBase {
 
     private void onHandleOAuth(@NonNull Intent data) {
         try {
+            etName.setEnabled(true);
+            etEmail.setEnabled(true);
+
             AuthorizationResponse auth = AuthorizationResponse.fromIntent(data);
             if (auth == null)
                 throw AuthorizationException.fromIntent(data);
@@ -388,6 +389,20 @@ public class FragmentOAuth extends FragmentBase {
                 String personal = args.getString("personal");
                 String address = args.getString("address");
 
+                EmailProvider provider = EmailProvider.getProvider(context, id);
+                String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
+
+                if (accessToken != null) {
+                    String[] segments = accessToken.split("\\.");
+                    if (segments.length > 1)
+                        try {
+                            String payload = new String(Base64.decode(segments[1], Base64.DEFAULT));
+                            EntityLog.log(context, "token payload=" + payload);
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
+                }
+
                 if (jwt != null) {
                     // https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens
                     String[] segments = jwt.split("\\.");
@@ -398,56 +413,32 @@ public class FragmentOAuth extends FragmentBase {
                             JSONObject jpayload = new JSONObject(payload);
                             if (jpayload.has("email")) {
                                 String email = jpayload.getString("email");
-                                if (!TextUtils.isEmpty(email))
-                                    address = email;
+                                if (!TextUtils.isEmpty(email) && !email.equals(address)) {
+                                    try (EmailService iservice = new EmailService(
+                                            context, aprotocol, null, false, EmailService.PURPOSE_CHECK, true)) {
+                                        iservice.connect(
+                                                provider.imap.host, provider.imap.port,
+                                                EmailService.AUTH_TYPE_OAUTH, provider.id,
+                                                email, state,
+                                                null, null);
+                                        address = email;
+                                        Log.i("jwt email=" + email);
+                                    } catch (Throwable ex) {
+                                        Log.w(ex);
+                                    }
+                                }
                             }
                         } catch (Throwable ex) {
                             Log.e(ex);
                         }
                 }
 
-                String primaryEmail = null;
+                String primaryEmail;
                 List<Pair<String, String>> identities = new ArrayList<>();
 
                 if (askAccount) {
                     primaryEmail = address;
                     identities.add(new Pair<>(address, personal));
-                } else if ("office365".equals(id)) {
-                    // https://docs.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http#http-request
-                    URL url = new URL("https://graph.microsoft.com/v1.0/me?$select=displayName,otherMails");
-                    Log.i("Fetching " + url);
-
-                    HttpURLConnection request = (HttpURLConnection) url.openConnection();
-                    request.setRequestMethod("GET");
-                    request.setReadTimeout(OAUTH_TIMEOUT);
-                    request.setConnectTimeout(OAUTH_TIMEOUT);
-                    request.setDoInput(true);
-                    request.setRequestProperty("Authorization", "Bearer " + token);
-                    request.setRequestProperty("Content-Type", "application/json");
-                    request.connect();
-
-                    String json;
-                    try {
-                        json = Helper.readStream(request.getInputStream(), StandardCharsets.UTF_8.name());
-                        Log.i("Response=" + json);
-                    } finally {
-                        request.disconnect();
-                    }
-
-                    JSONObject data = new JSONObject(json);
-                    if (data.has("otherMails")) {
-                        JSONArray otherMails = data.getJSONArray("otherMails");
-
-                        String displayName = data.getString("displayName");
-                        for (int i = 0; i < otherMails.length(); i++) {
-                            String email = (String) otherMails.get(i);
-                            if (i == 0)
-                                primaryEmail = email;
-                            if (TextUtils.isEmpty(displayName))
-                                displayName = name;
-                            identities.add(new Pair<>(email, displayName));
-                        }
-                    }
                 } else
                     throw new IllegalArgumentException("Unknown provider=" + id);
 
@@ -458,12 +449,9 @@ public class FragmentOAuth extends FragmentBase {
                 for (Pair<String, String> identity : identities)
                     Log.i("OAuth identity=" + identity.first + "/" + identity.second);
 
-                EmailProvider provider = EmailProvider.getProvider(context, id);
-
                 List<EntityFolder> folders;
 
                 Log.i("OAuth checking IMAP provider=" + provider.id);
-                String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
                 try (EmailService iservice = new EmailService(
                         context, aprotocol, null, false, EmailService.PURPOSE_CHECK, true)) {
                     iservice.connect(
@@ -590,6 +578,8 @@ public class FragmentOAuth extends FragmentBase {
     }
 
     private void onHandleCancel() {
+        etName.setEnabled(true);
+        etEmail.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
     }
@@ -613,6 +603,8 @@ public class FragmentOAuth extends FragmentBase {
                 ex instanceof AuthenticationFailedException)
             tvOfficeAuthHint.setVisibility(View.VISIBLE);
 
+        etName.setEnabled(true);
+        etEmail.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
 

@@ -276,7 +276,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(151) Can you add backup/restore messages?](#user-content-faq151)
 * [(152) How can I insert a contact group?](#user-content-faq152)
 * [(153) Why does permanently deleting Gmail message not work?](#user-content-faq153)
-* [(154) Can you add favicons as contact photos?](#user-content-faq154)
+* [~~(154) Can you add favicons as contact photos?~~](#user-content-faq154)
 * [(155) What is a winmail.dat file?](#user-content-faq155)
 * [(156) How can I set up an Office365 account?](#user-content-faq156)
 * [(157) How can I set up an Free.fr account?](#user-content-faq157)
@@ -1840,7 +1840,7 @@ it is not possible to preview which messages would match a header rule condition
 
 In the three-dots *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
 
-Rules are available for IMAP accounts only because the POP3 protocol allows downloading and permanently deleting messages from the inbox only.
+The POP3 protocol does not support setting keywords and moving or copying messages.
 
 Using rules is a pro feature.
 
@@ -2820,6 +2820,7 @@ The error *User is authenticated but not connected* might occur if:
 
 * The account password was changed: changing it in FairEmail too should fix the problem
 * Push messages are enabled for too many folders: see [this FAQ](#user-content-faq23) for more information and a workaround
+* An alias email address is being used as username instead of the primary email address
 * An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
 
 <br />
@@ -3045,10 +3046,10 @@ Some background: Gmail seems to have an additional message view for IMAP, which 
 <br />
 
 <a name="faq154"></a>
-**(154) Can you add favicons as contact photos?**
+**~~(154) Can you add favicons as contact photos?~~**
 
-Besides that a [favicon](https://en.wikipedia.org/wiki/Favicon) might be shared by many email addresses with the same domain name
-and therefore is not directly related to an email address, favicons can be used to track you.
+~~Besides that a [favicon](https://en.wikipedia.org/wiki/Favicon) might be shared by many email addresses with the same domain name~~
+~~and therefore is not directly related to an email address, favicons can be used to track you.~~
 
 <br />
 

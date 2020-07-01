@@ -287,6 +287,7 @@
     <string name="title_advanced_caption_message">Wiadomość</string>
     <string name="title_advanced_caption_message_header">Nagłówek wiadomości</string>
     <string name="title_advanced_caption_message_body">Treść wiadomości</string>
+    <string name="title_advanced_portrait2">Użyj dwóch rzędów w trybie pionowym</string>
     <string name="title_advanced_landscape">Użyj dwóch kolumn w trybie poziomym</string>
     <string name="title_advanced_landscape3">Domyślnie pokaż menu nawigacji w trybie poziomym</string>
     <string name="title_advanced_startup">Pokaż na ekranie początkowym</string>
@@ -300,6 +301,7 @@
     <string name="title_advanced_color_stripe">Pokaż kolorowy pasek</string>
     <string name="title_advanced_avatars">Pokaż zdjęcia kontaktu</string>
     <string name="title_advanced_gravatars">Pokaż Gravatary</string>
+    <string name="title_advanced_favicons" comment="title_advanced_favicons&#10;https://en.wikipedia.org/wiki/Favicon">Pokaż favikony</string>
     <string name="title_advanced_generated_icons">Pokaż wygenerowane ikony</string>
     <string name="title_advanced_identicons">Pokazuje ikony kontaktów</string>
     <string name="title_advanced_circular">Pokaż okrągłe ikony</string>
@@ -324,6 +326,7 @@
     <string name="title_advanced_preview_lines">Liczba linii podglądu</string>
     <string name="title_advanced_addresses">Domyślnie pokazuj szczegóły adresu</string>
     <string name="title_advanced_attachments_alt">Pokaż załączniki za treścią wiadomości</string>
+    <string name="title_advanced_thumbnails">Pokaż miniatury obrazów po tekście wiadomości</string>
     <string name="title_advanced_contrast">Użyj wysokiego kontrastu dla tekstu wiadomości</string>
     <string name="title_advanced_monospaced">Użyj czcionki o stałej szerokości dla tekstu wiadomości</string>
     <string name="title_advanced_text_color">Użyj kolorów tekstu</string>
@@ -358,7 +361,7 @@
     <string name="title_advanced_autounstar">Automatycznie usuwaj gwiazdki z wiadomości przy ich przenoszeniu</string>
     <string name="title_advanced_auto_important">Wiadomości oznaczone gwiazdką automatycznie ustaw jako ważne</string>
     <string name="title_advanced_reset_importance">Resetuj ważność przy przenoszeniu wiadomości</string>
-    <string name="title_advanced_discard_delete">Po odrzuceniu wersji roboczej trwale usuń wersję roboczą</string>
+    <string name="title_advanced_discard_delete">Po odrzuceniu wersji roboczej usuń ją trwale</string>
     <string name="title_advanced_default_snooze">Domyślny czas odłożenia</string>
     <string name="title_advanced_notifications">Zarządzaj powiadomieniami</string>
     <string name="title_advanced_notifications_default">Domyślny kanał</string>
@@ -533,6 +536,7 @@
     <string name="title_primary">Podstawowy</string>
     <string name="title_primary_account">Podstawowe (domyślne konto)</string>
     <string name="title_primary_identity">Podstawowe (domyślna tożsamość)</string>
+    <string name="title_self_identity">Usuń adres e-mail podczas odpowiedzi</string>
     <string name="title_leave_on_server">Pozostaw wiadomości na serwerze</string>
     <string name="title_leave_deleted">Pozostaw usunięte wiadomości na serwerze</string>
     <string name="title_leave_on_device">Pozostaw wiadomości na urządzeniu</string>
@@ -787,11 +791,7 @@
     <string name="title_style_size_medium">Średni</string>
     <string name="title_style_size_large">Duży</string>
     <string name="title_style_font">Czcionka</string>
-    <string name="title_style_font_cursive">Kursywa</string>
-    <string name="title_style_font_serif">Szeryfowa</string>
-    <string name="title_style_font_sans_serif">Bezszeryfowa</string>
-    <string name="title_style_font_monospace">O stałej szerokości znaków</string>
-    <string name="title_style_font_default">Domyślna</string>
+    <string name="title_style_font_default">Domyślny</string>
     <string name="title_style_color">Kolor &#8230;</string>
     <string name="title_style_clear">Wyczyść formatowanie</string>
     <string name="title_style_link">Wstaw link</string>
@@ -1338,5 +1338,11 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="fontNameNames">
+        <item>Kursywa</item>
+        <item>Szeryfowa</item>
+        <item>Bezszeryfowa</item>
+        <item>Stała szerokość</item>
     </string-array>
 </resources>

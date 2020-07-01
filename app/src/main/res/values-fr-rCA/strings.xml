@@ -266,6 +266,7 @@
     <string name="title_advanced_caption_message">Message</string>
     <string name="title_advanced_caption_message_header">En-tête du message</string>
     <string name="title_advanced_caption_message_body">Contenu du message</string>
+    <string name="title_advanced_portrait2">Utiliser deux lignes en mode portrait</string>
     <string name="title_advanced_landscape">Utiliser deux colonnes en mode paysage</string>
     <string name="title_advanced_landscape3">Afficher le menu de navigation en mode paysage par défaut</string>
     <string name="title_advanced_startup">Afficher sur l’écran de démarrage</string>
@@ -279,6 +280,7 @@
     <string name="title_advanced_color_stripe">Afficher la bande de couleur</string>
     <string name="title_advanced_avatars">Afficher la photo des contacts</string>
     <string name="title_advanced_gravatars">Afficher les Gravatars</string>
+    <string name="title_advanced_favicons" comment="title_advanced_favicons&#10;https://en.wikipedia.org/wiki/Favicon">Afficher l\'icône des sites web</string>
     <string name="title_advanced_generated_icons">Afficher les icônes générées</string>
     <string name="title_advanced_identicons">Afficher les identicônes</string>
     <string name="title_advanced_circular">Afficher des icônes rondes</string>
@@ -303,6 +305,7 @@
     <string name="title_advanced_preview_lines">Nombre de lignes d’aperçu</string>
     <string name="title_advanced_addresses">Afficher les détails de l’adresse par défaut</string>
     <string name="title_advanced_attachments_alt">Afficher les pièces jointes après le texte du message</string>
+    <string name="title_advanced_thumbnails">Afficher les vignettes des images après le texte du message</string>
     <string name="title_advanced_contrast">Utiliser un contraste élevé pour le texte du message</string>
     <string name="title_advanced_monospaced">Utiliser une police à espacement fixe pour le texte du message</string>
     <string name="title_advanced_text_color">Afficher les couleurs du texte</string>
@@ -512,6 +515,7 @@
     <string name="title_primary">Principal</string>
     <string name="title_primary_account">Principal (compte par défaut)</string>
     <string name="title_primary_identity">Principal (identité par défaut)</string>
+    <string name="title_self_identity">Supprimer l\'adresse courriel lors de la réponse</string>
     <string name="title_leave_on_server">Laisser les messages sur le serveur</string>
     <string name="title_leave_deleted">Laisser les messages supprimés sur le serveur</string>
     <string name="title_leave_on_device">Laisser les messages sur l’appareil</string>
@@ -766,10 +770,6 @@
     <string name="title_style_size_medium">Moyen</string>
     <string name="title_style_size_large">Grand</string>
     <string name="title_style_font">Police de caractères</string>
-    <string name="title_style_font_cursive">Cursive</string>
-    <string name="title_style_font_serif">Avec empattement</string>
-    <string name="title_style_font_sans_serif">Sans empattement</string>
-    <string name="title_style_font_monospace">À espacement fixe</string>
     <string name="title_style_font_default">Par défaut</string>
     <string name="title_style_color">Couleur&#8230;</string>
     <string name="title_style_clear">Effacer la mise en forme</string>
@@ -1316,5 +1316,11 @@
         <item>10 Mo</item>
         <item>20 Mo</item>
         <item>50 Mo</item>
+    </string-array>
+    <string-array name="fontNameNames">
+        <item>Cursive</item>
+        <item>Avec empattement</item>
+        <item>Sans empattement</item>
+        <item>À espacement fixe</item>
     </string-array>
 </resources>
