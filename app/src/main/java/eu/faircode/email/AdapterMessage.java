@@ -248,6 +248,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean preview;
     private boolean preview_italic;
     private int preview_lines;
+    private int message_zoom;
     private boolean attachments_alt;
     private boolean thumbnails;
     private boolean contrast;
@@ -754,7 +755,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             tvBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
 
                             scale = scale * factor;
-                            String perc = Math.round(scale * 100) + " %";
+                            String perc = Math.round(scale * message_zoom) + " %";
                             if (toast != null)
                                 toast.cancel();
                             toast = ToastEx.makeText(context, perc, Toast.LENGTH_SHORT);
@@ -984,7 +985,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             else
                 tvFrom.setText(MessageHelper.formatAddresses(senders, name_email, false));
             tvFrom.setPaintFlags(tvFrom.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
-            tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize, true));
+            tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize));
             tvSize.setVisibility(
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
@@ -1372,7 +1373,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvExpand.setVisibility(View.GONE);
             else {
                 tvExpand.setText(context.getString(R.string.title_expand_warning,
-                        message.size == null ? "?" : Helper.humanReadableByteCount(message.size, true)));
+                        message.size == null ? "?" : Helper.humanReadableByteCount(message.size)));
                 tvExpand.setVisibility(View.VISIBLE);
             }
         }
@@ -1670,9 +1671,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSizeEx.setVisibility(!show_addresses || (message.size == null && message.total == null) ? View.GONE : View.VISIBLE);
             StringBuilder size = new StringBuilder();
             size
-                    .append(message.size == null ? "-" : Helper.humanReadableByteCount(message.size, true))
+                    .append(message.size == null ? "-" : Helper.humanReadableByteCount(message.size))
                     .append("/")
-                    .append(message.total == null ? "-" : Helper.humanReadableByteCount(message.total, true));
+                    .append(message.total == null ? "-" : Helper.humanReadableByteCount(message.total));
             tvSizeEx.setText(size.toString());
 
             tvLanguageTitle.setVisibility(
@@ -1796,7 +1797,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 properties.setValue("images", message.id, true);
             }
 
-            float size = properties.getSize(message.id, show_full ? 0 : textSize);
+            float size = properties.getSize(message.id, show_full ? 0 : textSize * message_zoom / 100f);
             int height = properties.getHeight(message.id, 0);
             Pair<Integer, Integer> position = properties.getPosition(message.id);
             Log.i("Bind size=" + size + " height=" + height);
@@ -2832,12 +2833,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 if (EntityFolder.DRAFTS.equals(message.folderType) && message.visible == 1 &&
                         !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) &&
-                        !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
+                        !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt)) {
                     context.startActivity(
                             new Intent(context, ActivityCompose.class)
                                     .putExtra("action", "edit")
                                     .putExtra("id", message.id));
-                else {
+                    properties.setValue("selected", message.id, true);
+                } else {
                     final LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
                     final Intent viewThread = new Intent(ActivityView.ACTION_VIEW_THREAD)
                             .putExtra("account", message.account)
@@ -3641,16 +3643,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Bundle args = new Bundle();
             args.putLong("id", message.id);
 
-            new SimpleTask<Void>() {
+            new SimpleTask<EntityMessage>() {
                 @Override
-                protected Void onExecute(Context context, Bundle args) {
+                protected EntityMessage onExecute(Context context, Bundle args) {
                     long id = args.getLong("id");
+
+                    EntityMessage message;
 
                     DB db = DB.getInstance(context);
                     try {
                         db.beginTransaction();
 
-                        EntityMessage message = db.message().getMessage(id);
+                        message = db.message().getMessage(id);
                         if (message == null)
                             return null;
 
@@ -3691,7 +3695,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.cancel("send:" + id, 1);
 
-                    return null;
+                    return message;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, EntityMessage draft) {
+                    if (draft != null)
+                        context.startActivity(
+                                new Intent(context, ActivityCompose.class)
+                                        .putExtra("action", "edit")
+                                        .putExtra("id", draft.id));
                 }
 
                 @Override
@@ -4996,6 +5009,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.preview = prefs.getBoolean("preview", false);
         this.preview_italic = prefs.getBoolean("preview_italic", true);
         this.preview_lines = prefs.getInt("preview_lines", 2);
+        this.message_zoom = prefs.getInt("message_zoom", 100);
         this.attachments_alt = prefs.getBoolean("attachments_alt", false);
         this.thumbnails = prefs.getBoolean("thumbnails", true);
         this.contrast = prefs.getBoolean("contrast", false);

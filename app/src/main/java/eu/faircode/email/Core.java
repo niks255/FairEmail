@@ -49,6 +49,7 @@ import com.sun.mail.iap.CommandFailedException;
 import com.sun.mail.iap.ConnectionException;
 import com.sun.mail.iap.ProtocolException;
 import com.sun.mail.iap.Response;
+import com.sun.mail.imap.AppendUID;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.imap.IMAPStore;
@@ -330,7 +331,7 @@ class Core {
                                     break;
 
                                 case EntityOperation.ADD:
-                                    onAdd(context, jargs, folder, message, (IMAPStore) istore, (IMAPFolder) ifolder, state);
+                                    onAdd(context, jargs, account, folder, message, (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
                                 case EntityOperation.MOVE:
@@ -772,7 +773,7 @@ class Core {
         }
     }
 
-    private static void onAdd(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException {
+    private static void onAdd(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException {
         // Add message
         DB db = DB.getInstance(context);
 
@@ -799,21 +800,40 @@ class Core {
 
         // Get raw message
         MimeMessage imessage;
+        File file = message.getRawFile(context);
         if (folder.id.equals(message.folder)) {
             // Pre flight check
             if (!message.content)
                 throw new IllegalArgumentException("Message body missing");
 
             imessage = MessageHelper.from(context, message, null, isession, false);
+
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                imessage.writeTo(os);
+            }
         } else {
             // Cross account move
-            File file = message.getRawFile(context);
             if (!file.exists())
                 throw new IllegalArgumentException("raw message file not found");
 
             Log.i(folder.name + " reading " + file);
             try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
                 imessage = new MimeMessage(isession, is);
+            }
+        }
+
+        db.message().setMessageRaw(message.id, true);
+
+        // Check size
+        if (account.max_size != null) {
+            long size = file.length();
+            if (size > account.max_size) {
+                String msg = "Too large" +
+                        " size=" + Helper.humanReadableByteCount(size) +
+                        "/" + Helper.humanReadableByteCount(account.max_size) +
+                        " host=" + account.host;
+                Log.e(msg);
+                throw new IllegalArgumentException(msg);
             }
         }
 
@@ -830,7 +850,16 @@ class Core {
             imessage.setFlag(Flags.Flag.DRAFT, EntityFolder.DRAFTS.equals(folder.type));
 
         // Add message
-        ifolder.appendMessages(new Message[]{imessage});
+        Long newuid = null;
+        if (istore.hasCapability("UIDPLUS")) {
+            // https://tools.ietf.org/html/rfc4315
+            AppendUID[] uids = ifolder.appendUIDMessages(new Message[]{imessage});
+            if (uids != null && uids.length > 0 && uids[0].uid > 0) {
+                newuid = uids[0].uid;
+                Log.i(folder.name + " appended uid=" + newuid);
+            }
+        } else
+            ifolder.appendMessages(new Message[]{imessage});
 
         // Delete previous (external) version
         if (message.uid != null) {
@@ -852,7 +881,8 @@ class Core {
 
         if (folder.id.equals(message.folder)) {
             // Some providers do not list the new message yet
-            Long newuid = findUid(ifolder, message.msgid, true);
+            if (newuid == null)
+                newuid = findUid(ifolder, message.msgid, true);
             if (newuid != null && (message.uid == null || newuid > message.uid))
                 try {
                     JSONArray fargs = new JSONArray();

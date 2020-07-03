@@ -940,6 +940,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 }
                                 throw ex;
                             }
+                        } else {
+                            if (!BuildConfig.PLAY_STORE_RELEASE)
+                                Log.e(ex);
                         }
 
                         // Report account connection error
@@ -980,6 +983,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     db.account().setAccountError(account.id, null);
                     db.account().setAccountWarning(account.id, null);
                     EntityLog.log(this, account.name + " connected");
+
+                    db.account().setAccountMaxSize(account.id, iservice.getMaxSize());
 
                     // Listen for folder events
                     iservice.getStore().addFolderListener(new FolderAdapter() {

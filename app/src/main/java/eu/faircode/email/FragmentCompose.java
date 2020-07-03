@@ -173,6 +173,7 @@ import java.util.regex.Pattern;
 import javax.activation.DataHandler;
 import javax.mail.Address;
 import javax.mail.BodyPart;
+import javax.mail.Message;
 import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -2807,6 +2808,7 @@ public class FragmentCompose extends FragmentBase {
         args.putString("body", HtmlHelper.toHtml(etBody.getText(), getContext()));
         args.putBoolean("signature", cbSignature.isChecked());
         args.putBoolean("empty", isEmpty());
+        args.putBoolean("notext", etBody.getText().toString().trim().isEmpty());
         args.putBoolean("interactive", getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED));
         args.putBundle("extras", extras);
 
@@ -3924,6 +3926,7 @@ public class FragmentCompose extends FragmentBase {
             String body = args.getString("body");
             boolean signature = args.getBoolean("signature");
             boolean empty = args.getBoolean("empty");
+            boolean notext = args.getBoolean("notext");
             Bundle extras = args.getBundle("extras");
 
             EntityMessage draft;
@@ -4092,6 +4095,7 @@ public class FragmentCompose extends FragmentBase {
                     else
                         b = HtmlHelper.sanitizeCompose(context, body, true);
 
+                    int revision = draft.revision; // Save for undo/redo
                     if (dirty ||
                             TextUtils.isEmpty(body) ||
                             !b.body().html().equals(doc.body().html()) ||
@@ -4124,10 +4128,8 @@ public class FragmentCompose extends FragmentBase {
                         body = d.html();
 
                         // Create new revision
-                        if (action != R.id.action_undo && action != R.id.action_redo) {
-                            draft.revisions++;
-                            draft.revision = draft.revisions;
-                        }
+                        draft.revisions++;
+                        draft.revision = draft.revisions;
 
                         Helper.writeText(draft.getFile(context, draft.revision), body);
                     } else
@@ -4135,11 +4137,15 @@ public class FragmentCompose extends FragmentBase {
 
                     if (action == R.id.action_undo || action == R.id.action_redo) {
                         if (action == R.id.action_undo) {
-                            if (draft.revision > 1)
-                                draft.revision--;
+                            if (!dirty && revision > 1)
+                                draft.revision = revision - 1;
+                            else
+                                draft.revision = revision;
                         } else {
-                            if (draft.revision < draft.revisions)
-                                draft.revision++;
+                            if (revision < draft.revisions)
+                                draft.revision = revision + 1;
+                            else
+                                draft.revision = revision;
                         }
 
                         // Restore revision
@@ -4247,7 +4253,8 @@ public class FragmentCompose extends FragmentBase {
 
                             Document d = JsoupEx.parse(body);
 
-                            if (empty && d.select("div[fairemail=reference]").isEmpty())
+                            if (notext &&
+                                    d.select("div[fairemail=reference]").isEmpty())
                                 args.putBoolean("remind_text", true);
 
                             int attached = 0;
@@ -4273,11 +4280,38 @@ public class FragmentCompose extends FragmentBase {
                                         break;
                                     }
                             }
+
+                            // Check size
+                            if (identity != null && identity.max_size != null) {
+                                Properties props = MessageHelper.getSessionProperties();
+                                if (identity.unicode)
+                                    props.put("mail.mime.allowutf8", "true");
+                                Session isession = Session.getInstance(props, null);
+                                Message imessage = MessageHelper.from(context, draft, identity, isession, true);
+
+                                File file = draft.getRawFile(context);
+                                try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                                    imessage.writeTo(os);
+                                }
+
+                                long size = file.length();
+                                if (size > identity.max_size) {
+                                    args.putBoolean("remind_size", true);
+                                    args.putLong("size", size);
+                                    args.putLong("max_size", identity.max_size);
+                                }
+                            }
+
                         } else {
                             Handler handler = new Handler(context.getMainLooper());
                             handler.post(new Runnable() {
                                 public void run() {
-                                    ToastEx.makeText(context, R.string.title_draft_saved, Toast.LENGTH_LONG).show();
+                                    if (action == R.id.action_undo)
+                                        ToastEx.makeText(getContext(), R.string.title_undo, Toast.LENGTH_LONG).show();
+                                    else if (action == R.id.action_redo)
+                                        ToastEx.makeText(getContext(), R.string.title_redo, Toast.LENGTH_LONG).show();
+                                    else
+                                        ToastEx.makeText(context, R.string.title_draft_saved, Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
@@ -4437,11 +4471,12 @@ public class FragmentCompose extends FragmentBase {
                 boolean remind_subject = args.getBoolean("remind_subject", false);
                 boolean remind_text = args.getBoolean("remind_text", false);
                 boolean remind_attachment = args.getBoolean("remind_attachment", false);
+                boolean remind_size = args.getBoolean("remind_size", false);
 
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
-                if (send_dialog || address_error != null || recipients > RECIPIENTS_WARNING || (send_reminders &&
+                if (send_dialog || address_error != null || recipients > RECIPIENTS_WARNING || remind_size || (send_reminders &&
                         (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment))) {
                     setBusy(false);
 
@@ -5122,6 +5157,9 @@ public class FragmentCompose extends FragmentBase {
             final boolean remind_subject = args.getBoolean("remind_subject", false);
             final boolean remind_text = args.getBoolean("remind_text", false);
             final boolean remind_attachment = args.getBoolean("remind_attachment", false);
+            final boolean remind_size = args.getBoolean("remind_size", false);
+            final long size = args.getLong("size", -1);
+            final long max_size = args.getLong("max_size", -1);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean send_reminders = prefs.getBoolean("send_reminders", true);
@@ -5134,6 +5172,7 @@ public class FragmentCompose extends FragmentBase {
 
             final ViewGroup dview = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.dialog_send, null);
             final TextView tvAddressError = dview.findViewById(R.id.tvAddressError);
+            final TextView tvRemindSize = dview.findViewById(R.id.tvRemindSize);
             final TextView tvRemindTo = dview.findViewById(R.id.tvRemindTo);
             final TextView tvRemindExtra = dview.findViewById(R.id.tvRemindExtra);
             final TextView tvRemindPgp = dview.findViewById(R.id.tvRemindPgp);
@@ -5157,12 +5196,19 @@ public class FragmentCompose extends FragmentBase {
 
             tvAddressError.setText(address_error);
             tvAddressError.setVisibility(address_error == null ? View.GONE : View.VISIBLE);
+
+            tvRemindSize.setText(getString(R.string.title_size_reminder,
+                    Helper.humanReadableByteCount(size),
+                    Helper.humanReadableByteCount(max_size)));
+            tvRemindSize.setVisibility(remind_size ? View.VISIBLE : View.GONE);
+
             tvRemindTo.setVisibility(send_reminders && remind_to ? View.VISIBLE : View.GONE);
             tvRemindExtra.setVisibility(send_reminders && remind_extra ? View.VISIBLE : View.GONE);
             tvRemindPgp.setVisibility(send_reminders && remind_pgp ? View.VISIBLE : View.GONE);
             tvRemindSubject.setVisibility(send_reminders && remind_subject ? View.VISIBLE : View.GONE);
             tvRemindText.setVisibility(send_reminders && remind_text ? View.VISIBLE : View.GONE);
             tvRemindAttachment.setVisibility(send_reminders && remind_attachment ? View.VISIBLE : View.GONE);
+
             tvTo.setText(null);
             tvVia.setText(null);
             tvReceipt.setVisibility(View.GONE);
@@ -5445,7 +5491,7 @@ public class FragmentCompose extends FragmentBase {
                     .setView(dview)
                     .setNegativeButton(android.R.string.cancel, null);
 
-            if (address_error == null && !remind_to) {
+            if (address_error == null && !remind_to && !remind_size) {
                 if (send_delayed != 0)
                     builder.setNeutralButton(R.string.title_send_now, new DialogInterface.OnClickListener() {
                         @Override

@@ -364,7 +364,8 @@ public class ServiceSend extends ServiceBase {
                                 ex instanceof OutOfMemoryError ||
                                 ex instanceof MessageRemovedException ||
                                 ex instanceof FileNotFoundException ||
-                                ex instanceof AuthenticationFailedException ||
+                                (ex instanceof AuthenticationFailedException &&
+                                        !ConnectionHelper.isIoError(ex)) ||
                                 ex instanceof SendFailedException ||
                                 ex instanceof IllegalArgumentException) {
                             Log.w("Unrecoverable");
@@ -554,6 +555,12 @@ public class ServiceSend extends ServiceBase {
             if (BuildConfig.DEBUG && false)
                 throw new IOException("Test");
             db.identity().setIdentityState(ident.id, "connected");
+
+            if (ident.max_size == null) {
+                Long max_size = iservice.getMaxSize();
+                if (max_size != null)
+                    db.identity().setIdentityMaxSize(ident.id, max_size);
+            }
 
             Address[] to = imessage.getAllRecipients();
             String via = "via " + ident.host + "/" + ident.user +

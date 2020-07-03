@@ -113,6 +113,7 @@ public class FragmentIdentity extends FragmentBase {
     private EditText etCc;
     private EditText etBcc;
     private CheckBox cbUnicode;
+    private EditText etMaxSize;
 
     private Button btnSave;
     private ContentLoadingProgressBar pbSave;
@@ -205,6 +206,7 @@ public class FragmentIdentity extends FragmentBase {
         etCc = view.findViewById(R.id.etCc);
         etBcc = view.findViewById(R.id.etBcc);
         cbUnicode = view.findViewById(R.id.cbUnicode);
+        etMaxSize = view.findViewById(R.id.etMaxSize);
 
         btnSave = view.findViewById(R.id.btnSave);
         pbSave = view.findViewById(R.id.pbSave);
@@ -586,6 +588,7 @@ public class FragmentIdentity extends FragmentBase {
         args.putString("cc", etCc.getText().toString().trim());
         args.putString("bcc", etBcc.getText().toString().trim());
         args.putBoolean("unicode", cbUnicode.isChecked());
+        args.putString("max_size", etMaxSize.getText().toString());
         args.putLong("account", account == null ? -1 : account.id);
         args.putString("host", etHost.getText().toString().trim());
         args.putBoolean("starttls", rgEncryption.getCheckedRadioButtonId() == R.id.radio_starttls);
@@ -662,6 +665,7 @@ public class FragmentIdentity extends FragmentBase {
                 String cc = args.getString("cc");
                 String bcc = args.getString("bcc");
                 boolean unicode = args.getBoolean("unicode");
+                String max_size = args.getString("max_size");
 
                 boolean should = args.getBoolean("should");
 
@@ -738,6 +742,8 @@ public class FragmentIdentity extends FragmentBase {
                 if (TextUtils.isEmpty(signature))
                     signature = null;
 
+                Long user_max_size = (TextUtils.isEmpty(max_size) ? null : Integer.parseInt(max_size) * 1000 * 1000L);
+
                 DB db = DB.getInstance(context);
                 EntityIdentity identity = db.identity().getIdentity(id);
 
@@ -799,6 +805,8 @@ public class FragmentIdentity extends FragmentBase {
                         return true;
                     if (!Objects.equals(identity.unicode, unicode))
                         return true;
+                    if (user_max_size != null && !Objects.equals(identity.max_size, user_max_size))
+                        return true;
 
                     return false;
                 }
@@ -817,7 +825,9 @@ public class FragmentIdentity extends FragmentBase {
                         !Objects.equals(realm, identityRealm) ||
                         !Objects.equals(fingerprint, identity.fingerprint) ||
                         use_ip != identity.use_ip ||
-                        !Objects.equals(ehlo, identity.ehlo)));
+                        !Objects.equals(ehlo, identity.ehlo) ||
+                        (user_max_size != null && !Objects.equals(user_max_size, identity.max_size)) ||
+                        BuildConfig.DEBUG));
                 Log.i("Identity check=" + check);
 
                 Long last_connected = null;
@@ -825,6 +835,7 @@ public class FragmentIdentity extends FragmentBase {
                     last_connected = identity.last_connected;
 
                 // Check SMTP server
+                Long server_max_size = null;
                 if (check) {
                     // Create transport
                     String protocol = (starttls ? "smtp" : "smtps");
@@ -836,6 +847,7 @@ public class FragmentIdentity extends FragmentBase {
                                 auth, provider,
                                 user, password,
                                 certificate, fingerprint);
+                        server_max_size = iservice.getMaxSize();
                     }
                 }
 
@@ -888,6 +900,7 @@ public class FragmentIdentity extends FragmentBase {
                     identity.sign_key_alias = null;
                     identity.error = null;
                     identity.last_connected = last_connected;
+                    identity.max_size = (user_max_size == null ? server_max_size : user_max_size);
 
                     if (identity.primary)
                         db.identity().resetPrimary(account);
