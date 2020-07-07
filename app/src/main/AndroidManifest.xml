@@ -105,7 +105,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeBlueOrangeLight">
+        android:theme="@style/AppThemeBlueOrangeLight"
+        android:extractNativeLibs="false" >
 
         <!-- do not contact Google servers -->
         <meta-data
