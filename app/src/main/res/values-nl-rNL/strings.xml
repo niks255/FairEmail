@@ -66,6 +66,7 @@
         <item quantity="other">Behandel %1$d berichten als spam?</item>
     </plurals>
     <string name="title_ask_spam_who">Behandel bericht van %1$s als spam?</string>
+    <string name="title_junk_hint">Uw e-mailprovider is verantwoordelijk voor het filteren van spam. Een e-mail-app beschikt niet over alle gegevens die nodig zijn om dit betrouwbaar te doen.</string>
     <string name="title_block">Blokkeer %1$s</string>
     <string name="title_block_sender">Blokkeer afzender</string>
     <string name="title_block_domain">Afzender domein blokkeren</string>
@@ -77,6 +78,7 @@
     <string name="title_notification_idle">Inactief</string>
     <string name="title_notification_failed">\'%1$s\' is mislukt</string>
     <string name="title_notification_alert">\'%1$s\' servermelding</string>
+    <string name="title_notification_sending_left">Resterende pogingen: %1$d</string>
     <string name="title_notification_sending_failed">Verzenden naar %1$s mislukt</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -145,10 +147,11 @@
     <string name="title_setup_grant_again">Verleen de vereiste machtigingen</string>
     <string name="title_setup_account">Accounts instellen</string>
     <string name="title_setup_account_remark">Om e-mail te ontvangen</string>
-    <string name="title_setup_account_hint">Om kleur, veeg naar links/rechts doelmap, etc te wijzigen</string>
+    <string name="title_setup_account_hint">Om kleur, veeg naar links/rechts doelmap, enz te wijzigen</string>
     <string name="title_setup_identity">Identiteiten instellen</string>
     <string name="title_setup_identity_remark">Om e-mail te verzenden</string>
     <string name="title_setup_identity_hint">Om naam, kleur, handtekening, enz te wijzigen</string>
+    <string name="title_setup_identity_what">Wat is een identiteit?</string>
     <string name="title_setup_permissions">Toestemmingen verlenen</string>
     <string name="title_setup_permissions_remark">Voor toegang tot contactinformatie (optioneel)</string>
     <string name="title_setup_doze">Accuoptimalisaties instellen</string>
@@ -352,6 +355,7 @@
     <string name="title_advanced_notify_summary">Toon alleen melding met een samenvatting</string>
     <string name="title_advanced_notify_preview">Toon berichtvoorbeeld in meldingen</string>
     <string name="title_advanced_notify_preview_all">Voorbeeld van alle tekst</string>
+    <string name="title_advanced_notify_preview_only">Alleen meldingen met een voorbeeldtekst weergeven</string>
     <string name="title_advanced_notify_actions">Meldingsacties</string>
     <string name="title_advanced_notify_action_trash">Weggooien</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
@@ -389,6 +393,9 @@
     <string name="title_advanced_import_key">Importeer privé sleutel</string>
     <string name="title_advanced_manage_keys">Privé sleutels beheren</string>
     <string name="title_advanced_ca">Geïnstalleerde CA-certificaten</string>
+    <string name="title_advanced_manage_keys_hint">        Dit zal navigeren naar de Android-beveiligingsinstellingen.
+        Sleutels en certificaten kunnen over het algemeen worden gevonden onder Geavanceerd - Versleuteling en gegevens.
+    </string>
     <string name="title_advanced_external_search">Andere apps mogen zoeken in berichten</string>
     <string name="title_advanced_shortcuts">Toon veelgebruikte contacten in het Android-deelmenu</string>
     <string name="title_advanced_conversation_actions">Stel acties voor</string>
@@ -411,6 +418,7 @@
     <string name="title_advanced_more">Meer opties</string>
     <string name="title_advanced_manual_hint">Als het ontvangen van berichten is uitgeschakeld, is het nog steeds mogelijk om handmatig berichten te ontvangen door de berichtenlijst omlaag te trekken</string>
     <string name="title_advanced_poll_hint">Periodiek controleren op nieuwe berichten zal elke keer lokale en externe berichten vergelijken, wat een dure operatie is die kan resulteren in extra batterijgebruik, vooral als er veel berichten zijn. Altijd ontvangen zal dit voorkomen door continu veranderingen te volgen.</string>
+    <string name="title_advanced_optimize_hint">Dit kan de synchronisatie-frequentie wijzigen om op batterijgebruik te besparen, afhankelijk van de mogelijkheden en het gedrag van de e-mailservers</string>
     <string name="title_advanced_schedule_hint">Tik op een tijd om een tijd in te stellen</string>
     <string name="title_advanced_no_date_hint">Sommige providers slaan berichten met een onbekende, ongeldige of toekomstige datum op als berichten zonder datum</string>
     <string name="title_advanced_unseen_hint">Sommige providers ondersteunen dit niet goed, wat kan veroorzaken dat geen of alle berichten worden gesynchroniseerd</string>
@@ -457,6 +465,7 @@
     <string name="title_advanced_notify_manage_default_hint">Om het standaardgeluid, etc in te stellen</string>
     <string name="title_advanced_notify_manage_service_hint">Om de permanente melding uit te schakelen</string>
     <string name="title_advanced_notify_preview_all_hint">Voor wearables die de volledige tekst kunnen weergeven (tot 5.000 tekens)</string>
+    <string name="title_advanced_notify_preview_only_hint">Dit vertraagt het tonen van meldingen totdat de berichttekst is gedownload</string>
     <string name="title_advanced_wearable_hint">Meldingen worden alleen verzonden naar een wearable nadat de berichttekst is gedownload</string>
     <string name="title_advanced_move_hint">De doelmap kan worden geconfigureerd in de accountinstellingen</string>
     <string name="title_advanced_notify_no_grouping">Deze Android-versie ondersteunt geen meldingsgroepering</string>
@@ -930,6 +939,7 @@
     <string name="title_rule_move">Verplaatsen</string>
     <string name="title_rule_copy">Kopiëren (label)</string>
     <string name="title_rule_answer">Beantwoorden</string>
+    <string name="title_rule_tts">Tekst-naar-spraak</string>
     <string name="title_rule_automation">Automatisering</string>
     <string name="title_rule_caption">Bewerk regel</string>
     <string name="title_rule_title">Regel is van toepassing op</string>
@@ -965,6 +975,12 @@
     <string name="title_rule_no_headers">Header condities kunnen niet worden gecontroleerd</string>
     <string name="title_rule_matched">Overeenkomende berichten</string>
     <string name="title_rule_no_matches">Geen overeenkomende berichten</string>
+    <string name="title_rule_tts_ok">Setup oke</string>
+    <string name="title_rule_tts_setup">Instellingen controleren</string>
+    <string name="title_rule_tts_data">Spraakgegevens installeren</string>
+    <string name="title_rule_tts_prefix">Nieuw bericht</string>
+    <string name="title_rule_tts_from">Van</string>
+    <string name="title_rule_tts_subject">Onderwerp</string>
     <string name="title_legend_section_synchronize">Synchroniseren</string>
     <string name="title_legend_section_folders">Mappen</string>
     <string name="title_legend_section_messages">Berichten</string>

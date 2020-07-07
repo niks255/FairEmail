@@ -575,7 +575,7 @@ Please see [this FAQ](#user-content-faq111) about OAuth support.
 <a name="faq9"></a>
 **(9) What are identities / how do I add an alias?**
 
-Identities represent email addresses you are sending *from*.
+Identities represent email addresses you are sending *from* via an email (SMTP) server.
 
 Some providers allow you to have multiple aliases.
 You can configure these by setting the email address field of an additional identity to the alias address
@@ -712,6 +712,8 @@ Common errors:
 
 * *No certificate found matching targetContraints*: this likely means you are using an old version of FairEmail
 * *unable to find valid certification path to requested target*: basically this means one or more intermediate or root certificates were not found
+* *Private key does not match any encryption keys*: the selected key cannot be used to decrypt the message, probably because it is the incorrect key
+* *No private key*: no certificate was selected or no certificate was available in the Android keystore
 
 In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates.
 After the certificate details the issuer or "selfSign" is shown.
@@ -754,7 +756,9 @@ S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations ar
 You can start searching for messages on sender (from), recipient (to, cc, bcc), subject, keywords or message text by using the magnify glass in the action bar of a folder.
 You can also search from any app by selecting *Search email* in the copy/paste popup menu.
 
-Searching in the unified inbox will search in all folders, searching in a folder will search in that folder only.
+Searching in the unified inbox will search in all folders of all accounts,
+searching in the folder list will search in the associated account only
+and searching in a folder will search in that folder only.
 
 Messages will be searched for on the device first.
 There will be an action button with a search again icon at the bottom to continue searching on the server.
@@ -1334,6 +1338,13 @@ consider switching to a modern provider which supports push messages (IMAP IDLE)
 If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen,
 you can save battery usage while viewing messages by switching to the black theme.
 
+By default auto optimize in the receive settings is enabled,
+which will switch an account to periodically checking for new messages when the email server:
+
+* Says '*Still here*' within 3 minutes
+* The email server does not support push messages
+* The keep-alive interval is lower than 12 minutes
+
 <br />
 
 <a name="faq40"></a>
@@ -1826,6 +1837,7 @@ You can select one of these actions to apply to matching messages:
 * Move
 * Copy (Gmail: label)
 * Answer (with template)
+* Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded,
@@ -3017,8 +3029,14 @@ Unfortunately, there exists no intent to delete existing calendar events.
 **(151) Can you add backup/restore messages?**
 
 An email client is meant to read and write messages, not to backup and restore messages.
-The email server is responsible for backups.
+Note that breaking or losing your device, means losing your messages!
+
+Instead, the email provider/server is responsible for backups.
+
 If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
+
+If you want to import an mbox file to an existing email account,
+you can use Thunderbird on a desktop computer and the [ImportExportTools](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) add-on.
 
 <br />
 

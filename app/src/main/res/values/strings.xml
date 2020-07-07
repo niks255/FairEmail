@@ -84,6 +84,7 @@
         <item quantity="other">Treat %1$d messages as spam?</item>
     </plurals>
     <string name="title_ask_spam_who">Treat message from %1$s as spam?</string>
+    <string name="title_junk_hint">Your email provider is responsible for filtering spam. An email app does not have all the data needed to do this reliably.</string>
 
     <string name="title_block">Block %1$s</string>
     <string name="title_block_sender">Block sender</string>
@@ -98,6 +99,7 @@
     <string name="title_notification_idle">Idle</string>
     <string name="title_notification_failed">\'%1$s\' failed</string>
     <string name="title_notification_alert">\'%1$s\' server alert</string>
+    <string name="title_notification_sending_left">Attempts left: %1$d</string>
     <string name="title_notification_sending_failed">Sending to %1$s failed</string>
 
     <string name="title_of">%1$s/%2$s</string>
@@ -186,6 +188,7 @@
     <string name="title_setup_identity">Setup identities</string>
     <string name="title_setup_identity_remark">To send email</string>
     <string name="title_setup_identity_hint">To change name, color, signature, etc</string>
+    <string name="title_setup_identity_what">What is an identity?</string>
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
     <string name="title_setup_doze">Setup battery optimizations</string>
@@ -408,6 +411,7 @@
     <string name="title_advanced_notify_summary">Show summary notification only</string>
     <string name="title_advanced_notify_preview">Show message preview in notifications</string>
     <string name="title_advanced_notify_preview_all">Preview all text</string>
+    <string name="title_advanced_notify_preview_only">Show notifications with a preview text only</string>
     <string name="title_advanced_notify_actions">Notification actions</string>
     <string name="title_advanced_notify_action_trash">Trash</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
@@ -452,6 +456,10 @@
     <string name="title_advanced_import_key">Import private key</string>
     <string name="title_advanced_manage_keys">Manage private keys</string>
     <string name="title_advanced_ca">Installed CA certificates</string>
+    <string name="title_advanced_manage_keys_hint">
+        This will navigate to the Android security settings.
+        Keys and certificates can generally be found under Advanced - Encryption and credentials.
+    </string>
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$d</string>
 
     <string name="title_advanced_external_search">Allow other apps to search in messages</string>
@@ -483,6 +491,7 @@
 
     <string name="title_advanced_manual_hint">If receiving messages is disabled, it is still possible to manually receive messages by pulling down the message list</string>
     <string name="title_advanced_poll_hint">Periodically checking for new messages will compare local and remote messages every time, which is an expensive operation that may result in extra battery usage, especially if there are a lot of messages. Always receive will prevent this by continuously following changes.</string>
+    <string name="title_advanced_optimize_hint">This might change the sync frequency to save battery usage depending on the capabilities and behavior of the email servers</string>
     <string name="title_advanced_schedule_hint">Tap on a time to set a time</string>
     <string name="title_advanced_no_date_hint">Some providers store messages with an unknown, invalid or future date as messages without date</string>
     <string name="title_advanced_unseen_hint">Some providers don\'t support this properly, which may cause synchronizing none or all messages</string>
@@ -536,6 +545,7 @@
     <string name="title_advanced_notify_manage_default_hint">To set the default sound, etc</string>
     <string name="title_advanced_notify_manage_service_hint">To disable the permanent notification</string>
     <string name="title_advanced_notify_preview_all_hint">For wearables that can show the full text (up to 5,000 characters)</string>
+    <string name="title_advanced_notify_preview_only_hint">This delays showing of notifications until the message text has been downloaded</string>
     <string name="title_advanced_wearable_hint">Notifications are only sent to a wearable after the message text has been downloaded</string>
     <string name="title_advanced_move_hint">The target folder can be configured in the account settings</string>
     <string name="title_advanced_notify_no_grouping">This Android version does not support notification grouping</string>
@@ -1055,6 +1065,7 @@
     <string name="title_rule_move">Move</string>
     <string name="title_rule_copy">Copy (label)</string>
     <string name="title_rule_answer">Reply</string>
+    <string name="title_rule_tts">Text to speech</string>
     <string name="title_rule_automation">Automation</string>
 
     <string name="title_rule_caption">Edit rule</string>
@@ -1094,6 +1105,13 @@
     <string name="title_rule_no_headers">Header conditions cannot be checked</string>
     <string name="title_rule_matched">Matching messages</string>
     <string name="title_rule_no_matches">No matching messages</string>
+
+    <string name="title_rule_tts_ok">Setup okay</string>
+    <string name="title_rule_tts_setup">Check setup</string>
+    <string name="title_rule_tts_data">Install voice data</string>
+    <string name="title_rule_tts_prefix">New message</string>
+    <string name="title_rule_tts_from">From</string>
+    <string name="title_rule_tts_subject">Subject</string>
 
     <string name="title_legend_section_synchronize">Synchronize</string>
     <string name="title_legend_section_folders">Folders</string>

@@ -88,6 +88,7 @@
         <item quantity="other">Traktować wiadomości %1$d jako spam?</item>
     </plurals>
     <string name="title_ask_spam_who">Traktuj wiadomość od %1$s jako spam?</string>
+    <string name="title_junk_hint">Twój dostawca poczty e-mail jest odpowiedzialny za filtrowanie spamu. Aplikacja poczty e-mail nie ma wszystkich danych, aby wykonać to skutecznie.</string>
     <string name="title_block">Zablokuj %1$s</string>
     <string name="title_block_sender">Zablokuj nadawcę</string>
     <string name="title_block_domain">Blokuj domenę nadawcy</string>
@@ -98,6 +99,7 @@
     <string name="title_notification_idle">Bezczynny</string>
     <string name="title_notification_failed">%1$s nie powiodło się</string>
     <string name="title_notification_alert">Alert serwera \'%1$s\'</string>
+    <string name="title_notification_sending_left">Pozostało prób: %1$d</string>
     <string name="title_notification_sending_failed">Wysyłanie do %1$s nie powiodło się</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -171,6 +173,7 @@
     <string name="title_setup_identity">Skonfiguruj tożsamości</string>
     <string name="title_setup_identity_remark">Wysyłanie wiadomości e-mail</string>
     <string name="title_setup_identity_hint">Zmiana nazwy, koloru, podpisu, itp.</string>
+    <string name="title_setup_identity_what">Czym jest tożsamość?</string>
     <string name="title_setup_permissions">Przyznaj uprawnienia</string>
     <string name="title_setup_permissions_remark">Dostęp do kontaktów (opcjonalnie)</string>
     <string name="title_setup_doze">Skonfiguruj optymalizacje baterii</string>
@@ -374,6 +377,7 @@
     <string name="title_advanced_notify_summary">Pokaż tylko podsumowanie</string>
     <string name="title_advanced_notify_preview">Pokaż podgląd wiadomości w powiadomieniach</string>
     <string name="title_advanced_notify_preview_all">Podgląd całego tekstu</string>
+    <string name="title_advanced_notify_preview_only">Pokaż powiadomienia tylko z podglądem tekstu</string>
     <string name="title_advanced_notify_actions">Akcje powiadomień</string>
     <string name="title_advanced_notify_action_trash">Kosz</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
@@ -411,6 +415,9 @@
     <string name="title_advanced_import_key">Importuj klucz prywatny</string>
     <string name="title_advanced_manage_keys">Zarządzaj kluczami prywatnymi</string>
     <string name="title_advanced_ca">Zainstalowane certyfikaty CA</string>
+    <string name="title_advanced_manage_keys_hint">        To przeniesie Cię do ustawień zabezpieczeń Androida.
+        Klucze i certyfikaty można znaleźć w Zaawansowane - Szyfrowanie i uwierzytelnianie.
+    </string>
     <string name="title_advanced_external_search">Zezwalaj innym aplikacjom na wyszukiwanie w wiadomościach</string>
     <string name="title_advanced_shortcuts">Pokaż często używane kontakty w menu udostępniania Androida</string>
     <string name="title_advanced_conversation_actions">Sugeruj czynności</string>
@@ -433,6 +440,7 @@
     <string name="title_advanced_more">Więcej opcji</string>
     <string name="title_advanced_manual_hint">Gdy synchronizacja jest wyłączona, nadal można odbierać wiadomości ręcznie, przeciągając listę wiadomości</string>
     <string name="title_advanced_poll_hint">Synchronizacja okresowa porównuje wiadomości lokalne i zdalne za każdym razem, co jest kosztowną operacją, która może prowadzić do dodatkowego zużycia baterii, zwłaszcza gdy jest dużo wiadomości do synchronizacji. Synchronizacja stała pozwoli uniknąć ciągłego sprawdzania zmian.</string>
+    <string name="title_advanced_optimize_hint">Może to zmienić częstotliwość synchronizacji, aby zaoszczędzić zużycie baterii w zależności od możliwości i zachowania serwerów e-mail</string>
     <string name="title_advanced_schedule_hint">Dotknij zegara, aby ustawić czas</string>
     <string name="title_advanced_no_date_hint">Niektórzy dostawcy przechowują wiadomości z nieznaną, niepoprawną lub przyszłą datą jako wiadomości bez daty</string>
     <string name="title_advanced_unseen_hint">Niektórzy dostawcy nie obsługują tego poprawnie, co może powodować brak synchronizacji lub synchronizację wszystkich wiadomości</string>
@@ -479,6 +487,7 @@
     <string name="title_advanced_notify_manage_default_hint">Aby ustawić domyślny dźwięk, itp.</string>
     <string name="title_advanced_notify_manage_service_hint">Aby wyłączyć stałe powiadomienie</string>
     <string name="title_advanced_notify_preview_all_hint">Dla urządzeń do noszenia, które mogą wyświetlać pełny tekst (do 5000 znaków)</string>
+    <string name="title_advanced_notify_preview_only_hint">Opóźnia to wyświetlanie powiadomień do momentu pobrania tekstu wiadomości</string>
     <string name="title_advanced_wearable_hint">Powiadomienia są wysyłane na urządzenie do noszenia tylko po pobraniu treści wiadomości</string>
     <string name="title_advanced_move_hint">Folder docelowy można skonfigurować w ustawieniach konta</string>
     <string name="title_advanced_notify_no_grouping">Ta wersja Androida nie obsługuje grupowania powiadomień</string>
@@ -952,6 +961,7 @@
     <string name="title_rule_move">Przenieś</string>
     <string name="title_rule_copy">Kopiuj (etykieta)</string>
     <string name="title_rule_answer">Odpowiedz</string>
+    <string name="title_rule_tts">Przetwarzanie tekstu na mowę</string>
     <string name="title_rule_automation">Automatyzacja</string>
     <string name="title_rule_caption">Edytuj regułę</string>
     <string name="title_rule_title">Reguła dotyczy</string>
@@ -987,6 +997,12 @@
     <string name="title_rule_no_headers">Nie można sprawdzić stanów nagłówka</string>
     <string name="title_rule_matched">Pasujące wiadomości</string>
     <string name="title_rule_no_matches">Brak pasujących wiadomości</string>
+    <string name="title_rule_tts_ok">Ustawienia poprawne</string>
+    <string name="title_rule_tts_setup">Sprawdź ustawienia</string>
+    <string name="title_rule_tts_data">Zainstaluj dane głosowe</string>
+    <string name="title_rule_tts_prefix">Nowa wiadomość</string>
+    <string name="title_rule_tts_from">Od</string>
+    <string name="title_rule_tts_subject">Temat</string>
     <string name="title_legend_section_synchronize">Synchronizuj</string>
     <string name="title_legend_section_folders">Foldery</string>
     <string name="title_legend_section_messages">Wiadomości</string>

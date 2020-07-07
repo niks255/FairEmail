@@ -88,6 +88,7 @@
         <item quantity="other">Považovat %1$d zpráv za nevyžádaných?</item>
     </plurals>
     <string name="title_ask_spam_who">Považovat zprávy od %1$s za nevyžádané?</string>
+    <string name="title_junk_hint">Za filtrování nevyžádané pošty je zodpovědný poskytovatel e-mailu. E-mailové aplikace nemají k dispozici všechna data, aby to mohly provádět spolehlivě.</string>
     <string name="title_block">Blokovat %1$s</string>
     <string name="title_block_sender">Blokovat odesílatele</string>
     <string name="title_block_domain">Blokovat doménu odesílatele</string>
@@ -99,6 +100,7 @@
     <string name="title_notification_idle">Nečinný</string>
     <string name="title_notification_failed">\"%1$s\" selhalo</string>
     <string name="title_notification_alert">\'%1$s\' upozornění serveru</string>
+    <string name="title_notification_sending_left">Zbývající pokusy: %1$d</string>
     <string name="title_notification_sending_failed">Odesílání na %1$s se nezdařilo</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -172,6 +174,7 @@
     <string name="title_setup_identity">Nastavit identity</string>
     <string name="title_setup_identity_remark">Pro odesílání e-mailů</string>
     <string name="title_setup_identity_hint">Pro změnu jména, barvy, podpisu, apod.</string>
+    <string name="title_setup_identity_what">Co je to identita?</string>
     <string name="title_setup_permissions">Udělit oprávnění</string>
     <string name="title_setup_permissions_remark">Pro přístup k údajům kontaktů (nepovinné)</string>
     <string name="title_setup_doze">Nastavit optimalizace výdrže baterie</string>
@@ -375,6 +378,7 @@
     <string name="title_advanced_notify_summary">Zobrazit pouze souhrnné oznámení</string>
     <string name="title_advanced_notify_preview">Zobrazit náhled zprávy v oznámení</string>
     <string name="title_advanced_notify_preview_all">Náhled na celý text</string>
+    <string name="title_advanced_notify_preview_only">Zobrazit pouze oznámení s náhledem textu</string>
     <string name="title_advanced_notify_actions">Akce oznámení</string>
     <string name="title_advanced_notify_action_trash">Koš</string>
     <string name="title_advanced_notify_action_junk">Nevyžádané</string>
@@ -412,6 +416,9 @@
     <string name="title_advanced_import_key">Importovat privátní klíč</string>
     <string name="title_advanced_manage_keys">Spravovat privátní klíče</string>
     <string name="title_advanced_ca">Instalované certifikáty CA</string>
+    <string name="title_advanced_manage_keys_hint">        Otevře nastavení zabezpečení Androidu.
+        Klíče a certifikáty lze obecně najít pod Pokročilé - Šifrování a pověření.
+    </string>
     <string name="title_advanced_external_search">Povolit ostatním aplikacím vyhledávat ve zprávách</string>
     <string name="title_advanced_shortcuts">Zobrazit často používané kontakty v nabídce sdílení Androidu</string>
     <string name="title_advanced_conversation_actions">Navrhovat akce</string>
@@ -434,6 +441,7 @@
     <string name="title_advanced_more">Více možností</string>
     <string name="title_advanced_manual_hint">Je-li příjem zpráv zakázán, stále je možno zprávy přijímat ručně tažením dolů v seznamu zpráv</string>
     <string name="title_advanced_poll_hint">Pravidelná kontrola nových zpráv pokaždé porovnává místní a vzdálené zprávy, což je zdlouhavá operace, potencionálně vedoucí ke zvýšené spotřebě baterie, zvláště při velkém množství zpráv. Neustálý příjem tomuto předchází průběžným sledováním změn.</string>
+    <string name="title_advanced_optimize_hint">Může změnit synchronizační interval pro úsporu spotřeby baterie, v závislosti na možnostech a chování e-mailových serverů</string>
     <string name="title_advanced_schedule_hint">Pro změnu času se jej dotkněte</string>
     <string name="title_advanced_no_date_hint">Někteří poskytovatelé ukládají zprávy s neznámým, neplatným nebo budoucím datem jako zprávy bez data</string>
     <string name="title_advanced_unseen_hint">Někteří poskytovatelé toto nepodporují korektně, což může způsobit synchronizaci všech nebo žádných zpráv</string>
@@ -480,6 +488,7 @@
     <string name="title_advanced_notify_manage_default_hint">Pro nastavení výchozího zvuku, apod</string>
     <string name="title_advanced_notify_manage_service_hint">Pro vypnutí permanentního oznámení</string>
     <string name="title_advanced_notify_preview_all_hint">Pro nositelná zařízení umějící zobrazit celý text (až 5,000 znaků)</string>
+    <string name="title_advanced_notify_preview_only_hint">Pozdrží zobrazení oznámení, dokud není stažen text zprávy</string>
     <string name="title_advanced_wearable_hint">Oznámení jsou do nositelného zařízení odeslány teprve po stažení textu zprávy</string>
     <string name="title_advanced_move_hint">Cílovou složku lze změnit v nastavení účtu</string>
     <string name="title_advanced_notify_no_grouping">Tato verze Androidu nepodporuje seskupování oznámení</string>
@@ -953,6 +962,7 @@
     <string name="title_rule_move">Přesunout</string>
     <string name="title_rule_copy">Kopírovat (štítek)</string>
     <string name="title_rule_answer">Odpovědět</string>
+    <string name="title_rule_tts">Převod textu na řeč</string>
     <string name="title_rule_automation">Automatizace</string>
     <string name="title_rule_caption">Upravit pravidlo</string>
     <string name="title_rule_title">Pravidlo platí pro</string>
@@ -988,6 +998,12 @@
     <string name="title_rule_no_headers">Podmínky hlavičky nelze zkontrolovat</string>
     <string name="title_rule_matched">Odpovídající zprávy</string>
     <string name="title_rule_no_matches">Žádné odpovídající zprávy</string>
+    <string name="title_rule_tts_ok">Nastavení v pořádku</string>
+    <string name="title_rule_tts_setup">Ověřit nastavení</string>
+    <string name="title_rule_tts_data">Nainstalovat hlasová data</string>
+    <string name="title_rule_tts_prefix">Nová zpráva</string>
+    <string name="title_rule_tts_from">Od</string>
+    <string name="title_rule_tts_subject">Předmět</string>
     <string name="title_legend_section_synchronize">Synchronizace</string>
     <string name="title_legend_section_folders">Složky</string>
     <string name="title_legend_section_messages">Zprávy</string>

@@ -160,21 +160,21 @@ public class ContactInfo {
     }
 
     @NonNull
-    static ContactInfo[] get(Context context, long account, Address[] addresses) {
-        return get(context, account, addresses, false);
+    static ContactInfo[] get(Context context, long account, String folderType, Address[] addresses) {
+        return get(context, account, folderType, addresses, false);
     }
 
-    static ContactInfo[] getCached(Context context, long account, Address[] addresses) {
-        return get(context, account, addresses, true);
+    static ContactInfo[] getCached(Context context, long account, String folderType, Address[] addresses) {
+        return get(context, account, folderType, addresses, true);
     }
 
-    private static ContactInfo[] get(Context context, long account, Address[] addresses, boolean cacheOnly) {
+    private static ContactInfo[] get(Context context, long account, String folderType, Address[] addresses, boolean cacheOnly) {
         if (addresses == null || addresses.length == 0)
             return new ContactInfo[]{new ContactInfo()};
 
         ContactInfo[] result = new ContactInfo[addresses.length];
         for (int i = 0; i < addresses.length; i++) {
-            result[i] = _get(context, account, (InternetAddress) addresses[i], cacheOnly);
+            result[i] = _get(context, account, folderType, (InternetAddress) addresses[i], cacheOnly);
             if (result[i] == null)
                 return null;
         }
@@ -182,7 +182,7 @@ public class ContactInfo {
         return result;
     }
 
-    private static ContactInfo _get(Context context, long account, InternetAddress address, boolean cacheOnly) {
+    private static ContactInfo _get(Context context, long account, String folderType, InternetAddress address, boolean cacheOnly) {
         String key = MessageHelper.formatAddresses(new Address[]{address});
         synchronized (emailContactInfo) {
             ContactInfo info = emailContactInfo.get(key);
@@ -295,7 +295,8 @@ public class ContactInfo {
         }
 
         // Favicon
-        if (info.bitmap == null && favicons) {
+        if (info.bitmap == null && favicons &&
+                !EntityFolder.JUNK.equals(folderType)) {
             int at = (info.email == null ? -1 : info.email.indexOf('@'));
             String domain = (at < 0 ? null : info.email.substring(at + 1).toLowerCase(Locale.ROOT));
 
@@ -371,9 +372,9 @@ public class ContactInfo {
                     }
                 } catch (Throwable ex) {
                     if (isRecoverable(ex, context))
-                        Log.w(ex);
+                        Log.i(ex);
                     else {
-                        Log.e(ex);
+                        Log.w(ex);
                         try {
                             file.createNewFile();
                         } catch (IOException ex1) {
@@ -441,7 +442,7 @@ public class ContactInfo {
 
         Document doc = JsoupEx.parse(response);
 
-        Element link = doc.head().select("link[href~=.*\\.(ico|png)]").first();
+        Element link = doc.head().select("link[href~=.*\\.(ico|png|gif|svg)]").first();
         String favicon = (link == null ? null : link.attr("href"));
 
         if (TextUtils.isEmpty(favicon)) {
@@ -449,11 +450,8 @@ public class ContactInfo {
             favicon = (meta == null ? null : meta.attr("content"));
         }
 
-        if (!TextUtils.isEmpty(favicon)) {
-            URL url = new URL(base, favicon);
-            if ("https".equals(url.getProtocol()))
-                return getFavicon(url);
-        }
+        if (!TextUtils.isEmpty(favicon))
+            return getFavicon(new URL(base, favicon));
 
         return null;
     }
@@ -462,7 +460,10 @@ public class ContactInfo {
     private static Bitmap getFavicon(URL url) throws IOException {
         Log.i("GET favicon " + url);
 
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        if (!"https".equals(url.getProtocol()))
+            throw new FileNotFoundException("http");
+
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setReadTimeout(FAVICON_READ_TIMEOUT);
         connection.setConnectTimeout(FAVICON_CONNECT_TIMEOUT);

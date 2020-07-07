@@ -88,6 +88,7 @@
         <item quantity="other">Считать %1$d сообщений спамом?</item>
     </plurals>
     <string name="title_ask_spam_who">Считать сообщение от %1$s спамом?</string>
+    <string name="title_junk_hint">За фильтрацию спама отвечает ваш почтовый провайдер. Приложение электронной почты не имеет достаточно данных, чтобы надёжно исполнять данную функцию.</string>
     <string name="title_block">Блокировать %1$s</string>
     <string name="title_block_sender">Блокировать отправителя</string>
     <string name="title_block_domain">Заблокировать домен отправителя</string>
@@ -99,6 +100,7 @@
     <string name="title_notification_idle">Низкий</string>
     <string name="title_notification_failed">\"%1$s\" не удалось</string>
     <string name="title_notification_alert">\'%1$s\' предупреждение сервера</string>
+    <string name="title_notification_sending_left">Оставшиеся попытки: %1$d</string>
     <string name="title_notification_sending_failed">Отправка для %1$s не удалась</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -172,6 +174,7 @@
     <string name="title_setup_identity">Настроить идентификаторы</string>
     <string name="title_setup_identity_remark">Конфигурация отправки почты</string>
     <string name="title_setup_identity_hint">Изменение имени, цвета, подписи и т.д.</string>
+    <string name="title_setup_identity_what">Что такое идентификатор?</string>
     <string name="title_setup_permissions">Предоставить доступ</string>
     <string name="title_setup_permissions_remark">Доступ к контактной информации (необязательно)</string>
     <string name="title_setup_doze">Настроить энергосбережение</string>
@@ -375,6 +378,7 @@
     <string name="title_advanced_notify_summary">Показывать только сводное уведомление</string>
     <string name="title_advanced_notify_preview">Предпросмотр сообщений в уведомлениях</string>
     <string name="title_advanced_notify_preview_all">Предпросмотр всего текста</string>
+    <string name="title_advanced_notify_preview_only">Показывать уведомления только с предпросмотром текста</string>
     <string name="title_advanced_notify_actions">Действия с уведомлениями</string>
     <string name="title_advanced_notify_action_trash">Корзина</string>
     <string name="title_advanced_notify_action_junk">Спам</string>
@@ -412,6 +416,9 @@
     <string name="title_advanced_import_key">Импорт приватного ключа</string>
     <string name="title_advanced_manage_keys">Управление приватными ключами</string>
     <string name="title_advanced_ca">Установленные сертификаты ЦС</string>
+    <string name="title_advanced_manage_keys_hint">        Будут открыты настройки безопасности Android.
+        Ключи и сертификаты обычно находятся в разделе «Дополнительно» - «Шифрование и учётные данные».
+    </string>
     <string name="title_advanced_external_search">Разрешать другим приложениям искать в сообщениях</string>
     <string name="title_advanced_shortcuts">Показывать часто используемые контакты в меню \"Поделиться\" Android</string>
     <string name="title_advanced_conversation_actions">Предлагать действия</string>
@@ -434,6 +441,7 @@
     <string name="title_advanced_more">Другие возможности</string>
     <string name="title_advanced_manual_hint">Если получение сообщений отключено, его можно выполнить вручную, потянув вниз список сообщений</string>
     <string name="title_advanced_poll_hint">Периодическая проверка новых сообщений будет сравнивать сообщения на сервере с локальными. Это \"тяжёлая\" операция, которая может привести к высокому потреблению заряда батареи, особенно когда сообщений много. Постоянное получение избегает этого, непрерывно отслеживая только изменения.</string>
+    <string name="title_advanced_optimize_hint">Это может изменить частоту синхронизации для экономии заряда батареи в зависимости от возможностей и поведения почтовых серверов</string>
     <string name="title_advanced_schedule_hint">Нажмите на время, чтобы установить его</string>
     <string name="title_advanced_no_date_hint">Некоторые провайдеры хранят сообщения с неизвестными, недействительными или будущими датами как сообщения без даты</string>
     <string name="title_advanced_unseen_hint">Некоторые провайдеры не поддерживают эту функцию правильно, что может привести к синхронизации всех или ни одного сообщения</string>
@@ -480,6 +488,7 @@
     <string name="title_advanced_notify_manage_default_hint">Для установки звука по умолчанию и т.д.</string>
     <string name="title_advanced_notify_manage_service_hint">Для отключения постоянного уведомления</string>
     <string name="title_advanced_notify_preview_all_hint">Для носимых устройств, которые могут показывать полный текст (до 5000 символов)</string>
+    <string name="title_advanced_notify_preview_only_hint">Это задержит отображения уведомлений до тех пор, пока текст сообщения не будет загружен</string>
     <string name="title_advanced_wearable_hint">Уведомления на носимое устройство отправляются только после загрузки текста сообщения</string>
     <string name="title_advanced_move_hint">Целевая папка может быть указана в настройках учётной записи</string>
     <string name="title_advanced_notify_no_grouping">Эта версия Android не поддерживает группировку уведомлений</string>
@@ -953,6 +962,7 @@
     <string name="title_rule_move">Переместить</string>
     <string name="title_rule_copy">Копировать (пометить)</string>
     <string name="title_rule_answer">Ответить</string>
+    <string name="title_rule_tts">Синтез речи</string>
     <string name="title_rule_automation">Автоматизация</string>
     <string name="title_rule_caption">Изменить правило</string>
     <string name="title_rule_title">Правило применяется к</string>
@@ -988,6 +998,12 @@
     <string name="title_rule_no_headers">Условия заголовка не могут быть проверены</string>
     <string name="title_rule_matched">Подходящие сообщения</string>
     <string name="title_rule_no_matches">Нет подходящих сообщений</string>
+    <string name="title_rule_tts_ok">Установка в порядке</string>
+    <string name="title_rule_tts_setup">Проверить настройки</string>
+    <string name="title_rule_tts_data">Установить голосовые данные</string>
+    <string name="title_rule_tts_prefix">Новое сообщение</string>
+    <string name="title_rule_tts_from">От</string>
+    <string name="title_rule_tts_subject">Тема</string>
     <string name="title_legend_section_synchronize">Синхронизация</string>
     <string name="title_legend_section_folders">Папки</string>
     <string name="title_legend_section_messages">Сообщения</string>

@@ -52,6 +52,7 @@ import android.os.Handler;
 import android.os.OperationCanceledException;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainException;
 import android.text.Editable;
@@ -441,7 +442,8 @@ public class FragmentCompose extends FragmentBase {
                 PackageManager pm = getContext().getPackageManager();
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                         pick.resolveActivity(pm) == null)
-                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 else
                     startActivityForResult(Helper.getChooser(getContext(), pick), request);
             }
@@ -1193,8 +1195,8 @@ public class FragmentCompose extends FragmentBase {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_compose, menu);
 
-        menu.findItem(R.id.menu_encrypt).setActionView(R.layout.action_button);
-        ImageButton ib = (ImageButton) menu.findItem(R.id.menu_encrypt).getActionView();
+        menu.findItem(R.id.menu_encrypt).setActionView(R.layout.action_button_text);
+        ImageButton ib = menu.findItem(R.id.menu_encrypt).getActionView().findViewById(R.id.button);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1219,17 +1221,22 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
 
         int colorEncrypt = Helper.resolveColor(getContext(), R.attr.colorEncrypt);
-        ImageButton ib = (ImageButton) menu.findItem(R.id.menu_encrypt).getActionView();
+        View v = menu.findItem(R.id.menu_encrypt).getActionView();
+        ImageButton ib = v.findViewById(R.id.button);
+        TextView tv = v.findViewById(R.id.text);
         ib.setEnabled(state == State.LOADED);
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) || EntityMessage.SMIME_SIGNONLY.equals(encrypt)) {
             ib.setImageResource(R.drawable.baseline_gesture_24);
             ib.setImageTintList(null);
+            tv.setText(EntityMessage.PGP_SIGNONLY.equals(encrypt) ? "P" : "S");
         } else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) || EntityMessage.SMIME_SIGNENCRYPT.equals(encrypt)) {
             ib.setImageResource(R.drawable.baseline_lock_24);
             ib.setImageTintList(ColorStateList.valueOf(colorEncrypt));
+            tv.setText(EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) ? "P" : "S");
         } else {
             ib.setImageResource(R.drawable.baseline_lock_open_24);
             ib.setImageTintList(null);
+            tv.setText(null);
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -1357,9 +1364,11 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void setZoom() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int message_zoom = prefs.getInt("message_zoom", 100);
         float textSize = Helper.getTextSize(getContext(), zoom);
         if (textSize != 0) {
-            etBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            etBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * message_zoom / 100f);
             tvReference.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
     }
@@ -1457,7 +1466,8 @@ public class FragmentCompose extends FragmentBase {
         PackageManager pm = getContext().getPackageManager();
         Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
         if (intent.resolveActivity(pm) == null) { // action whitelisted
-            Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_recorder), Snackbar.LENGTH_INDEFINITE);
+            Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_recorder), Snackbar.LENGTH_INDEFINITE)
+                    .setGestureInsetBottomIgnored(true);
             snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1470,7 +1480,8 @@ public class FragmentCompose extends FragmentBase {
                 startActivityForResult(intent, REQUEST_RECORD_AUDIO);
             } catch (SecurityException ex) {
                 Log.w(ex);
-                Snackbar.make(view, getString(R.string.title_no_viewer, intent), Snackbar.LENGTH_INDEFINITE).show();
+                Snackbar.make(view, getString(R.string.title_no_viewer, intent), Snackbar.LENGTH_INDEFINITE)
+                        .setGestureInsetBottomIgnored(true).show();
             }
     }
 
@@ -1501,7 +1512,8 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void noStorageAccessFramework() {
-        Snackbar snackbar = Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG)
+                .setGestureInsetBottomIgnored(true);
         snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1614,8 +1626,11 @@ public class FragmentCompose extends FragmentBase {
 
                             @Override
                             public void onNothingSelected() {
-                                Snackbar snackbar = Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG);
-                                final Intent intent = KeyChain.createInstallIntent();
+                                Snackbar snackbar = Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG)
+                                        .setGestureInsetBottomIgnored(true);
+                                final Intent intent = (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
+                                        ? KeyChain.createInstallIntent()
+                                        : new Intent(Settings.ACTION_SECURITY_SETTINGS));
                                 PackageManager pm = getContext().getPackageManager();
                                 if (intent.resolveActivity(pm) != null) // package whitelisted
                                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
@@ -1675,14 +1690,16 @@ public class FragmentCompose extends FragmentBase {
                     onPgp(intent);
                 } catch (Throwable ex) {
                     if (ex instanceof IllegalArgumentException)
-                        Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                                .setGestureInsetBottomIgnored(true).show();
                     else {
                         Log.e(ex);
                         Log.unexpectedError(getParentFragmentManager(), ex);
                     }
                 }
             else {
-                Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true);
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1855,7 +1872,8 @@ public class FragmentCompose extends FragmentBase {
             PackageManager pm = getContext().getPackageManager();
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(pm) == null) { // action whitelisted
-                Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_camera), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_camera), Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true);
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1874,7 +1892,8 @@ public class FragmentCompose extends FragmentBase {
                     startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                 } catch (SecurityException ex) {
                     Log.w(ex);
-                    Snackbar.make(view, getString(R.string.title_no_viewer, intent), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, getString(R.string.title_no_viewer, intent), Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 }
             }
         } else {
@@ -1975,7 +1994,8 @@ public class FragmentCompose extends FragmentBase {
                 if (ex instanceof SecurityException)
                     handleFileShare();
                 else if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -2301,7 +2321,8 @@ public class FragmentCompose extends FragmentBase {
                 else if (ex instanceof IllegalArgumentException
                         || ex instanceof GeneralSecurityException /* InvalidKeyException */) {
                     Log.i(ex);
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -2576,7 +2597,8 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
-                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                            .setGestureInsetBottomIgnored(true);
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -3270,7 +3292,15 @@ public class FragmentCompose extends FragmentBase {
                                 // Prevent replying to self
                                 if (ref.replySelf(data.identities, ref.account)) {
                                     data.draft.from = ref.from;
-                                    data.draft.to = ref.to;
+                                    List<Address> tos = new ArrayList<>();
+                                    if (ref.to != null)
+                                        for (Address to : ref.to)
+                                            for (EntityIdentity identity : data.identities)
+                                                if (!Objects.equals(identity.account, ref.account) ||
+                                                        !identity.self ||
+                                                        !identity.similarAddress(to))
+                                                    tos.add(to);
+                                    data.draft.to = (tos.size() == 0 ? null : tos.toArray(new Address[0]));
                                 } else {
                                     data.draft.from = ref.to;
                                     data.draft.to = (ref.reply == null || ref.reply.length == 0 ? ref.from : ref.reply);
@@ -3388,8 +3418,11 @@ public class FragmentCompose extends FragmentBase {
 
                         // Encryption
                         if (ref.ui_encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(ref.ui_encrypt)) {
-                            if (ActivityBilling.isPro(context) && Helper.isOpenKeychainInstalled(context))
-                                data.draft.ui_encrypt = ref.ui_encrypt;
+                            if (ActivityBilling.isPro(context))
+                                if (Helper.isOpenKeychainInstalled(context) ||
+                                        EntityMessage.SMIME_SIGNONLY.equals(ref.encrypt) ||
+                                        EntityMessage.SMIME_SIGNENCRYPT.equals(ref.encrypt))
+                                    data.draft.ui_encrypt = ref.ui_encrypt;
                         }
 
                         // Reply template
@@ -3769,7 +3802,8 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(data.draft.revision < data.draft.revisions);
 
             if (args.getBoolean("incomplete"))
-                Snackbar.make(view, R.string.title_attachments_incomplete, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, R.string.title_attachments_incomplete, Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true).show();
 
             DB db = DB.getInstance(getContext());
 
@@ -3870,9 +3904,11 @@ public class FragmentCompose extends FragmentBase {
             else if (ex instanceof SecurityException)
                 handleFileShare();
             else if (ex instanceof IllegalArgumentException)
-                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true).show();
             else if (ex instanceof IllegalStateException) {
-                Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                        .setGestureInsetBottomIgnored(true);
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -3887,7 +3923,8 @@ public class FragmentCompose extends FragmentBase {
     };
 
     private void handleFileShare() {
-        Snackbar sb = Snackbar.make(view, R.string.title_no_stream, Snackbar.LENGTH_INDEFINITE);
+        Snackbar sb = Snackbar.make(view, R.string.title_no_stream, Snackbar.LENGTH_INDEFINITE)
+                .setGestureInsetBottomIgnored(true);
         sb.setAction(R.string.title_info, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -4137,7 +4174,7 @@ public class FragmentCompose extends FragmentBase {
 
                     if (action == R.id.action_undo || action == R.id.action_redo) {
                         if (action == R.id.action_undo) {
-                            if (!dirty && revision > 1)
+                            if (revision > 1)
                                 draft.revision = revision - 1;
                             else
                                 draft.revision = revision;
@@ -4303,15 +4340,20 @@ public class FragmentCompose extends FragmentBase {
                             }
 
                         } else {
+                            int mid;
+                            if (action == R.id.action_undo)
+                                mid = R.string.title_undo;
+                            else if (action == R.id.action_redo)
+                                mid = R.string.title_redo;
+                            else
+                                mid = R.string.title_draft_saved;
+                            final String msg = context.getString(mid) +
+                                    (BuildConfig.DEBUG ? ":" + draft.revision : "");
+
                             Handler handler = new Handler(context.getMainLooper());
                             handler.post(new Runnable() {
                                 public void run() {
-                                    if (action == R.id.action_undo)
-                                        ToastEx.makeText(getContext(), R.string.title_undo, Toast.LENGTH_LONG).show();
-                                    else if (action == R.id.action_redo)
-                                        ToastEx.makeText(getContext(), R.string.title_redo, Toast.LENGTH_LONG).show();
-                                    else
-                                        ToastEx.makeText(context, R.string.title_draft_saved, Toast.LENGTH_LONG).show();
+                                    ToastEx.makeText(context, msg, Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
@@ -4348,7 +4390,7 @@ public class FragmentCompose extends FragmentBase {
 
                         EntityFolder outbox = db.folder().getOutbox();
                         if (outbox == null) {
-                            Log.e("Outbox missing");
+                            Log.w("Outbox missing");
                             outbox = EntityFolder.getOutbox();
                             outbox.id = db.folder().insertFolder(outbox);
                         }
@@ -4500,7 +4542,8 @@ public class FragmentCompose extends FragmentBase {
             else {
                 setBusy(false);
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -4809,6 +4852,9 @@ public class FragmentCompose extends FragmentBase {
                     if (draft == null ||
                             draft.ui_encrypt == null || EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))
                         return null;
+
+                    if (draft.identity != null && draft.identity.equals(iid))
+                        return draft.ui_encrypt;
 
                     EntityIdentity identity = db.identity().getIdentity(iid);
                     if (identity == null)

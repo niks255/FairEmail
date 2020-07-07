@@ -22,6 +22,8 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -37,12 +39,15 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import javax.mail.Address;
@@ -98,11 +103,13 @@ public class EntityRule {
     static final int TYPE_KEYWORD = 11;
     static final int TYPE_HIDE = 12;
     static final int TYPE_IMPORTANCE = 13;
+    static final int TYPE_TTS = 14;
 
     static final String ACTION_AUTOMATION = BuildConfig.APPLICATION_ID + ".AUTOMATION";
     static final String EXTRA_RULE = "rule";
     static final String EXTRA_SENDER = "sender";
     static final String EXTRA_SUBJECT = "subject";
+    static final String EXTRA_RECEIVED = "received";
 
     private static final long SEND_DELAY = 5000L; // milliseconds
 
@@ -323,6 +330,8 @@ public class EntityRule {
                 return onActionCopy(context, message, jaction);
             case TYPE_ANSWER:
                 return onActionAnswer(context, message, jaction);
+            case TYPE_TTS:
+                return onActionTts(context, message, jaction);
             case TYPE_AUTOMATION:
                 return onActionAutomation(context, message, jaction);
             default:
@@ -469,13 +478,42 @@ public class EntityRule {
         String sender = (message.from == null || message.from.length == 0
                 ? null : ((InternetAddress) message.from[0]).getAddress());
 
+        // ISO 8601
+        DateFormat DTF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        DTF.setTimeZone(java.util.TimeZone.getTimeZone("Zulu"));
+
         Intent automation = new Intent(ACTION_AUTOMATION);
         automation.putExtra(EXTRA_RULE, name);
         automation.putExtra(EXTRA_SENDER, sender);
         automation.putExtra(EXTRA_SUBJECT, message.subject);
+        automation.putExtra(EXTRA_RECEIVED, DTF.format(message.received));
 
-        EntityLog.log(context, "Sending " + automation);
+        List<String> extras = Log.getExtras(automation.getExtras());
+        EntityLog.log(context, "Sending " + automation + " " + TextUtils.join(" ", extras));
         context.sendBroadcast(automation);
+
+        return true;
+    }
+
+    private boolean onActionTts(Context context, EntityMessage message, JSONObject jargs) {
+        Locale locale = (message.language == null ? Locale.getDefault() : new Locale(message.language));
+
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        Resources res = context.createConfigurationContext(configuration).getResources();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(res.getString(R.string.title_rule_tts_prefix)).append(". ");
+
+        if (message.from != null && message.from.length > 0)
+            sb.append(res.getString(R.string.title_rule_tts_from))
+                    .append(' ').append(MessageHelper.formatAddressesShort(message.from)).append(". ");
+
+        if (!TextUtils.isEmpty(message.subject))
+            sb.append(res.getString(R.string.title_rule_tts_subject))
+                    .append(' ').append(message.subject).append(". ");
+
+        TTSHelper.speak(context, "rule:" + message.id, sb.toString(), locale);
 
         return true;
     }
@@ -571,8 +609,14 @@ public class EntityRule {
     }
 
     static EntityRule blockSender(Context context, EntityMessage message, EntityFolder junk, boolean block_domain, List<String> whitelist) throws JSONException {
+        if (message.from == null || message.from.length == 0)
+            return null;
+
         String sender = ((InternetAddress) message.from[0]).getAddress();
         String name = MessageHelper.formatAddresses(new Address[]{message.from[0]});
+
+        if (TextUtils.isEmpty(sender))
+            return null;
 
         if (block_domain) {
             int at = sender.indexOf('@');
@@ -599,8 +643,6 @@ public class EntityRule {
         JSONObject jaction = new JSONObject();
         jaction.put("type", TYPE_MOVE);
         jaction.put("target", junk.id);
-
-        DB db = DB.getInstance(context);
 
         EntityRule rule = new EntityRule();
         rule.folder = message.folder;

@@ -516,8 +516,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         tvSubject.setEllipsize(TextUtils.TruncateAt.START);
                     else if ("end".equals(subject_ellipsize))
                         tvSubject.setEllipsize(TextUtils.TruncateAt.END);
-                    else
+                    else if ("middle".equals(subject_ellipsize))
                         tvSubject.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+                    else
+                        tvSubject.setEllipsize(null);
                 }
             }
 
@@ -1125,7 +1127,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 all.addAll(Arrays.asList(senders));
             if (show_recipients && recipients != null)
                 all.addAll(Arrays.asList(recipients));
-            ContactInfo[] info = ContactInfo.getCached(context, message.account, all.toArray(new Address[0]));
+            ContactInfo[] info = ContactInfo.getCached(context, message.account, message.folderType, all.toArray(new Address[0]));
             if (info == null) {
                 if (taskContactInfo != null)
                     taskContactInfo.cancel(context);
@@ -1133,6 +1135,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 Bundle aargs = new Bundle();
                 aargs.putLong("id", message.id);
                 aargs.putLong("account", message.account);
+                aargs.putString("folderType", message.folderType);
                 aargs.putSerializable("senders", senders);
                 aargs.putSerializable("recipients", show_recipients ? recipients : null);
 
@@ -1140,6 +1143,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     @Override
                     protected ContactInfo[] onExecute(Context context, Bundle args) {
                         long account = args.getLong("account");
+                        String folderType = args.getString("folderType");
                         Address[] senders = (Address[]) args.getSerializable("senders");
                         Address[] recipients = (Address[]) args.getSerializable("recipients");
 
@@ -1152,7 +1156,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         System.arraycopy(senders, 0, all, 0, senders.length);
                         System.arraycopy(recipients, 0, all, senders.length, recipients.length);
 
-                        return ContactInfo.get(context, account, all);
+                        return ContactInfo.get(context, account, folderType, all);
                     }
 
                     @Override
@@ -1487,7 +1491,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     DB db = DB.getInstance(context);
                     EntityAccount account = db.account().getAccount(aid);
-                    args.putBoolean("labels", account != null && account.isGmail());
+                    args.putBoolean("gmail", account != null && account.isGmail());
 
                     return db.folder().getSystemFolders(aid);
                 }
@@ -1503,7 +1507,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (!show_expanded)
                         return;
 
-                    boolean labels = args.getBoolean("labels");
+                    boolean gmail = args.getBoolean("gmail");
 
                     boolean hasArchive = false;
                     boolean hasTrash = false;
@@ -1530,6 +1534,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             message.accountProtocol == EntityAccount.TYPE_POP);
                     boolean junk = (move && (hasJunk && !inJunk));
                     boolean inbox = (move && (inArchive || inTrash || inJunk));
+                    boolean labels = (gmail && move && !inTrash && !inJunk && !outbox);
 
                     final boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
                             message.uid == null || message.accountProtocol == EntityAccount.TYPE_POP);
@@ -1555,7 +1560,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibUnsubscribe.setVisibility(tools && button_unsubscribe && message.unsubscribe != null ? View.VISIBLE : View.GONE);
                     ibPrint.setVisibility(tools && button_print && hasWebView && message.content && Helper.canPrint(context) ? View.VISIBLE : View.GONE);
                     ibAnswer.setVisibility(!tools || outbox || (!expand_all && expand_one) ? View.GONE : View.VISIBLE);
-                    ibLabels.setVisibility(tools && labels_header && labels && !inTrash && !inJunk && !outbox ? View.VISIBLE : View.GONE);
+                    ibLabels.setVisibility(tools && labels_header && labels ? View.VISIBLE : View.GONE);
                     ibCopy.setVisibility(tools && button_copy && move ? View.VISIBLE : View.GONE);
                     ibMove.setVisibility(tools && button_move && move ? View.VISIBLE : View.GONE);
                     ibArchive.setVisibility(tools && button_archive && archive ? View.VISIBLE : View.GONE);
@@ -2228,7 +2233,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
                     if (ex instanceof OutOfMemoryError)
-                        Snackbar.make(parentFragment.getView(), ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(parentFragment.getView(), ex.getMessage(), Snackbar.LENGTH_LONG)
+                                .setGestureInsetBottomIgnored(true).show();
                     else
                         Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
@@ -3295,7 +3301,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                     pick.resolveActivity(context.getPackageManager()) == null)
-                Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true).show();
             else {
                 properties.setValue("name", name);
                 properties.setValue("email", email);
@@ -3316,8 +3323,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             PackageManager pm = context.getPackageManager();
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                     insert.resolveActivity(pm) == null)
-                Snackbar.make(parentFragment.getView(),
-                        R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(parentFragment.getView(), R.string.title_no_contacts, Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true).show();
             else
                 try {
                     context.startActivity(insert);
@@ -3338,8 +3345,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             PackageManager pm = context.getPackageManager();
             if (edit.resolveActivity(pm) == null) // system whitelisted
-                Snackbar.make(parentFragment.getView(),
-                        R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(parentFragment.getView(), R.string.title_no_contacts, Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true).show();
             else
                 try {
                     context.startActivity(edit);
@@ -4530,9 +4537,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
                             intent.resolveActivity(pm) == null) // system whitelisted
                         Snackbar.make(parentFragment.getView(),
-                                context.getString(R.string.title_no_viewer, intent),
-                                Snackbar.LENGTH_LONG).
-                                show();
+                                context.getString(R.string.title_no_viewer, intent), Snackbar.LENGTH_LONG)
+                                .setGestureInsetBottomIgnored(true).show();
                     else
                         context.startActivity(Helper.getChooser(context, intent));
                 }
@@ -5001,7 +5007,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             font_size_subject = Helper.getTextSize(context, fz_subject);
 
         this.subject_italic = prefs.getBoolean("subject_italic", true);
-        this.subject_ellipsize = prefs.getString("subject_ellipsize", "middle");
+        this.subject_ellipsize = prefs.getString("subject_ellipsize", "full");
         this.keywords_header = prefs.getBoolean("keywords_header", false);
         this.labels_header = prefs.getBoolean("labels_header", true);
         this.flags = prefs.getBoolean("flags", true);
@@ -6045,11 +6051,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
             final TextView tvMessage = view.findViewById(R.id.tvMessage);
+            final ImageButton ibInfo = view.findViewById(R.id.ibInfo);
             final CheckBox cbBlockSender = view.findViewById(R.id.cbBlockSender);
             final CheckBox cbBlockDomain = view.findViewById(R.id.cbBlockDomain);
             final Button btnEditRules = view.findViewById(R.id.btnEditRules);
 
             tvMessage.setText(getString(R.string.title_ask_spam_who, from));
+
+            ibInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Helper.viewFAQ(getContext(), 92);
+                }
+            });
+
             cbBlockSender.setEnabled(ActivityBilling.isPro(getContext()));
             cbBlockDomain.setEnabled(false);
 
@@ -6083,12 +6098,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(R.string.title_info, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Helper.viewFAQ(getContext(), 92);
-                        }
-                    })
                     .create();
         }
     }

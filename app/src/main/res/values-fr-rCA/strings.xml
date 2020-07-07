@@ -66,6 +66,7 @@
         <item quantity="other">Traiter %1$d messages comme indésirables?</item>
     </plurals>
     <string name="title_ask_spam_who">Traiter le message de %1$s comme indésirable?</string>
+    <string name="title_junk_hint">Votre fournisseur de messagerie est responsable du filtrage du pourriel. Une application de messagerie n\'a pas toutes les données pour le faire de manière fiable.</string>
     <string name="title_block">Bloquer %1$s</string>
     <string name="title_block_sender">Bloquer l\'expéditeur</string>
     <string name="title_block_domain">Bloquer le domaine de l\'expéditeur</string>
@@ -77,6 +78,7 @@
     <string name="title_notification_idle">Inactif</string>
     <string name="title_notification_failed">\'%1$s\' a échoué</string>
     <string name="title_notification_alert">Alerte serveur \'%1$s\'</string>
+    <string name="title_notification_sending_left">Tentatives restantes : %1$d</string>
     <string name="title_notification_sending_failed">L\'envoi à %1$s a échoué</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
@@ -150,6 +152,7 @@
     <string name="title_setup_identity">Configurer les identités</string>
     <string name="title_setup_identity_remark">Pour envoyer des courriels</string>
     <string name="title_setup_identity_hint">Pour changer le nom, la couleur, la signature, etc.</string>
+    <string name="title_setup_identity_what">Qu\'est-ce qu\'une identité?</string>
     <string name="title_setup_permissions">Accorder les autorisations</string>
     <string name="title_setup_permissions_remark">Pour accéder aux informations de contact (facultatif)</string>
     <string name="title_setup_doze">Configurer les optimisations de la pile</string>
@@ -353,6 +356,7 @@
     <string name="title_advanced_notify_summary">Afficher uniquement une notification résumée</string>
     <string name="title_advanced_notify_preview">Afficher l’aperçu du message dans les notifications</string>
     <string name="title_advanced_notify_preview_all">Aperçu de tout le texte</string>
+    <string name="title_advanced_notify_preview_only">Afficher les notifications avec un texte de prévisualisation uniquement</string>
     <string name="title_advanced_notify_actions">Actions de notification</string>
     <string name="title_advanced_notify_action_trash">Supprimer</string>
     <string name="title_advanced_notify_action_junk">Indésirables</string>
@@ -390,6 +394,9 @@
     <string name="title_advanced_import_key">Importer une clé privée</string>
     <string name="title_advanced_manage_keys">Gérer les clés privées</string>
     <string name="title_advanced_ca">Certificats AC installés</string>
+    <string name="title_advanced_manage_keys_hint">        Ceci va vous amener sur les paramètres de sécurité Android.
+        Les clés et les certificats peuvent généralement être trouvés sous Avancé – Chiffrement et identifiants.
+    </string>
     <string name="title_advanced_external_search">Autoriser les autres applications à rechercher dans les messages</string>
     <string name="title_advanced_shortcuts">Afficher les contacts fréquemment utilisés dans le menu « Partager » d’Android</string>
     <string name="title_advanced_conversation_actions">Suggérer des actions</string>
@@ -412,6 +419,7 @@
     <string name="title_advanced_more">Plus d’options</string>
     <string name="title_advanced_manual_hint">Si la réception de messages est désactivée, il est toujours possible de recevoir manuellement des messages en tirant vers le bas la liste des messages</string>
     <string name="title_advanced_poll_hint">La synchronisation périodique comparera les messages locaux et distants à chaque fois, ce qui est une opération coûteuse qui peut entraîner une utilisation supplémentaire de la batterie, surtout lorsqu\'il y a beaucoup de messages à synchroniser. La synchronisation en continu évitera cela en surveillant uniquement les changements.</string>
+    <string name="title_advanced_optimize_hint">Ceci peut changer la fréquence de synchronisation pour économiser la pile en fonction des capacités et du comportement des serveurs de courriel</string>
     <string name="title_advanced_schedule_hint">Appuyez sur une heure pour définir une période</string>
     <string name="title_advanced_no_date_hint">Certains fournisseurs stockent les messages avec une date inconnue, invalide ou future comme étant des messages sans date</string>
     <string name="title_advanced_unseen_hint">Certains fournisseurs ne prennent pas ceci en charge correctement, ce qui peut entraîner la synchronisation de tous les messages, voire d’aucun</string>
@@ -458,6 +466,7 @@
     <string name="title_advanced_notify_manage_default_hint">Pour définir le son par défaut, etc.</string>
     <string name="title_advanced_notify_manage_service_hint">Pour désactiver la notification permanente</string>
     <string name="title_advanced_notify_preview_all_hint">Pour les appareils connectés qui peuvent afficher le texte complet (jusqu\'à 5 000 caractères)</string>
+    <string name="title_advanced_notify_preview_only_hint">Ceci retarde l\'affichage des notifications jusqu\'à ce que le texte du message ait été téléchargé</string>
     <string name="title_advanced_wearable_hint">Les notifications ne sont envoyées à un appareil connecté qu’après le téléchargement du texte du message</string>
     <string name="title_advanced_move_hint">Le dossier cible peut être configuré dans les paramètres du compte</string>
     <string name="title_advanced_notify_no_grouping">Cette version d’Android ne prend pas en charge le regroupement de notifications</string>
@@ -931,6 +940,7 @@
     <string name="title_rule_move">Déplacer</string>
     <string name="title_rule_copy">Copier (étiquette)</string>
     <string name="title_rule_answer">Répondre</string>
+    <string name="title_rule_tts">Synthèse vocale</string>
     <string name="title_rule_automation">Automatisation</string>
     <string name="title_rule_caption">Modifier la règle</string>
     <string name="title_rule_title">La règle s’applique à</string>
@@ -966,6 +976,12 @@
     <string name="title_rule_no_headers">Les conditions sur l\'en-tête ne peuvent pas être vérifiées</string>
     <string name="title_rule_matched">Messages correspondants</string>
     <string name="title_rule_no_matches">Aucun message correspondant</string>
+    <string name="title_rule_tts_ok">Configuration réussie</string>
+    <string name="title_rule_tts_setup">Vérifier la configuration</string>
+    <string name="title_rule_tts_data">Installer les données vocales</string>
+    <string name="title_rule_tts_prefix">Nouveau message</string>
+    <string name="title_rule_tts_from">De</string>
+    <string name="title_rule_tts_subject">Objet</string>
     <string name="title_legend_section_synchronize">Synchronisation</string>
     <string name="title_legend_section_folders">Dossiers</string>
     <string name="title_legend_section_messages">Messages</string>

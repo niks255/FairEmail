@@ -167,6 +167,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                     case EntityRule.TYPE_ANSWER:
                         tvAction.setText(R.string.title_rule_answer);
                         break;
+                    case EntityRule.TYPE_TTS:
+                        tvAction.setText(R.string.title_rule_tts);
+                        break;
                     case EntityRule.TYPE_AUTOMATION:
                         tvAction.setText(R.string.title_rule_automation);
                         break;
@@ -329,8 +332,8 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
 
                             Snackbar.make(
                                     parentFragment.getView(),
-                                    context.getString(R.string.title_rule_applied, applied),
-                                    Snackbar.LENGTH_LONG).show();
+                                    context.getString(R.string.title_rule_applied, applied), Snackbar.LENGTH_LONG)
+                                    .setGestureInsetBottomIgnored(true).show();
                         }
 
                         @Override

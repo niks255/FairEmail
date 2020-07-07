@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -133,6 +134,9 @@ public class FragmentRule extends FragmentBase {
     private Spinner spAnswer;
     private CheckBox cbCc;
 
+    private Button btnTtsSetup;
+    private Button btnTtsData;
+
     private TextView tvAutomation;
 
     private BottomNavigationView bottom_navigation;
@@ -146,6 +150,7 @@ public class FragmentRule extends FragmentBase {
     private Group grpMove;
     private Group grpMoveProp;
     private Group grpAnswer;
+    private Group grpTts;
     private Group grpAutomation;
 
     private ArrayAdapter<String> adapterDay;
@@ -168,6 +173,8 @@ public class FragmentRule extends FragmentBase {
     private final static int REQUEST_DELETE = 4;
     private final static int REQUEST_SCHEDULE_START = 5;
     private final static int REQUEST_SCHEDULE_END = 6;
+    private final static int REQUEST_TTS_CHECK = 7;
+    private final static int REQUEST_TTS_DATA = 8;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -247,6 +254,8 @@ public class FragmentRule extends FragmentBase {
         spAnswer = view.findViewById(R.id.spAnswer);
         cbCc = view.findViewById(R.id.cbCc);
 
+        btnTtsSetup = view.findViewById(R.id.btnTtsSetup);
+        btnTtsData = view.findViewById(R.id.btnTtsData);
         tvAutomation = view.findViewById(R.id.tvAutomation);
 
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
@@ -261,6 +270,7 @@ public class FragmentRule extends FragmentBase {
         grpMove = view.findViewById(R.id.grpMove);
         grpMoveProp = view.findViewById(R.id.grpMoveProp);
         grpAnswer = view.findViewById(R.id.grpAnswer);
+        grpTts = view.findViewById(R.id.grpTts);
         grpAutomation = view.findViewById(R.id.grpAutomation);
 
         ibSender.setOnClickListener(new View.OnClickListener() {
@@ -270,7 +280,8 @@ public class FragmentRule extends FragmentBase {
                 PackageManager pm = getContext().getPackageManager();
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                         pick.resolveActivity(pm) == null)
-                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 else
                     startActivityForResult(Helper.getChooser(getContext(), pick), REQUEST_SENDER);
             }
@@ -292,7 +303,8 @@ public class FragmentRule extends FragmentBase {
                 PackageManager pm = getContext().getPackageManager();
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                         pick.resolveActivity(pm) == null)
-                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG)
+                            .setGestureInsetBottomIgnored(true).show();
                 else
                     startActivityForResult(Helper.getChooser(getContext(), pick), REQUEST_RECIPIENT);
             }
@@ -391,6 +403,7 @@ public class FragmentRule extends FragmentBase {
             actions.add(new Action(EntityRule.TYPE_COPY, getString(R.string.title_rule_copy)));
         }
         actions.add(new Action(EntityRule.TYPE_ANSWER, getString(R.string.title_rule_answer)));
+        actions.add(new Action(EntityRule.TYPE_TTS, getString(R.string.title_rule_tts)));
         actions.add(new Action(EntityRule.TYPE_AUTOMATION, getString(R.string.title_rule_automation)));
         adapterAction.addAll(actions);
 
@@ -454,6 +467,24 @@ public class FragmentRule extends FragmentBase {
         spIdent.setOnItemSelectedListener(onItemSelectedListener);
         spAnswer.setOnItemSelectedListener(onItemSelectedListener);
 
+        btnTtsSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+                startActivityForResult(intent, REQUEST_TTS_CHECK);
+            }
+        });
+
+        btnTtsData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivityForResult(intent, REQUEST_TTS_DATA);
+            }
+        });
+
         tvAutomation.setText(getString(R.string.title_rule_automation_hint,
                 EntityRule.ACTION_AUTOMATION,
                 TextUtils.join(",", new String[]{
@@ -491,6 +522,7 @@ public class FragmentRule extends FragmentBase {
         grpMove.setVisibility(View.GONE);
         grpMoveProp.setVisibility(View.GONE);
         grpAnswer.setVisibility(View.GONE);
+        grpTts.setVisibility(View.GONE);
         grpAutomation.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);
 
@@ -634,6 +666,17 @@ public class FragmentRule extends FragmentBase {
                     if (resultCode == RESULT_OK)
                         onScheduleEnd(data.getBundleExtra("args"));
                     break;
+                case REQUEST_TTS_CHECK:
+                    if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)
+                        ToastEx.makeText(getContext(), R.string.title_rule_tts_ok, Toast.LENGTH_LONG).show();
+                    else {
+                        Intent tts = new Intent();
+                        tts.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                        startActivity(tts);
+                    }
+                    break;
+                case REQUEST_TTS_DATA:
+                    break;
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -723,6 +766,9 @@ public class FragmentRule extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, TupleRuleEx rule) {
+                if (copy > 0 && rule != null)
+                    rule.applied = 0;
+
                 try {
                     if (savedInstanceState == null) {
                         JSONObject jcondition = (rule == null ? new JSONObject() : new JSONObject(rule.condition));
@@ -881,6 +927,7 @@ public class FragmentRule extends FragmentBase {
         grpMove.setVisibility(type == EntityRule.TYPE_MOVE || type == EntityRule.TYPE_COPY ? View.VISIBLE : View.GONE);
         grpMoveProp.setVisibility(type == EntityRule.TYPE_MOVE ? View.VISIBLE : View.GONE);
         grpAnswer.setVisibility(type == EntityRule.TYPE_ANSWER ? View.VISIBLE : View.GONE);
+        grpTts.setVisibility(type == EntityRule.TYPE_TTS ? View.VISIBLE : View.GONE);
         grpAutomation.setVisibility(type == EntityRule.TYPE_AUTOMATION ? View.VISIBLE : View.GONE);
     }
 
@@ -901,7 +948,8 @@ public class FragmentRule extends FragmentBase {
 
             JSONObject jheader = jcondition.optJSONObject("header");
             if (jheader != null) {
-                Snackbar.make(view, R.string.title_rule_no_headers, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, R.string.title_rule_no_headers, Snackbar.LENGTH_LONG)
+                        .setGestureInsetBottomIgnored(true).show();
                 return;
             }
 
@@ -1015,7 +1063,8 @@ public class FragmentRule extends FragmentBase {
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
                     if (ex instanceof IllegalArgumentException)
-                        Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                                .setGestureInsetBottomIgnored(true).show();
                     else
                         Log.unexpectedError(getParentFragmentManager(), ex);
                 }

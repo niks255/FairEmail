@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -61,8 +62,9 @@ import java.util.Objects;
 
 public class FragmentOptionsSynchronize extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private SwitchCompat swEnabled;
-    private Spinner spPollInterval;
     private SwitchCompat swOptimize;
+    private ImageButton ibOptimizeInfo;
+    private Spinner spPollInterval;
     private RecyclerView rvExempted;
     private SwitchCompat swSchedule;
     private TextView tvSchedulePro;
@@ -103,8 +105,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         // Get controls
 
         swEnabled = view.findViewById(R.id.swEnabled);
-        spPollInterval = view.findViewById(R.id.spPollInterval);
         swOptimize = view.findViewById(R.id.swOptimize);
+        ibOptimizeInfo = view.findViewById(R.id.ibOptimizeInfo);
+        spPollInterval = view.findViewById(R.id.spPollInterval);
         swSchedule = view.findViewById(R.id.swSchedule);
         rvExempted = view.findViewById(R.id.rvExempted);
         tvSchedulePro = view.findViewById(R.id.tvSchedulePro);
@@ -147,6 +150,21 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             }
         });
 
+        swOptimize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_optimize", checked).apply();
+                ServiceSynchronize.reload(getContext(), null, false, "optimize");
+            }
+        });
+
+        ibOptimizeInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Helper.viewFAQ(getContext(), 39);
+            }
+        });
+
         spPollInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -168,14 +186,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
                 prefs.edit().remove("poll_interval").apply();
                 grpExempted.setVisibility(View.GONE);
                 ServiceSynchronize.reschedule(getContext());
-            }
-        });
-
-        swOptimize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("auto_optimize", checked).apply();
-                ServiceSynchronize.reload(getContext(), null, false, "optimize");
             }
         });
 
@@ -381,6 +391,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         boolean pro = ActivityBilling.isPro(getContext());
 
         swEnabled.setChecked(prefs.getBoolean("enabled", true));
+        swOptimize.setChecked(prefs.getBoolean("auto_optimize", true));
 
         int pollInterval = prefs.getInt("poll_interval", ServiceSynchronize.DEFAULT_POLL_INTERVAL);
         int[] pollIntervalValues = getResources().getIntArray(R.array.pollIntervalValues);
@@ -391,7 +402,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
                 break;
             }
 
-        swOptimize.setChecked(prefs.getBoolean("auto_optimize", false));
         grpExempted.setVisibility(pollInterval == 0 ? View.GONE : View.VISIBLE);
 
         swSchedule.setChecked(prefs.getBoolean("schedule", false) && pro);

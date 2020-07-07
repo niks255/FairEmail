@@ -714,13 +714,17 @@ class Core {
         DB db = DB.getInstance(context);
 
         if (!set && label.equals(folder.name)) {
-            if (TextUtils.isEmpty(message.msgid))
-                throw new IllegalArgumentException("label/msgid");
+            if (TextUtils.isEmpty(message.msgid)) {
+                Log.w("label/msgid");
+                return;
+            }
 
             // Prevent deleting message
             EntityFolder archive = db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE);
-            if (archive == null)
-                throw new IllegalArgumentException("label/archive");
+            if (archive == null) {
+                Log.w("label/archive");
+                return;
+            }
 
             Message[] imessages;
             Folder iarchive = istore.getFolder(archive.name);
@@ -740,8 +744,10 @@ class Core {
                 } catch (MessagingException ex) {
                     Log.w(ex);
                 }
-            else
-                throw new IllegalArgumentException("label/delete folder=" + folder.name);
+            else {
+                Log.w("label/delete folder=" + folder.name);
+                return;
+            }
         } else {
             try {
                 Message imessage = ifolder.getMessageByUID(message.uid);
@@ -3067,11 +3073,11 @@ class Core {
                     for (String key : sid.keySet())
                         sb.append(" ").append(key).append("=").append(sid.get(key));
                     if (!account.partial_fetch)
-                        Log.e("Empty message" + sb.toString());
+                        Log.w("Empty message" + sb.toString());
                 }
             } else {
                 if (!account.partial_fetch)
-                    Log.e("Empty message " + account.host);
+                    Log.w("Empty message " + account.host);
             }
         } catch (Throwable ex) {
             Log.w(ex);
@@ -3096,6 +3102,8 @@ class Core {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean notify_summary = prefs.getBoolean("notify_summary", false);
+        boolean notify_preview = prefs.getBoolean("notify_preview", true);
+        boolean notify_preview_only = prefs.getBoolean("notify_preview_only", false);
         boolean wearable_preview = prefs.getBoolean("wearable_preview", false);
         boolean biometrics = prefs.getBoolean("biometrics", false);
         boolean biometric_notify = prefs.getBoolean("biometrics_notify", false);
@@ -3123,6 +3131,9 @@ class Core {
                         continue;
                 }
             }
+
+            if (notify_preview && notify_preview_only && !message.content)
+                continue;
 
             long group = (pro && message.accountNotify ? message.account : 0);
             if (!message.folderUnified)
@@ -3159,12 +3170,16 @@ class Core {
                     remove.remove(id);
                     Log.i("Notify existing=" + id);
                 } else {
-                    add.add(id);
                     boolean existing = remove.contains(-id);
                     if (existing) {
-                        update.add(id);
+                        if (message.content && notify_preview) {
+                            Log.i("Notify preview=" + id);
+                            add.add(id);
+                            update.add(id);
+                        }
                         remove.remove(-id);
-                    }
+                    } else
+                        add.add(id);
                     Log.i("Notify adding=" + id + " existing=" + existing);
                 }
             }
@@ -3282,7 +3297,7 @@ class Core {
         Map<Long, Address[]> messageFrom = new HashMap<>();
         Map<Long, ContactInfo[]> messageInfo = new HashMap<>();
         for (TupleMessageEx message : messages) {
-            ContactInfo[] info = ContactInfo.get(context, message.account, message.from);
+            ContactInfo[] info = ContactInfo.get(context, message.account, message.folderType, message.from);
 
             Address[] modified = (message.from == null
                     ? new InternetAddress[0]

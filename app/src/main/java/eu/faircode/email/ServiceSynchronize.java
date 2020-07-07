@@ -105,7 +105,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final long QUIT_DELAY = 5 * 1000L; // milliseconds
     private static final long STILL_THERE_THRESHOLD = 3 * 60 * 1000L; // milliseconds
     static final int DEFAULT_POLL_INTERVAL = 0; // minutes
-    private static final int STILL_THERE_POLL_INTERVAL = 15; // minutes
+    private static final int OPTIMIZE_KEEP_ALIVE_INTERVAL = 12; // minutes
+    private static final int OPTIMIZE_POLL_INTERVAL = 15; // minutes
     private static final int CONNECT_BACKOFF_START = 8; // seconds
     private static final int CONNECT_BACKOFF_MAX = 32; // seconds (totally ~1 minutes)
     private static final int CONNECT_BACKOFF_AlARM_START = 15; // minutes
@@ -621,6 +622,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         liveAccountNetworkState.postDestroy();
 
+        TTSHelper.shutdown();
+
         try {
             stopForeground(true);
         } catch (Throwable ex) {
@@ -928,7 +931,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     } catch (Throwable ex) {
                         // Immediately report auth errors
                         if (ex instanceof AuthenticationFailedException) {
-                            if (!ConnectionHelper.isIoError(ex)) {
+                            if (ConnectionHelper.isIoError(ex)) {
+                                if (!BuildConfig.PLAY_STORE_RELEASE)
+                                    Log.e(ex);
+                            } else {
                                 Log.e(ex);
                                 try {
                                     NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -940,35 +946,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 }
                                 throw ex;
                             }
-                        } else {
-                            if (!BuildConfig.PLAY_STORE_RELEASE)
-                                Log.e(ex);
-                        }
-
-                        // Report account connection error
-                        if (account.last_connected != null && !ConnectionHelper.airplaneMode(this)) {
-                            EntityLog.log(this, account.name + " last connected: " + new Date(account.last_connected));
-
-                            long now = new Date().getTime();
-                            int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
-                            long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
-                            long maxDelayed = (pollInterval > 0 && !account.poll_exempted
-                                    ? pollInterval * ACCOUNT_ERROR_AFTER_POLL : ACCOUNT_ERROR_AFTER) * 60 * 1000L;
-                            if (delayed > maxDelayed && state.getBackoff() > BACKOFF_ERROR_AFTER) {
-                                Log.i("Reporting sync error after=" + delayed);
-                                Throwable warning = new Throwable(
-                                        getString(R.string.title_no_sync,
-                                                Helper.getDateTimeInstance(this, DateFormat.SHORT, DateFormat.SHORT)
-                                                        .format(account.last_connected)), ex);
-                                try {
-                                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                    nm.notify("receive:" + account.id, 1,
-                                            Core.getNotificationError(this, "warning", account.name, warning)
-                                                    .build());
-                                } catch (Throwable ex1) {
-                                    Log.w(ex1);
-                                }
-                            }
                         }
 
                         throw ex;
@@ -976,7 +953,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     final boolean capIdle = iservice.hasCapability("IDLE");
                     Log.i(account.name + " idle=" + capIdle);
-                    if (!capIdle)
+                    if (!capIdle || account.poll_interval < OPTIMIZE_KEEP_ALIVE_INTERVAL)
                         optimizeAccount(ServiceSynchronize.this, account, "IDLE");
 
                     db.account().setAccountState(account.id, "connected");
@@ -1432,7 +1409,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 account.keep_alive_ok = true;
                                 db.account().setAccountKeepAliveOk(account.id, true);
                                 if (!BuildConfig.PLAY_STORE_RELEASE)
-                                    Log.e(account.host + " set keep-alive=" + account.poll_interval);
+                                    Log.w(account.host + " set keep-alive=" + account.poll_interval);
                                 EntityLog.log(ServiceSynchronize.this, account.name + " keep alive ok");
                             } else
                                 EntityLog.log(ServiceSynchronize.this, account.name + " keep alive" +
@@ -1518,6 +1495,32 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             ServiceSynchronize.this,
                             account.name + " " + Log.formatThrowable(ex, false));
                     db.account().setAccountError(account.id, Log.formatThrowable(ex));
+
+                    // Report account connection error
+                    if (account.last_connected != null && !ConnectionHelper.airplaneMode(this)) {
+                        EntityLog.log(this, account.name + " last connected: " + new Date(account.last_connected));
+
+                        long now = new Date().getTime();
+                        int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+                        long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
+                        long maxDelayed = (pollInterval > 0 && !account.poll_exempted
+                                ? pollInterval * ACCOUNT_ERROR_AFTER_POLL : ACCOUNT_ERROR_AFTER) * 60 * 1000L;
+                        if (delayed > maxDelayed && state.getBackoff() > BACKOFF_ERROR_AFTER) {
+                            Log.i("Reporting sync error after=" + delayed);
+                            Throwable warning = new Throwable(
+                                    getString(R.string.title_no_sync,
+                                            Helper.getDateTimeInstance(this, DateFormat.SHORT, DateFormat.SHORT)
+                                                    .format(account.last_connected)), ex);
+                            try {
+                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                nm.notify("receive:" + account.id, 1,
+                                        Core.getNotificationError(this, "warning", account.name, warning)
+                                                .build());
+                            } catch (Throwable ex1) {
+                                Log.w(ex1);
+                            }
+                        }
+                    }
                 } finally {
                     // Update state
                     EntityLog.log(this, account.name + " closing");
@@ -1650,15 +1653,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private void optimizeAccount(Context context, EntityAccount account, String reason) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
+        boolean auto_optimize = prefs.getBoolean("auto_optimize", true);
         if (!auto_optimize)
             return;
 
         DB db = DB.getInstance(context);
 
         int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+        EntityLog.log(context, "Auto optimize account=" + account.name + " poll interval=" + pollInterval);
         if (pollInterval == 0) {
-            prefs.edit().putInt("poll_interval", STILL_THERE_POLL_INTERVAL).apply();
+            prefs.edit().putInt("poll_interval", OPTIMIZE_POLL_INTERVAL).apply();
             try {
                 db.beginTransaction();
                 for (EntityAccount a : db.account().getAccounts())

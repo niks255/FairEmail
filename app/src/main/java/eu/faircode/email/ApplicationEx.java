@@ -284,6 +284,11 @@ public class ApplicationEx extends Application {
             boolean monospaced = prefs.getBoolean("monospaced", false);
             if (monospaced && !BuildConfig.DEBUG)
                 editor.putBoolean("text_font", false);
+        } else if (version < 1238) {
+            if (!prefs.contains("subject_ellipsize"))
+                editor.putString("subject_ellipsize", "middle");
+            if (!prefs.contains("auto_optimize"))
+                editor.putBoolean("auto_optimize", false);
         }
 
         if (version < BuildConfig.VERSION_CODE)
