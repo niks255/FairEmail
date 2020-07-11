@@ -81,6 +81,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.CertPathValidatorException;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -103,6 +104,7 @@ import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.StoreClosedException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeUtility;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
@@ -649,6 +651,18 @@ public class Log {
             */
             return false;
 
+        if (ex instanceof IllegalArgumentException &&
+                "page introduces incorrect tiling".equals(ex.getMessage()))
+            /*
+                java.lang.IllegalArgumentException: page introduces incorrect tiling
+                  at androidx.paging.PagedStorage.insertPage(SourceFile:545)
+                  at androidx.paging.PagedStorage.tryInsertPageAndTrim(SourceFile:504)
+                  at androidx.paging.TiledPagedList$1.onPageResult(SourceFile:60)
+                  at androidx.paging.DataSource$LoadCallbackHelper$1.run(SourceFile:324)
+                  at android.os.Handler.handleCallback(Handler.java:789)
+            */
+            return false;
+
         if (ex instanceof IllegalMonitorStateException)
             /*
                 java.lang.IllegalMonitorStateException
@@ -1130,6 +1144,9 @@ public class Log {
             sb.append(String.format("Data saving: %b\r\n", saving));
         }
 
+        String charset = MimeUtility.getDefaultJavaCharset();
+        sb.append(String.format("Default charset: %s/%s\r\n", charset, MimeUtility.mimeCharset(charset)));
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean reporting = prefs.getBoolean("crash_reports", false);
         if (reporting) {
@@ -1196,7 +1213,7 @@ public class Log {
             for (EntityAccount account : accounts)
                 try {
                     JSONObject jaccount = account.toJSON();
-                    jaccount.put("state", account.state);
+                    jaccount.put("state", account.state == null ? "null" : account.state);
                     jaccount.put("warning", account.warning);
                     jaccount.put("error", account.error);
 
@@ -1222,8 +1239,8 @@ public class Log {
                         jfolder.put("total", folder.total);
                         jfolder.put("initialize", folder.initialize);
                         jfolder.put("subscribed", folder.subscribed);
-                        jfolder.put("state", folder.state);
-                        jfolder.put("sync_state", folder.sync_state);
+                        jfolder.put("state", folder.state == null ? "null" : folder.state);
+                        jfolder.put("sync_state", folder.sync_state == null ? "null" : folder.sync_state);
                         jfolder.put("read_only", folder.read_only);
                         jfolder.put("selectable", folder.selectable);
                         jfolder.put("inferiors", folder.inferiors);
@@ -1410,7 +1427,7 @@ public class Log {
     }
 
     static InternetAddress myAddress() throws UnsupportedEncodingException {
-        return new InternetAddress("marcel+fairemail@faircode.eu", "FairCode");
+        return new InternetAddress("marcel+fairemail@faircode.eu", "FairCode", StandardCharsets.UTF_8.name());
     }
 
     static boolean isSupportedDevice() {

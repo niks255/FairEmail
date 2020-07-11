@@ -1606,7 +1606,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibExpanderAddress.setContentDescription(context.getString(show_addresses ? R.string.title_accessibility_hide_addresses : R.string.title_accessibility_show_addresses));
 
             ivPlain.setVisibility(show_addresses && message.plain_only != null && message.plain_only ? View.VISIBLE : View.GONE);
-            ivReceipt.setVisibility(show_addresses && message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
+            ivReceipt.setVisibility(message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
             ivBrowsed.setVisibility(show_addresses && message.ui_browsed ? View.VISIBLE : View.GONE);
 
             ibSearchContact.setVisibility(show_addresses && (froms > 0 || tos > 0) ? View.VISIBLE : View.GONE);
@@ -1654,7 +1654,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             InternetAddress via = null;
             if (message.identityEmail != null)
                 try {
-                    via = new InternetAddress(message.identityEmail, message.identityName);
+                    via = new InternetAddress(message.identityEmail, message.identityName, StandardCharsets.UTF_8.name());
                 } catch (UnsupportedEncodingException ignored) {
                 }
 
@@ -2953,10 +2953,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         public boolean onKeyPressed(KeyEvent event) {
             TupleMessageEx message = getMessage();
+            if (message == null)
+                return false;
+
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_ENTER:
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                 case KeyEvent.KEYCODE_BUTTON_A:
+                    boolean expanded = properties.getValue("expanded", message.id);
+                    if (expanded)
+                        return false;
                     onClick(view);
                     return true;
                 case KeyEvent.KEYCODE_A:
@@ -2966,7 +2972,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onActionTrash(message, false);
                     return false;
                 case KeyEvent.KEYCODE_S:
-                    if (message == null || selectionTracker == null)
+                    if (selectionTracker == null)
                         return false;
                     if (selectionTracker.isSelected(message.id))
                         selectionTracker.deselect(message.id);

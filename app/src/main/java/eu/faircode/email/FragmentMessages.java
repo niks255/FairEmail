@@ -210,6 +210,7 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
+import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.ACTION_UP;
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_KEY_MISSING;
@@ -284,6 +285,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private boolean initialized = false;
     private boolean loading = false;
     private boolean swiping = false;
+    private boolean scrolling = false;
 
     private AdapterMessage adapter;
 
@@ -690,6 +692,24 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         };
         rvMessage.addItemDecoration(dateDecorator);
+
+        rvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy != 0) {
+                    boolean down = (dy > 0);
+                    if (scrolling != down) {
+                        scrolling = down;
+                        if (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER)
+                            if (dy > 0)
+                                fabCompose.hide();
+                            else
+                                fabCompose.show();
+                        updateExpanded();
+                    }
+                }
+            }
+        });
 
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
@@ -4398,17 +4418,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private void updateExpanded() {
         int expanded = (values.containsKey("expanded") ? values.get("expanded").size() : 0);
-
-        if (expanded == 1) {
-            long id = values.get("expanded").get(0);
-            int pos = adapter.getPositionForKey(id);
-            TupleMessageEx message = adapter.getItemAtPosition(pos);
-            if (message != null && !EntityFolder.OUTBOX.equals(message.folderType))
-                fabReply.show();
-            else
-                fabReply.hide();
-        } else
+        if (scrolling)
             fabReply.hide();
+        else {
+            if (expanded == 1) {
+                long id = values.get("expanded").get(0);
+                int pos = adapter.getPositionForKey(id);
+                TupleMessageEx message = adapter.getItemAtPosition(pos);
+                if (message != null && !EntityFolder.OUTBOX.equals(message.folderType))
+                    fabReply.show();
+                else
+                    fabReply.hide();
+            } else
+                fabReply.hide();
+        }
 
         ibDown.setVisibility(quick_scroll && expanded > 0 ? View.VISIBLE : View.GONE);
         ibUp.setVisibility(quick_scroll && expanded > 0 ? View.VISIBLE : View.GONE);
@@ -4860,6 +4883,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return false;
 
             boolean up = (event.getAction() == ACTION_UP);
+            boolean down = (event.getAction() == ACTION_DOWN);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean volumenav = prefs.getBoolean("volumenav", false);
@@ -4891,6 +4915,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     break;
                 case KeyEvent.KEYCODE_R:
                     return (up && onReply(context));
+                case KeyEvent.KEYCODE_PAGE_UP:
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    if (viewType == AdapterMessage.ViewType.THREAD)
+                        return (down && onScroll(context, true));
+                    break;
+                case KeyEvent.KEYCODE_PAGE_DOWN:
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    if (viewType == AdapterMessage.ViewType.THREAD)
+                        return (down && onScroll(context, false));
+                    break;
             }
 
             if (!up)
@@ -4997,6 +5031,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (!fabMore.isOrWillBeShown())
                 return false;
             fabMore.performClick();
+            return true;
+        }
+
+        private boolean onScroll(Context context, boolean up) {
+            rvMessage.scrollBy(0, (up ? -1 : 1) *
+                    context.getResources().getDisplayMetrics().heightPixels / 2);
             return true;
         }
     };
@@ -5580,12 +5620,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 List<String> users = sigResult.getConfirmedUserIds();
                                 String text;
                                 if (users.size() > 0)
-                                    text = getString(sresult == RESULT_VALID_KEY_UNCONFIRMED
+                                    text = context.getString(sresult == RESULT_VALID_KEY_UNCONFIRMED
                                                     ? R.string.title_signature_unconfirmed_from
                                                     : R.string.title_signature_valid_from,
                                             TextUtils.join(", ", users));
                                 else
-                                    text = getString(sresult == RESULT_VALID_KEY_UNCONFIRMED
+                                    text = context.getString(sresult == RESULT_VALID_KEY_UNCONFIRMED
                                             ? R.string.title_signature_unconfirmed
                                             : R.string.title_signature_valid);
                                 args.putString("sigresult", text);
@@ -5594,7 +5634,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             } else if (sresult == RESULT_KEY_MISSING)
                                 args.putString("sigresult", context.getString(R.string.title_signature_key_missing));
                             else {
-                                String text = getString(R.string.title_signature_invalid_reason, Integer.toString(sresult));
+                                String text = context.getString(R.string.title_signature_invalid_reason, Integer.toString(sresult));
                                 args.putString("sigresult", text);
                             }
 
@@ -6649,7 +6689,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (message.from != null && message.from.length > 0) {
                     Element span = document.createElement("span");
                     Element strong = document.createElement("strong");
-                    strong.text(getString(R.string.title_from));
+                    strong.text(context.getString(R.string.title_from));
                     span.appendChild(strong);
                     span.appendText(" " + MessageHelper.formatAddresses(message.from));
                     span.appendElement("br");
@@ -6659,7 +6699,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (message.to != null && message.to.length > 0) {
                     Element span = document.createElement("span");
                     Element strong = document.createElement("strong");
-                    strong.text(getString(R.string.title_to));
+                    strong.text(context.getString(R.string.title_to));
                     span.appendChild(strong);
                     span.appendText(" " + MessageHelper.formatAddresses(message.to));
                     span.appendElement("br");
@@ -6669,7 +6709,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (message.cc != null && message.cc.length > 0) {
                     Element span = document.createElement("span");
                     Element strong = document.createElement("strong");
-                    strong.text(getString(R.string.title_cc));
+                    strong.text(context.getString(R.string.title_cc));
                     span.appendChild(strong);
                     span.appendText(" " + MessageHelper.formatAddresses(message.cc));
                     span.appendElement("br");
@@ -6681,7 +6721,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                     Element span = document.createElement("span");
                     Element strong = document.createElement("strong");
-                    strong.text(getString(R.string.title_received));
+                    strong.text(context.getString(R.string.title_received));
                     span.appendChild(strong);
                     span.appendText(" " + DTF.format(message.received));
                     span.appendElement("br");
@@ -6713,7 +6753,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (attachment.isAttachment()) {
                         hasAttachments = true;
                         Element strong = document.createElement("strong");
-                        strong.text(getString(R.string.title_attachment));
+                        strong.text(context.getString(R.string.title_attachment));
                         footer.appendChild(strong);
                         if (!TextUtils.isEmpty(attachment.name))
                             footer.appendText(" " + attachment.name);

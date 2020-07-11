@@ -487,7 +487,8 @@
     <string name="title_advanced_sender">Tillåt avsändaradress redigering</string>
     <string name="title_advanced_sender_regex">Regex för att matcha användarnamn för inkommande e-postadresser</string>
     <string name="title_identity_reply_to">Svara till adress</string>
-    <string name="title_identity_unicode">Tillåt Unicode i e-postadresser</string>
+    <string name="title_identity_unicode">Använd Unicode transport</string>
+    <string name="title_identity_unicode_remark">De flesta servrar stöder inte detta</string>
     <string name="title_identity_max_size">Maximal meddelandestorlek (MB)</string>
     <string name="title_identity_receipt">Begär leverans/läs kvitto som standard</string>
     <string name="title_identity_use_ip_hint">Vid \"invalid greeting\", \"requires valid address\" eller ett liknande fel, försök ändra den här inställningen</string>
@@ -1184,9 +1185,10 @@
     <string name="title_widget_folder_unified">Samlade inkorgsmappar</string>
     <string name="title_widget_unseen">Endast olästa meddelanden</string>
     <string name="title_widget_flagged">Endast stjärnmärkta meddelanden</string>
-    <string name="title_widget_font_size">Teckenstorlek</string>
+    <string name="title_widget_font_size">Textstorlek</string>
     <string name="title_widget_padding">Utfyllnadsstorlek</string>
     <string name="title_widget_semi_transparent">Semi transparent bakgrund</string>
+    <string name="title_widget_background">Bakgrundsfärg</string>
     <string name="title_accessibility_collapsed">Ihopfälld</string>
     <string name="title_accessibility_expanded">Expanderad</string>
     <string name="title_accessibility_seen">Läst</string>

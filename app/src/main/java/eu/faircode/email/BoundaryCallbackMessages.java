@@ -90,7 +90,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
     private State state;
 
-    private static final int SEARCH_LIMIT = 1000;
+    private static final int SEARCH_LIMIT_DEVICE = 1000;
+    private static final int SEARCH_LIMIT_SERVER = 250;
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "boundary");
 
     interface IBoundaryCallbackMessages {
@@ -203,6 +204,11 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             if (state.ids == null) {
                 SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
                 state.ids = FtsDbHelper.match(sdb, account, folder, criteria);
+                EntityLog.log(context, "Boundary FTS " +
+                        " account=" + account +
+                        " folder=" + folder +
+                        " criteria=" + criteria +
+                        " ids=" + state.ids.size());
             }
 
             try {
@@ -245,12 +251,14 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                             criteria.with_size,
                             criteria.after,
                             criteria.before,
-                            SEARCH_LIMIT, state.offset);
-                    Log.i("Boundary device folder=" + folder +
+                            SEARCH_LIMIT_DEVICE, state.offset);
+                    EntityLog.log(context, "Boundary device" +
+                            " account=" + account +
+                            " folder=" + folder +
                             " criteria=" + criteria +
                             " offset=" + state.offset +
                             " size=" + state.matches.size());
-                    state.offset += Math.min(state.matches.size(), SEARCH_LIMIT);
+                    state.offset += Math.min(state.matches.size(), SEARCH_LIMIT_DEVICE);
                     state.index = 0;
                 }
 
@@ -297,11 +305,11 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         return found;
     }
 
-    private int load_server(State state) throws MessagingException, IOException {
+    private int load_server(final State state) throws MessagingException, IOException {
         DB db = DB.getInstance(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        final boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.BETA_RELEASE);
+        boolean debug = prefs.getBoolean("debug", false);
 
         final EntityFolder browsable = db.folder().getBrowsableFolder(folder, criteria != null);
         if (browsable == null || !browsable.selectable) {
@@ -319,14 +327,14 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 if (!ConnectionHelper.getNetworkState(context).isSuitable())
                     throw new IllegalStateException(context.getString(R.string.title_no_internet));
 
-                Log.i("Boundary server connecting account=" + account.name);
+                EntityLog.log(context, "Boundary server connecting account=" + account.name);
                 state.iservice = new EmailService(
                         context, account.getProtocol(), account.realm, account.insecure, EmailService.PURPOSE_SEARCH, debug);
                 state.iservice.setPartialFetch(account.partial_fetch);
                 state.iservice.setIgnoreBodyStructureSize(account.ignore_size);
                 state.iservice.connect(account);
 
-                Log.i("Boundary server opening folder=" + browsable.name);
+                EntityLog.log(context, "Boundary server opening folder=" + browsable.name);
                 state.ifolder = (IMAPFolder) state.iservice.getStore().getFolder(browsable.name);
                 try {
                     state.ifolder.open(Folder.READ_WRITE);
@@ -344,7 +352,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 if (criteria == null) {
                     boolean filter_seen = prefs.getBoolean("filter_seen", false);
                     boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
-                    Log.i("Boundary filter seen=" + filter_seen + " unflagged=" + filter_unflagged);
+                    EntityLog.log(context, "Boundary filter seen=" + filter_seen + " unflagged=" + filter_unflagged);
 
                     List<SearchTerm> and = new ArrayList<>();
 
@@ -360,6 +368,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         state.imessages = state.ifolder.getMessages();
                     else
                         state.imessages = state.ifolder.search(new AndTerm(and.toArray(new SearchTerm[0])));
+                    EntityLog.log(context, "Boundary filter messages=" + state.imessages.length);
                 } else {
                     Object result = state.ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
                         @Override
@@ -397,57 +406,23 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                                     return imessages;
                                 } else {
-                                    Log.i("Boundary server search=" + criteria);
+                                    EntityLog.log(context, "Boundary server" +
+                                            " account=" + account +
+                                            " folder=" + folder +
+                                            " search=" + criteria);
 
                                     if (protocol.supportsUtf8())
                                         try {
-                                            SearchTerm terms = criteria.getTerms(
-                                                    true,
-                                                    state.ifolder.getPermanentFlags(),
-                                                    browsable.keywords);
-                                            if (terms == null)
-                                                return new Message[0];
-
-                                            SearchSequence ss = new SearchSequence(protocol);
-                                            Argument args = ss.generateSequence(terms, StandardCharsets.UTF_8.name());
-                                            args.writeAtom("ALL");
-
-                                            Response[] responses = protocol.command("SEARCH", args);
-                                            if (responses.length == 0)
-                                                throw new ProtocolException("No response");
-                                            if (!responses[responses.length - 1].isOK())
-                                                throw new ProtocolException(responses[responses.length - 1]);
-
-                                            List<Integer> msgnums = new ArrayList<>();
-                                            for (Response response : responses)
-                                                if (((IMAPResponse) response).keyEquals("SEARCH")) {
-                                                    int msgnum;
-                                                    while ((msgnum = response.readNumber()) != -1)
-                                                        msgnums.add(msgnum);
-                                                }
-                                            Message[] imessages = new Message[msgnums.size()];
-                                            for (int i = 0; i < msgnums.size(); i++)
-                                                imessages[i] = state.ifolder.getMessage(msgnums.get(i));
-
-                                            return imessages;
+                                            return search(true, browsable.keywords, protocol, state);
                                         } catch (Throwable ex) {
-                                            ProtocolException pex = new ProtocolException(
-                                                    "Search unicode " + account.host + " " + criteria, ex);
-                                            Log.e(pex);
-                                            // Fallback to ASCII search
+                                            EntityLog.log(context, ex.toString());
                                         }
 
-                                    SearchTerm terms = criteria.getTerms(
-                                            false,
-                                            state.ifolder.getPermanentFlags(),
-                                            browsable.keywords);
-                                    if (terms == null)
-                                        return new Message[0];
-                                    return state.ifolder.search(terms);
+                                    return search(false, browsable.keywords, protocol, state);
                                 }
-                            } catch (MessagingException ex) {
+                            } catch (Throwable ex) {
                                 ProtocolException pex = new ProtocolException(
-                                        "Search " + account.host + " " + criteria, ex);
+                                        "Search " + account.host, ex);
                                 Log.e(pex);
                                 throw pex;
                             }
@@ -456,7 +431,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                     state.imessages = (Message[]) result;
                 }
-                Log.i("Boundary server found messages=" + state.imessages.length);
+                EntityLog.log(context, "Boundary found messages=" + state.imessages.length);
 
                 state.index = state.imessages.length - 1;
             } catch (Throwable ex) {
@@ -554,6 +529,43 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         Log.i("Boundary server done");
         return found;
+    }
+
+    private Message[] search(boolean utf8, String[] keywords, IMAPProtocol protocol, State state) throws IOException, MessagingException, ProtocolException {
+        EntityLog.log(context, "Search utf8=" + utf8);
+
+        SearchTerm terms = criteria.getTerms(utf8, state.ifolder.getPermanentFlags(), keywords);
+        if (terms == null)
+            throw new ProtocolException("No search conditions");
+
+        SearchSequence ss = new SearchSequence(protocol);
+        Argument args = ss.generateSequence(terms, utf8 ? StandardCharsets.UTF_8.name() : null);
+        args.writeAtom("ALL");
+
+        Response[] responses = protocol.command("SEARCH", args); // no CHARSET !
+        if (responses == null || responses.length == 0)
+            throw new ProtocolException("No response from server");
+        for (Response response : responses)
+            Log.i("Search response=" + response);
+        if (!responses[responses.length - 1].isOK())
+            throw new ProtocolException(responses[responses.length - 1]);
+
+        List<Integer> msgnums = new ArrayList<>();
+        for (int r = 0; r < Math.min(responses.length, SEARCH_LIMIT_SERVER); r++) {
+            IMAPResponse response = (IMAPResponse) responses[r];
+            if (response.keyEquals("SEARCH")) {
+                int msgnum;
+                while ((msgnum = response.readNumber()) != -1)
+                    msgnums.add(msgnum);
+            }
+        }
+
+        EntityLog.log(context, "Search messages=" + msgnums.size());
+        Message[] imessages = new Message[msgnums.size()];
+        for (int i = 0; i < msgnums.size(); i++)
+            imessages[i] = state.ifolder.getMessage(msgnums.get(i));
+
+        return imessages;
     }
 
     void destroy() {

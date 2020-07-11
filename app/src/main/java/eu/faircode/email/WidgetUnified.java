@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
 
+import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
 public class WidgetUnified extends AppWidgetProvider {
@@ -44,6 +45,7 @@ public class WidgetUnified extends AppWidgetProvider {
             long folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
             String type = prefs.getString("widget." + appWidgetId + ".type", null);
             boolean semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
+            int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
             int font = prefs.getInt("widget." + appWidgetId + ".font", 0);
             int padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
 
@@ -58,7 +60,7 @@ public class WidgetUnified extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_unified);
 
             if (!semi)
-                views.setInt(R.id.widget, "setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.widget, "setBackgroundColor", background);
 
             if (font > 0)
                 views.setTextViewTextSize(R.id.title, TypedValue.COMPLEX_UNIT_SP, getFontSizeSp(font));
@@ -67,6 +69,10 @@ public class WidgetUnified extends AppWidgetProvider {
                 int px = getPaddingPx(padding, context);
                 views.setViewPadding(R.id.title, px, px, px, px);
             }
+
+            float lum = (float) ColorUtils.calculateLuminance(background);
+            if (lum > 0.7f)
+                views.setTextColor(R.id.title, Color.BLACK);
 
             if (name == null)
                 views.setTextViewText(R.id.title, context.getString(R.string.title_folder_unified));

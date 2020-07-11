@@ -150,6 +150,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
@@ -1829,7 +1830,7 @@ public class FragmentCompose extends FragmentBase {
                             if (address != null)
                                 list.addAll(Arrays.asList(address));
 
-                            list.add(new InternetAddress(email, name));
+                            list.add(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
 
                             if (requestCode == REQUEST_CONTACT_TO)
                                 draft.to = list.toArray(new Address[0]);
@@ -2041,10 +2042,10 @@ public class FragmentCompose extends FragmentBase {
                 if (draft == null)
                     throw new MessageRemovedException("PGP");
                 if (draft.identity == null)
-                    throw new IllegalArgumentException(getString(R.string.title_from_missing));
+                    throw new IllegalArgumentException(context.getString(R.string.title_from_missing));
                 EntityIdentity identity = db.identity().getIdentity(draft.identity);
                 if (identity == null)
-                    throw new IllegalArgumentException(getString(R.string.title_from_missing));
+                    throw new IllegalArgumentException(context.getString(R.string.title_from_missing));
 
                 // Create files
                 File input = new File(context.getCacheDir(), "pgp_input." + draft.id);
@@ -2348,7 +2349,7 @@ public class FragmentCompose extends FragmentBase {
                     throw new MessageRemovedException("S/MIME");
                 EntityIdentity identity = db.identity().getIdentity(draft.identity);
                 if (identity == null)
-                    throw new IllegalArgumentException(getString(R.string.title_from_missing));
+                    throw new IllegalArgumentException(context.getString(R.string.title_from_missing));
 
                 // Get/clean attachments
                 List<EntityAttachment> attachments = db.attachment().getAttachments(id);
@@ -2679,7 +2680,7 @@ public class FragmentCompose extends FragmentBase {
                             if (contact != null && contact.moveToNext()) {
                                 String name = contact.getString(0);
                                 String email = contact.getString(1);
-                                selected.add(new InternetAddress(email, name));
+                                selected.add(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
                             }
                         }
                     }
@@ -3089,7 +3090,7 @@ public class FragmentCompose extends FragmentBase {
 
                 data.identities = db.identity().getComposableIdentities(null);
                 if (data.identities == null || data.identities.size() == 0)
-                    throw new IllegalStateException(getString(R.string.title_no_identities));
+                    throw new IllegalStateException(context.getString(R.string.title_no_identities));
 
                 data.draft = db.message().getMessage(id);
                 if (data.draft == null || data.draft.ui_hide) {
@@ -3417,12 +3418,14 @@ public class FragmentCompose extends FragmentBase {
                             data.draft.plain_only = true;
 
                         // Encryption
-                        if (ref.ui_encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(ref.ui_encrypt)) {
-                            if (ActivityBilling.isPro(context))
-                                if (Helper.isOpenKeychainInstalled(context) ||
-                                        EntityMessage.SMIME_SIGNONLY.equals(ref.encrypt) ||
-                                        EntityMessage.SMIME_SIGNENCRYPT.equals(ref.encrypt))
-                                    data.draft.ui_encrypt = ref.ui_encrypt;
+                        if (EntityMessage.PGP_SIGNONLY.equals(ref.ui_encrypt) ||
+                                EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
+                            if (Helper.isOpenKeychainInstalled(context) && selected.sign_key != null)
+                                data.draft.ui_encrypt = ref.ui_encrypt;
+                        } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
+                                EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
+                            if (ActivityBilling.isPro(context) && selected.sign_key_alias != null)
+                                data.draft.ui_encrypt = ref.ui_encrypt;
                         }
 
                         // Reply template
@@ -3584,7 +3587,7 @@ public class FragmentCompose extends FragmentBase {
                     data.draft.account = drafts.account;
                     data.draft.folder = drafts.id;
                     data.draft.identity = selected.id;
-                    data.draft.from = new InternetAddress[]{new InternetAddress(selected.email, selected.name)};
+                    data.draft.from = new InternetAddress[]{new InternetAddress(selected.email, selected.name, StandardCharsets.UTF_8.name())};
 
                     data.draft.sender = MessageHelper.getSortKey(data.draft.from);
                     Uri lookupUri = ContactInfo.getLookupUri(data.draft.from);
@@ -3631,7 +3634,7 @@ public class FragmentCompose extends FragmentBase {
                             String email = organizer.getEmail();
                             String name = organizer.getCommonName();
                             if (!TextUtils.isEmpty(email)) {
-                                InternetAddress o = new InternetAddress(email, name);
+                                InternetAddress o = new InternetAddress(email, name, StandardCharsets.UTF_8.name());
                                 Log.i("Setting organizer=" + o);
                                 data.draft.to = new Address[]{o};
                             }
@@ -4049,7 +4052,7 @@ public class FragmentCompose extends FragmentBase {
                     List<EntityAttachment> attachments = db.attachment().getAttachments(draft.id);
 
                     // Get data
-                    InternetAddress[] afrom = (identity == null ? null : new InternetAddress[]{new InternetAddress(identity.email, identity.name)});
+                    InternetAddress[] afrom = (identity == null ? null : new InternetAddress[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())});
                     InternetAddress[] ato = (TextUtils.isEmpty(to) ? null : InternetAddress.parseHeader(to, false));
                     InternetAddress[] acc = (TextUtils.isEmpty(cc) ? null : InternetAddress.parseHeader(cc, false));
                     InternetAddress[] abcc = (TextUtils.isEmpty(bcc) ? null : InternetAddress.parseHeader(bcc, false));

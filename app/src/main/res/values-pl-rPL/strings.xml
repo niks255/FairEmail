@@ -305,7 +305,7 @@
     <string name="title_advanced_gravatars">Pokaż Gravatary</string>
     <string name="title_advanced_favicons">Pokaż favikony</string>
     <string name="title_advanced_generated_icons">Pokaż wygenerowane ikony</string>
-    <string name="title_advanced_identicons">Pokazuje ikony kontaktów</string>
+    <string name="title_advanced_identicons">Pokaż ikony kontaktów</string>
     <string name="title_advanced_circular">Pokaż okrągłe ikony</string>
     <string name="title_advanced_color_saturation">Nasycenie</string>
     <string name="title_advanced_color_value">Jasność</string>
@@ -314,8 +314,8 @@
     <string name="title_advanced_replace_name">Preferuj nazwę kontaktu nad nazwą wysłaną</string>
     <string name="title_advanced_distinguish_contacts">Podkreśl nadawcę, gdy znany jest jako lokalny kontakt „do”</string>
     <string name="title_advanced_show_recipients">Pokaż odbiorców w nagłówku wiadomości</string>
-    <string name="title_advanced_font_size_sender">Rozmiar czcionki nadawcy</string>
-    <string name="title_advanced_font_size_subject">Rozmiar czcionki tematu</string>
+    <string name="title_advanced_font_size_sender">Rozmiar tekstu nadawcy</string>
+    <string name="title_advanced_font_size_subject">Rozmiar tekstu tematu</string>
     <string name="title_advanced_subject_top">Pokaż temat nad nadawcą</string>
     <string name="title_advanced_subject_italic">Temat wyświetlaj kursywą</string>
     <string name="title_advanced_subject_elipsed">W razie potrzeby skróć temat</string>
@@ -509,7 +509,8 @@
     <string name="title_advanced_sender">Zezwól na edycję adresu nadawcy</string>
     <string name="title_advanced_sender_regex">Regex, aby dopasować nazwę użytkownika dla przychodzących adresów e-mail</string>
     <string name="title_identity_reply_to">Odpowiedz na adres</string>
-    <string name="title_identity_unicode">Zezwalaj na Unicode w adresach e-mail</string>
+    <string name="title_identity_unicode">Użyj transportu Unicode</string>
+    <string name="title_identity_unicode_remark">Większość serwerów nie wspiera tego</string>
     <string name="title_identity_max_size">Maksymalny rozmiar wiadomości (MB)</string>
     <string name="title_identity_receipt">Domyślnie żądaj potwierdzenia odbioru/odczytu</string>
     <string name="title_identity_use_ip_hint">W przypadku „nieprawidłowego powitania”, „wymaga prawidłowego adresu” lub podobnego błędu spróbuj zmienić to ustawienie</string>
@@ -1205,9 +1206,10 @@
     <string name="title_widget_folder_unified">Foldery wspólnej skrzynki odbiorczej</string>
     <string name="title_widget_unseen">Tylko nieprzeczytane wiadomości</string>
     <string name="title_widget_flagged">Tylko oznaczone</string>
-    <string name="title_widget_font_size">Rozmiar czcionki</string>
+    <string name="title_widget_font_size">Rozmiar tekstu</string>
     <string name="title_widget_padding">Rozmiar wypełnienia</string>
     <string name="title_widget_semi_transparent">Półprzezroczyste tło</string>
+    <string name="title_widget_background">Kolor tła</string>
     <string name="title_accessibility_collapsed">Zwinięta</string>
     <string name="title_accessibility_expanded">Rozwinięta</string>
     <string name="title_accessibility_seen">Przeczytana</string>

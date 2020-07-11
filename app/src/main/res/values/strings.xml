@@ -345,8 +345,8 @@
     <string name="title_advanced_replace_name">Prefer a contact name over a sent name</string>
     <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
     <string name="title_advanced_show_recipients">Show recipients in message header</string>
-    <string name="title_advanced_font_size_sender">Font size sender</string>
-    <string name="title_advanced_font_size_subject">Font size subject</string>
+    <string name="title_advanced_font_size_sender">Text size sender</string>
+    <string name="title_advanced_font_size_subject">Text size subject</string>
     <string name="title_advanced_subject_top">Show subject above sender</string>
     <string name="title_advanced_subject_italic">Show subject in italics</string>
     <string name="title_advanced_subject_elipsed">When needed, shorten the subject</string>
@@ -457,7 +457,7 @@
     <string name="title_advanced_manage_keys">Manage private keys</string>
     <string name="title_advanced_ca">Installed CA certificates</string>
     <string name="title_advanced_manage_keys_hint">
-        This will navigate to the Android security settings.
+        This will open to the Android security settings.
         Keys and certificates can generally be found under Advanced - Encryption and credentials.
     </string>
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$d</string>
@@ -571,7 +571,8 @@
     <string name="title_advanced_sender">Allow editing sender address</string>
     <string name="title_advanced_sender_regex">Regex to match username of incoming email addresses</string>
     <string name="title_identity_reply_to">Reply to address</string>
-    <string name="title_identity_unicode">Allow Unicode in email addresses</string>
+    <string name="title_identity_unicode">Use Unicode transport</string>
+    <string name="title_identity_unicode_remark">Most servers do not support this</string>
     <string name="title_identity_max_size">Maximum message size (MB)</string>
     <string name="title_identity_receipt">Request delivery/read receipt by default</string>
     <string name="title_identity_use_ip_hint">In case of \'invalid greeting\', \'requires valid address\' or a similar error, try to change this setting</string>
@@ -1334,9 +1335,10 @@
     <string name="title_widget_folder_unified">Unified inbox folders</string>
     <string name="title_widget_unseen">Unread messages only</string>
     <string name="title_widget_flagged">Starred messages only</string>
-    <string name="title_widget_font_size">Font size</string>
+    <string name="title_widget_font_size">Text size</string>
     <string name="title_widget_padding">Padding size</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
+    <string name="title_widget_background">Background color</string>
 
     <string name="title_accessibility_collapsed">Collapsed</string>
     <string name="title_accessibility_expanded">Expanded</string>

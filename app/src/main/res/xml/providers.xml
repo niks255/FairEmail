@@ -110,7 +110,7 @@
         name="Sky.com"
         appPassword="true"
         domain="sky\\.com"
-        link="https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail">
+        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88">
         <imap
             host="imap.tools.sky.com"
             port="993"
@@ -740,6 +740,19 @@
             starttls="false" />
         <smtp
             host="poczta.o2.pl"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Onet"
+        domain="onet\\.pl"
+        link="https://pomoc.poczta.onet.pl/baza-wiedzy/konfiguracja-poczty-na-urzadzeniach-mobilnych/">
+        <imap
+            host="imap.poczta.onet.pl"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.poczta.onet.pl"
             port="465"
             starttls="false" />
     </provider>

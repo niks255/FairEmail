@@ -860,7 +860,7 @@ class Core {
         if (istore.hasCapability("UIDPLUS")) {
             // https://tools.ietf.org/html/rfc4315
             AppendUID[] uids = ifolder.appendUIDMessages(new Message[]{imessage});
-            if (uids != null && uids.length > 0 && uids[0].uid > 0) {
+            if (uids != null && uids.length > 0 && uids[0] != null && uids[0].uid > 0) {
                 newuid = uids[0].uid;
                 Log.i(folder.name + " appended uid=" + newuid);
             }
@@ -1514,7 +1514,7 @@ class Core {
             for (Folder ifolder : isubscribed) {
                 String fullName = ifolder.getFullName();
                 if (TextUtils.isEmpty(fullName)) {
-                    Log.e("Subscribed folder name empty namespace=" + defaultFolder.getFullName());
+                    Log.w("Subscribed folder name empty namespace=" + defaultFolder.getFullName());
                     continue;
                 }
                 subscription.add(fullName);

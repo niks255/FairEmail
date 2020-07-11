@@ -1653,7 +1653,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private void optimizeAccount(Context context, EntityAccount account, String reason) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean auto_optimize = prefs.getBoolean("auto_optimize", true);
+        boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
         if (!auto_optimize)
             return;
 
@@ -1671,7 +1671,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             } finally {
                 db.endTransaction();
             }
-            ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);
+            ServiceSynchronize.reschedule(ServiceSynchronize.this);
         } else if (pollInterval <= 60 && account.poll_exempted) {
             db.account().setAccountPollExempted(account.id, false);
             ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);

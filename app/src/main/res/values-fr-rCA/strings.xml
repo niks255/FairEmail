@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Recherche FairEmail</string>
-    <string name="app_changelog">Historique des modifications</string>
+    <string name="app_changelog">Journal des modifications</string>
     <string name="app_welcome">FairEmail est une application de messagerie open source axée sur la confidentialité et la sécurité. C’est pourquoi certaines fonctionnalités peuvent être différentes de ce à quoi vous êtes habitué·e.</string>
     <string name="app_limitations">Par exemple, les messages seront toujours reformatés afin d’en retirer les éléments non sûrs tout en améliorant leur lisibilité et l’ouverture des liens devra être confirmée par sécurité.</string>
     <string name="app_crash">FairEmail n\'est pas pris en charge sur cet appareil parce que des bogues dans Android provoquent des plantages</string>
     <string name="app_exit">Faites de nouveau « Retour » pour quitter</string>
     <string name="channel_service">Réception</string>
-    <string name="channel_send">Envoyer</string>
+    <string name="channel_send">Envoi</string>
     <string name="channel_notification">Notifications</string>
     <string name="channel_update">Mises à jour</string>
     <string name="channel_warning">Avertissements</string>
@@ -219,7 +219,7 @@
     <string name="title_advanced_section_misc">Divers</string>
     <string name="title_advanced_receive">Recevoir des messages pour tous les comptes</string>
     <string name="title_advanced_when">Quand</string>
-    <string name="title_advanced_always">Toujours recevoir des messages pour ces comptes</string>
+    <string name="title_advanced_always">Recevoir les messages en continu pour ces comptes</string>
     <string name="title_advanced_schedule">Planification</string>
     <string name="title_advanced_advanced">Avancé</string>
     <string name="title_advanced_no_date">Messages sans date</string>
@@ -293,8 +293,8 @@
     <string name="title_advanced_replace_name">Préférer un nom de contact à un nom d’envoi</string>
     <string name="title_advanced_distinguish_contacts">Souligner l’expéditeur quand il est connu comme contact local</string>
     <string name="title_advanced_show_recipients">Afficher les destinataires dans l’en-tête du message</string>
-    <string name="title_advanced_font_size_sender">Taille de police de l’expéditeur</string>
-    <string name="title_advanced_font_size_subject">Taille de police de l’objet</string>
+    <string name="title_advanced_font_size_sender">Taille de police du champ « Expéditeur »</string>
+    <string name="title_advanced_font_size_subject">Taille de police du champ « Objet »</string>
     <string name="title_advanced_subject_top">Afficher l’objet au dessus de l’expéditeur</string>
     <string name="title_advanced_subject_italic">Afficher l’objet en italique</string>
     <string name="title_advanced_subject_elipsed">Raccourcir l’objet si nécessaire</string>
@@ -488,7 +488,8 @@
     <string name="title_advanced_sender">Autoriser la modification de l’adresse de l’expéditeur</string>
     <string name="title_advanced_sender_regex">Expression régulière pour faire correspondre le nom d’utilisateur des adresses courriel entrantes</string>
     <string name="title_identity_reply_to">Répondre à l’adresse</string>
-    <string name="title_identity_unicode">Autoriser l\'Unicode dans les adresses courriel</string>
+    <string name="title_identity_unicode">Utiliser le transport Unicode</string>
+    <string name="title_identity_unicode_remark">La plupart des serveurs ne prennent pas ceci en charge</string>
     <string name="title_identity_max_size">Taille maximale du message (Mo)</string>
     <string name="title_identity_receipt">Demander une confirmation de réception/lecture par défaut</string>
     <string name="title_identity_use_ip_hint">En cas d’erreur « invalid greeting », « requires valid adress » ou similaire, essayez de modifier ce paramètre</string>
@@ -1188,6 +1189,7 @@
     <string name="title_widget_font_size">Taille de police</string>
     <string name="title_widget_padding">Taille de l\'espacement des messages</string>
     <string name="title_widget_semi_transparent">Arrière-plan semi-transparent</string>
+    <string name="title_widget_background">Couleur d\'arrière-plan</string>
     <string name="title_accessibility_collapsed">Réduit</string>
     <string name="title_accessibility_expanded">Développé</string>
     <string name="title_accessibility_seen">Lu</string>
