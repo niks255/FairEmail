@@ -5,7 +5,8 @@
     <string name="app_welcome">FairEmail è un\'app opensource di posta focalizzata su privacy e sicurezza. Per questo motivo alcune caratteristiche potrebbero funzionare in modo diverso da quello a cui si è abituati.</string>
     <string name="app_limitations">Ad esempio, i messaggi verranno sempre riformattati per rimuovere elementi non sicuri e per migliorare la leggibilità e l\'apertura dei collegamenti deve essere confermata per sicurezza.</string>
     <string name="app_crash">FairEmail non è supportata su questo dispositivo a causa di bug in Android che causano crash</string>
-    <string name="app_exit">Premi di nuovo \'indietro\' per uscire</string>
+    <string name="app_exit">Premi di nuovo «indietro» per uscire</string>
+    <string name="app_cake">Spazio di archiviazione insufficiente</string>
     <string name="channel_service">Ricevi</string>
     <string name="channel_send">Invia</string>
     <string name="channel_notification">Notifiche</string>
@@ -120,6 +121,7 @@
     </string>
     <string name="title_setup_quick">Configurazione rapida</string>
     <string name="title_setup_quick_remark">Per impostare rapidamente un account e un\'identità per la maggior parte dei provider</string>
+    <string name="title_setup_quick_support">Alcuni fornitori rendono difficile aggiungere un account. Per favore non incolpare FairEmail per questo ma chiedi aiuto invece.</string>
     <string name="title_setup_quick_hint">La configurazione rapida recupererà le informazioni di configurazione da autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">Server IMAP per ricevere messaggi</string>
     <string name="title_setup_quick_smtp">Server SMTP per inviare messaggi</string>
@@ -336,6 +338,7 @@
     <string name="title_advanced_collapse_multiple">Comprimi i messaggi in una conversazione con più messaggi premendo \'indietro\'</string>
     <string name="title_advanced_autoclose">Chiudi automaticamente le conversazioni</string>
     <string name="title_advanced_onclose">Alla chiusura di una conversazione</string>
+    <string name="title_advanced_undo">Scadenza dell’annullamento</string>
     <string name="title_advanced_quick_filter">Mostra icone di filtri rapidi non vistose</string>
     <string name="title_advanced_quick_scroll">Mostra icone di scorrimento rapido non vistose</string>
     <string name="title_advanced_autoread">Segna automaticamente i messaggi come letti quando si spostano</string>
@@ -546,6 +549,7 @@
     <string name="title_no_password">Password mancante</string>
     <string name="title_no_inbox">Posta in arrivo non trovata</string>
     <string name="title_no_primary_drafts">Nessun account principale o nessuna cartella bozze</string>
+    <string name="title_no_junk_folder">Non c\'è nessuna cartella spam selezionata per questo account</string>
     <string name="title_no_identities">L\'invio di email richiede almeno un\'identità e una cartella bozze</string>
     <string name="title_no_standard">Questo fornitore utilizza un protocollo di posta elettronica proprietario e quindi non è possibile utilizzare client di terze parti</string>
     <string name="title_no_idle">Questo fornitore non supporta i messaggi push. Ciò ritarderà la ricezione di nuovi messaggi e aumenterà l\'utilizzo della batteria.</string>
@@ -707,7 +711,6 @@
     <string name="title_no_camera">Nessuna app per la fotocamera adatta</string>
     <string name="title_no_saf">Storage access framework non disponibile</string>
     <string name="title_no_stream">Un\'app obsoleta ha inviato un percorso file invece di un flusso di file</string>
-    <string name="title_no_contacts">Selettore di contatti non disponibile</string>
     <string name="title_no_internet">Nessuna connessione internet adeguata</string>
     <string name="title_no_connection">Connessione a uno o più account &#8230;</string>
     <string name="title_no_folder">La cartella non esiste</string>
@@ -788,7 +791,6 @@
     <string name="title_add_image_inline">Inserisci</string>
     <string name="title_add_image_attach">Allega</string>
     <string name="title_add_image_resize">Ridimensiona</string>
-    <string name="title_add_image_privacy">Rimuovi posizione geografica</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Seleziona file</string>
     <string name="title_add_attachment">Aggiungi allegato</string>
@@ -796,6 +798,7 @@
     <string name="title_attachment_photo">Scatta una foto</string>
     <string name="title_attachment_audio">Registra audio</string>
     <string name="title_show_addresses">Mostra CC/CCN</string>
+    <string name="title_save_drafts">Salva bozze sul server</string>
     <string name="title_send_dialog">Mostra opzioni invio</string>
     <string name="title_image_dialog">Mostra opzioni immagine</string>
     <string name="title_media_toolbar">Barra strumenti media</string>
@@ -982,6 +985,7 @@
     <string name="title_rule_tts_prefix">Nuovo messaggio</string>
     <string name="title_rule_tts_from">Da</string>
     <string name="title_rule_tts_subject">Oggetto</string>
+    <string name="title_rule_tts_content">Testo</string>
     <string name="title_legend_section_synchronize">Sincronizza</string>
     <string name="title_legend_section_folders">Cartelle</string>
     <string name="title_legend_section_messages">Messaggi</string>
@@ -1100,6 +1104,7 @@
     <string name="title_hint_eml">Questo è un riepilogo del contenuto di un file di messaggio grezzo. Salva il messaggio grezzo con l\'icona di salvataggio nella barra azioni per vedere tutto il contenuto.</string>
     <string name="title_open_link">Apri collegamento</string>
     <string name="title_different_link">Il titolo del link e l\'indirizzo sono diversi</string>
+    <string name="title_tracking_link">Questo sito web potrebbe tracciarti</string>
     <string name="title_link_http">Il traffico non verrà criptato</string>
     <string name="title_link_https">Il traffico verrà crittografato</string>
     <string name="title_sanitize_link">Rimuovi i parametri di tracciamento</string>
@@ -1177,6 +1182,7 @@
     <string name="title_debug_info">Informazioni di debug</string>
     <string name="title_debug_info_remark">Si prega di descrivere il problema ed indicare il momento in cui è avvenuto:</string>
     <string name="title_crash_info_remark">Descrivi cosa stavi facendo quando l\'app si è interrotta:</string>
+    <string name="title_unexpected_info_remark">Descrivi cosa stavi facendo quando l\'errore è successo:</string>
     <string name="title_widget_title_count">Nuovo conteggio dei messaggi</string>
     <string name="title_widget_title_list">Elenco messaggi</string>
     <string name="title_widget_account">Account</string>
@@ -1335,6 +1341,13 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Disattivato</item>
+        <item>2,5 s</item>
+        <item>5 s</item>
+        <item>7,5 s</item>
+        <item>10 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Corsivo</item>

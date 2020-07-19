@@ -673,7 +673,6 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_no_camera">Nem elérhető használható kamera alkalmazás</string>
     <string name="title_no_saf">Tárhely hozzáférés keretrendszer nem elérhető</string>
     <string name="title_no_stream">Egy elavult alkalmazás egy fájl elérési utat küldött egy file stream helyett</string>
-    <string name="title_no_contacts">A névjegyválasztó nem elérhető</string>
     <string name="title_no_internet">Nincs vagy nem használható az internet kapcsolat</string>
     <string name="title_no_connection">Csatlakozás egy vagy több fiókhoz &#8230;</string>
     <string name="title_no_folder">A mappa nem létezik</string>
@@ -748,13 +747,13 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_style_size_large">Nagy</string>
     <string name="title_style_font">Betűtípus</string>
     <string name="title_style_font_default">Alapértelmezett</string>
+    <string name="title_style_color">Szín &#8230;</string>
     <string name="title_style_clear">Formázás törlése</string>
     <string name="title_style_link">Hivatkozás beillesztése</string>
     <string name="title_add_image">Kép hozzáadása</string>
     <string name="title_add_image_inline">Beszúrás</string>
     <string name="title_add_image_attach">Csatolás</string>
     <string name="title_add_image_resize">Átméretezés</string>
-    <string name="title_add_image_privacy">Földrajzi hely eltávolítása</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixelek</string>
     <string name="title_add_image_select">Fájl kiválasztása</string>
     <string name="title_add_attachment">Melléklet hozzáadása</string>
@@ -903,6 +902,7 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_rule_move">Áthelyezés</string>
     <string name="title_rule_copy">Másolás (cím)</string>
     <string name="title_rule_answer">Válasz</string>
+    <string name="title_rule_tts">Szövegfelolvasás</string>
     <string name="title_rule_automation">Automatizálás</string>
     <string name="title_rule_caption">Szabály szerkesztése</string>
     <string name="title_rule_title">A szabály érvényes erre</string>
@@ -938,6 +938,7 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_rule_no_headers">Fejléc kondíciók nem ellenőrizhetők</string>
     <string name="title_rule_matched">Egyező üzenetek</string>
     <string name="title_rule_no_matches">Nincs egyező üzenet</string>
+    <string name="title_rule_tts_data">Hangadatok telepítése</string>
     <string name="title_rule_tts_prefix">Új üzenet</string>
     <string name="title_rule_tts_from">Feladó</string>
     <string name="title_rule_tts_subject">Tárgy</string>

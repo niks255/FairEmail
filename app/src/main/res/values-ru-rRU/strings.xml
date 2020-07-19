@@ -6,6 +6,7 @@
     <string name="app_limitations">Например, сообщения всегда будут переформатированы, чтобы удалить небезопасные элементы и улучшить читабельность, а также открытие ссылок требует подтверждения в целях безопасности.</string>
     <string name="app_crash">FairEmail не поддерживается на этом устройстве, так как ошибки в Android вызывают сбои</string>
     <string name="app_exit">Для выхода снова перейдите \"назад\"</string>
+    <string name="app_cake">Недостаточно места</string>
     <string name="channel_service">Получение</string>
     <string name="channel_send">Отправка</string>
     <string name="channel_notification">Уведомления</string>
@@ -142,6 +143,7 @@
     </string>
     <string name="title_setup_quick">Быстрая настройка</string>
     <string name="title_setup_quick_remark">Быстрая настройка учётной записи и идентификатора для большинства провайдеров</string>
+    <string name="title_setup_quick_support">Некоторые провайдеры затрудняют добавление учётной записи. Пожалуйста, не обвиняйте в этом FairEmail, а попросите поддержку.</string>
     <string name="title_setup_quick_hint">Быстрая настройка считывает информацию о конфигурации с autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-сервер для получения сообщений</string>
     <string name="title_setup_quick_smtp">SMTP-сервер для отправки сообщений</string>
@@ -358,6 +360,7 @@
     <string name="title_advanced_collapse_multiple">Сворачивать сообщения в диалоге с несколькими сообщениями кнопкой \"назад\"</string>
     <string name="title_advanced_autoclose">Автоматически закрывать диалоги</string>
     <string name="title_advanced_onclose">При закрытии диалога</string>
+    <string name="title_advanced_undo">Время отмены</string>
     <string name="title_advanced_quick_filter">Показывать ненавязчивые значки быстрого фильтра</string>
     <string name="title_advanced_quick_scroll">Показывать ненавязчивые значки быстрой прокрутки вверх/вниз</string>
     <string name="title_advanced_autoread">Автоматически помечать сообщения прочитанными при перемещении</string>
@@ -568,6 +571,7 @@
     <string name="title_no_password">Отсутствует пароль</string>
     <string name="title_no_inbox">Папка \"Входящие\" не найдена</string>
     <string name="title_no_primary_drafts">Нет основной учётной записи или папки черновиков</string>
+    <string name="title_no_junk_folder">Для этой учётной записи не выбрана папка со спамом</string>
     <string name="title_no_identities">Отправка писем требует наличия хотя бы одного идентификатора и папки черновиков</string>
     <string name="title_no_standard">Этот провайдер использует проприетарный протокол электронной почты, что не позволяет использовать сторонние почтовые клиенты</string>
     <string name="title_no_idle">Данный провайдер не поддерживает push-сообщения. Это задержит получение новых сообщений и увеличит расход заряда батареи.</string>
@@ -729,7 +733,6 @@
     <string name="title_no_camera">Нет подходящего приложения камеры</string>
     <string name="title_no_saf">Нет метода доступа к хранилищу</string>
     <string name="title_no_stream">Устаревшее приложение послало путь к файлу вместо файлового потока</string>
-    <string name="title_no_contacts">Выбор контакта недоступен</string>
     <string name="title_no_internet">Нет или нет подходящего интернет-соединения</string>
     <string name="title_no_connection">Подключение к одной или нескольким учётным записям &#8230;</string>
     <string name="title_no_folder">Папка не существует</string>
@@ -811,7 +814,8 @@
     <string name="title_add_image_inline">Вставить</string>
     <string name="title_add_image_attach">Прикрепить</string>
     <string name="title_add_image_resize">Изменить размер</string>
-    <string name="title_add_image_privacy">Удалять место съёмки</string>
+    <string name="title_add_image_privacy">Удалить конфиденциальные данные</string>
+    <string name="title_add_image_privacy_remark">Географическое местоположение, серийные номера и т.п.</string>
     <string name="title_add_resize_pixels">&lt; %1$d пикс.</string>
     <string name="title_add_image_select">Выбрать файл</string>
     <string name="title_add_attachment">Добавить вложение</string>
@@ -819,6 +823,7 @@
     <string name="title_attachment_photo">Сделать фотографию</string>
     <string name="title_attachment_audio">Записать аудио</string>
     <string name="title_show_addresses">Показать копию/скрытую копию</string>
+    <string name="title_save_drafts">Сохранять черновики на сервере</string>
     <string name="title_send_dialog">Параметры отправки</string>
     <string name="title_image_dialog">Параметры изображения</string>
     <string name="title_media_toolbar">Панель медиа</string>
@@ -1005,6 +1010,7 @@
     <string name="title_rule_tts_prefix">Новое сообщение</string>
     <string name="title_rule_tts_from">От</string>
     <string name="title_rule_tts_subject">Тема</string>
+    <string name="title_rule_tts_content">Текст</string>
     <string name="title_legend_section_synchronize">Синхронизация</string>
     <string name="title_legend_section_folders">Папки</string>
     <string name="title_legend_section_messages">Сообщения</string>
@@ -1123,6 +1129,7 @@
     <string name="title_hint_eml">Это обзор содержимого файла оригинального сообщения. Сохраните его с помощью значка \"Сохранить\" на панели действий, чтобы просмотреть содержимое полностью.</string>
     <string name="title_open_link">Открыть ссылку</string>
     <string name="title_different_link">Заголовок и адрес ссылки отличаются</string>
+    <string name="title_tracking_link">Этот сайт может отслеживать вас</string>
     <string name="title_link_http">Не шифровать трафик</string>
     <string name="title_link_https">Трафик будет зашифрован</string>
     <string name="title_sanitize_link">Удалить параметры отслеживания</string>
@@ -1141,6 +1148,7 @@
     <string name="title_add">Добавить</string>
     <string name="title_browse">В браузере</string>
     <string name="title_info">Информация</string>
+    <string name="title_download">Загрузить</string>
     <string name="title_report">Отчёт</string>
     <string name="title_fix">Исправить</string>
     <string name="title_enable">Включить</string>
@@ -1200,6 +1208,7 @@
     <string name="title_debug_info">Отладочная информация</string>
     <string name="title_debug_info_remark">Пожалуйста, опишите проблему и укажите момент её возникновения:</string>
     <string name="title_crash_info_remark">Пожалуйста, опишите, что вы делали, когда в приложении произошёл сбой:</string>
+    <string name="title_unexpected_info_remark">Пожалуйста, опишите, что вы делали, когда получили ошибку:</string>
     <string name="title_widget_title_count">Количество новых сообщений</string>
     <string name="title_widget_title_list">Список сообщений</string>
     <string name="title_widget_account">Учётная запись</string>
@@ -1360,6 +1369,13 @@
         <item>10 МБ</item>
         <item>20 МБ</item>
         <item>50 МБ</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Выкл.</item>
+        <item>2,5 с</item>
+        <item>5 сек. </item>
+        <item>7,5 с</item>
+        <item>10 сек. </item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Курсив</item>

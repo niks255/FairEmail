@@ -22,17 +22,18 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -44,6 +45,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -63,7 +65,7 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
 
     private List<EntityAttachment> items = new ArrayList<>();
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private View view;
         private ImageButton ibDelete;
         private ImageView ivType;
@@ -96,12 +98,14 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
             view.setOnClickListener(this);
             ibDelete.setOnClickListener(this);
             ibSave.setOnClickListener(this);
+            view.setOnLongClickListener(this);
         }
 
         private void unwire() {
             view.setOnClickListener(null);
             ibDelete.setOnClickListener(null);
             ibSave.setOnClickListener(null);
+            view.setOnLongClickListener(null);
         }
 
         private void bindTo(EntityAttachment attachment) {
@@ -110,7 +114,7 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
             ibDelete.setVisibility(readonly ? View.GONE : View.VISIBLE);
 
             int resid = 0;
-            String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(attachment.getMimeType());
+            String extension = Helper.guessExtension(attachment.getMimeType());
             if (extension != null)
                 resid = context.getResources().getIdentifier("file_" + extension, "drawable", context.getPackageName());
             if (resid == 0)
@@ -184,6 +188,29 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                         onDownload(attachment);
                 }
             }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int pos = getAdapterPosition();
+            if (pos == RecyclerView.NO_POSITION)
+                return false;
+
+            EntityAttachment attachment = items.get(pos);
+            if (attachment == null || !attachment.available)
+                return false;
+
+            File file = attachment.getFile(context);
+            Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+
+            Intent send = new Intent();
+            send.setAction(Intent.ACTION_SEND);
+            send.putExtra(Intent.EXTRA_STREAM, uri);
+            send.setType(attachment.getMimeType());
+            send.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(Intent.createChooser(send, context.getString(R.string.title_select_app)));
+
+            return true;
         }
 
         private void onDelete(final EntityAttachment attachment) {

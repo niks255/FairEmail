@@ -6,6 +6,7 @@
     <string name="app_limitations">Przykładowo, wiadomości będą zawsze przeformatowane, aby usunąć niebezpieczne elementy i zwiększyć czytelność, a otwieranie linków musi być potwierdzane dla zachowania bezpieczeństwa.</string>
     <string name="app_crash">FairEmail nie jest obsługiwany na tym urządzeniu, ponieważ błędy w Androidzie powodują awarie</string>
     <string name="app_exit">Ponownie \'wstecz\', aby wyjść</string>
+    <string name="app_cake">Za mało miejsca w pamięci</string>
     <string name="channel_service">Odbierz</string>
     <string name="channel_send">Wyślij</string>
     <string name="channel_notification">Powiadomienia</string>
@@ -141,6 +142,7 @@
     </string>
     <string name="title_setup_quick">Szybkie ustawienia</string>
     <string name="title_setup_quick_remark">Aby szybko skonfigurować konto i tożsamość dla większości dostawców</string>
+    <string name="title_setup_quick_support">Niektórzy dostawcy utrudniają dodanie konta. To nie jest wina FairEmail. W razie problemów poproś o pomoc.</string>
     <string name="title_setup_quick_hint">Szybka konfiguracja pobierze informacje o ustawieniach z autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">Serwer IMAP do odbierania wiadomości</string>
     <string name="title_setup_quick_smtp">Serwer SMTP do wysyłania wiadomości</string>
@@ -357,6 +359,7 @@
     <string name="title_advanced_collapse_multiple">Zwiń wiadomości w rozmowie z wieloma wiadomościami przy \'wstecz\'</string>
     <string name="title_advanced_autoclose">Automatycznie zamykaj konwersacje</string>
     <string name="title_advanced_onclose">Przy zamykaniu wiadomości</string>
+    <string name="title_advanced_undo">Ustaw limit czasu dla \"Cofnij\"</string>
     <string name="title_advanced_quick_filter">Pokaż nienatarczywe ikony szybkiego filtrowania</string>
     <string name="title_advanced_quick_scroll">Pokaż nienatarczywe ikony szybkiego przewijania w górę/w dół</string>
     <string name="title_advanced_autoread">Automatycznie oznacz wiadomość jako przeczytaną przy przenoszeniu</string>
@@ -567,6 +570,7 @@
     <string name="title_no_password">Brak hasła</string>
     <string name="title_no_inbox">Nie znaleziono skrzynki odbiorczej</string>
     <string name="title_no_primary_drafts">Brak konta podstawowego lub brak folderu szkiców</string>
+    <string name="title_no_junk_folder">Dla tego konta nie wybrano folderu spam</string>
     <string name="title_no_identities">Wysyłanie wiadomości e-mail wymaga co najmniej jednej tożsamości i folderu kopii roboczych</string>
     <string name="title_no_standard">Ten dostawca korzysta z zastrzeżonego protokołu e-mail i dlatego nie jest możliwe korzystanie z klientów e-mail firm trzecich</string>
     <string name="title_no_idle">Ten dostawca nie obsługuje wiadomości push. To opóźni otrzymywanie nowych wiadomości i zwiększy zużycie baterii.</string>
@@ -728,7 +732,6 @@
     <string name="title_no_camera">Brak dostępnej odpowiedniej aplikacji aparatu</string>
     <string name="title_no_saf">Brak dostępu do plików</string>
     <string name="title_no_stream">Nieaktualna aplikacja wysłała ścieżkę pliku zamiast strumienia pliku</string>
-    <string name="title_no_contacts">Wybór kontaktu jest niedostępny</string>
     <string name="title_no_internet">Brak lub brak odpowiedniego połączenia internetowego</string>
     <string name="title_no_connection">Łączenie z jednym lub kilkoma kontami &#8230;</string>
     <string name="title_no_folder">Folder nie istnieje</string>
@@ -810,7 +813,8 @@
     <string name="title_add_image_inline">Wstaw</string>
     <string name="title_add_image_attach">Załącz</string>
     <string name="title_add_image_resize">Zmień rozmiar</string>
-    <string name="title_add_image_privacy">Usuń lokalizację geograficzną</string>
+    <string name="title_add_image_privacy">Usuń wrażliwe prywatne dane</string>
+    <string name="title_add_image_privacy_remark">Lokalizacja geograficzna, numery seryjne, itp.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pikseli</string>
     <string name="title_add_image_select">Wybierz plik</string>
     <string name="title_add_attachment">Dodaj załącznik</string>
@@ -818,6 +822,7 @@
     <string name="title_attachment_photo">Zrób zdjęcie</string>
     <string name="title_attachment_audio">Nagraj dźwięk</string>
     <string name="title_show_addresses">Pokaż DW/UDW</string>
+    <string name="title_save_drafts">Zapisz szkice na serwerze</string>
     <string name="title_send_dialog">Pokaż opcje wysyłania</string>
     <string name="title_image_dialog">Pokaż opcje obrazu</string>
     <string name="title_media_toolbar">Pasek mediów</string>
@@ -1004,6 +1009,7 @@
     <string name="title_rule_tts_prefix">Nowa wiadomość</string>
     <string name="title_rule_tts_from">Od</string>
     <string name="title_rule_tts_subject">Temat</string>
+    <string name="title_rule_tts_content">Tekst</string>
     <string name="title_legend_section_synchronize">Synchronizuj</string>
     <string name="title_legend_section_folders">Foldery</string>
     <string name="title_legend_section_messages">Wiadomości</string>
@@ -1122,6 +1128,7 @@
     <string name="title_hint_eml">To jest podsumowanie zawartości nieprzetworzonego pliku wiadomości. Zapisz nieprzetworzoną wiadomość używając ikony zapisu na pasku akcji, aby wyświetlić całą zawartość.</string>
     <string name="title_open_link">Otwórz link</string>
     <string name="title_different_link">Tytuł i adres linku są różne</string>
+    <string name="title_tracking_link">Ta strona może Cię śledzić</string>
     <string name="title_link_http">Ruch nie będzie szyfrowany</string>
     <string name="title_link_https">Ruch będzie szyfrowany</string>
     <string name="title_sanitize_link">Usuń parametry śledzenia</string>
@@ -1140,6 +1147,7 @@
     <string name="title_add">Dodaj</string>
     <string name="title_browse">Otwórz za pomocą</string>
     <string name="title_info">Info</string>
+    <string name="title_download">Pobierz</string>
     <string name="title_report">Zgłoś błąd</string>
     <string name="title_fix">Popraw</string>
     <string name="title_enable">Włącz</string>
@@ -1198,6 +1206,7 @@
     <string name="title_debug_info">Info debugowania</string>
     <string name="title_debug_info_remark">Opisz proszę problem i wskaż moment jego wystąpienia:</string>
     <string name="title_crash_info_remark">Opisz proszę, co robisz, w momencie awarii aplikacji:</string>
+    <string name="title_unexpected_info_remark">Opisz proszę, co robiłeś, w momencie awarii aplikacji:</string>
     <string name="title_widget_title_count">Liczba nowych wiadomości</string>
     <string name="title_widget_title_list">Lista wiadomości</string>
     <string name="title_widget_account">Konto</string>
@@ -1358,6 +1367,13 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Wył.</item>
+        <item>2,5 s</item>
+        <item>5 s</item>
+        <item>7,5 s</item>
+        <item>10 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursywa</item>

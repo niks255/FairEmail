@@ -6,6 +6,7 @@
     <string name="app_limitations">Eksempelvis vil beskeder altid blive omformateret for at fjerne usikre elementer samt for at øge læsbarheden, og åbning af links skal af sikkerhedsårsager bekræftes.</string>
     <string name="app_crash">FairEmail er ikke understøttet på denne enhed, da fejl i Android forårsager nedbrud</string>
     <string name="app_exit">Tryk \'Tilbage\' igen for at afslutte</string>
+    <string name="app_cake">Utilstrækkelig tilgængelig lagerplads</string>
     <string name="channel_service">Modtagelse</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">Notifikationer</string>
@@ -30,7 +31,7 @@
     <string name="shortcut_compose">Skriv</string>
     <string name="shortcut_setup">Indstillinger</string>
     <plurals name="title_notification_synchronizing">
-        <item quantity="one">Monitorere %1$d konto</item>
+        <item quantity="one">Monitorerer %1$d konto</item>
         <item quantity="other">Monitorere %1$d konti</item>
     </plurals>
     <plurals name="title_notification_operations">
@@ -120,6 +121,7 @@
     </string>
     <string name="title_setup_quick">Hurtig opsætning</string>
     <string name="title_setup_quick_remark">For hurtigt at opsætte en konto og identitet for de fleste udbydere</string>
+    <string name="title_setup_quick_support">Visse udbydere besværliggør kontotilføjelse. Bebrejd venligst ikke FairEmail for dette, men anmod i stedet om support.</string>
     <string name="title_setup_quick_hint">Hurtig opsætningen vil hente opsætningsoplysninger fra autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-server til beskedmodtagelse</string>
     <string name="title_setup_quick_smtp">SMTP-server til beskedafsendelse</string>
@@ -336,6 +338,7 @@
     <string name="title_advanced_collapse_multiple">Sammenfold beskeder i en samtale med flere beskeder ved tryk på \'Tilbage\'</string>
     <string name="title_advanced_autoclose">Auto-luk samtaler</string>
     <string name="title_advanced_onclose">Ved lukning af i en samtale</string>
+    <string name="title_advanced_undo">Fortryd timeout</string>
     <string name="title_advanced_quick_filter">Vis ikke-påtrængende hurtige filterikoner</string>
     <string name="title_advanced_quick_scroll">Vis ikke-påtrængende hurtige rul op/ned ikoner</string>
     <string name="title_advanced_autoread">Auto-markér beskeder som læst, når de flyttes</string>
@@ -546,6 +549,7 @@
     <string name="title_no_password">Adgangskode mangler</string>
     <string name="title_no_inbox">Indbakke ikke fundet</string>
     <string name="title_no_primary_drafts">Ingen primærkonto eller kladdemappe</string>
+    <string name="title_no_junk_folder">Der er ikke valgt nogen spammappe til denne konto</string>
     <string name="title_no_identities">Afsendelse af e-mails kræver mindst én identitet og en kladdemappe</string>
     <string name="title_no_standard">Denne udbyder benytter en proprietær e-mailprotokol, og det er derfor ikke muligt at benytte tredjeparts e-mailklienter</string>
     <string name="title_no_idle">Denne udbyder understøtter ikke push-beskeder. Dette vil forsinke modtagelsen af nye beskeder samt forøge strømforbruget.</string>
@@ -707,7 +711,6 @@
     <string name="title_no_camera">Ingen passende kamera-app tilgængelig</string>
     <string name="title_no_saf">Storage access framework ikke tilgængelig</string>
     <string name="title_no_stream">En forældet app har sendt en filsti i stedet for en fil-stream</string>
-    <string name="title_no_contacts">Kontaktvælger ikke tilgængelig</string>
     <string name="title_no_internet">Ingen (passende) dataforbindelse</string>
     <string name="title_no_connection">Opretter forbindelse til én eller flere konti &#8230;</string>
     <string name="title_no_folder">Mappe findes ikke</string>
@@ -789,7 +792,8 @@
     <string name="title_add_image_inline">Indsæt</string>
     <string name="title_add_image_attach">Vedhæft</string>
     <string name="title_add_image_resize">Skalér</string>
-    <string name="title_add_image_privacy">Fjern geografisk placering</string>
+    <string name="title_add_image_privacy">Fjern personsensitive data</string>
+    <string name="title_add_image_privacy_remark">Geografisk placering, serienumre mv.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Vælg fil</string>
     <string name="title_add_attachment">Tilføj vedhæftning</string>
@@ -797,6 +801,7 @@
     <string name="title_attachment_photo">Tag foto</string>
     <string name="title_attachment_audio">Optag lyd</string>
     <string name="title_show_addresses">Vis Cc/Bcc</string>
+    <string name="title_save_drafts">Gem udkast på serveren</string>
     <string name="title_send_dialog">Vis Send-muligheder</string>
     <string name="title_image_dialog">Vis Billed-muligheder</string>
     <string name="title_media_toolbar">Medieværktøjsbjælke</string>
@@ -983,6 +988,7 @@
     <string name="title_rule_tts_prefix">Ny besked</string>
     <string name="title_rule_tts_from">Fra</string>
     <string name="title_rule_tts_subject">Emne</string>
+    <string name="title_rule_tts_content">Tekst</string>
     <string name="title_legend_section_synchronize">Synkronisér</string>
     <string name="title_legend_section_folders">Mapper</string>
     <string name="title_legend_section_messages">Beskeder</string>
@@ -1101,6 +1107,7 @@
     <string name="title_hint_eml">Dette er en oversigt over indholdet af en råformatsbeskedfil. Gem den rå besked med Gem-ikonet i handlingsbjælken for at se alt indhold.</string>
     <string name="title_open_link">Åbn link</string>
     <string name="title_different_link">Titlen og linkadressen er forskellige</string>
+    <string name="title_tracking_link">Dette websted sporer dig muligvis</string>
     <string name="title_link_http">Trafik bliver ikke krypteret</string>
     <string name="title_link_https">Trafik bliver krypteret</string>
     <string name="title_sanitize_link">Fjern sporingsparametre</string>
@@ -1119,6 +1126,7 @@
     <string name="title_add">Tilføj</string>
     <string name="title_browse">Åbn med</string>
     <string name="title_info">Info</string>
+    <string name="title_download">Download</string>
     <string name="title_report">Rapportér</string>
     <string name="title_fix">Ret</string>
     <string name="title_enable">Aktivér</string>
@@ -1178,6 +1186,7 @@
     <string name="title_debug_info">Fejlretningsinfo</string>
     <string name="title_debug_info_remark">Beskriv venligst problemet og angiv tidspunktet for problemet:</string>
     <string name="title_crash_info_remark">Beskriv venligst, hvad du foretog dig, da app\'en gik ned:</string>
+    <string name="title_unexpected_info_remark">Beskriv, hvad du foretog dig, da fejlen opstod:</string>
     <string name="title_widget_title_count">Ny besked-tæller</string>
     <string name="title_widget_title_list">Beskedliste</string>
     <string name="title_widget_account">Konto</string>
@@ -1336,6 +1345,13 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Fra</item>
+        <item>2,5 s</item>
+        <item>5 s</item>
+        <item>7,5 s</item>
+        <item>10 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursiv</item>

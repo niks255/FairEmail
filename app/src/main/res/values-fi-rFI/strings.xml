@@ -5,7 +5,7 @@
     <string name="app_welcome">FairEmail on avoimen lähdekoodin sähköpostiohjelma, joka on keskittynyt yksityisyyteen ja turvallisuuteen. Tästä syystä jotkin ominaisuudet saattavat toimia eri tavalla, kuin mihin olet tottunut.</string>
     <string name="app_limitations">Esimerkiksi viestit muotoillaan aina uudelleen vaarallisten elementtien poistamiseksi ja luettavuuden parantamiseksi, ja linkkien avaaminen pitää turvallisuuden takia erikseen vahvistaa.</string>
     <string name="app_crash">FairEmailia ei tueta tässä laitteessa, koska bugit Androidissa aiheuttavat kaatumisia</string>
-    <string name="app_exit">Mene \'takaisin\' uudelleen poistuaksesi</string>
+    <string name="app_exit">Mene ”takaisin” uudelleen poistuaksesi</string>
     <string name="channel_service">Vastaanottaminen</string>
     <string name="channel_send">Lähettäminen</string>
     <string name="channel_notification">Ilmoitukset</string>
@@ -119,6 +119,7 @@
     </string>
     <string name="title_setup_quick">Pika-asennus</string>
     <string name="title_setup_quick_remark">Tilin ja identiteetin nopeaan asettamiseen useimmille palveluntarjoajille</string>
+    <string name="title_setup_quick_support">Jotkin palveluntarjoajat tekevät tilin lisäämisestä vaikeaa. Älä syytä tästä FairEmailia, vaan kysy sen sijaan tukea.</string>
     <string name="title_setup_quick_hint">Pika-asennus hakee asetustiedot osoitteesta autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-palvelin viestien vastaanottamiseen</string>
     <string name="title_setup_quick_smtp">SMTP-palvelin viestien lähettämiseen</string>
@@ -485,6 +486,8 @@
     <string name="title_advanced_sender">Salli lähetysosoitteen muokkaaminen</string>
     <string name="title_advanced_sender_regex">Regex saapuvien sähköpostien osoitteiden käyttäjätunnuksen täsmäämiseen</string>
     <string name="title_identity_reply_to">Vastausosoite</string>
+    <string name="title_identity_unicode">Käytä Unicode-tiedonsiirtoa</string>
+    <string name="title_identity_unicode_remark">Suurin osa palvelimista ei tue tätä</string>
     <string name="title_identity_max_size">Viestin suurin mahdollinen koko (MB)</string>
     <string name="title_identity_receipt">Pyydä toimitus-/lukukuittaus oletuksena</string>
     <string name="title_identity_use_ip_hint">Virheilmoituksen ollessa \'invalid greeting\', \'requires valid address\' tai muu samankaltainen yritä muuttaa tätä asetusta</string>
@@ -541,6 +544,7 @@
     <string name="title_no_password">Salasana puuttuu</string>
     <string name="title_no_inbox">Saapuneet-kansiota ei löydy</string>
     <string name="title_no_primary_drafts">Ei ensisijainen tili tai ei luonnokset-kansiota</string>
+    <string name="title_no_junk_folder">Tälle tilille ei ole valittu roskapostikansiota</string>
     <string name="title_no_identities">Viestien lähettäminen vaatii vähintään yhden identiteetin ja luonnoskansion</string>
     <string name="title_no_standard">Tämä palveluntarjoaja käyttää omaa sähköpostiprotokollaansa ja siksi kolmansien osapuolten sähköpostiohjelmien käyttö ei ole mahdollista</string>
     <string name="title_no_idle">Tämä palveluntarjoaja ei tue push-viestejä. Tämä viivästyttää uusien viestien vastaanottamista ja lisää akun käyttöä.</string>
@@ -702,7 +706,6 @@
     <string name="title_no_camera">Sopivaa kamerasovellusta ei ole saatavilla</string>
     <string name="title_no_saf">Storage access framework ei ole käytettävissä</string>
     <string name="title_no_stream">Vanhentunut sovellus lähetti tiedoston kansion tiedostovirran sijaan</string>
-    <string name="title_no_contacts">Yhteystiedon valitsin ei ole käytettävissä</string>
     <string name="title_no_internet">Ei verkkoyhteyttä tai ei sopivaa verkkoyhteyttä</string>
     <string name="title_no_connection">Yhdistetään yhteen tai useampaan tiliin &#8230;</string>
     <string name="title_no_folder">Kansiota ei ole</string>
@@ -784,7 +787,6 @@
     <string name="title_add_image_inline">Lisää</string>
     <string name="title_add_image_attach">Liitä</string>
     <string name="title_add_image_resize">Muuta kokoa</string>
-    <string name="title_add_image_privacy">Poista sijaintitiedot</string>
     <string name="title_add_resize_pixels">&lt; %1$d kuvapistettä</string>
     <string name="title_add_image_select">Valitse tiedosto</string>
     <string name="title_add_attachment">Lisää liite</string>
@@ -978,6 +980,7 @@
     <string name="title_rule_tts_prefix">Uusi viesti</string>
     <string name="title_rule_tts_from">Lähettäjä</string>
     <string name="title_rule_tts_subject">Aihe</string>
+    <string name="title_rule_tts_content">Teksti</string>
     <string name="title_legend_section_synchronize">Synkronointi</string>
     <string name="title_legend_section_folders">Kansiot</string>
     <string name="title_legend_section_messages">Viestit</string>
@@ -1331,6 +1334,13 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Pois päältä</item>
+        <item>2,5 s</item>
+        <item>5 s</item>
+        <item>7,5 s</item>
+        <item>10 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursivoitu</item>

@@ -107,14 +107,14 @@ public class MessageHelper {
 
     private static File cacheDir = null;
 
-    static final int SMALL_MESSAGE_SIZE = 64 * 1024; // bytes
-    static final int DEFAULT_ATTACHMENT_DOWNLOAD_SIZE = 256 * 1024; // bytes
+    static final int DEFAULT_DOWNLOAD_SIZE = 256 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
 
     private static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
     private static final long ATTACHMENT_PROGRESS_UPDATE = 1500L; // milliseconds
     private static final int MAX_META_EXCERPT = 1024; // characters
     private static final int FORMAT_FLOWED_LINE_LENGTH = 72;
+    private static final long MIN_REQUIRED_SPACE = 250 * 1024L * 1024L;
 
     // https://tools.ietf.org/html/rfc4021
 
@@ -303,8 +303,11 @@ public class MessageHelper {
 
                         final ContentType cts = new ContentType(attachment.type);
                         String micalg = cts.getParameter("micalg");
-                        if (TextUtils.isEmpty(micalg))
-                            Log.e("PGP micalg missing");
+                        if (TextUtils.isEmpty(micalg)) {
+                            // Some providers strip parameters
+                            // https://tools.ietf.org/html/rfc3156#section-5
+                            Log.w("PGP micalg missing type=" + attachment.type);
+                        }
                         ParameterList params = cts.getParameterList();
                         if (params != null)
                             params.remove("micalg");
@@ -389,7 +392,8 @@ public class MessageHelper {
                         final ContentType cts = new ContentType(attachment.type);
                         String micalg = cts.getParameter("micalg");
                         if (TextUtils.isEmpty(micalg)) {
-                            Log.e("S/MIME micalg missing type=" + attachment.type);
+                            // Some providers strip parameters
+                            Log.w("S/MIME micalg missing type=" + attachment.type);
                             micalg = "sha-256";
                         }
                         ParameterList params = cts.getParameterList();
@@ -755,7 +759,10 @@ public class MessageHelper {
         }
     }
 
-    MessageHelper(MimeMessage message, Context context) {
+    MessageHelper(MimeMessage message, Context context) throws IOException {
+        long cake = Helper.getAvailableStorageSpace();
+        if (cake < MIN_REQUIRED_SPACE)
+            throw new IOException(context.getString(R.string.app_cake));
         if (cacheDir == null)
             cacheDir = context.getCacheDir();
         this.imessage = message;

@@ -6,6 +6,7 @@
     <string name="app_limitations">Par exemple, les messages seront toujours reformatés afin d’en retirer les éléments non sûrs tout en améliorant leur lisibilité et l’ouverture des liens devra être confirmée par sécurité.</string>
     <string name="app_crash">FairEmail n\'est pas pris en charge sur cet appareil parce que des bogues dans Android provoquent des plantages</string>
     <string name="app_exit">Faites de nouveau « Retour » pour quitter</string>
+    <string name="app_cake">Espace de stockage restant insuffisant</string>
     <string name="channel_service">Réception</string>
     <string name="channel_send">Envoi</string>
     <string name="channel_notification">Notifications</string>
@@ -120,6 +121,7 @@
     </string>
     <string name="title_setup_quick">Configuration rapide</string>
     <string name="title_setup_quick_remark">Pour configurer rapidement un compte et une identité pour la plupart des fournisseurs</string>
+    <string name="title_setup_quick_support">Certains fournisseurs rendent difficile l\'ajout d\'un compte. Ne blâmez pas FairEmail pour ceci mais demandez de l\'aide à la place.</string>
     <string name="title_setup_quick_hint">La configuration rapide récupérera les informations de configuration de autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">Serveur IMAP pour la réception des messages</string>
     <string name="title_setup_quick_smtp">Serveur SMTP pour l’envoi des messages</string>
@@ -336,6 +338,7 @@
     <string name="title_advanced_collapse_multiple">Replier les multiples messages d’une conversation en faisant « Retour »</string>
     <string name="title_advanced_autoclose">Fermer automatiquement les conversations</string>
     <string name="title_advanced_onclose">Lors de la fermeture d’une conversation</string>
+    <string name="title_advanced_undo">Délai d’expiration de l’annulation</string>
     <string name="title_advanced_quick_filter">Afficher les icônes discrètes de filtrage rapide</string>
     <string name="title_advanced_quick_scroll">Afficher les icônes discrètes de défilement rapide vers le haut/bas</string>
     <string name="title_advanced_autoread">Marquer automatiquement les messages comme lus lors de leur déplacement</string>
@@ -383,6 +386,8 @@
     <string name="title_advanced_secure">Masquer FairEmail de la liste des applications récentes et empêcher la prise de captures d’écran</string>
     <string name="title_advanced_pin">NIP</string>
     <string name="title_advanced_biometrics_timeout">Délai d’expiration de l’authentification biométrique</string>
+    <string name="title_advanced_disconnect_links" comment="title_advanced_disconnect_links&#10;This is about Disconnect's tracker protection lists: https://disconnect.me/trackerprotection">Utiliser des listes pour vous avertir des liens de pistage</string>
+    <string name="title_advanced_disconnect_images" comment="title_advanced_disconnect_images&#10;This is about Disconnect's tracker protection lists: https://disconnect.me/trackerprotection">Utiliser des listes pour identifier les images de pistage</string>
     <string name="title_advanced_sign_default">Signer par défaut</string>
     <string name="title_advanced_encrypt_default">Chiffrer par défaut</string>
     <string name="title_advanced_auto_decrypt">Déchiffrer automatiquement les messages</string>
@@ -546,6 +551,7 @@
     <string name="title_no_password">Mot de passe manquant</string>
     <string name="title_no_inbox">Boîte de réception introuvable</string>
     <string name="title_no_primary_drafts">Pas de compte principal ou de dossier brouillons</string>
+    <string name="title_no_junk_folder">Il n\'y a aucun dossier pourriel sélectionné pour ce compte</string>
     <string name="title_no_identities">L’envoi de courriels nécessite au moins une identité et un dossier Brouillons</string>
     <string name="title_no_standard">Ce fournisseur utilise un protocole de messagerie propriétaire, il n’est donc pas possible d’utiliser des clients de messagerie tiers</string>
     <string name="title_no_idle">Ce fournisseur ne gère pas les messages en mode push. Ceci retardera la réception de nouveaux messages et augmentera l’utilisation de la pile.</string>
@@ -707,7 +713,6 @@
     <string name="title_no_camera">Aucune application d’appareil photo disponible</string>
     <string name="title_no_saf">Programme d\'accès au stockage non disponible</string>
     <string name="title_no_stream">Une application obsolète a envoyé un chemin d’accès au lieu d’un flux de fichier</string>
-    <string name="title_no_contacts">Sélecteur de contact non disponible</string>
     <string name="title_no_internet">Aucune connexion Internet ou connexion non appropriée</string>
     <string name="title_no_connection">Connexion à un ou plusieurs comptes&#8230;</string>
     <string name="title_no_folder">Le dossier n’existe pas</string>
@@ -789,7 +794,8 @@
     <string name="title_add_image_inline">Insérer</string>
     <string name="title_add_image_attach">Joindre</string>
     <string name="title_add_image_resize">Redimensionner</string>
-    <string name="title_add_image_privacy">Supprimer les informations de géolocalisation</string>
+    <string name="title_add_image_privacy">Supprimer les informations confidentielles sensibles</string>
+    <string name="title_add_image_privacy_remark">Informations de géolocalisation, numéros de série, etc.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Sélectionner un fichier</string>
     <string name="title_add_attachment">Ajouter une pièce jointe</string>
@@ -797,6 +803,7 @@
     <string name="title_attachment_photo">Prendre une photo</string>
     <string name="title_attachment_audio">Enregistrer un fichier audio</string>
     <string name="title_show_addresses">Afficher Cc/Cci</string>
+    <string name="title_save_drafts">Enregistrer les brouillons sur le serveur</string>
     <string name="title_send_dialog">Afficher les options d’envoi</string>
     <string name="title_image_dialog">Afficher les options d’image</string>
     <string name="title_media_toolbar">Barre d’outils média</string>
@@ -983,6 +990,7 @@
     <string name="title_rule_tts_prefix">Nouveau message</string>
     <string name="title_rule_tts_from">De</string>
     <string name="title_rule_tts_subject">Objet</string>
+    <string name="title_rule_tts_content">Texte</string>
     <string name="title_legend_section_synchronize">Synchronisation</string>
     <string name="title_legend_section_folders">Dossiers</string>
     <string name="title_legend_section_messages">Messages</string>
@@ -1101,6 +1109,7 @@
     <string name="title_hint_eml">Ceci est l’aperçu d’un fichier contenant un message original. Enregistrez le message original au moyen de l’icône de sauvegarde dans la barre d’action pour afficher tout son contenu.</string>
     <string name="title_open_link">Ouvrir le lien</string>
     <string name="title_different_link">Le titre et l’adresse du lien sont différents</string>
+    <string name="title_tracking_link">Ce site Web pourrait vous pister</string>
     <string name="title_link_http">Le trafic ne sera pas chiffré</string>
     <string name="title_link_https">Le trafic sera chiffré</string>
     <string name="title_sanitize_link">Supprimer les paramètres de pistage</string>
@@ -1119,6 +1128,7 @@
     <string name="title_add">Ajouter</string>
     <string name="title_browse">Ouvrir avec</string>
     <string name="title_info">Infos</string>
+    <string name="title_download">Télécharger</string>
     <string name="title_report">Signaler</string>
     <string name="title_fix">Corriger</string>
     <string name="title_enable">Activer</string>
@@ -1178,6 +1188,7 @@
     <string name="title_debug_info">Information de débogage</string>
     <string name="title_debug_info_remark">Veuillez décrire le problème et indiquer l\'heure à laquelle il est survenu :</string>
     <string name="title_crash_info_remark">Veuillez décrire ce que vous faisiez lorsque l’application s’est arrêtée :</string>
+    <string name="title_unexpected_info_remark">Veuillez décrire ce que vous faisiez lorsque vous avez eu l\'erreur :</string>
     <string name="title_widget_title_count">Nombre de nouveaux messages</string>
     <string name="title_widget_title_list">Liste des messages</string>
     <string name="title_widget_account">Compte</string>
@@ -1336,6 +1347,13 @@
         <item>10 Mo</item>
         <item>20 Mo</item>
         <item>50 Mo</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Désactivé</item>
+        <item>2,5 s</item>
+        <item>5 s</item>
+        <item>7,5 s</item>
+        <item>10 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Cursive</item>

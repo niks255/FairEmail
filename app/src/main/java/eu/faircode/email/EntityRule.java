@@ -36,6 +36,8 @@ import androidx.room.PrimaryKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.IOException;
@@ -407,6 +409,12 @@ public class EntityRule {
     }
 
     private boolean onActionAnswer(Context context, EntityMessage message, JSONObject jargs) throws JSONException, IOException {
+        if (!message.content) {
+            EntityOperation.queue(context, message, EntityOperation.BODY);
+            EntityOperation.queue(context, message, EntityOperation.RULE, this.id);
+            return true;
+        }
+
         long iid = jargs.getLong("identity");
         long aid = jargs.getLong("answer");
         boolean cc = (jargs.has("cc") && jargs.getBoolean("cc"));
@@ -458,6 +466,22 @@ public class EntityRule {
         reply.id = db.message().insertMessage(reply);
 
         String body = answer.getText(message.from);
+        Document msg = JsoupEx.parse(body);
+
+        Element div = msg.createElement("div");
+
+        Element p = msg.createElement("p");
+        DateFormat DF = Helper.getDateTimeInstance(context);
+        p.text(DF.format(new Date(message.received)) + " " + MessageHelper.formatAddresses(message.from) + ":");
+        div.appendChild(p);
+
+        Document answering = JsoupEx.parse(message.getFile(context));
+        div.appendChild(answering.body().tagName("blockquote"));
+
+        msg.body().appendChild(div);
+
+        body = msg.outerHtml();
+
         File file = reply.getFile(context);
         Helper.writeText(file, body);
         db.message().setMessageContent(reply.id,
@@ -496,7 +520,13 @@ public class EntityRule {
         return true;
     }
 
-    private boolean onActionTts(Context context, EntityMessage message, JSONObject jargs) {
+    private boolean onActionTts(Context context, EntityMessage message, JSONObject jargs) throws IOException {
+        if (!message.content) {
+            EntityOperation.queue(context, message, EntityOperation.BODY);
+            EntityOperation.queue(context, message, EntityOperation.RULE, this.id);
+            return true;
+        }
+
         Locale locale = (message.language == null ? Locale.getDefault() : new Locale(message.language));
 
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
@@ -513,6 +543,12 @@ public class EntityRule {
         if (!TextUtils.isEmpty(message.subject))
             sb.append(res.getString(R.string.title_rule_tts_subject))
                     .append(' ').append(message.subject).append(". ");
+
+        String body = Helper.readText(message.getFile(context));
+        String preview = HtmlHelper.getPreview(body);
+        if (!TextUtils.isEmpty(preview))
+            sb.append(res.getString(R.string.title_rule_tts_content))
+                    .append(' ').append(preview);
 
         TTSHelper.speak(context, "rule:" + message.id, sb.toString(), locale);
 

@@ -415,6 +415,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibRule;
         private ImageButton ibUnsubscribe;
         private ImageButton ibPrint;
+        private ImageButton ibEvent;
         private ImageButton ibAnswer;
         private ImageButton ibLabels;
         private ImageButton ibCopy;
@@ -622,6 +623,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibRule = vsBody.findViewById(R.id.ibRule);
             ibUnsubscribe = vsBody.findViewById(R.id.ibUnsubscribe);
             ibPrint = vsBody.findViewById(R.id.ibPrint);
+            ibEvent = vsBody.findViewById(R.id.ibEvent);
             ibAnswer = vsBody.findViewById(R.id.ibAnswer);
             ibLabels = vsBody.findViewById(R.id.ibLabels);
             ibCopy = vsBody.findViewById(R.id.ibCopy);
@@ -715,6 +717,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibRule.setOnClickListener(this);
                 ibUnsubscribe.setOnClickListener(this);
                 ibPrint.setOnClickListener(this);
+                ibEvent.setOnClickListener(this);
                 ibAnswer.setOnClickListener(this);
                 ibLabels.setOnClickListener(this);
                 ibCopy.setOnClickListener(this);
@@ -805,6 +808,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibRule.setOnClickListener(null);
                 ibUnsubscribe.setOnClickListener(null);
                 ibPrint.setOnClickListener(null);
+                ibEvent.setOnClickListener(null);
                 ibAnswer.setOnClickListener(null);
                 ibLabels.setOnClickListener(null);
                 ibCopy.setOnClickListener(null);
@@ -1199,8 +1203,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void clearExpanded(TupleMessageEx message) {
             if (compact) {
-                tvFrom.setSingleLine(true);
-                tvSubject.setSingleLine(!"full".equals(subject_ellipsize));
+                if (tvFrom.getMaxLines() > 1)
+                    tvFrom.setSingleLine(true);
+                boolean full = "full".equals(subject_ellipsize);
+                if (full ? tvSubject.getMaxLines() == 1 : tvSubject.getMaxLines() > 1)
+                    tvSubject.setSingleLine(!full);
             }
 
             tvPreview.setVisibility(
@@ -1278,6 +1285,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibRule.setVisibility(View.GONE);
             ibUnsubscribe.setVisibility(View.GONE);
             ibPrint.setVisibility(View.GONE);
+            ibEvent.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
             ibLabels.setVisibility(View.GONE);
             ibCopy.setVisibility(View.GONE);
@@ -1411,6 +1419,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibRule.setVisibility(View.GONE);
             ibUnsubscribe.setVisibility(View.GONE);
             ibPrint.setVisibility(View.GONE);
+            ibEvent.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
             ibLabels.setVisibility(View.GONE);
             ibCopy.setVisibility(View.GONE);
@@ -1548,6 +1557,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_archive = prefs.getBoolean("button_archive", true);
                     boolean button_move = prefs.getBoolean("button_move", true);
                     boolean button_copy = prefs.getBoolean("button_copy", false);
+                    boolean button_event = prefs.getBoolean("button_event", false);
                     boolean button_print = prefs.getBoolean("button_print", false);
                     boolean button_unsubscribe = prefs.getBoolean("button_unsubscribe", true);
                     boolean button_rule = prefs.getBoolean("button_rule", false);
@@ -1559,6 +1569,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             message.accountProtocol == EntityAccount.TYPE_IMAP ? View.VISIBLE : View.GONE);
                     ibUnsubscribe.setVisibility(tools && button_unsubscribe && message.unsubscribe != null ? View.VISIBLE : View.GONE);
                     ibPrint.setVisibility(tools && button_print && hasWebView && message.content && Helper.canPrint(context) ? View.VISIBLE : View.GONE);
+                    ibEvent.setVisibility(tools && button_event && message.content ? View.VISIBLE : View.GONE);
                     ibAnswer.setVisibility(!tools || outbox || (!expand_all && expand_one) ? View.GONE : View.VISIBLE);
                     ibLabels.setVisibility(tools && labels_header && labels ? View.VISIBLE : View.GONE);
                     ibCopy.setVisibility(tools && button_copy && move ? View.VISIBLE : View.GONE);
@@ -1836,7 +1847,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     at android.webkit.WebView.<init>(WebView.java:574)
                                     at android.webkit.WebView.<init>(WebView.java:564)
                          */
-                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex, false);
                         return;
                     }
 
@@ -2770,6 +2781,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     case R.id.ibPrint:
                         onMenuPrint(message);
                         break;
+                    case R.id.ibEvent:
+                        if (ActivityBilling.isPro(context))
+                            onMenuShare(message, true);
+                        else
+                            context.startActivity(new Intent(context, ActivityBilling.class));
+                        break;
                     case R.id.ibAnswer:
                         onActionAnswer(message, ibAnswer);
                         break;
@@ -3305,15 +3322,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void onPickContact(String name, String email) {
             Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
-                    pick.resolveActivity(context.getPackageManager()) == null)
-                Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true).show();
-            else {
-                properties.setValue("name", name);
-                properties.setValue("email", email);
+            properties.setValue("name", name);
+            properties.setValue("email", email);
+            try {
                 parentFragment.startActivityForResult(
                         Helper.getChooser(context, pick), FragmentMessages.REQUEST_PICK_CONTACT);
+            } catch (ActivityNotFoundException ex) {
+                Log.w(ex);
+                ToastEx.makeText(context, context.getString(R.string.title_no_viewer, pick), Toast.LENGTH_LONG).show();
+            } catch (Throwable ex) {
+                Log.unexpectedError(parentFragment.getParentFragmentManager(), ex, false);
             }
         }
 
@@ -3325,19 +3343,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 insert.putExtra(ContactsContract.Intents.Insert.NAME, name);
             insert.setAction(Intent.ACTION_INSERT);
             insert.setType(ContactsContract.Contacts.CONTENT_TYPE);
-
-            PackageManager pm = context.getPackageManager();
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
-                    insert.resolveActivity(pm) == null)
-                Snackbar.make(parentFragment.getView(), R.string.title_no_contacts, Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true).show();
-            else
-                try {
-                    context.startActivity(insert);
-                } catch (ActivityNotFoundException ex) {
-                    Log.w(ex);
-                    ToastEx.makeText(context, context.getString(R.string.title_no_viewer, insert), Toast.LENGTH_LONG).show();
-                }
+            context.startActivity(insert);
         }
 
         private void onEditContact(String name, String email, Uri lookupUri) {
@@ -3348,18 +3354,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 edit.putExtra(ContactsContract.Intents.Insert.NAME, name);
             edit.setAction(Intent.ACTION_EDIT);
             edit.setDataAndTypeAndNormalize(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-
-            PackageManager pm = context.getPackageManager();
-            if (edit.resolveActivity(pm) == null) // system whitelisted
-                Snackbar.make(parentFragment.getView(), R.string.title_no_contacts, Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true).show();
-            else
-                try {
-                    context.startActivity(edit);
-                } catch (ActivityNotFoundException ex) {
-                    Log.w(ex);
-                    ToastEx.makeText(context, context.getString(R.string.title_no_viewer, edit), Toast.LENGTH_LONG).show();
-                }
+            context.startActivity(edit);
         }
 
         private void onToggleMessage(TupleMessageEx message) {
@@ -3783,6 +3778,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean button_archive = prefs.getBoolean("button_archive", true);
             boolean button_move = prefs.getBoolean("button_move", true);
             boolean button_copy = prefs.getBoolean("button_copy", false);
+            boolean button_event = prefs.getBoolean("button_event", false);
             boolean button_print = prefs.getBoolean("button_print", false);
             boolean button_unsubscribe = prefs.getBoolean("button_unsubscribe", true);
             boolean button_rule = prefs.getBoolean("button_rule", false);
@@ -3795,6 +3791,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_button_archive).setChecked(button_archive);
             popupMenu.getMenu().findItem(R.id.menu_button_move).setChecked(button_move);
             popupMenu.getMenu().findItem(R.id.menu_button_copy).setChecked(button_copy);
+            popupMenu.getMenu().findItem(R.id.menu_button_event).setChecked(button_event);
             popupMenu.getMenu().findItem(R.id.menu_button_print).setChecked(button_print);
             popupMenu.getMenu().findItem(R.id.menu_button_unsubscribe).setChecked(button_unsubscribe);
             popupMenu.getMenu().findItem(R.id.menu_button_rule).setChecked(button_rule);
@@ -3865,6 +3862,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             return true;
                         case R.id.menu_button_copy:
                             onMenuButton(message, "copy", target.isChecked());
+                            return true;
+                        case R.id.menu_button_event:
+                            onMenuButton(message, "event", target.isChecked());
                             return true;
                         case R.id.menu_button_print:
                             onMenuButton(message, "print", target.isChecked());
@@ -5772,6 +5772,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final TextView tvTitle = dview.findViewById(R.id.tvTitle);
             final ImageButton ibDifferent = dview.findViewById(R.id.ibDifferent);
             final EditText etLink = dview.findViewById(R.id.etLink);
+            final TextView tvDisconnect = dview.findViewById(R.id.tvDisconnect);
+            final TextView tvDisconnectCategories = dview.findViewById(R.id.tvDisconnectCategories);
             final ImageButton ibShare = dview.findViewById(R.id.ibShare);
             final ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
             final CheckBox cbSecure = dview.findViewById(R.id.cbSecure);
@@ -5784,6 +5786,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             final Group grpDifferent = dview.findViewById(R.id.grpDifferent);
             final Group grpOwner = dview.findViewById(R.id.grpOwner);
+
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
             ibDifferent.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -5886,7 +5890,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbNotAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                     prefs.edit().putBoolean(uri.getHost() + ".confirm_link", !isChecked).apply();
                 }
             });
@@ -5954,6 +5957,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     uriTitle == null || uriTitle.getHost() == null ||
                     uriTitle.getHost().equalsIgnoreCase(uri.getHost())
                     ? View.GONE : View.VISIBLE);
+
+            boolean disconnect_links = prefs.getBoolean("disconnect_links", true);
+            List<String> categories = null;
+            if (disconnect_links)
+                categories = DisconnectBlacklist.getCategories(uri.getHost());
+            if (categories != null)
+                tvDisconnectCategories.setText(TextUtils.join(", ", categories));
+            tvDisconnect.setVisibility(categories == null ? View.GONE : View.VISIBLE);
+            tvDisconnectCategories.setVisibility(categories == null ? View.GONE : View.VISIBLE);
 
             final Context context = getContext();
 

@@ -8,6 +8,7 @@
     <string name="app_eula" translatable="false">THIS SOFTWARE IS PROVIDED BY THE AUTHOR \'\'AS IS\'\' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
     <string name="app_crash">FairEmail is not supported on this device because bugs in Android cause crashes</string>
     <string name="app_exit">Go \'back\' again to exit</string>
+    <string name="app_cake">Insufficient storage space left</string>
 
     <string name="channel_service">Receive</string>
     <string name="channel_send">Send</string>
@@ -152,9 +153,10 @@
     </string>
     <string name="title_setup_quick">Quick setup</string>
     <string name="title_setup_quick_remark">To quickly setup an account and an identity for most providers</string>
+    <string name="title_setup_quick_support">Some providers make it difficult to add an account. Please do not blame FairEmail for this, but ask for support instead.</string>
     <string name="title_setup_quick_hint">The quick setup will fetch configuration information from autoconfig.thunderbird.net</string>
-    <string name="title_setup_quick_imap">IMAP server to receive messages</string>
-    <string name="title_setup_quick_smtp">SMTP server to send messages</string>
+    <string name="title_setup_quick_imap">IMAP server to receive messages</string>0
+    <string name="title_setup_quick_smtp">SMTP server to send messages</string>0
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">The installation wizard can be used multiple times to set up multiple accounts</string>
     <string name="title_setup_wizard_remark">Go \'back\' to go to the inbox</string>
@@ -389,6 +391,7 @@
     <string name="title_advanced_collapse_multiple">Collapse messages in a conversation with multiple messages on \'back\'</string>
     <string name="title_advanced_autoclose">Automatically close conversations</string>
     <string name="title_advanced_onclose">On closing a conversation</string>
+    <string name="title_advanced_undo">Undo timeout</string>
     <string name="title_advanced_quick_filter">Show non-obtrusive quick filter icons</string>
     <string name="title_advanced_quick_scroll">Show non-obtrusive quick scroll up/down icons</string>
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
@@ -444,6 +447,9 @@
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Biometric authentication timeout</string>
     <string name="title_advanced_safe_browsing" translatable="false">Google Safe browsing</string>
+    <string name="title_advanced_disconnect_blacklist" translatable="false">Disconnect\'s tracker protection lists</string>
+    <string name="title_advanced_disconnect_links">Use lists to warn about tracking links</string>
+    <string name="title_advanced_disconnect_images">Use lists to recognize tracking images</string>
 
     <string name="title_advanced_sign_default">Sign by default</string>
     <string name="title_advanced_encrypt_default">Encrypt by default</string>
@@ -471,6 +477,8 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexed (%3$s)</string>
     <string name="title_advanced_english">Use US country settings</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
+    <string name="title_advanced_auth_plain" translatable="false">PLAIN</string>
+    <string name="title_advanced_auth_login" translatable="false">LOGIN</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_optimize">Automatically optimize</string>
     <string name="title_advanced_updates">Check for updates</string>
@@ -636,6 +644,7 @@
     <string name="title_no_password">Password missing</string>
     <string name="title_no_inbox">Inbox not found</string>
     <string name="title_no_primary_drafts">No primary account or no drafts folder</string>
+    <string name="title_no_junk_folder">There is no spam folder selected for this account</string>
     <string name="title_no_identities">Sending emails requires at least one identity and a drafts folder</string>
     <string name="title_no_standard">This provider uses a proprietary email protocol and therefore it is not possible to use third party email clients</string>
     <string name="title_no_idle">This provider does not support push messages. This will delay reception of new messages and increase battery usage.</string>
@@ -808,7 +817,6 @@
     <string name="title_no_camera">No suitable camera app available</string>
     <string name="title_no_saf">Storage access framework not available</string>
     <string name="title_no_stream">An outdated app sent a file path instead of a file stream</string>
-    <string name="title_no_contacts">Contact picker not available</string>
     <string name="title_no_internet">No or no suitable internet connection</string>
     <string name="title_no_connection">Connecting to one or more accounts &#8230;</string>
     <string name="title_no_folder">Folder does not exist</string>
@@ -899,7 +907,8 @@
     <string name="title_add_image_inline">Insert</string>
     <string name="title_add_image_attach">Attach</string>
     <string name="title_add_image_resize">Resize</string>
-    <string name="title_add_image_privacy">Remove geographic location</string>
+    <string name="title_add_image_privacy">Remove privacy sensitive data</string>
+    <string name="title_add_image_privacy_remark">Geographic location, serial numbers, etc</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Select file</string>
     <string name="title_add_attachment">Add attachment</string>
@@ -908,6 +917,7 @@
     <string name="title_attachment_audio">Record audio</string>
     <string name="title_show_addresses">Show CC/BCC</string>
 
+    <string name="title_save_drafts">Save drafts on the server</string>
     <string name="title_send_dialog">Show send options</string>
     <string name="title_image_dialog">Show image options</string>
     <string name="title_media_toolbar">Media toolbar</string>
@@ -1113,6 +1123,7 @@
     <string name="title_rule_tts_prefix">New message</string>
     <string name="title_rule_tts_from">From</string>
     <string name="title_rule_tts_subject">Subject</string>
+    <string name="title_rule_tts_content">Text</string>
 
     <string name="title_legend_section_synchronize">Synchronize</string>
     <string name="title_legend_section_folders">Folders</string>
@@ -1241,6 +1252,7 @@
 
     <string name="title_open_link">Open link</string>
     <string name="title_different_link">The title and the link address are different</string>
+    <string name="title_tracking_link">This website might track you</string>
     <string name="title_link_http">Traffic will not be encrypted</string>
     <string name="title_link_https">Traffic will be encrypted</string>
     <string name="title_sanitize_link">Remove tracking parameters</string>
@@ -1259,6 +1271,7 @@
     <string name="title_add">Add</string>
     <string name="title_browse">Open with</string>
     <string name="title_info">Info</string>
+    <string name="title_download">Download</string>
     <string name="title_report">Report</string>
     <string name="title_fix">Fix</string>
     <string name="title_enable">Enable</string>
@@ -1324,6 +1337,7 @@
     <string name="title_debug_info">Debug info</string>
     <string name="title_debug_info_remark">Please describe the problem and indicate the time of the problem:</string>
     <string name="title_crash_info_remark">Please describe what you were doing when the app crashed:</string>
+    <string name="title_unexpected_info_remark">Please describe what you were doing when you got the error:</string>
     <string name="title_issue_subject" translatable="false">FairEmail %1$s issue</string>
 
     <string name="title_widget_title_count">New message count</string>
@@ -1600,6 +1614,22 @@
         <item>10000000</item>
         <item>20000000</item>
         <item>50000000</item>
+    </integer-array>
+
+    <string-array name="undoNames">
+        <item>Off</item>
+        <item>2.5 s</item>
+        <item>5 s</item>
+        <item>7.5 s</item>
+        <item>10 s</item>
+    </string-array>
+
+    <integer-array name="undoValues" translatable="false">
+        <item>0</item>
+        <item>2500</item>
+        <item>5000</item>
+        <item>7500</item>
+        <item>10000</item>
     </integer-array>
 
     <string-array name="fontNameNames">

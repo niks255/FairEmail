@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +45,7 @@ import android.os.LocaleList;
 import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.StatFs;
+import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainAliasCallback;
 import android.security.KeyChainException;
@@ -411,10 +413,19 @@ public class Helper {
     }
 
     static boolean isSecure(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean biometrics = prefs.getBoolean("biometrics", false);
-        String pin = prefs.getString("pin", null);
-        return (biometrics || !TextUtils.isEmpty(pin));
+        try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                ContentResolver resolver = context.getContentResolver();
+                int enabled = Settings.System.getInt(resolver, Settings.System.LOCK_PATTERN_ENABLED, 0);
+                return (enabled != 0);
+            } else {
+                KeyguardManager kgm = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+                return (kgm != null && kgm.isDeviceSecure());
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
     }
 
     static boolean isOpenKeychainInstalled(Context context) {
@@ -941,14 +952,48 @@ public class Helper {
         String type = null;
 
         String extension = Helper.getExtension(filename);
-        if (extension != null)
+        if (extension != null) {
+            extension = extension.toLowerCase(Locale.ROOT);
             type = MimeTypeMap.getSingleton()
                     .getMimeTypeFromExtension(extension.toLowerCase(Locale.ROOT));
+        }
 
         if (TextUtils.isEmpty(type))
-            type = "application/octet-stream";
+            if ("csv".equals(extension))
+                return "text/csv";
+            else if ("eml".equals(extension))
+                return "message/rfc822";
+            else if ("gpx".equals(extension))
+                return "application/gpx+xml";
+            else if ("log".equals(extension))
+                return "text/plain";
+            else if ("ovpn".equals(extension))
+                return "application/x-openvpn-profile";
+            else
+                return "application/octet-stream";
 
         return type;
+    }
+
+    static String guessExtension(String mimeType) {
+        String extension = null;
+
+        if (mimeType != null) {
+            mimeType = mimeType.toLowerCase(Locale.ROOT);
+            extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+        }
+
+        if (TextUtils.isEmpty(extension))
+            if ("text/csv".equals(mimeType))
+                return "csv";
+            else if ("message/rfc822".equals(mimeType))
+                return "eml";
+            else if ("application/gpx+xml".equals(mimeType))
+                return "gpx";
+            else if ("application/x-openvpn-profile".equals(mimeType))
+                return "ovpn";
+
+        return extension;
     }
 
     static void writeText(File file, String content) throws IOException {

@@ -141,6 +141,7 @@ import org.jsoup.select.NodeFilter;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
+import org.w3c.dom.css.CSSStyleSheet;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -271,17 +272,18 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_CONTACT_TO = 1;
     private static final int REQUEST_CONTACT_CC = 2;
     private static final int REQUEST_CONTACT_BCC = 3;
-    private static final int REQUEST_IMAGE = 4;
-    private static final int REQUEST_IMAGE_FILE = 5;
-    private static final int REQUEST_ATTACHMENT = 6;
-    private static final int REQUEST_TAKE_PHOTO = 7;
-    private static final int REQUEST_RECORD_AUDIO = 8;
-    private static final int REQUEST_OPENPGP = 9;
-    private static final int REQUEST_CONTACT_GROUP = 10;
-    private static final int REQUEST_ANSWER = 11;
-    private static final int REQUEST_LINK = 12;
-    private static final int REQUEST_DISCARD = 13;
-    private static final int REQUEST_SEND = 14;
+    private static final int REQUEST_SHARED = 4;
+    private static final int REQUEST_IMAGE = 5;
+    private static final int REQUEST_IMAGE_FILE = 6;
+    private static final int REQUEST_ATTACHMENT = 7;
+    private static final int REQUEST_TAKE_PHOTO = 8;
+    private static final int REQUEST_RECORD_AUDIO = 9;
+    private static final int REQUEST_OPENPGP = 10;
+    private static final int REQUEST_CONTACT_GROUP = 11;
+    private static final int REQUEST_ANSWER = 12;
+    private static final int REQUEST_LINK = 13;
+    private static final int REQUEST_DISCARD = 14;
+    private static final int REQUEST_SEND = 15;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -440,13 +442,7 @@ public class FragmentCompose extends FragmentBase {
                 }
 
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
-                PackageManager pm = getContext().getPackageManager();
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
-                        pick.resolveActivity(pm) == null)
-                    Snackbar.make(view, R.string.title_no_contacts, Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
-                else
-                    startActivityForResult(Helper.getChooser(getContext(), pick), request);
+                startActivityForResult(Helper.getChooser(getContext(), pick), request);
             }
         };
 
@@ -1106,7 +1102,6 @@ public class FragmentCompose extends FragmentBase {
                 args.putString("body", a.getString("body"));
                 args.putString("text", a.getString("text"));
                 args.putString("selected", a.getString("selected"));
-                args.putParcelableArrayList("attachments", a.getParcelableArrayList("attachments"));
                 draftLoader.execute(this, args, "compose:new");
             } else {
                 Bundle args = new Bundle();
@@ -1241,9 +1236,11 @@ public class FragmentCompose extends FragmentBase {
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean save_drafts = prefs.getBoolean("save_drafts", true);
         boolean send_dialog = prefs.getBoolean("send_dialog", true);
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
 
+        menu.findItem(R.id.menu_save_drafts).setChecked(save_drafts);
         menu.findItem(R.id.menu_send_dialog).setChecked(send_dialog);
         menu.findItem(R.id.menu_image_dialog).setChecked(image_dialog);
         menu.findItem(R.id.menu_media).setChecked(media);
@@ -1267,6 +1264,9 @@ public class FragmentCompose extends FragmentBase {
                 return true;
             case R.id.menu_zoom:
                 onMenuZoom();
+                return true;
+            case R.id.menu_save_drafts:
+                onMenuSaveDrafts();
                 return true;
             case R.id.menu_send_dialog:
                 onMenuSendDialog();
@@ -1372,6 +1372,12 @@ public class FragmentCompose extends FragmentBase {
             etBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * message_zoom / 100f);
             tvReference.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
+    }
+
+    private void onMenuSaveDrafts() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean save_drafts = prefs.getBoolean("save_drafts", true);
+        prefs.edit().putBoolean("save_drafts", !save_drafts).apply();
     }
 
     private void onMenuSendDialog() {
@@ -1491,7 +1497,9 @@ public class FragmentCompose extends FragmentBase {
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
         if (image_dialog) {
             Bundle args = new Bundle();
-            args.putBoolean("photo", photo);
+            args.putInt("title", photo
+                    ? R.string.title_attachment_photo
+                    : R.string.title_add_image_select);
             FragmentDialogAddImage fragment = new FragmentDialogAddImage();
             fragment.setArguments(args);
             fragment.setTargetFragment(this, REQUEST_IMAGE);
@@ -1724,9 +1732,18 @@ public class FragmentCompose extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onPickContact(requestCode, data);
                     break;
-                case REQUEST_IMAGE:
+                case REQUEST_SHARED:
+                    Bundle args = getArguments();
+                    ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
+                    args.remove("attachments");
                     if (resultCode == RESULT_OK)
-                        onAddImage(data.getBundleExtra("args").getBoolean("photo"));
+                        onAddImageFile(uris);
+                    break;
+                case REQUEST_IMAGE:
+                    if (resultCode == RESULT_OK) {
+                        int title = data.getBundleExtra("args").getInt("title");
+                        onAddImage(title == R.string.title_attachment_photo);
+                    }
                     break;
                 case REQUEST_IMAGE_FILE:
                     if (resultCode == RESULT_OK && data != null)
@@ -2879,7 +2896,9 @@ public class FragmentCompose extends FragmentBase {
                 ftype = null;
             }
 
-        if (TextUtils.isEmpty(ftype) || "*/*".equals(ftype))
+        if (TextUtils.isEmpty(ftype) ||
+                "*/*".equals(ftype) ||
+                "application/octet-stream".equals(ftype))
             ftype = Helper.guessMimeType(fname);
 
         if (fsize != null && fsize <= 0)
@@ -2991,6 +3010,12 @@ public class FragmentCompose extends FragmentBase {
                     exif.setAttribute(ExifInterface.TAG_GPS_TRACK, null);
 
                     exif.setAttribute(ExifInterface.TAG_GPS_AREA_INFORMATION, null);
+
+                    exif.setAttribute(ExifInterface.TAG_XMP, null);
+                    exif.setAttribute(ExifInterface.TAG_ARTIST, null);
+                    exif.setAttribute(ExifInterface.TAG_CAMERA_OWNER_NAME, null);
+                    exif.setAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER, null);
+                    exif.setAttribute(ExifInterface.TAG_LENS_SERIAL_NUMBER, null);
 
                     exif.saveAttributes();
                 } catch (IOException ex) {
@@ -3565,8 +3590,19 @@ public class FragmentCompose extends FragmentBase {
                                 d.body().appendChild(div);
                             }
 
-                            // Quote referenced message body
                             Element e = d.body();
+
+                            // Apply styles
+                            List<CSSStyleSheet> sheets = HtmlHelper.parseStyles(d.head().select("style"));
+                            for (Element element : e.select("*")) {
+                                String tag = element.tagName();
+                                String clazz = element.attr("class");
+                                String style = HtmlHelper.processStyles(tag, clazz, null, sheets);
+                                style = HtmlHelper.mergeStyles(style, element.attr("style"));
+                                element.attr("style", style);
+                            }
+
+                            // Quote referenced message body
                             boolean quote_reply = prefs.getBoolean("quote_reply", true);
                             boolean quote = (quote_reply &&
                                     ("reply".equals(action) || "reply_all".equals(action) || "list".equals(action)));
@@ -3641,16 +3677,7 @@ public class FragmentCompose extends FragmentBase {
                         }
                     }
 
-                    if ("new".equals(action)) {
-                        ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
-                        if (uris != null)
-                            for (Uri uri : uris)
-                                try {
-                                    addAttachment(context, data.draft.id, uri, false, 0, false);
-                                } catch (IOException ex) {
-                                    Log.e(ex);
-                                }
-                    } else if (ref != null &&
+                    if (ref != null &&
                             ("reply".equals(action) || "reply_all".equals(action) ||
                                     "forward".equals(action) || "editasnew".equals(action))) {
 
@@ -3895,6 +3922,23 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }
             });
+
+            if (getArguments().containsKey("attachments")) {
+                boolean image_dialog = prefs.getBoolean("image_dialog", true);
+                if (image_dialog) {
+                    Bundle aargs = new Bundle();
+                    aargs.putInt("title", android.R.string.ok);
+                    FragmentDialogAddImage fragment = new FragmentDialogAddImage();
+                    fragment.setArguments(aargs);
+                    fragment.setTargetFragment(FragmentCompose.this, REQUEST_SHARED);
+                    fragment.show(getParentFragmentManager(), "compose:shared");
+                } else {
+                    Bundle aargs = getArguments();
+                    ArrayList<Uri> uris = aargs.getParcelableArrayList("attachments");
+                    aargs.remove("attachments");
+                    onAddImageFile(uris);
+                }
+            }
         }
 
         @Override
@@ -4135,6 +4179,11 @@ public class FragmentCompose extends FragmentBase {
                     else
                         b = HtmlHelper.sanitizeCompose(context, body, true);
 
+                    if (draft.revision == null) {
+                        draft.revision = 1;
+                        draft.revisions = 1;
+                    }
+
                     int revision = draft.revision; // Save for undo/redo
                     if (dirty ||
                             TextUtils.isEmpty(body) ||
@@ -4229,8 +4278,11 @@ public class FragmentCompose extends FragmentBase {
                             action == R.id.action_undo ||
                             action == R.id.action_redo ||
                             action == R.id.action_check) {
-                        if ((dirty || encrypted) && !needsEncryption)
-                            EntityOperation.queue(context, draft, EntityOperation.ADD);
+                        if ((dirty || encrypted) && !needsEncryption) {
+                            boolean save_drafts = prefs.getBoolean("save_drafts", true);
+                            if (save_drafts)
+                                EntityOperation.queue(context, draft, EntityOperation.ADD);
+                        }
 
                         if (action == R.id.action_check) {
                             // Check data
@@ -4243,6 +4295,14 @@ public class FragmentCompose extends FragmentBase {
                                 checkAddress(abcc, context);
                             } catch (AddressException ex) {
                                 args.putString("address_error", ex.getMessage());
+                            }
+
+                            try {
+                                checkMx(ato, context);
+                                checkMx(acc, context);
+                                checkMx(abcc, context);
+                            } catch (UnknownHostException ex) {
+                                args.putString("mx_error", ex.getMessage());
                             }
 
                             if (draft.to == null && draft.cc == null && draft.bcc == null &&
@@ -4510,6 +4570,7 @@ public class FragmentCompose extends FragmentBase {
                 boolean send_reminders = prefs.getBoolean("send_reminders", true);
 
                 String address_error = args.getString("address_error");
+                String mx_error = args.getString("mx_error");
                 boolean remind_to = args.getBoolean("remind_to", false);
                 boolean remind_extra = args.getBoolean("remind_extra", false);
                 boolean remind_pgp = args.getBoolean("remind_pgp", false);
@@ -4521,8 +4582,9 @@ public class FragmentCompose extends FragmentBase {
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
-                if (send_dialog || address_error != null || recipients > RECIPIENTS_WARNING || remind_size || (send_reminders &&
-                        (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment))) {
+                if (send_dialog || address_error != null || mx_error != null || recipients > RECIPIENTS_WARNING || remind_size ||
+                        (send_reminders &&
+                                (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment))) {
                     setBusy(false);
 
                     FragmentDialogSend fragment = new FragmentDialogSend();
@@ -4578,25 +4640,28 @@ public class FragmentCompose extends FragmentBase {
         }
 
         private void checkAddress(InternetAddress[] addresses, Context context) throws AddressException {
+            if (addresses == null)
+                return;
+
+            for (InternetAddress address : addresses)
+                try {
+                    address.validate();
+                } catch (AddressException ex) {
+                    throw new AddressException(context.getString(R.string.title_address_parse_error,
+                            MessageHelper.formatAddressesCompose(addresses), ex.getMessage()));
+                }
+        }
+
+        private void checkMx(InternetAddress[] addresses, Context context) throws UnknownHostException {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean lookup_mx = prefs.getBoolean("lookup_mx", false);
+            if (!lookup_mx)
+                return;
 
             if (addresses == null)
                 return;
 
-            for (InternetAddress address : addresses) {
-                Address[] _addresses = new Address[]{address};
-                try {
-                    address.validate();
-                    if (lookup_mx)
-                        DnsHelper.checkMx(context, _addresses);
-                } catch (AddressException ex) {
-                    throw new AddressException(context.getString(R.string.title_address_parse_error,
-                            MessageHelper.formatAddressesCompose(_addresses), ex.getMessage()));
-                } catch (UnknownHostException ex) {
-                    throw new AddressException(ex.getMessage());
-                }
-            }
+            DnsHelper.checkMx(context, addresses);
         }
     };
 
@@ -5067,7 +5132,7 @@ public class FragmentCompose extends FragmentBase {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            final boolean photo = getArguments().getBoolean("photo");
+            int title = getArguments().getInt("title");
 
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean add_inline = prefs.getBoolean("add_inline", true);
@@ -5147,8 +5212,7 @@ public class FragmentCompose extends FragmentBase {
             return new AlertDialog.Builder(getContext())
                     .setView(dview)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(
-                            photo ? R.string.title_attachment_photo : R.string.title_add_image_select,
+                    .setPositiveButton(title,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -5200,6 +5264,7 @@ public class FragmentCompose extends FragmentBase {
             Bundle args = getArguments();
             long id = args.getLong("id");
             String address_error = args.getString("address_error");
+            String mx_error = args.getString("mx_error");
             final boolean remind_to = args.getBoolean("remind_to", false);
             final boolean remind_extra = args.getBoolean("remind_extra", false);
             final boolean remind_pgp = args.getBoolean("remind_pgp", false);
@@ -5243,8 +5308,8 @@ public class FragmentCompose extends FragmentBase {
             final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             final TextView tvNotAgain = dview.findViewById(R.id.tvNotAgain);
 
-            tvAddressError.setText(address_error);
-            tvAddressError.setVisibility(address_error == null ? View.GONE : View.VISIBLE);
+            tvAddressError.setText(address_error == null ? mx_error : address_error);
+            tvAddressError.setVisibility(address_error == null && mx_error == null ? View.GONE : View.VISIBLE);
 
             tvRemindSize.setText(getString(R.string.title_size_reminder,
                     Helper.humanReadableByteCount(size),

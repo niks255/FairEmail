@@ -102,6 +102,7 @@
             clientId="dj0yJmk9MUFMR2dpdnllTHdZJmQ9WVdrOWRraFJNVGwwTkcwbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWFl"
             clientSecret="054ceb7cc001a322126dd51b3399785604543f83"
             enabled="false"
+            pcke="true"
             redirectUri="https://oauth.faircode.eu/"
             scopes="mail-w"
             tokenEndpoint="https://api.login.yahoo.com/oauth2/get_token" />
@@ -606,7 +607,7 @@
     <provider
         name="AOL"
         domain="aol\\..*"
-        link="https://help.aol.com/articles/how-do-i-use-other-email-applications-to-send-and-receive-my-aol-mail">
+        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88">
         <imap
             host="imap.aol.com"
             port="993"
@@ -829,6 +830,19 @@
             starttls="false" />
         <smtp
             host="mail.uk2.net"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Scarlet.be"
+        appPassword="true"
+        link="https://www.scarlet.be/help/faq/769/59/Welke-standaardinstellingen-gebruikt-Scarlet-voor-e-mail">
+        <imap
+            host="imap.scarlet.be"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.scarlet.be"
             port="465"
             starttls="false" />
     </provider>

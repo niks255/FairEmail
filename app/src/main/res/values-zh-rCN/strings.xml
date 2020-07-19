@@ -6,6 +6,7 @@
     <string name="app_limitations">例如，为了去除不安全元素并提高阅读性，邮件将总被重建格式；出于安全考虑，打开邮件内链接时需经用户确认</string>
     <string name="app_crash">FairEmail不支持该设备，因为 android 中的bug会导致崩溃</string>
     <string name="app_exit">再按一次返回键退出</string>
+    <string name="app_cake">剩余存储空间不足</string>
     <string name="channel_service">接收</string>
     <string name="channel_send">发送</string>
     <string name="channel_notification">通知</string>
@@ -108,6 +109,7 @@
     </string>
     <string name="title_setup_quick">快速设置</string>
     <string name="title_setup_quick_remark">为大多数邮件服务提供商快速设置账户和身份</string>
+    <string name="title_setup_quick_support">有些邮件服务提供商很难添加帐户。对此请不要怪责于 FairEmail, 而应向提供商寻求支持</string>
     <string name="title_setup_quick_hint">快速设置将从autoconfig.thunderbird.net 获取配置信息</string>
     <string name="title_setup_quick_imap">接收邮件的IMAP服务器</string>
     <string name="title_setup_quick_smtp">发送邮件的SMTP服务器</string>
@@ -324,6 +326,7 @@
     <string name="title_advanced_collapse_multiple">按返回时折叠会话中的多条消息</string>
     <string name="title_advanced_autoclose">自动关闭对话</string>
     <string name="title_advanced_onclose">关闭对话时</string>
+    <string name="title_advanced_undo">撤销超时</string>
     <string name="title_advanced_quick_filter">显示不显眼的快速过滤图标</string>
     <string name="title_advanced_quick_scroll">显示不显眼的快速上/下滚动图标</string>
     <string name="title_advanced_autoread">移动消息时自动标记为已读</string>
@@ -534,6 +537,7 @@
     <string name="title_no_password">缺少密码</string>
     <string name="title_no_inbox">未找到收件箱</string>
     <string name="title_no_primary_drafts">没有主帐户或草稿文件夹</string>
+    <string name="title_no_junk_folder">未选中此账号的垃圾邮件文件夹</string>
     <string name="title_no_identities">发送电子邮件需要至少一个身份和一个草稿文件夹</string>
     <string name="title_no_standard">此提供商使用专有的电子邮件协议，因此无法使用第三方电子邮件客户端</string>
     <string name="title_no_idle">该提供商不支持消息推送，这将延迟新消息的接收并增加电池用量</string>
@@ -695,7 +699,6 @@
     <string name="title_no_camera">没有合适的相机app可用</string>
     <string name="title_no_saf">存储访问框架不可用</string>
     <string name="title_no_stream">过时的应用发送的是文件路径, 而不是文件流</string>
-    <string name="title_no_contacts">联系选择器不可用</string>
     <string name="title_no_internet">没有或没有合适的网络连接</string>
     <string name="title_no_connection">正在连接到一个或多个账户 &#8230;</string>
     <string name="title_no_folder">文件夹不存在</string>
@@ -777,7 +780,8 @@
     <string name="title_add_image_inline">插入</string>
     <string name="title_add_image_attach">附件</string>
     <string name="title_add_image_resize">调整大小</string>
-    <string name="title_add_image_privacy">移除图片地理位置信息</string>
+    <string name="title_add_image_privacy">删除隐私敏感数据</string>
+    <string name="title_add_image_privacy_remark">地理位置、序列号等</string>
     <string name="title_add_resize_pixels">&lt; %1$d 像素</string>
     <string name="title_add_image_select">选择文件</string>
     <string name="title_add_attachment">添加附件</string>
@@ -785,6 +789,7 @@
     <string name="title_attachment_photo">拍照</string>
     <string name="title_attachment_audio">录音</string>
     <string name="title_show_addresses">显示抄送和密送</string>
+    <string name="title_save_drafts">将草稿保存在服务器上</string>
     <string name="title_send_dialog">显示发送选项</string>
     <string name="title_image_dialog">显示图像选项</string>
     <string name="title_media_toolbar">媒体工具栏</string>
@@ -971,6 +976,7 @@
     <string name="title_rule_tts_prefix">新消息</string>
     <string name="title_rule_tts_from">发件人</string>
     <string name="title_rule_tts_subject">主题</string>
+    <string name="title_rule_tts_content">文本</string>
     <string name="title_legend_section_synchronize">同步</string>
     <string name="title_legend_section_folders">文件夹</string>
     <string name="title_legend_section_messages">消息</string>
@@ -1089,6 +1095,7 @@
     <string name="title_hint_eml">这是一个原始消息文件内容的摘要。用操作栏中的保存图标保存原始消息以查看所有内容。</string>
     <string name="title_open_link">打开链接</string>
     <string name="title_different_link">标题和链接地址不同</string>
+    <string name="title_tracking_link">此网站可能会跟踪你</string>
     <string name="title_link_http">流量不会被加密</string>
     <string name="title_link_https">流量将被加密</string>
     <string name="title_sanitize_link">删除跟踪参数</string>
@@ -1107,6 +1114,7 @@
     <string name="title_add">添加</string>
     <string name="title_browse">打开方式</string>
     <string name="title_info">信息</string>
+    <string name="title_download">下载</string>
     <string name="title_report">报告</string>
     <string name="title_fix">修复</string>
     <string name="title_enable">启用</string>
@@ -1165,6 +1173,7 @@
     <string name="title_debug_info">调试信息</string>
     <string name="title_debug_info_remark">请描述问题及问题发生的时间：</string>
     <string name="title_crash_info_remark">请描述应用崩溃时您的操作</string>
+    <string name="title_unexpected_info_remark">请描述应用出错时你正在做什么:</string>
     <string name="title_widget_title_count">新消息计数</string>
     <string name="title_widget_title_list">消息列表</string>
     <string name="title_widget_account">账户</string>
@@ -1322,6 +1331,13 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>关闭</item>
+        <item>2.5 秒</item>
+        <item>5 秒</item>
+        <item>7.5 秒</item>
+        <item>10 秒</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>草写体</item>

@@ -5,7 +5,7 @@
     <string name="app_welcome">FairEmail е приложение за електронна поща с отворен код, фокусирано върху поверителността и сигурността. Поради тази причина някои функции могат да работят различно от това с което сте свикнали. Превод на български plimboster.</string>
     <string name="app_limitations">Например, съобщенията винаги ще се преформатират, за да се премахнат опасни елементи и да се подобри четенето, както и връзките за отваряне трябва да бъдат потвърдени за безопасност.</string>
     <string name="app_crash">FairEmail не се поддържа на това устройство поради срив, причинен от грешка в Android</string>
-    <string name="app_exit">Натиснете отново \"назад\", за изход</string>
+    <string name="app_exit">Натиснете отново „назад“, за изход</string>
     <string name="channel_service">Получаване</string>
     <string name="channel_send">Изпращане</string>
     <string name="channel_notification">Известия</string>
@@ -693,7 +693,6 @@
     <string name="title_no_camera">Няма налично подходящо приложение за камера</string>
     <string name="title_no_saf">Достъпът до софтуерната рамка не е наличен</string>
     <string name="title_no_stream">Остарялото приложение изпрати пътя към файла вместо файла</string>
-    <string name="title_no_contacts">Изборът на контакт не е наличен</string>
     <string name="title_no_internet">Няма или не е намерена подходяща интернет връзка</string>
     <string name="title_no_connection">Свързване с един или повече профили &#8230;</string>
     <string name="title_no_folder">Папката не съществува</string>
@@ -775,7 +774,6 @@
     <string name="title_add_image_inline">Вмъкване</string>
     <string name="title_add_image_attach">Прикачване</string>
     <string name="title_add_image_resize">Размер</string>
-    <string name="title_add_image_privacy">Премахнете географското местоположение</string>
     <string name="title_add_resize_pixels">&lt; %1$d пиксела</string>
     <string name="title_add_image_select">Избиране на файл</string>
     <string name="title_add_attachment">Прикачване на файл</string>
@@ -1313,6 +1311,13 @@
         <item>10 MB</item>
         <item>20 MB</item>
         <item>50 MB</item>
+    </string-array>
+    <string-array name="undoNames">
+        <item>Off</item>
+        <item>2,5 с</item>
+        <item>5 с</item>
+        <item>7,5 с</item>
+        <item>10 с</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Курсив</item>

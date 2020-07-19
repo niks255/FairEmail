@@ -32,7 +32,7 @@ For authorizing:
 * Outlook / Live / Hotmail, see [question 14](#user-content-faq14)
 * Office365, see [question 14](#user-content-faq156)
 * Microsoft Exchange, see [question 8](#user-content-faq8)
-* Yahoo and Sky, see [question 88](#user-content-faq88)
+* Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
 * Apple iCloud, see [question 148](#user-content-faq148)
 * Free.fr, see [question 157](#user-content-faq157)
 
@@ -110,7 +110,7 @@ Related questions:
 * ~~Remind to attach files~~
 * ~~Select domains to show images for~~ (this will be too complicated to use)
 * ~~Unified starred messages view~~ (there is already a special search for this)
-* ~~Notification move action~~
+* ~~Move notification action~~
 * ~~S/MIME support~~
 * ~~Search for settings~~
 
@@ -151,7 +151,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(24) What is browse messages on the server?](#user-content-faq24)
 * [(25) Why can't I select/open/save an image, attachment or a file?](#user-content-faq25)
 * [(26) Can I help to translate FairEmail in my own language?](#user-content-faq26)
-* [(27) How can I differentiate external and embedded images?](#user-content-faq27)
+* [(27) How can I distinguish between embedded and external images?](#user-content-faq27)
 * [(28) How can I manage status bar notifications?](#user-content-faq28)
 * [(29) How can I get new message notifications for other folders?](#user-content-faq29)
 * [(30) How can I use the provided quick settings?](#user-content-faq30)
@@ -159,7 +159,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(32) How can I check if reading email is really safe?](#user-content-faq32)
 * [(33) Why are edited sender addresses not working?](#user-content-faq33)
 * [(34) How are identities matched?](#user-content-faq34)
-* [(35) Why should I be careful with viewing images, attachments and the original message?](#user-content-faq35)
+* [(35) Why should I be careful with viewing images, attachments, and the original message?](#user-content-faq35)
 * [(36) How are settings files encrypted?](#user-content-faq36)
 * [(37) How are passwords stored?](#user-content-faq37)
 * [(39) How can I reduce the battery usage of FairEmail?](#user-content-faq39)
@@ -210,7 +210,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(85) Why is an identity not available?](#user-content-faq85)
 * [~~(86) What are 'extra privacy features'?~~](#user-content-faq86)
 * [(87) What does 'invalid credentials' mean?](#user-content-faq87)
-* [(88) How can I use a Yahoo or Sky account?](#user-content-faq88)
+* [(88) How can I use a Yahoo, AOL or Sky account?](#user-content-faq88)
 * [(89) How can I send plain text only messages?](#user-content-faq89)
 * [(90) Why are some texts linked while not being a link?](#user-content-faq90)
 * [~~(91) Can you add periodical synchronization to save battery power?~~](#user-content-faq91)
@@ -273,7 +273,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(148) How can I use an Apple iCloud account?](#user-content-faq148)
 * [(149) How does the unread message count widget work?](#user-content-faq149)
 * [(150) Can you add cancelling calendar invites?](#user-content-faq150)
-* [(151) Can you add backup/restore messages?](#user-content-faq151)
+* [(151) Can you add backup/restore of messages?](#user-content-faq151)
 * [(152) How can I insert a contact group?](#user-content-faq152)
 * [(153) Why does permanently deleting Gmail message not work?](#user-content-faq153)
 * [~~(154) Can you add favicons as contact photos?~~](#user-content-faq154)
@@ -281,6 +281,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(156) How can I set up an Office365 account?](#user-content-faq156)
 * [(157) How can I set up an Free.fr account?](#user-content-faq157)
 * [(158) Which camera / audio recorder do you recommend?](#user-content-faq158)
+* [(159) What are Disconnect's tracker protection lists?](#user-content-faq159)
 
 [I have another question.](#user-content-support)
 
@@ -389,6 +390,7 @@ The low priority status bar notification shows the number of pending operations,
 * *subscribe*: subscribe to remote folder
 * *send*: send message
 * *exists*: check if message exists
+* *rule*: execute rule on body text
 
 Operations are processed only when there is a connection to the email server or when manually synchronizing.
 See also [this FAQ](#user-content-faq16).
@@ -702,6 +704,9 @@ Note that certificates can contains multiple keys for multiple purposes,  for ex
 Android only imports the first key, so to import all the keys, the certificate must first be split.
 This is not very trivial and you are advised to ask the certificate supplier for support.
 
+The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time.
+You might need to enable the send options in the three dots menu again to be able to select the encryption method.
+
 To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
 Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the privacy settings (PEM or DER format).
@@ -911,6 +916,10 @@ Note that apps cannot change notification settings, including the notification l
 Apps designed and targeting older Android versions might still be able to control the contents of notifications,
 but such apps cannot be updated anymore and recent Android versions will show a warning that such apps are outdated.
 
+Sometimes it is necessary to disable the setting *Show message preview in notifications*
+or to enable the settings *Show notifications with a preview text only* to workaround a bug in Android.
+This might apply to notification sounds and vibrations too.
+
 Setting a light color before Android 8 is not supported and on Android 8 and later not possible.
 
 <br />
@@ -1085,7 +1094,7 @@ Registration is free.
 <br />
 
 <a name="faq27"></a>
-**(27) How can I differentiate external and embedded images?**
+**(27) How can I distinguish between embedded and external images?**
 
 External image:
 
@@ -1223,7 +1232,7 @@ Setting identity colors is a pro feature.
 <br />
 
 <a name="faq35"></a>
-**(35) Why should I be careful with viewing images, attachments and the original message?**
+**(35) Why should I be careful with viewing images, attachments, and the original message?**
 
 Viewing remotely stored images (see also [this FAQ](#user-content-faq27)) might not only tell the sender that you have seen the message,
 but will also leak your IP address.
@@ -1637,6 +1646,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the star icon in a conversation thread to set a colored star?
 * Did you know that you can open the navigation drawer by swiping from the left, even when viewing a conversation?
 * Did you know that you can long press the people's icon to show/hide the CC/BCC fields and remember the visibility state for the next time?
+* Did you know that if you select text and hit reply, only the selected text will be quoted?
 
 <br />
 
@@ -2099,17 +2109,18 @@ You will likely need to save the associated identity again as well.
 <br />
 
 <a name="faq88"></a>
-**(88) How can I use a Yahoo or Sky account?**
+**(88) How can I use a Yahoo, AOL or Sky account?**
 
-To authorize a Yahoo or Sky account you will need to create an app password.
+To authorize a Yahoo, AOL, or Sky account you will need to create an app password.
 For instructions, please see here:
 
 * [for Yahoo](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
+* [for AOL](https://help.aol.com/articles/Create-and-manage-app-password)
 * [for Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Other email apps*)
 
 Please see [this FAQ](#user-content-faq111) about OAuth support.
 
-Note that Yahoo and Sky do not support standard push messages.
+Note that Yahoo, AOL, and Sky do not support standard push messages.
 The Yahoo email app uses a proprietary, undocumented protocol for push messages.
 
 Push messages require [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) and the Yahoo email server does not report IDLE as capability:
@@ -2659,11 +2670,12 @@ Since there is no guarantee that a message text will always be fetched directly 
 it is not possible to guarantee that a new message notification with a preview text will always be sent to a wearable.
 
 If you think this is good enough, you can enable the notification option *Only send notifications with a message preview to wearables*.
-It is a good idea to review the connection setting *Automatically download messages and attachments on a metered connection up to ...* as well.
-For some odd reason notifications will work on [WearOS](https://wearos.google.com/) with this setting enabled only.
 
 If you want to have the full message text sent to your wearable, you can enable the notification option *Preview all text*.
 Note that some wearables are known to crash with this option enabled.
+
+If you use a Samsung wearable with the Galaxy Wearable (Samsung Gear) app, you might need to enable notifications for FairEmail
+when the setting *Notifications*, *Apps installed in the future* is turned off in this app.
 
 <br />
 
@@ -3029,7 +3041,7 @@ Unfortunately, there exists no intent to delete existing calendar events.
 <br />
 
 <a name="faq151"></a>
-**(151) Can you add backup/restore messages?**
+**(151) Can you add backup/restore of messages?**
 
 An email client is meant to read and write messages, not to backup and restore messages.
 Note that breaking or losing your device, means losing your messages!
@@ -3120,6 +3132,18 @@ The following apps are open source cameras and audio recorders:
 To record voice notes, etc, the audio recorder needs to support
 [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION).
 Oddly, most audio recorders seem not to support this standard Android action.
+
+<br />
+
+<a name="faq159"></a>
+**(159) What are Disconnect's tracker protection lists?**
+
+Please see [here](https://disconnect.me/trackerprotection) for more information about Disconnect's tracker protection lists.
+
+After downloading the lists in the privacy settings, the lists can optionally be used:
+
+* to warn about tracking links on opening links
+* to recognize tracking images in messages
 
 <br />
 

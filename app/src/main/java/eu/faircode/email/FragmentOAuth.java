@@ -55,6 +55,7 @@ import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.ClientSecretPost;
+import net.openid.appauth.CodeVerifierUtil;
 import net.openid.appauth.NoClientAuthentication;
 import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
@@ -282,6 +283,9 @@ public class FragmentOAuth extends FragmentBase {
             if (askAccount)
                 authRequestBuilder.setLoginHint(etEmail.getText().toString().trim());
 
+            if (provider.oauth.pcke)
+                authRequestBuilder.setCodeVerifier(CodeVerifierUtil.generateRandomCodeVerifier());
+
             // For offline access
             if ("gmail".equals(provider.id))
                 authRequestBuilder.setPrompt("consent");
@@ -446,9 +450,15 @@ public class FragmentOAuth extends FragmentBase {
                 if (TextUtils.isEmpty(primaryEmail) || identities.size() == 0)
                     throw new IllegalArgumentException("Primary email address not found");
 
+                if (!Helper.EMAIL_ADDRESS.matcher(primaryEmail).matches())
+                    throw new IllegalArgumentException(context.getString(R.string.title_email_invalid, primaryEmail));
+
                 Log.i("OAuth email=" + primaryEmail);
                 for (Pair<String, String> identity : identities)
                     Log.i("OAuth identity=" + identity.first + "/" + identity.second);
+
+                int at = primaryEmail.indexOf('@');
+                String username = primaryEmail.substring(0, at);
 
                 List<EntityFolder> folders;
 
@@ -499,7 +509,7 @@ public class FragmentOAuth extends FragmentBase {
                     account.user = primaryEmail;
                     account.password = state;
 
-                    account.name = provider.name;
+                    account.name = provider.name + "/" + username;
 
                     account.synchronize = true;
                     account.primary = (primary == null);
