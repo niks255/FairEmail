@@ -144,6 +144,7 @@
     <string name="title_setup_no_auth_hint">Por favor, compruebe su dirección de correo electrónico y contraseña y asegúrese de que el acceso externo (IMAP/SMTP) está habilitado para su cuenta</string>
     <string name="title_setup_app_password_hint">Este proveedor requiere una contraseña de aplicación en lugar de la contraseña de la cuenta, por favor revise las instrucciones de su proveedor</string>
     <string name="title_setup_no_system_folders">Carpeta de entrada o borradores no encontrada</string>
+    <string name="title_setup_advanced_protection">Al inscribirse en el programa de protección avanzada no es posible utilizar una aplicación de correo electrónico de terceros. Esta es una restricción impuesta por Google.</string>
     <string name="title_setup_quick_success">Una cuenta y una identidad han sido añadidas con éxito</string>
     <string name="title_setup_quick_failed">Puede intentar configurar una cuenta y una identidad a continuación también</string>
     <string name="title_setup_manage">Administrar</string>
@@ -333,6 +334,7 @@
     <string name="title_advanced_swipenav">Deslice a la izquierda/derecha para ir a la siguiente/anterior conversación</string>
     <string name="title_advanced_volumenav">Volumen arriba/abajo para ir a la conversación siguiente/anterior</string>
     <string name="title_advanced_reversed">Invertir la dirección de navegación</string>
+    <string name="title_advanced_swipe_close">Deslice hacia abajo para cerrar la conversación</string>
     <string name="title_advanced_autoexpand">Expandir mensajes automáticamente</string>
     <string name="title_advanced_expand_all">Expandir automáticamente todos los mensajes leídos</string>
     <string name="title_advanced_expand_one">Expandir sólo un mensaje a la vez</string>
@@ -351,7 +353,7 @@
     <string name="title_advanced_default_snooze">Tiempo de posponer por defecto</string>
     <string name="title_advanced_notifications">Gestionar notificaciones</string>
     <string name="title_advanced_notifications_default">Canal por defecto</string>
-    <string name="title_advanced_notifications_service">Canal de servicio</string>
+    <string name="title_advanced_notifications_service">Canal de recepción</string>
     <string name="title_advanced_notifications_background">Usar servicio en segundo plano para sincronizar mensajes</string>
     <string name="title_advanced_notifications_background_hint">Un servicio en segundo plano puede ser detenido por Android en cualquier momento, pero no requiere una notificación de la barra de estado</string>
     <string name="title_advanced_badge">Mostrar icono del lanzador con el número de mensajes nuevos</string>
@@ -387,6 +389,8 @@
     <string name="title_advanced_secure">Ocultar de la pantalla de aplicaciones recientes e impedir capturas de pantallas</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Límite de tiempo para autenticación biométrica</string>
+    <string name="title_advanced_disconnect_links">Usar listas para advertir sobre enlaces de seguimiento</string>
+    <string name="title_advanced_disconnect_images">Usar listas para reconocer imágenes de rastreo</string>
     <string name="title_advanced_sign_default">Firmar por defecto</string>
     <string name="title_advanced_encrypt_default">Cifrar por defecto</string>
     <string name="title_advanced_auto_decrypt">Descifrar automáticamente los mensajes</string>
@@ -536,7 +540,10 @@
     <string name="title_leave_on_device">Dejar mensajes en el dispositivo</string>
     <string name="title_max_messages">Número máximo de mensajes a descargar (en blanco para descargar todos)</string>
     <string name="title_keep_alive_interval">Intervalo de comprobación (minutos)</string>
-    <string name="title_use_date">Usar fecha y hora de envío del encabezado en lugar de la hora de recibido del servidor</string>
+    <string name="title_server_time">Usar hora de recepción (servidor)</string>
+    <string name="title_received_header">Usar encabezado \'Received\'</string>
+    <string name="title_date_header">Usar encabezado \'Date\' (fecha de envío)</string>
+    <string name="title_date_remark">Los cambios sólo se aplicarán a nuevos mensajes</string>
     <string name="title_related_identity">Añadir identidad relacionada</string>
     <string name="title_check">Verificar</string>
     <string name="title_trust">Confiar en el certificado del servidor con huella digital %1$s</string>
@@ -1108,6 +1115,7 @@
     <string name="title_hint_eml">Este es un resumen del contenido de un archivo de mensaje crudo. Guarde el mensaje raw con el icono guardar en la barra de acción para ver todo el contenido.</string>
     <string name="title_open_link">Abrir enlace</string>
     <string name="title_different_link">El título y la dirección del enlace son diferentes</string>
+    <string name="title_tracking_link">Este sitio web podría rastrearle</string>
     <string name="title_link_http">El tráfico no será cifrado</string>
     <string name="title_link_https">El tráfico será cifrado</string>
     <string name="title_sanitize_link">Eliminar parámetros de rastreo</string>
@@ -1126,6 +1134,7 @@
     <string name="title_add">Agregar</string>
     <string name="title_browse">Abrir con</string>
     <string name="title_info">Información</string>
+    <string name="title_download">Descargar</string>
     <string name="title_report">Reportar</string>
     <string name="title_fix">Reparar</string>
     <string name="title_enable">Activar</string>

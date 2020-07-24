@@ -56,6 +56,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -546,6 +547,8 @@ public class MessageHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean autolist = prefs.getBoolean("autolist", true);
         boolean format_flowed = prefs.getBoolean("format_flowed", false);
+        boolean monospaced = prefs.getBoolean("monospaced", false);
+        String compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
 
         // Build html body
         Document document = JsoupEx.parse(message.getFile(context));
@@ -556,6 +559,12 @@ public class MessageHelper {
                 HtmlHelper.convertLists(document);
 
             if (send) {
+                for (Element child : document.body().children())
+                    if (TextUtils.isEmpty(child.attr("fairemail"))) {
+                        String style = HtmlHelper.mergeStyles(
+                                "font-family:" + compose_font, child.attr("style"));
+                        child.attr("style", style);
+                    }
                 document.select("div[fairemail=signature]").removeAttr("fairemail");
                 document.select("div[fairemail=reference]").removeAttr("fairemail");
             }
@@ -1304,13 +1313,36 @@ public class MessageHelper {
         return (size < 0 ? null : size);
     }
 
-    long getReceived() throws MessagingException {
+    Long getReceived() throws MessagingException {
         ensureMessage(false);
 
         Date received = imessage.getReceivedDate();
         if (received == null)
-            received = imessage.getSentDate();
-        return (received == null ? new Date() : received).getTime();
+            return null;
+
+        return received.getTime();
+    }
+
+    Long getReceivedHeader() throws MessagingException {
+        ensureMessage(false);
+
+        // https://tools.ietf.org/html/rfc5321#section-4.4
+        // https://tools.ietf.org/html/rfc5322#section-3.6.7
+        String[] received = imessage.getHeader("Received");
+        if (received == null || received.length == 0)
+            return null;
+
+        String last = MimeUtility.unfold(received[0]);
+        int semi = last.lastIndexOf(';');
+        if (semi < 0)
+            return null;
+
+        MailDateFormat mdf = new MailDateFormat();
+        Date date = mdf.parse(last, new ParsePosition(semi + 1));
+        if (date == null)
+            return null;
+
+        return date.getTime();
     }
 
     Long getSent() throws MessagingException {
@@ -1318,8 +1350,9 @@ public class MessageHelper {
 
         Date sent = imessage.getSentDate();
         if (sent == null)
-            sent = imessage.getReceivedDate();
-        return (sent == null ? new Date() : sent).getTime();
+            return null;
+
+        return sent.getTime();
     }
 
     String getHeaders() throws MessagingException {
@@ -1949,6 +1982,10 @@ public class MessageHelper {
                             break;
                         }
                     }
+                } else if (content instanceof String) {
+                    String text = (String) content;
+                    String sample = text.substring(0, Math.min(80, text.length()));
+                    Log.e("Mixed string=" + sample);
                 } else
                     Log.e("Mixed type=" + (content == null ? null : content.getClass().getName()));
             }

@@ -143,6 +143,7 @@
     <string name="title_setup_no_auth_hint">Veuillez revérifier votre adresse e-mail et votre mot de passe et vous assurer que l’accès externe (IMAP/SMTP) est activé pour votre compte</string>
     <string name="title_setup_app_password_hint">Ce fournisseur requiert un mot de passe d\'application au lieu du mot de passe du compte, veuillez vérifier les instructions de votre fournisseur</string>
     <string name="title_setup_no_system_folders">Boîte de réception ou dossier « Brouillons » introuvable</string>
+    <string name="title_setup_advanced_protection">Quand on est inscrit au programme de protection avancée, il n\'est pas possible d\'utiliser une application de messagerie tierce. Il s\'agit d\'une restriction imposée par Google.</string>
     <string name="title_setup_quick_success">Compte et identité ajoutés avec succès</string>
     <string name="title_setup_quick_failed">Vous pouvez essayer de configurer un compte et une identité ci-dessous</string>
     <string name="title_setup_manage">Gérer</string>
@@ -241,6 +242,7 @@
     <string name="title_advanced_suggest_sent">Suggérer les adresses trouvées dans les messages envoyés</string>
     <string name="title_advanced_suggest_received">Suggérer les adresses trouvées dans les messages reçus</string>
     <string name="title_advanced_suggest_frequently">Trier les adresses suggérées par fréquence d’utilisation</string>
+    <string name="title_advanced_compose_font">Police de caractères par défaut</string>
     <string name="title_advanced_auto_list">Créer automatiquement des listes</string>
     <string name="title_advanced_prefix_once">Ne préfixer l\'objet qu\'une seule fois lors de la réponse ou du transfert</string>
     <string name="title_advanced_extended_reply">Utiliser l\'en-tête étendu de réponse/transfert</string>
@@ -332,6 +334,7 @@
     <string name="title_advanced_swipenav">Balayer vers la gauche/droite pour passer à la conversation suivante/précédente</string>
     <string name="title_advanced_volumenav">Utiliser les boutons de volume haut/bas pour passer à la conversation suivante/précédente</string>
     <string name="title_advanced_reversed">Inverser les directions de navigation</string>
+    <string name="title_advanced_swipe_close">Balayer vers le bas pour fermer la conversation</string>
     <string name="title_advanced_autoexpand">Déplier automatiquement les messages</string>
     <string name="title_advanced_expand_all">Déplier automatiquement tous les messages lus</string>
     <string name="title_advanced_expand_one">Ne déplier qu’un seul message à la fois</string>
@@ -350,7 +353,7 @@
     <string name="title_advanced_default_snooze">Délai de report par défaut</string>
     <string name="title_advanced_notifications">Gérer les notifications</string>
     <string name="title_advanced_notifications_default">Canal par défaut</string>
-    <string name="title_advanced_notifications_service">Canal « Service »</string>
+    <string name="title_advanced_notifications_service">Canal « Réception »</string>
     <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
     <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
     <string name="title_advanced_badge">Afficher le nombre de nouveaux messages sur l’icône de lancement</string>
@@ -386,8 +389,8 @@
     <string name="title_advanced_secure">Masquer FairEmail de la liste des applications récentes et empêcher la prise de captures d’écran</string>
     <string name="title_advanced_pin">Code PIN</string>
     <string name="title_advanced_biometrics_timeout">Délai d’expiration de l’authentification biométrique</string>
-    <string name="title_advanced_disconnect_links" comment="title_advanced_disconnect_links&#10;This is about Disconnect's tracker protection lists: https://disconnect.me/trackerprotection">Utiliser des listes pour vous avertir des liens de pistage</string>
-    <string name="title_advanced_disconnect_images" comment="title_advanced_disconnect_images&#10;This is about Disconnect's tracker protection lists: https://disconnect.me/trackerprotection">Utiliser des listes pour identifier les images de pistage</string>
+    <string name="title_advanced_disconnect_links">Utiliser des listes pour vous avertir des liens de pistage</string>
+    <string name="title_advanced_disconnect_images">Utiliser des listes pour identifier les images de pistage</string>
     <string name="title_advanced_sign_default">Signer par défaut</string>
     <string name="title_advanced_encrypt_default">Chiffrer par défaut</string>
     <string name="title_advanced_auto_decrypt">Déchiffrer automatiquement les messages</string>
@@ -537,7 +540,10 @@
     <string name="title_leave_on_device">Laisser les messages sur l\'appareil</string>
     <string name="title_max_messages">Nombre maximum de messages à télécharger (laisser vide pour tous)</string>
     <string name="title_keep_alive_interval">Intervalle de maintien de connexion (minutes)</string>
-    <string name="title_use_date">Utiliser l’heure d’envoi indiquée dans l’en-tête au lieu de l’heure de réception par le serveur</string>
+    <string name="title_server_time">Utiliser l\'heure de réception (serveur)</string>
+    <string name="title_received_header">Utiliser l\'en-tête « Reçu »</string>
+    <string name="title_date_header">Utiliser l\'en-tête « Date » (heure d\'envoi)</string>
+    <string name="title_date_remark">Les modifications seront appliquées uniquement aux nouveaux messages</string>
     <string name="title_related_identity">Ajouter une identité liée</string>
     <string name="title_check">Vérifier</string>
     <string name="title_trust">Faire confiance au certificat du serveur avec l\'empreinte digitale %1$s</string>
@@ -817,6 +823,7 @@
     <string name="title_no_key">Aucune clé privée</string>
     <string name="title_invalid_key">Clé privée non valide</string>
     <string name="title_unknown_key">La clé privée ne correspond à aucune clé de chiffrement</string>
+    <string name="title_key_missing" comment="title_key_missing&#10;No keys for &lt;email address(es)&gt;">Aucune clé pour %1$s</string>
     <string name="title_send_reminder_remark">Les rappels peuvent être activés à nouveau dans les paramètres d\'envoi</string>
     <string name="title_send_plain_text">Texte brut seulement</string>
     <string name="title_send_receipt">Demander une confirmation</string>

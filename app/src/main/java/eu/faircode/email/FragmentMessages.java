@@ -205,6 +205,11 @@ import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
+import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
+import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
+
 import static android.app.Activity.RESULT_OK;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
@@ -213,6 +218,9 @@ import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
 import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.ACTION_UP;
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
+import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecoratorBase.DEFAULT_DECELERATE_FACTOR;
+import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecoratorBase.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK;
+import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecoratorBase.DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_KEY_MISSING;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_NO_SIGNATURE;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_VALID_KEY_CONFIRMED;
@@ -503,6 +511,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         rvMessage.setHasFixedSize(false);
         //rvMessage.setItemViewCacheSize(10);
         //rvMessage.getRecycledViewPool().setMaxRecycledViews(0, 10);
+
         final LinearLayoutManager llm = new LinearLayoutManager(getContext()) {
             private Rect parentRect = new Rect();
             private Rect childRect = new Rect();
@@ -1296,6 +1305,30 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return rvMessage.canScrollVertically(-1);
             }
         });
+
+        boolean swipe_close = prefs.getBoolean("swipe_close", false);
+        if (swipe_close && viewType == AdapterMessage.ViewType.THREAD) {
+            IOverScrollDecor decor = new VerticalOverScrollBounceEffectDecorator(
+                    new RecyclerViewOverScrollDecorAdapter(rvMessage, touchHelper) {
+                        @Override
+                        public boolean isInAbsoluteEnd() {
+                            return false;
+                        }
+                    },
+                    DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD,
+                    DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK,
+                    DEFAULT_DECELERATE_FACTOR
+            );
+            decor.setOverScrollUpdateListener(new IOverScrollUpdateListener() {
+                @Override
+                public void onOverScrollUpdate(IOverScrollDecor decor, int state, float offset) {
+                    float height = decor.getView().getHeight();
+                    if (height != 0 &&
+                            offset * DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD > height / 4)
+                        handleAutoClose();
+                }
+            });
+        }
 
         final String pkg = Helper.getOpenKeychainPackage(getContext());
         Log.i("PGP binding to " + pkg);

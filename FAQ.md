@@ -356,14 +356,14 @@ The status bar notification can be disabled via the notification settings of Fai
 You can switch to periodically synchronization of messages in the receive settings to remove the notification, but be aware that this might use more battery power.
 See [here](#user-content-faq39) for more details about battery usage.
 
-Android 8 Oreo might also shows a status bar notification with the text *Apps are running in the background*.
+Android 8 Oreo might also show a status bar notification with the text *Apps are running in the background*.
 Please see [here](https://www.reddit.com/r/Android/comments/7vw7l4/psa_turn_off_background_apps_notification/) about how you can disable this notification.
 
 Some people suggested to use [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) (FCM) instead of an Android service with a status bar notification,
 but this would require email providers to send FCM messages or a central server where all messages are collected sending FCM messages.
 The first is not going to happen and the last would have significant privacy implications.
 
-If you came here by clicking on the notification, you should know that the next click will open the unified inbox instead.
+If you came here by clicking on the notification, you should know that the next click will open the unified inbox.
 
 <br />
 
@@ -691,6 +691,10 @@ Signed-only or encrypted-only messages are not a good idea, please see here abou
 
 Signed-only messages are supported, encrypted-only messages are not supported.
 
+Common errors:
+
+* *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
+
 *S/MIME*
 
 Encrypting a message requires the public key(s) of the recipient(s). Signing a message requires your private key.
@@ -1014,7 +1018,9 @@ means that the Android account manager was not able to refresh the authorization
 The error *... Authentication failed ... Invalid credentials ...* could be caused by having revoked the required account/contacts permissions.
 Just start the wizard (but do not select an account) to grant the required permissions again.
 
-The eror *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/).
+The eror *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/):
+"*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*",
+see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
 
 When in doubt, you can ask for [support](#user-content-support).
 
@@ -1851,7 +1857,7 @@ You can select one of these actions to apply to matching messages:
 * Automation (Tasker, etc)
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded,
-so it is not possible to apply conditions and actions to the message text.
+so it is not possible to apply conditions to the message text.
 Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
 If you want to forward a message, consider to use the move action instead.
@@ -2373,8 +2379,12 @@ This feature depends on support of your launcher.
 FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library.
 If it doesn't work, this cannot be fixed by changes in FairEmail.
 
-Some launchers incorrectly display '1' for [the monitoring notification](#user-content-faq2),
+Some launchers display '1' for [the monitoring notification](#user-content-faq2),
 despite FairEmail explicitly requesting not to show a badge for this notification.
+This could be caused by a bug in the launcher app or in your Android version.
+Please double check if the notification dot is disabled for the receive (service) notification channel.
+You can go to the right notification channel settings via the notification settings of FairEmail.
+This might not be obvious, but you can tap on the channel name for more settings.
 
 Note that Tesla Unread is [not supported anymore](https://forum.xda-developers.com/android/general/bad-news-tesla-unread-devoloper-t3920415).
 
@@ -2850,6 +2860,14 @@ The error *User is authenticated but not connected* might occur if:
 * An alias email address is being used as username instead of the primary email address
 * An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
 
+The shared mailbox alias will mostly be the email address of the shared account, like this:
+
+```
+you@example.com\shared@example.com
+```
+
+Note that it should be a backslash and not a forward slash.
+
 <br />
 
 <a name="faq140"></a>
@@ -2999,7 +3017,7 @@ When desired, this can be turned off in the miscellaneous settings.
 
 Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#user-content-downloads) for all download options.
 
-If you have a problem with the F-Droid build, please check if there is a newer version first.
+If you have a problem with the F-Droid build, please check if there is a newer GitHub version first.
 
 <br />
 
@@ -3145,6 +3163,20 @@ After downloading the lists in the privacy settings, the lists can optionally be
 * to warn about tracking links on opening links
 * to recognize tracking images in messages
 
+Tracking images will be disabled only if the corresponding main 'disable' option is enabled.
+
+Tracking images will not be recognized when the domain is classified as '*Content*',
+see [here](https://disconnect.me/trackerprotection#trackers-we-dont-block) for more information.
+
+This command can be sent to FairEmail from an automation app to update the protection lists:
+
+```
+(adb shell) am startservice -a eu.faircode.email.DISCONNECT.ME
+```
+
+Updating once a week will probably be sufficient,
+please see [here](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) for recent lists changes.
+
 <br />
 
 ## Support
@@ -3160,6 +3192,7 @@ Requested features should:
 * comply with common standards (IMAP, SMTP, etc)
 
 Features not fulfilling these requirements will likely be rejected.
+This is also to keep maintenance and support in the long run feasible.
 
 If you have a question, want to request a feature or report a bug, please use [this form](https://contact.faircode.eu/?product=fairemailsupport).
 

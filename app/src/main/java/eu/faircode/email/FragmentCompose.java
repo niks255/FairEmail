@@ -49,7 +49,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.OperationCanceledException;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -245,6 +244,7 @@ public class FragmentCompose extends FragmentBase {
 
     private boolean prefix_once = false;
     private boolean monospaced = false;
+    private String compose_font;
     private Integer encrypt = null;
     private boolean media = true;
     private boolean compact = false;
@@ -292,6 +292,7 @@ public class FragmentCompose extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefix_once = prefs.getBoolean("prefix_once", true);
         monospaced = prefs.getBoolean("monospaced", false);
+        compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
         media = prefs.getBoolean("compose_media", true);
         compact = prefs.getBoolean("compose_compact", false);
         zoom = prefs.getInt("compose_zoom", compact ? 0 : 1);
@@ -610,7 +611,7 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
-        etBody.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
+        etBody.setTypeface(Typeface.create(compose_font, Typeface.NORMAL));
         tvReference.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
         tvReference.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -1674,11 +1675,14 @@ public class FragmentCompose extends FragmentBase {
                     if (recipients.size() == 0)
                         throw new IllegalArgumentException(getString(R.string.title_to_missing));
 
-                    pgpUserIds = new String[recipients.size()];
+                    List<String> emails = new ArrayList<>();
                     for (int i = 0; i < recipients.size(); i++) {
                         InternetAddress recipient = (InternetAddress) recipients.get(i);
-                        pgpUserIds[i] = recipient.getAddress().toLowerCase();
+                        String email = recipient.getAddress().toLowerCase();
+                        if (!emails.contains(email))
+                            emails.add(email);
                     }
+                    pgpUserIds = emails.toArray(new String[0]);
 
                     Intent intent;
                     if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt))
@@ -2204,8 +2208,9 @@ public class FragmentCompose extends FragmentBase {
                                 // Sign/encrypt
                                 pgpKeyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
                                 Log.i("Keys=" + pgpKeyIds.length);
-                                if (pgpKeyIds.length == 0)
-                                    throw new OperationCanceledException("Got no key");
+                                if (pgpKeyIds.length != pgpUserIds.length)
+                                    throw new IllegalArgumentException(context.getString(R.string.title_key_missing,
+                                            TextUtils.join(", ", pgpUserIds)));
 
                                 if (identity.sign_key != null) {
                                     pgpSignKeyId = identity.sign_key;
@@ -2334,9 +2339,7 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof OperationCanceledException)
-                    ; // Do nothing
-                else if (ex instanceof IllegalArgumentException
+                if (ex instanceof IllegalArgumentException
                         || ex instanceof GeneralSecurityException /* InvalidKeyException */) {
                     Log.i(ex);
                     Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
@@ -3318,15 +3321,7 @@ public class FragmentCompose extends FragmentBase {
                                 // Prevent replying to self
                                 if (ref.replySelf(data.identities, ref.account)) {
                                     data.draft.from = ref.from;
-                                    List<Address> tos = new ArrayList<>();
-                                    if (ref.to != null)
-                                        for (Address to : ref.to)
-                                            for (EntityIdentity identity : data.identities)
-                                                if (!Objects.equals(identity.account, ref.account) ||
-                                                        !identity.self ||
-                                                        !identity.similarAddress(to))
-                                                    tos.add(to);
-                                    data.draft.to = (tos.size() == 0 ? null : tos.toArray(new Address[0]));
+                                    data.draft.to = ref.to;
                                 } else {
                                     data.draft.from = ref.to;
                                     data.draft.to = (ref.reply == null || ref.reply.length == 0 ? ref.from : ref.reply);

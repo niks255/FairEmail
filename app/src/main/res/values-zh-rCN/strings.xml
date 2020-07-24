@@ -131,6 +131,7 @@
     <string name="title_setup_no_auth_hint">请仔细检查您的邮件地址和密码，并确保您的帐户已启用外部访问 (IMAP/SMTP)</string>
     <string name="title_setup_app_password_hint">此供应商需要 app 密码而不是帐户密码，请查看该供应商的相关说明</string>
     <string name="title_setup_no_system_folders">找不到收件箱或草稿文件夹</string>
+    <string name="title_setup_advanced_protection">当注册了高级保护项目后，将无法使用第三方电子邮件应用程序。 这是Google施加的限制。</string>
     <string name="title_setup_quick_success">已成功添加了一个账户和身份</string>
     <string name="title_setup_quick_failed">您也可以尝试在下方配置一个账户和身份</string>
     <string name="title_setup_manage">管理</string>
@@ -229,6 +230,7 @@
     <string name="title_advanced_suggest_sent">建议在已发送消息中找到的地址</string>
     <string name="title_advanced_suggest_received">建议在已收到消息中找到的地址</string>
     <string name="title_advanced_suggest_frequently">按使用频率来排序建议地址</string>
+    <string name="title_advanced_compose_font">默认字体:</string>
     <string name="title_advanced_auto_list">自动创建列表</string>
     <string name="title_advanced_prefix_once">答复或抄送邮件时, 主题前的Re或CC只出现一次</string>
     <string name="title_advanced_extended_reply">使用扩展回复/转发头</string>
@@ -320,13 +322,14 @@
     <string name="title_advanced_swipenav">左右滑动切换邮件</string>
     <string name="title_advanced_volumenav">音量上/下键切换邮件</string>
     <string name="title_advanced_reversed">反转导航方向</string>
+    <string name="title_advanced_swipe_close">向下滑动关闭对话</string>
     <string name="title_advanced_autoexpand">自动展开消息</string>
     <string name="title_advanced_expand_all">自动展开所有已读消息</string>
     <string name="title_advanced_expand_one">每次仅展开一个消息</string>
     <string name="title_advanced_collapse_multiple">按返回时折叠会话中的多条消息</string>
     <string name="title_advanced_autoclose">自动关闭对话</string>
     <string name="title_advanced_onclose">关闭对话时</string>
-    <string name="title_advanced_undo">撤销超时</string>
+    <string name="title_advanced_undo">撤回超时</string>
     <string name="title_advanced_quick_filter">显示不显眼的快速过滤图标</string>
     <string name="title_advanced_quick_scroll">显示不显眼的快速上/下滚动图标</string>
     <string name="title_advanced_autoread">移动消息时自动标记为已读</string>
@@ -338,7 +341,7 @@
     <string name="title_advanced_default_snooze">默认打盹时间</string>
     <string name="title_advanced_notifications">管理通知</string>
     <string name="title_advanced_notifications_default">默认频道</string>
-    <string name="title_advanced_notifications_service">服务频道</string>
+    <string name="title_advanced_notifications_service">接收频道</string>
     <string name="title_advanced_notifications_background">使用后台服务来同步消息</string>
     <string name="title_advanced_notifications_background_hint">后台服务不会显示状态栏通知，但随时可能会被 Android 终止</string>
     <string name="title_advanced_badge">在启动器图标上显示新消息数目</string>
@@ -374,6 +377,8 @@
     <string name="title_advanced_secure">从\"最近应用\"列表中隐藏并阻止截屏</string>
     <string name="title_advanced_pin">PIN 码</string>
     <string name="title_advanced_biometrics_timeout">生物认证超时时间</string>
+    <string name="title_advanced_disconnect_links">使用列表警告跟踪链接</string>
+    <string name="title_advanced_disconnect_images">使用列表来识别跟踪图像</string>
     <string name="title_advanced_sign_default">使用默认签名</string>
     <string name="title_advanced_encrypt_default">使用默认加密</string>
     <string name="title_advanced_auto_decrypt">自动解密消息</string>
@@ -523,7 +528,10 @@
     <string name="title_leave_on_device">把消息留在设备上</string>
     <string name="title_max_messages">下载邮件的最大数（留空则下载全部）</string>
     <string name="title_keep_alive_interval">保持激活/轮询时间间隔(分钟)</string>
-    <string name="title_use_date">使用日期头发送时间而非服务器接收时间</string>
+    <string name="title_server_time">使用接收时间(服务器)</string>
+    <string name="title_received_header">使用“已接收”标头</string>
+    <string name="title_date_header">使用“日期”标头 (发送时间)</string>
+    <string name="title_date_remark">更改将仅应用于新消息</string>
     <string name="title_related_identity">添加相关身份</string>
     <string name="title_check">检查</string>
     <string name="title_trust">信任具有指纹 %1$s的服务器证书</string>
@@ -780,7 +788,7 @@
     <string name="title_add_image_inline">插入</string>
     <string name="title_add_image_attach">附件</string>
     <string name="title_add_image_resize">调整大小</string>
-    <string name="title_add_image_privacy">删除隐私敏感数据</string>
+    <string name="title_add_image_privacy">移除隐私敏感数据</string>
     <string name="title_add_image_privacy_remark">地理位置、序列号等</string>
     <string name="title_add_resize_pixels">&lt; %1$d 像素</string>
     <string name="title_add_image_select">选择文件</string>
@@ -803,6 +811,7 @@
     <string name="title_no_key">没有私钥</string>
     <string name="title_invalid_key">无效的私钥</string>
     <string name="title_unknown_key">私钥与任何加密密钥不匹配</string>
+    <string name="title_key_missing" comment="title_key_missing&#10;No keys for &lt;email address(es)&gt;">没有%1$s的密钥</string>
     <string name="title_send_reminder_remark">在发送设置中可以再次启用提醒</string>
     <string name="title_send_plain_text">仅纯文本</string>
     <string name="title_send_receipt">请求回执</string>
@@ -1173,7 +1182,7 @@
     <string name="title_debug_info">调试信息</string>
     <string name="title_debug_info_remark">请描述问题及问题发生的时间：</string>
     <string name="title_crash_info_remark">请描述应用崩溃时您的操作</string>
-    <string name="title_unexpected_info_remark">请描述应用出错时你正在做什么:</string>
+    <string name="title_unexpected_info_remark">请描述应用出错时您的操作:</string>
     <string name="title_widget_title_count">新消息计数</string>
     <string name="title_widget_title_list">消息列表</string>
     <string name="title_widget_account">账户</string>

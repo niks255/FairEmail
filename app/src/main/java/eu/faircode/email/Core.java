@@ -1829,8 +1829,11 @@ class Core {
                         Log.i(folder.name + " POP sync=" + uidl);
 
                         Long sent = helper.getSent();
-                        if (sent == null)
-                            sent = 0L;
+                        Long received = helper.getReceivedHeader();
+                        if (received == null)
+                            received = sent;
+                        if (received == null)
+                            received = 0L;
 
                         String[] authentication = helper.getAuthentication();
                         MessageHelper.MessageParts parts = helper.getMessageParts();
@@ -1867,7 +1870,7 @@ class Core {
                         message.content = false;
                         message.encrypt = parts.getEncryption();
                         message.ui_encrypt = message.encrypt;
-                        message.received = sent;
+                        message.received = received;
                         message.sent = sent;
                         message.seen = false;
                         message.answered = false;
@@ -2054,11 +2057,11 @@ class Core {
 
             // Reduce list of local uids
             Flags flags = ifolder.getPermanentFlags();
-            SearchTerm searchTerm = new ReceivedDateTerm(ComparisonTerm.GE, new Date(sync_time));
-            if (sync_nodate) {
-                searchTerm = new OrTerm(searchTerm, new SentDateTerm(ComparisonTerm.GE, new Date(sync_time)));
+            SearchTerm searchTerm = account.use_date
+                    ? new SentDateTerm(ComparisonTerm.GE, new Date(sync_time))
+                    : new ReceivedDateTerm(ComparisonTerm.GE, new Date(sync_time));
+            if (sync_nodate)
                 searchTerm = new OrTerm(searchTerm, new ReceivedDateTerm(ComparisonTerm.LT, new Date(365 * 24 * 3600 * 1000L)));
-            }
             if (sync_unseen && flags.contains(Flags.Flag.SEEN))
                 searchTerm = new OrTerm(searchTerm, new FlagTerm(new Flags(Flags.Flag.SEEN), false));
             if (sync_flagged && flags.contains(Flags.Flag.FLAGGED))
@@ -2448,8 +2451,12 @@ class Core {
                         dup.thread = thread;
 
                         if (EntityFolder.SENT.equals(folder.type)) {
-                            dup.received = helper.getReceived();
-                            dup.sent = helper.getSent();
+                            Long sent = helper.getSent();
+                            Long received = helper.getReceived();
+                            if (sent != null)
+                                dup.sent = sent;
+                            if (received != null)
+                                dup.received = received;
                         }
 
                         dup.error = null;
@@ -2466,15 +2473,26 @@ class Core {
 
         if (message == null) {
             Long sent = helper.getSent();
-            long received;
-            if (account.use_date)
-                received = (sent == null ? 0 : sent);
-            else {
+
+            Long received;
+            long future = new Date().getTime() + FUTURE_RECEIVED;
+            if (account.use_date) {
+                received = sent;
+                if (received == null || received == 0 || received > future)
+                    received = helper.getReceived();
+                if (received == null || received == 0 || received > future)
+                    received = helper.getReceivedHeader();
+            } else if (account.use_received) {
+                received = helper.getReceivedHeader();
+                if (received == null || received == 0 || received > future)
+                    received = helper.getReceived();
+            } else {
                 received = helper.getReceived();
-                if (received == 0 || received > new Date().getTime() + FUTURE_RECEIVED)
-                    if (sent != null)
-                        received = sent;
+                if (received == null || received == 0 || received > future)
+                    received = helper.getReceivedHeader();
             }
+            if (received == null)
+                received = 0L;
 
             String[] authentication = helper.getAuthentication();
             MessageHelper.MessageParts parts = helper.getMessageParts();

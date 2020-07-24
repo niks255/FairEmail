@@ -336,7 +336,6 @@
     <string name="title_advanced_default_snooze">Privzeti čas dremeža</string>
     <string name="title_advanced_notifications">Upravljaj z obvestili</string>
     <string name="title_advanced_notifications_default">Privzeti kanal</string>
-    <string name="title_advanced_notifications_service">Kanal storitev</string>
     <string name="title_advanced_badge">Ikono zaganjalnika prikaži s številom novih sporočil</string>
     <string name="title_advanced_unseen_ignored">Število novih sporočil naj se ujema s številom obvestil</string>
     <string name="title_advanced_notify_summary">Prikaži samo obvestilo s povzetkom</string>
@@ -497,7 +496,6 @@
     <string name="title_leave_on_device">Pusti sporočila na napravi</string>
     <string name="title_max_messages">Največje število prejetih sporočil (prazno za vse)</string>
     <string name="title_keep_alive_interval">Razmik med poizvedbami (min.)</string>
-    <string name="title_use_date">Uporabi čas pošiljanja iz datumske glave namesto časa prejema na strežniku</string>
     <string name="title_related_identity">Dodaj povezano identiteto</string>
     <string name="title_check">Preveri</string>
     <string name="title_trust">Zaupaj potrdilu strežnika s prstnim odtisom %1$s</string>
