@@ -64,6 +64,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -113,6 +115,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     private boolean exit = false;
     private boolean searching = false;
+    private Snackbar lastSnackbar = null;
 
     static final int REQUEST_UNIFIED = 1;
     static final int REQUEST_WHY = 2;
@@ -625,6 +628,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         iff.addAction(ACTION_EDIT_RULE);
         lbm.registerReceiver(receiver, iff);
 
+        ServiceSynchronize.state(this, true);
+
         checkUpdate(false);
         checkIntent();
     }
@@ -632,8 +637,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     @Override
     protected void onPause() {
         super.onPause();
+
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.unregisterReceiver(receiver);
+
+        ServiceSynchronize.state(this, false);
     }
 
 
@@ -710,10 +718,69 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         return super.onOptionsItemSelected(item);
     }
 
-    View getContentView() {
-        if (drawerLayout == null || drawerLayout.getChildCount() == 0)
-            return null;
-        return drawerLayout.getChildAt(0);
+    public void undo(String title, final Bundle args, final SimpleTask<Void> move, final SimpleTask<Void> show) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int undo_timeout = prefs.getInt("undo_timeout", 5000);
+
+        if (undo_timeout == 0) {
+            move.execute(this, args, "undo:move");
+            return;
+        }
+
+        if (drawerLayout == null || drawerLayout.getChildCount() == 0) {
+            Log.e("Undo: drawer missing");
+            return;
+        }
+
+        final View content = drawerLayout.getChildAt(0);
+
+        final Snackbar snackbar = Snackbar.make(content, title, Snackbar.LENGTH_INDEFINITE)
+                .setGestureInsetBottomIgnored(true);
+        lastSnackbar = snackbar;
+
+        snackbar.setAction(R.string.title_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Undo cancel");
+                snackbar.getView().setTag(true);
+                snackbar.dismiss();
+            }
+        });
+
+        snackbar.addCallback(new Snackbar.Callback() {
+            private int margin;
+
+            @Override
+            public void onShown(Snackbar sb) {
+                ViewGroup.MarginLayoutParams lparam = (ViewGroup.MarginLayoutParams) content.getLayoutParams();
+                margin = lparam.bottomMargin;
+                lparam.bottomMargin += snackbar.getView().getHeight();
+                content.setLayoutParams(lparam);
+            }
+
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                if (snackbar.getView().getTag() == null)
+                    move.execute(ActivityView.this, args, "undo:move");
+                else
+                    show.execute(ActivityView.this, args, "undo:show");
+
+                ViewGroup.MarginLayoutParams lparam = (ViewGroup.MarginLayoutParams) content.getLayoutParams();
+                lparam.bottomMargin = margin;
+                content.setLayoutParams(lparam);
+            }
+        });
+        snackbar.show();
+
+        // Wait
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("Undo timeout");
+                if (snackbar.isShown())
+                    snackbar.dismiss();
+            }
+        }, undo_timeout);
     }
 
     private void checkFirst() {
@@ -1232,6 +1299,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     private void onViewThread(Intent intent) {
         boolean found = intent.getBooleanExtra("found", false);
+
+        if (lastSnackbar != null && lastSnackbar.isShown())
+            lastSnackbar.dismiss();
 
         if (!found && getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             getSupportFragmentManager().popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);

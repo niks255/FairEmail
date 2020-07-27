@@ -1137,7 +1137,8 @@ class Core {
                         downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, stats);
                 }
 
-                EntityLog.log(context, folder.name + " fetch stats " + stats);
+                if (!stats.isEmpty())
+                    EntityLog.log(context, folder.name + " fetch stats " + stats);
             } finally {
                 ((IMAPMessage) imessage).invalidateHeaders();
             }
@@ -2378,6 +2379,7 @@ class Core {
             db.folder().setFolderError(folder.id, null);
 
             stats.total = (SystemClock.elapsedRealtime() - search);
+
             EntityLog.log(context, folder.name + " sync stats " + stats);
         } finally {
             Log.i(folder.name + " end sync state=" + state);
@@ -3161,7 +3163,7 @@ class Core {
         }
     }
 
-    static void notifyMessages(Context context, List<TupleMessageEx> messages, Map<Long, List<Long>> groupNotifying) {
+    static void notifyMessages(Context context, List<TupleMessageEx> messages, Map<Long, List<Long>> groupNotifying, boolean foreground) {
         if (messages == null)
             messages = new ArrayList<>();
 
@@ -3169,7 +3171,10 @@ class Core {
         if (nm == null)
             return;
 
+        DB db = DB.getInstance(context);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notify_background_only = prefs.getBoolean("notify_background_only", false);
         boolean notify_summary = prefs.getBoolean("notify_summary", false);
         boolean notify_preview = prefs.getBoolean("notify_preview", true);
         boolean notify_preview_only = prefs.getBoolean("notify_preview_only", false);
@@ -3196,13 +3201,22 @@ class Core {
                 String channelId = message.getNotificationChannelId();
                 if (channelId != null) {
                     NotificationChannel channel = nm.getNotificationChannel(channelId);
-                    if (channel != null && channel.getImportance() == NotificationManager.IMPORTANCE_NONE)
+                    if (channel != null && channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                        Log.i("Notify disabled=" + message.id + " channel=" + channelId);
                         continue;
+                    }
                 }
             }
 
             if (notify_preview && notify_preview_only && !message.content)
                 continue;
+
+            if (foreground && notify_background_only && message.notifying >= 0) {
+                Log.i("Notify foreground=" + message.id + " notifying=" + message.notifying);
+                if (message.notifying == 0)
+                    db.message().setMessageNotifying(message.id, 1);
+                continue;
+            }
 
             long group = (pro && message.accountNotify ? message.account : 0);
             if (!message.folderUnified)
@@ -3270,8 +3284,6 @@ class Core {
 
             Log.i("Notify group=" + group + " count=" + notifications.size() +
                     " added=" + add.size() + " removed=" + remove.size());
-
-            DB db = DB.getInstance(context);
 
             if (notifications.size() == 0) {
                 String tag = "unseen." + group + "." + 0;
@@ -4098,14 +4110,27 @@ class Core {
     private static class SyncStats {
         long search_ms;
         int flags;
-        int uids;
         long flags_ms;
+        int uids;
         long uids_ms;
         int headers;
         long headers_ms;
         long content;
         long attachments;
         long total;
+
+        boolean isEmpty() {
+            return (search_ms == 0 &&
+                    flags == 0 &&
+                    flags_ms == 0 &&
+                    uids == 0 &&
+                    uids_ms == 0 &&
+                    headers == 0 &&
+                    headers_ms == 0 &&
+                    content == 0 &&
+                    attachments == 0 &&
+                    total == 0);
+        }
 
         @Override
         public String toString() {
@@ -4115,7 +4140,7 @@ class Core {
                     " headers=" + headers + "/" + headers_ms + " ms" +
                     " content=" + Helper.humanReadableByteCount(content) +
                     " attachments=" + Helper.humanReadableByteCount(attachments) +
-                    " total=" + total;
+                    " total=" + total + " ms";
         }
     }
 }

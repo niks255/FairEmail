@@ -873,7 +873,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (avatars) {
                     int px = Math.round(fz_sender + fz_subject + (compact ? 0 : textSize * 0.9f));
                     ViewGroup.LayoutParams lparams = ibAvatar.getLayoutParams();
-                    if (lparams.height != px) {
+                    if (lparams.width != px || lparams.height != px) {
                         lparams.width = px;
                         lparams.height = px;
                         ibAvatar.requestLayout();
@@ -2324,7 +2324,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             for (EntityAttachment attachment : attachments) {
                 boolean inline = (attachment.isEncryption() ||
                         (attachment.isInline() && attachment.isImage()));
-                if (inline)
+                if (inline && attachment.available)
                     has_inline = true;
                 if (attachment.progress == null && !attachment.available)
                     download = true;
@@ -4769,7 +4769,28 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             @Override
             public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
-                super.onInitializeAccessibilityNodeInfo(host, info);
+                try {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+                } catch (Throwable ex) {
+                    /*
+                        java.lang.IllegalArgumentException: Comparison method violates its general contract!
+                                at java.util.TimSort.mergeHi(TimSort.java:864)
+                                at java.util.TimSort.mergeAt(TimSort.java:481)
+                                at java.util.TimSort.mergeForceCollapse(TimSort.java:422)
+                                at java.util.TimSort.sort(TimSort.java:219)
+                                at java.util.TimSort.sort(TimSort.java:169)
+                                at java.util.Arrays.sort(Arrays.java:2010)
+                                at java.util.Collections.sort(Collections.java:1883)
+                                at android.view.ViewGroup$ChildListForAccessibility.init(ViewGroup.java:7181)
+                                at android.view.ViewGroup$ChildListForAccessibility.obtain(ViewGroup.java:7138)
+                                at android.view.ViewGroup.addChildrenForAccessibility(ViewGroup.java:1792)
+                                at android.view.ViewGroup.addChildrenForAccessibility(ViewGroup.java:1801)
+                                at android.view.ViewGroup.addChildrenForAccessibility(ViewGroup.java:1801)
+                                at android.view.ViewGroup.onInitializeAccessibilityNodeInfoInternal(ViewGroup.java:2761)
+                                at android.view.View$AccessibilityDelegate.onInitializeAccessibilityNodeInfo(View.java:21332)
+                     */
+                    Log.e(ex);
+                }
 
                 TupleMessageEx message = getMessage();
                 if (message == null)
