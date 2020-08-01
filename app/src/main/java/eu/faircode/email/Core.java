@@ -56,6 +56,7 @@ import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.FLAGS;
 import com.sun.mail.imap.protocol.FetchResponse;
 import com.sun.mail.imap.protocol.IMAPProtocol;
+import com.sun.mail.imap.protocol.MessageSet;
 import com.sun.mail.imap.protocol.UID;
 import com.sun.mail.pop3.POP3Folder;
 import com.sun.mail.pop3.POP3Message;
@@ -186,7 +187,8 @@ class Core {
                         if (message == null &&
                                 !EntityOperation.FETCH.equals(op.name) &&
                                 !EntityOperation.SYNC.equals(op.name) &&
-                                !EntityOperation.SUBSCRIBE.equals(op.name))
+                                !EntityOperation.SUBSCRIBE.equals(op.name) &&
+                                !EntityOperation.PURGE.equals(op.name))
                             throw new MessageRemovedException();
 
                         // Process similar operations
@@ -303,6 +305,10 @@ class Core {
                                     onSynchronizeMessages(context, jargs, account, folder, (POP3Folder) ifolder, (POP3Store) istore, state);
                                     break;
 
+                                case EntityOperation.PURGE:
+                                    onPurgeFolder(context, folder);
+                                    break;
+
                                 default:
                                     Log.w(folder.name + " ignored=" + op.name);
                             }
@@ -379,6 +385,10 @@ class Core {
 
                                 case EntityOperation.SUBSCRIBE:
                                     onSubscribeFolder(context, jargs, folder, (IMAPFolder) ifolder);
+                                    break;
+
+                                case EntityOperation.PURGE:
+                                    onPurgeFolder(context, jargs, folder, (IMAPFolder) ifolder);
                                     break;
 
                                 case EntityOperation.RULE:
@@ -966,6 +976,9 @@ class Core {
                 }
 
                 file.delete();
+
+                for (Flags.Flag flag : imessage.getFlags().getSystemFlags())
+                    icopy.setFlag(flag, true);
 
                 icopies.add(icopy);
             }
@@ -1728,6 +1741,51 @@ class Core {
         db.folder().setFolderSubscribed(folder.id, subscribe);
 
         Log.i(folder.name + " subscribed=" + subscribe);
+    }
+
+    private static void onPurgeFolder(Context context, JSONArray jargs, EntityFolder folder, IMAPFolder ifolder) throws MessagingException {
+        // Delete all messages from folder
+        DB db = DB.getInstance(context);
+
+        try {
+            final MessageSet[] sets = new MessageSet[]{new MessageSet(1, ifolder.getMessageCount())};
+
+            Log.i(folder.name + " purge " + MessageSet.toString(sets));
+            ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+                @Override
+                public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                    protocol.storeFlags(sets, new Flags(Flags.Flag.DELETED), true);
+                    return null;
+                }
+            });
+            Log.i(folder.name + " purge deleted");
+
+            ifolder.expunge();
+            Log.i(folder.name + " purge expunged");
+        } catch (Throwable ex) {
+            Log.e(ex);
+            throw ex;
+        } finally {
+            int count = ifolder.getMessageCount();
+            db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
+
+            // Delete local, hidden messages
+            onPurgeFolder(context, folder);
+        }
+    }
+
+    private static void onPurgeFolder(Context context, EntityFolder folder) {
+        DB db = DB.getInstance(context);
+        try {
+            db.beginTransaction();
+
+            int purged = db.message().deleteHiddenMessages(folder.id);
+            Log.i(folder.name + " purge count=" + purged);
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, IOException {
@@ -2862,6 +2920,9 @@ class Core {
     private static EntityIdentity matchIdentity(Context context, EntityFolder folder, EntityMessage message) {
         DB db = DB.getInstance(context);
 
+        if (EntityFolder.DRAFTS.equals(folder.type))
+            return null;
+
         List<Address> addresses = new ArrayList<>();
         if (folder.isOutgoing()) {
             if (message.from != null)
@@ -3180,10 +3241,12 @@ class Core {
         boolean notify_preview_only = prefs.getBoolean("notify_preview_only", false);
         boolean wearable_preview = prefs.getBoolean("wearable_preview", false);
         boolean biometrics = prefs.getBoolean("biometrics", false);
+        String pin = prefs.getString("pin", null);
         boolean biometric_notify = prefs.getBoolean("biometrics_notify", false);
         boolean pro = ActivityBilling.isPro(context);
 
-        if (biometrics && !biometric_notify)
+        boolean redacted = ((biometrics || !TextUtils.isEmpty(pin)) && !biometric_notify);
+        if (redacted)
             notify_summary = true;
 
         Log.i("Notify messages=" + messages.size() +
@@ -3280,7 +3343,7 @@ class Core {
             List<NotificationCompat.Builder> notifications = getNotificationUnseen(context,
                     group, groupMessages.get(group),
                     notify_summary, new_messages,
-                    biometrics && !biometric_notify);
+                    redacted);
 
             Log.i("Notify group=" + group + " count=" + notifications.size() +
                     " added=" + add.size() + " removed=" + remove.size());
@@ -3482,7 +3545,7 @@ class Core {
 
             if (notify_preview)
                 if (redacted)
-                    builder.setContentText(context.getString(R.string.title_setup_biometrics));
+                    builder.setContentText(context.getString(R.string.title_notification_redacted));
                 else {
                     DateFormat DTF = Helper.getDateTimeInstance(context, SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);
                     StringBuilder sb = new StringBuilder();

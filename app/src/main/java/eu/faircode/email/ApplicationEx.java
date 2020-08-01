@@ -72,7 +72,8 @@ public class ApplicationEx extends Application {
         getMainLooper().setMessageLogging(new Printer() {
             @Override
             public void println(String msg) {
-                Log.d("Loop: " + msg);
+                if (BuildConfig.DEBUG)
+                    Log.d("Loop: " + msg);
             }
         });
 
@@ -302,7 +303,8 @@ public class ApplicationEx extends Application {
                     "OnePlus".equalsIgnoreCase(Build.MANUFACTURER) ||
                     "HUAWEI".equalsIgnoreCase(Build.MANUFACTURER))
                 editor.putInt("query_threads", 2);
-        }
+        } else if (version < 1274)
+            ContactInfo.clearCache(context); // Favicon background
 
         if (version < BuildConfig.VERSION_CODE)
             editor.putInt("previous_version", version);

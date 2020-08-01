@@ -31,6 +31,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.text.TextUtils;
 
@@ -49,6 +50,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 
@@ -63,24 +65,29 @@ import javax.mail.internet.MimeMessage;
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
-public class ServiceSend extends ServiceBase {
+public class ServiceSend extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private TupleUnsent lastUnsent = null;
+    private Network lastActive = null;
     private boolean lastSuitable = false;
 
+    private Handler handler;
     private PowerManager.WakeLock wlOutbox;
     private TwoStateOwner owner = new TwoStateOwner("send");
     private List<Long> handling = new ArrayList<>();
+
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "send");
 
     private static final int PI_SEND = 1;
-    private static final long CONNECTIVITY_DELAY = 5000L; // milliseconds
     private static final int RETRY_MAX = 3;
+    private static final int CONNECTIVITY_DELAY = 5000; // milliseconds
 
     @Override
     public void onCreate() {
         EntityLog.log(this, "Service send create");
         super.onCreate();
         startForeground(Helper.NOTIFICATION_SEND, getNotificationService().build());
+
+        handler = new Handler();
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wlOutbox = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, BuildConfig.APPLICATION_ID + ":send");
@@ -92,6 +99,7 @@ public class ServiceSend extends ServiceBase {
             public void onChanged(TupleUnsent unsent) {
                 if (unsent == null || !unsent.equals(lastUnsent)) {
                     lastUnsent = unsent;
+                    EntityLog.log(ServiceSend.this, "Unsent=" + (unsent == null ? null : unsent.count));
 
                     try {
                         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -99,6 +107,9 @@ public class ServiceSend extends ServiceBase {
                     } catch (Throwable ex) {
                         Log.w(ex);
                     }
+
+                    if (unsent == null || unsent.count == 0)
+                        stopSelf();
                 }
             }
         });
@@ -109,9 +120,6 @@ public class ServiceSend extends ServiceBase {
             public void onChanged(List<TupleOperationEx> operations) {
                 if (operations == null)
                     operations = new ArrayList<>();
-
-                if (operations.size() == 0)
-                    stopSelf();
 
                 final List<TupleOperationEx> process = new ArrayList<>();
 
@@ -124,8 +132,9 @@ public class ServiceSend extends ServiceBase {
                 handling = ops;
 
                 if (process.size() > 0) {
-                    Log.i("OUTBOX process=" + TextUtils.join(",", process) +
-                            " handling=" + TextUtils.join(",", handling));
+                    EntityLog.log(ServiceSend.this,
+                            "Send process=" + TextUtils.join(",", process) +
+                                    " handling=" + TextUtils.join(",", handling));
 
                     executor.submit(new Runnable() {
                         @Override
@@ -150,16 +159,22 @@ public class ServiceSend extends ServiceBase {
         iif.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         iif.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         registerReceiver(connectionChangedReceiver, iif);
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onDestroy() {
         EntityLog.log(this, "Service send destroy");
 
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+
         unregisterReceiver(connectionChangedReceiver);
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.unregisterNetworkCallback(networkCallback);
+
+        handler.removeCallbacks(_checkConnectivity);
 
         owner.stop();
         handling.clear();
@@ -170,6 +185,12 @@ public class ServiceSend extends ServiceBase {
         nm.cancel(Helper.NOTIFICATION_SEND);
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (ConnectionHelper.PREF_NETWORK.contains(key))
+            checkConnectivity();
     }
 
     @Override
@@ -262,34 +283,47 @@ public class ServiceSend extends ServiceBase {
     };
 
     private void checkConnectivity() {
-        boolean suitable = ConnectionHelper.getNetworkState(this).isSuitable();
-        if (lastSuitable != suitable) {
-            lastSuitable = suitable;
-            EntityLog.log(this, "Service send suitable=" + suitable);
+        handler.postDelayed(_checkConnectivity, CONNECTIVITY_DELAY);
+    }
 
-            try {
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                nm.notify(Helper.NOTIFICATION_SEND, getNotificationService().build());
-            } catch (Throwable ex) {
-                Log.w(ex);
+    private Runnable _checkConnectivity = new Runnable() {
+        @Override
+        public void run() {
+            Network active = ConnectionHelper.getActiveNetwork(ServiceSend.this);
+            boolean restart = !Objects.equals(lastActive, active);
+            if (restart) {
+                lastActive = active;
+                EntityLog.log(ServiceSend.this, "Service send active=" + active);
+
+                if (lastSuitable) {
+                    EntityLog.log(ServiceSend.this, "Service send restart");
+                    lastSuitable = false;
+                    owner.stop();
+                    handling.clear();
+                }
             }
 
-            // Wait for stabilization of connection
-            if (suitable)
+            boolean suitable = ConnectionHelper.getNetworkState(ServiceSend.this).isSuitable();
+            if (lastSuitable != suitable) {
+                lastSuitable = suitable;
+                EntityLog.log(ServiceSend.this, "Service send suitable=" + suitable);
+
                 try {
-                    Thread.sleep(CONNECTIVITY_DELAY);
-                } catch (InterruptedException ex) {
+                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    nm.notify(Helper.NOTIFICATION_SEND, getNotificationService().build());
+                } catch (Throwable ex) {
                     Log.w(ex);
                 }
 
-            if (suitable)
-                owner.start();
-            else {
-                owner.stop();
-                handling.clear();
+                if (suitable)
+                    owner.start();
+                else {
+                    owner.stop();
+                    handling.clear();
+                }
             }
         }
-    }
+    };
 
     private void processOperations(List<TupleOperationEx> ops) {
         try {
@@ -301,7 +335,7 @@ public class ServiceSend extends ServiceBase {
                 db.folder().setFolderError(outbox.id, null);
                 db.folder().setFolderSyncState(outbox.id, "syncing");
 
-                Log.i(outbox.name + " processing operations=" + ops.size());
+                EntityLog.log(this, "Send processing operations=" + ops.size());
 
                 while (ops.size() > 0) {
                     if (!ConnectionHelper.getNetworkState(this).isSuitable())
@@ -314,8 +348,7 @@ public class ServiceSend extends ServiceBase {
                         message = db.message().getMessage(op.message);
 
                     try {
-                        Log.i(outbox.name +
-                                " start op=" + op.id + "/" + op.name +
+                        EntityLog.log(this, "Send start op=" + op.id + "/" + op.name +
                                 " msg=" + op.message +
                                 " tries=" + op.tries +
                                 " args=" + op.args);
@@ -359,7 +392,7 @@ public class ServiceSend extends ServiceBase {
                         ops.remove(op);
                     } catch (Throwable ex) {
                         Log.e(outbox.name, ex);
-                        EntityLog.log(this, outbox.name + " " + Log.formatThrowable(ex, false));
+                        EntityLog.log(this, "Send " + Log.formatThrowable(ex, false));
 
                         db.operation().setOperationError(op.id, Log.formatThrowable(ex));
                         if (message != null) {
@@ -388,7 +421,7 @@ public class ServiceSend extends ServiceBase {
                         } else
                             throw ex;
                     } finally {
-                        Log.i(outbox.name + " end op=" + op.id + "/" + op.name);
+                        EntityLog.log(this, "Send end op=" + op.id + "/" + op.name);
                         db.operation().setOperationState(op.id, null);
                     }
                 }
@@ -571,9 +604,10 @@ public class ServiceSend extends ServiceBase {
 
             // Send message
             EntityLog.log(this, "Sending " + via);
+            long start = new Date().getTime();
             iservice.getTransport().sendMessage(imessage, to);
-            long time = new Date().getTime();
-            EntityLog.log(this, "Sent " + via);
+            long end = new Date().getTime();
+            EntityLog.log(this, "Sent " + via + " elapse=" + (end - start) + " ms");
 
             try {
                 db.beginTransaction();
@@ -583,7 +617,8 @@ public class ServiceSend extends ServiceBase {
 
                 // Show in sent folder
                 if (sid != null) {
-                    db.message().setMessageSent(sid, time);
+                    db.message().setMessageReceived(sid, start);
+                    db.message().setMessageSent(sid, end);
                     db.message().setMessageUiHide(sid, false);
                 }
 

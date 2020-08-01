@@ -388,6 +388,7 @@ The low priority status bar notification shows the number of pending operations,
 * *attachment*: download attachment
 * *sync*: synchronize local and remote messages
 * *subscribe*: subscribe to remote folder
+* *purge*: delete all messages from remote folder
 * *send*: send message
 * *exists*: check if message exists
 * *rule*: execute rule on body text
@@ -590,7 +591,7 @@ if your provider allows this.
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
-See [this FAQ](#user-content-faq33) for editing the username of email addresses.
+See [this FAQ](#user-content-faq33) on editing the username of email addresses.
 
 <br />
 
@@ -1279,6 +1280,10 @@ Long version:
 
 All supported Android versions [encrypt all user data](https://source.android.com/security/encryption),
 so all data, including usernames, passwords, messages, etc, is stored encrypted.
+
+If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible.
+If this is a problem because you are sharing the device with other people,
+consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
 
 <br />
 
@@ -2479,6 +2484,9 @@ So, it is reasonable to assume that OAuth is not supported by Yahoo anymore too.
 <a name="faq112"></a>
 **(112) Which email provider do you recommend?**
 
+FairEmail is an email client only, so you need to bring your own email address.
+
+There are plenty of email providers to choose from.
 Which email provider is best for you depends on your wishes/requirements.
 Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/)
 for a list of privacy oriented email providers with advantages and disadvantages.

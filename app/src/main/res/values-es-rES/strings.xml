@@ -81,6 +81,7 @@
     <string name="title_notification_alert">Alerta del servidor \'%1$s\'</string>
     <string name="title_notification_sending_left">Intentos restantes: %1$d</string>
     <string name="title_notification_sending_failed">El envío a %1$s falló</string>
+    <string name="title_notification_redacted">Redactado: autenticación biométrica o PIN habilitada</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -128,6 +129,7 @@
     <string name="title_setup_quick_smtp">Servidor SMTP para enviar mensajes</string>
     <string name="title_setup_wizard">Asistente</string>
     <string name="title_setup_wizard_multiple">El asistente de instalación puede utilizarse varias veces para configurar varias cuentas</string>
+    <string name="title_setup_wizard_new">Necesito una nueva dirección de correo electrónico</string>
     <string name="title_setup_wizard_remark">Ir \'atrás\' para ir a la bandeja de entrada</string>
     <string name="title_setup_other">Otro proveedor</string>
     <string name="title_setup_gmail_support">La autorización de cuentas de Google sólo funcionará en versiones oficiales ya que Android comprueba la firma de la aplicación</string>
@@ -602,6 +604,7 @@
     <string name="title_empty_spam_ask">¿Eliminar todos los mensajes de spam permanentemente?</string>
     <string name="title_empty_trash_all_ask">¿Eliminar todos los mensajes borrados de todas las cuentas permanentemente?</string>
     <string name="title_empty_spam_all_ask">¿Eliminar permanentemente todos los mensajes de spam de todas las cuentas?</string>
+    <string name="title_empty_all">Esto eliminará todos los mensajes tanto del dispositivo como del servidor</string>
     <string name="title_delete_operation">¿Eliminar operaciones con un mensaje de error?</string>
     <string name="title_delete_contacts">¿Eliminar todos los contactos locales?</string>
     <string name="title_no_operations">No hay operaciones pendientes</string>
@@ -756,6 +759,7 @@
         Agradecería que pudiera calificar a FairEmail en Play Store.
         Esto ayudará a mantener un equilibrio entre reseñas desfavorables y favorables.
     </string>
+    <string name="title_ask_once">Este mensaje sólo aparecerá una vez, a menos que seleccione \'Más tarde\'</string>
     <string name="title_third_party">Está usando una versión de un tercero</string>
     <string name="title_expand_warning">Expandir este mensaje descargará %1$s</string>
     <string name="title_download_message">Descargando &#8230;</string>

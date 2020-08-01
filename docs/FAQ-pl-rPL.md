@@ -1,6 +1,6 @@
 # Wsparcie FairEmail
 
-Jeśli masz pytanie, sprawdź najpierw najczęściej zadawane pytania. Na dole możesz dowiedzieć się, jak zadawać inne pytania, żądać funkcji i zgłaszać błędy.
+Jeśli masz pytanie, najpierw sprawdź najczęściej zadawane pytania umieszczone poniżej. Na dole możesz dowiedzieć się, jak zadawać pytania, zgłaszać nowe funkcjonalności i zgłaszać błędy.
 
 ## Spis treści
 
@@ -37,27 +37,27 @@ Zobacz [tutaj](#user-content-faq22) opisy typowych komunikatów o błędach i ro
 Powiązane pytania:
 
 * [Czy OAuth jest wspierany?](#user-content-faq111)
-* [Dlaczego ActiveSync nie jest obsługiwany? ](#user-content-faq133)
+* [Dlaczego ActiveSync nie jest obsługiwany?](#user-content-faq133)
 
 <a name="howto">
 
 ## W jaki sposób...?
 
-* Zmienić nazwę konta: Konfiguracja, krok 1, Zarządzaj, dotknij konta
-* Zmienić akcję gestu przesunięcia w lewo/w prawo: Ustawienia, Zachowanie, Ustaw akcję przesuwania
-* Zmienić hasło: Ustawienia, krok 1, Zarządzaj, dotknij konta, zmień hasło
-* Ustawić podpis: Konfiguracja, krok 2, Zarządzaj, dotknij tożsamość, edytuj podpis.
-* Dodać adresy DW i UDW: dotknij ikony osób na końcu tematu
-* Przejść do następnej/poprzedniej wiadomości dotyczącej archiwizowania/usuwania: w ustawieniach zachowania wyłącz * Automatycznie zamykaj konwersacje * i wybierz * Przejdź do następnej/poprzedniej rozmowy * dla * Po zamknięciu rozmowy *
-* Dodać folder do wspólnej skrzynki odbiorczej: naciśnij długo folder na liście folderów i zaznacz * Pokaż we wspólnej skrzynce *
-* Dodać folder do menu nawigacji: naciśnij długo folder na liście folderów i zaznacz * Pokaż w menu nawigacji *
-* Załadować więcej wiadomości: przytrzymaj folder na liście folderów, wybierz *Synchronizuj więcej wiadomości*
-* Usunąć wiadomość, pomijając kosz: w menu z trzema kropkami tuż nad tekstem wiadomości * Usuń * lub alternatywnie usuń zaznaczenie folderu Kosz w ustawieniach konta
-* Usunąć konto/tożsamość: Ustawienia, krok 1/2, Zarządzaj, dotknij konta/tożsamość, menu trzech kropek, Usuń
-* Usunąć folder: długo naciśnij folder na liście folderów, Edytuj właściwości, menu trzech kropek, Usuń
-* Cofnąć wysyłanie: Wysłanie, dotknij wiadomości, dotknij przycisku cofnij
-* Przechować wysłane wiadomości w skrzynce odbiorczej: [zobacz to FAQ](#user-content-faq142)
-* Zmienić foldery systemowe: Ustawienia, krok 1, Zarządzaj, dotknij konta, lista na dole
+* Zmiana nazwy konta: Konfiguracja, krok 1, Zarządzaj, dotknij konta
+* Zmiana akcji gestu przesunięcia w lewo/w prawo: Ustawienia, Zachowanie, Ustaw akcję przesuwania
+* Zmiana hasła: Ustawienia, krok 1, Zarządzaj, dotknij konta, zmień hasło
+* Ustawienie podpisu: Konfiguracja, krok 2, Zarządzaj, dotknij tożsamość, edytuj podpis.
+* Dodanie adresów DW i UDW: dotknij ikony osób na końcu tematu
+* Przejście do następnej/poprzedniej wiadomości dotyczącej archiwizowania/usuwania: w ustawieniach zachowania wyłącz * Automatycznie zamykaj konwersacje * i wybierz * Przejdź do następnej/poprzedniej rozmowy * dla * Po zamknięciu rozmowy *
+* Dodanie folderu do wspólnej skrzynki odbiorczej: naciśnij długo folder na liście folderów i zaznacz * Pokaż we wspólnej skrzynce *
+* Dodanie folderu do menu nawigacji: naciśnij długo folder na liście folderów i zaznacz * Pokaż w menu nawigacji *
+* Załadowanie większej ilości wiadomości: przytrzymaj folder na liście folderów, wybierz *Synchronizuj więcej wiadomości*
+* Usuwanie wiadomości, pomijając kosz: w menu z trzema kropkami tuż nad tekstem wiadomości * Usuń * lub alternatywnie usuń zaznaczenie folderu Kosz w ustawieniach konta
+* Usunięcie konta/tożsamości: Ustawienia, krok 1/2, Zarządzaj, dotknij konta/tożsamość, menu trzech kropek, Usuń
+* Usunięcie folderu: długo naciśnij folder na liście folderów, Edytuj właściwości, menu trzech kropek, Usuń
+* Cofnięcie wysyłania: Wysłanie, dotknij wiadomości, dotknij przycisku cofnij
+* Przechowywanie wysyłanych wiadomości w skrzynce odbiorczej: [zobacz to FAQ](#user-content-faq142)
+* Zmiana folderów systemowych: Ustawienia, krok 1, Zarządzaj, dotknij konta, lista na dole
 * Eksport/import ustawień: Ustawienia, menu nawigacji/hamburger (trzy paski u góry)
 
 ## Znane problemy
@@ -366,9 +366,10 @@ Powiadomienie na pasku stanu o niskim priorytecie pokazuje liczbę oczekujących
 * *attachment*: pobierz załącznik
 * *sync*: synchronizuj lokalne i zdalne wiadomości
 * *subscribe*: subskrybuj zdalny folder
-* *send*: wyślij wiadomość
-* *exists*: sprawdź, czy wiadomość istnieje
-* *rule*: wykonaj regułę na treści
+* *purge*: delete all messages from remote folder
+* *send*: send message
+* *exists*: check if message exists
+* *rule*: execute rule on body text
 
 Operacje są przetwarzane tylko wtedy, gdy istnieje połączenie z serwerem e-mail lub podczas ręcznej synchronizacji. Zobacz również to [FAQ](#user-content-faq16).
 
@@ -451,7 +452,7 @@ Niestety, nie można uszczęśliwić wszystkich, a dodanie wielu ustawień było
 
 Możesz użyć kreatora szybkiej konfiguracji, aby łatwo skonfigurować konto Gmail i tożsamość.
 
-Jeśli nie chcesz korzystać z konta Gmail znajdującego się na urządzeniu, możesz włączyć dostęp dla „mniej bezpiecznych aplikacji” i użyć hasła do konta lub włączyć uwierzytelnianie dwuskładnikowe i użyć hasła aplikacji. Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
+Jeśli nie chcesz korzystać z konta Gmail znajdującego się na urządzeniu, możesz włączyć dostęp dla „mniej bezpiecznych aplikacji” i użyć hasła do konta lub włączyć uwierzytelnianie dwuskładnikowe i użyć hasła aplikacji. Zobacz [ten FAQ](#user-content-faq111), aby dowiedzieć się dlaczego można używać tylko kont na urządzeniu.
 
 Pamiętaj, że hasło jest wymagane w przypadku włączenia uwierzytelniania dwuskładnikowego.
 
@@ -494,7 +495,7 @@ Instrukcje Google znajdują się [ tutaj ](https://support.google.com/mail/answe
 
 Wysłane wiadomości są zwykle przenoszone ze skrzynki nadawczej do folderu Wysłane, gdy tylko dostawca doda wysłane wiadomości do folderu. Wymaga to wybrania folderu Wysłane w ustawieniach konta i ustawienia synchronizacji folderu Wysłane.
 
-Niektórzy dostawcy nie śledzą wysłanych wiadomości lub używany serwer SMTP może nie być powiązany z dostawcą. In these cases FairEmail, will automatically add sent messages to the sent folder on synchronizing the sent folder, which will happen after a message have been sent. Spowoduje to dodatkowy ruch internetowy.
+Niektórzy dostawcy nie śledzą wysłanych wiadomości lub używany serwer SMTP może nie być powiązany z dostawcą. W takich przypadkach FairEmail automatycznie doda wysłane wiadomości do folderu Wysłane podczas synchronizacji folderu, co nastąpi po wysłaniu wiadomości. Spowoduje to dodatkowy ruch internetowy.
 
 ~~ Jeśli tak się nie stanie, twój dostawca może nie śledzić wysłanych wiadomości lub możesz używać serwera SMTP niezwiązanego z dostawcą. ~~ ~~ W takich przypadkach możesz włączyć zaawansowane ustawienie tożsamości * Przechowuj wysłane wiadomości *, aby umożliwić FairEmail dodawanie wysłanych wiadomości do folderu Wysłane zaraz po wysłaniu wiadomości. ~~ ~~ Pamiętaj, że włączenie tego ustawienia może spowodować zduplikowanie wiadomości, jeśli Twój dostawca doda również wysłane wiadomości do folderu Wysłane. ~~ ~~ Uważaj również, ponieważ włączenie tego ustawienia spowoduje dodatkowe wykorzystanie danych, szczególnie podczas wysyłania wiadomości z dużymi załącznikami. ~~
 
@@ -530,7 +531,7 @@ Alternatywnie możesz włączyć opcję * Zezwól na edycję adresu nadawcy * w 
 
 FairEmail automatycznie zaktualizuje hasła powiązanych tożsamości podczas aktualizacji hasła powiązanego konta lub powiązanej tożsamości.
 
-Zobacz tutaj[FAQ ](#user-content-faq33), aby edytować nazwę użytkownika adresów e-mail.
+Zobacz [ten FAQ](#user-content-faq33), jak edytować nazwy użytkownika adresów e-mail.
 
 <br />
 
@@ -609,7 +610,7 @@ Wiadomości tylko podpisane lub zaszyfrowane nie są dobrym pomysłem, zobacz tu
 
 Wiadomości 'tylko podpisane' są obsługiwane, wiadomości 'tylko szyfrowane' nie są obsługiwane.
 
-Common errors:
+Częste błędy:
 
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 
@@ -629,7 +630,7 @@ Public keys are stored by FairEmail and can be imported when verifying a signatu
 
 FairEmail verifies both the signature and the complete certificate chain.
 
-Common errors:
+Częste błędy:
 
 * *No certificate found matching targetContraints*: this likely means you are using an old version of FairEmail
 * *unable to find valid certification path to requested target*: basically this means one or more intermediate or root certificates were not found
@@ -638,7 +639,7 @@ Common errors:
 
 In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates. After the certificate details the issuer or "selfSign" is shown. A certificate is self signed when the subject and the issuer are the same. Certificates from a certificate authority (CA) are marked with "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)". Certificates found in the Android key store are marked with "Android".
 
-A valid chain looks like this:
+Prawidłowy łańcuch wygląda tak:
 
 ```
 Your certificate > zero or more intermediate certificates > CA (root) certificate marked with "Android"
@@ -1093,6 +1094,8 @@ Long version:
 
 All supported Android versions [encrypt all user data](https://source.android.com/security/encryption), so all data, including usernames, passwords, messages, etc, is stored encrypted.
 
+If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible. If this is a problem because you are sharing the device with other people, consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
+
 <br />
 
 <a name="faq39"></a>
@@ -1168,7 +1171,7 @@ See also [this FAQ](#user-content-faq4).
 
 Błąd '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
 
-Błąd '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
+The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
@@ -2070,7 +2073,9 @@ OAuth access for Yahoo was requested, but Yahoo never responded to the request. 
 <a name="faq112"></a>
 **(112) Which email provider do you recommend?**
 
-Which email provider is best for you depends on your wishes/requirements. Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/) for a list of privacy oriented email providers with advantages and disadvantages.
+FairEmail is an email client only, so you need to bring your own email address.
+
+There are plenty of email providers to choose from. Which email provider is best for you depends on your wishes/requirements. Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/) for a list of privacy oriented email providers with advantages and disadvantages.
 
 Be aware that not all providers support standard email protocols, see [this FAQ](#user-content-faq129) for more information.
 

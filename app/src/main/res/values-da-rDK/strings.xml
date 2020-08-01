@@ -81,6 +81,7 @@
     <string name="title_notification_alert">\'%1$s\'-serveradvarsel</string>
     <string name="title_notification_sending_left">Forsøg resterer: %1$d</string>
     <string name="title_notification_sending_failed">Afsendelse til %1$s mislykkedes</string>
+    <string name="title_notification_redacted">Redigeret: Biometrisk eller PIN-godkendelse aktiveret</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -127,6 +128,7 @@
     <string name="title_setup_quick_smtp">SMTP-server til beskedafsendelse</string>
     <string name="title_setup_wizard">Guide</string>
     <string name="title_setup_wizard_multiple">Installationsguiden kan anvendes flere gange til opsætning af flere konti</string>
+    <string name="title_setup_wizard_new">Jeg behøver en ny e-mailadresse</string>
     <string name="title_setup_wizard_remark">Returnér til indbakken</string>
     <string name="title_setup_other">Anden udbyder</string>
     <string name="title_setup_gmail_support">Godkendelse af Google-konti fungerer kun i officielle versioner, da Android tjekker app-signaturen</string>
@@ -601,6 +603,7 @@
     <string name="title_empty_spam_ask">Slet permanent alle spambeskeder?</string>
     <string name="title_empty_trash_all_ask">Slet permanent alt indhold i papirkurven for alle konti?</string>
     <string name="title_empty_spam_all_ask">Slet permanent alle spam-beskeder for alle konti?</string>
+    <string name="title_empty_all">Dette sletter alle beskeder fra såvel enheden som serveren</string>
     <string name="title_delete_operation">Slet operationer med en fejlmeddelelse?</string>
     <string name="title_delete_contacts">Slet alle lokale kontakter?</string>
     <string name="title_no_operations">Ingen afventende handlinger</string>
@@ -755,6 +758,7 @@
         Det vil blive værdsat, hvis du kunne bedømme FairEmail i Play Butik.
         Dette vil hjælpe med at bevare balancen mellem ugunstige og gunstige anmeldelser.
     </string>
+    <string name="title_ask_once">Denne besked vises kun én gang, med mindre duvælger \'Senere\'</string>
     <string name="title_third_party">Du benytter en tredjepartsversion</string>
     <string name="title_expand_warning">Udvides denne besked, downloades %1$s</string>
     <string name="title_download_message">Downloader &#8230;</string>

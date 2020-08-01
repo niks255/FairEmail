@@ -81,6 +81,7 @@
     <string name="title_notification_alert">Alerte serveur \'%1$s\'</string>
     <string name="title_notification_sending_left">Tentatives restantes : %1$d</string>
     <string name="title_notification_sending_failed">L\'envoi à %1$s a échoué</string>
+    <string name="title_notification_redacted">Authentification biométrique ou par code PIN activée</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -127,6 +128,7 @@
     <string name="title_setup_quick_smtp">Serveur SMTP pour l’envoi des messages</string>
     <string name="title_setup_wizard">Assistant</string>
     <string name="title_setup_wizard_multiple">L’assistant de configuration rapide peut être utilisé plusieurs fois pour configurer plusieurs comptes</string>
+    <string name="title_setup_wizard_new">J\'ai besoin d\'une nouvelle adresse e-mail</string>
     <string name="title_setup_wizard_remark">Faire « Retour » pour aller à la boîte de réception</string>
     <string name="title_setup_other">Autre fournisseur</string>
     <string name="title_setup_gmail_support">L’autorisation des comptes Google fonctionnera seulement sur les versions officielles parce qu’Android vérifie la signature de l’application</string>
@@ -143,7 +145,7 @@
     <string name="title_setup_no_auth_hint">Veuillez revérifier votre adresse e-mail et votre mot de passe et vous assurer que l’accès externe (IMAP/SMTP) est activé pour votre compte</string>
     <string name="title_setup_app_password_hint">Ce fournisseur requiert un mot de passe d\'application au lieu du mot de passe du compte, veuillez vérifier les instructions de votre fournisseur</string>
     <string name="title_setup_no_system_folders">Boîte de réception ou dossier « Brouillons » introuvable</string>
-    <string name="title_setup_advanced_protection">Quand on est inscrit au programme de protection avancée, il n\'est pas possible d\'utiliser une application de messagerie tierce. Il s\'agit d\'une restriction imposée par Google.</string>
+    <string name="title_setup_advanced_protection">Une fois inscrit au programme de protection avancée, il n’est plus possible d’utiliser une application de messagerie tierce. Il s’agit d’une restriction imposée par Google.</string>
     <string name="title_setup_quick_success">Compte et identité ajoutés avec succès</string>
     <string name="title_setup_quick_failed">Vous pouvez essayer de configurer un compte et une identité ci-dessous</string>
     <string name="title_setup_manage">Gérer</string>
@@ -159,7 +161,7 @@
     <string name="title_setup_permissions">Accorder les autorisations</string>
     <string name="title_setup_permissions_remark">Pour accéder aux informations des contacts (facultatif)</string>
     <string name="title_setup_doze">Configurer les optimisations de la batterie</string>
-    <string name="title_setup_doze_remark">Recevoir des e-mails de manière fiable</string>
+    <string name="title_setup_doze_remark">Pour recevoir des e-mails de manière fiable</string>
     <string name="title_setup_doze_instructions">Sur le prochain écran, sélectionnez « Toutes les applications » en haut, recherchez cette application puis sélectionnez et validez « Ne pas optimiser »</string>
     <string name="title_setup_doze_battery">Utilisation élevée de la batterie ?</string>
     <string name="title_setup_doze_stopped">Synchronisation arrêtée ?</string>
@@ -601,6 +603,7 @@
     <string name="title_empty_spam_ask">Supprimer définitivement tous les messages indésirables ?</string>
     <string name="title_empty_trash_all_ask">Supprimer définitivement tous les messages de la corbeille pour tous les comptes ?</string>
     <string name="title_empty_spam_all_ask">Supprimer définitivement tous les messages indésirables pour tous les comptes ?</string>
+    <string name="title_empty_all">Ceci supprimera tous les messages à la fois de l\'appareil et du serveur</string>
     <string name="title_delete_operation">Supprimer les opérations avec un message d’erreur ?</string>
     <string name="title_delete_contacts">Supprimer tous les contacts locaux ?</string>
     <string name="title_no_operations">Aucune opération en attente</string>
@@ -755,6 +758,7 @@
         Il serait appréciable que vous évaluiez FairEmail sur le Play Store.
         Ceci aiderait à maintenir un équilibre entre les avis défavorables et favorables.
     </string>
+    <string name="title_ask_once">Ce message n\'apparaîtra qu\'une seule fois, sauf si vous sélectionnez « Plus tard »</string>
     <string name="title_third_party">Vous utilisez une version tierce</string>
     <string name="title_expand_warning">Déplier ce message téléchargera %1$s</string>
     <string name="title_download_message">Téléchargement&#8230;</string>

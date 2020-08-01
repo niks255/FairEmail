@@ -1,22 +1,22 @@
-# FairEmail support
+# Υποστήριξη του FairEmail
 
-If you have a question, please check the frequently asked questions below first. At the bottom, you can find out how to ask other questions, request features, and report bugs.
+Αν έχετε κάποια απορία, παρακαλώ, συμβουλευτείτε την παρακάτω λίστα με τις συχνές ερωτήσεις. Στο κάτω μέρος, μπορείτε να βρείτε πώς μπορείτε να θέτετε άλλες ερωτήσεις, να ζητάτε καινούργιες δυνατότητες και να αναφέρετε προβλήματα.
 
-## Index
+## Ευρετήριο
 
-* [Authorizing accounts](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [How to ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Known problems](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planned features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Frequently requested features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Frequently Asked Questions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
+* [Εξουσιοδότηση λογαριασμών](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
+* [Πώς γίνεται...;](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
+* [Γνωστά προβλήματα](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
+* [Προγραμματισμένες δυνατότητες](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
+* [Δυνατότητες υψηλής ζήτησης](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
+* [Συχνές ερωτήσεις](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
 * [Υποστήριξη](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-support)
 
-## Authorizing accounts
+## Εξουσιοδότηση λογαριασμών
 
-In most cases, the quick setup will be able to automatically identify the correct configuration.
+Στις περισσότερες περιπτώσεις, η γρήγορη ρύθμιση θα μπορέσει να βρει αυτόματα τις σωστές ρυθμίσεις.
 
-If the quick setup fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Αν η γρήγορη ρύθμιση αποτύχει, θα χρειαστείτε να ρυθμίσετε έναν λογαριασμό χειροκίνητα (ώστε να λαμβάνετε μηνύματα) και μία ταυτότητα (ώστε να αποστέλλετε μηνύματα). Για τον σκοπό αυτό, θα χρειαστεί να ορίσετε τις διευθύνσεις εξυπηρετητή IMAP και SMTP και τους εκάστοτε αριθμούς θυρών, εάν θα χρησιμοποιηθεί SSL/TLS ή STARTTLS, καθώς και το όνομα χρήστη (συνήθως, αλλά όχι πάντα, η διεύθυνση ηλ. ταχυδρομείου) και τον προσωπικό κωδικό σας.
 
 Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
 
@@ -366,6 +366,7 @@ The low priority status bar notification shows the number of pending operations,
 * *attachment*: download attachment
 * *sync*: synchronize local and remote messages
 * *subscribe*: subscribe to remote folder
+* *purge*: delete all messages from remote folder
 * *send*: send message
 * *exists*: check if message exists
 * *rule*: execute rule on body text
@@ -530,7 +531,7 @@ Alternatively, you can enable *Allow editing sender address* in the advanced set
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
-See [this FAQ](#user-content-faq33) for editing the username of email addresses.
+See [this FAQ](#user-content-faq33) on editing the username of email addresses.
 
 <br />
 
@@ -1092,6 +1093,8 @@ Long version:
 **(37) How are passwords stored?**
 
 All supported Android versions [encrypt all user data](https://source.android.com/security/encryption), so all data, including usernames, passwords, messages, etc, is stored encrypted.
+
+If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible. If this is a problem because you are sharing the device with other people, consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
 
 <br />
 
@@ -2070,7 +2073,9 @@ OAuth access for Yahoo was requested, but Yahoo never responded to the request. 
 <a name="faq112"></a>
 **(112) Which email provider do you recommend?**
 
-Which email provider is best for you depends on your wishes/requirements. Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/) for a list of privacy oriented email providers with advantages and disadvantages.
+FairEmail is an email client only, so you need to bring your own email address.
+
+There are plenty of email providers to choose from. Which email provider is best for you depends on your wishes/requirements. Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/) for a list of privacy oriented email providers with advantages and disadvantages.
 
 Be aware that not all providers support standard email protocols, see [this FAQ](#user-content-faq129) for more information.
 

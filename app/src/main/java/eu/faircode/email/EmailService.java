@@ -314,6 +314,8 @@ public class EmailService implements AutoCloseable {
                 properties.put("mail." + protocol + ".auth.mechanisms", "XOAUTH2");
 
             if (auth == AUTH_TYPE_OAUTH) {
+                if ("imap.mail.yahoo.com".equals(host))
+                    properties.put("mail." + protocol + ".yahoo.guid", "FAIRMAIL_V1");
                 AuthState authState = OAuthRefresh(context, provider, password);
                 connect(host, port, auth, user, authState.getAccessToken(), factory);
                 return authState.jsonSerializeString();
@@ -672,6 +674,10 @@ public class EmailService implements AutoCloseable {
             return ((IMAPStore) getStore()).hasCapability(capability);
         else
             return false;
+    }
+
+    public boolean isOpen() {
+        return (iservice != null && iservice.isConnected());
     }
 
     public void close() throws MessagingException {

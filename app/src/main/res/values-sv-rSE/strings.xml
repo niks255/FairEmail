@@ -81,6 +81,7 @@
     <string name="title_notification_alert">\"%1$s\" servermeddelande</string>
     <string name="title_notification_sending_left">Försök kvar: %1$d</string>
     <string name="title_notification_sending_failed">Det gick inte att skicka till %1$s</string>
+    <string name="title_notification_redacted">Redigering: biometrisk autentisering eller PIN-kod aktiverad</string>
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -127,6 +128,7 @@
     <string name="title_setup_quick_smtp">SMTP-server för att skicka meddelanden</string>
     <string name="title_setup_wizard">Guide</string>
     <string name="title_setup_wizard_multiple">Installationsguiden kan användas flera gånger om flera konton ska sättas upp</string>
+    <string name="title_setup_wizard_new">Jag behöver en ny e-postadress</string>
     <string name="title_setup_wizard_remark">Gå \"tillbaka\" för att gå till inkorgen</string>
     <string name="title_setup_other">Annan leverantör</string>
     <string name="title_setup_gmail_support">Godkännande av Google-konton fungerar endast i officiella versioner eftersom Android kontrollerar appens signatur</string>
@@ -600,6 +602,7 @@
     <string name="title_empty_spam_ask">Ta bort all skräppost permanent?</string>
     <string name="title_empty_trash_all_ask">Ta bort alla borttagna meddelanden från alla konton permanent?</string>
     <string name="title_empty_spam_all_ask">Ta bort all skräppost från alla konton permanent?</string>
+    <string name="title_empty_all">Detta kommer att ta bort alla meddelanden både från enheten och servern</string>
     <string name="title_delete_operation">Ta bort åtgärder med ett felmeddelande?</string>
     <string name="title_delete_contacts">Ta bort alla lokala kontakter?</string>
     <string name="title_no_operations">Inga pågående åtgärder</string>
@@ -754,6 +757,7 @@
         Det skulle uppskattas om du kunde betygsätta FairEmail i Play Store.
         Detta kommer att bidra till att upprätthålla en balans mellan ogynnsamma och gynnsamma recensioner.
     </string>
+    <string name="title_ask_once">Detta meddelande kommer bara att visas en gång, om du inte väljer \'Senare\'</string>
     <string name="title_third_party">Du använder en version av en tredje part</string>
     <string name="title_expand_warning">Utvidgningen av detta meddelande kommer att ladda ned %1$s</string>
     <string name="title_download_message">Hämtar &#8230;</string>

@@ -132,7 +132,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     ));
 
     private static final List<String> PREF_RELOAD = Collections.unmodifiableList(Arrays.asList(
-            "metered", "roaming", "rlah", // force reconnect
             "ssl_harden", // force reconnect
             "badge", "unseen_ignored", // force update badge/widget
             "debug" // force reconnect
@@ -613,7 +612,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (PREF_EVAL.contains(key)) {
+        if (PREF_EVAL.contains(key) || ConnectionHelper.PREF_NETWORK.contains(key)) {
+            if (ConnectionHelper.PREF_NETWORK.contains(key))
+                updateNetworkState(null, null);
+
             Bundle command = new Bundle();
             command.putString("pref", key);
             command.putString("name", "eval");
@@ -1344,7 +1346,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                         ServiceSynchronize.this,
                                                                         folder.name + " " + Log.formatThrowable(ex, false));
                                                                 db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
-                                                                //state.error(ex);
+                                                                state.error(ex);
                                                             } finally {
                                                                 if (shouldClose) {
                                                                     if (ifolder != null && ifolder.isOpen()) {

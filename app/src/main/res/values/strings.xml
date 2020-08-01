@@ -103,6 +103,8 @@
     <string name="title_notification_sending_left">Attempts left: %1$d</string>
     <string name="title_notification_sending_failed">Sending to %1$s failed</string>
 
+    <string name="title_notification_redacted">Redacted: biometric or PIN authentication enabled</string>
+
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
@@ -159,6 +161,7 @@
     <string name="title_setup_quick_smtp">SMTP server to send messages</string>0
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">The installation wizard can be used multiple times to set up multiple accounts</string>
+    <string name="title_setup_wizard_new">I need a new email address</string>
     <string name="title_setup_wizard_remark">Go \'back\' to go to the inbox</string>
     <string name="title_setup_gmail" translatable="false">Gmail</string>
     <string name="title_setup_outlook" translatable="false">Outlook</string>
@@ -698,6 +701,7 @@
     <string name="title_empty_spam_ask">Delete all spam messages permanently?</string>
     <string name="title_empty_trash_all_ask">Delete all trashed messages of all accounts permanently?</string>
     <string name="title_empty_spam_all_ask">Delete all spam messages of all accounts permanently?</string>
+    <string name="title_empty_all">This will delete all messages both from the device and the server</string>
     <string name="title_delete_operation">Delete operations with an error message?</string>
     <string name="title_delete_contacts">Delete all local contacts?</string>
     <string name="title_no_operations">No pending operations</string>
@@ -862,6 +866,7 @@
         It would be appreciated if you could rate FairEmail in the Play Store.
         This will help to maintain a balance between unfavorable and favorable reviews.
     </string>
+    <string name="title_ask_once">This message will only appear once, unless you select \'Later\'</string>
 
     <string name="title_third_party">You are using a version of a third party</string>
 

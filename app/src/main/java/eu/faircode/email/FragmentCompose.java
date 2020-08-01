@@ -44,6 +44,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
@@ -127,6 +128,7 @@ import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipientInfoGenerator;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.DigestCalculatorProvider;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.OutputEncryptor;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
@@ -152,6 +154,7 @@ import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -1988,7 +1991,7 @@ public class FragmentCompose extends FragmentBase {
                 args.putInt("start", start);
 
                 // TODO: double conversion
-                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, getContext()), false, new Html.ImageGetter() {
+                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, context), false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(context, id, source, true, zoom, etBody);
@@ -2661,8 +2664,12 @@ public class FragmentCompose extends FragmentBase {
                         }
                     });
                     snackbar.show();
-                } else
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                } else {
+                    boolean expected =
+                            (ex instanceof OperatorCreationException &&
+                                    ex.getCause() instanceof InvalidKeyException);
+                    Log.unexpectedError(getParentFragmentManager(), ex, !expected);
+                }
             }
         }.execute(this, args, "compose:s/mime");
     }
@@ -3713,6 +3720,21 @@ public class FragmentCompose extends FragmentBase {
                 } else {
                     args.putBoolean("saved", true);
 
+                    // External draft
+                    if (data.draft.identity == null) {
+                        for (EntityIdentity identity : data.identities)
+                            if (identity.account.equals(data.draft.account))
+                                if (identity.primary) {
+                                    data.draft.identity = identity.id;
+                                    break;
+                                } else if (data.draft.identity == null)
+                                    data.draft.identity = identity.id;
+
+                        if (data.draft.identity != null)
+                            db.message().setMessageIdentity(data.draft.id, data.draft.identity);
+                        Log.i("Selected external identity=" + data.draft.identity);
+                    }
+
                     if (data.draft.revision == null) {
                         data.draft.revision = 1;
                         data.draft.revisions = 1;
@@ -4656,7 +4678,10 @@ public class FragmentCompose extends FragmentBase {
             if (addresses == null)
                 return;
 
-            DnsHelper.checkMx(context, addresses);
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
+            if (ani != null && ani.isConnected())
+                DnsHelper.checkMx(context, addresses);
         }
     };
 
