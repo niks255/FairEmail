@@ -147,6 +147,7 @@ import org.w3c.dom.css.CSSStyleSheet;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1106,6 +1107,13 @@ public class FragmentCompose extends FragmentBase {
                 args.putString("body", a.getString("body"));
                 args.putString("text", a.getString("text"));
                 args.putString("selected", a.getString("selected"));
+
+                if (a.containsKey("attachments")) {
+                    args.putParcelableArrayList("attachments", a.getParcelableArrayList("attachments"));
+                    a.remove("attachments");
+                    setArguments(a);
+                }
+
                 draftLoader.execute(this, args, "compose:new");
             } else {
                 Bundle args = new Bundle();
@@ -1740,11 +1748,10 @@ public class FragmentCompose extends FragmentBase {
                         onPickContact(requestCode, data);
                     break;
                 case REQUEST_SHARED:
-                    Bundle args = getArguments();
-                    ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
-                    args.remove("attachments");
-                    if (resultCode == RESULT_OK)
-                        onAddImageFile(uris);
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bundle args = data.getBundleExtra("args");
+                        onAddImageFile(args.getParcelableArrayList("images"));
+                    }
                     break;
                 case REQUEST_IMAGE:
                     if (resultCode == RESULT_OK) {
@@ -1988,6 +1995,9 @@ public class FragmentCompose extends FragmentBase {
                 if (!image)
                     return null;
 
+                DB db = DB.getInstance(context);
+                db.message().setMessagePlainOnly(id, false);
+
                 args.putInt("start", start);
 
                 // TODO: double conversion
@@ -2018,7 +2028,7 @@ public class FragmentCompose extends FragmentBase {
                 // External app sending absolute file
                 if (ex instanceof SecurityException)
                     handleFileShare();
-                else if (ex instanceof IllegalArgumentException)
+                else if (ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException)
                     Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
@@ -2877,42 +2887,7 @@ public class FragmentCompose extends FragmentBase {
         }
 
         EntityAttachment attachment = new EntityAttachment();
-
-        String fname = null;
-        String ftype = null;
-        Long fsize = null;
-
-        try {
-            DocumentFile dfile = DocumentFile.fromSingleUri(context, uri);
-            if (dfile != null) {
-                fname = dfile.getName();
-                ftype = dfile.getType();
-                fsize = dfile.length();
-            }
-        } catch (SecurityException ex) {
-            Log.e(ex);
-        }
-
-        // Check name
-        if (TextUtils.isEmpty(fname))
-            fname = uri.getLastPathSegment();
-
-        // Check type
-        if (!TextUtils.isEmpty(ftype))
-            try {
-                new ContentType(ftype);
-            } catch (ParseException ex) {
-                Log.w(ex);
-                ftype = null;
-            }
-
-        if (TextUtils.isEmpty(ftype) ||
-                "*/*".equals(ftype) ||
-                "application/octet-stream".equals(ftype))
-            ftype = Helper.guessMimeType(fname);
-
-        if (fsize != null && fsize <= 0)
-            fsize = null;
+        UriInfo info = getInfo(uri, context);
 
         DB db = DB.getInstance(context);
         try {
@@ -2923,10 +2898,10 @@ public class FragmentCompose extends FragmentBase {
 
             attachment.message = draft.id;
             attachment.sequence = db.attachment().getAttachmentSequence(draft.id) + 1;
-            attachment.name = fname;
-            attachment.type = ftype;
+            attachment.name = info.name;
+            attachment.type = info.type;
             attachment.disposition = (image ? Part.INLINE : Part.ATTACHMENT);
-            attachment.size = fsize;
+            attachment.size = info.size;
             attachment.progress = 0;
 
             attachment.id = db.attachment().insertAttachment(attachment);
@@ -3679,6 +3654,26 @@ public class FragmentCompose extends FragmentBase {
                         }
                     }
 
+                    if ("new".equals(action)) {
+                        ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
+                        if (uris != null) {
+                            ArrayList<Uri> images = new ArrayList<>();
+                            for (Uri uri : uris)
+                                try {
+                                    UriInfo info = getInfo(uri, context);
+                                    if (info.isImage())
+                                        images.add(uri);
+                                    else
+                                        addAttachment(context, data.draft.id, uri, false, 0, false);
+                                } catch (IOException ex) {
+                                    Log.e(ex);
+                                }
+
+                            if (images.size() > 0)
+                                args.putParcelableArrayList("images", images);
+                        }
+                    }
+
                     if (ref != null &&
                             ("reply".equals(action) || "reply_all".equals(action) ||
                                     "forward".equals(action) || "editasnew".equals(action))) {
@@ -3940,21 +3935,20 @@ public class FragmentCompose extends FragmentBase {
                 }
             });
 
-            if (getArguments().containsKey("attachments")) {
+            if (args.containsKey("images")) {
+                ArrayList<Uri> images = args.getParcelableArrayList("images");
                 boolean image_dialog = prefs.getBoolean("image_dialog", true);
                 if (image_dialog) {
                     Bundle aargs = new Bundle();
                     aargs.putInt("title", android.R.string.ok);
+                    aargs.putParcelableArrayList("images", images);
+
                     FragmentDialogAddImage fragment = new FragmentDialogAddImage();
                     fragment.setArguments(aargs);
                     fragment.setTargetFragment(FragmentCompose.this, REQUEST_SHARED);
                     fragment.show(getParentFragmentManager(), "compose:shared");
-                } else {
-                    Bundle aargs = getArguments();
-                    ArrayList<Uri> uris = aargs.getParcelableArrayList("attachments");
-                    aargs.remove("attachments");
-                    onAddImageFile(uris);
-                }
+                } else
+                    onAddImageFile(images);
             }
         }
 
@@ -3967,7 +3961,7 @@ public class FragmentCompose extends FragmentBase {
                 finish();
             else if (ex instanceof SecurityException)
                 handleFileShare();
-            else if (ex instanceof IllegalArgumentException)
+            else if (ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException)
                 Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
                         .setGestureInsetBottomIgnored(true).show();
             else if (ex instanceof IllegalStateException) {
@@ -5241,40 +5235,6 @@ public class FragmentCompose extends FragmentBase {
                             })
                     .create();
         }
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-            super.onActivityResult(requestCode, resultCode, intent);
-
-            if (resultCode == RESULT_OK && intent != null) {
-                Bundle data = intent.getBundleExtra("args");
-                long id = data.getLong("id");
-                long duration = data.getLong("duration");
-                long time = data.getLong("time");
-
-                Bundle args = new Bundle();
-                args.putLong("id", id);
-                args.putLong("wakeup", duration == 0 ? -1 : time);
-
-                new SimpleTask<Void>() {
-                    @Override
-                    protected Void onExecute(Context context, Bundle args) {
-                        long id = args.getLong("id");
-                        long wakeup = args.getLong("wakeup");
-
-                        DB db = DB.getInstance(context);
-                        db.message().setMessageSnoozed(id, wakeup < 0 ? null : wakeup);
-
-                        return null;
-                    }
-
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        Log.unexpectedError(getParentFragmentManager(), ex);
-                    }
-                }.execute(this, args, "compose:snooze");
-            }
-        }
     }
 
     public static class FragmentDialogSend extends FragmentDialogBase {
@@ -5676,6 +5636,53 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }.execute(this, args, "compose:snooze");
             }
+        }
+    }
+
+    private static UriInfo getInfo(Uri uri, Context context) {
+        UriInfo result = new UriInfo();
+        try {
+            DocumentFile dfile = DocumentFile.fromSingleUri(context, uri);
+            if (dfile != null) {
+                result.name = dfile.getName();
+                result.type = dfile.getType();
+                result.size = dfile.length();
+            }
+        } catch (SecurityException ex) {
+            Log.e(ex);
+        }
+
+        // Check name
+        if (TextUtils.isEmpty(result.name))
+            result.name = uri.getLastPathSegment();
+
+        // Check type
+        if (!TextUtils.isEmpty(result.type))
+            try {
+                new ContentType(result.type);
+            } catch (ParseException ex) {
+                Log.w(ex);
+                result.type = null;
+            }
+
+        if (TextUtils.isEmpty(result.type) ||
+                "*/*".equals(result.type) ||
+                "application/octet-stream".equals(result.type))
+            result.type = Helper.guessMimeType(result.name);
+
+        if (result.size != null && result.size <= 0)
+            result.size = null;
+
+        return result;
+    }
+
+    private static class UriInfo {
+        String name;
+        String type;
+        Long size;
+
+        boolean isImage() {
+            return Helper.isImage(type);
         }
     }
 

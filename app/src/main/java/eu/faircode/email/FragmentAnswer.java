@@ -49,6 +49,8 @@ import androidx.constraintlayout.widget.Group;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jsoup.nodes.Document;
+
 import static android.app.Activity.RESULT_OK;
 
 public class FragmentAnswer extends FragmentBase {
@@ -138,6 +140,7 @@ public class FragmentAnswer extends FragmentBase {
         // Initialize
         grpReady.setVisibility(View.GONE);
         style_bar.setVisibility(View.GONE);
+
         pbWait.setVisibility(View.VISIBLE);
 
         return view;
@@ -151,6 +154,16 @@ public class FragmentAnswer extends FragmentBase {
         args.putLong("id", copy < 0 ? id : copy);
 
         new SimpleTask<EntityAnswer>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                pbWait.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                pbWait.setVisibility(View.GONE);
+            }
+
             @Override
             protected EntityAnswer onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
@@ -176,7 +189,6 @@ public class FragmentAnswer extends FragmentBase {
 
                 bottom_navigation.findViewById(R.id.action_delete).setVisibility(answer == null ? View.GONE : View.VISIBLE);
 
-                pbWait.setVisibility(View.GONE);
                 grpReady.setVisibility(View.VISIBLE);
             }
 
@@ -236,7 +248,7 @@ public class FragmentAnswer extends FragmentBase {
         args.putString("name", etName.getText().toString().trim());
         args.putBoolean("favorite", cbFavorite.isChecked());
         args.putBoolean("hide", cbHide.isChecked());
-        args.putString("text", HtmlHelper.toHtml(etText.getText(), getContext()));
+        args.putString("html", HtmlHelper.toHtml(etText.getText(), getContext()));
 
         new SimpleTask<Void>() {
             @Override
@@ -255,10 +267,12 @@ public class FragmentAnswer extends FragmentBase {
                 String name = args.getString("name");
                 boolean favorite = args.getBoolean("favorite");
                 boolean hide = args.getBoolean("hide");
-                String text = args.getString("text");
+                String html = args.getString("html");
 
                 if (TextUtils.isEmpty(name))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_name));
+
+                Document document = HtmlHelper.fixEdit(JsoupEx.parse(html));
 
                 DB db = DB.getInstance(context);
                 if (id < 0) {
@@ -266,14 +280,14 @@ public class FragmentAnswer extends FragmentBase {
                     answer.name = name;
                     answer.favorite = favorite;
                     answer.hide = hide;
-                    answer.text = text;
+                    answer.text = document.body().html();
                     answer.id = db.answer().insertAnswer(answer);
                 } else {
                     EntityAnswer answer = db.answer().getAnswer(id);
                     answer.name = name;
                     answer.favorite = favorite;
                     answer.hide = hide;
-                    answer.text = text;
+                    answer.text = document.body().html();
                     db.answer().updateAnswer(answer);
                 }
 
