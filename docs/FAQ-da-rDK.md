@@ -821,11 +821,11 @@ Fejlen *... Vært er uopløst ...* eller "*... Kan ikke opløse vært ...* betyd
 
 Fejlen *... Software forårsaget forbindelsesafbrydelse ...* betyder, at e-mailserveren, eller noget mellem FairEmail og e-mailserveren, aktivt afsluttede en eksisterende forbindelse. Dette kan f.eks. ske, når tilslutningen pludselig blev mistet. Et typisk eksempel er aktivering af Flytilstand.
 
-Fejlen *... BYE, logger ud ...*, *... Connection reset by peer ...* eller *... Broken pipe ...* betyder, at e-mailserveren aktivt afsluttede en eksisterende forbindelse.
+Fejlene *... BYE, logger ud ...*, *... Forbindelse nulstillet af peer ... * betyder, at e-mailserveren aktivt afsluttede en eksisterende forbindelse.
 
 Fejlen *... Forbindelse lukket af peer ...* kan forårsages af en ikke-opdateret Exchange-server, se [hér](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for yderligere oplysninger.
 
-Fejlene *... Læsefejl ...*, *... Skrivefejl ...*, *... Læsning fik timeout ...* betyder, at e-mailserveren ikke længere svarer, eller at Internetforbindelsen er ringe.
+Fejlene *... Læsefejl ...*, *... Skrivefejl ...*, *... Læsning fik timeout ...*, *... Ødelagt pipe ...* betyder, at e-mailserveren ikke længere svarer, eller at Internetforbindelsen er ringe.
 
 Fejlen *... Uventet afslutning af zlib-inputstrøm ...* betyder, at ikke alle data blev modtaget, muligvis grundet en dårlig/afbrudt forbindelse.
 
@@ -1044,155 +1044,155 @@ Match udføres kun én gang efter modtagelse af en besked, så ændring af opsæ
 
 Det er muligt at opsætte en [regex](https://en.wikipedia.org/wiki/Regular_expression) i identitetsindstillingerne for at få en e-mailadresses matchende brugernavn (tekstdelen før @-tegnet).
 
-Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
+Bemærk, at domænenavnet (tekst/tegn efter @) altid skal være identisk med identitetens domænenavn.
 
-If you like to match the special purpose email addresses abc@example.com and xyx@example.com and like to have a fallback email address main@example.com as well, you could do something like this:
+Vil du matche e-mailadresserne til specielle formål, abc@eksemepel.dk og xyx@eksemepel.dk og også gerne have en fallback e-mailadresse, hoved@eksemepel.dk, kan du gøre noget ala dette:
 
-* Identity: abc@example.com; regex: **(?i)abc**
-* Identity: xyz@example.com; regex: **(?i)xyz**
-* Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
+* Identity: abc@eksempel.dk; regex: **(?i)abc**
+* Identity: xyz@eksempel.dk; regex: **(?i)xyz**
+* Identity: hoved@eskempel.dk; regex: **^(?i)((?!abc|xyz).)\*$**
 
-Matched identities can be used to color code messages. The identity color takes precedence over the account color. Setting identity colors is a pro feature.
+Matchede identiteter kan benyttes til beskedfarvekodning. Identitetsfarven har forrang over kontofarven. Brug af identitetsfarver er en Pro-funktion.
 
 <br />
 
 <a name="faq35"></a>
-**(35) Why should I be careful with viewing images, attachments, and the original message?**
+**(35) Hvorfor bør man være forsigtig med at få vist billeder, vedhæftninger og den oprindelige besked?**
 
-Viewing remotely stored images (see also [this FAQ](#user-content-faq27)) might not only tell the sender that you have seen the message, but will also leak your IP address.
+Visning af fjernlagrede billeder (se også [denne FAQ](#user-content-faq27)) fortæller muligvis ikke kun afsenderen, at du har set beskeden, men lækker også din IP-adresse.
 
-Opening attachments or viewing an original message might load remote content and execute scripts, that might not only cause privacy sensitive information to leak, but can also be a security risk.
+Åbning af vedhæftninger eller visning af en original besked kan muligvis indlæse eksternt indhold og eksekvere scripts, hvilket ikke alene kan forårsage læk af fortrolige informationer, men tillige udgøre en sikkerhedsrisiko.
 
-Note that your contacts could unknowingly send malicious messages if they got infected with malware.
+Bemærk, at dine kontakter, uden deres vidende, kan sende ondsindede beskeder, hvis de er blevet inficeret med malware.
 
-FairEmail formats messages again causing messages to look different from the original, but also uncovering phishing links.
+FairEmail genformaterer beskeder, hvilket får dem til at se anderledes ud end originalen, men også afslører phishing-links.
 
-Note that reformatted messages are often better readable than original messages because the margins are removed, and font colors and sizes are standardized.
+Bemærk, at genformaterede beskeder ofte er mere læsbare end originalerne, da margerne er fjernet, og skrifttypefarver og -størrelser er standardiserede.
 
-The Gmail app shows images by default by downloading the images through a Google proxy server. Since the images are downloaded from the source server [in real-time](https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/), this is even less secure because Google is involved too without providing much benefit.
+Gmail-appen viser som standard billeder ved at downloade disse via en Google-proxyserver. Da billederne downloades fra kildeserveren [i realtid](https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/), er dette endnu mindre sikkert, da Google uden nogen større fordel også er involveret.
 
-You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
+Du kan som standard få vist billeder og originale beskeder for betroede afsendere fra gang til gang ved at markere *Spørg ikke igen om ...*.
 
-If you want to reset the default *Open with* apps, please [see here](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
+Vil du nulstille standard *Åbn med* apps, så tjek [hér](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
 
 <br />
 
 <a name="faq36"></a>
-**(36) How are settings files encrypted?**
+**(36) Hvordan krypteres indstillingsfiler?**
 
-Short version: AES 256 bit
+Kort version: AES 256 bit
 
-Long version:
+Lang version:
 
-* The 256 bit key is generated with *PBKDF2WithHmacSHA1* using a 128 bit secure random salt and 65536 iterations
-* The cipher is *AES/CBC/PKCS5Padding*
+* 256 bit-nøglen genereres med *PBKDF2WithHmacSHA1* vha. en 128 bit sikkert tilfældigt salt og 65.536 iterationer
+* Cipher'en er *AES/CBC/PKCS5Padding*
 
 <br />
 
 <a name="faq37"></a>
-**(37) How are passwords stored?**
+**(37) Hvordan lagres adgangskoderr?**
 
-All supported Android versions [encrypt all user data](https://source.android.com/security/encryption), so all data, including usernames, passwords, messages, etc, is stored encrypted.
+Alle understøttede Android-versioner [krypterer alle brugerdata](https://source.android.com/security/encryption), så alle data, inkl. brugernavne, adgangskoder, beskeder mv., lagres krypteret.
 
-If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible. If this is a problem because you are sharing the device with other people, consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
+Er enheden sikret med en PIN-kode, mønster eller adgangskode, kan konto- og identitetsadgangskoder gøres. synlige. Er dette er et problem, fordi enheden deles med andre, så overvej at anvende [brugerprofiler](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
 
 <br />
 
 <a name="faq39"></a>
-**(39) How can I reduce the battery usage of FairEmail?**
+**(39) Hvordan kan FairEmails batteriforbrug reduceres?**
 
-Recent Android versions by default report *app usage* as a percentage in the Android battery settings screen. **Confusingly, *app usage* is not the same as *battery usage* and is not even directly related to battery usage!** The app usage (while in use) will be very high because FairEmail is using a foreground service which is considered as constant app usage by Android. However, this doesn't mean that FairEmail is constantly using battery power. The real battery usage can be seen by navigating to this screen:
+Som standard rapporterer nyere Android-versioner *app-brug* som en procentdel på Android-batteriindstillingssiden. **Forvirrende nok er *app-brug* ikke det samme som *batteriforbrug* og er ikke engang direkte relateret til batteriforbrug!** App-brugen (under i brug) vil være meget høj, da FairEmail bruger en forgrundstjeneste, der af Android betragtes som konstant app-brug. Dette betyder dog ikke, at FairEmail konstant forbruger strøm. Det reelle stømforbrug kan ses ved at gå til denne side:
 
 *Android-indstillinger*, *Batteri*, trepriksmenu *Batteriforbrug*, trepriksmenu *Vis fuld enhedsbrug*
 
-As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby*. If this isn't the case, please let me know.
+Som en tommelfingerregel skal strømforbruget være under eller i hvert fald ikke meget højere end for *Mobilnetværks-standby*. Er det ikke tilfældet, så lad mig det venligst vide.
 
-It is inevitable that synchronizing messages will use battery power because it requires network access and accessing the messages database.
+Det er uundgåeligt, at synkronisering af bbeskeder forbruger strøm, da det kræver adgang til både netværket og beskeddatabasen.
 
-If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is setup similarly. For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
+Sammenlignes batteriforbruget for FairEmail med en anden e-mailklient, skal den anden e-mailklient er opsat på lignende vis. Det er eksempelvis ikke retvisende at sammenligne kontinuerlig syn (push-beskeder) og periodisk (ikke-regelmæssig) kontrol for nye beskeder.
 
-Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage. In this case you might want to synchronize periodically, for example each hour, instead of continuously. Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always because connecting to the server and comparing the local and remotes messages are expensive operations.
+Gentilslutninger til en e-mailserver forbruger ekstra strøm, hvilket f.eks. en ustabil Internetforbindelse vil forårsage. I så tilfælde vil du måske kun synkronisere periodisk, f.eks. hver time, i stedet for kontinuerligt. Bemærk, at hyppig polling (mere end hvert 30.-60. minut) sandsynligvis vil forbruge mere strøm end kontinuerlig synkronisering, da det er dyrt at oprette forbindelse til serveren og sammenligne lokale og fjernbeskeder.
 
-[On some devices](https://dontkillmyapp.com/) it is necessary to *disable* battery optimizations (setup step 4) to keep connections to email servers open.
+[På visse enheder](https://dontkillmyapp.com/) er det nødvendigt at *deaktivere* batterioptimeringer (opsætningstrin 4) for at holde forbindelser til e-mailservere åbne.
 
-Most of the battery usage, not considering viewing messages, is due to synchronization (receiving and sending) of messages. So, to reduce the battery usage, set the number of days to synchronize message for to a lower value, especially if there are a lot of recent messages in a folder. Long press a folder name in the folders list and select *Edit properties* to access this setting.
+Størstedelen af strømforbruget, fraset at se beskeder, skyldes synkronisering (modtagelse/afsendelse) af beskeder. For at reducere strømforbruget så indstil antallet af synkroniseringsdage til en lavere værdi, især hvis der er en masse nylige beskeder i en mappe. Langt tryk på et mappenavn i mappelisten, og valg af *Redigér egenskaber* giver adgang til denne indstilling.
 
-If you have at least once a day internet connectivity, it is sufficient to synchronize messages just for one day.
+Har du mindst én gang om dagen Internetforbindelse, er det tilstrækkeligt at synkronisere beskeder blot for én dag.
 
-Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages for, but leave the number of days to keep messages for.
+Bemærk, det antal dage, hvori beskeder *beholdes* maksimalt kan indstilles til det antal dage, hvori beskeder *synkroniseres*. Du kan f.eks. indledningsvis synkronisere beskeder i et stort antal dage, og efter at dette er afsluttet reducer antallet af beskedsynkroniseringsdage, men bevare antallet af dage, hvori beskeder skal beholdes.
 
-In the receive settings you can enable to always synchronize starred messages, which will allow you to keep older messages around while synchronizing messages for a limited number of days.
+I modtagelsesindstillingerne kan du aktivere altid at synkronisere stjernemarkerede beskeder, hvilket lader dig beholde ældre beskeder, selvom du synkroniserer beskeder i et begrænset antal dage.
 
-Disabling the folder option *Automatically download message texts and attachments* will result in less network traffic and thus less battery usage. You could disable this option for example for the sent folder and the archive.
+Deaktivering af mappeindstillingen *Download automatisk beskedtekster og vedhæftninger* vil betyde mindre netværkstrafik og dermed mindre strømforbrug. Du kan deaktivere denne indstilling for eksempelvis Sendt-mappen og arkivet.
 
-Synchronizing messages at night is mostly not useful, so you can save on battery usage by not synchronizing at night. In the settings you can select a schedule for message synchronization (this is a pro feature).
+Synkronisering af beskeder om natten er for det meste unødvendigt, så du kan spare på strømmen ved ikke at gøre dette. Du kan i indstillingerne vælge en tidsplan for beskedsynkronisering (dette er en Pro-funktion).
 
-FairEmail will by default synchronize the folder list on each connection. Since folders are mostly not created, renamed and deleted very often, you can save some network and battery usage by disabling this in the receive settings.
+FairEmail vil som standard synkronisere mappelisten ved hver tilslutning. Da mapper stort set ikke oprettes, omdøbes og slettes særligt ofte, kan du spare på netværks- og strømforbruget ved at deaktivere dette i modtagelsesindstillingerne.
 
-FairEmail will by default check if old messages were deleted from the server on each connection. If you don't mind that old messages that were delete from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings.
+Som standard vil FairEmail ved hver tilslutning tjekke, om gamle beskeder blev slettet fra serveren. Hvis du ikke har noget imod, at gamle beskederr, som blev slettet fra serveren stadig er synlige i FairEmail, kan du spare netværks- og strømforbrug ved at deaktivere dette i modtagelsesindstillingerne.
 
-Some providers don't follow the IMAP standard and don't keep connections open long enough, forcing FairEmail to reconnect often, causing extra battery usage. You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc). You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes. Note that battery optimizations need to be disabled in setup step 4 to reliably keep connections alive.
+Visse udbydere følger ikke IMAP-standarden og holder ikke forbindelserne åbne længe nok. Det tvinger FairEmail til ofte at oprette forbindelse igen, hvilket medfører ekstra strømforbrug. Du kan tjekke *Loggen* via hovednavigeringsmenuen for at se, om der er hyppige forbindelsesgenoprettelser (forbindelse lukket/nulstillet, læse-/skrivefejl/timeout mv.). Du kan omgå dette ved i de avancerede kontoindstillinger at sænke keep-alive intervallet til f.eks. 9 eller 15 min. Bemærk, at batterioptimeringer skal deaktiveres i opsætningstrin 4 for pålideligt at holde forbindelserne i live.
 
-Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage. You can inspect the *Log* via the main navigation menu to check if your provider is doing this. If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server, you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider to switch to periodically instead of continuous synchronization. You can change this in the receive settings.
+Visse udbydere sender hvert 2. minut noget i retning af et '*Stadig her*', hvilket resulterer i netværkstrafik samt vækning af din enhed og forårsager unødigt ekstra strømforbrug. Du kan tjekke *Loggen* via hovednavigeringsmenuen for at se, hvorvidt din udbyder gør dette. Benytter din udbyder [Dovecot](https://www.dovecot.org/) som IMAP-server, kan du bede din udbyder om at ændre indstillingen [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) til en højere værdi eller endnu bedre, deaktivere dette. Er din udbyder ikke er i stand til eller villig til at ændre/deaktivere dette, så overvej at skifte til periodisk i stedet for kontinuerlig synkronisering. Du kan ændre dette i modtagelsesindstillingerne.
 
-If you got the message *This provider does not support push messages* while configuring an account, consider switching to a modern provider which supports push messages (IMAP IDLE) to reduce battery usage.
+Ser du under opsætningen af en konto meddelelsen *Denne udbyder understøtter ikke push-beskeder*, så overvej at skifte til en moderne udbyder, der understøtter push-beskeder (IMAP IDLE) for at reducere strømforbruget.
 
-If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen, you can save battery usage while viewing messages by switching to the black theme.
+Har din enhed en [AMOLED](https://en.wikipedia.org/wiki/AMOLED)-skærm, kan du ved at skifte til det sorte tema spare strøm, mens du ser beskeder.
 
-By default auto optimize in the receive settings is enabled, which will switch an account to periodically checking for new messages when the email server:
+Som standard er autooptimering i modtagelsesindstillingerne aktiveret, hvilket omskifter en konto til periodisk at tjekke for nye beskeder, når e-mailserveren:
 
-* Says '*Still here*' within 3 minutes
-* The email server does not support push messages
-* The keep-alive interval is lower than 12 minutes
+* Sender et '*Stadig her*' inden for 3 minutter
+* Ikke understøtter push-beskeder
+* Keep-alive intervallet er kortere end 12 minutes
 
 <br />
 
 <a name="faq40"></a>
-**(40) How can I reduce the network usage of FairEmail?**
+**(40) Hvordan reduceres FairEmails netværksforbrug?**
 
-You can reduce the network usage basically in the same way as reducing battery usage, see the previous question for suggestions.
+Du kan grundlæggende reducere netværksforbruget på samme måde som strømforbruget. Se foregående spørgsmål for forslag.
 
-Som standard henter FairEmail ikke beskedtekster og vedhæftninger større end 256 KiB, når Internetforbindelsen er takseret (mobildata eller betalt Wi-Fi). You can change this in the connection settings.
+Som standard henter FairEmail ikke beskedtekster og vedhæftninger større end 256 KiB, når Internetforbindelsen er takseret (mobildata eller betalt Wi-Fi). Du kan ændre dette i forbindelsesindstillingerne.
 
 <br />
 
 <a name="faq41"></a>
-**(41) How can I fix the error 'Handshake failed' ?**
+**(41) Hvordan rettes fejlen 'Handshake mislykkedes'?**
 
-There are several possible causes, so please read to the end of this answer.
+Der er flere mulige årsager, så tjek slutningen af dette svar.
 
-The error '*Handshake failed ... WRONG_VERSION_NUMBER ...*' might mean that you are trying to connect to an IMAP or SMTP server without an encrypted connection, typically using port 143 (IMAP) and port 25 (SMTP), or that a wrong protocol (SSL/TLS or STARTTLS) is being used.
+Fejlen '*Handshake mislykkedes ... WRONG_VERSION_NUMBER ...*' kan betyde, at du forsøger at oprette forbindelse til en IMAP- eller SMTP-server uden en krypteret forbindelse, typisk via port 143 (IMAP) og port 25 (SMTP), eller at der anvendes en forkert protokol (SSL/TLS eller STARTTLS).
 
-Most providers provide encrypted connections using different ports, typically port 993 (IMAP) and port 465/587 (SMTP).
+De fleste udbydere leverer krypterede forbindelser vha. forskellige porte, typisk port 993 (IMAP) og port 465/587 (SMTP).
 
-If your provider doesn't support encrypted connections, you should ask to make this possible. If this isn't an option, you could enable *Allow insecure connections* both in the advanced settings AND the account/identity settings.
+Understøtter din udbyder ikke krypterede forbindelser, bør du anmode om, at dette gøres muligt. Er dette ikke en mulighed, kan du aktivere *Tillad usikre forbindelser* i både de avancerede indstillinger OG konto-/identitetsindstillingerne.
 
-See also [this FAQ](#user-content-faq4).
+Se også [denne FAQ](#user-content-faq4).
 
-The error '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
+Fejlen '*Handshake mislykkedes ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' er enten forårsaget af en fejl i implementeringen af SSL-protokollen eller ved en for kort DH-nøgle på e-mailserveren og kan desværre ikke rettes af FairEmail.
 
-The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
+Fejlen '*Handshake mislykkedes ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' kan være forårsaget af, at udbyderen stadig anvender RC4, hvilket siden [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) ikke længere understøttes.
 
-The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
+Fejlen '*Handshake mislykkedes ... UNSUPPORTED_PROTOCOL ...*' kan være forårsaget af aktivering af hærdning af forbindelser i forbindelsesindstillingerne eller af at Android ikke længere understøtter ældre protokoller såsom SSLv3.
 
-Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore. There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
+Android 8 Oreo og senere [understøtter ikke længere](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3. Der er ingen måde at løse manglende RC4- og SSLv3-understøttelse på, da disse er helt fjernet fra Android.
 
-You can use [this website](https://ssl-tools.net/mailservers) or [this website](https://www.immuniweb.com/ssl/) to check for SSL/TLS problems of email servers.
+Du kan benytte [dette websted](https://ssl-tools.net/mailservers) eller [dette websted](https://www.immuniweb.com/ssl/) til at tjekke for SSL-/TLS-problemer på e-mailservere.
 
 <br />
 
 <a name="faq42"></a>
-**(42) Can you add a new provider to the list of providers?**
+**(42) Kan der tilføjes en ny udbyder på udbyderlisten?**
 
-If the provider is used by more than a few people, yes, with pleasure.
+Anvendes udbyderen af flere end blot et par personer, ja, med glæde.
 
-The following information is needed:
+Flg. oplysninger kræves:
 
 ```
 <provider
     name="Gmail"
     link="https://support.google.com/mail/answer/7126229" // link to the instructions of the provider
-    type="com.google"> // this is not needed
+    type="com.google"> // dette kræves ikke
     <imap
         host="imap.gmail.com"
         port="993"
@@ -1204,27 +1204,27 @@ The following information is needed:
 </provider>
 ```
 
-The EFF [writes](https://www.eff.org/nl/deeplinks/2018/06/announcing-starttls-everywhere-securing-hop-hop-email-delivery): "*Additionally, even if you configure STARTTLS perfectly and use a valid certificate, there’s still no guarantee your communication will be encrypted.*"
+EFF-[skrivere](https://www.eff.org/nl/deeplinks/2018/06/announcing-starttls-everywhere-securing-hop-hop-email-delivery): "*Derudover er der stadig ingen garanti for, at din kommunikation bliver krypteret, selvom du opsætter STARTTLS korrekt samt anvender et gyldigt certifikat.*"
 
-So, pure SSL connections are safer than using [STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS) and therefore preferred.
+Så rene SSL-forbindelser er sikrere end at anvende [STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS) og derfor foretrukne.
 
-Please make sure receiving and sending messages works properly before contacting me to add a provider.
+Sørg for at tjekke, at beskedmodtagelse/-afsendelse fungerer korrekt, før du kontakter mig vedr. udbydertilføjelse.
 
-See below about how to contact me.
+Se nedenfor, hvordan du kontakter mig.
 
 <br />
 
 <a name="faq43"></a>
-**(43) Can you show the original ... ?**
+**(43) Kan du vise den originale ... ?**
 
-Show original, shows the original message as the sender has sent it, including original fonts, colors, margins, etc. FairEmail does and will not alter this in any way, except for requesting [TEXT_AUTOSIZING](https://developer.android.com/reference/android/webkit/WebSettings.LayoutAlgorithm), which will *attempt* to make small text more readable.
+Vis original, viser den originale besked, som afsenderen har sendt den, inkl. originale skrifttyper, farver, marginer mv. FairEmail ændrer på ingen måde på dette, bortset fra at anmode om [TEXT_AUTOSIZING](https://developer.android.com/reference/android/webkit/WebSettings.LayoutAlgorithm), som *forsøger* at gøre en lille tekst mere læsbar.
 
 <br />
 
 <a name="faq44"></a>
-**~~(44) Can you show contact photos / identicons in the sent folder?~~**
+**~~(44) Kan man få vist kontaktfotos/-identikoner i Sendt-mappen?~~**
 
-~~Contact photos and identicons are always shown for the sender because this is necessary for conversation threads.~~ ~~Getting contact photos for both the sender and receiver is not really an option because getting contact photo is an expensive operation.~~
+~~Kontaktfotos og identikoner vises altid for afsenderen, da dette er nødvendigt for samtaletråde.~~ ~~At få kontaktfotos til både afsender og modtager er ikke rigtig en mulighed, da hentning af et kontaktfoto er en dyr operation.~~
 
 <br />
 
@@ -2127,12 +2127,13 @@ Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f4
 <a name="faq117"></a>
 **(117) Can you help me restore my purchase?**
 
-Google manages all purchases, so as developer I have little control over purchases. So, basically the only thing I can do, is give some advice:
+Google håndterer alle køb, så som udvikler har jeg ringe kontrol over køb. So, basically the only thing I can do, is give some advice:
 
 * Make sure you have an active, working internet connection
 * Make sure you are logged in with the right Google account and that there is nothing wrong with your Google account
-* Open the Play store application and wait at least a minute to give it time to synchronize with the Google servers
-* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases
+* Har du flere aktive Google-konti på din enhed, så sørg for at benytte den korrekte under installationen af FairEmail
+* Åbn Play Butik-appen, og vent mindst ét minut på at give den tid til at synkronisere med Google-serverne
+* Åbn FairEmail, og gå til Pro-funktionssiden for at lade FairEmail tjekke købene
 
 You can also try to clear the cache of the Play store app via the Android apps settings. Restarting the device might be necessary to let the Play store recognize the purchase correctly.
 
@@ -2141,7 +2142,7 @@ Note that:
 * Purchases are stored in the Google cloud and cannot get lost
 * There is no time limit on purchases, so they cannot expire
 * Google does not expose details (name, e-mail, etc) about buyers to developers
-* An application like FairEmail cannot select which Google account to use
+* En app som FairEmail kan ikke vælge, hvilken Google-konto, der skal benyttes
 * It may take a while until the Play store app has synchronized a purchase to another device
 
 If you cannot solve the problem with the purchase, you will have to contact Google about it.

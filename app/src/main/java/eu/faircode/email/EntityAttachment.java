@@ -45,7 +45,7 @@ import static androidx.room.ForeignKey.CASCADE;
         },
         indices = {
                 @Index(value = {"message"}),
-                @Index(value = {"message", "sequence"}, unique = true),
+                @Index(value = {"message", "sequence", "subsequence"}, unique = true),
                 @Index(value = {"message", "cid"})
         }
 )
@@ -67,6 +67,7 @@ public class EntityAttachment {
     public Long message;
     @NonNull
     public Integer sequence;
+    public Integer subsequence; // embedded messages
     public String name;
     @NonNull
     public String type;
@@ -155,6 +156,9 @@ public class EntityAttachment {
         // Fix types
         if ("gpx".equals(extension))
             return "application/gpx+xml";
+
+        if ("pdf".equals(extension))
+            return "application/pdf";
 
         if ("text/plain".equals(type) && "ics".equals(extension))
             return "text/calendar";

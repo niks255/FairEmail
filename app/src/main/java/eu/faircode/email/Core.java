@@ -131,15 +131,15 @@ import static androidx.core.app.NotificationCompat.DEFAULT_SOUND;
 import static javax.mail.Folder.READ_WRITE;
 
 class Core {
-    private static final int MAX_NOTIFICATION_COUNT = 25; // per group
+    private static final int MAX_NOTIFICATION_COUNT = 10; // per group
     private static final long AFTER_SEND_DELAY = 20 * 1000L; // milliseconds
     private static final int SYNC_CHUNCK_SIZE = 200;
     private static final int SYNC_BATCH_SIZE = 20;
     private static final int DOWNLOAD_BATCH_SIZE = 20;
     private static final long YIELD_DURATION = 200L; // milliseconds
     private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
-    private static final int LOCAL_RETRY_MAX = 3;
-    private static final long LOCAL_RETRY_DELAY = 10 * 1000L; // milliseconds
+    private static final int LOCAL_RETRY_MAX = 2;
+    private static final long LOCAL_RETRY_DELAY = 5 * 1000L; // milliseconds
     private static final int TOTAL_RETRY_MAX = LOCAL_RETRY_MAX * 10;
 
     static void processOperations(

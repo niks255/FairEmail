@@ -130,6 +130,7 @@ public class HtmlHelper {
     private static final int MAX_AUTO_LINK = 250;
     private static final int MAX_FORMAT_TEXT_SIZE = 200 * 1024; // characters
     private static final int MAX_FULL_TEXT_SIZE = 1024 * 1024; // characters
+    private static final int SMALL_IMAGE_SIZE = 5; // pixels
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
     private static final float[] HEADING_SIZES = {1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f};
     private static final String LINE = "----------------------------------------";
@@ -304,8 +305,8 @@ public class HtmlHelper {
     static Document fixEdit(Document document) {
         // Prevent extra newline at end
         Element body = document.body();
-        if (body != null && body.childrenSize() == 1) {
-            Element holder = body.child(0);
+        if (body != null && body.childrenSize() > 0) {
+            Element holder = body.child(body.childrenSize() - 1);
             if ("p".equals(holder.tagName())) {
                 holder.tagName("span");
                 int c = holder.childrenSize();
@@ -833,7 +834,7 @@ public class HtmlHelper {
 
         // Remove tracking pixels
         if (disable_tracking)
-            removeTrackingPixels(context, document);
+            removeTrackingPixels(context, document, false);
 
         // Images
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
@@ -1427,7 +1428,7 @@ public class HtmlHelper {
         return sb.toString();
     }
 
-    static void removeTrackingPixels(Context context, Document document) {
+    static void removeTrackingPixels(Context context, Document document, boolean full) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean disconnect_images = prefs.getBoolean("disconnect_images", false);
 
@@ -1461,14 +1462,28 @@ public class HtmlHelper {
         // Images
         for (Element img : document.select("img")) {
             img.removeAttr("x-tracking");
+
             String src = img.attr("src");
-            if (TextUtils.isEmpty(src))
+            if (TextUtils.isEmpty(src)) {
+                if (!full)
+                    img.remove();
                 continue;
+            }
 
             Uri uri = Uri.parse(src);
             String host = uri.getHost();
-            if (host == null || hosts.contains(host))
+            if (host == null || hosts.contains(host)) {
+                if (!full) {
+                    // Remove spacer, etc
+                    Integer width = Helper.parseInt(img.attr("width").trim());
+                    Integer height = Helper.parseInt(img.attr("height").trim());
+                    if ((width != null && width <= SMALL_IMAGE_SIZE) ||
+                            (height != null && height <= SMALL_IMAGE_SIZE))
+                        img.remove();
+                }
+
                 continue;
+            }
 
             if (isTrackingPixel(img) ||
                     (disconnect_images && DisconnectBlacklist.isTracking(host))) {

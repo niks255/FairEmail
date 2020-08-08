@@ -13,12 +13,12 @@ android {
         applicationId "eu.faircode.email"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1279
-        versionName "1.1279"
+        versionCode 1282
+        versionName "1.1282"
         archivesBaseName = "FairEmail-v$versionName"
 
         // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
-        buildConfigField "String", "RELEASE_NAME", "\"Omeisaurus\""
+        buildConfigField "String", "RELEASE_NAME", "\"Phyllodon\""
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -51,13 +51,13 @@ android {
 
         sourceSets {
             github {
-                java.srcDirs = ['src/main/java', 'src/iab/java']
+                java.srcDirs = ['src/main/java', 'src/play/java']
             }
             fdroid {
                 java.srcDirs = ['src/main/java', 'src/fdroid/java']
             }
             play {
-                java.srcDirs = ['src/main/java', 'src/iab/java']
+                java.srcDirs = ['src/main/java', 'src/play/java']
             }
             main.res.srcDirs += 'src/main/resExtra'
         }

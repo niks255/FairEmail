@@ -3269,9 +3269,7 @@ public class FragmentCompose extends FragmentBase {
                             if (a != null) {
                                 data.draft.subject = a.name;
                                 Document d = JsoupEx.parse(a.getText(null));
-                                Element e = d.body();
-                                e.tagName("div");
-                                document.body().appendChild(e);
+                                document.body().append(d.body().html());
                             }
                         }
 
@@ -3435,9 +3433,7 @@ public class FragmentCompose extends FragmentBase {
                             EntityAnswer a = db.answer().getAnswer(answer);
                             if (a != null) {
                                 Document d = JsoupEx.parse(a.getText(data.draft.to));
-                                Element e = d.body();
-                                e.tagName("div");
-                                document.body().appendChild(e);
+                                document.body().append(d.body().html());
                             }
                         }
 
@@ -3459,59 +3455,9 @@ public class FragmentCompose extends FragmentBase {
                             Element reply = document.createElement("div");
                             reply.attr("fairemail", "reference");
 
-                            boolean language_detection = prefs.getBoolean("language_detection", false);
-                            String language = (language_detection ? ref.language : null);
-
-                            DateFormat DF;
-                            if (language == null)
-                                DF = Helper.getDateTimeInstance(context);
-                            else
-                                DF = SimpleDateFormat.getDateTimeInstance(
-                                        SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM,
-                                        new Locale(language));
-
                             // Build reply header
-                            Element p = document.createElement("p");
                             boolean extended_reply = prefs.getBoolean("extended_reply", false);
-                            if (extended_reply) {
-                                if (ref.from != null && ref.from.length > 0) {
-                                    Element strong = document.createElement("strong");
-                                    strong.text(Helper.getString(context, language, R.string.title_from) + " ");
-                                    p.appendChild(strong);
-                                    p.appendText(MessageHelper.formatAddresses(ref.from));
-                                    p.appendElement("br");
-                                }
-                                if (ref.to != null && ref.to.length > 0) {
-                                    Element strong = document.createElement("strong");
-                                    strong.text(Helper.getString(context, language, R.string.title_to) + " ");
-                                    p.appendChild(strong);
-                                    p.appendText(MessageHelper.formatAddresses(ref.to));
-                                    p.appendElement("br");
-                                }
-                                if (ref.cc != null && ref.cc.length > 0) {
-                                    Element strong = document.createElement("strong");
-                                    strong.text(Helper.getString(context, language, R.string.title_cc) + " ");
-                                    p.appendChild(strong);
-                                    p.appendText(MessageHelper.formatAddresses(ref.cc));
-                                    p.appendElement("br");
-                                }
-                                {
-                                    Element strong = document.createElement("strong");
-                                    strong.text(Helper.getString(context, language, R.string.title_received) + " ");
-                                    p.appendChild(strong);
-                                    p.appendText(DF.format(ref.received));
-                                    p.appendElement("br");
-                                }
-                                {
-                                    Element strong = document.createElement("strong");
-                                    strong.text(Helper.getString(context, language, R.string.title_subject) + " ");
-                                    p.appendChild(strong);
-                                    p.appendText(ref.subject == null ? "" : ref.subject);
-                                    p.appendElement("br");
-                                }
-                            } else
-                                p.text(DF.format(new Date(ref.received)) + " " + MessageHelper.formatAddresses(ref.from) + ":");
-
+                            Element p = ref.getReplyHeader(context, document, extended_reply);
                             reply.appendChild(p);
 
                             Document d;

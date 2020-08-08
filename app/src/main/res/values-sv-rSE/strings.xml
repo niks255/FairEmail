@@ -173,6 +173,7 @@
     <string name="title_setup_done">Klar</string>
     <string name="title_setup_still">Fortfarande att göra</string>
     <string name="title_setup_error">Fel</string>
+    <string name="title_setup_configuring">Konfigurerar konto &#8230;</string>
     <string name="title_setup_export">Exportera inställningar</string>
     <string name="title_setup_import">Importera inställningar</string>
     <string name="title_setup_import_do">Importerade konton kommer att läggas till utan att skriva över några befintliga</string>
@@ -735,6 +736,7 @@
     <string name="title_unused_inline">Infogade bilder som är oanvända kommer att tas bort vid sändning</string>
     <string name="title_accross_remark">Meddelanden flyttade över konton kommer att hämtas igen och orsakar extra dataanvändning</string>
     <string name="title_raw_saved">Rent meddelande sparat</string>
+    <string name="title_attachment_eml" comment="title_attachment_eml&#10;This is a title (heading) for displaying attached messages (EML files)">Bifogat meddelande</string>
     <string name="title_attachment_saved">Bilaga sparad</string>
     <string name="title_attachments_saved">Bilagor sparade</string>
     <string name="title_attachments_incomplete">Vissa bilagor eller bilder hämtades inte och kunde inte läggas till</string>
@@ -754,8 +756,7 @@
     <string name="title_reporting_why">Felrapportering kommer att bidra till att förbättra FairEmail</string>
     <string name="title_ask_review">Vänligen recensera FairEmail</string>
     <string name="title_ask_review_rationale">        Du har använt FairEmail ett tag.
-        Det skulle uppskattas om du kunde betygsätta FairEmail i Play Store.
-        Detta kommer att bidra till att upprätthålla en balans mellan ogynnsamma och gynnsamma recensioner.
+        Det skulle vara uppskattat om du kunde betygsätta FairEmail i Play Store.
     </string>
     <string name="title_ask_once">Detta meddelande kommer bara att visas en gång, om du inte väljer \'Senare\'</string>
     <string name="title_third_party">Du använder en version av en tredje part</string>

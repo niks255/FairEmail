@@ -149,6 +149,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -172,12 +173,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 import javax.mail.Address;
+import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import biweekly.Biweekly;
 import biweekly.ICalendar;
@@ -1460,25 +1464,32 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             db.attachment().liveAttachments(message.id).observe(cowner, new Observer<List<EntityAttachment>>() {
                 @Override
                 public void onChanged(@Nullable List<EntityAttachment> attachments) {
+                    int inlineImages = 0;
+                    int embeddedMessages = 0;
+                    if (attachments != null)
+                        for (EntityAttachment attachment : attachments)
+                            if (attachment.available)
+                                if (attachment.isInline() && attachment.isImage())
+                                    inlineImages++;
+                                else if ("message/rfc822".equals(attachment.type))
+                                    embeddedMessages++;
+
+                    int lastInlineImages = 0;
+                    int lastEmbeddedMessages = 0;
+                    List<EntityAttachment> lastAttachments = properties.getAttachments(message.id);
+                    if (lastAttachments != null)
+                        for (EntityAttachment attachment : lastAttachments)
+                            if (attachment.available)
+                                if (attachment.isInline() && attachment.isImage())
+                                    lastInlineImages++;
+                                else if ("message/rfc822".equals(attachment.type))
+                                    lastEmbeddedMessages++;
+
                     boolean show_images = properties.getValue("images", message.id);
                     boolean inline = prefs.getBoolean("inline_images", false);
-                    if (show_images || inline) {
-                        int inlineImages = 0;
-                        if (attachments != null)
-                            for (EntityAttachment attachment : attachments)
-                                if (attachment.available && attachment.isInline() && attachment.isImage())
-                                    inlineImages++;
-
-                        int lastInlineImages = 0;
-                        List<EntityAttachment> lastAttachments = properties.getAttachments(message.id);
-                        if (lastAttachments != null)
-                            for (EntityAttachment attachment : lastAttachments)
-                                if (attachment.available && attachment.isInline() && attachment.isImage())
-                                    lastInlineImages++;
-
-                        if (inlineImages > lastInlineImages)
-                            bindBody(message, false);
-                    }
+                    if (embeddedMessages > lastEmbeddedMessages ||
+                            (inlineImages > lastInlineImages && (show_images || inline)))
+                        bindBody(message, false);
 
                     bindAttachments(message, attachments);
                 }
@@ -1869,7 +1880,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 webView.init(
                         height, size, position,
                         textSize, monospaced,
-                        show_images, inline,
                         new WebViewEx.IWebView() {
                             @Override
                             public void onSizeChanged(int w, int h, int ow, int oh) {
@@ -1896,6 +1906,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 return ViewHolder.this.onOpenLink(uri, null);
                             }
                         });
+                webView.setImages(show_images, inline);
                 webView.setOnTouchListener(ViewHolder.this);
 
                 tvBody.setVisibility(View.GONE);
@@ -1962,6 +1973,52 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     args.putBoolean("signed_data", signed_data);
 
                     Document document = JsoupEx.parse(file);
+
+                    // Add embedded messages
+                    for (EntityAttachment attachment : attachments)
+                        if (attachment.available && "message/rfc822".equals(attachment.type))
+                            try (FileInputStream fis = new FileInputStream(attachment.getFile(context))) {
+                                Properties props = MessageHelper.getSessionProperties();
+                                Session isession = Session.getInstance(props, null);
+                                MimeMessage imessage = new MimeMessage(isession, fis);
+                                MessageHelper helper = new MessageHelper(imessage, context);
+                                MessageHelper.MessageParts parts = helper.getMessageParts();
+
+                                EntityMessage embedded = new EntityMessage();
+                                embedded.from = helper.getFrom();
+                                embedded.to = helper.getTo();
+                                embedded.cc = helper.getCc();
+                                embedded.received = helper.getReceivedHeader();
+                                if (embedded.received == null)
+                                    embedded.received = helper.getSent();
+                                embedded.subject = helper.getSubject();
+
+                                String html = parts.getHtml(context);
+                                Document d = JsoupEx.parse(html);
+
+                                Element div = document.createElement("div");
+                                div.appendElement("hr");
+
+                                Element h = document.createElement("p");
+                                h.attr("style", "text-align: center;");
+
+                                Element em = document.createElement("em");
+                                em.text(TextUtils.isEmpty(attachment.name)
+                                        ? context.getString(R.string.title_attachment_eml) : attachment.name);
+                                h.appendChild(em);
+
+                                div.appendChild(h);
+
+                                Element p = embedded.getReplyHeader(context, document, true);
+                                div.appendChild(p);
+
+                                div.appendChild(d.body().tagName("p"));
+
+                                document.body().appendChild(div);
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
+
                     HtmlHelper.cleanup(document);
 
                     // Check for inline encryption
@@ -2017,7 +2074,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
                         if (disable_tracking)
-                            HtmlHelper.removeTrackingPixels(context, document);
+                            HtmlHelper.removeTrackingPixels(context, document, true);
 
                         if (debug) {
                             Document format = JsoupEx.parse(file);
@@ -3564,7 +3621,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onShowImagesConfirmed(TupleMessageEx message) {
-            bindBody(message, false);
+            boolean show_full = properties.getValue("full", message.id);
+            boolean show_images = properties.getValue("images", message.id);
+            if (show_full && show_images && wvBody != null)
+                ((WebViewEx) wvBody).setImages(show_images, inline);
+            else
+                bindBody(message, false);
         }
 
         private void onActionUnsubscribe(TupleMessageEx message) {
