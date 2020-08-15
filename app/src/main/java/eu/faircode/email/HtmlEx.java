@@ -211,7 +211,7 @@ public class HtmlEx {
 
     private /* static */ void withinBlockquoteIndividual(StringBuilder out, Spanned text, int start,
                                                    int end) {
-        boolean isInList = false;
+        Boolean isInBulletList = null;
         int next;
         for (int i = start; i <= end; i = next) {
             next = TextUtils.indexOf(text, '\n', i, end);
@@ -220,42 +220,47 @@ public class HtmlEx {
             }
 
             if (next == i) {
-                if (isInList) {
+                if (isInBulletList != null) {
                     // Current paragraph is no longer a list item; close the previously opened list
-                    isInList = false;
-                    out.append("</ul>\n");
+                    out.append(isInBulletList ? "</ul>\n" : "</ol>\n");
+                    isInBulletList = null;
                 }
                 out.append("<br>\n");
             } else {
-                boolean isListItem = false;
+                Boolean isBulletListItem = null;
                 ParagraphStyle[] paragraphStyles = text.getSpans(i, next, ParagraphStyle.class);
                 for (ParagraphStyle paragraphStyle : paragraphStyles) {
                     final int spanFlags = text.getSpanFlags(paragraphStyle);
                     if ((spanFlags & Spanned.SPAN_PARAGRAPH) == Spanned.SPAN_PARAGRAPH
                             && paragraphStyle instanceof BulletSpan) {
-                        isListItem = true;
+                        isBulletListItem = !(paragraphStyle instanceof eu.faircode.email.NumberSpan);
                         break;
                     }
                 }
 
-                if (isListItem && !isInList) {
+                if (isBulletListItem != null && isInBulletList != null && isBulletListItem != isInBulletList) {
+                    out.append(isInBulletList ? "</ul>\n" : "</ol>\n");
+                    isInBulletList = null;
+                }
+
+                if (isBulletListItem != null && isInBulletList == null) {
                     // Current paragraph is the first item in a list
-                    isInList = true;
-                    out.append("<ul")
+                    isInBulletList = isBulletListItem;
+                    out.append(isInBulletList ? "<ul" : "<ol")
                             .append(getTextStyles(text, i, next, true, false))
                             .append(">\n");
                 }
 
-                if (isInList && !isListItem) {
+                if (isInBulletList != null && isBulletListItem == null) {
                     // Current paragraph is no longer a list item; close the previously opened list
-                    isInList = false;
-                    out.append("</ul>\n");
+                    out.append(isInBulletList ? "</ul>\n" : "</ol>\n");
+                    isInBulletList = null;
                 }
 
-                String tagType = isListItem ? "li" : "p";
+                String tagType = isBulletListItem != null ? "li" : "p";
                 out.append("<").append(tagType)
                         .append(getTextDirection(text, i, next))
-                        .append(getTextStyles(text, i, next, !isListItem, true))
+                        .append(getTextStyles(text, i, next, isBulletListItem == null, true))
                         .append(">");
 
                 withinParagraph(out, text, i, next);
@@ -264,9 +269,9 @@ public class HtmlEx {
                 out.append(tagType);
                 out.append(">\n");
 
-                if (next == end && isInList) {
-                    isInList = false;
-                    out.append("</ul>\n");
+                if (next == end && isInBulletList != null) {
+                    out.append(isInBulletList ? "</ul>\n" : "</ol>\n");
+                    isInBulletList = null;
                 }
             }
 
@@ -276,7 +281,7 @@ public class HtmlEx {
 
     private /* static */ void withinBlockquoteConsecutive(StringBuilder out, Spanned text, int start,
                                                     int end) {
-        out.append("<p").append(getTextDirection(text, start, end)).append(">");
+        out.append("<span").append(getTextDirection(text, start, end)).append(">");
 
         int next;
         for (int i = start; i < end; i = next) {
@@ -294,21 +299,21 @@ public class HtmlEx {
 
             withinParagraph(out, text, i, next - nl);
 
-            if (nl == 1) {
+            if (nl == 0) {
                 out.append("<br>\n");
             } else {
-                for (int j = 2; j < nl; j++) {
+                for (int j = 0; j < nl; j++) {
                     out.append("<br>");
                 }
                 if (next != end) {
                     /* Paragraph should be closed and reopened */
-                    out.append("</p>\n");
-                    out.append("<p").append(getTextDirection(text, start, end)).append(">");
+                    out.append("</span>\n");
+                    out.append("<span").append(getTextDirection(text, start, end)).append(">");
                 }
             }
         }
 
-        out.append("</p>\n");
+        out.append("</span>\n");
     }
 
     private /* static */ void withinParagraph(StringBuilder out, Spanned text, int start, int end) {

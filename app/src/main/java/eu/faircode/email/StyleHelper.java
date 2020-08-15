@@ -2,10 +2,15 @@ package eu.faircode.email;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
@@ -13,13 +18,14 @@ import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.preference.PreferenceManager;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -89,30 +95,38 @@ public class StyleHelper {
                 case R.id.menu_style: {
                     final int s = start;
                     final int e = end;
-                    final SpannableString t = ss;
+                    final SpannableStringBuilder t = new SpannableStringBuilder(ss);
 
                     PopupMenu popupMenu = new PopupMenu(anchor.getContext(), anchor);
                     popupMenu.inflate(R.menu.popup_style);
 
                     String[] fontNames = anchor.getResources().getStringArray(R.array.fontNameNames);
+                    SubMenu smenu = popupMenu.getMenu().findItem(R.id.menu_style_font).getSubMenu();
                     for (int i = 0; i < fontNames.length; i++)
-                        popupMenu.getMenu().add(R.id.group_style_font, i, 3, fontNames[i]);
-                    popupMenu.getMenu().add(R.id.group_style_font, fontNames.length, 3, R.string.title_style_font_default);
+                        smenu.add(R.id.group_style_font, i, 0, fontNames[i]);
+                    smenu.add(R.id.group_style_font, fontNames.length, 0, R.string.title_style_font_default);
 
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getGroupId()) {
-                                case R.id.group_style_size:
-                                    return setSize(item);
-                                case R.id.group_style_color:
-                                    return setColor(item);
-                                case R.id.group_style_font:
-                                    return setFont(item);
-                                case R.id.group_style_clear:
-                                    return clear(item);
-                                default:
-                                    return false;
+                            try {
+                                switch (item.getGroupId()) {
+                                    case R.id.group_style_size:
+                                        return setSize(item);
+                                    case R.id.group_style_color:
+                                        return setColor(item);
+                                    case R.id.group_style_list:
+                                        return setList(item);
+                                    case R.id.group_style_font:
+                                        return setFont(item);
+                                    case R.id.group_style_clear:
+                                        return clear(item);
+                                    default:
+                                        return false;
+                                }
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                                return false;
                             }
                         }
 
@@ -188,6 +202,78 @@ public class StyleHelper {
 
                             etBody.setText(t);
                             etBody.setSelection(s, e);
+                        }
+
+                        private boolean setList(MenuItem item) {
+                            Context context = etBody.getContext();
+
+                            int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
+                            int dp3 = Helper.dp2pixels(context, 3);
+                            int dp6 = Helper.dp2pixels(context, 6);
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                            int message_zoom = prefs.getInt("message_zoom", 100);
+                            float textSize = Helper.getTextSize(context, 0) * message_zoom / 100f;
+
+                            int start = s;
+                            int end = e;
+
+                            // Expand selection at start
+                            while (start > 0 && t.charAt(start - 1) != '\n')
+                                start--;
+
+                            // Expand selection at end
+                            while (end > 0 && end < t.length() && t.charAt(end - 1) != '\n')
+                                end++;
+
+                            // Nothing to do
+                            if (start == end)
+                                return false;
+
+                            // Create paragraph at start
+                            if (start == 0 && t.charAt(start) != '\n') {
+                                t.insert(0, "\n");
+                                start++;
+                                end++;
+                            }
+
+                            // Create paragraph at end
+                            if (end == t.length() && t.charAt(end - 1) != '\n') {
+                                t.append("\n");
+                                end++;
+                            }
+
+                            if (end == t.length())
+                                t.append("\n"); // workaround Android bug
+
+                            // Remove existing bullets
+                            BulletSpan[] spans = t.getSpans(start, end, BulletSpan.class);
+                            for (BulletSpan span : spans)
+                                t.removeSpan(span);
+
+                            int i = start;
+                            int j = start + 1;
+                            int index = 1;
+                            while (j < end) {
+                                if (i > 0 && t.charAt(i - 1) == '\n' && t.charAt(j) == '\n') {
+                                    Log.i("Insert " + i + "..." + (j + 1) + " size=" + end);
+                                    if (item.getItemId() == R.id.menu_style_list_bullets)
+                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                                            t.setSpan(new BulletSpan(dp6, colorAccent), i, j + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_PARAGRAPH);
+                                        else
+                                            t.setSpan(new BulletSpan(dp6, colorAccent, dp3), i, j + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_PARAGRAPH);
+                                    else
+                                        t.setSpan(new NumberSpan(dp6, colorAccent, textSize, index++), i, j + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_PARAGRAPH);
+
+                                    i = j + 1;
+                                }
+                                j++;
+                            }
+
+                            etBody.setText(t);
+                            etBody.setSelection(start, end);
+
+                            return true;
                         }
 
                         private boolean setFont(MenuItem item) {

@@ -54,10 +54,6 @@
         <item quantity="one">%1$d beszélgetés kiválasztva</item>
         <item quantity="other">%1$d beszélgetés kiválasztva</item>
     </plurals>
-    <plurals name="title_moving_messages">
-        <item quantity="one">Áthelyez %1$d üzenetet a következő helyre: %2$s?</item>
-        <item quantity="other">Áthelyez %1$d üzenetet a következő helyre: %2$s?</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Véglegesen töröl %1$d üzenetet?</item>
         <item quantity="other">Biztosan töröl %1$d üzenetet véglegesen?</item>
@@ -246,7 +242,6 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_advanced_suggest_received">Fogadott üzenetekben szereplő címek felajánlása</string>
     <string name="title_advanced_suggest_frequently">A felajánlott címek rendezése gyakoriság alapján</string>
     <string name="title_advanced_compose_font">Alapértelmezett betűtípus</string>
-    <string name="title_advanced_auto_list">Listák automatikus létrehozása</string>
     <string name="title_advanced_prefix_once">Válasz vagy továbbítás esetén tárgy előtaggal jelzése csak egyszer</string>
     <string name="title_advanced_extended_reply">Kiterjesztett válasz/továbbítás fejléc használata</string>
     <string name="title_advanced_quote_reply">Megválaszolt szöveg idézése</string>
@@ -736,6 +731,7 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_unused_inline">Nem használt beágyazott képek küldéskor törölve lesznek</string>
     <string name="title_accross_remark">A különböző fiókok között átmozgatott üzenetek újra letöltsére kerülnek, amely további adatforgalmat eredményez</string>
     <string name="title_raw_saved">Nyers üzenet mentve</string>
+    <string name="title_attachment_eml">Csatolt üzenet</string>
     <string name="title_attachment_saved">A melléklet mentve</string>
     <string name="title_attachments_saved">A mellékletek mentve</string>
     <string name="title_attachments_incomplete">Néhány kép vagy melléklet letöltése nem sikerült, így hozzáadásuk meghiúsult</string>
@@ -795,9 +791,9 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_style_size_small">Kicsi</string>
     <string name="title_style_size_medium">Közepes</string>
     <string name="title_style_size_large">Nagy</string>
+    <string name="title_style_color">Szín &#8230;</string>
     <string name="title_style_font">Betűtípus</string>
     <string name="title_style_font_default">Alapértelmezett</string>
-    <string name="title_style_color">Szín &#8230;</string>
     <string name="title_style_clear">Formázás törlése</string>
     <string name="title_style_link">Hivatkozás beillesztése</string>
     <string name="title_add_image">Kép hozzáadása</string>
@@ -1038,6 +1034,7 @@ A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
     <string name="title_legend_download_fetch">Letöltött üzenetek száma / lehívott fejlécek</string>
     <string name="title_legend_stop">Szabályok feldolgozásának leállítása</string>
     <string name="title_legend_thread">Beszélgetés</string>
+    <string name="title_legend_bookmark">Legutóbb megnyitott beszélgetés</string>
     <string name="title_legend_zoom">Szövegméret módosítása</string>
     <string name="title_legend_draft">Van piszkozata</string>
     <string name="title_legend_priority">Magas prioritású</string>

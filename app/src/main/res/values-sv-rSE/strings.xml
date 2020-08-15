@@ -55,8 +55,8 @@
         <item quantity="other">Valda %1$d konversationer</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">Flytta %1$d meddelande till %2$s?</item>
-        <item quantity="other">Flytta %1$d meddelanden till %2$s?</item>
+        <item quantity="one">Flytta %1$d meddelande?</item>
+        <item quantity="other">Flytta %1$d meddelanden?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Ta bort %1$d meddelande permanent?</item>
@@ -200,6 +200,7 @@
     <string name="title_setup_theme_red_green">Röd/grön</string>
     <string name="title_setup_theme_grey">Grå</string>
     <string name="title_setup_theme_black">Svart</string>
+    <string name="title_setup_theme_black_and_white">Svart och vitt</string>
     <string name="title_setup_theme_reverse">Omvända färger</string>
     <string name="title_setup_theme_dark">Mörk</string>
     <string name="title_setup_theme_black_background">Svart bakgrund</string>
@@ -245,7 +246,6 @@
     <string name="title_advanced_suggest_received">Föreslå adresser som finns i mottagna meddelanden</string>
     <string name="title_advanced_suggest_frequently">Sortera föreslagna adresser vid användningsfrekvens</string>
     <string name="title_advanced_compose_font">Standardtypsnitt</string>
-    <string name="title_advanced_auto_list">Skapa automatiskt listor</string>
     <string name="title_advanced_prefix_once">Prefix i ämnet endast när du svarar eller vidarebefordrar</string>
     <string name="title_advanced_extended_reply">Använd förlängd svars-/framåtriktad sidhuvud</string>
     <string name="title_advanced_quote_reply">Citera svarstext</string>
@@ -337,6 +337,7 @@
     <string name="title_advanced_volumenav">Använd volymknappen upp/ned för att gå till nästa/föregående konversation</string>
     <string name="title_advanced_reversed">Omvänd navigeringsriktning</string>
     <string name="title_advanced_swipe_close">Svep nedåt för att stänga konversationen</string>
+    <string name="title_advanced_swipe_move">Svep uppåt för att flytta konversation</string>
     <string name="title_advanced_autoexpand">Utöka meddelanden automatiskt</string>
     <string name="title_advanced_expand_all">Expandera automatiskt alla lästa meddelanden</string>
     <string name="title_advanced_expand_one">Expandera endast ett meddelande åt gången</string>
@@ -579,6 +580,7 @@
     <string name="title_oauth_support">OAuth stöds inte</string>
     <string name="title_review">Granska</string>
     <string name="title_hint_alias">Långtryck för alternativ, som att kopiera för att skapa alias för olika identiteter</string>
+    <string name="title_service_auth">E-postservern sa: \'%1$s\'</string>
     <string name="title_service_vpn">Detta kan orsakas av den VPN som används</string>
     <string name="title_service_port">Vänligen dubbelkolla portnumret</string>
     <string name="title_service_protocol">Vänligen dubbelkolla protokollet (SSL/TLS eller STARTTLS)</string>
@@ -736,7 +738,7 @@
     <string name="title_unused_inline">Infogade bilder som är oanvända kommer att tas bort vid sändning</string>
     <string name="title_accross_remark">Meddelanden flyttade över konton kommer att hämtas igen och orsakar extra dataanvändning</string>
     <string name="title_raw_saved">Rent meddelande sparat</string>
-    <string name="title_attachment_eml" comment="title_attachment_eml&#10;This is a title (heading) for displaying attached messages (EML files)">Bifogat meddelande</string>
+    <string name="title_attachment_eml">Bifogat meddelande</string>
     <string name="title_attachment_saved">Bilaga sparad</string>
     <string name="title_attachments_saved">Bilagor sparade</string>
     <string name="title_attachments_incomplete">Vissa bilagor eller bilder hämtades inte och kunde inte läggas till</string>
@@ -762,6 +764,7 @@
     <string name="title_third_party">Du använder en version av en tredje part</string>
     <string name="title_expand_warning">Utvidgningen av detta meddelande kommer att ladda ned %1$s</string>
     <string name="title_download_message">Hämtar &#8230;</string>
+    <string name="title_reformatted">Detta är den formaterade meddelandevyn. Du kan trycka på &#x26F6; ikonen för att visa det ursprungliga meddelandet och för att dölja detta meddelande.</string>
     <string name="title_compose">Skriv</string>
     <string name="title_submitter">Skickad av:</string>
     <string name="title_delivered_to">Levererad till:</string>
@@ -796,9 +799,12 @@
     <string name="title_style_size_small">Liten</string>
     <string name="title_style_size_medium">Medel</string>
     <string name="title_style_size_large">Stor</string>
+    <string name="title_style_color">Färg &#8230;</string>
+    <string name="title_style_list">Lista</string>
+    <string name="title_style_list_bullets">Punkter</string>
+    <string name="title_style_list_numbered">Numrerad</string>
     <string name="title_style_font">Typsnitt</string>
     <string name="title_style_font_default">Standard</string>
-    <string name="title_style_color">Färg &#8230;</string>
     <string name="title_style_clear">Rensa formatering</string>
     <string name="title_style_link">Infoga länk</string>
     <string name="title_add_image">Lägg till bild</string>
@@ -1039,6 +1045,7 @@
     <string name="title_legend_download_fetch">Antal hämtade meddelanden / hämtade rubriker</string>
     <string name="title_legend_stop">Sluta bearbeta regler</string>
     <string name="title_legend_thread">Konversation</string>
+    <string name="title_legend_bookmark">Senast öppnade konversation</string>
     <string name="title_legend_zoom">Ändra textstorlek</string>
     <string name="title_legend_draft">Har utkast</string>
     <string name="title_legend_priority">Har hög prioritet</string>

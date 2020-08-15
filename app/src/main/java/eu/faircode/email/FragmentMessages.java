@@ -163,6 +163,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
@@ -334,12 +335,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private static final int REQUEST_MESSAGES_SNOOZE = 14;
     static final int REQUEST_MESSAGE_MOVE = 15;
     private static final int REQUEST_MESSAGES_MOVE = 16;
-    static final int REQUEST_PRINT = 17;
-    private static final int REQUEST_SEARCH = 18;
-    private static final int REQUEST_ACCOUNT = 19;
-    private static final int REQUEST_EMPTY_FOLDER = 20;
-    private static final int REQUEST_BOUNDARY_RETRY = 21;
-    static final int REQUEST_PICK_CONTACT = 22;
+    private static final int REQUEST_THREAD_MOVE = 17;
+    static final int REQUEST_PRINT = 18;
+    private static final int REQUEST_SEARCH = 19;
+    private static final int REQUEST_ACCOUNT = 20;
+    private static final int REQUEST_EMPTY_FOLDER = 21;
+    private static final int REQUEST_BOUNDARY_RETRY = 22;
+    static final int REQUEST_PICK_CONTACT = 23;
 
     static final String ACTION_STORE_RAW = BuildConfig.APPLICATION_ID + ".STORE_RAW";
     static final String ACTION_DECRYPT = BuildConfig.APPLICATION_ID + ".DECRYPT";
@@ -894,21 +896,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         try {
                             db.beginTransaction();
 
-                            EntityFolder target = db.folder().getFolderByType(aid, type);
-                            if (target != null) {
-                                EntityAccount account = db.account().getAccount(target.account);
-                                List<EntityMessage> messages = db.message().getMessagesByThread(
-                                        aid, thread, threading ? null : id, null);
-                                for (EntityMessage threaded : messages) {
-                                    EntityFolder folder = db.folder().getFolder(threaded.folder);
-                                    if (!folder.read_only &&
-                                            !target.id.equals(threaded.folder) &&
-                                            (!filter_archive || !EntityFolder.ARCHIVE.equals(folder.type)) &&
-                                            !EntityFolder.DRAFTS.equals(folder.type) && !EntityFolder.OUTBOX.equals(folder.type) &&
-                                            (!EntityFolder.SENT.equals(folder.type) || EntityFolder.TRASH.equals(target.type)) &&
-                                            !EntityFolder.TRASH.equals(folder.type) && !EntityFolder.JUNK.equals(folder.type))
-                                        result.add(new MessageTarget(threaded, account, target));
-                                }
+                            EntityAccount account = db.account().getAccount(aid);
+                            if (account == null)
+                                return result;
+
+                            EntityFolder targetFolder = db.folder().getFolderByType(aid, type);
+                            if (targetFolder == null)
+                                return result;
+
+                            List<EntityMessage> messages = db.message().getMessagesByThread(
+                                    aid, thread, threading ? null : id, null);
+                            for (EntityMessage threaded : messages) {
+                                EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
+                                if (sourceFolder != null && !sourceFolder.read_only &&
+                                        !targetFolder.id.equals(threaded.folder) &&
+                                        (!filter_archive || !EntityFolder.ARCHIVE.equals(sourceFolder.type)) &&
+                                        !EntityFolder.DRAFTS.equals(sourceFolder.type) && !EntityFolder.OUTBOX.equals(sourceFolder.type) &&
+                                        (!EntityFolder.SENT.equals(sourceFolder.type) || EntityFolder.TRASH.equals(targetFolder.type)) &&
+                                        !EntityFolder.TRASH.equals(sourceFolder.type) && !EntityFolder.JUNK.equals(sourceFolder.type))
+                                    result.add(new MessageTarget(context, threaded, account, sourceFolder, account, targetFolder));
                             }
 
                             db.setTransactionSuccessful();
@@ -1302,13 +1308,42 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
-        boolean swipe_close = prefs.getBoolean("swipe_close", false);
-        if (swipe_close && viewType == AdapterMessage.ViewType.THREAD) {
+        if (viewType == AdapterMessage.ViewType.THREAD) {
+            boolean swipe_close = prefs.getBoolean("swipe_close", false);
+            boolean swipe_move = prefs.getBoolean("swipe_move", false);
             IOverScrollDecor decor = new VerticalOverScrollBounceEffectDecorator(
                     new RecyclerViewOverScrollDecorAdapter(rvMessage, touchHelper) {
                         @Override
+                        public boolean isInAbsoluteStart() {
+                            if (!swipe_close)
+                                return false;
+                            return super.isInAbsoluteStart();
+                        }
+
+                        @Override
                         public boolean isInAbsoluteEnd() {
-                            return false;
+                            PagedList<TupleMessageEx> list = ((AdapterMessage) rvMessage.getAdapter()).getCurrentList();
+                            if (list == null)
+                                return false;
+
+                            boolean moveable = false;
+                            for (TupleMessageEx message : list) {
+                                if (message == null)
+                                    return false;
+
+                                if (!EntityFolder.isOutgoing(message.folderType) &&
+                                        (!filter_archive || !EntityFolder.ARCHIVE.equals(message.folderType))) {
+                                    moveable = true;
+                                    break;
+                                }
+                            }
+
+                            if (!moveable)
+                                return false;
+
+                            if (!swipe_move)
+                                return false;
+                            return super.isInAbsoluteEnd();
                         }
                     },
                     DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD,
@@ -1316,12 +1351,40 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     DEFAULT_DECELERATE_FACTOR
             );
             decor.setOverScrollUpdateListener(new IOverScrollUpdateListener() {
+                private boolean triggered = false;
+
                 @Override
                 public void onOverScrollUpdate(IOverScrollDecor decor, int state, float offset) {
                     float height = decor.getView().getHeight();
-                    if (height != 0 &&
-                            offset * DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD > height / 4)
-                        handleAutoClose();
+                    if (height == 0)
+                        return;
+
+                    if (offset == 0)
+                        triggered = false;
+                    else if (!triggered) {
+                        float dx = Math.abs(offset * DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD);
+                        if (offset > 0 && dx > height / 4) {
+                            triggered = true;
+                            handleAutoClose();
+                        }
+
+                        if (offset < 0 && dx > height / 8) {
+                            triggered = true;
+
+                            Bundle args = new Bundle();
+                            args.putString("title", getString(R.string.title_move_to_folder));
+                            args.putLong("account", account);
+                            args.putString("thread", thread);
+                            args.putLong("id", id);
+                            args.putBoolean("filter_archive", filter_archive);
+                            args.putLongArray("disabled", new long[]{folder});
+
+                            FragmentDialogFolder fragment = new FragmentDialogFolder();
+                            fragment.setArguments(args);
+                            fragment.setTargetFragment(FragmentMessages.this, REQUEST_THREAD_MOVE);
+                            fragment.show(getParentFragmentManager(), "overscroll:move");
+                        }
+                    }
                 }
             });
         }
@@ -1539,9 +1602,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         @Override
         public void setExpanded(TupleMessageEx message, boolean value) {
             // Prevent flicker
-            if (value &&
-                    (message.accountProtocol != EntityAccount.TYPE_IMAP ||
-                            (message.accountAutoSeen && !message.ui_seen && !message.folderReadOnly))) {
+            if (value && message.accountAutoSeen && !message.folderReadOnly) {
                 message.unseen = 0;
                 message.ui_seen = true;
                 message.visible_unseen = 0;
@@ -1663,12 +1724,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (message == null)
                             return result;
 
-                        EntityFolder target = db.folder().getFolderByType(message.account, type);
-                        if (target == null)
+                        EntityAccount account = db.account().getAccount(message.account);
+                        if (account == null)
                             return result;
 
-                        EntityAccount account = db.account().getAccount(target.account);
-                        result.add(new MessageTarget(message, account, target));
+                        EntityFolder sourceFolder = db.folder().getFolder(message.folder);
+                        if (sourceFolder == null)
+                            return result;
+
+                        EntityFolder targetFolder = db.folder().getFolderByType(message.account, type);
+                        if (targetFolder == null)
+                            return result;
+
+                        result.add(new MessageTarget(context, message, account, sourceFolder, account, targetFolder));
 
                         db.setTransactionSuccessful();
                     } finally {
@@ -2125,15 +2193,27 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (message == null)
                             return result;
 
-                        EntityFolder target = db.folder().getFolder(tid);
-                        if (target == null)
+                        EntityAccount sourceAccount = db.account().getAccount(message.account);
+                        if (sourceAccount == null)
                             return result;
 
-                        EntityAccount account = db.account().getAccount(target.account);
+                        EntityFolder targetFolder = db.folder().getFolder(tid);
+                        if (targetFolder == null)
+                            return result;
+
+                        EntityAccount targetAccount = db.account().getAccount(targetFolder.account);
+                        if (targetAccount == null)
+                            return result;
+
                         List<EntityMessage> messages = db.message().getMessagesByThread(
                                 message.account, message.thread, threading && thread ? null : id, message.folder);
-                        for (EntityMessage threaded : messages)
-                            result.add(new MessageTarget(threaded, account, target));
+                        for (EntityMessage threaded : messages) {
+                            EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
+                            if (sourceFolder == null || sourceFolder.read_only)
+                                continue;
+
+                            result.add(new MessageTarget(context, threaded, sourceAccount, sourceFolder, targetAccount, targetFolder));
+                        }
 
                         db.setTransactionSuccessful();
                     } finally {
@@ -3011,14 +3091,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (message == null)
                             continue;
 
+                        EntityAccount account = db.account().getAccount(message.account);
+                        if (account == null)
+                            continue;
+
+                        EntityFolder targetFolder = db.folder().getFolderByType(message.account, type);
+                        if (targetFolder == null)
+                            continue;
+
                         List<EntityMessage> messages = db.message().getMessagesByThread(
                                 message.account, message.thread, threading ? null : id, message.folder);
                         for (EntityMessage threaded : messages) {
-                            EntityFolder target = db.folder().getFolderByType(message.account, type);
-                            if (target != null) {
-                                EntityAccount account = db.account().getAccount(target.account);
-                                result.add(new MessageTarget(threaded, account, target));
-                            }
+                            EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
+                            if (sourceFolder == null || sourceFolder.read_only)
+                                continue;
+
+                            result.add(new MessageTarget(context, threaded, account, sourceFolder, account, targetFolder));
                         }
                     }
 
@@ -3074,18 +3162,31 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 try {
                     db.beginTransaction();
 
-                    EntityFolder target = db.folder().getFolder(tid);
-                    if (target != null) {
-                        EntityAccount account = db.account().getAccount(target.account);
-                        for (long id : ids) {
-                            EntityMessage message = db.message().getMessage(id);
-                            if (message == null)
+                    EntityFolder targetFolder = db.folder().getFolder(tid);
+                    if (targetFolder == null)
+                        return result;
+
+                    EntityAccount targetAccount = db.account().getAccount(targetFolder.account);
+                    if (targetAccount == null)
+                        return result;
+
+                    for (long id : ids) {
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message == null)
+                            continue;
+
+                        EntityAccount sourceAccount = db.account().getAccount(message.account);
+                        if (sourceAccount == null)
+                            continue;
+
+                        List<EntityMessage> messages = db.message().getMessagesByThread(
+                                message.account, message.thread, threading ? null : id, message.folder);
+                        for (EntityMessage threaded : messages) {
+                            EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
+                            if (sourceFolder == null || sourceFolder.read_only)
                                 continue;
 
-                            List<EntityMessage> messages = db.message().getMessagesByThread(
-                                    message.account, message.thread, threading ? null : id, message.folder);
-                            for (EntityMessage threaded : messages)
-                                result.add(new MessageTarget(threaded, account, target, copy));
+                            result.add(new MessageTarget(context, threaded, sourceAccount, sourceFolder, targetAccount, targetFolder, copy));
                         }
                     }
 
@@ -3111,6 +3212,61 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "messages:move");
+    }
+
+    private void onActionMoveThread(Bundle args) {
+        new SimpleTask<ArrayList<MessageTarget>>() {
+            @Override
+            protected ArrayList<MessageTarget> onExecute(Context context, Bundle args) {
+                long aid = args.getLong("account");
+                String thread = args.getString("thread");
+                long id = args.getLong("id");
+                boolean filter_archive = args.getBoolean("filter_archive");
+                long tid = args.getLong("folder");
+
+                ArrayList<MessageTarget> result = new ArrayList<>();
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    EntityAccount account = db.account().getAccount(aid);
+                    if (account == null)
+                        return result;
+
+                    EntityFolder targetFolder = db.folder().getFolder(tid);
+                    if (targetFolder == null)
+                        return result;
+
+                    List<EntityMessage> messages = db.message().getMessagesByThread(
+                            aid, thread, threading ? null : id, null);
+                    for (EntityMessage threaded : messages) {
+                        EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
+                        if (sourceFolder != null && !sourceFolder.read_only &&
+                                !targetFolder.id.equals(threaded.folder) &&
+                                !EntityFolder.isOutgoing(sourceFolder.type) &&
+                                (!filter_archive || !EntityFolder.ARCHIVE.equals(sourceFolder.type)))
+                            result.add(new MessageTarget(context, threaded, account, sourceFolder, account, targetFolder));
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, ArrayList<MessageTarget> result) {
+                moveAskConfirmed(result);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(FragmentMessages.this, args, "messages:move");
     }
 
     static void onActionUndo(TupleMessageEx message, final Context context, final LifecycleOwner owner, final FragmentManager manager) {
@@ -4405,9 +4561,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         for (MessageTarget target : targets)
                             if (message.id.equals(target.id)) {
                                 Log.i("Eval thread target id=" + target.id);
-                                if (!target.across) {
+                                if (!target.isAccross()) {
                                     found = true;
-                                    if (target.folder.id == folder)
+                                    if (target.targetFolder.id == folder)
                                         count++;
                                 }
                                 mt.remove(target);
@@ -4419,7 +4575,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 }
 
                 for (MessageTarget target : mt)
-                    if (!target.across && target.folder.id == folder &&
+                    if (!target.isAccross() && target.targetFolder.id == folder &&
                             (removed == null || !removed.contains(target.id)))
                         count++;
 
@@ -4584,7 +4740,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         db.message().setMessageUnsnoozed(message.id, false);
 
                     if (account.protocol != EntityAccount.TYPE_IMAP) {
-                        if (!message.ui_seen)
+                        if (!message.ui_seen && account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
                     } else {
                         if (!message.content)
@@ -4718,13 +4874,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         Bundle aargs = new Bundle();
-        aargs.putString("question", getResources()
-                .getQuantityString(R.plurals.title_moving_messages,
-                        result.size(), result.size(), getDisplay(result)));
         aargs.putString("notagain", key);
         aargs.putParcelableArrayList("result", result);
 
-        FragmentDialogAsk ask = new FragmentDialogAsk();
+        FragmentMoveAsk ask = new FragmentMoveAsk();
         ask.setArguments(aargs);
         ask.setTargetFragment(FragmentMessages.this, REQUEST_ASKED_MOVE);
         ask.show(getParentFragmentManager(), "messages:move");
@@ -4752,11 +4905,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (message == null)
                             continue;
 
-                        Log.i("Move id=" + target.id + " target=" + target.folder.name + " copy=" + target.copy);
+                        Log.i("Move id=" + target.id + " target=" + target.targetFolder.name + " copy=" + target.copy);
                         if (target.copy)
-                            EntityOperation.queue(context, message, EntityOperation.COPY, target.folder.id);
+                            EntityOperation.queue(context, message, EntityOperation.COPY, target.targetFolder.id);
                         else
-                            EntityOperation.queue(context, message, EntityOperation.MOVE, target.folder.id);
+                            EntityOperation.queue(context, message, EntityOperation.MOVE, target.targetFolder.id);
                     }
 
                     db.setTransactionSuccessful();
@@ -4850,10 +5003,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 if (message == null || !message.ui_hide)
                                     continue;
 
-                                Log.i("Move id=" + target.id + " target=" + target.folder.name);
+                                Log.i("Move id=" + target.id + " target=" + target.targetFolder.name);
                                 db.message().setMessageUiBusy(target.id, null);
                                 db.message().setMessageLastAttempt(target.id, new Date().getTime());
-                                EntityOperation.queue(context, message, EntityOperation.MOVE, target.folder.id);
+                                EntityOperation.queue(context, message, EntityOperation.MOVE, target.targetFolder.id);
                             }
 
                             db.setTransactionSuccessful();
@@ -4907,7 +5060,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     return;
                 }
 
-                String title = getString(R.string.title_move_undo, getDisplay(result), result.size());
+                String title = getString(R.string.title_move_undo, getDisplay(result, true), result.size());
                 ((ActivityView) activity).undo(title, args, move, show);
             }
 
@@ -4918,16 +5071,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }.execute(this, args, "undo:hide");
     }
 
-    private String getDisplay(ArrayList<MessageTarget> result) {
+    private static String getDisplay(ArrayList<MessageTarget> result, boolean dest) {
         boolean across = false;
         for (MessageTarget target : result)
-            if (target.across)
+            if (target.isAccross())
                 across = true;
 
         List<String> displays = new ArrayList<>();
         for (MessageTarget target : result) {
-            String display = (across ? target.account.name + "/" : "") +
-                    target.folder.getDisplayName(getContext());
+            String display = "";
+            if (across)
+                display += (dest ? target.targetAccount.name : target.sourceAccount.name) + "/";
+            display += (dest ? target.targetFolder.display : target.sourceFolder.display);
             if (!displays.contains(display))
                 displays.add(display);
         }
@@ -5335,6 +5490,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 case REQUEST_MESSAGES_MOVE:
                     if (resultCode == RESULT_OK && data != null)
                         onActionMoveSelection(data.getBundleExtra("args"));
+                    break;
+                case REQUEST_THREAD_MOVE:
+                    if (resultCode == RESULT_OK && data != null)
+                        onActionMoveThread(data.getBundleExtra("args"));
                     break;
                 case REQUEST_PRINT:
                     if (resultCode == RESULT_OK && data != null)
@@ -6497,7 +6656,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void onMoveAskAcross(final ArrayList<MessageTarget> result) {
         boolean across = false;
         for (MessageTarget target : result)
-            if (target.across) {
+            if (target.isAccross()) {
                 across = true;
                 break;
             }
@@ -6691,20 +6850,29 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (message == null)
                         return result;
 
-                    EntityFolder target = db.folder().getFolder(tid);
-                    if (target == null)
+                    EntityAccount sourceAccount = db.account().getAccount(message.account);
+                    if (sourceAccount == null)
                         return result;
 
-                    EntityAccount account = db.account().getAccount(target.account);
-                    if (account != null) {
-                        List<EntityMessage> messages = db.message().getMessagesByThread(
-                                message.account, message.thread, threading && similar ? null : id, message.folder);
-                        for (EntityMessage threaded : messages)
-                            if (copy)
-                                EntityOperation.queue(context, message, EntityOperation.COPY, tid);
-                            else
-                                result.add(new MessageTarget(threaded, account, target));
-                    }
+                    EntityFolder targetFolder = db.folder().getFolder(tid);
+                    if (targetFolder == null)
+                        return result;
+
+                    EntityAccount targetAccount = db.account().getAccount(targetFolder.account);
+                    if (targetAccount == null)
+                        return result;
+
+                    List<EntityMessage> messages = db.message().getMessagesByThread(
+                            message.account, message.thread, threading && similar ? null : id, message.folder);
+                    for (EntityMessage threaded : messages)
+                        if (copy)
+                            EntityOperation.queue(context, message, EntityOperation.COPY, tid);
+                        else {
+                            EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
+                            if (sourceFolder == null || sourceFolder.read_only)
+                                continue;
+                            result.add(new MessageTarget(context, threaded, sourceAccount, sourceFolder, targetAccount, targetFolder));
+                        }
 
                     db.setTransactionSuccessful();
                 } finally {
@@ -6928,12 +7096,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         List<Long> ids = db.message().getMessageByFolder(folder.id);
                         for (Long id : ids) {
                             EntityMessage message = db.message().getMessage(id);
-                            if (message != null &&
-                                    (account.protocol == EntityAccount.TYPE_POP || message.uid != null))
+                            if (message == null)
+                                continue;
+
+                            if (message.uid != null || account.protocol == EntityAccount.TYPE_POP)
                                 db.message().setMessageUiHide(message.id, true);
                         }
 
                         EntityOperation.queue(context, folder, EntityOperation.PURGE);
+                        EntityOperation.sync(context, folder.id, false);
                     }
 
                     db.setTransactionSuccessful();
@@ -7036,42 +7207,51 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private static class MessageTarget implements Parcelable {
         long id;
-        boolean across;
-        EntityAccount account;
-        EntityFolder folder;
+        Account sourceAccount;
+        Folder sourceFolder;
+        Account targetAccount;
+        Folder targetFolder;
         boolean copy;
 
-        MessageTarget(EntityMessage message, EntityAccount account, EntityFolder folder) {
-            this.id = message.id;
-            this.across = !folder.account.equals(message.account);
-            this.account = account;
-            this.folder = folder;
-            this.copy = false;
+        MessageTarget(Context context, EntityMessage message,
+                      EntityAccount sourceAccount, EntityFolder sourceFolder,
+                      EntityAccount targetAccount, EntityFolder targetFolder) {
+            this(context, message, sourceAccount, sourceFolder, targetAccount, targetFolder, false);
         }
 
-        MessageTarget(EntityMessage message, EntityAccount account, EntityFolder folder, boolean copy) {
+        MessageTarget(Context context, EntityMessage message,
+                      EntityAccount sourceAccount, EntityFolder sourceFolder,
+                      EntityAccount targetAccount, EntityFolder targetFolder,
+                      boolean copy) {
             this.id = message.id;
-            this.across = !folder.account.equals(message.account);
-            this.account = account;
-            this.folder = folder;
+            this.sourceAccount = new Account(sourceAccount);
+            this.sourceFolder = new Folder(context, sourceFolder);
+            this.targetAccount = new Account(targetAccount);
+            this.targetFolder = new Folder(context, targetFolder);
             this.copy = copy;
         }
 
         protected MessageTarget(Parcel in) {
             id = in.readLong();
-            across = (in.readInt() != 0);
-            account = (EntityAccount) in.readSerializable();
-            folder = (EntityFolder) in.readSerializable();
+            sourceAccount = (Account) in.readSerializable();
+            sourceFolder = (Folder) in.readSerializable();
+            targetAccount = (Account) in.readSerializable();
+            targetFolder = (Folder) in.readSerializable();
             copy = (in.readInt() != 0);
         }
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeLong(id);
-            dest.writeInt(across ? 1 : 0);
-            dest.writeSerializable(account);
-            dest.writeSerializable(folder);
+            dest.writeSerializable(sourceAccount);
+            dest.writeSerializable(sourceFolder);
+            dest.writeSerializable(targetAccount);
+            dest.writeSerializable(targetFolder);
             dest.writeInt(copy ? 1 : 0);
+        }
+
+        boolean isAccross() {
+            return (sourceAccount.id != targetAccount.id);
         }
 
         @Override
@@ -7090,6 +7270,28 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return new MessageTarget[size];
             }
         };
+
+        static class Account implements Serializable {
+            long id;
+            String name;
+
+            Account(EntityAccount account) {
+                this.id = account.id;
+                this.name = account.name;
+            }
+        }
+
+        static class Folder implements Serializable {
+            long id;
+            String name;
+            String display;
+
+            Folder(Context context, EntityFolder folder) {
+                this.id = folder.id;
+                this.name = folder.name;
+                this.display = folder.getDisplayName(context);
+            }
+        }
     }
 
     public static class FragmentDialogReporting extends FragmentDialogBase {
@@ -7314,6 +7516,54 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return new AlertDialog.Builder(getContext())
                     .setView(dview)
                     .setPositiveButton(R.string.title_boundary_retry, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendResult(Activity.RESULT_OK);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            sendResult(Activity.RESULT_CANCELED);
+                        }
+                    })
+                    .create();
+        }
+    }
+
+    public static class FragmentMoveAsk extends FragmentDialogBase {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            String notagain = getArguments().getString("notagain");
+            ArrayList<MessageTarget> result = getArguments().getParcelableArrayList("result");
+
+            View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_ask_move, null);
+            TextView tvMessages = dview.findViewById(R.id.tvMessages);
+            TextView tvSourceFolders = dview.findViewById(R.id.tvSourceFolders);
+            TextView tvTargetFolders = dview.findViewById(R.id.tvTargetFolders);
+            CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
+
+            String question = getResources()
+                    .getQuantityString(R.plurals.title_moving_messages,
+                            result.size(), result.size());
+
+            tvMessages.setText(question);
+            tvSourceFolders.setText(getDisplay(result, false));
+            tvTargetFolders.setText(getDisplay(result, true));
+
+            if (notagain != null)
+                cbNotAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        prefs.edit().putBoolean(notagain, isChecked).apply();
+                    }
+                });
+
+            return new AlertDialog.Builder(getContext())
+                    .setView(dview)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             sendResult(Activity.RESULT_OK);

@@ -55,8 +55,8 @@
         <item quantity="other">%1$d conversations sélectionnées</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">Déplacer %1$d message vers %2$s ?</item>
-        <item quantity="other">Déplacer %1$d messages vers %2$s ?</item>
+        <item quantity="one">Déplacer %1$d message ?</item>
+        <item quantity="other">Déplacer %1$d messages ?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Supprimer définitivement %1$d message ?</item>
@@ -200,6 +200,7 @@
     <string name="title_setup_theme_red_green">Rouge/vert</string>
     <string name="title_setup_theme_grey">Gris</string>
     <string name="title_setup_theme_black">Noir</string>
+    <string name="title_setup_theme_black_and_white">Noir et blanc</string>
     <string name="title_setup_theme_reverse">Permuter les couleurs</string>
     <string name="title_setup_theme_dark">Sombre</string>
     <string name="title_setup_theme_black_background">Fond noir</string>
@@ -246,7 +247,6 @@
     <string name="title_advanced_suggest_received">Suggérer les adresses trouvées dans les messages reçus</string>
     <string name="title_advanced_suggest_frequently">Trier les adresses suggérées par fréquence d’utilisation</string>
     <string name="title_advanced_compose_font">Police de caractères par défaut</string>
-    <string name="title_advanced_auto_list">Créer automatiquement des listes</string>
     <string name="title_advanced_prefix_once">Ne préfixer l\'objet qu\'une seule fois lors de la réponse ou du transfert</string>
     <string name="title_advanced_extended_reply">Utiliser l\'en-tête étendu de réponse/transfert</string>
     <string name="title_advanced_quote_reply">Citer le texte répondu</string>
@@ -338,6 +338,7 @@
     <string name="title_advanced_volumenav">Utiliser les boutons de volume haut/bas pour passer à la conversation suivante/précédente</string>
     <string name="title_advanced_reversed">Inverser les directions de navigation</string>
     <string name="title_advanced_swipe_close">Balayer vers le bas pour fermer la conversation</string>
+    <string name="title_advanced_swipe_move">Balayer vers le haut pour déplacer la conversation</string>
     <string name="title_advanced_autoexpand">Déplier automatiquement les messages</string>
     <string name="title_advanced_expand_all">Déplier automatiquement tous les messages lus</string>
     <string name="title_advanced_expand_one">Ne déplier qu’un seul message à la fois</string>
@@ -580,6 +581,7 @@
     <string name="title_oauth_support">OAuth n\'est pas pris en charge</string>
     <string name="title_review">Récapitulatif</string>
     <string name="title_hint_alias">Appuyer longuement sur une identité pour afficher les options, comme copier afin de créer des identités alias</string>
+    <string name="title_service_auth">Le serveur de messagerie a dit : %1$s</string>
     <string name="title_service_vpn">Ceci pourrait être dû au VPN utilisé</string>
     <string name="title_service_port">Veuillez vérifier le numéro de port</string>
     <string name="title_service_protocol">Veuillez vérifier à nouveau le protocole (SSL/TLS ou STARTTLS)</string>
@@ -737,7 +739,7 @@
     <string name="title_unused_inline">Les images incluses non utilisées seront supprimées lors de l’envoi</string>
     <string name="title_accross_remark">Les messages déplacés entre comptes seront téléchargés à nouveau entraînant une utilisation supplémentaire des données</string>
     <string name="title_raw_saved">Message original enregistré</string>
-    <string name="title_attachment_eml" comment="title_attachment_eml&#10;This is a title (heading) for displaying attached messages (EML files)">Message joint</string>
+    <string name="title_attachment_eml">Message joint</string>
     <string name="title_attachment_saved">Pièce jointe enregistrée</string>
     <string name="title_attachments_saved">Pièces jointes enregistrées</string>
     <string name="title_attachments_incomplete">Certaines pièces jointes ou images n\'ont pas été téléchargées et n\'ont pas pu être ajoutées</string>
@@ -763,6 +765,7 @@
     <string name="title_third_party">Vous utilisez une version tierce</string>
     <string name="title_expand_warning">Déplier ce message téléchargera %1$s</string>
     <string name="title_download_message">Téléchargement&#8230;</string>
+    <string name="title_reformatted">Ceci est la vue de message reformaté. Vous pouvez appuyer sur l\'icône &#x26F6; pour afficher le message original et masquer ce message.</string>
     <string name="title_compose">Rédiger</string>
     <string name="title_submitter">Envoyé par :</string>
     <string name="title_delivered_to">Envoyé à :</string>
@@ -797,9 +800,12 @@
     <string name="title_style_size_small">Petit</string>
     <string name="title_style_size_medium">Moyen</string>
     <string name="title_style_size_large">Grand</string>
+    <string name="title_style_color">Couleur&#8230;</string>
+    <string name="title_style_list">Liste</string>
+    <string name="title_style_list_bullets">Puces</string>
+    <string name="title_style_list_numbered">Numéros</string>
     <string name="title_style_font">Police de caractères</string>
     <string name="title_style_font_default">Par défaut</string>
-    <string name="title_style_color">Couleur&#8230;</string>
     <string name="title_style_clear">Effacer la mise en forme</string>
     <string name="title_style_link">Insérer un lien</string>
     <string name="title_add_image">Ajouter une image</string>
@@ -1040,6 +1046,7 @@
     <string name="title_legend_download_fetch">Nombre de messages téléchargés / en-têtes récupérés</string>
     <string name="title_legend_stop">Arrêter le traitement des règles</string>
     <string name="title_legend_thread">Conversation</string>
+    <string name="title_legend_bookmark">Dernière conversation ouverte</string>
     <string name="title_legend_zoom">Modifier la taille du texte</string>
     <string name="title_legend_draft">A un brouillon</string>
     <string name="title_legend_priority">A une priorité élevée</string>

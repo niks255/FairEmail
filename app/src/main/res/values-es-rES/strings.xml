@@ -55,8 +55,8 @@
         <item quantity="other">%1$d conversaciones seleccionadas</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">¿Mover %1$d mensaje a %2$s?</item>
-        <item quantity="other">¿Mover %1$d mensajes a %2$s?</item>
+        <item quantity="one">¿Mover %1$d mensaje?</item>
+        <item quantity="other">¿Mover %1$d mensajes?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">¿Eliminar %1$d mensaje permanentemente?</item>
@@ -174,6 +174,7 @@
     <string name="title_setup_done">Hecho</string>
     <string name="title_setup_still">Aún por hacer</string>
     <string name="title_setup_error">Error</string>
+    <string name="title_setup_configuring">Configurando cuenta &#8230;</string>
     <string name="title_setup_export">Exportar ajustes</string>
     <string name="title_setup_import">Importar ajustes</string>
     <string name="title_setup_import_do">Las cuentas importadas serán añadidas sin sobreescribir las existentes</string>
@@ -246,7 +247,6 @@
     <string name="title_advanced_suggest_received">Sugerir direcciones encontradas en mensajes recibidos</string>
     <string name="title_advanced_suggest_frequently">Ordenar direcciones sugeridas por frecuencia de uso</string>
     <string name="title_advanced_compose_font">Fuente por defecto</string>
-    <string name="title_advanced_auto_list">Crear listas automáticamente</string>
     <string name="title_advanced_prefix_once">Prefijar el asunto solo una vez al responder o reenviar</string>
     <string name="title_advanced_extended_reply">Usar encabezado de respuesta/reenvío extendido</string>
     <string name="title_advanced_quote_reply">Citar texto a responder</string>
@@ -338,6 +338,7 @@
     <string name="title_advanced_volumenav">Volumen arriba/abajo para ir a la conversación siguiente/anterior</string>
     <string name="title_advanced_reversed">Invertir la dirección de navegación</string>
     <string name="title_advanced_swipe_close">Deslice hacia abajo para cerrar la conversación</string>
+    <string name="title_advanced_swipe_move">Deslice hacia arriba para mover la conversación</string>
     <string name="title_advanced_autoexpand">Expandir mensajes automáticamente</string>
     <string name="title_advanced_expand_all">Expandir automáticamente todos los mensajes leídos</string>
     <string name="title_advanced_expand_one">Expandir sólo un mensaje a la vez</string>
@@ -580,6 +581,7 @@
     <string name="title_oauth_support">OAuth no está soportado</string>
     <string name="title_review">Revisar</string>
     <string name="title_hint_alias">Dejar pulsado para opciones, como copiar para crear identidades de alias</string>
+    <string name="title_service_auth">El servidor de correo electrónico dijo: \'%1$s\'</string>
     <string name="title_service_vpn">Esto podría ser causado por la VPN que está siendo usada</string>
     <string name="title_service_port">Por favor, compruebe el número de puerto</string>
     <string name="title_service_protocol">Por favor, compruebe el protocolo (SSL/TLS o STARTTLS)</string>
@@ -737,6 +739,7 @@
     <string name="title_unused_inline">Las imágenes embebidas no usadas serán eliminadas al enviar</string>
     <string name="title_accross_remark">Los mensajes movidos a otras cuentas serán descargados nuevamente causando uso adicional de datos</string>
     <string name="title_raw_saved">Mensaje raw guardado</string>
+    <string name="title_attachment_eml">Mensaje adjunto</string>
     <string name="title_attachment_saved">Adjunto guardado</string>
     <string name="title_attachments_saved">Adjuntos guardados</string>
     <string name="title_attachments_incomplete">Algunos adjuntos o imágenes no fueron descargados y no pudieron añadirse</string>
@@ -755,10 +758,14 @@
     <string name="title_ask_reporting">¿Enviar informes de error?</string>
     <string name="title_reporting_why">Informar de errores ayudará a mejorar FairEmail</string>
     <string name="title_ask_review">Por favor califique FairEmail</string>
+    <string name="title_ask_review_rationale">        Ha estado usando FairEmail durante un tiempo.
+        Se agradecería que pudiese calificar FairEmail en Play Store.
+    </string>
     <string name="title_ask_once">Este mensaje sólo aparecerá una vez, a menos que seleccione \'Más tarde\'</string>
     <string name="title_third_party">Está usando una versión de un tercero</string>
     <string name="title_expand_warning">Expandir este mensaje descargará %1$s</string>
     <string name="title_download_message">Descargando &#8230;</string>
+    <string name="title_reformatted">Esta es la vista de mensaje reformateada. Puede tocar el icono &#x26F6; para ver el mensaje original y ocultar este mensaje.</string>
     <string name="title_compose">Redactar</string>
     <string name="title_submitter">Enviado por:</string>
     <string name="title_delivered_to">Entregado a:</string>
@@ -793,9 +800,12 @@
     <string name="title_style_size_small">Pequeño</string>
     <string name="title_style_size_medium">Mediano</string>
     <string name="title_style_size_large">Grande</string>
+    <string name="title_style_color">Color &#8230;</string>
+    <string name="title_style_list">Lista</string>
+    <string name="title_style_list_bullets">Viñetas</string>
+    <string name="title_style_list_numbered">Numeradas</string>
     <string name="title_style_font">Fuente</string>
     <string name="title_style_font_default">Por defecto</string>
-    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_clear">Quitar formato</string>
     <string name="title_style_link">Insertar enlace</string>
     <string name="title_add_image">Añadir imagen</string>
@@ -1036,6 +1046,7 @@
     <string name="title_legend_download_fetch">Número de mensajes descargados / cabeceras obtenidas</string>
     <string name="title_legend_stop">Detener procesamiento de reglas</string>
     <string name="title_legend_thread">Conversación</string>
+    <string name="title_legend_bookmark">Última conversación abierta</string>
     <string name="title_legend_zoom">Cambiar tamaño del texto</string>
     <string name="title_legend_draft">Tiene borrador</string>
     <string name="title_legend_priority">Tiene prioridad alta</string>

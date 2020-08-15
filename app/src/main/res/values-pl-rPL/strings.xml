@@ -71,10 +71,10 @@
         <item quantity="other">Wybrano %1$d okien dialogowych</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">Przenieść %1$d wiadomość do %2$s?</item>
-        <item quantity="few">Przenieść %1$d wiadomości do %2$s?</item>
-        <item quantity="many">Przenieść %1$d wiadomości do %2$s?</item>
-        <item quantity="other">Przenieść %1$d wiadomości do %2$s?</item>
+        <item quantity="one">Przenieść %1$d wiadomość?</item>
+        <item quantity="few">Przenieść %1$d wiadomości?</item>
+        <item quantity="many">Przenieść %1$d wiadomości?</item>
+        <item quantity="other">Przenieść %1$d wiadomości?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Usunąć bezpowrotnie %1$d wiadomość?</item>
@@ -194,6 +194,7 @@
     <string name="title_setup_done">Gotowe</string>
     <string name="title_setup_still">Nadal do wykonania</string>
     <string name="title_setup_error">Błąd</string>
+    <string name="title_setup_configuring">Konfigurowanie konta &#8230;</string>
     <string name="title_setup_export">Eksport ustawień</string>
     <string name="title_setup_import">Import ustawień</string>
     <string name="title_setup_import_do">Zaimportowane konta zostaną dodane bez nadpisywania istniejących</string>
@@ -266,7 +267,6 @@
     <string name="title_advanced_suggest_received">Proponuj adresy znalezione w otrzymanych wiadomościach</string>
     <string name="title_advanced_suggest_frequently">Sortuj sugerowane adresy według częstotliwości używania</string>
     <string name="title_advanced_compose_font">Domyślna czcionka</string>
-    <string name="title_advanced_auto_list">Automatycznie twórz listy</string>
     <string name="title_advanced_prefix_once">Prefiksuj temat tylko raz przy odpowiedzi lub przesyłaniu dalej</string>
     <string name="title_advanced_extended_reply">Użyj rozszerzonego nagłówka odpowiedzi/przesyłania dalej</string>
     <string name="title_advanced_quote_reply">Cytuj treść w odpowiedzi</string>
@@ -358,6 +358,7 @@
     <string name="title_advanced_volumenav">Zwiększanie/zmniejszanie głośności, aby przejść do następnej/poprzedniej rozmowy</string>
     <string name="title_advanced_reversed">Odwróć kierunek nawigacji</string>
     <string name="title_advanced_swipe_close">Przesuń palcem w dół, aby zamknąć rozmowę</string>
+    <string name="title_advanced_swipe_move">Przesuń w górę, aby przenieść konwersację</string>
     <string name="title_advanced_autoexpand">Automatycznie rozwijaj wiadomości</string>
     <string name="title_advanced_expand_all">Automatycznie rozwiń wszystkie przeczytane wiadomości</string>
     <string name="title_advanced_expand_one">Rozwiń tylko jedną wiadomość na raz</string>
@@ -600,6 +601,7 @@
     <string name="title_oauth_support">OAuth nie jest wspierane</string>
     <string name="title_review">Przejrzyj</string>
     <string name="title_hint_alias">Naciśnij i przytrzymaj tożsamość, aby wyświetlić opcje, np. kopiuj, aby utworzyć tożsamość aliasu</string>
+    <string name="title_service_auth">Serwer e-mail odpowiedział: \'%1$s\'</string>
     <string name="title_service_vpn">Może to być spowodowane przez używany VPN</string>
     <string name="title_service_port">Zweryfikuj dokładnie numer portu</string>
     <string name="title_service_protocol">Upewnij się w kwestii protokołu (SSL/TLS lub STARTTLS)</string>
@@ -757,6 +759,7 @@
     <string name="title_unused_inline">Niewykorzystane wstawione obrazy zostaną usunięte podczas wysyłania</string>
     <string name="title_accross_remark">Wiadomości przenoszone pomiędzy kontami zostaną pobrane ponownie, wpływając na dodatkowe użycie danych</string>
     <string name="title_raw_saved">Zapisano nieprzetworzoną wiadomość</string>
+    <string name="title_attachment_eml">Załączona wiadomość</string>
     <string name="title_attachment_saved">Załącznik zapisany</string>
     <string name="title_attachments_saved">Załączniki zapisane</string>
     <string name="title_attachments_incomplete">Niektóre załączniki lub obrazy nie zostały pobrane i nie można ich dodać</string>
@@ -775,6 +778,9 @@
     <string name="title_ask_reporting">Wyślij raporty o błędach?</string>
     <string name="title_reporting_why">Raportowanie błędów pomoże ulepszyć FairEmail</string>
     <string name="title_ask_review">Oceń FairEmail</string>
+    <string name="title_ask_review_rationale">        Używasz FairEmail już od jakiegoś czasu.
+        Byłbym wdzięczny, gdybyś mógł ocenić FairEmail w Sklepie Play.
+    </string>
     <string name="title_ask_once">Ta wiadomość pojawi się tylko raz, chyba że wybierzesz \'Później\'</string>
     <string name="title_third_party">Używasz wersji od innych firm</string>
     <string name="title_expand_warning">Rozwinięcie tej wiadomości spowoduje pobranie %1$s</string>
@@ -813,9 +819,12 @@
     <string name="title_style_size_small">Mały</string>
     <string name="title_style_size_medium">Średni</string>
     <string name="title_style_size_large">Duży</string>
+    <string name="title_style_color">Kolor &#8230;</string>
+    <string name="title_style_list">Lista</string>
+    <string name="title_style_list_bullets">Wypunktowania</string>
+    <string name="title_style_list_numbered">Numerowane</string>
     <string name="title_style_font">Czcionka</string>
     <string name="title_style_font_default">Domyślny</string>
-    <string name="title_style_color">Kolor &#8230;</string>
     <string name="title_style_clear">Wyczyść formatowanie</string>
     <string name="title_style_link">Wstaw link</string>
     <string name="title_add_image">Dodaj obraz</string>
@@ -1056,6 +1065,7 @@
     <string name="title_legend_download_fetch">Liczba pobranych wiadomości / pobranych nagłówków</string>
     <string name="title_legend_stop">Zatrzymaj przetwarzanie reguł</string>
     <string name="title_legend_thread">Konwersacja</string>
+    <string name="title_legend_bookmark">Ostatnio otwarta konwersacja</string>
     <string name="title_legend_zoom">Zmień rozmiar tekstu</string>
     <string name="title_legend_draft">Posiada szkic</string>
     <string name="title_legend_priority">Posiada wysoki priorytet</string>

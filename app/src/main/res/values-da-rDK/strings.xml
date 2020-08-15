@@ -55,8 +55,8 @@
         <item quantity="other">%1$d konversationer valgt</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">Flyt %1$d besked til %2$s?</item>
-        <item quantity="other">Flyt %1$d beskeder til %2$s?</item>
+        <item quantity="one">Flyt %1$d besked?</item>
+        <item quantity="other">Flyt %1$d beskeder?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Slet %1$d besked permanent?</item>
@@ -200,6 +200,7 @@
     <string name="title_setup_theme_red_green">Rødt/grønt</string>
     <string name="title_setup_theme_grey">Gråt</string>
     <string name="title_setup_theme_black">Sort</string>
+    <string name="title_setup_theme_black_and_white">Sort og hvid</string>
     <string name="title_setup_theme_reverse">Omvendte farver</string>
     <string name="title_setup_theme_dark">Mørkt</string>
     <string name="title_setup_theme_black_background">Sort baggrund</string>
@@ -246,7 +247,6 @@
     <string name="title_advanced_suggest_received">Foreslå adresser fra modtagne beskeder</string>
     <string name="title_advanced_suggest_frequently">Sortér foreslåede adresser efter brugsfrekvens</string>
     <string name="title_advanced_compose_font">Standardskrifttype</string>
-    <string name="title_advanced_auto_list">Generér lister automatisk</string>
     <string name="title_advanced_prefix_once">Kun ét emnepræfiks ved svar eller videresendelse</string>
     <string name="title_advanced_extended_reply">Benyt udvidet svar-/videresendoverskrift</string>
     <string name="title_advanced_quote_reply">Citat af svartekst</string>
@@ -338,6 +338,7 @@
     <string name="title_advanced_volumenav">Lydstyrke op/ned for at gå til næste/foregående samtale</string>
     <string name="title_advanced_reversed">Omvendt navigeringsretning</string>
     <string name="title_advanced_swipe_close">Stryg nedad for at lukke samtale</string>
+    <string name="title_advanced_swipe_move">Stryg opad for at flytte samtale</string>
     <string name="title_advanced_autoexpand">Auto-udvid beskeder</string>
     <string name="title_advanced_expand_all">Auto-udvid alle læste beskeder</string>
     <string name="title_advanced_expand_one">Udvid kun én besked ad gangen</string>
@@ -580,6 +581,7 @@
     <string name="title_oauth_support">OAuth er uunderstøttet</string>
     <string name="title_review">Gennemse</string>
     <string name="title_hint_alias">Tryk og hold for indstillinger, såsom kopiér for at oprette aliasidentiteter</string>
+    <string name="title_service_auth">E-mailserveren returnerede: \'%1$s\'</string>
     <string name="title_service_vpn">Dette kan være forårsaget af den anvendte VPN</string>
     <string name="title_service_port">Dobbelttjek portnummeret</string>
     <string name="title_service_protocol">Dobbelttjek protokollen (SSL/TLS eller STARTTLS)</string>
@@ -737,6 +739,7 @@
     <string name="title_unused_inline">Ubrugte inline-billeder fjernes ved afsendelsen</string>
     <string name="title_accross_remark">Beskeder flyttet mellem konti gen-downloades, hvilket betyder ekstra dataforbrug</string>
     <string name="title_raw_saved">Besked i råformat gemt</string>
+    <string name="title_attachment_eml">Vedhæftet besked</string>
     <string name="title_attachment_saved">Vedhæftning gemt</string>
     <string name="title_attachments_saved">Vedhæftninger gemt</string>
     <string name="title_attachments_incomplete">Visse vedhæftninger eller billeder blev ikke downloadet og kunne ikke tilføjes</string>
@@ -796,9 +799,12 @@
     <string name="title_style_size_small">Lille</string>
     <string name="title_style_size_medium">Mellem</string>
     <string name="title_style_size_large">Stor</string>
+    <string name="title_style_color">Farve &#8230;</string>
+    <string name="title_style_list">Liste</string>
+    <string name="title_style_list_bullets">Punktliste</string>
+    <string name="title_style_list_numbered">Nummereret</string>
     <string name="title_style_font">Skrifttype</string>
     <string name="title_style_font_default">Standard</string>
-    <string name="title_style_color">Farve &#8230;</string>
     <string name="title_style_clear">Ryd formatering</string>
     <string name="title_style_link">Indsæt link</string>
     <string name="title_add_image">Tilføj billede</string>
@@ -1039,6 +1045,7 @@
     <string name="title_legend_download_fetch">Antal downloadede beskeder/hentede overskrifter</string>
     <string name="title_legend_stop">Stop afvikling af regler</string>
     <string name="title_legend_thread">Samtale</string>
+    <string name="title_legend_bookmark">Senest åbnede samtale</string>
     <string name="title_legend_zoom">Ændr tekststørrelse</string>
     <string name="title_legend_draft">Har kladde</string>
     <string name="title_legend_priority">Har høj prioritet</string>

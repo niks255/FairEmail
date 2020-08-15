@@ -53,10 +53,6 @@
         <item quantity="one">S\'han seleccionat %1$d conversa</item>
         <item quantity="other">S\'han seleccionat %1$d converses</item>
     </plurals>
-    <plurals name="title_moving_messages">
-        <item quantity="one">Moure el missatge %1$d a %2$s?</item>
-        <item quantity="other">Moure els missatges %1$d a %2$s?</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Esborrar el missatge %1$d per sempre?</item>
         <item quantity="other">Esborrar els missatges %1$d per sempre?</item>
@@ -237,7 +233,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_suggest_sent">Suggeriu adreces trobades als missatges enviats</string>
     <string name="title_advanced_suggest_received">Suggeriu adreces trobades als missatges rebuts</string>
     <string name="title_advanced_suggest_frequently">Ordena les adreces suggerides en funció de la freqüència d’ús</string>
-    <string name="title_advanced_auto_list">Crea llistes automàticament</string>
     <string name="title_advanced_prefix_once">El prefix de l\'assumpte només una vegada a la resposta o al reenviament</string>
     <string name="title_advanced_extended_reply">Utilitza resposta estesa/capçalera de reenviament</string>
     <string name="title_advanced_quote_reply">Text amb resposta a la cita</string>
@@ -762,9 +757,9 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_style_size_small">Petit</string>
     <string name="title_style_size_medium">Mitjà</string>
     <string name="title_style_size_large">Gran</string>
+    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_font">Font</string>
     <string name="title_style_font_default">Per defecte</string>
-    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_clear">Esborra el format</string>
     <string name="title_style_link">Insereix enllaç</string>
     <string name="title_add_image">Afegir una imatge</string>

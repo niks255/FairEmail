@@ -55,8 +55,8 @@
         <item quantity="other">%1$d Unterhaltungen ausgewählt</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">%1$d Nachricht nach %2$s verschieben?</item>
-        <item quantity="other">%1$d Nachrichten nach %2$s verschieben?</item>
+        <item quantity="one">%1$d Nachricht verschieben?</item>
+        <item quantity="other">%1$d Nachrichten verschieben?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">%1$d Nachricht dauerhaft löschen?</item>
@@ -174,7 +174,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_done">Erledigt</string>
     <string name="title_setup_still">Noch zu tun</string>
     <string name="title_setup_error">Fehler</string>
-    <string name="title_setup_configuring">Konto konfigurieren &#8230;</string>
+    <string name="title_setup_configuring">Konto wird konfiguriert &#8230;</string>
     <string name="title_setup_export">Einstellungen exportieren</string>
     <string name="title_setup_import">Einstellungen importieren</string>
     <string name="title_setup_import_do">Importierte Konten werden hinzugefügt, ohne vorhandene zu überschreiben</string>
@@ -201,6 +201,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_theme_red_green">Rot/Grün</string>
     <string name="title_setup_theme_grey">Grau</string>
     <string name="title_setup_theme_black">Schwarz</string>
+    <string name="title_setup_theme_black_and_white">Schwarz-Weiß</string>
     <string name="title_setup_theme_reverse">Farben umkehren</string>
     <string name="title_setup_theme_dark">Dunkler Hintergrund</string>
     <string name="title_setup_theme_black_background">Schwarzer Hintergrund</string>
@@ -211,8 +212,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_defaults">Standardeinstellungen wiederherstellen</string>
     <string name="title_setup_reset_questions">Fragen zurücksetzen</string>
     <string name="title_advanced_hint_title">Erweiterte Optionen</string>
-    <string name="title_advanced_hint_message">Du navigierst zu den erweiterten Optionen.
-        Alle diese Optionen haben üblicherweise vordefinierte Standardwerte. Diese können natürlich auch geändert werden, sofern eine andere Einstellung gewünscht wird.
+    <string name="title_advanced_hint_message">        Sie navigieren gerade zu den erweiterten Optionen.
+        Alle Optionen haben häufig verwendete Standardwerte, die geändert werden können, wenn Sie eine andere Vorliebe haben.
     </string>
     <string name="title_advanced_section_main">Haupteinstellungen</string>
     <string name="title_advanced_section_synchronize">Empfangen</string>
@@ -247,7 +248,6 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_suggest_received">Adressen aus empfangenen Nachrichten vorschlagen</string>
     <string name="title_advanced_suggest_frequently">Vorgeschlagene Adressen nach Nutzungshäufigkeit sortieren</string>
     <string name="title_advanced_compose_font">Standard-Schriftart</string>
-    <string name="title_advanced_auto_list">Listen automatisch erstellen</string>
     <string name="title_advanced_prefix_once">Re: und Fwd: nur einmal beim Antworten oder Weiterleiten voranstellen</string>
     <string name="title_advanced_extended_reply">Erweiterte Antwort-/Weiterleitungs-Kopfzeile verwenden</string>
     <string name="title_advanced_quote_reply">Beantworteten Text zitieren</string>
@@ -276,7 +276,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_caption_message">Nachricht</string>
     <string name="title_advanced_caption_message_header">Nachrichtenkopfzeilen</string>
     <string name="title_advanced_caption_message_body">Nachrichtentext</string>
-    <string name="title_advanced_portrait2">Zwei Zeilen im Hochformat verwenden</string>
+    <string name="title_advanced_portrait2">Zwei-Fenster-Darstellung im Hochformat verwenden</string>
     <string name="title_advanced_landscape">Zwei Spalten im Querformat verwenden</string>
     <string name="title_advanced_landscape3">Navigationsmenü standardmäßig im Querformat anzeigen</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
@@ -339,10 +339,11 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_volumenav">Lautstärke hoch/runter, um zur nächsten/vorherigen Unterhaltung zu wechseln</string>
     <string name="title_advanced_reversed">Navigationsrichtung umkehren</string>
     <string name="title_advanced_swipe_close">Zum Schließen der Unterhaltung nach unten wischen</string>
+    <string name="title_advanced_swipe_move">Zum Verschieben der Unterhaltung nach oben wischen</string>
     <string name="title_advanced_autoexpand">Nachrichten automatisch erweitern</string>
     <string name="title_advanced_expand_all">Alle gelesenen Nachrichten automatisch erweitern</string>
     <string name="title_advanced_expand_one">Jeweils nur eine Nachricht erweitern</string>
-    <string name="title_advanced_collapse_multiple">Nachrichten in einem Thema mit mehreren Nachrichten bei „Zurück“ zusammenfassen</string>
+    <string name="title_advanced_collapse_multiple">Nachrichten, in einer Unterhaltung mit mehreren Nachrichten, bei »Zurück« zusammenfassen</string>
     <string name="title_advanced_autoclose">Unterhaltungen automatisch schließen</string>
     <string name="title_advanced_onclose">Beim Schließen einer Unterhaltung</string>
     <string name="title_advanced_undo">Anzeigedauer von »Rückgängig«</string>
@@ -581,6 +582,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_oauth_support">OAuth wird nicht unterstützt</string>
     <string name="title_review">Kontrolle</string>
     <string name="title_hint_alias">Lange Drücken für Optionen, wie z.B. Kopieren oder um Alias-Adressen zu erstellen</string>
+    <string name="title_service_auth">Der E-Mail-Server meldete: „%1$s”</string>
     <string name="title_service_vpn">Dies kann durch das verwendete VPN verursacht werden</string>
     <string name="title_service_port">Bitte überprüfen Sie die Portnummer</string>
     <string name="title_service_protocol">Bitte überprüfen Sie das Protokoll (SSL/TLS oder STARTTLS)</string>
@@ -737,7 +739,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_unused_inline">Ungenutzte Inline-Bilder werden beim Senden entfernt</string>
     <string name="title_accross_remark">E-Mails, die über unterschiedliche Konten verschoben werden, werden erneut heruntergeladen, was zu einem erhöhtem Datenverbrauch führt</string>
     <string name="title_raw_saved">Rohdaten gespeichert</string>
-    <string name="title_attachment_eml" comment="title_attachment_eml&#10;This is a title (heading) for displaying attached messages (EML files)">Angehängte Nachricht</string>
+    <string name="title_attachment_eml">Angehängte Nachricht</string>
     <string name="title_attachment_saved">Anhang gespeichert</string>
     <string name="title_attachments_saved">Anhang gespeichert</string>
     <string name="title_attachments_incomplete">Einige Anhänge oder Bilder wurden nicht heruntergeladen und konnten nicht hinzugefügt werden</string>
@@ -756,11 +758,14 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_ask_reporting">Fehlerberichte senden?</string>
     <string name="title_reporting_why">Fehlerberichte helfen uns, FairEmail zu verbessern</string>
     <string name="title_ask_review">Bitte bewerten Sie FairEmail</string>
-    <string name="title_ask_review_rationale">Sie nutzen FairEmail bereits seit einiger Zeit. Es wäre schön, wenn Sie FairEmail im Play Store bewerten könnten.</string>
+    <string name="title_ask_review_rationale">        Sie verwenden FairEmail bereits seit einiger Zeit.
+        Es wäre schön, wenn Sie FairEmail im Play Store bewerten würden.
+    </string>
     <string name="title_ask_once">Diese Meldung wird nur einmal angezeigt, es sei denn, Sie wählen „Später”</string>
     <string name="title_third_party">Sie verwenden eine Version eines Drittanbieters</string>
     <string name="title_expand_warning">Durch Erweitern dieser Nachricht wird %1$s heruntergeladen</string>
     <string name="title_download_message">wird heruntergeladen &#8230;</string>
+    <string name="title_reformatted">Dies ist die neu formatierte Nachrichtenansicht. Sie können auf das &#x26F6; -Symbol tippen, um die ursprüngliche Nachricht zu sehen und diese Nachricht zu verstecken.</string>
     <string name="title_compose">Verfassen</string>
     <string name="title_submitter">Gesendet von:</string>
     <string name="title_delivered_to">Zugestellt an:</string>
@@ -795,9 +800,12 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_style_size_small">Klein</string>
     <string name="title_style_size_medium">Mittel</string>
     <string name="title_style_size_large">Groß</string>
+    <string name="title_style_color">Farbe &#8230;</string>
+    <string name="title_style_list">Liste</string>
+    <string name="title_style_list_bullets">Aufzählungspunkte</string>
+    <string name="title_style_list_numbered">Nummeriert</string>
     <string name="title_style_font">Schriftart</string>
     <string name="title_style_font_default">Standard</string>
-    <string name="title_style_color">Farbe &#8230;</string>
     <string name="title_style_clear">Formatierung entfernen</string>
     <string name="title_style_link">Link einfügen</string>
     <string name="title_add_image">Bild hinzufügen</string>
@@ -1036,6 +1044,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_legend_download_fetch">Anzahl der heruntergeladenen Nachrichten / abgerufenen Kopfzeilen</string>
     <string name="title_legend_stop">Regelverarbeitung stoppen</string>
     <string name="title_legend_thread">Unterhaltung</string>
+    <string name="title_legend_bookmark">Zuletzt geöffnete Unterhaltung</string>
     <string name="title_legend_zoom">Textgröße ändern</string>
     <string name="title_legend_draft">Entwurf vorhanden</string>
     <string name="title_legend_priority">Hat hohe Priorität</string>

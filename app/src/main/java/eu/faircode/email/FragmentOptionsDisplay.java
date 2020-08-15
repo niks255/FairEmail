@@ -660,6 +660,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        String theme = prefs.getString("theme", "light");
+        swTextColor.setEnabled(!"black_and_white".equals(theme));
+
         swTextSize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -933,6 +936,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         private SwitchCompat swDark;
         private SwitchCompat swBlack;
         private SwitchCompat swSystem;
+        private TextView tvSystem;
 
         private void eval() {
             int checkedId = rgTheme.getCheckedRadioButtonId();
@@ -946,6 +950,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swDark.setEnabled(dark);
             swBlack.setEnabled(colored && swDark.isChecked());
             swSystem.setEnabled(dark && !swDark.isChecked());
+            tvSystem.setEnabled(swSystem.isEnabled() && swSystem.isChecked());
         }
 
         @NonNull
@@ -958,6 +963,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swDark = dview.findViewById(R.id.swDark);
             swBlack = dview.findViewById(R.id.swBlack);
             swSystem = dview.findViewById(R.id.swSystem);
+            tvSystem = dview.findViewById(R.id.tvSystem);
 
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             String theme = prefs.getString("theme", "light");
@@ -1061,6 +1067,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                 case "black":
                     rgTheme.check(R.id.rbThemeBlack);
                     break;
+                case "black_and_white":
+                    rgTheme.check(R.id.rbThemeBlackAndWhite);
+                    break;
             }
 
             return new AlertDialog.Builder(getContext())
@@ -1114,6 +1123,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                                     break;
                                 case R.id.rbThemeBlack:
                                     prefs.edit().putString("theme", "black").apply();
+                                    break;
+                                case R.id.rbThemeBlackAndWhite:
+                                    prefs.edit().putString("theme", "black_and_white").apply();
                                     break;
                             }
                         }

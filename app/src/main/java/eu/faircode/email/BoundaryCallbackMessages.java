@@ -347,7 +347,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                 db.folder().setFolderError(browsable.id, null);
 
-                int count = state.ifolder.getMessageCount();
+                int count = MessageHelper.getMessageCount(state.ifolder);
                 db.folder().setFolderTotal(browsable.id, count < 0 ? null : count);
 
                 if (criteria == null) {
@@ -378,7 +378,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                                 // https://tools.ietf.org/html/rfc3501#section-6.4.4
                                 if (criteria.query != null &&
                                         criteria.query.startsWith("raw:") &&
-                                        state.iservice.hasCapability("X-GM-EXT-1")) {
+                                        state.iservice.hasCapability("X-GM-EXT-1") &&
+                                        EntityFolder.ARCHIVE.equals(browsable.type)) {
                                     // https://support.google.com/mail/answer/7190
                                     // https://developers.google.com/gmail/imap/imap-extensions#extension_of_the_search_command_x-gm-raw
                                     Log.i("Boundary raw search=" + criteria.query);

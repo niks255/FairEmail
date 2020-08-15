@@ -111,7 +111,7 @@ public class EmailService implements AutoCloseable {
 
     private final static int SEARCH_TIMEOUT = 90 * 1000; // milliseconds
     private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
-    private final static int POOL_TIMEOUT = 45 * 1000; // milliseconds, default 45 sec
+    private final static int POOL_TIMEOUT = 90 * 1000; // milliseconds, default 45 sec
 
     private static final int APPEND_BUFFER_SIZE = 4 * 1024 * 1024; // bytes
 
@@ -197,9 +197,9 @@ public class EmailService implements AutoCloseable {
             properties.put("mail.imap.starttls.enable", "true");
             properties.put("mail.imap.starttls.required", Boolean.toString(!insecure));
 
-            properties.put("mail." + protocol + ".separatestoreconnection", "false");
+            properties.put("mail." + protocol + ".separatestoreconnection", "true");
             properties.put("mail." + protocol + ".connectionpool.debug", "true");
-            properties.put("mail." + protocol + ".connectionpoolsize", "1");
+            properties.put("mail." + protocol + ".connectionpoolsize", Integer.toString(2));
             properties.put("mail." + protocol + ".connectionpooltimeout", Integer.toString(POOL_TIMEOUT));
 
             properties.put("mail." + protocol + ".finalizecleanclose", "false");
@@ -351,16 +351,26 @@ public class EmailService implements AutoCloseable {
                 AuthState authState = OAuthRefresh(context, provider, password);
                 connect(host, port, auth, user, authState.getAccessToken(), factory);
                 return authState.jsonSerializeString();
+            } else if (purpose == PURPOSE_CHECK) {
+                String msg = ex.getMessage();
+                if (msg != null)
+                    msg = msg.trim();
+                if (TextUtils.isEmpty(msg))
+                    throw ex;
+                throw new AuthenticationFailedException(
+                        context.getString(R.string.title_service_auth, msg),
+                        ex.getNextException());
             } else
                 throw ex;
         } catch (MailConnectException ex) {
             if (ConnectionHelper.vpnActive(context)) {
-                MailConnectException mex = new MailConnectException(new SocketConnectException(
-                        context.getString(R.string.title_service_vpn),
-                        new Exception(),
-                        ex.getHost(),
-                        ex.getPort(),
-                        ex.getConnectionTimeout()));
+                MailConnectException mex = new MailConnectException(
+                        new SocketConnectException(
+                                context.getString(R.string.title_service_vpn),
+                                new Exception(),
+                                ex.getHost(),
+                                ex.getPort(),
+                                ex.getConnectionTimeout()));
                 mex.setNextException(ex.getNextException());
                 throw mex;
             } else

@@ -430,6 +430,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibInbox;
         private ImageButton ibMore;
         private ImageButton ibTools;
+        private TextView tvReformatted;
         private TextView tvSignedData;
 
         private TextView tvBody;
@@ -638,6 +639,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibInbox = vsBody.findViewById(R.id.ibInbox);
             ibMore = vsBody.findViewById(R.id.ibMore);
             ibTools = vsBody.findViewById(R.id.ibTools);
+            tvReformatted = vsBody.findViewById(R.id.tvReformatted);
             tvSignedData = vsBody.findViewById(R.id.tvSignedData);
 
             tvBody = vsBody.findViewById(R.id.tvBody);
@@ -1300,6 +1302,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibInbox.setVisibility(View.GONE);
             ibMore.setVisibility(View.GONE);
             ibTools.setVisibility(View.GONE);
+            tvReformatted.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
 
             tvNoInternetBody.setVisibility(View.GONE);
@@ -1434,6 +1437,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibInbox.setVisibility(View.GONE);
             ibMore.setVisibility(View.GONE);
             ibTools.setVisibility(View.GONE);
+            tvReformatted.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
 
             // Message text
@@ -1576,8 +1580,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibTrash.setTag(delete);
 
                     ibUndo.setVisibility(outbox ? View.VISIBLE : View.GONE);
-                    ibRule.setVisibility(tools && button_rule && !outbox &&
-                            message.accountProtocol == EntityAccount.TYPE_IMAP ? View.VISIBLE : View.GONE);
+                    ibRule.setVisibility(tools && button_rule && !outbox && !message.folderReadOnly ? View.VISIBLE : View.GONE);
                     ibUnsubscribe.setVisibility(tools && button_unsubscribe && message.unsubscribe != null ? View.VISIBLE : View.GONE);
                     ibPrint.setVisibility(tools && button_print && hasWebView && message.content && Helper.canPrint(context) ? View.VISIBLE : View.GONE);
                     ibEvent.setVisibility(tools && button_event && message.content ? View.VISIBLE : View.GONE);
@@ -1994,7 +1997,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 embedded.subject = helper.getSubject();
 
                                 String html = parts.getHtml(context);
-                                Document d = JsoupEx.parse(html);
+                                Document d = (html == null ? Document.createShell("") : JsoupEx.parse(html));
 
                                 Element div = document.createElement("div");
                                 div.appendElement("hr");
@@ -2179,6 +2182,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt))
                             ? View.VISIBLE : View.GONE);
 
+                    boolean reformatted_hint = prefs.getBoolean("reformatted_hint", true);
+                    tvReformatted.setVisibility(reformatted_hint ? View.VISIBLE : View.GONE);
+
                     boolean signed_data = args.getBoolean("signed_data");
                     tvSignedData.setVisibility(signed_data ? View.VISIBLE : View.GONE);
 
@@ -2222,10 +2228,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         break;
                                     default:
                                         if (raction == null) {
-                                            // This seems to happen when there is no app available for the action
-                                            if (!ConversationAction.TYPE_VIEW_MAP.equals(type) &&
-                                                    !ConversationAction.TYPE_TRACK_FLIGHT.equals(type))
-                                                Log.e("Unknown action type=" + type);
+                                            Log.w("Unknown action type=" + type);
                                             continue;
                                         }
                                         text = null;
@@ -3426,9 +3429,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 boolean expanded = !properties.getValue("expanded", message.id);
 
                 // Prevent flicker
-                if (expanded &&
-                        (message.accountProtocol != EntityAccount.TYPE_IMAP ||
-                                (message.accountAutoSeen && !message.folderReadOnly))) {
+                if (expanded && message.accountAutoSeen && !message.folderReadOnly) {
                     message.unseen = 0;
                     message.ui_seen = true;
                     message.visible_unseen = 0;
@@ -3497,6 +3498,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onShow(final TupleMessageEx message, boolean full) {
+            if (full && tvReformatted.getVisibility() == View.VISIBLE) {
+                prefs.edit().putBoolean("reformatted_hint", false).apply();
+                tvReformatted.setVisibility(View.GONE);
+            }
+
             boolean current = properties.getValue(full ? "full" : "images", message.id);
             boolean asked = properties.getValue(full ? "full_asked" : "images_asked", message.id);
             if (current || asked) {
@@ -3812,7 +3818,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_resync).setEnabled(message.uid != null);
             popupMenu.getMenu().findItem(R.id.menu_resync).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
-            popupMenu.getMenu().findItem(R.id.menu_create_rule).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_create_rule).setVisible(!message.folderReadOnly);
 
             popupMenu.getMenu().findItem(R.id.menu_manage_keywords).setEnabled(message.uid != null && !message.folderReadOnly);
             popupMenu.getMenu().findItem(R.id.menu_manage_keywords).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
@@ -5870,17 +5876,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return;
 
                     Uri uri = Uri.parse(etLink.getText().toString());
-                    Uri.Builder builder = uri.buildUpon();
-
-                    builder.scheme(checked ? "https" : "http");
-
-                    String authority = uri.getEncodedAuthority();
-                    if (authority != null) {
-                        authority = authority.replace(checked ? ":80" : ":443", checked ? ":443" : ":80");
-                        builder.encodedAuthority(authority);
-                    }
-
-                    etLink.setText(builder.build().toString());
+                    etLink.setText(secure(uri, checked).toString());
                 }
             });
 
@@ -5889,10 +5885,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbSanitize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    if (checked)
-                        etLink.setText(sanitized.toString());
-                    else
-                        etLink.setText(uri.toString());
+                    etLink.setText(secure(checked ? sanitized : uri, cbSecure.isChecked()).toString());
                 }
             });
 
@@ -6064,6 +6057,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
 
             return (changed ? builder.build() : null);
+        }
+
+        private static Uri secure(Uri uri, boolean https) {
+            String scheme = uri.getScheme();
+            if (https ? "http".equals(scheme) : "https".equals(scheme)) {
+                Uri.Builder builder = uri.buildUpon();
+                builder.scheme(https ? "https" : "http");
+
+                String authority = uri.getEncodedAuthority();
+                if (authority != null) {
+                    authority = authority.replace(https ? ":80" : ":443", https ? ":443" : ":80");
+                    builder.encodedAuthority(authority);
+                }
+
+                return builder.build();
+            } else
+                return uri;
         }
     }
 

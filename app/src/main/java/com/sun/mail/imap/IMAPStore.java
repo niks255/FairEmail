@@ -1185,7 +1185,11 @@ public class IMAPStore extends Store
 		    // someone else is using the connection, give up
 		    // and wait until they're done
 		    p = null;
-		    pool.wait();
+		    pool.wait(pool.clientTimeoutInterval);
+		    if (pool.storeConnectionInUse) {
+				eu.faircode.email.Log.e("getStoreProtocol timeout");
+				throw new InterruptedException("getStoreProtocol timeout");
+			}
 		} catch (InterruptedException ex) {
 		    // restore the interrupted state, which callers might
 		    // depend on
@@ -1260,7 +1264,11 @@ public class IMAPStore extends Store
         return pool.separateStoreConnection;
     }
 
-    /** 
+    boolean isStoreConnectionInUse() {
+		return pool.storeConnectionInUse;
+	}
+
+    /**
      * Return the connection pool logger.
      */ 
     MailLogger getConnectionPoolLogger() {
@@ -2069,7 +2077,11 @@ public class IMAPStore extends Store
 		    // without aborting it ourselves
 		    try {
 			// give up lock and wait to be not idle
-			pool.wait();
+			pool.wait(pool.clientTimeoutInterval);
+			if (pool.idleState != ConnectionPool.RUNNING) {
+				eu.faircode.email.Log.e("idle timeout");
+				throw new InterruptedException("idle timeout");
+			}
 		    } catch (InterruptedException ex) {
 			// restore the interrupted state, which callers might
 			// depend on
@@ -2162,7 +2174,11 @@ public class IMAPStore extends Store
 	    }
 	    try {
 		// give up lock and wait to be not idle
-		pool.wait();
+		pool.wait(pool.clientTimeoutInterval);
+		if (pool.idleState != ConnectionPool.RUNNING) {
+			eu.faircode.email.Log.e("waitIfIdle timeout");
+			throw new InterruptedException("waitIfIdle timeout");
+		}
 	    } catch (InterruptedException ex) {
 		// If someone is trying to interrupt us we can't keep going
 		// around the loop waiting for IDLE to complete, but we can't

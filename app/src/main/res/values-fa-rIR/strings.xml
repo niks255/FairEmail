@@ -53,10 +53,6 @@
         <item quantity="one">%1$d گفتگوی انتخاب شده</item>
         <item quantity="other">%1$d گفتگوی انتخاب شده</item>
     </plurals>
-    <plurals name="title_moving_messages">
-        <item quantity="one">انتقال %1$d پیام به %2$s?</item>
-        <item quantity="other">انتقال%1$d پیام به%2$s؟</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">حذف همیشگی %1$d پیام؟</item>
         <item quantity="other">حذف همیشگی %1$d پیام؟</item>
@@ -240,7 +236,6 @@
     <string name="title_advanced_suggest_received">پیشنهاد نشانی‌های یافت شده در پیام‌های دریافت شده</string>
     <string name="title_advanced_suggest_frequently">مرتب‌سازی نشانی‌های پیشنهادی در دفعات استفاده</string>
     <string name="title_advanced_compose_font">قلم پیشفرض</string>
-    <string name="title_advanced_auto_list">به‌صورت خودکار فهرست‌ها را ایجاد کن</string>
     <string name="title_advanced_quote_reply">متن پاسخ نقل قول شده</string>
     <string name="title_advanced_resize_reply">تغییر اندازه تصاویر در متن پاسخ داده شده</string>
     <string name="title_advanced_signature_location">موقعیت امضاء</string>
@@ -675,9 +670,9 @@
     <string name="title_style_size_small">کوچک</string>
     <string name="title_style_size_medium">متوسط</string>
     <string name="title_style_size_large">بزرگ</string>
+    <string name="title_style_color">رنگ &#8230;</string>
     <string name="title_style_font">فونت</string>
     <string name="title_style_font_default">پیش‌فرض</string>
-    <string name="title_style_color">رنگ &#8230;</string>
     <string name="title_style_clear">پاک کردن شکل‌بندی</string>
     <string name="title_style_link">درج لینک</string>
     <string name="title_add_image">افزودن تصویر</string>

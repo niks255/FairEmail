@@ -69,12 +69,6 @@
         <item quantity="many">Zvolených %1$d konverzácií</item>
         <item quantity="other">Zvolených %1$d konverzácií</item>
     </plurals>
-    <plurals name="title_moving_messages">
-        <item quantity="one">Presunúť %1$d správu do %2$s?</item>
-        <item quantity="few">Presunúť %1$d správy do %2$s?</item>
-        <item quantity="many">Presunúť %1$d správ do %2$s?</item>
-        <item quantity="other">Presunúť %1$d správ do %2$s?</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Natrvalo vymazať %1$d správu?</item>
         <item quantity="few">Natrvalo vymazať %1$d správy?</item>
@@ -205,7 +199,6 @@
     <string name="title_advanced_suggest_sent">Navrhovať adresy nájdené v odoslaných správach</string>
     <string name="title_advanced_suggest_received">Navrhovať adresy nájdené v prijatých správach</string>
     <string name="title_advanced_suggest_frequently">Radiť navrhované správy podľa počtu použití</string>
-    <string name="title_advanced_auto_list">Automaticky vytvárať zoznamy</string>
     <string name="title_advanced_prefix_once">Pri odpovedaní alebo preposielaní pridať do predmetu len jednu predponu</string>
     <string name="title_advanced_extended_reply">Používať rozšírenú hlavičku odpovede/preposlania</string>
     <string name="title_advanced_quote_reply">Citovať text odpovede</string>

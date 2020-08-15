@@ -71,10 +71,10 @@
         <item quantity="other">Выбрано %1$d диалогов</item>
     </plurals>
     <plurals name="title_moving_messages">
-        <item quantity="one">Переместить %1$d сообщение в %2$s?</item>
-        <item quantity="few">Переместить %1$d сообщения в %2$s?</item>
-        <item quantity="many">Переместить %1$d сообщений в %2$s?</item>
-        <item quantity="other">Переместить %1$d сообщений в %2$s?</item>
+        <item quantity="one">Переместить %1$d сообщение?</item>
+        <item quantity="few">Переместить %1$d сообщения?</item>
+        <item quantity="many">Переместить %1$d сообщений?</item>
+        <item quantity="other">Переместить %1$d сообщений?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Удалить %1$d сообщение навсегда?</item>
@@ -222,6 +222,7 @@
     <string name="title_setup_theme_red_green">Красно-зелёная</string>
     <string name="title_setup_theme_grey">Серая</string>
     <string name="title_setup_theme_black">Чёрная</string>
+    <string name="title_setup_theme_black_and_white">Чёрно-белая</string>
     <string name="title_setup_theme_reverse">Инвертировать цвета</string>
     <string name="title_setup_theme_dark">Тёмная</string>
     <string name="title_setup_theme_black_background">Чёрный фон</string>
@@ -268,7 +269,6 @@
     <string name="title_advanced_suggest_received">Предлагать адреса, найденные в полученных сообщениях</string>
     <string name="title_advanced_suggest_frequently">Сортировать предложенные адреса по частоте использования</string>
     <string name="title_advanced_compose_font">Шрифт по умолчанию</string>
-    <string name="title_advanced_auto_list">Автоматическое создание списков</string>
     <string name="title_advanced_prefix_once">Добавлять только один префикс перед темой при ответе или пересылке</string>
     <string name="title_advanced_extended_reply">Использовать расширенный заголовок для ответа/пересылки</string>
     <string name="title_advanced_quote_reply">Цитировать текст при ответе</string>
@@ -360,6 +360,7 @@
     <string name="title_advanced_volumenav">Кнопки увеличения/уменьшения громкости для перехода к следующему/предыдущему диалогу</string>
     <string name="title_advanced_reversed">Обратное направление навигации</string>
     <string name="title_advanced_swipe_close">Смахивание вниз, чтобы закрыть диалог</string>
+    <string name="title_advanced_swipe_move">Смахивание вверх, чтобы переместить диалог</string>
     <string name="title_advanced_autoexpand">Автоматически разворачивать сообщения</string>
     <string name="title_advanced_expand_all">Автоматически разворачивать все прочитанные сообщения</string>
     <string name="title_advanced_expand_one">Разворачивать только одно сообщение за раз</string>
@@ -374,7 +375,7 @@
     <string name="title_advanced_autounstar">Автоматически удалять отметку избранного при перемещении сообщений</string>
     <string name="title_advanced_auto_important">Автоматически помечать избранные сообщения важными</string>
     <string name="title_advanced_reset_importance">Сбрасывать важность при перемещении сообщений</string>
-    <string name="title_advanced_discard_delete">При отклонении черновика удалять его безвозвратно</string>
+    <string name="title_advanced_discard_delete">При отказе от черновика удалять его безвозвратно</string>
     <string name="title_advanced_default_snooze">Время повтора по умолчанию</string>
     <string name="title_advanced_notifications">Настроить уведомления</string>
     <string name="title_advanced_notifications_default">Канал по умолчанию</string>
@@ -602,6 +603,7 @@
     <string name="title_oauth_support">OAuth не поддерживается</string>
     <string name="title_review">Пересмотр</string>
     <string name="title_hint_alias">Длительное нажатие откроет другие действия, например, копирования для создания псевдонима идентификатора.</string>
+    <string name="title_service_auth">Сервер электронной почты сообщил: \"%1$s\"</string>
     <string name="title_service_vpn">Это может быть вызвано использованием VPN</string>
     <string name="title_service_port">Пожалуйста, дважды проверьте номер порта</string>
     <string name="title_service_protocol">Пожалуйста, дважды проверьте протокол (SSL/TLS или STARTTLS)</string>
@@ -759,7 +761,7 @@
     <string name="title_unused_inline">Неиспользуемые встроенные изображения будут удалены при отправке</string>
     <string name="title_accross_remark">Сообщения, перемещаемые между учётными записями, будут загружены заново, порождая дополнительный трафик</string>
     <string name="title_raw_saved">Оригинал сообщения сохранён</string>
-    <string name="title_attachment_eml" comment="title_attachment_eml&#10;This is a title (heading) for displaying attached messages (EML files)">Прикрепленное сообщение</string>
+    <string name="title_attachment_eml">Прикреплённое сообщение</string>
     <string name="title_attachment_saved">Вложение сохранено</string>
     <string name="title_attachments_saved">Вложения сохранены</string>
     <string name="title_attachments_incomplete">Некоторые вложения или изображения не были загружены и не могут быть добавлены</string>
@@ -785,6 +787,7 @@
     <string name="title_third_party">Вы используете стороннюю версию</string>
     <string name="title_expand_warning">При развёртывании этого сообщения будет загружено %1$s</string>
     <string name="title_download_message">Загрузка&#8230;</string>
+    <string name="title_reformatted">Это переформатированное сообщение. Вы можете нажать на значок &#x26F6; для просмотра оригинального сообщения и скрытия этой надписи.</string>
     <string name="title_compose">Создать</string>
     <string name="title_submitter">Отправлено:</string>
     <string name="title_delivered_to">Доставлено:</string>
@@ -819,9 +822,12 @@
     <string name="title_style_size_small">Маленький</string>
     <string name="title_style_size_medium">Средний</string>
     <string name="title_style_size_large">Большой</string>
+    <string name="title_style_color">Цвет&#8230;</string>
+    <string name="title_style_list">Список</string>
+    <string name="title_style_list_bullets">Маркированный</string>
+    <string name="title_style_list_numbered">Нумерованный</string>
     <string name="title_style_font">Шрифт</string>
     <string name="title_style_font_default">По умолчанию</string>
-    <string name="title_style_color">Цвет&#8230;</string>
     <string name="title_style_clear">Очистить форматирование</string>
     <string name="title_style_link">Вставить ссылку</string>
     <string name="title_add_image">Добавить изображение</string>
@@ -1062,6 +1068,7 @@
     <string name="title_legend_download_fetch">Количество загруженных сообщений / полученных заголовков</string>
     <string name="title_legend_stop">Остановить обработку правил</string>
     <string name="title_legend_thread">Диалог</string>
+    <string name="title_legend_bookmark">Последний открытый диалог</string>
     <string name="title_legend_zoom">Изменить размер текста</string>
     <string name="title_legend_draft">Имеет черновик</string>
     <string name="title_legend_priority">Имеет высокий приоритет</string>

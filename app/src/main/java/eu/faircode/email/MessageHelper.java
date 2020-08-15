@@ -29,6 +29,7 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.gimap.GmailMessage;
+import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.util.ASCIIUtility;
 import com.sun.mail.util.BASE64DecoderStream;
@@ -77,6 +78,7 @@ import javax.activation.FileTypeMap;
 import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
+import javax.mail.Folder;
 import javax.mail.FolderClosedException;
 import javax.mail.Header;
 import javax.mail.Message;
@@ -547,7 +549,6 @@ public class MessageHelper {
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean autolist = prefs.getBoolean("autolist", true);
         boolean format_flowed = prefs.getBoolean("format_flowed", false);
         boolean monospaced = prefs.getBoolean("monospaced", false);
         String compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
@@ -557,12 +558,10 @@ public class MessageHelper {
 
         // When sending message
         if (identity != null) {
-            if (autolist)
-                HtmlHelper.convertLists(document);
-
             if (send) {
                 for (Element child : document.body().children())
-                    if (TextUtils.isEmpty(child.attr("fairemail"))) {
+                    if (!TextUtils.isEmpty(child.text()) &&
+                            TextUtils.isEmpty(child.attr("fairemail"))) {
                         String style = HtmlHelper.mergeStyles(
                                 "font-family:" + compose_font, child.attr("style"));
                         child.attr("style", style);
@@ -2283,6 +2282,27 @@ public class MessageHelper {
                 }
             else
                 throw ex;
+        }
+    }
+
+    static int getMessageCount(Folder folder) {
+        try {
+            // Prevent pool lock
+            if (folder instanceof IMAPFolder) {
+                int count = ((IMAPFolder) folder).getCachedCount();
+                Log.i(folder.getFullName() + " total count=" + count);
+                return count;
+            }
+
+            int count = 0;
+            for (Message message : folder.getMessages())
+                if (!message.isExpunged())
+                    count++;
+
+            return count;
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return -1;
         }
     }
 
