@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -93,8 +92,6 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     }
 
     private void run(final Context context, final LifecycleOwner owner, final Bundle args, final String name) {
-        final Handler handler = new Handler();
-
         this.name = name;
 
         if (owner instanceof TwoStateOwner)
@@ -126,16 +123,20 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
 
         future = executor.submit(new Runnable() {
             private Object data;
-            private long elapse;
+            private long elapsed;
             private Throwable ex;
 
             @Override
             public void run() {
                 // Run in background thread
                 try {
+                    if (log)
+                        Log.i("Executing task=" + name);
                     long start = new Date().getTime();
                     data = onExecute(context, args);
-                    elapse = new Date().getTime() - start;
+                    elapsed = new Date().getTime() - start;
+                    if (log)
+                        Log.i("Executed task=" + name + " elapsed=" + elapsed + " ms");
                 } catch (Throwable ex) {
                     if (!(ex instanceof IllegalArgumentException))
                         Log.e(ex);
@@ -143,7 +144,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                 }
 
                 // Run on UI thread
-                handler.post(new Runnable() {
+                ApplicationEx.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         Lifecycle.State state = owner.getLifecycle().getCurrentState();
@@ -152,10 +153,11 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                             cleanup(context);
                         } else if (state.isAtLeast(Lifecycle.State.RESUMED)) {
                             // Inline delivery
-                            Log.i("Deliver task " + name + " state=" + state + " elapse=" + elapse + " ms");
+                            Log.i("Deliver task " + name + " state=" + state + " elapse=" + elapsed + " ms");
                             deliver();
                             cleanup(context);
-                        } else
+                        } else {
+                            Log.i("Deferring task " + name + " state=" + state);
                             owner.getLifecycle().addObserver(new LifecycleObserver() {
                                 @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
                                 public void onAny() {
@@ -173,6 +175,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                                         Log.i("Deferring task " + name + " state=" + state);
                                 }
                             });
+                        }
                     }
 
                     private void deliver() {

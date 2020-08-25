@@ -225,7 +225,8 @@ public class HtmlEx {
                     out.append(isInBulletList ? "</ul>\n" : "</ol>\n");
                     isInBulletList = null;
                 }
-                out.append("<br>\n");
+                if (i != text.length())
+                    out.append("<br>\n");
             } else {
                 Boolean isBulletListItem = null;
                 ParagraphStyle[] paragraphStyles = text.getSpans(i, next, ParagraphStyle.class);
@@ -257,7 +258,7 @@ public class HtmlEx {
                     isInBulletList = null;
                 }
 
-                String tagType = isBulletListItem != null ? "li" : "p";
+                String tagType = isBulletListItem != null ? "li" : "span";
                 out.append("<").append(tagType)
                         .append(getTextDirection(text, i, next))
                         .append(getTextStyles(text, i, next, isBulletListItem == null, true))
@@ -268,6 +269,8 @@ public class HtmlEx {
                 out.append("</");
                 out.append(tagType);
                 out.append(">\n");
+                if (isBulletListItem == null)
+                    out.append("<br>\n");
 
                 if (next == end && isInBulletList != null) {
                     out.append(isInBulletList ? "</ul>\n" : "</ol>\n");

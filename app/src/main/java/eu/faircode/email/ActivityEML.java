@@ -270,7 +270,7 @@ public class ActivityEML extends ActivityBase {
                     Snackbar.make(findViewById(android.R.id.content), ex.getMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                    Log.unexpectedError(getSupportFragmentManager(), ex, false);
             }
         }.execute(this, args, "eml:decode");
     }
@@ -425,7 +425,7 @@ public class ActivityEML extends ActivityBase {
                                             MimeMessage imessage = new MimeMessage(isession, is);
 
                                             try (EmailService iservice = new EmailService(
-                                                    context, account.getProtocol(), account.realm, account.insecure, true)) {
+                                                    context, account.getProtocol(), account.realm, account.encryption, account.insecure, true)) {
                                                 iservice.setPartialFetch(account.partial_fetch);
                                                 iservice.setIgnoreBodyStructureSize(account.ignore_size);
                                                 iservice.connect(account);

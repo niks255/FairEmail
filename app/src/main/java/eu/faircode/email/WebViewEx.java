@@ -41,6 +41,11 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     public WebViewEx(Context context) {
         super(context);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean overview_mode = prefs.getBoolean("overview_mode", false);
+        boolean safe_browsing = prefs.getBoolean("safe_browsing", false);
+
+
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
 
@@ -49,7 +54,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
         WebSettings settings = getSettings();
         settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(false);
+        settings.setLoadWithOverviewMode(overview_mode);
 
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
@@ -60,11 +65,8 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean safe_browsing = prefs.getBoolean("safe_browsing", false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             settings.setSafeBrowsingEnabled(safe_browsing);
-        }
     }
 
     void init(
@@ -144,6 +146,13 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     }
 
     @Override
+    protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+        Log.i("Over scrolled=" + scrollX + "/" + scrollY + " clamped=" + clampedX + "/" + clampedY);
+        intf.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+    }
+
+    @Override
     public void onDownloadStart(
             String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         Log.i("Download url=" + url + " mime type=" + mimetype);
@@ -181,12 +190,32 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         return super.onGenericMotionEvent(event);
     }
 
+    public boolean isZoomed() {
+        int xtend = computeHorizontalScrollExtent();
+        if (xtend != 0) {
+            float xscale = computeHorizontalScrollRange() / (float) xtend;
+            if (xscale > 1.2)
+                return true;
+        }
+
+        int ytend = computeVerticalScrollExtent();
+        if (ytend != 0) {
+            float yscale = computeVerticalScrollRange() / (float) ytend;
+            if (yscale > 1.2)
+                return true;
+        }
+
+        return false;
+    }
+
     interface IWebView {
         void onSizeChanged(int w, int h, int ow, int oh);
 
         void onScaleChanged(float newScale);
 
         void onScrollChange(int scrollX, int scrollY);
+
+        void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY);
 
         boolean onOpenLink(String url);
     }

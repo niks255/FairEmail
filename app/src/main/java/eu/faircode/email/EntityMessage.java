@@ -294,7 +294,7 @@ public class EntityMessage implements Serializable {
                 p.appendText(MessageHelper.formatAddresses(cc));
                 p.appendElement("br");
             }
-            {
+            if (received != null) { // embedded messages
                 Element strong = document.createElement("strong");
                 strong.text(Helper.getString(context, l, R.string.title_received) + " ");
                 p.appendChild(strong);

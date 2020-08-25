@@ -19,21 +19,12 @@ package eu.faircode.email;
     Copyright 2018-2020 by Marcel Bokhorst (M66B)
 */
 
+import java.util.Objects;
+
 public class TupleAccountEx extends EntityAccount {
     public int unseen;
     public int identities; // synchronizing
-    public boolean drafts;
-
-    public boolean uiEquals(Object obj) {
-        if (obj instanceof TupleAccountEx) {
-            TupleAccountEx other = (TupleAccountEx) obj;
-            return (super.equals(obj) &&
-                    this.unseen == other.unseen &&
-                    this.identities == other.identities &&
-                    this.drafts == other.drafts);
-        } else
-            return false;
-    }
+    public Long drafts;
 
     @Override
     public boolean equals(Object obj) {
@@ -42,7 +33,7 @@ public class TupleAccountEx extends EntityAccount {
             return (super.equals(obj) &&
                     this.unseen == other.unseen &&
                     this.identities == other.identities &&
-                    this.drafts == other.drafts);
+                    Objects.equals(this.drafts, other.drafts));
         } else
             return false;
     }

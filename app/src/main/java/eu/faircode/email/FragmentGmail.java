@@ -33,7 +33,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -235,7 +234,7 @@ public class FragmentGmail extends FragmentBase {
         etName.setEnabled(granted);
         btnSelect.setEnabled(granted);
 
-        new Handler().post(new Runnable() {
+        getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 etName.requestFocus();
@@ -289,7 +288,7 @@ public class FragmentGmail extends FragmentBase {
                                     tvError.setText(Log.formatThrowable(ex));
                                     grpError.setVisibility(View.VISIBLE);
 
-                                    new Handler().post(new Runnable() {
+                                    getMainHandler().post(new Runnable() {
                                         @Override
                                         public void run() {
                                             scroll.smoothScrollTo(0, tvError.getBottom());
@@ -363,9 +362,11 @@ public class FragmentGmail extends FragmentBase {
 
                 List<EntityFolder> folders;
 
-                String aprotocol = provider.imap.starttls ? "imap" : "imaps";
+                String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
+                int aencryption = (provider.imap.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
                 try (EmailService iservice = new EmailService(
-                        context, aprotocol, null, false, EmailService.PURPOSE_CHECK, true)) {
+                        context, aprotocol, null, aencryption, false,
+                        EmailService.PURPOSE_CHECK, true)) {
                     iservice.connect(
                             provider.imap.host, provider.imap.port,
                             EmailService.AUTH_TYPE_GMAIL, null,
@@ -373,15 +374,14 @@ public class FragmentGmail extends FragmentBase {
                             null, null);
 
                     folders = iservice.getFolders();
-
-                    if (folders == null)
-                        throw new IllegalArgumentException(context.getString(R.string.title_setup_no_system_folders));
                 }
 
                 Long max_size;
-                String iprotocol = provider.smtp.starttls ? "smtp" : "smtps";
+                String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
+                int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
                 try (EmailService iservice = new EmailService(
-                        context, iprotocol, null, false, EmailService.PURPOSE_CHECK, true)) {
+                        context, iprotocol, null, iencryption, false,
+                        EmailService.PURPOSE_CHECK, true)) {
                     iservice.connect(
                             provider.smtp.host, provider.smtp.port,
                             EmailService.AUTH_TYPE_GMAIL, null,
@@ -400,7 +400,7 @@ public class FragmentGmail extends FragmentBase {
                     EntityAccount account = new EntityAccount();
 
                     account.host = provider.imap.host;
-                    account.starttls = provider.imap.starttls;
+                    account.encryption = aencryption;
                     account.port = provider.imap.port;
                     account.auth_type = EmailService.AUTH_TYPE_GMAIL;
                     account.user = user;
@@ -449,7 +449,7 @@ public class FragmentGmail extends FragmentBase {
                     identity.account = account.id;
 
                     identity.host = provider.smtp.host;
-                    identity.starttls = provider.smtp.starttls;
+                    identity.encryption = iencryption;
                     identity.port = provider.smtp.port;
                     identity.auth_type = EmailService.AUTH_TYPE_GMAIL;
                     identity.user = user;
@@ -489,7 +489,7 @@ public class FragmentGmail extends FragmentBase {
                     tvError.setText(Log.formatThrowable(ex));
                 grpError.setVisibility(View.VISIBLE);
 
-                new Handler().post(new Runnable() {
+                getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         scroll.smoothScrollTo(0, tvError.getBottom());

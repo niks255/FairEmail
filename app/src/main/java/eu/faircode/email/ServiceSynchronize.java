@@ -35,7 +35,6 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PowerManager;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -96,7 +95,6 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
 public class ServiceSynchronize extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private Integer lastStartId = null;
     private Boolean lastSuitable = null;
     private long lastLost = 0;
     private int lastAccounts = 0;
@@ -193,7 +191,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         liveAccountNetworkState.observeForever(new Observer<List<TupleAccountNetworkState>>() {
             private boolean fts = false;
-            private Integer lastQuitId = null;
+            private int lastEventId = 0;
+            private int lastQuitId = -1;
             private List<TupleAccountNetworkState> accountStates = new ArrayList<>();
             private ExecutorService queue = Helper.getBackgroundExecutor(1, "service");
 
@@ -212,6 +211,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 } else {
                     int accounts = 0;
                     int operations = 0;
+                    boolean event = false;
                     boolean runService = false;
                     for (TupleAccountNetworkState current : accountNetworkStates) {
                         Log.d("### evaluating " + current);
@@ -239,6 +239,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         " tbd=" + current.accountState.tbd +
                                         " state=" + current.accountState.state +
                                         " type=" + current.networkState.getType());
+                                event = true;
                                 start(current, current.accountState.isEnabled(current.enabled), false);
                             }
                         } else {
@@ -271,26 +272,39 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             " force=" + force +
                                             " stop=" + prev.canRun() +
                                             " start=" + current.canRun() +
-                                            " sync=" + current.accountState.isEnabled(current.enabled) + "/" + sync +
+                                            " sync=" + sync +
+                                            " enabled=" + current.accountState.isEnabled(current.enabled) +
+                                            " should=" + current.accountState.shouldRun(current.enabled) +
                                             " changed=" + !prev.accountState.equals(current.accountState) +
-                                            " enabled=" + current.accountState.synchronize +
+                                            " synchronize=" + current.accountState.synchronize +
                                             " ondemand=" + current.accountState.ondemand +
                                             " folders=" + current.accountState.folders +
                                             " ops=" + current.accountState.operations +
                                             " tbd=" + current.accountState.tbd +
                                             " state=" + current.accountState.state +
                                             " type=" + prev.networkState.getType() + "/" + current.networkState.getType());
-                                if (prev.canRun())
+                                if (prev.canRun()) {
+                                    event = true;
                                     stop(prev);
-                                if (current.canRun())
+                                }
+                                if (current.canRun()) {
+                                    event = true;
                                     start(current, current.accountState.isEnabled(current.enabled) || sync, force);
+                                }
                             }
                         }
 
                         if (current.accountState.tbd == null)
                             accountStates.add(current);
-                        else
+                        else {
+                            event = true;
                             delete(current);
+                        }
+                    }
+
+                    if (event) {
+                        lastEventId++;
+                        EntityLog.log(ServiceSynchronize.this, "### eventId=" + lastEventId);
                     }
 
                     if (lastAccounts != accounts || lastOperations != operations) {
@@ -326,8 +340,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             }
                     }
 
-                    if (!runService)
-                        quit(lastStartId);
+                    if (!runService && lastQuitId != lastEventId) {
+                        lastQuitId = lastEventId;
+                        EntityLog.log(ServiceSynchronize.this, "### quitting startId=" + lastEventId);
+                        quit(lastEventId);
+                    }
                 }
             }
 
@@ -410,23 +427,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 });
             }
 
-            private void quit(final Integer startId) {
-                if (startId != null && lastOperations > 0)
-                    return;
-
-                if (lastQuitId != null && lastQuitId.equals(startId))
-                    return;
-
-                lastQuitId = startId;
-
-                EntityLog.log(ServiceSynchronize.this, "Service quit startId=" + startId);
-
+            private void quit(final Integer eventId) {
                 queue.submit(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("### quit startId=" + startId);
+                        EntityLog.log(ServiceSynchronize.this, "### quit eventId=" + eventId);
 
-                        if (startId == null) {
+                        if (eventId == null) {
                             // Service destroy
                             DB db = DB.getInstance(ServiceSynchronize.this);
                             List<EntityOperation> ops = db.operation().getOperations(EntityOperation.SYNC);
@@ -440,10 +447,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 Log.w(ex);
                             }
 
+                            if (!eventId.equals(lastEventId)) {
+                                EntityLog.log(ServiceSynchronize.this, "### quit cancelled eventId=" + eventId + "/" + lastEventId);
+                                return;
+                            }
+
                             // Stop service
-                            boolean stopped = stopSelfResult(startId);
-                            EntityLog.log(ServiceSynchronize.this,
-                                    "Service quited=" + stopped + " startId=" + startId);
+                            stopSelf();
+                            EntityLog.log(ServiceSynchronize.this, "### stop self eventId=" + eventId);
                         }
                     }
                 });
@@ -687,7 +698,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        lastStartId = startId;
         String action = (intent == null ? null : intent.getAction());
         String reason = (intent == null ? null : intent.getStringExtra("reason"));
         EntityLog.log(ServiceSynchronize.this, "### Service command " + intent +
@@ -901,7 +911,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 state.reset();
                 Log.i(account.name + " run thread=" + currentThread);
 
-                Handler handler = new Handler(getMainLooper());
                 final List<TwoStateOwner> cowners = new ArrayList<>();
 
                 // Debug
@@ -909,7 +918,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
                 final EmailService iservice = new EmailService(
-                        this, account.getProtocol(), account.realm, account.insecure, debug);
+                        this, account.getProtocol(), account.realm, account.encryption, account.insecure, debug);
                 iservice.setPartialFetch(account.partial_fetch);
                 iservice.setIgnoreBodyStructureSize(account.ignore_size);
                 if (account.protocol != EntityAccount.TYPE_IMAP)
@@ -1210,7 +1219,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             mapFolders.put(folder, null);
 
                         Log.d(folder.name + " observing");
-                        handler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 TwoStateOwner cowner = new TwoStateOwner(ServiceSynchronize.this, folder.name);
@@ -1576,7 +1585,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     db.account().setAccountState(account.id, "closing");
 
                     // Stop watching for operations
-                    handler.post(new Runnable() {
+                    getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
                             for (TwoStateOwner owner : cowners)

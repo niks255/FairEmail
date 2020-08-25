@@ -25,7 +25,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -297,9 +296,10 @@ public class FragmentQuickSetup extends FragmentBase {
 
                 List<EntityFolder> folders;
 
-                String aprotocol = provider.imap.starttls ? "imap" : "imaps";
+                String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
+                int aencryption = (provider.imap.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
                 try (EmailService iservice = new EmailService(
-                        context, aprotocol, null, false, EmailService.PURPOSE_CHECK, true)) {
+                        context, aprotocol, null, aencryption, false, EmailService.PURPOSE_CHECK, true)) {
                     try {
                         iservice.connect(
                                 provider.imap.host, provider.imap.port,
@@ -318,30 +318,33 @@ public class FragmentQuickSetup extends FragmentBase {
                             throw ex;
                     } catch (Throwable ex) {
                         // Why not AuthenticationFailedException?
-                        // Some providers refuse connection with an invalid username
-                        if (!user.equals(username)) {
-                            Log.w(ex);
-                            user = username;
-                            Log.i("Retry with user=" + user);
-                            iservice.connect(
-                                    provider.imap.host, provider.imap.port,
-                                    EmailService.AUTH_TYPE_PASSWORD, null,
-                                    user, password,
-                                    null, null);
-                        } else
+                        // Some providers terminate the connection with an invalid username
+                        if (user.equals(username))
                             throw ex;
+                        else
+                            try {
+                                user = username;
+                                Log.i("Retry with user=" + user);
+                                iservice.connect(
+                                        provider.imap.host, provider.imap.port,
+                                        EmailService.AUTH_TYPE_PASSWORD, null,
+                                        user, password,
+                                        null, null);
+                            } catch (Throwable ex1) {
+                                Log.w(ex1);
+                                throw ex;
+                            }
                     }
 
                     folders = iservice.getFolders();
-
-                    if (folders == null)
-                        throw new IllegalArgumentException(context.getString(R.string.title_setup_no_system_folders));
                 }
 
                 Long max_size = null;
-                String iprotocol = provider.smtp.starttls ? "smtp" : "smtps";
+                String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
+                int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
                 try (EmailService iservice = new EmailService(
-                        context, iprotocol, null, false, EmailService.PURPOSE_CHECK, true)) {
+                        context, iprotocol, null, iencryption, false,
+                        EmailService.PURPOSE_CHECK, true)) {
                     iservice.setUseIp(provider.useip, null);
                     iservice.connect(
                             provider.smtp.host, provider.smtp.port,
@@ -372,7 +375,7 @@ public class FragmentQuickSetup extends FragmentBase {
                     EntityAccount account = new EntityAccount();
 
                     account.host = provider.imap.host;
-                    account.starttls = provider.imap.starttls;
+                    account.encryption = aencryption;
                     account.port = provider.imap.port;
                     account.auth_type = EmailService.AUTH_TYPE_PASSWORD;
                     account.user = user;
@@ -422,7 +425,7 @@ public class FragmentQuickSetup extends FragmentBase {
                     identity.account = account.id;
 
                     identity.host = provider.smtp.host;
-                    identity.starttls = provider.smtp.starttls;
+                    identity.encryption = iencryption;
                     identity.port = provider.smtp.port;
                     identity.auth_type = EmailService.AUTH_TYPE_PASSWORD;
                     identity.user = user;
@@ -482,7 +485,7 @@ public class FragmentQuickSetup extends FragmentBase {
                     tvError.setText(ex.getMessage());
                     grpError.setVisibility(View.VISIBLE);
 
-                    new Handler().post(new Runnable() {
+                    getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
                             scroll.smoothScrollTo(0, tvErrorHint.getBottom());
@@ -505,7 +508,7 @@ public class FragmentQuickSetup extends FragmentBase {
                         tvInstructions.setVisibility(View.VISIBLE);
                     }
 
-                    new Handler().post(new Runnable() {
+                    getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
                             if (args.containsKey("documentation"))

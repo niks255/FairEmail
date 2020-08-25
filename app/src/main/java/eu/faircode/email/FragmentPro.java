@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +50,7 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
     private TextView tvPrice;
     private ImageView ivExternal;
     private TextView tvPriceHint;
+    private TextView tvRestoreHint;
     private Button btnCheck;
 
     @Override
@@ -72,6 +72,7 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
         tvPrice = view.findViewById(R.id.tvPrice);
         ivExternal = view.findViewById(R.id.ivExternal);
         tvPriceHint = view.findViewById(R.id.tvPriceHint);
+        tvRestoreHint = view.findViewById(R.id.tvRestoreHint);
 
         btnCheck = view.findViewById(R.id.btnCheck);
 
@@ -107,7 +108,21 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
 
         ivExternal.setVisibility(Helper.isPlayStoreInstall() ? View.GONE : View.VISIBLE);
 
-        tvPriceHint.setMovementMethod(LinkMovementMethod.getInstance());
+        tvPriceHint.setPaintFlags(tvPriceHint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPriceHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Helper.viewFAQ(getContext(), 19);
+            }
+        });
+
+        tvRestoreHint.setPaintFlags(tvRestoreHint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvRestoreHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Helper.viewFAQ(getContext(), 117);
+            }
+        });
 
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +137,7 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
         cbHide.setVisibility(View.GONE);
         btnPurchase.setEnabled(!Helper.isPlayStoreInstall());
         tvPrice.setText(null);
+        tvRestoreHint.setVisibility(Helper.isPlayStoreInstall() || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         btnCheck.setEnabled(false);
         btnCheck.setVisibility(Helper.isPlayStoreInstall() && debug ? View.VISIBLE : View.GONE);
 

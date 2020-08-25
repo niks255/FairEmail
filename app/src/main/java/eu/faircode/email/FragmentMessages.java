@@ -46,7 +46,6 @@ import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
@@ -510,7 +509,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         });
 
         rvMessage.setHasFixedSize(false);
-        //rvMessage.setItemViewCacheSize(10);
+        rvMessage.setItemViewCacheSize(100); // Default: 2
         //rvMessage.getRecycledViewPool().setMaxRecycledViews(0, 10);
 
         final LinearLayoutManager llm = new LinearLayoutManager(getContext()) {
@@ -987,16 +986,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     @Override
                     protected void onExecuted(Bundle args, EntityFolder drafts) {
                         if (drafts == null)
-                            Snackbar.make(view, R.string.title_no_primary_drafts, Snackbar.LENGTH_LONG)
-                                    .setGestureInsetBottomIgnored(true).show();
-                        else {
-                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                            lbm.sendBroadcast(
-                                    new Intent(ActivityView.ACTION_VIEW_MESSAGES)
-                                            .putExtra("account", drafts.account)
-                                            .putExtra("folder", drafts.id)
-                                            .putExtra("type", drafts.type));
-                        }
+                            return;
+
+                        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+                        lbm.sendBroadcast(
+                                new Intent(ActivityView.ACTION_VIEW_MESSAGES)
+                                        .putExtra("account", drafts.account)
+                                        .putExtra("folder", drafts.id)
+                                        .putExtra("type", drafts.type));
                     }
 
                     @Override
@@ -1691,13 +1688,23 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         @Override
         public void scrollTo(final int pos, final int y) {
-            new Handler().post(new Runnable() {
+            getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     LinearLayoutManager llm = (LinearLayoutManager) rvMessage.getLayoutManager();
                     View child = llm.getChildAt(pos);
                     int dy = (child == null ? 0 : llm.getTopDecorationHeight(child));
                     llm.scrollToPositionWithOffset(pos, -y - dy);
+                }
+            });
+        }
+
+        @Override
+        public void scrollBy(int x, int y) {
+            getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    rvMessage.scrollBy(x, y);
                 }
             });
         }
@@ -1770,8 +1777,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     };
 
     private ItemTouchHelper.Callback touchHelper = new ItemTouchHelper.Callback() {
-        private Handler handler = new Handler();
-
         private Runnable enableSelection = new Runnable() {
             @Override
             public void run() {
@@ -1833,11 +1838,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
             if (selectionPredicate != null) {
-                handler.removeCallbacks(enableSelection);
+                getMainHandler().removeCallbacks(enableSelection);
                 if (isCurrentlyActive)
                     selectionPredicate.setEnabled(false);
                 else
-                    handler.postDelayed(enableSelection, SWIPE_DISABLE_SELECT_DURATION);
+                    getMainHandler().postDelayed(enableSelection, SWIPE_DISABLE_SELECT_DURATION);
             }
 
             int pos = viewHolder.getAdapterPosition();
@@ -4139,15 +4144,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         model.getIds(getContext(), getViewLifecycleOwner(), new Observer<List<Long>>() {
             @Override
             public void onChanged(List<Long> ids) {
-                new Handler().post(new Runnable() {
+                getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         selectionTracker.clearSelection();
                         for (long id : ids)
                             selectionTracker.select(id);
 
-                        ToastEx.makeText(getContext(),
-                                getContext().getResources().getQuantityString(
+                        Context context = getContext();
+                        if (context == null)
+                            return;
+
+                        ToastEx.makeText(context,
+                                context.getResources().getQuantityString(
                                         R.plurals.title_selected_conversations, ids.size(), ids.size()),
                                 Toast.LENGTH_LONG).show();
                     }
@@ -4773,7 +4782,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             protected void onException(Bundle args, Throwable ex) {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
-        }.setLog(false).execute(this, args, "messages:expand");
+        }.execute(this, args, "messages:expand");
     }
 
     private void handleAutoClose() {
@@ -7554,15 +7563,27 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             tvSourceFolders.setText(getDisplay(result, false));
             tvTargetFolders.setText(getDisplay(result, true));
 
+            List<String> sources = new ArrayList<>();
+            List<String> targets = new ArrayList<>();
+            for (MessageTarget t : result) {
+                if (!sources.contains(t.sourceFolder.type))
+                    sources.add(t.sourceFolder.type);
+                if (!targets.contains(t.targetFolder.type))
+                    targets.add(t.targetFolder.type);
+            }
+
             Drawable source = null;
-            Drawable target = null;
-            if (result.size() == 1) {
-                source = getResources().getDrawable(EntityFolder.getIcon(result.get(0).sourceFolder.type), null);
-                target = getResources().getDrawable(EntityFolder.getIcon(result.get(0).targetFolder.type), null);
+            if (sources.size() == 1) {
+                source = getResources().getDrawable(EntityFolder.getIcon(sources.get(0)), null);
                 if (source != null)
                     source.setBounds(0, 0, source.getIntrinsicWidth(), source.getIntrinsicHeight());
+            }
+
+            Drawable target = null;
+            if (targets.size() == 1) {
+                target = getResources().getDrawable(EntityFolder.getIcon(targets.get(0)), null);
                 if (target != null)
-                    target.setBounds(0, 0, target.getIntrinsicWidth(), source.getIntrinsicHeight());
+                    target.setBounds(0, 0, target.getIntrinsicWidth(), target.getIntrinsicHeight());
             }
 
             tvSourceFolders.setCompoundDrawablesRelative(source, null, null, null);

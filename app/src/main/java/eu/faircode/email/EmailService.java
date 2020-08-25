@@ -70,6 +70,7 @@ import javax.mail.Service;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.event.StoreListener;
+import javax.net.SocketFactory;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -107,11 +108,15 @@ public class EmailService implements AutoCloseable {
     static final int PURPOSE_USE = 2;
     static final int PURPOSE_SEARCH = 3;
 
+    static final int ENCRYPTION_SSL = 0;
+    static final int ENCRYPTION_STARTTLS = 1;
+    static final int ENCRYPTION_NONE = 2;
+
     final static int DEFAULT_CONNECT_TIMEOUT = 20; // seconds
 
     private final static int SEARCH_TIMEOUT = 90 * 1000; // milliseconds
     private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
-    private final static int POOL_TIMEOUT = 90 * 1000; // milliseconds, default 45 sec
+    private final static int POOL_TIMEOUT = 45 * 1000; // milliseconds, default 45 sec
 
     private static final int APPEND_BUFFER_SIZE = 4 * 1024 * 1024; // bytes
 
@@ -131,11 +136,11 @@ public class EmailService implements AutoCloseable {
         // Prevent instantiation
     }
 
-    EmailService(Context context, String protocol, String realm, boolean insecure, boolean debug) throws NoSuchProviderException {
-        this(context, protocol, realm, insecure, PURPOSE_USE, debug);
+    EmailService(Context context, String protocol, String realm, int encryption, boolean insecure, boolean debug) throws NoSuchProviderException {
+        this(context, protocol, realm, encryption, insecure, PURPOSE_USE, debug);
     }
 
-    EmailService(Context context, String protocol, String realm, boolean insecure, int purpose, boolean debug) throws NoSuchProviderException {
+    EmailService(Context context, String protocol, String realm, int encryption, boolean insecure, int purpose, boolean debug) throws NoSuchProviderException {
         this.context = context.getApplicationContext();
         this.protocol = protocol;
         this.insecure = insecure;
@@ -183,19 +188,26 @@ public class EmailService implements AutoCloseable {
         if (debug && BuildConfig.DEBUG)
             properties.put("mail.debug.auth", "true");
 
+        boolean starttls = (encryption == ENCRYPTION_STARTTLS);
+
+        if (encryption == ENCRYPTION_NONE) {
+            properties.put("mail." + protocol + ".ssl.enable", "false");
+            properties.put("mail." + protocol + ".socketFactory", new SocketFactoryService());
+        }
+
         if ("pop3".equals(protocol) || "pop3s".equals(protocol)) {
             // https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html#properties
             properties.put("mail.pop3s.starttls.enable", "false");
 
-            properties.put("mail.pop3.starttls.enable", "true");
-            properties.put("mail.pop3.starttls.required", Boolean.toString(!insecure));
+            properties.put("mail.pop3.starttls.enable", Boolean.toString(starttls));
+            properties.put("mail.pop3.starttls.required", Boolean.toString(starttls && !insecure));
 
         } else if ("imap".equals(protocol) || "imaps".equals(protocol) || "gimaps".equals(protocol)) {
             // https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html#properties
             properties.put("mail.imaps.starttls.enable", "false");
 
-            properties.put("mail.imap.starttls.enable", "true");
-            properties.put("mail.imap.starttls.required", Boolean.toString(!insecure));
+            properties.put("mail.imap.starttls.enable", Boolean.toString(starttls));
+            properties.put("mail.imap.starttls.required", Boolean.toString(starttls && !insecure));
 
             properties.put("mail." + protocol + ".separatestoreconnection", "true");
             properties.put("mail." + protocol + ".connectionpool.debug", "true");
@@ -220,8 +232,8 @@ public class EmailService implements AutoCloseable {
             // https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html#properties
             properties.put("mail.smtps.starttls.enable", "false");
 
-            properties.put("mail.smtp.starttls.enable", "true");
-            properties.put("mail.smtp.starttls.required", Boolean.toString(!insecure));
+            properties.put("mail.smtp.starttls.enable", Boolean.toString(starttls));
+            properties.put("mail.smtp.starttls.required", Boolean.toString(starttls && !insecure));
 
             properties.put("mail." + protocol + ".auth", "true");
 
@@ -635,15 +647,14 @@ public class EmailService implements AutoCloseable {
         EntityFolder.guessTypes(folders, getStore().getDefaultFolder().getSeparator());
 
         boolean inbox = false;
-        boolean drafts = false;
         for (EntityFolder folder : folders)
-            if (EntityFolder.INBOX.equals(folder.type))
+            if (EntityFolder.INBOX.equals(folder.type)) {
                 inbox = true;
-            else if (EntityFolder.DRAFTS.equals(folder.type))
-                drafts = true;
+                break;
+            }
 
-        if (!inbox || !drafts)
-            return null;
+        if (!inbox)
+            throw new IllegalArgumentException(context.getString(R.string.title_setup_no_inbox));
 
         return folders;
     }
@@ -696,6 +707,40 @@ public class EmailService implements AutoCloseable {
                 iservice.close();
         } finally {
             context = null;
+        }
+    }
+
+    private static class SocketFactoryService extends SocketFactory {
+        private SocketFactory factory = SocketFactory.getDefault();
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return configure(factory.createSocket());
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+            return configure(factory.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return configure(factory.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+            return configure(factory.createSocket(host, port, localHost, localPort));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+            return configure(factory.createSocket(address, port, localAddress, localPort));
+        }
+
+        private Socket configure(Socket socket) {
+            Log.i("Socket type=" + socket.getClass());
+            return socket;
         }
     }
 

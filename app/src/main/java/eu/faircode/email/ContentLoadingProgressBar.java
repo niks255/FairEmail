@@ -39,14 +39,22 @@ public class ContentLoadingProgressBar extends ProgressBar {
         super(context, attrs, 0);
     }
 
+    public ContentLoadingProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public ContentLoadingProgressBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
     @Override
     public void setVisibility(int visibility) {
         this.visibility = visibility;
 
-        removeCallbacks(delayedShow);
+        ApplicationEx.getMainHandler().removeCallbacks(delayedShow);
         if (visibility == VISIBLE) {
             super.setVisibility(INVISIBLE);
-            postDelayed(delayedShow, VISIBILITY_DELAY);
+            ApplicationEx.getMainHandler().postDelayed(delayedShow, VISIBILITY_DELAY);
         } else
             super.setVisibility(visibility);
     }

@@ -181,7 +181,7 @@
     <string name="title_setup_no_settings_hint">Please try setting up an account and identity in setup steps 1 and 2 using the settings provided by your email provider</string>
     <string name="title_setup_no_auth_hint">Please double check your email address and password and make sure external access (IMAP/SMTP) is enabled for your account</string>
     <string name="title_setup_app_password_hint">This provider requires an app password instead of the account password, please check the instructions of your provider</string>
-    <string name="title_setup_no_system_folders">Inbox or draft folder not found</string>
+    <string name="title_setup_no_inbox">Inbox not found</string>
     <string name="title_setup_advanced_protection">When enrolled in the advanced protection program it is not possible to use a third party email app. This is a restriction imposed by Google.</string>
     <string name="title_setup_quick_success">An account and an identity have successfully been added</string>
     <string name="title_setup_quick_failed">You can try to configure an account and an identity below too</string>
@@ -369,6 +369,7 @@
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_thumbnails">Show image thumbnails after the message text</string>
     <string name="title_advanced_message_text_zoom">Default message text zoom</string>
+    <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text by default</string>
     <string name="title_advanced_text_color">Use text colors</string>
@@ -543,6 +544,7 @@
     <string name="title_advanced_name_email_hint">When disabled only names will be shown when available</string>
     <string name="title_advanced_preview_hint">Only available when message text has been downloaded</string>
     <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
+    <string name="title_advanced_overview_mode_hint">This can result in very small fonts</string>
     <string name="title_advanced_inline_hint">Inline images are images included in the message</string>
     <string name="title_advanced_parse_classes_hint">This will more accurately display messages, but possibly with a delay</string>
 
@@ -617,8 +619,10 @@
     <string name="title_provider">Provider</string>
     <string name="title_custom">Custom</string>
     <string name="title_host">Host name</string>
-    <string name="title_ssl" translatable="false">SSL/TLS</string>
-    <string name="title_starttls" translatable="false">STARTTLS</string>
+    <string name="title_encryption">Encryption</string>
+    <string name="title_encryption_ssl" translatable="false">SSL/TLS</string>
+    <string name="title_encryption_starttls" translatable="false">STARTTLS</string>
+    <string name="title_encryption_none">None</string>
     <string name="title_allow_insecure">Allow insecure connections</string>
     <string name="title_insecure_remark">Insecure connections should only be allowed on trusted networks and never on public networks</string>
     <string name="title_port">Port number</string>
@@ -656,16 +660,17 @@
     <string name="title_no_user">User name missing</string>
     <string name="title_no_password">Password missing</string>
     <string name="title_no_inbox">Inbox not found</string>
-    <string name="title_no_primary_drafts">No primary account or no drafts folder</string>
+    <string name="title_no_drafts">No drafts folder</string>
     <string name="title_no_junk_folder">There is no spam folder selected for this account</string>
-    <string name="title_no_identities">Sending emails requires at least one identity and a drafts folder</string>
+    <string name="title_no_composable">Sending emails requires an identity to be configured, and a drafts folder to be selected in the account settings</string>
     <string name="title_no_standard">This provider uses a proprietary email protocol and therefore it is not possible to use third party email clients</string>
     <string name="title_no_idle">This provider does not support push messages. This will delay reception of new messages and increase battery usage.</string>
     <string name="title_no_utf8">This provider does not support UTF-8</string>
     <string name="title_no_sync">Synchronization errors since %1$s</string>
     <string name="title_reply_domain">The sender (%1$s) and reply domain (%2$s) differ</string>
-    <string name="title_identity_required">An identity is required to send messages</string>
-    <string name="title_drafts_required">A drafts folder is required to send messages</string>
+    <string name="title_identity_required">An identity is required to send emails</string>
+    <string name="title_drafts_required">A drafts folder is required to send emails</string>
+    <string name="title_drafts_select">Sending emails requires a drafts folder to be selected in the account settings</string>
     <string name="title_account_delete">Delete this account permanently?</string>
     <string name="title_identity_delete">Delete this identity permanently?</string>
     <string name="title_edit_html">Edit as HTML</string>
@@ -765,6 +770,7 @@
     <string name="title_buttons">Buttons</string>
     <string name="title_seen">Mark read</string>
     <string name="title_unseen">Mark unread</string>
+    <string name="title_toggle_seen">Toggle read</string>
     <string name="title_hide">Hide</string>
     <string name="title_unhide">Show</string>
     <string name="title_flag">Add star</string>
@@ -1342,7 +1348,8 @@
     </string>
     <string name="title_pro_hide">Hide small message for %1$d weeks</string>
     <string name="title_pro_hint">Buying pro features will allow you to use all current and future pro features, will keep this app maintained, and supported.</string>
-    <string name="title_pro_price">Please see <a href="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq19">this FAQ</a> about the price of the pro features</string>
+    <string name="title_pro_price">Why are the pro features so expensive?</string>
+    <string name="title_pro_restore">How can I restore a purchase?</string>
     <string name="title_pro_pending">Purchase pending</string>
     <string name="title_pro_activated">All pro features are activated</string>
     <string name="title_pro_valid">All pro features activated</string>

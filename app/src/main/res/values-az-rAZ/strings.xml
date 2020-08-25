@@ -228,7 +228,6 @@
     <string name="title_no_host">Host adı əskikdir</string>
     <string name="title_no_user">İstifadəçi adı əskikdir</string>
     <string name="title_no_password">Şifrə əskikdir</string>
-    <string name="title_no_primary_drafts">Üstünlük verilən hesab və ya qaralama qovluğu yoxdur</string>
     <string name="title_no_idle">Bu təchizatçı ani mesajları dəstəkləmir. Bu, yeni mesajların alınmasını gecikdirəcək və batareyanın istifadəsini artıracaq.</string>
     <string name="title_account_delete">Bu hesab birdəfəlik silinsin?</string>
     <string name="title_identity_delete">Bu kimlik birdəfəlik silinsin?</string>
@@ -392,7 +391,6 @@
     <string name="title_pro_list">Pro xüsusiyyətlərinin siyahısı</string>
     <string name="title_pro_purchase">Satın al</string>
     <string name="title_pro_hint">Pro xüsusiyyətlərinin alınması sizə, mövcud və gələcəkdəki pro xüsusiyyətləri istifadə etməyinizə icazə verəcək və tətbiqin uzunömürlü olması üçün bizə dəstək olacaq</string>
-    <string name="title_pro_price">Zəhmət olmasa pro xüsusiyyətlərin qiyməti haqqında <a href="https://github.com/M66B/open-source-email/blob/master/FAQ.md#user-content-faq19">bu TSS</a> səhifəsinə baxın</string>
     <string name="title_pro_activated">Bütün pro xüsusiyyətlər aktivləşdirildi</string>
     <string name="title_pro_valid">Bütün pro xüsusiyyətlər aktivləşdirildi</string>
     <string name="title_pro_invalid">Etibarsız cavab</string>

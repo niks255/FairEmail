@@ -67,12 +67,11 @@ public class FragmentSetup extends FragmentBase {
 
     private TextView tvAccountDone;
     private Button btnAccount;
-    private TextView tvNoPrimaryDrafts;
 
     private TextView tvIdentityDone;
     private Button btnIdentity;
     private TextView tvIdentityWhat;
-    private TextView tvNoIdentities;
+    private TextView tvNoComposable;
 
     private TextView tvPermissionsDone;
     private Button btnPermissions;
@@ -115,12 +114,11 @@ public class FragmentSetup extends FragmentBase {
 
         tvAccountDone = view.findViewById(R.id.tvAccountDone);
         btnAccount = view.findViewById(R.id.btnAccount);
-        tvNoPrimaryDrafts = view.findViewById(R.id.tvNoPrimaryDrafts);
 
         tvIdentityDone = view.findViewById(R.id.tvIdentityDone);
         btnIdentity = view.findViewById(R.id.btnIdentity);
         tvIdentityWhat = view.findViewById(R.id.tvIdentityWhat);
-        tvNoIdentities = view.findViewById(R.id.tvNoIdentities);
+        tvNoComposable = view.findViewById(R.id.tvNoComposable);
 
         tvPermissionsDone = view.findViewById(R.id.tvPermissionsDone);
         btnPermissions = view.findViewById(R.id.btnPermissions);
@@ -309,12 +307,11 @@ public class FragmentSetup extends FragmentBase {
 
         tvAccountDone.setText(null);
         tvAccountDone.setCompoundDrawables(null, null, null, null);
-        tvNoPrimaryDrafts.setVisibility(View.GONE);
 
         tvIdentityDone.setText(null);
         tvIdentityDone.setCompoundDrawables(null, null, null, null);
         btnIdentity.setEnabled(false);
-        tvNoIdentities.setVisibility(View.GONE);
+        tvNoComposable.setVisibility(View.GONE);
 
         tvPermissionsDone.setText(null);
         tvPermissionsDone.setCompoundDrawables(null, null, null, null);
@@ -386,25 +383,6 @@ public class FragmentSetup extends FragmentBase {
                 btnInbox.setEnabled(done);
 
                 prefs.edit().putBoolean("has_accounts", done).apply();
-
-                if (done)
-                    new SimpleTask<EntityFolder>() {
-                        @Override
-                        protected EntityFolder onExecute(Context context, Bundle args) {
-                            DB db = DB.getInstance(context);
-                            return db.folder().getPrimaryDrafts();
-                        }
-
-                        @Override
-                        protected void onExecuted(Bundle args, EntityFolder drafts) {
-                            tvNoPrimaryDrafts.setVisibility(drafts == null ? View.VISIBLE : View.GONE);
-                        }
-
-                        @Override
-                        protected void onException(Bundle args, Throwable ex) {
-                            Log.unexpectedError(getParentFragmentManager(), ex);
-                        }
-                    }.execute(FragmentSetup.this, new Bundle(), "setup:drafts");
             }
         });
 
@@ -415,7 +393,7 @@ public class FragmentSetup extends FragmentBase {
                 tvIdentityDone.setText(done ? R.string.title_setup_done : R.string.title_setup_to_do);
                 tvIdentityDone.setTextColor(done ? textColorPrimary : colorWarning);
                 tvIdentityDone.setCompoundDrawablesWithIntrinsicBounds(done ? check : null, null, null, null);
-                tvNoIdentities.setVisibility(done ? View.GONE : View.VISIBLE);
+                tvNoComposable.setVisibility(done ? View.GONE : View.VISIBLE);
             }
         });
     }

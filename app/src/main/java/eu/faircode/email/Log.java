@@ -283,7 +283,7 @@ public class Log {
         config.setAutoTrackSessions(false);
 
         ErrorTypes etypes = new ErrorTypes();
-        etypes.setAnrs(false);
+        etypes.setAnrs(BuildConfig.DEBUG);
         etypes.setNdkCrashes(false);
         config.setEnabledErrorTypes(etypes);
 
@@ -1049,7 +1049,7 @@ public class Log {
 
             List<TupleIdentityEx> identities = db.identity().getComposableIdentities(null);
             if (identities == null || identities.size() == 0)
-                throw new IllegalArgumentException(context.getString(R.string.title_no_identities));
+                throw new IllegalArgumentException(context.getString(R.string.title_no_composable));
 
             EntityIdentity identity = identities.get(0);
             EntityFolder drafts = db.folder().getFolderByType(identity.account, EntityFolder.DRAFTS);

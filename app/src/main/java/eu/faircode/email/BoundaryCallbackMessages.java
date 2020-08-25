@@ -21,7 +21,6 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -86,8 +85,6 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
     private IBoundaryCallbackMessages intf;
 
-    private Handler handler;
-
     private State state;
 
     private static final int SEARCH_LIMIT_DEVICE = 1000;
@@ -112,7 +109,6 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     }
 
     void setCallback(IBoundaryCallbackMessages intf) {
-        this.handler = new Handler();
         this.intf = intf;
         this.state = new State();
     }
@@ -148,7 +144,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         return;
 
                     if (intf != null)
-                        handler.post(new Runnable() {
+                        ApplicationEx.getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 intf.onLoading();
@@ -173,7 +169,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     state.error = true;
                     Log.e("Boundary", ex);
                     if (intf != null)
-                        handler.post(new Runnable() {
+                        ApplicationEx.getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 intf.onException(ex);
@@ -181,7 +177,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         });
                 } finally {
                     if (intf != null)
-                        handler.post(new Runnable() {
+                        ApplicationEx.getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 intf.onLoaded();
@@ -329,7 +325,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                 EntityLog.log(context, "Boundary server connecting account=" + account.name);
                 state.iservice = new EmailService(
-                        context, account.getProtocol(), account.realm, account.insecure,
+                        context, account.getProtocol(), account.realm, account.encryption, account.insecure,
                         EmailService.PURPOSE_SEARCH, debug || BuildConfig.DEBUG);
                 state.iservice.setPartialFetch(account.partial_fetch);
                 state.iservice.setIgnoreBodyStructureSize(account.ignore_size);

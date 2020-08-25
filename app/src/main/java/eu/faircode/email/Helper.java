@@ -40,7 +40,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.LocaleList;
 import android.os.Parcel;
 import android.os.PowerManager;
@@ -155,6 +154,7 @@ public class Helper {
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
     static final String CROWDIN_URI = "https://crowdin.com/project/open-source-email";
     static final String GRAVATAR_PRIVACY_URI = "https://meta.stackexchange.com/questions/44717/is-gravatar-a-privacy-risk";
+    static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
 
     static final Pattern EMAIL_ADDRESS
             = Pattern.compile(
@@ -1230,7 +1230,7 @@ public class Helper {
             return true;
 
         BiometricManager bm = BiometricManager.from(context);
-        return (bm.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS);
+        return (bm.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS);
     }
 
     static boolean shouldAuthenticate(Context context) {
@@ -1256,8 +1256,6 @@ public class Helper {
     static void authenticate(final FragmentActivity activity, final LifecycleOwner owner,
                              Boolean enabled, final
                              Runnable authenticated, final Runnable cancelled) {
-        final Handler handler = new Handler();
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String pin = prefs.getString("pin", null);
 
@@ -1287,7 +1285,7 @@ public class Helper {
                             if (errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON &&
                                     errorCode != BiometricPrompt.ERROR_CANCELED &&
                                     errorCode != BiometricPrompt.ERROR_USER_CANCELED)
-                                handler.post(new Runnable() {
+                                ApplicationEx.getMainHandler().post(new Runnable() {
                                     @Override
                                     public void run() {
                                         ToastEx.makeText(activity,
@@ -1296,20 +1294,20 @@ public class Helper {
                                     }
                                 });
 
-                            handler.post(cancelled);
+                            ApplicationEx.getMainHandler().post(cancelled);
                         }
 
                         @Override
                         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                             Log.i("Biometric succeeded");
                             setAuthenticated(activity);
-                            handler.post(authenticated);
+                            ApplicationEx.getMainHandler().post(authenticated);
                         }
 
                         @Override
                         public void onAuthenticationFailed() {
                             Log.w("Biometric failed");
-                            handler.post(cancelled);
+                            ApplicationEx.getMainHandler().post(cancelled);
                         }
                     });
 
@@ -1326,12 +1324,12 @@ public class Helper {
                 }
             };
 
-            handler.postDelayed(cancelPrompt, 60 * 1000L);
+            ApplicationEx.getMainHandler().postDelayed(cancelPrompt, 60 * 1000L);
 
             owner.getLifecycle().addObserver(new LifecycleObserver() {
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 public void onDestroy() {
-                    handler.post(cancelPrompt);
+                    ApplicationEx.getMainHandler().post(cancelPrompt);
                 }
             });
 
@@ -1350,21 +1348,21 @@ public class Helper {
 
                             if (pin.equals(entered)) {
                                 setAuthenticated(activity);
-                                handler.post(authenticated);
+                                ApplicationEx.getMainHandler().post(authenticated);
                             } else
-                                handler.post(cancelled);
+                                ApplicationEx.getMainHandler().post(cancelled);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            handler.post(cancelled);
+                            ApplicationEx.getMainHandler().post(cancelled);
                         }
                     })
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            handler.post(cancelled);
+                            ApplicationEx.getMainHandler().post(cancelled);
                         }
                     })
                     .create();
@@ -1388,7 +1386,7 @@ public class Helper {
                 }
             });
 
-            new Handler().post(new Runnable() {
+            ApplicationEx.getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     etPin.requestFocus();
@@ -1411,8 +1409,6 @@ public class Helper {
 
     static void selectKeyAlias(final Activity activity, final LifecycleOwner owner, final String alias, final IKeyAlias intf) {
         final Context context = activity.getApplicationContext();
-        final Handler handler = new Handler();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1429,7 +1425,7 @@ public class Helper {
                         Log.e(ex);
                     }
 
-                handler.post(new Runnable() {
+                ApplicationEx.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         KeyChain.choosePrivateKeyAlias(activity, new KeyChainAliasCallback() {
@@ -1445,7 +1441,7 @@ public class Helper {
             }
 
             private void deliver(final String selected) {
-                handler.post(new Runnable() {
+                ApplicationEx.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         if (owner.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
