@@ -508,9 +508,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
-        rvMessage.setHasFixedSize(false);
-        rvMessage.setItemViewCacheSize(100); // Default: 2
-        //rvMessage.getRecycledViewPool().setMaxRecycledViews(0, 10);
+        rvMessage.setHasFixedSize(true);
+
+        int threads = prefs.getInt("query_threads", 4);
+        if (threads >= 4)
+            rvMessage.setItemViewCacheSize(10); // Default: 2
+        //rvMessage.getRecycledViewPool().setMaxRecycledViews(0, 10); // Default 5
 
         final LinearLayoutManager llm = new LinearLayoutManager(getContext()) {
             private Rect parentRect = new Rect();

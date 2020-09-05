@@ -1907,11 +1907,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             }
 
                             @Override
-                            public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-                                if (clampedY) {
-                                    int dy = context.getResources().getDisplayMetrics().heightPixels / 50;
-                                    properties.scrollBy(0, scrollY == 0 ? -dy : dy);
-                                }
+                            public void onOverScrolled(int scrollX, int scrollY, int dx, int dy, boolean clampedX, boolean clampedY) {
+                                if (clampedY && ((WebViewEx) wvBody).isZoomed())
+                                    properties.scrollBy(0, dy);
                             }
 
                             @Override
@@ -2088,7 +2086,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         boolean overview_mode = prefs.getBoolean("overview_mode", false);
                         HtmlHelper.setViewport(document, overview_mode);
                         if (inline || show_images)
-                            HtmlHelper.embedInlineImages(context, message.id, document, true);
+                            HtmlHelper.embedInlineImages(context, message.id, document, show_images);
 
                         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
                         if (disable_tracking)
@@ -3650,12 +3648,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onShowImagesConfirmed(TupleMessageEx message) {
-            boolean show_full = properties.getValue("full", message.id);
-            boolean show_images = properties.getValue("images", message.id);
-            if (show_full && show_images && wvBody != null)
-                ((WebViewEx) wvBody).setImages(show_images, inline);
-            else
-                bindBody(message, false);
+            bindBody(message, false);
         }
 
         private void onActionUnsubscribe(TupleMessageEx message) {
@@ -4051,7 +4044,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     else
                         ToastEx.makeText(context, R.string.title_pro_invalid, Toast.LENGTH_LONG).show();
                 } catch (NoSuchAlgorithmException ex) {
-                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    Log.e(ex);
+                    ToastEx.makeText(context, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
                 }
             } else {
                 if ("full".equals(uri.getScheme())) {
@@ -4145,7 +4139,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     @Override
                     protected void onExecuted(Bundle args, File file) {
-                        Helper.share(context, file, "image/png", file.getName());
+                        if (file != null)
+                            Helper.share(context, file, "image/png", file.getName());
                     }
 
                     @Override
@@ -5636,6 +5631,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        try {
+            _onBindViewHolder(holder, position);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    private void _onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TupleMessageEx message = differ.getItem(position);
 
         if (message == null || context == null)

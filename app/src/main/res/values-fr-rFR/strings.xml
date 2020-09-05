@@ -105,6 +105,7 @@
     <string name="menu_rate">Évaluer cette application</string>
     <string name="title_welcome">Bienvenue</string>
     <string name="title_eula">Contrat de licence d\'utilisateur final</string>
+    <string name="title_contributors">Contributeurs</string>
     <string name="title_agree">J\'accepte</string>
     <string name="title_disagree">Je refuse</string>
     <string name="title_version">Version %1$s</string>
@@ -1161,6 +1162,7 @@
     <string name="title_enabled">Activé</string>
     <string name="title_executing">Exécution en cours</string>
     <string name="title_completed">Terminé</string>
+    <string name="title_default_changed">Valeur par défaut modifiée</string>
     <string name="title_clipboard_copy">Copier dans le presse-papiers</string>
     <string name="title_clipboard_copied">Copié dans le presse-papiers</string>
     <string name="title_ask_what">Demander ce qu\'il faut faire</string>

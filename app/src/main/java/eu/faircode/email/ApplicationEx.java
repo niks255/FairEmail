@@ -158,9 +158,13 @@ public class ApplicationEx extends Application {
     static void upgrade(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int version = prefs.getInt("version", BuildConfig.VERSION_CODE);
-        Log.i("Upgrading from " + version + " to " + BuildConfig.VERSION_CODE);
+        if (version != BuildConfig.VERSION_CODE)
+            EntityLog.log(context, "Upgrading from " + version + " to " + BuildConfig.VERSION_CODE);
 
         SharedPreferences.Editor editor = prefs.edit();
+
+        if (version < BuildConfig.VERSION_CODE)
+            editor.remove("crash_report_count");
 
         if (version < 468) {
             editor.remove("notify_trash");

@@ -791,14 +791,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private void onAlarm(Intent intent) {
         Bundle command = new Bundle();
-        schedule(this);
+        schedule(this, true);
         command.putString("name", "eval");
         command.putBoolean("sync", true);
         liveAccountNetworkState.post(command);
     }
 
     private void onWatchdog(Intent intent) {
-        schedule(this);
+        schedule(this, false);
         networkCallback.onCapabilitiesChanged(null, null);
     }
 
@@ -993,6 +993,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         throw ex;
                     }
 
+                    // https://tools.ietf.org/html/rfc2177
                     final boolean capIdle = iservice.hasCapability("IDLE");
                     Log.i(account.name + " idle=" + capIdle);
                     if (!capIdle || account.poll_interval < OPTIMIZE_KEEP_ALIVE_INTERVAL)
@@ -1096,6 +1097,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             db.folder().setFolderState(folder.id, "connected");
                             db.folder().setFolderError(folder.id, null);
+
+                            if (capIdle != MessageHelper.hasCapability(ifolder, "IDLE"))
+                                Log.e("Conflicting IDLE=" + capIdle + " host=" + account.host);
 
                             int count = MessageHelper.getMessageCount(ifolder);
                             db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
@@ -2006,7 +2010,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     }
 
                     // Restore schedule
-                    schedule(context);
+                    schedule(context, false);
 
                     // Init service
                     int accounts = db.account().getSynchronizingAccounts().size();
@@ -2023,7 +2027,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         thread.start();
     }
 
-    private static void schedule(Context context) {
+    private static void schedule(Context context, boolean sync) {
         Intent intent = new Intent(context, ServiceSynchronize.class);
         intent.setAction("alarm");
         PendingIntent pi = PendingIntentCompat.getForegroundService(
@@ -2033,6 +2037,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         am.cancel(pi);
 
         boolean poll;
+        Long at = null;
         long[] schedule = getSchedule(context);
         if (schedule == null)
             poll = true;
@@ -2048,9 +2053,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             Log.i("Schedule poll=" + poll);
 
             AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, pi);
+
+            if (sync & poll) {
+                at = now + 30 * 1000L;
+                Log.i("Sync at schedule start=" + new Date(at));
+            }
         }
 
-        ServiceUI.schedule(context, poll);
+        ServiceUI.schedule(context, poll, at);
     }
 
     static long[] getSchedule(Context context) {

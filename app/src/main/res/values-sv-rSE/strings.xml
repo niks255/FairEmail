@@ -105,6 +105,7 @@
     <string name="menu_rate">Betygsätt denna app</string>
     <string name="title_welcome">Välkommen</string>
     <string name="title_eula">Licensavtal för slutanvändare</string>
+    <string name="title_contributors">Bidragsgivare</string>
     <string name="title_agree">Jag samtycker</string>
     <string name="title_disagree">Jag samtycker inte</string>
     <string name="title_version">Version %1$s</string>
@@ -1160,6 +1161,7 @@
     <string name="title_enabled">Aktiverad</string>
     <string name="title_executing">Kör</string>
     <string name="title_completed">Slutförd</string>
+    <string name="title_default_changed">Standard ändrad</string>
     <string name="title_clipboard_copy">Kopiera till urklipp</string>
     <string name="title_clipboard_copied">Kopierad till urklipp</string>
     <string name="title_ask_what">Fråga vad du ska göra</string>

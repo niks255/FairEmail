@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contributors>
+    <contributor
+        alias="pulser"
+        contribution="English corrections" />
+    <contributor
+        name="Jorg K."
+        contribution="Charset handling" />
+    <contributor
+        alias="La Globule"
+        contribution="French translation" />
+    <contributor
+        name="Zidan Pragata"
+        alias="zidanpragata"
+        contribution="Indonesian translation" />
+</contributors>

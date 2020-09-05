@@ -93,6 +93,7 @@
     <string name="menu_rate">给此应用评分</string>
     <string name="title_welcome">欢迎</string>
     <string name="title_eula">最终用户许可协议</string>
+    <string name="title_contributors">贡献者</string>
     <string name="title_agree">同意</string>
     <string name="title_disagree">拒绝</string>
     <string name="title_version">版本 %1$s</string>
@@ -1149,6 +1150,7 @@
     <string name="title_enabled">已启用</string>
     <string name="title_executing">执行中</string>
     <string name="title_completed">完成</string>
+    <string name="title_default_changed">默认已更改</string>
     <string name="title_clipboard_copy">复制到剪切板</string>
     <string name="title_clipboard_copied">已复制到剪切板</string>
     <string name="title_ask_what">询问做什么</string>

@@ -425,6 +425,7 @@ public class FragmentCompose extends FragmentBase {
                 onMenuAddresses();
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 prefs.edit().putBoolean("cc_bcc", grpAddresses.getVisibility() == View.VISIBLE).apply();
+                ToastEx.makeText(v.getContext(), R.string.title_default_changed, Toast.LENGTH_LONG).show();
                 return true;
             }
         });
@@ -2206,7 +2207,7 @@ public class FragmentCompose extends FragmentBase {
                     Properties props = MessageHelper.getSessionProperties();
                     Session isession = Session.getInstance(props, null);
                     MimeMessage imessage = new MimeMessage(isession);
-                    MessageHelper.build(context, draft, attachments, identity, false, imessage);
+                    MessageHelper.build(context, draft, attachments, identity, true, imessage);
 
                     if (OpenPgpApi.ACTION_GET_SIGN_KEY_ID.equals(data.getAction())) {
                         // Serialize content
@@ -2500,7 +2501,7 @@ public class FragmentCompose extends FragmentBase {
                 Properties props = MessageHelper.getSessionProperties();
                 Session isession = Session.getInstance(props, null);
                 MimeMessage imessage = new MimeMessage(isession);
-                MessageHelper.build(context, draft, attachments, identity, false, imessage);
+                MessageHelper.build(context, draft, attachments, identity, true, imessage);
                 imessage.saveChanges();
                 BodyPart bpContent = new MimeBodyPart() {
                     @Override
@@ -3560,6 +3561,8 @@ public class FragmentCompose extends FragmentBase {
                             Element reply = document.createElement("div");
                             reply.attr("fairemail", "reference");
 
+                            reply.appendElement("br");
+
                             // Build reply header
                             boolean extended_reply = prefs.getBoolean("extended_reply", false);
                             Element p = ref.getReplyHeader(context, document, extended_reply);
@@ -3741,8 +3744,7 @@ public class FragmentCompose extends FragmentBase {
                         for (EntityAttachment attachment : attachments)
                             if (!attachment.isEncryption() &&
                                     ("forward".equals(action) || "editasnew".equals(action) ||
-                                            (cid.contains(attachment.cid) ||
-                                                    (attachment.isInline() && attachment.isImage())))) {
+                                            cid.contains(attachment.cid))) {
                                 if (attachment.available) {
                                     File source = attachment.getFile(context);
 
@@ -3887,7 +3889,9 @@ public class FragmentCompose extends FragmentBase {
             cbSignature.setTag(data.draft.signature);
 
             grpHeader.setVisibility(View.VISIBLE);
-            if ("reply_all".equals(action))
+            if ("reply_all".equals(action) ||
+                    (data.draft.cc != null && data.draft.cc.length > 0) ||
+                    (data.draft.bcc != null && data.draft.bcc.length > 0))
                 grpAddresses.setVisibility(View.VISIBLE);
             ibCcBcc.setVisibility(View.VISIBLE);
 
@@ -4846,6 +4850,10 @@ public class FragmentCompose extends FragmentBase {
                                 }
                             },
                             null);
+
+                    // Strip newline of reply header
+                    if (spannedRef.length() > 0 && spannedRef.charAt(0) == '\n')
+                        spannedRef = (Spanned) spannedRef.subSequence(1, spannedRef.length());
                 }
 
                 args.putBoolean("ref_has_images", spannedRef != null &&

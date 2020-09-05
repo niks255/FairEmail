@@ -1,20 +1,20 @@
 # FairEmail support
 
-If you have a question, please check the frequently asked questions below first. At the bottom, you can find out how to ask other questions, request features, and report bugs.
+Heb je een vraag? Bekijk dan eerst de veelgestelde vragen! Staat jouw vraag er niet tussen? Scroll dan naar beneden om contact op te nemen. Je kan ook nieuwe functies voorstellen of bugs melden.
 
 ## Index
 
-* [Authorizing accounts](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
+* [Account autoriseren](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
 * [How to ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Known problems](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planned features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
+* [Bekende problemen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
+* [Geplande functies](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Frequently requested features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Frequently Asked Questions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
 * [Ondersteuning](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-support)
 
-## Authorizing accounts
+## Account autoriseren
 
-In most cases, the quick setup will be able to automatically identify the correct configuration.
+In de meeste gevallen zal de snelle installatie automatisch de juiste configuratie identificeren.
 
 If the quick setup fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
 
@@ -34,14 +34,14 @@ For authorizing:
 
 Please see [here](#user-content-faq22) for common error messages and solutions.
 
-Related questions:
+Gerelateerde vragen:
 
-* [Is OAuth supported?](#user-content-faq111)
-* [Why is ActiveSync not supported?](#user-content-faq133)
+* [Wordt OAuth ondersteund?](#user-content-faq111)
+* [Waarom wordt ActiveSync niet ondersteund?](#user-content-faq133)
 
 <a name="howto">
 
-## How to ...?
+## Hoe kan ik...?
 
 * Change the account name: Setup, step 1, Manage, tap account
 * Change the swipe left/right target: Setup, Behavior, Set swipe actions
@@ -60,7 +60,7 @@ Related questions:
 * Change system folders: Setup, step 1, Manage, tap account, at the bottom
 * Export/import settings: Setup, navigation/hamburger menu
 
-## Known problems
+## Bekende problemen
 
 * ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~
 * ~~A [bug in Google Drive](https://issuetracker.google.com/issues/126362828) causes files exported to Google Drive to be empty. Google has fixed this.~~
@@ -77,7 +77,7 @@ Related questions:
 * Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
 * A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, and Mi band 3 wearables. See also [this FAQ](#user-content-faq126).
 
-## Planned features
+## Geplande functies
 
 * ~~Synchronize on demand (manual)~~
 * ~~Semi-automatic encryption~~
@@ -112,11 +112,11 @@ Related questions:
 
 Anything on this list is in random order and *might* be added in the near future.
 
-## Frequently requested features
+## Veelgevraagde functies
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
 
-## Frequently Asked Questions
+## Veelgestelde vragen
 
 * [(1) Which permissions are needed and why?](#user-content-faq1)
 * [(2) Why is there a permanent notification shown?](#user-content-faq2)
@@ -850,7 +850,8 @@ Possible causes are:
 
 * A firewall or router is blocking connections to the server
 * The host name or port number is invalid
-* The are problems with the internet connection
+* There are problems with the internet connection
+* There are problems with resolving domain names (Yandex: try to disable private DNS in the Android settings)
 * The email server is refusing to accept (external) connections
 * The email server is refusing to accept a message, for example because it is too large or contains unacceptable links
 * There are too many connections to the server, see also the next question
@@ -2172,6 +2173,7 @@ Note that:
 * Google does not expose details (name, e-mail, etc) about buyers to developers
 * An app like FairEmail cannot select which Google account to use
 * It may take a while until the Play store app has synchronized a purchase to another device
+* Play Store purchases cannot be used without the Play Store, which is also not allowed by Play Store rules
 
 If you cannot solve the problem with the purchase, you will have to contact Google about it.
 

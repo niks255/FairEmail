@@ -422,8 +422,8 @@ Dans la section d'affichage des paramètres, vous pouvez activer ou désactiver 
 * *Grouper par date*: Affiche la date en en-tête au dessus des messages ayant la même date
 * *Afficher en mode conversation*: Pour désactiver l'affichage en mode conversation et afficher à la place les messages de manière individuelle
 * *Afficher la photo des contacts*: pour masquer la photo des contacts
-* *Show identicons*: to show generated contact avatars
-* *Show names and email addresses*: to show names or to show names and email addresses
+* *Afficher les identicônes*: pour afficher les avatars de contact générés
+* *Afficher les noms et les adresses e-mail*: pour afficher les noms ou afficher les noms et les adresses e-mail
 * *Show subject italic*: to show the message subject as normal text
 * *Show stars*: to hide stars (favorites)
 * *Show message preview*: to show two lines of the message text
@@ -433,7 +433,7 @@ Dans la section d'affichage des paramètres, vous pouvez activer ou désactiver 
 * *Automatically show images for known contacts*: to automatically show images for contacts on your device, please read [this FAQ](#user-content-faq35)
 * *Conversation action bar*: to disable the bottom navigation bar
 
-Note that messages can be previewed only when the message text was downloaded. Larger message texts are not downloaded by default on metered (generally mobile) networks. You can change this in the settings.
+Note that messages can be previewed only when the message text was downloaded. Larger message texts are not downloaded by default on metered (generally mobile) networks. Vous pouvez changer cela dans les paramètres.
 
 If the list of addresses is long, you can collapse the addresses section with the *less* icon at the top of the addresses section.
 
@@ -491,7 +491,7 @@ See [here](https://support.google.com/mail/answer/7126229) for Google's instruct
 <br />
 
 <a name="faq7"></a>
-**(7) Why are sent messages not appearing (directly) in the sent folder?**
+Pourquoi les messages n'apparaissent-ils pas (directement) dans le dossier  « envoyé  » ?
 
 Sent messages are normally moved from the outbox to the sent folder as soon as your provider adds sent messages to the sent folder. This requires a sent folder to be selected in the account settings and the sent folder to be set to synchronizing.
 
@@ -504,7 +504,7 @@ Some providers do not keep track of sent messages or the used SMTP server might 
 <br />
 
 <a name="faq8"></a>
-**(8) Can I use a Microsoft Exchange account?**
+Est-il possible d'utiliser un compte Microsoft Exchange ?
 
 You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case. See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
 
@@ -850,10 +850,11 @@ Possible causes are:
 
 * A firewall or router is blocking connections to the server
 * The host name or port number is invalid
-* The are problems with the internet connection
+* Il y a des problèmes avec la connexion Internet
+* Il y a des problèmes avec la résolution des noms de domaine (Yandex : essayez de désactiver le DNS privé dans les paramètres Android)
 * Le serveur de messagerie refuse d'accepter des connexions (externes)
-* The email server is refusing to accept a message, for example because it is too large or contains unacceptable links
-* There are too many connections to the server, see also the next question
+* Le serveur de messagerie refuse d'accepter un message, par exemple parce qu'il est trop grand ou qu'il contient des liens inacceptables
+* Il y a trop de connexions au serveur, voir aussi la question suivante
 
 Many public Wi-Fi networks block outgoing email to prevent spam. Sometimes you can workaround this by using another SMTP port. See the documentation of the provider for the usable port numbers.
 
@@ -2172,6 +2173,7 @@ Note that:
 * Google does not expose details (name, e-mail, etc) about buyers to developers
 * An app like FairEmail cannot select which Google account to use
 * It may take a while until the Play store app has synchronized a purchase to another device
+* Les achats du Play Store ne peuvent pas être utilisés sans le Play Store, ce qui n'est pas autorisé par les règles du Play Store
 
 If you cannot solve the problem with the purchase, you will have to contact Google about it.
 

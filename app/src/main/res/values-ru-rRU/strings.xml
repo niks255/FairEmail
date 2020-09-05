@@ -127,6 +127,7 @@
     <string name="menu_rate">Оценить приложение</string>
     <string name="title_welcome">Добро пожаловать</string>
     <string name="title_eula">Пользовательское соглашение</string>
+    <string name="title_contributors">Имена разработчиков</string>
     <string name="title_agree">Принимаю</string>
     <string name="title_disagree">Не принимаю</string>
     <string name="title_version">Версия %1$s</string>
@@ -1183,6 +1184,7 @@
     <string name="title_enabled">Включено</string>
     <string name="title_executing">Выполнение</string>
     <string name="title_completed">Завершено</string>
+    <string name="title_default_changed">Значение \"по умолчанию\" изменено</string>
     <string name="title_clipboard_copy">Копировать в буфер</string>
     <string name="title_clipboard_copied">Скопировано в буфер</string>
     <string name="title_ask_what">Спросить о действии</string>

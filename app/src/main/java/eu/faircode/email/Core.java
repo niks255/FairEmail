@@ -136,6 +136,7 @@ class Core {
     private static final int SYNC_BATCH_SIZE = 20;
     private static final int DOWNLOAD_BATCH_SIZE = 20;
     private static final long YIELD_DURATION = 200L; // milliseconds
+    private static final long JOIN_WAIT = 180 * 1000L; // milliseconds
     private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
     private static final int LOCAL_RETRY_MAX = 2;
     private static final long LOCAL_RETRY_DELAY = 5 * 1000L; // milliseconds
@@ -872,7 +873,7 @@ class Core {
 
         // Add message
         Long newuid = null;
-        if (istore.hasCapability("UIDPLUS")) {
+        if (MessageHelper.hasCapability(ifolder, "UIDPLUS")) {
             // https://tools.ietf.org/html/rfc4315
             AppendUID[] uids = ifolder.appendUIDMessages(new Message[]{imessage});
             if (uids != null && uids.length > 0 && uids[0] != null && uids[0].uid > 0) {
@@ -954,7 +955,8 @@ class Core {
                 db.message().deleteMessage(message.id);
             }
 
-        boolean canMove = istore.hasCapability("MOVE");
+        // Some servers return different capabilities for different sessions
+        boolean canMove = MessageHelper.hasCapability(ifolder, "MOVE");
 
         // Some providers do not support the COPY operation for drafts
         boolean draft = (EntityFolder.DRAFTS.equals(folder.type) || EntityFolder.DRAFTS.equals(target.type));
@@ -1920,15 +1922,25 @@ class Core {
                         }
 
                         msgid = uidlMsgId.get(uidl);
-                        if (msgid == null)
+                        if (msgid == null) {
                             msgid = helper.getMessageID();
-                        else {
+                            if (TextUtils.isEmpty(msgid))
+                                msgid = uidl;
+                        } else {
                             Log.i(folder.name + " POP having uidl=" + uidl);
                             continue;
                         }
                     } else {
                         uidl = null;
                         msgid = helper.getMessageID();
+
+                        if (TextUtils.isEmpty(msgid)) {
+                            Long time = helper.getReceived();
+                            if (time == null)
+                                time = helper.getSent();
+                            if (time != null)
+                                msgid = Long.toString(time);
+                        }
 
                         if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
                             Log.i(folder.name + " POP having msgid=" + msgid);
@@ -4141,12 +4153,31 @@ class Core {
 
         void join(Thread thread) {
             boolean joined = false;
+            boolean interrupted = false;
+            String name = thread.getName();
             while (!joined)
                 try {
-                    Log.i("Joining " + thread.getName());
-                    thread.join();
-                    joined = true;
-                    Log.i("Joined " + thread.getName());
+                    Log.i("Joining " + name +
+                            " alive=" + thread.isAlive() +
+                            " state=" + thread.getState());
+
+                    thread.join(JOIN_WAIT);
+
+                    // https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html
+                    Thread.State state = thread.getState();
+                    if (thread.isAlive()) {
+                        if (interrupted)
+                            Log.e("Join " + name + " failed state=" + state + " interrupted=" + interrupted);
+                        if (interrupted)
+                            joined = true; // give up
+                        else {
+                            thread.interrupt();
+                            interrupted = true;
+                        }
+                    } else {
+                        Log.i("Joined " + name + " " + " state=" + state);
+                        joined = true;
+                    }
                 } catch (InterruptedException ex) {
                     Log.w(thread.getName() + " join " + ex.toString());
                 }

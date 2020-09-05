@@ -133,6 +133,7 @@
     <string name="title_welcome">Welcome</string>
     <string name="title_eula">End-user license agreement</string>
     <string name="title_gplv3" translatable="false">GNU General Public License - Version 3</string>
+    <string name="title_contributors">Contributors</string>
     <string name="title_agree">I agree</string>
     <string name="title_disagree">I disagree</string>
 
@@ -164,7 +165,7 @@
     <string name="title_setup_wizard_new">I need a new email address</string>
     <string name="title_setup_wizard_remark">Go \'back\' to go to the inbox</string>
     <string name="title_setup_gmail" translatable="false">Gmail</string>
-    <string name="title_setup_outlook" translatable="false">Outlook</string>
+    <string name="title_setup_outlook" translatable="false">Outlook, Live, Hotmail</string>
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
     <string name="title_setup_activesync" translatable="false">Exchange ActiveSync</string>
     <string name="title_setup_other">Other provider</string>
@@ -1306,6 +1307,7 @@
     <string name="title_enabled">Enabled</string>
     <string name="title_executing">Executing</string>
     <string name="title_completed">Completed</string>
+    <string name="title_default_changed">Default changed</string>
     <string name="title_clipboard_copy">Copy to clipboard</string>
     <string name="title_clipboard_copied">Copied to clipboard</string>
     <string name="title_ask_what">Ask what to do</string>
@@ -1351,6 +1353,7 @@
     <string name="title_pro_price">Why are the pro features so expensive?</string>
     <string name="title_pro_restore">How can I restore a purchase?</string>
     <string name="title_pro_pending">Purchase pending</string>
+    <string name="title_pro_response" translatable="false">Response</string>
     <string name="title_pro_activated">All pro features are activated</string>
     <string name="title_pro_valid">All pro features activated</string>
     <string name="title_pro_invalid">Invalid response</string>

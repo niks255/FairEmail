@@ -126,6 +126,7 @@
     <string name="menu_rate">Oceń aplikację</string>
     <string name="title_welcome">Witaj</string>
     <string name="title_eula">Umowa licencyjna użytkownika końcowego</string>
+    <string name="title_contributors">Współtwórcy</string>
     <string name="title_agree">Zgadzam się</string>
     <string name="title_disagree">Nie zgadzam się</string>
     <string name="title_version">Wersja %1$s</string>
@@ -1182,6 +1183,7 @@
     <string name="title_enabled">Włączone</string>
     <string name="title_executing">Wykonywanie</string>
     <string name="title_completed">Ukończone</string>
+    <string name="title_default_changed">Zmieniono wartość domyślną</string>
     <string name="title_clipboard_copy">Kopiuj do schowka</string>
     <string name="title_clipboard_copied">Skopiowano do schowka</string>
     <string name="title_ask_what">Zapytaj co zrobić</string>
