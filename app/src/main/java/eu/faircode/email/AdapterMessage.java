@@ -90,6 +90,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.textclassifier.ConversationAction;
 import android.view.textclassifier.ConversationActions;
@@ -263,6 +264,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private static boolean debug;
 
     private boolean gotoTop = false;
+    private Integer gotoPos = null;
     private boolean firstClick = false;
     private int searchResult = 0;
     private AsyncPagedListDiffer<TupleMessageEx> differ;
@@ -755,30 +757,41 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 btnCalendarMaybe.setOnLongClickListener(this);
 
                 gestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-                    private float scale = 1.0f;
                     private Toast toast = null;
 
                     @Override
                     public boolean onScale(ScaleGestureDetector detector) {
                         TupleMessageEx message = getMessage();
                         if (message != null) {
+                            // Scale factor
                             float factor = detector.getScaleFactor();
                             float size = tvBody.getTextSize() * factor;
+                            float scale = (textSize == 0 ? 1.0f : size / (textSize * message_zoom / 100f));
+
+                            // Text size
                             properties.setSize(message.id, size);
                             tvBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
 
-                            scale = scale * factor;
-                            String perc = Math.round(scale * message_zoom) + " %";
+                            // Image size
+                            Spanned spanned = (Spanned) tvBody.getText();
+                            for (ImageSpan img : spanned.getSpans(0, spanned.length(), ImageSpan.class)) {
+                                Drawable d = img.getDrawable();
+                                ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(img.getSource());
+                                ImageHelper.fitDrawable(d, a, scale, tvBody);
+                            }
+
+                            // Feedback
+                            String perc = Math.round(scale * 100) + " %";
                             if (toast != null)
                                 toast.cancel();
                             toast = ToastEx.makeText(context, perc, Toast.LENGTH_SHORT);
                             toast.show();
                         }
+
                         return true;
                     }
                 });
             }
-
 
             if (accessibility) {
                 view.setAccessibilityDelegate(accessibilityDelegateHeader);
@@ -958,7 +971,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 vwColor.setTag(colorBackground);
                 vwColor.setBackgroundColor(colorBackground);
             }
-            vwColor.setAlpha(message.ui_seen ? Helper.LOW_LIGHT : 1.0f);
             vwColor.setVisibility(color_stripe ? View.VISIBLE : View.GONE);
 
             // Expander
@@ -1946,6 +1958,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putBoolean("show_quotes", show_quotes);
             args.putInt("zoom", zoom);
 
+            float scale = (size == 0 || textSize == 0 ? 1.0f : size / (textSize * message_zoom / 100f));
+            args.putFloat("scale", scale);
+
             new SimpleTask<Object>() {
                 @Override
                 protected void onPreExecute(Bundle args) {
@@ -1964,6 +1979,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     final boolean show_images = args.getBoolean("show_images");
                     final boolean show_quotes = args.getBoolean("show_quotes");
                     final int zoom = args.getInt("zoom");
+                    final float scale = args.getFloat("scale");
 
                     if (message == null || !message.content)
                         return null;
@@ -2121,7 +2137,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, document, true, new Html.ImageGetter() {
                             @Override
                             public Drawable getDrawable(String source) {
-                                Drawable drawable = ImageHelper.decodeImage(context, message.id, source, show_images, zoom, tvBody);
+                                Drawable drawable = ImageHelper.decodeImage(context, message.id, source, show_images, zoom, scale, tvBody);
 
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                     if (drawable instanceof AnimatedImageDrawable)
@@ -3417,6 +3433,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onInsertContact(String name, String email) {
+            if (TextUtils.isEmpty(name)) {
+                int at = email.indexOf('@');
+                if (at > 0)
+                    name = email.substring(0, at);
+            }
+
             // https://developer.android.com/training/contacts-provider/modify-data
             Intent insert = new Intent();
             insert.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
@@ -3431,8 +3453,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             // https://developer.android.com/training/contacts-provider/modify-data
             Intent edit = new Intent();
             edit.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
-            if (!TextUtils.isEmpty(name))
-                edit.putExtra(ContactsContract.Intents.Insert.NAME, name);
             edit.setAction(Intent.ACTION_EDIT);
             edit.setDataAndTypeAndNormalize(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
             context.startActivity(edit);
@@ -3759,6 +3779,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             aargs.putLong("account", message.account);
             aargs.putInt("protocol", message.accountProtocol);
             aargs.putLong("folder", message.folder);
+            aargs.putString("type", message.folderType);
             aargs.putString("from", MessageHelper.formatAddresses(message.from));
 
             FragmentDialogJunk ask = new FragmentDialogJunk();
@@ -4129,7 +4150,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (bm == null)
                             return null;
 
-                        File file = ImageHelper.getCacheFile(context, id, source);
+                        File file = ImageHelper.getCacheFile(context, id, source, ".png");
                         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                             bm.compress(Bitmap.CompressFormat.PNG, 90, os);
                         }
@@ -5436,6 +5457,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 }
 
+                if (gotoPos != null && currentList != null && currentList.size() > 0) {
+                    properties.scrollTo(gotoPos, 0);
+                    gotoPos = null;
+                }
+
                 if (selectionTracker != null && selectionTracker.hasSelection()) {
                     Selection<Long> selection = selectionTracker.getSelection();
 
@@ -5523,6 +5549,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         } else
             properties.scrollTo(0, 0);
         this.gotoTop = true;
+    }
+
+    void gotoPos(int pos) {
+        if (pos != RecyclerView.NO_POSITION)
+            gotoPos = pos;
     }
 
     void submitList(PagedList<TupleMessageEx> list) {
@@ -5876,6 +5907,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
 
+            etLink.setHorizontallyScrolling(false);
+            etLink.setMaxLines(10);
+            etLink.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                        return true;
+                    } else
+                        return false;
+                }
+            });
+
             ibShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -6116,8 +6160,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             Bundle args = getArguments();
             final long account = args.getLong("account");
-            final long folder = args.getLong("folder");
             final int protocol = args.getInt("protocol");
+            final long folder = args.getLong("folder");
+            final String type = args.getString("type");
             final String from = args.getString("from");
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
@@ -6153,8 +6198,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     lbm.sendBroadcast(
                             new Intent(ActivityView.ACTION_EDIT_RULES)
                                     .putExtra("account", account)
+                                    .putExtra("protocol", protocol)
                                     .putExtra("folder", folder)
-                                    .putExtra("protocol", protocol));
+                                    .putExtra("type", type));
                     dismiss();
                 }
             });

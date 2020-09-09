@@ -2055,6 +2055,8 @@ public class HtmlHelper {
                             case "blockquote":
                                 if (start == 0 || ssb.charAt(start - 1) != '\n')
                                     ssb.insert(start++, "\n");
+                                if (start == ssb.length())
+                                    ssb.append(' ');
                                 if (ssb.length() == 0 || ssb.charAt(ssb.length() - 1) != '\n')
                                     ssb.append("\n");
 
@@ -2117,7 +2119,11 @@ public class HtmlHelper {
                                     else
                                         ssb.setSpan(new BulletSpan(dp6, colorAccent, dp3), start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                 else {
+                                    // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol
                                     int index = 0;
+                                    String s = parent.attr("start");
+                                    if (!TextUtils.isEmpty(s) && TextUtils.isDigitsOnly(s))
+                                        index = Integer.parseInt(s) - 1;
                                     for (Node child : parent.childNodes()) {
                                         if (child instanceof Element &&
                                                 child.nodeName().equals(element.tagName())) {

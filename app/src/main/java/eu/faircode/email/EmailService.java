@@ -263,6 +263,11 @@ public class EmailService implements AutoCloseable {
         properties.put("mail.mime.allowutf8", Boolean.toString(value));
     }
 
+    // https://tools.ietf.org/html/rfc3461
+    void setDsnNotify(String what) {
+        properties.put("mail." + protocol + ".dsn.notify", what);
+    }
+
     void setListener(StoreListener listener) {
         this.listener = listener;
     }
@@ -275,7 +280,7 @@ public class EmailService implements AutoCloseable {
                 account.certificate_alias, account.fingerprint);
         if (password != null) {
             DB db = DB.getInstance(context);
-            int count = db.account().setAccountPassword(account.id, account.password);
+            int count = db.account().setAccountPassword(account.id, password);
             Log.i(account.name + " token refreshed=" + count);
         }
     }
@@ -288,7 +293,7 @@ public class EmailService implements AutoCloseable {
                 identity.certificate_alias, identity.fingerprint);
         if (password != null) {
             DB db = DB.getInstance(context);
-            int count = db.identity().setIdentityPassword(identity.id, identity.password);
+            int count = db.identity().setIdentityPassword(identity.id, password);
             Log.i(identity.email + " token refreshed=" + count);
         }
     }

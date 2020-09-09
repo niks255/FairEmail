@@ -56,6 +56,7 @@ import static android.app.Activity.RESULT_OK;
 public class FragmentAnswer extends FragmentBase {
     private ViewGroup view;
     private EditText etName;
+    private EditText etGroup;
     private CheckBox cbFavorite;
     private CheckBox cbHide;
     private EditTextCompose etText;
@@ -94,6 +95,7 @@ public class FragmentAnswer extends FragmentBase {
 
         // Get controls
         etName = view.findViewById(R.id.etName);
+        etGroup = view.findViewById(R.id.etGroup);
         cbFavorite = view.findViewById(R.id.cbFavorite);
         cbHide = view.findViewById(R.id.cbHide);
         etText = view.findViewById(R.id.etText);
@@ -174,6 +176,7 @@ public class FragmentAnswer extends FragmentBase {
             protected void onExecuted(Bundle args, EntityAnswer answer) {
                 if (savedInstanceState == null) {
                     etName.setText(answer == null ? null : answer.name);
+                    etGroup.setText(answer == null ? null : answer.group);
                     cbFavorite.setChecked(answer == null ? false : answer.favorite);
                     cbHide.setChecked(answer == null ? false : answer.hide);
                     if (answer == null)
@@ -182,7 +185,7 @@ public class FragmentAnswer extends FragmentBase {
                         etText.setText(HtmlHelper.fromHtml(answer.text, false, new Html.ImageGetter() {
                             @Override
                             public Drawable getDrawable(String source) {
-                                return ImageHelper.decodeImage(getContext(), -1, source, true, 0, etText);
+                                return ImageHelper.decodeImage(getContext(), -1, source, true, 0, 1.0f, etText);
                             }
                         }, null, getContext()));
                 }
@@ -246,6 +249,7 @@ public class FragmentAnswer extends FragmentBase {
         Bundle args = new Bundle();
         args.putLong("id", id);
         args.putString("name", etName.getText().toString().trim());
+        args.putString("group", etGroup.getText().toString().trim());
         args.putBoolean("favorite", cbFavorite.isChecked());
         args.putBoolean("hide", cbHide.isChecked());
         args.putString("html", HtmlHelper.toHtml(etText.getText(), getContext()));
@@ -265,12 +269,15 @@ public class FragmentAnswer extends FragmentBase {
             protected Void onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
                 String name = args.getString("name");
+                String group = args.getString("group");
                 boolean favorite = args.getBoolean("favorite");
                 boolean hide = args.getBoolean("hide");
                 String html = args.getString("html");
 
                 if (TextUtils.isEmpty(name))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_name));
+                if (TextUtils.isEmpty(group))
+                    group = null;
 
                 Document document = JsoupEx.parse(html);
 
@@ -278,6 +285,7 @@ public class FragmentAnswer extends FragmentBase {
                 if (id < 0) {
                     EntityAnswer answer = new EntityAnswer();
                     answer.name = name;
+                    answer.group = group;
                     answer.favorite = favorite;
                     answer.hide = hide;
                     answer.text = document.body().html();
@@ -285,6 +293,7 @@ public class FragmentAnswer extends FragmentBase {
                 } else {
                     EntityAnswer answer = db.answer().getAnswer(id);
                     answer.name = name;
+                    answer.group = group;
                     answer.favorite = favorite;
                     answer.hide = hide;
                     answer.text = document.body().html();
@@ -342,7 +351,7 @@ public class FragmentAnswer extends FragmentBase {
             SpannableStringBuilder ssb = new SpannableStringBuilder(etText.getText());
             ssb.insert(start, " \uFFFC"); // Object replacement character
             String source = uri.toString();
-            Drawable d = ImageHelper.decodeImage(getContext(), -1, source, true, 0, etText);
+            Drawable d = ImageHelper.decodeImage(getContext(), -1, source, true, 0, 1.0f, etText);
             ImageSpan is = new ImageSpan(d, source);
             ssb.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             etText.setText(ssb);

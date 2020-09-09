@@ -15,6 +15,9 @@
     <string name="channel_error">Foutmeldingen</string>
     <string name="channel_alert">Servermeldingen</string>
     <string name="channel_group_contacts">Contacten</string>
+    <string name="channel_service_description">Synchroniseren en bewaken van accounts</string>
+    <string name="channel_send_description">Verzenden van berichten</string>
+    <string name="channel_notification_description">Meldingen voor nieuwe berichten</string>
     <plurals name="page_conversation">
         <item quantity="one">Gesprek</item>
         <item quantity="other">Gesprekken</item>
@@ -956,6 +959,7 @@
     <string name="title_answer_caption">Bewerk sjabloon</string>
     <string name="title_answer_reply">Antwoord sjabloon</string>
     <string name="title_answer_name">Sjabloonnaam</string>
+    <string name="title_answer_group">Sjabloongroep (optioneel)</string>
     <string name="title_answer_favorite">Favoriet</string>
     <string name="title_answer_hide">Verbergen in menu\'s</string>
     <string name="title_answer_text">Sjabloontekst</string>
@@ -972,7 +976,7 @@
     <string name="title_rule_keyword">Sleutelwoord toevoegen</string>
     <string name="title_rule_move">Verplaatsen</string>
     <string name="title_rule_copy">Kopiëren (label)</string>
-    <string name="title_rule_answer">Beantwoorden</string>
+    <string name="title_rule_answer">Beantwoorden/doorsturen</string>
     <string name="title_rule_tts">Tekst-naar-spraak</string>
     <string name="title_rule_automation">Automatisering</string>
     <string name="title_rule_caption">Bewerk regel</string>
@@ -998,7 +1002,9 @@
     <string name="title_rule_thread">Alle berichten in hetzelfde gesprek en dezelfde map</string>
     <string name="title_rule_identity">Identiteit</string>
     <string name="title_rule_template">Antwoord sjabloon</string>
+    <string name="title_rule_forward_to">Doorsturen naar</string>
     <string name="title_rule_cc">Antwoord op CC adressen</string>
+    <string name="title_rule_with_attachments">Met bijlagen</string>
     <string name="title_rule_answer_remark">Slechts één antwoord zal worden verzonden voor elk gesprek, om lussen te voorkomen</string>
     <string name="title_rule_name_missing">Regelnaam ontbreekt</string>
     <string name="title_rule_condition_missing">Conditie ontbreekt</string>
@@ -1212,6 +1218,13 @@
     <string name="title_log">Logboek</string>
     <string name="title_auto_scroll">Automatisch scrollen</string>
     <string name="title_log_clear">Wissen</string>
+    <string name="title_rules_search_hint">Zoek naam of voorwaarde</string>
+    <string name="title_rules_export">Exporteer regels</string>
+    <string name="title_rules_import">Importeer regels</string>
+    <string name="title_rules_delete_all">Verwijder alle regels</string>
+    <string name="title_rules_delete_junk">Verwijder spam-regels</string>
+    <string name="title_rules_delete_all_confirm">Alle regels verwijderen?</string>
+    <string name="title_rules_delete_junk_confirm">Alle regels die berichten verplaatsen naar de spam-map verwijderen?</string>
     <string name="title_debug_info">Foutopsporing</string>
     <string name="title_debug_info_remark">Beschrijf alstublieft het probleem en de tijd van het probleem:</string>
     <string name="title_crash_info_remark">Beschrijf alstublieft wat u aan het doen was toen de app crashte:</string>

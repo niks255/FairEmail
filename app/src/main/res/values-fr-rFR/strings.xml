@@ -15,6 +15,9 @@
     <string name="channel_error">Erreurs</string>
     <string name="channel_alert">Alertes de serveur</string>
     <string name="channel_group_contacts">Contacts</string>
+    <string name="channel_service_description">Synchronisation et surveillance des comptes</string>
+    <string name="channel_send_description">Envoi des messages</string>
+    <string name="channel_notification_description">Notifications de nouveaux messages</string>
     <plurals name="page_conversation">
         <item quantity="one">Conversation</item>
         <item quantity="other">Conversations</item>
@@ -822,7 +825,7 @@
     <string name="title_add_image_privacy">Supprimer les informations confidentielles sensibles</string>
     <string name="title_add_image_privacy_remark">Informations de géolocalisation, numéros de série, etc.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
-    <string name="title_add_image_select">Sélectionner un fichier</string>
+    <string name="title_add_image_select">Choisir un fichier</string>
     <string name="title_add_attachment">Ajouter une pièce jointe</string>
     <string name="title_attachment_file">Joindre un fichier</string>
     <string name="title_attachment_photo">Prendre une photo</string>
@@ -957,6 +960,7 @@
     <string name="title_answer_caption">Modifier le modèle</string>
     <string name="title_answer_reply">Modèle de réponse</string>
     <string name="title_answer_name">Nom du modèle</string>
+    <string name="title_answer_group">Groupe de modèles (optionnel)</string>
     <string name="title_answer_favorite">Favori</string>
     <string name="title_answer_hide">Masquer du menu « Répondre »</string>
     <string name="title_answer_text">Texte du modèle</string>
@@ -973,7 +977,7 @@
     <string name="title_rule_keyword">Ajouter un mot-clé</string>
     <string name="title_rule_move">Déplacer</string>
     <string name="title_rule_copy">Copier (étiquette)</string>
-    <string name="title_rule_answer">Répondre</string>
+    <string name="title_rule_answer">Répondre/transférer</string>
     <string name="title_rule_tts">Synthèse vocale</string>
     <string name="title_rule_automation">Automatisation</string>
     <string name="title_rule_caption">Modifier la règle</string>
@@ -999,7 +1003,9 @@
     <string name="title_rule_thread">Tous les messages dans la même conversation et le même dossier</string>
     <string name="title_rule_identity">Identité</string>
     <string name="title_rule_template">Répondre avec un modèle</string>
+    <string name="title_rule_forward_to">Transférer à</string>
     <string name="title_rule_cc">Répondre aux adresses Cc</string>
+    <string name="title_rule_with_attachments">Avec pièces jointes</string>
     <string name="title_rule_answer_remark">Une seule réponse par conversation sera envoyée afin d\'éviter les réponses en boucle</string>
     <string name="title_rule_name_missing">Nom de règle manquant</string>
     <string name="title_rule_condition_missing">Condition manquante</string>
@@ -1214,6 +1220,13 @@
     <string name="title_log">Journal</string>
     <string name="title_auto_scroll">Défilement automatique</string>
     <string name="title_log_clear">Effacer</string>
+    <string name="title_rules_search_hint">Rechercher un nom ou une condition</string>
+    <string name="title_rules_export">Exporter les règles</string>
+    <string name="title_rules_import">Importer les règles</string>
+    <string name="title_rules_delete_all">Supprimer toutes les règles</string>
+    <string name="title_rules_delete_junk">Supprimer les règles de spam</string>
+    <string name="title_rules_delete_all_confirm">Supprimer toutes les règles ?</string>
+    <string name="title_rules_delete_junk_confirm">Supprimer toutes les règles qui déplacent les messages dans le dossier spam ?</string>
     <string name="title_debug_info">Information de débogage</string>
     <string name="title_debug_info_remark">Veuillez décrire le problème et indiquer l\'heure à laquelle il est survenu :</string>
     <string name="title_crash_info_remark">Veuillez décrire ce que vous faisiez lorsque l’application s’est arrêtée :</string>

@@ -15,6 +15,9 @@
     <string name="channel_error">Σφάλματα</string>
     <string name="channel_alert">Ειδοποιήσεις διακομιστή</string>
     <string name="channel_group_contacts">Επαφές</string>
+    <string name="channel_service_description">Συγχρονισμός και παρακολούθηση λογαριασμών</string>
+    <string name="channel_send_description">Αποστολή μηνυμάτων</string>
+    <string name="channel_notification_description">Ειδοποιήσεις νέων μηνυμάτων</string>
     <plurals name="page_conversation">
         <item quantity="one">Συζήτηση</item>
         <item quantity="other">Συζητήσεις</item>
@@ -952,6 +955,7 @@
     <string name="title_answer_caption">Επεξεργασία προτύπου</string>
     <string name="title_answer_reply">Πρότυπο απάντησης</string>
     <string name="title_answer_name">Όνομα προτύπου</string>
+    <string name="title_answer_group">Ομάδα προτύπων (προαιρετικό)</string>
     <string name="title_answer_favorite">Αγαπημένα</string>
     <string name="title_answer_hide">Απόκρυψη από τα μενού</string>
     <string name="title_answer_text">Κείμενο προτύπου</string>
@@ -968,7 +972,7 @@
     <string name="title_rule_keyword">Προσθήκη λέξης-κλειδιού</string>
     <string name="title_rule_move">Μετακίνηση</string>
     <string name="title_rule_copy">Αντιγραφή (ετικέτα)</string>
-    <string name="title_rule_answer">Απάντηση</string>
+    <string name="title_rule_answer">Απάντηση/Προώθηση</string>
     <string name="title_rule_tts">Μετατροπή κειμένου σε φωνή</string>
     <string name="title_rule_automation">Αυτοματοποίηση</string>
     <string name="title_rule_caption">Επεξεργασία κανόνα</string>
@@ -994,7 +998,9 @@
     <string name="title_rule_thread">Όλα τα μηνύματα στην ίδια συζήτηση και τον ίδιο φάκελο</string>
     <string name="title_rule_identity">Ταυτότητα</string>
     <string name="title_rule_template">Πρότυπο απάντησης</string>
+    <string name="title_rule_forward_to">Προώθηση σε</string>
     <string name="title_rule_cc">Απάντηση στις διευθύνσεις Κοιν.</string>
+    <string name="title_rule_with_attachments">Με συνημμένα</string>
     <string name="title_rule_answer_remark">Θα αποστέλλεται μόνο μία απάντηση ανά συζήτηση, για να αποφευχθεί ένας ατέρμονος κύκλος απαντήσεων</string>
     <string name="title_rule_name_missing">Λείπει το όνομα του κανόνα</string>
     <string name="title_rule_condition_missing">Λείπει συνθήκη</string>
@@ -1207,6 +1213,13 @@
     <string name="title_log">Αρχείο καταγραφής</string>
     <string name="title_auto_scroll">Αυτόματη κύλιση</string>
     <string name="title_log_clear">Καθαρισμός</string>
+    <string name="title_rules_search_hint">Αναζήτηση με όνομα ή συνθήκη</string>
+    <string name="title_rules_export">Εξαγωγή κανόνων</string>
+    <string name="title_rules_import">Εισαγωγή κανόνων</string>
+    <string name="title_rules_delete_all">Διαγραφή όλων των κανόνων</string>
+    <string name="title_rules_delete_junk">Διαγραφή κανόνων ανεπιθ. αλληλογραφίας</string>
+    <string name="title_rules_delete_all_confirm">Διαγραφή όλων των κανόνων;</string>
+    <string name="title_rules_delete_junk_confirm">Να διαγραφούν όλοι οι κανόνες μετακίνησης μηνυμάτων στην ανεπιθ. αλληλογραφία;</string>
     <string name="title_debug_info">Πληροφορίες απασφαλμάτωσης</string>
     <string name="title_debug_info_remark">Παρακαλούμε, περιγράψτε το πρόβλημα καθώς και τον χρόνο εμφάνισής του:</string>
     <string name="title_crash_info_remark">Παρακαλούμε, περιγράψτε τι κάνατε τη στιγμή που η εφαρμογή σταμάτησε να λειτουργεί:</string>

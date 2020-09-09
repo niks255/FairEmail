@@ -19,6 +19,10 @@
     <string name="channel_alert">Server alerts</string>
     <string name="channel_group_contacts">Contacts</string>
 
+    <string name="channel_service_description">Synchronizing and monitoring of accounts</string>
+    <string name="channel_send_description">Sending of messages</string>
+    <string name="channel_notification_description">New message notifications</string>
+
     <plurals name="page_conversation">
         <item quantity="one">Conversation</item>
         <item quantity="other">Conversations</item>
@@ -1086,6 +1090,7 @@
     <string name="title_answer_caption">Edit template</string>
     <string name="title_answer_reply">Reply template</string>
     <string name="title_answer_name">Template name</string>
+    <string name="title_answer_group">Template group (optional)</string>
     <string name="title_answer_favorite">Favorite</string>
     <string name="title_answer_hide">Hide from menus</string>
     <string name="title_answer_text">Template text</string>
@@ -1103,7 +1108,7 @@
     <string name="title_rule_keyword">Add keyword</string>
     <string name="title_rule_move">Move</string>
     <string name="title_rule_copy">Copy (label)</string>
-    <string name="title_rule_answer">Reply</string>
+    <string name="title_rule_answer">Reply/forward</string>
     <string name="title_rule_tts">Text to speech</string>
     <string name="title_rule_automation">Automation</string>
 
@@ -1131,7 +1136,9 @@
     <string name="title_rule_thread">All messages in same conversation and folder</string>
     <string name="title_rule_identity">Identity</string>
     <string name="title_rule_template">Reply template</string>
+    <string name="title_rule_forward_to">Forward to</string>
     <string name="title_rule_cc">Reply to CC addresses</string>
+    <string name="title_rule_with_attachments">With attachments</string>
     <string name="title_rule_answer_remark">Only one reply will be sent for any conversation, to avoid reply loops</string>
     <string name="title_rule_name_missing">Rule name missing</string>
     <string name="title_rule_condition_missing">Condition missing</string>
@@ -1366,6 +1373,13 @@
     <string name="title_log">Log</string>
     <string name="title_auto_scroll">Auto scroll</string>
     <string name="title_log_clear">Clear</string>
+    <string name="title_rules_search_hint">Search name or condition</string>
+    <string name="title_rules_export">Export rules</string>
+    <string name="title_rules_import">Import rules</string>
+    <string name="title_rules_delete_all">Delete all rules</string>
+    <string name="title_rules_delete_junk">Delete spam rules</string>
+    <string name="title_rules_delete_all_confirm">Delete all rules?</string>
+    <string name="title_rules_delete_junk_confirm">Delete all rules moving messages to the spam folder?</string>
     <string name="title_debug_info">Debug info</string>
     <string name="title_debug_info_remark">Please describe the problem and indicate the time of the problem:</string>
     <string name="title_crash_info_remark">Please describe what you were doing when the app crashed:</string>

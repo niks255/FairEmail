@@ -37,7 +37,7 @@
         name="Live"
         domain="live\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
-        order="2"
+        order="3"
         partial="false">
         <imap
             host="outlook.office365.com"
@@ -52,7 +52,7 @@
         name="Hotmail"
         domain="hotmail\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
-        order="2"
+        order="4"
         partial="false">
         <imap
             host="outlook.office365.com"
@@ -80,7 +80,7 @@
         name="Office365"
         id="office365"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
-        order="3"
+        order="5"
         partial="false">
         <imap
             host="outlook.office365.com"
@@ -915,6 +915,19 @@
             starttls="false" />
         <smtp
             host="smtp.mail.us-west-2.awsapps.com"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="OnMail"
+        enabled="false"
+        link="https://support.onmail.com/hc/en-us/articles/360048987651-Connecting-My-Custom-Domain-to-Edison-Mail">
+        <imap
+            host="imap.onmail.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.onmail.com"
             port="465"
             starttls="false" />
     </provider>

@@ -1,64 +1,64 @@
-# FairEmail support
+# Підтримка FairEmail
 
-If you have a question, please check the frequently asked questions below first. At the bottom, you can find out how to ask other questions, request features, and report bugs.
+Якщо у вас виникли  запитання, спершу ознайомтеся з найпоширенішими питаннями нижче. Нижче, Ви можете отримати відповіді або задати питаня.
 
-## Index
+## Перелік
 
-* [Authorizing accounts](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [How to ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Known problems](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planned features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Frequently requested features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Frequently Asked Questions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
+* [Авторизація облікогово акаунту](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
+* [Як ...? ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
+* [Найпоширеніші складнощі](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
+* [Заплановані можливості](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
+* [Найпопулярніші функції](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
+* [Найбільш поширенні питання](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
 * [Підтримка](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-support)
 
-## Authorizing accounts
+## Авторизація облікового акаунту
 
-In most cases, the quick setup will be able to automatically identify the correct configuration.
+У більшості випадків швидке налаштування зможе автоматично визначити правильну конфігурацію.
 
-If the quick setup fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Якщо швидкі налаштування  не вдалось виконати, вам потрібно буде вручну створити обліковий запис (для отримання електронної пошти) та посвідчення особи (для надсилання електронної пошти). Для цього вам знадобляться адреси серверів IMAP та SMTP та номери портів, незалежно від того, слід використовувати SSL / TLS або STARTTLS і ваше ім’я користувача (здебільшого, але не завжди, вашу електронну адресу) та ваш пароль.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+Пошуку * IMAP * та імені постачальника здебільшого достатньо, щоб знайти потрібну документацію.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+У деяких випадках вам потрібно буде ввімкнути зовнішній доступ до свого облікового запису та / або використовувати спеціальний (додаток) пароль, наприклад, коли увімкнено двофакторну автентифікацію.
 
-For authorizing:
+Для авторизації:
 
-* Gmail / G suite, see [question 6](#user-content-faq6)
-* Outlook / Live / Hotmail, see [question 14](#user-content-faq14)
-* Office 365, see [question 14](#user-content-faq156)
-* Microsoft Exchange, see [question 8](#user-content-faq8)
-* Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
-* Apple iCloud, see [question 148](#user-content-faq148)
-* Free.fr, see [question 157](#user-content-faq157)
+* Gmail / G набори, дивіться [питання 6](#user-content-faq6)
+* Outlook / Live / Hotmail, дивіться[питання14](#user-content-faq14)
+* Офіс 365, дивіться [питання 14](#user-content-faq156)
+* Microsoft Exchange, див. [питання 8](#user-content-faq8)
+* Yahoo, AOL and Sky, див.[питання 88](#user-content-faq88)
+* Apple iCloud, див. [питання 148](#user-content-faq148)
+* Free.fr, див. [питання 157](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+Будь ласка, перегляньте [ тут ](#user-content-faq22), щоб отримати поширені повідомлення про помилки та способи їх усунення.
 
-Related questions:
+Інші питання
 
-* [Is OAuth supported?](#user-content-faq111)
-* [Why is ActiveSync not supported?](#user-content-faq133)
+* [Чи підтримується OAuth?](#user-content-faq111)
+* [Чому ActiveSync не підтримується?](#user-content-faq133)
 
 <a name="howto">
 
-## How to ...?
+## Як ...?
 
-* Change the account name: Setup, step 1, Manage, tap account
-* Change the swipe left/right target: Setup, Behavior, Set swipe actions
-* Change password: Setup, step 1, Manage, tap account, change password
-* Set a signature: Setup, step 2, Manage, tap identity, Edit signature.
-* Add CC and BCC addresses: tap the people's icon at the end of the subject
-* Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
-* Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
-* Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
-* Load more messages: long press a folder in the folder list, select *Synchronize more messages*
-* Delete a message, skipping trash: in the 3-dots menu just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
-* Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
-* Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
-* Undo send: Outbox, tap message, tap undo icon button
-* Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
-* Change system folders: Setup, step 1, Manage, tap account, at the bottom
-* Export/import settings: Setup, navigation/hamburger menu
+* Зміна назви облікового запису: Налаштування, крок 1, Керування, торкніться облікового запису
+* Змінення цілі проведення пальцем вліво / вправо: Налаштування, Поведінка, Налаштування дій проведення
+* Змінити пароль: Налаштування, крок 1, Керування, торкніться облікового запису, зміна паролю
+* Встановіть підпис: Налаштування, крок 2, Керування, торкніться посвідчення, Редагувати підпис.
+* Додайте адреси CC та BCC: торкніться значка людей у кінці теми
+* Перехід до наступного / попереднього повідомлення про архівування / видалення: у налаштуваннях поведінки вимкніть * Автоматично закривати бесіди * та виберіть * Перейти до наступної / попередньої бесіди * для * При закритті бесіди</li>
+* Додайте папку до уніфікованої папки "Вхідні": натисніть і утримуйте папку у списку папок і поставте галочку * Показати в уніфікованій папці "Вхідні" *
+* Додайте папку в меню навігації: натисніть і утримуйте папку у списку папок і поставте галочку * Показати в меню навігації *
+* Завантажте більше повідомлень: довго натискайте папку зі списку папок, виберіть * Синхронізувати більше повідомлень *
+* Видаліть повідомлення, пропустивши кошик: у меню з трьома крапками безпосередньо над текстом повідомлення * Видалити * або скасуйте вибір папки кошика в налаштуваннях облікового запису
+* Видалення облікового запису / посвідчення: Крок налаштування 1/2, Керування, торкніться облікового запису / посвідчення, меню з трьома крапками, Видалити
+* Видалення папки: тривале натискання папки зі списку папок, редагування властивостей, меню з трьома крапками, видалення
+* Скасувати надсилання: Вихідні, торкніться повідомлення, торкніться кнопки скасувати піктограму
+* Зберігайте надіслані повідомлення у папці "Вхідні": [ див. Цей FAQ ](#user-content-faq142)
+* Зміна системних папок: Налаштування, крок 1, Керування, торкніться облікового запису внизу
+* Параметри експорту / імпорту: Налаштування, меню навігації / гамбургер меню</ul>
 
 ## Known problems
 
@@ -222,7 +222,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(104) What do I need to know about error reporting?](#user-content-faq104)
 * [(105) How does the roam-like-at-home option work?](#user-content-faq105)
 * [(106) Which launchers can show a badge count with the number of unread messages?](#user-content-faq106)
-* [(107) How do I used colored stars?](#user-content-faq107)
+* [(107) How do I use colored stars?](#user-content-faq107)
 * [(108) Can you add permanently delete messages from any folder?](#user-content-faq108)
 * [~~(109) Why is 'select account' available in official versions only?~~](#user-content-faq109)
 * [(110) Why are (some) messages empty and/or attachments corrupted?](#user-content-faq110)
@@ -332,7 +332,7 @@ Android shows icons of high priority status bar notifications first and will hid
 
 The status bar notification can be disabled via the notification settings of FairEmail:
 
-* Android 8 Oreo and later: tap the *Service channel* button and disable the notification channel via the Android settings
+* Android 8 Oreo and later: tap the *Receive channel* button and disable the channel via the Android settings (this won't disable new message notifications)
 * Android 7 Nougat and before: enabled *Use background service to synchronize messages*, but be sure to read the remark below the setting
 
 You can switch to periodically synchronization of messages in the receive settings to remove the notification, but be aware that this might use more battery power. See [here](#user-content-faq39) for more details about battery usage.
@@ -612,6 +612,7 @@ Signed-only messages are supported, encrypted-only messages are not supported.
 
 Common errors:
 
+* *No key*: there is no PGP key available for one of the listed email addresses
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 
 *S/MIME*
@@ -946,6 +947,8 @@ Alternatively, you might be able to enable the *Files* app again using the Andro
 
 Yes, you can translate the texts of FairEmail in your own language [on Crowdin](https://crowdin.com/project/open-source-email). Registration is free.
 
+If you would like your name or alias to be included in the list of contributors in *About* the app, please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
+
 <br />
 
 <a name="faq27"></a>
@@ -953,15 +956,15 @@ Yes, you can translate the texts of FairEmail in your own language [on Crowdin](
 
 External image:
 
-![External image](https://raw.githubusercontent.com/google/material-design-icons/master/image/1x_web/ic_image_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
 
 Embedded image:
 
-![Embedded image](https://raw.githubusercontent.com/google/material-design-icons/master/image/1x_web/ic_photo_library_black_48dp.png)
+![Embedded image](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
 
 Broken image:
 
-![Broken image](https://raw.githubusercontent.com/google/material-design-icons/master/image/1x_web/ic_broken_image_black_48dp.png)
+![Broken image](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
 
 Note that downloading external images from a remote server can be used to record you did see a message, which you likely don't want if the message is spam or malicious.
 
@@ -1369,11 +1372,11 @@ There are almost no providers offering the [JMAP](https://jmap.io/) protocol, so
 
 The email icon in the folder list can be open (outlined) or closed (solid):
 
-![External image](https://raw.githubusercontent.com/google/material-design-icons/master/communication/1x_web/ic_mail_outline_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
 
 Message bodies and attachments are not downloaded by default.
 
-![External image](https://raw.githubusercontent.com/google/material-design-icons/master/communication/1x_web/ic_email_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png)
 
 Message bodies and attachments are downloaded by default.
 
@@ -1748,7 +1751,7 @@ Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a trackin
 
 FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
 
-![External image](https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_my_location_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
 
 Automatic recognition of tracking images can be disabled in the privacy settings.
 
@@ -2483,7 +2486,7 @@ Version 1.1082 added a local trash folder. Note that trashing a message will per
 
 To record voice notes you can press this icon in the bottom action bar of the message composer:
 
-![External image](https://raw.githubusercontent.com/google/material-design-icons/master/action/1x_web/ic_record_voice_over_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png)
 
 This requires a compatible audio recorder app to be installed. In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION) needs to be supported.
 

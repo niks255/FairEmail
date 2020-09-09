@@ -74,11 +74,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -285,10 +285,9 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_RECORD_AUDIO = 9;
     private static final int REQUEST_OPENPGP = 10;
     private static final int REQUEST_CONTACT_GROUP = 11;
-    private static final int REQUEST_ANSWER = 12;
-    private static final int REQUEST_LINK = 13;
-    private static final int REQUEST_DISCARD = 14;
-    private static final int REQUEST_SEND = 15;
+    private static final int REQUEST_LINK = 12;
+    private static final int REQUEST_DISCARD = 13;
+    private static final int REQUEST_SEND = 14;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1569,15 +1568,85 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onMenuAnswer() {
-        if (!ActivityBilling.isPro(getContext())) {
-            startActivity(new Intent(getContext(), ActivityBilling.class));
-            return;
-        }
+        new SimpleTask<List<EntityAnswer>>() {
+            @Override
+            protected List<EntityAnswer> onExecute(Context context, Bundle args) {
+                return DB.getInstance(context).answer().getAnswersByFavorite(false);
+            }
 
-        FragmentDialogAnswer fragment = new FragmentDialogAnswer();
-        fragment.setArguments(new Bundle());
-        fragment.setTargetFragment(this, REQUEST_ANSWER);
-        fragment.show(getParentFragmentManager(), "compose:answer");
+            @Override
+            protected void onExecuted(Bundle args, final List<EntityAnswer> answers) {
+                View vwAnchorMenu = view.findViewById(R.id.vwAnchorMenu);
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchorMenu);
+                Menu main = popupMenu.getMenu();
+
+                Map<String, SubMenu> map = new HashMap<>();
+
+                int order = 0;
+                for (EntityAnswer answer : answers) {
+                    order++;
+                    if (answer.group == null)
+                        main.add(Menu.NONE, order, order++, answer.toString())
+                                .setIntent(new Intent().putExtra("id", answer.id));
+                    else {
+                        if (!map.containsKey(answer.group))
+                            map.put(answer.group, main.addSubMenu(Menu.NONE, order, order++, answer.group));
+                        SubMenu smenu = map.get(answer.group);
+                        smenu.add(Menu.NONE, smenu.size(), smenu.size() + 1, answer.toString())
+                                .setIntent(new Intent().putExtra("id", answer.id));
+                    }
+                }
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem target) {
+                        Intent intent = target.getIntent();
+                        if (intent == null)
+                            return false;
+
+                        if (!ActivityBilling.isPro(getContext())) {
+                            startActivity(new Intent(getContext(), ActivityBilling.class));
+                            return true;
+                        }
+
+                        long id = intent.getLongExtra("id", -1);
+                        for (EntityAnswer answer : answers)
+                            if (answer.id.equals(id)) {
+                                if (etSubject.getText().length() == 0)
+                                    etSubject.setText(answer.name);
+
+                                InternetAddress[] to = null;
+                                try {
+                                    to = InternetAddress.parseHeader(etTo.getText().toString(), false);
+                                } catch (AddressException ignored) {
+                                }
+
+                                String html = EntityAnswer.replacePlaceholders(answer.text, to);
+
+                                Spanned spanned = HtmlHelper.fromHtml(html, false, new Html.ImageGetter() {
+                                    @Override
+                                    public Drawable getDrawable(String source) {
+                                        return ImageHelper.decodeImage(getContext(), working, source, true, zoom, 1.0f, etBody);
+                                    }
+                                }, null, getContext());
+
+                                etBody.getText().insert(etBody.getSelectionStart(), spanned);
+
+                                return true;
+                            }
+
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(getContext(), getViewLifecycleOwner(), new Bundle(), "compose:answer");
     }
 
     private boolean onActionStyle(int action) {
@@ -1887,10 +1956,6 @@ public class FragmentCompose extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onContactGroupSelected(data.getBundleExtra("args"));
                     break;
-                case REQUEST_ANSWER:
-                    if (resultCode == RESULT_OK && data != null)
-                        onAnswerSelected(data.getBundleExtra("args"));
-                    break;
                 case REQUEST_LINK:
                     if (resultCode == RESULT_OK && data != null)
                         onLinkSelected(data.getBundleExtra("args"));
@@ -2109,7 +2174,7 @@ public class FragmentCompose extends FragmentBase {
                 return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, context), false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
-                        return ImageHelper.decodeImage(context, id, source, true, zoom, etBody);
+                        return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
                     }
                 }, null, getContext());
             }
@@ -2326,7 +2391,7 @@ public class FragmentCompose extends FragmentBase {
                                 // Sign/encrypt
                                 pgpKeyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
                                 Log.i("Keys=" + pgpKeyIds.length);
-                                if (pgpKeyIds.length != pgpUserIds.length)
+                                if (pgpKeyIds.length == 0) // One key can be for multiple users
                                     throw new IllegalArgumentException(context.getString(R.string.title_key_missing,
                                             TextUtils.join(", ", pgpUserIds)));
 
@@ -2883,31 +2948,6 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "compose:picked");
-    }
-
-    private void onAnswerSelected(Bundle args) {
-        String name = args.getString("name");
-        String answer = args.getString("answer");
-
-        if (etSubject.getText().length() == 0)
-            etSubject.setText(name);
-
-        InternetAddress[] to = null;
-        try {
-            to = InternetAddress.parseHeader(etTo.getText().toString(), false);
-        } catch (AddressException ignored) {
-        }
-
-        String html = EntityAnswer.replacePlaceholders(answer, to);
-
-        Spanned spanned = HtmlHelper.fromHtml(html, false, new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(String source) {
-                return ImageHelper.decodeImage(getContext(), working, source, true, zoom, etBody);
-            }
-        }, null, getContext());
-
-        etBody.getText().insert(etBody.getSelectionStart(), spanned);
     }
 
     private void onLinkSelected(Bundle args) {
@@ -3790,10 +3830,13 @@ public class FragmentCompose extends FragmentBase {
                         db.message().setMessageRevisions(data.draft.id, data.draft.revisions);
                     }
 
-                    if (data.draft.content) {
+                    if (data.draft.content || data.draft.uid == null) {
+                        if (data.draft.uid == null && !data.draft.content)
+                            Log.e("Draft without uid");
+
                         File file = data.draft.getFile(context);
 
-                        Document doc = JsoupEx.parse(file);
+                        Document doc = (data.draft.content ? JsoupEx.parse(file) : Document.createShell(""));
                         doc.select("div[fairemail=signature]").remove();
                         Elements ref = doc.select("div[fairemail=reference]");
                         ref.remove();
@@ -3825,11 +3868,8 @@ public class FragmentCompose extends FragmentBase {
                                 data.draft.plain_only,
                                 HtmlHelper.getPreview(html),
                                 null);
-                    } else {
-                        if (data.draft.uid == null)
-                            throw new IllegalStateException("Draft without uid");
+                    } else
                         EntityOperation.queue(context, data.draft, EntityOperation.BODY);
-                    }
                 }
 
                 List<EntityAttachment> attachments = db.attachment().getAttachments(data.draft.id);
@@ -4817,7 +4857,7 @@ public class FragmentCompose extends FragmentBase {
                 Spanned spannedBody = HtmlHelper.fromDocument(context, doc, false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
-                        return ImageHelper.decodeImage(context, id, source, true, zoom, etBody);
+                        return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
                     }
                 }, null);
 
@@ -4846,7 +4886,7 @@ public class FragmentCompose extends FragmentBase {
                             new Html.ImageGetter() {
                                 @Override
                                 public Drawable getDrawable(String source) {
-                                    return ImageHelper.decodeImage(context, id, source, show_images, zoom, tvReference);
+                                    return ImageHelper.decodeImage(context, id, source, show_images, zoom, 1.0f, tvReference);
                                 }
                             },
                             null);
@@ -4946,7 +4986,7 @@ public class FragmentCompose extends FragmentBase {
                 signature = HtmlHelper.fromHtml(identity.signature, false, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
-                        return ImageHelper.decodeImage(getContext(), working, source, true, 0, tvSignature);
+                        return ImageHelper.decodeImage(getContext(), working, source, true, 0, 1.0f, tvSignature);
                     }
                 }, null, getContext());
             tvSignature.setText(signature);
@@ -5148,49 +5188,6 @@ public class FragmentCompose extends FragmentBase {
                                 sendResult(RESULT_OK);
                             } else
                                 sendResult(RESULT_CANCELED);
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
-        }
-    }
-
-    public static class FragmentDialogAnswer extends FragmentDialogBase {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            final ArrayAdapter<EntityAnswer> adapter =
-                    new ArrayAdapter<>(getContext(), R.layout.spinner_item1, android.R.id.text1);
-
-            // TODO: spinner
-            new SimpleTask<List<EntityAnswer>>() {
-                @Override
-                protected List<EntityAnswer> onExecute(Context context, Bundle args) {
-                    DB db = DB.getInstance(getContext());
-                    return db.answer().getAnswers(false);
-                }
-
-                @Override
-                protected void onExecuted(Bundle args, List<EntityAnswer> answers) {
-                    adapter.addAll(answers);
-                }
-
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getParentFragmentManager(), ex);
-                }
-            }.execute(this, new Bundle(), "compose:answer");
-
-            return new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.title_insert_template)
-                    .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            EntityAnswer answer = adapter.getItem(which);
-                            getArguments().putString("name", answer.name);
-                            getArguments().putString("answer", answer.text);
-
-                            sendResult(RESULT_OK);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
