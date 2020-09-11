@@ -92,7 +92,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.jetbrains.annotations.NotNull;
 import org.openintents.openpgp.util.OpenPgpApi;
 
 import java.io.ByteArrayOutputStream;
@@ -301,7 +300,7 @@ public class Helper {
         }
 
         @Override
-        public T get(long timeout, @NotNull TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+        public T get(long timeout, @NonNull TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
             return wrapped.get(timeout, unit);
         }
     }
@@ -454,6 +453,20 @@ public class Helper {
         List<ResolveInfo> ris = pm.queryIntentServices(intent, 0);
 
         return (ris != null && ris.size() > 0);
+    }
+
+    static void enableComponent(Context context, Class<?> clazz, boolean whether) {
+        enableComponent(context, clazz.getName(), whether);
+    }
+
+    static void enableComponent(Context context, String name, boolean whether) {
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(
+                new ComponentName(context, name),
+                whether
+                        ? PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     // View

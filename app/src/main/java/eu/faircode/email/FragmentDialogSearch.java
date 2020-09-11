@@ -295,7 +295,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                         if (criteria.query != null && criteria.query.startsWith("raw:"))
                             new SimpleTask<EntityFolder>() {
                                 @Override
-                                protected EntityFolder onExecute(Context context, Bundle args) throws Throwable {
+                                protected EntityFolder onExecute(Context context, Bundle args) {
                                     long aid = args.getLong("account", -1);
 
                                     DB db = DB.getInstance(context);
