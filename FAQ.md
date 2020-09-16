@@ -80,6 +80,7 @@ Related questions:
 * ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
 * Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
 * A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, and Mi band 3 wearables. See also [this FAQ](#user-content-faq126).
+* A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 
 ## Planned features
 
@@ -488,8 +489,10 @@ Unfortunately, it is impossible to make everybody happy and adding lots of setti
 You can use the quick setup wizard to easily setup a Gmail account and identity.
 
 If you don't want to use an on-device Gmail account,
-you can either enable access for "less secure apps" and use your account password
+you can either enable access for "less secure apps" and use your account password (not advised)
 or enable two factor authentication and use an app specific password.
+To use a password you'll need to setup an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
+
 Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
 Note that an app specific password is required when two factor authentication is enabled.
@@ -672,12 +675,16 @@ This can be done by long pressing an identity in the list of identities (Setup, 
 **Important**: to let apps like FairEmail reliably connect to the OpenKeychain service to encrypt/decrypt messages,
 it might be necessary to disable battery optimizations for the OpenKeychain app.
 
+**Important**: the OpenKeychain app reportedly needs contacts permission to work correctly.
+
 **Important**: on some Android versions / devices it is necessary to enable *Show popups while running in background*
 in the additional permissions of the Android app settings of the OpenKeychain app.
 Without this permission the draft will be saved, but the OpenKeychain popup to confirm/select might not appear.
 
-FairEmail will send the [Autocrypt](https://autocrypt.org/) headers for use by other email clients
-and send received Autocrypt headers to the OpenKeychain app for storage.
+FairEmail will send the [Autocrypt](https://autocrypt.org/) header for use by other email clients,
+but only for signed and encrypted messages because too many email servers have problems with the often long Autocrypt header.
+Note that the most secure way to start an encrypted email exchange is by sending signed messages first.
+Received Autocrypt headers will be sent to the OpenKeychain app for storage on verifying a signature or decrypting a message.
 
 All key handling is delegated to the OpenKey chain app for security reasons. This also means that FairEmail does not store PGP keys.
 
@@ -1701,6 +1708,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the star icon in a conversation thread to set a colored star?
 * Did you know that you can open the navigation drawer by swiping from the left, even when viewing a conversation?
 * Did you know that you can long press the people's icon to show/hide the CC/BCC fields and remember the visibility state for the next time?
+* Did you know that you can insert the email addresses of an Android contact group via the three dots overflow menu?
 * Did you know that if you select text and hit reply, only the selected text will be quoted?
 
 <br />

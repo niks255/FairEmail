@@ -24,7 +24,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.PathEffect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -326,6 +328,8 @@ public class HtmlHelper {
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
         boolean parse_classes = prefs.getBoolean("parse_classes", false);
+        boolean inline_images = prefs.getBoolean("inline_images", false);
+        boolean text_separators = prefs.getBoolean("text_separators", false);
 
         int textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
 
@@ -440,6 +444,10 @@ public class HtmlHelper {
         final Document document = new Cleaner(whitelist).clean(parsed);
 
         boolean dark = Helper.isDarkTheme(context);
+
+        // Remove tracking pixels
+        if (disable_tracking)
+            removeTrackingPixels(context, document, false);
 
         // Font
         for (Element font : document.select("font")) {
@@ -787,7 +795,11 @@ public class HtmlHelper {
             if (hasVisibleContent(row.childNodes())) {
                 Element next = row.nextElementSibling();
                 if (next != null && "tr".equals(next.tagName()))
-                    row.appendElement("br");
+                    if (text_separators)
+                        row.appendElement("hr")
+                                .attr("x-dashed", "true");
+                    else
+                        row.appendElement("br");
             }
         }
 
@@ -801,10 +813,6 @@ public class HtmlHelper {
         for (Element hf : document.select("thead,tfoot"))
             hf.tagName("span");
 
-        // Remove tracking pixels
-        if (disable_tracking)
-            removeTrackingPixels(context, document, false);
-
         // Images
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
         for (Element img : document.select("img")) {
@@ -815,7 +823,7 @@ public class HtmlHelper {
             if (alt.length() > MAX_ALT)
                 alt = alt.substring(0, MAX_ALT) + "…";
 
-            if (!show_images && !TextUtils.isEmpty(alt))
+            if (!show_images && !(inline_images && src.startsWith("cid:")) && !TextUtils.isEmpty(alt))
                 if (TextUtils.isEmpty(tracking))
                     img.appendText("[" + alt + "]");
                 else {
@@ -1309,11 +1317,15 @@ public class HtmlHelper {
                 return true;
             else if (node instanceof Element) {
                 Element element = (Element) node;
-                if (!element.isBlock() &&
-                        (element.hasText() ||
-                                element.selectFirst("a") != null ||
-                                element.selectFirst("img") != null))
+                if (element.isBlock())
+                    return false;
+                if (element.hasText())
                     return true;
+                if (element.selectFirst("img[src~=.+]") != null)
+                    return true;
+                for (Element a : element.select("a[href~=.+]"))
+                    if (a.childNodes().size() > 0)
+                        return true;
             }
         return false;
     }
@@ -1804,6 +1816,7 @@ public class HtmlHelper {
             @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
+        boolean text_separators = prefs.getBoolean("text_separators", false);
 
         final int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
         final int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
@@ -2094,9 +2107,33 @@ public class HtmlHelper {
                                 newline(ssb.length());
                                 break;
                             case "hr":
+                                if (text_separators) {
+                                    int lhr = 0;
+                                    for (LineSpan ls : ssb.getSpans(0, ssb.length(), LineSpan.class)) {
+                                        int end = ssb.getSpanEnd(ls);
+                                        if (end > lhr)
+                                            lhr = end;
+                                    }
+
+                                    boolean nls = true;
+                                    for (int i = lhr; i < ssb.length(); i++)
+                                        if (ssb.charAt(i) != '\n') {
+                                            nls = false;
+                                            break;
+                                        }
+                                    if (nls)
+                                        break;
+
+                                    while (ssb.length() > 1 &&
+                                            ssb.charAt(ssb.length() - 2) == '\n' &&
+                                            ssb.charAt(ssb.length() - 1) == '\n')
+                                        ssb.delete(ssb.length() - 1, ssb.length());
+                                }
+
                                 ssb.append("\n" + LINE + "\n");
                                 float stroke = context.getResources().getDisplayMetrics().density;
-                                ssb.setSpan(new LineSpan(colorSeparator, stroke),
+                                float dash = ("true".equals(element.attr("x-dashed")) ? dp3 : 0f);
+                                ssb.setSpan(new LineSpan(colorSeparator, stroke, dash),
                                         ssb.length() - 1 - LINE.length(), ssb.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                 break;
                             case "img":
@@ -2292,10 +2329,12 @@ public class HtmlHelper {
     public static class LineSpan extends ReplacementSpan {
         private int lineColor;
         private float strokeWidth;
+        private float dashLength;
 
-        LineSpan(int lineColor, float strokeWidth) {
+        LineSpan(int lineColor, float strokeWidth, float dashLength) {
             this.lineColor = lineColor;
             this.strokeWidth = strokeWidth;
+            this.dashLength = dashLength;
         }
 
         @Override
@@ -2308,11 +2347,15 @@ public class HtmlHelper {
             int ypos = (top + bottom) / 2;
             int c = paint.getColor();
             float s = paint.getStrokeWidth();
+            PathEffect p = paint.getPathEffect();
             paint.setColor(lineColor);
             paint.setStrokeWidth(strokeWidth);
+            if (dashLength != 0)
+                paint.setPathEffect(new DashPathEffect(new float[]{dashLength, dashLength}, 0));
             canvas.drawLine(0, ypos, canvas.getWidth(), ypos, paint);
             paint.setColor(c);
             paint.setStrokeWidth(s);
+            paint.setPathEffect(p);
         }
     }
 

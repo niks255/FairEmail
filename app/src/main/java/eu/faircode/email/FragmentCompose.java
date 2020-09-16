@@ -466,9 +466,25 @@ public class FragmentCompose extends FragmentBase {
         });
 
         etBody.setSelectionListener(new EditTextCompose.ISelection() {
+            private boolean style = false;
+            private boolean styling = false;
+
             @Override
             public void onSelected(boolean selection) {
-                style_bar.setVisibility(selection ? View.VISIBLE : View.GONE);
+                if (media) {
+                    style = selection;
+                    getMainHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (style != styling) {
+                                styling = style;
+                                media_bar.getMenu().clear();
+                                media_bar.inflateMenu(styling ? R.menu.action_compose_style : R.menu.action_compose_media);
+                            }
+                        }
+                    }, 20);
+                } else
+                    style_bar.setVisibility(selection ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -726,7 +742,8 @@ public class FragmentCompose extends FragmentBase {
         style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return onActionStyle(item.getItemId());
+                int action = item.getItemId();
+                return onActionStyle(action, style_bar.findViewById(action));
             }
         });
 
@@ -751,7 +768,7 @@ public class FragmentCompose extends FragmentBase {
                         onActionLink();
                         return true;
                     default:
-                        return false;
+                        return onActionStyle(action, media_bar.findViewById(action));
                 }
             }
         });
@@ -1513,6 +1530,8 @@ public class FragmentCompose extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.edit().putBoolean("compose_media", media).apply();
         media_bar.setVisibility(media ? View.VISIBLE : View.GONE);
+        media_bar.getMenu().clear();
+        media_bar.inflateMenu(media && etBody.hasSelection() ? R.menu.action_compose_style : R.menu.action_compose_media);
     }
 
     private void onMenuCompact() {
@@ -1571,18 +1590,23 @@ public class FragmentCompose extends FragmentBase {
         new SimpleTask<List<EntityAnswer>>() {
             @Override
             protected List<EntityAnswer> onExecute(Context context, Bundle args) {
-                return DB.getInstance(context).answer().getAnswersByFavorite(false);
+                List<EntityAnswer> answers = DB.getInstance(context).answer().getAnswers(false);
+                return (answers == null ? new ArrayList<>() : answers);
             }
 
             @Override
             protected void onExecuted(Bundle args, final List<EntityAnswer> answers) {
+                if (answers.size() == 0) {
+                    ToastEx.makeText(getContext(), R.string.title_no_answers, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 View vwAnchorMenu = view.findViewById(R.id.vwAnchorMenu);
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchorMenu);
                 Menu main = popupMenu.getMenu();
 
-                Map<String, SubMenu> map = new HashMap<>();
-
                 int order = 0;
+                Map<String, SubMenu> map = new HashMap<>();
                 for (EntityAnswer answer : answers) {
                     order++;
                     if (answer.group == null)
@@ -1630,10 +1654,30 @@ public class FragmentCompose extends FragmentBase {
                                     }
                                 }, null, getContext());
 
-                                etBody.getText().insert(etBody.getSelectionStart(), spanned);
+                                int start = etBody.getSelectionStart();
+                                int end = etBody.getSelectionEnd();
+                                if (start > end) {
+                                    int tmp = start;
+                                    start = end;
+                                    end = tmp;
+                                }
+
+                                if (start >= 0 && start < end)
+                                    etBody.getText().replace(start, end, spanned);
+                                else {
+                                    if (start < 0) {
+                                        start = etBody.length() - 1;
+                                        if (start < 0)
+                                            start = 0;
+                                    }
+
+                                    etBody.getText().insert(start, spanned);
+                                }
 
                                 return true;
                             }
+
+                        Log.e("Answer=" + id + " count=" + answers.size() + " not found");
 
                         return false;
                     }
@@ -1649,9 +1693,9 @@ public class FragmentCompose extends FragmentBase {
         }.execute(getContext(), getViewLifecycleOwner(), new Bundle(), "compose:answer");
     }
 
-    private boolean onActionStyle(int action) {
+    private boolean onActionStyle(int action, View anchor) {
         Log.i("Style action=" + action);
-        return StyleHelper.apply(action, view.findViewById(action), etBody);
+        return StyleHelper.apply(action, anchor, etBody);
     }
 
     private void onActionRecordAudio() {
@@ -2155,11 +2199,11 @@ public class FragmentCompose extends FragmentBase {
                     if (d == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_image));
 
-                    s.insert(start, " \uFFFC"); // Object replacement character
+                    s.insert(start, "\n\uFFFC\n"); // Object replacement character
                     ImageSpan is = new ImageSpan(context, cid);
                     s.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    start += 2;
+                    start += 3;
                 }
 
                 if (!image)
@@ -3416,13 +3460,13 @@ public class FragmentCompose extends FragmentBase {
                             document.body().appendChild(e);
                         }
 
-                        if (answer > 0) {
-                            EntityAnswer a = db.answer().getAnswer(answer);
-                            if (a != null) {
-                                data.draft.subject = a.name;
-                                Document d = JsoupEx.parse(a.getText(null));
-                                document.body().append(d.body().html());
-                            }
+                        EntityAnswer a = (answer < 0
+                                ? db.answer().getStandardAnswer()
+                                : db.answer().getAnswer(answer));
+                        if (a != null) {
+                            data.draft.subject = a.name;
+                            Document d = JsoupEx.parse(a.getText(null));
+                            document.body().append(d.body().html());
                         }
 
                         addSignature(context, document, data.draft, selected);
@@ -3581,12 +3625,12 @@ public class FragmentCompose extends FragmentBase {
                         }
 
                         // Reply template
-                        if (answer > 0) {
-                            EntityAnswer a = db.answer().getAnswer(answer);
-                            if (a != null) {
-                                Document d = JsoupEx.parse(a.getText(data.draft.to));
-                                document.body().append(d.body().html());
-                            }
+                        EntityAnswer a = (answer < 0
+                                ? db.answer().getStandardAnswer()
+                                : db.answer().getAnswer(answer));
+                        if (a != null) {
+                            Document d = JsoupEx.parse(a.getText(data.draft.to));
+                            document.body().append(d.body().html());
                         }
 
                         // Signature
@@ -4544,7 +4588,7 @@ public class FragmentCompose extends FragmentBase {
                             }
 
                             for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (!attachment.isAttachment() && attachment.isImage() &&
+                                if (attachment.isInline() && attachment.isImage() &&
                                         attachment.cid != null && !cids.contains(attachment.cid)) {
                                     Log.i("Removing unused inline attachment cid=" + attachment.cid);
                                     db.attachment().deleteAttachment(attachment.id);

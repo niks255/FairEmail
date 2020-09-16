@@ -898,10 +898,10 @@ class Core {
                 try {
                     Log.i(folder.name + " deleting uid=" + message.uid);
                     iexisting.setFlag(Flags.Flag.DELETED, true);
+                    ifolder.expunge();
                 } catch (MessageRemovedException ignored) {
                     Log.w(folder.name + " existing gone uid=" + message.uid);
                 }
-                ifolder.expunge();
             }
         }
 
@@ -1018,9 +1018,10 @@ class Core {
             try {
                 for (Message imessage : map.keySet())
                     imessage.setFlag(Flags.Flag.DELETED, true);
-            } catch (MessageRemovedException ignored) {
+                ifolder.expunge();
+            } catch (MessageRemovedException ex) {
+                Log.w(ex);
             }
-            ifolder.expunge();
         } else {
             int count = MessageHelper.getMessageCount(ifolder);
             db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
@@ -2715,7 +2716,7 @@ class Core {
             EntityIdentity identity = matchIdentity(context, folder, message);
             message.identity = (identity == null ? null : identity.id);
 
-            message.sender = MessageHelper.getSortKey(message.from);
+            message.sender = MessageHelper.getSortKey(EntityFolder.isOutgoing(folder.type) ? message.to : message.from);
             Uri lookupUri = ContactInfo.getLookupUri(message.from);
             message.avatar = (lookupUri == null ? null : lookupUri.toString());
             if (message.avatar == null && notify_known && pro)
@@ -2845,11 +2846,11 @@ class Core {
             if (download && message.size != null && !message.ui_hide) {
                 long maxSize;
                 if (state == null || state.networkState.isUnmetered())
-                    maxSize = MessageHelper.DEFAULT_DOWNLOAD_SIZE;
+                    maxSize = MessageHelper.SMALL_MESSAGE_SIZE;
                 else {
                     maxSize = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
-                    if (maxSize == 0)
-                        maxSize = MessageHelper.DEFAULT_DOWNLOAD_SIZE;
+                    if (maxSize == 0 || maxSize > MessageHelper.SMALL_MESSAGE_SIZE)
+                        maxSize = MessageHelper.SMALL_MESSAGE_SIZE;
                 }
 
                 if (message.size < maxSize) {

@@ -113,6 +113,7 @@ public class MessageHelper {
 
     private static File cacheDir = null;
 
+    static final int SMALL_MESSAGE_SIZE = 192 * 1024; // bytes
     static final int DEFAULT_DOWNLOAD_SIZE = 256 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
 
@@ -1120,12 +1121,11 @@ public class MessageHelper {
         String[] h = origin.split("\\s+");
         if (h.length > 1 && h[0].equalsIgnoreCase("from")) {
             String host = h[1];
-            if (host.startsWith("["))
-                host = host.substring(1);
-            if (host.endsWith("]"))
-                host = host.substring(0, host.length() - 1);
-            if (!TextUtils.isEmpty(host))
-                return host;
+            int s = origin.indexOf('[');
+            int e = origin.indexOf(']');
+            if (s > 0 && e > s + 1)
+                host = origin.substring(s + 1, e);
+            return host;
         }
 
         return null;

@@ -81,7 +81,7 @@ Verwandte Fragen:
 
 * ~~Synchronisieren bei Bedarf (manuell)~~
 * ~~Halbautomatische Verschlüsselung~~
-* ~~Nachricht kopieren~
+* ~~Nachricht kopieren~~
 * ~~Farbige Sterne~~
 * ~~Benachrichtigungseinstellungen pro Ordner~~
 * ~~~Das Wählen von lokalen Bildern für Signaturen~~ (dies wird nicht hinzugefügt, weil es eine Bildverwaltung erfordert und weil Bilder in den meisten E-Mail-Clients ohnehin nicht standardmäßig angezeigt werden)
@@ -161,7 +161,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(42) Können Sie einen neuen Anbieter zur Liste der Anbieter hinzufügen?](#user-content-faq42)
 * [(43) Können Sie das Original anzeigen?](#user-content-faq43)
 * [(44) Können Sie Kontaktfotos / Ident-Icons im Gesendeten Ordner anzeigen?](#user-content-faq44)
-* [(45) Wie kann ich "Dieser Schlüssel ist nicht verfügbar, um ihn verwenden zu können, müssen Sie ihn als einen Ihrer eigenen importieren" beheben ? ~ ?](#user-content-faq45)
+* [(45) Wie kann ich »Dieser Schlüssel ist nicht verfügbar« beheben? ~ ?](#user-content-faq45)
 * [(46) Warum wird die Nachrichtenliste immer wieder aktualisiert?](#user-content-faq46)
 * [(47) Wie löse ich den Fehler 'Kein primäres Konto oder kein Ordner für Entwürfe' ?](#user-content-faq47)
 * [(48) Wie löse ich den Fehler 'Kein primäres Konto oder kein Archivordner' ?](#user-content-faq48)
@@ -202,7 +202,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(84) Wozu gibt es lokale Kontakte?](#user-content-faq84)
 * [(85) Warum ist eine Identität nicht verfügbar?](#user-content-faq85)
 * [~~(86) Was sind 'zusätzliche Privatsphäre-Funktionen'?~~](#user-content-faq86)
-* [(87) Was bedeutet "ungültige Anmeldedaten"?](#user-content-faq87)
+* [(87) Was bedeutet »ungültige Anmeldedaten«?](#user-content-faq87)
 * [(88) Wie kann ich ein Yahoo-, AOL- oder Sky-Konto verwenden?](#user-content-faq88)
 * [(89) Wie kann ich Nur-Text-Nachrichten senden?](#user-content-faq89)
 * [(90) Warum sind einige Texte als Link formatiert, ohne ein gültiger Link zu sein?](#user-content-faq90)
@@ -237,7 +237,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(119) Können Sie dem Sammeleingang-Widget für Post Farben hinzufügen?](#user-content-faq119)
 * [(120) Warum werden neue Nachrichten beim Öffnen der App nicht entfernt?](#user-content-faq120)
 * [(121) Wie werden Nachrichten zu einer Konversation gruppiert?](#user-content-faq121)
-* [~~~(122) Warum wird der Empfängername/E-Mail-Adresse mit einer Warnfarbe angezeigt?~~](#user-content-faq122)
+* [~~(122) Warum wird Empfängername/E-Mail-Adresse mit einer Warnfarbe angezeigt?~~](#user-content-faq122)
 * [(123) Was geschieht, wenn FairEmail keine Verbindung zu einem E-Mail-Server herstellen kann?](#user-content-faq123)
 * [(124) Warum erhalte ich den Hinweis 'Nachricht zu groß oder zu komplex, um sie anzuzeigen'?](#user-content-faq124)
 * [(125) Was sind die aktuellen experimentellen Eigenschaften?](#user-content-faq125)
@@ -258,7 +258,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(140) Warum enthält der Nachrichtentext seltsame Zeichen?](#user-content-faq140)
 * [(141) Wie kann ich 'Ein Entwürfe-Ordner ist erforderlich, um Nachrichten zu senden' beheben?](#user-content-faq141)
 * [(142) Wie kann ich gesendete Nachrichten im Posteingang speichern?](#user-content-faq142)
-* [~~~(143) Gibt es einen Papierkorb für POP3-Konten? ~~](#user-content-faq143)
+* [~~(143) Gibt es einen Papierkorb für POP3-Konten? ~~](#user-content-faq143)
 * [(144) Wie kann ich Sprachnotizen aufnehmen?](#user-content-faq144)
 * [(145) Wie kann ich einen Benachrichtigungston für ein Konto, einen Ordner oder einen Absender festlegen?](#user-content-faq145)
 * [(146) Wie kann ich falsche Zeiten von Nachrichten beheben?](#user-content-faq146)
@@ -596,7 +596,7 @@ You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packa
 
 **Important**: on some Android versions / devices it is necessary to enable *Show popups while running in background* in the additional permissions of the Android app settings of the OpenKeychain app. Without this permission the draft will be saved, but the OpenKeychain popup to confirm/select might not appear.
 
-FairEmail will send the [Autocrypt](https://autocrypt.org/) headers for use by other email clients and send received Autocrypt headers to the OpenKeychain app for storage.
+FairEmail sendet den [Autocrypt](https://autocrypt.org/)-Header zur Verwendung durch andere E-Mail-Clients, aber nur für signierte und verschlüsselte Nachrichten, da zu viele E-Mail-Server Probleme mit dem oft langen Autocrypt-Header haben. Beachten Sie, dass die sicherste Art, einen verschlüsselten E-Mail-Austausch zu beginnen, darin besteht, dass zuerst signierte Nachrichten gesendet werden. Empfangene Autocrypt-Header werden an die OpenKeychain-App gesendet, um sie beim Verifizieren einer Signatur oder Entschlüsseln einer Nachricht zu speichern.
 
 All key handling is delegated to the OpenKey chain app for security reasons. This also means that FairEmail does not store PGP keys.
 
@@ -606,7 +606,7 @@ Signed-only or encrypted-only messages are not a good idea, please see here abou
 
 * [OpenPGP Considerations Part I](https://k9mail.github.io/2016/11/24/OpenPGP-Considerations-Part-I.html)
 * [OpenPGP Considerations Part II](https://k9mail.github.io/2017/01/30/OpenPGP-Considerations-Part-II.html)
-* [OpenPGP Considerations Part III Autocrypt](https://k9mail.github.io/2018/02/26/OpenPGP-Considerations-Part-III-Autocrypt.html)
+* [OpenPGP-Überlegungen Teil III Autocrypt](https://k9mail.github.io/2018/02/26/OpenPGP-Considerations-Part-III-Autocrypt.html)
 
 Signed-only messages are supported, encrypted-only messages are not supported.
 
@@ -704,7 +704,7 @@ Apfel +Banane -Kirsche ?Nüsse
 Dies führt zu dem folgenden Suchergebnis:
 
 ```
-("Apfel" UND "Banane" UND NICHT "Kirsche") ODER "Nüsse"
+(»Apfel« UND »Banane« UND NICHT »Kirsche«) ODER »Nüsse«
 ```
 
 Search expressions can be used for searching on the device via the search index and for searching on the email server, but not for searching on the device without search index for performance reasons.

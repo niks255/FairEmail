@@ -327,6 +327,7 @@
     <string name="title_advanced_text_size">Benyt tekststørrelser</string>
     <string name="title_advanced_text_font">Benyt skrifttyper</string>
     <string name="title_advanced_text_align">Benyt tekstjustering</string>
+    <string name="title_advanced_text_separators">Benyt separatorlinjer</string>
     <string name="title_advanced_collapse_quotes">Skjul citeret tekst</string>
     <string name="title_advanced_images_inline">Auto-vis indlejrede/vehæftede billeder</string>
     <string name="title_advanced_seekbar">Vis relativ samtaleposition med en prik</string>
@@ -961,6 +962,7 @@
     <string name="title_answer_reply">Svarskabelon</string>
     <string name="title_answer_name">Skabelonnavn</string>
     <string name="title_answer_group">Skabelongruppe (valgfrit)</string>
+    <string name="title_answer_standard">Standard</string>
     <string name="title_answer_favorite">Favorit</string>
     <string name="title_answer_hide">Skjul fra menuer</string>
     <string name="title_answer_text">Skabelontekst</string>

@@ -145,6 +145,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, false);
 
+        // Workaround stale intents from recent apps screen
+        boolean recents = (getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0;
+        if (recents) {
+            Intent intent = getIntent();
+            intent.setAction(null);
+            setIntent(intent);
+        }
+
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(creceiver, new IntentFilter(ACTION_NEW_MESSAGE));
 

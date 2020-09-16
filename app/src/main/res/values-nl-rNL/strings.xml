@@ -325,7 +325,8 @@
     <string name="title_advanced_text_color">Gebruik tekstkleuren</string>
     <string name="title_advanced_text_size">Gebruik tekstgrootte</string>
     <string name="title_advanced_text_font">Gebruik lettertypen</string>
-    <string name="title_advanced_text_align">Gebruik tekstuitlijning</string>
+    <string name="title_advanced_text_align">Gebruik tekst uitlijning</string>
+    <string name="title_advanced_text_separators">Gebruik scheidingslijnen</string>
     <string name="title_advanced_collapse_quotes">Geciteerde tekst samenvouwen</string>
     <string name="title_advanced_images_inline">Automatisch inline afbeeldingen weergeven</string>
     <string name="title_advanced_seekbar">Toon relatieve gesprekspositie met een punt</string>
@@ -708,6 +709,7 @@
     <string name="title_spam">Spam</string>
     <string name="title_move">Verplaatsen</string>
     <string name="title_copy_btn">Kopiëren</string>
+    <string name="title_keywords_btn">Trefwoorden</string>
     <string name="title_unsubscribe">Uitschrijven</string>
     <string name="title_message_rule">Maak regel</string>
     <string name="title_no_junk">Geen spam</string>

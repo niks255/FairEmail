@@ -381,6 +381,7 @@
     <string name="title_advanced_text_size">Use text sizes</string>
     <string name="title_advanced_text_font">Use fonts</string>
     <string name="title_advanced_text_align">Use text alignment</string>
+    <string name="title_advanced_text_separators">Use separator lines</string>
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
     <string name="title_advanced_images_inline">Automatically show inline images</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
@@ -814,6 +815,7 @@
     <string name="title_spam">Spam</string>
     <string name="title_move">Move</string>
     <string name="title_copy_btn">Copy</string>
+    <string name="title_keywords_btn">Keywords</string>
     <string name="title_unsubscribe">Unsubscribe</string>
     <string name="title_message_rule">Create rule</string>
     <string name="title_no_junk">Not spam</string>
@@ -1091,6 +1093,7 @@
     <string name="title_answer_reply">Reply template</string>
     <string name="title_answer_name">Template name</string>
     <string name="title_answer_group">Template group (optional)</string>
+    <string name="title_answer_standard">Default</string>
     <string name="title_answer_favorite">Favorite</string>
     <string name="title_answer_hide">Hide from menus</string>
     <string name="title_answer_text">Template text</string>
