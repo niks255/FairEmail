@@ -35,6 +35,7 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.OperationCanceledException;
 import android.os.PowerManager;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -899,7 +900,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 try {
                     long backoff = RECONNECT_BACKOFF - ago;
                     EntityLog.log(ServiceSynchronize.this, account.name + " reconnect backoff=" + (backoff / 1000));
-                    state.acquire(backoff);
+                    state.acquire(backoff, false);
                 } catch (InterruptedException ex) {
                     Log.w(account.name + " backoff " + ex.toString());
                 }
@@ -1325,9 +1326,19 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                                                     db.folder().setFolderState(folder.id, "connecting");
 
-                                                                    ifolder = iservice.getStore().getFolder(folder.name);
+                                                                    try {
+                                                                        ifolder = iservice.getStore().getFolder(folder.name);
+                                                                    } catch (IllegalStateException ex) {
+                                                                        if ("Not connected".equals(ex.getMessage()))
+                                                                            return; // Store closed
+                                                                        else
+                                                                            throw ex;
+                                                                    }
+
                                                                     try {
                                                                         ifolder.open(Folder.READ_WRITE);
+                                                                        if (ifolder instanceof IMAPFolder)
+                                                                            db.folder().setFolderReadOnly(folder.id, ((IMAPFolder) ifolder).getUIDNotSticky());
                                                                     } catch (ReadOnlyFolderException ex) {
                                                                         Log.w(folder.name + " read only");
                                                                         ifolder.open(Folder.READ_ONLY);
@@ -1355,7 +1366,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                         ServiceSynchronize.this,
                                                                         folder.name + " " + Log.formatThrowable(ex, false));
                                                                 db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
-                                                                state.error(ex);
+                                                                state.error(new OperationCanceledException("Process"));
                                                             } finally {
                                                                 if (shouldClose) {
                                                                     if (ifolder != null && ifolder.isOpen()) {
@@ -1523,7 +1534,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             try {
                                 wlAccount.release();
-                                state.acquire(2 * duration);
+                                state.acquire(2 * duration, true);
                                 Log.i("### " + account.name + " keeping alive");
                             } catch (InterruptedException ex) {
                                 EntityLog.log(this, account.name + " waited state=" + state);
@@ -1638,7 +1649,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     if (cbackoff > backoff) {
                         try {
                             EntityLog.log(this, account.name + " reconnect backoff=" + cbackoff);
-                            state.acquire(cbackoff * 1000L);
+                            state.acquire(cbackoff * 1000L, false);
                         } catch (InterruptedException ex) {
                             Log.w(account.name + " cbackoff " + ex.toString());
                         }
@@ -1648,7 +1659,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         if (backoff <= CONNECT_BACKOFF_MAX) {
                             // Short back-off period, keep device awake
                             try {
-                                state.acquire(backoff * 1000L);
+                                state.acquire(backoff * 1000L, false);
                             } catch (InterruptedException ex) {
                                 Log.w(account.name + " backoff " + ex.toString());
                             }
@@ -1681,7 +1692,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 try {
                                     wlAccount.release();
-                                    state.acquire(2 * backoff * 1000L);
+                                    state.acquire(2 * backoff * 1000L, false);
                                     Log.i("### " + account.name + " backoff done");
                                 } catch (InterruptedException ex) {
                                     Log.w(account.name + " backoff " + ex.toString());

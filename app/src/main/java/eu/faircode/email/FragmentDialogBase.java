@@ -30,11 +30,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.OnLifecycleEvent;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -42,12 +41,22 @@ public class FragmentDialogBase extends DialogFragment {
     private boolean once = false;
     private LifecycleOwner owner;
     private LifecycleRegistry registry;
-    private Fragment targetFragment;
+    private String requestKey = null;
+    private String targetRequestKey;
     private int targetRequestCode;
+
+    private static int requestSequence = 0;
+
+    public String getRequestKey() {
+        if (requestKey == null)
+            requestKey = getClass().getName() + "_" + (++requestSequence);
+        return requestKey;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         owner = new LifecycleOwner() {
             @NonNull
             @Override
@@ -57,7 +66,34 @@ public class FragmentDialogBase extends DialogFragment {
         };
         registry = new LifecycleRegistry(owner);
         registry.setCurrentState(Lifecycle.State.CREATED);
+
+        if (savedInstanceState != null) {
+            requestKey = savedInstanceState.getString("fair:request");
+            targetRequestKey = savedInstanceState.getString("fair:key");
+            targetRequestCode = savedInstanceState.getInt("fair:code");
+        }
+
+        getParentFragmentManager().setFragmentResultListener(getRequestKey(), this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                int requestCode = result.getInt("requestCode");
+                int resultCode = result.getInt("resultCode");
+
+                Intent data = new Intent();
+                data.putExtra("args", result);
+                onActivityResult(requestCode, resultCode, data);
+            }
+        });
+
         Log.i("Create " + this);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("fair:request", requestKey);
+        outState.putString("fair:key", targetRequestKey);
+        outState.putInt("fair:code", targetRequestCode);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -132,28 +168,31 @@ public class FragmentDialogBase extends DialogFragment {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setTargetFragment(@Nullable Fragment fragment, int requestCode) {
-        targetFragment = fragment;
+        if (fragment instanceof FragmentBase)
+            targetRequestKey = ((FragmentBase) fragment).getRequestKey();
+        else if (fragment instanceof FragmentDialogBase)
+            targetRequestKey = ((FragmentDialogBase) fragment).getRequestKey();
+        else {
+            Log.e("setTargetFragment=" + fragment.getClass().getName());
+            throw new IllegalArgumentException();
+        }
         targetRequestCode = requestCode;
         Log.i("Set target " + this + " " + fragment + " request=" + requestCode);
-
-        fragment.getViewLifecycleOwner().getLifecycle().addObserver(new LifecycleObserver() {
-            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            public void onDestroy() {
-                Log.i("Reset target " + FragmentDialogBase.this);
-                targetFragment = null;
-            }
-        });
     }
 
-    protected void sendResult(int result) {
+    protected void sendResult(int resultCode) {
         if (!once) {
             once = true;
-            Log.i("Dialog target=" + targetFragment + " result=" + result);
-            if (targetFragment != null) {
-                Intent data = new Intent();
-                data.putExtra("args", getArguments());
-                targetFragment.onActivityResult(targetRequestCode, result, data);
+            Log.i("Dialog key=" + targetRequestKey + " result=" + resultCode);
+            if (targetRequestKey != null) {
+                Bundle args = getArguments();
+                if (args == null) // onDismiss
+                    args = new Bundle();
+                args.putInt("requestCode", targetRequestCode);
+                args.putInt("resultCode", resultCode);
+                getParentFragmentManager().setFragmentResult(targetRequestKey, args);
             }
         }
     }

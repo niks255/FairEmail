@@ -303,7 +303,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     private static final List<String> IMAP_KEYWORDS_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
-            "$MDNSent".toLowerCase(Locale.ROOT),
+            "$MDNSent".toLowerCase(Locale.ROOT), // https://tools.ietf.org/html/rfc3503
             "$Forwarded".toLowerCase(Locale.ROOT),
             "$SubmitPending".toLowerCase(Locale.ROOT),
             "$Submitted".toLowerCase(Locale.ROOT),
@@ -1929,7 +1929,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             @Override
                             public void onOverScrolled(int scrollX, int scrollY, int dx, int dy, boolean clampedX, boolean clampedY) {
-                                if (clampedY && ((WebViewEx) wvBody).isZoomed())
+                                if (clampedY && ((WebViewEx) wvBody).isZoomedY())
                                     properties.scrollBy(0, dy);
                             }
 
@@ -2796,7 +2796,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             } else {
                 //view.getParent().requestDisallowInterceptTouchEvent(false);
                 //return (view.getId() == R.id.wvBody && ev.getAction() == MotionEvent.ACTION_MOVE);
-                boolean intercept = (view.getId() == R.id.wvBody && ((WebViewEx) wvBody).isZoomed());
+                boolean intercept = (view.getId() == R.id.wvBody && ((WebViewEx) wvBody).isZoomedY());
                 view.getParent().requestDisallowInterceptTouchEvent(intercept);
                 return false;
             }

@@ -144,7 +144,7 @@ class Core {
     private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
     private static final int LOCAL_RETRY_MAX = 2;
     private static final long LOCAL_RETRY_DELAY = 5 * 1000L; // milliseconds
-    private static final int TOTAL_RETRY_MAX = LOCAL_RETRY_MAX * 10;
+    private static final int TOTAL_RETRY_MAX = LOCAL_RETRY_MAX * 5;
 
     static void processOperations(
             Context context,
@@ -500,7 +500,9 @@ class Core {
                             ops.remove(op);
                         } else {
                             retry++;
-                            if (retry < LOCAL_RETRY_MAX)
+                            if (retry < LOCAL_RETRY_MAX &&
+                                    state.isRunning() &&
+                                    state.batchCanRun(folder.id, priority, sequence))
                                 try {
                                     Thread.sleep(LOCAL_RETRY_DELAY);
                                 } catch (InterruptedException ex1) {
@@ -528,6 +530,8 @@ class Core {
 
             if (ops.size() == 0)
                 state.batchCompleted(folder.id, priority, sequence);
+            else
+                state.error(new OperationCanceledException("Processing"));
         } finally {
             Log.i(folder.name + " end process state=" + state + " pending=" + ops.size());
         }
@@ -701,13 +705,11 @@ class Core {
         if (TextUtils.isEmpty(keyword))
             throw new IllegalArgumentException("keyword/empty");
 
-        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
-            db.message().setMessageKeywords(message.id, DB.Converters.fromStringArray(null));
-            return;
-        }
-
         if (message.uid == null)
             throw new IllegalArgumentException("keyword/uid");
+
+        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER))
+            return;
 
         Message imessage = ifolder.getMessageByUID(message.uid);
         if (imessage == null)
@@ -1518,7 +1520,7 @@ class Core {
                             itarget.setSubscribed(subscribed);
                             itarget.close();
                         } catch (MessagingException ex) {
-                            Log.e(ex);
+                            Log.w(ex);
                         }
 
                     db.folder().renameFolder(folder.account, folder.name, folder.rename);
@@ -2916,7 +2918,8 @@ class Core {
                 Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid + " flags=" + flags);
             }
 
-            if (!Helper.equal(message.keywords, keywords)) {
+            if (!Helper.equal(message.keywords, keywords) &&
+                    ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
                 update = true;
                 message.keywords = keywords;
                 Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid +
@@ -4054,6 +4057,7 @@ class Core {
 
     static class State {
         private int backoff;
+        private boolean keepalive = false;
         private ConnectionHelper.NetworkState networkState;
         private Thread thread = new Thread();
         private Semaphore semaphore = new Semaphore(0);
@@ -4098,8 +4102,13 @@ class Core {
             return true;
         }
 
-        boolean acquire(long milliseconds) throws InterruptedException {
-            return semaphore.tryAcquire(milliseconds, TimeUnit.MILLISECONDS);
+        boolean acquire(long milliseconds, boolean keepalive) throws InterruptedException {
+            try {
+                this.keepalive = keepalive;
+                return semaphore.tryAcquire(milliseconds, TimeUnit.MILLISECONDS);
+            } finally {
+                this.keepalive = false;
+            }
         }
 
         void error(Throwable ex) {
@@ -4129,8 +4138,10 @@ class Core {
             if (ex instanceof OperationCanceledException)
                 recoverable = false;
 
-            thread.interrupt();
-            yield();
+            if (keepalive) {
+                thread.interrupt();
+                yield();
+            }
         }
 
         void reset() {

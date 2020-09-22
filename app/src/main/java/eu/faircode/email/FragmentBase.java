@@ -43,6 +43,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -50,6 +51,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Lifecycle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -71,10 +73,13 @@ public class FragmentBase extends Fragment {
     private String subtitle = " ";
     private boolean finish = false;
     private boolean finished = false;
+    private String requestKey = null;
 
     private long message = -1;
     private long attachment = -1;
     private int scrollTo = 0;
+
+    private static int requestSequence = 0;
 
     private static final int REQUEST_ATTACHMENT = 51;
     private static final int REQUEST_ATTACHMENTS = 52;
@@ -181,6 +186,7 @@ public class FragmentBase extends Fragment {
         Log.d("Save instance " + this);
         int before = Helper.getSize(outState);
         outState.putString("fair:subtitle", subtitle);
+        outState.putString("fair:requestKey", requestKey);
         super.onSaveInstanceState(outState);
         int after = Helper.getSize(outState);
         Log.d("Saved instance " + this + " size=" + before + "/" + after);
@@ -199,12 +205,34 @@ public class FragmentBase extends Fragment {
             Log.d("Saved " + this + " " + key + "=" + outState.get(key));
     }
 
+    public String getRequestKey() {
+        if (requestKey == null)
+            requestKey = getClass().getName() + "_" + (++requestSequence);
+        return requestKey;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i("Create " + this + " saved=" + (savedInstanceState != null));
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null)
+
+        if (savedInstanceState != null) {
             subtitle = savedInstanceState.getString("fair:subtitle");
+            requestKey = savedInstanceState.getString("fair:requestKey");
+        }
+
+        // https://developer.android.com/training/basics/fragments/pass-data-between
+        getParentFragmentManager().setFragmentResultListener(getRequestKey(), this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                int requestCode = result.getInt("requestCode");
+                int resultCode = result.getInt("resultCode");
+
+                Intent data = new Intent();
+                data.putExtra("args", result);
+                onActivityResult(requestCode, resultCode, data);
+            }
+        });
     }
 
     @Override

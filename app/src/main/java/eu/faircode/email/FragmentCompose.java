@@ -479,7 +479,7 @@ public class FragmentCompose extends FragmentBase {
                             if (style != styling) {
                                 styling = style;
                                 media_bar.getMenu().clear();
-                                media_bar.inflateMenu(styling ? R.menu.action_compose_style : R.menu.action_compose_media);
+                                media_bar.inflateMenu(styling ? R.menu.action_compose_style_alt : R.menu.action_compose_media);
                             }
                         }
                     }, 20);
@@ -1298,15 +1298,13 @@ public class FragmentCompose extends FragmentBase {
         }
 
         private void check() {
-            Activity activity = getActivity();
-            if (activity != null)
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                            checkInternet();
-                    }
-                });
+            getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                        checkInternet();
+                }
+            });
         }
     };
 
@@ -1531,7 +1529,7 @@ public class FragmentCompose extends FragmentBase {
         prefs.edit().putBoolean("compose_media", media).apply();
         media_bar.setVisibility(media ? View.VISIBLE : View.GONE);
         media_bar.getMenu().clear();
-        media_bar.inflateMenu(media && etBody.hasSelection() ? R.menu.action_compose_style : R.menu.action_compose_media);
+        media_bar.inflateMenu(media && etBody.hasSelection() ? R.menu.action_compose_style_alt : R.menu.action_compose_media);
     }
 
     private void onMenuCompact() {
@@ -2189,6 +2187,8 @@ public class FragmentCompose extends FragmentBase {
 
                 for (Uri uri : uris) {
                     EntityAttachment attachment = addAttachment(context, id, uri, image, resize, privacy);
+                    if (attachment == null)
+                        continue;
                     if (!image)
                         continue;
 
@@ -3089,6 +3089,9 @@ public class FragmentCompose extends FragmentBase {
             db.beginTransaction();
 
             EntityMessage draft = db.message().getMessage(id);
+            if (draft == null)
+                return null;
+
             Log.i("Attaching to id=" + id);
 
             attachment.message = draft.id;
