@@ -516,11 +516,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvError = itemView.findViewById(R.id.tvError);
             ibHelp = itemView.findViewById(R.id.ibHelp);
 
+            if (tvFrom != null) {
+                if (compact)
+                    tvFrom.setSingleLine(true);
+            }
+
             if (tvSubject != null) {
                 tvSubject.setTextColor(colorSubject);
 
                 if (compact) {
-                    tvSubject.setSingleLine(!"full".equals(subject_ellipsize));
+                    boolean full = "full".equals(subject_ellipsize);
+                    tvSubject.setSingleLine(!full);
+
                     if ("start".equals(subject_ellipsize))
                         tvSubject.setEllipsize(TextUtils.TruncateAt.START);
                     else if ("end".equals(subject_ellipsize))
@@ -2413,7 +2420,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Log.i("Show inline=" + show_inline);
 
             boolean has_inline = false;
-            boolean download = false;
+            int download = 0;
             boolean save = (attachments.size() > 1);
             boolean downloading = false;
             boolean calendar = false;
@@ -2425,7 +2432,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (inline && attachment.available)
                     has_inline = true;
                 if (attachment.progress == null && !attachment.available)
-                    download = true;
+                    download++;
                 if (!attachment.available)
                     save = false;
                 if (attachment.progress != null)
@@ -2452,7 +2459,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbInline.setVisibility(has_inline ? View.VISIBLE : View.GONE);
 
             ibSaveAttachments.setVisibility(save ? View.VISIBLE : View.GONE);
-            ibDownloadAttachments.setVisibility(download && suitable ? View.VISIBLE : View.GONE);
+            ibDownloadAttachments.setVisibility(download > 1 && suitable ? View.VISIBLE : View.GONE);
             tvNoInternetAttachments.setVisibility(downloading && !suitable ? View.VISIBLE : View.GONE);
 
             cbInline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -2666,8 +2673,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 if (end != null)
                                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end.getTime());
 
-                                if (attendee.size() > 0)
-                                    intent.putExtra(Intent.EXTRA_EMAIL, TextUtils.join(",", attendee));
+                                // This will result in sending unwanted invites
+                                //if (attendee.size() > 0)
+                                //    intent.putExtra(Intent.EXTRA_EMAIL, TextUtils.join(",", attendee));
 
                                 return intent;
                             }

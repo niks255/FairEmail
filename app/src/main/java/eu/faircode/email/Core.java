@@ -530,8 +530,10 @@ class Core {
 
             if (ops.size() == 0)
                 state.batchCompleted(folder.id, priority, sequence);
-            else
-                state.error(new OperationCanceledException("Processing"));
+            else {
+                if (state.batchCanRun(folder.id, priority, sequence))
+                    state.error(new OperationCanceledException("Processing"));
+            }
         } finally {
             Log.i(folder.name + " end process state=" + state + " pending=" + ops.size());
         }
@@ -4056,7 +4058,7 @@ class Core {
 
     static class State {
         private int backoff;
-        private boolean keepalive = false;
+        private boolean backingoff = false;
         private ConnectionHelper.NetworkState networkState;
         private Thread thread = new Thread();
         private Semaphore semaphore = new Semaphore(0);
@@ -4064,6 +4066,7 @@ class Core {
         private boolean recoverable = true;
         private Long lastActivity = null;
 
+        private boolean process = false;
         private Map<FolderPriority, Long> sequence = new HashMap<>();
         private Map<FolderPriority, Long> batch = new HashMap<>();
 
@@ -4101,12 +4104,12 @@ class Core {
             return true;
         }
 
-        boolean acquire(long milliseconds, boolean keepalive) throws InterruptedException {
+        boolean acquire(long milliseconds, boolean backingoff) throws InterruptedException {
             try {
-                this.keepalive = keepalive;
+                this.backingoff = backingoff;
                 return semaphore.tryAcquire(milliseconds, TimeUnit.MILLISECONDS);
             } finally {
-                this.keepalive = false;
+                this.backingoff = false;
             }
         }
 
@@ -4137,7 +4140,7 @@ class Core {
             if (ex instanceof OperationCanceledException)
                 recoverable = false;
 
-            if (keepalive) {
+            if (!backingoff) {
                 thread.interrupt();
                 yield();
             }
@@ -4147,9 +4150,11 @@ class Core {
             recoverable = true;
             lastActivity = null;
             resetBatches();
+            process = true;
         }
 
         void resetBatches() {
+            process = false;
             synchronized (this) {
                 for (FolderPriority key : sequence.keySet()) {
                     batch.put(key, sequence.get(key));
@@ -4245,6 +4250,11 @@ class Core {
         }
 
         boolean batchCanRun(long folder, int priority, long current) {
+            if (!process) {
+                Log.i("=== Can " + folder + ":" + priority + " process=" + process);
+                return false;
+            }
+
             synchronized (this) {
                 FolderPriority key = new FolderPriority(folder, priority);
                 boolean can = batch.get(key).equals(current);

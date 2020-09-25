@@ -338,6 +338,7 @@
     <string name="title_advanced_landscape3">Show navigation menu in landscape mode by default</string>
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
+    <string name="title_advanced_cards_beige">Use beige background when using card style</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_threading_unread">Show number of unread messages in conversations</string>
@@ -542,6 +543,7 @@
 
     <string name="title_advanced_layout_hint">Switching to a more compact layout and changing the message text size can be done in the top action bar menu in the message view</string>
     <string name="title_advanced_startup_hint">Long press any folder in the folder list to add or remove it from the list of unified folders</string>
+    <string name="title_advanced_beige_hint">Light themes only</string>
     <string name="title_advanced_date_hint">Messages are only grouped by date if they are sorted by time</string>
     <string name="title_advanced_navbar_colorize_hint">Whether this works depends on the Android version and variant</string>
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
@@ -988,6 +990,7 @@
     <string name="title_queued_at">Message will be sent around %1$s</string>
 
     <string name="title_sign">Sign</string>
+    <string name="title_verify">Verify</string>
     <string name="title_encrypt">Encrypt</string>
     <string name="title_decrypt">Decrypt</string>
     <string name="title_resync">Resync</string>
@@ -1286,6 +1289,7 @@
     <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection, the device and on the number of messages. While downloading messages the app might respond slower.</string>
     <string name="title_hint_battery">Since FairEmail by default always receives messages, Android will report FairEmail as always being active. Therefore it might look as if FairEmail is always consuming battery power although this is in fact not the case.</string>
     <string name="title_hint_reformat">By default, FairEmail reformats messages for privacy and security reasons. To view the original message, tap the \'full screen\' icon above the message text.</string>
+    <string name="title_hint_design">The design is intentionally not distracting, but kept highly functional. There are many options to customize the appearance, but please understand that it is impossible to make everybody completely happy at the same time.</string>
     <string name="title_hint_contact_actions">Long press for options</string>
     <string name="title_hint_eml">This is a summary of the content of a raw message file. Save the raw message with the save icon in the action bar to view all content.</string>
 

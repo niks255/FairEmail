@@ -35,8 +35,6 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.OperationCanceledException;
 import android.os.PowerManager;
 import android.service.notification.StatusBarNotification;
@@ -55,11 +53,6 @@ import androidx.preference.PreferenceManager;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,6 +66,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Folder;
@@ -98,6 +92,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
 public class ServiceSynchronize extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private Network lastActive = null;
     private Boolean lastSuitable = null;
     private long lastLost = 0;
     private int lastAccounts = 0;
@@ -122,8 +117,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int ACCOUNT_ERROR_AFTER = 60; // minutes
     private static final int ACCOUNT_ERROR_AFTER_POLL = 3; // times
     private static final int BACKOFF_ERROR_AFTER = 16; // seconds
-    private static final long FAST_ERROR_TIME = 5 * 60 * 1000L; // milliseconds
+    private static final long FAST_ERROR_TIME = 6 * 60 * 1000L; // milliseconds
     private static final int FAST_ERROR_COUNT = 3;
+    private static final int FAST_ERROR_BACKOFF = CONNECT_BACKOFF_AlARM_START * 2;
 
     private static final String ACTION_NEW_MESSAGE_COUNT = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE_COUNT";
 
@@ -900,7 +896,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 try {
                     long backoff = RECONNECT_BACKOFF - ago;
                     EntityLog.log(ServiceSynchronize.this, account.name + " reconnect backoff=" + (backoff / 1000));
-                    state.acquire(backoff, false);
+                    state.acquire(backoff, true);
                 } catch (InterruptedException ex) {
                     Log.w(account.name + " backoff " + ex.toString());
                 }
@@ -913,10 +909,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 Log.i(account.name + " run thread=" + currentThread);
 
                 final List<TwoStateOwner> cowners = new ArrayList<>();
-
-                HandlerThread ht = new HandlerThread("account_" + account.id, THREAD_PRIORITY_BACKGROUND);
-                ht.start();
-                final Handler handler = new Handler(ht.getLooper());
+                final ExecutorService executor =
+                        Helper.getBackgroundExecutor(1, "account_" + account.id);
 
                 // Debug
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -1298,7 +1292,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                                 final long sequence = state.getSequence(folder.id, key.getPriority());
 
-                                                handler.post(new Helper.PriorityRunnable(key.getPriority(), key.getOrder()) {
+                                                executor.submit(new Helper.PriorityRunnable(key.getPriority(), key.getOrder()) {
                                                     @Override
                                                     public void run() {
                                                         super.run();
@@ -1444,6 +1438,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             Log.i(folder.name + " poll count=" + folder.poll_count);
                                         }
                             }
+
+                            if (!first)
+                                errors = 0;
                         } catch (Throwable ex) {
                             if (tune) {
                                 account.keep_alive_failed++;
@@ -1538,7 +1535,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             try {
                                 wlAccount.release();
-                                state.acquire(2 * duration, true);
+                                state.acquire(2 * duration, false);
                                 Log.i("### " + account.name + " keeping alive");
                             } catch (InterruptedException ex) {
                                 EntityLog.log(this, account.name + " waited state=" + state);
@@ -1549,7 +1546,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             am.cancel(pi);
                         }
 
-                        errors = 0;
                         first = false;
                     }
 
@@ -1571,7 +1567,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 account.name + " fast errors=" + errors +
                                         " last connected: " + new Date(account.last_connected));
                         if (errors >= FAST_ERROR_COUNT)
-                            state.setBackoff(CONNECT_BACKOFF_AlARM_START * 60);
+                            state.setBackoff(FAST_ERROR_BACKOFF * 60);
                     }
 
                     // Report account connection error
@@ -1601,7 +1597,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 } finally {
                     // Update state
                     EntityLog.log(this, account.name + " closing");
-                    db.account().setAccountState(account.id, "closing");
 
                     // Stop watching operations
                     Log.i(account.name + " stop watching operations");
@@ -1615,8 +1610,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     // Stop executing operations
                     Log.i(account.name + " stop executing operations");
-                    ht.quit();
                     state.resetBatches();
+                    ((ThreadPoolExecutor) executor).getQueue().clear();
 
                     // Close folders
                     for (EntityFolder folder : mapFolders.keySet())
@@ -1634,6 +1629,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     // Close store
                     try {
+                        db.account().setAccountState(account.id, "closing");
                         EntityLog.log(this, account.name + " store closing");
                         iservice.close();
                         EntityLog.log(this, account.name + " store closed");
@@ -1656,7 +1652,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     if (cbackoff > backoff) {
                         try {
                             EntityLog.log(this, account.name + " reconnect backoff=" + cbackoff);
-                            state.acquire(cbackoff * 1000L, false);
+                            state.acquire(cbackoff * 1000L, true);
                         } catch (InterruptedException ex) {
                             Log.w(account.name + " cbackoff " + ex.toString());
                         }
@@ -1666,7 +1662,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         if (backoff <= CONNECT_BACKOFF_MAX) {
                             // Short back-off period, keep device awake
                             try {
-                                state.acquire(backoff * 1000L, false);
+                                state.acquire(backoff * 1000L, true);
                             } catch (InterruptedException ex) {
                                 Log.w(account.name + " backoff " + ex.toString());
                             }
@@ -1699,7 +1695,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 try {
                                     wlAccount.release();
-                                    state.acquire(2 * backoff * 1000L, false);
+                                    state.acquire(2 * backoff * 1000L, true);
                                     Log.i("### " + account.name + " backoff done");
                                 } catch (InterruptedException ex) {
                                     Log.w(account.name + " backoff " + ex.toString());
@@ -1780,7 +1776,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         @Override
         public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities caps) {
             updateNetworkState(network, caps);
-
+            /*
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 try {
                     ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1804,10 +1800,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
+            */
         }
 
         @Override
         public void onLinkPropertiesChanged(@NonNull Network network, @NonNull LinkProperties props) {
+            /*
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 try {
                     ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1860,10 +1858,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
+             */
         }
 
         @Override
         public void onLost(@NonNull Network network) {
+            /*
             try {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ani = cm.getActiveNetworkInfo();
@@ -1872,6 +1872,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     lastLost = new Date().getTime();
             } catch (Throwable ex) {
                 Log.w(ex);
+            }
+             */
+
+            if (Objects.equals(lastActive, network)) {
+                EntityLog.log(ServiceSynchronize.this, "Lost active network=" + network);
+                lastLost = new Date().getTime();
             }
 
             updateNetworkState(network, null);
@@ -1914,6 +1920,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 } catch (Throwable ex) {
                     Log.w(ex);
                 }
+        }
+
+        Network active = ConnectionHelper.getActiveNetwork(ServiceSynchronize.this);
+        if (!Objects.equals(lastActive, active)) {
+            lastActive = active;
+            EntityLog.log(ServiceSynchronize.this, "New active network=" + active);
+            reload(ServiceSynchronize.this, -1L, false, "Network changed active=" + active);
         }
     }
 

@@ -97,7 +97,7 @@
     <string name="menu_operations">Vorgänge</string>
     <string name="menu_contacts">Lokale Kontakte</string>
     <string name="menu_setup">Einstellungen</string>
-    <string name="menu_legend">Symbolerklärung</string>
+    <string name="menu_legend">Legende</string>
     <string name="menu_test">Testprogramm</string>
     <string name="menu_faq">Support</string>
     <string name="menu_translate">Übersetzen helfen</string>
@@ -175,7 +175,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_inbox">Zu Nachrichten wechseln</string>
     <string name="title_setup_go">Los</string>
     <string name="title_setup_to_do">Nicht erledigt</string>
-    <string name="title_setup_done">Erledigt</string>
+    <string name="title_setup_done">Fertig</string>
     <string name="title_setup_still">Noch zu tun</string>
     <string name="title_setup_error">Fehler</string>
     <string name="title_setup_configuring">Konto wird konfiguriert &#8230;</string>
@@ -207,9 +207,9 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_theme_black">Schwarz</string>
     <string name="title_setup_theme_black_and_white">Schwarzweiß</string>
     <string name="title_setup_theme_reverse">Farben umkehren</string>
-    <string name="title_setup_theme_dark">Dunkler Hintergrund</string>
+    <string name="title_setup_theme_dark">Dunkel</string>
     <string name="title_setup_theme_black_background">Schwarzer Hintergrund</string>
-    <string name="title_setup_theme_system">Wie System-Design</string>
+    <string name="title_setup_theme_system">System-Design</string>
     <string name="title_setup_theme_system_hint">Das System-Design wird abhängig von der Tageszeit automatisch zwischen hell und dunkel wechseln, falls von Android unterstützt</string>
     <string name="title_setup_advanced">Erweitert</string>
     <string name="title_setup_options">Optionen</string>
@@ -285,6 +285,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_landscape3">Navigationsmenü standardmäßig im Querformat anzeigen</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
     <string name="title_advanced_cards">Ordner und Unterhaltungen mit Rahmen (breit) statt in Tabellendesign (schmal) zeigen</string>
+    <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund bei Kartendarstellung verwenden</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
     <string name="title_advanced_threading">Themenbaum</string>
     <string name="title_advanced_threading_unread">Anzahl ungelesener Nachrichten in Unterhaltungen anzeigen</string>
@@ -461,6 +462,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_browse_hint">Durch Herunterscrollen weitere E-Mails laden</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einer kompakteren Darstellung und Ändern der Nachrichtentextgröße kann im oberen Aktionsleistenmenü in der Nachrichtenansicht vorgenommen werden.</string>
     <string name="title_advanced_startup_hint">Einen beliebigen Ordner in der Ordnerliste lange gedrückt halten, um ihn der Liste der Sammelordner hinzuzufügen oder ihn daraus zu entfernen</string>
+    <string name="title_advanced_beige_hint">Nur helle Designs</string>
     <string name="title_advanced_date_hint">Nachrichten werden nur nach Datum gruppiert, wenn sie nach Zeit sortiert sind</string>
     <string name="title_advanced_navbar_colorize_hint">Ob das funktioniert, hängt von der Android-Version und -Variante ab</string>
     <string name="title_advanced_threading_hint">E-Mails gruppieren, die miteinander verwandt sind</string>
@@ -869,6 +871,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_queued">Nachricht wird gesendet</string>
     <string name="title_queued_at">Nachricht wird ungefähr %1$s gesendet</string>
     <string name="title_sign">Signieren</string>
+    <string name="title_verify">Gegenprüfen</string>
     <string name="title_encrypt">Verschlüsseln</string>
     <string name="title_decrypt">Entschlüsseln</string>
     <string name="title_resync">Neu synchronisieren</string>
@@ -1139,6 +1142,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_hint_sync">Das Herunterladen von E-Mails kann einige Zeit in Anspruch nehmen, abhängig von der Geschwindigkeit des Providers, der Internetverbindung, des Gerätes und von der Anzahl der E-Mails. Beim Herunterladen der E-Mails kann die App träge reagieren.</string>
     <string name="title_hint_battery">Da FairEmail standardmäßig immer bereit ist Nachrichten zu erhalten, meldet Android FairEmail als immer aktiv. Daher mag es so aussehen, als ob FairEmail immer Akkuleistung verbraucht, aber das ist nicht der Fall.</string>
     <string name="title_hint_reformat">Standardmäßig formatiert FairEmail Nachrichten aus Datenschutz- und Sicherheitsgründen neu. Um die Originalnachricht anzuzeigen, tippen Sie auf das Symbol „Original anzeigen“ über dem Nachrichtentext.</string>
+    <string name="title_hint_design">Das Design ist absichtlich nicht ablenkend, sondern sehr funktional gehalten. Es gibt viele Optionen, um das Aussehen individuell anzupassen, aber bitte verstehen Sie, dass es unmöglich ist, alle Nutzer gleichzeitig vollkommen glücklich zu machen.</string>
     <string name="title_hint_contact_actions">Gedrückt halten für weitere Optionen</string>
     <string name="title_hint_eml">Das ist eine Zusammenfassung des Inhalts einer Rohnachrichtendatei. Speichern Sie die Rohnachricht mit dem Speichernsymbol in der Aktionsleiste, um alle Inhalte anzuzeigen.</string>
     <string name="title_open_link">Link öffnen</string>
