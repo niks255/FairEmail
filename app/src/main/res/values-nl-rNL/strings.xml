@@ -138,6 +138,7 @@
     <string name="title_setup_gmail_rationale">Geef a.u.b. toestemming om een account te selecteren en uw naam te lezen</string>
     <string name="title_setup_gmail_permissions">Google zal machtigingen vragen om al uw e-mail te lezen, op te stellen, te verzenden en definitief te verwijderen. FairEmail zal uw berichten nooit verwijderen zonder uw expliciete toestemming.</string>
     <string name="title_setup_gmail_drafts">Als de conceptmap niet toegankelijk is voor IMAP, dan kan dit worden opgelost in de Gmail label instellingen</string>
+    <string name="title_setup_office_remark">Microsoft biedt dit type autorisatie niet aan voor Outlook, Live, Hotmail, etc accounts</string>
     <string name="title_setup_office_auth">De fout \'AUTHENTICATE failed\' kan worden veroorzaakt doordat IMAP/SMTP door de systeemadministrator is uitgeschakeld</string>
     <string name="title_setup_oauth_rationale">Autoriseer toegang tot uw %1$s account</string>
     <string name="title_setup_oauth_authorize">Autoriseren</string>
@@ -1034,8 +1035,8 @@
     <string name="title_legend_section_compose">Opstellen</string>
     <string name="title_legend_section_keyboard">Toetsenbord</string>
     <string name="title_legend_oauth">OAuth autorisatie</string>
-    <string name="title_legend_primary_connected">Account verbonden</string>
-    <string name="title_legend_primary_disconnected">Account niet verbonden</string>
+    <string name="title_legend_folder_connected">Map verbonden</string>
+    <string name="title_legend_folder_disconnected">Map losgekoppeld</string>
     <string name="title_legend_download_on">Inhoud van berichten automatisch downloaden</string>
     <string name="title_legend_download_off">Inhoud van berichten op aanvraag downloaden </string>
     <string name="title_legend_synchronize_on">Synchronisatie aan</string>
@@ -1043,7 +1044,7 @@
     <string name="title_legend_disconnected">Verbinding verbroken</string>
     <string name="title_legend_connecting">Verbinding maken</string>
     <string name="title_legend_connected">Verbonden</string>
-    <string name="title_legend_executing">Uitvoering van bewerkingen</string>
+    <string name="title_legend_executing">Bewerkingen uitvoeren</string>
     <string name="title_legend_synchronizing">Synchroniseren</string>
     <string name="title_legend_downloading">Downloaden</string>
     <string name="title_legend_closing">Sluiten</string>
@@ -1080,7 +1081,7 @@
     <string name="title_legend_answered">Is beantwoord</string>
     <string name="title_legend_forwarded">Is doorgestuurd</string>
     <string name="title_legend_plain_only">Is alleen platte tekst</string>
-    <string name="title_legend_receipt">Ontvangstbevestiging werd gevraagd</string>
+    <string name="title_legend_receipt">Ontvangstbevestiging gevraagd</string>
     <string name="title_legend_attachment">Heeft bijlagen</string>
     <string name="title_legend_flagged">Is favoriet</string>
     <string name="title_legend_contacts">Contacten beheren</string>
@@ -1144,6 +1145,7 @@
     <string name="title_hint_battery">Aangezien FairEmail standaard altijd berichten ontvangt, meldt Android dat FairEmail altijd actief is. Daarom lijkt het erop dat FairEmail altijd batterijvermogen gebruikt, maar in feite is dit niet het geval.</string>
     <string name="title_hint_reformat">Standaard formatteert FairEmail berichten opnieuw om privacy- en veiligheidsredenen. Tik op het \'volledig scherm\' pictogram boven de berichttekst om het oorspronkelijke bericht te bekijken.</string>
     <string name="title_hint_design">Het ontwerp is opzettelijk niet afleidend, maar zeer functioneel gehouden. Er zijn veel opties om het uiterlijk aan te passen, maar begrijp alsjeblieft dat het onmogelijk is om iedereen tegelijkertijd helemaal gelukkig te maken.</string>
+    <string name="title_hint_junk">Spamfiltering zou door de e-mailserver gedaan moeten worden en kan niet op een apparaat met beperkte mogelijkheden betrouwbaar gedaan worden.</string>
     <string name="title_hint_contact_actions">Druk lang voor opties</string>
     <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtbestand. Sla het ruwe bericht op met het \'bewaar\' icoon in de actiebalk om alle inhoud te bekijken.</string>
     <string name="title_open_link">Koppeling openen</string>

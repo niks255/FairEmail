@@ -77,6 +77,7 @@ Relaterede spørgsmål:
 * Rulning ned til en internt linket position i originalbeskeder fungerer ikke. Dette kan ikke rettes, da originalbeskedvisningen udgør en del af selve rulningsvisningen.
 * En forhåndsvisning af en beskedtekst vises ikke (altid) på Samsung-ure, da [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean))-parameteren synes at blive ignoreret. Beskedforhåndsvisningstekster bliver vist korrekt på Pebble- 2, Fitbit Charge 3- og Mi band 3-wearables. Se også [denne FAQ](#user-content-faq126).
 * En [fejl i Android](https://issuetracker.google.com/issues/37068143) medfører af og til et nedbrud med "*... Ugyldig forskydning... Gyldigt område er ...* når tekst er valgt og der trykkes uden for den valgte tekst. Denne fejl er rettet i Android 6.0.1.
+* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 
 ## Planlagte funktioner
 
@@ -628,7 +629,9 @@ Private nøgler gemmes af Android og kan importeres via Androids avancerede sikk
 
 Bemærk, at certifikater kan indeholde flere nøgler til flere formål, f.eks. til godkendelse, kryptering og signering. Android importerer kun den første nøgle, så for at importere alle nøgler, skal certifikatet først opdeles. Dette er ikke en almindelig forekommende handling, så du rådes til at bede certifikatleverandøren om support.
 
-Standardkrypteringsmetoden er PGP, men den sidst anvendte krypteringsmetode huskes for den valgte identitet til næste gang. You might need to enable the send options in the three dots menu again to be able to select the encryption method.
+Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+
+The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You might need to enable the send options in the three dots menu again to be able to select the encryption method.
 
 To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
@@ -842,13 +845,13 @@ The errors *... invalid greeting ...*, *... requires valid address ...* and *...
 
 The errors *... Couldn't connect to host ...*, *... Connection refused ...* or *... Network unreachable ...* mean that FairEmail was not able to connect to the email server.
 
-The error *... Host is unresolved ...* or "*... Unable to resolve host ...* means that the address of the email server could not be resolved. This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
+Fejlen *... Host is unresolved ...* or "*... Unable to resolve host ...* means that the address of the email server could not be resolved. This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
 
-Fejlen *... Software caused connection abort ...* means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
+The error *... Software caused connection abort ...* means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
 
-Fejlene *... BYE Logging out ...*, *... Connection reset by peer ...* mean that the email server actively terminated an existing connection.
+The errors *... BYE Logging out ...*, *... Connection reset by peer ...* mean that the email server actively terminated an existing connection.
 
-Fejlen *... Connection closed by peer ...* might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
+The error *... Connection closed by peer ...* might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
 
 The errors *... Read error ...*, *... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
 
@@ -888,7 +891,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * Outlooks og Office 365' størrelsesbegrænsning for vedhæftninger [udgør 20 MB](https://support.microsoft.com/en-us/help/2813269/attachment-size-exceeds-the-allowable-limit-error-when-you-add-a-large)
 * Yahoos størrelsesbegrænsning for vedhæftninger [udgør 25 MB](https://help.yahoo.com/kb/SLN5673.html)
 * For *554 5.7.1 Tjeneste utilgængelig; Klient vært xxx.xxx.xxx.xxx blokeret*, tjek venligst [hér](https://docs.gandi.net/en/gandimail/faq/error_types/554_5_7_1_service_unavailable.html)
-* *501 Syntax error - line too long* is often caused by using a long Autocrypt header
+* *501 Syntaksfejl - linje for lang* er ofte forårsaget af brug af en lang Autocrypt-header
 
 **Gmail errors**
 
@@ -1211,7 +1214,7 @@ The error '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either c
 
 The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
-The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
+The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore. There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
 

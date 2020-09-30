@@ -214,6 +214,14 @@ public class EntityFolder extends EntityOrder implements Serializable {
             TRASH,
             JUNK
     ));
+    private static final List<Boolean> SYSTEM_FOLDER_POLL = Collections.unmodifiableList(Arrays.asList(
+            false, // inbox
+            false, // drafts
+            false, // sent
+            false, // archive
+            true, // trash
+            true // junk
+    )); // MUST match SYSTEM_FOLDER_SYNC
     private static final List<Boolean> SYSTEM_FOLDER_DOWNLOAD = Collections.unmodifiableList(Arrays.asList(
             true, // inbox
             true, // drafts
@@ -235,6 +243,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
     void setProperties() {
         int sync = EntityFolder.SYSTEM_FOLDER_SYNC.indexOf(type);
         this.synchronize = (sync >= 0);
+        this.poll = (sync < 0 || EntityFolder.SYSTEM_FOLDER_POLL.get(sync));
         this.download = (sync < 0 || EntityFolder.SYSTEM_FOLDER_DOWNLOAD.get(sync));
 
         this.sync_days = EntityFolder.DEFAULT_SYNC;
@@ -249,6 +258,11 @@ public class EntityFolder extends EntityOrder implements Serializable {
             this.initialize = EntityFolder.DEFAULT_KEEP_DRAFTS;
             this.keep_days = EntityFolder.DEFAULT_KEEP_DRAFTS;
         }
+    }
+
+    static boolean shouldPoll(String type) {
+        int sync = EntityFolder.SYSTEM_FOLDER_SYNC.indexOf(type);
+        return (sync < 0 || EntityFolder.SYSTEM_FOLDER_POLL.get(sync));
     }
 
     static EntityFolder getOutbox() {
@@ -285,22 +299,22 @@ public class EntityFolder extends EntityOrder implements Serializable {
 
     static int getIcon(String type) {
         if (EntityFolder.INBOX.equals(type))
-            return R.drawable.baseline_inbox_24;
+            return R.drawable.twotone_inbox_24;
         if (EntityFolder.OUTBOX.equals(type))
-            return R.drawable.baseline_send_24;
+            return R.drawable.twotone_send_24;
         if (EntityFolder.DRAFTS.equals(type))
-            return R.drawable.baseline_drafts_24;
+            return R.drawable.twotone_drafts_24;
         if (EntityFolder.SENT.equals(type))
-            return R.drawable.baseline_forward_24;
+            return R.drawable.twotone_forward_24;
         if (EntityFolder.ARCHIVE.equals(type))
-            return R.drawable.baseline_archive_24;
+            return R.drawable.twotone_archive_24;
         if (EntityFolder.TRASH.equals(type))
-            return R.drawable.baseline_delete_24;
+            return R.drawable.twotone_delete_24;
         if (EntityFolder.JUNK.equals(type))
-            return R.drawable.baseline_report_problem_24;
+            return R.drawable.twotone_report_problem_24;
         if (EntityFolder.SYSTEM.equals(type))
-            return R.drawable.baseline_folder_special_24;
-        return R.drawable.baseline_folder_24;
+            return R.drawable.twotone_folder_special_24;
+        return R.drawable.twotone_folder_24;
     }
 
     String getDisplayName(Context context) {

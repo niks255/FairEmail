@@ -1057,8 +1057,8 @@
     <string name="title_legend_section_compose">Написание</string>
     <string name="title_legend_section_keyboard">Клавиатура</string>
     <string name="title_legend_oauth">OAuth-авторизация</string>
-    <string name="title_legend_primary_connected">Учётная запись подключена</string>
-    <string name="title_legend_primary_disconnected">Учётная запись отключена</string>
+    <string name="title_legend_folder_connected">Папка подключена</string>
+    <string name="title_legend_folder_disconnected">Папка отключена</string>
     <string name="title_legend_download_on">Автоматически загружать содержимое сообщения</string>
     <string name="title_legend_download_off">Загружать содержимое сообщения по требованию</string>
     <string name="title_legend_synchronize_on">Синхронизация включена</string>
@@ -1167,6 +1167,7 @@
     <string name="title_hint_battery">Поскольку FairEmail по умолчанию всегда получает сообщения, Android считает его всё время активным. Поэтому может показаться, что FairEmail всегда использует батарею, хотя на самом деле это не так.</string>
     <string name="title_hint_reformat">По умолчанию FairEmail переформатирует сообщения по соображениям конфиденциальности и безопасности. Чтобы просмотреть исходное сообщение, нажмите значок \"полный экран\" над текстом сообщения.</string>
     <string name="title_hint_design">Дизайн преднамеренно не отвлекающий, но сохраняет высокую функциональность. Существует множество вариантов для настройки внешнего вида, но пожалуйста, поймите, что невозможно сделать всех полностью счастливыми одновременно.</string>
+    <string name="title_hint_junk">Фильтрация спама должна выполняться почтовым сервером и не может быть надежно выполнена на устройстве с ограниченными возможностями и питанием от батареи.</string>
     <string name="title_hint_contact_actions">Длительное нажатие откроет другие действия.</string>
     <string name="title_hint_eml">Это обзор содержимого файла оригинального сообщения. Сохраните его с помощью значка \"Сохранить\" на панели действий, чтобы просмотреть содержимое полностью.</string>
     <string name="title_open_link">Открыть ссылку</string>

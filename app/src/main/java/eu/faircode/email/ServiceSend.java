@@ -200,7 +200,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     NotificationCompat.Builder getNotificationService() {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "send")
-                        .setSmallIcon(R.drawable.baseline_send_24)
+                        .setSmallIcon(R.drawable.twotone_send_24)
                         .setContentTitle(getString(R.string.title_notification_sending))
                         .setContentIntent(getPendingIntent(this))
                         .setAutoCancel(false)
@@ -710,6 +710,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                         int operations = db.operation().getOperations(outbox.id).size();
                         if (operations > 0)
                             start(context);
+                        else {
+                            db.folder().setFolderState(outbox.id, null);
+                            db.folder().setFolderSyncState(outbox.id, null);
+                        }
                     }
                 } catch (Throwable ex) {
                     Log.e(ex);

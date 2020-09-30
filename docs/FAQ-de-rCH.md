@@ -76,7 +76,8 @@ Verwandte Fragen:
 * ~~Die Verschlüsselung mit YubiKey führt zu einer Endlosschleife. Dies scheint durch einen [Fehler in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507) verursacht zu werden.~~
 * Der Bildlauf zu einer intern verknüpften Stelle in Originalnachrichten funktioniert nicht. Dies kann nicht behoben werden, da die Original-Nachrichten-Ansicht in einer Scroll-Ansicht enthalten ist.
 * Eine Vorschau eines Nachrichtentextes wird auf Samsung-Uhren nicht (immer) angezeigt, weil [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) wohl ignoriert wird. Bisher ist nur bekannt, dass Nachrichtenvorschautexte auf den Smart-Armbändern „Pebble 2”, „Fitbit Charge 3” und „Mi Band 3” korrekt angezeigt werden. Siehe auch [diese FAQ](#user-content-faq126).
-* Ein [Fehler in Android 6.0](https://issuetracker.google.com/issues/37068143) verursacht einen Absturz mit * … Invalid offset: ... Der gültige Bereich ist …* wenn Text ausgewählt ist und außerhalb des ausgewählten Textes angetippt wird. Dieser Fehler wurde in Android 6.0.1 behoben.
+* Ein [Fehler in Android 6.0](https://issuetracker.google.com/issues/37068143) verursacht einen Absturz mit * … Ungültiger Offset: ... Der gültige Bereich ist …* wenn Text ausgewählt ist und außerhalb des ausgewählten Textes angetippt wird. Dieser Fehler wurde in Android 6.0.1 behoben.
+* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 
 ## Geplante Funktionen
 
@@ -126,10 +127,10 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(5) Wie kann ich die Nachrichtenansicht anpassen?](#user-content-faq5)
 * [(6) Wie kann ich mich bei Gmail / G Suite anmelden?](#user-content-faq6)
 * [(7) Warum werden gesendete Nachrichten nicht (direkt) im Gesendet-Ordner angezeigt?](#user-content-faq7)
-* [(8) Kann ich ein Microsoft Exchange-Konto verwenden?](#user-content-faq8)
+* [(8) Kann ich ein Microsoft-Exchange-Konto verwenden?](#user-content-faq8)
 * [(9) Was sind Identitäten / Wie füge ich einen Alias hinzu?](#user-content-faq9)
 * [~~(11) Warum wird POP nicht unterstützt?~~](#user-content-faq11)
-* [~~(10) Was bedeutet "UIDPLUS nicht unterstützt"?~~](#user-content-faq10)
+* [~~(10) Was bedeutet »UIDPLUS nicht unterstützt«?~~](#user-content-faq10)
 * [(12) Wie funktioniert die Ver- und Entschlüsselung?](#user-content-faq12)
 * [(13) Wie funktioniert die Suche auf dem Gerät bzw. auf den Servern?](#user-content-faq13)
 * [(14) Wie kann ich ein Outlook-/Live-/Hotmail-Konto einrichten?](#user-content-faq14)
@@ -140,7 +141,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(19) Warum sind die Pro-Funktionen so teuer?](#user-content-faq19)
 * [(20) Kann ich eine Rückerstattung erhalten?](#user-content-faq20)
 * [(21) Wie aktiviere ich das Benachrichtigungslicht?](#user-content-faq21)
-* [(22) Was bedeutet ein Konto-/Ordnerfehler ... ?](#user-content-faq22)
+* [(22) Was bedeutet ein Konto-/Ordnerfehler …?](#user-content-faq22)
 * [(23) Warum bekomme ich einen Alarm? ?](#user-content-faq23)
 * [(24) Was bedeutet das Anzeigen / Suchen von Nachrichten auf dem Server?](#user-content-faq24)
 * [(25) Warum kann ich ein Bild, einen Anhang oder eine Datei nicht auswählen, öffnen oder speichern?](#user-content-faq25)
@@ -170,7 +171,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(50) Kann man eine Option hinzufügen, um alle Nachrichten zu synchronisieren?](#user-content-faq50)
 * [(51) Wie werden die Ordner sortiert?](#user-content-faq51)
 * [(52) Wieso dauert es so lange Zeit, um sich wieder mit einem Konto zu verbinden?](#user-content-faq52)
-* [(53) Kann ich die Aktionsleiste nach oben/unten verlagern?](#user-content-faq53)
+* [(53) Können Sie die Aktionsleiste nach oben/unten verlagern?](#user-content-faq53)
 * [~~(54) Wie benutze ich ein Namensraumpräfix?~~](#user-content-faq54)
 * [(55) Wie kann ich alle Nachrichten als gelesen markieren, verschieben oder löschen?](#user-content-faq55)
 * [(56) Können Sie Unterstützung für JMAP hinzufügen?](#user-content-faq56)
@@ -181,15 +182,15 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(61) Warum werden einige Nachrichten verdunkelt angezeigt?](#user-content-faq61)
 * [(62) Welche Authentifizierungsmethoden werden unterstützt?](#user-content-faq62)
 * [(63) Wie werden Bilder für die Anzeige auf den Bildschirmen skaliert?](#user-content-faq63)
-* [~~(64) Kann man benutzerdefinierte Aktionen zum Links/Rechts-Wischen hinzufügen?~~](#user-content-faq64)
+* [~~(64) Kann man benutzerdefinierte Aktionen zum Links-/Rechtswischen hinzufügen?~~](#user-content-faq64)
 * [(65) Warum werden einige Anhänge abgedunkelt angezeigt?](#user-content-faq65)
 * [(66) Gibt es FairMail in der Google Play Familienmediathek?](#user-content-faq66)
 * [(67) Wie kann ich Konversationen stumm schalten?](#user-content-faq67)
 * [~~(68) Warum kann Adobe Acrobat Reader keine PDF-Anhänge öffnen / Microsoft-Apps keine angehängten Dokumente öffnen?~~](#user-content-faq68)
-* [(69) Gibt es eine Option »Bei neuen Nachrichten automatisch nach oben scrollen«?](#user-content-faq69)
+* [(69) Gibt es eine Option »Bei neuen Nachrichten automatisch nach oben rollen«?](#user-content-faq69)
 * [(70) Wann werden Nachrichten automatisch erweitert?](#user-content-faq70)
 * [(71) Wie verwende ich Filterregeln?](#user-content-faq71)
-* [(72) Was sind Primärkonten/Identitäten?](#user-content-faq72)
+* [(72) Was sind Hauptkonten/-identitäten?](#user-content-faq72)
 * [(73) Ist das Verschieben von Nachrichten zwischen verschiedenen Konten sicher/effizient?](#user-content-faq73)
 * [(74) Wieso sehe ich Nachrichten doppelt?](#user-content-faq74)
 * [(75) Können Sie eine iOS-, Windows-, Linux- usw. Version erstellen?](#user-content-faq75)
@@ -213,7 +214,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(94) Was bedeutet der rot-orangefarbene Streifen am Ende des Nachrichtenkopfes?](#user-content-faq94)
 * [(95) Warum werden nicht alle Apps angezeigt, wenn ein Anhang oder ein Bild ausgewählt wird?](#user-content-faq95)
 * [(96) Wo finde ich die IMAP- und SMTP-Einstellungen?](#user-content-faq96)
-* [(97) Was ist "Aufräumen" ?](#user-content-faq97)
+* [(97) Was ist »Bereinigen« ?](#user-content-faq97)
 * [(98) Warum kann ich immer noch Kontakte auswählen, nachdem ich Kontaktberechtigungen entzogen habe?](#user-content-faq98)
 * [(99) Gibt es einen Rich-Text- oder Markdown-Editor?](#user-content-faq99)
 * [(100) Wie kann ich Google Mail-Kategorien synchronisieren?](#user-content-faq100)
@@ -225,57 +226,57 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(106) Welche Launcher können die Anzahl der ungelesenen Nachrichten als Plakette anzeigen?](#user-content-faq106)
 * [(107) Wie verwende ich farbige Sterne?](#user-content-faq107)
 * [(108) Kann man Nachrichten aus beliebigen Ordnern dauerhaft löschen?](#user-content-faq108)
-* [~~(109) Warum ist 'Konto auswählen' nur in offiziellen Versionen verfügbar?~~](#user-content-faq109)
+* [~~(109) Warum ist »Konto auswählen« nur in offiziellen Versionen verfügbar?~~](#user-content-faq109)
 * [(110) Warum sind (einige) Nachrichten leer und/oder Anhänge beschädigt?](#user-content-faq110)
 * [(111) Wird OAuth unterstützt?](#user-content-faq111)
 * [(112) Welchen E-Mail-Provider empfehlen Sie?](#user-content-faq112)
 * [(113) Wie funktioniert die biometrische Authentifizierung?](#user-content-faq113)
 * [(114) Kann man die Einstellungen anderer E-Mail-Apps importieren?](#user-content-faq114)
 * [(115) Können E-Mail-Adressen-Chips hinzufügt werden?](#user-content-faq115)
-* [(116) Wie kann ich Bilder in Nachrichten von vertrauenswürdigen Absendern standardmäßig anzeigen?~](#user-content-faq116)
+* [~~(116) Wie kann ich Bilder in Nachrichten von vertrauenswürdigen Absendern standardmäßig anzeigen? ~~](#user-content-faq116)
 * [Können Sie mir helfen, meinen Kauf wiederherzustellen?](#user-content-faq117)
 * [(118) Was bedeutet »Nachverfolgungsparameter entfernen« genau?](#user-content-faq118)
-* [(119) Können Sie dem Sammeleingang-Widget für Post Farben hinzufügen?](#user-content-faq119)
+* [~~(119) Können Sie Farben dem Sammeleingangs-Widget hinzufügen?~~](#user-content-faq119)
 * [(120) Warum werden neue Nachrichten beim Öffnen der App nicht entfernt?](#user-content-faq120)
 * [(121) Wie werden Nachrichten zu einer Konversation gruppiert?](#user-content-faq121)
 * [~~(122) Warum wird Empfängername/E-Mail-Adresse mit einer Warnfarbe angezeigt?~~](#user-content-faq122)
 * [(123) Was geschieht, wenn FairEmail keine Verbindung zu einem E-Mail-Server herstellen kann?](#user-content-faq123)
-* [(124) Warum erhalte ich den Hinweis 'Nachricht zu groß oder zu komplex, um sie anzuzeigen'?](#user-content-faq124)
+* [(124) Warum erhalte ich den Hinweis »Nachricht zu groß oder zu komplex, um sie anzuzeigen«?](#user-content-faq124)
 * [(125) Was sind die aktuellen experimentellen Eigenschaften?](#user-content-faq125)
 * [(126) Können Nachrichtenvorschauen an mein Wearable gesendet werden?](#user-content-faq126)
-* [(127) Wie kann ich den Fehler 'Syntaktisch ungültige HELO-Argumente(n)' beheben?](#user-content-faq127)
+* [(127) Wie kann ich den Fehler »Syntaktisch ungültige HELO-Argumente« beheben?](#user-content-faq127)
 * [(128) Wie kann ich die gestellten Fragen zurücksetzen, zum Beispiel um Bilder zu zeigen?](#user-content-faq128)
 * [(129) Wird ProtonMail, Tutanota unterstützt?](#user-content-faq129)
-* [(130) Was bedeutet die Meldung 'Fehler ...'?](#user-content-faq130)
+* [(130) Was bedeutet die Meldung »Fehler …«?](#user-content-faq130)
 * [(131) Kann man die Richtung für das Wischen für vorherige/nächste Nachricht ändern?](#user-content-faq131)
 * [(132) Warum sind Benachrichtigungen für neue Nachrichten stumm?](#user-content-faq132)
 * [(133) Warum wird ActiveSync nicht unterstützt?](#user-content-faq133)
 * [(134) Wie kann ich Nachrichten nur in der App löschen?](#user-content-faq134)
 * [(135) Warum werden gelöschte Nachrichten oder Entwürfe in Konversationen angezeigt?](#user-content-faq135)
 * [(136) Wie kann ich ein Konto/Identität/Ordner löschen?](#user-content-faq136)
-* [(137) Wie kann ich 'Nicht erneut fragen' zurücksetzen?](#user-content-faq137)
+* [(137) Wie kann ich »Nicht erneut fragen« zurücksetzen?](#user-content-faq137)
 * [(138) Gibt es die Funktionen Kalender/Kontaktmanagement/Synchronisation?](#user-content-faq138)
-* [(139) Wie behebe ich 'Benutzer ist angemeldet, aber nicht verbunden'?](#user-content-faq139)
+* [(139) Wie behebe ich »Benutzer ist angemeldet, aber nicht verbunden«?](#user-content-faq139)
 * [(140) Warum enthält der Nachrichtentext seltsame Zeichen?](#user-content-faq140)
-* [(141) Wie kann ich 'Ein Entwürfe-Ordner ist erforderlich, um Nachrichten zu senden' beheben?](#user-content-faq141)
+* [(141) Wie kann ich »Ein Entwürfe-Ordner ist erforderlich, um Nachrichten zu senden« beheben?](#user-content-faq141)
 * [(142) Wie kann ich gesendete Nachrichten im Posteingang speichern?](#user-content-faq142)
 * [~~(143) Gibt es einen Papierkorb für POP3-Konten? ~~](#user-content-faq143)
 * [(144) Wie kann ich Sprachnotizen aufnehmen?](#user-content-faq144)
 * [(145) Wie kann ich einen Benachrichtigungston für ein Konto, einen Ordner oder einen Absender festlegen?](#user-content-faq145)
 * [(146) Wie kann ich falsche Zeiten von Nachrichten beheben?](#user-content-faq146)
 * [(147) Was sollte ich über Drittanbieter-Versionen wissen?](#user-content-faq147)
-* [(148) Wie kann ich ein Apple iCloud-Konto verwenden?](#user-content-faq148)
+* [(148) Wie kann ich ein Apple-iCloud-Konto verwenden?](#user-content-faq148)
 * [(149) Wie funktioniert das Widget für ungelesene Nachrichten?](#user-content-faq149)
 * [(150) Gibt es eine Möglichkeit zum Ablehnen von Kalendereinladungen?](#user-content-faq150)
 * [(151) Gibt es eine Datensicherung/Wiederherstellung von Nachrichten?](#user-content-faq151)
 * [(152) Wie kann ich eine Kontaktgruppe einfügen?](#user-content-faq152)
-* [(153) Warum funktioniert das dauerhafte Löschen von Google Mail-Nachrichten nicht?](#user-content-faq153)
+* [(153) Warum funktioniert das dauerhafte Löschen von Gmail-Nachrichten nicht?](#user-content-faq153)
 * [~~(154) Kann man Favicons als Kontaktfotos verwenden?~~](#user-content-faq154)
 * [(155) Was ist eine winmail.dat-Datei?](#user-content-faq155)
 * [(156) Wie kann ich ein Office365-Konto einrichten?](#user-content-faq156)
 * [(157) Wie kann ich ein Free.fr-Konto einrichten?](#user-content-faq157)
 * [(158) Welche/r Kamera/Audiorekorder ist empfehlenswert?](#user-content-faq158)
-* [(159) Was sind Disconnect Trackingschutz-Listen?](#user-content-faq159)
+* [(159) Was sind Disconnects Tracker-Schutzlisten?](#user-content-faq159)
 
 [Ich habe eine weitere Frage.](#user-content-support)
 
@@ -358,21 +359,21 @@ Die Statusleistenbenachrichtigung mit niedriger Priorität zeigt die Anzahl der 
 * *Löschen*: Lösche Nachricht aus dem Remote-Ordner
 * *Gesehen*: Markiere Nachricht als gelesen/ungelesen im Remote-Ordner
 * *Beantwortet*: Markiere die Nachricht als beantwortet im Remote-Ordner
-* *Hinzufügen*: Nachricht zum Remote-Ordner hinzufügen
-* *keyword*: add/remove IMAP flag in remote folder
-* *label*: set/reset Gmail label in remote folder
+* *Hinzufügen*: Nachricht zum entfernten Ordner hinzufügen
+* *Stichwort*: IMAP-Markierungen im entfernten Ordner hinzufügen/entfernen
+* *Label*: Gmail-Label im entfernten Ordner festlegen/zurücksetzen
 * *Kopfzeilen*: Nachrichtenüberschriften herunterladen
 * *Roh*: Rohnachricht herunterladen
-* *body*: download message text
-* *attachment*: download attachment
-* *sync*: synchronize local and remote messages
-* *subscribe*: subscribe to remote folder
+* *body*: Nachrichtentext herunterladen
+* *Anhang*: Anhang herunterladen
+* *Synchronisation*: lokale und entfernte Nachrichten synchronisieren
+* *Abonnieren*: entfernten Ordner abonnieren
 * *purge*: delete all messages from remote folder
 * *Senden*: Nachricht senden
 * *Existiert*: Prüfen, ob Nachricht existiert
 * *Regel*: Regel im Text ausführen
 
-Operationen werden nur bearbeitet, wenn eine Verbindung zum E-Mail-Server besteht oder manuell synchronisiert wird. Siehe auch [diese FAQ](#user-content-faq16).
+Operationen werden nur bearbeitet, wenn eine Verbindung zum E-Mail-Server besteht oder manuell synchronisiert wird. Siehe auch [diese F&A](#user-content-faq16).
 
 <br />
 
@@ -500,7 +501,7 @@ Gesendete Nachrichten werden normalerweise aus dem Postausgang in den Ordner „
 
 Einige Provider verfolgen die gesendeten Nachrichten nicht oder der verwendete SMTP-Server ist möglicherweise nicht mit dem Provider verbunden. In diesen Fällen fügt FairEmail gesendete Nachrichten automatisch bei der Synchronisation des Ordners „Gesendet” dem Ordner „Gesendet” hinzu. Beachten Sie, dass dies zu zusätzlichem Internetverkehr führt.
 
-~~If this doesn't happen, your provider might not keep track of sent messages or you might be using an SMTP server not related to the provider.~~ ~~In these cases you can enable the advanced identity setting *Store sent messages* to let FairEmail add sent messages to the sent folder right after sending a message.~~ ~~Note that enabling this setting might result in duplicate messages if your provider adds sent messages to the sent folder too.~~ ~~Also beware that enabling this setting will result in extra data usage, especially when when sending messages with large attachments.~~
+~~Wenn dies nicht geschieht, verfolgt Ihr Provider möglicherweise nicht die gesendeten Nachrichten oder Sie verwenden einen SMTP-Server, der dem Provider nicht zugeordnet ist. ~ ~~In diesen Fällen können Sie die erweiterte Identitätseinstellung *Speichere gesendete Nachrichten* aktivieren, damit FairEmail gesendete Nachrichten direkt nach dem Senden einer Nachricht in den gesendeten Ordner einfügen kann. ~ ~~Beachten Sie, dass das Aktivieren dieser Einstellung zu doppelten Nachrichten führen kann, wenn Ihr Provider auch gesendete Nachrichten in den gesendeten Ordner einfügt. ~ ~~Beachten Sie auch, dass das Aktivieren dieser Einstellung zusätzliche Datenauslastung zur Folge hat, insbesondere wenn Nachrichten mit großen Anhängen gesendet werden.~~
 
 ~~If sent messages in the outbox are not found in the sent folder on a full synchronize, they will be moved from the outbox to the sent folder too.~~ ~~A full synchronize happens when reconnecting to the server or when synchronizing periodically or manually.~~ ~~You'll likely want to enable the advanced setting *Store sent messages* instead to move messages to the sent folder sooner.~~
 
@@ -628,24 +629,26 @@ Private keys are stored by Android and can be imported via the Android advanced 
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
-The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You might need to enable the send options in the three dots menu again to be able to select the encryption method.
+Beachten Sie, dass S/MIME-Signierung mit anderen Algorithmen als RSA zwar unterstützt wird, aber andere E-Mail-Clients dies möglicherweise nicht unterstützen. S/MIME-Verschlüsselung ist nur mit symmetrischen Algorithmen möglich, das heißt in der Praxis RSA.
 
-To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
+Die Standard-Verschlüsselungsmethode ist PGP, aber die zuletzt verwendete Verschlüsselungsmethode wird fürs nächsten Mal für die ausgewählte Identität gespeichert. Möglicherweise müssen Sie die Sendeoptionen im Drei-Punkte-Menü erneut aktivieren, um die Verschlüsselungsmethode wählen zu können.
 
-Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the privacy settings (PEM or DER format).
+Um verschiedene private Schlüssel für die gleiche E-Mail-Adresse zu erlauben lässt FairEmail Sie immer einen Schlüssel auswählen, wenn es mehrere Identitäten mit der gleichen E-Mail-Adresse für denselben Account gibt.
 
-FairEmail verifies both the signature and the complete certificate chain.
+Öffentliche Schlüssel werden bei FairEmail gespeichert und können bei der erstmaligen Überprüfung einer Signatur oder über die Privatsphäre-Einstellungen (PEM oder DER Format) importiert werden.
 
-Common errors:
+FairEmail überprüft sowohl die Unterschrift als auch die gesamte Zertifikatskette.
+
+Häufige Fehler:
 
 * *No certificate found matching targetContraints*: this likely means you are using an old version of FairEmail
 * *unable to find valid certification path to requested target*: basically this means one or more intermediate or root certificates were not found
 * *Privater Schlüssel stimmt mit keinem Verschlüsselungsschlüssel überein*: Der ausgewählte Schlüssel kann nicht verwendet werden, um die Nachricht zu entschlüsseln, wahrscheinlich weil es der falsche Schlüssel ist
 * *Kein privater Schlüssel*: Es wurde kein Zertifikat ausgewählt oder kein Zertifikat im Android-Schlüsselgeschäft verfügbar
 
-In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates. After the certificate details the issuer or "selfSign" is shown. A certificate is self signed when the subject and the issuer are the same. Certificates from a certificate authority (CA) are marked with "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)". Certificates found in the Android key store are marked with "Android".
+Falls die Zertifikatskette falsch ist, können Sie auf den kleinen Info-Button klicken, um alle Zertifikate anzuzeigen. After the certificate details the issuer or "selfSign" is shown. Ein Zertifikat ist selbstsigniert, wenn der Betreff und der Emittent identisch sind. Certificates from a certificate authority (CA) are marked with "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)". Zertifikate im Android-Schlüsselspeicher werden mit »Android« gekennzeichnet.
 
-A valid chain looks like this:
+Eine gültige Kette sieht so aus:
 
 ```
 Your certificate > zero or more intermediate certificates > CA (root) certificate marked with "Android"
@@ -653,45 +656,45 @@ Your certificate > zero or more intermediate certificates > CA (root) certificat
 
 Note that a certificate chain will always be invalid when no anchor certificate can be found in the Android key store, which is fundamental to S/MIME certificate validation.
 
-Please see [here](https://support.google.com/pixelphone/answer/2844832?hl=en) how you can import certificates into the Android key store.
+Sehen Sie [hier](https://support.google.com/pixelphone/answer/2844832?hl=en), wie Sie Zertifikate in den Android-Schlüsselspeicher importieren können.
 
-The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.
+Die Verwendung von abgelaufenen Schlüsseln, inline­verschlüsselten oder -signierten Nachrichten und Hardware­sicherheitstoken wird nicht unterstützt.
 
-If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options. Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219) if you want to request an S/MIME Actalis certificate.
+Wenn Sie ein kostenloses (Test) S/MIME Zertifikat suchen, finden Sie die Optionen [hier](http://kb.mozillazine.org/Getting_an_SMIME_certificate). Achten sie darauf, [das](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219) zuerst zu lesen, wenn sie ein solches Zertifikat erhalten wollen.
 
-How to extract a public key from a S/MIME certificate:
+Wie man einen öffentlichen Schlüssel aus einem S/MIME-Zertifikat extrahiert:
 
 ```
 openssl pkcs12 -in filename.pfx/p12 -clcerts -nokeys -out cert.pem
 ```
 
-You can decode S/MIME signatures, etc, [here](https://lapo.it/asn1js/).
+Sie können S/MIME Signaturen dekodieren usw., siehe [hier](https://lapo.it/asn1js/).
 
-S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations are free to use.
+S/MIME signieren/verschlüsseln ist ein Pro-Funktion, aber alle anderen PGP- und S/MIME-Operationen sind frei nutzbar.
 
 <br />
 
 <a name="faq13"></a>
-**(13) How does search on device/server work?**
+**(13) Wie funktioniert die Suche auf dem Gerät bzw. auf den Servern?**
 
-You can start searching for messages on sender (from), recipient (to, cc, bcc), subject, keywords or message text by using the magnify glass in the action bar of a folder. You can also search from any app by selecting *Search email* in the copy/paste popup menu.
+Sie können Nachrichten nach Absender (von), Empfänger (to, cc, bcc), Betreff, Schlagwörtern oder Nachrichtentext mit Hilfe der Lupe in der Aktionsleiste eines Ordners suchen. Sie können auch von jeder App aus suchen, indem Sie *FairEmail Suche* im Popup-Menü kopieren/einfügen auswählen.
 
-Searching in the unified inbox will search in all folders of all accounts, searching in the folder list will search in the associated account only and searching in a folder will search in that folder only.
+Die Suche im Sammeleingang wird alle Ordner aller Konten durchsuchen, die Suche in der Ordnerliste wird nur in dem zugehörigen Konto suchen, und die Suche in einem Ordner wird nur in diesem Ordner durchsuchen.
 
-Messages will be searched for on the device first. There will be an action button with a search again icon at the bottom to continue searching on the server. You can select in which folder to continue the search.
+Nachrichten werden zuerst nur auf dem Gerät gesucht. Es gibt einen Nochmal-Suchen-Aktionsknopf am unteren Bildschirmrand, um die Suche auf dem Server fortzusetzen. Sie können auswählen, in welchem Ordner die Suche fortgesetzt werden soll.
 
-The IMAP protocol doesn't support searching in more than one folder at the same time. Searching on the server is an expensive operation, therefore it is not possible to select multiple folders.
+Das IMAP-Protokoll unterstützt nicht die gleichzeitige Suche in mehr als einem Ordner. Die Suche auf dem Server ist ein aufwendiger Vorgang, daher ist es nicht möglich, mehrere Ordner auszuwählen.
 
-Searching local messages is case insensitive and on partial text. The message text of local messages will not be searched if the message text was not downloaded yet. Searching on the server might be case sensitive or case insensitive and might be on partial text or whole words, depending on the provider.
+Die Suche nach lokalen Nachrichten ist unabhängig von Groß- und Kleinschreibung und auf Teiltext bezoge. Der Nachrichtentext lokaler Nachrichten wird nicht durchsucht, wenn der Nachrichtentext noch nicht heruntergeladen wurde. Die Suche auf dem Server kann je nach Anbieter Groß- und Kleinschreibung berücksichtigen oder ignorieren, nach Teiltext oder nur nach ganzen Wörtern suchen.
 
-Some servers cannot handle searching in the message text when there are a large number of messages. For this case there is an option to disable searching in the message text.
+Einige Server schaffen es nicht den Nachrichtentext zu durchsuchen, wenn es viele Nachrichten gibt. Für diesen Fall gibt es eine Option, um die Suche im Nachrichtentext zu deaktivieren.
 
-It is possible to use Gmail search operators by prefixing a search command with *raw:*. If you configured just one Gmail account, you can start a raw search directly on the server by searching from the unified inbox. If you configured multiple Gmail accounts, you'll first need to navigate to the folder list or the archive (all messages) folder of the Gmail account you want to search in. Please [see here](https://support.google.com/mail/answer/7190) for the possible search operators. For example:
+Es ist möglich, Gmail-Suchoperatoren zu verwenden, indem einem Suchbefehl die Präfix *raw:* vorangestellt wird. Wenn Sie nur ein Gmail-Konto konfiguriert haben, können Sie eine rohe Suche direkt auf dem Server starten, indem Sie vom Sammeleingang aus suchen. Wenn Sie mehrere Gmail-Konten konfiguriert haben, müssen sie zuerst zur Ordnerliste oder zum Archiv („Alle Nachrichten“) des Gmail-Kontos navigieren, in dem Sie suchen möchten. Die möglichen Suchoperatoren finden Sie [hier](https://support.google.com/mail/answer/7190). Zum Beispiel:
 
 `
 raw:larger:10M`
 
-Searching through a large number of messages on the device is not very fast because of two limitations:
+Die Suche durch eine große Anzahl von Nachrichten auf dem Gerät ist aufgrund von zwei Einschränkungen nicht sehr schnell:
 
 * [sqlite](https://www.sqlite.org/), die Datenbank-Engine von Android hat ein Datensatzgrößenlimit und verhindert, dass Nachrichten in der Datenbank gespeichert werden
 * Android-Apps können nur mit limitiertem Arbeitsspeicher arbeiten, auch wenn das Gerät viel Speicher zur Verfügung hat
@@ -745,9 +748,9 @@ Mobile connections are almost always metered and some (paid) Wi-Fi hotspots are 
 <br />
 
 <a name="faq16"></a>
-**(16) Why are messages not being synchronized?**
+**(16) Warum werden Nachrichten nicht synchronisiert?**
 
-Possible causes of messages not being synchronized (sent or received) are:
+Mögliche Ursachen dafür, dass Nachrichten nicht synchronisiert (gesendet oder empfangen) werden, sind:
 
 * Konto oder Ordner(e) sind nicht zum Synchronisieren gesetzt
 * Die Anzahl der Tage, für die die Nachricht synchronisiert werden soll, ist zu niedrig gesetzt
@@ -755,13 +758,13 @@ Possible causes of messages not being synchronized (sent or received) are:
 * Der E-Mail-Server ist vorübergehend nicht verfügbar
 * Android hat die Synchronisation gestoppt
 
-So, check your account and folder settings and check if the accounts/folders are connected (see the legend in the navigation menu for the meaning of the icons).
+Überprüfen Sie also Ihre Konto- und Ordnereinstellungen und überprüfen Sie, ob die Konten/Ordner verbunden sind (siehe die Legende in der Navigation zur Bedeutung der Symbole).
 
-If there are any error messages, please see [this FAQ](#user-content-faq22).
+Wenn es irgendwelche Fehlermeldungen gibt, lesen Sie bitte [diese FAQ](#user-content-faq22).
 
-On some devices, where there are lots of applications competing for memory, Android may stop the synchronization service as a last resort.
+Auf einigen Geräten, wo es viele Anwendungen gibt, die um Speicher konkurrieren, kann Android den Synchronisierungsdienst als letzte Möglichkeit stoppen.
 
-Some Android versions stop apps and services too aggressively. See [this dedicated website](https://dontkillmyapp.com/) and [this Android issue](https://issuetracker.google.com/issues/122098785) for more information.
+Einige Android-Versionen stoppen Apps und Dienste zu aggressiv. Siehe [diese spezielle Webseite](https://dontkillmyapp.com/) und [dieses Android-Problem](https://issuetracker.google.com/issues/122098785) für weitere Informationen.
 
 Disabling battery optimizations (setup step 4) reduces the chance Android will stop the synchronization service.
 
@@ -784,16 +787,16 @@ The preview of the message text cannot be shown if the message body has not been
 <br />
 
 <a name="faq19"></a>
-**(19) Why are the pro features so expensive?**
+**(19) Warum sind die Pro-Funktionen so teuer?**
 
-The right question is "*why are there so many taxes and fees?*":
+Die richtige Frage ist: "*Warum gibt es so viele Steuern und Gebühren?*":
 
 * MwSt.: 25 % (je nach Land)
 * Google-Gebühr: 30 %
 * Einkommenssteuer: 50 %
 * <sub>PayPal-Gebühr: 5-10 % abhängig vom Land/Betrag</sub>
 
-So, what is left for the developer is just a fraction of what you pay.
+Was also für den Entwickler übrig bleibt, ist nur ein Bruchteil dessen, was Sie bezahlen.
 
 Note that only some convenience and advanced features need to be purchased which means that FairEmail is basically free to use.
 
@@ -842,13 +845,13 @@ The errors *... invalid greeting ...*, *... requires valid address ...* and *...
 
 The errors *... Couldn't connect to host ...*, *... Connection refused ...* or *... Network unreachable ...* mean that FairEmail was not able to connect to the email server.
 
-The error *... Host is unresolved ...* or "*... Unable to resolve host ...* means that the address of the email server could not be resolved. This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
+Der Fehler *... Host is unresolved ...* or "*... Unable to resolve host ...* means that the address of the email server could not be resolved. This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
 
-Der Fehler *... Software caused connection abort ...* means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
+The error *... Software caused connection abort ...* means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
 
-Die Fehler *... BYE Logging out ...*, *... Connection reset by peer ...* mean that the email server actively terminated an existing connection.
+The errors *... BYE Logging out ...*, *... Connection reset by peer ...* mean that the email server actively terminated an existing connection.
 
-Der Fehler *... Connection closed by peer ...* might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
+The error *... Connection closed by peer ...* might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
 
 The errors *... Read error ...*, *... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
 
@@ -894,9 +897,9 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 
 The authorization of Gmail accounts setup with the quick wizard needs to be periodically refreshed via the [Android account manager](https://developer.android.com/reference/android/accounts/AccountManager). This requires contact/account permissions and internet connectivity.
 
-Der Fehler *… Authentifizierung fehlgeschlagen ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
+The error *... Authentifizierung fehlgeschlagen ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
 
-The errors *... Authentifizierung fehlgeschlagen ... No token on refresh ...* means that the Android account manager failed to refresh the authorization of a Gmail account.
+The errors *... Authentication failed ... No token on refresh ...* means that the Android account manager failed to refresh the authorization of a Gmail account.
 
 The error *... Authentication failed ... Invalid credentials ... network error ...* means that the Android account manager was not able to refresh the authorization of a Gmail account due to problems with the internet connection
 
@@ -963,37 +966,37 @@ Alternatively, you might be able to enable the *Files* app again using the Andro
 <br />
 
 <a name="faq26"></a>
-**(26) Kann ich helfen, FairEmail in meine eigene Sprache zu übersetzen?**
+**(26) Can I help to translate FairEmail in my own language?**
 
-Ja, Sie können die Texte von FairEmail in Ihre eigene Sprache [auf Crowdin](https://crowdin.com/project/open-source-email) übersetzen. Die Registrierung ist kostenlos.
+Yes, you can translate the texts of FairEmail in your own language [on Crowdin](https://crowdin.com/project/open-source-email). Registration is free.
 
-Wenn Sie möchten, dass Ihr Name oder Ihr Alias in die Liste der Mitwirkenden in *über* der App aufgenommen werden soll, bitte [kontaktieren Sie mich](https://contact.faircode.eu/?product=fairemailsupport).
+If you would like your name or alias to be included in the list of contributors in *About* the app, please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
 
 <br />
 
 <a name="faq27"></a>
-**(27) Wie kann ich zwischen eingebetteten und externen Grafiken unterscheiden?**
+**(27) How can I distinguish between embedded and external images?**
 
-Externes Bild:
+External image:
 
 ![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
 
-Eingebettetes Bild:
+Embedded image:
 
 ![Embedded image](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
 
-Defektes Bild:
+Broken image:
 
 ![Broken image](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
 
-Beachten Sie, dass das Herunterladen externer Bilder von einem entfernten Server verwendet werden kann, um eine Nachricht zu speichern, was Sie wahrscheinlich nicht wollen, wenn die Nachricht Spam oder bösartig ist.
+Note that downloading external images from a remote server can be used to record you did see a message, which you likely don't want if the message is spam or malicious.
 
 <br />
 
 <a name="faq28"></a>
-**(28) Wie kann ich Statusleisten-Benachrichtigungen verwalten?**
+**(28) How can I manage status bar notifications?**
 
-In der Einrichtung finden Sie den Knopf *Benachrichtigungen verwalten*, um direkt zu den Android-Benachrichtigungseinstellungen für FairEmail zu navigieren.
+In the setup you'll find a button *Manage notifications* to directly navigate to the Android notifications settings for FairEmail.
 
 On Android 8.0 Oreo and later you can manage the properties of the individual notification channels, for example to set a specific notification sound or to show notifications on the lock screen.
 
@@ -1211,7 +1214,7 @@ The error '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either c
 
 The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
-The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
+The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore. There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
 
@@ -1392,7 +1395,7 @@ There are almost no providers offering the [JMAP](https://jmap.io/) protocol, so
 
 The email icon in the folder list can be open (outlined) or closed (solid):
 
-![Externes Bild](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
 
 Message bodies and attachments are not downloaded by default.
 

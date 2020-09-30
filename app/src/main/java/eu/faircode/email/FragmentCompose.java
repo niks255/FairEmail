@@ -882,7 +882,7 @@ public class FragmentCompose extends FragmentBase {
                         else {
                             String uri = cursor.getString(columnIndex);
                             if (uri == null)
-                                photo.setImageResource(R.drawable.baseline_person_24);
+                                photo.setImageResource(R.drawable.twotone_person_24);
                             else
                                 photo.setImageURI(Uri.parse(uri));
                         }
@@ -1369,15 +1369,15 @@ public class FragmentCompose extends FragmentBase {
         TextView tv = v.findViewById(R.id.text);
         ib.setEnabled(state == State.LOADED);
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) || EntityMessage.SMIME_SIGNONLY.equals(encrypt)) {
-            ib.setImageResource(R.drawable.baseline_gesture_24);
+            ib.setImageResource(R.drawable.twotone_gesture_24);
             ib.setImageTintList(null);
             tv.setText(EntityMessage.PGP_SIGNONLY.equals(encrypt) ? "P" : "S");
         } else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) || EntityMessage.SMIME_SIGNENCRYPT.equals(encrypt)) {
-            ib.setImageResource(R.drawable.baseline_lock_24);
+            ib.setImageResource(R.drawable.twotone_lock_24);
             ib.setImageTintList(ColorStateList.valueOf(colorEncrypt));
             tv.setText(EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) ? "P" : "S");
         } else {
-            ib.setImageResource(R.drawable.baseline_lock_open_24);
+            ib.setImageResource(R.drawable.twotone_lock_open_24);
             ib.setImageTintList(null);
             tv.setText(null);
         }
@@ -2716,7 +2716,14 @@ public class FragmentCompose extends FragmentBase {
                 CMSSignedDataGenerator cmsGenerator = new CMSSignedDataGenerator();
                 cmsGenerator.addCertificates(store);
 
-                ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withRSA")
+                String algorithm = privkey.getAlgorithm();
+                Log.i("Private key algorithm=" + algorithm);
+                if (TextUtils.isEmpty(algorithm))
+                    algorithm = "RSA";
+                else if ("EC".equals(algorithm))
+                    algorithm = "ECDSA";
+
+                ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256with" + algorithm)
                         .build(privkey);
                 DigestCalculatorProvider digestCalculator = new JcaDigestCalculatorProviderBuilder()
                         .build();
@@ -2824,9 +2831,14 @@ public class FragmentCompose extends FragmentBase {
 
                 // Encrypt
                 CMSEnvelopedDataGenerator cmsEnvelopedDataGenerator = new CMSEnvelopedDataGenerator();
-                for (X509Certificate cert : certs) {
-                    RecipientInfoGenerator gen = new JceKeyTransRecipientInfoGenerator(cert);
-                    cmsEnvelopedDataGenerator.addRecipientInfoGenerator(gen);
+                if ("EC".equals(privkey.getAlgorithm())) {
+                    // https://security.stackexchange.com/a/53960
+                    throw new IllegalArgumentException("ECDSA cannot be used for encryption");
+                } else {
+                    for (X509Certificate cert : certs) {
+                        RecipientInfoGenerator gen = new JceKeyTransRecipientInfoGenerator(cert);
+                        cmsEnvelopedDataGenerator.addRecipientInfoGenerator(gen);
+                    }
                 }
 
                 File einput = new File(context.getCacheDir(), "smime_encrypt." + draft.id);
@@ -3706,6 +3718,11 @@ public class FragmentCompose extends FragmentBase {
                                                         remove = true;
                                                     else {
                                                         Node next = node.nextSibling();
+                                                        if (next == null) {
+                                                            Node parent = node.parent();
+                                                            if (parent != null)
+                                                                next = parent.nextSibling();
+                                                        }
                                                         if (next != null && "br".equals(next.nodeName()))
                                                             remove = true;
                                                     }
@@ -4012,7 +4029,7 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(data.draft.revision < data.draft.revisions);
 
             if (args.getBoolean("incomplete"))
-                Snackbar.make(view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(view, R.string.title_attachments_incomplete, Snackbar.LENGTH_LONG)
                         .setGestureInsetBottomIgnored(true).show();
 
             DB db = DB.getInstance(getContext());
@@ -4417,7 +4434,11 @@ public class FragmentCompose extends FragmentBase {
 
                         // Restore revision
                         Log.i("Restoring revision=" + draft.revision);
-                        body = Helper.readText(draft.getFile(context, draft.revision));
+                        File file = draft.getFile(context, draft.revision);
+                        if (file.exists())
+                            body = Helper.readText(file);
+                        else
+                            Log.e("Missing revision=" + file);
 
                         dirty = true;
                     }

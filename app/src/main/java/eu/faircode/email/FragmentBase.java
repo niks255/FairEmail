@@ -33,7 +33,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +57,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -140,6 +138,8 @@ public class FragmentBase extends Fragment {
     @Override
     public void startActivity(Intent intent) {
         try {
+            Log.i("Start intent=" + intent);
+            Log.logExtras(intent);
             super.startActivity(intent);
         } catch (ActivityNotFoundException ex) {
             Log.w(ex);
@@ -153,6 +153,8 @@ public class FragmentBase extends Fragment {
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         try {
+            Log.i("Start intent=" + intent + " request=" + requestCode);
+            Log.logExtras(intent);
             super.startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException ex) {
             Log.w(ex);
@@ -382,26 +384,32 @@ public class FragmentBase extends Fragment {
 
     private void onStoreAttachment(Intent intent) {
         attachment = intent.getLongExtra("id", -1);
+        Log.i("Save attachment id=" + attachment);
+
         Intent create = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         create.addCategory(Intent.CATEGORY_OPENABLE);
         create.setType(intent.getStringExtra("type"));
         create.putExtra(Intent.EXTRA_TITLE, intent.getStringExtra("name"));
         Helper.openAdvanced(create);
         PackageManager pm = getContext().getPackageManager();
-        if (create.resolveActivity(pm) == null) // system whitelisted
+        if (create.resolveActivity(pm) == null) { // system whitelisted
+            Log.w("SAF missing");
             ToastEx.makeText(getContext(), R.string.title_no_saf, Toast.LENGTH_LONG).show();
-        else
+        } else
             startActivityForResult(Helper.getChooser(getContext(), create), REQUEST_ATTACHMENT);
     }
 
     private void onStoreAttachments(Intent intent) {
         message = intent.getLongExtra("id", -1);
+        Log.i("Save attachments message=" + message);
+
         Intent tree = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         Helper.openAdvanced(tree);
         PackageManager pm = getContext().getPackageManager();
-        if (tree.resolveActivity(pm) == null) // system whitelisted
+        if (tree.resolveActivity(pm) == null) { // system whitelisted
+            Log.w("SAF missing");
             ToastEx.makeText(getContext(), R.string.title_no_saf, Toast.LENGTH_LONG).show();
-        else
+        } else
             startActivityForResult(Helper.getChooser(getContext(), tree), REQUEST_ATTACHMENTS);
     }
 
@@ -427,14 +435,10 @@ public class FragmentBase extends Fragment {
                     return null;
                 File file = attachment.getFile(context);
 
-                ParcelFileDescriptor pfd = null;
                 OutputStream os = null;
                 InputStream is = null;
                 try {
-                    pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-                    if (pfd == null)
-                        throw new FileNotFoundException(uri.toString());
-                    os = new FileOutputStream(pfd.getFileDescriptor());
+                    os = context.getContentResolver().openOutputStream(uri);
                     is = new FileInputStream(file);
 
                     byte[] buffer = new byte[Helper.BUFFER_SIZE];
@@ -442,12 +446,6 @@ public class FragmentBase extends Fragment {
                     while ((read = is.read(buffer)) != -1)
                         os.write(buffer, 0, read);
                 } finally {
-                    try {
-                        if (pfd != null)
-                            pfd.close();
-                    } catch (Throwable ex) {
-                        Log.w(ex);
-                    }
                     try {
                         if (os != null)
                             os.close();
@@ -517,14 +515,10 @@ public class FragmentBase extends Fragment {
                     if (document == null)
                         throw new FileNotFoundException("Could not save " + uri + ":" + name);
 
-                    ParcelFileDescriptor pfd = null;
                     OutputStream os = null;
                     InputStream is = null;
                     try {
-                        pfd = context.getContentResolver().openFileDescriptor(document.getUri(), "w");
-                        if (pfd == null)
-                            throw new FileNotFoundException(name);
-                        os = new FileOutputStream(pfd.getFileDescriptor());
+                        os = context.getContentResolver().openOutputStream(uri);
                         is = new FileInputStream(file);
 
                         byte[] buffer = new byte[Helper.BUFFER_SIZE];
@@ -532,12 +526,6 @@ public class FragmentBase extends Fragment {
                         while ((read = is.read(buffer)) != -1)
                             os.write(buffer, 0, read);
                     } finally {
-                        try {
-                            if (pfd != null)
-                                pfd.close();
-                        } catch (Throwable ex) {
-                            Log.w(ex);
-                        }
                         try {
                             if (os != null)
                                 os.close();

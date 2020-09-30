@@ -966,7 +966,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvCount.setTypeface(typeface);
 
             int colorUnseen = (message.unseen > 0 ? colorUnread : colorRead);
-            if (tvFrom.getTag() == null || (int) tvFrom.getTag() != colorUnseen) {
+            if (!Objects.equals(tvFrom.getTag(), colorUnseen)) {
                 tvFrom.setTag(colorUnseen);
                 tvFrom.setTextColor(colorUnseen);
                 tvSize.setTextColor(colorUnseen);
@@ -977,14 +977,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             int colorBackground =
                     (message.accountColor == null || !ActivityBilling.isPro(context)
                             ? colorSeparator : message.accountColor);
-            if (vwColor.getTag() == null || (int) vwColor.getTag() != colorBackground) {
+            if (!Objects.equals(vwColor.getTag() == null, colorBackground)) {
                 vwColor.setTag(colorBackground);
                 vwColor.setBackgroundColor(colorBackground);
             }
             vwColor.setVisibility(color_stripe ? View.VISIBLE : View.GONE);
 
             // Expander
-            if (ibExpander.getTag() == null || (boolean) ibExpander.getTag() != expanded) {
+            if (!Objects.equals(ibExpander.getTag(), expanded)) {
                 ibExpander.setTag(expanded);
                 ibExpander.setImageLevel(expanded ? 0 /* less */ : 1 /* more */);
             }
@@ -1043,7 +1043,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             // Line 3
             int icon = (message.drafts > 0
-                    ? R.drawable.baseline_edit_24
+                    ? R.drawable.twotone_edit_24
                     : EntityFolder.getIcon(outgoing ? EntityFolder.SENT : message.folderType));
             ivType.setVisibility(message.drafts > 0 ||
                     (viewType == ViewType.UNIFIED && type == null && (!inbox || outgoing)) ||
@@ -1051,16 +1051,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     (viewType == ViewType.THREAD && (outgoing || EntityFolder.SENT.equals(message.folderType))) ||
                     viewType == ViewType.SEARCH
                     ? View.VISIBLE : View.GONE);
-            if (ivType.getTag() == null || (int) ivType.getTag() != icon) {
+            if (!Objects.equals(ivType.getTag(), icon)) {
                 ivType.setTag(icon);
                 ivType.setImageResource(icon);
             }
 
             ivFound.setVisibility(message.ui_found && found ? View.VISIBLE : View.GONE);
 
-            ibSnoozed.setImageResource(
-                    message.ui_snoozed != null && message.ui_snoozed == Long.MAX_VALUE
-                            ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_timelapse_24);
+            int snoozy = (message.ui_snoozed != null && message.ui_snoozed == Long.MAX_VALUE
+                    ? R.drawable.twotone_visibility_off_24
+                    : R.drawable.twotone_timelapse_24);
+            if (!Objects.equals(ibSnoozed.getTag(), snoozy)) {
+                ibSnoozed.setTag(snoozy);
+                ibSnoozed.setImageResource(snoozy);
+            }
             if (message.ui_unsnoozed)
                 ibSnoozed.setColorFilter(colorAccent);
             else
@@ -1114,7 +1118,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             // Message text preview
             int textColor = (contrast ? textColorPrimary : textColorSecondary);
-            if (tvPreview.getTag() == null || (int) tvPreview.getTag() != textColor) {
+            if (!Objects.equals(tvPreview.getTag(), textColor)) {
                 tvPreview.setTag(textColor);
                 tvPreview.setTextColor(textColor);
                 if (preview_lines == 1)
@@ -1369,15 +1373,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void bindFlagged(TupleMessageEx message, boolean expanded) {
             boolean pro = ActivityBilling.isPro(context);
-            int flagged = (message.count - message.unflagged);
+            boolean flagged = (message.count - message.unflagged) > 0;
             int color = (message.color == null || !pro ? colorAccent : message.color);
+            int tint = (flagged ? color : textColorSecondary);
 
-            ibFlagged.setImageResource(flagged > 0 ? R.drawable.baseline_star_24 : R.drawable.baseline_star_border_24);
-            ibFlagged.setImageTintList(ColorStateList.valueOf(flagged > 0 ? color : textColorSecondary));
+            if (!Objects.equals(ibFlagged.getTag(), flagged)) {
+                ibFlagged.setTag(flagged);
+                ibFlagged.setImageResource(flagged ? R.drawable.baseline_star_24 : R.drawable.twotone_star_border_24);
+            }
+
+            ColorStateList csl = ibFlagged.getImageTintList();
+            if (csl == null || csl.getColorForState(new int[0], 0) != tint)
+                ibFlagged.setImageTintList(ColorStateList.valueOf(tint));
+
             ibFlagged.setEnabled(message.uid != null || message.accountProtocol != EntityAccount.TYPE_IMAP);
 
             card.setCardBackgroundColor(
-                    flags_background && flagged > 0 && !expanded
+                    flags_background && flagged && !expanded
                             ? ColorUtils.setAlphaComponent(color, 127) : Color.TRANSPARENT);
 
             if (flags)
@@ -1613,7 +1625,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_unsubscribe = prefs.getBoolean("button_unsubscribe", true);
                     boolean button_rule = prefs.getBoolean("button_rule", false);
 
-                    ibSeen.setImageResource(message.ui_seen ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_visibility_24);
+                    ibSeen.setImageResource(message.ui_seen ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
                     ibTrash.setTag(delete);
 
                     ibUndo.setVisibility(outbox ? View.VISIBLE : View.GONE);
@@ -1812,7 +1824,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             clearActions();
 
             ibSeenBottom.setImageResource(message.ui_seen
-                    ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_visibility_24);
+                    ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
             ibSeenBottom.setVisibility(!(message.folderReadOnly || message.uid == null) ||
                     message.accountProtocol == EntityAccount.TYPE_POP
                     ? View.VISIBLE : View.GONE);
@@ -1868,8 +1880,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Log.i("Bind size=" + size + " height=" + height);
 
             ibFull.setEnabled(hasWebView);
-            ibFull.setImageResource(show_full ? R.drawable.baseline_fullscreen_exit_24 : R.drawable.baseline_fullscreen_24);
-            ibImages.setImageResource(show_images ? R.drawable.baseline_format_align_justify_24 : R.drawable.baseline_image_24);
+            ibFull.setImageResource(show_full ? R.drawable.twotone_fullscreen_exit_24 : R.drawable.twotone_fullscreen_24);
+            ibImages.setImageResource(show_images ? R.drawable.twotone_article_24 : R.drawable.twotone_image_24);
 
             if (show_full) {
                 // Create web view
@@ -2177,7 +2189,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     new DynamicDrawableSpan() {
                                         @Override
                                         public Drawable getDrawable() {
-                                            Drawable d = context.getDrawable(R.drawable.baseline_format_quote_24);
+                                            Drawable d = context.getDrawable(R.drawable.twotone_format_quote_24);
                                             d.setTint(colorAccent);
                                             d.setBounds(0, 0, px, px);
                                             return d;
@@ -2219,7 +2231,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
                             (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
                                     !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
-                            ? R.drawable.baseline_lock_24 : R.drawable.baseline_lock_open_24
+                            ? R.drawable.twotone_lock_24 : R.drawable.twotone_lock_open_24
                     );
                     ibDecrypt.setVisibility(!EntityFolder.OUTBOX.equals(message.folderType) &&
                             (args.getBoolean("inline_encrypted") ||

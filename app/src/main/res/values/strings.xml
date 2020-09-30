@@ -177,6 +177,7 @@
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
     <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
     <string name="title_setup_gmail_drafts">If the drafts folder is not accessible by IMAP, this can be fixed in the Gmail label settings</string>
+    <string name="title_setup_office_remark">Microsoft does not provide this type of authorization for Outlook, Live, Hotmail, etc accounts</string>
     <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
     <string name="title_setup_oauth_rationale">Authorize access to your %1$s account</string>
     <string name="title_setup_oauth_authorize">Authorize</string>
@@ -509,7 +510,7 @@
     <string name="title_advanced_app">App settings</string>
     <string name="title_advanced_more">More options</string>
     <string name="title_advanced_processors" translatable="false">Processors: %1$d</string>
-    <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s</string>
+    <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
     <string name="title_advanced_memory_usage" translatable="false">Memory usage: %1$s/%2$s Native: %3$s</string>
     <string name="title_advanced_storage_usage" translatable="false">Storage space: %1$s/%2$s</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
@@ -1173,8 +1174,8 @@
     <string name="title_legend_section_keyboard">Keyboard</string>
 
     <string name="title_legend_oauth">OAuth authorization</string>
-    <string name="title_legend_primary_connected">Account connected</string>
-    <string name="title_legend_primary_disconnected">Account disconnected</string>
+    <string name="title_legend_folder_connected">Folder connected</string>
+    <string name="title_legend_folder_disconnected">Folder disconnected</string>
     <string name="title_legend_download_on">Download message content automatically</string>
     <string name="title_legend_download_off">Download message content on demand</string>
     <string name="title_legend_synchronize_on">Synchronize on</string>
@@ -1290,6 +1291,7 @@
     <string name="title_hint_battery">Since FairEmail by default always receives messages, Android will report FairEmail as always being active. Therefore it might look as if FairEmail is always consuming battery power although this is in fact not the case.</string>
     <string name="title_hint_reformat">By default, FairEmail reformats messages for privacy and security reasons. To view the original message, tap the \'full screen\' icon above the message text.</string>
     <string name="title_hint_design">The design is intentionally not distracting, but kept highly functional. There are many options to customize the appearance, but please understand that it is impossible to make everybody completely happy at the same time.</string>
+    <string name="title_hint_junk">Spam filtering should be done by the email server and cannot be done reliably on a battery powered device with limited capabilities.</string>
     <string name="title_hint_contact_actions">Long press for options</string>
     <string name="title_hint_eml">This is a summary of the content of a raw message file. Save the raw message with the save icon in the action bar to view all content.</string>
 

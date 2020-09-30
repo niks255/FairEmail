@@ -47,7 +47,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -101,6 +100,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -294,6 +294,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private boolean loading = false;
     private boolean swiping = false;
     private boolean scrolling = false;
+    private boolean navigating = false;
 
     private AdapterMessage adapter;
 
@@ -425,6 +426,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             viewType = AdapterMessage.ViewType.SEARCH;
             setTitle(server ? R.string.title_search_server : R.string.title_search_device);
         }
+
+        if (viewType != AdapterMessage.ViewType.THREAD)
+            getParentFragmentManager().setFragmentResultListener("message.selected", this, new FragmentResultListener() {
+                @Override
+                public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                    long id = result.getLong("id", -1);
+                    iProperties.setValue("selected", id, true);
+                }
+            });
     }
 
     @Override
@@ -1588,9 +1598,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 values.get(name).remove(id);
 
             if ("selected".equals(name) && enabled) {
+                final List<Integer> changed = new ArrayList<>();
+
                 int pos = adapter.getPositionForKey(id);
                 if (pos != NO_POSITION)
-                    adapter.notifyItemChanged(pos);
+                    changed.add(pos);
 
                 for (Long other : new ArrayList<>(values.get("selected")))
                     if (!other.equals(id)) {
@@ -1598,8 +1610,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                         pos = adapter.getPositionForKey(other);
                         if (pos != NO_POSITION)
-                            adapter.notifyItemChanged(pos);
+                            changed.add(pos);
                     }
+
+                rvMessage.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            for (Integer pos : changed)
+                                adapter.notifyItemChanged(pos);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
             }
         }
 
@@ -1920,25 +1944,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             int icon;
             if (EntityMessage.SWIPE_ACTION_ASK.equals(action))
-                icon = R.drawable.baseline_list_24;
+                icon = R.drawable.twotone_help_24;
             else if (EntityMessage.SWIPE_ACTION_SEEN.equals(action))
-                icon = (message.ui_seen ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_visibility_24);
+                icon = (message.ui_seen ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
             else if (EntityMessage.SWIPE_ACTION_FLAG.equals(action))
-                icon = (message.ui_flagged ? R.drawable.baseline_star_border_24 : R.drawable.baseline_star_24);
+                icon = (message.ui_flagged ? R.drawable.twotone_star_border_24 : R.drawable.baseline_star_24);
             else if (EntityMessage.SWIPE_ACTION_SNOOZE.equals(action))
-                icon = (message.ui_snoozed == null ? R.drawable.baseline_timelapse_24 : R.drawable.baseline_timer_off_24);
+                icon = (message.ui_snoozed == null ? R.drawable.twotone_timelapse_24 : R.drawable.twotone_timer_off_24);
             else if (EntityMessage.SWIPE_ACTION_HIDE.equals(action))
-                icon = (message.ui_snoozed == null ? R.drawable.baseline_visibility_off_24 :
+                icon = (message.ui_snoozed == null ? R.drawable.twotone_visibility_off_24 :
                         (message.ui_snoozed == Long.MAX_VALUE
-                                ? R.drawable.baseline_visibility_24 : R.drawable.baseline_timer_off_24));
+                                ? R.drawable.twotone_visibility_24 : R.drawable.twotone_timer_off_24));
             else if (EntityMessage.SWIPE_ACTION_MOVE.equals(action))
-                icon = R.drawable.baseline_folder_24;
+                icon = R.drawable.twotone_folder_24;
             else if (EntityMessage.SWIPE_ACTION_JUNK.equals(action))
-                icon = R.drawable.baseline_report_problem_24;
+                icon = R.drawable.twotone_report_problem_24;
             else if (EntityMessage.SWIPE_ACTION_DELETE.equals(action) ||
                     (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
                     (EntityFolder.TRASH.equals(actionType) && EntityFolder.JUNK.equals(message.folderType)))
-                icon = R.drawable.baseline_delete_forever_24;
+                icon = R.drawable.twotone_delete_forever_24;
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
 
@@ -3784,7 +3808,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         menu.findItem(R.id.menu_folders).setActionView(R.layout.action_button);
         ImageButton ib = (ImageButton) menu.findItem(R.id.menu_folders).getActionView();
-        ib.setImageResource(R.drawable.baseline_folder_24);
+        ib.setImageResource(R.drawable.twotone_folder_24);
         ib.setContentDescription(getString(R.string.title_legend_section_folders));
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3835,7 +3859,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_folders).setVisible(viewType == AdapterMessage.ViewType.UNIFIED && primary >= 0);
         ImageButton ib = (ImageButton) menu.findItem(R.id.menu_folders).getActionView();
         ib.setImageResource(connected
-                ? R.drawable.baseline_folder_special_24 : R.drawable.baseline_folder_open_24);
+                ? R.drawable.twotone_folder_special_24 : R.drawable.twotone_folder_24);
 
         menu.findItem(R.id.menu_sort_on).setVisible(viewType != AdapterMessage.ViewType.SEARCH);
 
@@ -3899,9 +3923,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_force_sync).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
         menu.findItem(R.id.menu_force_send).setVisible(outbox);
 
-        ibSeen.setImageResource(filter_seen ? R.drawable.baseline_drafts_24 : R.drawable.baseline_mail_24);
-        ibUnflagged.setImageResource(filter_unflagged ? R.drawable.baseline_star_border_24 : R.drawable.baseline_star_24);
-        ibSnoozed.setImageResource(filter_snoozed ? R.drawable.baseline_visibility_off_24 : R.drawable.baseline_visibility_24);
+        ibSeen.setImageResource(filter_seen ? R.drawable.twotone_drafts_24 : R.drawable.twotone_mail_24);
+        ibUnflagged.setImageResource(filter_unflagged ? R.drawable.twotone_star_border_24 : R.drawable.baseline_star_24);
+        ibSnoozed.setImageResource(filter_snoozed ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
 
         ibSeen.setVisibility(quick_filter && folder ? View.VISIBLE : View.GONE);
         ibUnflagged.setVisibility(quick_filter && folder ? View.VISIBLE : View.GONE);
@@ -4871,6 +4895,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void navigate(long id, final boolean left) {
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
+        if (navigating)
+            return;
+        navigating = true;
+
+        Bundle result = new Bundle();
+        result.putLong("id", id);
+        getParentFragmentManager().setFragmentResult("message.selected", result);
 
         Bundle args = new Bundle();
         args.putLong("id", id);
@@ -5257,7 +5288,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (collapse_multiple && expanded > 0 && count > 1) {
                 values.get("expanded").clear();
                 updateExpanded();
-                adapter.notifyDataSetChanged();
+                rvMessage.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            adapter.notifyDataSetChanged();
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
                 return true;
             }
 
@@ -5370,7 +5410,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 else if (ACTION_DECRYPT.equals(action))
                     onDecrypt(intent);
                 else if (ACTION_KEYWORDS.equals(action))
-                    adapter.notifyDataSetChanged();
+                    onKeywords(intent);
             }
         }
     };
@@ -5490,6 +5530,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 snackbar.show();
             }
         }
+    }
+
+    private void onKeywords(Intent intent) {
+        rvMessage.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    adapter.notifyDataSetChanged();
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
     }
 
     @Override
@@ -5629,14 +5682,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 File file = message.getRawFile(context);
                 Log.i("Raw file=" + file);
 
-                ParcelFileDescriptor pfd = null;
                 OutputStream os = null;
                 InputStream is = null;
                 try {
-                    pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-                    if (pfd == null)
-                        throw new FileNotFoundException(uri.toString());
-                    os = new FileOutputStream(pfd.getFileDescriptor());
+                    os = context.getContentResolver().openOutputStream(uri);
                     is = new FileInputStream(file);
 
                     byte[] buffer = new byte[Helper.BUFFER_SIZE];
@@ -5644,12 +5693,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     while ((read = is.read(buffer)) != -1)
                         os.write(buffer, 0, read);
                 } finally {
-                    try {
-                        if (pfd != null)
-                            pfd.close();
-                    } catch (Throwable ex) {
-                        Log.w(ex);
-                    }
                     try {
                         if (os != null)
                             os.close();

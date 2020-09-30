@@ -139,6 +139,7 @@
     <string name="title_setup_gmail_rationale">Vänligen bevilja behörigheter för att välja ett konto och läsa ditt namn</string>
     <string name="title_setup_gmail_permissions">Google kommer att be om behörighet att läsa, komponera, skicka och permanent ta bort all din e-post. FairEmail kommer aldrig att ta bort dina meddelanden utan ditt uttryckliga medgivande.</string>
     <string name="title_setup_gmail_drafts">Om mappen för utkast inte är åtkomlig för IMAP kan detta lösas under inställningarna för Gmail-etiketten</string>
+    <string name="title_setup_office_remark">Microsoft tillhandahåller inte denna typ av auktorisering för Outlook, Live, Hotmail, etc konton</string>
     <string name="title_setup_office_auth">Felet \"AUTHENTICATE failed\" kan orsakas av att IMAP/SMTP inaktiveras av systemadministratören</string>
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
     <string name="title_setup_oauth_authorize">Auktorisera</string>
@@ -1034,8 +1035,8 @@
     <string name="title_legend_section_compose">Skriv</string>
     <string name="title_legend_section_keyboard">Tangentbord</string>
     <string name="title_legend_oauth">OAuth auktorisering</string>
-    <string name="title_legend_primary_connected">Kontot anslutet</string>
-    <string name="title_legend_primary_disconnected">Kontot frånkopplat</string>
+    <string name="title_legend_folder_connected">Mapp ansluten</string>
+    <string name="title_legend_folder_disconnected">Mappen frånkopplad</string>
     <string name="title_legend_download_on">Hämta meddelandeinnehåll automatiskt</string>
     <string name="title_legend_download_off">Hämta meddelandeinnehåll på begäran </string>
     <string name="title_legend_synchronize_on">Synkronisera nu</string>
@@ -1144,6 +1145,7 @@
     <string name="title_hint_battery">Eftersom FairEmail som standard alltid tar emot meddelanden, kommer Android att rapportera FairEmail som alltid aktiv. Därför kan det se ut som om FairEmail alltid förbrukar batterikraft även om detta i själva verket inte är fallet.</string>
     <string name="title_hint_reformat">Som standard formaterar FairEmail meddelanden av sekretess- och säkerhetsskäl. För att visa det ursprungliga meddelandet trycker du på ikonen \"helskärm\" ovanför meddelandetexten.</string>
     <string name="title_hint_design">Designen är avsiktligt inte distraherande, men hålls mycket funktionell. Det finns många alternativ för att anpassa utseendet, men vänligen förstå att det är omöjligt att göra alla helt glada på samma gång.</string>
+    <string name="title_hint_junk">Spamfiltrering bör göras via e-postservern och kan inte göras tillförlitligt på en batteridriven enhet med begränsad kapacitet.</string>
     <string name="title_hint_contact_actions">Långt tryck för alternativ</string>
     <string name="title_hint_eml">Detta är en sammanfattning av innehållet i en raw-meddelandefil. Spara raw-meddelandet med ikonen spara i åtgärdsfältet för att visa allt innehåll.</string>
     <string name="title_open_link">Öppna länken</string>
