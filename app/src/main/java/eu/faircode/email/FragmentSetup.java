@@ -190,9 +190,9 @@ public class FragmentSetup extends FragmentBase {
                         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
                         switch (item.getItemId()) {
                             case R.string.title_setup_gmail:
-                                if (Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG)
-                                    lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_GMAIL));
-                                else
+//                              if (Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG)
+//                                  lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_GMAIL));
+//                              else
                                     ToastEx.makeText(getContext(), R.string.title_setup_gmail_support, Toast.LENGTH_LONG).show();
                                 return true;
                             case R.string.title_setup_activesync:
