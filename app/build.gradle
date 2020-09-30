@@ -27,11 +27,14 @@ android {
 
         // https://developer.android.com/guide/topics/graphics/vector-drawable-resources
         vectorDrawables.useSupportLibrary = true
-
-        //ndkVersion "21.0.6113669"
-        ndk {
-            // Bugsnag, sqlite
-            abiFilters "armeabi-v7a", "arm64-v8a"
+        
+        splits {
+            abi {
+              enable true
+              reset()
+              include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+              universalApk true
+            }
         }
     }
 
@@ -107,6 +110,7 @@ android {
             useProguard = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            zipAlignEnabled true
         }
         debug {
             applicationIdSuffix '.debug'
