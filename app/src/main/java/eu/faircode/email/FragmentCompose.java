@@ -127,6 +127,7 @@ import org.bouncycastle.cms.RecipientInfoGenerator;
 import org.bouncycastle.cms.SignerInfoGenerator;
 import org.bouncycastle.cms.jcajce.JcaSignerInfoGeneratorBuilder;
 import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
+import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientInfoGenerator;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipientInfoGenerator;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.DigestCalculatorProvider;
@@ -805,6 +806,11 @@ public class FragmentCompose extends FragmentBase {
         // Initialize
         setHasOptionsMenu(true);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        //boolean beige = prefs.getBoolean("beige", true);
+        //if (beige && !Helper.isDarkTheme(getContext()))
+        //    view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.lightColorBackground_cards_beige));
+
         etExtra.setHint("");
         tvDomain.setText(null);
         tvPlainTextOnly.setVisibility(View.GONE);
@@ -831,7 +837,6 @@ public class FragmentCompose extends FragmentBase {
 
         final DB db = DB.getInstance(getContext());
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         final boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
         final boolean suggest_received = prefs.getBoolean("suggest_received", false);
         final boolean suggest_frequently = prefs.getBoolean("suggest_frequently", false);
@@ -2832,8 +2837,16 @@ public class FragmentCompose extends FragmentBase {
                 // Encrypt
                 CMSEnvelopedDataGenerator cmsEnvelopedDataGenerator = new CMSEnvelopedDataGenerator();
                 if ("EC".equals(privkey.getAlgorithm())) {
+                    JceKeyAgreeRecipientInfoGenerator gen = new JceKeyAgreeRecipientInfoGenerator(
+                            CMSAlgorithm.ECDH_SHA256KDF,
+                            privkey,
+                            chain[0].getPublicKey(),
+                            CMSAlgorithm.AES128_WRAP);
+                    for (X509Certificate cert : certs)
+                        gen.addRecipient(cert);
+                    cmsEnvelopedDataGenerator.addRecipientInfoGenerator(gen);
                     // https://security.stackexchange.com/a/53960
-                    throw new IllegalArgumentException("ECDSA cannot be used for encryption");
+                    // throw new IllegalArgumentException("ECDSA cannot be used for encryption");
                 } else {
                     for (X509Certificate cert : certs) {
                         RecipientInfoGenerator gen = new JceKeyTransRecipientInfoGenerator(cert);
@@ -4493,6 +4506,23 @@ public class FragmentCompose extends FragmentBase {
                                 checkAddress(ato, context);
                                 checkAddress(acc, context);
                                 checkAddress(abcc, context);
+
+                                List<String> all = new ArrayList<>();
+                                List<String> dup = new ArrayList<>();
+                                for (InternetAddress a : Helper.concat(Helper.concat(ato, acc), abcc)) {
+                                    String email = a.getAddress();
+                                    if (TextUtils.isEmpty(email))
+                                        continue;
+                                    if (all.contains(a.getAddress()))
+                                        dup.add(email);
+                                    else
+                                        all.add(email);
+                                }
+
+                                if (dup.size() > 0)
+                                    throw new AddressException(context.getString(
+                                            R.string.title_address_duplicate,
+                                            TextUtils.join(", ", dup)));
                             } catch (AddressException ex) {
                                 args.putString("address_error", ex.getMessage());
                             }
@@ -4967,7 +4997,7 @@ public class FragmentCompose extends FragmentBase {
                     bodyBuilder.setSpan(q,
                             bodyBuilder.getSpanStart(quoteSpan),
                             bodyBuilder.getSpanEnd(quoteSpan),
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            bodyBuilder.getSpanFlags(quoteSpan));
                     bodyBuilder.removeSpan(quoteSpan);
                 }
 

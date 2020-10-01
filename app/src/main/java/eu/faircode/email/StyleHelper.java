@@ -13,7 +13,9 @@ import android.text.Spanned;
 import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
@@ -119,6 +121,10 @@ public class StyleHelper {
                                         return setList(item);
                                     case R.id.group_style_font:
                                         return setFont(item);
+                                    case R.id.group_style_blockquote:
+                                        return setBlockquote(item);
+                                    case R.id.group_style_strikethrough:
+                                        return setStrikethrough(item);
                                     case R.id.group_style_clear:
                                         return clear(item);
                                     default:
@@ -287,6 +293,46 @@ public class StyleHelper {
 
                             if (face != null)
                                 t.setSpan(new TypefaceSpan(face), s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                            etBody.setText(t);
+                            etBody.setSelection(s, e);
+
+                            return true;
+                        }
+
+                        private boolean setBlockquote(MenuItem item) {
+                            Context context = etBody.getContext();
+
+                            int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
+                            int dp3 = Helper.dp2pixels(context, 3);
+                            int dp6 = Helper.dp2pixels(context, 6);
+
+                            QuoteSpan[] spans = t.getSpans(s, e, QuoteSpan.class);
+                            for (QuoteSpan span : spans)
+                                t.removeSpan(span);
+
+                            QuoteSpan q;
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                                q = new QuoteSpan(colorPrimary);
+                            else
+                                q = new QuoteSpan(colorPrimary, dp3, dp6);
+                            t.setSpan(q, s, e, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+                            etBody.setText(t);
+                            etBody.setSelection(s, e);
+
+                            return true;
+                        }
+
+                        private boolean setStrikethrough(MenuItem item) {
+                            boolean has = false;
+                            for (StrikethroughSpan span : t.getSpans(s, e, StrikethroughSpan.class)) {
+                                has = true;
+                                t.removeSpan(span);
+                            }
+
+                            if (!has)
+                                t.setSpan(new StrikethroughSpan(), s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                             etBody.setText(t);
                             etBody.setSelection(s, e);
