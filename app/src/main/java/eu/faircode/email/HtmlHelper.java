@@ -571,6 +571,12 @@ public class HtmlHelper {
 
                                 Float fsize = getFontSize(value, current);
                                 if (fsize != null && fsize != 0) {
+                                    if (!view) {
+                                        if (fsize < 1)
+                                            fsize = FONT_SMALL;
+                                        else if (fsize > 1)
+                                            fsize = FONT_LARGE;
+                                    }
                                     element.attr("x-font-size", Float.toString(fsize));
                                     element.attr("x-font-size-rel", Float.toString(fsize / current));
                                 }
@@ -671,8 +677,10 @@ public class HtmlHelper {
 
                             case "text-align":
                                 // https://developer.mozilla.org/en-US/docs/Web/CSS/text-align
-                                if (text_align)
+                                if (text_align) {
+                                    sb.append("display:block;");
                                     sb.append(key).append(':').append(value).append(';');
+                                }
                                 break;
                         }
                     }
@@ -795,7 +803,7 @@ public class HtmlHelper {
             if (hasVisibleContent(row.childNodes())) {
                 Element next = row.nextElementSibling();
                 if (next != null && "tr".equals(next.tagName()))
-                    if (text_separators)
+                    if (text_separators && view)
                         row.appendElement("hr")
                                 .attr("x-dashed", "true");
                     else
@@ -805,11 +813,13 @@ public class HtmlHelper {
 
         document.select("caption").tagName("div");
 
-        for (Element table : document.select("table"))
+        for (Element table : document.select("table")) {
+            table.attr("x-table", "true");
             if (table.parent() != null && "a".equals(table.parent().tagName()))
                 table.tagName("span"); // Links cannot contain tables
             else
                 table.tagName("div");
+        }
         for (Element hf : document.select("thead,tfoot"))
             hf.tagName("span");
 
@@ -2026,7 +2036,8 @@ public class HtmlHelper {
                                     boolean table = false;
                                     Element e = element;
                                     while (e != null) {
-                                        if ("table".equals(e.tagName())) {
+                                        if ("table".equals(e.tagName()) ||
+                                                "true".equals(e.attr("x-table"))) {
                                             table = true;
                                             break;
                                         }
@@ -2034,16 +2045,18 @@ public class HtmlHelper {
                                     }
 
                                     if (!table) {
+                                        // https://developer.mozilla.org/en-US/docs/Web/CSS/text-align
                                         Layout.Alignment alignment = null;
                                         switch (value) {
                                             case "left":
-                                            case "justify":
+                                            case "start":
                                                 alignment = (ltr ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE);
                                                 break;
                                             case "center":
                                                 alignment = Layout.Alignment.ALIGN_CENTER;
                                                 break;
                                             case "right":
+                                            case "end":
                                                 alignment = (ltr ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL);
                                                 break;
                                         }
@@ -2059,7 +2072,8 @@ public class HtmlHelper {
                     String xFontSize = element.attr("x-font-size-rel");
                     if (!TextUtils.isEmpty(xFontSize)) {
                         Float fsize = Float.parseFloat(xFontSize);
-                        setSpan(ssb, new RelativeSizeSpan(fsize), start, ssb.length());
+                        if (fsize != 1.0f)
+                            setSpan(ssb, new RelativeSizeSpan(fsize), start, ssb.length());
                     }
 
                     // Apply element
@@ -2167,6 +2181,10 @@ public class HtmlHelper {
                                     ssb.append("\n");
 
                                 Element parent = element.parent();
+                                while (parent != null &&
+                                        !"ol".equals(parent.tagName()) &&
+                                        !"ul".equals(parent.tagName()))
+                                    parent = parent.parent();
                                 if (parent == null || "ul".equals(parent.tagName()))
                                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
                                         setSpan(ssb, new BulletSpan(dp6, colorAccent), start, ssb.length());
@@ -2195,7 +2213,7 @@ public class HtmlHelper {
                                 int llevel = 0;
                                 Element lparent = element.parent();
                                 while (lparent != null) {
-                                    if (lparent.tagName().equals(element.tagName()))
+                                    if ("ol".equals(lparent.tagName()) || "ul".equals(lparent.tagName()))
                                         llevel++;
                                     lparent = lparent.parent();
                                 }
@@ -2204,6 +2222,9 @@ public class HtmlHelper {
                                 break;
                             case "pre":
                                 setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
+                                break;
+                            case "script":
+                                // Do nothing
                                 break;
                             case "small":
                                 setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
@@ -2301,10 +2322,17 @@ public class HtmlHelper {
             int s = start.get(spans[i]);
             int e = end.get(spans[i]);
             int f = flags.get(spans[i]);
-            if (spans[i] instanceof BulletSpan || spans[i] instanceof NumberSpan)
+            if (spans[i] instanceof AlignmentSpan ||
+                    spans[i] instanceof BulletSpan ||
+                    spans[i] instanceof NumberSpan) {
+                if (spans[i] instanceof AlignmentSpan &&
+                        !(e > 1 && ssb.charAt(e - 1) == '\n') &&
+                        e < ssb.length() && ssb.charAt(e) == '\n')
+                    e++;
                 if (s > 1 && ssb.charAt(s - 1) == '\n' &&
                         e > 1 && ssb.charAt(e - 1) == '\n')
                     f |= Spanned.SPAN_PARAGRAPH;
+            }
             ssb.setSpan(spans[i], s, e, f);
         }
 
@@ -2324,23 +2352,59 @@ public class HtmlHelper {
         HtmlEx converter = new HtmlEx(context);
         String html = converter.toHtml(spanned, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL);
 
-        // @Google: why convert size to and from in a different way?
         Document doc = JsoupEx.parse(html);
-        for (Element element : doc.select("span")) {
-            String style = element.attr("style");
-            if (style.startsWith("font-size:")) {
-                int colon = style.indexOf(':');
-                int semi = style.indexOf("em;", colon);
-                if (semi > colon)
-                    try {
-                        String hsize = style.substring(colon + 1, semi).replace(',', '.');
-                        float size = Float.parseFloat(hsize);
-                        element.tagName(size < 1.0f ? "small" : "big");
-                        element.attributes().remove("style");
-                    } catch (NumberFormatException ex) {
-                        Log.e(ex);
-                    }
+        for (Element span : doc.select("span")) {
+            String style = span.attr("style");
+            if (TextUtils.isEmpty(style))
+                continue;
+
+            StringBuilder sb = new StringBuilder();
+
+            String[] params = style.split(";");
+            for (String param : params) {
+                int semi = param.indexOf(":");
+                if (semi < 0) {
+                    sb.append(param).append(';');
+                    continue;
+                }
+
+                String key = param.substring(0, semi).trim();
+                String value = param.substring(semi + 1).trim();
+
+                switch (key) {
+                    case "font-size":
+                        // @Google: why convert size to and from in a different way?
+                        String v = value.replace(',', '.');
+                        Float size = getFontSize(v, 1.0f);
+                        if (size != null) {
+                            if (size < 1.0f)
+                                span.tagName("small");
+                            else if (size > 1.0f)
+                                span.tagName("big");
+                        }
+                        break;
+                    case "text-align":
+                        sb.append(" display:block;");
+                        // fall through
+                    default:
+                        sb.append(param).append(';');
+                }
+
+                if (sb.length() == 0)
+                    span.removeAttr("style");
+                else
+                    span.attr("style", sb.toString());
             }
+        }
+
+        for (Element quote : doc.select("blockquote")) {
+            Element prev = quote.previousElementSibling();
+            if (prev != null && "br".equals(prev.tagName()))
+                prev.remove();
+
+            Element last = quote.children().last();
+            if (last != null && "br".equals(last.tagName()))
+                last.remove();
         }
 
         return doc.html();

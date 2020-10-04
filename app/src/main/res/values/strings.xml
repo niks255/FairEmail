@@ -459,7 +459,7 @@
     <string name="title_advanced_browse_links">Delegate opening links to Android</string>
     <string name="title_advanced_confirm_images">Confirm showing images</string>
     <string name="title_advanced_confirm_html">Show reformatted messages by default</string>
-    <string name="title_advanced_tracking">Automatically recognize and disable tracking images</string>
+    <string name="title_advanced_tracking">Attempt to recognize and disable tracking images</string>
     <string name="title_advanced_hide_timezone">Send messages without timezone data</string>
     <string name="title_advanced_display_hidden">Display hidden message texts</string>
     <string name="title_advanced_secure">Hide from recent apps screen and prevent taking screenshots</string>
@@ -590,6 +590,7 @@
     <string name="title_advanced_cleanup_hint">This will delete all temporary files</string>
 
     <string name="title_advanced_never_favorite">Never favorite</string>
+    <string name="title_advanced_edit_name">Edit name</string>
 
     <string name="title_advanced_swipe_actions">Set swipe actions</string>
     <string name="title_advanced_swipe_actions_hint">This will set the swipe left and right action for all IMAP accounts</string>
@@ -933,6 +934,10 @@
     <string name="title_style_size_medium">Medium</string>
     <string name="title_style_size_large">Large</string>
     <string name="title_style_color">Color &#8230;</string>
+    <string name="title_style_align">Align</string>
+    <string name="title_style_align_start">Start</string>
+    <string name="title_style_align_center">Center</string>
+    <string name="title_style_align_end">End</string>
     <string name="title_style_list">List</string>
     <string name="title_style_list_bullets">Bullets</string>
     <string name="title_style_list_numbered">Numbered</string>
@@ -948,7 +953,7 @@
     <string name="title_add_image_attach">Attach</string>
     <string name="title_add_image_resize">Resize</string>
     <string name="title_add_image_privacy">Remove privacy sensitive data</string>
-    <string name="title_add_image_privacy_remark">Geographic location, serial numbers, etc</string>
+    <string name="title_add_image_privacy_remark">Geographic location, serial numbers, file names, etc</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Select file</string>
     <string name="title_add_attachment">Add attachment</string>
@@ -1227,6 +1232,7 @@
     <string name="title_legend_forwarded">Was forwarded</string>
     <string name="title_legend_plain_only">Is plain text only</string>
     <string name="title_legend_receipt">Receipt was requested</string>
+    <string name="title_legend_auto_submitted">Was automatically sent</string>
     <string name="title_legend_attachment">Has attachment</string>
     <string name="title_legend_flagged">Is favorite</string>
     <string name="title_legend_contacts">Manage contacts</string>

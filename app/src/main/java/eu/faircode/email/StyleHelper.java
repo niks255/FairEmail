@@ -1,15 +1,17 @@
 package eu.faircode.email;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
@@ -20,6 +22,7 @@ import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
@@ -33,9 +36,9 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class StyleHelper {
     static boolean apply(int action, View anchor, EditText etBody, Object... args) {
@@ -117,6 +120,8 @@ public class StyleHelper {
                                         return setSize(item);
                                     case R.id.group_style_color:
                                         return setColor(item);
+                                    case R.id.group_style_align:
+                                        return setAlignment(item);
                                     case R.id.group_style_list:
                                         return setList(item);
                                     case R.id.group_style_font:
@@ -163,10 +168,14 @@ public class StyleHelper {
                             if (imm != null)
                                 imm.hideSoftInputFromWindow(etBody.getWindowToken(), 0);
 
+                            Context context = etBody.getContext();
+                            int editTextColor = Helper.resolveColor(context, android.R.attr.editTextColor);
+
                             ColorPickerDialogBuilder builder = ColorPickerDialogBuilder
-                                    .with(etBody.getContext())
+                                    .with(context)
                                     .setTitle(R.string.title_color)
                                     .showColorEdit(true)
+                                    .setColorEditTextColor(editTextColor)
                                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                                     .density(6)
                                     .lightnessSliderOnly()
@@ -183,18 +192,7 @@ public class StyleHelper {
                                         }
                                     });
 
-                            Dialog dialog = builder.build();
-
-                            try {
-                                Field fColorEdit = builder.getClass().getDeclaredField("colorEdit");
-                                fColorEdit.setAccessible(true);
-                                EditText colorEdit = (EditText) fColorEdit.get(builder);
-                                colorEdit.setTextColor(Helper.resolveColor(etBody.getContext(), android.R.attr.textColorPrimary));
-                            } catch (Throwable ex) {
-                                Log.w(ex);
-                            }
-
-                            dialog.show();
+                            builder.build().show();
 
                             return true;
                         }
@@ -210,6 +208,39 @@ public class StyleHelper {
                             etBody.setSelection(s, e);
                         }
 
+                        private boolean setAlignment(MenuItem item) {
+                            Pair<Integer, Integer> paragraph = ensureParagraph(t, s, e);
+                            int start = paragraph.first;
+                            int end = paragraph.second;
+
+                            AlignmentSpan[] spans = t.getSpans(start, end, AlignmentSpan.class);
+                            for (AlignmentSpan span : spans)
+                                t.removeSpan(span);
+
+                            Layout.Alignment alignment = null;
+                            boolean ltr = (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_LTR);
+                            switch (item.getItemId()) {
+                                case R.id.menu_style_align_start:
+                                    alignment = (ltr ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE);
+                                    break;
+                                case R.id.menu_style_align_center:
+                                    alignment = Layout.Alignment.ALIGN_CENTER;
+                                    break;
+                                case R.id.menu_style_align_end:
+                                    alignment = (ltr ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL);
+                                    break;
+                            }
+
+                            if (alignment != null)
+                                t.setSpan(new AlignmentSpan.Standard(alignment),
+                                        start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_PARAGRAPH);
+
+                            etBody.setText(t);
+                            etBody.setSelection(start, end);
+
+                            return true;
+                        }
+
                         private boolean setList(MenuItem item) {
                             Context context = etBody.getContext();
 
@@ -221,36 +252,9 @@ public class StyleHelper {
                             int message_zoom = prefs.getInt("message_zoom", 100);
                             float textSize = Helper.getTextSize(context, 0) * message_zoom / 100f;
 
-                            int start = s;
-                            int end = e;
-
-                            // Expand selection at start
-                            while (start > 0 && t.charAt(start - 1) != '\n')
-                                start--;
-
-                            // Expand selection at end
-                            while (end > 0 && end < t.length() && t.charAt(end - 1) != '\n')
-                                end++;
-
-                            // Nothing to do
-                            if (start == end)
-                                return false;
-
-                            // Create paragraph at start
-                            if (start == 0 && t.charAt(start) != '\n') {
-                                t.insert(0, "\n");
-                                start++;
-                                end++;
-                            }
-
-                            // Create paragraph at end
-                            if (end == t.length() && t.charAt(end - 1) != '\n') {
-                                t.append("\n");
-                                end++;
-                            }
-
-                            if (end == t.length())
-                                t.append("\n"); // workaround Android bug
+                            Pair<Integer, Integer> paragraph = ensureParagraph(t, s, e);
+                            int start = paragraph.first;
+                            int end = paragraph.second;
 
                             // Remove existing bullets
                             BulletSpan[] spans = t.getSpans(start, end, BulletSpan.class);
@@ -349,6 +353,41 @@ public class StyleHelper {
                             etBody.setSelection(s, e);
 
                             return true;
+                        }
+
+                        private Pair<Integer, Integer> ensureParagraph(SpannableStringBuilder t, int s, int e) {
+                            int start = s;
+                            int end = e;
+
+                            // Expand selection at start
+                            while (start > 0 && t.charAt(start - 1) != '\n')
+                                start--;
+
+                            // Expand selection at end
+                            while (end > 0 && end < t.length() && t.charAt(end - 1) != '\n')
+                                end++;
+
+                            // Nothing to do
+                            if (start == end)
+                                return null;
+
+                            // Create paragraph at start
+                            if (start == 0 && t.charAt(start) != '\n') {
+                                t.insert(0, "\n");
+                                start++;
+                                end++;
+                            }
+
+                            // Create paragraph at end
+                            if (end == t.length() && t.charAt(end - 1) != '\n') {
+                                t.append("\n");
+                                end++;
+                            }
+
+                            if (end == t.length())
+                                t.append("\n"); // workaround Android bug
+
+                            return new Pair(start, end);
                         }
                     });
 

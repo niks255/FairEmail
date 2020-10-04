@@ -3141,7 +3141,11 @@ public class FragmentCompose extends FragmentBase {
 
             attachment.message = draft.id;
             attachment.sequence = db.attachment().getAttachmentSequence(draft.id) + 1;
-            attachment.name = info.name;
+            if (privacy) {
+                String ext = Helper.getExtension(info.name);
+                attachment.name = "img" + attachment.sequence + (ext == null ? "" : "." + ext);
+            } else
+                attachment.name = info.name;
             attachment.type = info.type;
             attachment.disposition = (image ? Part.INLINE : Part.ATTACHMENT);
             attachment.size = info.size;
@@ -3239,8 +3243,14 @@ public class FragmentCompose extends FragmentBase {
 
                     exif.setAttribute(ExifInterface.TAG_GPS_AREA_INFORMATION, null);
 
+                    exif.setAttribute(ExifInterface.TAG_DATETIME, null);
+                    exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, null);
+                    exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, null);
+
                     exif.setAttribute(ExifInterface.TAG_XMP, null);
+                    exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, null);
                     exif.setAttribute(ExifInterface.TAG_ARTIST, null);
+                    exif.setAttribute(ExifInterface.TAG_IMAGE_UNIQUE_ID, null);
                     exif.setAttribute(ExifInterface.TAG_CAMERA_OWNER_NAME, null);
                     exif.setAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER, null);
                     exif.setAttribute(ExifInterface.TAG_LENS_SERIAL_NUMBER, null);
