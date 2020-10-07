@@ -176,13 +176,6 @@ public class FragmentBase extends Fragment {
             finish = true;
     }
 
-    protected void restart() {
-        Intent intent = new Intent(getContext(), ActivityMain.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        Runtime.getRuntime().exit(0);
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.d("Save instance " + this);
@@ -536,7 +529,7 @@ public class FragmentBase extends Fragment {
                     OutputStream os = null;
                     InputStream is = null;
                     try {
-                        os = context.getContentResolver().openOutputStream(uri);
+                        os = context.getContentResolver().openOutputStream(document.getUri());
                         is = new FileInputStream(file);
 
                         byte[] buffer = new byte[Helper.BUFFER_SIZE];
@@ -569,6 +562,7 @@ public class FragmentBase extends Fragment {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
+                Log.w(ex);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                     if (ex instanceof RecoverableSecurityException) {
                         handle((RecoverableSecurityException) ex);

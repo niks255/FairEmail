@@ -351,7 +351,6 @@ Microsoft Exchange WebサービスやMicrosoft ActiveSyncなどの非標準プ�
     <string name="title_advanced_language_detection">メッセージのテキスト言語を検出</string>
     <string name="title_advanced_fts">検索インデックスを作成</string>
     <string name="title_advanced_fts_indexed">%1$d/%2$d個のメッセージがインデックス付けされました(%3$s)</string>
-    <string name="title_advanced_english">アメリカ合衆国向けの設定を使用する</string>
     <string name="title_advanced_watchdog">FairEmailがアクティブか定期的に確認</string>
     <string name="title_advanced_updates">更新を確認</string>
     <string name="title_advanced_experiments">実験的な機能を試す</string>
@@ -384,7 +383,6 @@ Microsoft Exchange WebサービスやMicrosoft ActiveSyncなどの非標準プ�
     <string name="title_advanced_date_hint">時間で並び替えをしている場合にのみ、メッセージは日付でグループ化されます</string>
     <string name="title_advanced_navbar_colorize_hint">これが機能するかはAndroidのバージョンとバリアントによって異なります</string>
     <string name="title_advanced_threading_hint">互いに関連するグループメッセージ</string>
-    <string name="title_advanced_highlight_hint">テーマのアクセントカラーを強調表示に使用</string>
     <string name="title_advanced_gravatars_hint">プライバシーリスクが有るかもしれません</string>
     <string name="title_advanced_name_email_hint">無効にすると利用可能な場合にのみ名前が表示されます</string>
     <string name="title_advanced_preview_hint">メッセージテキストがダウンロードされた場合にのみ使用可能</string>
@@ -413,7 +411,6 @@ Microsoft Exchange WebサービスやMicrosoft ActiveSyncなどの非標準プ�
     <string name="title_advanced_fts_hint">有効にすると検索パフォーマンスが向上しますが、バッテリーとストレージ使用量も増加します</string>
     <string name="title_advanced_english_hint">アプリが再起動されます</string>
     <string name="title_advanced_experiments_hint">現在の実験的な機能のリスト</string>
-    <string name="title_advanced_debug_hint">追加のログを有効にし様々な場所でデバッグ情報を表示</string>
     <string name="title_advanced_cleanup_attachments_hint">手動でクリーニングすると同期されていないメッセージから添付ファイルが削除されます</string>
     <string name="title_advanced_cleanup_hint">全ての一時ファイルが削除されます</string>
     <string name="title_advanced_never_favorite">お気に入りにしないようにします</string>

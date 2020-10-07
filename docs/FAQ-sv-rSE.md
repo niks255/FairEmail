@@ -337,20 +337,20 @@ Aviseringen i statusfältet kan inaktiveras via inställningarna för FairEmail:
 * Android 8 Oreo och senare: tryck på *Receive channel* -knappen och inaktivera kanalen via Android-inställningarna (detta kommer inte att inaktivera nya meddelanden)
 * Android 7 Nougat och tidigare: aktiverat *Använd bakgrundstjänst för att synkronisera meddelanden*, men se till att läsa anmärkningen under inställningen
 
-You can switch to periodically synchronization of messages in the receive settings to remove the notification, but be aware that this might use more battery power. See [here](#user-content-faq39) for more details about battery usage.
+Du kan växla till periodisk synkronisering av meddelanden i mottagarinställningarna för att ta bort meddelandet, men var medveten om att detta kan använda mer batteridrift. Se [här](#user-content-faq39) för mer information om batterianvändning.
 
-Android 8 Oreo kan också visa ett meddelande i statusfältet med texten *Apps körs i bakgrunden*. Please see [here](https://www.reddit.com/r/Android/comments/7vw7l4/psa_turn_off_background_apps_notification/) about how you can disable this notification.
+Android 8 Oreo kan också visa ett meddelande i statusfältet med texten *Apps körs i bakgrunden*. Se [här](https://www.reddit.com/r/Android/comments/7vw7l4/psa_turn_off_background_apps_notification/) om hur du kan inaktivera detta meddelande.
 
-Some people suggested to use [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) (FCM) instead of an Android service with a status bar notification, but this would require email providers to send FCM messages or a central server where all messages are collected sending FCM messages. The first is not going to happen and the last would have significant privacy implications.
+Vissa har föreslagit att använda [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) (FCM) istället för en Android-tjänst med en statusfältsnotis, men detta skulle kräva att e-postleverantörer skickar FCM-meddelanden eller en central server där alla meddelanden samlas in för att skicka FCM-meddelanden. Den första kommer inte att hända och den sista skulle få betydande konsekvenser för integriteten.
 
 Om du kom hit genom att klicka på aviseringen, bör du veta att nästa klick kommer att öppna den enhetliga inkorgen.
 
 <br />
 
 <a name="faq3"></a>
-**(3) What are operations and why are they pending?**
+**(3) Vad är åtgärder och varför väntar de?**
 
-The low priority status bar notification shows the number of pending operations, which can be:
+Meddelandet med låg prioritet visar antalet pågående åtgärder, som kan vara:
 
 * *add*: add message to remote folder
 * *move*: move message to another remote folder
@@ -373,16 +373,16 @@ The low priority status bar notification shows the number of pending operations,
 * *existerar*: kontrollera om meddelandet finns
 * *regel*: exekvera regel på text
 
-Operations are processed only when there is a connection to the email server or when manually synchronizing. Se även [denna FAQ](#user-content-faq16).
+Åtgärder behandlas endast när det finns en anslutning till e-postservern eller vid manuell synkronisering. Se även [denna FAQ](#user-content-faq16).
 
 <br />
 
 <a name="faq4"></a>
-**(4) How can I use an invalid security certificate / empty password / plain text connection?**
+**(4) Hur kan jag använda ett ogiltigt säkerhetsintyg / tomt lösenord / plain text-anslutning?**
 
-*... Untrusted ... not in certificate ...*
+*... Obetrodd ... inte i certifikat ...*
 <br />
-*... Invalid security certificate (Can't verify identity of server) ...*
+*... Ogiltigt säkerhetscertifikat (Kan inte verifiera serverns identitet) ...*
 
 You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
@@ -737,7 +737,7 @@ For setting up an Office 365 account, please see [this FAQ](#user-content-faq156
 <a name="faq15"></a>
 **(15) Why does the message text keep loading?**
 
-The message header and message body are fetched separately from the server. The message text of larger messages is not being pre-fetched on metered connections and need to be fetched on opening the message. The message text will keep loading if there is no connection to the account, see also the next question.
+The message header and message body are fetched separately from the server. The message text of larger messages is not being pre-fetched on metered connections and need to be fetched on opening the message. The message text will keep loading if there is no connection to the account, see also the next question, or if there other operations, like synchronizing messages, are being executed.
 
 You can check the account and folder list for the account and folder state (see the legend for the meaning of the icons) and the operation list accessible via the main navigation menu for pending operations (see [this FAQ](#user-content-faq3) for the meaning of the operations).
 
@@ -1181,11 +1181,13 @@ If you got the message *This provider does not support push messages* while conf
 
 If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen, you can save battery usage while viewing messages by switching to the black theme.
 
-By default auto optimize in the receive settings is enabled, which will switch an account to periodically checking for new messages when the email server:
+If auto optimize in the receive settings is enabled, an account will automatically be switched to periodically checking for new messages when the email server:
 
 * Says '*Still here*' within 3 minutes
 * The email server does not support push messages
 * The keep-alive interval is lower than 12 minutes
+
+In addition, the trash and spam folders will be automatically set to checking for new messages after three successive [too many simultaneous connections](#user-content-faq23) errors.
 
 <br />
 
@@ -1215,7 +1217,7 @@ The error '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either c
 
 The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
-The error '*Handshake failed ... UNSUPPORTED_PROTOCOL eller TLSV1_ALERT_PROTOCOL_VERSION ...*' kan orsakas av aktivering av härdning av anslutningar i anslutningsinställningarna eller av Android som inte stödjer äldre protokoll längre, som SSLv3.
+The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore. There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
 

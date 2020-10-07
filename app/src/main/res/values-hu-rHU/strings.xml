@@ -423,7 +423,6 @@
     <string name="title_advanced_language_detection">Üzenetszöveg nyelvének észlelése</string>
     <string name="title_advanced_fts">Keresési index létrehozása</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d üzenet indexelve (%3$s)</string>
-    <string name="title_advanced_english">US országbeállítások használata</string>
     <string name="title_advanced_watchdog">A FairEmail futásának időszakos ellenőrzése</string>
     <string name="title_advanced_optimize">Automatikus optimizálás</string>
     <string name="title_advanced_updates">Frissítések keresése</string>
@@ -463,7 +462,6 @@
     <string name="title_advanced_date_hint">Az üzenetek dátum szerinti csoportosítása csak idő szerinti rendezéskor aktív</string>
     <string name="title_advanced_navbar_colorize_hint">Az hogy ez működik-e az Android verziótól és variánstól függ</string>
     <string name="title_advanced_threading_hint">Egymáshoz kapcsolódó üzenetek csoportosítása</string>
-    <string name="title_advanced_highlight_hint">A téma kiemelőszíne a kiemeléshez lesz használva</string>
     <string name="title_advanced_gravatars_hint">Adatvédelmi szempontból aggályos a használata</string>
     <string name="title_advanced_name_email_hint">Ha ki van kapcsolva csak nevek fognak megjelenni, ha elérhető</string>
     <string name="title_advanced_preview_hint">Csak az üzenetek szövegének letöltése után elérhető</string>
@@ -495,7 +493,6 @@
     <string name="title_advanced_fts_hint">Bekapcsolása javítja a keresés sebességét, a tárhely- és akkumulátorhasználat kárára</string>
     <string name="title_advanced_english_hint">Ez újraindítja az alkalmazást</string>
     <string name="title_advanced_experiments_hint">A jelenlegi kísérleti funkciók listája</string>
-    <string name="title_advanced_debug_hint">Bővített logok és részletes debug üzenetek bekapcsolása</string>
     <string name="title_advanced_cleanup_attachments_hint">Manuális ürítésnél ez törölni fogja a mellékleteket olyan üzenetekről, amik már nem szinkronizáltak</string>
     <string name="title_advanced_cleanup_hint">Ez törli az összes ideiglenes fájlt</string>
     <string name="title_advanced_never_favorite">Kedvencként megjelölés tiltása</string>

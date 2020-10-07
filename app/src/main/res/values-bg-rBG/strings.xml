@@ -386,7 +386,6 @@
     <string name="title_advanced_language_detection">Разпознаване езика на текста на съобщението</string>
     <string name="title_advanced_fts">Изграждане индекс за търсене</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d индексирани съобщения (%3$s)</string>
-    <string name="title_advanced_english">Използвайте настройките на САЩ</string>
     <string name="title_advanced_watchdog">Периодична проверка дали FairEmail е активен</string>
     <string name="title_advanced_optimize">Автоматично оптимизиране</string>
     <string name="title_advanced_updates">Проверка за обновяване</string>
@@ -424,7 +423,6 @@
     <string name="title_advanced_date_hint">Съобщенията са групирани по дата само ако са сортирани по време</string>
     <string name="title_advanced_navbar_colorize_hint">За да работи това зависи от версията и варианта на Android</string>
     <string name="title_advanced_threading_hint">Групови съобщения, свързани помежду си</string>
-    <string name="title_advanced_highlight_hint">Акцентираният цвят на темата ще бъде използван за подчертаване</string>
     <string name="title_advanced_gravatars_hint">Възможно е да съществува риск за поверителността</string>
     <string name="title_advanced_name_email_hint">Когато са деактивирани ще се показват само имената когато са налични</string>
     <string name="title_advanced_preview_hint">Достъпно е само когато текстът на съобщението е изтеглен</string>
@@ -454,7 +452,6 @@
     <string name="title_advanced_fts_hint">Активирането на това подобрява ефективността на търсенето, но също така увеличава използването на батерията и пространството за съхранение</string>
     <string name="title_advanced_english_hint">Това ще рестартира програмата</string>
     <string name="title_advanced_experiments_hint">Списък на експерименталните функции</string>
-    <string name="title_advanced_debug_hint">Активиране на допълнителна регистрация и показване на информация за отстраняване на грешки на различни места</string>
     <string name="title_advanced_cleanup_attachments_hint">Това ще премахне прикачените файлове от съобщенията, които вече не се синхронизират при ръчно почистване</string>
     <string name="title_advanced_cleanup_hint">Това ще изтрие всички временни файлове</string>
     <string name="title_advanced_never_favorite">Никога в любими</string>

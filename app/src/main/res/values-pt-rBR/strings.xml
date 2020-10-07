@@ -423,7 +423,6 @@
     <string name="title_advanced_language_detection">Detectar idioma do texto da mensagem</string>
     <string name="title_advanced_fts">Construir índice de busca</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d mensagens indexadas (%3$s)</string>
-    <string name="title_advanced_english">Usar configurações do país dos EUA</string>
     <string name="title_advanced_watchdog">Verifique periodicamente se o FairEmail ainda está ativo</string>
     <string name="title_advanced_optimize">Otimizar automaticamente</string>
     <string name="title_advanced_updates">Procurar por atualizações</string>
@@ -463,7 +462,6 @@
     <string name="title_advanced_date_hint">As mensagens são agrupadas apenas por data se forem ordenadas por tempo</string>
     <string name="title_advanced_navbar_colorize_hint">Se isso funciona depende da versão e variante do Android</string>
     <string name="title_advanced_threading_hint">Agrupe as mensagens relacionadas entre si</string>
-    <string name="title_advanced_highlight_hint">A cor de destaque do tema será usada para destacar</string>
     <string name="title_advanced_gravatars_hint">Pode haver um risco na privacidade</string>
     <string name="title_advanced_name_email_hint">Quando desativado apenas os nomes serão exibidos quando disponíveis</string>
     <string name="title_advanced_preview_hint">Somente disponível quando o texto da mensagem for baixado</string>
@@ -495,7 +493,6 @@
     <string name="title_advanced_fts_hint">Ativando isto melhora o desempenho da pesquisa, mas também aumenta o uso de bateria e espaço de armazenamento</string>
     <string name="title_advanced_english_hint">Isto irá reiniciar o app</string>
     <string name="title_advanced_experiments_hint">Lista de recursos experimentais atuais</string>
-    <string name="title_advanced_debug_hint">Habilitar o log extra e mostrar informações de depuração em vários lugares</string>
     <string name="title_advanced_cleanup_attachments_hint">Ao limpar manualmente, isto removerá anexos de mensagens que não estão mais sincronizadas</string>
     <string name="title_advanced_cleanup_hint">Isto irá excluir todos os arquivos temporários</string>
     <string name="title_advanced_never_favorite">Nunca favoritar</string>

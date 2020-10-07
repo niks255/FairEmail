@@ -174,6 +174,9 @@ class Core {
                             " group=" + group +
                             " retry=" + retry);
 
+                    if (!Objects.equals(folder.id, op.folder))
+                        throw new IllegalArgumentException("Invalid folder=" + folder.id + "/" + op.folder);
+
                     if (ifolder != null && !ifolder.isOpen())
                         break;
 
@@ -485,11 +488,7 @@ class Core {
                                 db.operation().deleteOperation(op.id);
 
                                 // Cleanup messages
-                                if (message != null &&
-                                        (ex instanceof MessageRemovedException ||
-                                                ex instanceof MessageRemovedIOException ||
-                                                ex.getCause() instanceof MessageRemovedException ||
-                                                ex.getCause() instanceof MessageRemovedIOException))
+                                if (message != null && MessageHelper.isRemoved(ex))
                                     db.message().deleteMessage(message.id);
 
                                 db.setTransactionSuccessful();
@@ -1228,23 +1227,28 @@ class Core {
                     }
             }
 
-            if (!TextUtils.isEmpty(message.msgid) && !deleted) {
-                Message[] imessages = ifolder.search(new MessageIDTerm(message.msgid));
-                if (imessages == null)
-                    Log.w(folder.name + " search for msgid=" + message.msgid + " returned null");
-                else
-                    for (Message iexisting : imessages) {
-                        long muid = ifolder.getUID(iexisting);
-                        Log.i(folder.name + " deleting uid=" + muid);
-                        try {
-                            iexisting.setFlag(Flags.Flag.DELETED, true);
-                        } catch (MessageRemovedException ignored) {
-                            Log.w(folder.name + " existing gone uid=" + muid);
+            if (!TextUtils.isEmpty(message.msgid) && !deleted)
+                try {
+                    Message[] imessages = ifolder.search(new MessageIDTerm(message.msgid));
+                    if (imessages == null)
+                        Log.w(folder.name + " search for msgid=" + message.msgid + " returned null");
+                    else
+                        for (Message iexisting : imessages) {
+                            long muid = ifolder.getUID(iexisting);
+                            Log.i(folder.name + " deleting uid=" + muid);
+                            try {
+                                iexisting.setFlag(Flags.Flag.DELETED, true);
+                                deleted = true;
+                            } catch (MessageRemovedException ignored) {
+                                Log.w(folder.name + " existing gone uid=" + muid);
+                            }
                         }
-                    }
-            }
+                } catch (MessagingException ex) {
+                    Log.w(ex);
+                }
 
-            ifolder.expunge();
+            if (deleted)
+                ifolder.expunge();
 
             db.message().deleteMessage(message.id);
         } finally {
@@ -1476,11 +1480,12 @@ class Core {
         if (imessages == null || imessages.length == 0)
             EntityOperation.queue(context, message, EntityOperation.ADD);
         else {
-            if (imessages.length > 1)
-                Log.w(folder.name + " exists messages=" + imessages.length);
-            for (int i = 0; i < imessages.length; i++) {
-                long uid = ifolder.getUID(imessages[i]);
+            if (imessages.length == 1) {
+                long uid = ifolder.getUID(imessages[0]);
                 EntityOperation.queue(context, folder, EntityOperation.FETCH, uid);
+            } else {
+                Log.e(folder.name + " EXISTS messages=" + imessages.length);
+                EntityOperation.sync(context, folder.id, false);
             }
         }
     }
@@ -2243,9 +2248,12 @@ class Core {
                 }
             });
 
+            int expunge = 0;
             for (int i = 0; i < imessages.length && state.isRunning() && state.isRecoverable(); i++)
                 try {
-                    if (!imessages[i].isSet(Flags.Flag.DELETED))
+                    if (imessages[i].isSet(Flags.Flag.DELETED))
+                        expunge++;
+                    else
                         uids.remove(ifolder.getUID(imessages[i]));
                 } catch (MessageRemovedException ex) {
                     Log.w(folder.name, ex);
@@ -2253,6 +2261,14 @@ class Core {
                     Log.e(folder.name, ex);
                     EntityLog.log(context, folder.name + " " + Log.formatThrowable(ex, false));
                     db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
+                }
+
+            if (expunge > 0)
+                try {
+                    Log.i(folder.name + " expunging=" + expunge);
+                    ifolder.expunge();
+                } catch (Throwable ex) {
+                    Log.w(ex);
                 }
 
             if (uids.size() > 0) {

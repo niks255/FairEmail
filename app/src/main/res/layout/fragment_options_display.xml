@@ -325,15 +325,14 @@
             app:layout_constraintTop_toBottomOf="@id/tvCaptionHeader"
             app:switchPadding="12dp" />
 
-        <eu.faircode.email.FixedTextView
-            android:id="@+id/tvHighlightUnreadHint"
-            android:layout_width="0dp"
+        <eu.faircode.email.ViewButtonColor
+            android:id="@+id/btnHighlightColor"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="48dp"
-            android:text="@string/title_advanced_highlight_hint"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="6dp"
+            android:text="@string/title_advanced_highlight_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/swHighlightUnread" />
 
@@ -347,7 +346,7 @@
             android:text="@string/title_advanced_color_stripe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvHighlightUnreadHint"
+            app:layout_constraintTop_toBottomOf="@id/btnHighlightColor"
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat

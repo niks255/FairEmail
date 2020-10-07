@@ -300,6 +300,7 @@
     <string name="title_advanced_subject_top">在发件人上方显示主题</string>
     <string name="title_advanced_subject_italic">用斜体字显示邮件主题</string>
     <string name="title_advanced_subject_elipsed">必要时缩短邮件主题</string>
+    <string name="title_advanced_highlight_color">高亮色</string>
     <string name="title_advanced_keywords">在邮件头中显示关键字</string>
     <string name="title_advanced_labels">在邮件头中显示 Gmail 标签</string>
     <string name="title_advanced_flags">显示星标</string>
@@ -414,13 +415,15 @@
     <string name="title_advanced_language_detection">检测消息文本语言</string>
     <string name="title_advanced_fts">创建搜索索引</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d 的消息已索引(%3$s)</string>
-    <string name="title_advanced_english">使用美国国家设置</string>
+    <string name="title_advanced_language">语言</string>
+    <string name="title_advanced_language_system">系统</string>
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
     <string name="title_advanced_optimize">自动优化</string>
     <string name="title_advanced_updates">检查更新</string>
     <string name="title_advanced_experiments">尝试实验性功能</string>
     <string name="title_advanced_query_threads">限制并行数据库访问</string>
     <string name="title_advanced_crash_reports">发送错误报告</string>
+    <string name="title_advanced_protocol">协议日志记录</string>
     <string name="title_advanced_debug">调试模式</string>
     <string name="title_advanced_cleanup_attachments">删除旧消息的附件</string>
     <string name="title_advanced_cleanup">清理</string>
@@ -455,7 +458,6 @@
     <string name="title_advanced_date_hint">若按时间对消息排序，将仅按日期对消息分组</string>
     <string name="title_advanced_navbar_colorize_hint">这是否正常工作取决于Android版本和变体</string>
     <string name="title_advanced_threading_hint">合并相同主题为一封会话</string>
-    <string name="title_advanced_highlight_hint">主题的强调色将用于高亮文本颜色</string>
     <string name="title_advanced_gravatars_hint">可能存在隐私风险</string>
     <string name="title_advanced_name_email_hint">禁用该选项，将仅显示名称（如果可用）</string>
     <string name="title_advanced_preview_hint">只有当消息文本下载时才可用</string>
@@ -487,7 +489,8 @@
     <string name="title_advanced_fts_hint">启用此功能将提高搜索性能，但也会增加电池和存储空间用量</string>
     <string name="title_advanced_english_hint">这将重新启动应用程序</string>
     <string name="title_advanced_experiments_hint">当前实验性功能列表</string>
-    <string name="title_advanced_debug_hint">启用额外日志并在不同地方显示调试信息</string>
+    <string name="title_advanced_protocol_hint">这将大幅增加电池和存储空间用量！</string>
+    <string name="title_advanced_debug_hint">启用额外的日志记录并在不同位置显示晦涩的调试信息</string>
     <string name="title_advanced_cleanup_attachments_hint">手动清理时，这将从不再同步的消息中移除附件</string>
     <string name="title_advanced_cleanup_hint">这将会删除所有的临时文件</string>
     <string name="title_advanced_never_favorite">永不收藏</string>

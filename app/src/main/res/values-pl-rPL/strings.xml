@@ -333,6 +333,7 @@
     <string name="title_advanced_subject_top">Pokaż temat nad nadawcą</string>
     <string name="title_advanced_subject_italic">Temat wyświetlaj kursywą</string>
     <string name="title_advanced_subject_elipsed">W razie potrzeby skróć temat</string>
+    <string name="title_advanced_highlight_color">Kolor podświetlenia</string>
     <string name="title_advanced_keywords">Pokaż słowa kluczowe w nagłówku wiadomości</string>
     <string name="title_advanced_labels">Pokaż etykiety Gmail w nagłówku wiadomości</string>
     <string name="title_advanced_flags">Pokaż gwiazdki</string>
@@ -447,13 +448,15 @@
     <string name="title_advanced_language_detection">Wykryj język tekstu wiadomości</string>
     <string name="title_advanced_fts">Utwórz indeks wyszukiwania</string>
     <string name="title_advanced_fts_indexed">Zindeksowano %1$d / %2$d Wiadomości (%3$s)</string>
-    <string name="title_advanced_english">Użyj ustawień kraju US</string>
+    <string name="title_advanced_language">Język</string>
+    <string name="title_advanced_language_system">Systemowy</string>
     <string name="title_advanced_watchdog">Okresowo sprawdzaj, czy FairEmail jest nadal aktywny</string>
     <string name="title_advanced_optimize">Optymalizuj automatycznie</string>
     <string name="title_advanced_updates">Sprawdź aktualizacje</string>
     <string name="title_advanced_experiments">Wypróbuj funkcje eksperymentalne</string>
     <string name="title_advanced_query_threads">Ogranicz równoległy dostęp do bazy danych</string>
     <string name="title_advanced_crash_reports">Wyślij raport o błędach</string>
+    <string name="title_advanced_protocol">Rejestrowanie protokołów</string>
     <string name="title_advanced_debug">Debuguj</string>
     <string name="title_advanced_cleanup_attachments">Usuń załączniki starych wiadomości</string>
     <string name="title_advanced_cleanup">Oczyszczanie</string>
@@ -488,7 +491,6 @@
     <string name="title_advanced_date_hint">Wiadomości są pogrupowane według daty, tylko jeśli są posortowane według czasu</string>
     <string name="title_advanced_navbar_colorize_hint">Czy to zadziała zależy od wersji i wariantu Androida</string>
     <string name="title_advanced_threading_hint">Grupuj wiadomości powiązane ze sobą</string>
-    <string name="title_advanced_highlight_hint">Kolor akcentu motywu będzie używany do podświetlania</string>
     <string name="title_advanced_gravatars_hint">Może istnieć ryzyko naruszenia prywatności</string>
     <string name="title_advanced_name_email_hint">Gdy wyłączone, tylko nazwy będą pokazywane, jeśli są dostępne</string>
     <string name="title_advanced_preview_hint">Dostępne tylko po pobraniu tekstu wiadomości</string>
@@ -520,6 +522,7 @@
     <string name="title_advanced_fts_hint">Włączenie tej opcji poprawia wydajność wyszukiwania, ale także zwiększa zużycie baterii i przestrzeni dyskowej</string>
     <string name="title_advanced_english_hint">To uruchomi aplikację ponownie</string>
     <string name="title_advanced_experiments_hint">Lista aktualnych funkcji eksperymentalnych</string>
+    <string name="title_advanced_protocol_hint">Zwiększy to zużycie baterii i miejsca na dysku!</string>
     <string name="title_advanced_debug_hint">Włącz dodatkowe rejestrowanie i wyświetlaj informacje debugowania w różnych miejscach</string>
     <string name="title_advanced_cleanup_attachments_hint">Podczas ręcznego czyszczenia spowoduje to usunięcie załączników z wiadomości, które nie są już synchronizowane</string>
     <string name="title_advanced_cleanup_hint">Spowoduje to usunięcie wszystkich plików tymczasowych</string>
@@ -840,6 +843,10 @@
     <string name="title_style_size_medium">Średni</string>
     <string name="title_style_size_large">Duży</string>
     <string name="title_style_color">Kolor &#8230;</string>
+    <string name="title_style_align">Wyrównanie</string>
+    <string name="title_style_align_start">Na początku</string>
+    <string name="title_style_align_center">Wyśrodkowane</string>
+    <string name="title_style_align_end">Na końcu</string>
     <string name="title_style_list">Lista</string>
     <string name="title_style_list_bullets">Wypunktowania</string>
     <string name="title_style_list_numbered">Numerowane</string>

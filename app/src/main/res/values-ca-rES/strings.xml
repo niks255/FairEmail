@@ -394,7 +394,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_language_detection">Detecta el llenguatge de text del missatge</string>
     <string name="title_advanced_fts">Construint índex de cerca</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d missatges indexats (%3$s)</string>
-    <string name="title_advanced_english">Utilitzeu la configuració de país dels Estats Units</string>
     <string name="title_advanced_watchdog">Comproveu periòdicament si FairEmail està actiu</string>
     <string name="title_advanced_optimize">Optimitzar automàticament</string>
     <string name="title_advanced_updates">Comprova si hi ha actualitzacions</string>
@@ -431,7 +430,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_date_hint">Els missatges només s\'agruparan per data si s\'ordena per ordre temporal</string>
     <string name="title_advanced_navbar_colorize_hint">Si això funciona depèn de la versió i la versió d\'Android</string>
     <string name="title_advanced_threading_hint">Agrupa missatges relacionats entre ells</string>
-    <string name="title_advanced_highlight_hint">El color de l’accent del tema s’utilitzarà per ressaltar</string>
     <string name="title_advanced_gravatars_hint">Pot haver-hi un risc de privadesa</string>
     <string name="title_advanced_name_email_hint">Quan estigui desactivat només es mostraran noms quan estiguin disponibles</string>
     <string name="title_advanced_preview_hint">Només disponible quan s\'ha descarregat el text del missatge</string>
@@ -460,7 +458,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_fts_hint">Habilitant això millora el rendiment de cerca, però també augmenta l’ús de la bateria i l’espai d’emmagatzematge</string>
     <string name="title_advanced_english_hint">Això reiniciarà l\'aplicació</string>
     <string name="title_advanced_experiments_hint">Llista de funcions experimentals actuals</string>
-    <string name="title_advanced_debug_hint">Habiliteu el registre addicional i mostra informació de depuració en diversos llocs</string>
     <string name="title_advanced_cleanup_attachments_hint">Si es neteja manualment, s\'eliminen els fitxers adjunts dels missatges que ja no es sincronitzen</string>
     <string name="title_advanced_cleanup_hint">S\'eliminaran tots els fitxers temporals</string>
     <string name="title_advanced_never_favorite">Mai preferit</string>

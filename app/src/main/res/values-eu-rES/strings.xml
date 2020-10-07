@@ -372,7 +372,6 @@
     <string name="title_advanced_language_detection">Detektatu mezuen testuaren hizkuntza</string>
     <string name="title_advanced_fts">Sortu bilaketa-indizea</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d mezu indexatuak (%3$s)</string>
-    <string name="title_advanced_english">Erabili EEBBko herrialde ezarpenak</string>
     <string name="title_advanced_watchdog">Aldiro egiaztatu FairEmail aktibo dagoen</string>
     <string name="title_advanced_optimize">Optimizatu automatikoki</string>
     <string name="title_advanced_updates">Egiaztatu eguneraketarik dagoen</string>
@@ -410,7 +409,6 @@
     <string name="title_advanced_date_hint">Mezuak dataren arabera multzokatzen dira soilik denboraren arabera ordenatuta badaude</string>
     <string name="title_advanced_navbar_colorize_hint">Hau funtzionatzea Android bertsioa eta aldaeraren araberakoa da</string>
     <string name="title_advanced_threading_hint">Harremana duten mezuak taldekatu</string>
-    <string name="title_advanced_highlight_hint">Gaiaren kolorea indartua erabiliko da nabarmentzeko</string>
     <string name="title_advanced_gravatars_hint">Pribatutasun-arriskua egon daiteke</string>
     <string name="title_advanced_name_email_hint">Desgaituta dagonean erabilgarri dauden izenak bakarrik erakutsiko dira</string>
     <string name="title_advanced_preview_hint">Eskuragarri soilik mezuaren testua deskargatu bada</string>
@@ -439,7 +437,6 @@
     <string name="title_advanced_fts_hint">Hori gaitzeak bilaketa-errendimendua handituko du, baina bateriaren erabilera areagotuko du eta biltegiratze handiagoa erabiltzen du</string>
     <string name="title_advanced_english_hint">Honek aplikazioa berrabiaraziko du</string>
     <string name="title_advanced_experiments_hint">Egungo funtzio esperimentalen zerrenda</string>
-    <string name="title_advanced_debug_hint">Gaitu aparteko erregistroa eta erakutsi arazketaren informazioa hainbat tokitan</string>
     <string name="title_advanced_cleanup_attachments_hint">Horrek kenduko ditu eskuz garbitzerakoan jada sinkronizatzen ez diren mezuetako eranskinak</string>
     <string name="title_advanced_cleanup_hint">Honek behin behineko fitxategi guztiak ezabatuko ditu</string>
     <string name="title_advanced_never_favorite">Inoiz ez gogokoa</string>

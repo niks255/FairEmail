@@ -57,6 +57,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
 public class FragmentOptionsDisplay extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Button btnTheme;
     private Spinner spStartup;
@@ -76,6 +80,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swActionbarColor;
 
     private SwitchCompat swHighlightUnread;
+    private ViewButtonColor btnHighlightColor;
     private SwitchCompat swColorStripe;
     private SwitchCompat swAvatars;
     private TextView tvGravatarsHint;
@@ -130,7 +135,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private final static String[] RESET_OPTIONS = new String[]{
             "theme", "startup", "cards", "beige", "date", "navbar_colorize", "portrait2", "landscape", "landscape3",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_color",
-            "highlight_unread", "color_stripe",
+            "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
             "name_email", "prefer_contact", "distinguish_contacts", "show_recipients",
             "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
@@ -171,6 +176,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swActionbarColor = view.findViewById(R.id.swActionbarColor);
 
         swHighlightUnread = view.findViewById(R.id.swHighlightUnread);
+        btnHighlightColor = view.findViewById(R.id.btnHighlightColor);
         swColorStripe = view.findViewById(R.id.swColorStripe);
         swAvatars = view.findViewById(R.id.swAvatars);
         swGravatars = view.findViewById(R.id.swGravatars);
@@ -347,6 +353,41 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("highlight_unread", checked).apply();
+            }
+        });
+
+        btnHighlightColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = getContext();
+                int editTextColor = Helper.resolveColor(context, android.R.attr.editTextColor);
+                int highlightColor = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorAccent));
+
+                ColorPickerDialogBuilder builder = ColorPickerDialogBuilder
+                        .with(context)
+                        .setTitle(R.string.title_advanced_highlight_color)
+                        .initialColor(highlightColor)
+                        .showColorEdit(true)
+                        .setColorEditTextColor(editTextColor)
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(6)
+                        .lightnessSliderOnly()
+                        .setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                prefs.edit().putInt("highlight_color", selectedColor).apply();
+                                btnHighlightColor.setColor(selectedColor);
+                            }
+                        })
+                        .setNegativeButton(R.string.title_reset, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefs.edit().remove("highlight_color").apply();
+                                btnHighlightColor.setColor(Helper.resolveColor(context, R.attr.colorAccent));
+                            }
+                        });
+
+                builder.build().show();
             }
         });
 
@@ -840,6 +881,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swActionbarColor.setEnabled(swActionbar.isChecked());
 
         swHighlightUnread.setChecked(prefs.getBoolean("highlight_unread", true));
+
+        btnHighlightColor.setColor(prefs.getInt("highlight_color",
+                Helper.resolveColor(getContext(), R.attr.colorUnreadHighlight)));
+
         swColorStripe.setChecked(prefs.getBoolean("color_stripe", true));
         swAvatars.setChecked(prefs.getBoolean("avatars", true));
         swGravatars.setChecked(prefs.getBoolean("gravatars", false));
@@ -1128,51 +1173,57 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                             boolean system = (rgThemeOptions.isEnabled() && optionId == R.id.rbThemeSystem);
                             boolean black = (swBlack.isEnabled() && swBlack.isChecked());
 
+                            SharedPreferences.Editor editor = prefs.edit();
+
+                            editor.remove("highlight_color");
+
                             switch (rgTheme.getCheckedRadioButtonId()) {
                                 case R.id.rbThemeBlueOrange:
                                     if (system)
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 (reverse ? "orange_blue_system" : "blue_orange_system") +
                                                         (black ? "_black" : "")).apply();
                                     else
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 (reverse ? "orange_blue" : "blue_orange") +
                                                         (black ? "_black" : dark ? "_dark" : "_light")).apply();
                                     break;
                                 case R.id.rbThemeYellowPurple:
                                     if (system)
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 (reverse ? "purple_yellow_system" : "yellow_purple_system") +
                                                         (black ? "_black" : "")).apply();
                                     else
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 (reverse ? "purple_yellow" : "yellow_purple") +
                                                         (black ? "_black" : dark ? "_dark" : "_light")).apply();
                                     break;
                                 case R.id.rbThemeRedGreen:
                                     if (system)
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 (reverse ? "green_red_system" : "red_green_system") +
                                                         (black ? "_black" : "")).apply();
                                     else
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 (reverse ? "green_red" : "red_green") +
                                                         (black ? "_black" : dark ? "_dark" : "_light")).apply();
                                     break;
                                 case R.id.rbThemeGrey:
                                     if (system)
-                                        prefs.edit().putString("theme", "grey_system").apply();
+                                        editor.putString("theme", "grey_system").apply();
                                     else
-                                        prefs.edit().putString("theme",
+                                        editor.putString("theme",
                                                 "grey" + (dark ? "_dark" : "_light")).apply();
                                     break;
                                 case R.id.rbThemeBlack:
-                                    prefs.edit().putString("theme", "black").apply();
+                                    editor.putString("theme", "black").apply();
                                     break;
                                 case R.id.rbThemeBlackAndWhite:
-                                    prefs.edit().putString("theme", "black_and_white").apply();
+                                    editor.putString("theme", "black_and_white").apply();
                                     break;
                             }
+
+                            editor.apply();
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)

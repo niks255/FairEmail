@@ -79,7 +79,7 @@ public class FragmentOptions extends FragmentBase {
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "subscriptions",
             "portrait2", "landscape", "landscape3", "startup", "cards", "beige", "indentation", "date", "threading", "threading_unread",
-            "highlight_unread", "color_stripe",
+            "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
             "name_email", "prefer_contact", "distinguish_contacts", "show_recipients", "authentication",
             "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",

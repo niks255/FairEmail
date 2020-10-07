@@ -406,7 +406,6 @@
     <string name="title_advanced_language_detection">偵測訊息語言</string>
     <string name="title_advanced_fts">建立搜尋索引</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d 訊息被索引 (%3$s)</string>
-    <string name="title_advanced_english">使用 US 設定</string>
     <string name="title_advanced_watchdog">定期確認 FairEmail 是否依舊運作</string>
     <string name="title_advanced_optimize">自動最佳化</string>
     <string name="title_advanced_updates">檢查更新</string>
@@ -445,7 +444,6 @@
     <string name="title_advanced_date_hint">如果郵件按時間排序，則僅按日期分組</string>
     <string name="title_advanced_navbar_colorize_hint">這是否可行取決於Android版本和變量</string>
     <string name="title_advanced_threading_hint">彼此相關的群組訊息</string>
-    <string name="title_advanced_highlight_hint">主題的強調色將用於突出顯示</string>
     <string name="title_advanced_gravatars_hint">可能存在隱私風險</string>
     <string name="title_advanced_name_email_hint">禁用時，僅顯示名稱（如果可用）</string>
     <string name="title_advanced_preview_hint">僅在消息文本已被下載時可用</string>
@@ -477,7 +475,6 @@
     <string name="title_advanced_fts_hint">啟用此功能可增加搜尋效率，但也會增加電池和儲存空間的使用量</string>
     <string name="title_advanced_english_hint">這將會重起應用程式</string>
     <string name="title_advanced_experiments_hint">當前實驗功能列表</string>
-    <string name="title_advanced_debug_hint">啟用額外的日誌記錄並在不同位置顯示調試信息</string>
     <string name="title_advanced_cleanup_attachments_hint">手動清除時，這將從不再同步的郵件中刪除附件</string>
     <string name="title_advanced_cleanup_hint">這將刪除所有臨時文件</string>
     <string name="title_advanced_never_favorite">從不喜歡</string>

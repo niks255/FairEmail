@@ -313,6 +313,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_subject_top">Betreff oberhalb des Absenders anzeigen</string>
     <string name="title_advanced_subject_italic">Betreff kursiv anzeigen</string>
     <string name="title_advanced_subject_elipsed">Wenn nötig, den Betreff kürzen</string>
+    <string name="title_advanced_highlight_color">Hervorhebungsfarbe</string>
     <string name="title_advanced_keywords">Schlüsselwörter im Nachrichtenkopf anzeigen</string>
     <string name="title_advanced_labels">Gmail-Labels im Nachrichtenkopf anzeigen</string>
     <string name="title_advanced_flags">Sterne anzeigen</string>
@@ -427,13 +428,15 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_language_detection">Sprache des Nachrichtentextes erkennen</string>
     <string name="title_advanced_fts">Suchindex erstellen</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d Nachrichten indiziert (%3$s)</string>
-    <string name="title_advanced_english">US-Ländereinstellungen verwenden</string>
+    <string name="title_advanced_language">Sprache</string>
+    <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_optimize">Automatisch optimieren</string>
     <string name="title_advanced_updates">Nach Aktualisierungen suchen</string>
     <string name="title_advanced_experiments">Experimentelle Funktionen ausprobieren</string>
     <string name="title_advanced_query_threads">Parallelen Datenbankzugriff beschränken</string>
     <string name="title_advanced_crash_reports">Fehlerberichte senden</string>
+    <string name="title_advanced_protocol">Protokollaufzeichnung</string>
     <string name="title_advanced_debug">Fehlersuchmodus</string>
     <string name="title_advanced_cleanup_attachments">Anhänge aus alten Nachrichten löschen</string>
     <string name="title_advanced_cleanup">Bereinigen</string>
@@ -468,7 +471,6 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_date_hint">Nachrichten werden nur nach Datum gruppiert, wenn sie nach Zeit sortiert sind</string>
     <string name="title_advanced_navbar_colorize_hint">Ob das funktioniert, hängt von der Android-Version und -Variante ab</string>
     <string name="title_advanced_threading_hint">E-Mails gruppieren, die miteinander verwandt sind</string>
-    <string name="title_advanced_highlight_hint">Die Akzentfarbe des Farbschemas wird zur Hervorhebung verwendet</string>
     <string name="title_advanced_gravatars_hint">Es könnte ein Datenschutzrisiko geben</string>
     <string name="title_advanced_name_email_hint">Wenn deaktiviert, werden nur Namen angezeigt, sofern verfügbar</string>
     <string name="title_advanced_preview_hint">Nur verfügbar, wenn der E-Mail-Text heruntergeladen wurde</string>
@@ -500,6 +502,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_fts_hint">Dies zu aktivieren, verbessert die Suchleistung, erhöht aber auch den Akku- und Speicherverbrauch</string>
     <string name="title_advanced_english_hint">Dadurch wird die App neu gestartet</string>
     <string name="title_advanced_experiments_hint">Liste der aktuellen experimentellen Funktionen</string>
+    <string name="title_advanced_protocol_hint">Dadurch wird der Akku- und Speicherplatzverbrauch erheblich erhöht!</string>
     <string name="title_advanced_debug_hint">Aktiviert zusätzliche Protokollierung und zeigt Fehlerbehebungsinformationen an verschiedenen Stellen an</string>
     <string name="title_advanced_cleanup_attachments_hint">Beim manuellen Bereinigen werden Anhänge von Nachrichten entfernt, die nicht mehr synchronisiert werden</string>
     <string name="title_advanced_cleanup_hint">Dies löscht alle temporären Dateien</string>
