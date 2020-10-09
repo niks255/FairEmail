@@ -253,6 +253,7 @@
     <string name="title_advanced_suggest_frequently">Ταξινόμηση των προτεινόμενων διευθύνσεων με βάση τη συχνότητα που χρησιμοποιούνται</string>
     <string name="title_advanced_compose_font">Προεπιλεγμένη γραμματοσειρά</string>
     <string name="title_advanced_prefix_once">Μόνο ένα πρόθεμα κατά την απάντηση ή προώθηση μηνύματος</string>
+    <string name="title_advanced_separate_reply">Εισαγωγή μιας οριζόντιας γραμμής πριν από την κεφαλίδα μιας απάντησης/προώθησης</string>
     <string name="title_advanced_extended_reply">Χρήση εκτεταμένων κεφαλίδων κατά την απάντηση/προώθηση</string>
     <string name="title_advanced_quote_reply">Παράθεση του προς απάντηση κειμένου</string>
     <string name="title_advanced_resize_reply">Αναπροσαρμογή των εικόνων στο προς απάντηση κείμενο</string>
@@ -870,6 +871,7 @@
     <string name="title_text_reminder">Το μήνυμα είναι κενό</string>
     <string name="title_attachment_keywords">συνημμένο, συνημμένα, επισυνάπτω, επισυνάπτεται, επισυνάπονται, έγγραφο, έγγραφα, αρχείο, αρχεία, έντυπο, έντυπα, δικαιολογητικό, δικαιολογητικά, πιστοποιητικό, πιστοποιητικά, βιογραφικό, συνοδευτική επιστολή</string>
     <string name="title_attachment_reminder">Θα θέλατε να προσθέσετε ένα συνημμένο;</string>
+    <string name="title_plain_reminder" comment="title_plain_reminder&#10;This warning will be shown when sending a plain text message with formatting (bold, italic, embedded images, etc)">Όλη η μορφοποίηση θα χαθεί</string>
     <string name="title_size_reminder">Μήνυμα (%1$s) πιο μεγάλο από το όριο του διακομιστή (%2$s)</string>
     <string name="title_attachments_missing">Δεν έχουν κατέβει όλα τα συνημμένα</string>
     <string name="title_dialog_hint">Ο διάλογος αυτός μπορεί να ενεργοποιηθεί πάλι από το μενού με τις τρεις τελείες στην πάνω γραμμή ενεργειών</string>
