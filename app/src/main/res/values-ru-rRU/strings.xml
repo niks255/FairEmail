@@ -110,7 +110,6 @@
     <string name="title_of">%1$s/%2$s</string>
     <string name="title_name_count">%1$s (%2$s)</string>
     <string name="title_name_plus">%1$s +%2$d</string>
-    <string name="title_from_to">%1$s ➤ %2$s</string>
     <string name="title_title_description">%1$s: %2$s</string>
     <string name="title_factor_minutes">%1$d мин.</string>
     <string name="menu_exit">Выход</string>
@@ -491,7 +490,7 @@
     <string name="title_advanced_startup_hint">Длительное нажатие на любую папку в списке позволит добавить или удалить её из списка единых папок</string>
     <string name="title_advanced_beige_hint">Только светлые темы</string>
     <string name="title_advanced_date_hint">Сообщения группируются только по дате, если они сортируются по времени</string>
-    <string name="title_advanced_navbar_colorize_hint">Это работает в зависимости от версии и варианта Android</string>
+    <string name="title_advanced_navbar_colorize_hint">Работает в зависимости от версии и варианта Android</string>
     <string name="title_advanced_threading_hint">Группировать сообщения, связанные друг с другом</string>
     <string name="title_advanced_highlight_hint">Цвет акцента темы будет использован для подсветки</string>
     <string name="title_advanced_gravatars_hint">Возможен риск нарушения конфиденциальности</string>
@@ -514,7 +513,7 @@
     <string name="title_advanced_notify_remove_hint">Уведомления о новых о сообщениях всегда будут удаляться при смахивании сообщения и пометке о прочтении</string>
     <string name="title_advanced_notify_manage_hint">Нажмите на название канала, чтобы установить его свойства</string>
     <string name="title_advanced_notify_manage_default_hint">Для установки звука по умолчанию и т.д.</string>
-    <string name="title_advanced_notify_manage_service_hint">Для отключения постоянного уведомления</string>
+    <string name="title_advanced_notify_manage_service_hint">Для отключения контролирующего уведомления</string>
     <string name="title_advanced_notify_preview_all_hint">Для носимых устройств, которые могут показывать полный текст (до 5000 символов)</string>
     <string name="title_advanced_notify_preview_only_hint">Это задержит отображения уведомлений до тех пор, пока текст сообщения не будет загружен</string>
     <string name="title_advanced_wearable_hint">Уведомления на носимое устройство отправляются только после загрузки текста сообщения</string>
@@ -619,7 +618,7 @@
     <string name="title_edit_html">Редактировать как HTML</string>
     <string name="title_sign_key">Ключ подписи: %1$s</string>
     <string name="title_last_connected">Последнее подключение: %1$s</string>
-    <string name="title_storage_quota">Использование хранилища сервера: %1$s/%2$s</string>
+    <string name="title_storage_quota">Занято на сервере: %1$s/%2$s</string>
     <string name="title_pop_support">Протокол POP3 поддерживает загрузку и удаление сообщений только из папки \"Входящие\". POP3 не может помечать сообщения прочитанными, перемещать их и т.д. POP3 расходует больше энергии батареи и трафика, чем IMAP. Поэтому всегда используйте протокол IMAP, если это возможно.</string>
     <string name="title_oauth_support">OAuth не поддерживается</string>
     <string name="title_review">Пересмотр</string>
@@ -631,6 +630,7 @@
     <string name="title_advanced_browse">Просмотр сообщений на сервере</string>
     <string name="title_advanced_expand_read">Отмечать сообщения прочитанными при развёртывании</string>
     <string name="title_synchronize_now">Синхронизировать сейчас</string>
+    <string name="title_synchronize_childs">Синхронизировать вложенные папки</string>
     <string name="title_synchronize_more">Синхронизировать ещё сообщения</string>
     <string name="title_synchronize_enabled">Синхронизировать</string>
     <string name="title_delete_local">Удалить локальные сообщения</string>
@@ -899,7 +899,7 @@
     <string name="title_text_reminder">Сообщение пустое</string>
     <string name="title_attachment_keywords">attached,attachment,attachments,included,вложение,вложения,вложении,приложено</string>
     <string name="title_attachment_reminder">Вы хотите добавить вложение?</string>
-    <string name="title_plain_reminder" comment="title_plain_reminder&#10;This warning will be shown when sending a plain text message with formatting (bold, italic, embedded images, etc)">Всё форматирование будет утрачено</string>
+    <string name="title_plain_reminder">Всё форматирование будет утрачено</string>
     <string name="title_size_reminder">Сообщение (%1$s) больше, чем лимит сервера (%2$s)</string>
     <string name="title_attachments_missing">Не все вложения загружены</string>
     <string name="title_dialog_hint">Этот диалог можно снова включить через верхнее меню трёх точек в панели действий</string>
@@ -1075,8 +1075,8 @@
     <string name="title_legend_oauth">OAuth-авторизация</string>
     <string name="title_legend_folder_connected">Папка подключена</string>
     <string name="title_legend_folder_disconnected">Папка отключена</string>
-    <string name="title_legend_download_on">Автоматически загружать содержимое сообщения</string>
-    <string name="title_legend_download_off">Загружать содержимое сообщения по требованию</string>
+    <string name="title_legend_download_on">Автоматическая загрузка содержимого сообщения</string>
+    <string name="title_legend_download_off">Загрузка содержимого сообщения по требованию</string>
     <string name="title_legend_synchronize_on">Синхронизация включена</string>
     <string name="title_legend_synchronize_off">Синхронизация отключена</string>
     <string name="title_legend_disconnected">Отключено</string>

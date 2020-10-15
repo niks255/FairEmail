@@ -930,6 +930,7 @@
             host="smtp.onmail.com"
             port="465"
             starttls="false" />
+        <!--- please login the account by OnMail app -->
     </provider>
     <provider
         name="HCCnet"
@@ -979,5 +980,18 @@
             host="mail.gandi.net"
             port="465"
             starttls="false" />
+    </provider>
+    <provider
+        name="Ecomail"
+        domain="ecomail\\..*,ecomail-.*\\..*,apiculteur\\.me,asso-nature\\.fr"
+        link="https://sav.ecomail.earth/">
+        <imap
+            host="imap.ecomail.fr"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.ecomail.fr"
+            port="587"
+            starttls="true" />
     </provider>
 </providers>

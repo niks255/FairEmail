@@ -158,7 +158,7 @@
 * [(36) Как зашифрованы файлы настроек?](#user-content-faq36)
 * [(37) Как хранятся пароли?](#user-content-faq37)
 * [(39) Как я могу уменьшить использование батареи FairEmail?](#user-content-faq39)
-* [(40) Как я могу уменьшить использование сети FairEmail?](#user-content-faq40)
+* [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
 * [(41) Как исправить ошибку 'Не удалось выполнить рукопожатие'?](#user-content-faq41)
 * [(42) Можете ли вы добавить нового провайдера в список провайдеров?](#user-content-faq42)
 * [(43) Можете ли вы показать оригинал ... ?](#user-content-faq43)
@@ -277,6 +277,8 @@
 * [(157) Как я могу создать учетную запись Free.fr?](#user-content-faq157)
 * [(158) Какую камеру / диктофон вы рекомендуете?](#user-content-faq158)
 * [(159) Что такое списки защиты от отслеживания Disconnects? ](#user-content-faq159)
+* [(160) Can you add permanent deletion of messages without confirmation?](#user-content-faq160)
+* [(161) Can you add a setting to change the primary and accent color?](#user-content-faq161)
 
 [У меня есть еще один вопрос.](#user-content-support)
 
@@ -488,14 +490,14 @@ When "less secure apps" is not enabled, you'll get the error *Authentication fai
 
 *General*
 
-You might get the alert "*Please log in via your web browser*". This happens when Google considers the network that connects you to the internet (this could be a VPN) to be unsafe. This can be prevented by using the Gmail quick setup wizard or an app specific password.
+Вы можете получить оповещение "*Пожалуйста, войдите через веб-браузер*". Это происходит, когда Google считает небезопасной сеть, которая подключает вас к Интернету (это может быть VPN). Это можно предотвратить, используя мастер быстрой установки Gmail или пароль для конкретного приложения.
 
-See [here](https://support.google.com/mail/answer/7126229) for Google's instructions and [here](https://support.google.com/mail/accounts/answer/78754) for troubleshooting.
+Смотрите [здесь](https://support.google.com/mail/answer/7126229) для инструкций Google и [здесь](https://support.google.com/mail/accounts/answer/78754) для устранения неполадок.
 
 <br />
 
 <a name="faq7"></a>
-**(7) Why are sent messages not appearing (directly) in the sent folder?**
+(7) Почему сообщения не появляются (непосредственно) в папке отправленных?
 
 Sent messages are normally moved from the outbox to the sent folder as soon as your provider adds sent messages to the sent folder. This requires a sent folder to be selected in the account settings and the sent folder to be set to synchronizing.
 
@@ -660,7 +662,7 @@ Please see [here](https://support.google.com/pixelphone/answer/2844832?hl=en) ho
 
 The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.
 
-If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options. Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219) if you want to request an S/MIME Actalis certificate.
+If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options. Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219) if you want to request an S/MIME Actalis certificate. Если вы ищете дешёвый сертификат S/MIME, могу посоветовать [Certum](https://www.certum.eu/en/smime-certificates/).
 
 How to extract a public key from a S/MIME certificate:
 
@@ -845,7 +847,11 @@ The message *... +OK ...* likely means that a POP3 port (usually port number 995
 
 The errors *... invalid greeting ...*, *... requires valid address ...* and *... Parameter to HELO does not conform to RFC syntax ...* can likely be solved by changing the advanced identity setting *Use local IP address instead of host name*.
 
-The errors *... Couldn't connect to host ...*, *... Connection refused ...* or *... Network unreachable ...* mean that FairEmail was not able to connect to the email server.
+The error *... Couldn't connect to host ...* means that there was no response from the email server within a reasonable time (20 seconds by default). Mostly this indicates internet connectivity issues, possibly caused by a VPN or by a firewall app. You can try to increase the connection timeout in the connection settings of FairEmail, for when the email server is really slow.
+
+The error *... Connection refused ...* means that the email server or something between the email server and the app, like a firewall, actively refused the connection.
+
+The error *... Network unreachable ...* means that the email server was not reachable via the current internet connection, for example because internet traffic is restricted to local traffic only.
 
 The error *... Host is unresolved ...* or "*... Unable to resolve host ...* means that the address of the email server could not be resolved. This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
 
@@ -1090,6 +1096,12 @@ It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expr
 
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
 
+If you like to match a catch-all email address, this regex is mostly okay:
+
+```
+.*
+```
+
 If you like to match the special purpose email addresses abc@example.com and xyx@example.com and like to have a fallback email address main@example.com as well, you could do something like this:
 
 * Identity: abc@example.com; regex: **(?i)abc**
@@ -1194,9 +1206,13 @@ In addition, the trash and spam folders will be automatically set to checking fo
 <br />
 
 <a name="faq40"></a>
-**(40) How can I reduce the network usage of FairEmail?**
+**(40) How can I reduce the data usage of FairEmail?**
 
-You can reduce the network usage basically in the same way as reducing battery usage, see the previous question for suggestions.
+You can reduce the data usage basically in the same way as reducing battery usage, see the previous question for suggestions.
+
+It is inevitable that data will be used to synchronize messages.
+
+If the connection to the email server is lost, FairEmail will always synchronize the messages again to make sure no messages were missed. If the connection is unstable, this can result in extra data usage. In this case, it is a good idea to decrease the number of days to synchronize messages for to a minimum (see the previous question) or to switch to periodically synchronizing of messages (receive settings).
 
 By default FairEmail does not download message texts and attachments larger than 256 KiB when there is a metered (mobile or paid Wi-Fi) internet connection. You can change this in the connection settings.
 
@@ -1875,9 +1891,7 @@ By default FairEmail sends each message both as plain text and as HTML formatted
 
 FairEmail will automatically link not linked web links (http and https) and not linked email addresses (mailto) for your convenience. However, texts and links are not easily distinguished, especially not with lots of [top level domains](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) being words. This is why texts with dots are sometimes incorrectly recognized as links, which is better than not recognizing some links.
 
-Links for less usual protocols like telnet and ftp will not automatically be linked.
-
-<br />
+Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but links for less usual or less safe protocols like telnet and ftp will not be recognized.
 
 <a name="faq91"></a>
 **~~(91) Can you add periodical synchronization to save battery power?~~**
@@ -2731,6 +2745,21 @@ This command can be sent to FairEmail from an automation app to update the prote
 Updating once a week will probably be sufficient, please see [here](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) for recent lists changes.
 
 <br />
+
+<a name="faq160"></a>
+**(160) Can you add permanent deletion of messages without confirmation?**
+
+Permanent deletion means that messages will *irreversibly* be lost, and to prevent this from happening accidentally, this always needs to be confirmed. Even with a confirmation, some very angry people who lost some of their messages through their own fault contacted me, which was a rather unpleasant experience :-(
+
+<br />
+
+<a name="faq161"></a>
+**(161) Can you add a setting to change the primary and accent color?***
+
+If I could, I would add a setting to select the primary and accent color right away, but unfortunately Android themes are fixed, see for example [here](https://stackoverflow.com/a/26511725/1794097), so this is not possible.
+
+<br />
+
 
 ## Поддержка
 

@@ -914,11 +914,18 @@ public class HtmlHelper {
                                 int start = matcher.start();
                                 int end = matcher.end();
 
-                                // Workaround for links between parenthesis
-                                if (group.endsWith(")") &&
-                                        start > 0 && text.charAt(start - 1) == '(') {
-                                    group = group.substring(0, group.length() - 1);
+                                // Workarounds
+                                if (group.endsWith(".")) {
                                     end--;
+                                    group = group.substring(0, group.length() - 1);
+                                }
+                                if (group.startsWith("(")) {
+                                    start++;
+                                    group = group.substring(1);
+                                }
+                                if (group.endsWith(")")) {
+                                    end--;
+                                    group = group.substring(0, group.length() - 1);
                                 }
 
                                 boolean email = group.contains("@") && !group.contains(":");
@@ -1654,7 +1661,10 @@ public class HtmlHelper {
         if (full)
             return text;
 
-        return truncate(text, PREVIEW_SIZE);
+        String preview = text
+                .replace("\u200C", "") // Zero-width non-joiner
+                .replaceAll("\\s+", " ");
+        return truncate(preview, PREVIEW_SIZE);
     }
 
     static String truncate(String text, int at) {

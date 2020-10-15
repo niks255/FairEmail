@@ -44,6 +44,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -182,6 +183,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         content_separator = findViewById(R.id.content_separator);
         content_pane = findViewById(R.id.content_pane);
+
+        if ((portrait ? portrait2 : !landscape3) && Helper.isFoldable()) {
+            View content_frame = findViewById(R.id.content_frame);
+            ViewGroup.LayoutParams lparam = content_frame.getLayoutParams();
+            if (lparam instanceof LinearLayout.LayoutParams) {
+                ((LinearLayout.LayoutParams) lparam).weight = 1;
+                content_frame.setLayoutParams(lparam);
+            }
+        }
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -675,7 +685,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             if (exit || count > 1)
                 super.onBackPressed();
             else if (!backHandled()) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getOriginalContext());
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivityView.this);
                 boolean double_back = prefs.getBoolean("double_back", true);
                 if (searching || !double_back)
                     super.onBackPressed();
@@ -1299,8 +1309,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private void onViewMessages(Intent intent) {
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
             getSupportFragmentManager().popBackStack("messages", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            if (content_pane != null)
-                getSupportFragmentManager().popBackStack("unified", 0);
+            //if (content_pane != null)
+            //    getSupportFragmentManager().popBackStack("unified", 0);
         }
 
         Bundle args = new Bundle();

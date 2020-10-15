@@ -22,6 +22,8 @@ package eu.faircode.email;
 import android.app.ActivityManager;
 import android.app.ApplicationExitInfo;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +53,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
@@ -957,6 +960,21 @@ public class Log {
              */
             return false;
 
+        if (stack.length > 0 &&
+                "view.AccessibilityInteractionController".equals(stack[0].getClassName()) &&
+                "applyAppScaleAndMagnificationSpecIfNeeded".equals(stack[0].getMethodName()))
+            /*
+                java.lang.NullPointerException: Attempt to invoke virtual method 'void android.graphics.RectF.scale(float)' on a null object reference
+                  at android.view.AccessibilityInteractionController.applyAppScaleAndMagnificationSpecIfNeeded(AccessibilityInteractionController.java:872)
+                  at android.view.AccessibilityInteractionController.applyAppScaleAndMagnificationSpecIfNeeded(AccessibilityInteractionController.java:796)
+                  at android.view.AccessibilityInteractionController.updateInfosForViewportAndReturnFindNodeResult(AccessibilityInteractionController.java:924)
+                  at android.view.AccessibilityInteractionController.findAccessibilityNodeInfoByAccessibilityIdUiThread(AccessibilityInteractionController.java:345)
+                  at android.view.AccessibilityInteractionController.access$400(AccessibilityInteractionController.java:75)
+                  at android.view.AccessibilityInteractionController$PrivateHandler.handleMessage(AccessibilityInteractionController.java:1393)
+                  at android.os.Handler.dispatchMessage(Handler.java:107)
+             */
+            return false;
+
         if (ex instanceof InflateException)
             /*
                 android.view.InflateException: Binary XML file line #7: Binary XML file line #7: Error inflating class <unknown>
@@ -1140,6 +1158,8 @@ public class Log {
             attachLog(context, draft.id, 4);
             attachOperations(context, draft.id, 5);
             attachLogcat(context, draft.id, 6);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                attachNotificationInfo(context, draft.id, 7);
 
             EntityOperation.queue(context, draft, EntityOperation.ADD);
 
@@ -1515,6 +1535,7 @@ public class Log {
         db.attachment().setDownloaded(attachment.id, size);
     }
 
+
     private static void attachLog(Context context, long id, int sequence) throws IOException {
         DB db = DB.getInstance(context);
 
@@ -1608,6 +1629,39 @@ public class Log {
             if (proc != null)
                 proc.destroy();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static void attachNotificationInfo(Context context, long id, int sequence) throws IOException {
+        DB db = DB.getInstance(context);
+
+        EntityAttachment attachment = new EntityAttachment();
+        attachment.message = id;
+        attachment.sequence = sequence;
+        attachment.name = "channel.txt";
+        attachment.type = "text/plain";
+        attachment.disposition = Part.ATTACHMENT;
+        attachment.size = null;
+        attachment.progress = 0;
+        attachment.id = db.attachment().insertAttachment(attachment);
+
+        long size = 0;
+        File file = attachment.getFile(context);
+        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+            NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            for (NotificationChannel channel : nm.getNotificationChannels())
+                try {
+                    JSONObject jchannel = NotificationHelper.channelToJSON(channel);
+                    size += write(os, jchannel.toString(2) + "\r\n\r\n");
+                } catch (JSONException ex) {
+                    size += write(os, ex.toString() + "\r\n");
+                }
+
+            size += write(os, "Importance none=0; min=1; low=2; default=3; high=4; max=5\r\n\r\n");
+        }
+
+        db.attachment().setDownloaded(attachment.id, size);
     }
 
     private static int write(OutputStream os, String text) throws IOException {

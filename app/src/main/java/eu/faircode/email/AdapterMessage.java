@@ -363,7 +363,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibExpanderAddress;
 
         private ImageView ivPlain;
-        private ImageView ivReceipt;
+        private ImageButton ibReceipt;
         private ImageView ivAutoSubmitted;
         private ImageView ivBrowsed;
 
@@ -421,6 +421,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibRule;
         private ImageButton ibUnsubscribe;
         private ImageButton ibPrint;
+        private ImageButton ibShare;
         private ImageButton ibEvent;
         private ImageButton ibSeen;
         private ImageButton ibAnswer;
@@ -562,7 +563,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibExpanderAddress = vsBody.findViewById(R.id.ibExpanderAddress);
 
             ivPlain = vsBody.findViewById(R.id.ivPlain);
-            ivReceipt = vsBody.findViewById(R.id.ivReceipt);
+            ibReceipt = vsBody.findViewById(R.id.ibReceipt);
             ivAutoSubmitted = vsBody.findViewById(R.id.ivAutoSubmitted);
             ivBrowsed = vsBody.findViewById(R.id.ivBrowsed);
 
@@ -640,6 +641,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibRule = vsBody.findViewById(R.id.ibRule);
             ibUnsubscribe = vsBody.findViewById(R.id.ibUnsubscribe);
             ibPrint = vsBody.findViewById(R.id.ibPrint);
+            ibShare = vsBody.findViewById(R.id.ibShare);
             ibEvent = vsBody.findViewById(R.id.ibEvent);
             ibSeen = vsBody.findViewById(R.id.ibSeen);
             ibAnswer = vsBody.findViewById(R.id.ibAnswer);
@@ -721,6 +723,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (vsBody != null) {
                 ibExpanderAddress.setOnClickListener(this);
+                ibReceipt.setOnClickListener(this);
                 ibSearchContact.setOnClickListener(this);
                 ibNotifyContact.setOnClickListener(this);
                 ibPinContact.setOnClickListener(this);
@@ -737,6 +740,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibRule.setOnClickListener(this);
                 ibUnsubscribe.setOnClickListener(this);
                 ibPrint.setOnClickListener(this);
+                ibShare.setOnClickListener(this);
                 ibEvent.setOnClickListener(this);
                 ibSeen.setOnClickListener(this);
                 ibAnswer.setOnClickListener(this);
@@ -825,6 +829,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (vsBody != null) {
                 ibExpanderAddress.setOnClickListener(null);
+                ibReceipt.setOnLongClickListener(null);
                 ibSearchContact.setOnClickListener(null);
                 ibNotifyContact.setOnClickListener(null);
                 ibPinContact.setOnClickListener(null);
@@ -841,6 +846,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibRule.setOnClickListener(null);
                 ibUnsubscribe.setOnClickListener(null);
                 ibPrint.setOnClickListener(null);
+                ibShare.setOnClickListener(null);
                 ibEvent.setOnClickListener(null);
                 ibSeen.setOnClickListener(null);
                 ibAnswer.setOnClickListener(null);
@@ -1019,7 +1025,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ivSigned.clearColorFilter();
             ivEncrypted.setVisibility(message.encrypted > 0 ? View.VISIBLE : View.GONE);
             if (show_recipients && recipients != null && recipients.length > 0)
-                tvFrom.setText(context.getString(R.string.title_from_to,
+                tvFrom.setText(context.getString(
+                        outgoing && viewType != ViewType.THREAD ? R.string.title_to_from : R.string.title_from_to,
                         MessageHelper.formatAddresses(senders, name_email, false),
                         MessageHelper.formatAddresses(recipients, name_email, false)));
             else
@@ -1266,7 +1273,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             grpImages.setVisibility(View.GONE);
 
             ivPlain.setVisibility(View.GONE);
-            ivReceipt.setVisibility(View.GONE);
+            ibReceipt.setVisibility(View.GONE);
             ivAutoSubmitted.setVisibility(View.GONE);
             ivBrowsed.setVisibility(View.GONE);
 
@@ -1324,6 +1331,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibRule.setVisibility(View.GONE);
             ibUnsubscribe.setVisibility(View.GONE);
             ibPrint.setVisibility(View.GONE);
+            ibShare.setVisibility(View.GONE);
             ibEvent.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
@@ -1469,6 +1477,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibRule.setVisibility(View.GONE);
             ibUnsubscribe.setVisibility(View.GONE);
             ibPrint.setVisibility(View.GONE);
+            ibShare.setVisibility(View.GONE);
             ibEvent.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
@@ -1591,6 +1600,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 hasJunk = true;
 
                     boolean inArchive = EntityFolder.ARCHIVE.equals(message.folderType);
+                    boolean inSent = EntityFolder.SENT.equals(message.folderType);
                     boolean inTrash = EntityFolder.TRASH.equals(message.folderType);
                     boolean inJunk = EntityFolder.JUNK.equals(message.folderType);
                     boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
@@ -1598,7 +1608,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean move = !(message.folderReadOnly || message.uid == null) ||
                             (message.accountProtocol == EntityAccount.TYPE_POP &&
                                     EntityFolder.TRASH.equals(message.folderType));
-                    boolean archive = (move && (hasArchive && !inArchive));
+                    boolean archive = (move && (hasArchive && !inArchive && !inSent && !inTrash && !inJunk));
                     boolean trash = (move || outbox || debug ||
                             message.accountProtocol == EntityAccount.TYPE_POP);
                     boolean junk = (move && (hasJunk && !inJunk));
@@ -1624,6 +1634,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_keywords = prefs.getBoolean("button_keywords", false);
                     boolean button_seen = prefs.getBoolean("button_seen", false);
                     boolean button_event = prefs.getBoolean("button_event", false);
+                    boolean button_share = prefs.getBoolean("button_share", false);
                     boolean button_print = prefs.getBoolean("button_print", false);
                     boolean button_unsubscribe = prefs.getBoolean("button_unsubscribe", true);
                     boolean button_rule = prefs.getBoolean("button_rule", false);
@@ -1635,6 +1646,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibRule.setVisibility(tools && button_rule && !outbox && !message.folderReadOnly ? View.VISIBLE : View.GONE);
                     ibUnsubscribe.setVisibility(tools && button_unsubscribe && message.unsubscribe != null ? View.VISIBLE : View.GONE);
                     ibPrint.setVisibility(tools && button_print && hasWebView && message.content && Helper.canPrint(context) ? View.VISIBLE : View.GONE);
+                    ibShare.setVisibility(tools && button_share && message.content ? View.VISIBLE : View.GONE);
                     ibEvent.setVisibility(tools && button_event && message.content ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
                     ibAnswer.setVisibility(!tools || outbox || (!expand_all && expand_one) ? View.GONE : View.VISIBLE);
@@ -1685,7 +1697,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibExpanderAddress.setContentDescription(context.getString(show_addresses ? R.string.title_accessibility_hide_addresses : R.string.title_accessibility_show_addresses));
 
             ivPlain.setVisibility(show_addresses && message.plain_only != null && message.plain_only ? View.VISIBLE : View.GONE);
-            ivReceipt.setVisibility(message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
+            ibReceipt.setVisibility(message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
             ivAutoSubmitted.setVisibility(show_addresses && message.auto_submitted != null && message.auto_submitted ? View.VISIBLE : View.GONE);
             ivBrowsed.setVisibility(show_addresses && message.ui_browsed ? View.VISIBLE : View.GONE);
 
@@ -2855,6 +2867,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 onToggleFlag(message);
             else if (view.getId() == R.id.ibHelp)
                 onHelp(message);
+            else if (view.getId() == R.id.ibReceipt)
+                onReceipt(message);
             else if (view.getId() == R.id.ibSearchContact)
                 onSearchContact(message);
             else if (view.getId() == R.id.ibNotifyContact)
@@ -2908,6 +2922,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         break;
                     case R.id.ibPrint:
                         onMenuPrint(message);
+                        break;
+                    case R.id.ibShare:
+                        onMenuShare(message, false);
                         break;
                     case R.id.ibEvent:
                         if (ActivityBilling.isPro(context))
@@ -3254,6 +3271,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void onHelp(TupleMessageEx message) {
             Helper.viewFAQ(context, 130);
+        }
+
+        private void onReceipt(TupleMessageEx message) {
+            Intent reply = new Intent(context, ActivityCompose.class)
+                    .putExtra("action", "receipt")
+                    .putExtra("reference", message.id);
+            context.startActivity(reply);
         }
 
         private void onSearchContact(TupleMessageEx message) {
@@ -3848,6 +3872,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean button_keywords = prefs.getBoolean("button_keywords", false);
             boolean button_seen = prefs.getBoolean("button_seen", false);
             boolean button_event = prefs.getBoolean("button_event", false);
+            boolean button_share = prefs.getBoolean("button_share", false);
             boolean button_print = prefs.getBoolean("button_print", false);
             boolean button_unsubscribe = prefs.getBoolean("button_unsubscribe", true);
             boolean button_rule = prefs.getBoolean("button_rule", false);
@@ -3863,6 +3888,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_button_keywords).setChecked(button_keywords);
             popupMenu.getMenu().findItem(R.id.menu_button_seen).setChecked(button_seen);
             popupMenu.getMenu().findItem(R.id.menu_button_event).setChecked(button_event);
+            popupMenu.getMenu().findItem(R.id.menu_button_share).setChecked(button_share);
             popupMenu.getMenu().findItem(R.id.menu_button_print).setChecked(button_print);
             popupMenu.getMenu().findItem(R.id.menu_button_unsubscribe).setChecked(button_unsubscribe);
             popupMenu.getMenu().findItem(R.id.menu_button_rule).setChecked(button_rule);
@@ -3942,6 +3968,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             return true;
                         case R.id.menu_button_event:
                             onMenuButton(message, "event", target.isChecked());
+                            return true;
+                        case R.id.menu_button_share:
+                            onMenuButton(message, "share", target.isChecked());
                             return true;
                         case R.id.menu_button_print:
                             onMenuButton(message, "print", target.isChecked());

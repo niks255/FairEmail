@@ -22,7 +22,6 @@ package eu.faircode.email;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
@@ -33,12 +32,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +47,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -534,7 +529,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             NotificationChannel channel = nm.getNotificationChannel(
                                     EntityAccount.getNotificationChannelId(account.id));
                             if (channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE) {
-                                JSONObject jchannel = channelToJSON(channel);
+                                JSONObject jchannel = NotificationHelper.channelToJSON(channel);
                                 jaccount.put("channel", jchannel);
                                 Log.i("Exported account channel=" + jchannel);
                             }
@@ -556,7 +551,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             NotificationChannel channel = nm.getNotificationChannel(
                                     EntityFolder.getNotificationChannelId(folder.id));
                             if (channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE) {
-                                JSONObject jchannel = channelToJSON(channel);
+                                JSONObject jchannel = NotificationHelper.channelToJSON(channel);
                                 jfolder.put("channel", jchannel);
                                 Log.i("Exported folder channel=" + jchannel);
                             }
@@ -626,7 +621,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         String id = channel.getId();
                         if (id.startsWith("notification.") && id.contains("@") &&
                                 channel.getImportance() != NotificationManager.IMPORTANCE_NONE) {
-                            JSONObject jchannel = channelToJSON(channel);
+                            JSONObject jchannel = NotificationHelper.channelToJSON(channel);
                             jchannels.put(jchannel);
                             Log.i("Exported contact channel=" + jchannel);
                         }
@@ -708,8 +703,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 StringBuilder data = new StringBuilder();
                 Log.i("Reading URI=" + uri);
                 ContentResolver resolver = context.getContentResolver();
-                AssetFileDescriptor descriptor = resolver.openTypedAssetFileDescriptor(uri, "*/*", null);
-                try (InputStream raw = new BufferedInputStream(descriptor.createInputStream())) {
+                try (InputStream raw = new BufferedInputStream(resolver.openInputStream(uri))) {
 
                     InputStream in;
                     if (TextUtils.isEmpty(password))
@@ -817,7 +811,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                                     JSONObject jchannel = (JSONObject) jaccount.get("channel");
                                     jchannel.put("id", EntityAccount.getNotificationChannelId(account.id));
                                     jchannel.put("group", group.getId());
-                                    nm.createNotificationChannel(channelFromJSON(context, jchannel));
+                                    nm.createNotificationChannel(NotificationHelper.channelFromJSON(context, jchannel));
 
                                     Log.i("Imported account channel=" + jchannel);
                                 } else
@@ -867,7 +861,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                                     JSONObject jchannel = (JSONObject) jfolder.get("channel");
                                     jchannel.put("id", channelId);
                                     jchannel.put("group", group.getId());
-                                    nm.createNotificationChannel(channelFromJSON(context, jchannel));
+                                    nm.createNotificationChannel(NotificationHelper.channelFromJSON(context, jchannel));
 
                                     Log.i("Imported folder channel=" + jchannel);
                                 }
@@ -962,6 +956,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         if ("alert_once".equals(key) && !Log.isXiaomi())
                             continue;
 
+                        if ("background_service".equals(key) &&
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            continue;
+
                         if (key != null && key.startsWith("widget."))
                             continue;
 
@@ -1016,7 +1014,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                                 String channelId = jchannel.getString("id");
                                 nm.deleteNotificationChannel(channelId);
 
-                                nm.createNotificationChannel(channelFromJSON(context, jchannel));
+                                nm.createNotificationChannel(NotificationHelper.channelFromJSON(context, jchannel));
 
                                 Log.i("Imported contact channel=" + jchannel);
                             }
@@ -1128,65 +1126,6 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 }
             }.execute(this, args, "setup:cert");
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private JSONObject channelToJSON(NotificationChannel channel) throws JSONException {
-        JSONObject jchannel = new JSONObject();
-
-        jchannel.put("id", channel.getId());
-        jchannel.put("group", channel.getGroup());
-        jchannel.put("name", channel.getName());
-        jchannel.put("description", channel.getDescription());
-
-        jchannel.put("importance", channel.getImportance());
-        jchannel.put("dnd", channel.canBypassDnd());
-        jchannel.put("visibility", channel.getLockscreenVisibility());
-        jchannel.put("badge", channel.canShowBadge());
-
-        Uri sound = channel.getSound();
-        if (sound != null)
-            jchannel.put("sound", sound.toString());
-        // audio attributes
-
-        jchannel.put("light", channel.shouldShowLights());
-        // color
-
-        jchannel.put("vibrate", channel.shouldVibrate());
-        // pattern
-
-        return jchannel;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    static NotificationChannel channelFromJSON(Context context, JSONObject jchannel) throws JSONException {
-        NotificationChannel channel = new NotificationChannel(
-                jchannel.getString("id"),
-                jchannel.getString("name"),
-                jchannel.getInt("importance"));
-
-        String group = jchannel.optString("group");
-        if (!TextUtils.isEmpty(group))
-            channel.setGroup(group);
-
-        if (jchannel.has("description") && !jchannel.isNull("description"))
-            channel.setDescription(jchannel.getString("description"));
-
-        channel.setBypassDnd(jchannel.getBoolean("dnd"));
-        channel.setLockscreenVisibility(jchannel.getInt("visibility"));
-        channel.setShowBadge(jchannel.getBoolean("badge"));
-
-        if (jchannel.has("sound") && !jchannel.isNull("sound")) {
-            Uri uri = Uri.parse(jchannel.getString("sound"));
-            Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-            if (ringtone != null)
-                channel.setSound(uri, Notification.AUDIO_ATTRIBUTES_DEFAULT);
-        }
-
-        channel.enableLights(jchannel.getBoolean("light"));
-        channel.enableVibration(jchannel.getBoolean("vibrate"));
-
-        return channel;
     }
 
     private void onGmail(Intent intent) {
