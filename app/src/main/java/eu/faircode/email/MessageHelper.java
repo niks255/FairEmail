@@ -57,6 +57,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.IDN;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
 import java.text.ParsePosition;
@@ -1614,27 +1615,42 @@ public class MessageHelper {
         return address.getAddress();
     }
 
+    class PartHolder {
+        Part part;
+        ContentType contentType;
+
+        PartHolder(Part part, ContentType contentType) {
+            this.part = part;
+            this.contentType = contentType;
+        }
+
+        boolean isPlainText() {
+            return "text/plain".equalsIgnoreCase(contentType.getBaseType());
+        }
+    }
+
     class MessageParts {
-        private List<Part> plain = new ArrayList<>();
-        private List<Part> html = new ArrayList<>();
-        private List<Part> extra = new ArrayList<>();
+        private List<PartHolder> text = new ArrayList<>();
+        private List<PartHolder> extra = new ArrayList<>();
         private List<AttachmentPart> attachments = new ArrayList<>();
         private ArrayList<String> warnings = new ArrayList<>();
 
         Boolean isPlainOnly() {
-            if (plain.size() + html.size() + extra.size() == 0)
+            if (text.size() + extra.size() == 0)
                 return null;
-            return (html.size() == 0);
+            for (PartHolder h : text)
+                if (!h.isPlainText())
+                    return false;
+            return true;
         }
 
         boolean hasBody() throws MessagingException {
-            List<Part> all = new ArrayList<>();
-            all.addAll(plain);
-            all.addAll(html);
+            List<PartHolder> all = new ArrayList<>();
+            all.addAll(text);
             all.addAll(extra);
 
-            for (Part p : all)
-                if (p.getSize() > 0)
+            for (PartHolder h : all)
+                if (h.part.getSize() > 0)
                     return true;
 
             return false;
@@ -1643,12 +1659,11 @@ public class MessageHelper {
         Long getBodySize() throws MessagingException {
             Long size = null;
 
-            List<Part> all = new ArrayList<>();
-            all.addAll(plain);
-            all.addAll(html);
+            List<PartHolder> all = new ArrayList<>();
+            all.addAll(text);
             all.addAll(extra);
-            for (Part p : all) {
-                int s = p.getSize();
+            for (PartHolder h : all) {
+                int s = h.part.getSize();
                 if (s >= 0)
                     if (size == null)
                         size = (long) s;
@@ -1670,21 +1685,18 @@ public class MessageHelper {
         }
 
         String getHtml(Context context) throws MessagingException, IOException {
-            if (plain.size() + html.size() == 0) {
+            if (text.size() == 0) {
                 Log.i("No body part");
                 return null;
             }
 
             StringBuilder sb = new StringBuilder();
 
-            List<Part> parts = new ArrayList<>();
-            if (html.size() > 0)
-                parts.addAll(html);
-            else
-                parts.addAll(plain);
+            List<PartHolder> parts = new ArrayList<>();
+            parts.addAll(text);
             parts.addAll(extra);
-            for (Part part : parts) {
-                if (part.getSize() > MAX_MESSAGE_SIZE) {
+            for (PartHolder h : parts) {
+                if (h.part.getSize() > MAX_MESSAGE_SIZE) {
                     warnings.add(context.getString(R.string.title_insufficient_memory));
                     return null;
                 }
@@ -1692,7 +1704,7 @@ public class MessageHelper {
                 String result;
 
                 try {
-                    Object content = part.getContent();
+                    Object content = h.part.getContent();
                     Log.i("Content class=" + (content == null ? null : content.getClass().getName()));
 
                     if (content == null) {
@@ -1718,7 +1730,7 @@ public class MessageHelper {
                 // Get content type
                 ContentType ct;
                 try {
-                    ct = new ContentType(part.getContentType());
+                    ct = new ContentType(h.part.getContentType());
                 } catch (ParseException ex) {
                     Log.e(ex);
                     ct = new ContentType();
@@ -1732,24 +1744,37 @@ public class MessageHelper {
                 if ((TextUtils.isEmpty(charset) || charset.equalsIgnoreCase(StandardCharsets.US_ASCII.name())))
                     charset = null;
 
-                if (part.isMimeType("text/plain")) {
-                    if (charset == null) {
+                if (h.part.isMimeType("text/plain")) {
+                    Charset cs = null;
+                    try {
+                        if (charset != null)
+                            cs = Charset.forName(charset);
+                    } catch (UnsupportedCharsetException ignored) {
+                    }
+
+                    if (charset == null || StandardCharsets.ISO_8859_1.equals(cs)) {
                         Charset detected = CharsetHelper.detect(result);
-                        if (detected == null) {
-                            if (CharsetHelper.isUTF8(result)) {
-                                Log.i("Charset plain=UTF8");
-                                result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                            }
+                        if (StandardCharsets.ISO_8859_1.equals(cs) &&
+                                StandardCharsets.UTF_8.equals(detected)) {
+                            Log.i("Charset upgrade=UTF8");
+                            result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         } else {
-                            Log.i("Charset plain=" + detected.name());
-                            result = new String(result.getBytes(StandardCharsets.ISO_8859_1), detected);
+                            if (detected == null) {
+                                if (CharsetHelper.isUTF8(result)) {
+                                    Log.i("Charset plain=UTF8");
+                                    result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                                }
+                            } else {
+                                Log.i("Charset plain=" + detected.name());
+                                result = new String(result.getBytes(StandardCharsets.ISO_8859_1), detected);
+                            }
                         }
                     }
 
                     if ("flowed".equalsIgnoreCase(ct.getParameter("format")))
                         result = HtmlHelper.flow(result);
                     result = "<div x-plain=\"true\">" + HtmlHelper.formatPre(result) + "</div>";
-                } else if (part.isMimeType("text/html")) {
+                } else if (h.part.isMimeType("text/html")) {
                     if (charset == null) {
                         // <meta charset="utf-8" />
                         // <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -1779,8 +1804,8 @@ public class MessageHelper {
                                 }
                         }
                     }
-                } else if (part.isMimeType("message/delivery-status") ||
-                        part.isMimeType("message/disposition-notification")) {
+                } else if (h.part.isMimeType("message/delivery-status") ||
+                        h.part.isMimeType("message/disposition-notification")) {
                     StringBuilder report = new StringBuilder();
                     report.append("<hr><div style=\"font-family: monospace; font-size: small;\">");
                     for (String line : result.split("\\r?\\n")) {
@@ -1898,6 +1923,9 @@ public class MessageHelper {
                 throw new IllegalArgumentException("Attachment not found");
 
             downloadAttachment(context, index, local);
+
+            if (Helper.isTnef(local.type, local.name))
+                decodeTNEF(context, local);
         }
 
         void downloadAttachment(Context context, int index, EntityAttachment local) throws MessagingException, IOException {
@@ -2013,6 +2041,121 @@ public class MessageHelper {
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }
+            }
+        }
+
+        private void decodeTNEF(Context context, EntityAttachment local) {
+            try {
+                DB db = DB.getInstance(context);
+                int subsequence = 0;
+
+                // https://poi.apache.org/components/hmef/index.html
+                File file = local.getFile(context);
+                org.apache.poi.hmef.HMEFMessage msg = new org.apache.poi.hmef.HMEFMessage(new FileInputStream(file));
+
+                String subject = msg.getSubject();
+                if (!TextUtils.isEmpty(subject)) {
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = "subject.txt";
+                    attachment.type = "text/plain";
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    Helper.writeText(attachment.getFile(context), subject);
+                    db.attachment().setDownloaded(attachment.id, (long) subject.length());
+                }
+
+                String body = msg.getBody();
+                if (TextUtils.isEmpty(body)) {
+                    org.apache.poi.hmef.attribute.MAPIAttribute attr =
+                            msg.getMessageMAPIAttribute(org.apache.poi.hsmf.datatypes.MAPIProperty.BODY_HTML);
+                    if (attr == null)
+                        attr = msg.getMessageMAPIAttribute(org.apache.poi.hsmf.datatypes.MAPIProperty.BODY);
+                    if (attr != null) {
+                        EntityAttachment attachment = new EntityAttachment();
+                        attachment.message = local.message;
+                        attachment.sequence = local.sequence;
+                        attachment.subsequence = ++subsequence;
+                        if (attr.getProperty().equals(org.apache.poi.hsmf.datatypes.MAPIProperty.BODY_HTML)) {
+                            attachment.name = "body.html";
+                            attachment.type = "text/html";
+                        } else {
+                            attachment.name = "body.txt";
+                            attachment.type = "text/plain";
+                        }
+                        attachment.disposition = Part.ATTACHMENT;
+                        attachment.id = db.attachment().insertAttachment(attachment);
+
+                        byte[] data = attr.getData();
+                        Helper.writeText(attachment.getFile(context), new String(data));
+                        db.attachment().setDownloaded(attachment.id, (long) data.length);
+                    }
+                } else {
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = "body.rtf";
+                    attachment.type = "application/rtf";
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    Helper.writeText(attachment.getFile(context), body);
+                    db.attachment().setDownloaded(attachment.id, (long) body.length());
+                }
+
+                for (org.apache.poi.hmef.Attachment at : msg.getAttachments()) {
+                    String filename = at.getLongFilename();
+                    if (filename == null)
+                        filename = at.getFilename();
+                    if (filename == null) {
+                        String ext = at.getExtension();
+                        if (ext != null)
+                            filename = "document." + ext;
+                    }
+
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = filename;
+                    attachment.type = Helper.guessMimeType(attachment.name);
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    byte[] data = at.getContents();
+                    try (OutputStream os = new FileOutputStream(attachment.getFile(context))) {
+                        os.write(data);
+                    }
+
+                    db.attachment().setDownloaded(attachment.id, (long) data.length);
+                }
+
+                StringBuilder sb = new StringBuilder();
+                for (org.apache.poi.hmef.attribute.TNEFAttribute attr : msg.getMessageAttributes())
+                    sb.append(attr.toString()).append("\r\n");
+                for (org.apache.poi.hmef.attribute.MAPIAttribute attr : msg.getMessageMAPIAttributes())
+                    if (!org.apache.poi.hsmf.datatypes.MAPIProperty.RTF_COMPRESSED.equals(attr.getProperty()) &&
+                            !org.apache.poi.hsmf.datatypes.MAPIProperty.BODY_HTML.equals(attr.getProperty()))
+                        sb.append(attr.toString()).append("\r\n");
+                if (sb.length() > 0) {
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = "attributes.txt";
+                    attachment.type = "text/plain";
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    Helper.writeText(attachment.getFile(context), sb.toString());
+                    db.attachment().setDownloaded(attachment.id, (long) sb.length());
+                }
+            } catch (Throwable ex) {
+                Log.w(ex);
             }
         }
 
@@ -2141,15 +2284,36 @@ public class MessageHelper {
                 } else
                     throw new ParseException(content.getClass().getName());
 
-                for (int i = 0; i < multipart.getCount(); i++)
+                boolean other = false;
+                List<Part> plain = new ArrayList<>();
+                int count = multipart.getCount();
+                boolean alternative = part.isMimeType("multipart/alternative");
+                for (int i = 0; i < count; i++)
                     try {
-                        getMessageParts(multipart.getBodyPart(i), parts, encrypt);
+                        BodyPart child = multipart.getBodyPart(i);
+                        if (alternative && count > 1 && child.isMimeType("text/plain"))
+                            plain.add(child);
+                        else {
+                            getMessageParts(child, parts, encrypt);
+                            other = true;
+                        }
                     } catch (ParseException ex) {
                         // Nested body: try to continue
                         // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
                         Log.w(ex);
                         parts.warnings.add(Log.formatThrowable(ex, false));
                     }
+
+                if (alternative && count > 1 && !other)
+                    for (Part child : plain)
+                        try {
+                            getMessageParts(child, parts, encrypt);
+                        } catch (ParseException ex) {
+                            // Nested body: try to continue
+                            // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
+                            Log.w(ex);
+                            parts.warnings.add(Log.formatThrowable(ex, false));
+                        }
             } else {
                 // https://www.iana.org/assignments/cont-disp/cont-disp.xhtml
                 String disposition;
@@ -2185,18 +2349,14 @@ public class MessageHelper {
                     contentType = new ContentType(Helper.guessMimeType(filename));
                 }
 
-                boolean plain = "text/plain".equalsIgnoreCase(contentType.getBaseType());
-                boolean html = "text/html".equalsIgnoreCase(contentType.getBaseType());
-                if ((plain || html) &&
+                String ct = contentType.getBaseType();
+                if (("text/plain".equalsIgnoreCase(ct) || "text/html".equalsIgnoreCase(ct)) &&
                         !Part.ATTACHMENT.equalsIgnoreCase(disposition) && TextUtils.isEmpty(filename)) {
-                    if (plain)
-                        parts.plain.add(part);
-                    else if (html)
-                        parts.html.add(part);
+                    parts.text.add(new PartHolder(part, contentType));
                 } else {
                     if ("message/delivery-status".equalsIgnoreCase(contentType.getBaseType()) ||
                             "message/disposition-notification".equalsIgnoreCase(contentType.getBaseType()))
-                        parts.extra.add(part);
+                        parts.extra.add(new PartHolder(part, contentType));
 
                     AttachmentPart apart = new AttachmentPart();
                     apart.disposition = disposition;

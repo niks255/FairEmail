@@ -54,6 +54,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainException;
+import android.system.ErrnoException;
 import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -205,6 +206,7 @@ import biweekly.property.Organizer;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_FIRST_USER;
 import static android.app.Activity.RESULT_OK;
+import static android.system.OsConstants.ENOSPC;
 import static android.widget.AdapterView.INVALID_POSITION;
 
 public class FragmentCompose extends FragmentBase {
@@ -2270,8 +2272,13 @@ public class FragmentCompose extends FragmentBase {
                 else if (ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException)
                     Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
-                else
+                else {
+                    if (ex instanceof IOException &&
+                            ex.getCause() instanceof ErrnoException &&
+                            ((ErrnoException) ex.getCause()).errno == ENOSPC)
+                        ex = new Throwable(getContext().getString(R.string.app_cake), ex);
                     Log.unexpectedError(getParentFragmentManager(), ex);
+                }
             }
         }.execute(this, args, "compose:attachment:add");
     }
@@ -5229,10 +5236,11 @@ public class FragmentCompose extends FragmentBase {
     private ActivityBase.IKeyPressedListener onKeyPressedListener = new ActivityBase.IKeyPressedListener() {
         @Override
         public boolean onKeyPressed(KeyEvent event) {
-            if (event.isCtrlPressed() && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.isCtrlPressed() && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (event.getKeyCode()) {
+                    case KeyEvent.KEYCODE_S:
                     case KeyEvent.KEYCODE_ENTER:
-                        onAction(R.id.action_check, "enter");
+                        onAction(R.id.action_check, "key");
                         return true;
                     case KeyEvent.KEYCODE_B:
                         if (etBody.hasSelection())

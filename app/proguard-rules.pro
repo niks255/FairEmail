@@ -126,3 +126,8 @@
 #overscroll-decor
 -keepnames class me.everything.android.ui.overscroll.** {*;}
 
+#Markwon
+-keep class io.noties.markwon.** {*;}
+-keep class org.commonmark.** {*;}
+-keepnames class io.noties.markwon.** {*;}
+-keepnames class org.commonmark.** {*;}

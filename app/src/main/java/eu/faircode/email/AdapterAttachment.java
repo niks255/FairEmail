@@ -189,7 +189,7 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                 if (attachment.available)
                     onShare(attachment);
                 else {
-                    if (attachment.progress == null)
+                    if (attachment.progress == null && attachment.subsequence == null)
                         onDownload(attachment);
                 }
             }
@@ -257,7 +257,7 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
         private void onSave(EntityAttachment attachment) {
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
             lbm.sendBroadcast(
-                    new Intent(FragmentMessages.ACTION_STORE_ATTACHMENT)
+                    new Intent(FragmentBase.ACTION_STORE_ATTACHMENT)
                             .putExtra("id", attachment.id)
                             .putExtra("name", Helper.sanitizeFilename(attachment.name))
                             .putExtra("type", attachment.getMimeType()));

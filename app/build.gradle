@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.bugsnag.android.gradle'
 
+def getVersionCode = { -> return 1364 }
+def getReleaseName = { -> return "\"Yamanasaurus\"" }
+// https://en.wikipedia.org/wiki/List_of_dinosaur_genera
+
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 
@@ -13,12 +17,11 @@ android {
         applicationId "eu.faircode.email"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1359
-        versionName "1.1359"
+        versionCode getVersionCode()
+        versionName "1." + getVersionCode()
         archivesBaseName = "FairEmail-v$versionName"
 
-        // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
-        buildConfigField "String", "RELEASE_NAME", "\"Xiyunykus\""
+        buildConfigField "String", "RELEASE_NAME", getReleaseName()
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -39,36 +42,17 @@ android {
         }
     }
 
-    android {
-        buildFeatures {
-            buildFeatures {
-                buildConfig = true
-                viewBinding = false
-                dataBinding = false
-                aidl = true
-                renderScript = false
-                resValues = false
-                shaders = false
-            }
+    sourceSets {
+        github {
+            java.srcDirs = ['src/main/java', 'src/play/java']
         }
-
-        sourceSets {
-            github {
-                java.srcDirs = ['src/main/java', 'src/play/java']
-            }
-            fdroid {
-                java.srcDirs = ['src/main/java', 'src/fdroid/java']
-            }
-            play {
-                java.srcDirs = ['src/main/java', 'src/play/java']
-            }
-            main.res.srcDirs += 'src/main/resExtra'
+        fdroid {
+            java.srcDirs = ['src/main/java', 'src/fdroid/java']
         }
-    }
-
-    dependenciesInfo {
-        includeInApk = false
-        includeInBundle = false
+        play {
+            java.srcDirs = ['src/main/java', 'src/play/java']
+        }
+        main.res.srcDirs += 'src/main/resExtra'
     }
 
     lintOptions {
@@ -87,6 +71,11 @@ android {
         }
     }
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     packagingOptions {
         exclude 'LICENSES'
         exclude 'META-INF/LICENSE.txt'
@@ -96,6 +85,7 @@ android {
         exclude 'META-INF/COPYRIGHT.html'
         exclude 'META-INF/LICENSE.gpl.txt'
         exclude 'META-INF/LICENSE.commercial.txt'
+        exclude 'org/apache/**'
     }
 
     // https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.SigningConfig.html
@@ -107,6 +97,19 @@ android {
             keyPassword keystoreProperties['keyPassword']
             v1SigningEnabled true
             v2SigningEnabled true
+        }
+    }
+
+    buildFeatures {
+        buildFeatures {
+            buildConfig = true
+            viewBinding = false
+            dataBinding = false
+            aidl = true
+            renderScript = false
+            resValues = false
+            shaders = false
+            compose = false
         }
     }
 
@@ -168,6 +171,26 @@ android {
                 (flavors.contains("fdroid") || flavors.contains("play"))) {
             setIgnore(true)
         }
+    }
+
+    // https://stackoverflow.com/questions/28948538/
+    // $JAVA_HOME/bin/java -jar ~/Android/Sdk/tools/proguard/lib/retrace.jar ~/email/app/schemas/mapping/FairEmail-v1.nnn-github-release-mapping.txt
+    applicationVariants.all { variant ->
+        if (variant.getBuildType().isMinifyEnabled())
+            variant.assembleProvider.get().doLast {
+                for (file in variant.getMappingFileProvider().get().files)
+                    if (file != null && file.exists()) {
+                        def dir = "${rootDir}/app/schemas/mapping"
+                        def name = "$archivesBaseName-$variant.baseName-$file.name"
+                        def target = new File(dir, name)
+                        if (!target.exists())
+                            copy {
+                                from file
+                                into dir
+                                rename { String fileName -> name }
+                            }
+                    }
+            }
     }
 
     bugsnag {
@@ -233,11 +256,11 @@ dependencies {
     def lifecycle_version = "2.3.0-beta01"
     def lifecycle_extensions_version = "2.2.0"
     def sqlite_version = "2.1.0"
-    def room_version = "2.2.5" // 2.3.0-alpha02
+    def room_version = "2.2.5" // 2.3.0-alpha03
     def paging_version = "2.1.2" // 3.0.0-alpha03
     def preference_version = "1.1.1"
-    def work_version = "2.5.0-alpha02"
-    def exif_version = "1.3.0"
+    def work_version = "2.5.0-alpha03"
+    def exif_version = "1.3.1"
     def biometric_version = "1.1.0-beta01"
     def textclassifier_version = "1.0.0-alpha03"
     def billingclient_version = "3.0.1"
@@ -258,6 +281,7 @@ dependencies {
     def overscroll_version = "1.1.0"
     def appauth_version = "0.7.1"
     def jcharset_version = "2.1"
+    def apache_poi = "3.17"
 
     // https://developer.android.com/jetpack/androidx/releases/
 
@@ -418,4 +442,8 @@ dependencies {
     // http://www.freeutils.net/source/jcharset/
     // https://mvnrepository.com/artifact/net.freeutils/jcharset
     implementation "net.freeutils:jcharset:$jcharset_version"
+
+    // https://poi.apache.org/components/hmef/index.html
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad
+    implementation "org.apache.poi:poi-scratchpad:$apache_poi"
 }

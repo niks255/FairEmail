@@ -117,7 +117,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int ACCOUNT_ERROR_AFTER = 60; // minutes
     private static final int ACCOUNT_ERROR_AFTER_POLL = 4; // times
     private static final int BACKOFF_ERROR_AFTER = 16; // seconds
-    private static final long FAST_ERROR_TIME = 6 * 60 * 1000L; // milliseconds
     private static final int FAST_ERROR_COUNT = 3;
     private static final int FAST_ERROR_BACKOFF = CONNECT_BACKOFF_ALARM_START;
 
@@ -142,9 +141,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         EntityLog.log(this, "Service create version=" + BuildConfig.VERSION_NAME);
         super.onCreate();
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean background_service = prefs.getBoolean("background_service", false);
-        if (background_service)
+        if (isBackgroundService(this))
             stopForeground(true);
         else
             startForeground(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(null, null).build());
@@ -164,6 +161,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             registerReceiver(idleModeChangedReceiver, new IntentFilter(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED));
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         DB db = DB.getInstance(this);
 
@@ -454,6 +453,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             // Stop service
                             stopSelf();
                             EntityLog.log(ServiceSynchronize.this, "### stop self eventId=" + eventId);
+
+                            WorkerCleanup.cleanupConditionally(ServiceSynchronize.this);
                         }
                     }
                 });
@@ -705,9 +706,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         super.onStartCommand(intent, flags, startId);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean background_service = prefs.getBoolean("background_service", false);
-        if (background_service)
+        if (isBackgroundService(this))
             stopForeground(true);
         else
             startForeground(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(null, null).build());
@@ -1574,7 +1573,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     // Check for fast account errors
                     if (account.last_connected != null &&
-                            now - account.last_connected < FAST_ERROR_TIME) {
+                            now - account.last_connected < account.poll_interval * 60 * 1000L / 2) {
                         errors++;
                         EntityLog.log(ServiceSynchronize.this,
                                 account.name + " fast errors=" + errors +
@@ -2254,11 +2253,17 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private static void start(Context context, Intent intent) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean background_service = prefs.getBoolean("background_service", false);
-        if (background_service)
+        if (isBackgroundService(context))
             context.startService(intent);
         else
             ContextCompat.startForegroundService(context, intent);
+    }
+
+    private static boolean isBackgroundService(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            return false;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("background_service", false);
     }
 }

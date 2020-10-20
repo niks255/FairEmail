@@ -33,6 +33,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -1651,6 +1652,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
 
             setValue("expanded", message.id, value);
+
+            final int p = adapter.getPositionForKey(message.id);
+            if (p != NO_POSITION)
+                rvMessage.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            adapter.notifyItemChanged(p);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
 
             // Collapse other messages
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -5955,6 +5969,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         db.message().setMessageFts(message.id, false);
 
                                         db.setTransactionSuccessful();
+                                    } catch (SQLiteConstraintException ex) {
+                                        // Message removed
+                                        Log.w(ex);
                                     } finally {
                                         db.endTransaction();
                                     }
@@ -6580,6 +6597,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         db.identity().setIdentitySignKeyAlias(message.identity, alias);
 
                     db.setTransactionSuccessful();
+                } catch (SQLiteConstraintException ex) {
+                    // Message removed
+                    Log.w(ex);
                 } finally {
                     db.endTransaction();
                 }
