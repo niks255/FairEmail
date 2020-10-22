@@ -35,6 +35,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -907,7 +908,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     UpdateInfo info = new UpdateInfo();
                     info.tag_name = jroot.getString("tag_name");
                     //info.html_url = jroot.getString("html_url");
-                    info.html_url = BuildConfig.GITHUB_LATEST_URI;
+                    String abi = Build.SUPPORTED_ABIS[0];
 
                     // Check if new release
                     JSONArray jassets = jroot.getJSONArray("assets");
@@ -915,11 +916,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                         JSONObject jasset = jassets.getJSONObject(i);
                         if (jasset.has("name") && !jasset.isNull("name")) {
                             String name = jasset.getString("name");
-                            if (name.endsWith(".apk")) {
+                            if (name.endsWith(abi+"-release.apk")) {
                                 Log.i("Latest version=" + info.tag_name);
                                 if (BuildConfig.VERSION_NAME.equals(info.tag_name))
                                     return null;
                                 else
+                                    info.html_url = jasset.getString("browser_download_url");
                                     return info;
                             }
                         }
