@@ -112,8 +112,8 @@
     <string name="title_of" translatable="false">%1$s/%2$s</string>
     <string name="title_name_count" translatable="false">%1$s (%2$s)</string>
     <string name="title_name_plus" translatable="false">%1$s +%2$d</string>
-    <string name="title_from_to" translatable="false">%1$s &gt; %2$s</string>
-    <string name="title_to_from" translatable="false">%2$s &lt; %1$s</string>
+    <string name="title_from_to" translatable="false">%1$s &gt;&gt; %2$s</string>
+    <string name="title_to_from" translatable="false">%2$s &lt;&lt; %1$s</string>
     <string name="title_title_description" translatable="false">%1$s: %2$s</string>
     <string name="title_factor_minutes">%1$d minutes</string>
 
@@ -172,6 +172,7 @@
     <string name="title_setup_gmail" translatable="false">Gmail</string>
     <string name="title_setup_outlook" translatable="false">Outlook, Live, Hotmail</string>
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
+    <string name="title_setup_oauth_permission">The email provider has approved OAuth only for official app versions</string>
     <string name="title_setup_activesync" translatable="false">Exchange ActiveSync</string>
     <string name="title_setup_other">Other provider</string>
     <string name="title_setup_gmail_support">Authorizing Google accounts will work in official versions only because Android checks the app signature</string>

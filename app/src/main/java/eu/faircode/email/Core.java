@@ -1766,7 +1766,9 @@ class Core {
         Log.i("Delete local count=" + local.size());
         for (String name : local.keySet()) {
             EntityFolder folder = local.get(name);
-            if (EntityFolder.USER.equals(folder.type)) {
+            List<EntityFolder> childs = parentFolders.get(name);
+            if (EntityFolder.USER.equals(folder.type) ||
+                    childs == null || childs.size() == 0) {
                 Log.i(name + " delete");
                 db.folder().deleteFolder(account.id, name);
             } else
@@ -1787,8 +1789,6 @@ class Core {
 
     private static void onPurgeFolder(Context context, JSONArray jargs, EntityFolder folder, IMAPFolder ifolder) throws MessagingException {
         // Delete all messages from folder
-        DB db = DB.getInstance(context);
-
         try {
             final MessageSet[] sets = new MessageSet[]{new MessageSet(1, ifolder.getMessageCount())};
 
@@ -1808,15 +1808,12 @@ class Core {
             Log.e(ex);
             throw ex;
         } finally {
-            int count = MessageHelper.getMessageCount(ifolder);
-            db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
-
-            // Delete local, hidden messages
-            onPurgeFolder(context, folder);
+            EntityOperation.sync(context, folder.id, false);
         }
     }
 
     private static void onPurgeFolder(Context context, EntityFolder folder) {
+        // POP3
         DB db = DB.getInstance(context);
         try {
             db.beginTransaction();
@@ -1991,6 +1988,8 @@ class Core {
                         if (received == null)
                             received = 0L;
 
+                        boolean seen = (received <= account.created);
+
                         String[] authentication = helper.getAuthentication();
                         MessageHelper.MessageParts parts = helper.getMessageParts();
 
@@ -2029,12 +2028,12 @@ class Core {
                         message.ui_encrypt = message.encrypt;
                         message.received = received;
                         message.sent = sent;
-                        message.seen = false;
+                        message.seen = seen;
                         message.answered = false;
                         message.flagged = false;
                         message.flags = null;
                         message.keywords = new String[0];
-                        message.ui_seen = false;
+                        message.ui_seen = seen;
                         message.ui_answered = false;
                         message.ui_flagged = false;
                         message.ui_hide = false;

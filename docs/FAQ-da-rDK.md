@@ -158,7 +158,7 @@ Designet er baseret på mange debatter, og er du interesseret, kan du også deba
 * [(36) Hvordan krypteres indstillingsfiler?](#user-content-faq36)
 * [(37) Hvordan opbevares adgangskoder?](#user-content-faq37)
 * [(39) Hvordan kan jeg reducere FairEmails batteriforbrug?](#user-content-faq39)
-* [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
+* [(40) Hvordan reduceres FairEmails dataforbrug?](#user-content-faq40)
 * [(41) Hvordan retter jeg fejlen 'Handshake miskykkedes' ?](#user-content-faq41)
 * [(42) Kan en ny udbyder føjes til listen over udbydere?](#user-content-faq42)
 * [(43) Kan man vise den oprindelige ... ?](#user-content-faq43)
@@ -277,8 +277,8 @@ Designet er baseret på mange debatter, og er du interesseret, kan du også deba
 * [(157) Hvordan opsættes en Free.fr-konto?](#user-content-faq157)
 * [(158) Hvilken kamera-/lydoptager anbefales?](#user-content-faq158)
 * [(159) Hvad er Disconnect's sporingsbeskyttelseslister?](#user-content-faq159)
-* [(160) Can you add permanent deletion of messages without confirmation?](#user-content-faq160)
-* [(161) Can you add a setting to change the primary and accent color?](#user-content-faq161)
+* [(160) Kan der blive tilføjet permanent sletning af beskeder uden bekræftelse?](#user-content-faq160)
+* [(161) Kan der blive tilføjet en indstilling til ændring af primær- og accentfarverne?](#user-content-faq161)
 
 [Jeg har et andet spørgsmål.](#user-content-support)
 
@@ -604,7 +604,7 @@ Beskedtekster/vedhæftninger, som skal krypteres, samt dekrypterede beskedtekste
 
 **Vigtigt**: På visse Android-versioner/-enheder er det nødvendigt at aktivere *Vis popups i baggrundstilstand * i de udvidede tilladelser til Android-app indstillingerne i OpenKeychain-appen. Uden denne tilladelse, gemmes udkastet, men OpenKeychain-popup'en til bekræftelse/valg vises muligvis ikke.
 
-FairEmail vil sende [Autocrypt](https://autocrypt.org/)-headeren til brug for andre e-mailklienter, men kun for signerede og krypterede beskeder, da for mange e-mailservere har problemer med den ofte lange Autocrypt-header. Note that the most secure way to start an encrypted email exchange is by sending signed messages first. Modtagne Autocrypt-headers sendes til og lagres af OpenKeychain-appen til brug for fremtidige signaturbekræftelser eller beskeddekrypteringer.
+FairEmail vil sende [Autocrypt](https://autocrypt.org/)-headeren til brug for andre e-mailklienter, men kun for signerede og krypterede beskeder, da for mange e-mailservere har problemer med den ofte lange Autocrypt-header. Bemærk, at den mest sikre måde at starte en krypteret e-mailudveksling på er ved først at sende signerede beskeder. Modtagne Autocrypt-headers sendes til og lagres af OpenKeychain-appen til brug for fremtidige signaturbekræftelser eller beskeddekrypteringer.
 
 Al nøglehåndtering uddelegeres af sikkerhedsårsager til OpenKeychain appen. Dette betyder også, at FairEmail ikke gemmer PGP-nøgler.
 
@@ -2592,7 +2592,7 @@ There is **only support** on the latest Play store version, the latest GitHub re
 
 F-Droid builds irregularly, which can be problematic when there is an important update. Therefore you are advised to switch to the GitHub release.
 
-The F-Droid version is built from the same source code, but signed differently. This means that all features are available in the F-Droid version too, except for using the Gmail quick setup wizard because Google approved (and allows) one signature only.
+The F-Droid version is built from the same source code, but signed differently. Dvs., at alle funktioner også er tilgængelige i F-Droid versionen bortset brug af Gmail-hurtigopsætningsguiden, da Google har godkendt (og alee tillader) én app-signatur. For alle andre e-mailudbydere, er OAuth-adgang kun tilgængelig i Play Butik- og Github-versioner, da e-mailudbydere kun tillader brug af OAuth for officielle builds.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release because Android refuses to install the same app with a different signature for security reasons.
 

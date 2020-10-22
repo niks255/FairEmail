@@ -182,7 +182,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [~~(54) How do I use a namespace prefix?~~](#user-content-faq54)
 * [(55) How can I mark all messages as read / move or delete all messages?](#user-content-faq55)
 * [(56) Can you add support for JMAP?](#user-content-faq56)
-* [~~(57) Can I use HTML in signatures?~~](#user-content-faq57)
+* [(57) Can I use HTML in signatures?](#user-content-faq57)
 * [(58) What does an open/closed email icon mean?](#user-content-faq58)
 * [(59) Can original messages be opened in the browser?](#user-content-faq59)
 * [(60) Did you known ...?](#user-content-faq60)
@@ -1384,11 +1384,13 @@ If you are comparing the battery usage of FairEmail with another email client, p
 For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
 
 Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage.
-In this case you might want to synchronize periodically, for example each hour, instead of continuously.
+Also, some email servers prematurely terminate idle connections, while [the standard](https://tools.ietf.org/html/rfc2177) says that an idle connection should be kept open for 29 minutes.
+In these cases you might want to synchronize periodically, for example each hour, instead of continuously.
 Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always
-because connecting to the server and comparing the local and remotes messages are expensive operations.
+because connecting to the server and comparing the local and remote messages are expensive operations.
 
 [On some devices](https://dontkillmyapp.com/) it is necessary to *disable* battery optimizations (setup step 4) to keep connections to email servers open.
+In fact, leaving battery optimizations enabled can result in extra battery usage for all devices, even though this sounds contradictory!
 
 Most of the battery usage, not considering viewing messages, is due to synchronization (receiving and sending) of messages.
 So, to reduce the battery usage, set the number of days to synchronize message for to a lower value,
@@ -1693,14 +1695,25 @@ so it is not worth a lot of effort to add support for this to FairEmail.
 <br />
 
 <a name="faq57"></a>
-**(57) ~~Can I use HTML in signatures?~~**
+**(57) Can I use HTML in signatures?**
 
-~~Yes, you can use HTML in signatures if you paste formatted text into the signature field or use the *Edit as HTML* menu to enter HTML manually.~~
+Yes, you can use [HTML](https://en.wikipedia.org/wiki/HTML).
+In the signature editor you can switch to HTML mode via the three-dots menu.
 
-~~Note that including links and images in messages will increase the likelihood that a message will be seen as spam,~~
-~~especially when you send a message to someone for the first time.~~
+Note that if you switch back to the text editor that not all HTML might be rendered as-is because the Android text editor is not able to render all HTML.
+Similarly, if you use the text editor, the HTML might be altered in unexpected ways.
 
-~~See [here](https://stackoverflow.com/questions/44410675/supported-html-tags-on-android-textview) for which HTML tags are supported.~~
+If you want to use preformatted text, like [ASCII art](https://en.wikipedia.org/wiki/ASCII_art), you should wrap the text in a *pre* element, like this:
+
+```
+<pre>
+  |\_/|
+ / @ @ \
+( > º < )
+ `>>x<<´
+ /  O  \
+ </pre>
+```
 
 <br />
 
@@ -2673,6 +2686,7 @@ So, basically the only thing I can do, is give some advice:
 * Make sure you have an active, working internet connection
 * Make sure you are logged in with the right Google account and that there is nothing wrong with your Google account
 * Make sure you installed FairEmail via the right Google account if you configured multiple Google accounts on your device
+* Make sure the Play store app is up to date, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
 * Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers
 * Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases
 
@@ -2681,6 +2695,7 @@ Restarting the device might be necessary to let the Play store recognize the pur
 
 Note that:
 
+* If you get *ITEM_ALREADY_OWNED*, the Play store app probably needs to be updated, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
 * Purchases are stored in the Google cloud and cannot get lost
 * There is no time limit on purchases, so they cannot expire
 * Google does not expose details (name, e-mail, etc) about buyers to developers
@@ -3137,7 +3152,9 @@ Therefore you are advised to switch to the GitHub release.
 
 The F-Droid version is built from the same source code, but signed differently.
 This means that all features are available in the F-Droid version too,
-except for using the Gmail quick setup wizard because Google approved (and allows) one signature only.
+except for using the Gmail quick setup wizard because Google approved (and allows) one app signature only.
+For all other email providers, OAuth access is only available in Play Store versions and Github releases,
+as the email providers only permit the use of OAuth for official builds.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
 because Android refuses to install the same app with a different signature for security reasons.

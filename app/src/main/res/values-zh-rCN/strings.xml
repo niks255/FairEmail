@@ -73,12 +73,6 @@
     <string name="title_notification_sending_left">剩余尝试次数: %1$d</string>
     <string name="title_notification_sending_failed">发送至 %1$s 失败</string>
     <string name="title_notification_redacted">已编辑：启用了生物识别或PIN身份验证</string>
-    <string name="title_of">%1$s/%2$s</string>
-    <string name="title_name_count">%1$s (%2$s)</string>
-    <string name="title_name_plus">%1$s +%2$d</string>
-    <string name="title_from_to">%1$s &gt; %2$s</string>
-    <string name="title_to_from">%2$s &lt; %1$s</string>
-    <string name="title_title_description">%1$s: %2$s</string>
     <string name="title_factor_minutes">%1$d分钟</string>
     <string name="menu_exit">退出</string>
     <string name="menu_answers">模板</string>
@@ -123,6 +117,7 @@
     <string name="title_setup_wizard_multiple">可多次使用安装向导来设置多个账户</string>
     <string name="title_setup_wizard_new">我需要一个新的邮件地址</string>
     <string name="title_setup_wizard_remark">按返回键前往收件箱</string>
+    <string name="title_setup_oauth_permission">电子邮件服务提供商仅允许官方应用程序版本使用OAuth</string>
     <string name="title_setup_other">其他提供商</string>
     <string name="title_setup_gmail_support">授权谷歌账户只能用于官方版本，因为Android检查应用签名</string>
     <string name="title_setup_gmail_rationale">请授予权限来选择一个账户并读取您的姓名</string>

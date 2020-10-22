@@ -7,213 +7,213 @@ Jika Anda memiliki pertanyaan, silakan periksa pertanyaan yang sering diajukan d
 * [Memberi otorisasi akun](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
 * [Bagaimana caranya?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
 * [Masalah yang diketahui](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Fitur yang terencana](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
+* [Fitur yang direncanakan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Fitur yang sering diminta](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Pertanyaan yang sering di ajukan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
+* [Pertanyaan yang Sering Diajukan (FAQ)](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
 * [Dukungan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-support)
 
 ## Memberi otorisasi akun
 
 Dalam banyak kasus, pengaturan cepat akan mampu secara otomatis mengidentifikasi konfigurasi yang benar.
 
-If the quick setup fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Jika pengaturan cepat gagal, anda harus mengatur akun anda secara manual (untuk menerima surel) dan identitas (untuk mengirim surel). Untuk itu, anda membutuhkan alamat server IMAP dan SMTP dan nomor port, gunakan SSL/TLS atau STARTTLS dan nama pengguna anda (selalu, tapi terkadang tidak perlu, alamat surel anda) dan kata sandi anda.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+Mencari *IMAP* dan nama provider selalu cukup untuk menemukan dokumentasi yang cocok.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+Dalam beberapa kasus, anda butuh mengaktifkan akses eksternal ke akun anda dan/atau gunakan (aplikasi) kata sandi spesial, seperti contoh ketika otentikasi dua faktor diaktifkan.
 
-For authorizing:
+Untuk memberikan izin:
 
-* Gmail / G suite, see [question 6](#user-content-faq6)
-* Outlook / Live / Hotmail, see [question 14](#user-content-faq14)
-* Office 365, see [question 14](#user-content-faq156)
-* Microsoft Exchange, see [question 8](#user-content-faq8)
-* Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
-* Apple iCloud, see [question 148](#user-content-faq148)
-* Free.fr, see [question 157](#user-content-faq157)
+* Gmail / G suite, lihat [pertanyaan 6](#user-content-faq6)
+* Outlook / Live / Hotmail, lihat [pertanyaan 14](#user-content-faq14)
+* Office 365, lihat [pertanyaan 14](#user-content-faq156)
+* Microsoft Exchange, lihat [pertanyaan 8](#user-content-faq8)
+* Yahoo, AOL and Sky, lihat [pertanyaan 88](#user-content-faq88)
+* Apple iCloud, lihat [pertanyaan 148](#user-content-faq148)
+* Free.fr, lihat [pertanyaan 157](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+Sila lihat [disini](#user-content-faq22) untuk pesan eror yang biasa ditemukan dan solusinya.
 
-Related questions:
+Pertanyaan terkait:
 
-* [Is OAuth supported?](#user-content-faq111)
-* [Why is ActiveSync not supported?](#user-content-faq133)
+* [Apakah terdukung OAuth?](#user-content-faq111)
+* [Mengapa tidak terdukung ActiveSync?](#user-content-faq133)
 
 <a name="howto">
 
-## How to ...?
+## Bagaimana caranya ...?
 
-* Change the account name: Setup, step 1, Manage, tap account
-* Change the swipe left/right target: Setup, Behavior, Set swipe actions
-* Change password: Setup, step 1, Manage, tap account, change password
-* Set a signature: Setup, step 2, Manage, tap identity, Edit signature.
-* Add CC and BCC addresses: tap the people's icon at the end of the subject
-* Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
+* Mengubah nama akun: Pengaturan, langkah 1, Pengelolaan, klik akun
+* Mengubah target pergeseran kanan/kiri: Pengaturan, Perilaku, Atur aksi pergeseran
+* Mengubah kata sandi: Pengaturan, langkah 1, Pengelolaan, klik akun, ubah kata sandi
+* Mengatur tanda tangan: Pengaturan, langkah 2, Pengelolaan, klik identitas, sunting tanda tangan.
+* Menambahkan alamat CC dan BCC: klik ikon orang pada akhir dari subjek
+* Mengunjungi pesan selanjutnya/sebelumnya dalam arsip/hapus: dalam pengaturan perilaku, nonaktifkan *Tutup percakapan otomatis* dan klik *Kunjungi percakapan selanjutnya/sebelumnya* untuk *Dalam menutup percakapan*
 * Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
-* Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
-* Load more messages: long press a folder in the folder list, select *Synchronize more messages*
+* Menambahkan berkas di menu navigasi: tekan berkas dengan lama di dalam daftar berkan dan berikan tanda di *Tampilkan di menu navigasi*
+* Memuat pesan lainnya: tekan berkas dengan lama di dalam daftar berkas, pilih *Singkronisasikan pesan lainnya*
 * Delete a message, skipping trash: in the 3-dots menu just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
-* Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
-* Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
-* Undo send: Outbox, tap message, tap undo icon button
-* Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
-* Change system folders: Setup, step 1, Manage, tap account, at the bottom
-* Export/import settings: Setup, navigation/hamburger menu
+* Menghapus akun/identitas: Pengaturan langkah 1/2, Pengelolaan, menu titik 3, Hapus
+* Menghapus berkas: tekan berkas dengan lama di dalam daftar berkas, Sunting properti, menu tiga titik, Hapus
+* Mengurungkan pesan: Kotak keluar, tekan pesan, tekan tombol ikon urungkan
+* Menyimpan pesan terkirim di pesan masuk: sila [lihat FAQ ini](#user-content-faq142)
+* Mengubah sistem berkas: Pengaturan, langkah 1, Pengelolaan, tekan akun dibawah
+* Mengekspor/mengimpor pengaturan: Pengaturan, navigasi/menu hamburger
 
-## Known problems
+## Masalah yang diketahui
 
-* ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~
-* ~~A [bug in Google Drive](https://issuetracker.google.com/issues/126362828) causes files exported to Google Drive to be empty. Google has fixed this.~~
-* ~~A [bug in AndroidX](https://issuetracker.google.com/issues/78495471) causes FairEmail to occasionally crash on long pressing or swiping. Google has fixed this.~~
-* ~~A [bug in AndroidX ROOM](https://issuetracker.google.com/issues/138441698) causes sometimes a crash with "*... Exception while computing database live data ... Couldn't read row ...*". A workaround was added.~~
-* A [bug in Android](https://issuetracker.google.com/issues/119872129) causes FairEmail to crash with "*... Bad notification posted ...*" on some devices once after updating FairEmail and tapping on a notification.
-* A [bug in Android](https://issuetracker.google.com/issues/62427912) sometimes causes a crash with "*... ActivityRecord not found for ...*" after updating FairEmail. Reinstalling ([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) might fix the problem.
-* A [bug in Android](https://issuetracker.google.com/issues/37018931) sometimes causes a crash with *... InputChannel is not initialized ...* on some devices.
-* ~~A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) sometimes causes a crash with *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
-* A bug in Nova Launcher on Android 5.x causes FairEmail to crash with a *java.lang.StackOverflowError* when Nova Launcher has access to the accessibility service.
-* ~~The folder selector sometimes shows no folders for yet unknown reasons. This seems to be fixed.~~
-* ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
-* ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
+* ~~ [Bug di Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) yang menyebabkan aplikasi menampilkan format waktu yang salah beberapa kali. Toggle pengaturan Android *Gunakan format waktu 24 jam* dapat menyelesaikan masalah sementara ini. Solusi telah ditambahkan.~~
+* ~~ [Bug di Google Drive](https://issuetracker.google.com/issues/126362828) menyebabkan berkas yang terekspor ke Google Drive kosong. Google telah memperbaiki ini.~~
+* ~~[Bug di AndroidX](https://issuetracker.google.com/issues/78495471) menyebabkan FairEmail mengalami kegagalan dalam menekan dengan lama atau menggeser. Google telah memperbaiki ini.~~
+* ~~[Bug di AndroidX ROOM](https://issuetracker.google.com/issues/138441698) menyebabkan crash dengan "*... Pengecualian saat meghitung database data langsung ... Tidak dapat membaca barisan ...*". Solusi telah ditambahkan.~~
+* [Bug di Android](https://issuetracker.google.com/issues/119872129) menyebabkan FairEmail crash dengan "*... Notifikasi buruk diposkan ...*" dalam beberapa perangkat setelah memperbarui FairEmail dan mengklik notifikasi.
+* [Bug di Android](https://issuetracker.google.com/issues/62427912) beberapa kali menyebabkan crash dengan "*... RekamanAktivitas tidak ditemukan untuk ...*" setelah memperbarui FairEmail. Menginstal ulang ([sumber](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) dapat memperbaiki masalah.
+* [Bug di Android](https://issuetracker.google.com/issues/37018931) beberapa kali menyebabkan crash dengan *... InputChannel is not initialized ...* on some devices.
+* [Bug di LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) beberapa kali menyebabkan crash dengan *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
+* Bug di Nova Launcher dalam Android 5.x menyebabkan FairEmail crash dengan *java.lang.StackOverflowError* ketika Nova Launcher mengakses servis aksesibilitas.
+* ~~Pemilih berkas beberpa kali menampilkan tidak ada berkas dengan alasan yang tidak diketahui. Masalah ini terlihat sudah diperbaiki.~~
+* ~~[Bug di AndroidX](https://issuetracker.google.com/issues/64729576) menyebabkan kesulitan untuk menekan scroll cepat. Solusi telah ditambahkan.~~
+* ~~Enkripsi menggunakan YubiKey mengakibaykan putaran yang terus menerus. Hal ini disebabkan karena sebuah [bug di OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
 * Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
-* A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, and Mi band 3 wearables. See also [this FAQ](#user-content-faq126).
-* A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
-* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
+* Tampilan teks pesan tidak (selalu) terlihat pada jam Samsung karena [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) sepertinya dihindari. Tampilan teks pesan diketahui terlihat dengan benar pada perangkat jam Pebble 2, Fitbit Charge 3, dan Mi band 3. Lihat juga [FAQ ini](#user-content-faq126).
+* [Bug idi Android 6.0](https://issuetracker.google.com/issues/37068143) menyebabkan crash dengan *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. Bug ini telah diperbaiki dalam Android 6.0.1.
+* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). Hal ini merupakan limitasi Android yang tidak dapat diperbaiki atau di buat bekerja.
 
-## Planned features
+## Fitur yang Direncanakan
 
 * ~~Synchronize on demand (manual)~~
-* ~~Semi-automatic encryption~~
-* ~~Copy message~~
+* ~~Enkripsi semi otomatis~~
+* ~~Salinan pesan~~
 * ~~Colored stars~~
-* ~~Notification settings per folder~~
-* ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
+* ~~Pengaturan notifikasi per berkas~~
+* ~~Pilih gambar lokal untuk tanda tangan~~ (hal ini belum ditambahkan karena memerlukan manajemen berkas gambar dan karena bagaimanapun gambar tidak ditampilkan secara default pada sebagian besar surel klien)
 * ~~Show messages matched by a rule~~
 * ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
-* ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
+* ~~Cari pesan menggunakan/tanpa lampiran~~ (hal ini belum ditambahkan karena IMAP tidak mendukung perncarian lampiran)
 * ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
-* ~~Search suggestions~~
+* ~~Penyaranan pencarian~~
 * ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
 * ~~Generic unified folders~~
 * ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
-* ~~Copy accounts and identities~~
+* ~~Salin akun dan identitas~~
 * ~~Pinch zoom~~ (not reliably possible in a scrolling list; the full message view can be zoomed instead)
-* ~~More compact folder view~~
+* ~~Tampilan berkas yang lebih sederhana~~
 * ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
 * ~~Pinch zoom text size~~
-* ~~Display GIFs~~
-* ~~Themes~~ (a grey light and dark theme were added because this is what most people seems to want)
+* ~~Tampilan GIF~~
+* ~~Tema~~ (tema abu-abu muda dan gelap telah ditambahkan karena tema ini yang paling banyak disukai orang)
 * ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
-* ~~Send as attachment~~
-* ~~Widget for selected account~~
-* ~~Remind to attach files~~
+* ~~Kirimkan sebagai lampiran~~
+* ~~Widget untuk akun yang dipilih~~
+* ~~Pengingat untuk melampirkan berkas~~
 * ~~Select domains to show images for~~ (this will be too complicated to use)
 * ~~Unified starred messages view~~ (there is already a special search for this)
-* ~~Move notification action~~
+* ~~Memindahkan aksi notifikasi~~
 * ~~S/MIME support~~
-* ~~Search for settings~~
+* ~~Pencarian untuk pengaturan~~
 
-Anything on this list is in random order and *might* be added in the near future.
+Apapun yang ada dalam daftar ini disusun secara acak dan *mungkin* akan ditambahkan pada waktu yang akan datang.
 
-## Frequently requested features
+## Fitur yang sering diajukan
 
-The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
+Desain ini bersadarkan dari banyak diskusi dan anda dapat mendiskusikannya [di forum ini](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) jika anda menginginkannya. Tujuan dari desain ini adalah minimalis (tidak ada menu, tombol, dll. yang tidak diperlukan) dan tidak mengganggu (tidak ada warna atau animasi yang mencolok, dsb.). Hal-hal yang ditampilkan disini harus berguna sebagaimanapun dan harus ditempatkan secara tepat untuk penggunaan yang mudah. Font, ukuran, warna dan lainnya harus menggunakan desain material bila memungkinkan.
 
-## Frequently Asked Questions
+## Pertanyaan yang Sering Diajukan (FAQ)
 
-* [(1) Which permissions are needed and why?](#user-content-faq1)
-* [(2) Why is there a permanent notification shown?](#user-content-faq2)
-* [(3) What are operations and why are they pending?](#user-content-faq3)
-* [(4) How can I use an invalid security certificate / empty password / plain text connection?](#user-content-faq4)
-* [(5) How can I customize the message view?](#user-content-faq5)
-* [(6) How can I login to Gmail / G suite?](#user-content-faq6)
-* [(7) Why are sent messages not appearing (directly) in the sent folder?](#user-content-faq7)
-* [(8) Can I use a Microsoft Exchange account?](#user-content-faq8)
-* [(9) What are identities / how do I add an alias?](#user-content-faq9)
-* [~~(11) Why is POP not supported?~~](#user-content-faq11)
+* [(1) Izin mana yang dibutuhkan dan mengapa?](#user-content-faq1)
+* [(2) Mengapa terlihat notifikasi permanen?](#user-content-faq2)
+* [(3) Apa itu operasi dan mengapa mereka tertunda?](#user-content-faq3)
+* [(4) Bagaimana cara saya menggunakan sertifikat keamanan yang tidak valid / kata sandi kosong / koneksi teks kosong?](#user-content-faq4)
+* [(5) Bagaimana cara saya mengatur tampilan pesan?](#user-content-faq5)
+* [(6) Bagaimana cara saya masuk ke Gmail / G suite?](#user-content-faq6)
+* [(7) Mengapa pesan yang terkirimkan tidak nampak (secara langsung) dalam folder terkirim?](#user-content-faq7)
+* [(8) Apakah saya dapat menggunakan akun Microsoft Exchange?](#user-content-faq8)
+* [(9) Apa itu identitas / bagaimana cara saya menambahkan alias?](#user-content-faq9)
+* [~~(11) Mengapa POP tidak terdukung?~~](#user-content-faq11)
 * [~~(10) What does 'UIDPLUS not supported' mean?~~](#user-content-faq10)
-* [(12) How does encryption/decryption work?](#user-content-faq12)
-* [(13) How does search on device/server work?](#user-content-faq13)
-* [(14) How can I set up an Outlook / Live / Hotmail account?](#user-content-faq14)
-* [(15) Why does the message text keep loading?](#user-content-faq15)
-* [(16) Why are messages not being synchronized?](#user-content-faq16)
-* [~~(17) Why does manual synchronize not work?~~](#user-content-faq17)
-* [(18) Why is the message preview not always shown?](#user-content-faq18)
-* [(19) Why are the pro features so expensive?](#user-content-faq19)
-* [(20) Can I get a refund?](#user-content-faq20)
-* [(21) How do I enable the notification light?](#user-content-faq21)
-* [(22) What does account/folder error ... mean?](#user-content-faq22)
-* [(23) Why do I get alert .. ?](#user-content-faq23)
-* [(24) What is browse messages on the server?](#user-content-faq24)
-* [(25) Why can't I select/open/save an image, attachment or a file?](#user-content-faq25)
-* [(26) Can I help to translate FairEmail in my own language?](#user-content-faq26)
-* [(27) How can I distinguish between embedded and external images?](#user-content-faq27)
-* [(28) How can I manage status bar notifications?](#user-content-faq28)
-* [(29) How can I get new message notifications for other folders?](#user-content-faq29)
-* [(30) How can I use the provided quick settings?](#user-content-faq30)
-* [(31) How can I use the provided shortcuts?](#user-content-faq31)
-* [(32) How can I check if reading email is really safe?](#user-content-faq32)
-* [(33) Why are edited sender addresses not working?](#user-content-faq33)
-* [(34) How are identities matched?](#user-content-faq34)
-* [(35) Why should I be careful with viewing images, attachments, and the original message?](#user-content-faq35)
-* [(36) How are settings files encrypted?](#user-content-faq36)
-* [(37) How are passwords stored?](#user-content-faq37)
-* [(39) How can I reduce the battery usage of FairEmail?](#user-content-faq39)
-* [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
+* [(12) Bagaimana cara kerja enkripsi / dekripsi?](#user-content-faq12)
+* [(13) Bagaimana cara kerja pencarian dalam perangkat/server?](#user-content-faq13)
+* [(14) Bagaimana cara saya mengatur akun Outlook / Live / Hotmail?](#user-content-faq14)
+* [(15) Mengapa teks pesan terus menerus dimuat?](#user-content-faq15)
+* [(16) Mengapa pesan tidak tersingkronisasi?](#user-content-faq16)
+* [~~(17) Mengapa singkronisasi manual tidak bekerja~~](#user-content-faq17)
+* [(18) Mengapa tampilan pesan tidak selalu terlihat?](#user-content-faq18)
+* [(19) Mengapa fitur pro sangat mahal?](#user-content-faq19)
+* [(20) Apakah dapat mengembalikan dana saya?](#user-content-faq20)
+* [(21) Bagaimana cara saya mengaktifkan lampu notifikasi?](#user-content-faq21)
+* [(22) Apa yang dimaksud dengan akun/folder eror ... ?](#user-content-faq22)
+* [(23) Mengapa saya mendapatkan tanda .. ?](#user-content-faq23)
+* [(24) Apa itu telusuri pesan di server?](#user-content-faq24)
+* [(25) Mengapa saya tidak dapat memilih/membuka/menyimpan gambar, lampiran atau berkas?](#user-content-faq25)
+* [(26) Apakah saya dapat membantu menerjemahkan FairEmail ke dalam bahasa saya?](#user-content-faq26)
+* [(27) Bagaimana cara saya membedakan gambar yang tertanam dan eksternal?](#user-content-faq27)
+* [(28) Bagaimana cara saya mengelola status bilah notifikasi?](#user-content-faq28)
+* [(29) Bagaiman cara saya mendapatkan notifikasi pesan baru dari folder lainnya?](#user-content-faq29)
+* [(30) bagaimana cara saya menggunakan pengaturan cepat yang tersedia?](#user-content-faq30)
+* [(31) Bagaimana cara saya menggunakan shortcut yang tersedia?](#user-content-faq31)
+* [(32) Bagaimana cara saya memeriksa jika membaca pesan ini aman?](#user-content-faq32)
+* [(33) Mengapa alamat pengirim yang telah disunting tidak dapat bekerja?](#user-content-faq33)
+* [(34) Bagaimana identitas cocok?](#user-content-faq34)
+* [(35) Mengapa saya harus berhati-hati dalam melihat gambar, lampiran dan pesan orisinil?](#user-content-faq35)
+* [(36) Bagaimana pegaturan berkas terenkripsi?](#user-content-faq36)
+* [(37) Bagaimana kata sandi disimpan?](#user-content-faq37)
+* [(39) Bagaimana cara saya mereduksi penggunaan baterai dari FairEmail?](#user-content-faq39)
+* [(40) Bagaimana cara saya mereduksi penggunaan data dari FairEmail?](#user-content-faq40)
 * [(41) How can I fix the error 'Handshake failed' ?](#user-content-faq41)
-* [(42) Can you add a new provider to the list of providers?](#user-content-faq42)
-* [(43) Can you show the original ... ?](#user-content-faq43)
-* [(44) Can you show contact photos / identicons in the sent folder?](#user-content-faq44)
+* [(42) Apakah saya dapat menambahkan provider baru dalam daftar provider?](#user-content-faq42)
+* [(43) Apakah anda dapat menampilkan yang orisinil ... ?](#user-content-faq43)
+* [(44) Apakah saya dapat menampilkan foto / ikon identitas kontak dari folder terkirim?](#user-content-faq44)
 * [(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!' ?](#user-content-faq45)
-* [(46) Why does the message list keep refreshing?](#user-content-faq46)
+* [(46) Mengapa daftar pesan saya selalu segarkan?](#user-content-faq46)
 * [(47) How do I solve the error 'No primary account or no drafts folder' ?](#user-content-faq47)
 * [~~(48) How do I solve the error 'No primary account or no archive folder' ?~~](#user-content-faq48)
 * [(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?](#user-content-faq49)
-* [(50) Can you add an option to synchronize all messages?](#user-content-faq50)
-* [(51) How are folders sorted?](#user-content-faq51)
-* [(52) Why does it take some time to reconnect to an account?](#user-content-faq52)
-* [(53) Can you stick the message action bar to the top/bottom?](#user-content-faq53)
-* [~~(54) How do I use a namespace prefix?~~](#user-content-faq54)
-* [(55) How can I mark all messages as read / move or delete all messages?](#user-content-faq55)
-* [(56) Can you add support for JMAP?](#user-content-faq56)
-* [~~(57) Can I use HTML in signatures?~~](#user-content-faq57)
-* [(58) What does an open/closed email icon mean?](#user-content-faq58)
-* [(59) Can original messages be opened in the browser?](#user-content-faq59)
-* [(60) Did you known ...?](#user-content-faq60)
-* [(61) Why are some messages shown dimmed?](#user-content-faq61)
-* [(62) Which authentication methods are supported?](#user-content-faq62)
-* [(63) How are images resized for displaying on screens?](#user-content-faq63)
-* [~~(64) Can you add custom actions for swipe left/right?~~](#user-content-faq64)
-* [(65) Why are some attachments shown dimmed?](#user-content-faq65)
-* [(66) Is FairEmail available in the Google Play Family Library?](#user-content-faq66)
-* [(67) How can I snooze conversations?](#user-content-faq67)
-* [~~(68) Why can Adobe Acrobat reader not open PDF attachments / Microsoft apps not open attached documents?~~](#user-content-faq68)
-* [(69) Can you add auto scroll up on new message?](#user-content-faq69)
-* [(70) When will messages be auto expanded?](#user-content-faq70)
-* [(71) How do I use filter rules?](#user-content-faq71)
-* [(72) What are primary accounts/identities?](#user-content-faq72)
-* [(73) Is moving messages across accounts safe/efficient?](#user-content-faq73)
-* [(74) Why do I see duplicate messages?](#user-content-faq74)
-* [(75) Can you make an iOS, Windows, Linux, etc version?](#user-content-faq75)
-* [(76) What does 'Clear local messages' do?](#user-content-faq76)
-* [(77) Why are messages sometimes shown with a small delay?](#user-content-faq77)
-* [(78) How do I use schedules?](#user-content-faq78)
-* [(79) How do I use synchronize on demand (manual)?](#user-content-faq79)
+* [(50) Apakah saya dapat menambahkan opsi singkronisasikan seluruh pesan?](#user-content-faq50)
+* [(51) Bagaimana folder disusun?](#user-content-faq51)
+* [(52) Mengapa membutuhkan beberapa waktu untuk menghubungkan kembali ke akun?](#user-content-faq52)
+* [(53) Apakah saya dapat menempelkan bilah aksi pesan ke paling atas/paling bawah?](#user-content-faq53)
+* [~~(54) Bagaimana cara saya menggunakan bagian prefiks nama?~~](#user-content-faq54)
+* [(55) Bagaimana cara saya menandai semua pesan telah dibaca / memindahkan atau menghapus seluruh pesan?](#user-content-faq55)
+* [(56) Apakah saya dapat menambahkan dukungan untuk JMAP?](#user-content-faq56)
+* [~~(57) Apakah saya dapat menggunakan HTML di tanda tangan?~~](#user-content-faq57)
+* [(58) Apa yang dimaksud dengan ikon surel buka/tutup?](#user-content-faq58)
+* [(59) Apakah pesan orisinil dapat dibuka di browser?](#user-content-faq59)
+* [(60) Apakah anda mengetahui ...?](#user-content-faq60)
+* [(61) Mengapa terdapat beberapa pesan yang terlihat redup?](#user-content-faq61)
+* [(62) Metode autentikasi apa yang didukung?](#user-content-faq62)
+* [(63) Bagaimana cara mengubah ukuran gambar untuk ditampilkan di layar?](#user-content-faq63)
+* [~~(64) Apakah saya dapat menambah aksi tambahan untuk geser kiri/kanan?~~](#user-content-faq64)
+* [(65) Mengapa terdapat beberapa lampiran yang terlihat redup?](#user-content-faq65)
+* [(66) Apakah FairEmail tersedia di Google Play Family Library?](#user-content-faq66)
+* [(67) Bagaimana cara saya snooze percakapan?](#user-content-faq67)
+* [~~(68) Mengapa Adobe Acrobat reader tidak membuka lampiran PDF / aplikasi Microsoft tidak membuka dokumen yang dilampirkan?~~](#user-content-faq68)
+* [(69) Apakah saya dapat menambahkan scroll ke atas otomatis di pesan baru?](#user-content-faq69)
+* [(70) Kapan pesan akan diperluas secara otomatis?](#user-content-faq70)
+* [(71) Bagaimana cara saya menggunakan aturan penyaringan?](#user-content-faq71)
+* [(72) Apa itu akun/identitas utama?](#user-content-faq72)
+* [(73) Apakah memindahkan pesan ke berbagai akun aman/efisien?](#user-content-faq73)
+* [(74) Mengapa saya melihat pesan yang ganda?](#user-content-faq74)
+* [(75) Apakah anda dapat membuat versi iOS, Windows, Linux, dan sebagainya?](#user-content-faq75)
+* [(76) Apa itu 'Hapus pesan lokal'?](#user-content-faq76)
+* [(77) Mengapa pesan sering ditampilkan sedikit tertunda?](#user-content-faq77)
+* [(78) Bagaimana cara saya menggunakan jadwal?](#user-content-faq78)
+* [(79) Bagaimana cara sama mensinkronisasikan dengan manual?](#user-content-faq79)
 * [~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE'?~~](#user-content-faq80)
-* [~~(81) Can you make the background of the original message dark in the dark theme?~~](#user-content-faq81)
-* [(82) What is a tracking image?](#user-content-faq82)
-* [(84) What are local contacts for?](#user-content-faq84)
-* [(85) Why is an identity not available?](#user-content-faq85)
-* [~~(86) What are 'extra privacy features'?~~](#user-content-faq86)
-* [(87) What does 'invalid credentials' mean?](#user-content-faq87)
-* [(88) How can I use a Yahoo, AOL or Sky account?](#user-content-faq88)
-* [(89) How can I send plain text only messages?](#user-content-faq89)
+* [~~(81) Apakah saya dapat membuat latar belakang pesan orisinal menjadi gelap di tema gelap?~~](#user-content-faq81)
+* [(82) Apa itu pelacakan gambar?](#user-content-faq82)
+* [(84) Apakah fungsi dari kontak lokal?](#user-content-faq84)
+* [(85) Mengapa identitas tidak tersedia?](#user-content-faq85)
+* [~~(86) Apa itu 'fitur privasi tambahan'?~~](#user-content-faq86)
+* [(87) Apa yang dimaksud dengan 'kredensial tidak valid'?](#user-content-faq87)
+* [(88) Bagaimana cara saya menggunakan akun Yahoo, AOL or Sky?](#user-content-faq88)
+* [(89) Bagaimana cara saya mengirim pesan hanya teks?](#user-content-faq89)
 * [(90) Why are some texts linked while not being a link?](#user-content-faq90)
-* [~~(91) Can you add periodical synchronization to save battery power?~~](#user-content-faq91)
+* [~~(91) Apakah anda dapat menambahkan singkronisasi periodik untuk menghemat tenaga baterai?~~](#user-content-faq91)
 * [(92) Can you add spam filtering, verification of the DKIM signature and SPF authorization?](#user-content-faq92)
-* [(93) Can you allow installation/data storage on external storage media (sdcard)?](#user-content-faq93)
-* [(94) What does the red/orange stripe at the end of the header mean?](#user-content-faq94)
-* [(95) Why are not all apps shown when selecting an attachment or image?](#user-content-faq95)
-* [(96) Where can I find the IMAP and SMTP settings?](#user-content-faq96)
+* [(93) Apakah anda dapat mengizinkan instalasi/penyimpanan data di media penyimpanan eksternal?](#user-content-faq93)
+* [(94) Apa yang dimaksud dari garis yang berwarna merah/oranye diakhir header?](#user-content-faq94)
+* [(95) Mengapa tidak semua aplikasi terlihat saat memilih lampiran atau gambar?](#user-content-faq95)
+* [(96) Dimana saya dapat menemukan pengaturan IMAP dan SMTP?](#user-content-faq96)
 * [(97) What is 'cleanup' ?](#user-content-faq97)
 * [(98) Why can I still pick contacts after revoking contacts permissions?](#user-content-faq98)
 * [(99) Can you add a rich text or markdown editor?](#user-content-faq99)
@@ -2592,7 +2592,7 @@ There is **only support** on the latest Play store version, the latest GitHub re
 
 F-Droid builds irregularly, which can be problematic when there is an important update. Therefore you are advised to switch to the GitHub release.
 
-The F-Droid version is built from the same source code, but signed differently. This means that all features are available in the F-Droid version too, except for using the Gmail quick setup wizard because Google approved (and allows) one signature only.
+The F-Droid version is built from the same source code, but signed differently. This means that all features are available in the F-Droid version too, except for using the Gmail quick setup wizard because Google approved (and allows) one app signature only. For all other email providers, OAuth access is only available in Play Store versions and Github releases, as the email providers have only allowed permission for official builds to use OAuth.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release because Android refuses to install the same app with a different signature for security reasons.
 

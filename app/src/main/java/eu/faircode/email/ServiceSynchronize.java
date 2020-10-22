@@ -1089,7 +1089,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 }
                             } catch (FolderNotFoundException ex) {
                                 Log.w(folder.name, ex);
-                                db.folder().deleteFolder(folder.id);
+                                db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
+                                db.folder().setFolderSynchronize(folder.id, false);
                                 continue;
                             } catch (Throwable ex) {
                                 db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
@@ -1377,7 +1378,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                     ServiceSynchronize.this,
                                                                     folder.name + " " + Log.formatThrowable(ex, false));
                                                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
-                                                            state.error(new OperationCanceledException("Process"));
+                                                            if (!(ex instanceof FolderNotFoundException))
+                                                                state.error(new OperationCanceledException("Process"));
                                                         } finally {
                                                             if (shouldClose) {
                                                                 if (ifolder != null && ifolder.isOpen()) {
@@ -1459,7 +1461,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 account.keep_alive_succeeded = 0;
                                 if (account.keep_alive_failed >= 3) {
                                     account.keep_alive_failed = 0;
-                                    account.poll_interval--;
+                                    account.poll_interval = account.poll_interval - 2;
                                     db.account().setAccountKeepAliveInterval(account.id, account.poll_interval);
                                 }
                                 db.account().setAccountKeepAliveValues(account.id,
