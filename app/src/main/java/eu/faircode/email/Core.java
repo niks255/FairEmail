@@ -38,7 +38,9 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.Person;
 import androidx.core.app.RemoteInput;
+import androidx.core.graphics.drawable.IconCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
@@ -94,6 +96,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
@@ -1270,7 +1273,11 @@ class Core {
         DB db = DB.getInstance(context);
 
         if (EntityFolder.INBOX.equals(folder.type)) {
-            if (!account.leave_deleted) {
+            if (account.leave_deleted) {
+                // Remove message/attachments files on cleanup
+                db.message().resetMessageContent(message.id);
+                db.attachment().resetAvailable(message.id);
+            } else {
                 Map<String, String> caps = istore.capabilities();
 
                 Message[] imessages = ifolder.getMessages();
@@ -2106,6 +2113,7 @@ class Core {
                     ((POP3Message) imessage).invalidate(true);
                 }
 
+            db.folder().setFolderLastSync(folder.id, new Date().getTime());
             Log.i(folder.name + " POP done");
         } finally {
             db.folder().setFolderSyncState(folder.id, null);
@@ -3519,8 +3527,12 @@ class Core {
 
                     String tag = "unseen." + group + "." + Math.abs(id);
                     Notification notification = builder.build();
-                    Log.i("Notifying tag=" + tag + " id=" + id + " group=" + notification.getGroup() +
-                            (Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? "" : " channel=" + notification.getChannelId()));
+                    EntityLog.log(context, "Notifying tag=" + tag +
+                            " id=" + id + " group=" + notification.getGroup() +
+                            (Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+                                    ? " sdk=" + Build.VERSION.SDK_INT
+                                    : " channel=" + notification.getChannelId()) +
+                            " sort=" + notification.getSortKey());
                     try {
                         nm.notify(tag, 1, notification);
                     } catch (Throwable ex) {
@@ -3553,9 +3565,11 @@ class Core {
         boolean pro = ActivityBilling.isPro(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notify_newest_first = prefs.getBoolean("notify_newest_first", false);
         boolean name_email = prefs.getBoolean("name_email", false);
         boolean prefer_contact = prefs.getBoolean("prefer_contact", false);
         boolean flags = prefs.getBoolean("flags", true);
+        boolean notify_messaging = prefs.getBoolean("notify_messaging", false);
         boolean notify_preview = prefs.getBoolean("notify_preview", true);
         boolean notify_preview_all = prefs.getBoolean("notify_preview_all", false);
         boolean wearable_preview = prefs.getBoolean("wearable_preview", false);
@@ -3758,18 +3772,49 @@ class Core {
                     channelName = channel.getId();
             }
 
+            String sortKey = String.format(Locale.ROOT, "%13d",
+                    notify_newest_first ? (10000000000000L - message.received) : message.received);
+
             NotificationCompat.Builder mbuilder =
                     new NotificationCompat.Builder(context, channelName)
                             .addExtras(args)
                             .setSmallIcon(R.drawable.baseline_mail_white_24)
                             .setContentIntent(piContent)
                             .setWhen(message.received)
+                            .setShowWhen(true)
+                            .setSortKey(sortKey)
                             .setDeleteIntent(piIgnore)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                             .setCategory(NotificationCompat.CATEGORY_EMAIL)
                             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                             .setOnlyAlertOnce(alert_once)
                             .setAllowSystemGeneratedContextualActions(false);
+
+            if (notify_messaging) {
+                // https://developer.android.com/training/cars/messaging
+                Person.Builder me = new Person.Builder()
+                        .setName(MessageHelper.formatAddresses(message.to, name_email, false));
+                Person.Builder you = new Person.Builder()
+                        .setName(MessageHelper.formatAddresses(message.from, name_email, false));
+
+                if (info[0].hasPhoto())
+                    you.setIcon(IconCompat.createWithBitmap(info[0].getPhotoBitmap()));
+
+                if (info[0].hasLookupUri())
+                    you.setUri(info[0].getLookupUri().toString());
+
+                NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(me.build());
+
+                if (!TextUtils.isEmpty(message.subject))
+                    messagingStyle.setConversationTitle(message.subject);
+
+                messagingStyle.addMessage(
+                        notify_preview && message.preview != null ? message.preview : "",
+                        message.received,
+                        you.build());
+
+                mbuilder.setStyle(messagingStyle);
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 mbuilder
@@ -3804,6 +3849,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_trash),
                         piTrash)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_DELETE)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionTrash.build());
 
@@ -3821,6 +3867,7 @@ class Core {
                         R.drawable.twotone_report_problem_24,
                         context.getString(R.string.title_advanced_notify_action_junk),
                         piJunk)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionJunk.build());
 
@@ -3839,6 +3886,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_archive),
                         piArchive)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionArchive.build());
 
@@ -3859,6 +3907,7 @@ class Core {
                                 R.drawable.twotone_folder_24,
                                 folder.getDisplayName(context),
                                 piMove)
+                                .setShowsUserInterface(false)
                                 .setAllowGeneratedReplies(false);
                         mbuilder.addAction(actionMove.build());
 
@@ -3880,6 +3929,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_reply),
                         piReply)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
+                        .setShowsUserInterface(true)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionReply.build());
             }
@@ -3898,6 +3948,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_reply_direct),
                         piReply)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 RemoteInput.Builder input = new RemoteInput.Builder("text")
                         .setLabel(context.getString(R.string.title_advanced_notify_action_reply));
@@ -3916,6 +3967,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_flag),
                         piFlag)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionFlag.build());
 
@@ -3932,6 +3984,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_seen),
                         piSeen)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionSeen.build());
 
@@ -3948,6 +4001,7 @@ class Core {
                         context.getString(R.string.title_advanced_notify_action_snooze),
                         piSnooze)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MUTE)
+                        .setShowsUserInterface(false)
                         .setAllowGeneratedReplies(false);
                 mbuilder.addAction(actionSnooze.build());
 
@@ -3987,20 +4041,22 @@ class Core {
                 }
 
                 // Device
-                StringBuilder sbm = new StringBuilder();
-                if (!TextUtils.isEmpty(message.subject))
-                    sbm.append("<em>").append(message.subject).append("</em>").append("<br>");
-
-                if (!TextUtils.isEmpty(preview))
-                    sbm.append(preview);
-
-                if (sbm.length() > 0) {
-                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()
-                            .bigText(HtmlHelper.fromHtml(sbm.toString(), true, context));
+                if (!notify_messaging) {
+                    StringBuilder sbm = new StringBuilder();
                     if (!TextUtils.isEmpty(message.subject))
-                        bigText.setSummaryText(message.subject);
+                        sbm.append("<em>").append(message.subject).append("</em>").append("<br>");
 
-                    mbuilder.setStyle(bigText);
+                    if (!TextUtils.isEmpty(preview))
+                        sbm.append(preview);
+
+                    if (sbm.length() > 0) {
+                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()
+                                .bigText(HtmlHelper.fromHtml(sbm.toString(), true, context));
+                        if (!TextUtils.isEmpty(message.subject))
+                            bigText.setSummaryText(message.subject);
+
+                        mbuilder.setStyle(bigText);
+                    }
                 }
             } else {
                 if (!TextUtils.isEmpty(message.subject))
@@ -4010,8 +4066,11 @@ class Core {
             if (info[0].hasPhoto())
                 mbuilder.setLargeIcon(info[0].getPhotoBitmap());
 
-            if (info[0].hasLookupUri())
-                mbuilder.addPerson(info[0].getLookupUri().toString());
+            if (info[0].hasLookupUri()) {
+                Person.Builder you = new Person.Builder()
+                        .setUri(info[0].getLookupUri().toString());
+                mbuilder.addPerson(you.build());
+            }
 
             Integer color = getColor(message);
             if (pro && color != null) {

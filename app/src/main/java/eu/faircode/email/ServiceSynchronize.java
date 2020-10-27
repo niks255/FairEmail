@@ -127,9 +127,19 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     ));
 
     private static final List<String> PREF_RELOAD = Collections.unmodifiableList(Arrays.asList(
+            "sync_nodate",
+            "sync_unseen",
+            "sync_flagged",
+            "delete_unseen",
+            "sync_kept",
+            "sync_folders",
+            "sync_shared_folders",
             "ssl_harden", // force reconnect
             "badge", "unseen_ignored", // force update badge/widget
-            "protocol", "debug" // force reconnect
+            "protocol", "debug", // force reconnect
+            "auth_plain",
+            "auth_login",
+            "auth_sasl"
     ));
 
     static final int PI_ALARM = 1;
@@ -796,6 +806,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private void onWatchdog(Intent intent) {
+        EntityLog.log(this, "Watchdog");
         schedule(this, false);
         networkCallback.onCapabilitiesChanged(null, null);
     }
@@ -936,7 +947,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             // Store NOOP
                             //iservice.getStore().isConnected();
 
-                            if ("Still here".equals(message) && !account.ondemand) {
+                            if ("Still here".equals(message) && !isTransient(account)) {
                                 long now = new Date().getTime();
                                 if (now - start < STILL_THERE_THRESHOLD)
                                     optimizeAccount(ServiceSynchronize.this, account, message);
@@ -1094,7 +1105,28 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 continue;
                             } catch (Throwable ex) {
                                 db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
-                                throw ex;
+                                if (EntityFolder.INBOX.equals(folder.type))
+                                    throw ex;
+                                else
+                                    continue;
+                                /*
+                                    javax.mail.MessagingException: D2 NO Mailbox does not exist, or must be subscribed to.;
+                                      nested exception is:
+                                        com.sun.mail.iap.CommandFailedException: D2 NO Mailbox does not exist, or must be subscribed to.
+                                    javax.mail.MessagingException: D2 NO Mailbox does not exist, or must be subscribed to.;
+                                      nested exception is:
+                                        com.sun.mail.iap.CommandFailedException: D2 NO Mailbox does not exist, or must be subscribed to.
+                                        at com.sun.mail.imap.IMAPFolder.open(SourceFile:61)
+                                        at com.sun.mail.imap.IMAPFolder.open(SourceFile:1)
+                                        at eu.faircode.email.ServiceSynchronize.monitorAccount(SourceFile:63)
+                                        at eu.faircode.email.ServiceSynchronize.access$900(SourceFile:1)
+                                        at eu.faircode.email.ServiceSynchronize$4$1.run(SourceFile:1)
+                                        at java.lang.Thread.run(Thread.java:919)
+                                    Caused by: com.sun.mail.iap.CommandFailedException: D2 NO Mailbox does not exist, or must be subscribed to.
+                                        at com.sun.mail.iap.Protocol.handleResult(SourceFile:8)
+                                        at com.sun.mail.imap.protocol.IMAPProtocol.select(SourceFile:19)
+                                        at com.sun.mail.imap.IMAPFolder.open(SourceFile:16)
+                                 */
                             }
 
                             db.folder().setFolderState(folder.id, "connected");
@@ -1221,8 +1253,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             if (sync && folder.selectable)
                                 EntityOperation.sync(this, folder.id, false);
-                        } else
+                        } else {
                             mapFolders.put(folder, null);
+                            db.folder().setFolderState(folder.id, null);
+                            if (!capIdle && !folder.poll) {
+                                folder.poll = true;
+                                db.folder().setFolderPoll(folder.id, folder.poll);
+                            }
+                        }
                     }
 
                     Log.i(account.name + " observing operations");
@@ -1390,10 +1428,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                         Log.w(folder.name, ex);
                                                                     }
                                                                 }
-                                                                if (folder.synchronize && (folder.poll || !capIdle))
-                                                                    db.folder().setFolderState(folder.id, "waiting");
-                                                                else
-                                                                    db.folder().setFolderState(folder.id, null);
+                                                                db.folder().setFolderState(folder.id, null);
                                                             }
                                                         }
                                                     } finally {
@@ -1588,11 +1623,15 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             Throwable e = ex;
                             while (e != null) {
                                 if (ConnectionHelper.isMaxConnections(e.getMessage())) {
-                                    for (String ft : new String[]{EntityFolder.TRASH, EntityFolder.JUNK}) {
-                                        EntityFolder f = db.folder().getFolderByType(account.id, ft);
-                                        if (f != null)
-                                            db.folder().setFolderPoll(f.id, true);
-                                    }
+                                    for (int i = 0; i < EntityFolder.SYSTEM_FOLDER_SYNC.size(); i++)
+                                        if (EntityFolder.SYSTEM_FOLDER_POLL.get(i)) {
+                                            String ft = EntityFolder.SYSTEM_FOLDER_SYNC.get(i);
+                                            EntityFolder f = db.folder().getFolderByType(account.id, ft);
+                                            if (f != null && f.synchronize) {
+                                                EntityLog.log(ServiceSynchronize.this, account.name + "/" + f.name + "=poll");
+                                                db.folder().setFolderPoll(f.id, true);
+                                            }
+                                        }
                                 }
                                 e = e.getCause();
                             }
@@ -1647,7 +1686,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     ((ThreadPoolExecutor) executor).getQueue().clear();
 
                     // Close folders
-                    for (EntityFolder folder : mapFolders.keySet())
+                    for (EntityFolder folder : mapFolders.keySet()) {
                         if (folder.synchronize && !folder.poll && mapFolders.get(folder) != null) {
                             db.folder().setFolderState(folder.id, "closing");
                             try {
@@ -1655,10 +1694,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                     mapFolders.get(folder).close();
                             } catch (Throwable ex) {
                                 Log.w(ex);
-                            } finally {
-                                db.folder().setFolderState(folder.id, null);
                             }
                         }
+
+                        db.folder().setFolderState(folder.id, null);
+                    }
 
                     // Close store
                     try {
@@ -1703,7 +1743,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             // Cancel transient sync operations
                             boolean enabled = prefs.getBoolean("enabled", true);
                             int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
-                            if (!enabled || account.ondemand || (pollInterval > 0 && !account.poll_exempted)) {
+                            if (isTransient(account)) {
                                 List<EntityOperation> syncs = db.operation().getOperations(account.id, EntityOperation.SYNC);
                                 if (syncs != null) {
                                     for (EntityOperation op : syncs) {
@@ -1760,6 +1800,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         }
     }
 
+    private boolean isTransient(EntityAccount account) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean enabled = prefs.getBoolean("enabled", true);
+        int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+        return (!enabled || account.ondemand || (pollInterval > 0 && !account.poll_exempted));
+    }
+
     private void optimizeAccount(Context context, EntityAccount account, String reason) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
@@ -1771,7 +1818,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
         EntityLog.log(context, "Auto optimize account=" + account.name + " poll interval=" + pollInterval);
         if (pollInterval == 0) {
-            prefs.edit().putInt("poll_interval", OPTIMIZE_POLL_INTERVAL).apply();
             try {
                 db.beginTransaction();
                 for (EntityAccount a : db.account().getAccounts())
@@ -1780,7 +1826,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             } finally {
                 db.endTransaction();
             }
-            ServiceSynchronize.reschedule(ServiceSynchronize.this);
+            prefs.edit().putInt("poll_interval", OPTIMIZE_POLL_INTERVAL).apply();
         } else if (pollInterval <= 60 && account.poll_exempted) {
             db.account().setAccountPollExempted(account.id, false);
             ServiceSynchronize.eval(ServiceSynchronize.this, "Optimize=" + reason);
@@ -1788,10 +1834,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
-        private Network reloaded = null;
-        private NetworkCapabilities lastActiveCaps = null;
-        private LinkProperties lastActiveProps = null;
-
         @Override
         public void onAvailable(@NonNull Network network) {
             try {
@@ -2056,6 +2098,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         for (EntityFolder folder : db.folder().getFolders()) {
                             db.folder().setFolderState(folder.id, null);
                             db.folder().setFolderSyncState(folder.id, null);
+                            db.folder().setFolderPollCount(folder.id, 0);
                         }
 
                         // Reset operations

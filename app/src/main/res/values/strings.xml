@@ -427,6 +427,7 @@
     <string name="title_advanced_notifications">Manage notifications</string>
     <string name="title_advanced_notifications_default">Default channel</string>
     <string name="title_advanced_notifications_service">Receive channel</string>
+    <string name="title_advanced_notifications_newest_first">Show newest notifications first</string>
     <string name="title_advanced_notifications_background">Use background service to synchronize messages</string>
     <string name="title_advanced_notifications_background_hint">A background service can be stopped by Android at any time, but doesn\'t require a status bar notification</string>
 
@@ -451,6 +452,7 @@
     <string name="title_advanced_notify_remove">Remove new message notification on tapping on notification</string>
     <string name="title_advanced_notify_clear">Remove new message notifications on viewing message list</string>
     <string name="title_advanced_wearable_preview">Only send notifications with a message preview to wearables</string>
+    <string name="title_advanced_notify_messaging">Use Android \'messaging style\' notification format</string>
     <string name="title_advanced_biometrics_notify">Show notification content when using biometric authentication</string>
     <string name="title_advanced_light">Use notification light</string>
     <string name="title_advanced_sound">Select notification sound</string>
@@ -522,6 +524,7 @@
     <string name="title_advanced_storage_usage" translatable="false">Storage space: %1$s/%2$s</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
+    <string name="title_advanced_files" translatable="false">Files &gt;%1$s</string>
 
     <string name="title_advanced_manual_hint">If receiving messages is disabled, it is still possible to manually receive messages by pulling down the message list</string>
     <string name="title_advanced_poll_hint">Periodically checking for new messages will compare local and remote messages every time, which is an expensive operation that may result in extra battery usage, especially if there are a lot of messages. Always receive will prevent this by continuously following changes.</string>
@@ -583,6 +586,7 @@
     <string name="title_advanced_notify_preview_all_hint">For wearables that can show the full text (up to 5,000 characters)</string>
     <string name="title_advanced_notify_preview_only_hint">This delays showing of notifications until the message text has been downloaded</string>
     <string name="title_advanced_wearable_hint">Notifications are only sent to a wearable after the message text has been downloaded</string>
+    <string name="title_advanced_messaging_hint">This is required for Android Auto support</string>
     <string name="title_advanced_move_hint">The target folder can be configured in the account settings</string>
     <string name="title_advanced_notify_no_grouping">This Android version does not support notification grouping</string>
     <string name="title_advanced_notify_no_channels">This Android version does not support notification channels</string>
@@ -1198,6 +1202,7 @@
     <string name="title_legend_download_off">Download message content on demand</string>
     <string name="title_legend_synchronize_on">Synchronize on</string>
     <string name="title_legend_synchronize_off">Synchronize off</string>
+    <string name="title_legend_synchronize_poll">Synchronize periodically</string>
     <string name="title_legend_disconnected">Disconnected</string>
     <string name="title_legend_connecting">Connecting</string>
     <string name="title_legend_connected">Connected</string>
@@ -1205,7 +1210,6 @@
     <string name="title_legend_synchronizing">Synchronizing</string>
     <string name="title_legend_downloading">Downloading</string>
     <string name="title_legend_closing">Closing</string>
-    <string name="title_legend_waiting">Waiting for next synchronization</string>
 
     <string name="title_legend_unified">Unified inbox / primary account</string>
     <string name="title_legend_inbox">Inbox</string>

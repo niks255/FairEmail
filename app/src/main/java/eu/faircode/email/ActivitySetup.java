@@ -19,8 +19,6 @@ package eu.faircode.email;
     Copyright 2018-2020 by Marcel Bokhorst (M66B)
 */
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
@@ -101,6 +99,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
+
+import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
 
 public class ActivitySetup extends ActivityBase implements FragmentManager.OnBackStackChangedListener {
     private View view;
@@ -773,17 +773,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         JSONObject jaccount = (JSONObject) jaccounts.get(a);
                         EntityAccount account = EntityAccount.fromJSON(jaccount);
 
-                        if (account.auth_type == EmailService.AUTH_TYPE_GMAIL) {
-                            AccountManager am = AccountManager.get(context);
-                            boolean found = false;
-                            for (Account google : am.getAccountsByType("com.google"))
-                                if (account.user.equals(google.name)) {
-                                    found = true;
-                                    break;
-                                }
-
-                            if (!found) {
-                                Log.i("Google account not found email=" + account.user);
+                        if (account.auth_type == AUTH_TYPE_GMAIL) {
+                            if (GmailState.getAccount(context, account.user) == null) {
+                                Log.i("Google account not found user=" + account.user);
                                 continue;
                             }
                         }

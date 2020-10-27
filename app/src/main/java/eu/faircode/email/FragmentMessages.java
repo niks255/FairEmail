@@ -797,6 +797,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
+        bottom_navigation.findViewById(R.id.action_delete).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onActionDelete();
+                return true;
+            }
+        });
+
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -827,69 +835,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     default:
                         return false;
                 }
-            }
-
-            private void onActionDelete() {
-                Bundle args = new Bundle();
-                args.putLong("account", account);
-                args.putString("thread", thread);
-                args.putLong("id", id);
-                args.putBoolean("filter_archive", filter_archive);
-
-                new SimpleTask<List<Long>>() {
-                    @Override
-                    protected List<Long> onExecute(Context context, Bundle args) throws Throwable {
-                        long aid = args.getLong("account");
-                        String thread = args.getString("thread");
-                        long id = args.getLong("id");
-                        boolean filter_archive = args.getBoolean("filter_archive");
-
-                        ArrayList<Long> result = new ArrayList<>();
-
-                        DB db = DB.getInstance(context);
-                        try {
-                            db.beginTransaction();
-
-                            List<EntityMessage> messages = db.message().getMessagesByThread(
-                                    aid, thread, threading ? null : id, null);
-                            for (EntityMessage threaded : messages) {
-                                EntityFolder folder = db.folder().getFolder(threaded.folder);
-                                if (!folder.read_only &&
-                                        (!filter_archive || !EntityFolder.ARCHIVE.equals(folder.type)) &&
-                                        !EntityFolder.DRAFTS.equals(folder.type) &&
-                                        !EntityFolder.OUTBOX.equals(folder.type) &&
-                                        // sent
-                                        // trash
-                                        !EntityFolder.JUNK.equals(folder.type))
-                                    result.add(threaded.id);
-                            }
-
-                            db.setTransactionSuccessful();
-                        } finally {
-                            db.endTransaction();
-                        }
-
-                        return result;
-                    }
-
-                    @Override
-                    protected void onExecuted(Bundle args, List<Long> ids) {
-                        Bundle aargs = new Bundle();
-                        aargs.putString("question", getResources()
-                                .getQuantityString(R.plurals.title_deleting_messages, ids.size(), ids.size()));
-                        aargs.putLongArray("ids", Helper.toLongArray(ids));
-
-                        FragmentDialogAsk ask = new FragmentDialogAsk();
-                        ask.setArguments(aargs);
-                        ask.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGES_DELETE);
-                        ask.show(getParentFragmentManager(), "messages:delete");
-                    }
-
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        Log.unexpectedError(getParentFragmentManager(), ex);
-                    }
-                }.execute(FragmentMessages.this, args, "messages:delete");
             }
 
             private void onActionMove(String folderType) {
@@ -2250,6 +2195,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             Bundle args = new Bundle();
             args.putString("question", getString(R.string.title_ask_delete));
             args.putLong("id", message.id);
+            args.putBoolean("warning", true);
 
             FragmentDialogAsk ask = new FragmentDialogAsk();
             ask.setArguments(args);
@@ -3152,6 +3098,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 aargs.putString("question", getResources()
                         .getQuantityString(R.plurals.title_deleting_messages, ids.size(), ids.size()));
                 aargs.putLongArray("ids", Helper.toLongArray(ids));
+                aargs.putBoolean("warning", true);
 
                 FragmentDialogAsk ask = new FragmentDialogAsk();
                 ask.setArguments(aargs);
@@ -3377,6 +3324,70 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(FragmentMessages.this, args, "messages:move");
+    }
+
+    private void onActionDelete() {
+        Bundle args = new Bundle();
+        args.putLong("account", account);
+        args.putString("thread", thread);
+        args.putLong("id", id);
+        args.putBoolean("filter_archive", filter_archive);
+
+        new SimpleTask<List<Long>>() {
+            @Override
+            protected List<Long> onExecute(Context context, Bundle args) throws Throwable {
+                long aid = args.getLong("account");
+                String thread = args.getString("thread");
+                long id = args.getLong("id");
+                boolean filter_archive = args.getBoolean("filter_archive");
+
+                ArrayList<Long> result = new ArrayList<>();
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    List<EntityMessage> messages = db.message().getMessagesByThread(
+                            aid, thread, threading ? null : id, null);
+                    for (EntityMessage threaded : messages) {
+                        EntityFolder folder = db.folder().getFolder(threaded.folder);
+                        if (!folder.read_only &&
+                                (!filter_archive || !EntityFolder.ARCHIVE.equals(folder.type)) &&
+                                !EntityFolder.DRAFTS.equals(folder.type) &&
+                                !EntityFolder.OUTBOX.equals(folder.type) &&
+                                // sent
+                                // trash
+                                !EntityFolder.JUNK.equals(folder.type))
+                            result.add(threaded.id);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<Long> ids) {
+                Bundle aargs = new Bundle();
+                aargs.putString("question", getResources()
+                        .getQuantityString(R.plurals.title_deleting_messages, ids.size(), ids.size()));
+                aargs.putLongArray("ids", Helper.toLongArray(ids));
+                aargs.putBoolean("warning", true);
+
+                FragmentDialogAsk ask = new FragmentDialogAsk();
+                ask.setArguments(aargs);
+                ask.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGES_DELETE);
+                ask.show(getParentFragmentManager(), "messages:delete");
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(FragmentMessages.this, args, "messages:delete");
     }
 
     static void onActionUndo(TupleMessageEx message, final Context context, final LifecycleOwner owner, final FragmentManager manager) {
@@ -4124,6 +4135,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     account < 0 ? R.string.title_empty_spam_all_ask : R.string.title_empty_spam_ask));
         else
             throw new IllegalArgumentException("Invalid folder type=" + type);
+        aargs.putBoolean("warning", true);
         aargs.putString("remark", getString(R.string.title_empty_all));
         aargs.putLong("account", account);
         aargs.putString("type", type);

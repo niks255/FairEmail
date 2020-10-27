@@ -40,7 +40,6 @@ import android.os.BadParcelableException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.DeadObjectException;
-import android.os.DeadSystemException;
 import android.os.Debug;
 import android.os.PowerManager;
 import android.os.RemoteException;
@@ -688,11 +687,24 @@ public class Log {
             // Some Android versions (Samsung) send images as clip data
             return false;
 
-        if (ex instanceof RuntimeException &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Throwable cause = ex.getCause();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            /*
+                java.lang.RuntimeException: Failure from system
+                  at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1327)
+                  at android.app.ContextImpl.bindService(ContextImpl.java:1286)
+                  at android.content.ContextWrapper.bindService(ContextWrapper.java:604)
+                  at android.content.ContextWrapper.bindService(ContextWrapper.java:604)
+                  at hq.run(PG:15)
+                  at java.lang.Thread.run(Thread.java:818)
+                Caused by: android.os.DeadObjectException
+                  at android.os.BinderProxy.transactNative(Native Method)
+                  at android.os.BinderProxy.transact(Binder.java:503)
+                  at android.app.ActivityManagerProxy.bindService(ActivityManagerNative.java:3783)
+                  at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1317)
+             */
+            Throwable cause = ex;
             while (cause != null) {
-                if (cause instanceof DeadSystemException)
+                if (cause instanceof DeadObjectException) // Includes DeadSystemException
                     return false;
                 cause = cause.getCause();
             }
@@ -771,24 +783,6 @@ public class Log {
                   at android.app.ActivityThread.main(ActivityThread.java:7397)
              */
 
-        if (ex instanceof RuntimeException &&
-                "Failure from system".equals(ex.getMessage()))
-            /*
-                java.lang.RuntimeException: Failure from system
-                  at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1327)
-                  at android.app.ContextImpl.bindService(ContextImpl.java:1286)
-                  at android.content.ContextWrapper.bindService(ContextWrapper.java:604)
-                  at android.content.ContextWrapper.bindService(ContextWrapper.java:604)
-                  at hq.run(PG:15)
-                  at java.lang.Thread.run(Thread.java:818)
-                Caused by: android.os.DeadObjectException
-                  at android.os.BinderProxy.transactNative(Native Method)
-                  at android.os.BinderProxy.transact(Binder.java:503)
-                  at android.app.ActivityManagerProxy.bindService(ActivityManagerNative.java:3783)
-                  at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1317)
-             */
-            return false;
-
         if (ex.getMessage() != null &&
                 (ex.getMessage().startsWith("Bad notification posted") ||
                         ex.getMessage().contains("ActivityRecord not found") ||
@@ -852,10 +846,6 @@ public class Log {
                   at androidx.appcompat.widget.ActionMenuPresenter$OpenOverflowRunnable.run(SourceFile:792)
                */
             return false;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            if (ex instanceof RuntimeException && ex.getCause() instanceof DeadObjectException)
-                return false;
 
         StackTraceElement[] stack = ex.getStackTrace();
         if (stack.length > 0 &&
@@ -1535,7 +1525,6 @@ public class Log {
         db.attachment().setDownloaded(attachment.id, size);
     }
 
-
     private static void attachLog(Context context, long id, int sequence) throws IOException {
         DB db = DB.getInstance(context);
 
@@ -1580,15 +1569,20 @@ public class Log {
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
             DateFormat TF = Helper.getTimeInstance(context);
 
-            for (EntityOperation op : db.operation().getOperations())
-                size += write(os, String.format("%s %d %s/%d %s %s %s\r\n",
+            for (EntityOperation op : db.operation().getOperations()) {
+                EntityAccount account = (op.account == null ? null : db.account().getAccount(op.account));
+                EntityFolder folder = (op.folder == null ? null : db.folder().getFolder(op.folder));
+                size += write(os, String.format("%s %s/%s %d %s/%d %s %s %s\r\n",
                         TF.format(op.created),
+                        account == null ? null : account.name,
+                        folder == null ? null : folder.name,
                         op.message == null ? -1 : op.message,
                         op.name,
                         op.tries,
                         op.args,
                         op.state,
                         op.error));
+            }
         }
 
         db.attachment().setDownloaded(attachment.id, size);

@@ -58,6 +58,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
     private ImageView ivChannelDefault;
     private Button btnManageService;
     private ImageView ivChannelService;
+    private SwitchCompat swNewestFirst;
     private SwitchCompat swBackground;
 
     private CheckBox cbNotifyActionTrash;
@@ -86,6 +87,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
     private SwitchCompat swNotifyPreviewAll;
     private SwitchCompat swNotifyPreviewOnly;
     private SwitchCompat swWearablePreview;
+    private SwitchCompat swMessagingStyle;
     private SwitchCompat swBiometricsNotify;
     private SwitchCompat swAlertOnce;
     private TextView tvNoGrouping;
@@ -95,6 +97,8 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
     private Group grpNotification;
 
     private final static String[] RESET_OPTIONS = new String[]{
+            "notify_newest_first",
+            "background_service",
             "notify_trash", "notify_junk", "notify_block_sender", "notify_archive", "notify_move",
             "notify_reply", "notify_reply_direct",
             "notify_flag", "notify_seen", "notify_snooze",
@@ -102,6 +106,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
             "badge", "unseen_ignored",
             "notify_background_only", "notify_known", "notify_summary", "notify_remove", "notify_clear",
             "notify_preview", "notify_preview_all", "notify_preview_only", "wearable_preview",
+            "notify_messaging",
             "biometrics_notify",
             "alert_once"
     };
@@ -121,6 +126,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         ivChannelDefault = view.findViewById(R.id.ivChannelDefault);
         btnManageService = view.findViewById(R.id.btnManageService);
         ivChannelService = view.findViewById(R.id.ivChannelService);
+        swNewestFirst = view.findViewById(R.id.swNewestFirst);
         swBackground = view.findViewById(R.id.swBackground);
 
         cbNotifyActionTrash = view.findViewById(R.id.cbNotifyActionTrash);
@@ -149,6 +155,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         swNotifyPreviewAll = view.findViewById(R.id.swNotifyPreviewAll);
         swNotifyPreviewOnly = view.findViewById(R.id.swNotifyPreviewOnly);
         swWearablePreview = view.findViewById(R.id.swWearablePreview);
+        swMessagingStyle = view.findViewById(R.id.swMessagingStyle);
         swBiometricsNotify = view.findViewById(R.id.swBiometricsNotify);
         swAlertOnce = view.findViewById(R.id.swAlertOnce);
         tvNoGrouping = view.findViewById(R.id.tvNoGrouping);
@@ -204,6 +211,13 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         });
 
         ivChannelService.setVisibility(View.GONE);
+
+        swNewestFirst.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("notify_newest_first", checked).apply();
+            }
+        });
 
         swBackground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -389,6 +403,13 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
             }
         });
 
+        swMessagingStyle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("notify_messaging", checked).apply();
+            }
+        });
+
         swBiometricsNotify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -484,6 +505,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         boolean pro = ActivityBilling.isPro(getContext());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
+        swNewestFirst.setChecked(prefs.getBoolean("notify_newest_first", false));
         swBackground.setChecked(prefs.getBoolean("background_service", false));
 
         cbNotifyActionTrash.setChecked(prefs.getBoolean("notify_trash", true) || !pro);
@@ -509,6 +531,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         swNotifyPreviewAll.setChecked(prefs.getBoolean("notify_preview_all", false));
         swNotifyPreviewOnly.setChecked(prefs.getBoolean("notify_preview_only", false));
         swWearablePreview.setChecked(prefs.getBoolean("wearable_preview", false));
+        swMessagingStyle.setChecked(prefs.getBoolean("notify_messaging", false));
         swBiometricsNotify.setChecked(prefs.getBoolean("biometrics_notify", false));
         swAlertOnce.setChecked(!prefs.getBoolean("alert_once", true));
 

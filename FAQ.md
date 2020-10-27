@@ -79,7 +79,7 @@ Related questions:
 * ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
 * ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
 * Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
-* A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, and Mi band 3 wearables. See also [this FAQ](#user-content-faq126).
+* A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. See also [this FAQ](#user-content-faq126).
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 
@@ -232,7 +232,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(105) How does the roam-like-at-home option work?](#user-content-faq105)
 * [(106) Which launchers can show a badge count with the number of unread messages?](#user-content-faq106)
 * [(107) How do I use colored stars?](#user-content-faq107)
-* [(108) Can you add permanently delete messages from any folder?](#user-content-faq108)
+* [~~(108) Can you add permanently delete messages from any folder?~~](#user-content-faq108)
 * [~~(109) Why is 'select account' available in official versions only?~~](#user-content-faq109)
 * [(110) Why are (some) messages empty and/or attachments corrupted?](#user-content-faq110)
 * [(111) Is OAuth supported?](#user-content-faq111)
@@ -413,9 +413,10 @@ You should try to fix this by contacting your provider or by getting a valid sec
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
 If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
-Alternatively, you can accept the fingerprint shown below the error message
-if you set up the account and/or identity in setup step 1 and 2 (this is not possible when using the quick setup wizard).
-Note that you should make sure the internet connection you are using is safe.
+Alternatively, you can accept the fingerprint of the invalid server certificate as shown below the error message by ticking a checkbox.
+In case of an existing account (IMAP, receive) and/or identity (SMTP, send) you will need check/save it via setup step 1 and 2 to get the error message.
+This will "pin" the server certificate to prevent man-in-the-middle attacks.
+Note that you should make sure the internet connection you are using is safe if you do this.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure,
 see also [here](https://developer.android.com/training/articles/security-ssl).
@@ -1079,7 +1080,7 @@ This requires contact/account permissions and internet connectivity.
 
 The error *... Authentication failed ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
 
-The errors *... Authentication failed ... No token on refresh ...* means that the Android account manager failed to refresh the authorization of a Gmail account.
+The errors *... Authentication failed ... No token ...* means that the Android account manager failed to refresh the authorization of a Gmail account.
 
 The error *... Authentication failed ... Invalid credentials ... network error ...*
 means that the Android account manager was not able to refresh the authorization of a Gmail account due to problems with the internet connection
@@ -2819,6 +2820,7 @@ it is not possible to guarantee that a new message notification with a preview t
 
 If you think this is good enough, you can enable the notification option *Only send notifications with a message preview to wearables*
 and if this does not work, you can try to enable the notification option *Show notifications with a preview text only*.
+Note that this applies to wearables not showing a preview text too, even when the Android Wear app says the notification has been sent (bridged).
 
 If you want to have the full message text sent to your wearable, you can enable the notification option *Preview all text*.
 Note that some wearables are known to crash with this option enabled.
