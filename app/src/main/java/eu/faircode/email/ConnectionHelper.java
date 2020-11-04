@@ -88,7 +88,7 @@ public class ConnectionHelper {
         private Boolean suitable = null;
         private Boolean unmetered = null;
         private Boolean roaming = null;
-        private Integer type = null;
+        private Network active = null;
 
         boolean isConnected() {
             return (connected != null && connected);
@@ -106,16 +106,16 @@ public class ConnectionHelper {
             return (roaming != null && roaming);
         }
 
-        Integer getType() {
-            return type;
+        Network getActive() {
+            return active;
         }
 
         public void update(NetworkState newState) {
             connected = newState.connected;
-            unmetered = newState.unmetered;
             suitable = newState.suitable;
+            unmetered = newState.unmetered;
             roaming = newState.roaming;
-            type = newState.type;
+            active = newState.active;
         }
 
         @Override
@@ -125,9 +125,34 @@ public class ConnectionHelper {
                 return (Objects.equals(this.connected, other.connected) &&
                         Objects.equals(this.suitable, other.suitable) &&
                         Objects.equals(this.unmetered, other.unmetered) &&
-                        Objects.equals(this.roaming, other.roaming));
+                        Objects.equals(this.roaming, other.roaming) &&
+                        Objects.equals(this.active, other.active));
             } else
                 return false;
+        }
+
+        @Override
+        public String toString() {
+            return "connected=" + connected +
+                    " suitable=" + suitable +
+                    " unmetered=" + unmetered +
+                    " roaming=" + roaming +
+                    " active=" + active;
+        }
+    }
+
+    static boolean isConnected(Context context, Network network) {
+        NetworkInfo ni = getNetworkInfo(context, network);
+        return (ni != null && ni.isConnected());
+    }
+
+    static NetworkInfo getNetworkInfo(Context context, Network network) {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            return (cm == null ? null : cm.getNetworkInfo(network));
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return null;
         }
     }
 
@@ -143,14 +168,13 @@ public class ConnectionHelper {
             state.connected = (isMetered != null);
             state.unmetered = (isMetered != null && !isMetered);
             state.suitable = (isMetered != null && (metered || !isMetered));
+            state.active = getActiveNetwork(context);
 
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
-            if (ani != null)
-                state.type = ani.getType();
 
             if (state.connected && !roaming) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                    NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
                     if (ani != null)
                         state.roaming = ani.isRoaming();
                 } else {
@@ -343,6 +367,15 @@ public class ConnectionHelper {
                     ex instanceof ConnectionException ||
                     ex instanceof AccountsException ||
                     "failed to connect".equals(ex.getMessage()))
+                return true;
+            ex = ex.getCause();
+        }
+        return false;
+    }
+
+    static boolean isMaxConnections(Throwable ex) {
+        while (ex != null) {
+            if (isMaxConnections(ex.getMessage()))
                 return true;
             ex = ex.getCause();
         }

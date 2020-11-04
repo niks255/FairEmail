@@ -77,6 +77,7 @@ import com.steadystate.css.parser.selectors.ClassConditionImpl;
 import com.steadystate.css.parser.selectors.ConditionalSelectorImpl;
 import com.steadystate.css.parser.selectors.ElementSelectorImpl;
 
+import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
@@ -107,6 +108,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -135,6 +137,8 @@ public class HtmlHelper {
     private static final int SMALL_IMAGE_SIZE = 5; // pixels
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
     private static final float[] HEADING_SIZES = {1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f};
+    private static String WHITESPACE = " \t\f";
+    private static String WHITESPACE_NL = WHITESPACE + "\r\n";
     private static final String LINE = "----------------------------------------";
     private static final HashMap<String, Integer> x11ColorMap = new HashMap<>();
 
@@ -288,6 +292,42 @@ public class HtmlHelper {
         x11ColorMap.put("yellow", 0xFFFF00);
         x11ColorMap.put("yellowgreen", 0x9ACD32);
     }
+
+    // http://www.alanwood.net/demos/wingdings.html
+    static int[] WINGDING_TO_UNICODE = {
+            0x0020, 0x1F589, 0x2702, 0x2701, 0x1F453, 0x1F56D, 0x1F56E, 0x1F56F,
+            0x1F57F, 0x2706, 0x1F582, 0x1F583, 0x1F4EA, 0x1F4EB, 0x1F4EC, 0x1F4ED,
+            0x1F4C1, 0x1F4C2, 0x1F4C4, 0x1F5CF, 0x1F5D0, 0x1F5C4, 0x231B, 0x1F5AE,
+            0x1F5B0, 0x1F5B2, 0x1F5B3, 0x1F5B4, 0x1F5AB, 0x1F5AC, 0x2707, 0x270D,
+            0x1F58E, 0x270C, 0x1F44C, 0x1F44D, 0x1F44E, 0x261C, 0x261E, 0x261D,
+            0x261F, 0x1F590, 0x263A, 0x1F610, 0x2639, 0x1F4A3, 0x2620, 0x1F3F3,
+            0x1F3F1, 0x2708, 0x263C, 0x1F4A7, 0x2744, 0x1F546, 0x271E, 0x1F548,
+            0x2720, 0x2721, 0x262A, 0x262F, 0x0950, 0x2638, 0x2648, 0x2649,
+            0x264A, 0x264B, 0x264C, 0x264D, 0x264E, 0x264F, 0x2650, 0x2651,
+            0x2652, 0x2653, 0x1F670, 0x1F675, 0x25CF, 0x1F53E, 0x25A0, 0x25A1,
+            0x1F790, 0x2751, 0x2752, 0x2B27, 0x29EB, 0x25C6, 0x2756, 0x2B25,
+            0x2327, 0x2BB9, 0x2318, 0x1F3F5, 0x1F3F6, 0x1F676, 0x1F677, 0x003F,
+            0x24EA, 0x2460, 0x2461, 0x2462, 0x2463, 0x2464, 0x2465, 0x2466,
+            0x2467, 0x2468, 0x2469, 0x24FF, 0x2776, 0x2777, 0x2778, 0x2779,
+            0x277A, 0x277B, 0x277C, 0x277D, 0x277E, 0x277F, 0x1F662, 0x1F660,
+            0x1F661, 0x1F663, 0x1F65E, 0x1F65C, 0x1F65D, 0x1F65F, 0x00B7, 0x2022,
+            0x25AA, 0x26AA, 0x1F786, 0x1F788, 0x25C9, 0x25CE, 0x1F53F, 0x25AA,
+            0x25FB, 0x1F7C2, 0x2726, 0x2605, 0x2736, 0x2734, 0x2739, 0x2735,
+            0x2BD0, 0x2316, 0x27E1, 0x2311, 0x2BD1, 0x272A, 0x2730, 0x1F550,
+            0x1F551, 0x1F552, 0x1F553, 0x1F554, 0x1F555, 0x1F556, 0x1F557, 0x1F558,
+            0x1F559, 0x1F55A, 0x1F55B, 0x2BB0, 0x2BB1, 0x2BB2, 0x2BB3, 0x2BB4,
+            0x2BB5, 0x2BB6, 0x2BB7, 0x1F66A, 0x1F66B, 0x1F655, 0x1F654, 0x1F657,
+            0x1F656, 0x1F650, 0x1F651, 0x1F652, 0x1F653, 0x232B, 0x2326, 0x2B98,
+            0x2B9A, 0x2B99, 0x2B9B, 0x2B88, 0x2B8A, 0x2B89, 0x2B8B, 0x1F868,
+            0x1F86A, 0x1F869, 0x1F86B, 0x1F86C, 0x1F86D, 0x1F86F, 0x1F86E, 0x1F878,
+            0x1F87A, 0x1F879, 0x1F87B, 0x1F87C, 0x1F87D, 0x1F87F, 0x1F87E, 0x21E6,
+            0x21E8, 0x21E7, 0x21E9, 0x2B04, 0x21F3, 0x2B00, 0x2B01, 0x2B03,
+            0x2B02, 0x1F8AC, 0x1F8AD, 0x1F5F6, 0x2714, 0x1F5F7, 0x1F5F9, 0x0077
+    };
+
+    private static final List<String> TRACKING_HOSTS = Collections.unmodifiableList(Arrays.asList(
+            "www.google-analytics.com"
+    ));
 
     static Document sanitizeCompose(Context context, String html, boolean show_images) {
         try {
@@ -616,6 +656,10 @@ public class HtmlHelper {
                                     Log.i("Removing display none " + element.tagName());
                                     element.remove();
                                 }
+
+                                if ("block".equals(value) || "inline-block".equals(value))
+                                    element.attr("x-block", "true");
+
                                 if ("inline".equals(value) || "inline-block".equals(value)) {
                                     if (element.nextSibling() != null)
                                         element.attr("x-inline", "true");
@@ -696,6 +740,9 @@ public class HtmlHelper {
                         Log.i("Style=" + sb);
                 }
             }
+
+            if (element.isBlock())
+                element.attr("x-block", "true");
         }
 
         // Remove trailing br from div
@@ -792,7 +839,7 @@ public class HtmlHelper {
             // separate columns
             if (hasVisibleContent(col.childNodes()))
                 if (col.nextElementSibling() != null)
-                    col.appendText(" ");
+                    col.append("&nbsp;");
 
             if ("th".equals(col.tagName()))
                 col.tagName("strong");
@@ -1332,9 +1379,15 @@ public class HtmlHelper {
 
     private static boolean hasVisibleContent(List<Node> nodes) {
         for (Node node : nodes)
-            if (node instanceof TextNode && !((TextNode) node).isBlank())
+            if (node instanceof TextNode) {
+                String text = ((TextNode) node).getWholeText();
+                for (int i = 0; i < text.length(); i++) {
+                    char kar = text.charAt(i);
+                    if (!StringUtil.isWhitespace(kar) && kar != '\u00a0' /* nbsp */)
+                        return true;
+                }
                 return true;
-            else if (node instanceof Element) {
+            } else if (node instanceof Element) {
                 Element element = (Element) node;
                 if (element.isBlock())
                     return false;
@@ -1353,7 +1406,11 @@ public class HtmlHelper {
     static String flow(String text) {
         boolean continuation = false;
         StringBuilder flowed = new StringBuilder();
-        for (String line : text.split("\\r?\\n")) {
+        String[] lines = text.split("\\r?\\n");
+        for (int l = 0; l < lines.length; l++) {
+            String line = lines[l];
+            lines[l] = null;
+
             if (continuation)
                 while (line.startsWith(">")) {
                     line = line.substring(1);
@@ -1378,7 +1435,10 @@ public class HtmlHelper {
         int level = 0;
         StringBuilder sb = new StringBuilder();
         String[] lines = text.split("\\r?\\n");
-        for (String line : lines) {
+        for (int l = 0; l < lines.length; l++) {
+            String line = lines[l];
+            lines[l] = null;
+
             // Opening quotes
             // https://tools.ietf.org/html/rfc3676#section-4.5
             if (quote) {
@@ -1404,17 +1464,17 @@ public class HtmlHelper {
             }
 
             // Tabs characters
-            StringBuilder l = new StringBuilder();
+            StringBuilder sbl = new StringBuilder();
             for (int j = 0; j < line.length(); j++) {
                 char kar = line.charAt(j);
                 if (kar == '\t') {
-                    l.append(' ');
-                    while (l.length() % TAB_SIZE != 0)
-                        l.append(' ');
+                    sbl.append(' ');
+                    while (sbl.length() % TAB_SIZE != 0)
+                        sbl.append(' ');
                 } else
-                    l.append(kar);
+                    sbl.append(kar);
             }
-            line = l.toString();
+            line = sbl.toString();
 
             // Html characters
             // This will handle spaces / word wrapping as well
@@ -1457,7 +1517,8 @@ public class HtmlHelper {
             if (!TextUtils.isEmpty(src) && !isTrackingPixel(img)) {
                 Uri uri = Uri.parse(img.attr("src"));
                 String host = uri.getHost();
-                if (host != null && !hosts.contains(host))
+                if (host != null && !hosts.contains(host) &&
+                        !isTrackingHost(host, disconnect_images))
                     hosts.add(host);
             }
         }
@@ -1488,8 +1549,7 @@ public class HtmlHelper {
                 continue;
             }
 
-            if (isTrackingPixel(img) ||
-                    (disconnect_images && DisconnectBlacklist.isTracking(host))) {
+            if (isTrackingPixel(img) || isTrackingHost(host, disconnect_images)) {
                 img.attr("src", sb.toString());
                 img.attr("alt", context.getString(R.string.title_legend_tracking_pixel));
                 img.attr("height", "24");
@@ -1512,6 +1572,14 @@ public class HtmlHelper {
         } catch (NumberFormatException ignored) {
             return false;
         }
+    }
+
+    private static boolean isTrackingHost(String host, boolean disconnect_images) {
+        if (TRACKING_HOSTS.contains(host))
+            return true;
+        if (disconnect_images && DisconnectBlacklist.isTracking(host))
+            return true;
+        return false;
     }
 
     static void embedInlineImages(Context context, long id, Document document, boolean local) throws IOException {
@@ -1771,42 +1839,36 @@ public class HtmlHelper {
     }
 
     static boolean truncate(Document d, boolean reformat) {
+        final int[] length = new int[1];
         int max = (reformat ? MAX_FORMAT_TEXT_SIZE : MAX_FULL_TEXT_SIZE);
 
-        int length = 0;
-        int images = 0;
-        for (Element elm : d.select("*")) {
-            if ("img".equals(elm.tagName()))
-                images++;
-
-            boolean skip = false;
-            for (Node child : elm.childNodes()) {
-                if (child instanceof TextNode) {
-                    TextNode tnode = ((TextNode) child);
+        NodeTraversor.filter(new NodeFilter() {
+            @Override
+            public FilterResult head(Node node, int depth) {
+                if (length[0] >= max)
+                    return FilterResult.REMOVE;
+                else if (node instanceof TextNode) {
+                    TextNode tnode = ((TextNode) node);
                     String text = tnode.getWholeText();
-
-                    if (length < max) {
-                        if (length + text.length() >= max) {
-                            text = text.substring(0, max - length) + " ...";
-                            tnode.text(text);
-                            skip = true;
-                        }
-                    } else {
-                        if (skip)
-                            tnode.text("");
-                    }
-
-                    length += text.length();
+                    if (length[0] + text.length() >= max) {
+                        text = text.substring(0, max - length[0]) + " ...";
+                        tnode.text(text);
+                        length[0] += text.length();
+                        return FilterResult.SKIP_ENTIRELY;
+                    } else
+                        length[0] += text.length();
                 }
+                return FilterResult.CONTINUE;
             }
 
-            if (length >= max && !skip)
-                elm.remove();
-        }
+            @Override
+            public FilterResult tail(Node node, int depth) {
+                return FilterResult.CONTINUE;
+            }
+        }, d);
 
-        Log.i("Message size=" + length + " images=" + images);
-
-        return (length >= max);
+        Log.i("Message size=" + length[0]);
+        return (length[0] > max);
     }
 
     static boolean contains(Document d, String[] texts) {
@@ -1852,6 +1914,7 @@ public class HtmlHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
         boolean text_separators = prefs.getBoolean("text_separators", false);
+        boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
 
         final int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
         final int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
@@ -1870,8 +1933,6 @@ public class HtmlHelper {
             private int plain = 0;
             private List<TextNode> block = new ArrayList<>();
 
-            private String WHITESPACE = " \t\f\u00A0";
-            private String WHITESPACE_NL = WHITESPACE + "\r\n";
             private Pattern TRIM_WHITESPACE_NL =
                     Pattern.compile("[" + WHITESPACE + "]*\\r?\\n[" + WHITESPACE + "]*");
 
@@ -1884,9 +1945,11 @@ public class HtmlHelper {
                         block.add((TextNode) node);
                 } else if (node instanceof Element) {
                     element = (Element) node;
-                    if ("true".equals(element.attr("x-plain")))
+                    if ("pre".equals(element.tagName()) ||
+                            "true".equals(element.attr("x-plain")))
                         plain++;
-                    if (element.isBlock()) {
+                    if (element.isBlock() ||
+                            "true".equals(element.attr("x-block"))) {
                         normalizeText(block);
                         block.clear();
                     }
@@ -1897,9 +1960,12 @@ public class HtmlHelper {
             public void tail(Node node, int depth) {
                 if (node instanceof Element) {
                     element = (Element) node;
-                    if ("true".equals(element.attr("x-plain")))
+                    if ("pre".equals(element.tagName()) ||
+                            "true".equals(element.attr("x-plain")))
                         plain--;
-                    if (element.isBlock() || "br".equals(element.tagName())) {
+                    if (element.isBlock() ||
+                            "true".equals(element.attr("x-block")) ||
+                            "br".equals(element.tagName())) {
                         normalizeText(block);
                         block.clear();
                     }
@@ -1960,6 +2026,22 @@ public class HtmlHelper {
                     }
                 }
 
+                // Remove blank blocks
+                boolean blank = true;
+                for (int i = 0; i < block.size(); i++) {
+                    text = block.get(i).getWholeText();
+                    for (int j = 0; j < text.length(); j++) {
+                        char kar = text.charAt(j);
+                        if (WHITESPACE.indexOf(kar) < 0 && kar != '\u00a0' /* nbsp */) {
+                            blank = false;
+                            break;
+                        }
+                    }
+                }
+                if (blank)
+                    for (int i = 0; i < block.size(); i++)
+                        block.get(i).text("");
+
                 if (debug) {
                     if (block.size() > 0) {
                         TextNode first = block.get(0);
@@ -1998,7 +2080,12 @@ public class HtmlHelper {
                         ssb.append("[" + element.tagName() + ":" + element.attr("style") + "]");
                 } else if (node instanceof TextNode) {
                     tnode = (TextNode) node;
-                    ssb.append(tnode.getWholeText());
+                    String text = tnode.getWholeText();
+                    ssb.append(text);
+                    if (monospaced_pre &&
+                            node.parent() instanceof Element &&
+                            "true".equals(((Element) node.parent()).attr("x-plain")))
+                        setSpan(ssb, new TypefaceSpan("monospace"), ssb.length() - text.length(), ssb.length());
                 }
             }
 
@@ -2032,9 +2119,19 @@ public class HtmlHelper {
                                     break;
                                 case "font-family":
                                     String face = value.toLowerCase(Locale.ROOT);
-                                    if (BuildConfig.DEBUG && "fantasy".equals(face)) {
+                                    if ("fairemail".equals(face)) {
                                         Typeface typeface = ResourcesCompat.getFont(context, R.font.fantasy);
                                         setSpan(ssb, new CustomTypefaceSpan(face, typeface), start, ssb.length());
+                                    } else if ("wingdings".equals(face)) {
+                                        for (int i = start; i < ssb.length(); i++) {
+                                            int kar = ssb.charAt(i);
+                                            if (kar >= 0x20 && kar < 0x20 + WINGDING_TO_UNICODE.length) {
+                                                int codepoint = WINGDING_TO_UNICODE[kar - 0x20];
+                                                String replacement = new String(Character.toChars(codepoint));
+                                                if (replacement.length() == 1)
+                                                    ssb.replace(i, i + 1, replacement);
+                                            }
+                                        }
                                     } else
                                         setSpan(ssb, new TypefaceSpan(face), start, ssb.length());
                                     break;
@@ -2261,6 +2358,8 @@ public class HtmlHelper {
                             case "del":
                             case "strike":
                                 setSpan(ssb, new StrikethroughSpan(), start, ssb.length());
+                                break;
+                            case "style":
                                 break;
                             case "tt":
                                 setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());

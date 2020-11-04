@@ -158,15 +158,15 @@ Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze za
 * [(36) Jak jsou soubory nastavení šifrovány?](#user-content-faq36)
 * [(37) Jak jsou ukládána hesla?](#user-content-faq37)
 * [(39) Jak mohu snížit spotřebu baterie FairEmailem?](#user-content-faq39)
-* [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
+* [(40) Jak mohu snížit využití dat FairEmailem?](#user-content-faq40)
 * [(41) Jak opravím chybu 'Handshake failed' ?](#user-content-faq41)
 * [(42) Můžete na seznam poskytovatelů přidat nového poskytovatele?](#user-content-faq42)
-* [(43) Can you show the original ... ?](#user-content-faq43)
-* [(44) Can you show contact photos / identicons in the sent folder?](#user-content-faq44)
-* [(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!' ?](#user-content-faq45)
+* [(43) Můžete ukázat originální ... ?](#user-content-faq43)
+* [(44) Můžete zobrazit fotografie kontaktů / identikony v odeslané složce?](#user-content-faq44)
+* [(45) Jak mohu opravit 'tento klíč není k dispozici. Abyste jej mohli použít, musíte ho importovat jako jeden z vlastní!" ?](#user-content-faq45)
 * [(46) Proč se seznam zpráv stále obnovuje?](#user-content-faq46)
-* [(47) How do I solve the error 'No primary account or no drafts folder' ?](#user-content-faq47)
-* [~~(48) How do I solve the error 'No primary account or no archive folder' ?~~](#user-content-faq48)
+* [(47) Jak vyřeším chybu 'Žádný primární účet nebo žádná složka konceptů' ?](#user-content-faq47)
+* [~~(48) Jak vyřeším chybu 'Žádný primární účet nebo žádná složka konceptů' ?~~](#user-content-faq48)
 * [(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?](#user-content-faq49)
 * [(50) Can you add an option to synchronize all messages?](#user-content-faq50)
 * [(51) Jak jsou složky řazeny?](#user-content-faq51)
@@ -388,7 +388,15 @@ Operations are processed only when there is a connection to the email server or 
 
 You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
-Alternatively, you can accept the fingerprint of the invalid server certificate as shown below the error message by ticking a checkbox. In case of an existing account (IMAP, receive) and/or identity (SMTP, send) you will need check/save it via setup step 1 and 2 to get the error message. This will "pin" the server certificate to prevent man-in-the-middle attacks. Note that you should make sure the internet connection you are using is safe if you do this.
+Alternatively, you can accept the fingerprint of invalid server certificates like this:
+
+1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
+1. Go to the setup screen via the navigation menu (swipe from the left side inwards)
+1. In step 1 and 2 tap *Manage* and tap the faulty account and identity
+1. Check/save the account and identity
+1. Tick the checkbox below the error message and save again
+
+This will "pin" the server certificate to prevent man-in-the-middle attacks.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
 
@@ -1463,6 +1471,7 @@ For security reasons the files with the original message texts are not accessibl
 * Did you know that you can long press the people's icon to show/hide the CC/BCC fields and remember the visibility state for the next time?
 * Did you know that you can insert the email addresses of an Android contact group via the three dots overflow menu?
 * Did you know that if you select text and hit reply, only the selected text will be quoted?
+* Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)
 
 <br />
 

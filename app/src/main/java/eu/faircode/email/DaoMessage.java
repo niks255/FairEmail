@@ -218,6 +218,7 @@ public interface DaoMessage {
             " AND message.thread = :thread" +
             " AND (:id IS NULL OR message.id = :id)" +
             " AND (NOT :filter_archive" +
+            "  OR (NOT message.ui_seen AND NOT message.ui_hide)" +
             "  OR folder.type <> '" + EntityFolder.ARCHIVE + "'" +
             "  OR NOT EXISTS" +
             "   (SELECT * FROM message m" +
@@ -793,7 +794,8 @@ public interface DaoMessage {
             " AND NOT uid IS NULL" +
             " AND (ui_seen OR :unseen)" +
             " AND NOT ui_flagged" +
-            " AND NOT ui_browsed")
+            " AND NOT ui_browsed" +
+            " AND ui_snoozed IS NULL")
     List<Long> getMessagesBefore(long folder, long before, boolean unseen);
 
     @Query("DELETE FROM message" +
@@ -802,6 +804,7 @@ public interface DaoMessage {
             " AND NOT uid IS NULL" +
             " AND (ui_seen OR :unseen)" +
             " AND NOT ui_flagged" +
-            " AND (NOT ui_browsed OR stored < :before)")
+            " AND (NOT ui_browsed OR stored < :before)" +
+            " AND ui_snoozed IS NULL")
     int deleteMessagesBefore(long folder, long before, boolean unseen);
 }

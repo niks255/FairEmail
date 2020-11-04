@@ -99,6 +99,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -1587,7 +1588,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         @Override
-        public void setExpanded(TupleMessageEx message, boolean value) {
+        public void setExpanded(TupleMessageEx message, boolean value, boolean scroll) {
             // Prevent flicker
             if (value && message.accountAutoSeen && !message.folderReadOnly) {
                 message.unseen = 0;
@@ -1597,6 +1598,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
 
             setValue("expanded", message.id, value);
+            if (scroll)
+                setValue("scroll", message.id, true);
 
             final int p = adapter.getPositionForKey(message.id);
             if (p != NO_POSITION)
@@ -3893,6 +3896,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 (viewType == AdapterMessage.ViewType.UNIFIED ||
                         (viewType == AdapterMessage.ViewType.FOLDER && !outbox));
 
+        String filter_language = prefs.getString("filter_language", null);
+        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown || !TextUtils.isEmpty(filter_language));
+        MenuItem menuFilter = menu.findItem(R.id.menu_filter);
+        menuFilter.setShowAsAction(folder && filter_active
+                ? MenuItem.SHOW_AS_ACTION_ALWAYS
+                : MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItemCompat.setIconTintList(menuFilter,
+                folder && filter_active ?
+                        ColorStateList.valueOf(Helper.resolveColor(getContext(), R.attr.colorAccent)) : null);
+        menuFilter.setIcon(folder && filter_active ? R.drawable.twotone_filter_alt_24 : R.drawable.twotone_filter_list_24);
+
         MenuItem menuSearch = menu.findItem(R.id.menu_search);
         menuSearch.setVisible(folder);
 
@@ -4251,6 +4265,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             Locale locale = (Locale) item.getIntent().getSerializableExtra("locale");
                             prefs.edit().putString("filter_language", locale.getLanguage()).apply();
                         }
+
+                        FragmentActivity activity = getActivity();
+                        if (activity != null)
+                            activity.invalidateOptionsMenu();
 
                         loadMessages(true);
 
@@ -4667,7 +4685,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 if (expand != null &&
                         (expand.content || unmetered || (expand.size != null && expand.size < download)))
-                    iProperties.setExpanded(expand, true);
+                    iProperties.setExpanded(expand, true, false);
             }
 
             // Auto expand all seen messages
@@ -4679,7 +4697,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             !message.duplicate &&
                             !EntityFolder.DRAFTS.equals(message.folderType) &&
                             !EntityFolder.TRASH.equals(message.folderType))
-                        iProperties.setExpanded(message, true);
+                        iProperties.setExpanded(message, true, false);
         } else {
             if (autoCloseCount > 0 && (autoclose || onclose != null)) {
                 List<MessageTarget> mt = new ArrayList<>();
@@ -7631,7 +7649,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 @Override
                 protected List<TupleIdentityEx> onExecute(Context context, Bundle args) {
-                    DB db = DB.getInstance(getContext());
+                    DB db = DB.getInstance(context);
                     return db.identity().getComposableIdentities(null);
                 }
 

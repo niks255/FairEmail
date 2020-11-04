@@ -270,6 +270,7 @@
     <string name="title_advanced_roaming">Κατέβασμα μηνυμάτων και συνημμένων σε λειτουργία περιαγωγής</string>
     <string name="title_advanced_rlah">Περιήγηση όπως στο σπίτι</string>
     <string name="title_advanced_timeout">Χρονικό όριο σύνδεσης (δευτερόλεπτα)</string>
+    <string name="title_advanced_prefer_ip4">Να προτιμάται IPv4 παρά IPv6</string>
     <string name="title_advanced_ssl_harden">Θωράκιση συνδέσεων SSL</string>
     <string name="title_advanced_manage_connectivity">Διαχείριση συνδεσιμότητας</string>
     <string name="title_advanced_caption_general">Γενικά</string>
@@ -324,6 +325,7 @@
     <string name="title_advanced_overview_mode">Μεγέθυνση αρχικού μηνύματος για προσαρμογή στην οθόνη</string>
     <string name="title_advanced_contrast">Χρήση υψηλής αντίθεσης για το κείμενο του μηνύματος</string>
     <string name="title_advanced_monospaced">Χρήση γραμματοσειράς σταθερού πλάτους από προεπιλογή</string>
+    <string name="title_advanced_monospaced_pre">Χρήση γραμματοσειράς σταθερού πλάτους για προ-μορφοποιημένο κείμενο</string>
     <string name="title_advanced_text_color">Χρήση των χρωμάτων του κειμένου</string>
     <string name="title_advanced_text_size">Χρήση των μεγεθών του κειμένου</string>
     <string name="title_advanced_text_font">Χρήση των γραμματοσειρών</string>
@@ -571,6 +573,7 @@
     <string name="title_no_name">Λείπει το όνομα</string>
     <string name="title_no_email">Λείπει η διεύθυνση ηλ. ταχυδρομείου</string>
     <string name="title_email_invalid">Μη έγκυρη διεύθυνση ηλ. ταχυδρομείου: \'%1$s\'</string>
+    <string name="title_address_duplicate">Διπλότυπο της διεύθυνσης \'%1$s\'</string>
     <string name="title_address_parse_error">Διεύθυνση \'%1$s\' μη έγκυρη: %2$s</string>
     <string name="title_no_account">Λείπει λογαριασμός</string>
     <string name="title_no_host">Λείπει όνομα υπολογιστή</string>
@@ -593,6 +596,7 @@
     <string name="title_edit_html">Επεξεργασία ως HTML</string>
     <string name="title_sign_key">Κλειδί υπογραφής: %1$s</string>
     <string name="title_last_connected">Τελευταία σύνδεση: %1$s</string>
+    <string name="title_backoff_until">Αναμονή μετά από μία αποτυχία μέχρι: %1$s</string>
     <string name="title_storage_quota">Χρήση χωρητικότητας διακομιστή: %1$s/%2$s</string>
     <string name="title_pop_support">Το πρωτόκολλο POP3 υποστηρίζει το κατέβασμα και τη διαγραφή μηνυμάτων μόνον από τα εισερχόμενα. Το POP3 δεν μπορεί να επισημαίνει μηνύματα ως αναγνωσμένα, να τα μετακινεί, κλπ. Το POP3 καταναλώνει περισσότερη μπαταρία και δεδομένα από το IMAP. Συνεπώς, σκεφτείτε να χρησιμοποιείτε το πρωτόκολλο IMAP όποτε είναι δυνατόν.</string>
     <string name="title_oauth_support">Δεν υποστηρίζεται OAuth</string>
@@ -1054,6 +1058,7 @@
     <string name="title_legend_synchronize_off">Συγχρονισμός ανενεργός</string>
     <string name="title_legend_synchronize_poll">Περιοδικός συγχρονισμός</string>
     <string name="title_legend_disconnected">Αποσυνδέθηκε</string>
+    <string name="title_legend_backoff">Αναμονή μετά από μία αποτυχία σύνδεσης</string>
     <string name="title_legend_connecting">Γίνεται σύνδεση</string>
     <string name="title_legend_connected">Συνδέθηκε</string>
     <string name="title_legend_executing">Δραστηριότητες σε εξέλιξη</string>

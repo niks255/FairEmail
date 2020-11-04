@@ -270,6 +270,7 @@
     <string name="title_advanced_roaming">Download beskeder og vedhæftninger under roaming</string>
     <string name="title_advanced_rlah">Roam, som var du hjemme</string>
     <string name="title_advanced_timeout">Forbindelses-timeout (sekunder)</string>
+    <string name="title_advanced_prefer_ip4">Foretræk IPv4 frem for IPv6</string>
     <string name="title_advanced_ssl_harden">Hærd SSL-forbindelser</string>
     <string name="title_advanced_manage_connectivity">Håndtér konnektivitet</string>
     <string name="title_advanced_caption_general">Generelt</string>
@@ -323,6 +324,7 @@
     <string name="title_advanced_overview_mode">Zoom originale beskeder for skærmtilpasning</string>
     <string name="title_advanced_contrast">Benyt høj kontrast til beskedtekst</string>
     <string name="title_advanced_monospaced">Benyt som standard monospatieret skrifttype til beskedtekst</string>
+    <string name="title_advanced_monospaced_pre">Benyt monospatieret skrifttype til præformateret tekst</string>
     <string name="title_advanced_text_color">Benyt tekstfarver</string>
     <string name="title_advanced_text_size">Benyt tekststørrelser</string>
     <string name="title_advanced_text_font">Benyt skrifttyper</string>
@@ -593,6 +595,7 @@
     <string name="title_edit_html">Redigér som HTML</string>
     <string name="title_sign_key">Signér nøgle: %1$s</string>
     <string name="title_last_connected">Sidst forbundet: %1$s</string>
+    <string name="title_backoff_until">Ventetid efter fejl: %1$s</string>
     <string name="title_storage_quota">Serverlagerpladsforbrug: %1$s/%2$s</string>
     <string name="title_pop_support">POP3-protokollen understøtter kun download og sletning af beskeder fra Indbakken. POP3 kan ikke markere beskeder som læste eller flytte dem mv. POP3 forbruger mere batteristrøm og data end IMAP, så overvej at benytte IMAP-protokollen, når det er muligt.</string>
     <string name="title_oauth_support">OAuth er uunderstøttet</string>
@@ -1049,7 +1052,9 @@
     <string name="title_legend_download_off">Download beskedindhold efter behov</string>
     <string name="title_legend_synchronize_on">Synkronisering slået til</string>
     <string name="title_legend_synchronize_off">Synkronisering slået fra</string>
+    <string name="title_legend_synchronize_poll">Synkronisér periodisk</string>
     <string name="title_legend_disconnected">Afbrudt</string>
+    <string name="title_legend_backoff">Ventetid efter fejl</string>
     <string name="title_legend_connecting">Tilslutter</string>
     <string name="title_legend_connected">Tilsluttet</string>
     <string name="title_legend_executing">Eksekverer operationer</string>

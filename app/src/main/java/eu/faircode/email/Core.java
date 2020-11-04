@@ -715,8 +715,14 @@ class Core {
         if (message.uid == null)
             throw new IllegalArgumentException("keyword/uid");
 
-        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER))
+        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
+            if ("$Forwarded".equals(keyword) && false) {
+                JSONArray janswered = new JSONArray();
+                janswered.put(true);
+                onAnswered(context, janswered, folder, message, ifolder);
+            }
             return;
+        }
 
         Message imessage = ifolder.getMessageByUID(message.uid);
         if (imessage == null)
@@ -1315,7 +1321,7 @@ class Core {
                         ifolder.open(Folder.READ_WRITE);
                     } catch (Throwable ex) {
                         Log.e(ex);
-                        state.error(new FolderClosedException(ifolder, "POP"));
+                        state.error(new FolderClosedException(ifolder, "POP", new Exception(ex)));
                     }
                 }
             }
@@ -4168,6 +4174,7 @@ class Core {
         private Semaphore semaphore = new Semaphore(0);
         private boolean running = true;
         private boolean recoverable = true;
+        private Throwable unrecoverable = null;
         private Long lastActivity = null;
 
         private boolean process = false;
@@ -4244,6 +4251,9 @@ class Core {
             if (ex instanceof OperationCanceledException)
                 recoverable = false;
 
+            if (!recoverable)
+                unrecoverable = ex;
+
             if (!backingoff) {
                 thread.interrupt();
                 yield();
@@ -4295,6 +4305,10 @@ class Core {
 
         boolean isRecoverable() {
             return recoverable;
+        }
+
+        Throwable getUnrecoverable() {
+            return unrecoverable;
         }
 
         void join(Thread thread) {

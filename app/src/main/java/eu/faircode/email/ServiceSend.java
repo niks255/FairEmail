@@ -200,7 +200,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     NotificationCompat.Builder getNotificationService() {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "send")
-                        .setSmallIcon(R.drawable.twotone_send_24)
+                        .setSmallIcon(R.drawable.baseline_send_white_24)
                         .setContentTitle(getString(R.string.title_notification_sending))
                         .setContentIntent(getPendingIntent(this))
                         .setAutoCancel(false)
@@ -678,6 +678,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         // Check sent message
         if (sid != null) {
             try {
+                // Some email servers are slow with adding sent messages
                 Thread.sleep(EXISTS_DELAY);
             } catch (InterruptedException ex) {
                 Log.e(ex);

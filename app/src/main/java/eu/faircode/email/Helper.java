@@ -37,6 +37,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -423,6 +424,18 @@ public class Helper {
         return null;
     }
 
+    static boolean isCharging(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return false;
+        try {
+            BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+            return bm.isCharging();
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
     static boolean isPlayStoreInstall() {
         return BuildConfig.PLAY_STORE_RELEASE;
     }
@@ -483,6 +496,15 @@ public class Helper {
     }
 
     static void share(Context context, File file, String type, String name) {
+        try {
+            _share(context, file, type, name);
+        } catch (Throwable ex) {
+            // java.lang.IllegalArgumentException: Failed to resolve canonical path for ...
+            Log.e(ex);
+        }
+    }
+
+    static void _share(Context context, File file, String type, String name) {
         // https://developer.android.com/reference/android/support/v4/content/FileProvider
         Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
         Log.i("uri=" + uri);
@@ -561,6 +583,11 @@ public class Helper {
     }
 
     static void view(Context context, Uri uri, boolean browse, boolean task) {
+        if (context == null) {
+            Log.e(new Throwable("view"));
+            return;
+        }
+
         boolean has = hasCustomTabs(context, uri);
         Log.i("View=" + uri + " browse=" + browse + " task=" + task + " has=" + has);
 
@@ -1003,7 +1030,10 @@ public class Helper {
         if (name == null)
             return null;
 
-        return name.replaceAll("[?:\"*|/\\\\<>]", "_");
+        return name
+                // Canonical files names cannot contain NUL
+                .replace("\0", "")
+                .replaceAll("[?:\"*|/\\\\<>]", "_");
     }
 
     static String getExtension(String filename) {

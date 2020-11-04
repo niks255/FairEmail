@@ -95,6 +95,8 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
         private ImageView ivState;
         private TextView tvHost;
         private TextView tvLast;
+        private TextView tvUsage;
+        private TextView tvBackoff;
         private TextView tvQuota;
         private TextView tvMaxSize;
         private TextView tvIdentity;
@@ -121,6 +123,8 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
             ivState = itemView.findViewById(R.id.ivState);
             tvHost = itemView.findViewById(R.id.tvHost);
             tvLast = itemView.findViewById(R.id.tvLast);
+            tvUsage = itemView.findViewById(R.id.tvUsage);
+            tvBackoff = itemView.findViewById(R.id.tvBackoff);
             tvQuota = itemView.findViewById(R.id.tvQuota);
             tvMaxSize = itemView.findViewById(R.id.tvMaxSize);
             tvIdentity = itemView.findViewById(R.id.tvIdentity);
@@ -182,8 +186,13 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                 ivState.setImageResource(R.drawable.twotone_cancel_24);
                 ivState.setContentDescription(context.getString(R.string.title_legend_closing));
             } else {
-                ivState.setImageResource(R.drawable.twotone_cloud_off_24);
-                ivState.setContentDescription(context.getString(R.string.title_legend_disconnected));
+                if (account.backoff_until == null) {
+                    ivState.setImageResource(R.drawable.twotone_cloud_off_24);
+                    ivState.setContentDescription(context.getString(R.string.title_legend_disconnected));
+                } else {
+                    ivState.setImageResource(R.drawable.twotone_update_24);
+                    ivState.setContentDescription(context.getString(R.string.title_legend_backoff));
+                }
             }
             ivState.setVisibility(account.synchronize || account.state != null ? View.VISIBLE : View.INVISIBLE);
 
@@ -195,6 +204,17 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                                             "/" + account.keep_alive_ok +
                                             "/" + account.keep_alive_failed +
                                             "/" + account.keep_alive_succeeded : "")));
+
+            tvBackoff.setText(context.getString(R.string.title_backoff_until,
+                    account.backoff_until == null ? "-" : DTF.format(account.backoff_until)));
+            tvBackoff.setVisibility(account.backoff_until == null || !settings ? View.GONE : View.VISIBLE);
+
+            Integer percent = null;
+            if (!settings && account.quota_usage != null && account.quota_limit != null)
+                percent = Math.round((float) account.quota_usage * 100 / account.quota_limit);
+
+            tvUsage.setText(percent == null ? null : NF.format(percent) + "%");
+            tvUsage.setVisibility(percent == null ? View.GONE : View.VISIBLE);
             tvQuota.setText(context.getString(R.string.title_storage_quota,
                     (account.quota_usage == null ? "-" : Helper.humanReadableByteCount(account.quota_usage)),
                     (account.quota_limit == null ? "-" : Helper.humanReadableByteCount(account.quota_limit))));
@@ -441,7 +461,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
         this.colorUnread = (highlight_unread ? colorHighlight : Helper.resolveColor(context, R.attr.colorUnread));
         this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
 
-        this.DTF = Helper.getDateTimeInstance(context, DateFormat.SHORT, DateFormat.SHORT);
+        this.DTF = Helper.getDateTimeInstance(context, DateFormat.SHORT, DateFormat.MEDIUM);
 
         setHasStableIds(true);
 

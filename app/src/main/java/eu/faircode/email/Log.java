@@ -33,6 +33,7 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteFullException;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
+import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -1004,6 +1005,9 @@ public class Log {
     }
 
     static String formatThrowable(Throwable ex, String separator, boolean sanitize) {
+        if (ex == null)
+            return null;
+
         if (sanitize) {
             if (ex instanceof MessageRemovedException)
                 return null;
@@ -1288,6 +1292,7 @@ public class Log {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             ignoring = pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
         sb.append(String.format("Battery optimizations: %b\r\n", !ignoring));
+        sb.append(String.format("Charging: %b\r\n", Helper.isCharging(context)));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             UsageStatsManager usm = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -1502,14 +1507,17 @@ public class Log {
                         " type=" + ani.getType() + "/" + ani.getTypeName() +
                         "\r\n\r\n");
 
-            Network active = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                active = cm.getActiveNetwork();
-
+            Network active = ConnectionHelper.getActiveNetwork(context);
             for (Network network : cm.getAllNetworks()) {
+                size += write(os, (network.equals(active) ? "active=" : "network=") + network + "\r\n");
+
                 NetworkCapabilities caps = cm.getNetworkCapabilities(network);
-                size += write(os, (network.equals(active) ? "active=" : "network=") + network +
-                        " capabilities=" + caps + "\r\n\r\n");
+                size += write(os, " caps=" + caps + "\r\n");
+
+                LinkProperties props = cm.getLinkProperties(network);
+                size += write(os, " props=" + props + "\r\n");
+
+                size += write(os, "\r\n");
             }
 
             size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n\r\n");
@@ -1519,7 +1527,6 @@ public class Log {
             size += write(os, "Suitable=" + state.isSuitable() + "\r\n");
             size += write(os, "Unmetered=" + state.isUnmetered() + "\r\n");
             size += write(os, "Roaming=" + state.isRoaming() + "\r\n");
-            size += write(os, "Type=" + state.getType() + "\r\n\r\n");
         }
 
         db.attachment().setDownloaded(attachment.id, size);

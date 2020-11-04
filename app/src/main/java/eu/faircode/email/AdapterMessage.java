@@ -1540,7 +1540,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (attachment.available)
                                 if (attachment.isInline() && attachment.isImage())
                                     inlineImages++;
-                                else if ("message/rfc822".equals(attachment.type))
+                                else if ("message/rfc822".equals(attachment.getMimeType()))
                                     embeddedMessages++;
 
                     int lastInlineImages = 0;
@@ -1551,7 +1551,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (attachment.available)
                                 if (attachment.isInline() && attachment.isImage())
                                     lastInlineImages++;
-                                else if ("message/rfc822".equals(attachment.type))
+                                else if ("message/rfc822".equals(attachment.getMimeType()))
                                     lastEmbeddedMessages++;
 
                     boolean show_images = properties.getValue("images", message.id);
@@ -2062,7 +2062,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     // Add embedded messages
                     for (EntityAttachment attachment : attachments)
-                        if (attachment.available && "message/rfc822".equals(attachment.type))
+                        if (attachment.available && "message/rfc822".equals(attachment.getMimeType()))
                             try (FileInputStream fis = new FileInputStream(attachment.getFile(context))) {
                                 Properties props = MessageHelper.getSessionProperties();
                                 Session isession = Session.getInstance(props, null);
@@ -3545,12 +3545,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 .putExtra("id", message.id));
             else {
                 boolean expanded = !properties.getValue("expanded", message.id);
-
-                properties.setExpanded(message, expanded);
-
-                // Needed to scroll to item after collapsing other items
-                if (expanded)
-                    properties.scrollTo(getAdapterPosition(), 0);
+                properties.setExpanded(message, expanded, expanded);
             }
         }
 
@@ -4298,7 +4293,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     message.ui_seen = args.getBoolean("seen");
                     message.unseen = (message.ui_seen ? 0 : message.count);
-                    properties.setExpanded(message, false);
+                    properties.setExpanded(message, false, false);
                 }
 
                 @Override
@@ -4775,22 +4770,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (message.raw == null || !message.raw) {
                 properties.setValue("raw_send", message.id, true);
                 rawDownload(message);
-            } else {
-                File file = message.getRawFile(context);
-                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
-
-                Intent send = new Intent(Intent.ACTION_SEND);
-                send.putExtra(Intent.EXTRA_STREAM, uri);
-                send.setType("message/rfc822");
-                send.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
+            } else
                 try {
+                    File file = message.getRawFile(context);
+                    Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+
+                    Intent send = new Intent(Intent.ACTION_SEND);
+                    send.putExtra(Intent.EXTRA_STREAM, uri);
+                    send.setType("message/rfc822");
+                    send.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
                     context.startActivity(send);
-                } catch (ActivityNotFoundException ex) {
-                    Log.w(ex);
-                    ToastEx.makeText(context, context.getString(R.string.title_no_viewer, send), Toast.LENGTH_LONG).show();
+                } catch (Throwable ex) {
+                    // java.lang.IllegalArgumentException: Failed to resolve canonical path for ...
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
-            }
         }
 
         private void rawDownload(TupleMessageEx message) {
@@ -5804,8 +5798,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             return;
         }
 
+        boolean scroll = false;
+        if (viewType == ViewType.THREAD) {
+            scroll = properties.getValue("scroll", message.id);
+            properties.setValue("scroll", message.id, false);
+        }
+
         holder.unwire();
-        holder.bindTo(message, false);
+        holder.bindTo(message, scroll);
         holder.wire();
     }
 
@@ -5887,7 +5887,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         boolean getValue(String name, long id);
 
-        void setExpanded(TupleMessageEx message, boolean expanded);
+        void setExpanded(TupleMessageEx message, boolean expanded, boolean scroll);
 
         void setSize(long id, Float size);
 
