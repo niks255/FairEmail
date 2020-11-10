@@ -373,7 +373,6 @@
     <string name="title_advanced_fts">Zgradi iskalno kazalo</string>
     <string name="title_advanced_fts_indexed">V kazalo je bilo dodanih %1$d/%2$d sporočil (%3$s)</string>
     <string name="title_advanced_watchdog">Občasno preveri, ali je FairEmail še vedno dejaven</string>
-    <string name="title_advanced_updates">Preveri za posodobitve</string>
     <string name="title_advanced_experiments">Preizkusne značilnosti</string>
     <string name="title_advanced_crash_reports">Pošiljaj poročila o napakah</string>
     <string name="title_advanced_debug">Razhroščevalni način</string>
@@ -532,7 +531,6 @@
     <string name="title_empty_spam_ask">Trajno izbriši vsiljena sporočila?</string>
     <string name="title_empty_trash_all_ask">Trajno izbriši sporočila iz smeti iz vseh računov?</string>
     <string name="title_empty_spam_all_ask">Trajno izbriši vsiljena sporočila iz vseh računov?</string>
-    <string name="title_delete_operation">Izbriši opravila s sporočilom o napaki?</string>
     <string name="title_delete_contacts">Izbriši vse krajevne stike?</string>
     <string name="title_no_operations">Ni opravil na čakanju.</string>
     <string name="title_hint_operations">Izbris opravil lahko povzroči izginjanje sporočil in težave s sinhronizacijo.</string>

@@ -207,6 +207,7 @@
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
     <string name="title_setup_doze">Setup battery optimizations</string>
     <string name="title_setup_doze_remark">To reliably receive email</string>
+    <string name="title_setup_doze_hint">Although this may sound contradictory, turning off battery optimizations will result in less battery usage</string>
     <string name="title_setup_doze_instructions">In the next dialog, select \"All apps\" at the top, select this app and select and confirm \"Don\'t optimize\"</string>
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
@@ -329,6 +330,7 @@
     <string name="title_advanced_rlah">Roam like at home</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
+    <string name="title_advanced_tcp_keep_alive" translatable="false">TCP keep alive</string>
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
 
@@ -484,6 +486,7 @@
     <string name="title_advanced_openpgp">OpenPGP provider</string>
     <string name="title_advanced_autocrypt">Use Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt mutual mode</string>
+    <string name="title_advanced_encrypt_subject">Encrypt subject</string>
     <string name="title_advanced_check_certificate">Check public key on sending</string>
     <string name="title_advanced_manage_certificates">Manage public keys</string>
     <string name="title_advanced_import_key">Import private key</string>
@@ -509,7 +512,7 @@
     <string name="title_advanced_auth_login" translatable="false">LOGIN</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_optimize">Automatically optimize</string>
-    <string name="title_advanced_updates">Check for updates</string>
+    <string name="title_advanced_updates">Check for GitHub updates</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_query_threads">Limit parallel database access</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
@@ -548,6 +551,7 @@
     <string name="title_advanced_metered_hint">Metered connections are generally mobile connections or paid Wi-Fi hotspots</string>
     <string name="title_advanced_metered_warning">Disabling this option will disable receiving and sending messages on mobile internet connections</string>
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Enabling this can cause connection problems on some devices</string>
     <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
     <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers, which can lead to connection problems</string>
     <string name="title_advanced_roaming_hint">Messages headers will always be fetched when roaming. You can use the device\'s roaming setting to disable internet while roaming.</string>
@@ -737,7 +741,13 @@
     <string name="title_empty_trash_all_ask">Delete all trashed messages of all accounts permanently?</string>
     <string name="title_empty_spam_all_ask">Delete all spam messages of all accounts permanently?</string>
     <string name="title_empty_all">This will delete all messages both from the device and the server</string>
-    <string name="title_delete_operation">Delete operations with an error message?</string>
+    <string name="title_delete_operation_title">Delete operations</string>
+    <string name="title_delete_operation_error">With an error message</string>
+    <string name="title_delete_operation_fetch">Fetch operations</string>
+    <string name="title_delete_operation_move">Move operations</string>
+    <string name="title_delete_operation_flag">Flag operations</string>
+    <string name="title_delete_operation_delete">Delete operations</string>
+    <string name="title_delete_operation_deleted">%1$d operations deleted</string>
     <string name="title_delete_contacts">Delete all local contacts?</string>
     <string name="title_no_operations">No pending operations</string>
     <string name="title_hint_operations">Deleting operations can result in disappearing messages and synchronization problems</string>
@@ -760,6 +770,8 @@
     <string name="title_keep_days">Keep messages (days)</string>
     <string name="title_keep_days_remark">Old messages will be removed from the device, but will remain on the server</string>
     <string name="title_keep_all">Keep all messages</string>
+    <string name="title_poll_system">Set system folders to periodically check for new messages</string>
+    <string name="title_poll_user">Set user folders to periodically check for new messages</string>
     <string name="title_auto_trash">Automatically move old messages to trash</string>
     <string name="title_auto_delete">Automatically permanently delete old messages</string>
     <string name="title_auto_delete_hint">Old messages are messages that are no longer kept on the device</string>
@@ -923,6 +935,7 @@
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Sent:</string>
     <string name="title_received">Received:</string>
+    <string name="title_stored">Stored:</string>
     <string name="title_size">Size:</string>
     <string name="title_language">Language:</string>
     <string name="title_subject">Subject:</string>

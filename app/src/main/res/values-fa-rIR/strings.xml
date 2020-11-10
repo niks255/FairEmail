@@ -363,7 +363,6 @@
     <string name="title_advanced_language_system">سیستم</string>
     <string name="title_advanced_watchdog">بطور دوره ای بررسی کن که آیا FairEmail هنوز فعال است یا خیر</string>
     <string name="title_advanced_optimize">خودکار بهینه‌سازی کن</string>
-    <string name="title_advanced_updates">بررسی بروزرسانی ها</string>
     <string name="title_advanced_experiments">امتحان ویژگی‌های آزمایشی</string>
     <string name="title_advanced_query_threads">دسترسی موازی پایگاه‌داده را محدود کن</string>
     <string name="title_advanced_crash_reports">ارسال گزارش‌های خطا</string>
@@ -489,7 +488,6 @@
     <string name="title_empty_trash_ask">پیام‌های سطل آشغال برای همیشه پاک شوند?</string>
     <string name="title_empty_spam_ask">پیام‌های هرزنامه برای همیشه پاک شوند؟</string>
     <string name="title_empty_spam_all_ask">همه پیام‌های هرزنامه از همه حساب‌ها برای همیشه حذف شود؟</string>
-    <string name="title_delete_operation">حذف عملیات با دریافت پیام خطا؟</string>
     <string name="title_delete_contacts">حذف همه مخاطبین محلی؟</string>
     <string name="title_no_operations">عملیاتی در انتظار وجود ندارد </string>
     <string name="title_hint_operations">عملیات‌های حذف می‌تواند موجب ناپدید شدن پیام‌ها و مشکلات همگام‌سازی شود</string>

@@ -393,7 +393,6 @@
     <string name="title_advanced_fts">Bygg søkeindeks</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d meldinger indeksert (%3$s)</string>
     <string name="title_advanced_watchdog">Kontroller regelmessig om FairEmail fortsatt er aktiv</string>
-    <string name="title_advanced_updates">Se etter oppdateringer</string>
     <string name="title_advanced_experiments">Prøv eksperimentelle funksjoner</string>
     <string name="title_advanced_crash_reports">Send feilrapporter</string>
     <string name="title_advanced_debug">Feilsøkingsmodus</string>
@@ -539,7 +538,6 @@
     <string name="title_edit_channel">Rediger varselkanal</string>
     <string name="title_delete_channel">Slett varselkanal</string>
     <string name="title_create_sub_folder">Lag undermappe</string>
-    <string name="title_delete_operation">Slett operasjoner med en feilmelding?</string>
     <string name="title_delete_contacts">Slette alle lokale kontakter?</string>
     <string name="title_no_operations">Ingen ventende operasjoner</string>
     <string name="title_hint_operations">Slette operasjoner kan føre til at meldinger og synkroniseringsproblemer forsvinner</string>

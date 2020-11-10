@@ -11,7 +11,7 @@ At the bottom, you can find out how to ask other questions, request features, an
 * [Planned features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Frequently requested features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Frequently Asked Questions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-support)
+* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
 ## Authorizing accounts
 
@@ -2140,6 +2140,8 @@ It is also possible to create [rules](#user-content-faq71) with a time condition
 This way it is possible to snooze business related messages until the start of the business hours.
 This also means that the messages will be on your device for when there is no internet connection, for example when flying.
 
+Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app,
+which could be used to (not) silence specific notifications.
 
 Scheduling is a pro feature.
 
@@ -2292,6 +2294,9 @@ This is why texts with dots are sometimes incorrectly recognized as links, which
 
 Links for the tel, geo, rtsp and xmpp protocols will be recognized too,
 but links for less usual or less safe protocols like telnet and ftp will not be recognized.
+The regex to recognize links is already *very* complex and adding more protocols will make it only slower and possibly cause errors.
+
+<br />
 
 <a name="faq91"></a>
 **~~(91) Can you add periodical synchronization to save battery power?~~**
@@ -2300,7 +2305,6 @@ but links for less usual or less safe protocols like telnet and ftp will not be 
 ~~so periodically synchronizing messages will not result in saving battery power, more likely the contrary.~~
 
 ~~See [this FAQ](#user-content-faq39) about optimizing battery usage.~~
-
 
 <br />
 
@@ -2697,7 +2701,7 @@ So, basically the only thing I can do, is give some advice:
 * Make sure you installed FairEmail via the right Google account if you configured multiple Google accounts on your device
 * Make sure the Play store app is up to date, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
 * Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers
-* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases
+* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it help to tap the *buy* button
 
 You can also try to clear the cache of the Play store app via the Android apps settings.
 Restarting the device might be necessary to let the Play store recognize the purchase correctly.
@@ -3356,10 +3360,17 @@ but unfortunately Android themes are fixed, see for example [here](https://stack
 <br />
 
 
-## Support
+## Get support
+
+FairEmail is supported on smartphones, tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported.
+The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release.
 This also means that downgrading is not supported.
+
+There is no support on things that are not directly related to FairEmail.
+
+There is no support on building and developing things by yourself.
 
 Requested features should:
 
@@ -3369,10 +3380,12 @@ Requested features should:
 * comply with common standards (IMAP, SMTP, etc)
 
 Features not fulfilling these requirements will likely be rejected.
-This is also to keep maintenance and support in the long run feasible.
+This is also to keep maintenance and support in the long term feasible.
 
 If you have a question, want to request a feature or report a bug, please use [this form](https://contact.faircode.eu/?product=fairemailsupport).
 
 GitHub issues are disabled due to frequent misusage.
+
+<br />
 
 Copyright &copy; 2018-2020 Marcel Bokhorst.

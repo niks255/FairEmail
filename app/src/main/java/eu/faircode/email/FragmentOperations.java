@@ -29,7 +29,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -130,29 +132,109 @@ public class FragmentOperations extends FragmentBase {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            final View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_delete_operations, null);
+            final CheckBox cbError = dview.findViewById(R.id.cbError);
+            final CheckBox cbFetch = dview.findViewById(R.id.cbFetch);
+            final CheckBox cbMove = dview.findViewById(R.id.cbMove);
+            final CheckBox cbFlag = dview.findViewById(R.id.cbFlag);
+            final CheckBox cbDelete = dview.findViewById(R.id.cbDelete);
+
             return new AlertDialog.Builder(getContext())
-                    .setMessage(R.string.title_delete_operation)
+                    .setView(dview)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new SimpleTask<Void>() {
+                            Bundle args = new Bundle();
+                            args.putBoolean("error", cbError.isChecked());
+                            args.putBoolean("fetch", cbFetch.isChecked());
+                            args.putBoolean("move", cbMove.isChecked());
+                            args.putBoolean("flag", cbFlag.isChecked());
+                            args.putBoolean("delete", cbDelete.isChecked());
+
+                            new SimpleTask<Integer>() {
                                 @Override
-                                protected Void onExecute(Context context, Bundle args) {
+                                protected void onPostExecute(Bundle args) {
+                                    ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                protected Integer onExecute(Context context, Bundle args) {
+                                    boolean error = args.getBoolean("error");
+                                    boolean fetch = args.getBoolean("fetch");
+                                    boolean move = args.getBoolean("move");
+                                    boolean flag = args.getBoolean("flag");
+                                    boolean delete = args.getBoolean("delete");
+
+                                    int deleted = 0;
                                     DB db = DB.getInstance(context);
-                                    List<EntityOperation> ops = db.operation().getOperationsError();
-                                    Log.i("Operations with error count=" + ops.size());
-                                    for (EntityOperation op : ops) {
-                                        Log.w("Deleting operation=" + op.id + " error=" + op.error);
-                                        if (op.message != null)
-                                            db.message().setMessageUiHide(op.message, false);
-                                        db.operation().deleteOperation(op.id);
+                                    try {
+                                        db.beginTransaction();
+
+                                        List<EntityOperation> ops = new ArrayList<>();
+
+                                        if (error)
+                                            addAll(ops, db.operation().getOperationsError());
+
+                                        if (fetch) {
+                                            addAll(ops, db.operation().getOperations(EntityOperation.FETCH));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.BODY));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.ATTACHMENT));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.HEADERS));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.SYNC));
+                                        }
+
+                                        if (move) {
+                                            addAll(ops, db.operation().getOperations(EntityOperation.MOVE));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.COPY));
+                                        }
+
+                                        if (flag) {
+                                            addAll(ops, db.operation().getOperations(EntityOperation.SEEN));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.ANSWERED));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.FLAG));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.KEYWORD));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.LABEL));
+                                        }
+
+                                        if (delete) {
+                                            addAll(ops, db.operation().getOperations(EntityOperation.DELETE));
+                                            addAll(ops, db.operation().getOperations(EntityOperation.PURGE));
+                                        }
+
+                                        for (EntityOperation op : ops) {
+                                            EntityLog.log(context, "Deleting operation=" + op.id + ":" + op.name + " error=" + op.error);
+                                            if (db.operation().deleteOperation(op.id) > 0) {
+                                                op.cleanup(context, false);
+                                                deleted++;
+                                            }
+                                        }
+
+                                        db.setTransactionSuccessful();
+                                    } finally {
+                                        db.endTransaction();
                                     }
-                                    return null;
+
+                                    return deleted;
+                                }
+
+                                @Override
+                                protected void onExecuted(Bundle args, Integer deleted) {
+                                    if (deleted == null)
+                                        deleted = -1;
+                                    ToastEx.makeText(
+                                            getContext(),
+                                            getString(R.string.title_delete_operation_deleted, deleted),
+                                            Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
                                 protected void onException(Bundle args, Throwable ex) {
                                     Log.unexpectedError(getParentFragmentManager(), ex);
+                                }
+
+                                private void addAll(List<EntityOperation> list, List<EntityOperation> sublist) {
+                                    if (sublist != null)
+                                        list.addAll(sublist);
                                 }
                             }.execute(getContext(), getActivity(), new Bundle(), "operations:delete");
                         }

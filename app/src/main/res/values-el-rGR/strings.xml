@@ -163,6 +163,7 @@
     <string name="title_setup_permissions_remark">Για πρόσβαση στις πληροφορίες επαφών (προαιρετικό)</string>
     <string name="title_setup_doze">Ρυθμίσεις βελτιστοποίησης μπαταρίας</string>
     <string name="title_setup_doze_remark">Για λήψη μηνυμάτων χωρίς καθυστερήσεις</string>
+    <string name="title_setup_doze_hint">Αν και μπορεί να ακούγεται αντιφατικό, η απενεργοποίηση των βελτιστοποιήσεων μπαταρίας θα έχει ως αποτέλεσμα λιγότερη χρήση μπαταρίας</string>
     <string name="title_setup_doze_instructions">Στην επόμενη οθόνη, επιλέξτε \"Όλες οι εφαρμογές\" στο πάνω μέρος, διαλέξτε το FairEmail από τη λίστα των εφαρμογών, επιλέξτε: \"Να μην γίνεται βελτιστοποίηση\", και επιβεβαιώστε την επιλογή αυτή</string>
     <string name="title_setup_doze_battery">Η μπαταρία χρησιμοποιείται παραπάνω από το κανονικό;</string>
     <string name="title_setup_doze_stopped">Σταμάτησε ο συγχρονισμός;</string>
@@ -413,6 +414,7 @@
     <string name="title_advanced_openpgp">Πάροχος OpenPGP</string>
     <string name="title_advanced_autocrypt">Χρήση Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Αμοιβαία λειτουργία Autocrypt</string>
+    <string name="title_advanced_encrypt_subject">Κρυπτογράφηση θέματος</string>
     <string name="title_advanced_check_certificate">Επαλήθευση δημόσιου κλειδιού κατά την αποστολή</string>
     <string name="title_advanced_manage_certificates">Διαχείριση δημόσιων κλειδιών</string>
     <string name="title_advanced_import_key">Εισαγωγή ιδιωτικού κλειδιού</string>
@@ -431,7 +433,7 @@
     <string name="title_advanced_language_system">Σύστημα</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_optimize">Αυτόματη βελτιστοποίηση</string>
-    <string name="title_advanced_updates">Έλεγχος για ενημερώσεις</string>
+    <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
     <string name="title_advanced_experiments">Δοκιμή πειραματικών χαρακτηριστικών</string>
     <string name="title_advanced_query_threads">Περιορισμός παράλληλων προσβάσεων στη βάση δεδομένων</string>
     <string name="title_advanced_crash_reports">Αποστολή αναφοράς σφαλμάτων</string>
@@ -459,6 +461,7 @@
     <string name="title_advanced_metered_hint">Οι συνδέσεις με ογκοχρέωση είναι, γενικά, οι κινητές συνδέσεις διαδικτύου ή τα επί πληρωμή σημεία Wi-Fi</string>
     <string name="title_advanced_metered_warning">Αν απενεργοποιηθεί, θα απενεργοποιηθούν η λήψη και η αποστολή μηνυμάτων σε κινητές συνδέσεις διαδικτύου</string>
     <string name="title_advanced_rlah_hint">Υπό την προϋπόθεση ότι δεν λαμβάνει χώρα περιαγωγή εντός της ΕΕ</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Αν ενεργοποιηθεί, μπορεί να προκαλέσει προβλήματα σύνδεσης σε ορισμένες συσκευές</string>
     <string name="title_advanced_timeout_hint">Το χρονικό όριο για τις διαδικασίες ανάγνωσης/εγγραφής θα τεθεί στο διπλάσιο από εκείνο για τη λήξη της σύνδεσης. Υψηλότερες τιμές συνεπάγονται μεγαλύτερη χρήση μπαταρίας.</string>
     <string name="title_advanced_ssl_harden_hint">Αν ενεργοποιηθεί, θα απενεργοποιηθούν τα ασθενή πρωτόκολλα SSL και οι αλγόριθμοι κρυπτογράφησης, το οποίο ενδέχεται να οδηγήσει σε προβλήματα σύνδεσης</string>
     <string name="title_advanced_roaming_hint">Οι κεφαλίδες μηνυμάτων θα λαμβάνονται πάντα κατά την περιαγωγή. Από τις ρυθμίσεις περιαγωγής της συσκευής σας, μπορείτε να απενεργοποίησετε το ίντερνετ κατά την περιαγωγή.</string>
@@ -629,7 +632,11 @@
     <string name="title_empty_trash_all_ask">Οριστική διαγραφή όλων των απορριμμάτων όλων των λογαριασμών;</string>
     <string name="title_empty_spam_all_ask">Οριστική διαγραφή όλων των ανεπιθύμητων όλων των λογαριασμών;</string>
     <string name="title_empty_all">Θα διαγράψει όλα τα μηνύματα και από τη συσκευή και από τον εξυπηρετητή</string>
-    <string name="title_delete_operation">Διαγραφή των δραστηριοτήτων με ένα μήνυμα σφάλματος;</string>
+    <string name="title_delete_operation_title">Διαγραφή δραστηριοτήτων</string>
+    <string name="title_delete_operation_error">Με ένα μήνυμα σφάλματος</string>
+    <string name="title_delete_operation_move">Δραστηριότητες μετακίνησης</string>
+    <string name="title_delete_operation_delete">Δραστηριότητες διαγραφής</string>
+    <string name="title_delete_operation_deleted">%1$d δραστηριότητες διεγράφησαν</string>
     <string name="title_delete_contacts">Διαγραφή όλων των τοπικών επαφών;</string>
     <string name="title_no_operations">Καμία εκκρεμής δραστηριότητα</string>
     <string name="title_hint_operations">Η διαγραφή των δραστηριοτήτων μπορεί να οδηγήσει σε εξαφανισμένα μηνύματα και προβλήματα συγχρονισμού</string>
@@ -801,6 +808,7 @@
     <string name="title_via_identity">Μέσω:</string>
     <string name="title_sent">Απεστάλη:</string>
     <string name="title_received">Λήφθηκε:</string>
+    <string name="title_stored">Αποθηκεύτηκε:</string>
     <string name="title_size">Μέγεθος:</string>
     <string name="title_language">Γλώσσα:</string>
     <string name="title_subject">Θέμα:</string>

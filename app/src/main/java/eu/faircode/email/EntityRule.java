@@ -447,6 +447,12 @@ public class EntityRule {
         if (answer == null)
             throw new IllegalArgumentException("Rule answer not found name=" + name);
 
+        EntityFolder outbox = db.folder().getOutbox();
+        if (outbox == null) {
+            outbox = EntityFolder.getOutbox();
+            outbox.id = db.folder().insertFolder(outbox);
+        }
+
         Address[] from = new InternetAddress[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())};
 
         // Prevent loop
@@ -463,7 +469,7 @@ public class EntityRule {
 
         EntityMessage reply = new EntityMessage();
         reply.account = message.account;
-        reply.folder = db.folder().getOutbox().id;
+        reply.folder = outbox.id;
         reply.identity = identity.id;
         reply.msgid = EntityMessage.generateMessageId();
 
@@ -719,6 +725,7 @@ public class EntityRule {
         JSONObject jaction = new JSONObject();
         jaction.put("type", TYPE_MOVE);
         jaction.put("target", junk.id);
+        jaction.put("seen", true);
 
         EntityRule rule = new EntityRule();
         rule.folder = message.folder;

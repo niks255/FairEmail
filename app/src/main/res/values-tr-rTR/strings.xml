@@ -432,7 +432,6 @@
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_watchdog">Düzenli aralıklarla FairEmail hala etkin mi diye kontrol et</string>
     <string name="title_advanced_optimize">Otomatik olarak optimize et</string>
-    <string name="title_advanced_updates">Güncellemelere bak</string>
     <string name="title_advanced_experiments">Deneysel özellikleri deneyin</string>
     <string name="title_advanced_query_threads">Paralel veritabanı erişimini sınırla</string>
     <string name="title_advanced_crash_reports">Hata raporları gönder</string>
@@ -631,7 +630,6 @@
     <string name="title_empty_trash_all_ask">Tüm hesapların çöpe atılan tüm mesajları kalıcı olarak silinsin mi?</string>
     <string name="title_empty_spam_all_ask">Tüm hesapların tüm spam mesajları kalıcı olarak silinsin mi?</string>
     <string name="title_empty_all">Bu, tüm mesajları hem cihazdan hem de sunucudan silmektedir/siler</string>
-    <string name="title_delete_operation">Hata iletisi olan işlemler silinsin mi?</string>
     <string name="title_delete_contacts">Tüm yerel rehber silinsin mi?</string>
     <string name="title_no_operations">Bekleyen işlem yok</string>
     <string name="title_hint_operations">İşlemleri silmek mesajların kaybolmasına ve senkronizasyon sorunlarına neden olabilir</string>

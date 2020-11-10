@@ -1670,7 +1670,7 @@ public class FragmentCompose extends FragmentBase {
 
                                 String html = EntityAnswer.replacePlaceholders(answer.text, to);
 
-                                Spanned spanned = HtmlHelper.fromHtml(html, false, new Html.ImageGetter() {
+                                Spanned spanned = HtmlHelper.fromHtml(html, new Html.ImageGetter() {
                                     @Override
                                     public Drawable getDrawable(String source) {
                                         return ImageHelper.decodeImage(getContext(), working, source, true, zoom, 1.0f, etBody);
@@ -2248,7 +2248,7 @@ public class FragmentCompose extends FragmentBase {
                 args.putInt("start", start);
 
                 // TODO: double conversion
-                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, context), false, new Html.ImageGetter() {
+                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, context), new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
@@ -4256,6 +4256,7 @@ public class FragmentCompose extends FragmentBase {
             boolean notext = args.getBoolean("notext");
             Bundle extras = args.getBundle("extras");
 
+            boolean dirty = false;
             EntityMessage draft;
 
             DB db = DB.getInstance(context);
@@ -4274,6 +4275,7 @@ public class FragmentCompose extends FragmentBase {
                 Log.i("Load action id=" + draft.id + " action=" + getActionName(action));
 
                 if (action == R.id.action_delete) {
+                    dirty = true;
                     boolean discard_delete = prefs.getBoolean("discard_delete", false);
                     EntityFolder trash = db.folder().getFolderByType(draft.account, EntityFolder.TRASH);
                     if (empty || trash == null || discard_delete)
@@ -4289,8 +4291,6 @@ public class FragmentCompose extends FragmentBase {
                         }
                     });
                 } else {
-                    boolean dirty = false;
-
                     // Move draft to new account
                     if (draft.account != aid && aid >= 0) {
                         Log.i("Account changed");
@@ -4777,7 +4777,8 @@ public class FragmentCompose extends FragmentBase {
                 db.endTransaction();
             }
 
-            ServiceSynchronize.eval(context, "compose/action");
+            if (dirty)
+                ServiceSynchronize.eval(context, "compose/action");
 
             if (action == R.id.action_send)
                 if (draft.ui_snoozed == null)
@@ -5023,7 +5024,7 @@ public class FragmentCompose extends FragmentBase {
                 Elements ref = doc.select("div[fairemail=reference]");
                 ref.remove();
 
-                Spanned spannedBody = HtmlHelper.fromDocument(context, doc, false, new Html.ImageGetter() {
+                Spanned spannedBody = HtmlHelper.fromDocument(context, doc, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
@@ -5051,7 +5052,7 @@ public class FragmentCompose extends FragmentBase {
                 if (!ref.isEmpty()) {
                     Document dref = JsoupEx.parse(ref.outerHtml());
                     Document quote = HtmlHelper.sanitizeView(context, dref, show_images);
-                    spannedRef = HtmlHelper.fromDocument(context, quote, true,
+                    spannedRef = HtmlHelper.fromDocument(context, quote,
                             new Html.ImageGetter() {
                                 @Override
                                 public Drawable getDrawable(String source) {
@@ -5074,9 +5075,9 @@ public class FragmentCompose extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, Spanned[] text) {
                 etBody.setText(text[0]);
-                if (scroll && text[0] != null)
-                    etBody.setSelection(text[0].length());
-                else
+                if (scroll)
+                    etBody.setSelection(text[0] == null ? 0 : text[0].length());
+                else if (state != State.LOADED)
                     etBody.setSelection(0);
                 grpBody.setVisibility(View.VISIBLE);
 
@@ -5096,6 +5097,8 @@ public class FragmentCompose extends FragmentBase {
 
                 setBodyPadding();
 
+                if (state == State.LOADED)
+                    return;
                 state = State.LOADED;
 
                 final Context context = getContext();
@@ -5152,7 +5155,7 @@ public class FragmentCompose extends FragmentBase {
 
             Spanned signature = null;
             if (identity != null && !TextUtils.isEmpty(identity.signature))
-                signature = HtmlHelper.fromHtml(identity.signature, false, new Html.ImageGetter() {
+                signature = HtmlHelper.fromHtml(identity.signature, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(getContext(), working, source, true, 0, 1.0f, tvSignature);

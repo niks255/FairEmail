@@ -164,6 +164,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_setup_permissions_remark">Um auf Kontaktinformationen zuzugreifen (optional)</string>
     <string name="title_setup_doze">Akkuoptimierungen einrichten</string>
     <string name="title_setup_doze_remark">Um Nachrichten zuverlässig abzurufen</string>
+    <string name="title_setup_doze_hint">Auch wenn es widersprüchlich klingt, wird das Ausschalten der Akkuoptimierung zu weniger Akkuverbrauch führen</string>
     <string name="title_setup_doze_instructions">Bitte oben im folgenden Auswahldialog »Alle Apps« aufrufen und anschließend FairEmail auswählen, danach die Option »Nicht optimieren« mit »Fertig« bestätigen.</string>
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
@@ -414,6 +415,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_openpgp">OpenPGP-Anbieter</string>
     <string name="title_advanced_autocrypt">Autocrypt verwenden</string>
     <string name="title_advanced_autocrypt_mutual">Gegenseitiger Autocrypt-Modus</string>
+    <string name="title_advanced_encrypt_subject">Betreff verschlüsseln</string>
     <string name="title_advanced_check_certificate">Öffentlichen Schlüssel beim Senden überprüfen</string>
     <string name="title_advanced_manage_certificates">Öffentliche Schlüssel verwalten</string>
     <string name="title_advanced_import_key">Privaten Schlüssel importieren</string>
@@ -433,7 +435,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_optimize">Automatisch optimieren</string>
-    <string name="title_advanced_updates">Nach Aktualisierungen suchen</string>
+    <string name="title_advanced_updates">Auf GitHub nach Aktualisierungen suchen</string>
     <string name="title_advanced_experiments">Experimentelle Funktionen ausprobieren</string>
     <string name="title_advanced_query_threads">Parallelen Datenbankzugriff beschränken</string>
     <string name="title_advanced_crash_reports">Fehlerberichte senden</string>
@@ -462,9 +464,10 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_advanced_metered_hint">Getaktete Verbindungen sind in der Regel mobile Verbindungen oder bezahlte WLAN-Zugangspunkte</string>
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Das Aktivieren dieser Funktion kann bei einigen Geräten zu Verbindungsproblemen führen</string>
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
     <string name="title_advanced_ssl_harden_hint">Wenn dies eingeschaltet ist, werden schwache SSL-Protokolle und Chiffren deaktiviert, was zu Verbindungsproblemen führen kann</string>
-    <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgeholt. Sie können die Roaming-Einstellung des Geräts verwenden, um das Internet während des Roaming zu deaktivieren.</string>
+    <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgerufen. Sie können die Roaming-Einstellung des Gerätes verwenden, um das Internet während des Roamings zu deaktivieren.</string>
     <string name="title_advanced_browse_hint">Durch Herunterscrollen weitere E-Mails laden</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einer kompakteren Darstellung und Ändern der Nachrichtentextgröße kann im oberen Aktionsleistenmenü in der Nachrichtenansicht vorgenommen werden.</string>
     <string name="title_advanced_startup_hint">Einen beliebigen Ordner in der Ordnerliste lange gedrückt halten, um ihn der Liste der Sammelordner hinzuzufügen oder ihn daraus zu entfernen</string>
@@ -632,7 +635,13 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_empty_trash_all_ask">Alle in den Papierkorb verschobenen Nachrichten aller Konten endgültig löschen?</string>
     <string name="title_empty_spam_all_ask">Alle Spam-Nachrichten aller Konten endgültig löschen?</string>
     <string name="title_empty_all">Dies löscht alle Nachrichten sowohl vom Gerät als auch vom Server</string>
-    <string name="title_delete_operation">Vorgänge mit einer Fehlermeldung löschen?</string>
+    <string name="title_delete_operation_title">Vorgänge löschen</string>
+    <string name="title_delete_operation_error">Mit einer Fehlermeldung</string>
+    <string name="title_delete_operation_fetch">Abruf-Vorgänge</string>
+    <string name="title_delete_operation_move">Verschiebe-Vorgänge</string>
+    <string name="title_delete_operation_flag">Kennzeichnungs-Vorgänge</string>
+    <string name="title_delete_operation_delete">Lösch-Vorgänge</string>
+    <string name="title_delete_operation_deleted">%1$d Vorgänge gelöscht</string>
     <string name="title_delete_contacts">Alle lokale Kontakte löschen?</string>
     <string name="title_no_operations">Keine weiteren Vorgänge</string>
     <string name="title_hint_operations">Das Löschen von Vorgängen kann zum Verschwinden von Meldungen und zu Synchronisationsproblemen führen</string>
@@ -654,6 +663,8 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_keep_days">E-Mails aufbewahren (Tage)</string>
     <string name="title_keep_days_remark">Alte Nachrichten werden vom Gerät entfernt, aber auf dem Server belassen</string>
     <string name="title_keep_all">Alle E-Mails aufbewahren</string>
+    <string name="title_poll_system">Systemordner so einstellen, dass periodisch nach neuen Nachrichten gesucht wird</string>
+    <string name="title_poll_user">Benutzerordner so einstellen, dass periodisch nach neuen Nachrichten gesucht wird</string>
     <string name="title_auto_trash">Alte Nachrichten automatisch in den Papierkorb verschieben</string>
     <string name="title_auto_delete">Automatisch alte Nachrichten dauerhaft löschen</string>
     <string name="title_auto_delete_hint">Alte Nachrichten sind Nachrichten, die nicht mehr auf dem Gerät vorgehalten werden</string>
@@ -804,6 +815,7 @@ Protokolle, die dem Standard nicht entsprechen, wie „Microsoft Exchange Web Se
     <string name="title_via_identity">Über:</string>
     <string name="title_sent">Gesendet:</string>
     <string name="title_received">Empfangen:</string>
+    <string name="title_stored">Gespeichert:</string>
     <string name="title_size">Größe:</string>
     <string name="title_language">Sprache:</string>
     <string name="title_subject">Betreff:</string>

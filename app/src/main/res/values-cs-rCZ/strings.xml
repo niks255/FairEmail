@@ -185,6 +185,7 @@
     <string name="title_setup_permissions_remark">Pro přístup k údajům kontaktů (nepovinné)</string>
     <string name="title_setup_doze">Nastavit optimalizace výdrže baterie</string>
     <string name="title_setup_doze_remark">Pro spolehlivý příjem e-mailu</string>
+    <string name="title_setup_doze_hint">Třebaže to může znít protichůdně, vypnutí optimalizace výdrže baterie povede k menší spotřebě baterie</string>
     <string name="title_setup_doze_instructions">V následujícím dialogu nahoře vyberte „Všechny aplikace“, v seznamu vyberte tuto aplikaci a označte a potvrďte volbu „Neoptimalizovat“</string>
     <string name="title_setup_doze_battery">Rychlé vybíjení baterie?</string>
     <string name="title_setup_doze_stopped">Synchronizace se zastavila?</string>
@@ -434,6 +435,7 @@
     <string name="title_advanced_openpgp">Poskytovatel OpenPGP</string>
     <string name="title_advanced_autocrypt">Použít Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Vzájemný režim Autocrypt</string>
+    <string name="title_advanced_encrypt_subject">Šifrovat předmět</string>
     <string name="title_advanced_check_certificate">Zkontrolovat veřejný klíč při odesílání</string>
     <string name="title_advanced_manage_certificates">Spravovat veřejné klíče</string>
     <string name="title_advanced_import_key">Importovat privátní klíč</string>
@@ -453,7 +455,7 @@
     <string name="title_advanced_language_system">Systémový</string>
     <string name="title_advanced_watchdog">Pravidelně kontrolovat, zda je FairEmail stále aktivní</string>
     <string name="title_advanced_optimize">Automaticky optimalizovat</string>
-    <string name="title_advanced_updates">Kontrolovat aktualizace</string>
+    <string name="title_advanced_updates">Zkontrolovat aktualizace na GitHubu</string>
     <string name="title_advanced_experiments">Vyzkoušet experimentální funkce</string>
     <string name="title_advanced_query_threads">Omezit paralelní přístup k databázi</string>
     <string name="title_advanced_crash_reports">Odesílat zprávy o chybách</string>
@@ -652,7 +654,13 @@
     <string name="title_empty_trash_all_ask">Trvale smazat všechny zprávy v koši ze všech účtů?</string>
     <string name="title_empty_spam_all_ask">Trvale smazat všechny nevyžádané zprávy ze všech účtů?</string>
     <string name="title_empty_all">Tímto smažete všechny zprávy jak ze zařízení, tak i ze serveru</string>
-    <string name="title_delete_operation">Smazat operace s chybovou hláškou?</string>
+    <string name="title_delete_operation_title">Smazat operace</string>
+    <string name="title_delete_operation_error">S chybovou hláškou</string>
+    <string name="title_delete_operation_fetch">Operace načítání</string>
+    <string name="title_delete_operation_move">Operace přesouvání</string>
+    <string name="title_delete_operation_flag">Operace značení</string>
+    <string name="title_delete_operation_delete">Operace mazání</string>
+    <string name="title_delete_operation_deleted">Smazáno %1$d operací</string>
     <string name="title_delete_contacts">Smazat všechny lokální kontakty?</string>
     <string name="title_no_operations">Žádné probíhající operace</string>
     <string name="title_hint_operations">Odstranění operací může mít za následek mizení zpráv a problémy se synchronizací</string>
@@ -674,6 +682,8 @@
     <string name="title_keep_days">Uchovávat zprávy (dny)</string>
     <string name="title_keep_days_remark">Staré zprávy budou ze zařízení odstraněny, na serveru však zůstanou</string>
     <string name="title_keep_all">Uchovávat všechny zprávy</string>
+    <string name="title_poll_system">Nastavit systémové složky pro pravidelnou kontrolu nových zpráv</string>
+    <string name="title_poll_user">Nastavit uživatelské složky pro pravidelnou kontrolu nových zpráv</string>
     <string name="title_auto_trash">Automaticky přesouvat staré zprávy do koše</string>
     <string name="title_auto_delete">Automaticky trvale mazat staré zprávy</string>
     <string name="title_auto_delete_hint">Staré zprávy jsou zprávy, které již nejsou uchovány v zařízení</string>
@@ -825,6 +835,7 @@
     <string name="title_via_identity">Přes:</string>
     <string name="title_sent">Odesláno:</string>
     <string name="title_received">Přijato:</string>
+    <string name="title_stored">Uloženo:</string>
     <string name="title_size">Velikost:</string>
     <string name="title_language">Jazyk:</string>
     <string name="title_subject">Předmět:</string>

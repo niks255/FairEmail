@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.OperationCanceledException;
 import android.os.SystemClock;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -263,7 +264,8 @@ class Core {
                         Map<String, String> crumb = new HashMap<>();
                         crumb.put("name", op.name);
                         crumb.put("args", op.args);
-                        crumb.put("folder", op.account + ":" + op.folder + ":" + folder.type);
+                        crumb.put("account", op.account + ":" + account.protocol);
+                        crumb.put("folder", op.folder + ":" + folder.type);
                         if (op.message != null)
                             crumb.put("message", Long.toString(op.message));
                         crumb.put("similar", TextUtils.join(",", sids));
@@ -488,7 +490,7 @@ class Core {
                                 db.beginTransaction();
 
                                 // Cleanup operation
-                                op.cleanup(context);
+                                op.cleanup(context, true);
 
                                 // There is no use in repeating
                                 db.operation().deleteOperation(op.id);
@@ -1013,7 +1015,7 @@ class Core {
             itarget.appendMessages(icopies.toArray(new Message[0]));
         } else {
             for (Message imessage : map.keySet()) {
-                Log.i("Move seen=" + seen + " unflag=" + unflag + " flags=" + imessage.getFlags() + " can=" + canMove);
+                Log.i((copy ? "Copy" : "Move") + " seen=" + seen + " unflag=" + unflag + " flags=" + imessage.getFlags() + " can=" + canMove);
 
                 // Mark read
                 if (seen && !imessage.isSet(Flags.Flag.SEEN) && flags.contains(Flags.Flag.SEEN))
@@ -1046,7 +1048,7 @@ class Core {
         }
 
         // Fetch appended/copied when needed
-        boolean fetch = !"connected".equals(target.state);
+        boolean fetch = (copy || !"connected".equals(target.state));
         if (draft || fetch)
             try {
                 Log.i(target.name + " moved message fetch=" + fetch);
@@ -1059,8 +1061,10 @@ class Core {
                             if (uid != null) {
                                 if (draft) {
                                     Message icopy = itarget.getMessageByUID(uid);
-                                    if (icopy == null)
+                                    if (icopy == null) {
+                                        Log.w(target.name + " Gone uid=" + uid);
                                         continue;
+                                    }
 
                                     // Mark read
                                     if (seen && !icopy.isSet(Flags.Flag.SEEN) && flags.contains(Flags.Flag.SEEN))
@@ -1076,6 +1080,7 @@ class Core {
                                 }
 
                                 if (fetch) {
+                                    Log.w(target.name + " Fetching uid=" + uid);
                                     JSONArray fargs = new JSONArray();
                                     fargs.put(uid);
                                     onFetch(context, fargs, target, istore, itarget, state);
@@ -1145,6 +1150,8 @@ class Core {
 
         DB db = DB.getInstance(context);
         EntityAccount account = db.account().getAccount(folder.account);
+        if (account == null)
+            throw new IllegalArgumentException("account missing");
 
         try {
             if (removed) {
@@ -2423,9 +2430,12 @@ class Core {
 
                 int free = Log.getFreeMemMb();
                 Map<String, String> crumb = new HashMap<>();
+                crumb.put("account", account.id + ":" + account.protocol);
+                crumb.put("folder", folder.id + ":" + folder.type);
                 crumb.put("start", Integer.toString(from));
                 crumb.put("end", Integer.toString(i));
                 crumb.put("free", Integer.toString(free));
+                crumb.put("partial", Boolean.toString(account.partial_fetch));
                 Log.breadcrumb("sync", crumb);
                 Log.i("Sync " + from + ".." + i + " free=" + free);
 
@@ -2482,20 +2492,9 @@ class Core {
                     }
             }
 
-            // Add local sent messages to remote sent folder
-            if (EntityFolder.SENT.equals(folder.type)) {
-                List<EntityMessage> orphans = db.message().getOrphans(folder.id);
-                Log.i(folder.name + " sent orphans=" + orphans.size());
-                for (EntityMessage orphan : orphans) {
-                    Log.i(folder.name + " adding orphan id=" + orphan.id);
-                    if (orphan.content && !orphan.ui_hide)
-                        EntityOperation.queue(context, orphan, EntityOperation.ADD);
-                }
-            } else {
-                // Delete not synchronized messages without uid
-                if (!EntityFolder.DRAFTS.equals(folder.type))
-                    db.message().deleteOrphans(folder.id);
-            }
+            // Delete not synchronized messages without uid
+            if (!EntityFolder.isOutgoing(folder.type))
+                db.message().deleteOrphans(folder.id);
 
             int count = MessageHelper.getMessageCount(ifolder);
             db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
@@ -2516,6 +2515,8 @@ class Core {
 
                     int free = Log.getFreeMemMb();
                     Map<String, String> crumb = new HashMap<>();
+                    crumb.put("account", account.id + ":" + account.protocol);
+                    crumb.put("folder", folder.id + ":" + folder.type);
                     crumb.put("start", Integer.toString(from));
                     crumb.put("end", Integer.toString(i));
                     crumb.put("free", Integer.toString(free));
@@ -3707,10 +3708,10 @@ class Core {
                     for (EntityMessage message : messages) {
                         Address[] afrom = messageFrom.get(message.id);
                         String from = MessageHelper.formatAddresses(afrom, name_email, false);
-                        sb.append("<strong>").append(from).append("</strong>");
+                        sb.append("<strong>").append(Html.escapeHtml(from)).append("</strong>");
                         if (!TextUtils.isEmpty(message.subject))
-                            sb.append(": ").append(message.subject);
-                        sb.append(" ").append(DTF.format(message.received));
+                            sb.append(": ").append(Html.escapeHtml(message.subject));
+                        sb.append(" ").append(Html.escapeHtml(DTF.format(message.received)));
                         sb.append("<br>");
                     }
 
@@ -3719,7 +3720,7 @@ class Core {
 
                     // Device
                     builder.setStyle(new NotificationCompat.BigTextStyle()
-                            .bigText(HtmlHelper.fromHtml(sb.toString(), true, context))
+                            .bigText(HtmlHelper.fromHtml(sb.toString(), context))
                             .setSummaryText(title));
                 }
 
@@ -4050,14 +4051,14 @@ class Core {
                 if (!notify_messaging) {
                     StringBuilder sbm = new StringBuilder();
                     if (!TextUtils.isEmpty(message.subject))
-                        sbm.append("<em>").append(message.subject).append("</em>").append("<br>");
+                        sbm.append("<em>").append(Html.escapeHtml(message.subject)).append("</em>").append("<br>");
 
                     if (!TextUtils.isEmpty(preview))
-                        sbm.append(preview);
+                        sbm.append(Html.escapeHtml(preview));
 
                     if (sbm.length() > 0) {
                         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()
-                                .bigText(HtmlHelper.fromHtml(sbm.toString(), true, context));
+                                .bigText(HtmlHelper.fromHtml(sbm.toString(), context));
                         if (!TextUtils.isEmpty(message.subject))
                             bigText.setSummaryText(message.subject);
 

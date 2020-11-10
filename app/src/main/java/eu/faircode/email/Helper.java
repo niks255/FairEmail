@@ -424,11 +424,25 @@ public class Helper {
         return null;
     }
 
+    static Integer getBatteryLevel(Context context) {
+        try {
+            BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+            if (bm == null)
+                return null;
+            return bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return null;
+        }
+    }
+
     static boolean isCharging(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
             return false;
         try {
             BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+            if (bm == null)
+                return false;
             return bm.isCharging();
         } catch (Throwable ex) {
             Log.e(ex);

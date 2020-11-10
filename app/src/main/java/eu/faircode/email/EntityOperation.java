@@ -101,6 +101,8 @@ public class EntityOperation {
     static final String RULE = "rule";
     static final String PURGE = "purge";
 
+    private static final int MAX_FETCH = 100; // operations
+
     static void queue(Context context, EntityMessage message, String name, Object... values) {
         DB db = DB.getInstance(context);
 
@@ -236,6 +238,7 @@ public class EntityOperation {
                     Long identity = message.identity;
                     long uid = message.uid;
                     Boolean raw = message.raw;
+                    Long stored = message.stored;
                     int notifying = message.notifying;
                     boolean fts = message.fts;
                     Integer importance = message.importance;
@@ -254,6 +257,7 @@ public class EntityOperation {
                     message.identity = null;
                     message.uid = null;
                     message.raw = null;
+                    message.stored = new Date().getTime();
                     message.notifying = 0;
                     message.fts = false;
                     if (reset_importance)
@@ -271,6 +275,7 @@ public class EntityOperation {
                     message.ui_browsed = false;
                     message.error = null;
                     message.id = db.message().insertMessage(message);
+
                     File mtarget = message.getFile(context);
                     long tmpid = message.id;
                     jargs.put(2, tmpid);
@@ -281,6 +286,7 @@ public class EntityOperation {
                     message.identity = identity;
                     message.uid = uid;
                     message.raw = raw;
+                    message.stored = stored;
                     message.notifying = notifying;
                     message.fts = fts;
                     message.importance = importance;
@@ -315,7 +321,6 @@ public class EntityOperation {
                 }
 
                 return;
-
             } else if (DELETE.equals(name)) {
                 db.message().setMessageUiHide(message.id, true);
 /*
@@ -337,43 +342,30 @@ public class EntityOperation {
         }
     }
 
-    private static void queue(Context context, Long account, long folder, long message, String name, JSONArray jargs) {
+    static void queue(Context context, EntityFolder folder, String name, Object... values) {
+        JSONArray jargs = new JSONArray();
+        for (Object value : values)
+            jargs.put(value);
+
+        queue(context, folder.account, folder.id, null, name, jargs);
+    }
+
+    private static void queue(Context context, Long account, long folder, Long message, String name, JSONArray jargs) {
         DB db = DB.getInstance(context);
+
+        if (FETCH.equals(name)) {
+            int count = db.operation().getOperationCount(folder, name);
+            if (count >= MAX_FETCH) {
+                Log.i("Replacing fetch by sync folder=" + folder + " args=" + jargs + " count=" + count);
+                sync(context, folder, false);
+                return;
+            }
+        }
 
         EntityOperation op = new EntityOperation();
         op.account = account;
         op.folder = folder;
         op.message = message;
-        op.name = name;
-        op.args = jargs.toString();
-        op.created = new Date().getTime();
-        op.id = db.operation().insertOperation(op);
-
-        Log.i("Queued op=" + op.id + "/" + op.name +
-                " folder=" + op.folder + " msg=" + op.message +
-                " args=" + op.args);
-
-        Map<String, String> crumb = new HashMap<>();
-        crumb.put("name", op.name);
-        crumb.put("args", op.args);
-        crumb.put("folder", op.account + ":" + op.folder);
-        if (op.message != null)
-            crumb.put("message", Long.toString(op.message));
-        crumb.put("free", Integer.toString(Log.getFreeMemMb()));
-        Log.breadcrumb("queued", crumb);
-    }
-
-    static void queue(Context context, EntityFolder folder, String name, Object... values) {
-        DB db = DB.getInstance(context);
-
-        JSONArray jargs = new JSONArray();
-        for (Object value : values)
-            jargs.put(value);
-
-        EntityOperation op = new EntityOperation();
-        op.account = folder.account;
-        op.folder = folder.id;
-        op.message = null;
         op.name = name;
         op.args = jargs.toString();
         op.created = new Date().getTime();
@@ -441,7 +433,7 @@ public class EntityOperation {
         Log.i("Queued subscribe=" + subscribe + " folder=" + folder);
     }
 
-    void cleanup(Context context) {
+    void cleanup(Context context, boolean fetch) {
         DB db = DB.getInstance(context);
 
         if (message != null)
@@ -473,7 +465,7 @@ public class EntityOperation {
         if (EntityOperation.SYNC.equals(name))
             db.folder().setFolderSyncState(folder, null);
 
-        if (message != null) {
+        if (fetch && message != null) {
             EntityMessage m = db.message().getMessage(message);
             if (m == null || m.uid == null)
                 return;

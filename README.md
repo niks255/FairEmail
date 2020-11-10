@@ -116,6 +116,9 @@ Supported download locations:
 * [F-Droid](https://f-droid.org/en/packages/eu.faircode.email/) ([last build status](https://f-droid.org/wiki/page/eu.faircode.email/lastbuild)) (the F-Droid app can be downloaded [here](https://f-droid.org/))
 * ~~[AppGallery](https://wap3.hispace.hicloud.com/uowap/index.jsp#/detailApp/C101678151) (the AppGallery app can be downloaded [here](https://huaweimobileservices.com/appgallery/))~~
 
+All versions provide the same features, except that there is no Android Auto support in the Play store version.
+Please [see here](https://forum.xda-developers.com/showpost.php?p=83801249&postcount=16542) about why not.
+
 **Important**: after enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/)
 you cannot use third party email apps anymore, please see [this FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq22) for more information.
 
@@ -173,8 +176,6 @@ Please see [here](https://github.com/M66B/FairEmail/blob/master/PRIVACY.md#faire
 
 ## Support
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
-
 Please see [here](https://github.com/M66B/FairEmail/blob/master/FAQ.md) for a list of often asked questions and about how to get support.
 
 ## Contributing
@@ -213,6 +214,7 @@ Error reporting is sponsored by:
 
 [Bugsnag](https://www.bugsnag.com/) monitors application stability
 and is used to [help improve FairEmail](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq104).
+Error reporting is disabled by default, see also [the privacy policy](https://github.com/M66B/FairEmail/blob/master/PRIVACY.md#fairemail).
 
 ## License
 

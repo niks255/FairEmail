@@ -21,7 +21,9 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.ParcelFileDescriptor;
 import android.security.KeyChain;
+import android.system.ErrnoException;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -130,6 +132,8 @@ public class EmailService implements AutoCloseable {
     private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
     private final static int POOL_TIMEOUT = 45 * 1000; // milliseconds, default 45 sec
 
+    private final static int TCP_KEEP_ALIVE_INTERVAL = 9 * 60; // seconds
+
     private static final int APPEND_BUFFER_SIZE = 4 * 1024 * 1024; // bytes
 
     // https://developer.android.com/reference/javax/net/ssl/SSLSocket.html#protocols
@@ -143,6 +147,12 @@ public class EmailService implements AutoCloseable {
 
     // TLS_FALLBACK_SCSV https://tools.ietf.org/html/rfc7507
     // TLS_EMPTY_RENEGOTIATION_INFO_SCSV https://tools.ietf.org/html/rfc5746
+
+    static {
+        System.loadLibrary("fairemail");
+    }
+
+    private static native int jni_socket_keep_alive(int fd, int seconds);
 
     private EmailService() {
         // Prevent instantiation
@@ -433,7 +443,7 @@ public class EmailService implements AutoCloseable {
             main = InetAddress.getByName(host);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean prefer_ip4 = prefs.getBoolean("prefer_ip4", false);
+            boolean prefer_ip4 = prefs.getBoolean("prefer_ip4", true);
             if (prefer_ip4 && main instanceof Inet6Address) {
                 for (InetAddress iaddr : InetAddress.getAllByName(host))
                     if (iaddr instanceof Inet4Address) {
@@ -1025,19 +1035,35 @@ public class EmailService implements AutoCloseable {
         boolean keepAlive = socket.getKeepAlive();
         int linger = socket.getSoLinger();
 
-        Log.i("Socket type=" + socket.getClass() +
+        Log.i("Socket type=" + socket.getClass().getName() +
                 " timeout=" + timeout +
                 " keep-alive=" + keepAlive +
                 " linger=" + linger);
 
         if (keepAlive) {
             Log.e("Socket keep-alive=" + keepAlive);
-            socket.setKeepAlive(false);
+            socket.setKeepAlive(false); // sets SOL_SOCKET/SO_KEEPALIVE
         }
 
         if (linger >= 0) {
             Log.e("Socket linger=" + linger);
             socket.setSoLinger(false, -1);
+        }
+
+        try {
+            boolean tcp_keep_alive = Boolean.parseBoolean(System.getProperty("fairemail.tcp_keep_alive"));
+            if (tcp_keep_alive) {
+                Log.i("Enabling TCP keep alive");
+
+                int fd = ParcelFileDescriptor.fromSocket(socket).getFd();
+                int errno = jni_socket_keep_alive(fd, TCP_KEEP_ALIVE_INTERVAL);
+                if (errno == 0)
+                    Log.i("Enabled TCP keep alive");
+                else
+                    throw new ErrnoException("jni_socket_keep_alive", errno);
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
     }
 

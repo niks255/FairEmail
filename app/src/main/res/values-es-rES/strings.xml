@@ -164,6 +164,7 @@
     <string name="title_setup_permissions_remark">Para acceder a información de contactos (opcional)</string>
     <string name="title_setup_doze">Configurar optimizaciones de batería</string>
     <string name="title_setup_doze_remark">Para recibir correo electrónico de forma fiable</string>
+    <string name="title_setup_doze_hint">Aunque esto pueda sonar contradictorio, desactivar las optimizaciones de la batería resultará en un menor uso de la batería</string>
     <string name="title_setup_doze_instructions">En el siguiente diálogo, seleccione \"Todas las apps\" en el menú superior, seleccione esta app y finalmente seleccione y confirme la opción \"No optimizar\"</string>
     <string name="title_setup_doze_battery">¿Consumo de batería elevado?</string>
     <string name="title_setup_doze_stopped">¿Sincronización detenida?</string>
@@ -414,6 +415,7 @@
     <string name="title_advanced_openpgp">Proveedor OpenPGP</string>
     <string name="title_advanced_autocrypt">Usar Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Modo mutuo Autocrypt</string>
+    <string name="title_advanced_encrypt_subject">Cifrar asunto</string>
     <string name="title_advanced_check_certificate">Comprobar clave pública al enviar</string>
     <string name="title_advanced_manage_certificates">Administrar claves públicas</string>
     <string name="title_advanced_import_key">Importar clave privada</string>
@@ -433,7 +435,7 @@
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_watchdog">Comprobar periódicamente si FairEmail sigue activo</string>
     <string name="title_advanced_optimize">Optimizar automáticamente</string>
-    <string name="title_advanced_updates">Buscar actualizaciones</string>
+    <string name="title_advanced_updates">Comprobar actualizaciones de GitHub</string>
     <string name="title_advanced_experiments">Probar características experimentales</string>
     <string name="title_advanced_query_threads">Limitar acceso paralelo a la base de datos</string>
     <string name="title_advanced_crash_reports">Enviar informes de errores</string>
@@ -462,6 +464,7 @@
     <string name="title_advanced_metered_hint">Las conexiones medidas son generalmente conexiones móviles o puntos de acceso Wi-Fi de pago</string>
     <string name="title_advanced_metered_warning">Desactivar esta opción desactivará la recepción y envío de mensajes en conexiones móviles a Internet</string>
     <string name="title_advanced_rlah_hint">Suponiendo que no hay itinerancia dentro de la UE</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Activar esto puede causar problemas de conexión en algunos dispositivos</string>
     <string name="title_advanced_timeout_hint">El tiempo de espera de lectura/escritura se establecerá al doble del tiempo de espera de conexión. Valores más altos resultarán en un mayor uso de la batería.</string>
     <string name="title_advanced_ssl_harden_hint">Activar esto desactivará los protocolos SSL y cifrados débiles, lo que puede provocar problemas de conexión</string>
     <string name="title_advanced_roaming_hint">Los encabezados de mensajes siempre se obtendrán cuando en itinerancia. Puede usar la configuración de itinerancia del dispositivo para desactivar internet mientras se está en itinerancia.</string>
@@ -632,7 +635,13 @@
     <string name="title_empty_trash_all_ask">¿Eliminar todos los mensajes borrados de todas las cuentas permanentemente?</string>
     <string name="title_empty_spam_all_ask">¿Eliminar permanentemente todos los mensajes de spam de todas las cuentas?</string>
     <string name="title_empty_all">Esto eliminará todos los mensajes tanto del dispositivo como del servidor</string>
-    <string name="title_delete_operation">¿Eliminar operaciones con un mensaje de error?</string>
+    <string name="title_delete_operation_title">Eliminar operaciones</string>
+    <string name="title_delete_operation_error">Con un mensaje de error</string>
+    <string name="title_delete_operation_fetch">Operaciones de obtención</string>
+    <string name="title_delete_operation_move">Operaciones de mover</string>
+    <string name="title_delete_operation_flag">Operaciones de marcar</string>
+    <string name="title_delete_operation_delete">Operaciones de eliminación</string>
+    <string name="title_delete_operation_deleted">%1$d operaciones eliminadas</string>
     <string name="title_delete_contacts">¿Eliminar todos los contactos locales?</string>
     <string name="title_no_operations">No hay operaciones pendientes</string>
     <string name="title_hint_operations">Eliminar operaciones puede resultar en la desaparición de mensajes y problemas de sincronización</string>
@@ -654,6 +663,8 @@
     <string name="title_keep_days">Mantener mensajes (días)</string>
     <string name="title_keep_days_remark">Los mensajes antiguos se eliminarán del dispositivo, pero permanecerán en el servidor</string>
     <string name="title_keep_all">Mantener todos los mensajes</string>
+    <string name="title_poll_system">Configurar carpetas del sistema para comprobar periódicamente si hay nuevos mensajes</string>
+    <string name="title_poll_user">Configurar carpetas de usuario para comprobar periódicamente si hay nuevos mensajes</string>
     <string name="title_auto_trash">Mover mensajes antiguos a la papelera de manera automática</string>
     <string name="title_auto_delete">Eliminar mensajes antiguos permanentemente de manera automática</string>
     <string name="title_auto_delete_hint">Los mensajes antiguos son mensajes que ya no se almacenan en el dispositivo</string>
@@ -805,6 +816,7 @@
     <string name="title_via_identity">Vía:</string>
     <string name="title_sent">Enviado:</string>
     <string name="title_received">Recibido:</string>
+    <string name="title_stored">Almacenado:</string>
     <string name="title_size">Tamaño:</string>
     <string name="title_language">Idioma:</string>
     <string name="title_subject">Asunto:</string>
