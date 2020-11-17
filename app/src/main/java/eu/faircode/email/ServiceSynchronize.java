@@ -119,6 +119,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int ACCOUNT_ERROR_AFTER_POLL = 4; // times
     private static final int BACKOFF_ERROR_AFTER = 16; // seconds
     private static final int FAST_FAIL_THRESHOLD = 75; // percent
+    private static final int FETCH_YIELD_DURATION = 50; // milliseconds
 
     private static final String ACTION_NEW_MESSAGE_COUNT = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE_COUNT";
 
@@ -928,6 +929,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             long first_fail = 0;
             Throwable last_fail = null;
             state.setBackoff(CONNECT_BACKOFF_START);
+            if (account.backoff_until != null)
+                db.account().setAccountBackoff(account.id, null);
             while (state.isRunning() &&
                     currentThread != null && currentThread.equals(thread)) {
                 state.reset();
@@ -1175,6 +1178,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         } finally {
                                             db.endTransaction();
                                         }
+
+                                        Thread.sleep(FETCH_YIELD_DURATION);
                                     } catch (Throwable ex) {
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
@@ -1204,6 +1209,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         } finally {
                                             db.endTransaction();
                                         }
+
+                                        Thread.sleep(FETCH_YIELD_DURATION);
                                     } catch (Throwable ex) {
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
@@ -1228,6 +1235,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                         long uid = ifolder.getUID(e.getMessage());
                                         EntityOperation.queue(ServiceSynchronize.this, folder, EntityOperation.FETCH, uid);
+
+                                        Thread.sleep(FETCH_YIELD_DURATION);
                                     } catch (Throwable ex) {
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
@@ -2036,8 +2045,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         db.beginTransaction();
 
                         // Reset accounts
-                        for (EntityAccount account : db.account().getAccounts())
+                        for (EntityAccount account : db.account().getAccounts()) {
                             db.account().setAccountState(account.id, null);
+                            db.account().setAccountBackoff(account.id, null);
+                        }
 
                         // reset folders
                         for (EntityFolder folder : db.folder().getFolders()) {

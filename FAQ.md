@@ -82,6 +82,7 @@ Related questions:
 * A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. See also [this FAQ](#user-content-faq126).
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
+* Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 
 ## Planned features
 
@@ -1410,6 +1411,7 @@ If you have at least once a day internet connectivity, it is sufficient to synch
 Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for.
 You could for example initially synchronize messages for a large number of days and after this has been completed
 reduce the number of days to synchronize messages for, but leave the number of days to keep messages for.
+After decreasing the number of days to keep messages for, you might want to run the cleanup in the miscellaneous settings to remove old files.
 
 In the receive settings you can enable to always synchronize starred messages,
 which will allow you to keep older messages around while synchronizing messages for a limited number of days.
@@ -2080,9 +2082,22 @@ so there is little room for performance improvements.
 <a name="faq78"></a>
 **(78) How do I use schedules?**
 
-In the receive settings you can enable scheduling and set the time period and the day of weeks when messages should be received.
-
+In the receive settings you can enable scheduling and set a time period and the days of the week *when* messages should be *received*.
 Note that an end time equal to or earlier than the start time is considered to be 24 hours later.
+
+Automation, see below, can be used for more advanced schedules,
+like for example multiple synchronization periods per day or different synchronization periods for different days.
+
+It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile,
+which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
+
+It is also possible to create [filter rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition.
+This way it is possible to *snooze* business related messages until the start of the business hours.
+This also means that the messages will be on your device for when there is (temporarily) no internet connection.
+
+Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app,
+which could be used to (not) silence specific (business) notifications.
+Please [see here](https://support.google.com/android/answer/9069335) for more information.
 
 For more complex schemes you could set one or more accounts to manual synchronization
 and send this command to FairEmail to check for new messages:
@@ -2129,19 +2144,6 @@ Extras: account:Gmail
 ```
 
 Account names are case sensitive.
-
-Automation can be used for more advanced schedules,
-like for example multiple synchronization periods per day or different synchronization periods for different days.
-
-It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile,
-which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
-
-It is also possible to create [rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition.
-This way it is possible to snooze business related messages until the start of the business hours.
-This also means that the messages will be on your device for when there is no internet connection, for example when flying.
-
-Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app,
-which could be used to (not) silence specific notifications.
 
 Scheduling is a pro feature.
 
@@ -2252,6 +2254,9 @@ You will likely need to save the associated identity again as well.
 
 <a name="faq88"></a>
 **(88) How can I use a Yahoo, AOL or Sky account?**
+
+The preferred way to set up a Yahoo account is by using the quick setup wizard,
+which will use OAuth instead of a password and is therefore safer (and easier as well).
 
 To authorize a Yahoo, AOL, or Sky account you will need to create an app password.
 For instructions, please see here:
@@ -2608,14 +2613,9 @@ The Android account manager will be used to fetch and refresh OAuth tokens for s
 OAuth for non on-device accounts is not supported
 because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this.
 
-OAuth for Yandex is supported via the quick setup wizard.
+OAuth for Yandex and Yahoo is supported via the quick setup wizard.
 
 OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
-
-OAuth access for Yahoo was requested, but Yahoo never responded to the request.
-OAuth for AOL [was deactivated](https://www.programmableweb.com/api/aol-open-auth) by AOL.
-Verizon owns both AOL and Yahoo, collectively named [Oath inc](https://en.wikipedia.org/wiki/Verizon_Media).
-So, it is reasonable to assume that OAuth is not supported by Yahoo anymore too.
 
 <br />
 

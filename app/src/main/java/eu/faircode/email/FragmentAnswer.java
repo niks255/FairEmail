@@ -383,7 +383,7 @@ public class FragmentAnswer extends FragmentBase {
             sb.setAction(R.string.title_info, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.viewFAQ(getContext(), 49);
+                    Helper.viewFAQ(v.getContext(), 49);
                 }
             });
             sb.show();
@@ -397,7 +397,7 @@ public class FragmentAnswer extends FragmentBase {
         int start = args.getInt("start");
         int end = args.getInt("end");
         etText.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, null, etText, link);
+        StyleHelper.apply(R.id.menu_link, getViewLifecycleOwner(), null, etText, link);
     }
 
     private void onDelete() {
@@ -460,7 +460,7 @@ public class FragmentAnswer extends FragmentBase {
 
             return true;
         } else
-            return StyleHelper.apply(action, view.findViewById(action), etText);
+            return StyleHelper.apply(action, getViewLifecycleOwner(), view.findViewById(action), etText);
     }
 
     public static class FragmentInfo extends FragmentDialogBase {

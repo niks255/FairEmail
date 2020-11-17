@@ -241,6 +241,7 @@
     <string name="title_advanced_sync_folders">Synchroniser la liste des dossiers</string>
     <string name="title_advanced_sync_shared_folders">Synchroniser les listes de dossiers partagés</string>
     <string name="title_advanced_subscriptions">Gérer les abonnements aux dossiers</string>
+    <string name="title_advanced_sync_subscribed">Synchroniser automatiquement les dossiers abonnés</string>
     <string name="title_advanced_check_mx">Vérifier l’adresse courriel de l’expéditeur lors de la synchronisation des messages</string>
     <string name="title_advanced_check_reply">Vérifier les adresses courriel de réponse lors de la synchronisation des messages</string>
     <string name="title_advanced_tune_keep_alive">Ajuster automatiquement l\'intervalle de connexion</string>
@@ -254,6 +255,7 @@
     <string name="title_advanced_separate_reply">Insérer une ligne horizontale avant l\'en-tête de réponse/transfert</string>
     <string name="title_advanced_extended_reply">Utiliser l’en-tête de réponse/transfert étendu</string>
     <string name="title_advanced_quote_reply">Citer le texte répondu</string>
+    <string name="title_advanced_limit_reply">Limiter le nombre de citations imbriquées</string>
     <string name="title_advanced_resize_reply">Redimensionner les images dans le texte de la réponse</string>
     <string name="title_advanced_signature_location">Emplacement de la signature</string>
     <string name="title_advanced_signature_reply">Utiliser la signature lors de la réponse</string>
@@ -333,6 +335,7 @@
     <string name="title_advanced_text_align">Utiliser l\'alignement du texte</string>
     <string name="title_advanced_text_separators">Utiliser des lignes de séparation</string>
     <string name="title_advanced_collapse_quotes">Replier le texte cité</string>
+    <string name="title_advanced_image_placeholders">Afficher les espaces réservés aux images</string>
     <string name="title_advanced_images_inline">Afficher automatiquement les images incluses</string>
     <string name="title_advanced_seekbar">Afficher la position relative dans la conversation avec un point</string>
     <string name="title_advanced_actionbar">Afficher la barre d\'action de conversation</string>
@@ -480,8 +483,10 @@
     <string name="title_advanced_preview_hint">Disponible uniquement lorsque le texte du message a été téléchargé</string>
     <string name="title_advanced_preview_issue">Le défilement peut être lent quand il y a plus d’une ligne en raison d’un bogue dans certaines versions d’Android</string>
     <string name="title_advanced_overview_mode_hint">Ceci peut afficher de très petites polices de caractères</string>
+    <string name="title_advanced_placeholders_hint">Ceci s\'applique uniquement aux messages reformatés</string>
     <string name="title_advanced_inline_hint">Les images incluses dans le message peuvent être affichées sans téléchargement supplémentaire</string>
     <string name="title_advanced_parse_classes_hint">L’affichage des messages sera plus fidèle mais pourra être retardé</string>
+    <string name="title_advanced_language_detection_hint">La prise en charge de la détection de la langue dépend du fabricant de l\'appareil</string>
     <string name="title_advanced_autoexpand_hint">Ouvrir automatiquement le message s’il n’y a qu’un seul message ou un seul message non lu dans une conversation</string>
     <string name="title_advanced_autoseen_hint">Le marquage automatique des messages comme lus lors de leur ouverture peut être désactivé dans les paramètres de chaque compte</string>
     <string name="title_advanced_autoclose_hint">Fermer automatiquement les conversations quand tous les messages sont archivés, envoyés ou mis à la corbeille</string>

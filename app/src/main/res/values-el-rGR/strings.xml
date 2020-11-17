@@ -241,6 +241,7 @@
     <string name="title_advanced_sync_folders">Συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_shared_folders">Συγχρονισμός της λίστας κοινών φακέλων</string>
     <string name="title_advanced_subscriptions">Διαχείριση συνδρομών σε φακέλους</string>
+    <string name="title_advanced_sync_subscribed">Αυτόματος συγχρονισμός των φακέλων με συνδρομή</string>
     <string name="title_advanced_check_mx">Έλεγχος διευθύνσεων των αποστολέων κατά τον συγχρονισμό μηνυμάτων</string>
     <string name="title_advanced_check_reply">Έλεγχος διευθύνσεων των απαντήσεων κατά τον συγχρονισμό μηνυμάτων</string>
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
@@ -254,6 +255,7 @@
     <string name="title_advanced_separate_reply">Εισαγωγή μιας οριζόντιας γραμμής πριν από την κεφαλίδα μιας απάντησης/προώθησης</string>
     <string name="title_advanced_extended_reply">Χρήση εκτεταμένων κεφαλίδων κατά την απάντηση/προώθηση</string>
     <string name="title_advanced_quote_reply">Παράθεση του προς απάντηση κειμένου</string>
+    <string name="title_advanced_limit_reply">Περιορισμός του αριθμού των ιεραρχημένων παραθεμάτων</string>
     <string name="title_advanced_resize_reply">Αναπροσαρμογή των εικόνων στο προς απάντηση κείμενο</string>
     <string name="title_advanced_signature_location">Θέση της υπογραφής</string>
     <string name="title_advanced_signature_reply">Χρήση υπογραφής κατά την απάντηση</string>
@@ -333,6 +335,7 @@
     <string name="title_advanced_text_align">Χρήση της στοίχισης του κειμένου</string>
     <string name="title_advanced_text_separators">Χρήση γραμμών διαχωρισμού</string>
     <string name="title_advanced_collapse_quotes">Σύμπτυξη του παρατιθέμενου κειμένου</string>
+    <string name="title_advanced_image_placeholders">Να προβάλλονται οι κρατημένες για εικόνες θέσεις</string>
     <string name="title_advanced_images_inline">Να προβάλλονται αυτόματα οι ένθετες εικόνες</string>
     <string name="title_advanced_seekbar">Επισήμανση της σχετικής θέσης στη συζήτηση με μία τελεία</string>
     <string name="title_advanced_actionbar">Προβολή της γραμμής ενεργειών της συζήτησης</string>
@@ -478,8 +481,10 @@
     <string name="title_advanced_preview_hint">Διαθέσιμο μόνον εφόσον το κείμενο του μηνύματος έχει κατέβει</string>
     <string name="title_advanced_preview_issue">Η κύλιση ενδέχεται να καθυστερεί εξαιτίας ενός σφάλματος σε ορισμένες εκδόσεις του Android, όταν ο αριθμός των σειρών υπερβαίνει τη μία</string>
     <string name="title_advanced_overview_mode_hint">Μπορεί να προκαλέσει πολύ μικρές γραμματοσειρές</string>
+    <string name="title_advanced_placeholders_hint">Εφαρμόζεται μόνον στα αναμορφοποιημένα μηνύματα</string>
     <string name="title_advanced_inline_hint">Οι ένθετες εικόνες είναι οι εικόνες που περιλαμβάνονται στο μήνυμα</string>
     <string name="title_advanced_parse_classes_hint">Η προβολή των εικόνων θα είναι πιο ακριβής αλλά με ενδεχόμενη καθυστέρηση</string>
+    <string name="title_advanced_language_detection_hint">Η υποστήριξη αναγνώρισης γλώσσας εξαρτάται από τον κατασκευαστή της συσκευής</string>
     <string name="title_advanced_autoexpand_hint">Αυτόματο άνοιγμα του μηνύματος όταν υπάρχει μόνον ένα μήνυμα ή μόνον ένα μη αναγνωσμένο μήνυμα σε μία συζήτηση</string>
     <string name="title_advanced_autoseen_hint">Η αυτόματη σήμανση των μηνυμάτων ως αναγνωσμένων κατά την ανάπτυξή τους, μπορεί να απενεργοποιηθεί στις επιμέρους ρυθμίσεις καθενός λογαριασμού</string>
     <string name="title_advanced_autoclose_hint">Αυτόματο κλείσιμο των συζητήσεων όταν όλα τα μηνύματα έχουν αρχειοθετηθεί, διαβαστεί ή διαγραφεί</string>

@@ -56,8 +56,6 @@ import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
-import android.view.textclassifier.TextClassificationManager;
-import android.view.textclassifier.TextLanguage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -368,7 +366,8 @@ public class HtmlHelper {
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
         boolean parse_classes = prefs.getBoolean("parse_classes", true);
         boolean inline_images = prefs.getBoolean("inline_images", false);
-        boolean text_separators = prefs.getBoolean("text_separators", false);
+        boolean text_separators = prefs.getBoolean("text_separators", true);
+        boolean image_placeholders = prefs.getBoolean("image_placeholders", true);
 
         int textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
 
@@ -491,7 +490,7 @@ public class HtmlHelper {
 
         // Remove tracking pixels
         if (disable_tracking)
-            removeTrackingPixels(context, document, false);
+            removeTrackingPixels(context, document);
 
         // Font
         for (Element font : document.select("font")) {
@@ -602,7 +601,14 @@ public class HtmlHelper {
                                 if (!text_size)
                                     continue;
 
-                                float current = 1.0f;
+                                float current;
+                                if (tag.length() == 2 &&
+                                        tag.charAt(0) == 'h' &&
+                                        Character.isDigit(tag.charAt(1)))
+                                    current = HEADING_SIZES[tag.charAt(1) - '1'];
+                                else
+                                    current = 1.0f;
+
                                 Element parent = element.parent();
                                 while (parent != null) {
                                     String xFontSize = parent.attr("x-font-size");
@@ -753,8 +759,18 @@ public class HtmlHelper {
         }
 
         // Replace headings
-        if (!text_size)
-            document.select("h1,h2,h3,h4,h5,h6").tagName("strong");
+        Elements hs = document.select("h1,h2,h3,h4,h5,h6");
+        if (text_size) {
+            if (text_separators && view)
+                for (Element h : hs)
+                    h.appendElement("hr")
+                            .attr("x-block", "true");
+            else
+                hs.attr("x-line-after", "true");
+        } else {
+            hs.tagName("strong");
+            hs.attr("x-line-after", "true");
+        }
 
         // Paragraphs
         for (Element p : document.select("p")) {
@@ -844,20 +860,47 @@ public class HtmlHelper {
                 for (Element col : row.children()) {
                     Element next = col.nextElementSibling();
 
-                    // Merge single images into next column
-                    if (col.childNodeSize() == 1 &&
-                            (next == null ||
-                                    next.attr("x-align")
-                                            .equals(col.attr("x-align")))) {
-                        Node lonely = col.childNode(0);
-                        if (lonely instanceof Element &&
-                                "img".equals(lonely.nodeName())) {
-                            lonely.remove();
-                            lonely.removeAttr("x-block");
-                            merge.add(lonely);
-                            if (next != null)
-                                continue;
+                    // Get nodes with content
+                    List<Node> nodes = new ArrayList<>(col.childNodes());
+                    while (nodes.size() > 0) {
+                        Node first = nodes.get(0);
+                        if (first instanceof TextNode && ((TextNode) first).isBlank()) {
+                            nodes.remove(0);
+                            continue;
                         }
+
+                        Node last = nodes.get(nodes.size() - 1);
+                        if (last instanceof TextNode && ((TextNode) last).isBlank()) {
+                            nodes.remove(nodes.size() - 1);
+                            continue;
+                        }
+
+                        break;
+                    }
+
+                    // Merge single images into next column
+                    if (nodes.size() == 1) {
+                        Node lonely = nodes.get(0);
+
+                        // prevent extra newlines
+                        lonely.removeAttr("x-paragraph");
+
+                        if (next == null ||
+                                next.attr("x-align")
+                                        .equals(col.attr("x-align"))) {
+                            if (lonely instanceof Element &&
+                                    "img".equals(lonely.nodeName())) {
+                                lonely.remove();
+                                lonely.removeAttr("x-block");
+                                merge.add(lonely);
+                                if (next != null)
+                                    continue;
+                            }
+                        }
+
+                        if (lonely instanceof TextNode &&
+                                "\u00a0".equals(((TextNode) lonely).getWholeText()))
+                            lonely.remove(); // -> column separator
                     }
 
                     if (merge.size() > 0) {
@@ -880,10 +923,14 @@ public class HtmlHelper {
                     if (TextUtils.isEmpty(align) ||
                             "left".equals(align) ||
                             "start".equals(align))
-                        col.tagName("div").removeAttr("x-block");
+                        col.removeAttr("x-block");
+                    else {
+                        if ("true".equals(col.attr("x-line-before")))
+                            col.removeAttr("x-line-before");
+                    }
 
-                    if (next != null && col.childNodeSize() > 0)
-                        col.appendText("\u2002"); // ensp
+                    col.tagName("div")
+                            .attr("x-column", "true");
                 }
 
                 if (merge.size() != 0)
@@ -905,11 +952,37 @@ public class HtmlHelper {
             String alt = img.attr("alt");
             String src = img.attr("src");
             String tracking = img.attr("x-tracking");
+            boolean isInline = src.startsWith("cid:");
+
+            if (TextUtils.isEmpty(src)) {
+                Log.i("Removing empty image");
+                img.remove();
+                continue;
+            }
+
+            if (!show_images && !(inline_images && isInline) && !image_placeholders) {
+                Log.i("Removing placeholder");
+                img.removeAttr("src");
+                continue;
+            }
+
+            // Remove spacer, etc
+            if (!show_images && !(inline_images && isInline) &&
+                    TextUtils.isEmpty(img.attr("x-tracking"))) {
+                Log.i("Removing small image");
+                Integer width = Helper.parseInt(img.attr("width").trim());
+                Integer height = Helper.parseInt(img.attr("height").trim());
+                if ((width != null && width <= SMALL_IMAGE_SIZE) ||
+                        (height != null && height <= SMALL_IMAGE_SIZE)) {
+                    img.remove();
+                    continue;
+                }
+            }
 
             if (alt.length() > MAX_ALT)
                 alt = alt.substring(0, MAX_ALT) + "…";
 
-            if (!show_images && !(inline_images && src.startsWith("cid:")) && !TextUtils.isEmpty(alt))
+            if (!show_images && !(inline_images && isInline) && !TextUtils.isEmpty(alt))
                 if (TextUtils.isEmpty(tracking))
                     img.appendText("[" + alt + "]");
                 else {
@@ -1461,7 +1534,7 @@ public class HtmlHelper {
         return sb.toString();
     }
 
-    static void removeTrackingPixels(Context context, Document document, boolean full) {
+    static void removeTrackingPixels(Context context, Document document) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean disconnect_images = prefs.getBoolean("disconnect_images", false);
 
@@ -1498,26 +1571,13 @@ public class HtmlHelper {
             img.removeAttr("x-tracking");
 
             String src = img.attr("src");
-            if (TextUtils.isEmpty(src)) {
-                if (!full)
-                    img.remove();
+            if (TextUtils.isEmpty(src))
                 continue;
-            }
 
             Uri uri = Uri.parse(src);
             String host = uri.getHost();
-            if (host == null || hosts.contains(host)) {
-                if (!full) {
-                    // Remove spacer, etc
-                    Integer width = Helper.parseInt(img.attr("width").trim());
-                    Integer height = Helper.parseInt(img.attr("height").trim());
-                    if ((width != null && width <= SMALL_IMAGE_SIZE) ||
-                            (height != null && height <= SMALL_IMAGE_SIZE))
-                        img.remove();
-                }
-
+            if (host == null || hosts.contains(host))
                 continue;
-            }
 
             if (isTrackingPixel(img) || isTrackingHost(host, disconnect_images)) {
                 img.attr("src", sb.toString());
@@ -1630,23 +1690,9 @@ public class HtmlHelper {
             if (!language_detection)
                 return null;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                TextClassificationManager tcm =
-                        (TextClassificationManager) context.getSystemService(Context.TEXT_CLASSIFICATION_SERVICE);
-                if (tcm == null)
-                    return null;
-
-                String text = getPreview(body);
-                if (text == null)
-                    return null;
-
-                TextLanguage.Request trequest = new TextLanguage.Request.Builder(text).build();
-                TextLanguage tlanguage = tcm.getTextClassifier().detectLanguage(trequest);
-                if (tlanguage.getLocaleHypothesisCount() > 0)
-                    return tlanguage.getLocale(0).toLocale().getLanguage();
-            }
-
-            return null;
+            String text = getPreview(body);
+            Locale locale = TextHelper.detectLanguage(context, text);
+            return (locale == null ? null : locale.getLanguage());
         } catch (Throwable ex) {
             Log.e(ex);
             return null;
@@ -1876,7 +1922,6 @@ public class HtmlHelper {
             @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
-        boolean text_separators = prefs.getBoolean("text_separators", false);
         boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
 
         final int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
@@ -2065,10 +2110,6 @@ public class HtmlHelper {
                     tnode = (TextNode) node;
                     String text = tnode.getWholeText();
                     ssb.append(text);
-                    if (monospaced_pre &&
-                            node.parent() instanceof Element &&
-                            "true".equals(((Element) node.parent()).attr("x-plain")))
-                        setSpan(ssb, new TypefaceSpan("monospace"), ssb.length() - text.length(), ssb.length());
                 }
             }
 
@@ -2204,29 +2245,48 @@ public class HtmlHelper {
                             case "h4":
                             case "h5":
                             case "h6":
-                                int level = element.tagName().charAt(1) - '1';
-                                setSpan(ssb, new RelativeSizeSpan(HEADING_SIZES[level]), start, ssb.length());
+                                // Font size is already set
                                 setSpan(ssb, new StyleSpan(Typeface.BOLD), start, ssb.length());
                                 break;
                             case "hr":
-                                boolean dashed = "true".equals(element.attr("x-dashed"));
-                                LineSpan[] lines = null;
-                                if (dashed && ssb.length() > 0)
-                                    lines = ssb.getSpans(ssb.length() - 1, ssb.length() - 1, LineSpan.class);
-                                if (lines == null || lines.length == 0) {
-                                    ssb.append(LINE);
-                                    float stroke = context.getResources().getDisplayMetrics().density;
-                                    float dash = (dashed ? dp3 : 0f);
-                                    setSpan(ssb, new LineSpan(colorSeparator, stroke, dash), start, ssb.length());
+                                // Suppress succesive lines
+                                LineSpan[] lines = ssb.getSpans(0, ssb.length(), LineSpan.class);
+                                int last = -1;
+                                if (lines != null)
+                                    for (LineSpan line : lines) {
+                                        int e = ssb.getSpanEnd(line);
+                                        if (e > last)
+                                            last = e;
+                                    }
+                                if (last >= 0) {
+                                    boolean blank = true;
+                                    for (int i = last; i < ssb.length(); i++) {
+                                        char kar = ssb.charAt(i);
+                                        if (kar != ' ' && kar != '\n' && kar != '\u00a0') {
+                                            blank = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (blank)
+                                        break;
                                 }
+
+                                boolean dashed = "true".equals(element.attr("x-dashed"));
+                                float stroke = context.getResources().getDisplayMetrics().density;
+                                float dash = (dashed ? dp3 : 0f);
+                                ssb.append(LINE);
+                                setSpan(ssb, new LineSpan(colorSeparator, stroke, dash), start, ssb.length());
                                 break;
                             case "img":
                                 String src = element.attr("src");
-                                Drawable d = (imageGetter == null
-                                        ? context.getDrawable(R.drawable.twotone_broken_image_24)
-                                        : imageGetter.getDrawable(src));
-                                ssb.insert(start, "\uFFFC"); // Object replacement character
-                                setSpan(ssb, new ImageSpan(d, src), start, start + 1);
+                                if (!TextUtils.isEmpty(src)) {
+                                    Drawable d = (imageGetter == null
+                                            ? context.getDrawable(R.drawable.twotone_broken_image_24)
+                                            : imageGetter.getDrawable(src));
+                                    ssb.insert(start, "\uFFFC"); // Object replacement character
+                                    setSpan(ssb, new ImageSpan(d, src), start, start + 1);
+                                }
                                 break;
                             case "li":
                                 if (start == 0 || ssb.charAt(start - 1) != '\n')
@@ -2309,6 +2369,10 @@ public class HtmlHelper {
                             default:
                                 Log.e("Unknown tag=" + element.tagName());
                         }
+
+                        if (monospaced_pre &&
+                                "true".equals(element.attr("x-plain")))
+                            setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }
@@ -2327,6 +2391,13 @@ public class HtmlHelper {
                     if ("true".equals(element.attr("x-line-after")) &&
                             ssb.length() > 0 && ssb.charAt(ssb.length() - 1) == '\n')
                         ssb.append('\n');
+
+                    if ("true".equals(element.attr("x-column")) &&
+                            ssb.length() > 1 &&
+                            ssb.charAt(ssb.length() - 1) != '\n' &&
+                            ssb.charAt(ssb.length() - 1) != '\u00a0' &&
+                            ssb.charAt(ssb.length() - 1) != '\u2002')
+                        ssb.append('\u2002'); // ensp
 
                     if (debug)
                         ssb.append("[/" + element.tagName() + "]");
@@ -2349,13 +2420,17 @@ public class HtmlHelper {
         }, document.body());
 
         if (debug)
-            for (int i = ssb.length() - 1; i >= 0; i--)
-                if (ssb.charAt(i) == '\n')
+            for (int i = ssb.length() - 1; i >= 0; i--) {
+                char kar = ssb.charAt(i);
+                if (kar == '\n')
                     ssb.insert(i, "|");
-                else if (ssb.charAt(i) == ' ')
+                else if (kar == ' ')
                     ssb.replace(i, i + 1, "_");
-                else if (ssb.charAt(i) == '\u00A0')
+                else if (kar == '\u00A0')
                     ssb.replace(i, i + 1, "•");
+                else if (!Character.isLetterOrDigit(kar))
+                    ssb.replace(i, i + 1, "{" + Integer.toHexString(kar) + "}");
+            }
 
         Object[] spans = ssb.getSpans(0, ssb.length(), Object.class);
         Map<Object, Integer> start = new HashMap<>();

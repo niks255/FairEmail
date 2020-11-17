@@ -53,7 +53,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.security.KeyChain;
-import android.security.KeyChainException;
 import android.system.ErrnoException;
 import android.text.Editable;
 import android.text.Html;
@@ -277,6 +276,8 @@ public class FragmentCompose extends FragmentBase {
     private static final int REDUCED_IMAGE_QUALITY = 90; // percent
 
     private static final int RECIPIENTS_WARNING = 10;
+
+    private static final int MAX_QUOTE_LEVEL = 5;
 
     private static final int REQUEST_CONTACT_TO = 1;
     private static final int REQUEST_CONTACT_CC = 2;
@@ -1371,10 +1372,14 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
 
         int colorEncrypt = Helper.resolveColor(getContext(), R.attr.colorEncrypt);
+
         View v = menu.findItem(R.id.menu_encrypt).getActionView();
         ImageButton ib = v.findViewById(R.id.button);
         TextView tv = v.findViewById(R.id.text);
+
+        v.setAlpha(state == State.LOADED ? 1f : Helper.LOW_LIGHT);
         ib.setEnabled(state == State.LOADED);
+
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) || EntityMessage.SMIME_SIGNONLY.equals(encrypt)) {
             ib.setImageResource(R.drawable.twotone_gesture_24);
             ib.setImageTintList(null);
@@ -1408,6 +1413,16 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_send).setTitle(R.string.title_encrypt);
         else
             bottom_navigation.getMenu().findItem(R.id.action_send).setTitle(R.string.title_send);
+
+        bottom_navigation.findViewById(R.id.action_send).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Bundle args = new Bundle();
+                args.putBoolean("force_dialog", true);
+                onAction(R.id.action_check, args, "force");
+                return true;
+            }
+        });
     }
 
     @Override
@@ -1441,7 +1456,7 @@ public class FragmentCompose extends FragmentBase {
                 onMenuAnswer();
                 return true;
             case R.id.menu_clear:
-                StyleHelper.apply(R.id.menu_clear, null, etBody);
+                StyleHelper.apply(R.id.menu_clear, getViewLifecycleOwner(), null, etBody);
                 return true;
             case R.id.menu_legend:
                 onMenuLegend();
@@ -1718,7 +1733,7 @@ public class FragmentCompose extends FragmentBase {
 
     private boolean onActionStyle(int action, View anchor) {
         Log.i("Style action=" + action);
-        return StyleHelper.apply(action, anchor, etBody);
+        return StyleHelper.apply(action, getViewLifecycleOwner(), anchor, etBody);
     }
 
     private void onActionRecordAudio() {
@@ -1731,7 +1746,7 @@ public class FragmentCompose extends FragmentBase {
             snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.viewFAQ(getContext(), 158);
+                    Helper.viewFAQ(v.getContext(), 158);
                 }
             });
             snackbar.show();
@@ -1779,7 +1794,7 @@ public class FragmentCompose extends FragmentBase {
         snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.viewFAQ(getContext(), 25);
+                Helper.viewFAQ(v.getContext(), 25);
             }
         });
         snackbar.show();
@@ -1846,7 +1861,7 @@ public class FragmentCompose extends FragmentBase {
 
             new SimpleTask<EntityIdentity>() {
                 @Override
-                protected EntityIdentity onExecute(Context context, Bundle args) throws KeyChainException, InterruptedException {
+                protected EntityIdentity onExecute(Context context, Bundle args) {
                     long id = args.getLong("id");
 
                     DB db = DB.getInstance(context);
@@ -1969,7 +1984,7 @@ public class FragmentCompose extends FragmentBase {
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Helper.viewFAQ(getContext(), 12);
+                        Helper.viewFAQ(v.getContext(), 12);
                     }
                 });
                 snackbar.show();
@@ -2147,7 +2162,7 @@ public class FragmentCompose extends FragmentBase {
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Helper.viewFAQ(getContext(), 158);
+                        Helper.viewFAQ(v.getContext(), 158);
                     }
                 });
                 snackbar.show();
@@ -2314,6 +2329,16 @@ public class FragmentCompose extends FragmentBase {
         args.putParcelable("data", data);
 
         new SimpleTask<Object>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                setBusy(true);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                setBusy(false);
+            }
+
             @Override
             protected Object onExecute(Context context, Bundle args) throws Throwable {
                 // Get arguments
@@ -2618,6 +2643,16 @@ public class FragmentCompose extends FragmentBase {
     private void onSmime(Bundle args, final int action, final Bundle extras) {
         new SimpleTask<Void>() {
             @Override
+            protected void onPreExecute(Bundle args) {
+                setBusy(true);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                setBusy(false);
+            }
+
+            @Override
             protected Void onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
                 int type = args.getInt("type");
@@ -2687,14 +2722,16 @@ public class FragmentCompose extends FragmentBase {
                     try {
                         chain[0].checkValidity();
                     } catch (CertificateException ex) {
-                        throw new IllegalArgumentException(context.getString(R.string.title_invalid_key), ex);
+                        String msg = ex.getMessage();
+                        throw new IllegalArgumentException(
+                                TextUtils.isEmpty(msg) ? Log.formatThrowable(ex) : msg);
                     }
 
                     // Check public key email
                     boolean known = false;
                     List<String> emails = EntityCertificate.getEmailAddresses(chain[0]);
                     for (String email : emails)
-                        if (email.equals(identity.email)) {
+                        if (email.equalsIgnoreCase(identity.email)) {
                             known = true;
                             break;
                         }
@@ -3063,7 +3100,7 @@ public class FragmentCompose extends FragmentBase {
         int start = args.getInt("start");
         int end = args.getInt("end");
         etBody.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, null, etBody, link);
+        StyleHelper.apply(R.id.menu_link, getViewLifecycleOwner(), null, etBody, link);
     }
 
     private void onActionDiscardConfirmed() {
@@ -3747,43 +3784,60 @@ public class FragmentCompose extends FragmentBase {
                                 for (Element e : d.select("[x-plain=true]"))
                                     e.removeAttr("x-plain");
 
-                                // Remove signature separators
-                                boolean remove_signatures = prefs.getBoolean("remove_signatures", false);
-                                if (remove_signatures)
-                                    d.body().filter(new NodeFilter() {
-                                        private boolean remove = false;
+                                if ("reply".equals(action) || "reply_all".equals(action)) {
+                                    // Remove signature separators
+                                    boolean remove_signatures = prefs.getBoolean("remove_signatures", false);
+                                    if (remove_signatures)
+                                        d.body().filter(new NodeFilter() {
+                                            private boolean remove = false;
 
-                                        @Override
-                                        public FilterResult head(Node node, int depth) {
-                                            if (node instanceof TextNode) {
-                                                TextNode tnode = (TextNode) node;
-                                                String text = tnode.getWholeText()
-                                                        .replaceAll("[\r\n]+$", "")
-                                                        .replaceAll("^[\r\n]+", "");
-                                                if ("-- ".equals(text)) {
-                                                    if (tnode.getWholeText().endsWith("\n"))
-                                                        remove = true;
-                                                    else {
-                                                        Node next = node.nextSibling();
-                                                        if (next == null) {
-                                                            Node parent = node.parent();
-                                                            if (parent != null)
-                                                                next = parent.nextSibling();
-                                                        }
-                                                        if (next != null && "br".equals(next.nodeName()))
+                                            @Override
+                                            public FilterResult head(Node node, int depth) {
+                                                if (node instanceof TextNode) {
+                                                    TextNode tnode = (TextNode) node;
+                                                    String text = tnode.getWholeText()
+                                                            .replaceAll("[\r\n]+$", "")
+                                                            .replaceAll("^[\r\n]+", "");
+                                                    if ("-- ".equals(text)) {
+                                                        if (tnode.getWholeText().endsWith("\n"))
                                                             remove = true;
+                                                        else {
+                                                            Node next = node.nextSibling();
+                                                            if (next == null) {
+                                                                Node parent = node.parent();
+                                                                if (parent != null)
+                                                                    next = parent.nextSibling();
+                                                            }
+                                                            if (next != null && "br".equals(next.nodeName()))
+                                                                remove = true;
+                                                        }
                                                     }
                                                 }
+
+                                                return (remove ? FilterResult.REMOVE : FilterResult.CONTINUE);
                                             }
 
-                                            return (remove ? FilterResult.REMOVE : FilterResult.CONTINUE);
-                                        }
+                                            @Override
+                                            public FilterResult tail(Node node, int depth) {
+                                                return FilterResult.CONTINUE;
+                                            }
+                                        });
 
-                                        @Override
-                                        public FilterResult tail(Node node, int depth) {
-                                            return FilterResult.CONTINUE;
+                                    // Limit number of nested block quotes
+                                    boolean quote_limit = prefs.getBoolean("quote_limit", true);
+                                    if (quote_limit)
+                                        for (Element bq : d.select("blockquote")) {
+                                            int level = 1;
+                                            Element parent = bq.parent();
+                                            while (parent != null) {
+                                                if ("blockquote".equals(parent.tagName()))
+                                                    level++;
+                                                parent = parent.parent();
+                                            }
+                                            if (level >= MAX_QUOTE_LEVEL)
+                                                bq.html("&#8230;");
                                         }
-                                    });
+                                }
                             } else {
                                 // Selected text
                                 d = Document.createShell("");
@@ -4218,7 +4272,7 @@ public class FragmentCompose extends FragmentBase {
         sb.setAction(R.string.title_info, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.viewFAQ(getContext(), 49);
+                Helper.viewFAQ(v.getContext(), 49);
             }
         });
         sb.show();
@@ -4840,6 +4894,7 @@ public class FragmentCompose extends FragmentBase {
                 boolean send_dialog = prefs.getBoolean("send_dialog", true);
                 boolean send_reminders = prefs.getBoolean("send_reminders", true);
 
+                boolean force_dialog = extras.getBoolean("force_dialog", false);
                 String address_error = args.getString("address_error");
                 String mx_error = args.getString("mx_error");
                 boolean remind_to = args.getBoolean("remind_to", false);
@@ -4854,7 +4909,8 @@ public class FragmentCompose extends FragmentBase {
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
-                if (send_dialog || address_error != null || mx_error != null || recipients > RECIPIENTS_WARNING || remind_size ||
+                if (send_dialog || force_dialog ||
+                        address_error != null || mx_error != null || recipients > RECIPIENTS_WARNING || remind_size ||
                         (formatted && (draft.plain_only != null && draft.plain_only)) ||
                         (send_reminders &&
                                 (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment))) {
@@ -4906,12 +4962,6 @@ public class FragmentCompose extends FragmentBase {
             }
         }
 
-        private void setBusy(boolean busy) {
-            state = (busy ? State.LOADING : State.LOADED);
-            Helper.setViewsEnabled(view, !busy);
-            getActivity().invalidateOptionsMenu();
-        }
-
         private void checkAddress(InternetAddress[] addresses, Context context) throws AddressException {
             if (addresses == null)
                 return;
@@ -4940,6 +4990,12 @@ public class FragmentCompose extends FragmentBase {
                 DnsHelper.checkMx(context, addresses);
         }
     };
+
+    private void setBusy(boolean busy) {
+        state = (busy ? State.LOADING : State.LOADED);
+        Helper.setViewsEnabled(view, !busy);
+        getActivity().invalidateOptionsMenu();
+    }
 
     private static String unprefix(String subject, String prefix) {
         subject = subject.trim();
@@ -5253,17 +5309,17 @@ public class FragmentCompose extends FragmentBase {
                         return true;
                     case KeyEvent.KEYCODE_B:
                         if (etBody.hasSelection())
-                            return StyleHelper.apply(R.id.menu_bold, null, etBody);
+                            return StyleHelper.apply(R.id.menu_bold, getViewLifecycleOwner(), null, etBody);
                         else
                             return false;
                     case KeyEvent.KEYCODE_I:
                         if (etBody.hasSelection())
-                            return StyleHelper.apply(R.id.menu_italic, null, etBody);
+                            return StyleHelper.apply(R.id.menu_italic, getViewLifecycleOwner(), null, etBody);
                         else
                             return false;
                     case KeyEvent.KEYCODE_U:
                         if (etBody.hasSelection())
-                            return StyleHelper.apply(R.id.menu_underline, null, etBody);
+                            return StyleHelper.apply(R.id.menu_underline, getViewLifecycleOwner(), null, etBody);
                         else
                             return false;
                 }
@@ -5695,7 +5751,7 @@ public class FragmentCompose extends FragmentBase {
             ibEncryption.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.viewFAQ(getContext(), 12);
+                    Helper.viewFAQ(v.getContext(), 12);
                 }
             });
 

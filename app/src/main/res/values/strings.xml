@@ -297,6 +297,7 @@
     <string name="title_advanced_sync_folders">Synchronize folder list</string>
     <string name="title_advanced_sync_shared_folders">Synchronize shared folder lists</string>
     <string name="title_advanced_subscriptions">Manage folder subscriptions</string>
+    <string name="title_advanced_sync_subscribed">Automatically synchronize subscribed folders</string>
     <string name="title_advanced_check_mx">Check sender email addresses on synchronizing messages</string>
     <string name="title_advanced_check_reply">Check reply email addresses on synchronizing messages</string>
     <string name="title_advanced_tune_keep_alive">Automatically tune the keep-alive interval</string>
@@ -311,6 +312,7 @@
     <string name="title_advanced_separate_reply">Insert a horizontal line before a reply/forward header</string>
     <string name="title_advanced_extended_reply">Use extended reply/forward header</string>
     <string name="title_advanced_quote_reply">Quote replied text</string>
+    <string name="title_advanced_limit_reply">Limit the number of nested quotes</string>
     <string name="title_advanced_resize_reply">Resize images in replied text</string>
     <string name="title_advanced_signature_location">Signature position</string>
     <string name="title_advanced_signature_reply">Use signature when replying</string>
@@ -394,6 +396,7 @@
     <string name="title_advanced_text_align">Use text alignment</string>
     <string name="title_advanced_text_separators">Use separator lines</string>
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
+    <string name="title_advanced_image_placeholders">Show image placeholders</string>
     <string name="title_advanced_images_inline">Automatically show inline images</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
     <string name="title_advanced_actionbar">Show conversation action bar</string>
@@ -570,9 +573,11 @@
     <string name="title_advanced_preview_hint">Only available when message text has been downloaded</string>
     <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
     <string name="title_advanced_overview_mode_hint">This can result in very small fonts</string>
+    <string name="title_advanced_placeholders_hint">This applies to reformatted messages only</string>
     <string name="title_advanced_inline_hint">Inline images are images included in the message</string>
     <string name="title_advanced_parse_classes_hint">This will more accurately display messages, but possibly with a delay</string>
 
+    <string name="title_advanced_language_detection_hint">Language detection support depends on the device manufacturer</string>
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
     <string name="title_advanced_autoseen_hint">Automatically marking messages read on expanding can be disabled in the individual account settings</string>
     <string name="title_advanced_autoclose_hint">Automatically close conversations when all messages are archived, sent or trashed</string>

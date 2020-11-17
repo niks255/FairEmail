@@ -10,7 +10,7 @@ Jeśli masz pytanie, najpierw sprawdź najczęściej zadawane pytania umieszczon
 * [Planowane funkcje](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Często żądane funkcje](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Najczęściej zadawane pytania (FAQ)](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Uzyskaj wsparcie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
 ## Autoryzacja kont
 
@@ -26,7 +26,7 @@ Do autoryzacji:
 
 * Gmail / G suite, zob. [pytanie 6](#user-content-faq6)
 * Outlook / Live / Hotmail, zob. [pytanie 14](#user-content-faq14)
-* Office 365, see [question 14](#user-content-faq156)
+* Office365, zob. [pytanie 14](#user-content-faq156)
 * Microsoft Exchange, zob. [pytanie 8](#user-content-faq8)
 * Yahoo, AOL i Sky, zobacz [pytanie 88](#user-content-faq88)
 * Apple iCloud, zob. [pytanie 148](#user-content-faq148)
@@ -75,9 +75,9 @@ Powiązane pytania:
 * ~~A [błąd w AndroidX](https://issuetracker.google.com/issues/64729576) utrudnia przechwytywanie szybkiego przewijania. Dodano obejście. ~~
 * ~~ Szyfrowanie za pomocą YubiKey skutkuje nieskończoną pętlą. Wydaje się, że jest to spowodowane błędem [w OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
 * Przewijanie do wewnętrznie połączonej lokalizacji w oryginalnych wiadomościach nie działa. Nie można tego naprawić, ponieważ oryginalny widok wiadomości znajduje się w przewijanym widoku.
-* Podgląd tekstu wiadomości nie (zawsze) pojawia się na zegarku Samsung, ponieważ [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) wydaje się być ignorowany. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. Zobacz również [ten FAQ](#user-content-faq126).
-* A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
-* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
+* Podgląd tekstu wiadomości nie (zawsze) pojawia się na zegarku Samsung, ponieważ [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) wydaje się być ignorowany. Wiadomo, że podglądy wiadomości są wyświetlane poprawnie na Pebble 2, Fitbit Charge 3, Mi band 3 i Xiaomi Amazfit BIP. Zobacz również [ten FAQ](#user-content-faq126).
+* [błąd w Android 6.0](https://issuetracker.google.com/issues/37068143) powoduje awarię z *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. Ten błąd został naprawiony w Androidzie 6.0.1.
+* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). Jest to ograniczenie Androida, które nie może być naprawione.
 
 ## Planowane funkcje
 
@@ -158,7 +158,7 @@ Projekt opiera się na wielu dyskusjach i jeśli chcesz, możesz o nim dyskutowa
 * [(36) W jaki sposób zaszyfrowane są pliki ustawień?](#user-content-faq36)
 * [(37) Jak przechowywane są hasła?](#user-content-faq37)
 * [(39) Jak mogę zmniejszyć zużycie baterii przez FairEmail?](#user-content-faq39)
-* [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
+* [(40) Jak mogę zmniejszyć użycie sieci przez FairEmail?](#user-content-faq40)
 * [(41) Jak mogę naprawić błąd "Handshake failed”?](#user-content-faq41)
 * [(42) Czy możesz dodać nowego dostawcę do listy dostawców?](#user-content-faq42)
 * [(43) Czy możesz pokazać oryginał...?](#user-content-faq43)
@@ -175,7 +175,7 @@ Projekt opiera się na wielu dyskusjach i jeśli chcesz, możesz o nim dyskutowa
 * [~~ (54) Jak korzystać z prefiksu przestrzeni nazw? ~~](#user-content-faq54)
 * [(55) Jak mogę oznaczyć wszystkie wiadomości jako przeczytane / przeniesione lub usunąć wszystkie wiadomości?](#user-content-faq55)
 * [(56) Czy możesz dodać wsparcie dla JMAP?](#user-content-faq56)
-* [(57) Can I use HTML in signatures?](#user-content-faq57)
+* [(57) Czy mogę użyć HTML w podpisach?](#user-content-faq57)
 * [(58) Co oznacza otwarta/zamknięta ikona e-mail?](#user-content-faq58)
 * [(59) Czy oryginalne wiadomości mogą być otwierane w przeglądarce?](#user-content-faq59)
 * [(60) Czy wiesz...?](#user-content-faq60)
@@ -224,8 +224,8 @@ Projekt opiera się na wielu dyskusjach i jeśli chcesz, możesz o nim dyskutowa
 * [(104) Co muszę wiedzieć o zgłaszaniu błędów?](#user-content-faq104)
 * [(105) Jak działa opcja Roaming jak w domu?](#user-content-faq105)
 * [(106) Które launchery mogą pokazać licznik z liczbą nieprzeczytanych wiadomości?](#user-content-faq106)
-* [(107) How do I use colored stars?](#user-content-faq107)
-* [~~(108) Can you add permanently delete messages from any folder?~~](#user-content-faq108)
+* [Jak używać kolorowych gwiazdek?](#user-content-faq107)
+* [~~(108) Czy można trwale usunąć wiadomości z dowolnego folderu?~~](#user-content-faq108)
 * [~~ (109) Dlaczego funkcja „wybierz konto” jest dostępna tylko w oficjalnych wersjach? ~~](#user-content-faq109)
 * [(110) Dlaczego (niektóre) wiadomości są puste i / lub załączniki są uszkodzone?](#user-content-faq110)
 * [(111) Czy OAuth jest wspierany?](#user-content-faq111)
@@ -273,11 +273,11 @@ Projekt opiera się na wielu dyskusjach i jeśli chcesz, możesz o nim dyskutowa
 * [(153) Dlaczego trwale usunięcie wiadomości Gmaila nie działa?](#user-content-faq153)
 * [~~(154) Czy możesz dodać favikony jako zdjęcia kontaktowe?~~](#user-content-faq154)
 * [(155) Co to jest plik winmail.dat?](#user-content-faq155)
-* [(156) How can I set up an Office 365 account?](#user-content-faq156)
+* [(156) Jak mogę założyć konto Office 365?](#user-content-faq156)
 * [(157) Jak mogę utworzyć konto Free.fr?](#user-content-faq157)
 * [(158) Którą kamerę / rejestrator audio rekomendujesz?](#user-content-faq158)
 * [(159) Czym są listy ochrony przed śledzeniem Disconnect?](#user-content-faq159)
-* [(160) Can you add permanent deletion of messages without confirmation?](#user-content-faq160)
+* [(160) Czy możesz dodać trwałe usuwanie wiadomości bez potwierdzenia?](#user-content-faq160)
 * [(161) Can you add a setting to change the primary and accent color?](#user-content-faq161)
 
 [Mam kolejne pytanie.](#user-content-support)
@@ -997,15 +997,15 @@ If you would like your name or alias to be included in the list of contributors 
 
 External image:
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
+![Obraz zewnętrzny](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
 
 Embedded image:
 
-![Embedded image](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
+![Wbudowany obraz](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
 
 Broken image:
 
-![Broken image](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
+![Uszkodzony obraz](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
 
 Note that downloading external images from a remote server can be used to record you did see a message, which you likely don't want if the message is spam or malicious.
 
@@ -1184,7 +1184,7 @@ Most of the battery usage, not considering viewing messages, is due to synchroni
 
 If you have at least once a day internet connectivity, it is sufficient to synchronize messages just for one day.
 
-Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages for, but leave the number of days to keep messages for.
+Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages for, but leave the number of days to keep messages for. After decreasing the number of days to keep messages for, you might want to run the cleanup in the miscellaneous settings to remove old files.
 
 In the receive settings you can enable to always synchronize starred messages, which will allow you to keep older messages around while synchronizing messages for a limited number of days.
 
@@ -1435,11 +1435,11 @@ If you want to use preformatted text, like [ASCII art](https://en.wikipedia.org/
 
 The email icon in the folder list can be open (outlined) or closed (solid):
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
+![Obraz zewnętrzny](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
 
 Message bodies and attachments are not downloaded by default.
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png)
+![Obraz zewnętrzny](https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png)
 
 Message bodies and attachments are downloaded by default.
 
@@ -1723,9 +1723,15 @@ FairEmail is based on the state-of-the-art [Android architecture components](htt
 <a name="faq78"></a>
 **(78) How do I use schedules?**
 
-In the receive settings you can enable scheduling and set the time period and the day of weeks when messages should be received.
+In the receive settings you can enable scheduling and set a time period and the days of the week *when* messages should be *received*. Note that an end time equal to or earlier than the start time is considered to be 24 hours later.
 
-Note that an end time equal to or earlier than the start time is considered to be 24 hours later.
+Automation, see below, can be used for more advanced schedules, like for example multiple synchronization periods per day or different synchronization periods for different days.
+
+It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile, which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
+
+It is also possible to create [filter rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition. This way it is possible to *snooze* business related messages until the start of the business hours. This also means that the messages will be on your device for when there is (temporarily) no internet connection.
+
+Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app, which could be used to (not) silence specific (business) notifications. Please [see here](https://support.google.com/android/answer/9069335) for more information.
 
 For more complex schemes you could set one or more accounts to manual synchronization and send this command to FairEmail to check for new messages:
 
@@ -1771,14 +1777,6 @@ Extras: account:Gmail
 ```
 
 Account names are case sensitive.
-
-Automation can be used for more advanced schedules, like for example multiple synchronization periods per day or different synchronization periods for different days.
-
-It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile, which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
-
-It is also possible to create [rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition. This way it is possible to snooze business related messages until the start of the business hours. This also means that the messages will be on your device for when there is no internet connection, for example when flying.
-
-Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app, which could be used to (not) silence specific notifications.
 
 Scheduling is a pro feature.
 
@@ -1880,6 +1878,8 @@ If the account authorization has expired, you will have to select the account ag
 <a name="faq88"></a>
 **(88) How can I use a Yahoo, AOL or Sky account?**
 
+The preferred way to set up a Yahoo account is by using the quick setup wizard, which will use OAuth instead of a password and is therefore safer (and easier as well).
+
 To authorize a Yahoo, AOL, or Sky account you will need to create an app password. For instructions, please see here:
 
 * [for Yahoo](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
@@ -1912,7 +1912,9 @@ By default FairEmail sends each message both as plain text and as HTML formatted
 
 FairEmail will automatically link not linked web links (http and https) and not linked email addresses (mailto) for your convenience. However, texts and links are not easily distinguished, especially not with lots of [top level domains](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) being words. This is why texts with dots are sometimes incorrectly recognized as links, which is better than not recognizing some links.
 
-Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but links for less usual or less safe protocols like telnet and ftp will not be recognized.
+Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but links for less usual or less safe protocols like telnet and ftp will not be recognized. The regex to recognize links is already *very* complex and adding more protocols will make it only slower and possibly cause errors.
+
+<br />
 
 <a name="faq91"></a>
 **~~(91) Can you add periodical synchronization to save battery power?~~**
@@ -1920,7 +1922,6 @@ Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but link
 ~~Synchronizing messages is an expensive proces because the local and remote messages need to be compared,~~ ~~so periodically synchronizing messages will not result in saving battery power, more likely the contrary.~~
 
 ~~See [this FAQ](#user-content-faq39) about optimizing battery usage.~~
-
 
 <br />
 
@@ -2786,7 +2787,7 @@ If I could, I would add a setting to select the primary and accent color right a
 <br />
 
 
-## Get support
+## Wsparcie
 
 FairEmail is supported on smartphones, tablets and ChromeOS only.
 
@@ -2798,10 +2799,10 @@ There is no support on building and developing things by yourself.
 
 Requested features should:
 
-* be useful to most people
-* not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
-* comply with common standards (IMAP, SMTP, etc)
+* być przydatny dla większości ludzi
+* nie komplikować użycia FairEmail
+* pasować do filozofii FairEmail (zorientowanej na prywatność i bezpieczeństwo)
+* być zgodne z popularnymi standardami (IMAP, SMTP, itp.)
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 

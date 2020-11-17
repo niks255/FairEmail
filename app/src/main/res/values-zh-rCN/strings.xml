@@ -151,9 +151,9 @@
     <string name="title_setup_permissions_remark">获取联系人信息(可选)</string>
     <string name="title_setup_doze">设置电池优化</string>
     <string name="title_setup_doze_remark">使接收邮件更可靠</string>
-    <string name="title_setup_doze_hint">虽然这听起来自相矛盾，但关闭电池优化会减少电池用量。</string>
+    <string name="title_setup_doze_hint">虽然这听起来自相矛盾，但关闭电池优化将减少电池用量</string>
     <string name="title_setup_doze_instructions">在下以个界面，选择最上面的\"所有应用\"，找到此应用并选择\"不优化\"</string>
-    <string name="title_setup_doze_battery">耗电量高？</string>
+    <string name="title_setup_doze_battery">太耗电？</string>
     <string name="title_setup_doze_stopped">同步已停止？</string>
     <string name="title_setup_data">已启用数据节省</string>
     <string name="title_setup_advanced_options">显示高级选项</string>
@@ -229,6 +229,7 @@
     <string name="title_advanced_sync_folders">同步文件夹列表</string>
     <string name="title_advanced_sync_shared_folders">同步共享文件夹列表</string>
     <string name="title_advanced_subscriptions">管理文件夹订阅</string>
+    <string name="title_advanced_sync_subscribed">自动同步订阅的文件夹</string>
     <string name="title_advanced_check_mx">同步消息时检查发送者电子邮件地址</string>
     <string name="title_advanced_check_reply">同步消息时检查回复邮件地址</string>
     <string name="title_advanced_tune_keep_alive">自动调整保持活动时间间隔</string>
@@ -242,6 +243,7 @@
     <string name="title_advanced_separate_reply">在回复/转发标题之前插入一条水平线</string>
     <string name="title_advanced_extended_reply">使用扩展回复/转发头</string>
     <string name="title_advanced_quote_reply">引用回复文本</string>
+    <string name="title_advanced_limit_reply">限制嵌套引用数量</string>
     <string name="title_advanced_resize_reply">调整回复文本中图像的大小</string>
     <string name="title_advanced_signature_location">签名位置</string>
     <string name="title_advanced_signature_reply">回复时使用签名</string>
@@ -321,6 +323,7 @@
     <string name="title_advanced_text_align">使用文本对齐</string>
     <string name="title_advanced_text_separators">使用分隔线</string>
     <string name="title_advanced_collapse_quotes">折叠引用文本</string>
+    <string name="title_advanced_image_placeholders">显示图像占位符</string>
     <string name="title_advanced_images_inline">自动显示内联图像</string>
     <string name="title_advanced_seekbar">在底部用一个圆点显示会话相对位置</string>
     <string name="title_advanced_actionbar">显示对话操作栏</string>
@@ -468,8 +471,10 @@
     <string name="title_advanced_preview_hint">只有当消息文本下载时才可用</string>
     <string name="title_advanced_preview_issue">由于某些Android版本中的错误，当行数大于一时，滚动可能会较慢</string>
     <string name="title_advanced_overview_mode_hint">这可能会产生非常小的字体</string>
+    <string name="title_advanced_placeholders_hint">这只适用于重新格式化的消息</string>
     <string name="title_advanced_inline_hint">内联图像是邮件中包含的图像</string>
     <string name="title_advanced_parse_classes_hint">这将更准确地显示消息，但可能会有延迟</string>
+    <string name="title_advanced_language_detection_hint">语言检测支持取决于设备制造商</string>
     <string name="title_advanced_autoexpand_hint">当对话中只有一条消息或只是一条未读消息时，自动打开该消息</string>
     <string name="title_advanced_autoseen_hint">可以在单独的账户设置中禁用展开消息时自动标记消息为已读</string>
     <string name="title_advanced_autoclose_hint">在所有邮件存档、发送或丢弃时自动关闭对话线程</string>

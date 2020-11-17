@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.bugsnag.android.gradle'
 
-def getVersionCode = { -> return 1386 }
-def getReleaseName = { -> return "\"Ziapelta\"" }
+def getVersionCode = { -> return 1399 }
+def getReleaseName = { -> return "\"Adelolophus\"" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -249,7 +249,7 @@ dependencies {
     def coordinatorlayout_version = "1.1.0"
     def constraintlayout_version = "2.0.2"
     def material_version = "1.3.0-alpha03"
-    def browser_version = "1.3.0-beta01"
+    def browser_version = "1.3.0-rc01"
     def lbm_version = "1.0.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.0.1"
@@ -257,11 +257,11 @@ dependencies {
     def lifecycle_extensions_version = "2.2.0"
     def sqlite_version = "2.1.0"
     def room_version = "2.2.5" // 2.3.0-alpha03
-    def paging_version = "2.1.2" // 3.0.0-alpha03
+    def paging_version = "2.1.2" // 3.0.0-alpha09
     def preference_version = "1.1.1"
     def work_version = "2.5.0-beta01"
     def exif_version = "1.3.1"
-    def biometric_version = "1.1.0-beta01"
+    def biometric_version = "1.1.0-rc01"
     def textclassifier_version = "1.0.0-alpha03"
     def billingclient_version = "3.0.1"
     def javamail_version = "1.6.5"
@@ -270,13 +270,13 @@ dependencies {
     def jax_version = "2.3.0-jaxb-1.0.6"
     def dnsjava_version = "2.1.9"
     def openpgp_version = "12.0"
-    def requery_version = "3.32.2"
+    def requery_version = "3.33.0"
     def badge_version = "1.1.22"
     def bugsnag_version = "5.2.1"
-    def biweekly_version = "0.6.3"
+    def biweekly_version = "0.6.5"
     def relinker_version = "1.3.1"
     def markwon_version = "4.6.0"
-    def bouncycastle_version = "1.66"
+    def bouncycastle_version = "1.67"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.0"
     def appauth_version = "0.7.1"

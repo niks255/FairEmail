@@ -172,10 +172,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         Log.i("Orientation=" + config.orientation + " normal=" + normal +
                 " landscape=" + landscape + "/" + landscape3);
 
-        boolean portrait = (config.orientation == ORIENTATION_PORTRAIT || !normal || !landscape);
-        view = LayoutInflater.from(this).inflate(portrait
-                ? (portrait2 ? R.layout.activity_view_portrait_split : R.layout.activity_view_portrait)
-                : R.layout.activity_view_landscape, null);
+        int viewId;
+        if (config.orientation == ORIENTATION_PORTRAIT || !normal || !landscape)
+            viewId = (portrait2 ? R.layout.activity_view_portrait_split : R.layout.activity_view_portrait);
+        else
+            viewId = R.layout.activity_view_landscape_split;
+        view = LayoutInflater.from(this).inflate(viewId, null);
         setContentView(view);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -185,7 +187,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         content_separator = findViewById(R.id.content_separator);
         content_pane = findViewById(R.id.content_pane);
 
-        if ((portrait ? portrait2 : !landscape3) && Helper.isFoldable()) {
+        if (Helper.isFoldable() &&
+                (viewId == R.layout.activity_view_portrait_split ||
+                        viewId == R.layout.activity_view_landscape_split)) {
             View content_frame = findViewById(R.id.content_frame);
             ViewGroup.LayoutParams lparam = content_frame.getLayoutParams();
             if (lparam instanceof LinearLayout.LayoutParams) {
@@ -244,7 +248,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         int drawerWidth;
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        if (portrait || !landscape3) {
+        if (viewId != R.layout.activity_view_landscape_split || !landscape3) {
             int actionBarHeight;
             TypedValue tv = new TypedValue();
             if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
@@ -1428,14 +1432,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             btnBatteryInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.viewFAQ(getContext(), 39);
+                    Helper.viewFAQ(v.getContext(), 39);
                 }
             });
 
             btnReformatInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.viewFAQ(getContext(), 35);
+                    Helper.viewFAQ(v.getContext(), 35);
                 }
             });
 

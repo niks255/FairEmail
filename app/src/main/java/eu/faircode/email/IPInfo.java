@@ -20,10 +20,12 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
-import android.net.MailTo;
 import android.net.ParseException;
 import android.net.Uri;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
+import androidx.core.net.MailTo;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -40,8 +42,8 @@ public class IPInfo {
 
     private final static int FETCH_TIMEOUT = 15 * 1000; // milliseconds
 
-    static Pair<String, Organization> getOrganization(Uri uri, Context context) throws IOException, ParseException {
-        if ("mailto".equals(uri.getScheme())) {
+    static Pair<String, Organization> getOrganization(@NonNull Uri uri, Context context) throws IOException, ParseException {
+        if ("mailto".equalsIgnoreCase(uri.getScheme())) {
             MailTo email = MailTo.parse(uri.toString());
             String to = email.getTo();
             if (to == null || !to.contains("@"))

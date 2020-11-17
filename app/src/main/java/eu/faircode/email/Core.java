@@ -59,12 +59,12 @@ import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.FLAGS;
 import com.sun.mail.imap.protocol.FetchResponse;
 import com.sun.mail.imap.protocol.IMAPProtocol;
+import com.sun.mail.imap.protocol.MailboxInfo;
 import com.sun.mail.imap.protocol.MessageSet;
 import com.sun.mail.imap.protocol.UID;
 import com.sun.mail.pop3.POP3Folder;
 import com.sun.mail.pop3.POP3Message;
 import com.sun.mail.pop3.POP3Store;
-import com.sun.mail.util.MessageRemovedIOException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,7 +86,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -462,18 +461,19 @@ class Core {
                             db.endTransaction();
                         }
 
+                        if (ifolder != null && !ifolder.isOpen())
+                            break;
+
                         if (op.tries >= TOTAL_RETRY_MAX ||
                                 ex instanceof OutOfMemoryError ||
-                                ex instanceof MessageRemovedException ||
-                                ex instanceof MessageRemovedIOException ||
                                 ex instanceof FileNotFoundException ||
                                 ex instanceof FolderNotFoundException ||
                                 ex instanceof IllegalArgumentException ||
                                 ex instanceof SQLiteConstraintException ||
-                                ex.getCause() instanceof MessageRemovedException ||
-                                ex.getCause() instanceof MessageRemovedIOException ||
-                                ex.getCause() instanceof BadCommandException ||
-                                ex.getCause() instanceof CommandFailedException ||
+                                (!ConnectionHelper.isIoError(ex) &&
+                                        (ex.getCause() instanceof BadCommandException ||
+                                                ex.getCause() instanceof CommandFailedException /* NO */)) ||
+                                MessageHelper.isRemoved(ex) ||
                                 EntityOperation.ATTACHMENT.equals(op.name) ||
                                 (ConnectionHelper.isIoError(ex) &&
                                         EntityFolder.DRAFTS.equals(folder.type) &&
@@ -481,10 +481,19 @@ class Core {
                             // com.sun.mail.iap.BadCommandException: B13 BAD [TOOBIG] Message too large
                             // com.sun.mail.iap.CommandFailedException: AY3 NO [CANNOT] Cannot APPEND to a SPAM folder
                             // com.sun.mail.iap.CommandFailedException: B16 NO [ALERT] Cannot MOVE messages out of the Drafts folder
+                            // com.sun.mail.iap.CommandFailedException: AV5 NO [OVERQUOTA] quota exceeded
                             // Drafts: javax.mail.FolderClosedException: * BYE Jakarta Mail Exception:
                             //   javax.net.ssl.SSLException: Write error: ssl=0x8286cac0: I/O error during system call, Broken pipe
                             // Drafts: * BYE Jakarta Mail Exception: java.io.IOException: Connection dropped by server?
-                            Log.w("Unrecoverable");
+                            String msg = "Unrecoverable operation=" + op.name + " tries=" + op.tries + " created=" + new Date(op.created);
+                            EntityLog.log(context, msg +
+                                    " folder=" + folder.id + ":" + folder.name +
+                                    " message=" + (message == null ? null : message.id + ":" + message.subject) +
+                                    " reason=" + Log.formatThrowable(ex, false));
+                            if (op.tries > 1 ||
+                                    ex.getCause() instanceof BadCommandException ||
+                                    ex.getCause() instanceof CommandFailedException)
+                                Log.e(new Throwable(msg, ex));
 
                             try {
                                 db.beginTransaction();
@@ -706,7 +715,6 @@ class Core {
 
     private static void onKeyword(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException {
         // Set/reset user flag
-        DB db = DB.getInstance(context);
         // https://tools.ietf.org/html/rfc3501#section-2.3.2
         String keyword = jargs.getString(0);
         boolean set = jargs.getBoolean(1);
@@ -1528,6 +1536,8 @@ class Core {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean sync_folders = (prefs.getBoolean("sync_folders", true) || force);
         boolean sync_shared_folders = prefs.getBoolean("sync_shared_folders", false);
+        boolean subscriptions = prefs.getBoolean("subscriptions", false);
+        boolean sync_subscribed = prefs.getBoolean("sync_subscribed", false);
 
         // Get folder names
         Map<String, EntityFolder> local = new HashMap<>();
@@ -1708,7 +1718,7 @@ class Core {
                         folder.account = account.id;
                         folder.name = fullName;
                         folder.type = (EntityFolder.SYSTEM.equals(type) ? type : EntityFolder.USER);
-                        folder.synchronize = false;
+                        folder.synchronize = (subscribed && subscriptions && sync_subscribed);
                         folder.subscribed = subscribed;
                         folder.poll = true;
                         folder.sync_days = EntityFolder.DEFAULT_SYNC;
@@ -1810,13 +1820,20 @@ class Core {
     private static void onPurgeFolder(Context context, JSONArray jargs, EntityFolder folder, IMAPFolder ifolder) throws MessagingException {
         // Delete all messages from folder
         try {
-            final MessageSet[] sets = new MessageSet[]{new MessageSet(1, ifolder.getMessageCount())};
-
-            Log.i(folder.name + " purge " + MessageSet.toString(sets));
+            Log.i(folder.name + " purge=" + ifolder.getMessageCount());
             ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
                 @Override
                 public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
-                    protocol.storeFlags(sets, new Flags(Flags.Flag.DELETED), true);
+                    MailboxInfo info = protocol.select(ifolder.getFullName());
+                    if (info.total > 0) {
+                        MessageSet[] sets = new MessageSet[]{new MessageSet(1, info.total)};
+                        EntityLog.log(context, folder.name + " purging=" + MessageSet.toString(sets));
+                        try {
+                            protocol.storeFlags(sets, new Flags(Flags.Flag.DELETED), true);
+                        } catch (ProtocolException ex) {
+                            throw new ProtocolException("Purge=" + MessageSet.toString(sets), ex);
+                        }
+                    }
                     return null;
                 }
             });
@@ -2996,7 +3013,8 @@ class Core {
             if (message.ui_hide &&
                     message.ui_snoozed == null &&
                     (message.ui_busy == null || message.ui_busy < new Date().getTime()) &&
-                    db.operation().getOperationCount(folder.id, message.id) == 0) {
+                    db.operation().getOperationCount(folder.id, message.id) == 0 &&
+                    db.operation().getOperationCount(folder.id, EntityOperation.PURGE) == 0) {
                 update = true;
                 message.ui_hide = false;
                 Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid + " unhide");
@@ -3799,10 +3817,17 @@ class Core {
 
             if (notify_messaging) {
                 // https://developer.android.com/training/cars/messaging
-                Person.Builder me = new Person.Builder()
-                        .setName(MessageHelper.formatAddresses(message.to, name_email, false));
-                Person.Builder you = new Person.Builder()
-                        .setName(MessageHelper.formatAddresses(message.from, name_email, false));
+                String meName = MessageHelper.formatAddresses(message.to, name_email, false);
+                String youName = MessageHelper.formatAddresses(message.from, name_email, false);
+
+                // Names cannot be empty
+                if (TextUtils.isEmpty(meName))
+                    meName = "-";
+                if (TextUtils.isEmpty(youName))
+                    youName = "-";
+
+                Person.Builder me = new Person.Builder().setName(meName);
+                Person.Builder you = new Person.Builder().setName(youName);
 
                 if (info[0].hasPhoto())
                     you.setIcon(IconCompat.createWithBitmap(info[0].getPhotoBitmap()));
@@ -4038,14 +4063,8 @@ class Core {
                     if (!TextUtils.isEmpty(preview))
                         sb.append(preview);
                 }
-                if (sb.length() > 0) {
-                    String ascii = Normalizer
-                            .normalize(sb.toString(), Normalizer.Form.NFKD)
-                            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-                            .replace("ß", "ss")
-                            .replace("ĳ", "ij");
-                    mbuilder.setContentText(ascii);
-                }
+                if (sb.length() > 0)
+                    mbuilder.setContentText(sb.toString());
 
                 // Device
                 if (!notify_messaging) {
