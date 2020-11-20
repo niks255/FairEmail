@@ -298,7 +298,7 @@ public class EntityRule {
         return matched;
     }
 
-    boolean execute(Context context, EntityMessage message) throws JSONException, IOException, AddressException {
+    boolean execute(Context context, EntityMessage message) throws JSONException {
         boolean executed = _execute(context, message);
         if (id != null && executed) {
             DB db = DB.getInstance(context);
@@ -307,7 +307,7 @@ public class EntityRule {
         return executed;
     }
 
-    private boolean _execute(Context context, EntityMessage message) throws JSONException, IOException, AddressException {
+    private boolean _execute(Context context, EntityMessage message) throws JSONException, IllegalArgumentException {
         JSONObject jaction = new JSONObject(action);
         int type = jaction.getInt("type");
         Log.i("Executing rule=" + type + ":" + name + " message=" + message.id);
@@ -343,6 +343,66 @@ public class EntityRule {
                 return onActionAutomation(context, message, jaction);
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type + " name=" + name);
+        }
+    }
+
+    void validate(Context context) throws JSONException, IllegalArgumentException {
+        JSONObject jargs = new JSONObject(action);
+        int type = jargs.getInt("type");
+
+        DB db = DB.getInstance(context);
+        switch (type) {
+            case TYPE_NOOP:
+                return;
+            case TYPE_SEEN:
+                return;
+            case TYPE_UNSEEN:
+                return;
+            case TYPE_HIDE:
+                return;
+            case TYPE_IGNORE:
+                return;
+            case TYPE_SNOOZE:
+                return;
+            case TYPE_FLAG:
+                return;
+            case TYPE_IMPORTANCE:
+                return;
+            case TYPE_KEYWORD:
+                String keyword = jargs.getString("keyword");
+                if (TextUtils.isEmpty(keyword))
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_keyword_missing));
+                return;
+            case TYPE_MOVE:
+            case TYPE_COPY:
+                long target = jargs.optLong("target", -1);
+                if (target < 0)
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_folder_missing));
+                EntityFolder folder = db.folder().getFolder(target);
+                if (folder == null)
+                    throw new IllegalArgumentException("Folder not found");
+                return;
+            case TYPE_ANSWER:
+                long iid = jargs.optLong("identity", -1);
+                if (iid < 0)
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_identity_missing));
+                EntityIdentity identity = db.identity().getIdentity(iid);
+                if (identity == null)
+                    throw new IllegalArgumentException("Identity not found");
+
+                long aid = jargs.optLong("answer", -1);
+                if (aid < 0)
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_answer_missing));
+                EntityAnswer answer = db.answer().getAnswer(aid);
+                if (answer == null)
+                    throw new IllegalArgumentException("Answer not found");
+                return;
+            case TYPE_TTS:
+                return;
+            case TYPE_AUTOMATION:
+                return;
+            default:
+                throw new IllegalArgumentException("Unknown rule type=" + type);
         }
     }
 
@@ -399,7 +459,7 @@ public class EntityRule {
         return true;
     }
 
-    private boolean onActionCopy(Context context, EntityMessage message, JSONObject jargs) throws JSONException {
+    private boolean onActionCopy(Context context, EntityMessage message, JSONObject jargs) {
         long target = jargs.optLong("target", -1);
 
         DB db = DB.getInstance(context);
@@ -412,7 +472,7 @@ public class EntityRule {
         return true;
     }
 
-    private boolean onActionAnswer(Context context, EntityMessage message, JSONObject jargs) throws JSONException, IOException, AddressException {
+    private boolean onActionAnswer(Context context, EntityMessage message, JSONObject jargs) {
         DB db = DB.getInstance(context);
         boolean attachments = jargs.optBoolean("attachments");
 
@@ -443,7 +503,8 @@ public class EntityRule {
                 try {
                     answer(context, EntityRule.this, message, jargs);
                 } catch (Throwable ex) {
-                    Log.e(ex);
+                    db.message().setMessageError(message.id, Log.formatThrowable(ex));
+                    Log.w(ex);
                 }
             }
         });
@@ -583,7 +644,9 @@ public class EntityRule {
         return true;
     }
 
-    private boolean onActionTts(Context context, EntityMessage message, JSONObject jargs) throws IOException {
+    private boolean onActionTts(Context context, EntityMessage message, JSONObject jargs) {
+        DB db = DB.getInstance(context);
+
         if (!message.content) {
             EntityOperation.queue(context, message, EntityOperation.BODY);
             EntityOperation.queue(context, message, EntityOperation.RULE, this.id);
@@ -596,7 +659,8 @@ public class EntityRule {
                 try {
                     speak(context, EntityRule.this, message);
                 } catch (Throwable ex) {
-                    Log.e(ex);
+                    db.message().setMessageError(message.id, Log.formatThrowable(ex));
+                    Log.w(ex);
                 }
             }
         });
@@ -691,10 +755,8 @@ public class EntityRule {
 
     private boolean onActionKeyword(Context context, EntityMessage message, JSONObject jargs) throws JSONException {
         String keyword = jargs.getString("keyword");
-        if (TextUtils.isEmpty(keyword)) {
-            Log.w("Keyword empty");
-            return false;
-        }
+        if (TextUtils.isEmpty(keyword))
+            throw new IllegalArgumentException("Keyword missing rule=" + name);
 
         EntityOperation.queue(context, message, EntityOperation.KEYWORD, keyword, true);
 

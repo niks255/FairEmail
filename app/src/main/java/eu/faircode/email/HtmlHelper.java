@@ -760,6 +760,7 @@ public class HtmlHelper {
 
         // Replace headings
         Elements hs = document.select("h1,h2,h3,h4,h5,h6");
+        hs.attr("x-line-before", "true");
         if (text_size) {
             if (text_separators && view)
                 for (Element h : hs)
@@ -920,6 +921,12 @@ public class HtmlHelper {
 
                     // Flow not / left aligned columns
                     String align = col.attr("x-align");
+                    //if (next == null && row.childrenSize() == 2) {
+                    //    align = "end";
+                    //    String style = col.attr("style");
+                    //    col.attr("style",
+                    //            mergeStyles(style, "text-align:" + align));
+                    //}
                     if (TextUtils.isEmpty(align) ||
                             "left".equals(align) ||
                             "start".equals(align))
@@ -945,6 +952,20 @@ public class HtmlHelper {
 
         // Fix dangling table elements
         document.select("tr,th,td").tagName("div");
+
+        // Lists
+        for (Element e : document.select("ol,ul")) {
+            if (view) {
+                if (!"false".equals(e.attr("x-line-before")))
+                    e.attr("x-line-before", "true");
+                if (!"false".equals(e.attr("x-line-after")))
+                    e.attr("x-line-after", "true");
+            } else {
+                String style = e.attr("style");
+                e.attr("style",
+                        mergeStyles(style, "margin:0"));
+            }
+        }
 
         // Images
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img

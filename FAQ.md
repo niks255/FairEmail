@@ -1019,8 +1019,9 @@ or something between the email server and the app, like a firewall, actively ref
 The error *... Network unreachable ...* means that the email server was not reachable via the current internet connection,
 for example because internet traffic is restricted to local traffic only.
 
-The error *... Host is unresolved ...* or "*... Unable to resolve host ...* means that the address of the email server could not be resolved.
-This might be caused by ad blocking or an unreachable or not properly working [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
+The error *... Host is unresolved ...*, *... Unable to resolve host ...* or *... No address associated with hostname ...*
+means that the address of the email server could not be resolved into an IP address.
+This might be caused by a VPN, ad blocking or an unreachable or not properly working (local) [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) server.
 
 The error *... Software caused connection abort ...*
 means that the email server or something between FairEmail and the email server actively terminated an existing connection.
@@ -1470,6 +1471,11 @@ If the connection to the email server is lost, FairEmail will always synchronize
 If the connection is unstable, this can result in extra data usage.
 In this case, it is a good idea to decrease the number of days to synchronize messages for to a minimum (see the previous question)
 or to switch to periodically synchronizing of messages (receive settings).
+
+To reduce data usage, you could change these advanced receive settings:
+
+* Check if old messages were removed from the server: disable
+* Synchronize (shared) folder list: disable
 
 By default FairEmail does not download message texts and attachments larger than 256 KiB when there is a metered (mobile or paid Wi-Fi) internet connection.
 You can change this in the connection settings.
@@ -2612,6 +2618,7 @@ OAuth for Gmail is supported via the quick setup wizard.
 The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts.
 OAuth for non on-device accounts is not supported
 because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this.
+You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
 OAuth for Yandex and Yahoo is supported via the quick setup wizard.
 
@@ -2781,9 +2788,6 @@ When FairEmail cannot connect to an email server to receive messages,
 for example when the internet connection is bad or a firewall or a VPN is blocking the connection,
 FairEmail will wait 8, 16 and 32 seconds while keeping the device awake (=use battery power) and try again to connect.
 If this fails, FairEmail will schedule an alarm to retry after 15, 30 and 60 minutes and let the device sleep (=no battery usage).
-
-Between connectivity changes there is a wait of 90 seconds to give the email server the opportunity to discover the old connection is broken.
-This is necessary because the internet connection of a mobile device is often lost abruptly and to prevent the problem described in [this FAQ](#user-content-faq23).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby)
 does not allow to wake the device earlier than after 15 minutes.
@@ -3348,6 +3352,10 @@ please see [here](https://github.com/disconnectme/disconnect-tracking-protection
 
 Permanent deletion means that messages will *irreversibly* be lost, and to prevent this from happening accidentally, this always needs to be confirmed.
 Even with a confirmation, some very angry people who lost some of their messages through their own fault contacted me, which was a rather unpleasant experience :-(
+
+Advanced: the IMAP delete flag in combination with the EXPUNGE command is not supportable
+because both email servers and not all people can handle this, risking unexpected loss of messages.
+A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
 
 <br />
 

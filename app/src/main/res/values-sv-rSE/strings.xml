@@ -334,6 +334,7 @@
     <string name="title_advanced_text_align">Använd textjustering</string>
     <string name="title_advanced_text_separators">Använd separata linjer</string>
     <string name="title_advanced_collapse_quotes">Kollapsa citerad text</string>
+    <string name="title_advanced_image_placeholders">Visa bildplatshållare</string>
     <string name="title_advanced_images_inline">Visa automatiskt infogade bilder</string>
     <string name="title_advanced_seekbar">Visa relativ konversationsposition med en punkt</string>
     <string name="title_advanced_actionbar">Visa konversationsåtgärdsfältet</string>
@@ -481,8 +482,10 @@
     <string name="title_advanced_preview_hint">Endast tillgängligt när meddelandetexten hämtades</string>
     <string name="title_advanced_preview_issue">Scrollningen kan vara långsam på grund av en bugg i vissa Android-versioner när antalet rader är mer än en</string>
     <string name="title_advanced_overview_mode_hint">Detta kan resultera i mycket små typsnitt</string>
+    <string name="title_advanced_placeholders_hint">Detta gäller endast omformaterade meddelanden</string>
     <string name="title_advanced_inline_hint">Infogade bilder är bilder som ingår i meddelandet</string>
     <string name="title_advanced_parse_classes_hint">Detta kommer att visa meddelanden mer korrekt, men möjligen med en fördröjning</string>
+    <string name="title_advanced_language_detection_hint">Stöd för språkdetektering beror på enhetstillverkaren</string>
     <string name="title_advanced_autoexpand_hint">Öppna automatiskt meddelandet när det bara finns ett meddelande eller bara ett oläst meddelande i en konversation</string>
     <string name="title_advanced_autoseen_hint">Automatisk markering av meddelanden som läses vid utökning kan inaktiveras i de enskilda kontoinställningarna</string>
     <string name="title_advanced_autoclose_hint">Stäng automatiskt konversationstrådar när alla meddelanden arkiveras, skickas eller kastas</string>
@@ -615,9 +618,11 @@
     <string name="title_advanced_browse">Bläddra bland meddelanden på servern</string>
     <string name="title_advanced_expand_read">Markera meddelanden som lästa vid expanderande</string>
     <string name="title_synchronize_now">Synkronisera nu</string>
-    <string name="title_synchronize_childs">Synkronisera underordnade mappar</string>
+    <string name="title_synchronize_subfolders">Undermappar</string>
     <string name="title_synchronize_more">Synkronisera fler meddelanden</string>
     <string name="title_synchronize_enabled">Synkronisera</string>
+    <string name="title_synchronize_batch_enable">Aktivera synkronisering</string>
+    <string name="title_synchronize_batch_disable">Inaktivera synkronisering</string>
     <string name="title_delete_local">Ta bort lokala meddelanden</string>
     <string name="title_delete_browsed">Ta bort bläddrade/sökta meddelanden</string>
     <string name="title_empty_trash">Töm papperskorg</string>
@@ -1047,6 +1052,10 @@
     <string name="title_rule_answer_remark">Endast ett svar kommer att skickas för någon konversation, för att undvika svarsloopar</string>
     <string name="title_rule_name_missing">Regelnamn saknas</string>
     <string name="title_rule_condition_missing">Tillstånd saknas</string>
+    <string name="title_rule_folder_missing">Mapp saknas</string>
+    <string name="title_rule_identity_missing">Identitet saknas</string>
+    <string name="title_rule_answer_missing">Mall saknas</string>
+    <string name="title_rule_keyword_missing">Nyckelord saknas</string>
     <string name="title_rule_automation_hint">Detta kommer att skicka avsikten \'%1$s\' med extramaterial \'%2$s\'</string>
     <string name="title_rule_execute">Verkställ nu</string>
     <string name="title_rule_applied">Berörda meddelanden: %1$d</string>
