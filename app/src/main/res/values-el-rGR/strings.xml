@@ -254,6 +254,7 @@
     <string name="title_advanced_prefix_once">Μόνο ένα πρόθεμα κατά την απάντηση ή προώθηση μηνύματος</string>
     <string name="title_advanced_separate_reply">Εισαγωγή μιας οριζόντιας γραμμής πριν από την κεφαλίδα μιας απάντησης/προώθησης</string>
     <string name="title_advanced_extended_reply">Χρήση εκτεταμένων κεφαλίδων κατά την απάντηση/προώθηση</string>
+    <string name="title_advanced_write_below">Συγγραφή κάτω από το κείμενο του αποστολέα</string>
     <string name="title_advanced_quote_reply">Παράθεση του προς απάντηση κειμένου</string>
     <string name="title_advanced_limit_reply">Περιορισμός του αριθμού των ιεραρχημένων παραθεμάτων</string>
     <string name="title_advanced_resize_reply">Αναπροσαρμογή των εικόνων στο προς απάντηση κείμενο</string>
@@ -617,6 +618,7 @@
     <string name="title_advanced_browse">Περιήγηση μηνυμάτων στο διακομιστή</string>
     <string name="title_advanced_expand_read">Σήμανση των μηνυμάτων ως αναγνωσμένων κατά την ανάπτυξή τους</string>
     <string name="title_synchronize_now">Συγχρονισμός τώρα</string>
+    <string name="title_synchronize_subfolders">Υποφάκελοι</string>
     <string name="title_synchronize_more">Συγχρονισμός περισσοτέρων μηνυμάτων</string>
     <string name="title_synchronize_enabled">Συγχρονισμός</string>
     <string name="title_synchronize_batch_enable">Ενεργοποίηση συγχρονισμού</string>
@@ -1045,6 +1047,10 @@
     <string name="title_rule_answer_remark">Θα αποστέλλεται μόνο μία απάντηση ανά συζήτηση, για να αποφευχθεί ένας ατέρμονος κύκλος απαντήσεων</string>
     <string name="title_rule_name_missing">Λείπει το όνομα του κανόνα</string>
     <string name="title_rule_condition_missing">Λείπει συνθήκη</string>
+    <string name="title_rule_folder_missing">Λείπει φάκελος</string>
+    <string name="title_rule_identity_missing">Λείπει ταυτότητα</string>
+    <string name="title_rule_answer_missing">Λείπει πρότυπο</string>
+    <string name="title_rule_keyword_missing">Λείπει λέξη-κλειδί</string>
     <string name="title_rule_execute">Εκτέλεση τώρα</string>
     <string name="title_rule_applied">Μηνύματα που αφορά: %1$d</string>
     <string name="title_rule_check">Έλεγχος</string>

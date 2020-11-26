@@ -254,6 +254,7 @@
     <string name="title_advanced_prefix_once">Ne préfixer l’objet qu’une seule fois lors de la réponse ou du transfert</string>
     <string name="title_advanced_separate_reply">Insérer une ligne horizontale avant l\'en-tête de réponse/transfert</string>
     <string name="title_advanced_extended_reply">Utiliser l’en-tête de réponse/transfert étendu</string>
+    <string name="title_advanced_write_below">Écrire sous le texte de l\'expéditeur</string>
     <string name="title_advanced_quote_reply">Citer le texte répondu</string>
     <string name="title_advanced_limit_reply">Limiter le nombre de citations imbriquées</string>
     <string name="title_advanced_resize_reply">Redimensionner les images dans le texte de la réponse</string>
@@ -723,6 +724,7 @@
     <string name="title_event">Ajouter au calendrier</string>
     <string name="title_pin">Ajouter un raccourci</string>
     <string name="title_print">Imprimer</string>
+    <string name="title_print_header" comment="title_print_header&#10;Title for option to enable/disable printing sender, subject, etc above message text">Imprimer l\'en-tête</string>
     <string name="title_show_headers">Afficher les en-têtes</string>
     <string name="title_raw_save">Enregistrer le message original</string>
     <string name="title_raw_send">Envoyer comme pièce-jointe</string>

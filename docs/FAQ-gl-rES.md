@@ -10,17 +10,17 @@ Se ten algunha pregunta, por favor mire primeiro na lista de preguntas frecuente
 * [Características planeadas](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Características frecuentemente pedidas](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Preguntas frecuentes](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Conseguir soporte](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
 ## Autorizando contas
 
 Na maioría dos casos, a configuración rápida é capaz de identificar a configuración correcta automaticamente.
 
-Se a configuración rápida fallara, terá que configurar unha conta manualmente (para recibir correo) e unha identidade (para enviar correo). Para iso, precisará coñecer os enderezos e os números de porto dos servidores IMAP e SMTP, se hai que usar SSL/TLS ou STARTTLS, ou seu nome de usuario (a maioría das veces é o seu enderezo de correo, pero non sempre) e o seu contrasinal.
+Se a configuración rápida fallase, terá que configurar unha conta manualmente (para recibir correo) e unha identidade (para enviar correo). Para iso, precisará coñecer os enderezos e os números de porto dos servidores IMAP e SMTP, se hai que usar SSL/TLS ou STARTTLS, ou seu nome de usuario (a maioría das veces é o seu enderezo de correo, pero non sempre) e o seu contrasinal.
 
 Soe chegar facer unha procura de *IMAP* e o nome do provedor para atopar a documentación axeitada.
 
-Nalgúns casos será preciso habilitar o acceso externo á súa conta e/ou usar un contrasinal especial da aplicación, por exemplo cando a autenticación de dos factores está activa.
+Nalgúns casos será preciso habilitar o acceso externo á súa conta e/ou usar un contrasinal especial (da aplicación), por exemplo cando a autenticación de dos factores está activa.
 
 Para autorizar:
 
@@ -1223,6 +1223,11 @@ You can reduce the data usage basically in the same way as reducing battery usag
 It is inevitable that data will be used to synchronize messages.
 
 If the connection to the email server is lost, FairEmail will always synchronize the messages again to make sure no messages were missed. If the connection is unstable, this can result in extra data usage. In this case, it is a good idea to decrease the number of days to synchronize messages for to a minimum (see the previous question) or to switch to periodically synchronizing of messages (receive settings).
+
+To reduce data usage, you could change these advanced receive settings:
+
+* Check if old messages were removed from the server: disable
+* Synchronize (shared) folder list: disable
 
 By default FairEmail does not download message texts and attachments larger than 256 KiB when there is a metered (mobile or paid Wi-Fi) internet connection. You can change this in the connection settings.
 
@@ -2798,10 +2803,10 @@ There is no support on building and developing things by yourself.
 
 Requested features should:
 
-* ser de utilidade para a maioría da xente
-* non complicar o uso de FairEmail
-* encaixar na filosofía de FairEmail (orientado á privacidade e coa seguridade en mente)
-* cumprir cos estándares comúns (IMAP, SMTP, etc)
+* be useful to most people
+* not complicate the usage of FairEmail
+* fit within the philosophy of FairEmail (privacy oriented, security minded)
+* comply with common standards (IMAP, SMTP, etc)
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 

@@ -253,6 +253,7 @@
     <string name="title_advanced_prefix_once">Prefix i ämnet endast när du svarar eller vidarebefordrar</string>
     <string name="title_advanced_separate_reply">Infoga en horisontell linje innan ett svar/framåt sidhuvud</string>
     <string name="title_advanced_extended_reply">Använd förlängd svars-/framåtriktad sidhuvud</string>
+    <string name="title_advanced_write_below">Skriv under avsändarens text</string>
     <string name="title_advanced_quote_reply">Citera svarstext</string>
     <string name="title_advanced_limit_reply">Begränsa antalet nästlade citat</string>
     <string name="title_advanced_resize_reply">Ändra storlek på bilder i svarande text</string>
@@ -722,6 +723,7 @@
     <string name="title_event">Lägg till i kalender</string>
     <string name="title_pin">Lägg till genväg</string>
     <string name="title_print">Skriv ut</string>
+    <string name="title_print_header" comment="title_print_header&#10;Title for option to enable/disable printing sender, subject, etc above message text">Visa header</string>
     <string name="title_show_headers">Visa sidhuvuden</string>
     <string name="title_raw_save">Spara rent meddelande</string>
     <string name="title_raw_send">Skicka som bilaga</string>

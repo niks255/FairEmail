@@ -954,7 +954,7 @@ public class HtmlHelper {
         document.select("tr,th,td").tagName("div");
 
         // Lists
-        for (Element e : document.select("ol,ul")) {
+        for (Element e : document.select("ol,ul,blockquote")) {
             if (view) {
                 if (!"false".equals(e.attr("x-line-before")))
                     e.attr("x-line-before", "true");
@@ -963,7 +963,7 @@ public class HtmlHelper {
             } else {
                 String style = e.attr("style");
                 e.attr("style",
-                        mergeStyles(style, "margin:0"));
+                        mergeStyles(style, "margin-top:0;margin-bottom:0"));
             }
         }
 
@@ -2355,8 +2355,11 @@ public class HtmlHelper {
                                 if (llevel > 0)
                                     setSpan(ssb, new LeadingMarginSpan.Standard(llevel * dp24), start, ssb.length());
                                 break;
-                            case "p": // signature
-                                // Do nothing
+                            case "meta":
+                                // Signature
+                                break;
+                            case "p":
+                                // Signature
                                 break;
                             case "small":
                                 setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
@@ -2371,6 +2374,12 @@ public class HtmlHelper {
                             case "sup":
                                 setSpan(ssb, new SuperscriptSpan(), start, ssb.length());
                                 setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
+                                break;
+                            case "table":
+                            case "tr":
+                            case "th":
+                            case "td":
+                                // Signature
                                 break;
                             case "b":
                             case "strong":

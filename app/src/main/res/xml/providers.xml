@@ -117,7 +117,7 @@
     </provider>
     <!-- no IMAP IDLE -->
     <provider
-        name="Yahoo"
+        name="Yahoo/AT&amp;T"
         appPassword="true"
         domain="yahoo\\..*"
         id="yahoo"
@@ -384,6 +384,19 @@
             starttls="false" />
         <smtp
             host="smtp.ionos.de"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Ionos.com"
+        keepalive="12"
+        link="https://www.ionos.com/help/email/general-topics/settings-for-your-email-programs-imap-pop3/">
+        <imap
+            host="imap.ionos.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.ionos.com"
             port="465"
             starttls="false" />
     </provider>

@@ -3358,6 +3358,7 @@ public class FragmentCompose extends FragmentBase {
             boolean sign_default = prefs.getBoolean("sign_default", false);
             boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
             boolean receipt_default = prefs.getBoolean("receipt_default", false);
+            boolean write_below = prefs.getBoolean("write_below", false);
 
             Log.i("Load draft action=" + action + " id=" + id + " reference=" + reference);
 
@@ -3834,7 +3835,10 @@ public class FragmentCompose extends FragmentBase {
                             e.tagName(quote ? "blockquote" : "p");
                             reply.appendChild(e);
 
-                            document.body().appendChild(reply);
+                            if (write_below)
+                                document.body().prependChild(reply);
+                            else
+                                document.body().appendChild(reply);
 
                             addSignature(context, document, data.draft, selected);
                         }
@@ -4003,7 +4007,10 @@ public class FragmentCompose extends FragmentBase {
                         Document document = HtmlHelper.sanitizeCompose(context, doc.html(), true);
 
                         for (Element e : ref)
-                            document.body().appendChild(e);
+                            if (write_below)
+                                document.body().prependChild(e);
+                            else
+                                document.body().appendChild(e);
 
                         EntityIdentity identity = null;
                         if (data.draft.identity != null)
@@ -4172,7 +4179,7 @@ public class FragmentCompose extends FragmentBase {
 
                         Log.i("Draft content=" + draft.content);
                         if (draft.content && state == State.NONE)
-                            showDraft(draft, false);
+                            showDraft(draft);
 
                         tvPlainTextOnly.setVisibility(
                                 draft.plain_only != null && draft.plain_only && !plain_only ? View.VISIBLE : View.GONE);
@@ -4451,12 +4458,16 @@ public class FragmentCompose extends FragmentBase {
 
                         // Get saved body
                         Document d;
+                        boolean write_below = prefs.getBoolean("write_below", false);
                         if (extras != null && extras.containsKey("html")) {
                             // Save current revision
                             Document c = JsoupEx.parse(body);
 
                             for (Element e : ref)
-                                c.body().appendChild(e);
+                                if (write_below)
+                                    c.body().prependChild(e);
+                                else
+                                    c.body().appendChild(e);
 
                             addSignature(context, c, draft, identity);
 
@@ -4467,7 +4478,10 @@ public class FragmentCompose extends FragmentBase {
                             d = HtmlHelper.sanitizeCompose(context, body, true);
 
                             for (Element e : ref)
-                                d.body().appendChild(e);
+                                if (write_below)
+                                    d.body().prependChild(e);
+                                else
+                                    d.body().appendChild(e);
 
                             addSignature(context, d, draft, identity);
                         }
@@ -4825,9 +4839,8 @@ public class FragmentCompose extends FragmentBase {
 
             Bundle extras = args.getBundle("extras");
             boolean show = extras.getBoolean("show");
-            boolean html = extras.containsKey("html");
             if (show)
-                showDraft(draft, html);
+                showDraft(draft);
 
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(draft.revision > 1);
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
@@ -4848,7 +4861,7 @@ public class FragmentCompose extends FragmentBase {
                 finish();
 
             } else if (action == R.id.action_undo || action == R.id.action_redo) {
-                showDraft(draft, false);
+                showDraft(draft);
 
             } else if (action == R.id.action_save) {
                 // Do nothing
@@ -4977,6 +4990,7 @@ public class FragmentCompose extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int signature_location = prefs.getInt("signature_location", 1);
         boolean usenet = prefs.getBoolean("usenet_signature", false);
+        boolean write_below = prefs.getBoolean("write_below", false);
 
         Element div = document.createElement("div");
         div.attr("fairemail", "signature");
@@ -4992,15 +5006,18 @@ public class FragmentCompose extends FragmentBase {
         div.append(identity.signature);
 
         Elements ref = document.select("div[fairemail=reference]");
-        if (signature_location == 0)
+        if (signature_location == 0) // top
             document.body().prependChild(div);
-        else if (ref.size() == 0 || signature_location == 2)
+        else if (ref.size() == 0 || signature_location == 2) // bottom
             document.body().appendChild(div);
-        else if (signature_location == 1)
-            ref.first().before(div);
+        else if (signature_location == 1) // below text
+            if (write_below)
+                document.body().appendChild(div);
+            else
+                ref.first().before(div);
     }
 
-    private void showDraft(final EntityMessage draft, final boolean scroll) {
+    private void showDraft(final EntityMessage draft) {
         Bundle args = new Bundle();
         args.putLong("id", draft.id);
         args.putBoolean("show_images", show_images);
@@ -5095,9 +5112,7 @@ public class FragmentCompose extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, Spanned[] text) {
                 etBody.setText(text[0]);
-                if (scroll)
-                    etBody.setSelection(text[0] == null ? 0 : text[0].length());
-                else if (state != State.LOADED)
+                if (state != State.LOADED)
                     etBody.setSelection(0);
                 grpBody.setVisibility(View.VISIBLE);
 
