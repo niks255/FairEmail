@@ -155,6 +155,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -194,6 +195,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import javax.mail.internet.ParseException;
 import javax.mail.util.ByteArrayDataSource;
 
@@ -206,6 +208,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_FIRST_USER;
 import static android.app.Activity.RESULT_OK;
 import static android.system.OsConstants.ENOSPC;
+import static android.view.inputmethod.EditorInfo.IME_FLAG_NO_FULLSCREEN;
 import static android.widget.AdapterView.INVALID_POSITION;
 
 public class FragmentCompose extends FragmentBase {
@@ -751,6 +754,17 @@ public class FragmentCompose extends FragmentBase {
         //boolean beige = prefs.getBoolean("beige", true);
         //if (beige && !Helper.isDarkTheme(getContext()))
         //    view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.lightColorBackground_cards_beige));
+
+        boolean keyboard_no_fullscreen = prefs.getBoolean("keyboard_no_fullscreen", false);
+        if (keyboard_no_fullscreen) {
+            // https://developer.android.com/reference/android/view/inputmethod/EditorInfo#IME_FLAG_NO_FULLSCREEN
+            etExtra.setImeOptions(etExtra.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
+            etTo.setImeOptions(etTo.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
+            etCc.setImeOptions(etCc.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
+            etBcc.setImeOptions(etBcc.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
+            etSubject.setImeOptions(etSubject.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
+            etBody.setImeOptions(etBody.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
+        }
 
         etExtra.setHint("");
         tvDomain.setText(null);
@@ -1455,6 +1469,18 @@ public class FragmentCompose extends FragmentBase {
                     db.message().setMessageUiEncrypt(id, encrypt);
 
                 return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                int encrypt = args.getInt("encrypt");
+                int[] values = getResources().getIntArray(R.array.encryptValues);
+                String[] names = getResources().getStringArray(R.array.encryptNames);
+                for (int i = 0; i < values.length; i++)
+                    if (values[i] == encrypt) {
+                        ToastEx.makeText(getContext(), names[i], Toast.LENGTH_LONG).show();
+                        break;
+                    }
             }
 
             @Override
@@ -2360,7 +2386,13 @@ public class FragmentCompose extends FragmentBase {
                                     ContentType ct = new ContentType(type);
                                     ct.setParameter("protected-headers", "v1");
                                     setHeader("Content-Type", ct.toString());
-                                    setHeader("Subject", draft.subject == null ? "" : draft.subject);
+                                    String subject = draft.subject == null ? "" : draft.subject;
+                                    try {
+                                        setHeader("Subject", MimeUtility.encodeWord(subject));
+                                    } catch (UnsupportedEncodingException ex) {
+                                        Log.e(ex);
+                                        setHeader("Subject", subject);
+                                    }
                                 }
                             };
 

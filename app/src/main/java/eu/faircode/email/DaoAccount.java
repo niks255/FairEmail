@@ -92,6 +92,11 @@ public interface DaoAccount {
     @Query("SELECT * FROM account WHERE name = :name")
     EntityAccount getAccount(String name);
 
+    @Query("SELECT * FROM account" +
+            " WHERE user = :user" +
+            " AND auth_type = :auth_type")
+    EntityAccount getAccount(String user, int auth_type);
+
     @Query("SELECT * FROM account WHERE `primary`")
     EntityAccount getPrimaryAccount();
 
@@ -119,72 +124,79 @@ public interface DaoAccount {
     @Update
     void updateAccount(EntityAccount account);
 
-    @Query("UPDATE account SET separator = :separator WHERE id = :id")
+    @Query("UPDATE account SET separator = :separator WHERE id = :id AND NOT (separator IS :separator)")
     int setFolderSeparator(long id, Character separator);
 
-    @Query("UPDATE account SET synchronize = :synchronize WHERE id = :id")
+    @Query("UPDATE account SET synchronize = :synchronize WHERE id = :id AND NOT (synchronize IS :synchronize)")
     int setAccountSynchronize(long id, boolean synchronize);
 
-    @Query("UPDATE account SET `primary` = :primary WHERE id = :id")
+    @Query("UPDATE account SET `primary` = :primary WHERE id = :id AND NOT (`primary` IS :primary)")
     int setAccountPrimary(long id, boolean primary);
 
-    @Query("UPDATE account SET thread = :thread WHERE id = :id")
+    @Query("UPDATE account SET thread = :thread WHERE id = :id AND NOT (thread IS :thread)")
     int setAccountThread(long id, Long thread);
 
     @Query("SELECT thread FROM account WHERE id = :id")
     Long getAccountThread(long id);
 
-    @Query("UPDATE account SET state = :state WHERE id = :id")
+    @Query("UPDATE account SET state = :state WHERE id = :id AND NOT (state IS :state)")
     int setAccountState(long id, String state);
 
-    @Query("UPDATE account SET password = :password WHERE id = :id")
+    @Query("UPDATE account SET password = :password WHERE id = :id AND NOT (password IS :password)")
     int setAccountPassword(long id, String password);
 
-    @Query("UPDATE account SET last_connected = :last_connected WHERE id = :id")
+    @Query("UPDATE account SET last_connected = :last_connected WHERE id = :id AND NOT (last_connected IS :last_connected)")
     int setAccountConnected(long id, long last_connected);
 
-    @Query("UPDATE account SET backoff_until = :backoff_until WHERE id = :id")
+    @Query("UPDATE account SET backoff_until = :backoff_until WHERE id = :id AND NOT (backoff_until IS :backoff_until)")
     int setAccountBackoff(long id, Long backoff_until);
 
-    @Query("UPDATE account SET quota_usage = :used, quota_limit = :limit WHERE id = :id")
+    @Query("UPDATE account" +
+            " SET quota_usage = :used, quota_limit = :limit" +
+            " WHERE id = :id" +
+            " AND (NOT (quota_usage IS :used) OR NOT (quota_limit IS :limit))")
     int setAccountQuota(long id, Long used, Long limit);
 
-    @Query("UPDATE account SET poll_interval = :value WHERE id = :id")
+    @Query("UPDATE account SET poll_interval = :value WHERE id = :id AND NOT (poll_interval IS :value)")
     int setAccountKeepAliveInterval(long id, int value);
 
-    @Query("UPDATE account SET keep_alive_ok = :ok WHERE id = :id")
+    @Query("UPDATE account SET keep_alive_ok = :ok WHERE id = :id AND NOT (keep_alive_ok IS :ok)")
     int setAccountKeepAliveOk(long id, boolean ok);
 
     @Query("UPDATE account" +
             " SET keep_alive_failed = :failed, keep_alive_succeeded = :succeeded" +
-            " WHERE id = :id")
+            " WHERE id = :id" +
+            " AND (NOT (keep_alive_failed IS :failed) OR NOT (keep_alive_succeeded IS :succeeded))")
     int setAccountKeepAliveValues(long id, int failed, int succeeded);
 
-    @Query("UPDATE account SET poll_exempted = :value WHERE id = :id")
+    @Query("UPDATE account SET poll_exempted = :value WHERE id = :id AND NOT (poll_exempted IS :value)")
     int setAccountPollExempted(long id, boolean value);
 
-    @Query("UPDATE account SET `order` = :order WHERE id = :id")
+    @Query("UPDATE account SET `order` = :order WHERE id = :id AND NOT (`order` IS :order)")
     int setAccountOrder(long id, Integer order);
 
-    @Query("UPDATE account SET partial_fetch = :partial_fetch WHERE id = :id")
+    @Query("UPDATE account SET partial_fetch = :partial_fetch WHERE id = :id AND NOT (partial_fetch IS :partial_fetch)")
     int setAccountPartialFetch(long id, boolean partial_fetch);
 
-    @Query("UPDATE account SET max_size = :max_size WHERE id = :id")
+    @Query("UPDATE account SET max_size = :max_size WHERE id = :id AND NOT (max_size IS :max_size)")
     int setAccountMaxSize(long id, Long max_size);
 
-    @Query("UPDATE account SET warning = :warning WHERE id = :id")
+    @Query("UPDATE account SET warning = :warning WHERE id = :id AND NOT (warning IS :warning)")
     int setAccountWarning(long id, String warning);
 
-    @Query("UPDATE account SET error = :error WHERE id = :id")
+    @Query("UPDATE account SET error = :error WHERE id = :id AND NOT (error IS :error)")
     int setAccountError(long id, String error);
 
-    @Query("UPDATE account SET swipe_left = :left, swipe_right = :right  WHERE id = :id")
+    @Query("UPDATE account" +
+            " SET swipe_left = :left, swipe_right = :right" +
+            " WHERE id = :id" +
+            " AND (NOT (swipe_left IS :left) OR NOT (swipe_right IS :right))")
     int setAccountSwipes(long id, Long left, Long right);
 
-    @Query("UPDATE account SET `primary` = 0")
+    @Query("UPDATE account SET `primary` = 0 WHERE NOT (`primary` IS 0)")
     void resetPrimary();
 
-    @Query("UPDATE account SET tbd = 1 WHERE id = :id")
+    @Query("UPDATE account SET tbd = 1 WHERE id = :id AND NOT (tbd IS 1)")
     int setAccountTbd(long id);
 
     @Query("DELETE FROM account WHERE id = :id")

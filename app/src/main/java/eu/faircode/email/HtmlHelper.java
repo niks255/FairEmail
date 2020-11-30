@@ -426,6 +426,7 @@ public class HtmlHelper {
             String tag = e.tagName();
             if (tag.contains(":")) {
                 if (display_hidden ||
+                        "body".equals(tag) ||
                         ns == null || tag.startsWith(ns)) {
                     String[] nstag = tag.split(":");
                     e.tagName(nstag[nstag.length > 1 ? 1 : 0]);
@@ -2343,6 +2344,10 @@ public class HtmlHelper {
                                     setSpan(ssb, new NumberSpan(dp6, colorAccent, textSize, index), start, ssb.length());
                                 }
                                 break;
+                            case "pre":
+                                // Signature
+                                setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
+                                break;
                             case "ol":
                             case "ul":
                                 int llevel = 0;
@@ -2382,6 +2387,7 @@ public class HtmlHelper {
                                 // Signature
                                 break;
                             case "b":
+                            case "code": // Signature
                             case "strong":
                                 setSpan(ssb, new StyleSpan(Typeface.BOLD), start, ssb.length());
                                 break;

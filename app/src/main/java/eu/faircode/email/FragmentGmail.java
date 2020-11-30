@@ -42,6 +42,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class FragmentGmail extends FragmentBase {
     private Button btnGrant;
     private TextView tvGranted;
     private EditText etName;
+    private CheckBox cbUpdate;
     private Button btnSelect;
     private ContentLoadingProgressBar pbSelect;
 
@@ -89,6 +91,7 @@ public class FragmentGmail extends FragmentBase {
         btnGrant = view.findViewById(R.id.btnGrant);
         tvGranted = view.findViewById(R.id.tvGranted);
         etName = view.findViewById(R.id.etName);
+        cbUpdate = view.findViewById(R.id.cbUpdate);
         btnSelect = view.findViewById(R.id.btnSelect);
         pbSelect = view.findViewById(R.id.pbSelect);
 
@@ -232,6 +235,7 @@ public class FragmentGmail extends FragmentBase {
         }
 
         etName.setEnabled(granted);
+        cbUpdate.setEnabled(granted);
         btnSelect.setEnabled(granted);
 
         getMainHandler().post(new Runnable() {
@@ -322,6 +326,7 @@ public class FragmentGmail extends FragmentBase {
 
         Bundle args = new Bundle();
         args.putString("name", etName.getText().toString().trim());
+        args.putBoolean("update", cbUpdate.isChecked());
         args.putString("user", user);
         args.putString("password", state.jsonSerializeString());
 
@@ -329,6 +334,7 @@ public class FragmentGmail extends FragmentBase {
             @Override
             protected void onPreExecute(Bundle args) {
                 etName.setEnabled(false);
+                cbUpdate.setEnabled(false);
                 btnSelect.setEnabled(false);
                 pbSelect.setVisibility(View.VISIBLE);
             }
@@ -336,6 +342,7 @@ public class FragmentGmail extends FragmentBase {
             @Override
             protected void onPostExecute(Bundle args) {
                 etName.setEnabled(true);
+                cbUpdate.setEnabled(true);
                 btnSelect.setEnabled(true);
                 pbSelect.setVisibility(View.GONE);
             }
@@ -396,72 +403,82 @@ public class FragmentGmail extends FragmentBase {
                 try {
                     db.beginTransaction();
 
-                    EntityAccount primary = db.account().getPrimaryAccount();
+                    EntityAccount update = null;
+                    if (args.getBoolean("update"))
+                        update = db.account().getAccount(user, AUTH_TYPE_GMAIL);
+                    if (update == null) {
+                        EntityAccount primary = db.account().getPrimaryAccount();
 
-                    // Create account
-                    EntityAccount account = new EntityAccount();
+                        // Create account
+                        EntityAccount account = new EntityAccount();
 
-                    account.host = provider.imap.host;
-                    account.encryption = aencryption;
-                    account.port = provider.imap.port;
-                    account.auth_type = AUTH_TYPE_GMAIL;
-                    account.user = user;
-                    account.password = password;
+                        account.host = provider.imap.host;
+                        account.encryption = aencryption;
+                        account.port = provider.imap.port;
+                        account.auth_type = AUTH_TYPE_GMAIL;
+                        account.user = user;
+                        account.password = password;
 
-                    account.name = provider.name + "/" + username;
+                        account.name = provider.name + "/" + username;
 
-                    account.synchronize = true;
-                    account.primary = (primary == null);
+                        account.synchronize = true;
+                        account.primary = (primary == null);
 
-                    account.created = new Date().getTime();
-                    account.last_connected = account.created;
+                        account.created = new Date().getTime();
+                        account.last_connected = account.created;
 
-                    account.id = db.account().insertAccount(account);
-                    args.putLong("account", account.id);
-                    EntityLog.log(context, "Gmail account=" + account.name);
+                        account.id = db.account().insertAccount(account);
+                        args.putLong("account", account.id);
+                        EntityLog.log(context, "Gmail account=" + account.name);
 
-                    // Create folders
-                    for (EntityFolder folder : folders) {
-                        EntityFolder existing = db.folder().getFolderByName(account.id, folder.name);
-                        if (existing == null) {
-                            folder.account = account.id;
-                            folder.id = db.folder().insertFolder(folder);
-                            EntityLog.log(context, "Gmail folder=" + folder.name + " type=" + folder.type);
-                            if (folder.synchronize)
-                                EntityOperation.sync(context, folder.id, false);
+                        // Create folders
+                        for (EntityFolder folder : folders) {
+                            EntityFolder existing = db.folder().getFolderByName(account.id, folder.name);
+                            if (existing == null) {
+                                folder.account = account.id;
+                                folder.id = db.folder().insertFolder(folder);
+                                EntityLog.log(context, "Gmail folder=" + folder.name + " type=" + folder.type);
+                                if (folder.synchronize)
+                                    EntityOperation.sync(context, folder.id, false);
+                            }
                         }
+
+                        // Set swipe left/right folder
+                        for (EntityFolder folder : folders)
+                            if (EntityFolder.TRASH.equals(folder.type))
+                                account.swipe_left = folder.id;
+                            else if (EntityFolder.ARCHIVE.equals(folder.type))
+                                account.swipe_right = folder.id;
+
+                        db.account().updateAccount(account);
+
+                        if (TextUtils.isEmpty(name))
+                            name = user.split("@")[0];
+
+                        // Create identity
+                        EntityIdentity identity = new EntityIdentity();
+                        identity.name = name;
+                        identity.email = user;
+                        identity.account = account.id;
+
+                        identity.host = provider.smtp.host;
+                        identity.encryption = iencryption;
+                        identity.port = provider.smtp.port;
+                        identity.auth_type = AUTH_TYPE_GMAIL;
+                        identity.user = user;
+                        identity.password = password;
+                        identity.synchronize = true;
+                        identity.primary = true;
+                        identity.max_size = max_size;
+
+                        identity.id = db.identity().insertIdentity(identity);
+                        EntityLog.log(context, "Gmail identity=" + identity.name + " email=" + identity.email);
+                    } else {
+                        args.putLong("account", -1);
+                        EntityLog.log(context, "Gmail update account=" + update.name);
+                        db.account().setAccountPassword(update.id, password);
+                        db.identity().setIdentityPassword(update.id, update.user, password, update.auth_type);
                     }
-
-                    // Set swipe left/right folder
-                    for (EntityFolder folder : folders)
-                        if (EntityFolder.TRASH.equals(folder.type))
-                            account.swipe_left = folder.id;
-                        else if (EntityFolder.ARCHIVE.equals(folder.type))
-                            account.swipe_right = folder.id;
-
-                    db.account().updateAccount(account);
-
-                    if (TextUtils.isEmpty(name))
-                        name = user.split("@")[0];
-
-                    // Create identity
-                    EntityIdentity identity = new EntityIdentity();
-                    identity.name = name;
-                    identity.email = user;
-                    identity.account = account.id;
-
-                    identity.host = provider.smtp.host;
-                    identity.encryption = iencryption;
-                    identity.port = provider.smtp.port;
-                    identity.auth_type = AUTH_TYPE_GMAIL;
-                    identity.user = user;
-                    identity.password = password;
-                    identity.synchronize = true;
-                    identity.primary = true;
-                    identity.max_size = max_size;
-
-                    identity.id = db.identity().insertIdentity(identity);
-                    EntityLog.log(context, "Gmail identity=" + identity.name + " email=" + identity.email);
 
                     db.setTransactionSuccessful();
                 } finally {
@@ -475,10 +492,15 @@ public class FragmentGmail extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, Void data) {
-                FragmentReview fragment = new FragmentReview();
-                fragment.setArguments(args);
-                fragment.setTargetFragment(FragmentGmail.this, ActivitySetup.REQUEST_DONE);
-                fragment.show(getParentFragmentManager(), "quick:review");
+                if (args.getLong("account") < 0) {
+                    finish();
+                    ToastEx.makeText(getContext(), R.string.title_setup_oauth_updated, Toast.LENGTH_LONG).show();
+                } else {
+                    FragmentReview fragment = new FragmentReview();
+                    fragment.setArguments(args);
+                    fragment.setTargetFragment(FragmentGmail.this, ActivitySetup.REQUEST_DONE);
+                    fragment.show(getParentFragmentManager(), "quick:review");
+                }
             }
 
             @Override

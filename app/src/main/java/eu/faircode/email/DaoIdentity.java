@@ -86,43 +86,51 @@ public interface DaoIdentity {
     @Update
     void updateIdentity(EntityIdentity identity);
 
-    @Query("UPDATE identity SET synchronize = :synchronize WHERE id = :id")
+    @Query("UPDATE identity SET synchronize = :synchronize WHERE id = :id AND NOT (synchronize IS :synchronize)")
     int setIdentitySynchronize(long id, boolean synchronize);
 
-    @Query("UPDATE identity SET `primary` = :primary WHERE id = :id")
+    @Query("UPDATE identity SET `primary` = :primary WHERE id = :id AND NOT (`primary` IS :primary)")
     int setIdentityPrimary(long id, boolean primary);
 
-    @Query("UPDATE identity SET state = :state WHERE id = :id")
+    @Query("UPDATE identity SET state = :state WHERE id = :id AND NOT (state IS :state)")
     int setIdentityState(long id, String state);
 
-    @Query("UPDATE identity SET password = :password WHERE id = :id")
+    @Query("UPDATE identity SET password = :password WHERE id = :id AND NOT (password IS :password)")
     int setIdentityPassword(long id, String password);
 
     @Query("UPDATE identity SET password = :password" +
             " WHERE account = :account" +
             " AND user = :user" +
+            " AND NOT (password IS :password)" +
             " AND host LIKE :domain")
     int setIdentityPassword(long account, String user, String password, String domain);
 
-    @Query("UPDATE identity SET last_connected = :last_connected WHERE id = :id")
+    @Query("UPDATE identity SET password = :password" +
+            " WHERE account = :account" +
+            " AND user = :user" +
+            " AND NOT (password IS :password)" +
+            " AND auth_type = :auth_type")
+    int setIdentityPassword(long account, String user, String password, int auth_type);
+
+    @Query("UPDATE identity SET last_connected = :last_connected WHERE id = :id AND NOT (last_connected IS :last_connected)")
     int setIdentityConnected(long id, long last_connected);
 
-    @Query("UPDATE identity SET encrypt = :encrypt WHERE id = :id")
+    @Query("UPDATE identity SET encrypt = :encrypt WHERE id = :id AND NOT (encrypt IS :encrypt)")
     int setIdentityEncrypt(long id, int encrypt);
 
-    @Query("UPDATE identity SET sign_key = :sign_key WHERE id = :id")
+    @Query("UPDATE identity SET sign_key = :sign_key WHERE id = :id AND NOT (sign_key IS :sign_key)")
     int setIdentitySignKey(long id, Long sign_key);
 
-    @Query("UPDATE identity SET sign_key_alias = :alias WHERE id = :id")
+    @Query("UPDATE identity SET sign_key_alias = :alias WHERE id = :id AND NOT (sign_key_alias IS :alias)")
     int setIdentitySignKeyAlias(long id, String alias);
 
-    @Query("UPDATE identity SET max_size = :max_size WHERE id = :id")
+    @Query("UPDATE identity SET max_size = :max_size WHERE id = :id AND NOT (max_size IS :max_size)")
     int setIdentityMaxSize(long id, Long max_size);
 
-    @Query("UPDATE identity SET error = :error WHERE id = :id")
+    @Query("UPDATE identity SET error = :error WHERE id = :id AND NOT (error IS :error)")
     int setIdentityError(long id, String error);
 
-    @Query("UPDATE identity SET `primary` = 0 WHERE account = :account")
+    @Query("UPDATE identity SET `primary` = 0 WHERE account = :account AND NOT (`primary` IS 0)")
     void resetPrimary(long account);
 
     @Query("DELETE FROM identity WHERE id = :id")

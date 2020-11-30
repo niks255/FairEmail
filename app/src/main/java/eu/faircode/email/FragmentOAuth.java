@@ -38,9 +38,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,6 +92,7 @@ public class FragmentOAuth extends FragmentBase {
     private TextView tvGrantHint;
     private EditText etName;
     private EditText etEmail;
+    private CheckBox cbUpdate;
     private Button btnOAuth;
     private ContentLoadingProgressBar pbOAuth;
     private TextView tvConfiguring;
@@ -126,6 +129,7 @@ public class FragmentOAuth extends FragmentBase {
         tvGrantHint = view.findViewById(R.id.tvGrantHint);
         etName = view.findViewById(R.id.etName);
         etEmail = view.findViewById(R.id.etEmail);
+        cbUpdate = view.findViewById(R.id.cbUpdate);
         btnOAuth = view.findViewById(R.id.btnOAuth);
         pbOAuth = view.findViewById(R.id.pbOAuth);
         tvConfiguring = view.findViewById(R.id.tvConfiguring);
@@ -231,6 +235,7 @@ public class FragmentOAuth extends FragmentBase {
 
             etName.setEnabled(false);
             etEmail.setEnabled(false);
+            cbUpdate.setEnabled(false);
             btnOAuth.setEnabled(false);
             pbOAuth.setVisibility(View.VISIBLE);
             hideError();
@@ -318,6 +323,7 @@ public class FragmentOAuth extends FragmentBase {
         try {
             etName.setEnabled(true);
             etEmail.setEnabled(true);
+            cbUpdate.setEnabled(true);
 
             AuthorizationResponse auth = AuthorizationResponse.fromIntent(data);
             if (auth == null)
@@ -385,6 +391,7 @@ public class FragmentOAuth extends FragmentBase {
         args.putBoolean("askAccount", askAccount);
         args.putString("personal", etName.getText().toString().trim());
         args.putString("address", etEmail.getText().toString().trim());
+        args.putBoolean("update", cbUpdate.isChecked());
 
         new SimpleTask<Void>() {
             @Override
@@ -511,80 +518,90 @@ public class FragmentOAuth extends FragmentBase {
                 try {
                     db.beginTransaction();
 
-                    EntityAccount primary = db.account().getPrimaryAccount();
+                    EntityAccount update = null;
+                    if (args.getBoolean("update"))
+                        update = db.account().getAccount(username, AUTH_TYPE_OAUTH);
+                    if (update == null) {
+                        EntityAccount primary = db.account().getPrimaryAccount();
 
-                    // Create account
-                    EntityAccount account = new EntityAccount();
+                        // Create account
+                        EntityAccount account = new EntityAccount();
 
-                    account.host = provider.imap.host;
-                    account.encryption = aencryption;
-                    account.port = provider.imap.port;
-                    account.auth_type = AUTH_TYPE_OAUTH;
-                    account.provider = provider.id;
-                    account.user = username;
-                    account.password = state;
+                        account.host = provider.imap.host;
+                        account.encryption = aencryption;
+                        account.port = provider.imap.port;
+                        account.auth_type = AUTH_TYPE_OAUTH;
+                        account.provider = provider.id;
+                        account.user = username;
+                        account.password = state;
 
-                    int at = address.indexOf('@');
-                    String user = address.substring(0, at);
+                        int at = address.indexOf('@');
+                        String user = address.substring(0, at);
 
-                    account.name = provider.name + "/" + user;
+                        account.name = provider.name + "/" + user;
 
-                    account.synchronize = true;
-                    account.primary = (primary == null);
+                        account.synchronize = true;
+                        account.primary = (primary == null);
 
-                    if (provider.keepalive > 0)
-                        account.poll_interval = provider.keepalive;
+                        if (provider.keepalive > 0)
+                            account.poll_interval = provider.keepalive;
 
-                    account.partial_fetch = provider.partial;
+                        account.partial_fetch = provider.partial;
 
-                    account.created = new Date().getTime();
-                    account.last_connected = account.created;
+                        account.created = new Date().getTime();
+                        account.last_connected = account.created;
 
-                    account.id = db.account().insertAccount(account);
-                    args.putLong("account", account.id);
-                    EntityLog.log(context, "OAuth account=" + account.name);
+                        account.id = db.account().insertAccount(account);
+                        args.putLong("account", account.id);
+                        EntityLog.log(context, "OAuth account=" + account.name);
 
-                    // Create folders
-                    for (EntityFolder folder : folders) {
-                        EntityFolder existing = db.folder().getFolderByName(account.id, folder.name);
-                        if (existing == null) {
-                            folder.account = account.id;
-                            folder.id = db.folder().insertFolder(folder);
-                            EntityLog.log(context, "OAuth folder=" + folder.name + " type=" + folder.type);
-                            if (folder.synchronize)
-                                EntityOperation.sync(context, folder.id, false);
+                        // Create folders
+                        for (EntityFolder folder : folders) {
+                            EntityFolder existing = db.folder().getFolderByName(account.id, folder.name);
+                            if (existing == null) {
+                                folder.account = account.id;
+                                folder.id = db.folder().insertFolder(folder);
+                                EntityLog.log(context, "OAuth folder=" + folder.name + " type=" + folder.type);
+                                if (folder.synchronize)
+                                    EntityOperation.sync(context, folder.id, false);
+                            }
                         }
-                    }
 
-                    // Set swipe left/right folder
-                    for (EntityFolder folder : folders)
-                        if (EntityFolder.TRASH.equals(folder.type))
-                            account.swipe_left = folder.id;
-                        else if (EntityFolder.ARCHIVE.equals(folder.type))
-                            account.swipe_right = folder.id;
+                        // Set swipe left/right folder
+                        for (EntityFolder folder : folders)
+                            if (EntityFolder.TRASH.equals(folder.type))
+                                account.swipe_left = folder.id;
+                            else if (EntityFolder.ARCHIVE.equals(folder.type))
+                                account.swipe_right = folder.id;
 
-                    db.account().updateAccount(account);
+                        db.account().updateAccount(account);
 
-                    // Create identities
-                    for (Pair<String, String> identity : identities) {
-                        EntityIdentity ident = new EntityIdentity();
-                        ident.name = identity.second;
-                        ident.email = identity.first;
-                        ident.account = account.id;
+                        // Create identities
+                        for (Pair<String, String> identity : identities) {
+                            EntityIdentity ident = new EntityIdentity();
+                            ident.name = identity.second;
+                            ident.email = identity.first;
+                            ident.account = account.id;
 
-                        ident.host = provider.smtp.host;
-                        ident.encryption = iencryption;
-                        ident.port = provider.smtp.port;
-                        ident.auth_type = AUTH_TYPE_OAUTH;
-                        ident.provider = provider.id;
-                        ident.user = username;
-                        ident.password = state;
-                        ident.synchronize = true;
-                        ident.primary = ident.user.equals(ident.email);
-                        ident.max_size = max_size;
+                            ident.host = provider.smtp.host;
+                            ident.encryption = iencryption;
+                            ident.port = provider.smtp.port;
+                            ident.auth_type = AUTH_TYPE_OAUTH;
+                            ident.provider = provider.id;
+                            ident.user = username;
+                            ident.password = state;
+                            ident.synchronize = true;
+                            ident.primary = ident.user.equals(ident.email);
+                            ident.max_size = max_size;
 
-                        ident.id = db.identity().insertIdentity(ident);
-                        EntityLog.log(context, "OAuth identity=" + ident.name + " email=" + ident.email);
+                            ident.id = db.identity().insertIdentity(ident);
+                            EntityLog.log(context, "OAuth identity=" + ident.name + " email=" + ident.email);
+                        }
+                    } else {
+                        args.putLong("account", -1);
+                        EntityLog.log(context, "OAuth update account=" + update.name);
+                        db.account().setAccountPassword(update.id, state);
+                        db.identity().setIdentityPassword(update.id, update.user, state, update.auth_type);
                     }
 
                     db.setTransactionSuccessful();
@@ -601,10 +618,15 @@ public class FragmentOAuth extends FragmentBase {
             protected void onExecuted(Bundle args, Void data) {
                 pbOAuth.setVisibility(View.GONE);
 
-                FragmentReview fragment = new FragmentReview();
-                fragment.setArguments(args);
-                fragment.setTargetFragment(FragmentOAuth.this, ActivitySetup.REQUEST_DONE);
-                fragment.show(getParentFragmentManager(), "oauth:review");
+                if (args.getLong("account") < 0) {
+                    finish();
+                    ToastEx.makeText(getContext(), R.string.title_setup_oauth_updated, Toast.LENGTH_LONG).show();
+                } else {
+                    FragmentReview fragment = new FragmentReview();
+                    fragment.setArguments(args);
+                    fragment.setTargetFragment(FragmentOAuth.this, ActivitySetup.REQUEST_DONE);
+                    fragment.show(getParentFragmentManager(), "oauth:review");
+                }
             }
 
             @Override
@@ -617,6 +639,7 @@ public class FragmentOAuth extends FragmentBase {
     private void onHandleCancel() {
         etName.setEnabled(true);
         etEmail.setEnabled(true);
+        cbUpdate.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
     }
@@ -647,6 +670,7 @@ public class FragmentOAuth extends FragmentBase {
 
         etName.setEnabled(true);
         etEmail.setEnabled(true);
+        cbUpdate.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
 

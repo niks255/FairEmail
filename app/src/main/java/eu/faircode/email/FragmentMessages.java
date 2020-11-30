@@ -1794,6 +1794,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         @Override
+        public void lock(long id) {
+            Bundle args = new Bundle();
+            args.putLong("id", id);
+
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) throws Throwable {
+                    long id = args.getLong("id");
+                    lockMessage(id);
+                    return null;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(FragmentMessages.this, args, "message:lock");
+        }
+
+        @Override
         public void refresh() {
             rvMessage.post(new Runnable() {
                 @Override
@@ -4517,9 +4537,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         @Override
-        public void onLoaded() {
+        public void onLoaded(int found) {
             loading = false;
-            updateListState("Loaded", SimpleTask.getCount(), adapter.getItemCount());
+            updateListState("Loaded found=" + found, SimpleTask.getCount(), adapter.getItemCount() + found);
         }
 
         @Override
@@ -4971,6 +4991,45 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
     }
 
+    private void handleExit() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean auto_undecrypt = prefs.getBoolean("auto_undecrypt", false);
+
+        if (auto_undecrypt &&
+                viewType == AdapterMessage.ViewType.THREAD) {
+            List<Long> ids = new ArrayList<>();
+            for (int i = 0; i < adapter.getItemCount(); i++) {
+                TupleMessageEx message = adapter.getItemAtPosition(i);
+                if (message == null)
+                    continue;
+                if ((EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) &&
+                        !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
+                        (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
+                                !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt)))
+                    ids.add(message.id);
+            }
+
+            Bundle args = new Bundle();
+            args.putLongArray("ids", Helper.toLongArray(ids));
+
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) throws Throwable {
+                    long[] ids = args.getLongArray("ids");
+
+                    for (long id : ids)
+                        lockMessage(id);
+                    return null;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(this, args, "messages:lock");
+        }
+    }
+
     private void navigate(long id, final boolean left) {
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
@@ -5276,6 +5335,56 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         return TextUtils.join(", ", displays);
     }
 
+    private void lockMessage(long id) throws IOException {
+        Context context = getContext();
+        if (context == null)
+            return;
+
+        DB db = DB.getInstance(context);
+        try {
+            db.beginTransaction();
+
+            EntityMessage message = db.message().getMessage(id);
+            if (message == null)
+                return;
+
+            boolean inline = true;
+            List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+            for (EntityAttachment attachment : attachments) {
+                if (attachment.encryption != null) {
+                    inline = false;
+                    break;
+                }
+            }
+
+            if (inline) {
+                if (message.uid == null)
+                    return;
+
+                EntityFolder folder = db.folder().getFolder(message.folder);
+                if (folder == null)
+                    return;
+
+                db.message().deleteMessage(id);
+                EntityOperation.queue(context, folder, EntityOperation.FETCH, message.uid);
+
+                return;
+            }
+
+            File file = message.getFile(context);
+            Helper.writeText(file, null);
+            db.message().setMessageContent(message.id, true, null, null, null, null);
+            //db.message().setMessageSubject(id, subject);
+            db.attachment().deleteAttachments(message.id);
+            db.message().setMessageEncrypt(message.id, message.ui_encrypt);
+            db.message().setMessageStored(message.id, new Date().getTime());
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     private ActivityBase.IKeyPressedListener onBackPressedListener = new ActivityBase.IKeyPressedListener() {
         @Override
         public boolean onKeyPressed(KeyEvent event) {
@@ -5379,6 +5488,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 });
                 return true;
             }
+
+            handleExit();
 
             return false;
         }

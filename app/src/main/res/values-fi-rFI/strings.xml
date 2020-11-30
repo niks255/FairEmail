@@ -9,7 +9,7 @@
     <string name="app_cake">Liian vähän tallennustilaa jäljellä</string>
     <string name="channel_service">Vastaanottaminen</string>
     <string name="channel_send">Lähettäminen</string>
-    <string name="channel_notification">Ilmoitukset</string>
+    <string name="channel_notification">Sähköposti</string>
     <string name="channel_update">Päivitykset</string>
     <string name="channel_warning">Varoitukset</string>
     <string name="channel_error">Virheet</string>
@@ -137,6 +137,8 @@
     <string name="title_setup_office_remark">Microsoft ei tarjoa tällaista valtuutusta Outlook-, Live-, ja Hotmail-tileille (eikä muille vastaaville)</string>
     <string name="title_setup_office_auth">Virhe \'AUTHENTICATE failed\' voi aiheutua siitä, että järjestelmän ylläpitäjän on poistanut IMAP/SMTP-protokollat käytöstä</string>
     <string name="title_setup_oauth_rationale">Valtuuta pääsy tilillesi %1$s</string>
+    <string name="title_setup_oauth_update">Valtuuta olemassa oleva tili uudelleen</string>
+    <string name="title_setup_oauth_updated">Tilin valtuutus päivitettiin</string>
     <string name="title_setup_oauth_authorize">Valtuuta</string>
     <string name="title_setup_select_account">Valitse tili</string>
     <string name="title_setup_instructions">Asetusohjeet</string>
@@ -244,6 +246,7 @@
     <string name="title_advanced_check_reply">Tarkista vastaussähköpostiosoitteet viestejä synkronoitaessa</string>
     <string name="title_advanced_tune_keep_alive">Säädä ylläpitokyselyn aikaväli automaattisesti</string>
     <string name="title_advanced_keyboard">Näytä näppäimistö oletuksena</string>
+    <string name="title_advanced_keyboard_no_fullscreen">Estä koko näytön näppäimistö</string>
     <string name="title_advanced_suggest_local">Ehdota paikallisesti tallennettuja yhteystietoja</string>
     <string name="title_advanced_suggest_sent">Ehdota lähetetyistä viesteistä löytyviä osoitteita</string>
     <string name="title_advanced_suggest_received">Ehdota saapuneista viesteistä löytyviä osoitteita</string>
@@ -334,6 +337,7 @@
     <string name="title_advanced_text_align">Käytä tekstin tasausta</string>
     <string name="title_advanced_text_separators">Käytä erotinrivejä</string>
     <string name="title_advanced_collapse_quotes">Tiivistä lainattu teksti</string>
+    <string name="title_advanced_image_placeholders">Näytä kuvien paikkamerkit</string>
     <string name="title_advanced_images_inline">Näytä tekstiin upotetut kuvat oletuksena</string>
     <string name="title_advanced_seekbar">Näytä suhteellinen sijainti keskustelussa pisteellä</string>
     <string name="title_advanced_actionbar">Näytä keskustelun toimintopalkki</string>
@@ -412,6 +416,7 @@
     <string name="title_advanced_sign_default">Allekirjoita oletuksena</string>
     <string name="title_advanced_encrypt_default">Salaa oletuksena</string>
     <string name="title_advanced_auto_decrypt">Pura viestien salaus automaattisesti</string>
+    <string name="title_advanced_auto_undo_decrypt">Kumoa salauksen purku keskustelua suljettaessa</string>
     <string name="title_advanced_openpgp">OpenPGP-palveluntarjoaja</string>
     <string name="title_advanced_autocrypt">Käytä Autocryptiä</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt molemminpuolinen tila</string>
@@ -528,7 +533,7 @@
     <string name="title_identity_unicode_remark">Suurin osa palvelimista ei tue tätä</string>
     <string name="title_identity_max_size">Viestin suurin mahdollinen koko (MB)</string>
     <string name="title_identity_receipt">Pyydä toimitus-/lukukuittaus oletuksena</string>
-    <string name="title_identity_use_ip_hint">Virheilmoituksen ollessa \'invalid greeting\', \'requires valid address\' tai muu samankaltainen yritä muuttaa tätä asetusta</string>
+    <string name="title_identity_use_ip_hint">Jos saat virheilmoituksen \'invalid greeting\', \'requires valid address\' tai vastaava, yritä muuttaa tätä asetusta</string>
     <string name="title_optional">Valinnainen</string>
     <string name="title_recommended">Suositeltu</string>
     <string name="title_account_linked">Linkitetty tili</string>
@@ -720,7 +725,7 @@
     <string name="title_event">Lisää kalenteriin</string>
     <string name="title_pin">Lisää pikakuvake</string>
     <string name="title_print">Tulosta</string>
-    <string name="title_print_header" comment="title_print_header&#10;Title for option to enable/disable printing sender, subject, etc above message text">Tulosteen otsikko</string>
+    <string name="title_print_header">Tulosteen otsikko</string>
     <string name="title_show_headers">Näytä tunnistetiedot</string>
     <string name="title_raw_save">Tallenna raakaviesti</string>
     <string name="title_raw_send">Lähetä liitteenä</string>

@@ -9,7 +9,7 @@
     <string name="app_cake">Otillräckligt lagringsutrymme kvar</string>
     <string name="channel_service">Ta emot</string>
     <string name="channel_send">Skicka</string>
-    <string name="channel_notification">Aviseringar</string>
+    <string name="channel_notification">E-post</string>
     <string name="channel_update">Uppdateringar</string>
     <string name="channel_warning">Varningar</string>
     <string name="channel_error">Fel</string>
@@ -138,6 +138,8 @@
     <string name="title_setup_office_remark">Microsoft tillhandahåller inte denna typ av auktorisering för Outlook, Live, Hotmail, etc konton</string>
     <string name="title_setup_office_auth">Felet \"AUTHENTICATE failed\" kan orsakas av att IMAP/SMTP inaktiveras av systemadministratören</string>
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
+    <string name="title_setup_oauth_update">Auktorisera befintligt konto igen</string>
+    <string name="title_setup_oauth_updated">Kontoauktorisering har uppdaterats</string>
     <string name="title_setup_oauth_authorize">Auktorisera</string>
     <string name="title_setup_select_account">Välj konto</string>
     <string name="title_setup_instructions">Inställningsinstruktioner</string>
@@ -245,6 +247,7 @@
     <string name="title_advanced_check_reply">Kontrollera svarsadresser vid synkronisering av meddelanden</string>
     <string name="title_advanced_tune_keep_alive">Justera automatiskt keep-alive intervallet</string>
     <string name="title_advanced_keyboard">Visa tangentbord som standard</string>
+    <string name="title_advanced_keyboard_no_fullscreen">Förhindra helskärmstangentbord</string>
     <string name="title_advanced_suggest_local">Föreslå lokalt lagrade kontakter</string>
     <string name="title_advanced_suggest_sent">Föreslå adresser som finns i skickade meddelanden</string>
     <string name="title_advanced_suggest_received">Föreslå adresser som finns i mottagna meddelanden</string>
@@ -414,6 +417,7 @@
     <string name="title_advanced_sign_default">Signera som standard</string>
     <string name="title_advanced_encrypt_default">Kryptera som standard</string>
     <string name="title_advanced_auto_decrypt">Dekryptera meddelanden automatiskt</string>
+    <string name="title_advanced_auto_undo_decrypt">Ångra dekryptering vid stängning av konversation</string>
     <string name="title_advanced_openpgp">OpenPGP-leverantör</string>
     <string name="title_advanced_autocrypt">Använd Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autokryptera ömsesidigt läge</string>
@@ -723,7 +727,7 @@
     <string name="title_event">Lägg till i kalender</string>
     <string name="title_pin">Lägg till genväg</string>
     <string name="title_print">Skriv ut</string>
-    <string name="title_print_header" comment="title_print_header&#10;Title for option to enable/disable printing sender, subject, etc above message text">Visa header</string>
+    <string name="title_print_header">Visa header</string>
     <string name="title_show_headers">Visa sidhuvuden</string>
     <string name="title_raw_save">Spara rent meddelande</string>
     <string name="title_raw_send">Skicka som bilaga</string>

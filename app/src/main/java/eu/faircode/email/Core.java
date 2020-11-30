@@ -259,6 +259,8 @@ class Core {
                         if (similar.size() > 0)
                             Log.i(folder.name + " similar=" + TextUtils.join(",", sids));
 
+                        op.tries++;
+
                         // Leave crumb
                         Map<String, String> crumb = new HashMap<>();
                         crumb.put("name", op.name);
@@ -267,6 +269,7 @@ class Core {
                         crumb.put("folder", op.folder + ":" + folder.type);
                         if (op.message != null)
                             crumb.put("message", Long.toString(op.message));
+                        crumb.put("tries", Integer.toString(op.tries));
                         crumb.put("similar", TextUtils.join(",", sids));
                         crumb.put("thread", Thread.currentThread().getName() + ":" + Thread.currentThread().getId());
                         crumb.put("free", Integer.toString(Log.getFreeMemMb()));
@@ -275,7 +278,6 @@ class Core {
                         try {
                             db.beginTransaction();
 
-                            db.operation().setOperationTries(op.id, ++op.tries);
                             db.operation().setOperationError(op.id, null);
 
                             if (message != null)
@@ -440,25 +442,28 @@ class Core {
                                 " try=" + op.tries +
                                 " " + Log.formatThrowable(ex, false));
 
+                        try {
+                            db.beginTransaction();
+
+                            db.operation().setOperationTries(op.id, op.tries);
+
+                            op.error = Log.formatThrowable(ex);
+                            db.operation().setOperationError(op.id, op.error);
+
+                            if (message != null &&
+                                    !(ex instanceof IllegalArgumentException))
+                                db.message().setMessageError(message.id, op.error);
+
+                            db.setTransactionSuccessful();
+                        } finally {
+                            db.endTransaction();
+                        }
+
                         if (similar.size() > 0) {
                             // Retry individually
                             group = false;
                             // Finally will reset state
                             continue;
-                        }
-
-                        try {
-                            db.beginTransaction();
-
-                            op.error = Log.formatThrowable(ex, false);
-                            db.operation().setOperationError(op.id, Log.formatThrowable(ex));
-
-                            if (message != null && !(ex instanceof IllegalArgumentException))
-                                db.message().setMessageError(message.id, Log.formatThrowable(ex));
-
-                            db.setTransactionSuccessful();
-                        } finally {
-                            db.endTransaction();
                         }
 
                         if (ifolder != null && !ifolder.isOpen())
@@ -475,9 +480,8 @@ class Core {
                                                 ex.getCause() instanceof CommandFailedException /* NO */)) ||
                                 MessageHelper.isRemoved(ex) ||
                                 EntityOperation.ATTACHMENT.equals(op.name) ||
-                                (ConnectionHelper.isIoError(ex) &&
-                                        EntityFolder.DRAFTS.equals(folder.type) &&
-                                        EntityOperation.ADD.equals(op.name))) {
+                                (EntityOperation.ADD.equals(op.name) &&
+                                        EntityFolder.DRAFTS.equals(folder.type))) {
                             // com.sun.mail.iap.BadCommandException: BAD [TOOBIG] Message too large
                             // com.sun.mail.iap.CommandFailedException: NO [CANNOT] Cannot APPEND to a SPAM folder
                             // com.sun.mail.iap.CommandFailedException: NO [ALERT] Cannot MOVE messages out of the Drafts folder
@@ -1517,16 +1521,14 @@ class Core {
             } catch (MessagingException ex) {
                 Log.e(ex);
             }
-        if (imessages == null || imessages.length == 0)
-            EntityOperation.queue(context, message, EntityOperation.ADD);
-        else {
-            if (imessages.length == 1) {
-                long uid = ifolder.getUID(imessages[0]);
-                EntityOperation.queue(context, folder, EntityOperation.FETCH, uid);
-            } else {
+
+        if (imessages != null && imessages.length == 1) {
+            long uid = ifolder.getUID(imessages[0]);
+            EntityOperation.queue(context, folder, EntityOperation.FETCH, uid);
+        } else {
+            if (imessages != null && imessages.length > 1)
                 Log.e(folder.name + " EXISTS messages=" + imessages.length);
-                EntityOperation.sync(context, folder.id, false);
-            }
+            EntityOperation.queue(context, message, EntityOperation.ADD);
         }
     }
 
