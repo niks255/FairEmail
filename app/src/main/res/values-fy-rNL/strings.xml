@@ -135,6 +135,7 @@
     <string name="title_setup_gmail_rationale">Jou asjebleaft tagongsrjochten om in akkount te selektearjen en jo namme te lêzen</string>
     <string name="title_setup_gmail_permissions">Google sil om tagongsrjochten freegje om al jo e-post te lêzen, te komponearjen, te ferstjoeren en te wiskjen. FairEmail sil jo berjochten nea wiskje sûnder jo eksplisite tastimming.</string>
     <string name="title_setup_gmail_drafts">As de map ûntwerpen net tagonklik is troch IMAP, kin dit wurde fêst yn \'e ynstellings fan it label fan Gmail</string>
+    <string name="title_setup_gmail_password">Ik wol in akkount autorisearje mei in wachtwurd</string>
     <string name="title_setup_office_remark">Microsoft leveret dit type autorisaasje net foar akkounts foar Outlook, Live, Hotmail, ensfh</string>
     <string name="title_setup_office_auth">De flater \'AUTHENTICATE is mislearre\' kin wurde feroarsake troch IMAP / SMTP te wurden útskeakele troch de systeembehearder</string>
     <string name="title_setup_oauth_rationale">Autorisearje tagong ta jo %1$s akkount</string>
@@ -460,6 +461,7 @@
     <string name="title_advanced_unseen_hint">Guon oanbieders stypje dit net goed, wat kin syngronisearje fan gjin of alle berjochten</string>
     <string name="title_advanced_deleted_unseen">As útskeakele, wurde net-lêzen berjochten foar altyd op it apparaat bewarre</string>
     <string name="title_advanced_sync_kept_hint">Dit sil ekstra gegevens oerdrage en ekstra batterijskrêft konsumearje, fral as in soad berjochten op it apparaat wurde opslein</string>
+    <string name="title_advanced_gmail_thread_hint">Dit jildt allinich foar nij ûntfange berjochten en kin besteande groepen brekke</string>
     <string name="title_advanced_sync_folders_hint">As jo dit útskeakelje, sille gegevens en batterijgebrûk wat ferminderje, mar sil it bywurkjen fan de list mei mappen ek útskeakelje</string>
     <string name="title_advanced_lookup_mx_hint">Kontrolearje periodyk lykas FairEmail noch aktyf is</string>
     <string name="title_advanced_sync_delay_hint">Dit sil syngronisearjende berjochten fertrage</string>
@@ -596,7 +598,7 @@
     <string name="title_no_inbox">Postfak net fûn</string>
     <string name="title_no_drafts">Gjin konsept-map</string>
     <string name="title_no_junk_folder">D\'r is gjin spam-map selektearre foar dit akkount</string>
-    <string name="title_no_composable">E-post ferstjoeren fereasket in identiteit te konfigurearjen, en in dampprogramma moat wurde selektearre yn \'e akkountynstellingen</string>
+    <string name="title_no_composable">E-post ferstjoere fereasket in identiteit te konfigurearjen en in dampprogramma moat wurde selektearre yn \'e akkountynstellings (ynstellingsstap 1)</string>
     <string name="title_no_standard">Dizze provider brûkt in proprietêr e-postprotokol en dêrom is it net mooglik e-postkliïnten fan tredden te brûken</string>
     <string name="title_no_idle">Dizze provider stipet gjin pushberjochten. Dit sil de ûntfangst fan nije berjochten fertrage en it batterijgebrûk ferheegje.</string>
     <string name="title_no_utf8">Dizze provider stipet UTF-8 net</string>

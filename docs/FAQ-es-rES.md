@@ -221,7 +221,7 @@ El diseño está basado en muchas discusiones y si lo deseas puedes unirte a la 
 * [(100) ¿Cómo puedo sincronizar las categorías de Gmail?](#user-content-faq100)
 * [(101) ¿Qué significa el punto azul/naranja en la parte inferior de las conversaciones?](#user-content-faq101)
 * [(102) ¿Cómo puedo habilitar la rotación automática de imágenes?](#user-content-faq102)
-* [(103) ¿Cómo puedo grabar audio?](#user-content-faq103)
+* [(103) ¿Cómo puedo grabar audio?](#user-content-faq158)
 * [(104) ¿Qué necesito saber sobre los informes de errores?](#user-content-faq104)
 * [(105) ¿Cómo funciona la opción de roam-como-en-casa?](#user-content-faq105)
 * [(106) ¿Qué lanzadores pueden mostrar un contador con el número de mensajes no leídos?](#user-content-faq106)
@@ -575,27 +575,27 @@ Vea [estas Preguntas Frecuentes](#user-content-faq33) sobre la edición del nomb
 <a name="faq12"></a>
 **(12) ¿Cómo funciona el cifrado/descifrado?**
 
-Communication with email servers is always encrypted, unless you explicitly turned this off. This question is about optional end-to-end encryption with PGP or S/MIME. The sender and recipient should first agree on this and exchange signed messages to transfer their public key to be able to send encrypted messages.
+La comunicación con los servidores de correo-e siempre está encriptada, a menos que lo desactive explícitamente. Esta pregunta se refiere al cifrado opcional de extremo a extremo con PGP o S/MIME. El remitente y destinario primero deberían acordar esto e intercambiar mensajes firmados para transferir su clave pública para poder enviar mensajes encriptados.
 
 *General*
 
-Please [see here](https://en.wikipedia.org/wiki/Public-key_cryptography) about how public/private key encryption works.
+Por favor, [vea aquí](https://en.wikipedia.org/wiki/Public-key_cryptography) sobre cómo funciona el cifrado con clave pública/privada.
 
-Encryption in short:
+Cifrado en resumen:
 
 * Los mensajes **salientes** se cifran con la **clave pública** del destinatario
 * Los mensajes **entrantes** se descifran con la **clave privada** del destinatario
 
-Signing in short:
+Firma en resumen:
 
 * Los mensajes **salientes** se firman con la **clave privada** del remitente
 * Los mensajes **entrantes** se verifican con la **clave pública** del remitente
 
-To sign/encrypt a message, just select the appropriate method in the send dialog. You can always open the send dialog using the three-dots overflow menu in case you selected *Don't show again* before.
+Para firmar/cifrar un mensaje, solo seleccione el método apropiado en el dialogo de envío. Siempre puede abrir el dialogo de envío usando el menú de tres puntos en caso de que haya seleccionado *No mostrar de nuevo* antes.
 
 To verify a signature or to decrypt a received message, open the message and just tap the gesture or padlock icon just below the message action bar.
 
-The first time you send a signed/encrypted message you might be asked for a sign key. FairEmail will automatically store the selected sign key in the used identity for the next time. If you need to reset the sign key, just save the identity or long press the identity in the list of identities and select *Reset sign key*. The selected sign key is visible in the list of identities. If need to select a key on a case by case basis, you can create multiple identities for the same account with the same email address.
+La primera vez que envíe un mensaje firmado/cifrado puede que se le pida una clave de firma. FairEmail automáticamente almacenará las claves de firma seleccionadas en la identidad utilizada para la próxima vez. Si necesita reiniciar la clave de firma, solo guarde la identidad o mantenga pulsada la identidad en la lista de identidades y selecciones *Reiniciar clave de firma*. La clave de firma seleccionada es visible en la lista de identidades. Si es necesario seleccionar una clave caso por caso, puede crear múltiples identidades para la misma cuenta con la misma dirección de correo-e.
 
 In the privacy settings you can select the default encryption method (PGP or S/MIME), enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*, but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
 
@@ -603,17 +603,17 @@ The to be encrypted message text/attachments and the decrypted message text/atta
 
 *PGP*
 
-You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) first. FairEmail was tested with OpenKeychain version 5.4. Later versions will most likely be compatible, but earlier versions might not be.
+Necesitará instalar y configurar [OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) primero. FairEmail ha sido probado con OpenKeychain versión 5.4. Later versions will most likely be compatible, but earlier versions might not be.
 
-**Important**: the OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key. You can workaround this by trying to send a signed/encrypted message to a sender with an unknown public key.
+**Important**: the OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key. Puede solucionar esto tratando de enviar un mensaje firmado/cifrado al remitente con una clave pública desconocida.
 
-**Important**: if the OpenKeychain app cannot find a key (anymore), you might need to reset a previously selected key. This can be done by long pressing an identity in the list of identities (Setup, step 2, Manage).
+**Importante**: si la aplicación OpenKeychain (ya) no puede encontrar una clave, puede que necesite restablecer una clave seleccionada previamente. Esto puede hacerse al mantener pulsada una identidad en la lista de identidades (Configuración, paso 2, Administrar).
 
 **Important**: to let apps like FairEmail reliably connect to the OpenKeychain service to encrypt/decrypt messages, it might be necessary to disable battery optimizations for the OpenKeychain app.
 
 **Important**: the OpenKeychain app reportedly needs contacts permission to work correctly.
 
-**Important**: on some Android versions / devices it is necessary to enable *Show popups while running in background* in the additional permissions of the Android app settings of the OpenKeychain app. Without this permission the draft will be saved, but the OpenKeychain popup to confirm/select might not appear.
+**Important**: on some Android versions / devices it is necessary to enable *Show popups while running in background* in the additional permissions of the Android app settings of the OpenKeychain app. Sin este permiso el borrador se guardará, pero la ventana emergente de OpenKeychain para confirmar/seleccionar puede que no aparezca.
 
 FairEmail will send the [Autocrypt](https://autocrypt.org/) header for use by other email clients, but only for signed and encrypted messages because too many email servers have problems with the often long Autocrypt header. Note that the most secure way to start an encrypted email exchange is by sending signed messages first. Received Autocrypt headers will be sent to the OpenKeychain app for storage on verifying a signature or decrypting a message.
 
@@ -913,6 +913,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *501 Error de sintaxis - línea demasiado larga* es a menudo causada por el uso de un encabezado Autocrypt largo
 * *503 5.5.0 Destinatario ya especificado* significa principalmente que una dirección está siendo utilizada como dirección A y CC
 * *554 5.7.1 ... no se permite transmitir* significa que el servidor de correo electrónico no reconoce el nombre de usuario/dirección de correo electrónico. Por favor, compruebe el nombre de host y el nombre de usuario/dirección de correo electrónico en la configuración de identidad.
+* *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 
 **Gmail errors**
 
@@ -953,6 +954,8 @@ First try to wait some time to see if the problem resolves itself, else:
 
 * cambie a comprobar periódicamente los mensajes en la configuración de recepción, lo que dará como resultado abrir carpetas una a la vez
 * o configure algunas carpetas para sondear en lugar de sincronizar (mantenga presioanda una carpeta de la lista de carpetas, editar propiedades)
+
+An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
 The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
 
@@ -1551,7 +1554,7 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The price of FairEmail is too low, lower than that of most similar apps, and there are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %, to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it and doesn't contribute anything.
+The price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
 
 <br />
 
@@ -1605,7 +1608,7 @@ Messages will automatically be marked read on expanding, unless this was disable
 <a name="faq71"></a>
 **(71) How do I use filter rules?**
 
-You can edit filter rules by long pressing a folder in the folder list.
+You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
 New rules will be applied to new messages received in the folder, not to existing messages. You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
 
@@ -1653,7 +1656,7 @@ You can select one of these actions to apply to matching messages:
 * Add keyword
 * Move
 * Copy (Gmail: label)
-* Answer (with template)
+* Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
 
@@ -2067,15 +2070,6 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 
 <br />
 
-<a name="faq103"></a>
-**(103) How can I record audio?**
-
-You can record audio if you have a recording app installed which supports the [RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION) intent. If no supported app is installed, FairEmail will not show a record audio action/icon.
-
-Unfortunately and surprisingly, most recording apps do not seem to support this intent (they should).
-
-<br />
-
 <a name="faq104"></a>
 **(104) What do I need to know about error reporting?**
 
@@ -2310,7 +2304,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-When FairEmail cannot connect to an email server to receive messages, for example when the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will wait 8, 16 and 32 seconds while keeping the device awake (=use battery power) and try again to connect. If this fails, FairEmail will schedule an alarm to retry after 15, 30 and 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2318,7 +2312,7 @@ Note that [Android doze mode](https://developer.android.com/training/monitoring-
 
 Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can open/expand the message and use the undo icon to move the message to the drafts folder, possible change it and send it again.
+Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
 
 <br />
 
@@ -2332,7 +2326,15 @@ The message *Message too large or too complex to display* will be shown if there
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-* ...
+* [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) support
+
+IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
+
+**Important**: push messages (=always sync) for the inbox needs to be enabled.
+
+**Important**: most email server do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
+
+You can enable experimental features in the miscellaneous settings.
 
 <br />
 
@@ -2744,13 +2746,14 @@ Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/confi
 
 <br />
 
+<a name="faq103"></a>
 <a name="faq158"></a>
 **(158) Which camera / audio recorder do you recommend?**
 
 To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
 To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 

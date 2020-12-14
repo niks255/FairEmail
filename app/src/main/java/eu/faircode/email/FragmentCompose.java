@@ -2261,8 +2261,8 @@ public class FragmentCompose extends FragmentBase {
                     if (ex instanceof IOException &&
                             ex.getCause() instanceof ErrnoException &&
                             ((ErrnoException) ex.getCause()).errno == ENOSPC)
-                        ex = new Throwable(getContext().getString(R.string.app_cake), ex);
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                        ex = new IOException(getContext().getString(R.string.app_cake), ex);
+                    Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
                 }
             }
         }.execute(this, args, "compose:attachment:add");
@@ -3224,6 +3224,9 @@ public class FragmentCompose extends FragmentBase {
                 is = context.getContentResolver().openInputStream(uri);
                 os = new FileOutputStream(file);
 
+                if (is == null)
+                    throw new IOException("Content provider crashed");
+
                 byte[] buffer = new byte[Helper.BUFFER_SIZE];
                 for (int len = is.read(buffer); len != -1; len = is.read(buffer)) {
                     size += len;
@@ -3714,10 +3717,17 @@ public class FragmentCompose extends FragmentBase {
                         } else if ("receipt".equals(action)) {
                             data.draft.subject = context.getString(R.string.title_receipt_subject, subject);
 
-                            for (String text : Helper.getStrings(context, ref.language, R.string.title_receipt_text)) {
-                                Element p = document.createElement("p");
-                                p.text(text);
-                                document.body().appendChild(p);
+                            String[] texts = Helper.getStrings(context, ref.language, R.string.title_receipt_text);
+                            for (int i = 0; i < texts.length; i++) {
+                                if (i > 0)
+                                    document.body()
+                                            .appendElement("br");
+
+                                Element div = document.createElement("div");
+                                div.text(texts[i]);
+                                document.body()
+                                        .appendChild(div)
+                                        .appendElement("br");
                             }
                         } else if ("participation".equals(action))
                             data.draft.subject = status + ": " + ref.subject;
@@ -4386,6 +4396,8 @@ public class FragmentCompose extends FragmentBase {
                     Map<String, String> crumb = new HashMap<>();
                     crumb.put("draft", draft.folder + ":" + draft.id);
                     crumb.put("content", Boolean.toString(draft.content));
+                    crumb.put("revision", Integer.toString(draft.revision == null ? -1 : draft.revision));
+                    crumb.put("revisions", Integer.toString(draft.revisions == null ? -1 : draft.revisions));
                     crumb.put("file", Boolean.toString(draft.getFile(context).exists()));
                     crumb.put("action", getActionName(action));
                     Log.breadcrumb("compose", crumb);

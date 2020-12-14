@@ -21,12 +21,10 @@ package eu.faircode.email;
 
 import android.app.ActivityManager;
 import android.app.NotificationManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -34,6 +32,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.provider.Settings;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,6 +75,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 
 public class FragmentOptionsMisc extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private boolean resumed = false;
+    private List<Pair<String, String>> languages = new ArrayList<>();
 
     private SwitchCompat swExternalSearch;
     private SwitchCompat swShortcuts;
@@ -130,6 +130,21 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "identities_asked", "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
             "setup_reminder", "setup_advanced"
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        for (String tag : getResources().getAssets().getLocales())
+            languages.add(new Pair<>(tag, Locale.forLanguageTag(tag).getDisplayName()));
+
+        Collections.sort(languages, new Comparator<Pair<String, String>>() {
+            @Override
+            public int compare(Pair<String, String> l1, Pair<String, String> l2) {
+                return l1.second.compareTo(l2.second);
+            }
+        });
+    }
 
     @Override
     @Nullable
@@ -242,7 +257,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 if (position == 0)
                     onNothingSelected(adapterView);
                 else {
-                    String tag = getResources().getAssets().getLocales()[position - 1];
+                    String tag = languages.get(position - 1).first;
                     prefs.edit().putString("language", tag).commit(); // apply won't work here
                 }
             }
@@ -693,24 +708,18 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private void setOptions() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        PackageManager pm = getContext().getPackageManager();
-        int state = pm.getComponentEnabledSetting(new ComponentName(getContext(), ActivitySearch.class));
-
-        swExternalSearch.setChecked(state != PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
+        swExternalSearch.setChecked(Helper.isComponentEnabled(getContext(), ActivitySearch.class));
         swShortcuts.setChecked(prefs.getBoolean("shortcuts", true));
         swFts.setChecked(prefs.getBoolean("fts", false));
 
-        String language = prefs.getString("language", null);
-        String[] languages = getResources().getAssets().getLocales();
-
         int selected = -1;
+        String language = prefs.getString("language", null);
         List<String> display = new ArrayList<>();
         display.add(getString(R.string.title_advanced_language_system));
-        for (int pos = 0; pos < languages.length; pos++) {
-            String lang = languages[pos];
-            Locale loc = Locale.forLanguageTag(lang);
-            display.add(loc.getDisplayName() + " [" + lang + "]");
-            if (lang.equals(language))
+        for (int pos = 0; pos < languages.size(); pos++) {
+            Pair<String, String> lang = languages.get(pos);
+            display.add(lang.second);
+            if (lang.first.equals(language))
                 selected = pos + 1;
         }
 

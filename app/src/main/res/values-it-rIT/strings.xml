@@ -135,6 +135,7 @@
     <string name="title_setup_gmail_rationale">Si prega di concedere i permessi per selezionare un account e leggere il tuo nome</string>
     <string name="title_setup_gmail_permissions">Google chiederà le autorizzazioni per leggere, comporre, inviare e eliminare definitivamente tutte le tue email. FairEmail non eliminerà mai i tuoi messaggi senza il tuo esplicito consenso.</string>
     <string name="title_setup_gmail_drafts">Se la cartella bozze non è accessibile da IMAP, questo può essere corretto nelle impostazioni dell\'etichetta Gmail</string>
+    <string name="title_setup_gmail_password">Voglio autorizzare un account con una password</string>
     <string name="title_setup_office_remark">Microsoft non fornisce questo tipo di autorizzazione per gli account Outlook, Live, Hotmail, ecc.</string>
     <string name="title_setup_office_auth">L\'errore «AUTENTICA fallita» può essere causato dalla disattivazione di IMAP/SMTP da parte dell\'amministratore di sistema</string>
     <string name="title_setup_oauth_rationale">Autorizza l\'accesso al tuo account %1$s</string>
@@ -461,6 +462,7 @@
     <string name="title_advanced_unseen_hint">Alcuni provider non supportano correttamente questa funzione, il che potrebbe causare la sincronizzazione di nessuno o di tutti i messaggi</string>
     <string name="title_advanced_deleted_unseen">Quando disabilitato, i messaggi non letti vengono mantenuti sul dispositivo per sempre</string>
     <string name="title_advanced_sync_kept_hint">Questo trasferirà dati aggiuntivi e consumerà energia batteria extra, specialmente se molti messaggi vengono memorizzati sul dispositivo</string>
+    <string name="title_advanced_gmail_thread_hint">Questo vale solo per i nuovi messaggi ricevuti e può rompere i gruppi esistenti</string>
     <string name="title_advanced_sync_folders_hint">Disabilitando questa opzione si ridurranno in qualche modo i dati e l\'utilizzo della batteria, ma disattiverà anche l\'aggiornamento della lista delle cartelle</string>
     <string name="title_advanced_lookup_mx_hint">Questo controllerà se esistono record DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Questo rallenterà la sincronizzazione dei messaggi</string>
@@ -597,7 +599,7 @@
     <string name="title_no_inbox">Posta in arrivo non trovata</string>
     <string name="title_no_drafts">Nessuna cartella bozze</string>
     <string name="title_no_junk_folder">Non c\'è nessuna cartella spam selezionata per questo account</string>
-    <string name="title_no_composable">L\'invio di messaggi richiede la configurazione di un\'identità e la selezione di una cartella delle bozze nelle impostazioni dell\'account</string>
+    <string name="title_no_composable">L\'invio di messaggi di posta elettronica richiede la configurazione di un\'identità e la selezione di una cartella delle bozze nelle impostazioni dell\'account (fase di configurazione 1)</string>
     <string name="title_no_standard">Questo fornitore utilizza un protocollo di posta elettronica proprietario e quindi non è possibile utilizzare client di terze parti</string>
     <string name="title_no_idle">Questo fornitore non supporta i messaggi push. Ciò ritarderà la ricezione di nuovi messaggi e aumenterà l\'utilizzo della batteria.</string>
     <string name="title_no_utf8">Questo provider non supporta UTF-8</string>
@@ -987,7 +989,7 @@
     <string name="title_sort_on_hidden">Nascosto</string>
     <string name="title_sort_ascending">Prima i più vecchi</string>
     <string name="title_filter">Filtra</string>
-    <string name="title_filter_seen">Leggi</string>
+    <string name="title_filter_seen">Da leggere</string>
     <string name="title_filter_unflagged">Senza stella</string>
     <string name="title_filter_unknown">Mittenti sconosciuti</string>
     <string name="title_filter_hidden">Nascosto</string>

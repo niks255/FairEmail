@@ -49,9 +49,9 @@
 * 设置签名：设置，第二步，管理，点击身份，编辑签名。
 * 添加抄送和密送地址：点击主题末尾的联系人图标
 * 归档/删除后转到下/上一条消息: 在行为设置中禁用 *自动关闭会话* 并且在 *关闭会话时* 中选择 *转到下/上一个会话*
-* Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
-* Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
-* Load more messages: long press a folder in the folder list, select *Synchronize more messages*
+* 将文件夹添加到统一的收件箱中：长按文件夹列表中的文件夹，然后勾选 *在统一的收件箱中显示*
+* 将文件夹添加到导航菜单中：长按文件夹列表中的文件夹，然后勾选 *在导航菜单中显示*
+* 加载更多消息：长按文件夹列表中的文件夹，选择 *同步更多消息*
 * Delete a message, skipping trash: in the 3-dots menu just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
 * Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
 * Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
@@ -62,8 +62,8 @@
 
 ## 已知问题
 
-* ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~ Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~
-* ~~A [bug in Google Drive](https://issuetracker.google.com/issues/126362828) causes files exported to Google Drive to be empty. Google has fixed this.~~ Google has fixed this.~~
+* ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~ 将安卓设置切换到 *使用24小时格式* 可能可以暂时解决这个问题。 A workaround was added.~~
+* ~~一个 [Google Drive 的 bug](https://issuetracker.google.com/issues/126362828) 导致导出到 Google Drive 的文件为空。 谷歌已将其修复。~~
 * ~~A [bug in AndroidX](https://issuetracker.google.com/issues/78495471) causes FairEmail to occasionally crash on long pressing or swiping. Google has fixed this.~~ Google has fixed this.~~
 * ~~A [bug in AndroidX ROOM](https://issuetracker.google.com/issues/138441698) causes sometimes a crash with "*... Exception while computing database live data ... Couldn't read row ...*". A workaround was added.~~ Exception while computing database live data ... Couldn't read row ...</em>". A workaround was added.~~
 * A [bug in Android](https://issuetracker.google.com/issues/119872129) causes FairEmail to crash with "*... Bad notification posted ...*" on some devices once after updating FairEmail and tapping on a notification. Bad notification posted ...</em>" on some devices once after updating FairEmail and tapping on a notification.
@@ -83,30 +83,30 @@
 ## 计划添加的功能
 
 * ~~Synchronize on demand (manual)~~
-* ~~Semi-automatic encryption~~
+* ~~~半自动加密~~
 * ~~Copy message~~
-* ~~Colored stars~~
+* ~~多彩星标~~
 * ~~Notification settings per folder~~
 * ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
-* ~~Show messages matched by a rule~~
+* ~~显示规则匹配的消息~~
 * ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
 * ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
 * ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
-* ~~Search suggestions~~
+* ~~搜索建议~~
 * ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
 * ~~Generic unified folders~~
 * ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
-* ~~Copy accounts and identities~~
+* ~~复制帐户和身份~~
 * ~~Pinch zoom~~ (not reliably possible in a scrolling list; the full message view can be zoomed instead)
 * ~~More compact folder view~~
 * ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
 * ~~Pinch zoom text size~~
-* ~~Display GIFs~~
+* ~~显示GIF~~
 * ~~Themes~~ (a grey light and dark theme were added because this is what most people seems to want)
 * ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
-* ~~Send as attachment~~
+* ~~作为附件发送~~
 * ~~Widget for selected account~~
-* ~~Remind to attach files~~
+* ~~~~提醒附加文件~~
 * ~~Select domains to show images for~~ (this will be too complicated to use)
 * ~~Unified starred messages view~~ (there is already a special search for this)
 * ~~Move notification action~~
@@ -221,7 +221,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(100) How can I synchronize Gmail categories?](#user-content-faq100)
 * [(101) What does the blue/orange dot at the bottom of the conversations mean?](#user-content-faq101)
 * [(102) How can I enable auto rotation of images?](#user-content-faq102)
-* [(103) How can I record audio?](#user-content-faq103)
+* [(103) How can I record audio?](#user-content-faq158)
 * [(104) What do I need to know about error reporting?](#user-content-faq104)
 * [(105) How does the roam-like-at-home option work?](#user-content-faq105)
 * [(106) Which launchers can show a badge count with the number of unread messages?](#user-content-faq106)
@@ -913,6 +913,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *501 Syntax error - line too long* is often caused by using a long Autocrypt header
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 ... not permitted to relay* means that the email server does not recognize the username/email address. Please double check the host name and username/email address in the identity settings.
+* *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 
 **Gmail errors**
 
@@ -953,6 +954,8 @@ First try to wait some time to see if the problem resolves itself, else:
 
 * either switch to periodically checking for messages in the receive settings, which will result in opening folders one at a time
 * or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
+
+An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
 The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
 
@@ -1551,7 +1554,7 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The price of FairEmail is too low, lower than that of most similar apps, and there are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %, to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it and doesn't contribute anything.
+The price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
 
 <br />
 
@@ -1605,7 +1608,7 @@ Messages will automatically be marked read on expanding, unless this was disable
 <a name="faq71"></a>
 **(71) How do I use filter rules?**
 
-You can edit filter rules by long pressing a folder in the folder list.
+You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
 New rules will be applied to new messages received in the folder, not to existing messages. You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
 
@@ -1653,7 +1656,7 @@ You can select one of these actions to apply to matching messages:
 * Add keyword
 * Move
 * Copy (Gmail: label)
-* Answer (with template)
+* Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
 
@@ -2067,15 +2070,6 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 
 <br />
 
-<a name="faq103"></a>
-**(103) How can I record audio?**
-
-You can record audio if you have a recording app installed which supports the [RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION) intent. If no supported app is installed, FairEmail will not show a record audio action/icon.
-
-Unfortunately and surprisingly, most recording apps do not seem to support this intent (they should).
-
-<br />
-
 <a name="faq104"></a>
 **(104) What do I need to know about error reporting?**
 
@@ -2310,7 +2304,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-When FairEmail cannot connect to an email server to receive messages, for example when the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will wait 8, 16 and 32 seconds while keeping the device awake (=use battery power) and try again to connect. If this fails, FairEmail will schedule an alarm to retry after 15, 30 and 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2318,7 +2312,7 @@ Note that [Android doze mode](https://developer.android.com/training/monitoring-
 
 Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can open/expand the message and use the undo icon to move the message to the drafts folder, possible change it and send it again.
+Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
 
 <br />
 
@@ -2332,7 +2326,15 @@ The message *Message too large or too complex to display* will be shown if there
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-* ...
+* [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) support
+
+IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
+
+**Important**: push messages (=always sync) for the inbox needs to be enabled.
+
+**Important**: most email server do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
+
+You can enable experimental features in the miscellaneous settings.
 
 <br />
 
@@ -2744,13 +2746,14 @@ Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/confi
 
 <br />
 
+<a name="faq103"></a>
 <a name="faq158"></a>
 **(158) Which camera / audio recorder do you recommend?**
 
 To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
 To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 

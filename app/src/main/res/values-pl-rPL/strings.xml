@@ -156,6 +156,7 @@
     <string name="title_setup_gmail_rationale">Przyznaj uprawnienia, aby wybrać konto i odczytać twoje imię</string>
     <string name="title_setup_gmail_permissions">Google poprosi o uprawnienia do odczytu, tworzenia, wysyłania i trwałego usuwania wszystkich wiadomości e-mail. FairEmail nigdy nie usunie twoich wiadomości bez Twojej wyraźnej zgody.</string>
     <string name="title_setup_gmail_drafts">Jeśli folder wersji roboczych nie jest dostępny przez IMAP, można to naprawić w ustawieniach etykiety Gmail</string>
+    <string name="title_setup_gmail_password">Chcę autoryzować konto hasłem</string>
     <string name="title_setup_office_remark">Firma Microsoft nie zapewnia tego typu autoryzacji dla kont Outlook, Live, Hotmail itp</string>
     <string name="title_setup_office_auth">Błąd \"AUTHENTICATE failed\" może być spowodowany wyłączeniem protokołu IMAP/SMTP przez administratora systemu</string>
     <string name="title_setup_oauth_rationale">Autoryzuj dostęp do Twojego konta %1$s</string>
@@ -482,6 +483,7 @@
     <string name="title_advanced_unseen_hint">Niektórzy dostawcy nie obsługują tego poprawnie, co może powodować brak synchronizacji lub synchronizację wszystkich wiadomości</string>
     <string name="title_advanced_deleted_unseen">Kiedy wyłączone, nieprzeczytane wiadomości są zawsze przechowywane w urządzeniu</string>
     <string name="title_advanced_sync_kept_hint">Spowoduje to użycie dodatkowych danych i zużycie dodatkowej energii baterii, zwłaszcza jeśli w urządzeniu przechowywanych jest wiele wiadomości</string>
+    <string name="title_advanced_gmail_thread_hint">Dotyczy to tylko nowo odebranych wiadomości i może uszkodzić istniejące grupy</string>
     <string name="title_advanced_sync_folders_hint">Wyłączenie tej opcji nieco zmniejszy zużycie danych i baterii, ale wyłączy także aktualizację listy folderów</string>
     <string name="title_advanced_lookup_mx_hint">To sprawdzi, czy istnieją rekordy MX DNS</string>
     <string name="title_advanced_sync_delay_hint">Wydłuży to synchronizację wiadomości</string>
@@ -618,7 +620,7 @@
     <string name="title_no_inbox">Nie znaleziono skrzynki odbiorczej</string>
     <string name="title_no_drafts">Brak folderu szkiców</string>
     <string name="title_no_junk_folder">Dla tego konta nie wybrano folderu spam</string>
-    <string name="title_no_composable">Wysyłanie wiadomości e-mail wymaga skonfigurowania tożsamości i wybrania folderu szkiców w ustawieniach konta</string>
+    <string name="title_no_composable">Wysyłanie wiadomości e-maili wymaga skonfigurowania tożsamości i folderu szkiców (do wyboru w ustawieniach konta, konfiguracja krok 1)</string>
     <string name="title_no_standard">Ten dostawca korzysta z zastrzeżonego protokołu e-mail i dlatego nie jest możliwe korzystanie z klientów e-mail firm trzecich</string>
     <string name="title_no_idle">Ten dostawca nie obsługuje wiadomości push. To opóźni otrzymywanie nowych wiadomości i zwiększy zużycie baterii.</string>
     <string name="title_no_utf8">Ten dostawca nie wspiera UTF-8</string>

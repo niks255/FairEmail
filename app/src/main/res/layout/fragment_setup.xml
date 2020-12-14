@@ -38,7 +38,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tvWelcome"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvWelcome"
-            app:srcCompat="@drawable/baseline_close_24" />
+            app:srcCompat="@drawable/twotone_close_24" />
 
         <View
             android:id="@+id/vSeparatorWelcome"
@@ -49,6 +49,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.1"
+            android:background="?attr/colorAccent"
+            app:layout_constraintBottom_toTopOf="@id/vSeparatorAccount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vSeparatorWelcome" />
 
         <ImageView
             android:id="@+id/fast"
@@ -103,7 +113,7 @@
             android:id="@+id/btnQuick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="12dp"
             android:backgroundTint="?attr/colorInfoBackground"
             android:text="@string/title_setup_wizard"
             android:textColor="?attr/colorInfoForeground"
@@ -600,7 +610,7 @@
             android:id="@+id/grpWelcome"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:constraint_referenced_ids="tvWelcome,ibWelcome,vSeparatorWelcome" />
+            app:constraint_referenced_ids="tvWelcome,ibWelcome" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grpDataSaver"

@@ -8,19 +8,19 @@ Wenn Sie eine Frage haben, lesen Sie bitte zuerst die unten stehenden häufig ge
 * [Wie kann ich …?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
 * [Bekannte Probleme](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
 * [Geplante Funktionen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Häufig angeforderte Funktionen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
+* [Häufig angefragte Funktionen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Häufig gestellte Fragen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Hilfe bekommen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
 ## Konten autorisieren
 
 In den meisten Fällen kann der Schnelleinrichtungs-Assistent automatisch die richtige Konfiguration ermitteln.
 
-Wenn die schnelle Einrichtung fehlschlägt, müssen Sie manuell ein Konto (für den Empfang von E-Mails) und eine Identität (für den Versand von E-Mails) einrichten. Hierzu benötigen Sie die Adressen der IMAP- und SMTP-Server sowie die jeweiligen Portnummern, ob SSL/TLS oder STARTTLS verwendet werden soll, Ihren Benutzernamen (meistens, aber nicht immer, Ihre E-Mail-Adresse) und Ihr Passwort.
+Wenn die automatische Einrichtung fehlschlägt, müssen Sie manuell ein Konto (für den Empfang von E-Mails) und eine Identität (für den Versand von E-Mails) einrichten. Hierzu benötigen Sie die Adressen der IMAP- und SMTP-Server sowie die jeweiligen Portnummern, ob SSL/TLS oder STARTTLS verwendet werden soll und Ihren Benutzernamen (meistens, aber nicht immer, Ihre E-Mail-Adresse) und Ihr Passwort.
 
-Die Suche nach *IMAP* und dem Namen des Email-Anbieters reichen im Internet meistens aus, um die richtige Anleitung zu finden.
+Die Suche nach *IMAP* und dem Namen des Email-Anbieters reichen im Internet meist aus, um die richtige Anleitung zu finden.
 
-In einigen Fällen müssen Sie den externen Zugriff auf Ihr Konto gestatten und/oder ein spezielles (App-) Passwort verwenden, wenn beispielsweise eine Zwei-Faktor-Authentifizierung aktiviert ist.
+In einigen Fällen müssen Sie den externen Zugriff auf Ihr Konto erlauben und/oder ein spezielles (App-) Passwort verwenden, wenn beispielsweise eine Zwei-Faktor-Authentifizierung aktiviert ist.
 
 Zur Autorisierung:
 
@@ -43,22 +43,22 @@ Verwandte Fragen:
 
 ## Wie kann ich …?
 
-* Kontonamen ändern: Einrichten, Schritt 1, Verwalten, Konto tippen
-* Ändern Sie das Ziel für das Links/Rechts-Wischen: Einrichten, Verhalten, Wisch-Aktionen einstellen
-* Passwort ändern: Einrichten, Schritt 1, Verwalten, Konto tippen, Passwort ändern
-* Signatur festlegen: Setup, Schritt 2, Verwalten, Identität tippen, Signatur bearbeiten.
+* Kontonamen ändern: Einstellungen, Punkt 1, Verwalten, Konto antippen
+* Ziel für das Links-/Rechts-Wischen ändern: Einstellungen, Verhalten, Wischgesten festlegen
+* Passwort ändern: Einstellungen, Punkt 1, Verwalten, Konto antippen, Passwort ändern
+* Signatur festlegen: Einstellungen, Punkt 2, Verwalten, Identität antippen, Signatur bearbeiten.
 * Kopie- und Blindkopie-Adressen (CC und BCC) hinzufügen: auf das Bild der Person am Ende des Betreffs tippen
-* Gehe zur nächsten/vorherigen Nachricht im Archiv/Löschen: In den Einstellungen deaktiviere *Konversation automatisch schließen* und wähle *Gehe zur nächsten/vorherigen Konversation* für *Beim Schließen einer Konversation*
-* Fügen Sie einen Ordner zum einheitlichen Posteingang hinzu: Drücken Sie lange den Ordner in der Ordnerliste und markieren Sie *Im einheitlichen Posteingang anzeigen*
-* Fügen Sie einen Ordner zum Navigationsmenü hinzu: Drücken Sie lange den Ordner in der Ordnerliste und markieren Sie *Im Navigationsmenü anzeigen*
-* Weitere Nachrichten laden: Drücken Sie lange auf einen Ordner in der Ordnerliste, wählen Sie *Weitere Nachrichten synchronisieren*
-* Lösche eine Nachricht, überspringe den Papierkorb: im 3-Punkte-Menü direkt über dem Nachrichtentext *Löschen* oder deaktiviere den Papierkorb in den Kontoeinstellungen
-* Konto/Identität löschen: Schritt 1/2, Verwalten, Benutzerkonten/Identität, Drei-Punkte-Menü, Löschen
-* Ordner löschen: Drücken Sie lange auf den Ordner in der Ordnerliste, Eigenschaften, Drei-Punkte-Menü, Löschen
+* Zur nächsten/vorherigen Nachricht beim Archiviren/Löschen gehen: in den Einstellungen unter »Verhalten« *Unterhaltungen automatisch schließen* deaktivieren und unter *Beim schließen einer Unterhaltung* bitte *Zur nächsten/vorherigen Unterhaltung wechseln* auswählen
+* Einen Ordner zum Sammeleingang hinzufügen: lange auf den Ordner in der Ordnerliste drücken und *Im Sammeleingang anzeigen* ankreuzen
+* Einen Ordner zum Navigationsmenü hinzufügen: lange auf den Ordner in der Ordnerliste drücken und *Im Navigationsmenü anzeigen* ankreuzen
+* Weitere Nachrichten laden: lange auf den Ordner in der Ordnerliste drücken und *Weitere Nachrichten synchronisieren* auswählen
+* Eine Nachricht löschen und den den Papierkorb überspringen: im 3-Punkte-Menü direkt über dem Nachrichtentext *Löschen* oder den Papierkorb in den Kontoeinstellungen deaktivieren
+* Konto/Identität löschen: Einstellungen, Punkt 1/2, Verwalten, Benutzerkonten/Identität, Drei-Punkte-Menü, Löschen
+* Ordner löschen: lange auf den Ordner in der Ordnerliste drücken, Eigenschaften, Drei-Punkte-Menü, Löschen
 * Absenden rückgängig machen: Postausgang, Nachricht antippen, Symbol rückgängig tippen
 * Gesendete Nachrichten im Posteingang speichern: [Siehe diese F&A](#user-content-faq142)
-* Systemordner ändern: Einrichten, Schritt 1, Verwalten, Benutzerkonto unten
-* Export-/Import-Einstellungen: Einrichtung, Navigations-/Hamburgermenü
+* Systemordner ändern: Einstellungen, Punkt 1, Verwalten, Benutzerkonto unten
+* Export-/Import-Einstellungen: Einstellungen, Navigations-/Hamburgermenü
 
 ## Bekannte Probleme
 
@@ -155,7 +155,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(32) Wie kann ich überprüfen, ob das Lesen von E-Mails wirklich sicher ist?](#user-content-faq32)
 * [(33) Warum funktionieren bearbeitete Absenderadressen nicht?](#user-content-faq33)
 * [(34) Wie werden Identitäten abgeglichen?](#user-content-faq34)
-* [(35) Why should I be careful with viewing images, attachments, the original message, and opening links?](#user-content-faq35)
+* [(35) Warum sollte ich vorsichtig beim Öffnen von Bildern, Anhängen, der originialen Nachricht oder Links sein?](#user-content-faq35)
 * [(36) Wie werden Einstellungsdateien verschlüsselt?](#user-content-faq36)
 * [(37) Wie werden Passwörter gespeichert?](#user-content-faq37)
 * [(39) Wie kann ich den Akkuverbrauch von FairEmail verringern?](#user-content-faq39)
@@ -221,7 +221,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [(100) Wie kann ich Google Mail-Kategorien synchronisieren?](#user-content-faq100)
 * [(101) Was bedeutet der blaue/orangefarbene Punkt am unteren Ende der Konversationen?](#user-content-faq101)
 * [(102) Wie kann ich die automatische Drehung von Bildern aktivieren?](#user-content-faq102)
-* [(103) Wie kann ich Audio aufnehmen?](#user-content-faq103)
+* [(103) Wie kann ich Audio aufnehmen?](#user-content-faq158)
 * [(104) Was muss ich über die Fehlermeldung wissen?](#user-content-faq104)
 * [(105) Wie funktioniert die »Roaming wie zu Hause«-Option?](#user-content-faq105)
 * [(106) Welche Launcher können die Anzahl der ungelesenen Nachrichten als Plakette anzeigen?](#user-content-faq106)
@@ -389,42 +389,42 @@ Operationen werden nur bearbeitet, wenn eine Verbindung zum E-Mail-Server besteh
 
 Kontaktieren Sie Ihren Provider, um dieses Problem zu beheben oder besorgen Sie sich ein gültiges Sicherheitszertifikat, da ungültige und dadurch unsichere Sicherheitszertifikate [Man-in-the-Middle-Angriffe](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) ermöglichen. Falls Sie die Kosten hierfür scheuen, dann können Sie kostenlose Sicherheitszertifikate von [Let's Encrypt](https://letsencrypt.org) beziehen.
 
-Alternatively, you can accept the fingerprint of invalid server certificates like this:
+Alternativ können Sie den Fingerabdruck ungültiger Server-Zertifikate wie folgt akzeptieren:
 
-1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
-1. Go to the setup screen via the navigation menu (swipe from the left side inwards)
-1. In step 1 and 2 tap *Manage* and tap the faulty account and identity
-1. Check/save the account and identity
-1. Tick the checkbox below the error message and save again
+1. Stellen Sie sicher, dass Sie eine vertrauenswürdige Internetverbindung verwenden (keine öffentlichen WLAN-Netzwerke, etc)
+1. Gehen Sie zu den Einstellungen über das Navigationsmenü (wischen Sie von der linken Seite nach innen)
+1. Tippen Sie in Schritt 1 und 2 auf *Verwalten* und tippen Sie auf das fehlerhafte Konto und Identität
+1. Prüfen/Speichern Sie Konto und Identität
+1. Markieren Sie das Kontrollkästchen unterhalb der Fehlermeldung und speichern Sie erneut
 
-This will "pin" the server certificate to prevent man-in-the-middle attacks.
+Dies wird das Serverzertifikat an das Konto "binden", um Man-in-the-Middle-Angriffe zu verhindern.
 
-Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
+Beachten Sie, dass ältere Android-Versionen neuere Zertifizierungsstellen, wie Let’s Encrypt, möglicherweise nicht akzeptieren wodurch Internetverbindungen als unsicher eingestuft werden können, siehe auch [hier](https://developer.android.com/training/articles/security-ssl).
 
-*Trust anchor for certification path not found*
+*Vertrauensanker für Zertifizierungspfad nicht gefunden*
 
-*... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* means that the default Android trust manager was not able to verify the server certificate chain.
+*... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* bedeutet, dass der standardmäßige Android Trust Manager die Server-Zertifikatskette nicht überprüfen konnte.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+Sie sollten entweder die Serverkonfiguration korrigieren oder den unten angezeigten Fingerabdruck akzeptieren.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+Beachten Sie, dass dieses Problem dadurch verursacht werden kann, dass der Server nicht alle Zwischenzertifikate sendet.
 
 *Leeres Passwort*
 
-Your username is likely easily guessed, so this is insecure.
+Ihr Benutzername ist möglicherweise leicht zu erraten, daher ist dies unsicher.
 
-*Plain text connection*
+*Klartext-Verbindung*
 
-Your username and password and all messages will be sent and received unencrypted, which is **very insecure** because a [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) is very simple on an unencrypted connection.
+Benutzername und Passwort, sowie alle Nachrichten, werden unverschlüsselt gesendet und empfangen, was im **höchsten Maße unsicher** ist, weil eine [Man-in-the-Middle-Attacke](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) auf einer unverschlüsselten Verbindung sehr einfach ist.
 
-If you still want to use an invalid security certificate, an empty password or a plain text connection you'll need to enable insecure connections in the account and/or identity settings. STARTTLS should be selected for plain text connections. If you enable insecure connections, you should connect via private, trusted networks only and never via public networks, like offered in hotels, airports, etc.
+Wenn Sie dennoch ein ungültiges Sicherheitszertifikat, ein leeres Passwort oder eine Klartext-Verbindung verwenden möchten, dann müssen Sie unsichere Verbindungen in den Konto- und/oder Identitätseinstellungen aktivieren. STARTTLS sollte für Klartext-Verbindungen ausgewählt werden. Wenn Sie unsichere Verbindungen aktivieren, sollten Sie sich nur über private, vertrauenswürdige Netzwerke verbinden und niemals über öffentliche Netzwerke, wie sie in Hotels, Flughäfen usw. angeboten werden.
 
 <br />
 
 <a name="faq5"></a>
 **(5) Wie kann ich die Nachrichtenanzeige anpassen?**
 
-In the three dot overflow menu you can enable or disable or select:
+Im Burger-Menü können Sie die folgenden Optionen aktivieren/deaktivieren bzw. wählen:
 
 * *Textgröße*: für drei verschiedene Schriftgrößen
 * *kompakte Ansicht*: für eine mehr verdichtete Nachrichtendarstellung und eine kleinere Text-Schriftart
@@ -446,40 +446,40 @@ Im Bereich "Anzeige" der Einstellungen können Sie ein- oder ausschalten:
 * *Bilder von bekannten Kontakten anzeigen*: Wenn Sie Bilder von bekannten Kontakten automatisch anzeigen lassen möchten, dann lesen Sie bitte [diese FAQ](#user-content-faq35)
 * *Konversations-Aktionsleiste*: Blendet die untere Navigationsleiste ein oder aus
 
-Note that messages can be previewed only when the message text was downloaded. Larger message texts are not downloaded by default on metered (generally mobile) networks. You can change this in the settings.
+Beachten Sie, dass die Nachrichtenvorschau nur angezeigt werden kann, wenn der Nachrichtentext heruntergeladen wurde. Größere Nachrichtentexte werden standardmäßig nicht bei getakteten Datenverbindungen (Mobile Daten) heruntergeladen. Sie können dies in den Einstellungen ändern.
 
-If the list of addresses is long, you can collapse the addresses section with the *less* icon at the top of the addresses section.
+Wenn die Liste der Adressaten sehr lang ist, dann können Sie den Adressbereich mit dem *Weniger* Symbol oben im Adressbereich einklappen.
 
-Some people ask:
+Einige Benutzer fragten:
 
 * wie man den Betreff fett anzeigen lassen kann, obwohl eine fette Schrift bereits verwendet wird, um ungelesene Nachrichten hervorzuheben
 * wie man die Adresse oder den Betreff unabhängig von der Textgröße-Option in den Einstellungen größer/kleiner anzeigen lassen kann
 * um den Stern nach links zu bewegen, aber es ist viel einfacher, den Stern auf der rechten Seite zu bedienen
 
-Unfortunately, it is impossible to make everybody happy and adding lots of settings would not only be confusing, but also never be sufficient.
+Leider ist es unmöglich, alle glücklich zu machen und viele Einstellungen wären nicht nur verwirrend, sondern auch nie ausreichend.
 
 <br />
 
 <a name="faq6"></a>
-**(6) How can I login to Gmail / G suite?**
+**(6) Wie kann ich mich bei Gmail / G Suite anmelden?**
 
-You can use the quick setup wizard to easily setup a Gmail account and identity.
+Sie können den Schnelleinrichtungsassistenten verwenden, um einfach ein Gmail-Konto und eine Gmail-Identität einzurichten.
 
-If you don't want to use an on-device Gmail account, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to setup an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
+Wenn Sie kein Gmail-Konto auf dem Gerät verwenden möchten, können Sie entweder den Zugriff für „weniger sichere Apps“ aktivieren und Ihr Kontopasswort verwenden (nicht empfohlen) oder die Zwei-Faktor-Authentifizierung aktivieren und ein appspezifisches Passwort verwenden. Um ein Passwort zu verwenden, müssen Sie Konto und Identität über die Einrichtungsschritte 1 und 2 statt über den Schnelleinrichtungs-Assistenten einrichten.
 
-Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
+Bitte lesen Sie in [dieser FAQ](#user-content-faq111), warum nur On-Device-Konten verwendet werden können.
 
-Note that an app specific password is required when two factor authentication is enabled.
-
-<br />
-
-*App specific password*
-
-See [here](https://support.google.com/accounts/answer/185833) about how to generate an app specific password.
+Beachten Sie, dass bei Aktivierung der Zwei-Faktor-Authentifizierung ein Anwendungsspezifisches Passwort erforderlich ist.
 
 <br />
 
-*Enable "Less secure apps"*
+*Anwendungsspezifisches Passwort*
+
+Wie ein Anwendungsspezifisches Passwort erstellt wird, sehen Sie [hier](https://support.google.com/accounts/answer/185833).
+
+<br />
+
+*„Weniger sichere Anwendungen“ aktivieren*
 
 **Important**: using this method is not recommended because it is less reliable.
 
@@ -913,6 +913,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *501 Syntaxfehler — Zeile zu lang* wird oft durch die Verwendung von langen Autocrypt-Kopfzeilen verursacht
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 … nicht zur Weiterleitung zugelassen* bedeutet, dass der E-Mail-Server den Benutzernamen/E-Mail-Adresse nicht erkennen konnte. Bitte überprüfen Sie den Hostnamen, Benutzernamen und E-Mail-Adresse in den Identitätseinstellungen.
+* *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 
 **Gmail errors**
 
@@ -953,6 +954,8 @@ First try to wait some time to see if the problem resolves itself, else:
 
 * entweder wechseln Sie regelmäßig auf Nachrichten in den Empfangseinstellungen um, was dazu führt, dass Ordner gleichzeitig geöffnet werden
 * oder setzen Sie Ordner, die statt der Synchronisierung abgefragt werden sollen (lange halten Sie den Ordner in der Ordnerliste, bearbeiten Sie die Eigenschaften)
+
+An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
 The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
 
@@ -1551,7 +1554,7 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The price of FairEmail is too low, lower than that of most similar apps, and there are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %, to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it and doesn't contribute anything.
+The price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
 
 <br />
 
@@ -1605,7 +1608,7 @@ Messages will automatically be marked read on expanding, unless this was disable
 <a name="faq71"></a>
 **(71) How do I use filter rules?**
 
-You can edit filter rules by long pressing a folder in the folder list.
+You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
 New rules will be applied to new messages received in the folder, not to existing messages. You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
 
@@ -1653,7 +1656,7 @@ You can select one of these actions to apply to matching messages:
 * Add keyword
 * Move
 * Copy (Gmail: label)
-* Answer (with template)
+* Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
 
@@ -2067,15 +2070,6 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 
 <br />
 
-<a name="faq103"></a>
-**(103) How can I record audio?**
-
-You can record audio if you have a recording app installed which supports the [RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION) intent. If no supported app is installed, FairEmail will not show a record audio action/icon.
-
-Unfortunately and surprisingly, most recording apps do not seem to support this intent (they should).
-
-<br />
-
 <a name="faq104"></a>
 **(104) What do I need to know about error reporting?**
 
@@ -2310,7 +2304,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-When FairEmail cannot connect to an email server to receive messages, for example when the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will wait 8, 16 and 32 seconds while keeping the device awake (=use battery power) and try again to connect. If this fails, FairEmail will schedule an alarm to retry after 15, 30 and 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2318,7 +2312,7 @@ Note that [Android doze mode](https://developer.android.com/training/monitoring-
 
 Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can open/expand the message and use the undo icon to move the message to the drafts folder, possible change it and send it again.
+Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
 
 <br />
 
@@ -2332,7 +2326,15 @@ The message *Message too large or too complex to display* will be shown if there
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-* ...
+* [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) support
+
+IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
+
+**Important**: push messages (=always sync) for the inbox needs to be enabled.
+
+**Important**: most email server do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
+
+You can enable experimental features in the miscellaneous settings.
 
 <br />
 
@@ -2744,13 +2746,14 @@ Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/confi
 
 <br />
 
+<a name="faq103"></a>
 <a name="faq158"></a>
 **(158) Which camera / audio recorder do you recommend?**
 
 To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
 To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 

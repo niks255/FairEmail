@@ -219,6 +219,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int colorSubject;
     private int colorEncrypt;
     private int colorSeparator;
+    private int colorError;
+    private int colorControlNormal;
 
     private boolean hasWebView;
     private boolean pin;
@@ -1626,7 +1628,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean archive = (move && (hasArchive && !inArchive && !inSent && !inTrash && !inJunk));
                     boolean trash = (move || outbox || debug ||
                             message.accountProtocol == EntityAccount.TYPE_POP);
-                    boolean junk = (move && (hasJunk && !inJunk));
+                    boolean junk = (move && hasJunk);
                     boolean inbox = (move && (inArchive || inTrash || inJunk));
                     boolean keywords = (!message.folderReadOnly && message.uid != null &&
                             message.accountProtocol == EntityAccount.TYPE_IMAP);
@@ -1713,6 +1715,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ivPlain.setVisibility(show_addresses && message.plain_only != null && message.plain_only ? View.VISIBLE : View.GONE);
             ibReceipt.setVisibility(message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
+            ibReceipt.setImageTintList(ColorStateList.valueOf(message.ui_answered ? colorControlNormal : colorError));
             ivAutoSubmitted.setVisibility(show_addresses && message.auto_submitted != null && message.auto_submitted ? View.VISIBLE : View.GONE);
             ivBrowsed.setVisibility(show_addresses && message.ui_browsed ? View.VISIBLE : View.GONE);
 
@@ -2284,10 +2287,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvSignedData.setVisibility(signed_data ? View.VISIBLE : View.GONE);
 
                     if (result instanceof Spanned) {
-                        tvBody.setText((Spanned) result);
-                        tvBody.setTextIsSelectable(false);
-                        tvBody.setTextIsSelectable(true);
-                        tvBody.setMovementMethod(new TouchHandler(message));
+                        tvBody.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    tvBody.setText((Spanned) result);
+                                    tvBody.setTextIsSelectable(false);
+                                    tvBody.setTextIsSelectable(true);
+                                    tvBody.setMovementMethod(new TouchHandler(message));
+                                } catch (Throwable ex) {
+                                    Log.e(ex);
+                                }
+                            }
+                        });
                     } else if (result instanceof String)
                         ((WebView) wvBody).loadDataWithBaseURL(null, (String) result, "text/html", StandardCharsets.UTF_8.name(), null);
                     else if (result == null) {
@@ -3153,6 +3165,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     }
                     return false;
+                case KeyEvent.KEYCODE_8:
+                    if (event.isShiftPressed()) {
+                        onToggleFlag(message);
+                        return true;
+                    } else
+                        return false;
+                case KeyEvent.KEYCODE_NUMPAD_MULTIPLY:
+                    onToggleFlag(message);
+                    return true;
                 default:
                     return false;
             }
@@ -3894,6 +3915,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             aargs.putLong("folder", message.folder);
             aargs.putString("type", message.folderType);
             aargs.putString("from", MessageHelper.formatAddresses(message.from));
+            aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
 
             FragmentDialogJunk ask = new FragmentDialogJunk();
             ask.setArguments(aargs);
@@ -5181,6 +5203,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorSubject = Helper.resolveColor(context, highlight_subject ? R.attr.colorUnreadHighlight : R.attr.colorRead);
         this.colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         this.colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);
+        this.colorError = Helper.resolveColor(context, R.attr.colorError);
+        this.colorControlNormal = Helper.resolveColor(context, R.attr.colorControlNormal);
 
         this.hasWebView = Helper.hasWebView(context);
         this.pin = ShortcutManagerCompat.isRequestPinShortcutSupported(context);
@@ -6318,6 +6342,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final long folder = args.getLong("folder");
             final String type = args.getString("type");
             final String from = args.getString("from");
+            final boolean inJunk = args.getBoolean("inJunk");
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
             final TextView tvMessage = view.findViewById(R.id.tvMessage);
@@ -6325,6 +6350,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final CheckBox cbBlockSender = view.findViewById(R.id.cbBlockSender);
             final CheckBox cbBlockDomain = view.findViewById(R.id.cbBlockDomain);
             final Button btnEditRules = view.findViewById(R.id.btnEditRules);
+            final Group grpInJunk = view.findViewById(R.id.grpInJunk);
 
             tvMessage.setText(getString(R.string.title_ask_spam_who, from));
 
@@ -6348,16 +6374,52 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             btnEditRules.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                    lbm.sendBroadcast(
-                            new Intent(ActivityView.ACTION_EDIT_RULES)
-                                    .putExtra("account", account)
-                                    .putExtra("protocol", protocol)
-                                    .putExtra("folder", folder)
-                                    .putExtra("type", type));
-                    dismiss();
+                    if (inJunk) {
+                        new SimpleTask<EntityFolder>() {
+                            @Override
+                            protected EntityFolder onExecute(Context context, Bundle args) throws Throwable {
+                                long account = args.getLong("account");
+
+                                DB db = DB.getInstance(context);
+                                EntityFolder inbox = db.folder().getFolderByType(account, EntityFolder.INBOX);
+
+                                if (inbox == null)
+                                    throw new IllegalArgumentException(context.getString(R.string.title_no_inbox));
+
+                                return inbox;
+                            }
+
+                            @Override
+                            protected void onExecuted(Bundle args, EntityFolder inbox) {
+                                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+                                lbm.sendBroadcast(
+                                        new Intent(ActivityView.ACTION_EDIT_RULES)
+                                                .putExtra("account", account)
+                                                .putExtra("protocol", protocol)
+                                                .putExtra("folder", inbox.id)
+                                                .putExtra("type", inbox.type));
+                                dismiss();
+                            }
+
+                            @Override
+                            protected void onException(Bundle args, Throwable ex) {
+                                Log.unexpectedError(getParentFragmentManager(), ex);
+                            }
+                        }.execute(FragmentDialogJunk.this, getArguments(), "junk");
+                    } else {
+                        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+                        lbm.sendBroadcast(
+                                new Intent(ActivityView.ACTION_EDIT_RULES)
+                                        .putExtra("account", account)
+                                        .putExtra("protocol", protocol)
+                                        .putExtra("folder", folder)
+                                        .putExtra("type", type));
+                        dismiss();
+                    }
                 }
             });
+
+            grpInJunk.setVisibility(inJunk ? View.GONE : View.VISIBLE);
 
             return new AlertDialog.Builder(getContext())
                     .setView(view)

@@ -40,6 +40,7 @@ import androidx.preference.PreferenceManager;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -58,6 +59,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,11 +74,13 @@ import java.util.concurrent.Future;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLProtocolException;
+import javax.net.ssl.SSLSession;
 
 public class ContactInfo {
     private String email;
@@ -95,6 +100,8 @@ public class ContactInfo {
     private static final ExecutorService executorFavicon =
             Helper.getBackgroundExecutor(0, "favicon");
 
+    private static final int GENERATED_ICON_SIZE = 96; // dp
+    private static final int FAVICON_ICON_SIZE = 64; // dp
     private static final int GRAVATAR_TIMEOUT = 5 * 1000; // milliseconds
     private static final int FAVICON_CONNECT_TIMEOUT = 5 * 1000; // milliseconds
     private static final int FAVICON_READ_TIMEOUT = 10 * 1000; // milliseconds
@@ -343,39 +350,46 @@ public class ContactInfo {
                         else
                             info.bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     else {
-                        final int scaleToPixels = Helper.dp2pixels(context, 64);
-                        final URL base = new URL("https://" + domain);
-                        final URL www = new URL("https://www." + domain);
+                        final int scaleToPixels = Helper.dp2pixels(context, FAVICON_ICON_SIZE);
 
                         List<Future<Bitmap>> futures = new ArrayList<>();
 
-                        futures.add(executorFavicon.submit(new Callable<Bitmap>() {
-                            @Override
-                            public Bitmap call() throws Exception {
-                                return parseFavicon(base, scaleToPixels);
-                            }
-                        }));
+                        String host = domain;
+                        while (host.indexOf('.') > 0) {
+                            final URL base = new URL("https://" + host);
+                            final URL www = new URL("https://www." + host);
 
-                        futures.add(executorFavicon.submit(new Callable<Bitmap>() {
-                            @Override
-                            public Bitmap call() throws Exception {
-                                return parseFavicon(www, scaleToPixels);
-                            }
-                        }));
+                            futures.add(executorFavicon.submit(new Callable<Bitmap>() {
+                                @Override
+                                public Bitmap call() throws Exception {
+                                    return parseFavicon(base, scaleToPixels);
+                                }
+                            }));
 
-                        futures.add(executorFavicon.submit(new Callable<Bitmap>() {
-                            @Override
-                            public Bitmap call() throws Exception {
-                                return getFavicon(new URL(base, "favicon.ico"), scaleToPixels);
-                            }
-                        }));
+                            futures.add(executorFavicon.submit(new Callable<Bitmap>() {
+                                @Override
+                                public Bitmap call() throws Exception {
+                                    return parseFavicon(www, scaleToPixels);
+                                }
+                            }));
 
-                        futures.add(executorFavicon.submit(new Callable<Bitmap>() {
-                            @Override
-                            public Bitmap call() throws Exception {
-                                return getFavicon(new URL(www, "favicon.ico"), scaleToPixels);
-                            }
-                        }));
+                            futures.add(executorFavicon.submit(new Callable<Bitmap>() {
+                                @Override
+                                public Bitmap call() throws Exception {
+                                    return getFavicon(new URL(base, "favicon.ico"), scaleToPixels);
+                                }
+                            }));
+
+                            futures.add(executorFavicon.submit(new Callable<Bitmap>() {
+                                @Override
+                                public Bitmap call() throws Exception {
+                                    return getFavicon(new URL(www, "favicon.ico"), scaleToPixels);
+                                }
+                            }));
+
+                            int dot = host.indexOf('.');
+                            host = host.substring(dot + 1);
+                        }
 
                         Throwable ex = null;
                         for (Future<Bitmap> future : futures)
@@ -416,7 +430,7 @@ public class ContactInfo {
         // Generated
         boolean identicon = false;
         if (info.bitmap == null && generated) {
-            int dp = Helper.dp2pixels(context, 96);
+            int dp = Helper.dp2pixels(context, GENERATED_ICON_SIZE);
             if (!TextUtils.isEmpty(info.email)) {
                 if (identicons) {
                     identicon = true;
@@ -455,6 +469,12 @@ public class ContactInfo {
         connection.setReadTimeout(FAVICON_READ_TIMEOUT);
         connection.setConnectTimeout(FAVICON_CONNECT_TIMEOUT);
         connection.setInstanceFollowRedirects(true);
+        connection.setHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
         connection.connect();
 
         String response;
@@ -470,16 +490,74 @@ public class ContactInfo {
 
         Document doc = JsoupEx.parse(response);
 
-        Element link = doc.head().select("link[href~=.*\\.(ico|png|gif|svg)]").first();
-        String favicon = (link == null ? null : link.attr("href"));
-
-        if (TextUtils.isEmpty(favicon)) {
-            Element meta = doc.head().select("meta[itemprop=image]").first();
-            favicon = (meta == null ? null : meta.attr("content"));
+        // Use canonical address
+        Element canonical = doc.head().select("link[rel=canonical]").first();
+        if (canonical != null) {
+            String href = canonical.attr("href");
+            if (!TextUtils.isEmpty(href))
+                base = new URL(href);
         }
 
-        if (!TextUtils.isEmpty(favicon))
-            return getFavicon(new URL(base, favicon), scaleToPixels);
+        // https://en.wikipedia.org/wiki/Favicon
+        Elements imgs = new Elements();
+        imgs.addAll(doc.head().select("link[href~=.+\\.(ico|png|gif|svg)]"));
+        imgs.addAll(doc.head().select("meta[itemprop=image]"));
+
+        Collections.sort(imgs, new Comparator<Element>() {
+            @Override
+            public int compare(Element img1, Element img2) {
+                boolean l1 = "link".equals(img1.tagName());
+                boolean l2 = "link".equals(img2.tagName());
+                int l = Boolean.compare(l1, l2);
+                if (l != 0)
+                    return -l;
+
+                boolean i1 = "icon".equalsIgnoreCase(img1.attr("rel")
+                        .replace("shortcut", "").trim());
+                boolean i2 = "icon".equalsIgnoreCase(img2.attr("rel")
+                        .replace("shortcut", "").trim());
+                int i = Boolean.compare(i1, i2);
+                if (i != 0)
+                    return -i;
+
+                String[] s1 = img1.attr("sizes").split("[x|X]");
+                String[] s2 = img2.attr("sizes").split("[x|X]");
+                Integer w1 = Helper.parseInt(s1.length == 2 ? s1[0] : null);
+                Integer h1 = Helper.parseInt(s1.length == 2 ? s1[1] : null);
+                Integer w2 = Helper.parseInt(s2.length == 2 ? s2[0] : null);
+                Integer h2 = Helper.parseInt(s2.length == 2 ? s2[1] : null);
+                return Integer.compare(
+                        Math.abs(Math.min(w1 == null ? 0 : w1, h1 == null ? 0 : h1) - scaleToPixels),
+                        Math.abs(Math.min(w2 == null ? 0 : w2, h2 == null ? 0 : h2) - scaleToPixels));
+            }
+        });
+
+        for (int i = 0; i < imgs.size(); i++)
+            Log.i("Favicon " + i + "=" + imgs.get(i) + " @" + base);
+
+        List<Future<Bitmap>> futures = new ArrayList<>();
+        for (Element img : imgs) {
+            String favicon = ("link".equals(img.tagName())
+                    ? img.attr("href")
+                    : img.attr("content"));
+            if (TextUtils.isEmpty(favicon))
+                continue;
+
+            final URL url = new URL(base, favicon);
+            futures.add(executorFavicon.submit(new Callable<Bitmap>() {
+                @Override
+                public Bitmap call() throws Exception {
+                    return getFavicon(url, scaleToPixels);
+                }
+            }));
+        }
+
+        for (Future<Bitmap> future : futures)
+            try {
+                return future.get();
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
 
         return null;
     }
@@ -496,6 +574,12 @@ public class ContactInfo {
         connection.setReadTimeout(FAVICON_READ_TIMEOUT);
         connection.setConnectTimeout(FAVICON_CONNECT_TIMEOUT);
         connection.setInstanceFollowRedirects(true);
+        connection.setHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
         connection.connect();
 
         try {

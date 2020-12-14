@@ -49,8 +49,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
+import com.sun.mail.iap.Argument;
+import com.sun.mail.iap.ProtocolException;
+import com.sun.mail.iap.Response;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import com.sun.mail.imap.protocol.IMAPProtocol;
+import com.sun.mail.imap.protocol.IMAPResponse;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -77,6 +82,7 @@ import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Quota;
 import javax.mail.ReadOnlyFolderException;
+import javax.mail.Store;
 import javax.mail.StoreClosedException;
 import javax.mail.event.FolderAdapter;
 import javax.mail.event.FolderEvent;
@@ -111,7 +117,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int OPTIMIZE_KEEP_ALIVE_INTERVAL = 12; // minutes
     private static final int OPTIMIZE_POLL_INTERVAL = 15; // minutes
     private static final int CONNECT_BACKOFF_START = 4; // seconds
-    private static final int CONNECT_BACKOFF_MAX = 32; // seconds (totally 4+8+16+32=1 minute)
+    private static final int CONNECT_BACKOFF_MAX = 8; // seconds (totally 4+8+2x15=42 seconds)
     private static final int CONNECT_BACKOFF_ALARM_START = 15; // minutes
     private static final int CONNECT_BACKOFF_ALARM_MAX = 60; // minutes
     private static final long CONNECT_BACKOFF_GRACE = 2 * 60 * 1000L; // milliseconds
@@ -138,7 +144,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "sync_shared_folders",
             "prefer_ip4", "tcp_keep_alive", "ssl_harden", // force reconnect
             "badge", "unseen_ignored", // force update badge/widget
-            "protocol", "debug", // force reconnect
+            "experiments", "debug", "protocol", // force reconnect
             "auth_plain",
             "auth_login",
             "auth_sasl"
@@ -913,6 +919,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         try {
             wlAccount.acquire();
 
+            boolean forced = false;
             final DB db = DB.getInstance(this);
 
             long thread = Thread.currentThread().getId();
@@ -943,6 +950,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 // Debug
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                boolean experiments = prefs.getBoolean("experiments", false);
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
                 final EmailService iservice = new EmailService(
@@ -1034,10 +1042,19 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     if (!capIdle || account.poll_interval < OPTIMIZE_KEEP_ALIVE_INTERVAL)
                         optimizeAccount(account, "IDLE");
 
+                    final boolean capNotify = (experiments && iservice.hasCapability("NOTIFY"));
+
                     db.account().setAccountState(account.id, "connected");
                     db.account().setAccountError(account.id, null);
                     db.account().setAccountWarning(account.id, null);
-                    EntityLog.log(this, account.name + " connected");
+
+                    Store istore = iservice.getStore();
+                    if (istore instanceof IMAPStore) {
+                        Map<String, String> caps = ((IMAPStore) istore).getCapabilities();
+                        EntityLog.log(this, account.name + " connected" +
+                                " caps=" + (caps == null ? null : TextUtils.join(" ", caps.keySet())));
+                    } else
+                        EntityLog.log(this, account.name + " connected");
 
                     db.account().setAccountMaxSize(account.id, iservice.getMaxSize());
 
@@ -1088,11 +1105,26 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 wlFolder.release();
                             }
                         }
+
+                        @Override
+                        public void folderChanged(FolderEvent e) {
+                            try {
+                                wlFolder.acquire();
+
+                                String name = e.getFolder().getFullName();
+                                EntityLog.log(ServiceSynchronize.this, "Folder changed=" + name);
+                                EntityFolder folder = db.folder().getFolderByName(account.id, name);
+                                if (folder != null)
+                                    EntityOperation.sync(ServiceSynchronize.this, folder.id, false);
+                            } finally {
+                                wlFolder.release();
+                            }
+                        }
                     });
 
                     // Update folder list
                     if (account.protocol == EntityAccount.TYPE_IMAP)
-                        Core.onSynchronizeFolders(this, account, iservice.getStore(), state, force);
+                        Core.onSynchronizeFolders(this, account, iservice.getStore(), state, force && !forced);
 
                     // Open synchronizing folders
                     List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
@@ -1281,7 +1313,43 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             idlers.add(idler);
 
                             if (sync && folder.selectable)
-                                EntityOperation.sync(this, folder.id, false);
+                                EntityOperation.sync(this, folder.id, false, force && !forced);
+
+                            if (capNotify && EntityFolder.INBOX.equals(folder.type))
+                                ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+                                    @Override
+                                    public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                        EntityLog.log(ServiceSynchronize.this, account.name + " NOTIFY enable");
+
+                                        // https://tools.ietf.org/html/rfc5465
+                                        Argument arg = new Argument();
+                                        arg.writeAtom("SET STATUS" +
+                                                " (selected (MessageNew (uid) MessageExpunge FlagChange))" +
+                                                " (subscribed (MessageNew MessageExpunge FlagChange))");
+
+                                        Response[] responses = protocol.command("NOTIFY", arg);
+
+                                        if (responses.length == 0)
+                                            throw new ProtocolException("No response");
+                                        if (!responses[responses.length - 1].isOK())
+                                            throw new ProtocolException(responses[responses.length - 1]);
+
+                                        for (int i = 0; i < responses.length - 1; i++) {
+                                            EntityLog.log(ServiceSynchronize.this, account.name + " " + responses[i]);
+                                            if (responses[i] instanceof IMAPResponse) {
+                                                IMAPResponse ir = (IMAPResponse) responses[i];
+                                                if (ir.keyEquals("STATUS")) {
+                                                    String mailbox = ir.readAtomString();
+                                                    EntityFolder f = db.folder().getFolderByName(account.id, mailbox);
+                                                    if (f != null)
+                                                        EntityOperation.sync(ServiceSynchronize.this, f.id, false);
+                                                }
+                                            }
+                                        }
+
+                                        return null;
+                                    }
+                                });
                         } else {
                             mapFolders.put(folder, null);
                             db.folder().setFolderState(folder.id, null);
@@ -1291,6 +1359,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             }
                         }
                     }
+
+                    forced = true;
 
                     Log.i(account.name + " observing operations");
                     getMainHandler().post(new Runnable() {

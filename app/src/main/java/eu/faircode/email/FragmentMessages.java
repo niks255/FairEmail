@@ -1902,6 +1902,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     getMainHandler().postDelayed(enableSelection, SWIPE_DISABLE_SELECT_DURATION);
             }
 
+            Context context = getContext();
+            if (context == null)
+                return;
+
             int pos = viewHolder.getAdapterPosition();
             if (pos == NO_POSITION)
                 return;
@@ -1937,8 +1941,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             AdapterMessage.ViewHolder holder = ((AdapterMessage.ViewHolder) viewHolder);
             Rect rect = holder.getItemRect();
-            int margin = Helper.dp2pixels(getContext(), 12);
-            int size = Helper.dp2pixels(getContext(), 24);
+            int margin = Helper.dp2pixels(context, 12);
+            int size = Helper.dp2pixels(context, 24);
 
             int icon;
             if (EntityMessage.SWIPE_ACTION_ASK.equals(action))
@@ -1964,8 +1968,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
 
-            Drawable d = getResources().getDrawable(icon, getContext().getTheme()).mutate();
-            d.setTint(Helper.resolveColor(getContext(), android.R.attr.textColorSecondary));
+            Drawable d = getResources().getDrawable(icon, context.getTheme()).mutate();
+            d.setTint(Helper.resolveColor(context, android.R.attr.textColorSecondary));
 
             if (dX > 0) {
                 // Right swipe
@@ -2221,6 +2225,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             aargs.putLong("folder", message.folder);
             aargs.putString("type", message.folderType);
             aargs.putString("from", MessageHelper.formatAddresses(message.from));
+            aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
 
             AdapterMessage.FragmentDialogJunk ask = new AdapterMessage.FragmentDialogJunk();
             ask.setArguments(aargs);
@@ -4452,7 +4457,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void updateMore() {
         if (selectionTracker != null && selectionTracker.hasSelection()) {
             fabMore.show();
-            tvSelectedCount.setText(NF.format(selectionTracker.getSelection().size()));
+
+            Context context = tvSelectedCount.getContext();
+            int count = selectionTracker.getSelection().size();
+            tvSelectedCount.setText(NF.format(count));
+            if (count > (BuildConfig.DEBUG ? 10 : MAX_MORE)) {
+                int ts = Math.round(tvSelectedCount.getTextSize());
+                Drawable w = context.getResources().getDrawable(R.drawable.twotone_warning_24, context.getTheme());
+                w.setBounds(0, 0, ts, ts);
+                w.setTint(tvSelectedCount.getCurrentTextColor());
+                tvSelectedCount.setCompoundDrawablesRelative(null, null, w, null);
+                tvSelectedCount.setCompoundDrawablePadding(ts / 2);
+            } else
+                tvSelectedCount.setCompoundDrawablesRelative(null, null, null, null);
             tvSelectedCount.setVisibility(View.VISIBLE);
         } else {
             fabMore.hide();
@@ -5954,10 +5971,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 throw new IllegalArgumentException(context.getString(R.string.title_attachments_missing));
 
                         File file = attachment.getFile(context);
+                        Log.i("PGP in=" + file.getAbsolutePath() + " exist=" + file.exists() + "/" + file.length());
                         in = new FileInputStream(file);
 
-                        if (EntityAttachment.PGP_MESSAGE.equals(attachment.encryption))
+                        if (EntityAttachment.PGP_MESSAGE.equals(attachment.encryption)) {
+                            Log.i("PGP out=" + plain.getAbsolutePath());
                             out = new FileOutputStream(plain);
+                        }
 
                     } else if (EntityAttachment.PGP_SIGNATURE.equals(attachment.encryption)) {
                         if (!attachment.available)
@@ -5993,6 +6013,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 String pgpMessage = TextUtils.join("\n\r", disarmored);
 
                                 inline = true;
+                                Log.i("PGP inline");
                                 in = new ByteArrayInputStream(pgpMessage.getBytes());
                                 out = new FileOutputStream(plain);
                             }
@@ -6934,10 +6955,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (junk == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_junk_folder));
 
-                    EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id);
+                    if (!message.folder.equals(junk.id))
+                        EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id);
 
                     if (block_sender || block_domain) {
                         EntityRule rule = EntityRule.blockSender(context, message, junk, block_domain, whitelist);
+                        if (rule != null) {
+                            if (message.folder.equals(junk.id)) {
+                                EntityFolder inbox = db.folder().getFolderByType(message.account, EntityFolder.INBOX);
+                                if (inbox == null)
+                                    rule = null;
+                                else
+                                    rule.folder = inbox.id;
+                            }
+                        }
                         if (rule != null)
                             rule.id = db.rule().insertRule(rule);
                     }
@@ -7624,12 +7655,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             String type;
             String name;
             String display;
+            Integer color;
 
             Folder(Context context, EntityFolder folder) {
                 this.id = folder.id;
                 this.type = folder.type;
                 this.name = folder.name;
                 this.display = folder.getDisplayName(context);
+                this.color = folder.color;
             }
         }
     }
@@ -7894,11 +7927,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             List<String> sources = new ArrayList<>();
             List<String> targets = new ArrayList<>();
+            Integer sourceColor = null;
+            Integer targetColor = null;
             for (MessageTarget t : result) {
                 if (!sources.contains(t.sourceFolder.type))
                     sources.add(t.sourceFolder.type);
                 if (!targets.contains(t.targetFolder.type))
                     targets.add(t.targetFolder.type);
+                if (sourceColor == null)
+                    sourceColor = t.sourceFolder.color;
+                if (targetColor == null)
+                    targetColor = t.targetFolder.color;
             }
 
             Drawable source = null;
@@ -7906,17 +7945,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 source = getResources().getDrawable(EntityFolder.getIcon(sources.get(0)), null);
                 if (source != null)
                     source.setBounds(0, 0, source.getIntrinsicWidth(), source.getIntrinsicHeight());
-            }
+            } else
+                sourceColor = null;
 
             Drawable target = null;
             if (targets.size() == 1) {
                 target = getResources().getDrawable(EntityFolder.getIcon(targets.get(0)), null);
                 if (target != null)
                     target.setBounds(0, 0, target.getIntrinsicWidth(), target.getIntrinsicHeight());
-            }
+            } else
+                targetColor = null;
 
             tvSourceFolders.setCompoundDrawablesRelative(source, null, null, null);
             tvTargetFolders.setCompoundDrawablesRelative(target, null, null, null);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (sourceColor != null)
+                    tvSourceFolders.setCompoundDrawableTintList(ColorStateList.valueOf(sourceColor));
+                if (targetColor != null)
+                    tvTargetFolders.setCompoundDrawableTintList(ColorStateList.valueOf(targetColor));
+            }
 
             if (notagain != null)
                 cbNotAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

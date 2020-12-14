@@ -92,9 +92,10 @@ public class WorkerCleanup extends Worker {
         boolean fts = prefs.getBoolean("fts", true);
         boolean cleanup_attachments = prefs.getBoolean("cleanup_attachments", false);
 
+        long start = new Date().getTime();
         DB db = DB.getInstance(context);
         try {
-            Log.i("Start cleanup manual=" + manual);
+            EntityLog.log(context, "Start cleanup manual=" + manual);
 
             if (manual) {
                 // Check message files
@@ -261,7 +262,9 @@ public class WorkerCleanup extends Worker {
                     }
 
             // Cleanup contact info
-            if (!manual)
+            if (manual)
+                ContactInfo.clearCache(context, true);
+            else
                 ContactInfo.cleanup(context);
 
             Log.i("Cleanup FTS=" + fts);
@@ -292,6 +295,16 @@ public class WorkerCleanup extends Worker {
             int logs = db.log().deleteLogs(now - KEEP_LOG_DURATION);
             Log.i("Deleted logs=" + logs);
 
+            if (BuildConfig.DEBUG) {
+                // https://sqlite.org/lang_analyze.html
+                Log.i("Analyze");
+                long analyze = new Date().getTime();
+                try (Cursor cursor = db.getOpenHelper().getWritableDatabase().query("PRAGMA analysis_limit=1000; PRAGMA optimize;")) {
+                    cursor.moveToNext();
+                }
+                EntityLog.log(context, "Analyze=" + (new Date().getTime() - analyze) + " ms");
+            }
+
             if (manual) {
                 // https://www.sqlite.org/lang_vacuum.html
                 long size = context.getDatabasePath(db.getOpenHelper().getDatabaseName()).length();
@@ -305,13 +318,11 @@ public class WorkerCleanup extends Worker {
                     Log.w("Insufficient space for VACUUM" +
                             " size=" + Helper.humanReadableByteCount(size) +
                             "/" + Helper.humanReadableByteCount(available));
-
             }
-
         } catch (Throwable ex) {
             Log.e(ex);
         } finally {
-            Log.i("End cleanup");
+            EntityLog.log(context, "End cleanup=" + (new Date().getTime() - start) + " ms");
 
             long now = new Date().getTime();
             prefs.edit()

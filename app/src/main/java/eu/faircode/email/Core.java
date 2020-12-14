@@ -451,6 +451,7 @@ class Core {
                             db.operation().setOperationError(op.id, op.error);
 
                             if (message != null &&
+                                    !EntityOperation.FETCH.equals(op.name) &&
                                     !(ex instanceof IllegalArgumentException))
                                 db.message().setMessageError(message.id, op.error);
 
@@ -465,9 +466,6 @@ class Core {
                             // Finally will reset state
                             continue;
                         }
-
-                        if (ifolder != null && !ifolder.isOpen())
-                            break;
 
                         if (op.tries >= TOTAL_RETRY_MAX ||
                                 ex instanceof OutOfMemoryError ||
@@ -489,16 +487,34 @@ class Core {
                             // Drafts: javax.mail.FolderClosedException: * BYE Jakarta Mail Exception:
                             //   javax.net.ssl.SSLException: Write error: ssl=0x8286cac0: I/O error during system call, Broken pipe
                             // Drafts: * BYE Jakarta Mail Exception: java.io.IOException: Connection dropped by server?
+                            // Sync: BAD Could not parse command
+                            // Seen: NO mailbox selected READ-ONLY
+                            // Fetch: BAD Error in IMAP command FETCH: Invalid messageset
+                            // Fetch: NO all of the requested messages have been expunged
+                            // Fetch: BAD parse error: invalid message sequence number:
+                            // Fetch: NO [SERVERBUG] SELECT Server error - Please try again later
+                            // Fetch: NO [SERVERBUG] UID FETCH Server error - Please try again later
+                            // Move: NO Over quota
                             // Move: NO No matching messages
+                            // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist
+                            // Move: BAD parse error: invalid message sequence number:
+                            // Move: NO MOVE failed or partially completed.
+                            // Move: NO mailbox selected READ-ONLY
                             // Delete: NO [CANNOT] STORE It's not possible to perform specified operation
+                            // Delete: NO [UNAVAILABLE] EXPUNGE Backend error
+                            // Delete: NO mailbox selected READ-ONLY
+
                             String msg = "Unrecoverable operation=" + op.name + " tries=" + op.tries + " created=" + new Date(op.created);
+
                             EntityLog.log(context, msg +
                                     " folder=" + folder.id + ":" + folder.name +
                                     " message=" + (message == null ? null : message.id + ":" + message.subject) +
                                     " reason=" + Log.formatThrowable(ex, false));
-                            if (op.tries > 1 ||
-                                    ex.getCause() instanceof BadCommandException ||
-                                    ex.getCause() instanceof CommandFailedException)
+
+                            if (ifolder != null && ifolder.isOpen() &&
+                                    (op.tries > 1 ||
+                                            ex.getCause() instanceof BadCommandException ||
+                                            ex.getCause() instanceof CommandFailedException))
                                 Log.e(new Throwable(msg, ex));
 
                             try {
@@ -918,34 +934,27 @@ class Core {
         } else
             ifolder.appendMessages(new Message[]{imessage});
 
-        // Delete previous (external) version
-        if (message.uid != null) {
+        if (folder.id.equals(message.folder)) {
+            // Prevent deleting message
             db.message().setMessageUid(message.id, null);
 
-            Message iexisting = ifolder.getMessageByUID(message.uid);
-            if (iexisting == null)
-                Log.w(folder.name + " existing not found uid=" + message.uid);
-            else {
-                try {
-                    Log.i(folder.name + " deleting uid=" + message.uid);
-                    iexisting.setFlag(Flags.Flag.DELETED, true);
-                    ifolder.expunge();
-                } catch (MessageRemovedException ignored) {
-                    Log.w(folder.name + " existing gone uid=" + message.uid);
-                }
-            }
-        }
-
-        if (folder.id.equals(message.folder)) {
             // Some providers do not list the new message yet
-            if (newuid == null)
-                newuid = findUid(ifolder, message.msgid, true);
+            Long found = findUid(ifolder, message.msgid, true);
+            if (found != null)
+                if (newuid == null)
+                    newuid = found;
+                else if (!newuid.equals(found)) {
+                    Log.e(folder.name + " Added=" + newuid + " found=" + found);
+                    newuid = Math.max(newuid, found);
+                }
+
             if (newuid != null && (message.uid == null || newuid > message.uid))
                 try {
+                    Log.i(folder.name + " Fetching uid=" + newuid);
                     JSONArray fargs = new JSONArray();
                     fargs.put(newuid);
                     onFetch(context, fargs, folder, istore, ifolder, state);
-                } catch (JSONException ex) {
+                } catch (Throwable ex) {
                     Log.e(ex);
                 }
         } else {
@@ -1093,12 +1102,15 @@ class Core {
                                         icopy.setFlag(Flags.Flag.DRAFT, EntityFolder.DRAFTS.equals(target.type));
                                 }
 
-                                if (fetch) {
-                                    Log.w(target.name + " Fetching uid=" + uid);
-                                    JSONArray fargs = new JSONArray();
-                                    fargs.put(uid);
-                                    onFetch(context, fargs, target, istore, itarget, state);
-                                }
+                                if (fetch)
+                                    try {
+                                        Log.i(target.name + " Fetching uid=" + uid);
+                                        JSONArray fargs = new JSONArray();
+                                        fargs.put(uid);
+                                        onFetch(context, fargs, target, istore, itarget, state);
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
                             }
                         } catch (Throwable ex) {
                             Log.w(ex);
@@ -1729,6 +1741,7 @@ class Core {
                         folder.keep_days = EntityFolder.DEFAULT_KEEP;
                         folder.selectable = selectable;
                         folder.inferiors = inferiors;
+                        folder.setSpecials(account);
                         folder.id = db.folder().insertFolder(folder);
                         Log.i(folder.name + " added type=" + folder.type);
                     } else {
@@ -1892,7 +1905,7 @@ class Core {
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean pro = ActivityBilling.isPro(context);
 
-        Log.i(folder.name + " POP sync type=" + folder.type + " connected=" + (ifolder != null));
+        EntityLog.log(context, folder.name + " POP sync type=" + folder.type + " connected=" + (ifolder != null));
 
         if (!EntityFolder.INBOX.equals(folder.type)) {
             db.folder().setFolderSyncState(folder.id, null);
@@ -1905,10 +1918,10 @@ class Core {
             db.folder().setFolderSyncState(folder.id, "syncing");
 
             Map<String, String> caps = istore.capabilities();
-            Log.i(folder.name + " POP capabilities= " + caps.keySet());
+            EntityLog.log(context, folder.name + " POP capabilities= " + caps.keySet());
 
             Message[] imessages = ifolder.getMessages();
-            Log.i(folder.name + " POP messages=" + imessages.length);
+            EntityLog.log(context, folder.name + " POP messages=" + imessages.length);
 
             if (account.max_messages != null && imessages.length > account.max_messages)
                 imessages = Arrays.copyOfRange(imessages,
@@ -1924,7 +1937,7 @@ class Core {
             }
 
             List<TupleUidl> ids = db.message().getUidls(folder.id);
-            Log.i(folder.name + " POP existing=" + ids.size() + " uidl=" + hasUidl);
+            EntityLog.log(context, folder.name + " POP existing=" + ids.size() + " uidl=" + hasUidl);
 
             // Index UIDLs
             Map<String, String> uidlMsgId = new HashMap<>();
@@ -1948,7 +1961,7 @@ class Core {
                     }
 
                     for (TupleUidl uidl : known.values()) {
-                        Log.i(folder.name + " POP purging uidl=" + uidl.uidl);
+                        EntityLog.log(context, folder.name + " POP purging uidl=" + uidl.uidl);
                         db.message().deleteMessage(uidl.id);
                     }
                 } else {
@@ -1965,7 +1978,7 @@ class Core {
                     }
 
                     for (TupleUidl uidl : known.values()) {
-                        Log.i(folder.name + " POP purging msgid=" + uidl.msgid);
+                        EntityLog.log(context, folder.name + " POP purging msgid=" + uidl.msgid);
                         db.message().deleteMessage(uidl.id);
                     }
                 }
@@ -1983,7 +1996,7 @@ class Core {
                     if (hasUidl) {
                         uidl = ifolder.getUID(imessage);
                         if (TextUtils.isEmpty(uidl)) {
-                            Log.w(folder.name + " POP no uidl");
+                            EntityLog.log(context, folder.name + " POP no uidl");
                             continue;
                         }
 
@@ -2015,7 +2028,7 @@ class Core {
                     }
 
                     if (TextUtils.isEmpty(msgid)) {
-                        Log.w(folder.name + " POP no msgid");
+                        EntityLog.log(context, folder.name + " POP no msgid");
                         continue;
                     }
 
@@ -2148,7 +2161,7 @@ class Core {
                 }
 
             db.folder().setFolderLastSync(folder.id, new Date().getTime());
-            Log.i(folder.name + " POP done");
+            EntityLog.log(context, folder.name + " POP done");
         } finally {
             db.folder().setFolderSyncState(folder.id, null);
         }
@@ -2164,13 +2177,14 @@ class Core {
 
             // Legacy
             if (jargs.length() == 0)
-                jargs = folder.getSyncArgs();
+                jargs = folder.getSyncArgs(false);
 
             int sync_days = jargs.getInt(0);
             int keep_days = jargs.getInt(1);
             boolean download = jargs.optBoolean(2, false);
             boolean auto_delete = jargs.optBoolean(3, false);
             int initialize = jargs.optInt(4, folder.initialize);
+            boolean force = jargs.optBoolean(5, false);
 
             if (keep_days == sync_days && keep_days != Integer.MAX_VALUE)
                 keep_days++;
@@ -2183,6 +2197,7 @@ class Core {
             boolean delete_unseen = prefs.getBoolean("delete_unseen", false);
 
             Log.i(folder.name + " start sync after=" + sync_days + "/" + keep_days +
+                    " force=" + force +
                     " sync unseen=" + sync_unseen + " flagged=" + sync_flagged +
                     " delete unseen=" + delete_unseen + " kept=" + sync_kept);
 
@@ -2245,7 +2260,7 @@ class Core {
             }
 
             // Get list of local uids
-            final List<Long> uids = db.message().getUids(folder.id, sync_kept ? null : sync_time);
+            final List<Long> uids = db.message().getUids(folder.id, sync_kept || force ? null : sync_time);
             Log.i(folder.name + " local count=" + uids.size());
 
             // Reduce list of local uids

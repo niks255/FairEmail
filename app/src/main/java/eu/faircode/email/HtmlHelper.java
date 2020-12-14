@@ -2348,6 +2348,9 @@ public class HtmlHelper {
                                 // Signature
                                 setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
                                 break;
+                            case "style":
+                                // signatures
+                                break;
                             case "ol":
                             case "ul":
                                 int llevel = 0;
@@ -2381,6 +2384,9 @@ public class HtmlHelper {
                                 setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
                                 break;
                             case "table":
+                            case "thead":
+                            case "tbody":
+                            case "tfoot":
                             case "tr":
                             case "th":
                             case "td":

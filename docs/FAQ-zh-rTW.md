@@ -10,7 +10,7 @@
 * [計畫中的功能](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [頻繁請求的功能](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [頻繁被問起的問題](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [獲取協助](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
 ## 認證帳號中
 
@@ -41,17 +41,17 @@ Please see [here](#user-content-faq22) for common error messages and solutions.
 
 <a name="howto">
 
-## How to ...?
+## 如何 ...？
 
-* Change the account name: Setup, step 1, Manage, tap account
-* Change the swipe left/right target: Setup, Behavior, Set swipe actions
-* Change password: Setup, step 1, Manage, tap account, change password
-* Set a signature: Setup, step 2, Manage, tap identity, Edit signature.
-* Add CC and BCC addresses: tap the people's icon at the end of the subject
+* 變更帳號名稱： 設定， 步驟1，管理，輕觸帳號
+* 變更 左/右 滑動動作：點選設定，行為，設置滑動動作
+* 變更密碼：設置，步驟1，管理，輕觸要變更密碼的帳號，變更密碼
+* 設置簽名：設置，步驟二，管理，選擇帳號，變更簽名
+* 新增副本和密件副本郵件地址：輕觸主旨後方的人像圖標
 * Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
 * Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
 * Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
-* Load more messages: long press a folder in the folder list, select *Synchronize more messages*
+* 載入更多訊息：長按資料夾列表中的資料夾，選擇 *同步更多訊息*
 * Delete a message, skipping trash: in the 3-dots menu just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
 * Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
 * Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
@@ -70,7 +70,7 @@ Please see [here](#user-content-faq22) for common error messages and solutions.
 * A [bug in Android](https://issuetracker.google.com/issues/62427912) sometimes causes a crash with "*... ActivityRecord not found for ...*" after updating FairEmail. Reinstalling ([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) might fix the problem.
 * A [bug in Android](https://issuetracker.google.com/issues/37018931) sometimes causes a crash with *... InputChannel is not initialized ...* on some devices.
 * ~~A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) sometimes causes a crash with *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
-* A bug in Nova Launcher on Android 5.x causes FairEmail to crash with a *java.lang.StackOverflowError* when Nova Launcher has access to the accessibility service.
+* 在Android5.x版本中，Nova Launcher有個與*java.lang.StackOverflowError* 有關的錯誤，當Nova Launcher 有無障礙設定存取權時。
 * ~~The folder selector sometimes shows no folders for yet unknown reasons. This seems to be fixed.~~
 * ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
 * ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
@@ -78,7 +78,7 @@ Please see [here](#user-content-faq22) for common error messages and solutions.
 * A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. See also [this FAQ](#user-content-faq126).
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
-* Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* 自動偵測語言 [不再運作](https://issuetracker.google.com/issues/173337263) ，若您使用的是 Pixel 裝置，版本(升級到？) Android 11
 
 ## 計畫中的功能
 
@@ -121,8 +121,8 @@ The design is based on many discussions and if you like you can discuss about it
 
 ## 常見問題
 
-* [(1) Which permissions are needed and why?](#user-content-faq1)
-* [(2) Why is there a permanent notification shown?](#user-content-faq2)
+* [(1) 我需要給予什麼權限和為什麼需要這些權限?](#user-content-faq1)
+* [(2) 為什麼有個沒辦法清除的通知在狀態欄?](#user-content-faq2)
 * [(3) What are operations and why are they pending?](#user-content-faq3)
 * [(4) How can I use an invalid security certificate / empty password / plain text connection?](#user-content-faq4)
 * [(5) How can I customize the message view?](#user-content-faq5)
@@ -133,45 +133,45 @@ The design is based on many discussions and if you like you can discuss about it
 * [~~(11) Why is POP not supported?~~](#user-content-faq11)
 * [~~(10) What does 'UIDPLUS not supported' mean?~~](#user-content-faq10)
 * [(12) How does encryption/decryption work?](#user-content-faq12)
-* [(13) How does search on device/server work?](#user-content-faq13)
-* [(14) How can I set up an Outlook / Live / Hotmail account?](#user-content-faq14)
-* [(15) Why does the message text keep loading?](#user-content-faq15)
-* [(16) Why are messages not being synchronized?](#user-content-faq16)
-* [~~(17) Why does manual synchronize not work?~~](#user-content-faq17)
-* [(18) Why is the message preview not always shown?](#user-content-faq18)
-* [(19) Why are the pro features so expensive?](#user-content-faq19)
-* [(20) Can I get a refund?](#user-content-faq20)
-* [(21) How do I enable the notification light?](#user-content-faq21)
-* [(22) What does account/folder error ... mean?](#user-content-faq22)
+* [(13) 在 裝置/伺服器 搜尋是如何運作的?](#user-content-faq13)
+* [(14) 我如何建立 Outlook / Live / Hotmail 帳號?](#user-content-faq14)
+* [(15) 為什麼訊息文字一直在載入中?](#user-content-faq15)
+* [(16) 為什麼訊息沒有被同步?](#user-content-faq16)
+* [~~(17) 為什麼手動同步無法運作?~~](#user-content-faq17)
+* [(18) 為什麼訊息預覽並非每次顯示?](#user-content-faq18)
+* [(19) 為什麼專業版功能如此昂貴?](#user-content-faq19)
+* [(20) 我可以退款嗎?](#user-content-faq20)
+* [(21) 如何啟用訊息通知LED燈?](#user-content-faq21)
+* [(22) 帳號/資料夾 錯誤代表什麼意思?](#user-content-faq22)
 * [(23) Why do I get alert .. ?](#user-content-faq23)
 * [(24) What is browse messages on the server?](#user-content-faq24)
 * [(25) Why can't I select/open/save an image, attachment or a file?](#user-content-faq25)
 * [(26) Can I help to translate FairEmail in my own language?](#user-content-faq26)
 * [(27) How can I distinguish between embedded and external images?](#user-content-faq27)
 * [(28) How can I manage status bar notifications?](#user-content-faq28)
-* [(29) How can I get new message notifications for other folders?](#user-content-faq29)
-* [(30) How can I use the provided quick settings?](#user-content-faq30)
-* [(31) How can I use the provided shortcuts?](#user-content-faq31)
-* [(32) How can I check if reading email is really safe?](#user-content-faq32)
-* [(33) Why are edited sender addresses not working?](#user-content-faq33)
-* [(34) How are identities matched?](#user-content-faq34)
-* [(35) Why should I be careful with viewing images, attachments, the original message, and opening links?](#user-content-faq35)
+* [(29) 我如何接收其他資料夾的訊息通知？](#user-content-faq29)
+* [(30) 如何使用程式提供的快速設定？](#user-content-faq30)
+* [(31) 我如何使用程式提供的捷徑？](#user-content-faq31)
+* [(32) 我如何檢驗我所閱讀的電子郵件是安全的？](#user-content-faq32)
+* [(33) 為什麼編輯寄件人地址無法運作？](#user-content-faq33)
+* [(34) 電子郵件身份是怎麼被連結的](#user-content-faq34)
+* [(35) 為什麼在瀏覽圖片、附件、原始訊息、點開連結時需要特別當心？](#user-content-faq35)
 * [(36) How are settings files encrypted?](#user-content-faq36)
-* [(37) How are passwords stored?](#user-content-faq37)
-* [(39) How can I reduce the battery usage of FairEmail?](#user-content-faq39)
-* [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
-* [(41) How can I fix the error 'Handshake failed' ?](#user-content-faq41)
+* [(37) 密碼是如何被儲存的？](#user-content-faq37)
+* [(39) 我如何減少FairEmail的電池使用量？](#user-content-faq39)
+* [(40) 如何減少FailEmail的行動數據使用量？](#user-content-faq40)
+* [(41) 如何修復「交握失敗」錯誤？](#user-content-faq41)
 * [(42) Can you add a new provider to the list of providers?](#user-content-faq42)
 * [(43) Can you show the original ... ?](#user-content-faq43)
 * [(44) Can you show contact photos / identicons in the sent folder?](#user-content-faq44)
 * [(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!' ?](#user-content-faq45)
-* [(46) Why does the message list keep refreshing?](#user-content-faq46)
-* [(47) How do I solve the error 'No primary account or no drafts folder' ?](#user-content-faq47)
+* [(46) 為何訊息列表一直在刷新？](#user-content-faq46)
+* [(47) 如何解決「無主要帳號或無草稿資料夾」？](#user-content-faq47)
 * [~~(48) How do I solve the error 'No primary account or no archive folder' ?~~](#user-content-faq48)
 * [(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?](#user-content-faq49)
-* [(50) Can you add an option to synchronize all messages?](#user-content-faq50)
-* [(51) How are folders sorted?](#user-content-faq51)
-* [(52) Why does it take some time to reconnect to an account?](#user-content-faq52)
+* [(50) 開發團隊可以增加一個同步所有訊息的選項嗎？](#user-content-faq50)
+* [(51) 資料夾是如何被分類的？](#user-content-faq51)
+* [(52) 為什麼重新連結至帳號需要花一段時間？](#user-content-faq52)
 * [(53) Can you stick the message action bar to the top/bottom?](#user-content-faq53)
 * [~~(54) How do I use a namespace prefix?~~](#user-content-faq54)
 * [(55) How can I mark all messages as read / move or delete all messages?](#user-content-faq55)
@@ -221,7 +221,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(100) How can I synchronize Gmail categories?](#user-content-faq100)
 * [(101) What does the blue/orange dot at the bottom of the conversations mean?](#user-content-faq101)
 * [(102) How can I enable auto rotation of images?](#user-content-faq102)
-* [(103) 我是否可以錄音？](#user-content-faq103)
+* [(103) 我是否可以錄音？](#user-content-faq158)
 * [(104) What do I need to know about error reporting?](#user-content-faq104)
 * [(105) How does the roam-like-at-home option work?](#user-content-faq105)
 * [(106) Which launchers can show a badge count with the number of unread messages?](#user-content-faq106)
@@ -913,6 +913,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *501 Syntax error - line too long* is often caused by using a long Autocrypt header
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 ... not permitted to relay* means that the email server does not recognize the username/email address. Please double check the host name and username/email address in the identity settings.
+* *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 
 **Gmail errors**
 
@@ -953,6 +954,8 @@ First try to wait some time to see if the problem resolves itself, else:
 
 * either switch to periodically checking for messages in the receive settings, which will result in opening folders one at a time
 * or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
+
+An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
 The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
 
@@ -1551,7 +1554,7 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The price of FairEmail is too low, lower than that of most similar apps, and there are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %, to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it and doesn't contribute anything.
+The price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
 
 <br />
 
@@ -1605,7 +1608,7 @@ Messages will automatically be marked read on expanding, unless this was disable
 <a name="faq71"></a>
 **(71) How do I use filter rules?**
 
-You can edit filter rules by long pressing a folder in the folder list.
+You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
 New rules will be applied to new messages received in the folder, not to existing messages. You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
 
@@ -1653,7 +1656,7 @@ You can select one of these actions to apply to matching messages:
 * Add keyword
 * Move
 * Copy (Gmail: label)
-* Answer (with template)
+* Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
 
@@ -2067,15 +2070,6 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 
 <br />
 
-<a name="faq103"></a>
-**(103) How can I record audio?**
-
-You can record audio if you have a recording app installed which supports the [RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION) intent. If no supported app is installed, FairEmail will not show a record audio action/icon.
-
-Unfortunately and surprisingly, most recording apps do not seem to support this intent (they should).
-
-<br />
-
 <a name="faq104"></a>
 **(104) What do I need to know about error reporting?**
 
@@ -2310,7 +2304,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-When FairEmail cannot connect to an email server to receive messages, for example when the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will wait 8, 16 and 32 seconds while keeping the device awake (=use battery power) and try again to connect. If this fails, FairEmail will schedule an alarm to retry after 15, 30 and 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2318,7 +2312,7 @@ Note that [Android doze mode](https://developer.android.com/training/monitoring-
 
 Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can open/expand the message and use the undo icon to move the message to the drafts folder, possible change it and send it again.
+Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
 
 <br />
 
@@ -2332,7 +2326,15 @@ The message *Message too large or too complex to display* will be shown if there
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-* ...
+* [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) support
+
+IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
+
+**Important**: push messages (=always sync) for the inbox needs to be enabled.
+
+**Important**: most email server do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
+
+You can enable experimental features in the miscellaneous settings.
 
 <br />
 
@@ -2744,13 +2746,14 @@ Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/confi
 
 <br />
 
+<a name="faq103"></a>
 <a name="faq158"></a>
 **(158) Which camera / audio recorder do you recommend?**
 
 To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
 To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 

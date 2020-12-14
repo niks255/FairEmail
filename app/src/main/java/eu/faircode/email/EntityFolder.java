@@ -260,6 +260,11 @@ public class EntityFolder extends EntityOrder implements Serializable {
         }
     }
 
+    void setSpecials(EntityAccount account) {
+        if ("imap.web.de".equals(account.host) && "Unbekannt".equals(name))
+            synchronize = true;
+    }
+
     static boolean shouldPoll(String type) {
         int sync = EntityFolder.SYSTEM_FOLDER_SYNC.indexOf(type);
         return (sync < 0 || EntityFolder.SYSTEM_FOLDER_POLL.get(sync));
@@ -279,7 +284,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         return "notification.folder." + id;
     }
 
-    JSONArray getSyncArgs() {
+    JSONArray getSyncArgs(boolean force) {
         int days = sync_days;
         if (last_sync != null) {
             int ago_days = (int) ((new Date().getTime() - last_sync) / (24 * 3600 * 1000L)) + 1;
@@ -293,6 +298,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         jargs.put(download);
         jargs.put(auto_delete);
         jargs.put(initialize);
+        jargs.put(force);
 
         return jargs;
     }

@@ -32,7 +32,7 @@ Pour l'autorisation de :
 * Apple iCloud, voir [question 148](#user-content-faq148)
 * Free.fr, voir [question 157](#user-content-faq157)
 
-Vous trouverez [ici](#user-content-faq22) les messages d'erreur fréquents leurs solutions.
+Vous trouverez [ici](#user-content-faq22) les messages d'erreur fréquents et leurs solutions.
 
 Questions liées:
 
@@ -43,22 +43,22 @@ Questions liées:
 
 ## Comment... ?
 
-* Changer le nom du compte : Configuration, étape 1, Gerer, appuyer sur le compte
-* Changer la cible de balayage gauche/droite: Configuration, comportement, Définir les actions de balayage
-* Changer le mot de passe : Configurer, étape 1, Gérer, toucher le compte, changer le mot de passe
-* Définir une signature: Configuration, étape 2, Gérer, touchez l'identité, Modifier la signature.
-* Ajouter des adresses CC et CCI : appuyez sur l'icône des personnes à la fin de l'objet
-* Allez au message suivant/précédent dans l'archive/suppression : dans les paramètres de comportement, désactivez *Fermez automatiquement les conversations* et sélectionnez *Allez à la suivante/précédente conversation* pour *Lors de la fermeture d'une conversation*
+* Changer le nom du compte : Paramètres > Étape 1 > Gérer > Sélectionner le compte
+* Changer la l'action de balayage gauche/droite: Paramètres > Comportement > Définir les actions de balayage
+* Changer le mot de passe : Paramètres > Étape 1 > Gérer > Sélectionner le compte > changer le mot de passe
+* Définir une signature: Paramètres > Étape 2 > Gérer > Sélectionner l'identité > Modifier la signature.
+* Ajouter des adresses CC et CCI : appuyez sur l'icône des personnes à l'extrémité de l'objet
+* Allez au message suivant/précédent dans l'archive/suppression : dans les paramètres de comportement, désactivez *Fermez automatiquement les conversations* et sélectionnez *Allez à la conversation suivante/précédente* pour *Lors de la fermeture d'une conversation*
 * Ajouter un dossier à la boîte de réception unifiée : appuyez longuement sur le dossier dans la liste des dossiers et cochez *Afficher dans la boîte de réception unifiée*
 * Ajouter un dossier au menu de navigation : appuyez longuement sur le dossier dans la liste des dossiers et cochez *Afficher dans le menu de navigation*
 * Charger plus de messages : appuyez longuement sur un dossier dans la liste de dossiers, sélectionnez *Synchroniser plus de messages*
 * Supprimez un message, sautez la corbeille : dans le menu à 3 points juste au-dessus du texte du message *Supprimer* ou désélectionnez le dossier corbeille dans les paramètres du compte
 * Supprimer un compte/identité: Étape 1/2, Gestion, Appuyer sur compte/identité, Menu à trois points, Supprimer
-* Supprimer un dossier : appuyez longuement sur le dossier dans la liste de dossiers, Modifier les propriétés, Menu à trois points, Supprimer
-* Annuler l'envoi : Boîte d'envoi, appuyez sur le message, appuyez sur l'icône d'annulation
+* Supprimer un dossier : appuyez longuement sur le dossier dans la liste de dossiers > Modifier les propriétés > Menu à trois points > Supprimer
+* Annuler l'envoi : Dans la boîte d'envoi, appuyez sur le message, appuyez sur l'icône d'annulation
 * Stocker les messages envoyés dans la boîte de réception : veuillez [voir ceci dans FAQ](#user-content-faq142)
-* Modifier les dossiers système: Configuration, étape 1, gestion, appuyer sur le compte, en bas
-* Exporter/importer les paramètres : Configuration, navigation/menu hamburger
+* Modifier les dossiers système: Paramètres > Étape 1 > Gérer > Sélectionner le compte > voir tout en bas
+* Exporter/importer les paramètres : Paramètres > menu de navigation (icon hamburger)
 
 ## Problèmes connus
 
@@ -66,11 +66,11 @@ Questions liées:
 * ~~Un [bogue dans Google Drive](https://issuetracker.google.com/issues/126362828) vide le dossier des fichiers exportés vers Google Drive. Google a corrigé ceci.~~
 * ~A [bug dans AndroidX](https://issuetracker.google.com/issues/78495471) provoque un plantage occasionnel de FairEmail en appui long ou en glissant. Google a corrigé ceci.~~
 * ~~Un [bug dans AndroidX ROOM](https://issuetracker.google.com/issues/138441698) provoque parfois un plantage avec "*... Exception lors du calcul de la base de données en direct... Impossible de lire la ligne ...*". Une solution de contournement a été ajoutée.~~
-* Un [bug dans Android](https://issuetracker.google.com/issues/119872129) provoque parfois un plantage avec "*... Mauvaise notification postée ...*" sur certains appareils une fois après la mise à jour de FairEmail et en appuyant sur une notification.
-* Un [bug dans Android](https://issuetracker.google.com/issues/62427912) provoque parfois un plantage avec "*... ActivityRecord introuvable pour ...*" après la mise à jour de FairEmail. La réinstallation de ([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) pourrait résoudre le problème.
+* Un [bug dans Android](https://issuetracker.google.com/issues/119872129) provoque parfois un plantage de FairEmail avec "*... Mauvaise notification postée ...*" sur certains appareils une fois après la mise à jour de FairEmail et en appuyant sur une notification.
+* Un [bug dans Android](https://issuetracker.google.com/issues/62427912) provoque parfois un plantage avec "*... ActivityRecord introuvable pour ...*" après la mise à jour de FairEmail. La réinstallation([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) pourrait résoudre le problème.
 * Un [bug dans Android](https://issuetracker.google.com/issues/37018931) provoque parfois un plantage avec *... InputChannel n'est pas initialisé ...* sur certains appareils.
 * ~A [bug dans LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) provoque parfois un plantage avec *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
-* Un bug dans Nova Launcher sur Android 5.x provoque le plantage de FairEmail avec une *java.lang.StackOverflowError* lorsque Nova Launcher a accès au service d'accessibilité.
+* Un bug dans Nova Launcher sur Android 5.x provoque le plantage de FairEmail avec une exception *java.lang.StackOverflowError* lorsque Nova Launcher a accès au service d'accessibilité.
 * ~~Le sélecteur de dossier ne montre parfois aucun dossier pour des raisons encore inconnues. Cela semble être réparé.~~
 * ~~Un [bug dans AndroidX](https://issuetracker.google.com/issues/64729576) rend difficile le défilement rapide. Une solution de contournement a été ajoutée.~~
 * ~~Le chiffrement avec YubiKey se traduit par une boucle infinie. Cela semble être causé par un [bug dans OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
@@ -78,7 +78,7 @@ Questions liées:
 * Un aperçu d'un message texte n'apparaît pas (toujours) sur les montres Samsung car [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) semble être ignoré. Les textes de prévisualisation des messages sont censés être affichés correctement sur les objets connectés Pebble 2, Fitbit Charge 3, Mi band 3 et Xiaomi Amazfit BIP. Voir aussi [cette FAQ](#user-content-faq126).
 * Un [bug sur Android 6.0](https://issuetracker.google.com/issues/37068143) provoque un plantage *... Invalid offset: ... Valid range is ...* lorsque du texte est sélectionné et en tapotant à côté de ce dernier. Ce bogue a été corrigé dans Android 6.0.1.
 * Les liens internes (ancrés) ne fonctionneront pas parce que les messages originaux sont affichés dans une WebView intégrée dans une vue défilante (la liste des conversations). Il s'agit d'une limitation Android qui ne peut être ni corrigée ni contournée.
-* La détection de langue [ne fonctionne plus](https://issuetracker.google.com/issues/173337263) sur les appareils Pixel avec (mise à jour vers ?) Android 11
+* La détection de la langue [ne fonctionne plus](https://issuetracker.google.com/issues/173337263) sur les appareils Pixel avec (mise à jour vers ?) Android 11
 
 ## Fonctionnalités prévues
 
@@ -113,11 +113,11 @@ Questions liées:
 * ~~support S/MIME ~~
 * ~~Rechercher des paramètres~~
 
-Tout ce qui est dans cette liste est dans l'ordre aléatoire et *pourrait* être ajouté dans un avenir proche.
+Le contenu de cette liste est rangé aléatoirement et *peut être* ajouté dans un avenir proche.
 
 ## Fonctionnalités fréquemment demandées
 
-La conception est basée sur de nombreuses discussions et si vous le souhaitez, vous pouvez en discuter [dans ce forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) également. Le but de la conception est d'être minimaliste (pas de menus inutiles, boutons, etc) et non distrayant (pas de couleurs fantaisie, animations, etc). Toutes les informations affichées devraient être utiles d'une manière ou d'une autre et devraient être soigneusement positionnées pour une utilisation facile. Les polices, tailles, couleurs, etc doivent être Material Design autant que possible.
+La conception est basée sur de nombreuses discussions et si vous le souhaitez, vous pouvez en discuter [dans ce forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) également. Le but de la conception est d'être minimaliste (pas de menus inutiles, boutons, etc) et non distrayant (pas de couleurs fantaisie, animations, etc). Toutes les informations affichées devraient être utiles d'une manière ou d'une autre et devraient être soigneusement positionnées pour une utilisation facile. Les polices, tailles, couleurs, etc doivent être dans le style "Material Design" autant que possible.
 
 ## Foire aux questions
 
@@ -221,7 +221,7 @@ La conception est basée sur de nombreuses discussions et si vous le souhaitez, 
 * [(100) Comment puis-je synchroniser les catégories Gmail ?](#user-content-faq100)
 * [(101) Que signifie le point bleu/orange au bas des conversations?](#user-content-faq101)
 * [(102) Comment puis-je activer la rotation automatique des images ?](#user-content-faq102)
-* [(103) Comment puis-je enregistrer de l'audio?](#user-content-faq103)
+* [(103) Comment puis-je enregistrer de l'audio?](#user-content-faq158)
 * [(104) Que dois-je savoir au sujet du signalement d'erreur?](#user-content-faq104)
 * [(105) Comment fonctionne l’option itinérance à domicile?](#user-content-faq105)
 * [(106) Quels lanceurs peuvent afficher un nombre de badges avec le nombre de messages non lus ?](#user-content-faq106)
@@ -479,27 +479,27 @@ Voir [ici](https://support.google.com/accounts/answer/185833) sur la façon de g
 
 <br />
 
-*Activer les "Applications moins sécurisées"*
+*Autoriser les "Applications moins sécurisées"*
 
 **Important**: l'utilisation de cette méthode n'est pas recommandée car elle est moins fiable.
 
 **Important**: Les comptes Gsuite autorisés avec un nom d'utilisateur/mot de passe cesseront de fonctionner [dans un avenir proche](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
 
-See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps" or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).
+Voir [ici](https://support.google.com/accounts/answer/6010255) sur la façon d'autoriser les "applications moins sécurisées" ou aller [directement au paramètre en question](https://www.google.com/settings/security/lesssecureapps).
 
-If you use multiple Gmail accounts, make sure you change the "less secure apps" setting of the right account(s).
+Si vous utilisez plusieurs comptes Gmail, assurez-vous de modifier le paramètre "applications moins sécurisées" du ou des comptes concernés.
 
-Be aware that you need to leave the "less secure apps" settings screen by using the back arrow to apply the setting.
+Sachez que vous devez quitter l'écran de configuration des "applications moins sécurisées" en utilisant la flèche de retour arrière pour que le paramètre soit appliqué.
 
-If you use this method, you should use a [strong password](https://en.wikipedia.org/wiki/Password_strength) for your Gmail account, which is a good idea anyway. Note that using the [standard](https://tools.ietf.org/html/rfc3501) IMAP protocol in itself is not less secure.
+Si vous utilisez cette méthode, vous devriez utiliser un [mot de passe robuste](https://en.wikipedia.org/wiki/Password_strength) pour votre compte Gmail, ce qui est de toute façon une bonne idée. Notez que l'utilisation du protocole [standard](https://tools.ietf.org/html/rfc3501) IMAP n'est en soi pas moins sécurisée.
 
-When "less secure apps" is not enabled, you'll get the error *Authentication failed - invalid credentials* for accounts (IMAP) and *Username and Password not accepted* for identities (SMTP).
+Lorsque les "applications moins sécurisées" ne sont pas activées, vous obtiendrez l'erreur *L'authentification a échoué - identifiants non valides* pour les comptes (IMAP) et *nom d'utilisateur et mot de passe non acceptés* pour les identités (SMTP).
 
 <br />
 
-*General*
+*Cas général*
 
-You might get the alert "*Please log in via your web browser*". This happens when Google considers the network that connects you to the internet (this could be a VPN) to be unsafe. This can be prevented by using the Gmail quick setup wizard or an app specific password.
+Il se peut que vous obteniez l'alerte "*S'il vous plaît connectez-vous via votre navigateur web*". Cela se produit lorsque Google considère que le réseau sur lequel vous vous connectez à Internet (il peut s'agir d'un VPN) n'est pas sûr. Cela peut être évité en utilisant l'assistant de configuration rapide de Gmail ou un mot de passe spécifique à l'application.
 
 Voir [ici](https://support.google.com/mail/answer/7126229) pour les instructions de Google et [ici](https://support.google.com/mail/accounts/answer/78754) pour le dépannage.
 
@@ -913,6 +913,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *501 Erreur de syntaxe - ligne trop longue* est souvent provoquée par l'utilisation d'un en-tête Autocrypt long
 * *503 5.5.0 Recipient already specified* signifie généralement qu'une adresse est utilisée à la fois comme adresse de destinataire et en copie
 * *554 5.7.1 ... not permitted to relay* signifie que le serveur de messagerie ne reconnaît pas le nom d'utilisateur/adresse e-mail. Veuillez vérifier le nom d’hôte et le nom d’utilisateur/adresse e-mail dans les paramètres d’identité.
+* *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 
 **Gmail errors**
 
@@ -953,6 +954,8 @@ First try to wait some time to see if the problem resolves itself, else:
 
 * either switch to periodically checking for messages in the receive settings, which will result in opening folders one at a time
 * or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
+
+An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
 The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
 
@@ -1551,7 +1554,7 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The price of FairEmail is too low, lower than that of most similar apps, and there are [too many fees and taxes](#user-content-faq19), Google alone already takes 30 %, to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it and doesn't contribute anything.
+The price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
 
 <br />
 
@@ -1605,7 +1608,7 @@ Messages will automatically be marked read on expanding, unless this was disable
 <a name="faq71"></a>
 **(71) How do I use filter rules?**
 
-You can edit filter rules by long pressing a folder in the folder list.
+You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
 New rules will be applied to new messages received in the folder, not to existing messages. You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
 
@@ -1653,7 +1656,7 @@ You can select one of these actions to apply to matching messages:
 * Add keyword
 * Move
 * Copy (Gmail: label)
-* Answer (with template)
+* Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
 
@@ -2067,15 +2070,6 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 
 <br />
 
-<a name="faq103"></a>
-**(103) How can I record audio?**
-
-You can record audio if you have a recording app installed which supports the [RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION) intent. If no supported app is installed, FairEmail will not show a record audio action/icon.
-
-Unfortunately and surprisingly, most recording apps do not seem to support this intent (they should).
-
-<br />
-
 <a name="faq104"></a>
 **(104) What do I need to know about error reporting?**
 
@@ -2310,7 +2304,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-When FairEmail cannot connect to an email server to receive messages, for example when the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will wait 8, 16 and 32 seconds while keeping the device awake (=use battery power) and try again to connect. If this fails, FairEmail will schedule an alarm to retry after 15, 30 and 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2318,7 +2312,7 @@ Note that [Android doze mode](https://developer.android.com/training/monitoring-
 
 Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can open/expand the message and use the undo icon to move the message to the drafts folder, possible change it and send it again.
+Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
 
 <br />
 
@@ -2332,7 +2326,15 @@ The message *Message too large or too complex to display* will be shown if there
 <a name="faq125"></a>
 **(125) What are the current experimental features?**
 
-* ...
+* [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) support
+
+IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
+
+**Important**: push messages (=always sync) for the inbox needs to be enabled.
+
+**Important**: most email server do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
+
+You can enable experimental features in the miscellaneous settings.
 
 <br />
 
@@ -2744,13 +2746,14 @@ Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/confi
 
 <br />
 
+<a name="faq103"></a>
 <a name="faq158"></a>
 **(158) Which camera / audio recorder do you recommend?**
 
 To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
 To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 
