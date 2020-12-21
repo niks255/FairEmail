@@ -2,25 +2,25 @@
 
 Jika Anda memiliki pertanyaan, silakan periksa pertanyaan yang sering diajukan di bawah ini terlebih dahulu. Di bagian bawah, Anda dapat mengetahui cara mengajukan pertanyaan lain, meminta fitur, dan melaporkan bug.
 
-## Indeks
+## Panduan
 
-* [Memberi otorisasi akun](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [Bagaimana caranya?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Masalah yang diketahui](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
+* [Mengizinkan akun](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
+* [Bagaimana cara untuk ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
+* [Kendala yang diketahui](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
 * [Fitur yang direncanakan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Fitur yang sering diminta](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Pertanyaan yang Sering Diajukan (FAQ)](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Dapatkan bantuan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
-## Memberi otorisasi akun
+## Mengizinkan akun
 
-Dalam banyak kasus, pengaturan cepat akan mampu secara otomatis mengidentifikasi konfigurasi yang benar.
+Dalam banyak kasus, pengaturan cepat secara otomatis mampu mengidentifikasi konfigurasi mana yang benar.
 
-Jika pengaturan cepat gagal, anda harus mengatur akun anda secara manual (untuk menerima surel) dan identitas (untuk mengirim surel). Untuk itu, anda membutuhkan alamat server IMAP dan SMTP dan nomor port, gunakan SSL/TLS atau STARTTLS dan nama pengguna anda (selalu, tapi terkadang tidak perlu, alamat surel anda) dan kata sandi anda.
+Jika pengaturan cepat gagal, Anda harus mengatur akun secara manual (agar dapat menerima surel) dan mengatur identitas (agar dapat mengirim surel). Untuk itu, Anda membutuhkan alamat server IMAP dan SMTP dan nomor port, gunakan SSL/TLS atau STARTTLS dan nama pengguna Anda (umumnya, tapi terkadang tidak perlu, alamat surel Anda) dan kata sandi Anda.
 
 Mencari *IMAP* dan nama provider selalu cukup untuk menemukan dokumentasi yang cocok.
 
-Dalam beberapa kasus, anda butuh mengaktifkan akses eksternal ke akun anda dan/atau gunakan (aplikasi) kata sandi spesial, seperti contoh ketika otentikasi dua faktor diaktifkan.
+Dalam beberapa kasus, Anda perlu mengaktifkan akses eksternal ke akun Anda dan/atau gunakan (aplikasi) kata sandi spesial, misalnya ketika otentikasi dua faktor diaktifkan.
 
 Untuk memberikan izin:
 
@@ -28,7 +28,7 @@ Untuk memberikan izin:
 * Outlook / Live / Hotmail, lihat [pertanyaan 14](#user-content-faq14)
 * Office 365, lihat [pertanyaan 14](#user-content-faq156)
 * Microsoft Exchange, lihat [pertanyaan 8](#user-content-faq8)
-* Yahoo, AOL and Sky, lihat [pertanyaan 88](#user-content-faq88)
+* Yahoo, AOL dan Sky, lihat [pertanyaan 88](#user-content-faq88)
 * Apple iCloud, lihat [pertanyaan 148](#user-content-faq148)
 * Free.fr, lihat [pertanyaan 157](#user-content-faq157)
 
@@ -36,34 +36,34 @@ Sila lihat [disini](#user-content-faq22) untuk pesan eror yang biasa ditemukan d
 
 Pertanyaan terkait:
 
-* [Apakah terdukung OAuth?](#user-content-faq111)
-* [Mengapa tidak terdukung ActiveSync?](#user-content-faq133)
+* [Apakah OAuth didukung?](#user-content-faq111)
+* [Mengapa ActiveSync tidak didukung?](#user-content-faq133)
 
 <a name="howto">
 
-## Bagaimana caranya ...?
+## Bagaimana cara untuk ...?
 
 * Mengubah nama akun: Pengaturan, langkah 1, Pengelolaan, klik akun
 * Mengubah target pergeseran kanan/kiri: Pengaturan, Perilaku, Atur aksi pergeseran
 * Mengubah kata sandi: Pengaturan, langkah 1, Pengelolaan, klik akun, ubah kata sandi
-* Mengatur tanda tangan: Pengaturan, langkah 2, Pengelolaan, klik identitas, sunting tanda tangan.
-* Menambahkan alamat CC dan BCC: klik ikon orang pada akhir dari subjek
-* Mengunjungi pesan selanjutnya/sebelumnya dalam arsip/hapus: dalam pengaturan perilaku, nonaktifkan *Tutup percakapan otomatis* dan klik *Kunjungi percakapan selanjutnya/sebelumnya* untuk *Dalam menutup percakapan*
-* Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
-* Menambahkan berkas di menu navigasi: tekan berkas dengan lama di dalam daftar berkan dan berikan tanda di *Tampilkan di menu navigasi*
-* Memuat pesan lainnya: tekan berkas dengan lama di dalam daftar berkas, pilih *Singkronisasikan pesan lainnya*
-* Menghapus pesan, loncati sampah: dalam menu titik 3 diatas *Hapus* teks pesan atau secara alternatif tidak memilih folder sampah di pengaturan akun
-* Menghapus akun/identitas: Pengaturan langkah 1/2, Pengelolaan, menu titik 3, Hapus
-* Menghapus berkas: tekan berkas dengan lama di dalam daftar berkas, Sunting properti, menu tiga titik, Hapus
-* Mengurungkan pesan: Kotak keluar, tekan pesan, tekan tombol ikon urungkan
-* Menyimpan pesan terkirim di pesan masuk: sila [lihat FAQ ini](#user-content-faq142)
-* Mengubah sistem berkas: Pengaturan, langkah 1, Pengelolaan, tekan akun dibawah
-* Mengekspor/mengimpor pengaturan: Pengaturan, navigasi/menu hamburger
+* Mengatur tanda tangan: Pengaturan, langkah 2, Pengelolaan, klik identitas, Ubah tanda tangan.
+* Menambahkan alamat CC dan BCC: klik ikon orang pada akhir subjek
+* Melihat pesan selanjutnya/sebelumnya dalam arsip/sampah: dalam pengaturan perilaku, nonaktifkan *Tutup percakapan secara otomatis* dan pilih *Kunjungi percakapan selanjutnya/sebelumnya* pada *Ketika menutup percakapan*
+* Menambahkan folder ke pesan masuk terpadu: tekan lama folder di daftar folder dan centang *Tampilkan di pesan masuk terpadu*
+* Menambahkan folder di menu navigasi: tekan lama folder di daftar folder dan centang *Tampilkan di menu navigasi*
+* Memuat pesan lebih banyak: tekan lama folder di daftar folder, pilih *Sinkronkan lebih banyak pesan*
+* Menghapus pesan, meloncati tong sampah: dalam menu tiga titik di atas *Hapus* pesan teks atau alternatif lainnya, hapus pilihan folder sampah di pengaturan akun
+* Menghapus akun/identitas: Pengaturan langkah 1/2, Pengelolaan, klik akun/identitas, menu tiga titik, Hapus
+* Menghapus folder: tekan lama folder di daftar folder, Ubah atribut, menu tiga titik, Hapus
+* Batalkan pesan: Kotak keluar, klik pesan, klik tombol ikon batalkan
+* Menyimpan pesan terkirim di kotak masuk: mohon [baca FAQ berikut](#user-content-faq142)
+* Mengubah sistem folder: Pengaturan, langkah 1, Pengelolaan, klik akun, di bawah
+* Ekspor/impor pengaturan: Pengaturan, navigasi/menu tiga garis
 
-## Masalah yang diketahui
+## Kendala yang diketahui
 
-* ~~ [Bug di Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) yang menyebabkan aplikasi menampilkan format waktu yang salah beberapa kali. Toggle pengaturan Android *Gunakan format waktu 24 jam* dapat menyelesaikan masalah sementara ini. Solusi telah ditambahkan.~~
-* ~~ [Bug di Google Drive](https://issuetracker.google.com/issues/126362828) menyebabkan berkas yang terekspor ke Google Drive kosong. Google telah memperbaiki ini.~~
+* ~~ [Gangguan pada Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) yang menyebabkan aplikasi menampilkan format waktu yang salah beberapa kali. Mengubah pengaturan Android *Gunakan format waktu 24 jam* dapat menyelesaikan kendala saat ini. Solusi telah ditambahkan.~~
+* ~~ [Gangguan pada Google Drive](https://issuetracker.google.com/issues/126362828) menyebabkan berkas yang diekspor ke Google Drive kosong. Google telah memperbaikinya.~~
 * ~~[Bug di AndroidX](https://issuetracker.google.com/issues/78495471) menyebabkan FairEmail mengalami kegagalan dalam menekan dengan lama atau menggeser. Google telah memperbaiki ini.~~
 * ~~[Bug di AndroidX ROOM](https://issuetracker.google.com/issues/138441698) menyebabkan crash dengan "*... Pengecualian saat meghitung database data langsung ... Tidak dapat membaca barisan ...*". Solusi telah ditambahkan.~~
 * [Bug di Android](https://issuetracker.google.com/issues/119872129) menyebabkan FairEmail crash dengan "*... Notifikasi buruk diposkan ...*" dalam beberapa perangkat setelah memperbarui FairEmail dan mengklik notifikasi.
@@ -914,6 +914,16 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 ... not permitted to relay* means that the email server does not recognize the username/email address. Sila periksa lagi nama host dan nama pengguna/alamat surel pada pengaturan identitas.
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
+* *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
+
+If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
+
+* Verify your email address [here](https://mail.google.com/mail/u/0/#settings/accounts) (you'll need to use a desktop browser for this)
+* Change the identity settings like this (setup, step 2, tap Manage, tap identity):
+
+&emsp;&emsp;Username: *your Gmail address*<br /> &emsp;&emsp;Password: *[an app password](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Port: *465*<br /> &emsp;&emsp;Encryption: *SSL/TLS*<br /> &emsp;&emsp;Reply to address: *your email address* (advanced identity settings)<br />
+
+<br />
 
 **Gmail errors**
 
@@ -946,14 +956,14 @@ This alert will be sent when there are too many folder connections for the same 
 
 Possible causes are:
 
-* Terdapat lebih dari satu surel klien yang terhubung dengan akun yang sama
-* Surel klien yang sama terkoneksi lebih dari satu kali ke akun yang sama
-* Koneksi sebelumnya telah diberhentikan secara tiba-tiba karena contohnya tiba-tiba kehilangan jaringan internet
+* There are multiple email clients connected to the same account
+* The same email client is connected multiple times to the same account
+* Previous connections were terminated abruptly for example by abruptly losing internet connectivity
 
 First try to wait some time to see if the problem resolves itself, else:
 
-* pindah ke pemeriksaan secara periodik untuk pesan salam pengaturan penerimaan, yang akan menghasilkan folder untuk terbuka satu per satu
-* atau atur beberapa folder untuk pilihan dibandingkan dengan sinkronisasi (tekan dengan lama pada folder dalam daftar folder, sunting properti)
+* either switch to periodically checking for messages in the receive settings, which will result in opening folders one at a time
+* or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
 
 An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
@@ -1028,11 +1038,11 @@ On Android 8.0 Oreo and later you can manage the properties of the individual no
 
 FairEmail has the following notification channels:
 
-* Layanan: digunakan untuk notifikasi dari layanan singkronisasi, lihat juga [FAQ ini](#user-content-faq2)
-* Kirim: digunakan untuk notifikasi untuk layanan pengiriman
-* Notifikasi: digunakan untuk notifikasi pesan baru
-* Peringatan: digunakan untuk notifikasi peringatan
-* Eror: digunakan untuk notifikasi eror
+* Service: used for the notification of the synchronize service, see also [this FAQ](#user-content-faq2)
+* Send: used for the notification of the send service
+* Notifications: used for new message notifications
+* Warning: used for warning notifications
+* Error: used for error notifications
 
 See [here](https://developer.android.com/guide/topics/ui/notifiers/notifications#ManageChannels) for details on notification channels. In short: tap on the notification channel name to access the channel settings.
 
@@ -1054,8 +1064,8 @@ Just long press a folder, select *Edit properties*, and enable either *Show in u
 
 There are quick settings (settings tiles) available to:
 
-* mengaktifkan/menonaktifkan singkronisasi secara global
-* menampilkan jumlah pesan baru dan menandai pesan tersebut sebagai terlihat (bukan dibaca)
+* globally enable/disable synchronization
+* show the number of new messages and marking them as seen (not read)
 
 Quick settings require Android 7.0 Nougat or later. The usage of settings tiles is explained [here](https://support.google.com/android/answer/9083864).
 
@@ -1066,8 +1076,8 @@ Quick settings require Android 7.0 Nougat or later. The usage of settings tiles 
 
 There are shortcuts available to:
 
-* membuat pesan baru untuk kontak favorit
-* mengatur akun, identitas, dll
+* compose a new message to a favorite contact
+* setup accounts, identities, etc
 
 Shortcuts require Android 7.1 Nougat or later. The usage of shortcuts is explained [here](https://support.google.com/android/answer/2781850).
 
@@ -1101,7 +1111,7 @@ Note that this is independent of receiving messages.
 <a name="faq34"></a>
 **(34) How are identities matched?**
 
-Identities are as expected matched by account. For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order) and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked.
+Identities are as expected matched by account. For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order) and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked. Equal addresses have precedence over partially matching addresses, except for *delivered-to* addresses.
 
 The matched address will be shown as *via* in the addresses section of received messages (between the message header and message text).
 
@@ -1109,7 +1119,7 @@ Note that identities needs to be enabled to be able to be matched and that ident
 
 Matching will be done only once on receiving a message, so changing the configuration will not change existing messages. You could clear local messages by long pressing a folder in the folder list and synchronize the messages again though.
 
-It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings to match the username of an email address (the part before the @ sign).
+It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings to match **the username** of an email address (the part before the @ sign).
 
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
 
@@ -1121,9 +1131,9 @@ If you like to match a catch-all email address, this regex is mostly okay:
 
 If you like to match the special purpose email addresses abc@example.com and xyx@example.com and like to have a fallback email address main@example.com as well, you could do something like this:
 
-* Identitas: abc@contoh.com; regex: **(?i)abc**
-* Identitas: xyz@contoh.com; regex: **(?i)xyz**
-* Identitas: main@contoh.com; regex: **^(?i)((?!abc|xyz).)\*$**
+* Identity: abc@example.com; regex: **(?i)abc**
+* Identity: xyz@example.com; regex: **(?i)xyz**
+* Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
 
 Matched identities can be used to color code messages. The identity color takes precedence over the account color. Setting identity colors is a pro feature.
 

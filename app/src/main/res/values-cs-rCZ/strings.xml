@@ -370,6 +370,7 @@
     <string name="title_advanced_navbar_colorize">Obarvit navigační panel Androidu</string>
     <string name="title_advanced_parse_classes">Parsovat šablony stylů</string>
     <string name="title_advanced_authentication">Zobrazit upozornění, nemůže-li přijímající server zprávu ověřit</string>
+    <string name="title_advanced_sync_on_launch">Synchronizovat při spuštění</string>
     <string name="title_advanced_double_back">Dvakrát „zpět“ pro ukončení</string>
     <string name="title_advanced_pull_refresh">Aktualizovat tažením dolů</string>
     <string name="title_advanced_autoscroll">Posun na začátek při příjmu nových zpráv</string>
@@ -722,6 +723,7 @@
     <string name="title_folder_user_only">Pouze uživatelské složky</string>
     <string name="title_folder_primary">Hlavní účet složky</string>
     <string name="title_folders_unified">Složky sjednocené doručené pošty</string>
+    <string name="title_folder_local_drafts" comment="title_folder_local_drafts&#10;A local drafts folder will be used when there is no drafts folder on the email server">Místní koncepty</string>
     <string name="title_no_folders">Žádné složky</string>
     <string name="title_no_messages">Žádné zprávy</string>
     <string name="title_filters_active">Jeden nebo více filtrů aktivních</string>

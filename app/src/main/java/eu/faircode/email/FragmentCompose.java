@@ -1093,14 +1093,16 @@ public class FragmentCompose extends FragmentBase {
                             Element p = document.createElement("p");
                             p.html(TextUtils.join("<br>", line));
                             document.body().appendChild(p);
+                            return document.html();
                         } else {
                             Document d = HtmlHelper.sanitizeCompose(context, ref.outerHtml(), true);
                             Element b = d.body();
                             b.tagName("div");
                             document.body().appendChild(b);
-                        }
 
-                        return document.html();
+                            Spanned spanned = HtmlHelper.fromDocument(context, document, null, null);
+                            return HtmlHelper.toHtml(spanned, context);
+                        }
                     }
 
                     @Override
@@ -3571,8 +3573,11 @@ public class FragmentCompose extends FragmentBase {
                         String b = args.getString("body", "");
                         if (!TextUtils.isEmpty(b)) {
                             Document d = HtmlHelper.sanitizeCompose(context, b, false);
-                            Element e = d.body();
-                            e.tagName("div");
+                            Spanned spanned = HtmlHelper.fromDocument(context, d, null, null);
+                            String shtml = HtmlHelper.toHtml(spanned, context);
+                            Element e = document
+                                    .createElement("div")
+                                    .html(shtml);
                             document.body().appendChild(e);
                         }
 
@@ -3708,8 +3713,11 @@ public class FragmentCompose extends FragmentBase {
                             if (ref.content) {
                                 String html = Helper.readText(ref.getFile(context));
                                 Document d = HtmlHelper.sanitizeCompose(context, html, true);
-                                Element e = d.body();
-                                e.tagName("div");
+                                Spanned spanned = HtmlHelper.fromDocument(context, d, null, null);
+                                String shtml = HtmlHelper.toHtml(spanned, context);
+                                Element e = document
+                                        .createElement("div")
+                                        .html(shtml);
                                 document.body().appendChild(e);
                             }
                         } else if ("list".equals(action)) {
@@ -4046,6 +4054,7 @@ public class FragmentCompose extends FragmentBase {
                             refFile.delete();
                         }
 
+                        // Could be external draft
                         Document document = HtmlHelper.sanitizeCompose(context, doc.html(), true);
 
                         for (Element e : ref)
@@ -4343,7 +4352,8 @@ public class FragmentCompose extends FragmentBase {
                     dirty = true;
                     boolean discard_delete = prefs.getBoolean("discard_delete", false);
                     EntityFolder trash = db.folder().getFolderByType(draft.account, EntityFolder.TRASH);
-                    if (empty || trash == null || discard_delete)
+                    EntityFolder drafts = db.folder().getFolderByType(draft.account, EntityFolder.DRAFTS);
+                    if (empty || trash == null || discard_delete || (drafts != null && drafts.local))
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
                     else {
                         EntityOperation.queue(context, draft, EntityOperation.ADD);
@@ -4487,6 +4497,7 @@ public class FragmentCompose extends FragmentBase {
                         b = Document.createShell("");
                     else
                         b = HtmlHelper.sanitizeCompose(context, body, true);
+                    HtmlHelper.clearAnnotations(b);
 
                     if (draft.revision == null) {
                         draft.revision = 1;
@@ -4530,6 +4541,7 @@ public class FragmentCompose extends FragmentBase {
                             addSignature(context, d, draft, identity);
                         }
 
+                        HtmlHelper.clearAnnotations(d);
                         body = d.html();
 
                         // Create new revision

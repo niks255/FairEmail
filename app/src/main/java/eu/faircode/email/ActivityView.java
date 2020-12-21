@@ -29,7 +29,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -434,7 +433,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         // Fixed menus
 
-        PackageManager pm = getPackageManager();
         final List<NavMenuItem> menus = new ArrayList<>();
 
         final NavMenuItem navOperations = new NavMenuItem(R.drawable.twotone_dns_24, R.string.menu_operations, new Runnable() {
@@ -751,25 +749,33 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         if (drawerLayout == null || drawerLayout.getChildCount() == 0) {
             Log.e("Undo: drawer missing");
+            show.execute(this, args, "undo:move");
             return;
         }
 
         final View content = drawerLayout.getChildAt(0);
-
-        if (lastSnackbar != null && lastSnackbar.isShown())
-            lastSnackbar.dismiss();
 
         final Snackbar snackbar = Snackbar.make(content, title, Snackbar.LENGTH_INDEFINITE)
                 .setGestureInsetBottomIgnored(true);
 
         lastSnackbar = snackbar;
 
+        final Runnable timeout = new Runnable() {
+            @Override
+            public void run() {
+                Log.i("Undo timeout");
+                snackbar.dismiss();
+                move.execute(ActivityView.this, args, "undo:move");
+            }
+        };
+
         snackbar.setAction(R.string.title_undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Undo cancel");
-                snackbar.getView().setTag(true);
+                getMainHandler().removeCallbacks(timeout);
                 snackbar.dismiss();
+                show.execute(ActivityView.this, args, "undo:show");
             }
         });
 
@@ -786,27 +792,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
-                if (snackbar.getView().getTag() == null)
-                    move.execute(ActivityView.this, args, "undo:move");
-                else
-                    show.execute(ActivityView.this, args, "undo:show");
-
                 ViewGroup.MarginLayoutParams lparam = (ViewGroup.MarginLayoutParams) content.getLayoutParams();
                 lparam.bottomMargin = margin;
                 content.setLayoutParams(lparam);
             }
         });
+
         snackbar.show();
 
-        // Wait
-        getMainHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.i("Undo timeout");
-                if (snackbar.isShown())
-                    snackbar.dismiss();
-            }
-        }, undo_timeout);
+        getMainHandler().postDelayed(timeout, undo_timeout);
     }
 
     private void checkFirst() {

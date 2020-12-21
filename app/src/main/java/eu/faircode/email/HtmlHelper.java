@@ -328,8 +328,7 @@ public class HtmlHelper {
 
     static Document sanitizeCompose(Context context, String html, boolean show_images) {
         try {
-            Document parsed = JsoupEx.parse(html);
-            return sanitize(context, parsed, false, show_images);
+            return sanitize(context, JsoupEx.parse(html), false, show_images);
         } catch (Throwable ex) {
             // OutOfMemoryError
             Log.e(ex);
@@ -2402,6 +2401,9 @@ public class HtmlHelper {
                             case "strike":
                                 setSpan(ssb, new StrikethroughSpan(), start, ssb.length());
                                 break;
+                            case "title":
+                                // Signature, etc
+                                break;
                             case "tt":
                                 setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
                                 break;
@@ -2503,6 +2505,21 @@ public class HtmlHelper {
         }
 
         return ssb;
+    }
+
+    static void clearAnnotations(Document d) {
+        d.select("*")
+                .removeAttr("x-block")
+                .removeAttr("x-inline")
+                .removeAttr("x-paragraph")
+                .removeAttr("x-font-size")
+                .removeAttr("x-font-size-rel")
+                .removeAttr("x-line-before")
+                .removeAttr("x-line-after")
+                .removeAttr("x-align")
+                .removeAttr("x-column")
+                .removeAttr("x-dashed")
+                .removeAttr("x-tracking");
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {

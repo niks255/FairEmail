@@ -182,8 +182,11 @@ class Core {
                     if (!Objects.equals(folder.id, op.folder))
                         throw new IllegalArgumentException("Invalid folder=" + folder.id + "/" + op.folder);
 
-                    if (ifolder != null && !ifolder.isOpen())
+                    if (account.protocol == EntityAccount.TYPE_IMAP &&
+                            !folder.local && ifolder != null && !ifolder.isOpen()) {
+                        Log.w(folder.name + " is closed");
                         break;
+                    }
 
                     // Fetch most recent copy of message
                     EntityMessage message = null;
@@ -492,6 +495,7 @@ class Core {
                             // Fetch: BAD Error in IMAP command FETCH: Invalid messageset
                             // Fetch: NO all of the requested messages have been expunged
                             // Fetch: BAD parse error: invalid message sequence number:
+                            // Fetch: NO The specified message set is invalid.
                             // Fetch: NO [SERVERBUG] SELECT Server error - Please try again later
                             // Fetch: NO [SERVERBUG] UID FETCH Server error - Please try again later
                             // Move: NO Over quota
@@ -500,6 +504,7 @@ class Core {
                             // Move: BAD parse error: invalid message sequence number:
                             // Move: NO MOVE failed or partially completed.
                             // Move: NO mailbox selected READ-ONLY
+                            // Move: NO read only
                             // Delete: NO [CANNOT] STORE It's not possible to perform specified operation
                             // Delete: NO [UNAVAILABLE] EXPUNGE Backend error
                             // Delete: NO mailbox selected READ-ONLY
@@ -578,6 +583,8 @@ class Core {
     }
 
     private static void ensureUid(Context context, EntityFolder folder, EntityMessage message, EntityOperation op, IMAPFolder ifolder) throws MessagingException {
+        if (folder.local)
+            return;
         if (message == null || message.uid != null)
             return;
 
@@ -849,6 +856,11 @@ class Core {
     private static void onAdd(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException {
         // Add message
         DB db = DB.getInstance(context);
+
+        if (folder.local) {
+            Log.i(folder.name + " local add");
+            return;
+        }
 
         // Drafts can change accounts
         if (jargs.length() == 0 && !folder.id.equals(message.folder))
@@ -1260,6 +1272,13 @@ class Core {
     private static void onDelete(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException {
         // Delete message
         DB db = DB.getInstance(context);
+
+        if (folder.local) {
+            Log.i(folder.name + " local delete");
+            db.message().deleteMessage(message.id);
+            return;
+        }
+
         try {
             boolean deleted = false;
 
@@ -1556,8 +1575,10 @@ class Core {
         boolean sync_subscribed = prefs.getBoolean("sync_subscribed", false);
 
         // Get folder names
+        boolean drafts = false;
         Map<String, EntityFolder> local = new HashMap<>();
-        for (EntityFolder folder : db.folder().getFolders(account.id, false, false))
+        List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
+        for (EntityFolder folder : folders)
             if (folder.tbc != null) {
                 Log.i(folder.name + " creating");
                 Folder ifolder = istore.getFolder(folder.name);
@@ -1607,11 +1628,36 @@ class Core {
                 sync_folders = true;
 
             } else {
-                local.put(folder.name, folder);
-                if (folder.synchronize && folder.initialize != 0)
-                    sync_folders = true;
+                if (EntityFolder.DRAFTS.equals(folder.type))
+                    drafts = true;
+
+                if (folder.local) {
+                    if (!EntityFolder.DRAFTS.equals(folder.type)) {
+                        List<Long> ids = db.message().getMessageByFolder(folder.id);
+                        if (ids == null || ids.size() == 0)
+                            db.folder().deleteFolder(folder.id);
+                    }
+                } else {
+                    local.put(folder.name, folder);
+                    if (folder.synchronize && folder.initialize != 0)
+                        sync_folders = true;
+                }
             }
-        Log.i("Local folder count=" + local.size());
+        Log.i("Local folder count=" + local.size() + " drafts=" + drafts);
+
+        if (!drafts) {
+            EntityFolder d = new EntityFolder();
+            d.account = account.id;
+            d.name = context.getString(R.string.title_folder_local_drafts);
+            d.type = EntityFolder.DRAFTS;
+            d.local = true;
+            d.setProperties();
+            d.synchronize = false;
+            d.download = false;
+            d.sync_days = Integer.MAX_VALUE;
+            d.keep_days = Integer.MAX_VALUE;
+            db.folder().insertFolder(d);
+        }
 
         if (!sync_folders)
             return;
@@ -3113,13 +3159,15 @@ class Core {
                 addresses.addAll(Arrays.asList(message.bcc));
             if (message.from != null)
                 addresses.addAll(Arrays.asList(message.from));
-            if (message.deliveredto != null)
-                try {
-                    addresses.add(new InternetAddress(message.deliveredto));
-                } catch (AddressException ex) {
-                    Log.w(ex);
-                }
         }
+
+        InternetAddress deliveredto = null;
+        if (message.deliveredto != null)
+            try {
+                deliveredto = new InternetAddress(message.deliveredto);
+            } catch (AddressException ex) {
+                Log.w(ex);
+            }
 
         // Search for matching identity
         List<EntityIdentity> identities = db.identity().getSynchronizingIdentities(folder.account);
@@ -3132,6 +3180,11 @@ class Core {
             for (Address address : addresses)
                 for (EntityIdentity identity : identities)
                     if (identity.similarAddress(address))
+                        return identity;
+
+            if (deliveredto != null)
+                for (EntityIdentity identity : identities)
+                    if (identity.sameAddress(deliveredto) || identity.similarAddress(deliveredto))
                         return identity;
         }
 

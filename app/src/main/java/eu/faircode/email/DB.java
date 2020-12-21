@@ -64,7 +64,7 @@ import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 178,
+        version = 179,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -276,9 +276,19 @@ public abstract class DB extends RoomDatabase {
                 .addCallback(new Callback() {
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                        Log.i("Database version=" + db.getVersion());
+                        Log.i("Database" +
+                                " version=" + db.getVersion() +
+                                " WAL=" + db.isWriteAheadLoggingEnabled());
 
-                        if (BuildConfig.DEBUG) {
+                        try (Cursor cursor = db.query("PRAGMA journal_mode;")) {
+                            Log.i("journal_mode=" + (cursor.moveToNext() ? cursor.getString(0) : "?"));
+                        }
+
+                        try (Cursor cursor = db.query("PRAGMA wal_autocheckpoint;")) {
+                            Log.i("wal_autocheckpoint=" + (cursor.moveToNext() ? cursor.getInt(0) : "?"));
+                        }
+
+                        if (BuildConfig.DEBUG && false) {
                             db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                             db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
                         }
@@ -1749,6 +1759,13 @@ public abstract class DB extends RoomDatabase {
                                 " AND account IN" +
                                 "  (SELECT id FROM account" +
                                 "   WHERE host IN ('imap.arcor.de'))");
+                    }
+                })
+                .addMigrations(new Migration(178, 179) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `folder` ADD COLUMN `local` INTEGER NOT NULL DEFAULT 0");
                     }
                 });
     }

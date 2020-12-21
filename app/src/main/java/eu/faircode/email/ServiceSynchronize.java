@@ -116,8 +116,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     static final int DEFAULT_POLL_INTERVAL = 0; // minutes
     private static final int OPTIMIZE_KEEP_ALIVE_INTERVAL = 12; // minutes
     private static final int OPTIMIZE_POLL_INTERVAL = 15; // minutes
-    private static final int CONNECT_BACKOFF_START = 4; // seconds
-    private static final int CONNECT_BACKOFF_MAX = 8; // seconds (totally 4+8+2x15=42 seconds)
+    private static final int CONNECT_BACKOFF_START = 8; // seconds
+    private static final int CONNECT_BACKOFF_MAX = 8; // seconds (totally 8+2x15=38 seconds)
     private static final int CONNECT_BACKOFF_ALARM_START = 15; // minutes
     private static final int CONNECT_BACKOFF_ALARM_MAX = 60; // minutes
     private static final long CONNECT_BACKOFF_GRACE = 2 * 60 * 1000L; // milliseconds
@@ -950,6 +950,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 // Debug
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                boolean subscriptions = prefs.getBoolean("subscriptions", false);
                 boolean experiments = prefs.getBoolean("experiments", false);
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
@@ -1315,7 +1316,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             if (sync && folder.selectable)
                                 EntityOperation.sync(this, folder.id, false, force && !forced);
 
-                            if (capNotify && EntityFolder.INBOX.equals(folder.type))
+                            if (capNotify && subscriptions && EntityFolder.INBOX.equals(folder.type))
                                 ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
                                     @Override
                                     public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
@@ -1466,7 +1467,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                                         // Get folder
                                                         Folder ifolder = mapFolders.get(folder); // null when polling
-                                                        boolean canOpen = (account.protocol == EntityAccount.TYPE_IMAP || EntityFolder.INBOX.equals(folder.type));
+                                                        boolean canOpen = (EntityFolder.INBOX.equals(folder.type) ||
+                                                                (account.protocol == EntityAccount.TYPE_IMAP && !folder.local));
                                                         final boolean shouldClose = (ifolder == null && canOpen);
 
                                                         try {

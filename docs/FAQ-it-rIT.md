@@ -155,7 +155,7 @@ Il design è basato su molte discussioni e se vuoi puoi discuterne anche tu [in 
 * [(32) Come posso controllare se leggere un'email è davvero sicuro?](#user-content-faq32)
 * [(33) Perché gli indirizzi modificati dei mittenti non funzionano?](#user-content-faq33)
 * [(34) Come vengono abbinate le identità?](#user-content-faq34)
-* [(35) Why should I be careful with viewing images, attachments, the original message, and opening links?](#user-content-faq35)
+* [(35) Perché dovrei fare attenzione alla visualizzazione di immagini, allegati, il messaggio originale e ad aprire collegamenti?](#user-content-faq35)
 * [(36) Come sono crittografati i file delle impostazioni?](#user-content-faq36)
 * [(37) Come vengono memorizzate le password?](#user-content-faq37)
 * [(39) Come posso ridurre l'uso della batteria di FairEmail?](#user-content-faq39)
@@ -391,49 +391,49 @@ Dovresti provare a risolvere ciò contattando il tuo fornitore o ottenendo un ce
 
 In alternativa, puoi accettare la fingerprint dei certificati server non validi in questo modo:
 
-1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
-1. Go to the setup screen via the navigation menu (swipe from the left side inwards)
-1. In step 1 and 2 tap *Manage* and tap the faulty account and identity
-1. Check/save the account and identity
-1. Tick the checkbox below the error message and save again
+1. Assicurati di star usando una connessione internet affidabile (nessuna rete Wi-Fi pubblica, etc)
+1. Vai alla schermata di configurazione tramite il menu di navigazione (scorri verso l'interno dal lato sinistro)
+1. Nella fase 1 e 2 tocca *Gestisci* e tocca il profilo e l'identità difettosi
+1. Seleziona/salva il profilo e l'identità
+1. Seleziona la casella sotto al messaggio di errore e salva di nuovo
 
-This will "pin" the server certificate to prevent man-in-the-middle attacks.
+Questo "fisserà" il certificato del server per prevenire attacchi dell'uomo di mezzo.
 
-Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
+Nota che le versioni più vecchie di Android potrebbero non riconoscere le autorità di certificazione più nuove come Let's Encrypt causando alle connessioni di essere considerate non sicure, vedi anche [qui](https://developer.android.com/training/articles/security-ssl).
 
-*Trust anchor for certification path not found*
+*Ancoraggio di fiducia per il percorso di certificazione non trovato*
 
-*... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* means that the default Android trust manager was not able to verify the server certificate chain.
+*... java.security.cert.CertPathValidatorException: Ancoraggio di fiducia per il percorso di certificazione non trovato ...* significa che il gestore di fiducia di Android predefinito non è stato capace di verificare la catena di certificati del server.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+Dovresti correggere la configurazione del server o accettare l'impronta digitale mostrata sotto al messaggio di errore.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+Nota che questo problema può essere anche causato dal mancato invio dal server di tutti i certificati intermedi.
 
-*Empty password*
+*Password vuota*
 
-Your username is likely easily guessed, so this is insecure.
+Il tuo nome utente è probabilmente facile da indovinare, quindi non è sicuro.
 
-*Plain text connection*
+*Connessione del testo semplice*
 
-Your username and password and all messages will be sent and received unencrypted, which is **very insecure** because a [man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) is very simple on an unencrypted connection.
+Il tuo nome utente e la password e tutti i messaggi saranno inviati e ricevuti non crittografati, il che è **molto insicuro** perché un[attacco man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) è molto semplice su una connessione non crittografata.
 
-If you still want to use an invalid security certificate, an empty password or a plain text connection you'll need to enable insecure connections in the account and/or identity settings. STARTTLS should be selected for plain text connections. If you enable insecure connections, you should connect via private, trusted networks only and never via public networks, like offered in hotels, airports, etc.
+Se vuoi ancora usare un certificato di sicurezza non valido, una password vuota o una connessione di testo semplice, dovrai abilitare le connessioni non sicure nelle impostazioni del profilo e/o identità. STARTTLS dovrebbe essere selezionato per le connessioni in testo semplice. Se abiliti le connessioni non sicure, dovresti connetterti tramite reti affidabili e private soltanto e mai tramite reti pubbliche, come quelle offerte negli hotel, aeroporti, etc.
 
 <br />
 
 <a name="faq5"></a>
-**(5) How can I customize the message view?**
+**(5) Come posso personalizzare la visualizzazione dei messaggi?**
 
-In the three dot overflow menu you can enable or disable or select:
+Nel menu di trabocco a tre puntini puoi abilitare o disabilitare o selezionare:
 
-* *text size*: for three different font sizes
-* *compact view*: for more condensed message items and a smaller message text font
+* *dimensione del testo*: per tre differenti dimensioni del font
+* *vista compatta*: per altri elementi di messaggio compressi e un font di testo del messaggio più piccolo
 
-In the display section of the settings you can enable or disable:
+Nella sezione di visualizzazione delle impostazioni puoi abilitare o disabilitare:
 
 * *Casella unificata*: per disabilitare la casella della posta in arrivo unificata ed elencare le cartelle selezionate invece per la casella di posta in arrivo unificata
 * *Group by date*: mostra l'intestazione di data sui messaggi con la stessa data
-* *Conversation threading*: to disable conversation threading and to show individual messages instead
+* *Filettatura della conversazione*: per disabilitare la filettatura della conversazione e mostrare piuttosto messaggi individuali
 * *Mostra foto dei contatti*: per nascondere le foto di contatto
 * *Mostra identicon*: per mostrare gli avatar di contatto generati
 * *Mostra nomi ed indirizzi email*: per mostrare nomi o mostrare nomi ed indirizzi email
@@ -443,74 +443,74 @@ In the display section of the settings you can enable or disable:
 * *Mostra dettagli dell'indirizzo di default*: per espandere la sezione degli indirizzi di default
 * *Usa carattere monospaziato per il testo del messaggio*: per usare un tipo di testo di larghezza fissa per i testi del messaggio
 * *Mostra automaticamente il messaggio originale per i contatti noti*: per mostrare automaticamente i messaggi originali per i contatti sul tuo dispositivo, sei pregato di leggere [questa FAQ](#user-content-faq35)
-* *Automatically show images for known contacts*: to automatically show images for contacts on your device, please read [this FAQ](#user-content-faq35)
+* *Mostra automaticamente le immagini per i contatti noti*: per mostrare automaticamente le immagini per i contatti sul tuo dispositivo, sei pregato di leggere [questa FAQ](#user-content-faq35)
 * *Barra di azione della conversazione*: per disabilitare la barra di navigazione in basso
 
-Note that messages can be previewed only when the message text was downloaded. Larger message texts are not downloaded by default on metered (generally mobile) networks. You can change this in the settings.
+Nota che i messaggi sono visibili in anteprima solo quando il testo del messaggio è stato scaricato. I testi del messaggio più grandi non sono scaricati di default su reti misurate (generalmente mobili). Puoi modificarlo nelle impostazioni.
 
-If the list of addresses is long, you can collapse the addresses section with the *less* icon at the top of the addresses section.
+Se l'elenco degli indirizzi è lungo, puoi comprimere la sezione degli indirizzi con l'icona *meno* sulla sezione degli indirizzi.
 
-Some people ask:
+Alcune persone chiedono:
 
 * di mostrare il soggetto in grassetto, ma il grassetto è già usato per evidenziare i messaggi non letti
 * di mostrare l'indirizzo o l'oggetto più grande/più piccolo, ma questo interferirebbe con l'opzione di dimensione del testo
 * di spostare la stella a sinistra, ma è molto più facile azionarla sul lato destro
 
-Unfortunately, it is impossible to make everybody happy and adding lots of settings would not only be confusing, but also never be sufficient.
+Sfortunatamente, è impossibile rendere tutti felici e aggiungere tante impostazioni non solo sarebbe confusionario, ma anche mai sufficiente.
 
 <br />
 
 <a name="faq6"></a>
-**(6) How can I login to Gmail / G suite?**
+**(6) Come posso accedere a Gmail/G suite?**
 
-You can use the quick setup wizard to easily setup a Gmail account and identity.
+Puoi usare la procedura guidata rapida per configurare facilmente un profilo e un'identità di Gmail.
 
-If you don't want to use an on-device Gmail account, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to setup an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
+Se non vuoi usare un profilo Gmail sul dispositivo, puoi abilitare l'accesso alle "app meno sicure" e usare la password del tuo profilo (sconsigliato) o abilitare l'autenticazione a due fattori e usare una password specifica dell'app. Per usare una password dovrai configurar un profilo e un'identità tramite le fasi 1 e 2 di configurazione invece che tramite la procedura guidata rapida.
 
-Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
+Sei pregato di vedere [questa FAQ](#user-content-faq111) sul perché sono utilizzabili solo i profili su dispositivo.
 
-Note that an app specific password is required when two factor authentication is enabled.
-
-<br />
-
-*App specific password*
-
-See [here](https://support.google.com/accounts/answer/185833) about how to generate an app specific password.
+Nota che una password specifica dell'app è necessaria quando l'autenticazione a due fattori è abilitata.
 
 <br />
 
-*Enable "Less secure apps"*
+*Password specifica dell'app*
 
-**Important**: using this method is not recommended because it is less reliable.
-
-**Important**: Gsuite accounts authorized with a username/password will stop working [in the near future](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
-
-See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps" or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).
-
-If you use multiple Gmail accounts, make sure you change the "less secure apps" setting of the right account(s).
-
-Be aware that you need to leave the "less secure apps" settings screen by using the back arrow to apply the setting.
-
-If you use this method, you should use a [strong password](https://en.wikipedia.org/wiki/Password_strength) for your Gmail account, which is a good idea anyway. Note that using the [standard](https://tools.ietf.org/html/rfc3501) IMAP protocol in itself is not less secure.
-
-When "less secure apps" is not enabled, you'll get the error *Authentication failed - invalid credentials* for accounts (IMAP) and *Username and Password not accepted* for identities (SMTP).
+Vedi [qui](https://support.google.com/accounts/answer/185833) come generare una password specifica dell'app.
 
 <br />
 
-*General*
+*Abilita "Meno app sicure"*
 
-You might get the alert "*Please log in via your web browser*". This happens when Google considers the network that connects you to the internet (this could be a VPN) to be unsafe. This can be prevented by using the Gmail quick setup wizard or an app specific password.
+**Importante**: usare questo metodo è sconsigliato perché meno affidabile.
 
-See [here](https://support.google.com/mail/answer/7126229) for Google's instructions and [here](https://support.google.com/mail/accounts/answer/78754) for troubleshooting.
+**Importante**: I profili Gsuite autorizzati con un nome utente/password smetteranno di funzionare [nel futuro prossimo](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
+
+Vedi [qui](https://support.google.com/accounts/answer/6010255) come abilitare le "app meno sicure" o vai [direttamente all'impostazione](https://www.google.com/settings/security/lesssecureapps).
+
+Se usi i profili multipli di Gmail, assicurati di modificare l'impostazione "app meno sicure" dei profili corretti.
+
+Sappi che devi lasciare la schermata delle impostazioni delle "app meno sicure" usando la freccia indietro per applicarle.
+
+Se usi questo metodo, dovresti usare una [password forte](https://en.wikipedia.org/wiki/Password_strength) per il tuo profilo Gmail, il che è comunque una buona idea. Nota che usare il protocollo IMAP [standard](https://tools.ietf.org/html/rfc3501) in sé non è meno sicuro.
+
+Quando le "app meno sicure" non sono abilitate, riceverete l'errore *Autenticazione fallita - credenziali non valide* per i profili (IMAP) e *Nome utente e Password non accettati* per le identità (SMTP).
+
+<br />
+
+*Generale*
+
+Potresti ottenere l'avviso "*Sei pregato di accedere tramite il tuo browser web*". Questo si verifica quando Google considera la rete che ti connette a internet (potrebbe essere un VPN) come insicura. Questo si può prevenire usando la procedura guidata rapida Gmail o una password specifica dell'app.
+
+Vedi [qui](https://support.google.com/mail/answer/7126229) le istruzioni di Google e [qui](https://support.google.com/mail/accounts/answer/78754) la risoluzione dei problemi.
 
 <br />
 
 <a name="faq7"></a>
-**(7) Why are sent messages not appearing (directly) in the sent folder?**
+**(7) Perché i messaggi inviati non compaiono (direttamente) nella cartella inviati?**
 
-Sent messages are normally moved from the outbox to the sent folder as soon as your provider adds sent messages to the sent folder. This requires a sent folder to be selected in the account settings and the sent folder to be set to synchronizing.
+I messaggi inviati sono spostati normalmente dalla posta in uscita alla cartella inviati appena il tuo fornitore aggiunge i messaggi inviati alla cartella inviati. Questo richiede la selezione di una cartella inviati nelle impostazioni del profilo e che questa sia impostata per la sincronizzazione.
 
-Some providers do not keep track of sent messages or the used SMTP server might not be related to the provider. In these cases FairEmail, will automatically add sent messages to the sent folder on synchronizing the sent folder, which will happen after a message have been sent. Note that this will result in extra internet traffic.
+Alcuni provider non tengono traccia dei messaggi inviati o il server SMTP usato potrebbe non essere correlato al provider. In questi casi FaiEmail, aggiungerà automaticamente i messaggi inviati alla cartella inviati alla sincronizzazione di quest'ultima, che si verificheranno dopo l'invio di un messaggio. Nota che questo risulterà in traffico internet extra.
 
 ~~If this doesn't happen, your provider might not keep track of sent messages or you might be using an SMTP server not related to the provider.~~ ~~In these cases you can enable the advanced identity setting *Store sent messages* to let FairEmail add sent messages to the sent folder right after sending a message.~~ ~~Note that enabling this setting might result in duplicate messages if your provider adds sent messages to the sent folder too.~~ ~~Also beware that enabling this setting will result in extra data usage, especially when when sending messages with large attachments.~~
 
@@ -519,13 +519,13 @@ Some providers do not keep track of sent messages or the used SMTP server might 
 <br />
 
 <a name="faq8"></a>
-**(8) Can I use a Microsoft Exchange account?**
+**(8) Posso usare un profilo di Microsoft Exchange?**
 
-You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case. See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
+Puoi usare un profilo di Microsoft Exchange se è accessibile tramite IMAP, il che è principalmente il caso. Vedi [qui](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) per ulteriori informazioni.
 
-Please see [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for the Microsoft documentation about configuring an email client. There is also a section about common connection errors and solutions.
+Sei pregato di vedere [qui](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) per la documentazione di Microsoft sulla configurazione di un client email. Esiste anche una sezione sugli errori e le soluzioni di connessione comuni.
 
-Some older Exchange server versions have a bug causing empty message and corrupt attachments. Please see [this FAQ](#user-content-faq110) for a workaround.
+Alcune versioni del server di Exchange hanno un bug che causa al messaggio vuoto e gli allegati corrotti. Please see [this FAQ](#user-content-faq110) for a workaround.
 
 Please see [this FAQ](#user-content-faq133) about ActiveSync support.
 
@@ -914,45 +914,55 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 ... non è consentito trasmettere* significa che il server di posta elettronica non riconosce il nome utente/indirizzo email. Si prega di controllare il nome host e il nome utente/indirizzo email nelle impostazioni di identità.
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
+* *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. Questo significa probabilmente che i filtri spam del server email sono troppo rigidi. Dovrai contattare il provider di posta elettronica per avere supporto a riguardo.
 
-**Gmail errors**
+Se vuoi usare il server SMTP di Gmail per aggirare un filtro spam troppo rigido o migliorare la consegna dei messaggi:
 
-The authorization of Gmail accounts setup with the quick wizard needs to be periodically refreshed via the [Android account manager](https://developer.android.com/reference/android/accounts/AccountManager). This requires contact/account permissions and internet connectivity.
+* Verifica il tuo indirizzo email [qui](https://mail.google.com/mail/u/0/#settings/accounts) (dovrai usare un browser desktop)
+* Cambia le impostazioni di identità come queste (configurazione, fase 2, tocca Gestisci, tocca identità):
 
-The error *... Authentication failed ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
+&emsp;&emsp;Username: *your Gmail address*<br /> &emsp;&emsp;Password: *[an app password](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Port: *465*<br /> &emsp;&emsp;Encryption: *SSL/TLS*<br /> &emsp;&emsp;Reply to address: *your email address* (advanced identity settings)<br />
 
-The errors *... Authentication failed ... No token ...* means that the Android account manager failed to refresh the authorization of a Gmail account.
+<br />
 
-The error *... Authentication failed ... network error ...* means that the Android account manager was not able to refresh the authorization of a Gmail account due to problems with the internet connection
+**Errori Gmail**
 
-The error *... Authentication failed ... Invalid credentials ...* could be caused by changing the account password or by having revoked the required account/contacts permissions. In case the account password was changed, you'll need to authenticate the Google account in the Android account settings again. In case the permissions were revoked, you can start the Gmail quick setup wizard to grant the required permissions again (you don't need to setup the account again).
+L'autorizzazione della configurazione dei profili Gmail con la procedura guidata rapida deve essere ricaricata periodicamente tramite il [gestore del profilo Android](https://developer.android.com/reference/android/accounts/AccountManager). Questo richiede permessi di contatto/profilo e connettività internet.
 
-The eror *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/): "*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*", see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
+The error *... Authentication failed ... Profilo non trovato ...* significa che un profilo Gmail autorizzato precedentemente è stato rimosso dal dispositivo.
 
-When in doubt, you can ask for [support](#user-content-support).
+Gli errori *... Autenticazione fallita... Nessun token ...* significa che il gestore del profilo Android non è riuscito a ricaricare l'autorizzazione di un profilo Gmail.
+
+L'errore *... Autenticazione fallita ... errore di rete ...* significa che il gestore del profilo Android non è stato in grado di ricaricare l'autorizzazione di un profilo Gmail a causa dei problemi con la connessione internet
+
+L'errore *... Autenticazione fallita ... Credenziali non valide ...* potrebbe essere causato dalla modifica della password del profilo o revocando i permessi necessari dei contatti/del profilo. Nel caso in cui la password del profilo fosse stata modificata, dovrete autenticare di nuovo il profilo di Google nelle impostazioni del profilo Android. Nel caso in cui i permessi siano stati revocati, potete avviare la procedura guidata rapida di Gmail per garantire di nuovo i permessi necessari (non dovete riconfigurare il profilo).
+
+L'errore *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/): "*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*", see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
+
+Quando in dubbio, potete chiedere [supporto](#user-content-support).
 
 <br />
 
 <a name="faq23"></a>
-**(23) Why do I get alert ... ?**
+**(23) Perché ricevo l'avviso ... ?**
 
-*General*
+*Generale*
 
-Alerts are warning messages sent by email servers.
+Gli avvisi sono messaggi di avviso inviati dal server email.
 
-*Too many simultaneous connections* or *Maximum number of connections exceeded*
+*Troppe connessioni simultanee* o *Numero massimo di connessioni superate*
 
-This alert will be sent when there are too many folder connections for the same email account at the same time.
+Questo avviso sarà inviato quando ci sono troppe connessioni di cartelle per lo stesso profilo email allo stesso tempo.
 
-Possible causes are:
+Possibili cause sono:
 
-* There are multiple email clients connected to the same account
-* The same email client is connected multiple times to the same account
-* Previous connections were terminated abruptly for example by abruptly losing internet connectivity
+* Ci sono client email multipli connessi allo stesso profilo
+* Lo stesso client email è connesso diverse volte allo stesso profilo
+* Le connessioni precedenti sono state terminate bruscamente per esempio perdendo bruscamente la connettività internet
 
-First try to wait some time to see if the problem resolves itself, else:
+Prima prova ad attendere un po' di tempo se il problema si risolve da solo, oppure:
 
-* either switch to periodically checking for messages in the receive settings, which will result in opening folders one at a time
+* o passa alla verifica periodica dei messaggi nelle impostazioni di ricezione, che risulterà nell'apertura delle cartelle una per volta
 * or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
 
 An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
@@ -1101,7 +1111,7 @@ Note that this is independent of receiving messages.
 <a name="faq34"></a>
 **(34) How are identities matched?**
 
-Identities are as expected matched by account. For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order) and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked.
+Identities are as expected matched by account. For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order) and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked. Equal addresses have precedence over partially matching addresses, except for *delivered-to* addresses.
 
 The matched address will be shown as *via* in the addresses section of received messages (between the message header and message text).
 
@@ -1109,7 +1119,7 @@ Note that identities needs to be enabled to be able to be matched and that ident
 
 Matching will be done only once on receiving a message, so changing the configuration will not change existing messages. You could clear local messages by long pressing a folder in the folder list and synchronize the messages again though.
 
-It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings to match the username of an email address (the part before the @ sign).
+It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings to match **the username** of an email address (the part before the @ sign).
 
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
 
