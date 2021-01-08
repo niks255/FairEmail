@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -69,6 +69,7 @@ public class FragmentFolder extends FragmentBase {
     private EditText etPoll;
     private TextView tvPoll;
     private CheckBox cbDownload;
+    private CheckBox cbAutoClassify;
     private Button btnInfo;
     private EditText etSyncDays;
     private EditText etKeepDays;
@@ -129,6 +130,7 @@ public class FragmentFolder extends FragmentBase {
         etPoll = view.findViewById(R.id.etPoll);
         tvPoll = view.findViewById(R.id.tvPoll);
         cbDownload = view.findViewById(R.id.cbDownload);
+        cbAutoClassify = view.findViewById(R.id.cbAutoClassify);
         btnInfo = view.findViewById(R.id.btnInfo);
         etSyncDays = view.findViewById(R.id.etSyncDays);
         etKeepDays = view.findViewById(R.id.etKeepDays);
@@ -215,6 +217,7 @@ public class FragmentFolder extends FragmentBase {
         grpImap.setVisibility(imap ? View.VISIBLE : View.GONE);
         tvParent.setText(parent);
         grpParent.setVisibility(parent == null ? View.GONE : View.VISIBLE);
+        cbAutoClassify.setVisibility(View.GONE);
         grpAutoDelete.setVisibility(View.GONE);
         btnSave.setEnabled(false);
         pbSave.setVisibility(View.GONE);
@@ -285,36 +288,35 @@ public class FragmentFolder extends FragmentBase {
                     etPoll.setText(folder == null ? null : Integer.toString(folder.poll_factor));
                     tvPoll.setText(getString(R.string.title_factor_minutes, interval));
                     cbDownload.setChecked(folder == null ? true : folder.download);
+                    cbAutoClassify.setChecked(folder == null ? false : folder.auto_classify);
                     etSyncDays.setText(Integer.toString(folder == null ? EntityFolder.DEFAULT_SYNC : folder.sync_days));
                     if (folder != null && folder.keep_days == Integer.MAX_VALUE)
                         cbKeepAll.setChecked(true);
                     else
                         etKeepDays.setText(Integer.toString(folder == null ? EntityFolder.DEFAULT_KEEP : folder.keep_days));
-
-                    if (!imap || (folder != null && folder.read_only))
-                        grpAutoDelete.setVisibility(View.GONE);
-                    else {
-                        cbAutoDelete.setText(folder != null && EntityFolder.TRASH.equals(folder.type)
-                                ? R.string.title_auto_delete : R.string.title_auto_trash);
-                        cbAutoDelete.setChecked(folder != null && folder.auto_delete);
-                        grpAutoDelete.setVisibility(View.VISIBLE);
-                    }
-
-                    tvInboxRootHint.setVisibility(folder == null && parent == null ? View.VISIBLE : View.GONE);
+                    cbAutoDelete.setChecked(folder != null && folder.auto_delete);
                 }
 
                 Helper.setViewsEnabled(view, true);
 
                 boolean always = (!ondemand && (pollInterval == 0 || exempted));
+                boolean canAutoClassify = (imap &&
+                        MessageClassifier.isEnabled(getContext()) &&
+                        (folder == null || MessageClassifier.canClassify(folder.type)));
 
                 etName.setEnabled(folder == null || EntityFolder.USER.equals(folder.type));
                 cbPoll.setEnabled(cbSynchronize.isChecked() && always);
                 etPoll.setEnabled(cbSynchronize.isChecked() && always);
                 tvPoll.setEnabled(cbSynchronize.isChecked() && always);
                 grpPoll.setVisibility(imap && cbPoll.isEnabled() && cbPoll.isChecked() ? View.VISIBLE : View.GONE);
+                cbAutoClassify.setVisibility(canAutoClassify ? View.VISIBLE : View.GONE);
                 etKeepDays.setEnabled(!cbKeepAll.isChecked());
                 cbAutoDelete.setEnabled(!cbKeepAll.isChecked());
+                cbAutoDelete.setText(folder != null && EntityFolder.TRASH.equals(folder.type)
+                        ? R.string.title_auto_delete : R.string.title_auto_trash);
+                grpAutoDelete.setVisibility(!imap || (folder != null && folder.read_only) ? View.GONE : View.VISIBLE);
                 btnSave.setEnabled(true);
+                tvInboxRootHint.setVisibility(folder == null && parent == null ? View.VISIBLE : View.GONE);
 
                 deletable = (folder != null && EntityFolder.USER.equals(folder.type));
                 getActivity().invalidateOptionsMenu();
@@ -415,6 +417,7 @@ public class FragmentFolder extends FragmentBase {
         args.putBoolean("poll", cbPoll.isChecked());
         args.putString("factor", etPoll.getText().toString());
         args.putBoolean("download", cbDownload.isChecked());
+        args.putBoolean("auto_classify", cbAutoClassify.isChecked());
         args.putString("sync", etSyncDays.getText().toString());
         args.putString("keep", cbKeepAll.isChecked()
                 ? Integer.toString(Integer.MAX_VALUE)
@@ -457,6 +460,7 @@ public class FragmentFolder extends FragmentBase {
                 boolean poll = args.getBoolean("poll");
                 String factor = args.getString("factor");
                 boolean download = args.getBoolean("download");
+                boolean auto_classify = args.getBoolean("auto_classify");
                 String sync = args.getString("sync");
                 String keep = args.getString("keep");
                 boolean auto_delete = args.getBoolean("auto_delete");
@@ -517,6 +521,8 @@ public class FragmentFolder extends FragmentBase {
                                 return true;
                             if (!Objects.equals(folder.download, download))
                                 return true;
+                            if (!Objects.equals(folder.auto_classify, auto_classify))
+                                return true;
                             if (!Objects.equals(folder.sync_days, sync_days))
                                 return true;
                             if (!Objects.equals(folder.keep_days, keep_days))
@@ -560,6 +566,7 @@ public class FragmentFolder extends FragmentBase {
                         create.poll = poll;
                         create.poll_factor = poll_factor;
                         create.download = download;
+                        create.auto_classify = auto_classify;
                         create.sync_days = sync_days;
                         create.keep_days = keep_days;
                         create.auto_delete = auto_delete;
@@ -579,7 +586,7 @@ public class FragmentFolder extends FragmentBase {
                         db.folder().setFolderProperties(id,
                                 folder.name.equals(name) ? null : name,
                                 display, color, unified, navigation, notify, hide,
-                                synchronize, poll, poll_factor, download,
+                                synchronize, poll, poll_factor, download, auto_classify,
                                 sync_days, keep_days, auto_delete);
                         db.folder().setFolderError(id, null);
 

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityManager;
@@ -43,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,9 +81,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swExternalSearch;
     private SwitchCompat swShortcuts;
     private SwitchCompat swFts;
+    private SwitchCompat swClassification;
+    private ImageButton ibClassification;
     private TextView tvFtsIndexed;
     private TextView tvFtsPro;
     private Spinner spLanguage;
+    private ImageButton ibResetLanguage;
     private SwitchCompat swWatchdog;
     private SwitchCompat swUpdates;
     private SwitchCompat swExperiments;
@@ -116,7 +120,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private final static long MIN_FILE_SIZE = 1024 * 1024L;
 
     private final static String[] RESET_OPTIONS = new String[]{
-            "shortcuts", "fts", "language", "watchdog", "updates",
+            "shortcuts", "fts", "classification", "language", "watchdog", "updates",
             "experiments", "query_threads", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "auth_plain", "auth_login", "auth_sasl"
     };
@@ -159,9 +163,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExternalSearch = view.findViewById(R.id.swExternalSearch);
         swShortcuts = view.findViewById(R.id.swShortcuts);
         swFts = view.findViewById(R.id.swFts);
+        swClassification = view.findViewById(R.id.swClassification);
+        ibClassification = view.findViewById(R.id.ibClassification);
         tvFtsIndexed = view.findViewById(R.id.tvFtsIndexed);
         tvFtsPro = view.findViewById(R.id.tvFtsPro);
         spLanguage = view.findViewById(R.id.spLanguage);
+        ibResetLanguage = view.findViewById(R.id.ibResetLanguage);
         swWatchdog = view.findViewById(R.id.swWatchdog);
         swUpdates = view.findViewById(R.id.swUpdates);
         swExperiments = view.findViewById(R.id.swExperiments);
@@ -251,6 +258,30 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         Helper.linkPro(tvFtsPro);
 
+        swClassification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            private int count = 0;
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
+                prefs.edit().putBoolean("classification", checked).apply();
+                if (!checked) {
+                    count++;
+                    if (count >= 3) {
+                        count = 0;
+                        MessageClassifier.clear(buttonView.getContext());
+                        ToastEx.makeText(buttonView.getContext(), R.string.title_reset, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+        ibClassification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 163);
+            }
+        });
+
         spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -264,6 +295,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                prefs.edit().remove("language").commit(); // apply won't work here
+            }
+        });
+
+        ibResetLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 prefs.edit().remove("language").commit(); // apply won't work here
             }
         });
@@ -711,6 +749,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExternalSearch.setChecked(Helper.isComponentEnabled(getContext(), ActivitySearch.class));
         swShortcuts.setChecked(prefs.getBoolean("shortcuts", true));
         swFts.setChecked(prefs.getBoolean("fts", false));
+        swClassification.setChecked(prefs.getBoolean("classification", false));
 
         int selected = -1;
         String language = prefs.getString("language", null);

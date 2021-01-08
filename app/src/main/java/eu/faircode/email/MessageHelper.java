@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -136,10 +136,13 @@ public class MessageHelper {
     static void setSystemProperties(Context context) {
         System.setProperty("mail.mime.decodetext.strict", "false");
 
+        // https://docs.oracle.com/javaee/6/api/javax/mail/internet/package-summary.html
         System.setProperty("mail.mime.ignoreunknownencoding", "true"); // Content-Transfer-Encoding
         System.setProperty("mail.mime.base64.ignoreerrors", "true");
         System.setProperty("mail.mime.decodefilename", "true");
-        System.setProperty("mail.mime.encodefilename", "true");
+        System.setProperty("mail.mime.encodefilename", "false");
+        System.setProperty("mail.mime.decodeparameters", "true");
+        System.setProperty("mail.mime.encodeparameters", "true");
         System.setProperty("mail.mime.allowutf8", "false"); // InternetAddress, MimeBodyPart, MimeUtility
         System.setProperty("mail.mime.cachemultipart", "false");
 
@@ -272,7 +275,10 @@ public class MessageHelper {
 
         MailDateFormat mdf = new MailDateFormat();
         mdf.setTimeZone(hide_timezone ? TimeZone.getTimeZone("UTC") : TimeZone.getDefault());
-        imessage.setHeader("Date", mdf.format(new Date()));
+        if (message.sent != null)
+            imessage.setHeader("Date", mdf.format(new Date(message.sent)));
+        else
+            imessage.setHeader("Date", mdf.format(new Date(message.received)));
 
         List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
 
@@ -763,7 +769,8 @@ public class MessageHelper {
                     });
                     attachmentPart.setDataHandler(new DataHandler(dataSource));
 
-                    attachmentPart.setFileName(attachment.name);
+                    if (attachment.name != null)
+                        attachmentPart.setFileName(attachment.name);
                     if (attachment.disposition != null)
                         attachmentPart.setDisposition(attachment.disposition);
                     if (attachment.cid != null)
@@ -2415,7 +2422,7 @@ public class MessageHelper {
                         // https://blog.nodemailer.com/2017/01/27/the-mess-that-is-attachment-filenames/
                         int q1 = filename.indexOf('\'');
                         int q2 = filename.indexOf('\'', q1 + 1);
-                        if (q1 >= 0 && q2 > 0) {
+                        if (q1 >= 0 && q2 > 0 && false) {
                             try {
                                 String charset = filename.substring(0, q1);
                                 String language = filename.substring(q1 + 1, q2);
@@ -2441,6 +2448,22 @@ public class MessageHelper {
                 try {
                     // From the body structure
                     contentType = new ContentType(part.getContentType());
+
+                    // Workaround bodystructure not matching header
+                    if (part instanceof MimeMessage &&
+                            "text/plain".equalsIgnoreCase(contentType.getBaseType()))
+                        try {
+                            String[] c = part.getHeader("Content-type");
+                            if (c != null && c.length > 0) {
+                                ContentType ct = new ContentType(c[0]);
+                                if ("text/html".equalsIgnoreCase(ct.getBaseType())) {
+                                    Log.e("Inconsistent bs=" + contentType + " header=" + ct);
+                                    contentType = ct;
+                                }
+                            }
+                        } catch (MessagingException ex) {
+                            Log.w(ex);
+                        }
                 } catch (ParseException ex) {
                     if (part instanceof MimeMessage)
                         Log.w("MimeMessage content type=" + ex.getMessage());

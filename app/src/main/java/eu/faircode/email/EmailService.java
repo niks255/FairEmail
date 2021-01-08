@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -126,12 +126,13 @@ public class EmailService implements AutoCloseable {
     static final int ENCRYPTION_STARTTLS = 1;
     static final int ENCRYPTION_NONE = 2;
 
-    final static int DEFAULT_CONNECT_TIMEOUT = 15; // seconds
+    final static int DEFAULT_CONNECT_TIMEOUT = 20; // seconds
+    final static boolean SEPARATE_STORE_CONNECTION = false;
 
     private final static int SEARCH_TIMEOUT = 90 * 1000; // milliseconds
     private final static int FETCH_SIZE = 1024 * 1024; // bytes, default 16K
-    private final static int POOL_SIZE = 2; // connections
-    private final static int POOL_TIMEOUT = 60 * 1000; // milliseconds, default 45 sec
+    private final static int POOL_SIZE = 1; // connections
+    private final static int POOL_TIMEOUT = 45 * 1000; // milliseconds, default 45 sec
 
     private final static int TCP_KEEP_ALIVE_INTERVAL = 9 * 60; // seconds
 
@@ -231,7 +232,7 @@ public class EmailService implements AutoCloseable {
             properties.put("mail.imap.starttls.enable", Boolean.toString(starttls));
             properties.put("mail.imap.starttls.required", Boolean.toString(starttls && !insecure));
 
-            properties.put("mail." + protocol + ".separatestoreconnection", "true");
+            properties.put("mail." + protocol + ".separatestoreconnection", Boolean.toString(SEPARATE_STORE_CONNECTION));
             properties.put("mail." + protocol + ".connectionpool.debug", "true");
             properties.put("mail." + protocol + ".connectionpoolsize", Integer.toString(POOL_SIZE));
             properties.put("mail." + protocol + ".connectionpooltimeout", Integer.toString(POOL_TIMEOUT));

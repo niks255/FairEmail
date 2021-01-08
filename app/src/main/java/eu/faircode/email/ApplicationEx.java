@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Application;
@@ -391,6 +391,10 @@ public class ApplicationEx extends Application implements SharedPreferences.OnSh
             editor.remove("print_html_confirmed");
         else if (version < 1413)
             editor.remove("experiments");
+        else if (version < 1439) {
+            if (!BuildConfig.DEBUG)
+                editor.remove("experiments");
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
             editor.remove("background_service");

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -250,7 +250,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                         ivState.setImageResource(R.drawable.twotone_warning_24);
                 }
                 ivState.setVisibility(
-                        folder.synchronize || folder.state != null || folder.sync_state != null
+                        (folder.selectable && folder.synchronize) || folder.state != null || folder.sync_state != null
                                 ? View.VISIBLE : View.INVISIBLE);
 
                 if (folder.selectable)
@@ -1132,7 +1132,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
         return result;
     }
 
-    private class DiffCallback extends DiffUtil.Callback {
+    private static class DiffCallback extends DiffUtil.Callback {
         private List<TupleFolderEx> prev = new ArrayList<>();
         private List<TupleFolderEx> next = new ArrayList<>();
 

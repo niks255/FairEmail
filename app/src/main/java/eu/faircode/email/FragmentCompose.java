@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
@@ -1189,6 +1189,7 @@ public class FragmentCompose extends FragmentBase {
                 args.putString("to", a.getString("to"));
                 args.putString("cc", a.getString("cc"));
                 args.putString("bcc", a.getString("bcc"));
+                args.putString("inreplyto", a.getString("inreplyto"));
                 args.putString("subject", a.getString("subject"));
                 args.putString("body", a.getString("body"));
                 args.putString("text", a.getString("text"));
@@ -3568,6 +3569,8 @@ public class FragmentCompose extends FragmentBase {
                             Log.w(ex);
                         }
 
+                        data.draft.inreplyto = args.getString("inreplyto", null);
+
                         data.draft.subject = args.getString("subject", "");
 
                         String b = args.getString("body", "");
@@ -3794,6 +3797,7 @@ public class FragmentCompose extends FragmentBase {
                             if (TextUtils.isEmpty(s)) {
                                 // Get referenced message body
                                 d = JsoupEx.parse(ref.getFile(context));
+                                HtmlHelper.normalizeNamespaces(d, false);
                                 for (Element e : d.select("[x-plain=true]"))
                                     e.removeAttr("x-plain");
 
@@ -4149,9 +4153,18 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(data.draft.revision > 1);
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(data.draft.revision < data.draft.revisions);
 
-            if (args.getBoolean("incomplete"))
-                Snackbar.make(view, R.string.title_attachments_incomplete, Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true).show();
+            if (args.getBoolean("incomplete")) {
+                final Snackbar snackbar = Snackbar.make(
+                        view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE)
+                        .setGestureInsetBottomIgnored(true);
+                snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
+                snackbar.show();
+            }
 
             DB db = DB.getInstance(getContext());
 
@@ -4608,6 +4621,11 @@ public class FragmentCompose extends FragmentBase {
                         db.setTransactionSuccessful();
                         return draft;
                     }
+
+                    if (!shouldEncrypt)
+                        for (EntityAttachment attachment : attachments)
+                            if (attachment.isEncryption())
+                                db.attachment().deleteAttachment(attachment.id);
 
                     if (action == R.id.action_save ||
                             action == R.id.action_undo ||

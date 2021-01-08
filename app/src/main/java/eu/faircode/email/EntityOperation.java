@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -167,7 +167,12 @@ public class EntityOperation {
                     db.message().setMessageLabels(message.id, DB.Converters.fromStringArray(message.labels));
 
             } else if (MOVE.equals(name)) {
-                // Parameters:
+                // Parameters in:
+                // 0: target folder
+                // 1: mark seen
+                // 2: auto classified
+
+                // Parameters out:
                 // 0: target folder
                 // 1: mark seen
                 // 2: temporary message
@@ -178,8 +183,18 @@ public class EntityOperation {
                 boolean autounflag = prefs.getBoolean("autounflag", false);
                 boolean reset_importance = prefs.getBoolean("reset_importance", false);
 
-                if (jargs.opt(1) != null) // rules
+                if (jargs.opt(1) != null) {
+                    // rules, classify
                     autoread = jargs.getBoolean(1);
+                    autounflag = false;
+                }
+
+                boolean auto_classified = message.auto_classified;
+                if (jargs.opt(2) != null) {
+                    auto_classified = jargs.getBoolean(2);
+                    jargs.remove(2);
+                }
+
                 jargs.put(1, autoread);
                 jargs.put(3, autounflag);
 
@@ -263,6 +278,7 @@ public class EntityOperation {
                     message.stored = new Date().getTime();
                     message.notifying = 0;
                     message.fts = false;
+                    message.auto_classified = auto_classified;
                     if (reset_importance)
                         message.importance = null;
                     if (autoread) {

@@ -16,10 +16,11 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -88,6 +89,8 @@ public class EntityFolder extends EntityOrder implements Serializable {
     public Integer poll_count = 0;
     @NonNull
     public Boolean download = true;
+    @NonNull
+    public Boolean auto_classify = false;
     public Boolean subscribed;
     @NonNull
     public Integer sync_days;
@@ -325,6 +328,12 @@ public class EntityFolder extends EntityOrder implements Serializable {
         return R.drawable.twotone_folder_24;
     }
 
+    static Integer getDefaultColor(String type) {
+        if (EntityFolder.TRASH.equals(type) || EntityFolder.JUNK.equals(type))
+            return Color.RED;
+        return null;
+    }
+
     String getDisplayName(Context context) {
         return (display == null ? localizeName(context, name) : display);
     }
@@ -538,6 +547,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         json.put("poll", poll);
         json.put("poll_factor", poll_factor);
         json.put("download", download);
+        json.put("auto_classify", auto_classify);
         json.put("sync_days", sync_days);
         json.put("keep_days", keep_days);
         json.put("auto_delete", auto_delete);
@@ -571,6 +581,9 @@ public class EntityFolder extends EntityOrder implements Serializable {
 
         if (json.has("download"))
             folder.download = json.getBoolean("download");
+
+        if (json.has("auto_classify"))
+            folder.auto_classify = json.getBoolean("auto_classify");
 
         if (json.has("after"))
             folder.sync_days = json.getInt("after");

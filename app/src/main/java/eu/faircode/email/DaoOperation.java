@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import androidx.lifecycle.LiveData;
@@ -133,8 +133,11 @@ public interface DaoOperation {
     @Query("UPDATE operation SET state = :state WHERE id = :id AND NOT (state IS :state)")
     int setOperationState(long id, String state);
 
-    @Query("UPDATE operation SET state = NULL WHERE state IS NOT NULL")
-    int resetOperationStates();
+    @Query("UPDATE operation SET state = NULL" +
+            " WHERE account = :account" +
+            " AND state IS NOT NULL" +
+            " AND name <> '" + EntityOperation.SEND + "'")
+    int resetOperationStates(long account);
 
     @Query("UPDATE operation SET error = :error WHERE id = :id AND NOT (error IS :error)")
     int setOperationError(long id, String error);

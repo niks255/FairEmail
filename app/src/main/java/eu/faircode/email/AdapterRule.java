@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -54,6 +54,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,6 +68,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
     private LifecycleOwner owner;
     private LayoutInflater inflater;
 
+    private DateFormat DF;
+    private NumberFormat NF = NumberFormat.getNumberInstance();
+
     private int protocol = -1;
     private String search = null;
     private List<TupleRuleEx> all = new ArrayList<>();
@@ -79,9 +83,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
         private ImageView ivStop;
         private TextView tvCondition;
         private TextView tvAction;
+        private TextView tvLastApplied;
         private TextView tvApplied;
 
-        private NumberFormat NF = NumberFormat.getNumberInstance();
         private TwoStateOwner powner = new TwoStateOwner(owner, "RulePopup");
 
         ViewHolder(View itemView) {
@@ -93,6 +97,7 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
             ivStop = itemView.findViewById(R.id.ivStop);
             tvCondition = itemView.findViewById(R.id.tvCondition);
             tvAction = itemView.findViewById(R.id.tvAction);
+            tvLastApplied = itemView.findViewById(R.id.tvLastApplied);
             tvApplied = itemView.findViewById(R.id.tvApplied);
         }
 
@@ -183,6 +188,7 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                 tvAction.setText(ex.getMessage());
             }
 
+            tvLastApplied.setText(rule.last_applied == null ? null : DF.format(rule.last_applied));
             tvApplied.setText(NF.format(rule.applied));
         }
 
@@ -405,6 +411,8 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
         this.owner = parentFragment.getViewLifecycleOwner();
         this.inflater = LayoutInflater.from(context);
 
+        this.DF = Helper.getDateTimeInstance(this.context);
+
         setHasStableIds(true);
 
         owner.getLifecycle().addObserver(new LifecycleObserver() {
@@ -481,7 +489,7 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
         set(protocol, all);
     }
 
-    private class DiffCallback extends DiffUtil.Callback {
+    private static class DiffCallback extends DiffUtil.Callback {
         private List<TupleRuleEx> prev = new ArrayList<>();
         private List<TupleRuleEx> next = new ArrayList<>();
 

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -127,6 +127,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     static final String ACTION_QUICK_GMAIL = BuildConfig.APPLICATION_ID + ".ACTION_QUICK_GMAIL";
     static final String ACTION_QUICK_OAUTH = BuildConfig.APPLICATION_ID + ".ACTION_QUICK_OAUTH";
     static final String ACTION_QUICK_SETUP = BuildConfig.APPLICATION_ID + ".ACTION_QUICK_SETUP";
+    static final String ACTION_QUICK_POP3 = BuildConfig.APPLICATION_ID + ".ACTION_QUICK_POP3";
     static final String ACTION_VIEW_ACCOUNTS = BuildConfig.APPLICATION_ID + ".ACTION_VIEW_ACCOUNTS";
     static final String ACTION_VIEW_IDENTITIES = BuildConfig.APPLICATION_ID + ".ACTION_VIEW_IDENTITIES";
     static final String ACTION_EDIT_ACCOUNT = BuildConfig.APPLICATION_ID + ".EDIT_ACCOUNT";
@@ -320,6 +321,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         iff.addAction(ACTION_QUICK_GMAIL);
         iff.addAction(ACTION_QUICK_OAUTH);
         iff.addAction(ACTION_QUICK_SETUP);
+        iff.addAction(ACTION_QUICK_POP3);
         iff.addAction(ACTION_VIEW_ACCOUNTS);
         iff.addAction(ACTION_VIEW_IDENTITIES);
         iff.addAction(ACTION_EDIT_ACCOUNT);
@@ -461,7 +463,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     private void onDebugInfo() {
         new SimpleTask<Long>() {
             @Override
-            protected Long onExecute(Context context, Bundle args) throws IOException {
+            protected Long onExecute(Context context, Bundle args) throws IOException, JSONException {
                 return Log.getDebugInfo(context, R.string.title_debug_info_remark, null, null).id;
             }
 
@@ -626,6 +628,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 jexport.put("accounts", jaccounts);
                 jexport.put("answers", janswers);
                 jexport.put("certificates", jcertificates);
+                jexport.put("classifier", MessageClassifier.toJson());
                 jexport.put("settings", jsettings);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -683,11 +686,11 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException ||
-                        ex instanceof FileNotFoundException)
-                    ToastEx.makeText(ActivitySetup.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                boolean expected =
+                        (ex instanceof IllegalArgumentException ||
+                                ex instanceof FileNotFoundException ||
+                                ex instanceof SecurityException);
+                Log.unexpectedError(getSupportFragmentManager(), ex, !expected);
             }
         }.execute(this, args, "setup:export");
     }
@@ -950,6 +953,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         }
                     }
 
+                    if (jimport.has("classifier"))
+                        MessageClassifier.fromJson(jimport.getJSONObject("classifier"));
+
                     // Settings
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor editor = prefs.edit();
@@ -1067,12 +1073,14 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     ToastEx.makeText(ActivitySetup.this, R.string.title_setup_password_invalid, Toast.LENGTH_LONG).show();
                 else if (ex instanceof IOException && ex.getCause() instanceof IllegalBlockSizeException)
                     ToastEx.makeText(ActivitySetup.this, R.string.title_setup_import_invalid, Toast.LENGTH_LONG).show();
-                else if (ex instanceof IllegalArgumentException ||
-                        ex instanceof FileNotFoundException ||
-                        ex instanceof JSONException)
-                    ToastEx.makeText(ActivitySetup.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                else {
+                    boolean expected =
+                            (ex instanceof IllegalArgumentException ||
+                                    ex instanceof FileNotFoundException ||
+                                    ex instanceof JSONException ||
+                                    ex instanceof SecurityException);
+                    Log.unexpectedError(getSupportFragmentManager(), ex, !expected);
+                }
             }
         }.execute(this, args, "setup:import");
     }
@@ -1139,7 +1147,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getSupportFragmentManager(), ex, false);
+                    boolean expected = (ex instanceof SecurityException);
+                    Log.unexpectedError(getSupportFragmentManager(), ex, !expected);
                 }
             }.execute(this, args, "setup:cert");
         }
@@ -1159,9 +1168,17 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         fragmentTransaction.commit();
     }
 
-    private void onViewQuickSetup(Intent intent) {
+    private void onQuickSetup(Intent intent) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, new FragmentQuickSetup()).addToBackStack("quick");
+        fragmentTransaction.commit();
+    }
+
+    private void onQuickPop3(Intent intent) {
+        FragmentBase fragment = new FragmentPop();
+        fragment.setArguments(new Bundle());
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("account");
         fragmentTransaction.commit();
     }
 
@@ -1321,7 +1338,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 else if (ACTION_QUICK_OAUTH.equals(action))
                     onOAuth(intent);
                 else if (ACTION_QUICK_SETUP.equals(action))
-                    onViewQuickSetup(intent);
+                    onQuickSetup(intent);
+                else if (ACTION_QUICK_POP3.equals(action))
+                    onQuickPop3(intent);
                 else if (ACTION_VIEW_ACCOUNTS.equals(action))
                     onViewAccounts(intent);
                 else if (ACTION_VIEW_IDENTITIES.equals(action))

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.annotation.TargetApi;
@@ -505,7 +505,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
         diff.dispatchUpdatesTo(this);
     }
 
-    private class DiffCallback extends DiffUtil.Callback {
+    private static class DiffCallback extends DiffUtil.Callback {
         private List<TupleAccountEx> prev = new ArrayList<>();
         private List<TupleAccountEx> next = new ArrayList<>();
 

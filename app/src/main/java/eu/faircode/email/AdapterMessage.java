@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
@@ -341,6 +341,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvTime;
         private ImageView ivType;
         private ImageView ivFound;
+        private ImageView ivClassified;
         private ImageButton ibSnoozed;
         private ImageView ivAnswered;
         private ImageView ivForwarded;
@@ -503,6 +504,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvTime = itemView.findViewById(R.id.tvTime);
             ivType = itemView.findViewById(R.id.ivType);
             ivFound = itemView.findViewById(R.id.ivFound);
+            ivClassified = itemView.findViewById(R.id.ivClassified);
             ibSnoozed = itemView.findViewById(R.id.ibSnoozed);
             ivAnswered = itemView.findViewById(R.id.ivAnswered);
             ivForwarded = itemView.findViewById(R.id.ivForwarded);
@@ -896,7 +898,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean inbox = EntityFolder.INBOX.equals(message.folderType);
             boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
             boolean outgoing = isOutgoing(message);
-            boolean reverse = (outgoing &&
+            boolean reverse = (EntityFolder.isOutgoing(message.folderType) &&
                     (viewType != ViewType.THREAD || !threading) && !show_recipients);
             Address[] senders = ContactInfo.fillIn(reverse ? message.to : message.senders, prefer_contact);
             Address[] recipients = ContactInfo.fillIn(reverse ? message.from : message.recipients, prefer_contact);
@@ -904,7 +906,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     !(Boolean.FALSE.equals(message.dkim) ||
                             Boolean.FALSE.equals(message.spf) ||
                             Boolean.FALSE.equals(message.dmarc) ||
-                            Boolean.FALSE.equals(message.mx));
+                            Boolean.FALSE.equals(message.mx) ||
+                            Boolean.FALSE.equals(message.reply_domain));
             boolean expanded = (viewType == ViewType.THREAD && properties.getValue("expanded", message.id));
 
             // Text size
@@ -939,6 +942,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvTime.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivType.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivFound.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
+                ivClassified.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ibSnoozed.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivAnswered.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivForwarded.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
@@ -1041,6 +1045,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             ivFound.setVisibility(message.ui_found && found ? View.VISIBLE : View.GONE);
+            ivClassified.setVisibility(message.auto_classified ? View.VISIBLE : View.GONE);
 
             int snoozy = (message.ui_snoozed != null && message.ui_snoozed == Long.MAX_VALUE
                     ? R.drawable.twotone_visibility_off_24
@@ -1724,8 +1729,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibPinContact.setVisibility(show_addresses && pin && froms > 0 ? View.VISIBLE : View.GONE);
             ibAddContact.setVisibility(show_addresses && contacts && froms > 0 ? View.VISIBLE : View.GONE);
 
-            tvSubmitterTitle.setVisibility(show_addresses && !TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
-            tvSubmitter.setVisibility(show_addresses && !TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
+            tvSubmitterTitle.setVisibility(!TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
+            tvSubmitter.setVisibility(!TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
             tvSubmitter.setText(submitter);
 
             tvDeliveredToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
@@ -3195,6 +3200,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onShowAuth(TupleMessageEx message) {
+            StringBuilder sb = new StringBuilder();
+
             List<String> result = new ArrayList<>();
             if (Boolean.FALSE.equals(message.dkim))
                 result.add("DKIM");
@@ -3205,10 +3212,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (Boolean.FALSE.equals(message.mx))
                 result.add("MX");
 
-            ToastEx.makeText(context,
-                    context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)),
-                    Toast.LENGTH_LONG)
-                    .show();
+            if (result.size() > 0)
+                sb.append(context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)));
+
+            if (Boolean.FALSE.equals(message.reply_domain)) {
+                if (sb.length() > 0)
+                    sb.append('\n');
+                sb.append(message.checkReplyDomain(context));
+            }
+
+            ToastEx.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
         }
 
         private void onShowSnoozed(TupleMessageEx message) {
@@ -5107,7 +5120,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     result.add(context.getString(R.string.title_accessibility_attachment));
 
                 boolean outgoing = isOutgoing(message);
-                Address[] addresses = (outgoing && (viewType != ViewType.THREAD || !threading) ? message.to : message.senders);
+                Address[] addresses = (EntityFolder.isOutgoing(message.folderType) &&
+                        (viewType != ViewType.THREAD || !threading) ? message.to : message.senders);
                 String from = MessageHelper.formatAddresses(addresses, name_email, false);
                 // For a11y purpose subject is reported first when: user wishes so or this is a single outgoing message
                 if (subject_top || (outgoing && message.visible == 1)) {
@@ -5333,6 +5347,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!Objects.equals(prev.mx, next.mx)) {
                     same = false;
                     log("mx changed", next.id);
+                }
+                if (!Objects.equals(prev.reply_domain, next.reply_domain)) {
+                    same = false;
+                    log("reply_domain changed", next.id);
                 }
                 if (!Objects.equals(prev.avatar, next.avatar)) {
                     same = false;
@@ -6200,6 +6218,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         @Override
                         protected void onException(Bundle args, Throwable ex) {
+                            tvHost.setText(ex.getClass().getName());
                             tvOwner.setText(ex.getMessage());
                         }
                     }.execute(FragmentDialogLink.this, args, "link:owner");
@@ -6336,7 +6355,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            Bundle args = getArguments();
+            final Bundle args = getArguments();
             final long account = args.getLong("account");
             final int protocol = args.getInt("protocol");
             final long folder = args.getLong("folder");
@@ -6346,15 +6365,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
             final TextView tvMessage = view.findViewById(R.id.tvMessage);
-            final ImageButton ibInfo = view.findViewById(R.id.ibInfo);
+            final ImageButton ibInfoProvider = view.findViewById(R.id.ibInfoProvider);
             final CheckBox cbBlockSender = view.findViewById(R.id.cbBlockSender);
             final CheckBox cbBlockDomain = view.findViewById(R.id.cbBlockDomain);
             final Button btnEditRules = view.findViewById(R.id.btnEditRules);
+            final CheckBox cbJunkFilter = view.findViewById(R.id.cbJunkFilter);
+            final ImageButton ibInfoFilter = view.findViewById(R.id.ibInfoFilter);
             final Group grpInJunk = view.findViewById(R.id.grpInJunk);
 
             tvMessage.setText(getString(R.string.title_ask_spam_who, from));
 
-            ibInfo.setOnClickListener(new View.OnClickListener() {
+            ibInfoProvider.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Helper.viewFAQ(v.getContext(), 92);
@@ -6405,7 +6426,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             protected void onException(Bundle args, Throwable ex) {
                                 Log.unexpectedError(getParentFragmentManager(), ex);
                             }
-                        }.execute(FragmentDialogJunk.this, getArguments(), "junk");
+                        }.execute(FragmentDialogJunk.this, args, "junk:rules");
                     } else {
                         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
                         lbm.sendBroadcast(
@@ -6419,7 +6440,80 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
 
+            cbJunkFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    args.putBoolean("filter", isChecked);
+
+                    new SimpleTask<Void>() {
+                        @Override
+                        protected Void onExecute(Context context, Bundle args) throws Throwable {
+                            long account = args.getLong("account");
+                            boolean filter = args.getBoolean("filter");
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+                            DB db = DB.getInstance(context);
+                            EntityFolder junk = db.folder().getFolderByType(account, EntityFolder.JUNK);
+                            if (junk != null) {
+                                db.folder().setFolderAutoClassify(junk.id, filter);
+                                prefs.edit().putBoolean("classification", true).apply();
+                            }
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        }
+                    }.execute(FragmentDialogJunk.this, args, "junk:filter");
+                }
+            });
+
+            ibInfoFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(v.getContext(), 163);
+                }
+            });
+
             grpInJunk.setVisibility(inJunk ? View.GONE : View.VISIBLE);
+
+            new SimpleTask<Boolean>() {
+                @Override
+                protected void onPreExecute(Bundle args) {
+                    cbJunkFilter.setEnabled(false);
+                }
+
+                @Override
+                protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                    long account = args.getLong("account");
+
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    boolean classification = prefs.getBoolean("classification", false);
+
+                    DB db = DB.getInstance(context);
+                    EntityFolder junk = db.folder().getFolderByType(account, EntityFolder.JUNK);
+                    if (junk == null)
+                        return false;
+
+                    return classification && junk.auto_classify;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Boolean filter) {
+                    if (filter != null) {
+                        cbJunkFilter.setChecked(filter);
+                        cbJunkFilter.setEnabled(true);
+                    }
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(FragmentDialogJunk.this, args, "junk:filter");
 
             return new AlertDialog.Builder(getContext())
                     .setView(view)

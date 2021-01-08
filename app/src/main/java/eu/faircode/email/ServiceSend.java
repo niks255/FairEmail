@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.AlarmManager;
@@ -61,8 +61,6 @@ import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
 public class ServiceSend extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private TupleUnsent lastUnsent = null;
@@ -706,10 +704,12 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     }
 
     static void boot(final Context context) {
-        Thread thread = new Thread(new Runnable() {
+        executor.submit(new Runnable() {
             @Override
             public void run() {
                 try {
+                    EntityLog.log(context, "Boot send service");
+
                     DB db = DB.getInstance(context);
 
                     EntityFolder outbox = db.folder().getOutbox();
@@ -726,9 +726,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                     Log.e(ex);
                 }
             }
-        }, "send:boot");
-        thread.setPriority(THREAD_PRIORITY_BACKGROUND);
-        thread.start();
+        });
     }
 
     static void start(Context context) {

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.accounts.AccountsException;
@@ -216,18 +216,17 @@ public class ConnectionHelper {
             return null;
         }
 
-        Network active = null;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
-            active = cm.getActiveNetwork();
-        if (active == null) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             NetworkInfo ani = cm.getActiveNetworkInfo();
-            if (ani == null || !ani.isConnected()) {
-                Log.i("isMetered: no/connected active network info=" + ani);
+            if (ani == null || !ani.isConnected())
                 return null;
-            }
-            boolean metered = cm.isActiveNetworkMetered();
-            Log.i("isMetered: active network metered=" + metered);
-            return metered;
+            return cm.isActiveNetworkMetered();
+        }
+
+        Network active = cm.getActiveNetwork();
+        if (active == null) {
+            Log.i("isMetered: no active network");
+            return null;
         }
 
         // onLost [... state: SUSPENDED/SUSPENDED ... available: true]
@@ -266,7 +265,10 @@ public class ConnectionHelper {
             return null;
         }
 
-        if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean standalone_vpn = prefs.getBoolean("standalone_vpn", false);
+        if (standalone_vpn ||
+                caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
             // NET_CAPABILITY_NOT_METERED is unreliable on older Android versions
             boolean metered = cm.isActiveNetworkMetered();
             Log.i("isMetered: active not VPN metered=" + metered);
@@ -326,12 +328,8 @@ public class ConnectionHelper {
             }
         }
 
-        if (!underlying) {
-            // VPN-only network via USB is possible
-            boolean metered = cm.isActiveNetworkMetered();
-            Log.i("isMetered: no underlying network metered=" + metered);
-            return metered;
-        }
+        if (!underlying)
+            return null;
 
         // Assume metered
         Log.i("isMetered: underlying assume metered");

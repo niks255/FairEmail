@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityManager;
@@ -1018,6 +1018,26 @@ public class Log {
              */
             return false;
 
+        if (ex instanceof NullPointerException) {
+            for (StackTraceElement ste : stack)
+                if ("android.app.job.IJobCallback$Stub$Proxy".equals(ste.getClassName()) &&
+                        "jobFinished".equals(ste.getMethodName()))
+                    return false;
+            /*
+                java.lang.NullPointerException: Attempt to invoke virtual method 'int com.android.server.job.controllers.JobStatus.getUid()' on a null object reference
+                  at android.os.Parcel.readException(Parcel.java:1605)
+                  at android.os.Parcel.readException(Parcel.java:1552)
+                  at android.app.job.IJobCallback$Stub$Proxy.jobFinished(IJobCallback.java:167)
+                  at android.app.job.JobService$JobHandler.handleMessage(JobService.java:147)
+                  at android.os.Handler.dispatchMessage(Handler.java:111)
+                  at android.os.Looper.loop(Looper.java:207)
+                  at android.app.ActivityThread.main(ActivityThread.java:5697)
+                  at java.lang.reflect.Method.invoke(Native Method)
+                  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:905)
+                  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:766)
+             */
+        }
+
         if (ex instanceof IllegalStateException &&
                 stack.length > 0 &&
                 "android.database.sqlite.SQLiteSession".equals(stack[0].getClassName()) &&
@@ -1189,7 +1209,7 @@ public class Log {
         }
     }
 
-    static EntityMessage getDebugInfo(Context context, int title, Throwable ex, String log) throws IOException {
+    static EntityMessage getDebugInfo(Context context, int title, Throwable ex, String log) throws IOException, JSONException {
         StringBuilder sb = new StringBuilder();
         sb.append(context.getString(title)).append("\n\n\n\n");
         sb.append(getAppInfo(context));
@@ -1244,6 +1264,8 @@ public class Log {
             attachLogcat(context, draft.id, 6);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 attachNotificationInfo(context, draft.id, 7);
+            if (MessageClassifier.isEnabled(context))
+                attachClassifierData(context, draft.id, 8);
 
             EntityOperation.queue(context, draft, EntityOperation.ADD);
 
@@ -1756,6 +1778,27 @@ public class Log {
         }
 
         db.attachment().setDownloaded(attachment.id, size);
+    }
+
+    private static void attachClassifierData(Context context, long id, int sequence) throws IOException, JSONException {
+        DB db = DB.getInstance(context);
+
+        EntityAttachment attachment = new EntityAttachment();
+        attachment.message = id;
+        attachment.sequence = sequence;
+        attachment.name = "classifier.json";
+        attachment.type = "application/json";
+        attachment.disposition = Part.ATTACHMENT;
+        attachment.size = null;
+        attachment.progress = 0;
+        attachment.id = db.attachment().insertAttachment(attachment);
+
+        MessageClassifier.save(context);
+        File source = MessageClassifier.getFile(context);
+        File target = attachment.getFile(context);
+        Helper.copy(source, target);
+
+        db.attachment().setDownloaded(attachment.id, target.length());
     }
 
     private static int write(OutputStream os, String text) throws IOException {

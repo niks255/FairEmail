@@ -16,12 +16,13 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -32,7 +33,6 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -57,47 +57,54 @@ public class WorkerFts extends Worker {
 
         try {
             Log.i("FTS index");
+            Context context = getApplicationContext();
 
             int indexed = 0;
             List<Long> ids = new ArrayList<>(INDEX_BATCH_SIZE);
-            DB db = DB.getInstance(getApplicationContext());
-            SQLiteDatabase sdb = FtsDbHelper.getInstance(getApplicationContext());
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            DB db = DB.getInstance(context);
+            SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             try (Cursor cursor = db.message().getMessageFts()) {
-                while (cursor.moveToNext()) {
-                    boolean fts = prefs.getBoolean("fts", false);
-                    if (!fts)
-                        break;
+                while (cursor.moveToNext())
+                    try {
+                        long id = cursor.getLong(0);
+                        Log.i("FTS index=" + id);
 
-                    long id = cursor.getLong(0);
-                    EntityMessage message = db.message().getMessage(id);
-                    if (message != null)
-                        try {
-                            Log.i("FTS index=" + message.id);
+                        ids.add(id);
 
-                            File file = message.getFile(getApplicationContext());
-                            String text = HtmlHelper.getFullText(file);
-
-                            try {
-                                sdb.beginTransaction();
-                                FtsDbHelper.insert(sdb, message, text);
-                                sdb.setTransactionSuccessful();
-                            } finally {
-                                sdb.endTransaction();
-                            }
-
-                            indexed++;
-
-                            ids.add(id);
-                            if (ids.size() > INDEX_BATCH_SIZE)
-                                markIndexed(db, ids);
-                        } catch (Throwable ex) {
-                            if (ex instanceof FileNotFoundException ||
-                                    ex instanceof OutOfMemoryError)
-                                ids.add(id);
-                            Log.e(ex);
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message == null) {
+                            Log.i("FTS gone");
+                            continue;
                         }
-                }
+
+                        File file = message.getFile(context);
+                        String text = HtmlHelper.getFullText(file);
+                        if (TextUtils.isEmpty(text)) {
+                            Log.i("FTS empty");
+                            continue;
+                        }
+
+                        boolean fts = prefs.getBoolean("fts", false);
+                        if (!fts)
+                            break;
+
+                        try {
+                            sdb.beginTransaction();
+                            FtsDbHelper.insert(sdb, message, text);
+                            sdb.setTransactionSuccessful();
+                        } finally {
+                            sdb.endTransaction();
+                        }
+
+                        indexed++;
+
+                        if (ids.size() > INDEX_BATCH_SIZE)
+                            markIndexed(db, ids);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
                 markIndexed(db, ids);
             }
 

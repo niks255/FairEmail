@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import androidx.lifecycle.LiveData;
@@ -59,16 +59,24 @@ public interface DaoRule {
     @Update
     int updateRule(EntityRule rule);
 
-    @Query("UPDATE rule SET folder = :folder WHERE id = :id AND NOT (folder IS :folder)")
+    @Query("UPDATE rule" +
+            " SET folder = :folder" +
+            " WHERE id = :id AND NOT (folder IS :folder)")
     int setRuleFolder(long id, long folder);
 
-    @Query("UPDATE rule SET enabled = :enabled WHERE id = :id AND NOT (enabled IS :enabled)")
+    @Query("UPDATE rule" +
+            " SET enabled = :enabled" +
+            " WHERE id = :id AND NOT (enabled IS :enabled)")
     int setRuleEnabled(long id, boolean enabled);
 
-    @Query("UPDATE rule SET applied = applied + 1 WHERE id = :id")
-    int applyRule(long id);
+    @Query("UPDATE rule" +
+            " SET applied = applied + 1, last_applied = :time" +
+            " WHERE id = :id")
+    int applyRule(long id, long time);
 
-    @Query("UPDATE rule SET applied = 0 WHERE id = :id AND NOT (applied IS 0)")
+    @Query("UPDATE rule" +
+            " SET applied = 0, last_applied = NULL" +
+            " WHERE id = :id AND NOT (applied IS 0)")
     int resetRule(long id);
 
     @Query("DELETE FROM rule WHERE id = :id")

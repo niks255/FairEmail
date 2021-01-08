@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import androidx.lifecycle.LiveData;
@@ -166,6 +166,7 @@ public interface DaoFolder {
 
     @Query("SELECT * FROM folder" +
             " WHERE folder.account = :account" +
+            " AND folder.selectable" +
             " AND folder.synchronize")
     List<EntityFolder> getSynchronizingFolders(long account);
 
@@ -286,6 +287,7 @@ public interface DaoFolder {
             ", poll = :poll" +
             ", poll_factor = :poll_factor" +
             ", download = :download" +
+            ", auto_classify = :auto_classify" +
             ", `sync_days` = :sync_days" +
             ", `keep_days` = :keep_days" +
             ", auto_delete = :auto_delete" +
@@ -293,7 +295,7 @@ public interface DaoFolder {
     int setFolderProperties(
             long id, String rename,
             String display, Integer color, boolean unified, boolean navigation, boolean notify, boolean hide,
-            boolean synchronize, boolean poll, int poll_factor, boolean download,
+            boolean synchronize, boolean poll, int poll_factor, boolean download, boolean auto_classify,
             int sync_days, int keep_days, boolean auto_delete);
 
     @Query("UPDATE folder" +
@@ -341,6 +343,9 @@ public interface DaoFolder {
 
     @Query("UPDATE folder SET poll_count = :count WHERE id = :id AND NOT (poll_count IS :count)")
     int setFolderPollCount(long id, int count);
+
+    @Query("UPDATE folder SET auto_classify = :auto_classify WHERE id = :id AND NOT (auto_classify IS :auto_classify)")
+    int setFolderAutoClassify(long id, boolean auto_classify);
 
     @Query("DELETE FROM folder WHERE id = :id")
     void deleteFolder(long id);

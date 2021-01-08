@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.animation.ObjectAnimator;
@@ -391,8 +391,7 @@ public class FragmentAccounts extends FragmentBase {
                             EntityAccount account = db.account().getAccount(folder.account);
                             if (account != null && !"connected".equals(account.state)) {
                                 now = false;
-                                if (enabled && !account.ondemand &&
-                                        (pollInterval == 0 || account.poll_exempted))
+                                if (!account.isTransient(context))
                                     force = true;
                             }
                         }

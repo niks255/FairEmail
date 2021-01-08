@@ -3270,6 +3270,9 @@ public class IMAPProtocol extends Protocol {
 	boolean done = false;		// done reading responses?
 	notifyResponseHandlers(responses);
 
+	if (r.isUnTagged() && r.isOK()) // Still here
+		idleAbort();
+
 	if (r.isBYE()) // shouldn't wait for command completion response
 	    done = true;
 

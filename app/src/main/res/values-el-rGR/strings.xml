@@ -77,6 +77,8 @@
     <string name="title_block_sender_hint">         Ο  αποκλεισμός ενός αποστολέα θα δημιουργήσει έναν κανόνα ο οποίος αυτόματα θα μετακινεί τα μελλοντικά μηνύματα στον φάκελο των ανεπιθύμητων.
         Η δημιουργία και χρήση κανόνων είναι μια δυνατότητα της έκδοσης Pro.
     </string>
+    <string name="title_junk_filter">Χρήση τοπικού φίλτρου ανεπιθ. αλληλογραφίας</string>
+    <string name="title_junk_filter_hint">Αυτό μπορεί να αυξήσει τη χρήση της μπαταρίας και να σημάνει εσφαλμένα μηνύματα ως spam</string>
     <string name="title_notification_sending">Αποστολή μηνυμάτων</string>
     <string name="title_notification_waiting">Αναμονή για την κατάλληλη σύνδεση</string>
     <string name="title_notification_idle">Σε αδράνεια</string>
@@ -131,6 +133,7 @@
     <string name="title_setup_wizard_remark">\"Πίσω\" για να πάτε στα εισερχόμενα</string>
     <string name="title_setup_oauth_permission">Ο πάροχος ηλ. ταχυδρομείου έχει εγκρίνει OAuth μόνον για τις επίσημες εφαρμογές</string>
     <string name="title_setup_other">Άλλος πάροχος</string>
+    <string name="title_setup_pop3">Λογαριασμός POP3</string>
     <string name="title_setup_gmail_support">Η εξουσιοδότηση λογαριασμών Google θα λειτουργήσει μόνο σε επίσημες εκδόσεις διότι το Android ελέγχει την υπογραφή της εφαρμογής</string>
     <string name="title_setup_gmail_rationale">Παρακαλώ, παραχωρήστε τις απαιτούμενες άδειες για την επιλογή ενός λογαριασμού και την ανάγνωση του ονόματός σας</string>
     <string name="title_setup_gmail_permissions">Η Google θα ζητήσει άδειες που αφορούν στην ανάγνωση, σύνταξη, αποστολή και οριστική διαγραφή όλων των μηνυμάτων σας. Το FairEmail δεν θα διαγράψει ποτέ τα μηνύματά σας χωρίς τη ρητή συγκατάθεσή σας.</string>
@@ -217,8 +220,8 @@
     <string name="title_setup_defaults">Επαναφορά προεπιλογών</string>
     <string name="title_setup_reset_questions">Επαναφορά ερωτήσεων</string>
     <string name="title_advanced_hint_title">Πιο προηγμένες επιλογές</string>
-    <string name="title_advanced_hint_message">Τώρα περιηγείστε στις πιο προχωρημένες ρυθμίσεις.
-        Όλες οι επιλογές έχουν τις πιο συνηθισμένες τυπικές τιμές, οι οποίες μπορούν να αλλάξουν εάν έχετε μία διαφορετική προτίμηση.
+    <string name="title_advanced_hint_message">        Τώρα περιηγείστε στις πιο προχωρημένες ρυθμίσεις.
+        Όλες οι επιλογές έχουν τις πιο συνηθισμένες τυπικές τιμές, οι οποίες μπορούν, αλλά δεν χρειάζεται να αλλάξουν, εάν έχετε μία διαφορετική προτίμηση.
     </string>
     <string name="title_advanced_section_main">Κύριες</string>
     <string name="title_advanced_section_synchronize">Λήψη</string>
@@ -246,7 +249,6 @@
     <string name="title_advanced_subscriptions">Διαχείριση συνδρομών σε φακέλους</string>
     <string name="title_advanced_sync_subscribed">Αυτόματος συγχρονισμός των φακέλων με συνδρομή</string>
     <string name="title_advanced_check_mx">Έλεγχος διευθύνσεων των αποστολέων κατά τον συγχρονισμό μηνυμάτων</string>
-    <string name="title_advanced_check_reply">Έλεγχος διευθύνσεων των απαντήσεων κατά τον συγχρονισμό μηνυμάτων</string>
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
     <string name="title_advanced_keyboard">Εμφάνιση του πληκτρολογίου από προεπιλογή</string>
     <string name="title_advanced_keyboard_no_fullscreen">Να μην προβάλλεται το πληκτρολόγιο σε πλήρη οθόνη</string>
@@ -439,6 +441,7 @@
     <string name="title_advanced_language_detection">Αναγνώριση της γλώσσας του μηνύματος</string>
     <string name="title_advanced_fts">Κατασκευή ευρετηρίου αναζήτησης</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d μηνύματα ευρετηριασμένα (%3$s)</string>
+    <string name="title_advanced_classification">Ταξινόμηση μηνυμάτων</string>
     <string name="title_advanced_language">Γλώσσα</string>
     <string name="title_advanced_language_system">Σύστημα</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
@@ -465,7 +468,6 @@
     <string name="title_advanced_sync_folders_hint">Αν απενεργοποιηθεί, θα μειωθεί κάπως η χρήση δεδομένων και μπαταρίας, αλλά θα απενεργοποιηθεί και ο συγχρονισμός της λίστας των φακέλων επίσης</string>
     <string name="title_advanced_lookup_mx_hint">Ελέγχει αν υπάρχουν καταγραφές DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Η επιλογή αυτή θα επιβραδύνει τον συγχρονισμό των μηνυμάτων</string>
-    <string name="title_advanced_check_reply_hint">Ελέγχει αν το το όνομα τομέα του αποστολέα και οι διευθύνσεις απάντησης είναι ίδια</string>
     <string name="title_advanced_suggest_local_hint">Επιπρόσθετα στις παρεχόμενες από το Android επαφές, θα αποθηκεύονται πληροφορίες επαφών για πρόσφατα απεσταλμένα ή ειλημμένα μηνύματα, μόνον εφόσον οι σχετικές δυνατότητες έχουν ενεργοποιηθεί.</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
@@ -670,6 +672,7 @@
     <string name="title_poll_folder">Περιοδικός έλεγχος αντί για συνεχής συγχρονισμός</string>
     <string name="title_download_folder">Αυτόματο κατέβασμα των κειμένων των μηνυμάτων και των συνημμένων</string>
     <string name="title_notify_folder">Να ειδοποιούμαι για νέα μηνύματα</string>
+    <string name="title_auto_classify">Αυτόματη μετακίνηση ταξινομημένων μηνυμάτων</string>
     <string name="title_sync_days">Συγχρονισμός μηνυμάτων (ημέρες)</string>
     <string name="title_sync_days_remark">Αν αυξηθεί η τιμή αυτή, θα αυξηθεί η χρήση μπαταρίας και δεδομένων</string>
     <string name="title_keep_days">Διατήρηση μηνυμάτων (ημέρες)</string>
@@ -701,7 +704,7 @@
     <string name="title_folder_user_only">Φάκελοι χρήστη μόνον</string>
     <string name="title_folder_primary">Φάκελοι κύριου λογαριασμού</string>
     <string name="title_folders_unified">Φάκελοι ενοποιημένων εισερχομένων</string>
-    <string name="title_folder_local_drafts" comment="title_folder_local_drafts&#10;A local drafts folder will be used when there is no drafts folder on the email server">Τοπικά πρόχειρα</string>
+    <string name="title_folder_local_drafts">Τοπικά πρόχειρα</string>
     <string name="title_no_folders">Κανείς φάκελος</string>
     <string name="title_no_messages">Κανένα μήνυμα</string>
     <string name="title_filters_active">Ένα ή περισσότερα φίλτρα ενεργά</string>
@@ -1127,6 +1130,7 @@
     <string name="title_legend_encrypted">Είναι κρυπτογραφημένο</string>
     <string name="title_legend_auth">Η ταυτοποίηση απέτυχε</string>
     <string name="title_legend_found">Βρέθηκε</string>
+    <string name="title_legend_classified">Ταξινομήθηκε αυτόματα</string>
     <string name="title_legend_snoozed">Έχει τεθεί σε αναβολή</string>
     <string name="title_legend_browsed">Έχει διέλθει από φυλλομέτρηση ή αναζήτηση</string>
     <string name="title_legend_answered">Έχει απαντηθεί</string>
@@ -1194,6 +1198,7 @@
     <string name="title_hint_message_selection">Πατήστε παρατεταμένα σε ένα μήνυμα για να αρχίσετε να επιλέγετε πολλαπλά μηνύματα. Συνεχίστε το πάτημα και σύρετε προς τα πάνω ή κάτω για να επιλέξετε περισσότερα μηνύματα</string>
     <string name="title_hint_important">Σημαντικό</string>
     <string name="title_hint_sync">Το κατέβασμα των μηνυμάτων μπορεί να διαρκέσει κάποιο διάστημα, ανάλογα με την ταχύτητα του παρόχου, της σύνδεσης, της συσκευής και τον αριθμό των μηνυμάτων. Ενόσω κατεβαίνουν τα μηνύματα, η εφαρμογή ίσως να ανταποκρίνεται πιο αργά.</string>
+    <string name="title_hint_sync_note">Από προεπιλογή, δεν θα κατέβουν όλα τα μηνύματα, για περιορισμό αποθηκευτικού χώρου και χρήσης μπαταρίας και δεδομένων. Μπορείτε να αλλάξετε αυτή τη ρύθμιση, με παρατεταμένο πάτημα πάνω σε έναν φάκελο στη λίστα φακέλων και επιλέγοντας «Συγχρονισμός περισσοτέρων».</string>
     <string name="title_hint_battery">Καθότι το FairEmail πάντα λαμβάνει μηνύματα από προεπιλογή, το Android θα αναφέρει το FairEmail ως μονίμως ενεργό. Αυτό μπορεί να δώσει την εντύπωση ότι το FairEmail διαρκώς καταναλώνει μπαταρία, παρόλο που, στην πραγματικότητα, δεν συμβαίνει κάτι τέτοιο.</string>
     <string name="title_hint_reformat">Από προεπιλογή, το FairEmail αναμορφοποιεί τα μηνύματα για λόγους ιδιωτικότητας και ασφάλειας. Για να δείτε το αρχικό μήνυμα, πατήστε στο εικονίδιο \"πλήρης οθόνη\" πάνω από το κείμενο του μηνύματος.</string>
     <string name="title_hint_design">Ο σχεδιασμός είναι εστιασμένος στην αυξημένη λειτουργικότητα χωρίς περισπάσεις. Προσφέρονται πολλές επιλογές για εξατομικευμένη εμφάνιση αλλά, παρακαλούμε, λάβετε υπόψη πως είναι αδύνατο να μένουν οι πάντες πάντα ευχαριστημένοι.</string>

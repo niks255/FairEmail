@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.database.Cursor;
@@ -218,7 +218,6 @@ public interface DaoMessage {
             " AND message.thread = :thread" +
             " AND (:id IS NULL OR message.id = :id)" +
             " AND (NOT :filter_archive" +
-            "  OR (NOT message.ui_seen AND NOT message.ui_hide)" +
             "  OR folder.type <> '" + EntityFolder.ARCHIVE + "'" +
             "  OR NOT EXISTS" +
             "   (SELECT * FROM message m" +
@@ -750,9 +749,6 @@ public interface DaoMessage {
     @Query("UPDATE message SET ui_unsnoozed = :unsnoozed WHERE id = :id AND NOT (ui_unsnoozed IS :unsnoozed)")
     int setMessageUnsnoozed(long id, boolean unsnoozed);
 
-    @Query("UPDATE message SET uidl = :uidl WHERE id = :id AND NOT (uidl IS :uidl)")
-    int setMessageUidl(long id, String uidl);
-
     @Query("UPDATE message SET notifying = 0 WHERE NOT (notifying IS 0)")
     int clearNotifyingMessages();
 
@@ -771,11 +767,6 @@ public interface DaoMessage {
             " WHERE folder = :folder" +
             " AND uid = :uid")
     int deleteMessage(long folder, long uid);
-
-    @Query("DELETE FROM message" +
-            " WHERE folder = :folder" +
-            " AND msgid = :msgid")
-    int deleteMessage(long folder, String msgid);
 
     @Query("DELETE FROM message" +
             " WHERE folder = :folder" +
@@ -799,7 +790,13 @@ public interface DaoMessage {
             " AND NOT EXISTS" +
             "  (SELECT * FROM operation" +
             "  WHERE operation.message = message.id" +
-            "  AND operation.name = '" + EntityOperation.ADD + "')")
+            "  AND operation.name = '" + EntityOperation.ADD + "')"+
+            " AND NOT EXISTS" +
+            "  (SELECT * FROM operation o" +
+            "  JOIN message m ON m.id = o.message" +
+            "  WHERE o.account = message.account" +
+            "  AND o.name = '" + EntityOperation.MOVE + "'" +
+            "  AND m.msgid = message.msgid)")
     int deleteOrphans(long folder);
 
     @Query("SELECT id FROM message" +

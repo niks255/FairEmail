@@ -76,6 +76,8 @@
     <string name="title_block_domain">Estä lähettäjän verkkotunnus</string>
     <string name="title_block_sender_hint">Lähettäjän estäminen luo säännön viestien käsittelemiseksi roskapostina.
         Sääntöjen luominen ja käyttö ovat pro-ominaisuuksia.    </string>
+    <string name="title_junk_filter">Käytä paikallista roskapostisuodinta</string>
+    <string name="title_junk_filter_hint">Tämä voi lisätä akun käyttöä ja merkitä viestit virheellisesti roskapostiksi</string>
     <string name="title_notification_sending">Lähetetään viestejä</string>
     <string name="title_notification_waiting">Odotetaan sopivaa yhteyttä</string>
     <string name="title_notification_idle">Toimeton</string>
@@ -130,6 +132,7 @@
     <string name="title_setup_wizard_remark">Mene \'takaisin\' palataksesi saapuneet-kansioon</string>
     <string name="title_setup_oauth_permission">Sähköpostipalveluntarjoaja on hyväksynyt OAuthin vain virallisille sovellusversioille</string>
     <string name="title_setup_other">Muu palveluntarjoaja</string>
+    <string name="title_setup_pop3">POP3-tili</string>
     <string name="title_setup_gmail_support">Google-tilien valtuutus toimii vain virallisissa versioissa, koska Android tarkistaa sovelluksen allekirjoituksen</string>
     <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
     <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
@@ -165,7 +168,7 @@
     <string name="title_setup_permissions_remark">Laitteen yhteystietoihin pääsemiseksi (valinnainen)</string>
     <string name="title_setup_doze">Akun käytön optimoinnin asettaminen</string>
     <string name="title_setup_doze_remark">Sähköpostien vastaanottoon luotettavasti</string>
-    <string name="title_setup_doze_hint">Vaikka tämä saattaa kuulostaa ristiriitaiselta, akun optimointi vähentää akun käyttöä</string>
+    <string name="title_setup_doze_hint">Vaikka tämä saattaa kuulostaa ristiriitaiselta, akun käytön optimoinnin poistaminen käytöstä vähentää akun käyttöä</string>
     <string name="title_setup_doze_instructions">Seuraavassa valintaikkunassa valitse ylhäältä ”Kaikki sovellukset”, valitse tämä sovellus ja valitse sekä vahvista ”Älä optimoi”</string>
     <string name="title_setup_doze_battery">Suuri akun käyttö?</string>
     <string name="title_setup_doze_stopped">Keskeytyikö synkronointi?</string>
@@ -217,7 +220,8 @@
     <string name="title_setup_reset_questions">Nollaa kysymykset</string>
     <string name="title_advanced_hint_title">Edistyneemmät asetukset</string>
     <string name="title_advanced_hint_message">Olet siirtymässä edistyneempiin asetuksiin.
-    Kaikilla asetuksilla on yleisesti käytetyt oletusarvot. Arvoja voi halutessaan vaihtaa.    </string>
+        Kaikilla asetuksilla on yleisesti käytetyt oletusarvot. Arvoja voi halutessaan vaihtaa.
+    </string>
     <string name="title_advanced_section_main">Yleiset</string>
     <string name="title_advanced_section_synchronize">Vastaanottaminen</string>
     <string name="title_advanced_section_send">Lähettäminen</string>
@@ -244,7 +248,6 @@
     <string name="title_advanced_subscriptions">Hallinnoi tilattuja kansioita</string>
     <string name="title_advanced_sync_subscribed">Synkronoi tilatut kansiot automaattisesti</string>
     <string name="title_advanced_check_mx">Tarkista lähettäjien sähköpostiosoitteet viestejä synkronoitaessa</string>
-    <string name="title_advanced_check_reply">Tarkista vastaussähköpostiosoitteet viestejä synkronoitaessa</string>
     <string name="title_advanced_tune_keep_alive">Säädä ylläpitokyselyn aikaväli automaattisesti</string>
     <string name="title_advanced_keyboard">Näytä näppäimistö oletuksena</string>
     <string name="title_advanced_keyboard_no_fullscreen">Estä koko näytön näppäimistö</string>
@@ -437,11 +440,12 @@
     <string name="title_advanced_language_detection">Tunnista tekstin kieli</string>
     <string name="title_advanced_fts">Rakenna haun indeksi</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d viestiä indeksoitu (%3$s)</string>
+    <string name="title_advanced_classification">Luokittele viestit</string>
     <string name="title_advanced_language">Kieli</string>
     <string name="title_advanced_language_system">Järjestelmä</string>
     <string name="title_advanced_watchdog">Tarkista väliajoin, että FairEmail on edelleen aktiivinen</string>
     <string name="title_advanced_optimize">Optimoi automaattisesti</string>
-    <string name="title_advanced_updates">Tarkista GitHub päivitykset</string>
+    <string name="title_advanced_updates">Tarkista GitHub-päivitykset</string>
     <string name="title_advanced_experiments">Käytä kokeellisia ominaisuuksia</string>
     <string name="title_advanced_query_threads">Rajoita rinnakkaisia tietokantayhteyksiä</string>
     <string name="title_advanced_crash_reports">Lähetä virheraportit</string>
@@ -464,7 +468,6 @@
     <string name="title_advanced_sync_folders_hint">Tämän kytkeminen pois vähentää datan ja akun käyttöä, mutta kytkee pois myös kansiolistan päivittymisen</string>
     <string name="title_advanced_lookup_mx_hint">Tämä tarkistaa löytyykö DNS MX-tietoja</string>
     <string name="title_advanced_sync_delay_hint">Tämä hidastaa viestien synkronointia</string>
-    <string name="title_advanced_check_reply_hint">Tämä tarkistaa, ovatko lähetys- ja vastaussähköpostiosoitteiden verkkotunnukset samat</string>
     <string name="title_advanced_suggest_local_hint">Androidin yhteystietojen lisäksi. Yhteystietoja tallennetaan uusista lähetetyistä ja vastaanotetuista viesteistä vain, jos asetus on päällä.</string>
     <string name="title_advanced_usenet_hint">Lisää \'--\' tekstin ja allekirjoituksen väliin</string>
     <string name="title_advanced_send_reminders_hint">Näytä varoitus, kun viestin teksti tai aihe on tyhjä tai kun liite puuttuu</string>
@@ -669,6 +672,7 @@
     <string name="title_poll_folder">Tarkista väliajoin jatkuvan synkronoinnin sijaan</string>
     <string name="title_download_folder">Lataa viestien tekstit ja liitteet automaattisesti</string>
     <string name="title_notify_folder">Ilmoita uusista viesteistä</string>
+    <string name="title_auto_classify">Siirrä luokitellut viestit automaattisesti</string>
     <string name="title_sync_days">Synkronoi viestit (päivää)</string>
     <string name="title_sync_days_remark">Tämän arvon suurentaminen lisää akun ja datan käyttöä</string>
     <string name="title_keep_days">Viestien säilyttäminen (päivää)</string>
@@ -700,6 +704,7 @@
     <string name="title_folder_user_only">Vain käyttäjän kansiot</string>
     <string name="title_folder_primary">Kansion ensisijainen tili</string>
     <string name="title_folders_unified">Yhdistetyn saapuneet-kansion kansiot</string>
+    <string name="title_folder_local_drafts">Paikalliset luonnokset</string>
     <string name="title_no_folders">Ei kansioita</string>
     <string name="title_no_messages">Ei viestejä</string>
     <string name="title_filters_active">Yksi tai useampi suodatin aktiivinen</string>
@@ -728,7 +733,7 @@
     <string name="title_event">Lisää kalenteriin</string>
     <string name="title_pin">Lisää pikakuvake</string>
     <string name="title_print">Tulosta</string>
-    <string name="title_print_header">Tulosteen otsikko</string>
+    <string name="title_print_header">Tulosta tunnistetiedot</string>
     <string name="title_show_headers">Näytä tunnistetiedot</string>
     <string name="title_raw_save">Tallenna raakaviesti</string>
     <string name="title_raw_send">Lähetä liitteenä</string>
@@ -1061,11 +1066,11 @@
     <string name="title_rule_condition_missing">Ehdot puuttuvat</string>
     <string name="title_rule_folder_missing">Kansio puuttuu</string>
     <string name="title_rule_identity_missing">Identiteetti puuttuu</string>
-    <string name="title_rule_answer_missing">Malli puuttuu</string>
+    <string name="title_rule_answer_missing">Viestipohja puuttuu</string>
     <string name="title_rule_keyword_missing">Avainsana puuttuu</string>
     <string name="title_rule_automation_hint">Tämä lähettää intentin \'%1$s\' extradatalla \'%2$s\'</string>
     <string name="title_rule_execute">Suorita nyt</string>
-    <string name="title_rule_applied">Täsmäävät viestit: %1$d</string>
+    <string name="title_rule_applied">Ehtoja vastaavat viestit: %1$d</string>
     <string name="title_rule_check">Tarkista</string>
     <string name="title_rule_no_headers">Tunnistetietojen ehtoja ei voida tarkistaa</string>
     <string name="title_rule_matched">Ehtoja vastaavat viestit</string>
@@ -1125,6 +1130,7 @@
     <string name="title_legend_encrypted">Salattu</string>
     <string name="title_legend_auth">Tunnistautuminen epäonnistui</string>
     <string name="title_legend_found">Löytynyt</string>
+    <string name="title_legend_classified">Automaattisesti luokiteltu</string>
     <string name="title_legend_snoozed">Torkutettu</string>
     <string name="title_legend_browsed">Selattu tai haettu</string>
     <string name="title_legend_answered">Vastattu</string>
@@ -1192,6 +1198,7 @@
     <string name="title_hint_message_selection">Paina viestiä pitkään aloittaaksesi useamman viestin valinnan; Paina ja vieritä ylös tai alas valitaksesi lisää viestejä</string>
     <string name="title_hint_important">Tärkeä</string>
     <string name="title_hint_sync">Viestien lataaminen voi kestää riippuen verkkoyhteyden nopeudesta, käytettävästä laitteesta ja viestien lukumäärästä. Viestejä ladatessa sovellus voi toimia normaalia hitaammin.</string>
+    <string name="title_hint_sync_note">Oletuksena kaikkia viestejä ei ladata tallennustilan ja akun käytön sekä tiedonsiirron rajoittamiseksi. Voit muuttaa tätä painamalla kansiota pitkään kansioluettelossa ja valitsemalla \'Synkronoi lisää\'.</string>
     <string name="title_hint_battery">Koska FairEmail vastaanottaa viestit oletusarvoisesti aina, Android ilmoittaa FairEmailin olevan aina aktviininen. Saattaa vaikuttaa, että FairEmail käyttäisi aina akkua, vaikka niin ei olekaan.</string>
     <string name="title_hint_reformat">FairEmail oletusarvoisesti uudelleenmuotoilee viestit yksityisyyden ja turvallisuuden takaamiseksi. Näpäytä koko näytön kuvaketta viestin tekstin yläpuolella nähdäksesi alkuperäisen viestin.</string>
     <string name="title_hint_design">Ulkoasu on tarkoituksella tehty sellaiseksi, ettei se vie huomiota, mutta on hyvin toiminnallinen. Ulkoasun muokkaamiseen on paljon asetuksia, mutta on mahdotonta tehdä kaikki onnelliseksi samaan aikaan.</string>

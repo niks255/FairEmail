@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -393,7 +393,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                                     if (responses.length == 0)
                                         throw new ProtocolException("No response");
                                     if (!responses[responses.length - 1].isOK())
-                                        throw new ProtocolException(responses[responses.length - 1]);
+                                        throw new ProtocolException(
+                                                context.getString(R.string.title_service_auth, responses[responses.length - 1]));
 
                                     List<Integer> msgnums = new ArrayList<>();
                                     for (Response response : responses)

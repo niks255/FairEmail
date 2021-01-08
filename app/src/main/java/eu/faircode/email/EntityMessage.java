@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2020 by Marcel Bokhorst (M66B)
+    Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
 import android.app.AlarmManager;
@@ -136,7 +136,8 @@ public class EntityMessage implements Serializable {
     public Boolean dkim;
     public Boolean spf;
     public Boolean dmarc;
-    public Boolean mx = null;
+    public Boolean mx;
+    public Boolean reply_domain; // differs from 'from'
     public String avatar; // lookup URI from sender
     public String sender; // sort key: from email address
     public Address[] submitter;
@@ -184,6 +185,8 @@ public class EntityMessage implements Serializable {
     public Integer notifying = 0;
     @NonNull
     public Boolean fts = false;
+    @NonNull
+    public Boolean auto_classified = false;
     @NonNull
     public Boolean ui_seen = false;
     @NonNull
@@ -270,6 +273,34 @@ public class EntityMessage implements Serializable {
                 if ("$Forwarded".equalsIgnoreCase(keyword))
                     return true;
         return false;
+    }
+
+    String checkReplyDomain(Context context) {
+        if (from == null || from.length == 0)
+            return null;
+        if (reply == null || reply.length == 0)
+            return null;
+
+        for (Address _reply : reply) {
+            String r = ((InternetAddress) _reply).getAddress();
+            int rat = (r == null ? -1 : r.indexOf('@'));
+            if (rat < 0)
+                continue;
+            String rdomain = DnsHelper.getParentDomain(r.substring(rat + 1));
+
+            for (Address _from : from) {
+                String f = ((InternetAddress) _from).getAddress();
+                int fat = (f == null ? -1 : f.indexOf('@'));
+                if (fat < 0)
+                    continue;
+                String fdomain = DnsHelper.getParentDomain(f.substring(fat + 1));
+
+                if (!rdomain.equalsIgnoreCase(fdomain))
+                    return context.getString(R.string.title_reply_domain, fdomain, rdomain);
+            }
+        }
+
+        return null;
     }
 
     Element getReplyHeader(Context context, Document document, boolean separate, boolean extended) {
@@ -454,6 +485,7 @@ public class EntityMessage implements Serializable {
                     Objects.equals(this.spf, other.spf) &&
                     Objects.equals(this.dmarc, other.dmarc) &&
                     Objects.equals(this.mx, other.mx) &&
+                    Objects.equals(this.reply_domain, other.reply_domain) &&
                     Objects.equals(this.avatar, other.avatar) &&
                     Objects.equals(this.sender, other.sender) &&
                     MessageHelper.equal(this.from, other.from) &&

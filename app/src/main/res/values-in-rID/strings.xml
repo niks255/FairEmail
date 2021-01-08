@@ -116,13 +116,16 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_setup_wizard_remark">Ketuk \'kembali\' untuk membuka kotak masuk</string>
     <string name="title_setup_oauth_permission">Pengelola surel ini telah menerima OAuth hanya untuk versi aplikasi yang resmi saja</string>
     <string name="title_setup_other">Penyedia Lainnya</string>
+    <string name="title_setup_pop3">Akun POP3</string>
     <string name="title_setup_gmail_support">Memberi otorisasi pada akun Google hanya akan berfungsi dalam versi resminya karena Android memeriksa tanda tangan aplikasi.</string>
     <string name="title_setup_gmail_rationale">Mohon berikan izin untuk memilih akun dan membaca nama Anda.</string>
     <string name="title_setup_gmail_permissions">Google akan meminta izin untuk membaca, menulis, mengirim dan menghapus semua email Anda secara permanen. FairEmail tidak akan pernah menghapus pesan tanpa persetujuan tegas dari Anda.</string>
     <string name="title_setup_gmail_drafts">Jika folder draf tidak dapat diakses oleh IMAP, hal ini dapat diperbaiki pada pengaturan label Gmail.</string>
+    <string name="title_setup_gmail_password">Saya ingin mengotorisasi akun dengan kata sandi</string>
     <string name="title_setup_office_remark">Microsoft tidak akan memberikan tipe otorisasi ini untuk akun Outlook, Live, Hotmail, dan lainnya</string>
     <string name="title_setup_office_auth">Kesalahan \'AUTHENTICATE Failed\' bisa disebabkan oleh IMAP/SMTP yang dinon-aktifkan oleh administrator sistem.</string>
     <string name="title_setup_oauth_rationale">Izinkan akses ke akun %1$s Anda</string>
+    <string name="title_setup_oauth_update">Mengotorisasi akun yang sudah ada</string>
     <string name="title_setup_oauth_updated">Ulang kembali otorisasi akun</string>
     <string name="title_setup_oauth_authorize">Perizinan</string>
     <string name="title_setup_select_account">Pilih Akun</string>
@@ -200,7 +203,6 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_setup_defaults">Kembalikan pengaturan standar</string>
     <string name="title_setup_reset_questions">Atur ulang pertanyaan</string>
     <string name="title_advanced_hint_title">Opsi lebih lanjut</string>
-    <string name="title_advanced_hint_message">Anda menavigasi ke opsi yang lebih canggih. Semua opsi biasanya menggunakan nilai standar yang dapat diubah jika Anda memiliki preferensi yang berbeda.</string>
     <string name="title_advanced_section_main">Utama</string>
     <string name="title_advanced_section_synchronize">Menerima</string>
     <string name="title_advanced_section_send">Kirim</string>
@@ -227,7 +229,6 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_advanced_subscriptions">Kelola folder langganan</string>
     <string name="title_advanced_sync_subscribed">Sinkronisasi folder langganan secara otomatis</string>
     <string name="title_advanced_check_mx">Periksa alamat email pengirim di sinkronisasi pesan</string>
-    <string name="title_advanced_check_reply">Periksa alamat email balasan pada sinkronisasi pesan</string>
     <string name="title_advanced_tune_keep_alive">Secara otomatis mengatur interval tetap-hidup</string>
     <string name="title_advanced_keyboard">Tampilkan keyboard secara bawaan</string>
     <string name="title_advanced_keyboard_no_fullscreen">Nonaktifkan keyboard layar penuh</string>
@@ -329,6 +330,7 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_advanced_navbar_colorize">Warnai Navigasi Bar Android</string>
     <string name="title_advanced_parse_classes">Urai Kode Gaya \"Style Sheets\"</string>
     <string name="title_advanced_authentication">Tampilkan peringatan ketika server penerima tidak bisa mengotentikasi pesan</string>
+    <string name="title_advanced_sync_on_launch">Sinkronisasi pada saat memulai aplikasi</string>
     <string name="title_advanced_double_back">Ketuk dua kali untuk keluar</string>
     <string name="title_advanced_pull_refresh">Tarik ke bawah untuk memuat ulang</string>
     <string name="title_advanced_autoscroll">Gulir ke atas saat menerima pesan baru</string>
@@ -418,6 +420,7 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_advanced_language_detection">Deteksi bahasa teks pesan</string>
     <string name="title_advanced_fts">Membangun indeks pencarian</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d pesan terindeks (%3$s)</string>
+    <string name="title_advanced_classification">Klasifikasikan pesan</string>
     <string name="title_advanced_language">Bahasa</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_watchdog">Periksa secara berkala apakah FairEmail masih aktif</string>
@@ -443,7 +446,6 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_advanced_sync_folders_hint">Menonaktifkan ini akan mengurangi penggunaan data dan sedikit baterai, tetapi juga akan menonaktifkan pembaruan daftar folder</string>
     <string name="title_advanced_lookup_mx_hint">Ini akan memeriksa apakah catatan DNS MX ada</string>
     <string name="title_advanced_sync_delay_hint">Ini akan memperlambat sinkronisasi pesan</string>
-    <string name="title_advanced_check_reply_hint">Ini akan memeriksa apakah nama domain dari alamat pengirim dan balasannya sama</string>
     <string name="title_advanced_suggest_local_hint">Selain kontak yang disediakan oleh Android. Data kontak akan disimpan untuk pesan yang baru dikirim atau diterima hanya ketika diaktifkan.</string>
     <string name="title_advanced_usenet_hint">Sisipkan \'-- \' antara teks dan tanda tangan</string>
     <string name="title_advanced_send_reminders_hint">Menampilkan peringatan ketika teks pesan atau subjek kosong atau mungkin ketika lampiran pesan hilang</string>
@@ -560,7 +562,7 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_date_remark">Perubahan akan diterapkan hanya ke pesan baru saja</string>
     <string name="title_related_identity">Tambahkan identitas terkait</string>
     <string name="title_check">Periksa</string>
-    <string name="title_trust">Mempercayai sertifikat server dengan sidik jari% 1 $ s</string>
+    <string name="title_trust">Mempercayai sertifikat server dengan sidik jari %1$s</string>
     <string name="title_no_name">Tidak ada nama</string>
     <string name="title_no_email">Tidak ada alamat surel</string>
     <string name="title_email_invalid">Alamat surel tidak valid: \'%1$s\'</string>
@@ -584,7 +586,7 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_account_delete">Hapus akun ini secara permanen?</string>
     <string name="title_identity_delete">Hapus identitas ini secara permanen?</string>
     <string name="title_edit_html">Sunting dalam HTML</string>
-    <string name="title_sign_key">Kunci tanda tangan:% 1 $ s</string>
+    <string name="title_sign_key">Kunci tanda tangan: %1$s</string>
     <string name="title_last_connected">Terakhir tersambung: %1$s</string>
     <string name="title_backoff_until">Menunggu setelah terjadi kegagalan koneksi sampai: %1$s</string>
     <string name="title_storage_quota">Penggunaan penyimpanan server: %1$s/%2$s</string>
@@ -601,6 +603,8 @@ Akun dan identitas (alias) juga dapat diatur secara manual jika diperlukan. Prot
     <string name="title_synchronize_now">Sinkronkan sekarang</string>
     <string name="title_synchronize_more">Sinkronkan pesan lebih banyak</string>
     <string name="title_synchronize_enabled">Mengsinkronisasikan</string>
+    <string name="title_synchronize_batch_enable">Aktifkan sinkronisasi</string>
+    <string name="title_synchronize_batch_disable">Nonaktifkan sinkronisasi</string>
     <string name="title_delete_local">Hapus pesan di perangkat</string>
     <string name="title_delete_browsed">Hapus histori penjelajahan/pencarian pesan</string>
     <string name="title_empty_trash">Kosongkan sampah</string>
