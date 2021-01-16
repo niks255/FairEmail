@@ -221,7 +221,7 @@
     <string name="title_setup_reset_questions">Επαναφορά ερωτήσεων</string>
     <string name="title_advanced_hint_title">Πιο προηγμένες επιλογές</string>
     <string name="title_advanced_hint_message">        Τώρα περιηγείστε στις πιο προχωρημένες ρυθμίσεις.
-        Όλες οι επιλογές έχουν τις πιο συνηθισμένες τυπικές τιμές, οι οποίες μπορούν, αλλά δεν χρειάζεται να αλλάξουν, εάν έχετε μία διαφορετική προτίμηση.
+        Όλες οι επιλογές έχουν τις πιο συνηθισμένες τυπικές τιμές, τις οποίες δεν χρειάζεται να αλλάξετε εκτός εάν έχετε μία διαφορετική προτίμηση.
     </string>
     <string name="title_advanced_section_main">Κύριες</string>
     <string name="title_advanced_section_synchronize">Λήψη</string>
@@ -308,9 +308,9 @@
     <string name="title_advanced_generated_icons">Να προβάλλονται εικονίδια που δημιουργούνται αυτόματα</string>
     <string name="title_advanced_identicons">Προβολή identicon</string>
     <string name="title_advanced_circular">Στρογγυλεμένα εικονίδια</string>
-    <string name="title_advanced_color_saturation">Κορεσμός</string>
-    <string name="title_advanced_color_value">Φωτεινότητα</string>
-    <string name="title_advanced_color_threshold">Κατώφλι για τον καθορισμό του χρώματος του γράμματος</string>
+    <string name="title_advanced_color_saturation">Κορεσμός: %1$s %%</string>
+    <string name="title_advanced_color_value">Φωτεινότητα: %1$s%%</string>
+    <string name="title_advanced_color_threshold">Κατώφλι για τον καθορισμό του χρώματος του γράμματος: %1$s%%</string>
     <string name="title_advanced_name_email">Να προβάλλονται τα ονόματα και οι διευθύνσεις ηλεκτρονικού ταχυδρομείου</string>
     <string name="title_advanced_replace_name">Να προτιμάται το όνομα της επαφής αντί για το όνομα του αποστολέα</string>
     <string name="title_advanced_distinguish_contacts">Να υπογραμμίζεται ο αποστολέας όταν ο αποστολέας είναι γνωστός ως τοπική επαφή</string>
@@ -442,6 +442,8 @@
     <string name="title_advanced_fts">Κατασκευή ευρετηρίου αναζήτησης</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d μηνύματα ευρετηριασμένα (%3$s)</string>
     <string name="title_advanced_classification">Ταξινόμηση μηνυμάτων</string>
+    <string name="title_advanced_class_min_chance">Ελάχιστη πιθανότητα για ορισμένη ταξινόμηση: %1$s%%</string>
+    <string name="title_advanced_class_min_difference">Ελάχιστη διαφορά για την επόμενη τάξη: %1$s%%</string>
     <string name="title_advanced_language">Γλώσσα</string>
     <string name="title_advanced_language_system">Σύστημα</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
@@ -629,6 +631,7 @@
     <string name="title_synchronize_now">Συγχρονισμός τώρα</string>
     <string name="title_synchronize_subfolders">Υποφάκελοι</string>
     <string name="title_synchronize_more">Συγχρονισμός περισσοτέρων μηνυμάτων</string>
+    <string name="title_synchronize_more_hint">Αυτό έχει ως αποτέλεσμα ένα και μοναδικό κατέβασμα παλαιότερων μηνυμάτων, οπότε δεν θα οδηγήσει σε επιπλέον χρήση μπαταρίας κατά την καθημερινή χρήση</string>
     <string name="title_synchronize_enabled">Συγχρονισμός</string>
     <string name="title_synchronize_batch_enable">Ενεργοποίηση συγχρονισμού</string>
     <string name="title_synchronize_batch_disable">Απενεργοποίηση συγχρονισμού</string>
@@ -672,7 +675,8 @@
     <string name="title_poll_folder">Περιοδικός έλεγχος αντί για συνεχής συγχρονισμός</string>
     <string name="title_download_folder">Αυτόματο κατέβασμα των κειμένων των μηνυμάτων και των συνημμένων</string>
     <string name="title_notify_folder">Να ειδοποιούμαι για νέα μηνύματα</string>
-    <string name="title_auto_classify">Αυτόματη μετακίνηση ταξινομημένων μηνυμάτων</string>
+    <string name="title_auto_classify_source">Ταξινόμηση νέων μηνυμάτων σε αυτόν το φάκελο</string>
+    <string name="title_auto_classify_target">Αυτόματη μετακίνηση ταξινομημένων μηνυμάτων σε αυτόν το φάκελο</string>
     <string name="title_sync_days">Συγχρονισμός μηνυμάτων (ημέρες)</string>
     <string name="title_sync_days_remark">Αν αυξηθεί η τιμή αυτή, θα αυξηθεί η χρήση μπαταρίας και δεδομένων</string>
     <string name="title_keep_days">Διατήρηση μηνυμάτων (ημέρες)</string>

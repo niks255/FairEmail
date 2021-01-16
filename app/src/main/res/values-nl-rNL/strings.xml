@@ -78,7 +78,7 @@
         Het maken en gebruiken van regels is een pro-functie.
     </string>
     <string name="title_junk_filter">Lokale spam filter gebruiken</string>
-    <string name="title_junk_filter_hint">Dit kan batterijgebruik verhogen en berichten onjuist markeren als spam</string>
+    <string name="title_junk_filter_hint">Dit kan het batterijgebruik verhogen en berichten onjuist markeren als spam</string>
     <string name="title_notification_sending">Berichten verzenden</string>
     <string name="title_notification_waiting">Wachten op een geschikte verbinding</string>
     <string name="title_notification_idle">Inactief</string>
@@ -220,7 +220,7 @@
     <string name="title_setup_reset_questions">Vragen resetten</string>
     <string name="title_advanced_hint_title">Meer geavanceerde opties</string>
     <string name="title_advanced_hint_message">        U navigeert naar de meer geavanceerde opties.
-        Alle opties hebben veelgebruikte standaardwaarden die kunnen, maar niet hoeven te worden gewijzigd als u een andere voorkeur heeft.
+        Alle opties hebben vaak gebruikte standaardwaarden die je niet hoeft te wijzigen tenzij je een andere voorkeur hebt.
     </string>
     <string name="title_advanced_section_main">Hoofd</string>
     <string name="title_advanced_section_synchronize">Ontvangen</string>
@@ -307,9 +307,9 @@
     <string name="title_advanced_generated_icons">Toon gegenereerde iconen</string>
     <string name="title_advanced_identicons">Toon identicons</string>
     <string name="title_advanced_circular">Toon ronde iconen</string>
-    <string name="title_advanced_color_saturation">Verzadiging</string>
-    <string name="title_advanced_color_value">Helderheid</string>
-    <string name="title_advanced_color_threshold">Drempel letterkleur</string>
+    <string name="title_advanced_color_saturation">Verzadiging: %1$s %%</string>
+    <string name="title_advanced_color_value">Helderheid: %1$s %%</string>
+    <string name="title_advanced_color_threshold">Drempel letterkleur: %1$s %%</string>
     <string name="title_advanced_name_email">Toon namen en e-mailadressen</string>
     <string name="title_advanced_replace_name">Geef de voorkeur aan een contactnaam boven een verzonden naam</string>
     <string name="title_advanced_distinguish_contacts">Onderstreep de afzender wanneer de afzender bekend staat als lokaal \'aan\'-contact</string>
@@ -442,6 +442,8 @@
     <string name="title_advanced_fts">Zoekindex opbouwen</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d berichten geïndexeerd (%3$s)</string>
     <string name="title_advanced_classification">Berichten classificeren</string>
+    <string name="title_advanced_class_min_chance">Minimale klasse waarschijnlijkheid: %1$s %%</string>
+    <string name="title_advanced_class_min_difference">Minimale klasse verschil: %1$s %%</string>
     <string name="title_advanced_language">Taal</string>
     <string name="title_advanced_language_system">Systeem</string>
     <string name="title_advanced_watchdog">Periodiek controleren of FairEmail nog actief is</string>
@@ -630,6 +632,7 @@
     <string name="title_synchronize_now">Nu synchroniseren</string>
     <string name="title_synchronize_subfolders">Submappen</string>
     <string name="title_synchronize_more">Meer berichten synchroniseren</string>
+    <string name="title_synchronize_more_hint">Dit zal resulteren in een enkele download van oudere berichten, dus het zal niet resulteren in meer batterijgebruik voor dagelijks gebruik</string>
     <string name="title_synchronize_enabled">Synchroniseren</string>
     <string name="title_synchronize_batch_enable">Synchronisatie inschakelen</string>
     <string name="title_synchronize_batch_disable">Synchronisatie uitschakelen</string>
@@ -673,7 +676,8 @@
     <string name="title_poll_folder">Controleer periodiek in plaats van continu synchroniseren</string>
     <string name="title_download_folder">Berichtteksten en bijlagen automatisch downloaden</string>
     <string name="title_notify_folder">Melding bij nieuwe berichten</string>
-    <string name="title_auto_classify">Automatisch geclassificeerde berichten verplaatsen</string>
+    <string name="title_auto_classify_source">Classificeer nieuwe berichten in deze map</string>
+    <string name="title_auto_classify_target">Verplaats automatisch geclassificeerde berichten naar deze map</string>
     <string name="title_sync_days">Synchroniseren van berichten (dagen)</string>
     <string name="title_sync_days_remark">Een hogere waarde verhoogt het batterij- en datagebruik</string>
     <string name="title_keep_days">Bewaren van berichten (dagen)</string>

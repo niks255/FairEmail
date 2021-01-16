@@ -270,7 +270,7 @@
     <string name="title_advanced_plain_only">Invia solo in testo semplice per impostazione predefinita</string>
     <string name="title_advanced_flow">\'format flowed\' per il testo normale</string>
     <string name="title_advanced_receipt">Quando si richiede una ricevuta</string>
-    <string name="title_advanced_usenet_signature">Convenzione firma Usenet</string>
+    <string name="title_advanced_usenet_signature">Segui convenzione di firma di Usenet</string>
     <string name="title_advanced_remove_signatures">Rimuovi firme riconosciute</string>
     <string name="title_advanced_send_reminders">Mostra promemoria</string>
     <string name="title_advanced_lookup_mx">Controlla gli indirizzi e-mail dei destinatari prima di inviare</string>
@@ -308,9 +308,9 @@
     <string name="title_advanced_generated_icons">Mostra icone generate</string>
     <string name="title_advanced_identicons">Visualizza identicon</string>
     <string name="title_advanced_circular">Mostra icone rotonde</string>
-    <string name="title_advanced_color_saturation">Saturazione</string>
-    <string name="title_advanced_color_value">Luminosità</string>
-    <string name="title_advanced_color_threshold">Soglia colore lettera</string>
+    <string name="title_advanced_color_saturation">Saturazione: %1$s %%</string>
+    <string name="title_advanced_color_value">Luminosità: %1$s %%</string>
+    <string name="title_advanced_color_threshold">Soglia colore lettera: %1$s %%</string>
     <string name="title_advanced_name_email">Mostra nomi e indirizzi email</string>
     <string name="title_advanced_replace_name">Preferisci un nome di contatto a un nome inviato</string>
     <string name="title_advanced_distinguish_contacts">Sottolinea il mittente quando il mittente è conosciuto come contatto locale \'a\"</string>
@@ -443,6 +443,8 @@
     <string name="title_advanced_fts">Crea indice di ricerca</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d messaggi indicizzati (%3$s)</string>
     <string name="title_advanced_classification">Classifica messaggi</string>
+    <string name="title_advanced_class_min_chance">Probabilità minima di classe: %1$s %%</string>
+    <string name="title_advanced_class_min_difference">Differenza minima di classe: %1$s %%</string>
     <string name="title_advanced_language">Lingua</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_watchdog">Controlla periodicamente se FairEmail è ancora attiva</string>
@@ -631,6 +633,7 @@
     <string name="title_synchronize_now">Sincronizza ora</string>
     <string name="title_synchronize_subfolders">Sottocartelle</string>
     <string name="title_synchronize_more">Sincronizza altri messaggi</string>
+    <string name="title_synchronize_more_hint">Questo risulterà in un download singolo dei messaggi più vecchi, quindi non risulterà in maggiore uso della batteria per l\'uso quotidiano</string>
     <string name="title_synchronize_enabled">Sincronizza</string>
     <string name="title_synchronize_batch_enable">Abilita la sincronizzazione</string>
     <string name="title_synchronize_batch_disable">Disabilita la sincronizzazione</string>
@@ -674,7 +677,8 @@
     <string name="title_poll_folder">Controllare periodicamente anziché sincronizzare continuamente</string>
     <string name="title_download_folder">Scarica automaticamente messaggi di testo e allegati</string>
     <string name="title_notify_folder">Notifica nuovi messaggi</string>
-    <string name="title_auto_classify">Sposta automaticamente i messaggi classificati</string>
+    <string name="title_auto_classify_source">Classifica i nuovi messaggi in questa cartella</string>
+    <string name="title_auto_classify_target">Sposta automaticamente i messaggi classificati in questa cartella</string>
     <string name="title_sync_days">Sincronizza i messaggi (giorni)</string>
     <string name="title_sync_days_remark">Aumentando questo valore aumenterà l\'utilizzo della batteria e dei dati</string>
     <string name="title_keep_days">Mantieni i messaggi (giorni)</string>

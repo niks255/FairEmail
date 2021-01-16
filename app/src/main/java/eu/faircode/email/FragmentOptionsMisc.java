@@ -44,6 +44,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ import androidx.preference.PreferenceManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,6 +84,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swShortcuts;
     private SwitchCompat swFts;
     private SwitchCompat swClassification;
+    private TextView tvClassMinProbability;
+    private SeekBar sbClassMinProbability;
+    private TextView tvClassMinDifference;
+    private SeekBar sbClassMinDifference;
     private ImageButton ibClassification;
     private TextView tvFtsIndexed;
     private TextView tvFtsPro;
@@ -105,6 +111,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swDebug;
     private SwitchCompat swAuthPlain;
     private SwitchCompat swAuthLogin;
+    private SwitchCompat swAuthNtlm;
     private SwitchCompat swAuthSasl;
     private TextView tvProcessors;
     private TextView tvMemoryClass;
@@ -117,12 +124,16 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     private Group grpDebug;
 
+    private NumberFormat NF = NumberFormat.getNumberInstance();
+
     private final static long MIN_FILE_SIZE = 1024 * 1024L;
 
     private final static String[] RESET_OPTIONS = new String[]{
-            "shortcuts", "fts", "classification", "language", "watchdog", "updates",
+            "shortcuts", "fts",
+            "classification", "class_min_probability", "class_min_difference",
+            "language", "watchdog", "updates",
             "experiments", "query_threads", "crash_reports", "cleanup_attachments",
-            "protocol", "debug", "auth_plain", "auth_login", "auth_sasl"
+            "protocol", "debug", "auth_plain", "auth_login", "auth_ntlm", "auth_sasl"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -165,6 +176,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swFts = view.findViewById(R.id.swFts);
         swClassification = view.findViewById(R.id.swClassification);
         ibClassification = view.findViewById(R.id.ibClassification);
+        tvClassMinProbability = view.findViewById(R.id.tvClassMinProbability);
+        sbClassMinProbability = view.findViewById(R.id.sbClassMinProbability);
+        tvClassMinDifference = view.findViewById(R.id.tvClassMinDifference);
+        sbClassMinDifference = view.findViewById(R.id.sbClassMinDifference);
         tvFtsIndexed = view.findViewById(R.id.tvFtsIndexed);
         tvFtsPro = view.findViewById(R.id.tvFtsPro);
         spLanguage = view.findViewById(R.id.spLanguage);
@@ -187,6 +202,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swDebug = view.findViewById(R.id.swDebug);
         swAuthPlain = view.findViewById(R.id.swAuthPlain);
         swAuthLogin = view.findViewById(R.id.swAuthLogin);
+        swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
         tvProcessors = view.findViewById(R.id.tvProcessors);
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
@@ -279,6 +295,40 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 163);
+            }
+        });
+
+        sbClassMinProbability.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                prefs.edit().putInt("class_min_probability", progress).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+        });
+
+        sbClassMinDifference.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                prefs.edit().putInt("class_min_difference", progress).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
             }
         });
 
@@ -430,6 +480,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("auth_login", checked).apply();
+            }
+        });
+
+        swAuthNtlm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auth_ntlm", checked).apply();
             }
         });
 
@@ -749,7 +806,16 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExternalSearch.setChecked(Helper.isComponentEnabled(getContext(), ActivitySearch.class));
         swShortcuts.setChecked(prefs.getBoolean("shortcuts", true));
         swFts.setChecked(prefs.getBoolean("fts", false));
+
         swClassification.setChecked(prefs.getBoolean("classification", false));
+
+        int class_min_chance = prefs.getInt("class_min_probability", 15);
+        tvClassMinProbability.setText(getString(R.string.title_advanced_class_min_chance, NF.format(class_min_chance)));
+        sbClassMinProbability.setProgress(class_min_chance);
+
+        int class_min_difference = prefs.getInt("class_min_difference", 50);
+        tvClassMinDifference.setText(getString(R.string.title_advanced_class_min_difference, NF.format(class_min_difference)));
+        sbClassMinDifference.setProgress(class_min_difference);
 
         int selected = -1;
         String language = prefs.getString("language", null);
@@ -783,6 +849,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swDebug.setChecked(prefs.getBoolean("debug", false));
         swAuthPlain.setChecked(prefs.getBoolean("auth_plain", true));
         swAuthLogin.setChecked(prefs.getBoolean("auth_login", true));
+        swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
 
         tvProcessors.setText(getString(R.string.title_advanced_processors, Runtime.getRuntime().availableProcessors()));

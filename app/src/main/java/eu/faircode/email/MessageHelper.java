@@ -1645,6 +1645,15 @@ public class MessageHelper {
         boolean isPlainText() {
             return "text/plain".equalsIgnoreCase(contentType.getBaseType());
         }
+
+        boolean isHtml() {
+            return "text/html".equalsIgnoreCase(contentType.getBaseType());
+        }
+
+        boolean isDSN() {
+            return ("message/delivery-status".equalsIgnoreCase(contentType.getBaseType()) ||
+                    "message/disposition-notification".equalsIgnoreCase(contentType.getBaseType()));
+        }
     }
 
     class MessageParts {
@@ -1750,24 +1759,15 @@ public class MessageHelper {
                     return null;
                 }
 
-                // Get content type
-                ContentType ct;
-                try {
-                    ct = new ContentType(h.part.getContentType());
-                } catch (ParseException ex) {
-                    Log.e(ex);
-                    ct = new ContentType();
-                }
-
                 // Check character set
-                String charset = ct.getParameter("charset");
+                String charset = h.contentType.getParameter("charset");
                 if (UnknownCharsetProvider.charsetForMime(charset) == null)
                     warnings.add(context.getString(R.string.title_no_charset, charset));
 
                 if ((TextUtils.isEmpty(charset) || charset.equalsIgnoreCase(StandardCharsets.US_ASCII.name())))
                     charset = null;
 
-                if (h.part.isMimeType("text/plain")) {
+                if (h.isPlainText()) {
                     Charset cs = null;
                     try {
                         if (charset != null)
@@ -1794,10 +1794,10 @@ public class MessageHelper {
                         }
                     }
 
-                    if ("flowed".equalsIgnoreCase(ct.getParameter("format")))
+                    if ("flowed".equalsIgnoreCase(h.contentType.getParameter("format")))
                         result = HtmlHelper.flow(result);
                     result = "<div x-plain=\"true\">" + HtmlHelper.formatPre(result) + "</div>";
-                } else if (h.part.isMimeType("text/html")) {
+                } else if (h.isHtml()) {
                     // Fix incorrect UTF16
                     if (charset != null)
                         try {
@@ -1824,7 +1824,7 @@ public class MessageHelper {
                         for (Element meta : d.select("meta")) {
                             if ("Content-Type".equalsIgnoreCase(meta.attr("http-equiv"))) {
                                 try {
-                                    ct = new ContentType(meta.attr("content"));
+                                    ContentType ct = new ContentType(meta.attr("content"));
                                     charset = ct.getParameter("charset");
                                 } catch (ParseException ex) {
                                     Log.w(ex);
@@ -1869,8 +1869,7 @@ public class MessageHelper {
                                 }
                         }
                     }
-                } else if (h.part.isMimeType("message/delivery-status") ||
-                        h.part.isMimeType("message/disposition-notification")) {
+                } else if (h.isDSN()) {
                     StringBuilder report = new StringBuilder();
                     report.append("<hr><div style=\"font-family: monospace; font-size: small;\">");
                     for (String line : result.split("\\r?\\n")) {
@@ -1892,7 +1891,8 @@ public class MessageHelper {
                     }
                     report.append("</div>");
                     result = report.toString();
-                }
+                } else
+                    Log.w("Unexpected content type=" + h.contentType);
 
                 sb.append(result);
             }
@@ -2709,6 +2709,23 @@ public class MessageHelper {
         if (email2 != null)
             email2 = email2.toLowerCase();
         return Objects.equals(email1, email2);
+    }
+
+    static boolean equalEmail(Address[] a1, Address[] a2) {
+        if (a1 == null && a2 == null)
+            return true;
+
+        if (a1 == null || a2 == null)
+            return false;
+
+        if (a1.length != a2.length)
+            return false;
+
+        for (int i = 0; i < a1.length; i++)
+            if (!equalEmail(a1[i], a2[i]))
+                return false;
+
+        return true;
     }
 
     static boolean equal(Address[] a1, Address[] a2) {

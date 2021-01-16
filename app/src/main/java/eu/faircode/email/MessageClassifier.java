@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,78 +50,40 @@ import javax.mail.internet.InternetAddress;
 public class MessageClassifier {
     private static boolean loaded = false;
     private static boolean dirty = false;
+    private static final Map<Long, List<String>> accountMsgIds = new HashMap<>();
     private static final Map<Long, Map<String, Integer>> classMessages = new HashMap<>();
     private static final Map<Long, Map<String, Map<String, Frequency>>> wordClassFrequency = new HashMap<>();
 
-    private static final double CHANCE_MINIMUM = 0.20;
-    private static final double CHANCE_THRESHOLD = 2.0;
+    private static final int MAX_WORDS = 1000;
 
     static void classify(EntityMessage message, EntityFolder folder, EntityFolder target, Context context) {
         try {
             if (!isEnabled(context))
                 return;
 
-            if (!canClassify(folder.type))
-                return;
-
-            if (target != null && !canClassify(target.type))
-                return;
-
-            File file = message.getFile(context);
-            if (!file.exists())
+            if (!folder.auto_classify_source)
                 return;
 
             long start = new Date().getTime();
 
             // Build text to classify
-            StringBuilder sb = new StringBuilder();
-
-            List<Address> addresses = new ArrayList<>();
-            if (message.from != null)
-                addresses.addAll(Arrays.asList(message.from));
-            if (message.to != null)
-                addresses.addAll(Arrays.asList(message.to));
-            if (message.cc != null)
-                addresses.addAll(Arrays.asList(message.cc));
-            if (message.bcc != null)
-                addresses.addAll(Arrays.asList(message.bcc));
-            if (message.reply != null)
-                addresses.addAll(Arrays.asList(message.reply));
-
-            for (Address address : addresses) {
-                String email = ((InternetAddress) address).getAddress();
-                String name = ((InternetAddress) address).getAddress();
-                if (!TextUtils.isEmpty(email)) {
-                    sb.append(email).append('\n');
-                    int at = email.indexOf('@');
-                    String domain = (at < 0 ? null : email.substring(at + 1));
-                    if (!TextUtils.isEmpty(domain))
-                        sb.append(domain).append('\n');
-                }
-                if (!TextUtils.isEmpty(name))
-                    sb.append(name).append('\n');
-            }
-
-            if (message.subject != null)
-                sb.append(message.subject).append('\n');
-
-            String text = HtmlHelper.getFullText(file);
-            sb.append(text);
-
-            if (sb.length() == 0)
+            List<String> texts = getTexts(message, context);
+            if (texts.size() == 0)
                 return;
 
             // Load data if needed
             load(context);
 
-            // Initialize data if needed
+            // Initialize account if needed
+            if (!accountMsgIds.containsKey(folder.account))
+                accountMsgIds.put(folder.account, new ArrayList<>());
             if (!classMessages.containsKey(folder.account))
                 classMessages.put(folder.account, new HashMap<>());
             if (!wordClassFrequency.containsKey(folder.account))
                 wordClassFrequency.put(folder.account, new HashMap<>());
 
-            // Classify text
-            String classified = classify(folder.account, folder.name, sb.toString(), target == null, context);
+            // Classify texts
+            String classified = classify(folder.account, folder.name, texts, target == null, context);
 
             long elapsed = new Date().getTime() - start;
             EntityLog.log(context, "Classifier" +
@@ -132,43 +95,116 @@ public class MessageClassifier {
                     " re=" + message.auto_classified +
                     " elapsed=" + elapsed);
 
-            Integer m = classMessages.get(folder.account).get(folder.name);
-            m = (m == null ? 0 : m) + (target == null ? 1 : -1);
-            if (m <= 0)
-                classMessages.get(folder.account).remove(folder.name);
-            else
-                classMessages.get(folder.account).put(folder.name, m);
-            Log.i("Classifier " + folder.name + "=" + m + " msgs");
-
-            dirty = true;
-
-            // Auto classify
+            // Auto classify message
             if (classified != null &&
                     !classified.equals(folder.name) &&
-                    !message.auto_classified &&
+                    !TextUtils.isEmpty(message.msgid) &&
+                    !accountMsgIds.get(folder.account).contains(message.msgid) &&
                     !EntityFolder.JUNK.equals(folder.type)) {
+                boolean pro = ActivityBilling.isPro(context);
+
                 DB db = DB.getInstance(context);
                 try {
                     db.beginTransaction();
 
                     EntityFolder dest = db.folder().getFolderByName(folder.account, classified);
-                    if (dest != null && dest.auto_classify) {
+                    if (dest != null && dest.auto_classify_target &&
+                            (pro || EntityFolder.JUNK.equals(dest.type))) {
                         EntityOperation.queue(context, message, EntityOperation.MOVE, dest.id, false, true);
                         message.ui_hide = true;
                     }
 
                     db.setTransactionSuccessful();
-
                 } finally {
                     db.endTransaction();
                 }
+
+                if (message.ui_hide)
+                    accountMsgIds.get(folder.account).add(message.msgid);
             }
+
+            dirty = true;
         } catch (Throwable ex) {
             Log.e(ex);
         }
     }
 
-    private static String classify(long account, String currentClass, String text, boolean added, Context context) {
+    @NonNull
+    private static List<String> getTexts(@NonNull EntityMessage message, @NonNull Context context) throws IOException {
+        List<String> texts = new ArrayList<>();
+
+        File file = message.getFile(context);
+        if (!file.exists())
+            return texts;
+
+        List<Address> addresses = new ArrayList<>();
+        if (message.from != null)
+            addresses.addAll(Arrays.asList(message.from));
+        if (message.to != null)
+            addresses.addAll(Arrays.asList(message.to));
+        if (message.cc != null)
+            addresses.addAll(Arrays.asList(message.cc));
+        if (message.bcc != null)
+            addresses.addAll(Arrays.asList(message.bcc));
+        if (message.reply != null)
+            addresses.addAll(Arrays.asList(message.reply));
+
+        for (Address address : addresses) {
+            String email = ((InternetAddress) address).getAddress();
+            String name = ((InternetAddress) address).getPersonal();
+            if (!TextUtils.isEmpty(email))
+                texts.add(email);
+            if (!TextUtils.isEmpty(name))
+                texts.add(name);
+        }
+
+        if (message.subject != null)
+            texts.add(message.subject);
+
+        String text = HtmlHelper.getFullText(file);
+        texts.add(text);
+
+        return texts;
+    }
+
+    private static String classify(long account, @NonNull String currentClass, @NonNull List<String> texts, boolean added, @NonNull Context context) {
+        State state = new State();
+
+        Log.i("Classifier texts=" + texts.size());
+        for (String text : texts) {
+            // First word
+            processWord(account, added, null, state);
+
+            // Process words
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                java.text.BreakIterator boundary = java.text.BreakIterator.getWordInstance();
+                boundary.setText(text);
+                int start = boundary.first();
+                for (int end = boundary.next(); end != java.text.BreakIterator.DONE; end = boundary.next()) {
+                    String word = text.substring(start, end);
+                    processWord(account, added, word, state);
+                    if (state.words.size() >= MAX_WORDS)
+                        break;
+                    start = end;
+                }
+            } else {
+                // The ICU break iterator works better for Chinese texts
+                android.icu.text.BreakIterator boundary = android.icu.text.BreakIterator.getWordInstance();
+                boundary.setText(text);
+                int start = boundary.first();
+                for (int end = boundary.next(); end != android.icu.text.BreakIterator.DONE; end = boundary.next()) {
+                    String word = text.substring(start, end);
+                    processWord(account, added, word, state);
+                    if (state.words.size() >= MAX_WORDS)
+                        break;
+                    start = end;
+                }
+            }
+        }
+
+        // final word
+        processWord(account, added, null, state);
+
         int maxMessages = 0;
         for (String clazz : classMessages.get(account).keySet()) {
             int count = classMessages.get(account).get(clazz);
@@ -176,46 +212,19 @@ public class MessageClassifier {
                 maxMessages = count;
         }
 
-        State state = new State();
-
-        // First word
-        process(account, currentClass, added, null, state);
-
-        // Process words
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            java.text.BreakIterator boundary = java.text.BreakIterator.getWordInstance();
-            boundary.setText(text);
-            int start = boundary.first();
-            for (int end = boundary.next(); end != java.text.BreakIterator.DONE; end = boundary.next()) {
-                String word = text.substring(start, end);
-                process(account, currentClass, added, word, state);
-                start = end;
-            }
-        } else {
-            // The ICU break iterator works better for Chinese texts
-            android.icu.text.BreakIterator boundary = android.icu.text.BreakIterator.getWordInstance();
-            boundary.setText(text);
-            int start = boundary.first();
-            for (int end = boundary.next(); end != android.icu.text.BreakIterator.DONE; end = boundary.next()) {
-                String word = text.substring(start, end);
-                process(account, currentClass, added, word, state);
-                start = end;
-            }
-        }
-
-        // Last word
-        process(account, currentClass, added, null, state);
-
-        if (!added)
-            return null;
+        updateFrequencies(account, currentClass, added, state);
 
         if (maxMessages == 0) {
             Log.i("Classifier no messages account=" + account);
             return null;
         }
 
+        if (!added)
+            return null;
+
         // Calculate chance per class
         DB db = DB.getInstance(context);
+        int words = state.words.size() - texts.size() - 1;
         List<Chance> chances = new ArrayList<>();
         for (String clazz : state.classStats.keySet()) {
             EntityFolder folder = db.folder().getFolderByName(account, clazz);
@@ -226,17 +235,17 @@ public class MessageClassifier {
 
             Stat stat = state.classStats.get(clazz);
 
-            double chance = stat.totalFrequency / maxMessages / state.words.size();
+            double chance = stat.totalFrequency / maxMessages / words;
             Chance c = new Chance(clazz, chance);
             chances.add(c);
             EntityLog.log(context, "Classifier " + c +
                     " frequency=" + (Math.round(stat.totalFrequency * 100.0) / 100.0) + "/" + maxMessages + " msgs" +
-                    " matched=" + stat.matchedWords + "/" + state.words.size() + " words" +
+                    " matched=" + stat.matchedWords + "/" + words + " words" +
                     " text=" + TextUtils.join(", ", stat.words));
         }
 
         if (BuildConfig.DEBUG)
-            Log.i("Classifier words=" + TextUtils.join(", ", state.words));
+            Log.i("Classifier words=" + state.words.size() + " " + TextUtils.join(", ", state.words));
 
         if (chances.size() <= 1)
             return null;
@@ -249,28 +258,41 @@ public class MessageClassifier {
             }
         });
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        double class_min_chance = prefs.getInt("class_min_probability", 15) / 100.0;
+        double class_min_difference = prefs.getInt("class_min_difference", 50) / 100.0;
+
         // Select best class
         String classification = null;
-        if (chances.get(0).chance > CHANCE_MINIMUM &&
-                chances.get(0).chance / chances.get(1).chance >= CHANCE_THRESHOLD)
+        double c0 = chances.get(0).chance;
+        double c1 = chances.get(1).chance;
+        double threshold = c0 * (1.0 - class_min_difference);
+        if (c0 > class_min_chance && c1 < threshold)
             classification = chances.get(0).clazz;
 
-        Log.i("Classifier current=" + currentClass + " classified=" + classification);
+        Log.i("Classifier current=" + currentClass +
+                " c0=" + Math.round(c0 * 100 * 100) / 100.0 + ">" + Math.round(class_min_chance * 100) + "%" +
+                " c1=" + Math.round(c1 * 100 * 100) / 100.0 + "<" + Math.round(threshold * 100 * 100) / 100.0 + "%" +
+                " (" + Math.round(class_min_difference * 100) + "%)" +
+                " classified=" + classification);
 
         return classification;
     }
 
-    private static void process(long account, String currentClass, boolean added, String word, State state) {
+    private static void processWord(long account, boolean added, String word, State state) {
         if (word != null) {
             word = word.trim().toLowerCase();
-
-            if (word.length() < 2 ||
-                    state.words.contains(word) ||
-                    word.matches(".*\\d.*"))
+            if (word.length() < 2 || word.matches(".*\\d.*"))
                 return;
         }
 
-        state.words.add(word);
+        if (word != null ||
+                state.words.size() == 0 ||
+                state.words.get(state.words.size() - 1) != null)
+            state.words.add(word);
+
+        if (!added)
+            return;
 
         if (state.words.size() < 3)
             return;
@@ -279,50 +301,82 @@ public class MessageClassifier {
         String current = state.words.get(state.words.size() - 2);
         String after = state.words.get(state.words.size() - 1);
 
+        if (current == null)
+            return;
+
         Map<String, Frequency> classFrequency = wordClassFrequency.get(account).get(current);
-        if (added) {
-            if (classFrequency == null) {
-                classFrequency = new HashMap<>();
-                wordClassFrequency.get(account).put(current, classFrequency);
+        if (classFrequency == null)
+            return;
+
+        for (String clazz : classFrequency.keySet()) {
+            Frequency frequency = classFrequency.get(clazz);
+            if (frequency.count <= 0)
+                continue;
+
+            Stat stat = state.classStats.get(clazz);
+            if (stat == null) {
+                stat = new Stat();
+                state.classStats.put(clazz, stat);
             }
 
-            for (String clazz : classFrequency.keySet()) {
-                Frequency frequency = classFrequency.get(clazz);
-                if (frequency.count > 0) {
-                    Stat stat = state.classStats.get(clazz);
-                    if (stat == null) {
-                        stat = new Stat();
-                        state.classStats.put(clazz, stat);
-                    }
+            int c = (frequency.count - frequency.duplicates);
+            Integer b = (before == null ? null : frequency.before.get(before));
+            Integer a = (after == null ? null : frequency.after.get(after));
+            double f = (c +
+                    (b == null ? 2 * c : 2.0 * b / frequency.count * c) +
+                    (a == null ? 2 * c : 2.0 * a / frequency.count * c)) / 5.0;
+            //Log.i("Classifier " +
+            //        before + "/" + b + "/" + frequency.before.get(before) + " " +
+            //        after + "/" + a + "/" + frequency.after.get(after) + " " +
+            //        current + "/" + c + "=" + frequency.count + "-" + frequency.duplicates +
+            //        " f=" + f);
 
-                    int c = frequency.count;
-                    Integer b = (before == null ? null : frequency.before.get(before));
-                    Integer a = (after == null ? null : frequency.after.get(after));
-                    double f = ((b == null ? 0 : b) + c + (a == null ? 0 : a)) / 3.0;
-                    stat.totalFrequency += f;
+            stat.totalFrequency += f;
+            stat.matchedWords++;
 
-                    stat.matchedWords++;
-                    if (stat.matchedWords > state.maxMatchedWords)
-                        state.maxMatchedWords = stat.matchedWords;
-
-                    if (BuildConfig.DEBUG)
-                        stat.words.add(current);
-                }
-            }
-
-            Frequency c = classFrequency.get(currentClass);
-            if (c == null)
-                c = new Frequency();
-            c.add(before, after, 1);
-            classFrequency.put(currentClass, c);
-        } else {
-            Frequency c = (classFrequency == null ? null : classFrequency.get(currentClass));
-            if (c != null)
-                c.add(before, after, -1);
+            if (BuildConfig.DEBUG && false)
+                stat.words.add(current + "=" + f);
         }
     }
 
-    static synchronized void save(Context context) throws JSONException, IOException {
+    private static void updateFrequencies(long account, @NonNull String currentClass, boolean added, @NonNull State state) {
+        Integer m = classMessages.get(account).get(currentClass);
+        m = (m == null ? 0 : m) + (added ? 1 : -1);
+        if (m <= 0)
+            classMessages.get(account).remove(currentClass);
+        else
+            classMessages.get(account).put(currentClass, m);
+        Log.i("Classifier " + currentClass + "=" + m + " msgs");
+
+        for (int i = 1; i < state.words.size() - 1; i++) {
+            String before = state.words.get(i - 1);
+            String current = state.words.get(i);
+            String after = state.words.get(i + 1);
+
+            if (current == null)
+                continue;
+
+            Map<String, Frequency> classFrequency = wordClassFrequency.get(account).get(current);
+            if (added) {
+                if (classFrequency == null) {
+                    classFrequency = new HashMap<>();
+                    wordClassFrequency.get(account).put(current, classFrequency);
+                }
+                Frequency c = classFrequency.get(currentClass);
+                if (c == null) {
+                    c = new Frequency();
+                    classFrequency.put(currentClass, c);
+                }
+                c.add(before, after, 1, state.words.indexOf(current) < i);
+            } else {
+                Frequency c = (classFrequency == null ? null : classFrequency.get(currentClass));
+                if (c != null)
+                    c.add(before, after, -1, state.words.indexOf(current) < i);
+            }
+        }
+    }
+
+    static synchronized void save(@NonNull Context context) throws JSONException, IOException {
         if (!dirty)
             return;
 
@@ -333,7 +387,7 @@ public class MessageClassifier {
         Log.i("Classifier data saved");
     }
 
-    private static synchronized void load(Context context) throws IOException, JSONException {
+    private static synchronized void load(@NonNull Context context) throws IOException, JSONException {
         if (loaded || dirty)
             return;
 
@@ -349,27 +403,48 @@ public class MessageClassifier {
         Log.i("Classifier data loaded");
     }
 
-    static synchronized void clear(Context context) {
+    static synchronized void cleanup(@NonNull Context context) {
+        try {
+            load(context);
+
+            DB db = DB.getInstance(context);
+            for (Long account : accountMsgIds.keySet()) {
+                List<String> msgids = accountMsgIds.get(account);
+                Log.i("Classifier cleanup account=" + account + " count=" + msgids.size());
+                for (String msgid : new ArrayList<>(msgids)) {
+                    List<EntityMessage> messages = db.message().getMessagesByMsgId(account, msgid);
+                    if (messages != null && messages.size() == 0) {
+                        Log.i("Classifier removing msgid=" + msgid);
+                        msgids.remove(msgid);
+                        dirty = true;
+                    }
+                }
+            }
+
+            if (dirty)
+                save(context);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    static synchronized void clear(@NonNull Context context) {
+        accountMsgIds.clear();
         wordClassFrequency.clear();
         dirty = true;
         Log.i("Classifier data cleared");
     }
 
-    static boolean isEnabled(Context context) {
+    static boolean isEnabled(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("classification", false);
     }
 
-    static boolean canClassify(String folderType) {
-        return EntityFolder.INBOX.equals(folderType) ||
-                EntityFolder.JUNK.equals(folderType) ||
-                EntityFolder.USER.equals(folderType);
-    }
-
-    static File getFile(Context context) {
+    static File getFile(@NonNull Context context) {
         return new File(context.getFilesDir(), "classifier.json");
     }
 
+    @NonNull
     static JSONObject toJson() throws JSONException {
         JSONArray jmessages = new JSONArray();
         for (Long account : classMessages.keySet())
@@ -391,31 +466,50 @@ public class MessageClassifier {
                     jword.put("account", account);
                     jword.put("word", word);
                     jword.put("class", clazz);
-                    jword.put("frequency", f.count);
+                    jword.put("count", f.count);
+                    jword.put("dup", f.duplicates);
                     jword.put("before", from(f.before));
                     jword.put("after", from(f.after));
                     jwords.put(jword);
                 }
             }
 
+        JSONArray jclassified = new JSONArray();
+        for (Long account : accountMsgIds.keySet()) {
+            JSONObject jaccount = new JSONObject();
+            jaccount.put("account", account);
+            jaccount.put("messages", from(accountMsgIds.get(account)));
+            jclassified.put(jaccount);
+        }
+
         JSONObject jroot = new JSONObject();
-        jroot.put("version", 1);
+        jroot.put("version", 2);
         jroot.put("messages", jmessages);
         jroot.put("words", jwords);
+        jroot.put("classified", jclassified);
 
         return jroot;
     }
 
-    private static JSONObject from(Map<String, Integer> map) throws JSONException {
+    @NonNull
+    private static JSONArray from(@NonNull List<String> list) throws JSONException {
+        JSONArray jlist = new JSONArray();
+        for (String item : list)
+            jlist.put(item);
+        return jlist;
+    }
+
+    @NonNull
+    private static JSONObject from(@NonNull Map<String, Integer> map) throws JSONException {
         JSONObject jmap = new JSONObject();
         for (String key : map.keySet())
             jmap.put(key, map.get(key));
         return jmap;
     }
 
-    static void fromJson(JSONObject jroot) throws JSONException {
+    static void fromJson(@NonNull JSONObject jroot) throws JSONException {
         int version = jroot.optInt("version");
-        if (version < 1)
+        if (version < 2)
             return;
 
         JSONArray jmessages = jroot.getJSONArray("messages");
@@ -435,23 +529,42 @@ public class MessageClassifier {
             long account = jword.getLong("account");
             if (!wordClassFrequency.containsKey(account))
                 wordClassFrequency.put(account, new HashMap<>());
-            String word = jword.getString("word");
-            Map<String, Frequency> classFrequency = wordClassFrequency.get(account).get(word);
-            if (classFrequency == null) {
-                classFrequency = new HashMap<>();
-                wordClassFrequency.get(account).put(word, classFrequency);
+            if (jword.has("word")) {
+                String word = jword.getString("word");
+                Map<String, Frequency> classFrequency = wordClassFrequency.get(account).get(word);
+                if (classFrequency == null) {
+                    classFrequency = new HashMap<>();
+                    wordClassFrequency.get(account).put(word, classFrequency);
+                }
+                Frequency f = new Frequency();
+                f.count = jword.getInt("count");
+                f.duplicates = jword.optInt("dup");
+                if (jword.has("before"))
+                    f.before = from(jword.getJSONObject("before"));
+                if (jword.has("after"))
+                    f.after = from(jword.getJSONObject("after"));
+                classFrequency.put(jword.getString("class"), f);
+            } else
+                Log.w("No words account=" + account);
+        }
+
+        JSONArray jclassified = jroot.getJSONArray("classified");
+        for (int a = 0; a < jclassified.length(); a++) {
+            JSONObject jaccount = jclassified.getJSONObject(a);
+            long account = jaccount.getLong("account");
+            List<String> ids = accountMsgIds.get(account);
+            if (ids == null) {
+                ids = new ArrayList<>();
+                accountMsgIds.put(account, ids);
             }
-            Frequency f = new Frequency();
-            f.count = jword.getInt("frequency");
-            if (jword.has("before"))
-                f.before = from(jword.getJSONObject("before"));
-            if (jword.has("after"))
-                f.after = from(jword.getJSONObject("after"));
-            classFrequency.put(jword.getString("class"), f);
+            JSONArray jids = jaccount.getJSONArray("messages");
+            for (int h = 0; h < jids.length(); h++)
+                ids.add(jids.getString(h));
         }
     }
 
-    private static Map<String, Integer> from(JSONObject jmap) throws JSONException {
+    @NonNull
+    private static Map<String, Integer> from(@NonNull JSONObject jmap) throws JSONException {
         Map<String, Integer> result = new HashMap<>(jmap.length());
         Iterator<String> iterator = jmap.keys();
         while (iterator.hasNext()) {
@@ -462,21 +575,24 @@ public class MessageClassifier {
     }
 
     private static class State {
-        private int maxMatchedWords = 0;
-        private List<String> words = new ArrayList<>();
-        private Map<String, Stat> classStats = new HashMap<>();
+        private final List<String> words = new ArrayList<>();
+        private final Map<String, Stat> classStats = new HashMap<>();
     }
 
     private static class Frequency {
         private int count = 0;
+        private int duplicates = 0;
         private Map<String, Integer> before = new HashMap<>();
         private Map<String, Integer> after = new HashMap<>();
 
-        private void add(String b, String a, int c) {
+        private void add(String b, String a, int c, boolean duplicate) {
             if (count + c < 0)
                 return;
 
             count += c;
+
+            if (duplicate)
+                duplicates += c;
 
             if (b != null) {
                 Integer x = before.get(b);
@@ -493,7 +609,7 @@ public class MessageClassifier {
     private static class Stat {
         private int matchedWords = 0;
         private double totalFrequency = 0;
-        private List<String> words = new ArrayList<>();
+        private final List<String> words = new ArrayList<>();
     }
 
     private static class Chance {

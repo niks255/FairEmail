@@ -498,6 +498,7 @@ class Core {
                             // Fetch: NO The specified message set is invalid.
                             // Fetch: NO [SERVERBUG] SELECT Server error - Please try again later
                             // Fetch: NO [SERVERBUG] UID FETCH Server error - Please try again later
+                            // Fetch: NO Invalid message number (took n ms)
                             // Move: NO Over quota
                             // Move: NO No matching messages
                             // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist
@@ -505,6 +506,7 @@ class Core {
                             // Move: NO MOVE failed or partially completed.
                             // Move: NO mailbox selected READ-ONLY
                             // Move: NO read only
+                            // Add: BAD Data length exceeds limit
                             // Delete: NO [CANNOT] STORE It's not possible to perform specified operation
                             // Delete: NO [UNAVAILABLE] EXPUNGE Backend error
                             // Delete: NO mailbox selected READ-ONLY
@@ -2161,7 +2163,7 @@ class Core {
                         message.ui_ignored = false;
                         message.ui_browsed = false;
 
-                        if (MessageHelper.equal(message.submitter, message.from))
+                        if (MessageHelper.equalEmail(message.submitter, message.from))
                             message.submitter = null;
 
                         if (message.size == null && message.total != null)
@@ -2252,6 +2254,8 @@ class Core {
             int initialize = jargs.optInt(4, folder.initialize);
             boolean force = jargs.optBoolean(5, false);
 
+            if (force)
+                sync_days = keep_days;
             if (keep_days == sync_days && keep_days != Integer.MAX_VALUE)
                 keep_days++;
 
@@ -2859,7 +2863,7 @@ class Core {
             if (message.flagged)
                 message.color = color;
 
-            if (MessageHelper.equal(message.submitter, message.from))
+            if (MessageHelper.equalEmail(message.submitter, message.from))
                 message.submitter = null;
 
             // Borrow reply name from sender name
@@ -2969,7 +2973,7 @@ class Core {
 
                 runRules(context, imessage, account, folder, message, rules);
                 if (download && !message.ui_hide &&
-                        MessageClassifier.isEnabled(context) && MessageClassifier.canClassify(folder.type))
+                        MessageClassifier.isEnabled(context) && folder.auto_classify_source)
                     db.message().setMessageUiHide(message.id, true);
 
                 db.setTransactionSuccessful();
@@ -3002,28 +3006,30 @@ class Core {
                 }
 
                 if ((message.size != null && message.size < maxSize) ||
-                        (MessageClassifier.isEnabled(context)) && MessageClassifier.canClassify(folder.type)) {
-                    String body = parts.getHtml(context);
-                    File file = message.getFile(context);
-                    Helper.writeText(file, body);
-                    db.message().setMessageContent(message.id,
-                            true,
-                            HtmlHelper.getLanguage(context, body),
-                            parts.isPlainOnly(),
-                            HtmlHelper.getPreview(body),
-                            parts.getWarnings(message.warning));
-                    MessageClassifier.classify(message, folder, null, context);
-                    if (!message.ui_hide)
-                        db.message().setMessageUiHide(message.id, false);
+                        (MessageClassifier.isEnabled(context)) && folder.auto_classify_source)
+                    try {
+                        String body = parts.getHtml(context);
+                        File file = message.getFile(context);
+                        Helper.writeText(file, body);
+                        db.message().setMessageContent(message.id,
+                                true,
+                                HtmlHelper.getLanguage(context, body),
+                                parts.isPlainOnly(),
+                                HtmlHelper.getPreview(body),
+                                parts.getWarnings(message.warning));
+                        MessageClassifier.classify(message, folder, null, context);
 
-                    if (stats != null && body != null)
-                        stats.content += body.length();
-                    Log.i(folder.name + " inline downloaded message id=" + message.id +
-                            " size=" + message.size + "/" + (body == null ? null : body.length()));
+                        if (stats != null && body != null)
+                            stats.content += body.length();
+                        Log.i(folder.name + " inline downloaded message id=" + message.id +
+                                " size=" + message.size + "/" + (body == null ? null : body.length()));
 
-                    if (TextUtils.isEmpty(body) && parts.hasBody())
-                        reportEmptyMessage(context, state, account, istore);
-                }
+                        if (TextUtils.isEmpty(body) && parts.hasBody())
+                            reportEmptyMessage(context, state, account, istore);
+                    } finally {
+                        if (!message.ui_hide)
+                            db.message().setMessageUiHide(message.id, false);
+                    }
             }
 
             reportNewMessage(context, account, folder, message);

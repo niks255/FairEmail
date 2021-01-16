@@ -460,7 +460,7 @@ Alcune persone chiedono:
 <a name="faq6"></a>
 **(6) Come posso accedere a Gmail / G suite?**
 
-Puoi usare la procedura guidata rapida per configurare facilmente un profilo e un'identità Gmail.
+Se usi la versione del Play Store o di GitHub di FairEmail, puoi usare la procedura guidata di configurazione rapida per configurare facilmente un profilo e un'identità di Gmail. La procedura guidata di configurazione rapida di Gmail non è disponibile per le build di terze parti, come le build di F-Droid, perché Google ha approvato l'uso di OAuth solo per le build ufficiali.
 
 Se non vuoi usare un profilo sul dispositivo di Gmail, puoi abilitare l'accesso per le "app meno sicure" e usare la password del tuo profilo (sconsigliato) o abilitare l'autenticazione a due fattori e usare una password specifica dell'app. Per usare una password dovrai configurare un profilo e identità tramite i passaggi 1 e 2 della configurazione invece che tramite la procedura guidata rapida.
 
@@ -828,66 +828,68 @@ Se una funzionalità pro acquistata non funziona come intesa e non è causata da
 <a name="faq21"></a>
 **(21) Come abilito il Led di notifica?**
 
-Prima di Android 8 Oreo: esiste un'opzione avanzata nella configurazione per questo.
+Prima di Android 8 Oreo: esiste un'opzione avanzata nelle impostazioni di notifica dell'app per questo.
 
-Android 8 Oreo e successive: vedi [qui](https://developer.android.com/training/notify-user/channels) come configurare i canali di notifica. Puoi usare il pulsante *Gestione notifiche* nella configurazione per andare direttamente alle impostazioni di notifica di Android. Nota che le app non possono modificare le impostazioni di notifica, inclusa l'impostazione del Led di notifica, su Android 8 Oreo e successive. Le app progettate e mirate a versioni più vecchie di Android potrebbero essere capaci di controllare i contenuti delle notifiche, ma tali app non possono essere più aggiornate e quelle recenti mostreranno un avviso che tali app sono obsolete.
+Android 8 Oreo e successive: sei pregato di vedere [qui](https://developer.android.com/training/notify-user/channels) su come configurare i canali di notifica. Puoi usare il pulsante *Canale predefinito* nelle impostazioni di notifica dell'app per andare direttamente alle impostazioni corrette del canale di notifica di Android.
 
-A volte serve disabilitare l'impostazione *Mostra anteprima di messaggio nelle notifiche* o per abilitare le impostazioni *Mostra solo le notifiche con un testo di anteprima* per risolvere un bug in Android. Questo potrebbe applicarsi anche ai suoni di notifica e le vibrazioni.
+Nota che le app non possono più modificare le impostazioni di notifica, incluse quelle del Led di notifica, su Android 8 Oreo e successive.
 
-L'impostazione di un colore chiaro prima di Android 8 non è supportato e impossibile su Android 8 e successive.
+Talvolta è necessario disabilitare l'impostazione *Mostra anteprima del messaggio nelle notifiche* o abilitare le impostazioni *Mostra solo le notifiche con un testo di anteprima* per risolvere bug in Android. Questo potrebbe applicarsi anche ai suoni e le vibrazioni di notifica.
+
+Impostare un colore chiaro prima di Android 8 non è supportato ed è impossibile su Android 8 e successive.
 
 <br />
 
 <a name="faq22"></a>
 **(22) Cosa significa l'errore profilo/cartella ...?**
 
-FairEmail non nasconde gli errori come le app simili fanno spesso, quindi è più facile diagnosticare i problemi.
+FairEmail non nasconde gli errori come spesso fanno le app simili, quindi è più facile diagnosticare i problemi.
 
-FairEmail proverà automaticamente a connettersi di nuovo dopo un ritardo. Questo ritardo sarà raddoppiato dopo ogni tentativo fallito di prevenire il drenaggio della batteria e prevenire che si blocchi permanentemente.
+FairEmail proverà automaticamente a riconnettersi dopo un ritardo. Questo ritardo sarà raddoppiato dopo ogni tentativo fallito di prevenire il drenaggio della batteria e per prevenire che rimanga bloccato permanentemente.
 
-Ci sono errori generali e specifici ai profili Gmail (vedi sotto).
+Esistono degli errori generali e specifici ai profili di Gmail (vedi sotto).
 
 **Errori generali**
 
-L'errore *... Autenticazione fallita ...* o *... AUTHENTICATE fallita ...* potrebbe significare che il tuo nome utente o password fossero scorretti. Alcuni provider prevedono come nome utente solo *il nome utente* e altri il tuo indirizzo email completo *username@example.com*. Quando copi/incolli per inserire un nome utente o una password, i caratteri invisibili potrebbero essere copiati, il che potrebbe anche causare questo problema. Alcuni manager di password sono anche noti per farlo erroneamente. Il nome utente potrebbe essere sensibile alle maiuscole, quindi prova con soli caratteri minuscoli. La password è quasi sempre sensibile alle maiuscole. Alcuni provider richiedono l'uso di una password dell'app invece della password del profilo, quindi sei pregato di controllare la documentazione del provider. A volte è necessario per abilitare l'accesso esterno (IMAP/SMTP) sul sito web del provider per primo. Altre possibili cause sono che il profilo sia bloccato o che l'accesso sia stato limitato amministrativamente in qualche modo, per esempio consentendo di accedere solo da certe reti / indirizzi IP.
+L'errore *... Autenticazione fallita ...* o *... AUTHENTICATE fallito ...* potrebbe significare che il tuo nome utente o la tua password siano scorretti. Alcuni provider prevedono come nome utente solo il *nome utente* e altri il tuo indirizzo email completo *username@example.com*. Quando copi/incolli per inserire un nome utente o una password, potrebbero essere copiati i caratteri invisibili, che potrebbero anche causare questo problema. Anche alcuni gestori di password sono noti per farlo in modo scorretto. Il nome utente potrebbe essere sensibile alle maiuscole, quindi prova con soli caratteri minuscoli. La password è quasi sempre sensibile alle maiuscole. Alcuni provider richiedono l'uso di una password dell'app invece di quella del profilo, quindi sei pregato di controllare la documentazione del provider. A volte è necessario abilitare l'accesso esterno (IMAP/SMTP) sul sito web del provider prima. Altre cause possibili sono che il profilo è bloccato o che l'accesso è stato limitato amministrativamente in qualche modo, per esempio consentendo di accedere solo da certe reti / indirizzi IP.
 
-L'errore *... Troppi tentativi errati di autenticazione ...* potrebbero significare che tu stia usando una password del profilo di Yahoo invece di una password dell'app. Sei pregato di vedere [questa FAQ](#user-content-faq88) su come configurare un profilo di Yahoo.
+L'errore *... Troppi tentativi errati di autenticazione ...* potrebbe significare che stai usando una password del profilo di Yahoo invece di una password dell'app. Sei pregato di vedere [questa FAQ](#user-content-faq88) su come configurare un profilo di Yahoo.
 
-Il messaggio *... +OK ...* potrebbe significare che una porta POP3 (solitamente la porta numero 995) sia usata per un profilo IMAP (solitamente la porta numero 993).
+Il messaggio *... +OK ...* potrebbe significare che una porta POP3 (solitamente la porta numero 995) stia venendo utilizzata per un profilo IMAP (solitamente la porta numero 993).
 
-Gli errori *... non validi ...*, *... richiede indirizzo valido ...* e *... Il parametro di HELO non è conforme alla sintassi RFC ...* potrebbe essere risolto cambiando l'impostazione dell'identità avanzata *Usa l'indirizzo IP locale invece del nome dell'host*.
+Gli errori *... saluto non valido ...*, *... richiede indirizzo valido ...* e *... Parametro a HELO non conforme alla sintassi RFC ...* potrebbero essere risolti cambiando l'impostazione di identità avanzata *Usa indirizzo IP locale invece del nome dell'host*.
 
-L'errore *... Impossibile connettersi all'host ...* significa che non c'è stata alcuna risposta dal server email entro un tempo ragionevole (20 secondi di default). Principalmente indica problemi di connettività a internet, possibilmente causati da una VPN o da un'app del firewall. Puoi provare ad aumentare il timeout di connessione nelle impostazioni di connessione di FairEmail, per quando il server dell'email è molto lento.
+L'errore *... Impossibile connettersi all'host ...* significa che non c'è stata alcuna risposta dal server dell'email entro un tempo ragionevole (20 secondi di default). Principalmente questo indica problemi di connettività, possibilmente causati da una VPN o dall'app di un firewall. Puoi provare ad aumentare il timeout di connessione nelle impostazioni di connessione di FairEmail, per quando il server email è davvero lento.
 
-L'errore *... Connessione rifiutata ...* significa che il server email o qualcosa tra esso e l'app, come un firewall, ha rifiutato attivamente la connessione.
+L'errore *... Connessione rifiutata ...* significa che il server email o qualcosa tra il server email e l'app, come un firewall, ha attivamente rifiutato la connessione.
 
-L'errore *... Rete irraggiungibile ...* significa che il server dell'email era irraggiungibile tramite la connessione internet corrente, ad esempio perché il traffico di internet è limitato solo al traffico locale.
+L'errore *... Rete irraggiungibile ...* significa che il server dell'email non era raggiungibile tramite la connessione a internet attuale, ad esempio perché il traffico internet è limitato al solo traffico locale.
 
-L'errore *... L'host è irrisolto ...*, *... Impossibile risolvere l'host ...* o *... Nessun indirizzo associato all'hostname ...* significa che l'indirizzo del server dell'email non è stato risolto in un indirizzo IP. Questo potrebbe essere causato da una VPN, blocco annunci o un server [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) (locale) irraggiungibile o non funzionante propriamente.
+L'errore *... Ospite non risolto ...*, *... Impossibile risolvere l'host ...* o *... Nessun indirizzo associato con il nome dell'host ...* significa che non è stato possibile risolvere l'indirizzo del server email in un indirizzo IP. Questo potrebbe essere causato da un VPN, un blocco degli annunci o un server [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) irraggiungibile o non funzionante propriamente (locale).
 
-L'errore *... Il software ha causato l'annullamento ...* significa che il server email o qualcosa tra esso e FairEmail ha terminato la connessione esistente. Questo può verificarsi ad esempio alla perdita brusca di connettività. Un esempio tipico è l'attivazione della modalità aereo.
+L'errore *... Annullamento della connessione causato dal software ...* significa che il server dell'email o qualcosa tra FairEmail e il server dell'email ha terminato attivamente una connessione esistente. Questo può per esempio verificarsi quando la connessione è persa inaspettatamente. Un esempio tipico è l'attivazione della modalità aereo.
 
-Gli errori *... BYE Logging out ...*, *... Connection reset by peer ...* mean that the email server actively terminated an existing connection.
+Gli errori *... Disconnettendo BYE ...*, *... Connessione ripristinata da pari ...* significa che il server dell'email ha terminato attivamente una connessione esistente.
 
-L'errore *... Connection closed by peer ...* might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
+L'errore *... Connessione chiusa da pari ...* potrebbe esser causata da un server non aggiornato di Exchange, vedi [qui](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) per ulteriori informazioni.
 
-Gli errori *... Errore di lettura ...*, *... Errore di scrittura ...*, *... Lettura scaduta ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
+Gli errori *... Errore di lettura ...*, *... Errore di scrittura ...*, *... Lettura scaduta ...*, *... Conduttura rotta ...* significa che il server dell'email non risponde più o che la connessione internet non è buona.
 
-L'errore *... Unexpected end of zlib input stream ...* means that not all data was received, possibly due to a bad or interrupted connection.
+L'errore *... Interruzione imprevista del flusso di input di zlib ...* significa che non tutti i dati sono stati ricevuti, possibilmente a causa di una connessione interrotta o non buona.
 
 L'errore *... connessione fallita ...* potrebbe indicare [Troppe connessioni simultanee](#user-content-faq23).
 
-L'avviso *... Crittografia non supportata ...* significa che i caratteri del messaggio sono sconosciuti o non supportati. FairEmail presumerà ISO-8859-1 (Latin1), che in gran parte dei casi risulterà nella visualizzazione corretta del messaggio.
+L'avviso *... Crittografia non supportata ...* significa che la serie di caratteri del messaggio è sconosciuta o non supportata. FairEmail presumerà ISO-8859-1 (Latin1), che in gran parte dei casi risulterà nel mostrare correttamente il messaggio.
 
-Sei pregato di [vedere qui](#user-content-faq4) per gli errori *... Inaffidabile ... non nel certificato ...*, *... Certificato di sicurezza non valido (Impossibile verificare l'identità del server) ...* o *... Ancoraggio di fiducia per il percorso del certificato non trovato ...*
+Sei pregato di [vedere qui](#user-content-faq4) per gli errori *... Inaffidabile ... non nel certificato ...*, *... Certificato di sicurezza non valido (Impossibile verificare l'identità del server) ...* o *... Ancoraggio di fiducia per il percorso di certificazione non trovato ...*
 
 Sei pregato di [vedere qui](#user-content-faq127) per l'errore *... Argomenti HELO sintatticamente non validi ...*.
 
-Sei pregato di [vedere qui](#user-content-faq41) per l'errore *... Handshake failed ...*.
+Sei pregato di [vedere qui](#user-content-faq41) per l'errore *... Stretta di mano fallita ...*.
 
-Vedi [qui](https://linux.die.net/man/3/connect) per cosa significano codici di errore come EHOSTUNREACH e ETIMEDOUT.
+Vedi [qui](https://linux.die.net/man/3/connect) per cosa significano i codici di errore come EHOSTUNREACH e ETIMEDOUT.
 
-Possibili cause sono:
+Cause possibili sono:
 
 * Un firewall o router sta bloccando le connessioni al server
 * Il nome dell'host o numero di porta non è valido
@@ -897,13 +899,13 @@ Possibili cause sono:
 * Il server dell'email rifiuta di accettare un messaggio, ad esempio perché troppo grande o contenente collegamenti inaccettabili
 * Ci sono troppe connessioni al server, vedi anche la prossima domanda
 
-Molte reti Wi-Fi pubbliche bloccano l'email in uscita per prevenire lo spam. A volte puoi risolverlo usando un'altra porta SMTP. Vedi la documentazione del provider per i numeri di porta inutilizzabili.
+Molte reti Wi-Fi pubbliche bloccano le email in uscita per prevenire lo spam. A volte puoi risolverlo usando un'altra porta SMTP. Vedi la documentazione del provider per i numeri di porta utilizzabili.
 
-Se stai usando una [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), il provider del VPN potrebbe bloccare la connessione perché sta provando troppo aggressivamente a prevenire lo spam. Nota anche che [Google Fi](https://fi.google.com/) sta usando una VPN.
+Se stai usando una [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), il provider della VPN potrebbe bloccare la connessione perché prova troppo aggressivamente a prevenire lo spam. Nota che anche [Google Fi](https://fi.google.com/) sta usando una VPN.
 
 **Errori di invio**
 
-I server SMTP possono rifiutare i messaggi per [diversi motivi](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes). I messaggi troppo grandi e l'innesco del filtro dello spam di un server email sono le motivazioni più comuni.
+I server SMTP possono rifiutare i messaggi per [varie motivazioni](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes). Messaggi troppo grandi e l'innesco del filtro di spam di un server email sono i motivi più comuni.
 
 * Il limite della dimensione dell'allegato per Gmail [è 25 MB](https://support.google.com/mail/answer/6584)
 * Il limite delle dimensioni dell'allegato per Outlook e Office 365 [è 20 MB](https://support.microsoft.com/en-us/help/2813269/attachment-size-exceeds-the-allowable-limit-error-when-you-add-a-large)
@@ -915,127 +917,127 @@ I server SMTP possono rifiutare i messaggi per [diversi motivi](https://en.wikip
 * *550 Messaggio di spam rifiutato perché l'IP è elencato per ...* significa che il server dell'email ha rifiutato di inviare un messaggio dall'indirizzo di rete attuale (pubblico) perché usato erroneamente per inviare spam da qualcun altro (si spera) in precedenza. Sei pregato di provare ad abilitare la modalità aereo per 10 minuti per acquisire un nuovo indirizzo di rete.
 * *571 5.7.1 Il messaggio contiene spam o virus o il mittente è bloccato ...* significa che il server dell'email ha considerato un messaggio come spam. Questo significa probabilmente che i filtri spam del server email sono troppo rigidi. Dovrai contattare il provider di posta elettronica per avere supporto a riguardo.
 
-Se vuoi usare il server SMTP di Gmail per risolvere un filtro anti-spam in uscita troppo severo o per migliorare la consegna dei messaggi:
+Se vuoi usare il server SMTP di Gmail per risolvere un filtro spam in uscita troppo severo o per migliorare la consegna dei messaggi:
 
 * Verifica il tuo indirizzo email [qui](https://mail.google.com/mail/u/0/#settings/accounts) (dovrai usare un browser desktop)
 * Cambia le impostazioni di identità come queste (configurazione, fase 2, tocca Gestisci, tocca identità):
 
-&emsp;&emsp;Nome utente: *il tuo indirizzo Gmail*<br /> &emsp;&emsp;Password: *[la password di un'app](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Porta: *465*<br /> &emsp;&emsp;Crittografia: *SSL/TLS*<br /> &emsp;&emsp;Risposta all'indirizzo: *il tuo indirizzo email* (impostazioni avanzate di identità)<br />
+&emsp;&emsp;Username: *your Gmail address*<br /> &emsp;&emsp;Password: *[an app password](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Port: *465*<br /> &emsp;&emsp;Encryption: *SSL/TLS*<br /> &emsp;&emsp;Reply to address: *your email address* (advanced identity settings)<br />
 
 <br />
 
 **Errori di Gmail**
 
-L'autorizzazione della configurazione dei profili di Gmail con la procedura guidata rapida deve essere aggiornata periodicamente tramite il [Manager dei profili di Android](https://developer.android.com/reference/android/accounts/AccountManager). Questo richiede permessi di contatto/profilo e connettività a internet.
+L'autorizzazione della configurazione dei profili di Gmail con la procedura guidata rapida devono essere ricaricati periodicamente tramite il [gestore del profilo Android](https://developer.android.com/reference/android/accounts/AccountManager). Questo richiede i permessi di contatto/profilo e connettività internet.
 
-L'errore *... Autenticazione fallita ... Profilo non trovato ...* significa che un profilo di Gmail autorizzato precedentemente è stato rimosso dal dispositivo.
+L'errore *... Autenticazione fallita ... Profilo non trovato ...* significa che un profilo di Gmail precedentemente autorizzato è stato rimosso dal dispositivo.
 
 Gli errori *... Autenticazione fallita ... Nessun token ...* significa che il manager del profilo di Android non è riuscito a ricaricare l'autorizzazione di un profilo di Gmail.
 
 L'errore *... Autenticazione fallita ... errore di rete ...* significa che il manager del profilo di Android non è riuscito a ricaricare l'autorizzazione di un profilo di Gmail a causa di problemi con la connessione a internet
 
-L'errore *... Autenticazione fallita ... Credenziali non valide ...* potrebbe esser causato dalla modifica della password del profilo o dall'aver revocato i permessi necessari del profilo/contatti. Nel caso in cui la password del profilo sia stata cambiata, dovrai autenticare di nuovo il profilo di Google nelle impostazioni del profilo di Android. Nel caso in cui i permessi fossero revocati, puoi avviare la procedura guidata rapida di Gmail per garantire di nuovo i permessi necessari (non devi riconfigurare il profilo).
+L'errore *... Autenticazione fallita ... Credenziali non valide ...* potrebbe essere causato dal cambiamento della password del profilo o avendo revocati i permessi di profilo/contatti necessari. Nel caso in cui la password del profilo fosse cambiata, dovrai autenticare di nuovo le impostazioni del profilo di Android. Nel caso in cui fossero stati revocati i permessi, puoi avviare la procedura guidata di configurazione rapida di Gmail per garantire di nuovo i permessi richiesti (non devi riconfigurare il profilo).
 
-L'errore *... ServiceDisabled ...* potrebbe essere causato dall'iscrizione nel [Programma di Protezione Avanzata](https://landing.google.com/advancedprotection/): "<em x-id"3">Per leggere la tua email, puoi (devi) usare Gmail - Non potrai usare il tuo Profilo di Google con alcune app (tutte) e servizi che richiedono l'accesso a dati sensibili come le tue email</em>", vedi [qui](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
+L'errore *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/): "*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*", see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
 
-Quando in dubbio, puoi richiedere [supporto](#user-content-support).
+When in doubt, you can ask for [support](#user-content-support).
 
 <br />
 
 <a name="faq23"></a>
-**(23) Perché ottengo l'avviso ... ?**
+**(23) Why do I get alert ... ?**
 
-*Generale*
+*General*
 
-Gli avvisi sono messaggi di avviso inviati dai server dell'email.
+Alerts are warning messages sent by email servers.
 
-*Troppe connessioni simultanee* o *Numero massimo di connessioni superate*
+*Too many simultaneous connections* or *Maximum number of connections exceeded*
 
-Questo avviso sarà inviato quando ci sono troppe connessioni di cartelle per lo stesso profilo email allo stesso tempo.
+This alert will be sent when there are too many folder connections for the same email account at the same time.
 
-Cause possibili sono:
+Possible causes are:
 
 * Ci sono client email multipli connessi allo stesso profilo
 * Lo stesso client email è connesso diverse volte allo stesso profilo
 * Le connessioni precedenti sono state terminate bruscamente per esempio perdendo bruscamente la connettività internet
 
-Prima prova ad attendere un po' di tempo per vedere se il problema si risolve da solo, altrimenti:
+First try to wait some time to see if the problem resolves itself, else:
 
 * o passa alla verifica periodica dei messaggi nelle impostazioni di ricezione, che risulterà nell'apertura delle cartelle una per volta
 * o imposta alcune cartelle a sondaggio invece di sincronizzare (tenere premuto a lungo la cartella nell'elenco della cartella, modificare le proprietà)
 
-Un modo facile per configurare periodicamente la verifica dei messaggi per tutte le cartelle tranne quella della posta in arrivo è usare *Applica a tutti ...* nel menu a tre puntini dell'elenco delle cartelle per spuntare le due caselle avanzate in fondo.
+An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
 
-Il numero massimo di connessioni delle cartelle simultanee per Gmail è 15, quindi puoi sincronizzare massimo 15 cartelle in simultanea su *tutti* i tuoi dispositivi allo stesso tempo. Per questo motivo le cartelle dell'*utente* di Gmail sono impostate per sondare di default invece che sincronizzare sempre. Quando necessario o desiderato, puoi cambiarlo premendo a lungo una cartella nell'elenco delle cartelle e selezionando *Modifica proprietà*. Vedi [qui](https://support.google.com/mail/answer/7126229) per i dettagli.
+The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
 
-Quando usi un server Dovecot, potresti voler cambiare l'impostazione [mail_max_userip_connections](https://doc.dovecot.org/settings/dovecot_core_settings/#mail-max-userip-connections).
+When using a Dovecot server, you might want to change the setting [mail_max_userip_connections](https://doc.dovecot.org/settings/dovecot_core_settings/#mail-max-userip-connections).
 
-Nota che ci vorrà un po' perché il server dell'email scopra le connessioni rotte, ad esempio per l'uscita dal raggio di una rete, il che significa che efficientemente solo metà delle connessioni della cartella sono disponibili. Per Gmail queste saranno solo 7 connessioni.
+Note that it will take the email server a while to discover broken connections, for example due to going out of range of a network, which means that effectively only half of the folder connections are available. For Gmail this would be just 7 connections.
 
 <br />
 
 <a name="faq24"></a>
-**(24) Cosa sono i messaggi di navigazione sul server?**
+**(24) What is browse messages on the server?**
 
-Sfogliare i messaggi sul server li recupererà dal server dell'email in tempo reale al raggiungimento della fine dell'elenco dei messaggi sincronizzati, anche quando la cartella è impostata per non sincronizzare. Puoi disabilitare questa funzionalità nelle impostazioni del profilo avanzate.
+Browse messages on the server will fetch messages from the email server in real time when you reach the end of the list of synchronized messages, even when the folder is set to not synchronize. You can disable this feature in the advanced account settings.
 
 <br />
 
 <a name="faq25"></a>
-**(25) Perché non posso selezionare/aprire/salvare un'immagine, allegato o file?**
+**(25) Why can't I select/open/save an image, attachment or a file?**
 
-Quando l'elemento di un menu per selezionare/aprire/salvare un file è disabilitato (attenuato) o quando ottieni il messaggio *Framework di accesso all'archiviazione non disponibile*, il [framework di accesso all'archiviazione](https://developer.android.com/guide/topics/providers/document-provider), un componente Android standard, è probabilmente non presente. Questo potrebbe dipendere dalla tua ROM personalizzata non lo include o perché è stata rimossa attivamente (sgonfiato).
+When a menu item to select/open/save a file is disabled (dimmed) or when you get the message *Storage access framework not available*, the [storage access framework](https://developer.android.com/guide/topics/providers/document-provider), a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated).
 
-FairEmail non richiede i permessi di archiviazione, quindi questo framework è necessario ai file e le cartelle selezionati. Nessun'app, eccetto forse i manager di file, indirizzati ad Android 4.4 KitKat o successivo dovrebbe chiedere i permessi di archiviazione perché consentirebbe l'accesso a *tutti* i file.
+FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to *all* files.
 
-Il framework di accesso all'archiviazione è fornito dal pacchetto *com.android.documentsui*, visibile come app *File* su alcune versioni di Android (notevole OxygenOS).
+The storage access framework is provided by the package *com.android.documentsui*, which is visible as *Files* app on some Android versions (notable OxygenOS).
 
-Puoi abilitare (di nuovo) il framework di accesso all'archiviazione con questo comando adb:
+You can enable the storage access framework (again) with this adb command:
 
 ```
 pm install -k --user 0 com.android.documentsui
 ```
 
-In alternativa, potresti riabilitare l'app *File* usando le impostazioni dell'app di Android.
+Alternatively, you might be able to enable the *Files* app again using the Android app settings.
 
 <br />
 
 <a name="faq26"></a>
-**(26) Posso aiutare a tradurre FairEmail nella mia lingua?**
+**(26) Can I help to translate FairEmail in my own language?**
 
-Sì, puoi tradurre i testi di FairEmail nella tua lingua [su Crowdin](https://crowdin.com/project/open-source-email). La registrazione è gratuita.
+Yes, you can translate the texts of FairEmail in your own language [on Crowdin](https://crowdin.com/project/open-source-email). Registration is free.
 
-Se vorresti che il tuo nome o alias fosse incluso nell'elenco dei collaboratori in *Info* nell'app, sei pregato di [contattarmi](https://contact.faircode.eu/?product=fairemailsupport).
+If you would like your name or alias to be included in the list of contributors in *About* the app, please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
 
 <br />
 
 <a name="faq27"></a>
-**(27) Come posso distinguere tra immagini incorporate ed esterne?**
+**(27) How can I distinguish between embedded and external images?**
 
-Immagine esterna:
+External image:
 
-![Immagine esterna](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
 
-Immagine incorporata:
+Embedded image:
 
-![Immagine incorporata](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
+![Embedded image](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
 
-Immagine danneggiata:
+Broken image:
 
-![Immagine danneggiata](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
+![Broken image](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
 
-Nota che lo scaricamento di immagini esterne da un server remoto è utilizzabile per registrare di aver visto un messaggio, cosa che probabilmente non faresti se questo fosse spam o malevolo.
+Note that downloading external images from a remote server can be used to record you did see a message, which you likely don't want if the message is spam or malicious.
 
 <br />
 
 <a name="faq28"></a>
-**(28) Come posso gestire le notifiche della barra di stato?**
+**(28) How can I manage status bar notifications?**
 
-Nella configurazione troverai il pulsante *Gestione notifiche* per navigare direttamente alle impostazioni di notifica di Android per FairEmail.
+In the setup you'll find a button *Manage notifications* to directly navigate to the Android notifications settings for FairEmail.
 
-Su Android 8.0 Oreo e successive puoi gestire le proprietà dei canali di notifica individuali, ad esempio per configurare un suono di notifica specifico o mostrare le notifiche sul blocco schermo.
+On Android 8.0 Oreo and later you can manage the properties of the individual notification channels, for example to set a specific notification sound or to show notifications on the lock screen.
 
-FairEmail ha i seguenti canali di notifica:
+FairEmail has the following notification channels:
 
 * Servizio: usato per la notifica del servizio di sincronizzazione, vedi anche [questa FAQ](#user-content-faq2)
 * Invio: usato per le notifiche del servizio di invio
@@ -1043,128 +1045,128 @@ FairEmail ha i seguenti canali di notifica:
 * Avviso: usato per le notifiche di avviso
 * Errore: usato per le notifiche di errore
 
-Vedi [qui](https://developer.android.com/guide/topics/ui/notifiers/notifications#ManageChannels) per i dettagli sui canali di notifica. In breve: tocca sul nome del canale di notifica per accedere alle impostazioni del canale.
+See [here](https://developer.android.com/guide/topics/ui/notifiers/notifications#ManageChannels) for details on notification channels. In short: tap on the notification channel name to access the channel settings.
 
-Su Android prima di Android 8 Oreo puoi impostare il suono di notifica nelle impostazioni.
+On Android before Android 8 Oreo you can set the notification sound in the settings.
 
-Vedi [questa FAQ](#user-content-faq21) se il tuo dispositivo ha un LED di notifica.
+See [this FAQ](#user-content-faq21) if your device has a notification light.
 
 <br />
 
 <a name="faq29"></a>
-**(29) Come posso ottenere le notifiche dei messaggi nuovi per le altre cartelle?**
+**(29) How can I get new message notifications for other folders?**
 
-Basta premere a lungo su una cartella, selezionare *Modifica proprietà*, e abilitare *Mostra nella cartella di posta in entrata unificata* o *Notifica nuovi messaggi* (disponibile solo su Android 7 Nougat e successive) e tocca *Salva*.
+Just long press a folder, select *Edit properties*, and enable either *Show in unified inbox* or *Notify new messages* (available on Android 7 Nougat and later only) and tap *Save*.
 
 <br />
 
 <a name="faq30"></a>
-**(30) Come posso usare le impostazioni rapide fornite?**
+**(30) How can I use the provided quick settings?**
 
-Ci sono impostazioni rapide (impostazione tile) disponibili per:
+There are quick settings (settings tiles) available to:
 
 * abilitare/disabilitare globalmente la sincronizzazione
 * mostrare il numero di nuovi messaggi e contrassegnarli come visti (non letti)
 
-Le impostazioni rapide richiedono Android 7.0 Nougat o successive. L'uso delle tile delle impostazioni è spiegato [qui](https://support.google.com/android/answer/9083864).
+Quick settings require Android 7.0 Nougat or later. The usage of settings tiles is explained [here](https://support.google.com/android/answer/9083864).
 
 <br />
 
 <a name="faq31"></a>
-**(31) Come posso usare le scorciatoie fornite?**
+**(31) How can I use the provided shortcuts?**
 
-Esistono scorciatoie disponibili per:
+There are shortcuts available to:
 
 * comporre un nuovo messaggio a un contatto preferito
 * configura profili, identità, etc
 
-Le scorciatoie richiedono Android 7.1 Nougat o successive. L'uso di scorciatoie è spiegato [qui](https://support.google.com/android/answer/2781850).
+Shortcuts require Android 7.1 Nougat or later. The usage of shortcuts is explained [here](https://support.google.com/android/answer/2781850).
 
 <br />
 
 <a name="faq32"></a>
-**(32) Come posso controllare se la lettura dell'email sia davvero sicura?**
+**(32) How can I check if reading email is really safe?**
 
-Puoi usare il [Tester della Privacy dell'Email](https://www.emailprivacytester.com/) per questo.
+You can use the [Email Privacy Tester](https://www.emailprivacytester.com/) for this.
 
 <br />
 
 <a name="faq33"></a>
-**(33) Perché gli indirizzi del mittente modificati non funzionano?**
+**(33) Why are edited sender addresses not working?**
 
-Gran parte dei provider accettano indirizzi convalidati solo inviando messaggi per prevenire lo spam.
+Most providers accept validated addresses only when sending messages to prevent spam.
 
-Per esempio Google modifica le intestazioni del messaggio come questo per gli indirizzi *non verificati*:
+For example Google modifies the message headers like this for *unverified* addresses:
 
 ```
 Da: Qualcuno <somebody@example.org>
 X-Google-Original-From: Qualcuno <somebody+extra@example.org>
 ```
 
-Questo significa che l'indirizzo del mittente modificato è stato sostituito automaticamente da un indirizzo verificato prima di inviare il messaggio.
+This means that the edited sender address was automatically replaced by a verified address before sending the message.
 
-Nota che questo è indipendente dalla ricezione di messaggi.
+Note that this is independent of receiving messages.
 
 <br />
 
 <a name="faq34"></a>
-**(34) Come sono abbinate le identità?**
+**(34) How are identities matched?**
 
-Le identità sono come previsto abbinate dal profilo. Per i messaggi in arrivo gli indirizzi *a*, *cc*, *bcc*, *da* e *(X-)delivered/envelope/original-to* saranno controllati (in quest'ordine) e per i messaggi in uscita (bozze, in uscita e inviate) solo gli indirizzi *da* saranno controllati. Gli indirizzi uguali hanno la precedenza su quelli parzialmente corrispondenti, eccetto per gli indirizzi *delivered-to*.
+Identities are as expected matched by account. For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order) and for outgoing messages (drafts, outbox and sent) only the *from* addresses will be checked. Equal addresses have precedence over partially matching addresses, except for *delivered-to* addresses.
 
-L'indirizzo abbinato sarà mostrato come *tramite* nella sezione degli indirizzi dei messaggi ricevuti (tra l'intestazione e il testo del messaggio).
+The matched address will be shown as *via* in the addresses section of received messages (between the message header and message text).
 
-Nota che le identità devono essere abilitate per poter essere abbinate e che le identità di altri profili non saranno considerate.
+Note that identities needs to be enabled to be able to be matched and that identities of other accounts will not be considered.
 
-L'abbinamento sarà fatto solo una volta alla ricezione di un messaggio, quindi cambiare la configurazione non cambierà i messaggi esistenti. Però, potresti cancellare i messaggi locali tenendo premuta a lungo una cartella nell'elenco delle cartelle e risincronizzarli.
+Matching will be done only once on receiving a message, so changing the configuration will not change existing messages. You could clear local messages by long pressing a folder in the folder list and synchronize the messages again though.
 
-È possibile configurare un [regex](https://en.wikipedia.org/wiki/Regular_expression) nelle impostazioni d'identità per abbinare **il nome utente** di un indirizzo email (la parte prima della firma @).
+It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings to match **the username** of an email address (the part before the @ sign).
 
-Nota che il nome di dominio (le parti dopo la firma @) necessita sempre di essere uguale al nome di dominio dell'identità.
+Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
 
-Se vuoi abbinare un indirizzo email tutto sommato, questo regex è principalmente buono:
+If you like to match a catch-all email address, this regex is mostly okay:
 
 ```
 .*
 ```
 
-Se vuoi abbinare gli indirizzi email a scopo speciale abc@example.com e xyz@example.com e vorresti avere anche l'indirizzo email di ripiego main@example.com, potresti fare qualcosa come:
+If you like to match the special purpose email addresses abc@example.com and xyx@example.com and like to have a fallback email address main@example.com as well, you could do something like this:
 
 * Identità: abc@example.com; regex: **(?i)abc**
 * Identità: xyz@example.com; regex: **(?i)xyz**
 * Identità: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
 
-Le identità abbinate sono utilizzabili per colorare i messaggi del codice. Il colore dell'identità prende la precedenza sul colore secondario. Impostare i colori di identità è una funzionalità pro.
+Matched identities can be used to color code messages. The identity color takes precedence over the account color. Setting identity colors is a pro feature.
 
 <br />
 
 <a name="faq35"></a>
-**(35) Perché dovrei stare attento alla visualizzazione di immagini, allegati, messaggio originale e ad aprire collegamenti?**
+**(35) Why should I be careful with viewing images, attachments, the original message, and opening links?**
 
-Visualizzare le immagini archiviate remotamente (vedi anche [questa FAQ](#user-content-faq27)) e aprire collegamenti potrebbe non solo dire al mittente che hai visto il messaggio, ma potrebbe anche far rilevare il tuo indirizzo IP. Vedi anche questa domanda: [Perché il collegamento dell'email è più pericoloso del collegamento di ricerca web?](https://security.stackexchange.com/questions/241139/why-emails-link-is-more-dangerous-than-web-searchs-link).
+Viewing remotely stored images (see also [this FAQ](#user-content-faq27)) and opening links might not only tell the sender that you have seen the message, but will also leak your IP address. See also this question: [Why email's link is more dangerous than web search's link?](https://security.stackexchange.com/questions/241139/why-emails-link-is-more-dangerous-than-web-searchs-link).
 
-Aprire allegati o visualizzare un messaggio originale potrebbe caricare contenuti remoti ed eseguire script, che potrebbero non solo causare la rilevazione di informazioni sulla privacy sensibili, ma anche un rischio di sicurezza.
+Opening attachments or viewing an original message might load remote content and execute scripts, that might not only cause privacy sensitive information to leak, but can also be a security risk.
 
-Nota che i tuoi contatti potrebbero inconsapevolmente inviare messaggi malevoli se infettati da malware.
+Note that your contacts could unknowingly send malicious messages if they got infected with malware.
 
-FairEmail riformatta i messaggi rendendoli diversi dall'originale, ma scoprendo anche i collegamenti di phishing.
+FairEmail formats messages again causing messages to look different from the original, but also uncovering phishing links.
 
-Nota che i messaggi riformattati sono spesso più leggibili di quelli originali perché i margini sono rimossi e i colori del font e le dimensioni sono standardizzati.
+Note that reformatted messages are often better readable than original messages because the margins are removed, and font colors and sizes are standardized.
 
-L'app di Gmail mostra le immagini di default scaricandole tramite un server proxy di Google. Poiché le immagini sono scaricate dal server sorgente [in tempo reale](https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/), è anche meno sicuro perché Google è anche coinvolto senza fornire maggiori benefici.
+The Gmail app shows images by default by downloading the images through a Google proxy server. Since the images are downloaded from the source server [in real-time](https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/), this is even less secure because Google is involved too without providing much benefit.
 
-Puoi visualizzare immagini e messaggi originali di default per i mittenti fidati su base di un caso, spuntando *Non chiedere di nuovo per ...*.
+You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
 
-Se vuoi ripristinare le app predefinite di *Apri con*, sei pregato di [vedere qui](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
+If you want to reset the default *Open with* apps, please [see here](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
 
 <br />
 
 <a name="faq36"></a>
-**(36) Come sono crittografati i file di impostazioni?**
+**(36) How are settings files encrypted?**
 
-Versione breve: AES 256 bit
+Short version: AES 256 bit
 
-Versione lunga:
+Long version:
 
 * La chiave a 256 bit è generata con *PBKDF2WithHmacSHA1* usando un sale casuale sicuro a 128 bit e 65536 iterazioni
 * La cifra è *AES/CBC/PKCS5Padding*
@@ -1172,80 +1174,80 @@ Versione lunga:
 <br />
 
 <a name="faq37"></a>
-**(37) Come sono archiviate le password?**
+**(37) How are passwords stored?**
 
-Tutte le versioni supportate di Android [crittografano tutti i dati dell'utente](https://source.android.com/security/encryption), quindi tutti i dati, inclusi nomi utenti, password, messaggi, etc. sono archiviati crittografati.
+All supported Android versions [encrypt all user data](https://source.android.com/security/encryption), so all data, including usernames, passwords, messages, etc, is stored encrypted.
 
-Se il dispositivo è in sicurezza con un PIN, uno schema o una password, puoi rendere visibili le password del profilo e dell'identità. Se questo è un problema perché stai condividendo il dispositivo con altre persone, considera di usare i [profili utente](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
+If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible. If this is a problem because you are sharing the device with other people, consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
 
 <br />
 
 <a name="faq39"></a>
-**(39) Come posso ridurre l'uso della batteria di FairEmail?**
+**(39) How can I reduce the battery usage of FairEmail?**
 
-Le versioni Android recenti di default segnalano l'*uso dell'app* come una percentuale nella schermata delle impostazioni della batteria di Android. **In modo confusionario, *l'uso dell'app* non equivale all'*uso della batteria* e non è nemmeno correlato direttamente all'uso della batteria!** L'uso dell'app (mentre in uso) sarà molto alto perché FairEmail sta usando il servizio in primo piano, considerato come l'uso costante dell'app di Android. Tuttavia, questo non significa che FairEmail stia usando costantemente l'energia della batteria. Il vero uso della batteria è visibile navigando a questa schermata:
+Recent Android versions by default report *app usage* as a percentage in the Android battery settings screen. **Confusingly, *app usage* is not the same as *battery usage* and is not even directly related to battery usage!** The app usage (while in use) will be very high because FairEmail is using a foreground service which is considered as constant app usage by Android. However, this doesn't mean that FairEmail is constantly using battery power. The real battery usage can be seen by navigating to this screen:
 
-*Impostazioni di Android*, *Batteria*, menu a tre puntini *Uso della batteria*, menu a tre puntini*Mostra usi completi del dispositivo*
+*Android settings*, *Battery*, three-dots menu *Battery usage*, three-dots menu *Show full device usage*
 
-Come regola generale, l'uso della batteria dovrebbe essere inferiore o in ogni caso non molto maggiore dello *Standby della rete mobile*. Se non è il caso, sei pregato di attivare *Ottimizzazione automatica* nelle impostazioni di ricezione. Se questo non aiuta, sei pregato di [chiedere supporto](https://contact.faircode.eu/?product=fairemailsupport).
+As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby*. If this isn't the case, please turn on *Auto optimize* in the receive settings. If this doesn't help, please [ask for support](https://contact.faircode.eu/?product=fairemailsupport).
 
-È inevitabile che la sincronizzazione dei messaggi userà energia della batteria perché richiede accesso alla rete e l'accesso al database dei messaggi.
+It is inevitable that synchronizing messages will use battery power because it requires network access and accessing the messages database.
 
-Se stai comparando l'uso della batteria di FairEmail con un altro client email, sei pregato di assicurarti che l'altro client email sia configurato similmente. Per esempio, comparare la sincronizzazione continua (messaggi push) e il controllo periodico (raro) per i nuovi messaggi non è un confronto equo.
+If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is setup similarly. For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
 
-La riconnessione al server email userà energia extra della batteria, quindi una connessione internet instabile risulterà in uso extra della batteria. Inoltre, alcuni server email terminano prematuramente le connessioni inattive, mentre [lo standard](https://tools.ietf.org/html/rfc2177) dice che una connessione inattiva dovrebbe essere mantenuta aperta per 29 minuti. In questi casi potresti voler sincronizzare periodicamente, ad esempio ogni ora, invece che continuamente. Nota che sondare frequentemente (più di ogni 30-60 minuti) potrebbe usare maggiore energia della batteria rispetto alla sincronizzazione continua perché la connessione al server e il confronto di messaggi locali e remoti sono operazioni costose.
+Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage. Also, some email servers prematurely terminate idle connections, while [the standard](https://tools.ietf.org/html/rfc2177) says that an idle connection should be kept open for 29 minutes. In these cases you might want to synchronize periodically, for example each hour, instead of continuously. Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always because connecting to the server and comparing the local and remote messages are expensive operations.
 
-[Su alcuni dispositivi](https://dontkillmyapp.com/) è necessario *disabilitare* le ottimizzazioni della batteria (configurazione, passaggio 4) per mantenere le connessioni ai server email aperti. Difatti, lasciare abilitate le ottimizzazioni della batteria può risultare nell'uso extra di batteria per tutti i dispositivi, per quanto sembri contraddittorio!
+[On some devices](https://dontkillmyapp.com/) it is necessary to *disable* battery optimizations (setup step 4) to keep connections to email servers open. In fact, leaving battery optimizations enabled can result in extra battery usage for all devices, even though this sounds contradictory!
 
-Gran parte dell'uso della batteria, senza considerare la visualizzazione dei messaggi, è dovuto alla sincronizzazione dei messaggi (ricezione e invio). Quindi, per ridurre l'uso della batteria, imposta il numero di giorni per sincronizzare i messaggi a un valore inferiore, specialmente se ci sono molti messaggi recenti in una cartella. Premi a lungo il nome di una cartella nell'elenco delle cartelle e seleziona *Modifica proprietà* per accedere a quest'impostazione.
+Most of the battery usage, not considering viewing messages, is due to synchronization (receiving and sending) of messages. So, to reduce the battery usage, set the number of days to synchronize message for to a lower value, especially if there are a lot of recent messages in a folder. Long press a folder name in the folders list and select *Edit properties* to access this setting.
 
-Se hai connettività a internet almeno una volta al giorno, è sufficiente sincronizzare i messaggi solo per un giorno.
+If you have at least once a day internet connectivity, it is sufficient to synchronize messages just for one day.
 
-Nota che puoi impostare il numero di giorni per *mantenere* i messaggi per un numero maggiore piuttosto che per *sincronizzarne* i messaggi. Potresti ad esempio sincronizzare inizialmente i messaggi per un gran numero di giorni e dopo il completamento di ciò ridurre il numero di giorni in cui sincronizzare i messaggi, lasciando il numero di giorni per cui mantenerli. Dopo aver diminuito il numero di giorni per cui mantenere i messaggi, potresti voler eseguire la pulizia nelle impostazioni miste per rimuovere i vecchi file.
+Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages for, but leave the number of days to keep messages for. After decreasing the number of days to keep messages for, you might want to run the cleanup in the miscellaneous settings to remove old files.
 
-Nelle impostazioni di ricezione puoi abilitare la sincronizzazione continua dei messaggi preferiti, che consentirà di mantenere messaggi più vecchi in giro sincronizzandoli per un numero limitato di giorni.
+In the receive settings you can enable to always synchronize starred messages, which will allow you to keep older messages around while synchronizing messages for a limited number of days.
 
-Disabilitare l'opzione della cartella *Scarica automaticamente testi e allegati del messaggio* risulterà in minore traffico di rete e dunque minore uso della batteria. Potresti disabilitare quest'opzione per esempio per la cartella degli inviati e l'archivio.
+Disabling the folder option *Automatically download message texts and attachments* will result in less network traffic and thus less battery usage. You could disable this option for example for the sent folder and the archive.
 
-Sincronizzare i messaggi di notte è principalmente inutile, quindi puoi risparmiare sull'uso della batteria non sincronizzando di notte. Nelle impostazioni puoi selezionare un piano per la sincronizzazione del messaggio (questa è una funzionalità pro).
+Synchronizing messages at night is mostly not useful, so you can save on battery usage by not synchronizing at night. In the settings you can select a schedule for message synchronization (this is a pro feature).
 
-FairEmail sincronizzerà di default l'elenco delle cartelle su ogni connessione. Poiché le cartelle sono per lo più create, rinominate ed eliminate molto spesso, puoi risparmiare uso della rete e della batteria disabilitandolo nelle impostazioni di ricezione.
+FairEmail will by default synchronize the folder list on each connection. Since folders are mostly not created, renamed and deleted very often, you can save some network and battery usage by disabling this in the receive settings.
 
-FairEmail verificherà di default se i vecchi messaggi sono stati eliminati dal server su ogni connessione. Se non ti dispiace che i vecchi messaggi eliminati dal server siano ancora visibili in FairEmail, puoi risparmiare uso di batteria e rete disabilitandolo nelle impostazioni di ricezione.
+FairEmail will by default check if old messages were deleted from the server on each connection. If you don't mind that old messages that were delete from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings.
 
-Alcuni provider non seguono lo standard IMAP e non mantengono le connessioni aperte abbastanza a lungo, forzando spesso la riconnessione di FairEmail, causando uso extra della batteria. Puoi ispezionare il *Registro* tramite il menu di navigazione principale per verificare se ci sono riconnessioni frequenti (connessione chiusa/ripristinata, errore di lettura/scrittura/timeout, etc.). Puoi risolverlo abbassando l'intervallo di mantenimento in vita nelle impostazioni avanzate del profilo ad esempio per 9 o 15 minuti. Nota che le ottimizzazioni della batteria devono essere disabilitate nel passaggio 4 della configurazione per mantenere in vita le connessioni in modo affidabile.
+Some providers don't follow the IMAP standard and don't keep connections open long enough, forcing FairEmail to reconnect often, causing extra battery usage. You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc). You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes. Note that battery optimizations need to be disabled in setup step 4 to reliably keep connections alive.
 
-Alcuni provider inviano qualcosa ogni due minuti del tipo di '*Ancora qui*' risultando in traffico di rete e nell'attivazione del tuo dispositivo e causando uso extra non necessario della batteria. Puoi ispezionare il *Registro* tramite il menu di navigazione principale per controllare se il tuo provider lo stia facendo. Se il tuo provider usa [Dovecot](https://www.dovecot.org/) come server IMAP, potresti chiedere al tuo provider di cambiare l'impostazione [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) a un valore maggiore o anche meglio, disabilitarla. Se il tuo provider non è capace o desideroso di cambiarlo/disabilitarlo, dovresti considerare di passare alla sincronizzazione periodica invece che continua. Puoi modificarlo nelle impostazioni di ricezione.
+Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage. You can inspect the *Log* via the main navigation menu to check if your provider is doing this. If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server, you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider to switch to periodically instead of continuous synchronization. You can change this in the receive settings.
 
-Se ottieni il messaggio *Questo provider non supporta i messaggi push* configurando un profilo, considera di passare a un provider moderno che supporta messaggi push (IMAP IDLE) per ridurre l'uso della batteria.
+If you got the message *This provider does not support push messages* while configuring an account, consider switching to a modern provider which supports push messages (IMAP IDLE) to reduce battery usage.
 
-Se il tuo dispositivo ha uno schermo [AMOLED](https://en.wikipedia.org/wiki/AMOLED), puoi risparmiare l'uso della batteria visualizzando i messaggi passando al tema scuro.
+If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen, you can save battery usage while viewing messages by switching to the black theme.
 
-Se l'ottimizzazione automatica nelle impostazioni di ricezione è abilitato, un profilo sarà cambiato automaticamente per controllare periodicamente per nuovi messaggi quando il server email:
+If auto optimize in the receive settings is enabled, an account will automatically be switched to periodically checking for new messages when the email server:
 
 * Dice '*Ancora qui*' entro 3 minuti
 * Il server email non supporta i messaggi push
 * L'intervallo di mantenimento in vita è inferiore a 12 minuti
 
-Inoltre, le cartelle del cestino e dello spam saranno impostate automaticamente per verificare la presenza di nuovi messaggi dopo tre errori di [troppe connessioni simultanee](#user-content-faq23) consecutive.
+In addition, the trash and spam folders will be automatically set to checking for new messages after three successive [too many simultaneous connections](#user-content-faq23) errors.
 
 <br />
 
 <a name="faq40"></a>
-**(40) Come posso ridurre l'uso di dati di FairEmail?**
+**(40) How can I reduce the data usage of FairEmail?**
 
-Puoi ridurre l'uso dei dati allo stesso modo che riducendo l'uso della batteria, vedi la domanda precedente per i suggerimenti.
+You can reduce the data usage basically in the same way as reducing battery usage, see the previous question for suggestions.
 
-È inevitabile che i dati saranno usati per sincronizzare i messaggi.
+It is inevitable that data will be used to synchronize messages.
 
-Se la connessione al server email è persa, FairEmail risincronizzerà sempre i messaggi per assicurarsi che non ne siano mancati alcuni. Se la connessione è instabile, questo può risultare in un uso extra dei dati. In questo caso, è una buona idea ridurre il numero di giorni per sincronizzare i messaggi a un minimo (vedi la domanda precedente) o passare alla sincronizzazione periodica dei messaggi (impostazioni di ricezione).
+If the connection to the email server is lost, FairEmail will always synchronize the messages again to make sure no messages were missed. If the connection is unstable, this can result in extra data usage. In this case, it is a good idea to decrease the number of days to synchronize messages for to a minimum (see the previous question) or to switch to periodically synchronizing of messages (receive settings).
 
-Per ridurre l'uso dei dati, potresti cambiare queste impostazioni avanzate di ricevimento:
+To reduce data usage, you could change these advanced receive settings:
 
 * Controlla che i messaggi vecchi siano stati rimossi dal server: disabilitato
 * Sincronizzazione (condivisa) dell'elenco delle cartelle: disabilitato
 
-Di default FairEmail non scarica i testi e gli allegati del messaggio più grandi di 256 KiB quando c'è una connessione a internet misurata (mobile o Wi-Fi a pagamento). Puoi cambiarlo nelle impostazioni di connessione.
+By default FairEmail does not download message texts and attachments larger than 256 KiB when there is a metered (mobile or paid Wi-Fi) internet connection. You can change this in the connection settings.
 
 <br />
 
@@ -1262,9 +1264,9 @@ If your provider doesn't support encrypted connections, you should ask to make t
 
 See also [this FAQ](#user-content-faq4).
 
-The error '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
+L'errore '*Stretta di mano fallita ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
 
-The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
+L'errore '*Stretta di mano fallita ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
@@ -1275,11 +1277,11 @@ You can use [this website](https://ssl-tools.net/mailservers) or [this website](
 <br />
 
 <a name="faq42"></a>
-**(42) Puoi aggiungere un nuovo provider all'elenco dei provider?**
+**(42) Can you add a new provider to the list of providers?**
 
-Se il provider è usato da più che poche persone, sì, con piacere.
+If the provider is used by more than a few people, yes, with pleasure.
 
-Le seguenti informazioni sono necessarie:
+The following information is needed:
 
 ```
 <provider
@@ -1297,148 +1299,148 @@ Le seguenti informazioni sono necessarie:
 </provider>
 ```
 
-L'EFF [scrive](https://www.eff.org/nl/deeplinks/2018/06/announcing-starttls-everywhere-securing-hop-hop-email-delivery): "*Inoltre, anche se configuri perfettamente STARTTLS e usi un certificato valido, non c'è ancora garanzia alcuna che le tue comunicazioni saranno crittografate.*"
+The EFF [writes](https://www.eff.org/nl/deeplinks/2018/06/announcing-starttls-everywhere-securing-hop-hop-email-delivery): "*Additionally, even if you configure STARTTLS perfectly and use a valid certificate, there’s still no guarantee your communication will be encrypted.*"
 
-Quindi, le connessioni SSL pure sono più sicure che usare [STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS) e dunque preferite.
+So, pure SSL connections are safer than using [STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS) and therefore preferred.
 
-Sei pregato di assicurarti che la ricezione e l'invio dei messaggi funzionino propriamente prima di contattarmi per aggiungere un provider.
+Please make sure receiving and sending messages works properly before contacting me to add a provider.
 
-Vedi sotto come contattarmi.
+See below about how to contact me.
 
 <br />
 
 <a name="faq43"></a>
-**(43) Muoi mostrare l'originale ... ?**
+**(43) Can you show the original ... ?**
 
-Mostra l'originale, mostra il messaggio originale come inviato dal mittente, includendo font, colori, margini, etc. originali. FairEmail non li altererà in alcun modo, eccetto che richiedendo [TEXT_AUTOSIZING](https://developer.android.com/reference/android/webkit/WebSettings.LayoutAlgorithm), che *tenterà* di rendere più leggibili i testi piccoli.
+Show original, shows the original message as the sender has sent it, including original fonts, colors, margins, etc. FairEmail does and will not alter this in any way, except for requesting [TEXT_AUTOSIZING](https://developer.android.com/reference/android/webkit/WebSettings.LayoutAlgorithm), which will *attempt* to make small text more readable.
 
 <br />
 
 <a name="faq44"></a>
-**~~(44) Puoi mostrare foto / identicon di contatto nella cartella inviati?~~**
+**~~(44) Can you show contact photos / identicons in the sent folder?~~**
 
-~~Le foto di contatto e gli identicon sono sempre mostrati per il mittente perché necessari per i thread di conversazione.~~ ~~Ottenere le foto di contatto sia per il mittente che per il destinatario non è propriamente un'opzione perché ottenere le foto di contatto è un'operazione costosa.~~
+~~Contact photos and identicons are always shown for the sender because this is necessary for conversation threads.~~ ~~Getting contact photos for both the sender and receiver is not really an option because getting contact photo is an expensive operation.~~
 
 <br />
 
 <a name="faq45"></a>
-**(45) Come posso risolvere 'Questa chiave non è disponibile. **Per usarla, devi importarla come tua!'</em> ?**</p>
+**(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!' ?**
 
-Otterrai il messaggio *Questa chiave non è disponibile. Per usarla, devi importarla come tua!* provando a decrittografare un messaggio con una chiave pubblica. Per risolverlo devi importare la chiave privata.
+You'll get the message *This key is not available. To use it, you must import it as one of your own!* when trying to decrypt a message with a public key. To fix this you'll need to import the private key.
 
 <br />
 
 <a name="faq46"></a>
-**(46) Perché l'elenco dei messaggi continua ad aggiornarsi?**
+**(46) Why does the message list keep refreshing?**
 
-Se vedi uno 'snipper' sull'elenco dei messaggi, la cartella è ancora sincronizzata con il server remoto. Puoi vedere il progresso della sincronizzazione nell'elenco delle cartelle. Vedi la legenda su cosa significano le icone e i numeri.
+If you see a 'spinner' at the top of the message list, the folder is still being synchronized with the remote server. You can see the progress of the synchronization in the folder list. See the legend about what the icons and numbers mean.
 
-La velocità del tuo dispositivo e della connessione internet e il numero di giorni per sincronizzare i messaggi per determinare quanto durerà la sincronizzazione. Nota che non dovresti impostare il numero di giorni per sincronizzare i messaggi a oltre un giorno in gran parte dei casi, vedi anche [questa FAQ](#user-content-faq39).
+The speed of your device and internet connection and the number of days to synchronize messages for determine how long synchronization will take. Note that you shouldn't set the number of days to synchronize messages for to more than one day in most cases, see also [this FAQ](#user-content-faq39).
 
 <br />
 
 <a name="faq47"></a>
-**(47) Come risolvo l'errore 'Nessun colore primario o nessuna cartella delle bozze' ?**
+**(47) How do I solve the error 'No primary account or no drafts folder' ?**
 
-Otterrai il messaggio di errore *Nessun profilo primario o nessuna cartella delle bozze* provando a comporre un messaggio mentre non esiste alcun profilo impostato come primario o quando non ci sono cartelle di bozze selezionate per il profilo primario. Questo può succedere ad esempio avviando FairEmail per comporre un messaggio da un'altra app. FairEmail deve sapere dove archiviare le bozze, quindi dovrai selezionare un profilo come principale e/o dovrai selezionare una cartella di bozze per il profilo principale.
+You'll get the error message *No primary account or no drafts folder* when trying to compose a message while there is no account set to be the primary account or when there is no drafts folder selected for the primary account. This can happen for example when you start FairEmail to compose a message from another app. FairEmail needs to know where to store the draft, so you'll need to select one account to be the primary account and/or you'll need to select a drafts folder for the primary account.
 
-Questo può succedere anche provando a rispondere a un messaggio o a inoltrarne uno da un profilo senza cartella delle bozze, mentre non esiste alcun profilo principale o quando questo non ha una cartella di bozze.
+This can also happen when you try to reply to a message or to forward a message from an account with no drafts folder while there is no primary account or when the primary account does not have a drafts folder.
 
-Sei pregato di vedere [questa FAQ](#user-content-faq141) per ulteriori informazioni.
+Please see [this FAQ](#user-content-faq141) for some more information.
 
 <br />
 
 <a name="faq48"></a>
-**~~(48) Come risolvo l'errore 'Nessun profilo principale o nessuna cartella d'archivio?~~**
+**~~(48) How do I solve the error 'No primary account or no archive folder' ?~~**
 
-~~Otterrai il messaggio di errore *Nessun profilo principale o nessuna cartella di archivio* cercando messaggi da un'altra app. Fair Email deve sapere dove cercare, quindi dovrai selezionare un profilo come principale e/o una cartella di archivio per il profilo principale.~~
+~~You'll get the error message *No primary account or no archive folder* when searching for messages from another app. FairEmail needs to know where to search, so you'll need to select one account to be the primary account and/or you'll need to select a archive folder for the primary account.~~
 
 <br />
 
 <a name="faq49"></a>
-**(49) Come risolvo 'Un'app obsoleta ha inviato un percorso del file invece di un flusso di file' ?**
+**(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?**
 
-Potresti aver selezionato o inviato un allegato o un'immagine con un gestore di file obsoleto o un'app obsoleta che presume che tutte le app abbiano ancora permessi di archiviazione. Per motivi di sicurezza e privacy le app moderne come FairEmail non hanno più alcun accesso completo a tutti i file. Questo può risultare nel messaggio di errore *Un'app obsoleta ha inviato un percorso del file invece di un flusso di file* se un nome del file invece che un flusso di file è in condivisione con FairEmail perché questo non può aprire casualmente i file.
+You likely selected or sent an attachment or image with an outdated file manager or an outdated app which assumes all apps still have storage permissions. For security and privacy reasons modern apps like FairEmail have no full access to all files anymore. This can result into the error message *An outdated app sent a file path instead of a file stream* if a file name instead of a file stream is being shared with FairEmail because FairEmail cannot randomly open files.
 
-Puoi correggerlo passando a un gestore di file aggiornato o un'app progettata per le versioni recenti di Android. In alternativa, puoi garantire l'accesso di lettura di FairEmail allo spazio di archiviazione sul tuo dispositivo nelle impostazioni dell'app di Android. Nota che questa soluzione [non funzionerà più su Android Q](https://developer.android.com/preview/privacy/scoped-storage).
+You can fix this by switching to an up-to-date file manager or an app designed for recent Android versions. Alternatively, you can grant FairEmail read access to the storage space on your device in the Android app settings. Note that this workaround [won't work on Android Q](https://developer.android.com/preview/privacy/scoped-storage) anymore.
 
-Vedi anche la [domanda 25](#user-content-faq25) e [cosa scrive a riguardo Google](https://developer.android.com/training/secure-file-sharing/share-file#RespondToRequest).
+See also [question 25](#user-content-faq25) and [what Google writes about it](https://developer.android.com/training/secure-file-sharing/share-file#RespondToRequest).
 
 <br />
 
 <a name="faq50"></a>
-**(50) Puoi aggiungere un'opzione per sincronizzare tutti i messaggi?**
+**(50) Can you add an option to synchronize all messages?**
 
-Puoi sincronizzare più messaggi o persino tutti tenendo premuto a lungo una cartella (posta in entrata) nell'elenco delle cartelle di un profilo (tocca il nome di un profilo nel menu di navigazione) e selezionando *Sincronizza di più* nel menu a popup.
+You can synchronize more or even all messages by long pressing a folder (inbox) in the folder list of an account (tap on the account name in the navigation menu) and selecting *Synchronize more* in the popup menu.
 
 <br />
 
 <a name="faq51"></a>
-**(51) Come sono ordinate le cartelle?**
+**(51) How are folders sorted?**
 
-Le cartelle sono prima ordinate su ordine del profilo (di default sul nome del profilo) e entro un profilo con cartelle speciali di sistema in alto, seguite da quelle impostate per la sincronizzazione. Entro ogni categoria le cartelle sono ordinate per nome (su schermo). Puoi impostare il nome mostrato premendo a lungo una cartella nell'elenco delle cartelle e selezionando *Modifica proprietà*.
+Folders are first sorted on account order (by default on account name) and within an account with special, system folders on top, followed by folders set to synchronize. Within each category the folders are sorted on (display) name. You can set the display name by long pressing a folder in the folder list and selecting *Edit properties*.
 
-L'elemento del menu di navigazione (hamburger) *Ordine cartelle* nella configurazione è utilizzabile per ordinare manualmente le cartelle.
+The navigation (hamburger) menu item *Order folders* in the setup can be used to manually order the folders.
 
 <br />
 
 <a name="faq52"></a>
-**(52) Perché ci vuole del tempo per riconnettersi a un profilo?**
+**(52) Why does it take some time to reconnect to an account?**
 
-Non c'è modo affidabile per sapere se una connessione del profilo è stata terminata con grazia o con forza. Provare a riconnettersi a un profilo mentre la connessione del profilo è stata terminata forzatamente troppo spesso può risultare in problemi come [troppe connessioni simultanee](#user-content-faq23) o persino il blocco del profilo. Per prevenire tali problemi, FairEmail attende 90 secondi fino a provare a riconnettersi.
+There is no reliable way to know if an account connection was terminated gracefully or forcefully. Trying to reconnect to an account while the account connection was terminated forcefully too often can result in problems like [too many simultaneous connections](#user-content-faq23) or even the account being blocked. To prevent such problems, FairEmail waits 90 seconds until trying to reconnect again.
 
-Puoi tenere premuto a lungo le *Impostazioni* nel menu di navigazione per riconnettersi immediatamente.
+You can long press *Settings* in the navigation menu to reconnect immediately.
 
 <br />
 
 <a name="faq53"></a>
-**(53) Puoi mettere la barra d'azione del messaggio in alto/in basso?**
+**(53) Can you stick the message action bar to the top/bottom?**
 
-La barra di azione del messaggio funziona su un messaggio singolo e la barra di azione in fondo funziona su tutti i messaggi nella cconversazione. Essendoci sempre più di un messaggio in una conversazione, questo è impossibile. Inoltre, ci sono alcune azioni specifiche del messaggio, come l'inoltro.
+The message action bar works on a single message and the bottom action bar works on all the messages in the conversation. Since there is often more than one message in a conversation, this is not possible. Moreover, there are quite some message specific actions, like forwarding.
 
-Spostare la barra d'azione del messaggio in fondo al messaggio è visivamente non attraente perché c'è già una barra di azione della conversazione in fondo alla schermata.
+Moving the message action bar to the bottom of the message is visually not appealing because there is already a conversation action bar at the bottom of the screen.
 
-Nota che non ci sono molte app di email (se presenti) che mostrano una conversazione come elenco di messaggi espandibili. Questo ha molti vantaggi, ma causa anche il bisogno di azioni specifiche del messaggio.
+Note that there are not many, if any, email apps that display a conversation as a list of expandable messages. This has a lot of advantages, but the also causes the need for message specific actions.
 
 <br />
 
 <a name="faq54"></a>
-**~~(54) Come uso il prefisso di uno spazio del nome?~~**
+**~~(54) How do I use a namespace prefix?~~**
 
-~~Il prefisso di uno spazio del nome è usato per rimuovere automaticamente il prefisso, i provider talvolta aggiungo i nomi delle cartelle.~~
+~~A namespace prefix is used to automatically remove the prefix providers sometimes add to folder names.~~
 
-~~Per esempio la cartella di spam di Gmail è chiamata:~~
+~~For example the Gmail spam folder is called:~~
 
 ```
 [Gmail]/Spam
 ```
 
-~~Impostando il prefisso dello spazio del nome a *[Gmail]*, FairEmail rimuoverà automaticamente *[Gmail]* dai nomi di tutte le cartelle.~~
+~~By setting the namespace prefix to *[Gmail]* FairEmail will automatically remove *[Gmail]/* from all folder names.~~
 
 <br />
 
 <a name="faq55"></a>
-**(55) Come posso contrassegnare tutti i messaggi come letti / spostati o eliminarli tutti?**
+**(55) How can I mark all messages as read / move or delete all messages?**
 
-Puoi usare la selezione multipla per questo. Premi a lungo il primo messaggio, non sollevare il dito e scorri in giù all'ultimo messaggio. Quindi usa il pulsante di azione a tre puntini per eseguire l'azione desiderata.
+You can use multiple select for this. Long press the first message, don't lift your finger and slide down to the last message. Then use the three dot action button to execute the desired action.
 
 <br />
 
 <a name="faq56"></a>
-**(56) Puoi aggiungere il supporto per JMAP?**
+**(56) Can you add support for JMAP?**
 
-Quasi nessun provider offre il protocollo [JMAP](https://jmap.io/), quindi non vale la pena sforzarsi molto per aggiungere supporto a questo a FairEmail.
+There are almost no providers offering the [JMAP](https://jmap.io/) protocol, so it is not worth a lot of effort to add support for this to FairEmail.
 
 <br />
 
 <a name="faq57"></a>
-**(57) Posso usare HTML nelle firme?**
+**(57) Can I use HTML in signatures?**
 
-Sì, puoi usare [HTML](https://en.wikipedia.org/wiki/HTML). Nell'editor della firma puoi passare alla modalità HTML tramite il menu a tre puntini.
+Yes, you can use [HTML](https://en.wikipedia.org/wiki/HTML). In the signature editor you can switch to HTML mode via the three-dots menu.
 
-Nota che se torni all'editor di testo non tutto lo HTML potrebbe essere renderizzato così com'è perché l'editor di testo di Android non è capace di renderizzarlo tutto. Similmente, se usi l'editor di testo, lo HTML potrebbe essere alterato in modi inaspettati.
+Note that if you switch back to the text editor that not all HTML might be rendered as-is because the Android text editor is not able to render all HTML. Similarly, if you use the text editor, the HTML might be altered in unexpected ways.
 
-Se vuoi usare il testo pre-formattato, come [ASCII art](https://en.wikipedia.org/wiki/ASCII_art), dovresti avvolgere il testo in un elemento *pre* come questo:
+If you want to use preformatted text, like [ASCII art](https://en.wikipedia.org/wiki/ASCII_art), you should wrap the text in a *pre* element, like this:
 
 ```
 <pre>
@@ -1453,29 +1455,29 @@ Se vuoi usare il testo pre-formattato, come [ASCII art](https://en.wikipedia.org
 <br />
 
 <a name="faq58"></a>
-**(58) Cosa significa l'icona dell'email aperta/chiusa?**
+**(58) What does an open/closed email icon mean?**
 
-L'icona dell'email nell'elenco delle cartelle può essere aperta (delineata) o chiusa (solida):
+The email icon in the folder list can be open (outlined) or closed (solid):
 
 ![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
 
-I corpi del messaggio e gli allegati non sono scaricati di default.
+Message bodies and attachments are not downloaded by default.
 
 ![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png)
 
-I corpi e gli allegati del messaggio sono scaricati di default.
+Message bodies and attachments are downloaded by default.
 
 <br />
 
 <a name="faq59"></a>
-**(59) I messaggi originali possono essere aperti nel browser?**
+**(59) Can original messages be opened in the browser?**
 
-Per ragioni di sicurezza con il messaggio originale, i testi non sono accessibili ad altre app, quindi questo è impossibile. In teoria il [Framework di Accesso all'Archiviazione](https://developer.android.com/guide/topics/providers/document-provider) potrebbe essere usato per condividere questi file, ma persino Google Chrome non può gestirlo.
+For security reasons the files with the original message texts are not accessible to other apps, so this is not possible. In theory the [Storage Access Framework](https://developer.android.com/guide/topics/providers/document-provider) could be used to share these files, but even Google's Chrome cannot handle this.
 
 <br />
 
 <a name="faq60"></a>
-**(60) Sapevi che ... ?**
+**(60) Did you know ... ?**
 
 * Sapevi che i messaggi stellati possono essere sincronizzati/mantenuti sempre? (abilitabile nelle impostazioni di ricezione)
 * Sapevi che puoi premere a lungo l'icona 'scrivi messaggio' per andare alla cartella delle bozze?
@@ -1500,22 +1502,22 @@ Per ragioni di sicurezza con il messaggio originale, i testi non sono accessibil
 <br />
 
 <a name="faq61"></a>
-**(61) Perché alcuni messaggi sono mostrati attenuati?**
+**(61) Why are some messages shown dimmed?**
 
-I messaggi mostrati attenuati (ingrigiti) sono messaggi spostati localmente per cui lo spostamento non è ancora stato confermato dal server. Questo può succedere quando non c'è alcuna connessione al server o al profilo (ancora). Questi messaggi saranno sincronizzati dopo una connessione al server e la creazione del profilo o, se non succede mai, saranno eliminati se troppo vecchi da sincronizzare.
+Messages shown dimmed (grayed) are locally moved messages for which the move is not confirmed by the server yet. This can happen when there is no connection to the server or the account (yet). These messages will be synchronized after a connection to the server and the account has been made or, if this never happens, will be deleted if they are too old to be synchronized.
 
-Potresti dover sincronizzare manualmente la cartella, ad esempio tirando in giù.
+You might need to manually synchronize the folder, for example by pulling down.
 
-Puoi visualizzare questi messaggi, ma non puoi spostarli di nuovo fino alla conferma dello spostamento precedente.
+You can view these messages, but you cannot move these messages again until the previous move has been confirmed.
 
-Le [operazioni](#user-content-faq3) in attesa sono mostrate come accessibili nella vista delle operazioni dal menu di navigazione principale.
+Pending [operations](#user-content-faq3) are shown in the operations view accessible from the main navigation menu.
 
 <br />
 
 <a name="faq62"></a>
-**(62) Che metodi di autenticazione sono supportati?**
+**(62) Which authentication methods are supported?**
 
-I seguenti metodi di autenticazione sono supportati e usati in quest'ordine:
+The following authentication methods are supported and used in this order:
 
 * LOGIN
 * PLAIN
@@ -1523,109 +1525,109 @@ I seguenti metodi di autenticazione sono supportati e usati in quest'ordine:
 * XOAUTH2 ([Gmail](https://developers.google.com/gmail/imap/xoauth2-protocol), [Yandex](https://tech.yandex.com/oauth/))
 * NTLM (non testato)
 
-I metodi di autenticazione SASL, oltre CRAM-MD5, non sono supportati perché [JavaMail per Android](https://javaee.github.io/javamail/Android) non supporta l'autenticazione SASL.
+SASL authentication methods, besides CRAM-MD5, are not supported because [JavaMail for Android](https://javaee.github.io/javamail/Android) does not support SASL authentication.
 
-Se il provider richiede un metodo di autenticazione non supportato, potresti ottenere il messaggio di errore *autenticazione fallita*.
+If your provider requires an unsupported authentication method, you'll likely get the error message *authentication failed*.
 
-L'[Indicazione del Nome del Server](https://en.wikipedia.org/wiki/Server_Name_Indication) è supportata da [tutte le versioni Android supportate](https://developer.android.com/training/articles/security-ssl).
+[Server Name Indication](https://en.wikipedia.org/wiki/Server_Name_Indication) is supported by [all supported Android versions](https://developer.android.com/training/articles/security-ssl).
 
 <br />
 
 <a name="faq63"></a>
-**(63) Come sono ridimensionate le immagini per la visualizzazione sugli schermi?**
+**(63) How are images resized for displaying on screens?**
 
-Le immagini in linea grandi o allegate [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) e [JPEG](https://en.wikipedia.org/wiki/JPEG) saranno ridimensionate automaticamente per la visualizzazione sugli schermi. Questo perché i messaggi email sono limitati in dimensioni, in base al provider, principalmente tra 10 e 50 MB. Le immagini saranno ridimensionate di default a una larghezza e altezza massima di circa 140 pixel e salvate con un rapporto di compressione del 90%. Le immagini sono ridimensionate usando fattori interi per ridurre l'uso della memoria e mantenere la qualità dell'immagine. Il ridimensionamento automatico di immagini in linea e/o allegate e la dimensione massima di destinazione dell'immagine è configurabile nelle impostazioni di invio.
+Large inline or attached [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) and [JPEG](https://en.wikipedia.org/wiki/JPEG) images will automatically be resized for displaying on screens. This is because email messages are limited in size, depending on the provider mostly between 10 and 50 MB. Images will by default be resized to a maximum width and height of about 1440 pixels and saved with a compression ratio of 90 %. Images are scaled down using whole number factors to reduce memory usage and to retain image quality. Automatically resizing of inline and/or attached images and the maximum target image size can be configured in the send settings.
 
-Se vuoi ridimensionare le immagini su base del caso, puoi usare [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) o un'app simile.
+If you want to resize images on a case-by-case basis, you can use [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) or a similar app.
 
 <br />
 
 <a name="faq64"></a>
-**~~(64) Puoi aggiungere le azioni personalizzate per lo scorrimento a sinistra/destra?~~**
+**~~(64) Can you add custom actions for swipe left/right?~~**
 
-~~La cosa più naturale da fare quando scorri a sinistra o destra in una voce dell'elenco è rimuoverla dall'elenco.~~ ~~L'azione più naturale nel contesto di un'app di email è spostare il messaggio al di fuori della cartella verso un'altra.~~ ~~Puoi selezionare la cartella in cui spostare nelle impostazioni del profilo.~~
+~~The most natural thing to do when swiping a list entry left or right is to remove the entry from the list.~~ ~~The most natural action in the context of an email app is moving the message out of the folder to another folder.~~ ~~You can select the folder to move to in the account settings.~~
 
-~~Altre azioni, come contrassegnare i messaggi come letti e posticiparli sono disponibili tramite la selezione multipla.~~ ~~Puoi premere un messaggio a lungo per avviare la selezione multipla. Vedi anche [questa domanda](#user-content-faq55).~~
+~~Other actions, like marking messages read and snoozing messages are available via multiple selection.~~ ~~You can long press a message to start multiple selection. See also [this question](#user-content-faq55).~~
 
-~~Scorrere a sinistra o destra per contrassegnare un messaggio come letto o non letto non è naturale perché il messaggio prima se ne va e poi torna in una forma differente.~~ ~~Nota che esiste un'opzione avanzata per contrassegnare automaticamente i messaggi letti allo spostamento,~~ ~~che in gran parte dei casi è una sostituzione perfetta per contrassegnare la sequenza come letta e spostarla a qualche cartella.~~ ~~Puoi anche contrassegnare i messaggi come letti dalle notifiche dei nuovi messaggi.~~
+~~Swiping left or right to mark a message read or unread is unnatural because the message first goes away and later comes back in a different shape.~~ ~~Note that there is an advanced option to mark messages automatically read on moving,~~ ~~which is in most cases a perfect replacement for the sequence mark read and move to some folder.~~ ~~You can also mark messages read from new message notifications.~~
 
-~~Se vuoi leggere più tardi un messaggio, puoi nasconderlo fino a un orario specifico usando il menu *posticipa*.~~
+~~If you want to read a message later, you can hide it until a specific time by using the *snooze* menu.~~
 
 <br />
 
 <a name="faq65"></a>
-**(65) Perché alcuni allegati sono mostrati come attenuati?**
+**(65) Why are some attachments shown dimmed?**
 
-Gli allegati in linea (immagine) sono mostrati come attenuati. [Gli allegati in linea](https://tools.ietf.org/html/rfc2183) dovrebbero essere scaricati e mostrati automaticamente, ma poiché FairEmail non scarica sempre automaticamente gli allegati, vedi anche [questa FAQ](#user-content-faq40), FairEmail mostra tutti i tipi di allegati. Per distinguere gli allegati in linea e regolari, i primi sono mostrati attenuati.
+Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.ietf.org/html/rfc2183) are supposed to be downloaded and shown automatically, but since FairEmail doesn't always download attachments automatically, see also [this FAQ](#user-content-faq40), FairEmail shows all attachment types. To distinguish inline and regular attachments, inline attachments are shown dimmed.
 
 <br />
 
 <a name="faq66"></a>
-**(66) FairEmail è disponibile nella Libreria di Famiglia di Google Play?**
+**(66) Is FairEmail available in the Google Play Family Library?**
 
-Il prezzo di alcune funzionalità pro è troppo basso, inferiore al prezzo di gran parte delle app simili, e ci sono [troppe commissioni e tasse](#user-content-faq19), per giustifica la resa di FairEmail disponibile nella [Libreria di Famiglia di Google Play](https://support.google.com/googleone/answer/7007852). Nota che Google promuove la libreria di Famiglia, ma la fa pagare agli sviluppatori.
+The price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
 
 <br />
 
 <a name="faq67"></a>
-**(67) Come posso posticipare le conversazioni?**
+**(67) How can I snooze conversations?**
 
-Seleziona più di una conversazione (premi a lungo per avviare la selezione multipla), tocca il pulsante a tre punti e seleziona *Posticipa ...*. In alternativa, nella vista espansa del messaggio usa *Posticipa ...* nel menu 'altro' a tre puntini del messaggio o l'azione di timelapse nella barra di azione in basso. Seleziona l'orario di posticipazione delle conversazioni e conferma toccando OK. Le conversazioni saranno nascoste per il tempo selezionato e mostrate nuovamente in seguito. Riceverai la notifica di un nuovo messaggio come promemoria.
+Multiple select one of more conversations (long press to start multiple selecting), tap the three dot button and select *Snooze ...*. Alternatively, in the expanded message view use *Snooze ...* in the message three-dots 'more' menu or the timelapse action in the bottom action bar. Select the time the conversation(s) should snooze and confirm by tapping OK. The conversations will be hidden for the selected time and shown again afterwards. You will receive a new message notification as reminder.
 
-Puoi anche posticipare i messaggi con [una regola](#user-content-faq71).
+It is also possible to snooze messages with [a rule](#user-content-faq71).
 
-Puoi mostrare i messaggi posticipati deselezionando *Filtra* > *Nascosti* nel menu di trabocco a tre puntini.
+You can show snoozed messages by unchecking *Filter out* > *Hidden* in the three dot overflow menu.
 
-Puoi toccare sulla piccola icona di posticipazione per vedere fin quando è posticipata una conversazione.
+You can tap on the small snooze icon to see until when a conversation is snoozed.
 
-Selezionando una durata di posticipazione di zero, puoi annullare la posticipazione.
+By selecting a zero snooze duration you can cancel snoozing.
 
 <br />
 
 <a name="faq68"></a>
-**~~(68) Perché Adobe Acrobat Reader non può aprire gli allegati PDF / app di Microsoft e i documenti allegati?~~**
+**~~(68) Why can Adobe Acrobat reader not open PDF attachments / Microsoft apps not open attached documents?~~**
 
-~~Adobe Acrobat Reader e le app di Microsoft prevedono ancora l'accesso completo a tutti i file archiviati,~~ ~~mentre le app dovrebbero usare il [Framework di Accesso all'Archiviazione](https://developer.android.com/guide/topics/providers/document-provider) da Android KitKat (2013)~~ ~~per avere accesso ai soli file condivisi attivamente. Questo è per motivi di sicurezza e privacy.~~
+~~Adobe Acrobat reader and Microsoft apps still expects full access to all stored files,~~ ~~while apps should use the [Storage Access Framework](https://developer.android.com/guide/topics/providers/document-provider) since Android KitKat (2013)~~ ~~to have access to actively shared files only. This is for privacy and security reasons.~~
 
-~~Puoi risolverlo salvando l'allegato e aprendolo dall'app di Adobe Acrobat Reader / Microsoft,~~ ~~ma si consiglia di installare un visualizzatore di documenti / PDF reader aggiornato e preferibilmente open-source,~~ ~~per esempio quelle elencate [qui](https://github.com/offa/android-foss#-document--pdf-viewer).~~
+~~You can workaround this by saving the attachment and opening it from the Adobe Acrobat reader / Microsoft app,~~ ~~but you are advised to install an up-to-date and preferably open source PDF reader / document viewer,~~ ~~for example one listed [here](https://github.com/offa/android-foss#-document--pdf-viewer).~~
 
 <br />
 
 <a name="faq69"></a>
-**(69) Puoi aggiungere lo scorrimento automatico in su sui nuovi messaggi?**
+**(69) Can you add auto scroll up on new message?**
 
-L'elenco dei messaggi viene scorso in su automaticamente navigando dalla notifica di un messaggio nuovo o dopo un aggiornamento manuale. Scorrere sempre in su automaticamente all'arrivo dei nuovi messaggi interferirebbe con il tuo scorrimento, ma se vuoi puoi abilitarlo nelle impostazioni.
+The message list is automatically scrolled up when navigating from a new message notification or after a manual refresh. Always automatically scrolling up on arrival of new messages would interfere with your own scrolling, but if you like you can enable this in the settings.
 
 <br />
 
 <a name="faq70"></a>
-**(70) Quando saranno espansi automaticamente i messaggi?**
+**(70) When will messages be auto expanded?**
 
-Quando la navigazione al messaggio di una conversazione sarà espansa se:
+When navigation to a conversation one message will be expanded if:
 
 * C'è solo un messaggio nella conversazione
 * C'è esattamente un messaggio non letto nella conversazione
 
-Esiste un'eccezione: il messaggio non è ancora stato scaricato ed è troppo grande per il download automatico su una connessione misurata (mobile). Puoi impostare o disabilitare la dimensione massima del messaggio sulla scheda delle impostazioni di 'connessione'.
+There is one exception: the message was not downloaded yet and the message is too large to download automatically on a metered (mobile) connection. You can set or disable the maximum message size on the 'connection' settings tab.
 
-I messaggi duplicati (archiviati), cestinati e le bozze non sono contate.
+Duplicate (archived) messages, trashed messages and draft messages are not counted.
 
-I messaggi saranno automaticamente contrassegnati come letti all'espansione, a meno che non sia disabilitato nelle impostazioni del singolo profilo.
+Messages will automatically be marked read on expanding, unless this was disabled in the individual account settings.
 
 <br />
 
 <a name="faq71"></a>
-**(71) Come uso le regole di filtraggio?**
+**(71) How do I use filter rules?**
 
-Puoi modificare le regole del filtro premendo a lungo una cartella nell'elenco delle cartelle di un profilo (tocca il nome del profilo nel menu laterale/di navigazione).
+You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
-Le nuove regole saranno applicate ai nuovi messaggi ricevuti nella cartella, non ai messaggi esistenti. Puoi controllare la regole a applicarla ai messaggi esistenti, o in alternativa, premendo a lungo la regola nell'elenco della regola e selezionare *Esegui ora*.
+New rules will be applied to new messages received in the folder, not to existing messages. You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
 
-Dovrai dare un nome alla regola e dovrai definire l'ordine in cui una regola dovrebbe essere eseguita in relazione ad altre regole.
+You'll need to give a rule a name and you'll need to define the order in which a rule should be executed relative to other rules.
 
-Puoi disabilitare una regola e puoi interrompere l'elaborazione delle altre dopo l'esecuzione di una.
+You can disable a rule and you can stop processing other rules after a rule has been executed.
 
-Le seguenti condizioni della regola sono disponibili:
+The following rule conditions are available:
 
 * Mittente contiene
 * Destinatario contiene
@@ -1634,25 +1636,25 @@ Le seguenti condizioni della regola sono disponibili:
 * Intestazione contiene
 * Giorno/ora tra
 
-Tutte le condizioni di una regola devono essere vere per l'esecuzione dell'azione della regola. Tutte le condizioni sono opzionali, ma ci deve essere almeno una condizione, per prevenire l'abbinamento di tutti i messaggi. Se vuoi abbinare tutti i mittenti o tutti i destinatari, puoi semplicemente usare il carattere @ come condizione perché tutti gli indirizzi email lo conterranno.
+All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
 
-Nota che gli indirizzi email sono formattati come segue:
+Note that email addresses are formatted like this:
 
 `
-"Qualcuno" <somebody@example.org>`
+"Somebody" <somebody@example.org>`
 
-Puoi usare regole multiple, possibilmente con *interrompi elaborazione*, per una condizione *o* o *non*.
+You can use multiple rules, possibly with a *stop processing*, for an *or* or a *not* condition.
 
-L'abbinamento non è sensibile alle maiuscole, a meno che tu non usi le [espressioni regolari](https://en.wikipedia.org/wiki/Regular_expression). Sei pregato di vedere [qui](https://developer.android.com/reference/java/util/regex/Pattern) per la documentazione delle espressioni regola di Java. Puoi testare [qui](https://regexr.com/) un regex.
+Matching is not case sensitive, unless you use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression). Please see [here](https://developer.android.com/reference/java/util/regex/Pattern) for the documentation of Java regular expressions. You can test a regex [here](https://regexr.com/).
 
-Nota che un'espressione regolare supporta un operatore *o*, quindi se vuoi abbinare mittenti multipli, puoi fare questo:
+Note that a regular expression supports an *or* operator, so if you want to match multiple senders, you can do this:
 
 `
 .*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*`
 
-Nota che la [modalità dot all](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) è abilitata per abbinare le [intestazioni senza cartelle](https://tools.ietf.org/html/rfc2822#section-3.2.3).
+Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
 
-Puoi selezionare una di queste azioni da applicare ai messaggi corrispondenti:
+You can select one of these actions to apply to matching messages:
 
 * Nessun'azione (utile per *non*)
 * Segna come letto
@@ -1669,123 +1671,123 @@ Puoi selezionare una di queste azioni da applicare ai messaggi corrispondenti:
 * Sintesi vocale (mittente e oggetto)
 * Automatizzazione (Tasker, etc.)
 
-Le regole si applicano direttamente dopo il recupero dell'intestazione del messaggio, ma prima dello scaricamento del testo del messaggio, quindi è impossibile applicare le condizioni al testo del messaggio. Nota che i testi di messaggi grandi sono scaricati su richiesta su una connessione misurata per risparmiare sull'uso dei dati.
+Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
-Se vuoi inoltrare un messaggio, considera invece di usare l'azione di spostamento. Questa sarà più affidabile dell'inoltro anche perché i messaggi inoltrati potrebbero essere considerati come spam.
+If you want to forward a message, consider to use the move action instead. This will be more reliable than forwarding as well because forwarded messages might be considered as spam.
 
-Poiché le intestazioni del messaggio non sono scaricate e archiviate di default per risparmiare sull'uso della batteria e dei dati e per risparmiare spazio di archiviazione, è impossibile vedere in anteprima quali messaggi corrisponderebbero alla condizione di una regola dell'intestazione.
+Since message headers are not downloaded and stored by default to save on battery and data usage and to save storage space it is not possible to preview which messages would match a header rule condition.
 
-Alcune condizioni comuni dell'intestazione (regex):
+Some common header conditions (regex):
 
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;Content-Type: multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
-Nel menu del messaggio *altro* a tre puntini esiste un elemento per creare una regola per un messaggio ricevuto con le condizioni più comuni inserite.
+In the three-dots *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
 
-Il protocollo POP3 non supporta l'impostazione delle parole chiave e lo spostamento o copia dei messaggi.
+The POP3 protocol does not support setting keywords and moving or copying messages.
 
-Usare le regole è una funzionalità pro.
+Using rules is a pro feature.
 
 <br />
 
 <a name="faq72"></a>
-**(72) Cosa sono i profili/le identità primari?**
+**(72) What are primary accounts/identities?**
 
-Il profilo primario è usato quando il profilo è ambiguo, ad esempio avviando una nuova bozza dalla casella di posta in entrata unificata.
+The primary account is used when the account is ambiguous, for example when starting a new draft from the unified inbox.
 
-Similmente, l'identità primaria di un profilo è usata quando l'identità è ambigua.
+Similarly, the primary identity of an account is used when the identity is ambiguous.
 
-Può esistere solo un profilo primario e un'identità primaria per profilo.
+There can be just one primary account and there can be just one primary identity per account.
 
 <br />
 
 <a name="faq73"></a>
-**(73) Spostare i messaggi tra i profili è sicuro/efficiente?**
+**(73) Is moving messages across accounts safe/efficient?**
 
-Spostare i messaggi tra profili è sicuro perché i messaggi grezzi e originali saranno scaricati e spostati e perché i messaggi sorgente saranno eliminati solo dopo l'aggiunta dei messaggi di destinazione
+Moving messages across accounts is safe because the raw, original messages will be downloaded and moved and because the source messages will be deleted only after the target messages have been added
 
-Lo spostamento della partita di messaggi tra i profili è efficiente se sia la cartella sorgente che di arrivo sono impostate per la sincronizzazione, altrimenti FairEmail deve connettersi alle cartelle per ogni messaggio.
+Batch moving messages across accounts is efficient if both the source folder and target folder are set to synchronize, else FairEmail needs to connect to the folder(s) for each message.
 
 <br />
 
 <a name="faq74"></a>
-**(74) Perché vedo i messaggi duplicati?**
+**(74) Why do I see duplicate messages?**
 
-Alcuni provider, in particolare Gmail, elencano tutti i messaggi in tutte le cartelle, tranne quelli cestinati, anche nella cartella dell'archivio (tutti i messaggi). FairEmail mostra tutti questi messaggi in un modo non invadente per indicare che sono difatti gli stessi messaggi.
+Some providers, notably Gmail, list all messages in all folders, except trashed messages, in the archive (all messages) folder too. FairEmail shows all these messages in a non obtrusive way to indicate that these messages are in fact the same message.
 
-Gmail consente a un messaggio di avere etichette multiple, presentate come cartelle in FairEmail. Questo significa che i messaggi con più etichette saranno mostrati anch'essi diverse volte.
+Gmail allows one message to have multiple labels, which are presented to FairEmail as folders. This means that messages with multiple labels will be shown multiple times as well.
 
 <br />
 
 <a name="faq75"></a>
-**(75) Puoi creare una versione iOS, Windows, Linux, etc.?**
+**(75) Can you make an iOS, Windows, Linux, etc version?**
 
-Servono molta conoscenza ed esperienza per sviluppare correttamente un'app per una piattaforma specifica, per cui sviluppo app solo per Android.
+A lot of knowledge and experience is required to successfully develop an app for a specific platform, which is why I develop apps for Android only.
 
 <br />
 
 <a name="faq76"></a>
-**(76) Cosa fa 'Elimina messaggi locali'?**
+**(76) What does 'Clear local messages' do?**
 
-Il menu delle cartelle *Elimina messaggi locali* rimuove i messaggi presenti anche sul server dal dispositivo. Non elimina i messaggi dal server. Questo può essere utile dopo aver cambiato le impostazioni della cartella per scaricare il contenuto del messaggio (testo e allegati), ad esempio per risparmiare spazio.
+The folder menu *Clear local messages* removes messages from the device which are present on the server too. It does not delete messages from the server. This can be useful after changing the folder settings to not download the message content (text and attachments), for example to save space.
 
 <br />
 
 <a name="faq77"></a>
-**(77) Perché i messaggi sono talvolta mostrati con un lieve ritardo?**
+**(77) Why are messages sometimes shown with a small delay?**
 
-In base alla velocità del tuo dispositivo (velocità del processore e forse anche della memoria), i messaggi potrebbero essere mostrati con un lieve ritardo. FairEmail è progettato per gestire dinamicamente un gran numero di messaggi senza esaurire la memoria. Questo significa che i messaggi devono esser letti da un database e che questo necessita di essere sorvegliato per le modifiche, che potrebbero causare lievi ritardi.
+Depending on the speed of your device (processor speed and maybe even more memory speed) messages might be displayed with a small delay. FairEmail is designed to dynamically handle a large number of messages without running out of memory. This means that messages needs to be read from a database and that this database needs to be watched for changes, both of which might cause small delays.
 
-Alcune funzionalità di convenienza, come il raggruppamento dei messaggi per visualizzare i thread di conversazione e la determinazione del messaggio precedente/successivo, impiegano del tempo extra. Nota che non si parla de *il* messaggio successivo perché nel frattempo potrebbe esserne arrivato uno nuovo.
+Some convenience features, like grouping messages to display conversation threads and determining the previous/next message, take a little extra time. Note that there is no *the* next message because in the meantime a new message might have been arrived.
 
-Confrontando la velocità di FairEmail con app simili questo dovrebbe far parte del confronto. È facile scrivere un'app simile e più veloce che mostri solo un elenco lineare di messaggi, possibilmente usando troppa memoria, ma non è facile gestire propriamente l'uso delle risorse e offrire funzionalità più avanzate come il threading della conversazione.
+When comparing the speed of FairEmail with similar apps this should be part of the comparison. It is easy to write a similar, faster app which just displays a lineair list of messages while possible using too much memory, but it is not so easy to properly manage resource usage and to offer more advanced features like conversation threading.
 
-FairEmail si basa sui [componenti di architettura di Android](https://developer.android.com/topic/libraries/architecture/) all'avanguardia, quindi c'è poco spazio per miglioramenti delle prestazioni.
+FairEmail is based on the state-of-the-art [Android architecture components](https://developer.android.com/topic/libraries/architecture/), so there is little room for performance improvements.
 
 <br />
 
 <a name="faq78"></a>
-**(78) Come uso le pianificazioni?**
+**(78) How do I use schedules?**
 
-Nelle impostazioni di ricezione puoi abilitare la pianificazione e impostare un periodo di tempo e i giorni della settimana *in cui* i messaggi dovrebbero essere *ricevuti*. Nota che un orario finale uguale o precedente all'orario di inizio è considerato essere 24 ore dopo.
+In the receive settings you can enable scheduling and set a time period and the days of the week *when* messages should be *received*. Note that an end time equal to or earlier than the start time is considered to be 24 hours later.
 
-L'automazione, vedi sotto, è utilizzabile per pianificazioni più avanzate, come ad esempio periodi di sincronizzazione multipli al giorno o differenti per diversi giorni.
+Automation, see below, can be used for more advanced schedules, like for example multiple synchronization periods per day or different synchronization periods for different days.
 
-È possibile installare FairEmail in profili utente multipli, ad esempio un profilo personale e uno di lavoro, e configurarlo differentemente per ogni profilo, il che è un'altra possibilità per avere piani di sincronizzazione differenti e sincronizzare una diversa serie di profili.
+It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile, which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
 
-È anche possibile creare delle [regole del filtro](#user-content-faq71) con una condizione temporale e per posticipare i messaggi fino all'orario finale della condizione temporale. In questo modo è possibile *posticipare* i messaggi aziendali fino all'inizio dell'orario lavorativo. Questo significa anche che i messaggi saranno sul tuo dispositivo per quando non ci sarà (temporaneamente) una connessione a internet.
+It is also possible to create [filter rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition. This way it is possible to *snooze* business related messages until the start of the business hours. This also means that the messages will be on your device for when there is (temporarily) no internet connection.
 
-Nota che le versioni recenti di Android consentono la sovrascrizione di DND (Non DIsturbare) per il canale delle notifiche e per app, il che potrebbe essere usato per (non) silenziare notifiche (aziendali) specifiche. Sei pregato di [vedere qui](https://support.google.com/android/answer/9069335) per ulteriori informazioni.
+Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app, which could be used to (not) silence specific (business) notifications. Please [see here](https://support.google.com/android/answer/9069335) for more information.
 
-Per schemi più complessi potresti impostare uno o più profili per la sincronizzazione manuale e inviare questo comando a FairEmail per controllare la presenza di nuovi messaggi:
+For more complex schemes you could set one or more accounts to manual synchronization and send this command to FairEmail to check for new messages:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.POLL
 ```
 
-Per un profilo specifico:
+For a specific account:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.POLL --es account Gmail
 ```
 
-Puoi anche automatizzare l'attivazione e disattivazione della ricezione dei messaggi inviando questi comandi a FairEmail:
+You can also automate turning receiving messages on and off by sending these commands to FairEmail:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.ENABLE
 (adb shell) am startservice -a eu.faircode.email.DISABLE
 ```
 
-Per abilitare/disabilitare un profilo specifico:
+To enable/disable a specific account:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.ENABLE --es account Gmail
 (adb shell) am startservice -a eu.faircode.email.DISABLE --es account Gmail
 ```
 
-Nota che disabilitare un profilo nasconderà il profilo e tutte le cartelle e i messaggi associati.
+Note that disabling an account will hide the account and all associated folders and messages.
 
-Puoi inviare automaticamente comandi per esempio con [Tasker](https://tasker.joaoapps.com/userguide/en/intents.html):
+You can automatically send commands with for example [Tasker](https://tasker.joaoapps.com/userguide/en/intents.html):
 
 ```
 Nuova attività: Qualcosa di riconoscibile
@@ -1794,94 +1796,94 @@ Azione: eu.faircode.email.ENABLE
 Target: Servizio
 ```
 
-Per abilitare/disabilitare un profilo con il nome *Gmail*:
+To enable/disable an account with the name *Gmail*:
 
 ```
 Extra: account:Gmail
 ```
 
-I nomi dei profili sono sensibili alle maiuscole.
+Account names are case sensitive.
 
-La pianificazione è una funzionalità pro.
+Scheduling is a pro feature.
 
 <br />
 
 <a name="faq79"></a>
-**(79) Come uso la sincronizzazione su richiesta (manuale)?**
+**(79) How do I use synchronize on demand (manual)?**
 
-Normalmente, FairEmail mantiene una connessione ai server email configurati quando è possibile ricevere messaggi in tempo reale. Se non vuoi, per esempio non vuoi essere disturbato o vuoi risparmiare sull'uso della batteria, disabilita semplicemente la ricezione nelle impostazioni di ricezione. Questo interromperà il servizio in background che si occupa della sincronizzazione automatica e rimuoverà la notifica della barra di stato associata.
+Normally, FairEmail maintains a connection to the configured email servers whenever possible to receive messages in real-time. If you don't want this, for example to be not disturbed or to save on battery usage, just disable receiving in the receive settings. This will stop the background service which takes care of automatic synchronization and will remove the associated status bar notification.
 
-Puoi anche abilitare *Sincronizza manualmente* nelle impostazioni avanzate del profilo se vuoi sincronizzare manualmente solo profili specifici.
+You can also enable *Synchronize manually* in the advanced account settings if you want to manually synchronize specific accounts only.
 
-Puoi usare lo scorrimento in giù per ricaricare in un elenco di messaggi o usare il menu delle cartelle *Sincronizza ora* per sincronizzare manualmente i messaggi.
+You can use pull-down-to-refresh in a message list or use the folder menu *Synchronize now* to manually synchronize messages.
 
-Se vuoi sincronizzare alcune o tutte le cartelle di un profilo manualmente, disabilita semplicemente la sincronizzazione per le cartelle (ma non del profilo).
+If you want to synchronize some or all folders of an account manually, just disable synchronization for the folders (but not of the account).
 
-Potresti voler disabilitare anche [naviga sul server](#user-content-faq24).
+You'll likely want to disabled [browse on server](#user-content-faq24) too.
 
 <br />
 
 <a name="faq80"></a>
-**~~(80) Come correggo l'errore 'Impossibile caricare BODYSTRUCTURE' ?~~**
+**~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE' ?~~**
 
-~~Il messaggio di errore *Impossibile caricare BODYSTRUCTURE* è causato da bug nel server dell'email,~~ ~~vedi [qui](https://javaee.github.io/javamail/FAQ#imapserverbug) per ulteriori dettagli.~~
+~~The error message *Unable to load BODYSTRUCTURE* is caused by bugs in the email server,~~ ~~see [here](https://javaee.github.io/javamail/FAQ#imapserverbug) for more details.~~
 
-~~FairEmail tenta già di aggirarli, ma se fallisce dovrai chiedere supporto dal tuo provider.~~
+~~FairEmail already tries to workaround these bugs, but if this fail you'll need to ask for support from your provider.~~
 
 <br />
 
 <a name="faq81"></a>
-**~~(81) Puoi rendere scuro lo sfondo del messaggio originale nel tema scuro?~~**
+**~~(81) Can you make the background of the original message dark in the dark theme?~~**
 
-~~Il messaggio originale è mostrato come inviato dal mittente, tutti i colori inclusi.~~ ~~Cambiare il colore di sfondo non solo renderebbe non più originale la vista originale, ma potrebbe risultare anche in messaggi illegibili.~~
+~~The original message is shown as the sender has sent it, including all colors.~~ ~~Changing the background color would not only make the original view not original anymore, it can also result in unreadable messages.~~
 
 <br />
 
 <a name="faq82"></a>
-**(82) Cos'è un'immagine di monitoraggio?**
+**(82) What is a tracking image?**
 
-Sei pregato di vedere [qui](https://en.wikipedia.org/wiki/Web_beacon) per sapere esattamente cosa sia un'immagine di monitoraggio. In breve, queste tengono traccia dell'apertura di un messaggio.
+Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a tracking image exactly is. In short tracking images keep track if you opened a message.
 
-FairEmail riconoscerà in gran parte dei casi queste immagini in automatico e le sostituirà con quest'icona:
+FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
 
 ![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
 
-Il riconoscimento automatico delle immagini di monitoraggio può essere disabilitato nelle impostazioni sulla privacy.
+Automatic recognition of tracking images can be disabled in the privacy settings.
 
 <br />
 
 <a name="faq84"></a>
-**(84) A cosa servono i contatti locali?**
+**(84) What are local contacts for?**
 
-Le informazioni di contatto locali sono basate su nomi e indirizzi trovati nei messaggi in entrata e in uscita.
+Local contact information is based on names and addresses found in incoming and outgoing messages.
 
-L'uso principale dell'archiviazione dei contatti locali è offrire il completamento automatico quando non sono garantiti i permessi dei contatti a FairEmail.
+The main use of the local contacts storage is to offer auto completion when no contacts permission has been granted to FairEmail.
 
-Un altro uso è quello di generare [scorciatoie](#user-content-faq31) sulle versioni recenti di Android per inviare rapidamente un messaggio a persone contattate frequentemente. Questo è anche il motivo per cui il numero di volte di contatto e l'ultimo contatto sono registrate e perché puoi rendere un contatto preferito o escluderlo dai preferiti tenendolo premuto a lungo.
+Another use is to generate [shortcuts](#user-content-faq31) on recent Android versions to quickly send a message to frequently contacted people. This is also why the number of times contacted and the last time contacted is being recorded and why you can make a contact a favorite or exclude it from favorites by long pressing it.
 
-L'elenco dei contatti è ordinato per numero di volte di contatto e ultima volta di contatto.
+The list of contacts is sorted on number of times contacted and the last time contacted.
 
-Di default saranno registrati solo i nomi e gli indirizzi a cui invii messaggi. Puoi cambiarlo nelle impostazioni di invio.
+By default only names and addresses to whom you send messages to will be recorded. You can change this in the send settings.
 
 <br />
 
 <a name="faq85"></a>
-**(85) Perché un'identità non è disponibile?**
+**(85) Why is an identity not available?**
 
-Un'identità è disponibile per inviare un nuovo messaggio o rispondere o inoltrarne uno esistente solo se:
+An identity is available for sending a new message or replying or forwarding an existing message only if:
 
 * l'identità è impostata per la sincronizzazione (invio messaggi)
 * il profilo associato è impostato per la sincronizzazione (ricezione messaggi)
 * il profilo associato ha una cartella delle bozze
 
-FairEmail proverà a selezionare l'identità migliore in base *agli* indirizzi del messaggio a cui si risponde / inoltrato.
+FairEmail will try to select the best identity based on the *to* address of the message replied to / being forwarded.
 
 <br />
 
 <a name="faq86"></a>
-**~~(86) Cosa sono le 'funzionalità extra di privacy'?~~**
+**~~(86) What are 'extra privacy features'?~~**
 
-~~L'opzione avanzata *funzionalità extra di privacy* abilitano:~~
+~~The advanced option *extra privacy features* enables:~~
 
 * ~~La ricerca del proprietario di un indirizzo IP di un link~~
 * ~~Il rilevamento e la rimozione delle [immagini di monitoraggio](#user-content-faq82)~~
@@ -1889,32 +1891,32 @@ FairEmail proverà a selezionare l'identità migliore in base *agli* indirizzi d
 <br />
 
 <a name="faq87"></a>
-**(87) Cosa significa 'credenziali non valide'?**
+**(87) What does 'invalid credentials' mean?**
 
-Il messaggio di errore *credenziali non valide* significa che il nome utente e/o la password non sono corrette, per esempio perché la password è cambiata o scaduta, o che l'autorizzazione del profilo è scaduta.
+The error message *invalid credentials* means either that the user name and/or password is incorrect, for example because the password was changed or expired, or that the account authorization has expired.
 
-Se la password è scorretta/scaduta, dovrai aggiornarla nelle impostazioni del profilo e/o dell'identità.
+If the password is incorrect/expired, you will have to update the password in the account and/or identity settings.
 
-Se l'autorizzazione del profilo è scaduta, dovrai selezionare di nuovo il profilo. Potresti anche dover salvare di nuovo l'identità associata.
+If the account authorization has expired, you will have to select the account again. You will likely need to save the associated identity again as well.
 
 <br />
 
 <a name="faq88"></a>
-**(88) Come posso usare un profilo di Yahoo, AOL o Sky?**
+**(88) How can I use a Yahoo, AOL or Sky account?**
 
-Il modo preferito per configurare un profilo di Yahoo è usando la procedura guidata rapida di configurazione, che userà OAuth invece di una password ed è dunque più sicura (e anche più facile).
+The preferred way to set up a Yahoo account is by using the quick setup wizard, which will use OAuth instead of a password and is therefore safer (and easier as well).
 
-Per autorizzare un profilo di Yahoo, AOL o Sky dovrai creare una password dell'app. Per le istruzioni, sei pregato di vedere qui:
+To authorize a Yahoo, AOL, or Sky account you will need to create an app password. For instructions, please see here:
 
 * [per Yahoo](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
 * [per AOL](https://help.aol.com/articles/Create-and-manage-app-password)
 * [per Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (sotto *Altre app di email*)
 
-Sei pregato di vedere [questa FAQ](#user-content-faq111) sul supporto di OAuth.
+Please see [this FAQ](#user-content-faq111) about OAuth support.
 
-Nota che Yahoo, AOL e Sky non supportano i messaggi push standard. L'app email di Yahoo usa un protocollo proprietario non documentato per i messaggi push.
+Note that Yahoo, AOL, and Sky do not support standard push messages. The Yahoo email app uses a proprietary, undocumented protocol for push messages.
 
-I messaggi push richiedono [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) e il server email di Yahoo non segnala IDLE come capacità:
+Push messages require [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) and the Yahoo email server does not report IDLE as capability:
 
 ```
 Y1 CAPABILITY
@@ -1925,7 +1927,7 @@ Y1 OK CAPABILITY completed
 <br />
 
 <a name="faq89"></a>
-**(89) Come posso inviare messaggi di solo testo semplice?**
+**(89) How can I send plain text only messages?**
 
 By default FairEmail sends each message both as plain text and as HTML formatted text because almost every receiver expects formatted messages these days. If you want/need to send plain text messages only, you can enable this in the advanced identity options. You might want to create a new identity for this if you want/need to select sending plain text messages on a case-by-case basis.
 
@@ -1954,11 +1956,15 @@ Note that original messages are shown exactly as they are, which means also that
 <a name="faq92"></a>
 **(92) Can you add spam filtering, verification of the DKIM signature and SPF authorization?**
 
-Spam filtering, verification of the [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) signature and [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) authorization is a task of email servers, not of an email client. I server hanno generalmente più memoria e potenza di calcolo, quindi sono molto più adatti a quest'attività piuttosto che ai dispositivi alimentati a batteria. Also, you'll want spam filtered for all your email clients, possibly including web email, not just one email client. Moreover, email servers have access to information, like the IP address, etc of the connecting server, which an email client has no access to.
+Spam filtering, verification of the [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) signature and [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) authorization is a task of email servers, not of an email client. Servers generally have more memory and computing power, so they are much better suited to this task than battery-powered devices. Also, you'll want spam filtered for all your email clients, possibly including web email, not just one email client. Moreover, email servers have access to information, like the IP address, etc of the connecting server, which an email client has no access to.
 
 Spam filtering based on message headers might have been feasible, but unfortunately this technique is [patented by Microsoft](https://patents.google.com/patent/US7543076).
 
+Recent versions of FairEmail can filter spam to a certain extend using a message classifier. Please see [this FAQ](#user-content-faq163) for more information about this.
+
 Of course you can report messages as spam with FairEmail, which will move the reported messages to the spam folder and train the spam filter of the provider, which is how it is supposed to work. This can be done automatically with [filter rules](#user-content-faq71) too. Blocking the sender will create a filter rule to automatically move future messages of the same sender into the spam folder.
+
+Note that the POP3 protocol gives access to the inbox only. So, it is won't be possible to report spam for POP3 accounts.
 
 Note that you should not delete spam messages, also not from the spam folder, because the email server uses the messages in the spam folder to "learn" what spam messages are.
 
@@ -2015,11 +2021,11 @@ The IMAP settings are part of the (custom) account settings and the SMTP setting
 
 About each four hours FairEmail runs a cleanup job that:
 
-* Removes old message texts
-* Removes old attachment files
-* Removes old image files
-* Removes old local contacts
-* Removes old log entries
+* Rimuove i testi dei messaggi vecchi
+* Rimuove gli allegati dei messaggi vecchi
+* Rimuove immagini di vecchi file
+* Rimuove contatti locali vecchi
+* Rimuove le vecchie voci del registro
 
 Note that the cleanup job will only run when the synchronize service is active.
 
@@ -2046,9 +2052,9 @@ A [Rich text](https://en.wikipedia.org/wiki/Formatted_text) or [Markdown](https:
 
 You can synchronize Gmail categories by creating filters to label categorized messages:
 
-* Create a new filter via Gmail > Settings (wheel) > Filters and Blocked Addresses > Create a new filter
-* Enter a category search (see below) in the *Has the words* field and click *Create filter*
-* Check *Apply the label* and select a label and click *Create filter*
+* Crea un nuovo filtro tramite Gmail > Impostazioni (rotellina) > Filtri e Indirizzi Bloccati > Crea un nuovo filtro
+* Inserisci una ricerca della categoria (vedi sotto) nel campo *Contiene le parole* e clicca *Crea filtro*
+* Spunta *Applica l'etichetta* e selezionane una e clicca *Crea filtro*
 
 Possible categories:
 
@@ -2086,14 +2092,14 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 <a name="faq104"></a>
 **(104) What do I need to know about error reporting?**
 
-* Error reports will help improve FairEmail
-* Error reporting is optional and opt-in
-* Error reporting can be enabled/disabled in the settings, section miscellaneous
-* Error reports will automatically be sent anonymously to [Bugsnag](https://www.bugsnag.com/)
-* Bugsnag for Android is [open source](https://github.com/bugsnag/bugsnag-android)
-* See [here](https://docs.bugsnag.com/platforms/android/automatically-captured-data/) about what data will be sent in case of errors
-* See [here](https://docs.bugsnag.com/legal/privacy-policy/) for the privacy policy of Bugsnag
-* Error reports will be sent to *sessions.bugsnag.com:443* and *notify.bugsnag.com:443*
+* Le segnalazioni degli errori aiuteranno a migliorare FairEmail
+* La segnalazione degli errori è opzionale e su adesione
+* La segnalazione degli errori può essere abilitata/disabilitata nelle impostazioni, sezione varie
+* Le segnalazioni degli errori saranno inviate automaticamente e anonimamente a [Bugsnag](https://www.bugsnag.com/)
+* Bugsnag per Android è [open-source](https://github.com/bugsnag/bugsnag-android)
+* Vedi [qui](https://docs.bugsnag.com/platforms/android/automatically-captured-data/) quali dati saranno inviati in caso di errori
+* Vedi [qui](https://docs.bugsnag.com/legal/privacy-policy/) la politica della privacy di Bugsnag
+* Le segnalazioni di errori saranno inviate a *sessions.bugsnag.com:443* e *notify.bugsnag.com:443*
 
 <br />
 
@@ -2121,7 +2127,7 @@ This feature depends on support of your launcher. FairEmail merely 'broadcasts' 
 
 Some launchers display '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a badge for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
 
-Nota che Tesla Unread [non è più supportata](https://forum.xda-developers.com/android/general/bad-news-tesla-unread-devoloper-t3920415).
+Note that Tesla Unread is [not supported anymore](https://forum.xda-developers.com/android/general/bad-news-tesla-unread-devoloper-t3920415).
 
 FairEmail does send a new message count intent as well:
 
@@ -2158,8 +2164,8 @@ Some email clients use IMAP keywords for colors. However, not all servers suppor
 
 ~~You can solve this in two ways:~~
 
-* ~~Switch to the official version of FairEmail, see [here](https://github.com/M66B/FairEmail/blob/master/README.md#downloads) for the options~~
-* ~~Use app specific passwords, see [this FAQ](#user-content-faq6)~~
+* ~~Passa alla versione ufficiale di FairEmail, vedi [qui](https://github.com/M66B/FairEmail/blob/master/README.md#downloads) le opzioni~~
+* ~~Usa le password specifiche dell'app, vedi [questa FAQ](#user-content-faq6)~~
 
 ~~Using *select account* in third party builds is not possible in recent versions anymore.~~ ~~In older versions this was possible, but it will now result in the error *UNREGISTERED_ON_API_CONSOLE*.~~
 
@@ -2248,24 +2254,24 @@ Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f4
 
 Google manages all purchases, so as a developer I have little control over purchases. So, basically the only thing I can do, is give some advice:
 
-* Make sure you have an active, working internet connection
-* Make sure you are logged in with the right Google account and that there is nothing wrong with your Google account
-* Make sure you installed FairEmail via the right Google account if you configured multiple Google accounts on your device
-* Make sure the Play store app is up to date, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
-* Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers
-* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it help to tap the *buy* button
+* Assicurati di avere una connessione attiva e funzionante a internet
+* Assicurati di essere connesso con il giusto profilo di Google e che non ci sia niente di sbagliato con il tuo profilo di Google
+* Assicurati di aver installato FairEmail tramite il giusto profilo Google se hai diversi profili Google configurati sul tuo dispositivo
+* Assicurati che l'app del Play Store sia aggiornata, sei pregato di [vedere qui](https://support.google.com/googleplay/answer/1050566?hl=en)
+* Apri l'app del Play Store e attendi almeno un minuto per dargli tempo di sincronizzarsi con i server di Google
+* Apri FairEmail e naviga alla schermata delle funzionalità pro per far controllare a FairEmail gli acquisti; talvolta aiuta toccare il pulsante *compra*
 
 You can also try to clear the cache of the Play store app via the Android apps settings. Restarting the device might be necessary to let the Play store recognize the purchase correctly.
 
 Note that:
 
-* If you get *ITEM_ALREADY_OWNED*, the Play store app probably needs to be updated, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
-* Purchases are stored in the Google cloud and cannot get lost
-* There is no time limit on purchases, so they cannot expire
-* Google does not expose details (name, e-mail, etc) about buyers to developers
-* An app like FairEmail cannot select which Google account to use
-* It may take a while until the Play store app has synchronized a purchase to another device
-* Play Store purchases cannot be used without the Play Store, which is also not allowed by Play Store rules
+* Se ottieni *ITEM_ALREADY_OWNED*, l'app del Play Store potrebbe dover essere aggiornata, sei pregato di [vedere qui](https://support.google.com/googleplay/answer/1050566?hl=en)
+* Gli acquisti sono archiviati nel cloud di Google e non sono mai perduti
+* Non c'è limite di tempo sugli acquisti, quindi non scadono
+* Google non espone i dettagli (nome, email, etc.) sugli acquirenti agli sviluppatori
+* Un'app come FairEmail non può selezionare quale profilo Google usare
+* Potrebbe volerci un po' fino alla sincronizzazione di un acquisto su un altro dispositivo dall'app del Play Store
+* Gli acquisti del Play Store non sono utilizzabili senza il Play Store, il che non è anche consentito dalle regole del Play Store
 
 If you cannot solve the problem with the purchase, you will have to contact Google about it.
 
@@ -2341,512 +2347,525 @@ The message *Message too large or too complex to display* will be shown if there
 
 *Message classification (version 1.1438+)*
 
-Sei pregato di vedere [questa FAQ](#user-content-faq163) per i dettagli.
+Please see [this FAQ](#user-content-faq163) for details.
 
-Essendo una funzionalità sperimentale, il mio consiglio è di iniziare con una sola cartella.
+Since this is an experimental feature, my advice is to start with just one folder.
 
 <br />
 
 <a name="faq126"></a>
-**(126) Le anteprime dei messaggi possono essere inviate al mio indossabile?**
+**(126) Can message previews be sent to my wearable?**
 
-FairEmail recupera un messaggio in due passaggi:
+FairEmail fetches a message in two steps:
 
-1. Fetch message headers
-1. Fetch message text and attachments
+1. Recupera intestazioni del messaggio
+1. Recupera testo e allegati del messaggio
 
-Direttamente dopo il primo passaggio saranno notificati i nuovi messaggi. Tuttavia, solo dopo il secondo il testo del messaggio sarà disponibile. FairEmail aggiorna le notifiche esistenti con un'anteprima del testo del messaggio, ma sfortunatamente le notifiche dell'indossabile non possono essere aggiornate.
+Directly after the first step new messages will be notified. However, only until after the second step the message text will be available. FairEmail updates exiting notifications with a preview of the message text, but unfortunately wearable notifications cannot be updated.
 
-Non essendoci garanzia che il testo di un messaggio sia sempre recuperato direttamente dopo l'intestazione del messaggio, non si può garantire che la notifica di un nuovo messaggio con un testo di anteprima sia sempre inviata a un indossabile.
+Since there is no guarantee that a message text will always be fetched directly after a message header, it is not possible to guarantee that a new message notification with a preview text will always be sent to a wearable.
 
-Se pensi che sia abbastanza, puoi abilitare l'opzione di notifica *Invia solo le notifiche con un'anteprima di messaggio agli indossabile* e se non funziona, puoi provare ad abilitare l'opzione di notifica *Mostra solo le notifiche con un testo di anteprima*. Nota che questo si applica anche agli indossabili che non mostrano un testo di anteprima, anche quando l'app Android Wear dice che la notifica è stata inviata (collegata).
+If you think this is good enough, you can enable the notification option *Only send notifications with a message preview to wearables* and if this does not work, you can try to enable the notification option *Show notifications with a preview text only*. Note that this applies to wearables not showing a preview text too, even when the Android Wear app says the notification has been sent (bridged).
 
-Se vuoi aver inviato il testo completo del messaggio al tuo indossabile, puoi abilitare l'opzione di notifica *Anteprima del testo completo*. Nota che alcuni indossabili sono noti per esser crashati con quest'opzione abilitata.
+If you want to have the full message text sent to your wearable, you can enable the notification option *Preview all text*. Note that some wearables are known to crash with this option enabled.
 
-Se usi un indossabile di Samsung con l'app Galaxy Wearable (Samsung Gear), potresti dover abilitare le notifiche per FairEmail impostando *Notifiche*, *App installate in futuro* è disattivata in quest'app.
+If you use a Samsung wearable with the Galaxy Wearable (Samsung Gear) app, you might need to enable notifications for FairEmail when the setting *Notifications*, *Apps installed in the future* is turned off in this app.
 
 <br />
 
 <a name="faq127"></a>
-**(127) Come posso correggere 'Argomenti HELO sintatticamente non validi?**
+**(127) How can I fix 'Syntactically invalid HELO argument(s)'?**
 
-L'errore *... Argomenti HELO sintatticamente non validi ...* significa che il server SMTP ha rifiutato l'indirizzo IP locale o il nome dell'host. Potresti correggere quest'errore abilitando o disabilitando l'opzione di identità avanzata *Usa l'indirizzo IP locale invece del nome dell'host*.
+The error *... Syntactically invalid HELO argument(s) ...* means that the SMTP server rejected the local IP address or host name. You can likely fix this error by enabling or disabling the advanced indentity option *Use local IP address instead of host name*.
 
 <br />
 
 <a name="faq128"></a>
-**(128) Come posso ripristinare le domande fatte, ad esempio per mostrare immagini=**
+**(128) How can I reset asked questions, for example to show images?**
 
-Puoi ripristinare le domande fatte tramite il menu di panoramica a tre puntini nelle impostazioni varie.
+You can reset asked questions via the three dots overflow menu in the miscellaneous settings.
 
 <br />
 
 <a name="faq129"></a>
-**(129) ProtonMail e Tutanota sono supportate?**
+**(129) Are ProtonMail, Tutanota supported?**
 
-ProtonMail usa un protocollo email proprietario e [non supporta direttamente IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), quindi non puoi usare FairEmail per accedere ProtonMail.
+ProtonMail uses a proprietary email protocol and [does not directly support IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), so you cannot use FairEmail to access ProtonMail.
 
-Tutanota usa un protocollo email proprietario e [non supporta IMAP](https://tutanota.com/faq/#imap), quindi non puoi usare FairEmail per accedere a Tutanota.
+Tutanota uses a proprietary email protocol and [does not support IMAP](https://tutanota.com/faq/#imap), so you cannot use FairEmail to access Tutanota.
 
 <br />
 
 <a name="faq130"></a>
-**(130) Cosa significa il messaggio di errore ...?**
+**(130) What does message error ... mean?**
 
-Una serie di righe con testi arancioni o rossi con informazioni tecniche significa che la modalità di debug è stata abilitata nelle impostazioni miste.
+A series of lines with orangish or red texts with technical information means that debug mode was enabled in the miscellaneous settings.
 
-L'avviso *Nessun server trovato a ...* significa che non è stato indicato alcun server email al nome di dominio indicato. Rispondere al messaggio potrebbe non essere possibile e potrebbe risultare in un errore. Questo potrebbe indicare un indirizzo email falsificato e/o spam.
+The warning *No server found at ...* means that there was no email server registered at the indicated domain name. Replying to the message might not be possible and might result in an error. This could indicate a falsified email address and/or spam.
 
-L'errore *... ParseException ...* significa che c'è un problema con un messaggio ricevuto, probabilmente causato da un bug nel software di invio. FairEmail lo risolverà nella maggior parte dei casi, quindi questo messaggio è prevalentemente considerabile come un avviso invece che un errore.
+The error *... ParseException ...* means that there is a problem with a received message, likely caused by a bug in the sending software. FairEmail will workaround this is in most cases, so this message can mostly be considered as a warning instead of an error.
 
-L'errore *...SendFailedException...* significa che si è verificato un problema inviando un messaggio. L'errore includerà quasi sempre un motivo. Motivi comuni sono che il messaggio era troppo grande o che uno o più indirizzi del destinatario non erano validi.
+The error *...SendFailedException...* means that there was a problem while sending a message. The error will almost always include a reason. Common reasons are that the message was too big or that one or more recipient addresses were invalid.
 
-L'avviso *Messaggio troppo grande per la memoria disponibile* significa che il messaggio era più grande di 10 MiB. Anche se il tuo dispositivo ha molto spazio di archiviazione, Android fornisce memoria operativa limitata alle app, il che limita la dimensione dei messaggi gestibili.
+The warning *Message too large to fit into the available memory* means that the message was larger than 10 MiB. Even if your device has plenty of storage space Android provides limited working memory to apps, which limits the size of messages that can be handled.
 
-Sei pregato di vedere [qui](#user-content-faq22) per altri messaggi di errore nella posta in uscita.
+Please see [here](#user-content-faq22) for other error messages in the outbox.
 
 <br />
 
 <a name="faq131"></a>
-**(131) Puoi modificare la direzione per scorrere al messaggio precedente/successivo?**
+**(131) Can you change the direction for swiping to previous/next message?**
 
-Se leggi da sinistra a destra, scorrere a sinistra mostrerà il messaggio successivo. Allo stesso modo, se leggi da destra a sinistra, scorrere a destra mostrerà quello successivo.
+If you read from left to right, swiping to the left will show the next message. Similarly, if you read from right to left, swiping to the right will show the next message.
 
-Questo comportamento mi sembra molto naturale, anche perché somiglia a voltare le pagine.
+This behavior seems quite natural to me, also because it is similar to turning pages.
 
-Ad ogni modo, esiste un'impostazione di comportamento per invertire la direzione di scorrimento.
+Anyway, there is a behavior setting to reverse the swipe direction.
 
 <br />
 
 <a name="faq132"></a>
-**(132) Perché le notifiche dei nuovi messaggi sono silenziose?**
+**(132) Why are new message notifications silent?**
 
-Le notifiche sono silenziose di default su alcune versioni di MIUI. Sei pregato di vedere [qui](http://en.miui.com/thread-3930694-1-1.html) come puoi risolverlo.
+Notifications are silent by default on some MIUI versions. Please see [here](http://en.miui.com/thread-3930694-1-1.html) how you can fix this.
 
-Esiste un bug in alcune versioni di Android che causa che [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean)) silenzi le notifiche. Poiché FairEmail mostra le notifiche dei nuovi messaggi subito dopo averne recuperato le intestazioni e che FairEmail deve aggiornare le notifiche dei nuovi messaggi dopo il successivo recupero del testo del messaggio, questo non è correggibile o risolvibile da FairEmail.
+There is a bug in some Android versions causing [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean)) to mute notifications. Since FairEmail shows new message notifications right after fetching the message headers and FairEmail needs to update new message notifications after fetching the message text later, this cannot be fixed or worked around by FairEmail.
 
-Android potrebbe limitare il suono di notifica, il che può causare il silenziamento di alcune notifiche dei messaggi.
+Android might rate limit the notification sound, which can cause some new message notifications to be silent.
 
 <br />
 
 <a name="faq133"></a>
-**(133) Perché ActiveSync non è supportato?**
+**(133) Why is ActiveSync not supported?**
 
-Il protocollo ActiveSync di Microsoft Exchange [è brevettato](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) a può dunque non essere supportato. Per questo motivo non troverai molti altri client email, se presenti, che supportano ActiveSync.
+The Microsoft Exchange ActiveSync protocol [is patented](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) and can therefore not be supported. For this reason you won't find many, if any, other email clients supporting ActiveSync.
 
-Il protocollo dei Servizi Web di Microsoft Exchange [è in fase di eliminazione](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055).
+The Microsoft Exchange Web Services protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055).
 
-Nota che la descrizione di FairEmail inizia con l'osservazione che i protocolli non standard, come i Servizi Web di Microsoft Exchange e ActiveSync di Microsoft non sono supportati.
+Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
 
 <br />
 
 <a name="faq134"></a>
-**(134) Puoi aggiungere l'eliminazione dei messaggi locali?**
+**(134) Can you add deleting local messages?**
 
 *POP3*
 
-Nelle impostazioni del profilo (Configurazione, passaggio 1, Gestione, tocca profilo) puoi abilitare *Lascia i messaggi eliminati sul server*.
+In the account settings (Setup, step 1, Manage, tap account) you can enable *Leave deleted messages on server*.
 
 *IMAP*
 
-Poiché il protocollo IMAP è destinato alla sincronizzazione in due modi, eliminare un messaggio dal dispositivo risulterebbe nel recupero del messaggio alla nuova sincronizzazione.
+Since the IMAP protocol is meant to synchronize two ways, deleting a message from the device would result in fetching the message again when synchronizing again.
 
-Tuttavia, FairEmail supporta i messaggi nascosti, tramite il menu a tre puntini nella barra di azione proprio sopra il testo del messaggio o selezionando messaggi multipli nell'elenco dei messaggi. Fondamentalmente questo equivale a "lascia sul server" del protocollo POP3 con il vantaggio di poter mostrare ancora i messaggi quando necessario.
+However, FairEmail supports hiding messages, either via the three-dots menu in the action bar just above the message text or by multiple selecting messages in the message list. Basically this is the same as "leave on server" of the POP3 protocol with the advantage that you can show the messages again when needed.
 
-Nota che è possibile impostare l'azione di scorrimento da sinistra a destra per nascondere un messaggio.
+Note that it is possible to set the swipe left or right action to hide a message.
 
 <br />
 
 <a name="faq135"></a>
-**(135) Perché i messaggi cestinati e le bozze sono mostrate nelle conversazioni?**
+**(135) Why are trashed messages and drafts shown in conversations?**
 
-I messaggi individuali saranno raramente cestinati e prevalentemente si verifica per incidente. Mostrare i messaggi cestinati nelle conversazioni rende più facile ritrovarli.
+Individual messages will rarely be trashed and mostly this happens by accident. Showing trashed messages in conversations makes it easier to find them back.
 
-Puoi eliminare un messaggio permanentemente usando *elimina* nel menu a tre puntini del messaggio, che rimuoverà il messaggio dalla conversazione. Nota che è irreversibile.
+You can permanently delete a message using the message three-dots *delete* menu, which will remove the message from the conversation. Note that this irreversible.
 
-Similmente, le bozze sono mostrate nelle conversazioni per ritrovarle nel contesto a cui appartengono. Leggere i messaggi ricevuti è facile prima di continuare a scrivere la bozza in seguito.
+Similarly, drafts are shown in conversations to find them back in the context where they belong. It is easy to read through the received messages before continuing to write the draft later.
 
 <br />
 
 <a name="faq136"></a>
-**(136) Come posso eliminare un profilo/identità/cartella?**
+**(136) How can I delete an account/identity/folder?**
 
-L'eliminazione di un profilo/identità/cartella è un po' nascosta per prevenire gli incidenti.
+Deleting an account/identity/folder is a little bit hidden to prevent accidents.
 
-* Account: Setup > Step 1 > Manage > Tap account
-* Identity: Setup > Step 2 > Manage > Tap identity
-* Folder: Long press the folder in the folder list > Edit properties
+* Profilo: Configurazione > Passaggio 1 > Gestione > Tocca profilo
+* Identità: Configurazione > Passaggio 2 > Gestione > Tocca identità
+* Cartella: Lunga pressione sulla cartella nell'elenco delle cartelle > Modifica proprietà
 
-Nel menu di trabocco a tre puntini in alto a destra esiste un elemento per eliminare il profilo/identità/cartella.
+In the three-dots overflow menu at the top right there is an item to delete the account/identity/folder.
 
 <br />
 
 <a name="faq137"></a>
-**(137) Come posso ripristinare 'Non chiedermelo più'?**
+**(137) How can I reset 'Don't ask again'?**
 
-Puoi ripristinare tutte le domande impostate per non esser chieste più nelle impostazioni miste.
+You can reset all questions set to be not asked again in the miscellaneous settings.
 
 <br />
 
 <a name="faq138"></a>
-**(138) Puoi aggiungere il calendario, la gestione dei contatti, la sincronizzazione?**
+**(138) Can you add calendar/contact management/synchronizing?**
 
-Il calendario e la gestione dei contatti sono realizzabili da un'app separata specializzata. Nota che FairEmail è un'app email specializzata, non una suite da ufficio.
+Calendar and contact management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
 
-Inoltre, preferisco fare alcune cose molto bene, invece che molte solo a metà. Inoltre, dal punto di vista della sicurezza, non è una buona idea garantire molti permessi a un'app singola.
+Also, I prefer to do a few things very well, instead of many things only half. Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.
 
-Si consiglia di usare l'eccellente app open source [DAVx⁵](https://f-droid.org/packages/at.bitfire.davdroid/) per sincronizzare/gestire i tuoi calendari/contatti.
+You are advised to use the excellent, open source [DAVx⁵](https://f-droid.org/packages/at.bitfire.davdroid/) app to synchronize/manage your calendars/contacts.
 
-Gran parte dei provider supportano l'esportazione dei tuoi contatti. Sei pregato di [vedere qui](https://support.google.com/contacts/answer/1069522) come puoi importare i contatti se la sincronizzazione è impossibile.
+Most providers support exporting your contacts. Please [see here](https://support.google.com/contacts/answer/1069522) about how you can import contacts if synchronizing is not possible.
 
-Nota che FairEmail supporta la risposta agli inviti del calendario (una funzionalità pro) e l'aggiunta di inviti del calendario al tuo calendario personale.
+Note that FairEmail does support replying to calendar invites (a pro feature) and adding calendar invites to your personal calendar.
 
 <br />
 
 <a name="faq83"></a>
 <a name="faq139"></a>
-**(139) Come correggo 'Utente autenticato ma non connesso'?**
+**(139) How do I fix 'User is authenticated but not connected'?**
 
-Difatti questo errore specifico di Microsoft Exchange è un messaggio di errore scorretto causato da un bug nel vecchio software del server di Exchange.
+In fact this Microsoft Exchange specific error is an incorrect error message caused by a bug in older Exchange server software.
 
-L'errore *Utente autenticato ma non connesso* potrebbe verificarsi se:
+The error *User is authenticated but not connected* might occur if:
 
-* Push messages are enabled for too many folders: see [this FAQ](#user-content-faq23) for more information and a workaround
-* The account password was changed: changing it in FairEmail too should fix the problem
-* An alias email address is being used as username instead of the primary email address
-* An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
+* I messaggi push sono abilitati per troppe cartelle: vedi [questa FAQ](#user-content-faq23) per ulteriori informazioni e una soluzione
+* La password del profilo è stata cambiata: cambiarla in FairEmail dovrebbe risolvere il problema
+* L'indirizzo email di un alias è usato come nome utente invece che come indirizzo email principale
+* Uno schema di accesso scorretto è in uso per una casella di posta condivisa: lo schema corretto è *username@domain\SharedMailboxAlias*
 
-Gli alias della casella di posta elettronica condivisa saranno prevalentemente gli indirizzi di posta elettronica del profilo condiviso, come questo:
+The shared mailbox alias will mostly be the email address of the shared account, like this:
 
 ```
 you@example.com\shared@example.com
 ```
 
-Nota che dovrebbe essere un backslash e non uno slash.
+Note that it should be a backslash and not a forward slash.
 
 <br />
 
 <a name="faq140"></a>
-**(140) Perché il testo del messaggio contiene caratteri strani?**
+**(140) Why does the message text contain strange characters?**
 
-La visualizzazione di caratteri strani è quasi sempre causata dalla specificazione o meno di una codifica non valida del carattere inviata dal software. FairEmail presumerà che [ISO 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) quando nessun carattere è impostato o quando è stato specificato [US-ASCII](https://en.wikipedia.org/wiki/ASCII). Oltre al fatto che non c'è modo di determinare affidabilmente la crittografia corretta dei caratteri automaticamente, quindi non è correggibile da FairEmail. L'azione giusta è quella di lamentarsi con il mittente.
+Displaying strange characters is almost always caused by specifying no or an invalid character encoding by the sending software. FairEmail will assume [ISO 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) when no character set or when [US-ASCII](https://en.wikipedia.org/wiki/ASCII) was specified. Other than that there is no way to reliably determine the correct character encoding automatically, so this cannot be fixed by FairEmail. The right action is to complain to the sender.
 
 <br />
 
 <a name="faq141"></a>
-**(141) Come posso correggere 'Una cartella di bozze è necessaria per inviare i messaggi'?**
+**(141) How can I fix 'A drafts folder is required to send messages'?**
 
-Per memorizzare i messaggi di bozza è necessaria una cartella delle bozze. In molti casi FairEmail selezionerà automaticamente le cartelle di bozze all'aggiunta di un profilo basato [sugli attributi](https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml) inviati dal server email. Tuttavia, alcuni server email non sono propriamente configurati e non inviano tali attributi. In questo caso FairEmail prova a identificare la cartella delle bozze per nome, ma questo potrebbe fallire se la cartella delle bozze ha un nome insolito o non è presente affatto.
+To store draft messages a drafts folder is required. In most cases FairEmail will automatically select the drafts folders on adding an account based on [the attributes](https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml) the email server sends. However, some email servers are not configured properly and do not send these attributes. In this case FairEmail tries to identify the drafts folder by name, but this might fail if the drafts folder has an unusual name or is not present at all.
 
-Puoi risolvere questo problema selezionando manualmente la cartella delle bozze nelle impostazioni del profilo (Configurazione, passaggio 1, tocca profilo, in basso). Se non esiste alcuna cartella delle bozze, puoi crearne una toccando sul pulsante '+' nell'elenco delle cartelle del profilo (tocca il nome del profilo nel menu di navigazione).
+You can fix this problem by manually selecting the drafts folder in the account settings (Setup, step 1, tap account, at the bottom). If there is no drafts folder at all, you can create a drafts folder by tapping on the '+' button in the folder list of the account (tap on the account name in the navigation menu).
 
-Alcuni provider, come Gmail, consentono di abilitare/disabilitare IMAP per le cartelle singole. Quindi, se una cartella è invisibile, potresti dover abilitare l'IMAP per essa.
+Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
 
-Collegamento rapido per Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Quick link for Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 
 <a name="faq142"></a>
-**(142) Come posso memorizzare i messaggi inviati nella posta in arrivo?**
+**(142) How can I store sent messages in the inbox?**
 
-Generalmente, non è una buona idea memorizzare i messaggi inviati nella posta in arrivo perché difficile da annullare e potrebbe essere non compatibile con altri client di posta elettronica.
+Generally, it is not a good idea to store sent messages in the inbox because this is hard to undo and could be incompatible with other email clients.
 
-Detto ciò, FairEmail può gestire propriamente i messaggi inviati nella posta di arrivo. FairEmail contrassegnerà i messaggi in uscita con l'icona di quelli inviati, per esempio.
+That said, FairEmail is able to properly handle sent messages in the inbox. FairEmail will mark outgoing messages with a sent messages icon for example.
 
-La soluzione migliore sarebbe abilitare la visualizzazione della cartella inviati nella posta in arrivo unica premendo a lungo sulla cartella inviati nell'elenco delle cartelle e abilitando *Mostra nella posta in arrivo unificata*. Così tutti i messaggi possono rimanere a dove appartengono, consentendo di vedere sia i messaggi in entrata che in uscita in un posto.
+The best solution would be to enable showing the sent folder in the unified inbox by long pressing the sent folder in the folder list and enabling *Show in unified inbox*. This way all messages can stay where they belong, while allowing to see both incoming and outgoing messages at one place.
 
-Se non è possibile, puoi [creare una regola](#user-content-faq71) per spostare automaticamente i messaggi inviati in posta in arrivo o impostare un indirizzo CC/BCC predefinito nelle impostazioni di identità avanzata per inviarti una copia.
+If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox or set a default CC/BCC address in the advanced identity settings to send yourself a copy.
 
 <br />
 
 <a name="faq143"></a>
-**~~(143) Puoi aggiungere una cartella del cestino per i profili POP3?~~**
+**~~(143) Can you add a trash folder for POP3 accounts?~~**
 
-[POP3](https://en.wikipedia.org/wiki/Post_Office_Protocol) è un protocollo molto limitato. Fondamentalmente solo i messaggi sono scaricabili ed eliminabili dalla posta in arrivo. Non si può nemmeno segnare un messaggio come letto.
+[POP3](https://en.wikipedia.org/wiki/Post_Office_Protocol) is a very limited protocol. Basically only messages can be downloaded and deleted from the inbox. It is not even possible to mark a message read.
 
-Poiché POP3 non consente alcun accesso al cestino, non c'è modo di ripristinare i messaggi cestinati.
+Since POP3 does not allow access to the trash folder at all, there is no way to restore trashed messages.
 
-Nota che puoi nascondere i messaggi e cercare quelli nascosti, similmente alla cartella locale del cestino, senza suggerire che i messaggi cestinati siano ripristinati, mentre non è realmente possibile.
+Note that you can hide messages and search for hidden messages, which is similar to a local trash folder, without suggesting that trashed messages can be restored, while this is actually not possible.
 
-La versione 1.1082 ha aggiunto una cartella locale del cestino. Nota che cestinare un messaggio lo rimuoverà permanentemente dal server e che i messaggi cestinati non sono più ripristinabili al server.
+Version 1.1082 added a local trash folder. Note that trashing a message will permanently remove it from the server and that trashed messages cannot be restored to the server anymore.
 
 <br />
 
 <a name="faq144"></a>
-**(144) Come posso registrare le note vocali?**
+**(144) How can I record voice notes?**
 
-Per registrare le note vocali puoi premere quest'icona nella barra di azione in basso del compositore di messaggi:
+To record voice notes you can press this icon in the bottom action bar of the message composer:
 
-![Immagine esterna](https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png)
+![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png)
 
-Questo richiede un'app di registrazione audio compatibile installata. In particolare [questo intento comune](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION) deve essere supportato</a>.
+This requires a compatible audio recorder app to be installed. In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION) needs to be supported.
 
-Per esempio [questo registratore audio](https://f-droid.org/app/com.github.axet.audiorecorder) è compatibile.
+For example [this audio recorder](https://f-droid.org/app/com.github.axet.audiorecorder) is compatible.
 
-Le note vocali saranno allegate automaticamente.
+Voice notes will automatically be attached.
 
 <br />
 
 <a name="faq145"></a>
-**(145) Come posso impostare un suono di notifica per un profilo, una cartella o un mittente?**
+**(145) How can I set a notification sound for an account, folder or sender?**
 
-Profilo:
+Account:
 
-* Enable *Separate notifications* in the advanced account settings (Setup, step 1, Manage, tap account, tap Advanced)
-* Long press the account in the account list (Setup, step 1, Manage) and select *Edit notification channel* to change the notification sound
+* Abilita *Notifiche separate* nelle impostazioni avanzate del profilo (Configurazione, passaggio 1, Gestione, tocca profilo, tocca Avanzate)
+* Premi a lungo il profilo nell'elenco dei profili (Configurazione, passaggio 1, Gestione) e seleziona *Modifica canale di notifica* per notificare il suono di notifica
 
-Cartella:
+Folder:
 
-* Long press the folder in the folder list and select *Create notification channel*
-* Long press the folder in the folder list and select *Edit notification channel* to change the notification sound
+* Premi a lungo la cartella nell'elenco della cartella e seleziona *Crea canale di notifica*
+* Premi a lungo la cartella nell'elenco della cartella e seleziona *Modifica canale di notifica* per cambiare il suono di notifica
 
-Mittente:
+Sender:
 
-* Open a message from the sender and expand it
-* Expand the addresses section by tapping on the down arrow
-* Tap on the bell icon to create or edit a notification channel and to change the notification sound
+* Apri un messaggio dal mittente ed espandilo
+* Espandi la sezione degli indirizzi toccando sulla freccia giù
+* Tocca sull'icona della campanella per creare o modificare un canale di notifica e cambiare il suono di notifica
 
-L'ordine di precedenza è: suono del mittente, suono della cartella, suono del profilo e suono predefinito.
+The order of precendence is: sender sound, folder sound, account sound and default sound.
 
-Impostare un suono di notifica per un profilo, una cartella o un mittente richiede Android 8 Oreo o successiva ed è una funzionalità pro.
+Setting a notification sound for an account, folder or sender requires Android 8 Oreo or later and is a pro feature.
 
 <br />
 
 <a name="faq146"></a>
-**(146) Come posso correggere gli orari del messaggio non corretti?**
+**(146) How can I fix incorrect message times?**
 
-Poiché la data/ora è opzionale e manipolabile dal mittente, FairEmail usa la data/ora di ricezione del server di default.
+Since the sent date/time is optional and can be manipulated by the sender, FairEmail uses the server received date/time by default.
 
-A volte la data/ora di ricezione del server non è corretta, principalmente perché i messaggi sono stati importati scorrettamente da un altro server e talvolta a causa di un bug nel server dell'email.
+Sometimes the server received date/time is incorrect, mostly because messages were incorrectly imported from another server and sometimes due to a bug in the email server.
 
-In questi rari casi, è possibile far usare a FairEmail la data o l'ora dall'intestazione *Data* (orario di invio) o <em x-id"3">Ricevuto</em> come soluzione. Questo si può modificare nelle impostazioni avanzate del profilo: Configurazione, passaggio 1, Gestione, tocca profilo, tocca Avanzate.
+In these rare cases, it is possible to let FairEmail use either the date/time from the *Date* header (sent time) or from the *Received* header as a workaround. This can be changed in the advanced account settings: Setup, step 1, Manage, tap account, tap Advanced.
 
-Questo non cambierà l'ora dei messaggi già sincronizzati. Per risolverlo, premi a lungo sulle cartelle nell'elenco della cartella e seleziona *Elimina i messaggi locali* e *Sincronizza ora*.
+This will not change the time of already synchronized messages. To solve this, long press the folder(s) in the folder list and select *Delete local messages* and *Synchronize now*.
 
 <br />
 
 <a name="faq147"></a>
-**(147) Cosa dovrei sapere sulle versioni di terze parti?**
+**(147) What should I know about third party versions?**
 
-Potresti venire qui perché stai usando una build di terze parti di FairEmail.
+You likely came here because you are using a third party build of FairEmail.
 
-Esiste **il supporto solo** sull'ultima versione del Play Store, l'ultima release di GitHub e la build di F-Droid, ma **solo se** il numero della versione della build di F-Droid è la stessa del numero di versione dell'ultima release di GitHub.
+There is **only support** on the latest Play store version, the latest GitHub release and the F-Droid build, but **only if** the version number of the F-Droid build is the same as the version number of the latest GitHub release.
 
-F-Droid si costruisce irregolarmente, il che può essere problematico quando c'è un aggiornamento importante. Dunque ti si consiglia di passare alla release di GitHub.
+F-Droid builds irregularly, which can be problematic when there is an important update. Therefore you are advised to switch to the GitHub release.
 
-La versione di F-Droid è costruito dallo stesso codice sorgente, ma firmato differentemente. Questo significa che tutte le funzionalità sono disponibili anche nella versione di F-Droid, eccetto per usare la procedura guidata rapida di Gmail perché Google ha approvato (e consente) solo una firma dell'app. Per tutti gli altri provider email, l'accesso OAuth è disponibile solo nelle versioni del Play Store e le release di GitHub, così come i provider email permettono solo l'uso di OAuth per le build ufficiali.
+The F-Droid version is built from the same source code, but signed differently. This means that all features are available in the F-Droid version too, except for using the Gmail quick setup wizard because Google approved (and allows) one app signature only. For all other email providers, OAuth access is only available in Play Store versions and Github releases, as the email providers only permit the use of OAuth for official builds.
 
-Nota che dovrai disinstallare la build di F-Droid prima di poter installare una release di GitHub perché Android rifiuta di installare la stessa app con una firma differente per motivi di sicurezza.
+Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release because Android refuses to install the same app with a different signature for security reasons.
 
-Nota che la versione di GitHub controllerà automaticamente gli aggiornamenti. Quando desiderato, questo è disattivabile nelle impostazioni miste.
+Note that the GitHub version will automatically check for updates. When desired, this can be turned off in the miscellaneous settings.
 
-Sei pregato di [vedere qui](https://github.com/M66B/FairEmail/blob/master/README.md#user-content-downloads) per tutte le opzioni di download.
+Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#user-content-downloads) for all download options.
 
-Se hai un problema con la build di F-Droid, sei pregato di controllare che ci sia una versione più nuova di GitHub prima.
+If you have a problem with the F-Droid build, please check if there is a newer GitHub version first.
 
 <br />
 
 <a name="faq148"></a>
-**(148) Come posso usare un profilo di Apple iCloud?**
+**(148) How can I use an Apple iCloud account?**
 
-Esiste un profilo integrato per Apple iCloud, ma se necessario puoi trovare le impostazioni giuste [qui](https://support.apple.com/en-us/HT202304).
+There is a built-in profile for Apple iCloud, but if needed you can find the right settings [here](https://support.apple.com/en-us/HT202304).
 
-Quando usi l'autenticazione a due fattori potresti dover usare una [password specifica dell'app](https://support.apple.com/en-us/HT204397).
+When using two-factor authentication you might need to use an [app-specific password](https://support.apple.com/en-us/HT204397).
 
 <br />
 
 <a name="faq149"></a>
-**(149) Come funziona il widget di conteggio dei messaggi non letti?**
+**(149) How does the unread message count widget work?**
 
-Il widget di conteggio dei messaggi non letti mostra il numero di messaggi non letti per tutti i profilo o per un profilo selezionato, ma solo per le cartelle per cui sono abilitate le notifiche del nuovo messaggio.
+The unread message count widget shows the number of unread messages either for all accounts or for a selected account, but only for the folders for which new message notifications are enabled.
 
-Toccare sulla notifica sincronizzerà tutte le cartelle per cui è abilitata la sincronizzazione e aprirà:
+Tapping on the notification will synchronize all folders for which synchronization is enabled and will open:
 
-* the start screen when all accounts were selected
-* a folder list when a specific account was selected and when new message notifications are enabled for multiple folders
+* la schermata di avvio quando sono selezionati tutti i profili
+* un elenco delle cartelle quando è selezionato un profilo specifico e quando le notifiche dei nuovi messaggi sono abilitate per cartelle multiple
 * un elenco di messaggi quando un profilo specifico è stato selezionato e all'abilitazione per una cartella delle notifiche di nuovi messaggi
 
 <br />
 
 <a name="faq150"></a>
-**(150) Puoi aggiungere l'annullamento degli inviti del calendario?**
+**(150) Can you add cancelling calendar invites?**
 
-Annullare gli inviti del calendario (rimuovere gli eventi del calendario) richiede permessi di scrittura del calendario, che risulteranno nella garanzia effettiva del permesso per leggere e scrivere *tutti* gli eventi del calendario di *tutti* i calendari.
+Cancelling calendar invites (removing calendar events) requires write calendar permission, which will result in effectively granting permission to read and write *all* calendar events of *all* calendars.
 
-Dato lo scopo di FairEmail, la privacy e la sicurezza, e dato che è facile rimuovere manualmente l'evento di un calendario, non è una buona idea richiedere questo permesso solo per questo motivo.
+Given the goal of FairEmail, privacy and security, and given that it is easy to remove a calendar event manually, it is not a good idea to request this permission for just this reason.
 
-Inserire nuovi eventi del calendario può esser fatto senza permessi con [intenti](https://developer.android.com/guide/topics/providers/calendar-provider.html#intents) speciali. Sfortunatamente, non esiste alcun intento per eliminare gli eventi esistenti del calendario.
+Inserting new calendar events can be done without permissions with special [intents](https://developer.android.com/guide/topics/providers/calendar-provider.html#intents). Unfortunately, there exists no intent to delete existing calendar events.
 
 <br />
 
 <a name="faq151"></a>
-**(151) Puoi aggiungere il backup/ripristino dei messaggi?**
+**(151) Can you add backup/restore of messages?**
 
-Un client email è inteso per leggere e scrivere i messaggi, non per il backup e ripristino dei messaggi. Nota che rompere o perdere il tuo dispositivo, significa perdere i tuoi messaggi!
+An email client is meant to read and write messages, not to backup and restore messages. Note that breaking or losing your device, means losing your messages!
 
-Invece, il provider email/server è responsabile per i backup.
+Instead, the email provider/server is responsible for backups.
 
-Se vuoi creare tu stesso un backup, potresti usare uno strumento come [imapsync](https://imapsync.lamiral.info/).
+If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
 
-Se vuoi importare un file mbox a un profilo email esistente, puoi usare Thunderbird su un computer desktop e l'addon [ImportExportTools](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/).
+If you want to import an mbox file to an existing email account, you can use Thunderbird on a desktop computer and the [ImportExportTools](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) add-on.
 
 <br />
 
 <a name="faq152"></a>
-**(152) Come posso inserire un gruppo di contatto?**
+**(152) How can I insert a contact group?**
 
-Puoi inserire gli indirizzi email di tutti i contatti in un gruppo di contatti tramite il menu a tre puntini del compositore di messaggi.
+You can insert the email addresses of all contacts in a contact group via the three dots menu of the message composer.
 
-Puoi definire i gruppi di contatti con l'app dei contatti di Android, sei pregato di vedere [qui](https://support.google.com/contacts/answer/30970) per le istruzioni.
+You can define contact groups with the Android contacts app, please see [here](https://support.google.com/contacts/answer/30970) for instructions.
 
 <br />
 
 <a name="faq153"></a>
-**(153) Perché eliminare permanentemente il messaggio di Gmail non funziona?**
+**(153) Why does permanently deleting Gmail message not work?**
 
-Potresti dover cambiare [le impostazioni IMAP di Gmail](https://mail.google.com/mail/u/0/#settings/fwdandpop) su un browser desktop per farlo funzionare:
+You might need to change [the Gmail IMAP settings](https://mail.google.com/mail/u/0/#settings/fwdandpop) on a desktop browser to make it work:
 
 * Quando contrassegno un messaggio in IMAP come eliminato: Auto-Expunge off - Attendi che il client aggiorni il server.
-* When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever
+* Quando un messaggio è contrassegnato come eliminato e cancellato dall'ultima cartella IMAP visibile: Elimina immediatamente il messaggio per sempre
 
-Nota che i messaggi archiviati sono eliminabili solo spostandoli prima alla cartella del cestino.
+Note that archived messages can be deleted only by moving them to the trash folder first.
 
-Qualche sfondo: Gmail sembra avere una vista aggiuntiva del messaggio per IMAP, che può essere differente dalla vista dei messaggi principale.
+Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.
 
 <br />
 
 <a name="faq154"></a>
-**~~(154) Puoi aggiungere i favicon come foto di contatto?~~**
+**~~(154) Can you add favicons as contact photos?~~**
 
-~~ Oltre il fatto che un [favicon](https://en.wikipedia.org/wiki/Favicon) potrebbe essere condiviso da molti indirizzi email con lo stesso nome del dominio~~ ~~e dunque non correlato direttamente a un indirizzo email, i favicon sono utilizzabili per monitorarti.~~
+~~Besides that a [favicon](https://en.wikipedia.org/wiki/Favicon) might be shared by many email addresses with the same domain name~~ ~~and therefore is not directly related to an email address, favicons can be used to track you.~~
 
 <br />
 
 <a name="faq155"></a>
-**(155) Cos'è un file winmail.dat?**
+**(155) What is a winmail.dat file?**
 
-Un file *winmail.dat* è inviato da un client di Outlook configurato in modo errato. Si tratta di un formato di file specifico di Microsoft ([TNEF](https://en.wikipedia.org/wiki/Transport_Neutral_Encapsulation_Format)) contenente un messaggio e possibilmente allegati.
+A *winmail.dat* file is sent by an incorrectly configured Outlook client. It is a Microsoft specific file format ([TNEF](https://en.wikipedia.org/wiki/Transport_Neutral_Encapsulation_Format)) containing a message and possibly attachments.
 
-Puoi trovare alcune altre informazioni su questo file [qui](https://support.mozilla.org/en-US/kb/what-winmaildat-attachment).
+You can find some more information about this file [here](https://support.mozilla.org/en-US/kb/what-winmaildat-attachment).
 
-Puoi visualizzarlo per esempio con l'app Android [Letter Opener](https://play.google.com/store/apps/details?id=app.letteropener).
+You can view it with for example the Android app [Letter Opener](https://play.google.com/store/apps/details?id=app.letteropener).
 
 <br />
 
 <a name="faq156"></a>
-**(156) Come posso configurare un profilo Office 365?**
+**(156) How can I set up an Office 365 account?**
 
-Un profilo Office 365 può essere configurato tramite la procedura guidata rapida e selezionando *Office 365 (OAuth)>*.
+An Office 365 account can be set up via the quick setup wizard and selecting *Office 365 (OAuth)*.
 
-Se la procedura guidata si conclude con *AUTHENTICATE failed*, IMAP e/o SMTP potrebbe essere disabilitato per il profilo. In questo caso dovresti chiedere all'amministratore di abilitare IMAP e SMTP. La procedura è documentata [qui](https://docs.microsoft.com/en-in/exchange/troubleshoot/configure-mailboxes/pop3-imap-owa-activesync-office-365).
+If the wizard ends with *AUTHENTICATE failed*, IMAP and/or SMTP might be disabled for the account. In this case you should ask the administrator to enable IMAP and SMTP. The procedure is documented [here](https://docs.microsoft.com/en-in/exchange/troubleshoot/configure-mailboxes/pop3-imap-owa-activesync-office-365).
 
-Se hai abilitato i *predefiniti di sicurezza* nella tua organizzazione, potresti dover abilitare il protocollo SMTP AUTH. Sei pregato di [vedere qui](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) come farlo.
+If you've enabled *security defaults* in your organization, you might need to enable the SMTP AUTH protocol. Please [see here](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) about how to.
 
 <br />
 
 <a name="faq157"></a>
-**(157) Come posso configurare un profilo Free.fr?**
+**(157) How can I set up an Free.fr account?**
 
-Siete pregati di [vedere qui](https://free.fr/assistance/597.html) per le istruzioni.
+Veuillez [voir ici](https://free.fr/assistance/597.html) pour les instructions.
 
-**SMTP è disattivato di default**, sei pregato di [vedere qui](https://free.fr/assistance/2406.html) come attivarlo.
+**SMTP est désactivé par défaut**, veuillez [voir ici](https://free.fr/assistance/2406.html) comment il peut être activé.
 
-Siete pregati di [vedere qui](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr) per una guida dettagliata.
+Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr) pour un guide détaillé.
 
 <br />
 
 <a name="faq103"></a>
 <a name="faq158"></a>
-**(158) Che fotocamera / registratore audio consigli?**
+**(158) Which camera / audio recorder do you recommend?**
 
-Per scattare foto e registrare audio è necessaria un'app fotocamera e una di registrazione audio. Le seguenti app sono registratori audio e fotocamere open source:
+To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
 * [Audio Recorder versione 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
-Per registrare le note vocali, etc, il registratore audio deve supportare [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Stranamente, gran parte dei registratori audio sembra non supportare quest'azione Android standard.
+To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 
 <br />
 
 <a name="faq159"></a>
-**(159) Cosa sono gli elenchi di protezione del monitor di Disconnect?**
+**(159) What are Disconnect's tracker protection lists?**
 
-Sei pregato di vedere [qui](https://disconnect.me/trackerprotection) per ulteriori informazioni sugli elenchi di protezione del monitor di Disconnect.
+Please see [here](https://disconnect.me/trackerprotection) for more information about Disconnect's tracker protection lists.
 
-Dopo il download degli elenchi nelle impostazioni di privacy, gli possono opzionalmente essere usati:
+After downloading the lists in the privacy settings, the lists can optionally be used:
 
 * per avvisare sui collegamenti di monitoraggio all'apertura dei collegamenti
 * per riconoscere le immagini di monitoraggio nei messaggi
 
-Le immagini di monitoraggio saranno disabilitati solo se l'opzione 'disabilita' principale corrispondente è abilitata.
+Tracking images will be disabled only if the corresponding main 'disable' option is enabled.
 
-Il monitoraggio delle immagini non sarà riconosciuto alla classificazione del dominio come '*Contenuto*', vedi [qui](https://disconnect.me/trackerprotection#trackers-we-dont-block) per ulteriori informazioni.
+Tracking images will not be recognized when the domain is classified as '*Content*', see [here](https://disconnect.me/trackerprotection#trackers-we-dont-block) for more information.
 
-Questo comando è inviabile a FairEmail da un'app di automazione per aggiornare gli elenchi di protezione:
+This command can be sent to FairEmail from an automation app to update the protection lists:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.DISCONNECT.ME
 ```
 
-Aggiornare una volta a settimana sarà probabilmente abbastanza, sei pregato di vedere [qui](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) per le modifiche recenti agli elenchi.
+Updating once a week will probably be sufficient, please see [here](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) for recent lists changes.
 
 <br />
 
 <a name="faq160"></a>
-**(160) Puoi aggiungere l'eliminazione permanente dei messaggi senza conferma?**
+**(160) Can you add permanent deletion of messages without confirmation?**
 
-L'eliminazione permanente significa che i messaggi saranno persi *irreversibilmente* e per prevenire che si verifichi accidentalmente, questa deve essere sempre confermata. Anche con una conferma, alcune persone molto arrabbiate che hanno perso alcuni dei loro messaggi per colpa propria mi hanno contattato, un'esperienza alquanto spiacevole :-(
+Permanent deletion means that messages will *irreversibly* be lost, and to prevent this from happening accidentally, this always needs to be confirmed. Even with a confirmation, some very angry people who lost some of their messages through their own fault contacted me, which was a rather unpleasant experience :-(
 
-Avanzate: il flag di eliminazione di IMAP insieme al comando EXPUNGE non è supportabile perché sia i server email che non tutte le persone possono gestirlo, rischiando la perdita imprevista dei messaggi. Un fattore complicante è che non tutti i server email supportano [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
+Advanced: the IMAP delete flag in combination with the EXPUNGE command is not supportable because both email servers and not all people can handle this, risking unexpected loss of messages. A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
 
 <br />
 
 <a name="faq161"></a>
-**(161) Puoi aggiungere un'impostazione per cambiare il colore primario e secondario?***
+**(161) Can you add a setting to change the primary and accent color?***
 
-Se potessi, aggiungere un'impostazione per selezionare colori primari e secondari subito, ma sfortunatamente i temi di Android sono fissi, vedi [qui](https://stackoverflow.com/a/26511725/1794097) ad esempio, quindi è impossibile.
+If I could, I would add a setting to select the primary and accent color right away, but unfortunately Android themes are fixed, see for example [here](https://stackoverflow.com/a/26511725/1794097), so this is not possible.
 
 <br />
 
 <a name="faq162"></a>
-**(162) IMAP NOTIFY è supportato?***
+**(162) Is IMAP NOTIFY supported?***
 
-Sì, [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) è stato supportato dalla versione 1.1413.
+Yes, [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) has been supported since version 1.1413.
 
-Il supporto di IMAP NOTIFY significa che le notifiche per i messaggi aggiunti, modificati o eliminati di tutte le cartelle *iscritte* saranno richieste e se una notifica è ricevuta per una cartella iscritta, quella sarà sincronizzata. La sincronizzazione per le cartelle iscritte può dunque essere disabilitata, salvando le connessioni della cartella al server email.
+IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
 
-**Importante**: i messaggi push (=sempre sincronizzati) per la casella di posta in arrivo e la gestione dell'abbonamento (impostazioni di ricevimento) devono essere abilitati.
+**Important**: push messages (=always sync) for the inbox and subscription management (receive settings) need to be enabled.
 
-**Importante**: gran parte dei server email non lo supportano! Puoi controllare il registro tramite il menu di navigazione se un server email supporta la funzionalità NOTIFY.
+**Important**: most email servers do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
 
 <br />
 
 <a name="faq163"></a>
-**(163) Cos'è la classificazione del messaggio?**
+**(163) What is message classification?**
 
 *This is an experimental feature!*
 
-Message classification will attempt to automatically group emails into classes, based on their contents, using [Bayesian statistics](https://en.wikipedia.org/wiki/Bayesian_statistics). Nel contesto di FairEmail, una cartella è una classe. So, for example, the inbox, the spam folder, a 'marketing' folder, etc, etc.
+Message classification will attempt to automatically group emails into classes, based on their contents, using [Bayesian statistics](https://en.wikipedia.org/wiki/Bayesian_statistics). In the context of FairEmail, a folder is a class. So, for example, the inbox, the spam folder, a 'marketing' folder, etc, etc.
 
-Puoi abilitare la classificazione dei messaggi nelle impostazioni miste. Questo abiliterà la modalità di solo apprendimento.
+You can enable message classification in the miscellaneous settings. This will enable 'learning' mode only. The classifier will 'learn' from new messages in the inbox and spam folder by default. The folder property *Classify new messages in this folder* will enable or disable 'learning' mode for a folder. You can clear local messages (long press a folder in the folder list of an account) and synchronize the messages again to classify existing messages.
 
-Ogni cartella ha un'opzione per abilitare la classificazione automatica dei messaggi. Quando è attivato, i nuovi messaggi in altre cartelle che il classificatore pensa appartengano a quella cartella saranno spostati automaticamente.
+Each folder has an option *Automatically move classified messages to this folder* ('auto classification' for short). When this is turned on, new messages in other folders which the classifier thinks belong to that folder will be automatically moved.
 
-The option *Use local spam filter* turns on message classification and auto classification for the spam folder. Please understand that this is not a replacement for the spam filter of the email server and can result in false positives. See also [this FAQ](#user-content-faq92).
+The option *Use local spam filter* in the report spam dialog will turn on message classification in the miscellaneous settings and auto classification for the spam folder. Please understand that this is not a replacement for the spam filter of the email server and can result in [false positives and false negatives](https://en.wikipedia.org/wiki/False_positives_and_false_negatives). See also [this FAQ](#user-content-faq92).
 
-A practical example: suppose there is a folder 'marketing' and auto message classification is enabled for this folder. Each time you move a message into this folder you'll train FairEmail that similar messages belong in this folder. Each time you move a message out of this folder you'll train FairEmail that similar messages do not belong in this folder. After moving some messages into the folder, FairEmail will start to move messages automatically into this folder. This will work best with similar messages.
+A practical example: suppose there is a folder 'marketing' and auto message classification is enabled for this folder. Each time you move a message into this folder you'll train FairEmail that similar messages belong in this folder. Each time you move a message out of this folder you'll train FairEmail that similar messages do not belong in this folder. After moving some messages into the 'marketing' folder, FairEmail will start moving similar messages automatically into this folder. Or, the other way around, after moving some messages out of the 'marketing' folder, FairEmail will stop moving similar messages automatically into this folder. This will work best with messages with similar content (email addresses, subject and message text).
 
 Classification should be considered as a best guess - it might be a wrong guess, or the classifier might not be confident enough to make any guess. If the classifier is unsure, it will simply leave an email where it is.
 
-Classification will be done for new messages in the inbox, spam folder and user folders only. You can clear local messages (long press a folder in the folder list of an account) and synchronize the messages again to classify existing messages.
-
-Moving a message on the device will reclassify the message. Moving a message with another email client will not result in reclassification because IMAP does not support 'moved' notifications.
-
 To prevent the email server from moving a message into the spam folder again and again, auto classification out of the spam folder will not be done.
+
+The message classifier calculates the probability a message belongs in a folder (class). There are two options in the miscellaneous settings which control if a message will be automatically moved into a folder, provided that auto classification is enabled for the folder:
+
+* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 20 %)
+* *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
+
+Both conditions must be satisfied before a message will be moved.
+
+Considering the defaults option values:
+
+* Il 40% delle mele e il 30% delle banane sarebbe scartato perché la differenza del 25% è inferiore al minimo di 50%
+* Il 15% delle mele e il 5% delle banane sarebbe scartato perché la probabilità per le mele è inferiore al minimo del 20%
+* Il 50% delle mele e il 20% delle banane risulterebbe nella selezione delle mele
 
 Classification is optimized to use as little resources as possible, but will inevitably use some extra battery power.
 
-You can delete all classification data by turning classification three times off.
+You can delete all classification data by turning classification in the miscellaneous settings three times off.
+
+[Filter rules](#user-content-faq71) will be executed before classification.
+
+Message classification is a pro feature, except for the spam folder.
 
 <br />
 
@@ -2862,9 +2881,9 @@ There is no support on building and developing things by yourself.
 
 Requested features should:
 
-* essere utili a gran parte delle persone
+* essere utili alla maggior parte delle persone
 * non complicare l'uso di FairEmail
-* adattarsi alla filosofia di FairEmail (orientata alla privacy e la siucrezza)
+* adattarsi alla filosofia di FairEmail (orientate alla privacy, con un occhio alla sicurezza)
 * conformarsi agli standard comuni (IMAP, SMTP, etc.)
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.

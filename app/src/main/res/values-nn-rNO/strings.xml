@@ -303,9 +303,6 @@
     <string name="title_advanced_generated_icons">Vis genererte ikoner</string>
     <string name="title_advanced_identicons">Vis identicons</string>
     <string name="title_advanced_circular">Vis runde ikoner</string>
-    <string name="title_advanced_color_saturation">Metning</string>
-    <string name="title_advanced_color_value">Lysstyrke</string>
-    <string name="title_advanced_color_threshold">Terskelbokstavfarge</string>
     <string name="title_advanced_name_email">Vis navn og e-postadresser</string>
     <string name="title_advanced_replace_name">Foretrekker et kontaktnavn fremfor et sendt navn</string>
     <string name="title_advanced_distinguish_contacts">Understreke avsenderen når avsenderen er kjent som lokal \'til\' -kontakt</string>
@@ -668,7 +665,6 @@
     <string name="title_poll_folder">Kontroller jevnlig i stedet for kontinuerlig synkronisering</string>
     <string name="title_download_folder">Last ned automatisk meldings tekster og vedlegg</string>
     <string name="title_notify_folder">Gi beskjed om nye meldinger</string>
-    <string name="title_auto_classify">Flytt klassifiserte meldinger automatisk</string>
     <string name="title_sync_days">Synkronisere meldinger (dager)</string>
     <string name="title_sync_days_remark">Ved å øke denne verdien øker batteriet og dataforbruket</string>
     <string name="title_keep_days">Beholde meldinger (dager)</string>

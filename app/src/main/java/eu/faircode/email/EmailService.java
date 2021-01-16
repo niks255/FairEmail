@@ -179,8 +179,13 @@ public class EmailService implements AutoCloseable {
 
         boolean auth_plain = prefs.getBoolean("auth_plain", true);
         boolean auth_login = prefs.getBoolean("auth_login", true);
+        boolean auth_ntlm = prefs.getBoolean("auth_ntlm", true);
         boolean auth_sasl = prefs.getBoolean("auth_sasl", true);
-        Log.i("Authenticate plain=" + auth_plain + " login=" + auth_login + " sasl=" + auth_sasl);
+        Log.i("Authenticate" +
+                " plain=" + auth_plain +
+                " login=" + auth_login +
+                " ntlm=" + auth_ntlm +
+                " sasl=" + auth_sasl);
 
         properties.put("mail.event.scope", "folder");
         properties.put("mail.event.executor", executor);
@@ -189,10 +194,14 @@ public class EmailService implements AutoCloseable {
             properties.put("mail." + protocol + ".auth.plain.disable", "true");
         if (!auth_login)
             properties.put("mail." + protocol + ".auth.login.disable", "true");
+        if (!auth_ntlm)
+            properties.put("mail." + protocol + ".auth.ntlm.disable", "true");
 
+        // SASL is attempted before other authentication methods
         properties.put("mail." + protocol + ".sasl.enable", Boolean.toString(auth_sasl));
         properties.put("mail." + protocol + ".sasl.mechanisms", "CRAM-MD5");
         properties.put("mail." + protocol + ".sasl.realm", realm == null ? "" : realm);
+
         properties.put("mail." + protocol + ".auth.ntlm.domain", realm == null ? "" : realm);
 
         // writetimeout: one thread overhead
@@ -203,9 +212,12 @@ public class EmailService implements AutoCloseable {
             properties.put("mail." + protocol + ".writetimeout", Integer.toString(SEARCH_TIMEOUT));
             properties.put("mail." + protocol + ".timeout", Integer.toString(SEARCH_TIMEOUT));
         } else {
+            int factor = 2;
+            if ("smtp".equals(protocol) || "smtps".equals(protocol))
+                factor *= 2;
             properties.put("mail." + protocol + ".connectiontimeout", Integer.toString(timeout));
-            properties.put("mail." + protocol + ".writetimeout", Integer.toString(timeout * 2));
-            properties.put("mail." + protocol + ".timeout", Integer.toString(timeout * 2));
+            properties.put("mail." + protocol + ".writetimeout", Integer.toString(timeout * factor));
+            properties.put("mail." + protocol + ".timeout", Integer.toString(timeout * factor));
         }
 
         if (debug && BuildConfig.DEBUG)
@@ -368,8 +380,11 @@ public class EmailService implements AutoCloseable {
         ServiceAuthenticator authenticator = new ServiceAuthenticator(context, auth, provider, user, password, intf);
 
         try {
-            if (auth == AUTH_TYPE_GMAIL || auth == AUTH_TYPE_OAUTH)
+            if (auth == AUTH_TYPE_GMAIL || auth == AUTH_TYPE_OAUTH) {
                 properties.put("mail." + protocol + ".auth.mechanisms", "XOAUTH2");
+                properties.put("mail." + protocol + ".auth.xoauth2.disable", "false");
+            } else
+                properties.put("mail." + protocol + ".auth.xoauth2.disable", "true");
 
             if (auth == AUTH_TYPE_OAUTH && "imap.mail.yahoo.com".equals(host))
                 properties.put("mail." + protocol + ".yahoo.guid", "FAIRMAIL_V1");

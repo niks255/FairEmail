@@ -122,11 +122,11 @@ La conception est basée sur de nombreuses discussions et si vous le souhaitez, 
 ## Foire aux questions
 
 * [(1) Quelles autorisations Android sont nécessaires et pourquoi ?](#user-content-faq1)
-* [(2) Pourquoi y a t'il une notification permanente ?](#user-content-faq2)
+* [(2) Pourquoi y a-t-il une notification permanente ?](#user-content-faq2)
 * [(3) Que sont les opérations et pourquoi sont-elles en attente ?](#user-content-faq3)
 * [(4) Comment puis-je utiliser un certificat de sécurité non valide / un mot de passe vide / une connexion en texte clair ?](#user-content-faq4)
 * [(5) Comment puis-je paramétrer la vue des messages ?](#user-content-faq5)
-* [(6) Comment puis-je me connecter à Gmail / G suite?](#user-content-faq6)
+* [(6) Comment puis-je me connecter à Gmail / G suite ?](#user-content-faq6)
 * [(7) Pourquoi les messages envoyés n'apparaissent pas (directement) dans le dossier Envoyés ?](#user-content-faq7)
 * [(8) Puis-je utiliser un compte Microsoft Exchange ?](#user-content-faq8)
 * [(9) Que sont les identités / comment ajouter un alias ?](#user-content-faq9)
@@ -135,35 +135,35 @@ La conception est basée sur de nombreuses discussions et si vous le souhaitez, 
 * [(12) Comment fonctionne le chiffrement/déchiffrement ?](#user-content-faq12)
 * [(13) Comment fonctionne la recherche sur l'appareil/le serveur ?](#user-content-faq13)
 * [(14) Comment puis-je configurer un compte Outlook / Live / Hotmail ?](#user-content-faq14)
-* [(15) Pourquoi le texte du message continue-t-il de se charger?](#user-content-faq15)
-* [(16) Pourquoi les messages ne sont-ils pas synchronisés?](#user-content-faq16)
+* [(15) Pourquoi le texte du message continue-t-il de se charger indéfiniment ?](#user-content-faq15)
+* [(16) Pourquoi les messages ne sont-ils pas synchronisés ?](#user-content-faq16)
 * [~~(17) Pourquoi la synchronisation manuelle ne fonctionne pas ?~~](#user-content-faq17)
-* [(18) Pourquoi l'aperçu du message n'est-il pas toujours affiché?](#user-content-faq18)
-* [(19) Pourquoi les fonctionnalités pro sont-elles si chères?](#user-content-faq19)
+* [(18) Pourquoi l'aperçu du message n'est-il pas toujours affiché ?](#user-content-faq18)
+* [(19) Pourquoi les fonctionnalités pro sont-elles si chères ?](#user-content-faq19)
 * [(20) Puis-je obtenir un remboursement ?](#user-content-faq20)
 * [(21) Comment activer le voyant de notification ?](#user-content-faq21)
-* [(22) Qu'est-ce que l'erreur de compte/dossier ... signifie?](#user-content-faq22)
-* [(23) Pourquoi est-ce que je reçois une alerte .. ?](#user-content-faq23)
-* [(24) Qu'est-ce que parcourir les messages sur le serveur?](#user-content-faq24)
+* [(22) Qu'est-ce que l'erreur de compte/dossier ... signifie ?](#user-content-faq22)
+* [(23) Pourquoi est-ce que je reçois une alerte ... ? ?](#user-content-faq23)
+* [(24) Qu'est-ce que parcourir les messages sur le serveur ?](#user-content-faq24)
 * [(25) Pourquoi ne puis-je pas sélectionner/ouvrir/enregistrer une image, une pièce jointe ou un fichier ?](#user-content-faq25)
 * [(26) Puis-je aider à traduire FairEmail dans ma propre langue ?](#user-content-faq26)
-* [(27) Comment faire la distinction entre les images intégrées et les images externes?](#user-content-faq27)
+* [(27) Comment faire la distinction entre les images intégrées et les images externes ?](#user-content-faq27)
 * [(28) Comment puis-je gérer les notifications dans la barre d'état ?](#user-content-faq28)
-* [(29) Comment puis-je recevoir des notifications de nouveaux messages pour d'autres dossiers?](#user-content-faq29)
+* [(29) Comment puis-je recevoir des notifications de nouveaux messages pour d'autres dossiers ?](#user-content-faq29)
 * [(30) Comment puis-je utiliser les paramètres rapides fournis ?](#user-content-faq30)
 * [(31) Comment puis-je utiliser les raccourcis fournis ?](#user-content-faq31)
-* [(32) Comment puis-je vérifier si la lecture des courriels est vraiment sécurisé?](#user-content-faq32)
-* [(33) Pourquoi la modification des adresses de l'expéditeur ne fonctionne-t-elle pas?](#user-content-faq33)
-* [(34) Comment les identités correspondent-elles?](#user-content-faq34)
+* [(32) Comment puis-je vérifier si la lecture des courriels est vraiment sécurisée ?](#user-content-faq32)
+* [(33) Pourquoi la modification des adresses de l'expéditeur ne fonctionne-t-elle pas ?](#user-content-faq33)
+* [(34) Comment les identités correspondent-elles ?](#user-content-faq34)
 * [(35) Pourquoi devrais-je faire attention à la visualisation des images, des pièces jointes, du message original et à l'ouverture des liens ?](#user-content-faq35)
 * [(36) Comment les fichiers de configuration sont-ils chiffrés ?](#user-content-faq36)
-* [(37) Comment les mots de passe sont-ils stockés?](#user-content-faq37)
-* [(39) Comment puis-je réduire l'utilisation de la batterie de FairEmail?](#user-content-faq39)
+* [(37) Comment les mots de passe sont-ils stockés ?](#user-content-faq37)
+* [(39) Comment puis-je réduire l'utilisation de la batterie de FairEmail ?](#user-content-faq39)
 * [(40) Comment puis-je réduire l'utilisation des données par FairEmail ?](#user-content-faq40)
 * [(41) Comment puis-je corriger l'erreur 'Échec de la prise de main' ?](#user-content-faq41)
 * [(42) Pouvez-vous ajouter un nouveau fournisseur à la liste des fournisseurs ?](#user-content-faq42)
 * [(43) Pouvez-vous montrer l'original ... ?](#user-content-faq43)
-* [(44) Pouvez-vous montrer les photos / identicons de contact dans le dossier envoyé?](#user-content-faq44)
+* [(44) Pouvez-vous montrer les photos / identicons de contact dans le dossier envoyé ?](#user-content-faq44)
 * [(45) Comment puis-je corriger « Cette clé n'est pas disponible. Pour l'utiliser, vous devez l'importer comme l'un des vôtres ! » ?](#user-content-faq45)
 * [(46) Pourquoi la liste des messages continue-t-elle à se rafraîchir ?](#user-content-faq46)
 * [(47) Comment puis-je résoudre l'erreur « Aucun compte principal ou aucun dossier brouillon » ?](#user-content-faq47)
@@ -175,60 +175,60 @@ La conception est basée sur de nombreuses discussions et si vous le souhaitez, 
 * [(53) Pouvez-vous coller la barre d'action de message en haut/bas ?](#user-content-faq53)
 * [~~(54) Comment utiliser un préfixe d'espace de noms ?~~](#user-content-faq54)
 * [(55) Comment puis-je marquer tous les messages comme lus / déplacer ou supprimer tous les messages ?](#user-content-faq55)
-* [(56) Pouvez-vous ajouter un support pour JMAP?](#user-content-faq56)
+* [(56) Pouvez-vous ajouter un support pour JMAP ?](#user-content-faq56)
 * [(57) Puis-je utiliser HTML dans les signatures ?](#user-content-faq57)
-* [(58) Que signifie une icône de courriel ouverte/fermée?](#user-content-faq58)
-* [(59) Peut-on ouvrir des messages originaux dans le navigateur?](#user-content-faq59)
+* [(58) Que signifie une icône de courriel ouverte/fermée ?](#user-content-faq58)
+* [(59) Peut-on ouvrir des messages originaux dans le navigateur ?](#user-content-faq59)
 * [(60) Saviez-vous ...?](#user-content-faq60)
-* [(61) Pourquoi certains messages sont-ils affichés grisés?](#user-content-faq61)
+* [(61) Pourquoi certains messages sont-ils affichés grisés ?](#user-content-faq61)
 * [(62) Quelles méthodes d'authentification sont supportées ?](#user-content-faq62)
 * [(63) Comment les images sont-elles redimensionnées pour l'affichage sur les écrans ?](#user-content-faq63)
-* [~~(64) Pouvez-vous ajouter des actions personnalisées pour glisser vers la gauche/vers la droite?~~](#user-content-faq64)
-* [(65) Pourquoi certaines pièces jointes sont-elles affichées grisées?](#user-content-faq65)
+* [~~(64) Pouvez-vous ajouter des actions personnalisées pour glisser vers la gauche/vers la droite ?~~](#user-content-faq64)
+* [(65) Pourquoi certaines pièces jointes sont-elles affichées grisées ?](#user-content-faq65)
 * [(66) FairEmail est-il disponible dans la bibliothèque familiale Google Play ?](#user-content-faq66)
-* [(67) Comment puis-je répéter les conversations?](#user-content-faq67)
+* [(67) Comment puis-je répéter les conversations ?](#user-content-faq67)
 * [~~(68) Pourquoi le lecteur Adobe Acrobat n'ouvre-t-il pas les pièces jointes PDF / Les applications Microsoft n'ouvrent pas les documents ?~~](#user-content-faq68)
 * [(69) Pouvez-vous ajouter le défilement automatique vers le haut sur un nouveau message ?](#user-content-faq69)
 * [(70) Quand les messages seront-ils automatiquement étendus ?](#user-content-faq70)
 * [(71) Comment utiliser les règles de filtrage ?](#user-content-faq71)
-* [(72) Quelles sont les comptes/identités principales?](#user-content-faq72)
+* [(72) Quelles sont les comptes/identités principales ?](#user-content-faq72)
 * [(73) Est-ce que le transfert de messages entre les comptes est sécurisé et efficace ?](#user-content-faq73)
-* [(74) Pourquoi est-ce que je vois des messages en double?](#user-content-faq74)
+* [(74) Pourquoi est-ce que je vois des messages en double ?](#user-content-faq74)
 * [(75) Pouvez-vous créer une version iOS, Windows, Linux, etc ?](#user-content-faq75)
 * [(76) Que fait 'Effacer les messages locaux' ?](#user-content-faq76)
-* [(77) Pourquoi les messages sont-ils parfois affichés avec un petit retard?](#user-content-faq77)
+* [(77) Pourquoi les messages sont-ils parfois affichés avec un petit retard ?](#user-content-faq77)
 * [(78) Comment utiliser les horaires ?](#user-content-faq78)
 * [(79) Comment utiliser la synchronisation à la demande (manuel) ?](#user-content-faq79)
-* [~~(80) Comment puis-je corriger l'erreur 'Impossible de charger BODYSTRUCTURE'?~~](#user-content-faq80)
+* [~~(80) Comment puis-je corriger l'erreur 'Impossible de charger BODYSTRUCTURE' ?~~](#user-content-faq80)
 * [~~(81) Pouvez-vous mettre le fond du message original sombre dans le thème sombre ?~~](#user-content-faq81)
-* [(82) Qu'est-ce qu'une image de suivi?](#user-content-faq82)
+* [(82) Qu'est-ce qu'une image de suivi ?](#user-content-faq82)
 * [(84) À quoi servent les contacts locaux ?](#user-content-faq84)
-* [(85) Pourquoi une identité n'est-elle pas disponible?](#user-content-faq85)
-* [~~(86) Que sont les 'fonctionnalités de confidentialité supplémentaires'?~~](#user-content-faq86)
+* [(85) Pourquoi une identité n'est-elle pas disponible ?](#user-content-faq85)
+* [~~(86) Que sont les 'fonctionnalités de confidentialité supplémentaires' ?~~](#user-content-faq86)
 * [(87) Que signifient les 'identifiants invalides' ?](#user-content-faq87)
 * [(88) Comment puis-je utiliser un compte Yahoo, AOL ou Sky ?](#user-content-faq88)
 * [(89) Comment puis-je envoyer des messages en texte brut uniquement ?](#user-content-faq89)
-* [(90) Pourquoi certains textes sont-ils liés sans être liés?](#user-content-faq90)
+* [(90) Pourquoi certains textes sont-ils liés sans être liés ?](#user-content-faq90)
 * [~~(91) Pouvez-vous ajouter une synchronisation périodique pour économiser la batterie ?~~](#user-content-faq91)
 * [(92) Pouvez-vous ajouter le filtrage de spam, la vérification de la signature DKIM et l'autorisation SPF ?](#user-content-faq92)
-* [(93) Pouvez-vous autoriser l'installation/stockage de données sur un support de stockage externe (sdcard) ?](#user-content-faq93)
+* [(93) Pouvez-vous autoriser l'installation/stockage de données sur un support de stockage externe (Carte SD) ?](#user-content-faq93)
 * [(94) Que signifie la bande rouge/orange à la fin de l'en-tête ?](#user-content-faq94)
 * [(95) Pourquoi toutes les applications ne sont-elles pas affichées lors de la sélection d'une pièce jointe ou d'une image ?](#user-content-faq95)
 * [(96) Où puis-je trouver les paramètres IMAP et SMTP ?](#user-content-faq96)
-* [(97) Qu'est-ce que le "nettoyage"?](#user-content-faq97)
-* [(98) Pourquoi puis-je toujours choisir des contacts après avoir révoqué les autorisations de contacts?](#user-content-faq98)
+* [(97) Qu'est-ce que le "nettoyage" ?](#user-content-faq97)
+* [(98) Pourquoi puis-je toujours choisir des contacts après avoir révoqué les autorisations de contacts ?](#user-content-faq98)
 * [(99) Pouvez-vous ajouter un texte riche ou un éditeur de markdown ?](#user-content-faq99)
 * [(100) Comment puis-je synchroniser les catégories Gmail ?](#user-content-faq100)
-* [(101) Que signifie le point bleu/orange au bas des conversations?](#user-content-faq101)
+* [(101) Que signifie le point bleu/orange au bas des conversations ?](#user-content-faq101)
 * [(102) Comment puis-je activer la rotation automatique des images ?](#user-content-faq102)
-* [(103) Comment puis-je enregistrer de l'audio?](#user-content-faq158)
-* [(104) Que dois-je savoir au sujet du signalement d'erreur?](#user-content-faq104)
-* [(105) Comment fonctionne l’option itinérance à domicile?](#user-content-faq105)
+* [(103) Comment puis-je enregistrer de l'audio ?](#user-content-faq158)
+* [(104) Que dois-je savoir au sujet du signalement d'erreur ?](#user-content-faq104)
+* [(105) Comment fonctionne l’option itinérance à domicile ?](#user-content-faq105)
 * [(106) Quels lanceurs peuvent afficher un nombre de badges avec le nombre de messages non lus ?](#user-content-faq106)
 * [(107) Comment utiliser les étoiles colorées ?](#user-content-faq107)
 * [~~(108) Pouvez-vous ajouter la suppression des messages de façon définitive à partir de n'importe quel dossier ?~~](#user-content-faq108)
 * [~~(109) Pourquoi 'sélectionner le compte' est-il uniquement disponible dans les versions officielles ?~~](#user-content-faq109)
-* [(110) Pourquoi (certains) les messages sont-ils vides et/ou les pièces jointes corrompues?](#user-content-faq110)
+* [(110) Pourquoi (certains) les messages sont-ils vides et/ou les pièces jointes corrompues ?](#user-content-faq110)
 * [(111) OAuth est-il pris en charge ?](#user-content-faq111)
 * [(112) Quel fournisseur de messagerie recommandez-vous ?](#user-content-faq112)
 * [(113) Comment fonctionne l'authentification biométrique ?](#user-content-faq113)
@@ -238,50 +238,50 @@ La conception est basée sur de nombreuses discussions et si vous le souhaitez, 
 * [(117) Pouvez-vous m'aider à restaurer mon achat ?](#user-content-faq117)
 * [(118) Qu'est-ce que 'Supprimer les paramètres de suivi' exactement ?](#user-content-faq118)
 * [~~(119) Pouvez-vous ajouter des couleurs au widget de la boîte de réception unifiée ?~~](#user-content-faq119)
-* [(120) Pourquoi les notifications de nouveaux messages ne sont-elles pas supprimées à l'ouverture de l'application?](#user-content-faq120)
-* [(121) Comment les messages sont-ils regroupés en conversation?](#user-content-faq121)
+* [(120) Pourquoi les notifications de nouveaux messages ne sont-elles pas supprimées à l'ouverture de l'application ?](#user-content-faq120)
+* [(121) Comment les messages sont-ils regroupés en conversation ?](#user-content-faq121)
 * [~~(122) Pourquoi le nom du destinataire/adresse e-mail est-il affiché avec une couleur d'avertissement ?~~](#user-content-faq122)
 * [(123) Que se passe-t-il lorsque FairEmail ne peut pas se connecter à un serveur de messagerie ?](#user-content-faq123)
 * [(124) Pourquoi est-ce que je reçois "Message trop grand ou trop complexe à afficher" ?](#user-content-faq124)
-* [(125) Quelles sont les fonctionnalités expérimentales actuelles?](#user-content-faq125)
+* [(125) Quelles sont les fonctionnalités expérimentales actuelles ?](#user-content-faq125)
 * [(126) Peut-on envoyer des aperçus de messages à mon portable ?](#user-content-faq126)
-* [(127) Comment puis-je corriger 'Arguments HELO syntaxiquement invalides'?](#user-content-faq127)
+* [(127) Comment puis-je corriger 'Arguments HELO syntaxiquement invalides' ?](#user-content-faq127)
 * [(128) Comment réinitialiser les questions posées, par exemple pour afficher les images ?](#user-content-faq128)
 * [(129) ProtonMail, Tutanota est-il pris en charge ?](#user-content-faq129)
-* [(130) Qu'est-ce que l'erreur de message ... signifie?](#user-content-faq130)
+* [(130) Qu'est-ce que l'erreur de message ... signifie ?](#user-content-faq130)
 * [(131) Pouvez-vous changer la direction pour glisser vers le message précédent/suivant ?](#user-content-faq131)
 * [(132) Pourquoi les notifications de nouveaux messages sont-elles silencieuses ?](#user-content-faq132)
 * [(133) Pourquoi ActiveSync n'est-il pas pris en charge ?](#user-content-faq133)
 * [(134) Pouvez-vous ajouter la suppression des messages locaux ?](#user-content-faq134)
 * [(135) Pourquoi les messages de la corbeille et les brouillons sont-ils affichés dans les conversations ?](#user-content-faq135)
-* [(136) Comment puis-je supprimer un compte/identité/dossier?](#user-content-faq136)
-* [(137) Comment puis-je réinitialiser "Ne plus demander a nouveau" ?](#user-content-faq137)
+* [(136) Comment puis-je supprimer un compte/identité/dossier ?](#user-content-faq136)
+* [(137) Comment puis-je réinitialiser "Ne plus demander à nouveau" ?](#user-content-faq137)
 * [(138) Pouvez-vous ajouter le calendrier/la gestion des contacts/la synchronisation ?](#user-content-faq138)
 * [(139) Comment puis-je corriger "L'utilisateur est authentifié mais pas connecté" ?](#user-content-faq139)
-* [(140) Pourquoi le texte du message contient-il des caractères étranges?](#user-content-faq140)
-* [(141) Comment puis-je réparer le dossier 'Un brouillon est requis pour envoyer des messages'?](#user-content-faq141)
+* [(140) Pourquoi le texte du message contient-il des caractères étranges ?](#user-content-faq140)
+* [(141) Comment puis-je réparer le dossier 'Un brouillon est requis pour envoyer des messages' ?](#user-content-faq141)
 * [(142) Comment stocker les messages envoyés dans la boîte de réception ?](#user-content-faq142)
 * [~~(143) Peux-tu ajouter un dossier corbeille pour les comptes POP3 ?~~](#user-content-faq143)
-* [(144) Comment puis-je enregistrer des notes vocales?](#user-content-faq144)
-* [(145) Comment puis-je définir un son de notification pour un compte, un dossier ou un expéditeur?](#user-content-faq145)
+* [(144) Comment puis-je enregistrer des notes vocales ?](#user-content-faq144)
+* [(145) Comment puis-je définir un son de notification pour un compte, un dossier ou un expéditeur ?](#user-content-faq145)
 * [(146) Comment puis-je corriger les heures de messages incorrects ?](#user-content-faq146)
 * [(147) Que devrais-je savoir des versions tierces ?](#user-content-faq147)
 * [(148) Comment puis-je utiliser un compte Apple iCloud ?](#user-content-faq148)
 * [(149) Comment fonctionne le widget nombre de messages non lus ?](#user-content-faq149)
 * [(150) Pouvez-vous ajouter des invitations au calendrier d'annulation ?](#user-content-faq150)
 * [(151) Pouvez-vous ajouter une sauvegarde/restauration de messages ?](#user-content-faq151)
-* [(152) Comment puis-je insérer un groupe de contacts?](#user-content-faq152)
+* [(152) Comment puis-je insérer un groupe de contacts ?](#user-content-faq152)
 * [(153) Pourquoi la suppression définitive du message Gmail ne fonctionne-t-elle pas ?](#user-content-faq153)
-* [~~(154) Peut-on ajouter des favicons comme photos de contact?~~](#user-content-faq154)
+* [~~(154) Peut-on ajouter des favicons comme photos de contact ?~~](#user-content-faq154)
 * [(155) Qu'est-ce qu'un fichier winmail.dat ?](#user-content-faq155)
 * [(156) Comment puis-je configurer un compte Office365 ?](#user-content-faq156)
 * [(157) Comment puis-je créer un compte gratuit ?](#user-content-faq157)
-* [(158) Quelle caméra / enregistreur audio recommandez-vous?](#user-content-faq158)
-* [(159) Qu'est ce que deconnecter les listes de protection du tracker ?](#user-content-faq159)
+* [(158) Quelle caméra / enregistreur audio recommandez-vous ?](#user-content-faq158)
+* [(159) Que sont les listes anti-tracker de Disconnect ?](#user-content-faq159)
 * [(160) Pouvez-vous ajouter la suppression définitive des messages sans confirmation ?](#user-content-faq160)
-* [(161) Pouvez vous ajouter un paramètre pour changer les couleurs primaire et d'accentuation ?](#user-content-faq161)
-* [(162) Is IMAP NOTIFY supported?](#user-content-faq162)
-* [(163) What is message classification?](#user-content-faq163)
+* [(161) Pouvez-vous ajouter un paramètre pour changer les couleurs primaire et d'accentuation ?](#user-content-faq161)
+* [(162) L'IMAP NOTIFY est-il pris en charge ?](#user-content-faq162)
+* [(163) Qu'est-ce que la classification des messages ?](#user-content-faq163)
 
 [J’ai une autre question.](#user-content-support)
 
@@ -431,131 +431,131 @@ Dans le menu à trois points, vous pouvez activer ou désactiver ou sélectionne
 * *taille de texte* : pour trois tailles de police différentes
 * *Vue compacte* : pour des éléments de message plus condensés et une police de texte de message plus petite
 
-In the display section of the settings you can enable or disable for example:
+Dans la section d'affichage des paramètres, vous pouvez par exemple activer ou désactiver :
 
 * *Boîte de réception unifiée* : pour désactiver la boîte de réception unifiée et pour lister les dossiers sélectionnés pour la boîte de réception unifiée
-* *Tabular style*: to show a linear list instead of cards
-* *Group by date*: show date header above messages with the same date
-* *Conversation threading*: to disable conversation threading and to show individual messages instead
-* *Conversation action bar*: to disable the bottom navigation bar
-* *Highlight color*: to select a color for the sender of unread messages
-* *Show contact photos*: to hide contact photos
-* *Show names and email addresses*: to show names or to show names and email addresses
-* *Show subject italic*: to show the message subject as normal text
-* *Show stars*: to hide stars (favorites)
-* *Show message preview*: to show 1-4 lines of the message text
-* *Show address details by default*: to expand the addresses section by default
-* *Automatically show original message for known contacts*: to automatically show original messages for contacts on your device, please read [this FAQ](#user-content-faq35)
-* *Automatically show images for known contacts*: to automatically show images for contacts on your device, please read [this FAQ](#user-content-faq35)
+* *Style tabulaire*: afficher une liste linéaire au lieu de cartes
+* *Grouper par date*: affiche la date en en-tête au-dessus des messages ayant la même date
+* *Afficher en mode conversation*: pour désactiver l'affichage en mode conversation et afficher à la place les messages de manière individuelle
+* *Barre d'action de conversation*: pour désactiver la barre de navigation du bas
+* *Couleur de surbrillance*: pour sélectionner une couleur pour l'expéditeur des messages non lus
+* *Afficher la photo des contacts*: pour masquer la photo des contacts
+* *Afficher les noms et les adresses e-mail*: pour afficher les noms ou afficher les noms et les adresses e-mail
+* *Afficher l’objet en italique*: pour afficher l'objet du message en texte normal
+* *Afficher les étoiles de suivi*: pour masquer les étoiles de suivi (favoris)
+* *Afficher l'aperçu du message*: pour afficher 1-4 lignes du corps du message
+* *Afficher par défaut les détails de l'adresse*: pour développer par défaut la section d'adresses
+* *Afficher automatiquement le message original pour les contacts connus*: pour automatiquement afficher les messages originaux pour les contacts de votre appareil, merci de lire [cette FAQ](#user-content-faq35)
+* *Afficher automatiquement les images pour les contacts connus*: pour automatiquement afficher les images pour les contacts de votre appareil, merci de lire[cette FAQ](#user-content-faq35)
 
-Notez que les messages ne peuvent être prévisualisés que lorsque le texte du message a été téléchargé. Les textes de messages plus volumineux ne sont pas téléchargés par défaut sur les réseaux limités (généralement mobiles). You can change this in the connection settings.
+Notez que les messages ne peuvent être prévisualisés que lorsque le texte du message a été téléchargé. Les textes de messages plus volumineux ne sont pas téléchargés par défaut sur les réseaux limités (généralement mobiles). Vous pouvez changer ceci dans les paramètres de connexion.
 
-Some people ask:
+Certaines personnes demandent :
 
 * d'afficher l'objet en gras, mais l'affichage en gras est déjà utilisé pour mettre en évidence les messages non lus
-* to move the star to the left, but it is much easier to operate the star on the right side
+* de déplacer l'étoile à gauche, mais il est beaucoup plus facile de manipuler l'étoile sur le côté droit
 
 <br />
 
 <a name="faq6"></a>
-**(6) How can I login to Gmail / G suite?**
+**(6) Comment puis-je me connecter à Gmail / G suite ?**
 
-You can use the quick setup wizard to easily setup a Gmail account and identity.
+Si vous utilisez la version Play Store ou GitHub de FairEmail, vous pouvez utiliser l'assistant de configuration rapide pour configurer facilement un compte Gmail et une identité. L'assistant de configuration rapide de Gmail n'est pas disponible pour les versions tierces, comme la version F-Droid, car Google n'a approuvé l'utilisation d'OAuth que pour les versions officielles.
 
-If you don't want to use an on-device Gmail account, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to setup an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
+Si vous ne souhaitez pas utiliser le compte Gmail de l'appareil, vous pouvez soit autoriser l'accès aux "applications moins sécurisées" et utiliser le mot de passe de votre compte (déconseillé) ou activer l'authentification à deux facteurs et utiliser un mot de passe spécifique à l'application. Pour utiliser un mot de passe, vous devrez configurer un compte et une identité via les étapes de configuration 1 et 2, au lieu de passer par l'assistant de configuration rapide.
 
-Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
+Veuillez consulter [cette FAQ](#user-content-faq111) pour savoir pourquoi seuls les comptes de l'appareil peuvent être utilisés.
 
-Note that an app specific password is required when two factor authentication is enabled.
-
-<br />
-
-*App specific password*
-
-See [here](https://support.google.com/accounts/answer/185833) about how to generate an app specific password.
+Notez qu'un mot de passe spécifique à l'application est nécessaire lorsque l'authentification à deux facteurs est activée.
 
 <br />
 
-*Enable "Less secure apps"*
+*Mot de passe spécifique à l'application*
 
-**Important**: using this method is not recommended because it is less reliable.
-
-**Important**: Gsuite accounts authorized with a username/password will stop working [in the near future](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
-
-See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps" or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).
-
-If you use multiple Gmail accounts, make sure you change the "less secure apps" setting of the right account(s).
-
-Be aware that you need to leave the "less secure apps" settings screen by using the back arrow to apply the setting.
-
-If you use this method, you should use a [strong password](https://en.wikipedia.org/wiki/Password_strength) for your Gmail account, which is a good idea anyway. Note that using the [standard](https://tools.ietf.org/html/rfc3501) IMAP protocol in itself is not less secure.
-
-When "less secure apps" is not enabled, you'll get the error *Authentication failed - invalid credentials* for accounts (IMAP) and *Username and Password not accepted* for identities (SMTP).
+Voir [ici](https://support.google.com/accounts/answer/185833) sur la façon de générer un mot de passe spécifique à l'application.
 
 <br />
 
-*General*
+*Autoriser les "Applications moins sécurisées"*
 
-You might get the alert "*Please log in via your web browser*". This happens when Google considers the network that connects you to the internet (this could be a VPN) to be unsafe. This can be prevented by using the Gmail quick setup wizard or an app specific password.
+**Important **: l'utilisation de cette méthode n'est pas recommandée car elle est moins fiable.
 
-See [here](https://support.google.com/mail/answer/7126229) for Google's instructions and [here](https://support.google.com/mail/accounts/answer/78754) for troubleshooting.
+**Important **: Les comptes Gsuite autorisés avec un nom d'utilisateur/mot de passe cesseront de fonctionner [dans un avenir proche](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
+
+Voir [ici](https://support.google.com/accounts/answer/6010255) comment autoriser les "applications moins sécurisées" ou aller [directement au paramètre en question](https://www.google.com/settings/security/lesssecureapps).
+
+Si vous utilisez plusieurs comptes Gmail, assurez-vous de modifier le paramètre "Autoriser les applications moins sécurisées" du ou des comptes concernés.
+
+Sachez que vous devez quitter l'écran de paramétrage des "applications moins sécurisées" en utilisant la flèche de retour arrière pour que le paramètre soit appliqué.
+
+Si vous utilisez cette méthode, vous devriez utiliser un [mot de passe robuste](https://en.wikipedia.org/wiki/Password_strength) pour votre compte Gmail, ce qui est de toute façon une bonne idée. Notez que l'utilisation du protocole [standard](https://tools.ietf.org/html/rfc3501) IMAP n'est en soi pas moins sécurisée.
+
+Lorsque les "applications moins sécurisées" ne sont pas activées, vous obtiendrez l'erreur *L'authentification a échoué - identifiants non valides* pour les comptes (IMAP) et *nom d'utilisateur et mot de passe non acceptés* pour les identités (SMTP).
+
+<br />
+
+*Général*
+
+Il se peut que vous obteniez l'alerte "*S'il vous plaît connectez-vous via votre navigateur web*". Cela se produit lorsque Google considère que le réseau sur lequel vous vous connectez à Internet (il peut s'agir d'un VPN) n'est pas sûr. Cela peut être évité en utilisant l'assistant de configuration rapide de Gmail ou un mot de passe spécifique à l'application.
+
+Voir [ici](https://support.google.com/mail/answer/7126229) pour les instructions de Google et [ici](https://support.google.com/mail/accounts/answer/78754) pour le dépannage.
 
 <br />
 
 <a name="faq7"></a>
-**(7) Why are sent messages not appearing (directly) in the sent folder?**
+**(7) Pourquoi les messages envoyés n'apparaissent-ils pas (directement) dans le dossier « envoyé » ? **
 
-Sent messages are normally moved from the outbox to the sent folder as soon as your provider adds sent messages to the sent folder. This requires a sent folder to be selected in the account settings and the sent folder to be set to synchronizing.
+Les messages envoyés sont normalement déplacés de la boîte d'envoi vers le dossier envoyé dès que votre fournisseur ajoute les messages envoyés au dossier envoyé. Cela nécessite qu'un dossier envoyé soit sélectionné dans les paramètres du compte et que le dossier envoyé soit configuré pour être synchronisé.
 
-Some providers do not keep track of sent messages or the used SMTP server might not be related to the provider. In these cases FairEmail, will automatically add sent messages to the sent folder on synchronizing the sent folder, which will happen after a message have been sent. Note that this will result in extra internet traffic.
+Certains fournisseurs ne gardent pas de trace des messages envoyés ou le serveur SMTP utilisé peut ne pas être lié au fournisseur. Dans ce cas, FairEmail ajoutera automatiquement les messages envoyés au dossier envoyé lors de la synchronisation du dossier envoyé, qui se produira après l'envoi d'un message. Notez que cela entraînera un trafic Internet supplémentaire.
 
-~~If this doesn't happen, your provider might not keep track of sent messages or you might be using an SMTP server not related to the provider.~~ ~~In these cases you can enable the advanced identity setting *Store sent messages* to let FairEmail add sent messages to the sent folder right after sending a message.~~ ~~Note that enabling this setting might result in duplicate messages if your provider adds sent messages to the sent folder too.~~ ~~Also beware that enabling this setting will result in extra data usage, especially when when sending messages with large attachments.~~
+~~Si ce n'est pas le cas, il se peut que votre fournisseur ne garde pas de trace des messages envoyés ou bien vous utilisez un serveur SMTP qui n'est pas lié au fournisseur.~~ ~~Dans ces cas, vous pouvez activer le paramètre d'identité avancé *Stocker les messages envoyés* pour permettre à FairEmail d'ajouter les messages envoyés au dossier envoyé juste après avoir envoyé un message.~~ ~~Notez que l'activation de ce paramètre peut entraîner des messages en double si votre fournisseur ajoute également les messages envoyés au dossier envoyé.~~ ~~Soyez également conscient que l'activation de ce paramètre entraînera une consommation supplémentaire de données, en particulier lorsque vous envoyez des messages avec de pièces jointes volumineuses.~~
 
-~~If sent messages in the outbox are not found in the sent folder on a full synchronize, they will be moved from the outbox to the sent folder too.~~ ~~A full synchronize happens when reconnecting to the server or when synchronizing periodically or manually.~~ ~~You'll likely want to enable the advanced setting *Store sent messages* instead to move messages to the sent folder sooner.~~
+~~Si des messages envoyés dans la boîte d'envoi ne sont pas trouvés dans le dossier envoyé lors d'une synchronisation complète, ils seront également déplacés de la boîte d'envoi vers le dossier envoyé.~~ ~~Une synchronisation complète se produit lors de la reconnexion au serveur ou lors de la synchronisation périodique ou manuelle.~~ ~~Vous préférerez probablement activer le paramètre avancé *Stocker les messages envoyés* à la place, pour déplacer les messages vers le dossier envoyé plus rapidement.~~
 
 <br />
 
 <a name="faq8"></a>
-**(8) Can I use a Microsoft Exchange account?**
+**(8) Est-il possible d'utiliser un compte Microsoft Exchange ?**
 
-You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case. See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
+Vous pouvez utiliser un compte Microsoft Exchange s'il est accessible via IMAP, ce qui est généralement le cas. Voir [ici](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) pour plus d'informations.
 
-Please see [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for the Microsoft documentation about configuring an email client. There is also a section about common connection errors and solutions.
+Veuillez consulter [ici](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) la documentation de Microsoft sur la configuration d'un client de messagerie. Il y a également une section sur les erreurs de connexion courantes et leurs solutions.
 
-Some older Exchange server versions have a bug causing empty message and corrupt attachments. Please see [this FAQ](#user-content-faq110) for a workaround.
+Certaines anciennes versions du serveur Exchange souffrent d'un bug causant des messages vides et des pièces jointes corrompues. Veuillez consulter [cette FAQ](#user-content-faq110) pour une solution.
 
-Please see [this FAQ](#user-content-faq133) about ActiveSync support.
+Veuillez consulter [cette FAQ](#user-content-faq133) sur la compatibilité avec ActiveSync.
 
-Please see [this FAQ](#user-content-faq111) about OAuth support.
+Veuillez consulter [cette FAQ](#user-content-faq111) sur la compatibilité avec OAuth.
 
 <br />
 
 <a name="faq9"></a>
-**(9) What are identities / how do I add an alias?**
+**(9) Que sont les identités / comment ajouter un alias ?**
 
 Identities represent email addresses you are sending *from* via an email (SMTP) server.
 
-Some providers allow you to have multiple aliases. You can configure these by setting the email address field of an additional identity to the alias address and setting the user name field to your main email address.
+Certains fournisseurs vous permettent d'avoir plusieurs alias. You can configure these by setting the email address field of an additional identity to the alias address and setting the user name field to your main email address.
 
-Note that you can copy an identity by long pressing it.
+Notez que vous pouvez copier une identité en appuyant longuement dessus.
 
-Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message, if your provider allows this.
+Sinon, vous pouvez activer *Autoriser l'édition de l'adresse de l'expéditeur* dans les paramètres avancés d'une identité existante pour modifier le nom d'utilisateur lors de la rédaction d'un nouveau message, si votre fournisseur le permet.
 
-FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
+FairEmail mettra automatiquement à jour les mots de passe des identités liées lorsque vous mettez à jour le mot de passe du compte associé ou d'une identité liée.
 
-See [this FAQ](#user-content-faq33) on editing the username of email addresses.
+Voir [cette FAQ](#user-content-faq33) pour modifier le nom d'utilisateur des adresses e-mail.
 
 <br />
 
 <a name="faq10"></a>
-**~~(10) What does 'UIDPLUS not supported' mean?~~**
+**~~(10) Que signifie "UIDPLUS n'est pas pris en charge" ?~~**
 
 ~~The error message *UIDPLUS not supported* means that your email provider does not provide the IMAP [UIDPLUS extension](https://tools.ietf.org/html/rfc4315). This IMAP extension is required to implement two way synchronization, which is not an optional feature. So, unless your provider can enable this extension, you cannot use FairEmail for this provider.~~
 
 <br />
 
 <a name="faq11"></a>
-**~~(11) Why is POP not supported?~~**
+**~~(11) Pourquoi POP n'est pas pris en charge ?~~**
 
 ~~Besides that any decent email provider supports [IMAP](https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol) these days,~~ ~~using [POP](https://en.wikipedia.org/wiki/Post_Office_Protocol) will result in unnecessary extra battery usage and delayed new message notifications.~~ ~~Moreover, POP is unsuitable for two way synchronization and more often than not people read and write messages on different devices these days.~~
 
@@ -570,9 +570,9 @@ See [this FAQ](#user-content-faq33) on editing the username of email addresses.
 <br />
 
 <a name="faq12"></a>
-**(12) How does encryption/decryption work?**
+**(12) Comment fonctionne le chiffrement/déchiffrement ?**
 
-Communication with email servers is always encrypted, unless you explicitly turned this off. This question is about optional end-to-end encryption with PGP or S/MIME. The sender and recipient should first agree on this and exchange signed messages to transfer their public key to be able to send encrypted messages.
+La communication avec les serveurs de messagerie est toujours chiffrée, à moins que vous ne l'ayez explicitement désactivée. Cette question concerne le chiffrement de bout en bout optionnel avec PGP ou S/MIME. The sender and recipient should first agree on this and exchange signed messages to transfer their public key to be able to send encrypted messages.
 
 *General*
 
@@ -685,7 +685,7 @@ S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations ar
 <br />
 
 <a name="faq13"></a>
-**(13) How does search on device/server work?**
+**(13) Comment fonctionne la recherche sur l'appareil/le serveur ?**
 
 You can start searching for messages on sender (from), recipient (to, cc, bcc), subject, keywords or message text by using the magnify glass in the action bar of a folder. You can also search from any app by selecting *Search email* in the copy/paste popup menu.
 
@@ -732,22 +732,22 @@ Searching on the device is a free feature, using the search index and searching 
 <br />
 
 <a name="faq14"></a>
-**(14) How can I set up an Outlook / Live / Hotmail account?**
+**(14) Comment puis-je configurer un compte Outlook / Live / Hotmail ?**
 
-An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting *Outlook*.
+Un compte Outlook / Live / Hotmail peut être configuré via l'assistant de configuration rapide et en sélectionnant *Outlook*.
 
-To use an Outlook, Live or Hotmail account with two factor authentication enabled, you need to create an app password. See [here](https://support.microsoft.com/en-us/help/12409/microsoft-account-app-passwords-two-step-verification) for the details.
+Pour utiliser un compte Outlook, Live ou Hotmail avec l'authentification à deux facteurs activée, vous devez créer un mot de passe d'application. Voir [ici](https://support.microsoft.com/en-us/help/12409/microsoft-account-app-passwords-two-step-verification) pour les détails.
 
-See [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for Microsoft's instructions.
+Voir [ici](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) pour les instructions de Microsoft.
 
-For setting up an Office 365 account, please see [this FAQ](#user-content-faq156).
+Pour configurer un compte Office 365, veuillez consulter [cette FAQ](#user-content-faq156).
 
 <br />
 
 <a name="faq15"></a>
-**(15) Why does the message text keep loading?**
+**(15) Pourquoi le texte du message continue-t-il de se charger indéfiniment ?**
 
-The message header and message body are fetched separately from the server. The message text of larger messages is not being pre-fetched on metered connections and will be fetched on demand on expanding a message. The message text will keep loading if there is no connection to the account, see also the next question, or if there other operations, like synchronizing messages, are being executed.
+L'en-tête du message et le corps du message sont récupérés séparément du serveur. The message text of larger messages is not being pre-fetched on metered connections and will be fetched on demand on expanding a message. The message text will keep loading if there is no connection to the account, see also the next question, or if there other operations, like synchronizing messages, are being executed.
 
 You can check the account and folder list for the account and folder state (see the legend for the meaning of the icons) and the operation list accessible via the main navigation menu for pending operations (see [this FAQ](#user-content-faq3) for the meaning of the operations).
 
@@ -760,7 +760,7 @@ Mobile connections are almost always metered and some (paid) Wi-Fi hotspots are 
 <br />
 
 <a name="faq16"></a>
-**(16) Why are messages not being synchronized?**
+**(16) Pourquoi les messages ne sont-ils pas synchronisés ?**
 
 Possible causes of messages not being synchronized (sent or received) are:
 
@@ -785,54 +785,56 @@ In case of successive connection errors, FairEmail will hold off increasingly lo
 <br />
 
 <a name="faq17"></a>
-**~~(17) Why does manual synchronize not work?~~**
+**~~(17) Pourquoi la synchronisation manuelle ne fonctionne pas ?~~**
 
-~~If the *Synchronize now* menu is dimmed, there is no connection to the account.~~
+~~Si le menu *Synchroniser maintenant* est grisé, il n'y a pas de connexion au compte.~~
 
-~~See the previous question for more information.~~
+~~Voir la question précédente pour plus d'informations.~~
 
 <br />
 
 <a name="faq18"></a>
-**(18) Why is the message preview not always shown?**
+**(18) Pourquoi l'aperçu du message n'est-il pas toujours affiché ?**
 
-The preview of the message text cannot be shown if the message body has not been downloaded yet. See also [this FAQ](#user-content-faq15).
+L'aperçu du texte du message ne peut pas être affiché si le corps du message n'a pas encore été téléchargé. Voir aussi [cette FAQ](#user-content-faq15).
 
 <br />
 
 <a name="faq19"></a>
-**(19) Why are the pro features so expensive?**
+**(19) Pourquoi les fonctionnalités pro sont-elles si chères ?**
 
-The right question is "*why are there so many taxes and fees?*":
+La bonne question est "*pourquoi y a-t-il autant de taxes et de frais ?*":
 
-* VAT: 25 % (depending on your country)
-* Google fee: 30 %
-* Income tax: 50 %
-* <sub>Paypal fee: 5-10 % depending on the country/amount</sub>
+* TVA : 25 % (selon votre pays)
+* Frais Google : 30 %
+* Impôt sur le revenu: 50 %
+* <sub>Frais Paypal : 5-10 % en fonction du pays/montant</sub>
 
-So, what is left for the developer is just a fraction of what you pay.
+Ainsi, ce qui reste pour le développeur n'est qu'une fraction de ce que vous payez.
 
-Note that only some convenience and advanced features need to be purchased which means that FairEmail is basically free to use.
+Notez que seules quelques commodités et fonctionnalités avancées doivent être achetées, ce qui signifie qu'en gros, FairEmail est gratuit à utiliser.
 
 Also note that most free apps will appear not to be sustainable in the end, whereas FairEmail is properly maintained and supported, and that free apps may have a catch, like sending privacy sensitive information to the internet.
 
-I have been working on FairEmail almost every day for more than two years, so I think the price is more than reasonable. For this reason there won't be discounts either.
+Je travaille sur FairEmail presque tous les jours depuis plus de deux ans, je pense donc que le prix est plus que raisonnable. Pour cette raison, il n'y aura pas non plus de réductions.
 
 <br />
 
 <a name="faq20"></a>
-**(20) Can I get a refund?**
+**(20) Puis-je obtenir un remboursement ?**
 
-If a purchased pro feature doesn't work as intended and this isn't caused by a problem in the free features and I cannot fix the problem in a timely manner, you can get a refund. In all other cases there is no refund possible. In no circumstances there is a refund possible for any problem related to the free features, since there wasn't paid anything for them and because they can be evaluated without any limitation. I take my responsibility as seller to deliver what has been promised and I expect that you take responsibility for informing yourself of what you are buying.
+Si une fonctionnalité pro achetée ne fonctionne pas comme prévu, si cela ne relève pas d'un problème dans les fonctionnalités gratuites et si je ne peux pas résoudre le problème dans des délais acceptables, alors vous pouvez obtenir un remboursement. Dans tous les autres cas, il n'y a pas de remboursement possible. En aucun cas il n'y a de remboursement possible pour tout problème lié aux fonctionnalités gratuites, étant donné que rien a été payé pour les obtenir et parce qu'elles peuvent être évaluées sans aucune limitation. J'assume ma responsabilité en tant que vendeur, de fournir ce qui a été promis et j'attends que vous preniez la responsabilité de vous informer de ce que vous achetez.
 
 <a name="faq21"></a>
 **(21) How do I enable the notification light?**
 
-Before Android 8 Oreo: there is an advanced option in the setup for this.
+Before Android 8 Oreo: there is an advanced option in the notification settings of the app for this.
 
-Android 8 Oreo and later: see [here](https://developer.android.com/training/notify-user/channels) about how to configure notification channels. You can use the button *Manage notifications* in the setup to directly go to the Android notification settings. Note that apps cannot change notification settings, including the notification light setting, on Android 8 Oreo and later anymore. Apps designed and targeting older Android versions might still be able to control the contents of notifications, but such apps cannot be updated anymore and recent Android versions will show a warning that such apps are outdated.
+Android 8 Oreo and later: please see [here](https://developer.android.com/training/notify-user/channels) about how to configure notification channels. You can use the button *Default channel* in the notification settings of the app to directly go to the right Android notification channel settings.
 
-Sometimes it is necessary to disable the setting *Show message preview in notifications* or to enable the settings *Show notifications with a preview text only* to workaround a bug in Android. This might apply to notification sounds and vibrations too.
+Note that apps cannot change notification settings, including the notification light setting, on Android 8 Oreo and later anymore.
+
+Sometimes it is necessary to disable the setting *Show message preview in notifications* or to enable the settings *Show notifications with a preview text only* to workaround bugs in Android. This might apply to notification sounds and vibrations too.
 
 Setting a light color before Android 8 is not supported and on Android 8 and later not possible.
 
@@ -1958,7 +1960,11 @@ Spam filtering, verification of the [DKIM](https://en.wikipedia.org/wiki/DomainK
 
 Spam filtering based on message headers might have been feasible, but unfortunately this technique is [patented by Microsoft](https://patents.google.com/patent/US7543076).
 
+Recent versions of FairEmail can filter spam to a certain extend using a message classifier. Please see [this FAQ](#user-content-faq163) for more information about this.
+
 Of course you can report messages as spam with FairEmail, which will move the reported messages to the spam folder and train the spam filter of the provider, which is how it is supposed to work. This can be done automatically with [filter rules](#user-content-faq71) too. Blocking the sender will create a filter rule to automatically move future messages of the same sender into the spam folder.
+
+Note that the POP3 protocol gives access to the inbox only. So, it is won't be possible to report spam for POP3 accounts.
 
 Note that you should not delete spam messages, also not from the spam folder, because the email server uses the messages in the spam folder to "learn" what spam messages are.
 
@@ -2828,25 +2834,38 @@ IMAP NOTIFY support means that notifications for added, changed or deleted messa
 
 Message classification will attempt to automatically group emails into classes, based on their contents, using [Bayesian statistics](https://en.wikipedia.org/wiki/Bayesian_statistics). In the context of FairEmail, a folder is a class. So, for example, the inbox, the spam folder, a 'marketing' folder, etc, etc.
 
-You can enable message classification in the miscellaneous settings. This will enable learning mode only.
+You can enable message classification in the miscellaneous settings. This will enable 'learning' mode only. The classifier will 'learn' from new messages in the inbox and spam folder by default. The folder property *Classify new messages in this folder* will enable or disable 'learning' mode for a folder. You can clear local messages (long press a folder in the folder list of an account) and synchronize the messages again to classify existing messages.
 
-Each folder has an option to enable automatic message classification. When this is turned on, new messages in other folders which the classifier thinks belong to that folder will be automatically moved.
+Each folder has an option *Automatically move classified messages to this folder* ('auto classification' for short). When this is turned on, new messages in other folders which the classifier thinks belong to that folder will be automatically moved.
 
-The option *Use local spam filter* turns on message classification and auto classification for the spam folder. Please understand that this is not a replacement for the spam filter of the email server and can result in false positives. See also [this FAQ](#user-content-faq92).
+The option *Use local spam filter* in the report spam dialog will turn on message classification in the miscellaneous settings and auto classification for the spam folder. Please understand that this is not a replacement for the spam filter of the email server and can result in [false positives and false negatives](https://en.wikipedia.org/wiki/False_positives_and_false_negatives). See also [this FAQ](#user-content-faq92).
 
-A practical example: suppose there is a folder 'marketing' and auto message classification is enabled for this folder. Each time you move a message into this folder you'll train FairEmail that similar messages belong in this folder. Each time you move a message out of this folder you'll train FairEmail that similar messages do not belong in this folder. After moving some messages into the folder, FairEmail will start to move messages automatically into this folder. This will work best with similar messages.
+A practical example: suppose there is a folder 'marketing' and auto message classification is enabled for this folder. Each time you move a message into this folder you'll train FairEmail that similar messages belong in this folder. Each time you move a message out of this folder you'll train FairEmail that similar messages do not belong in this folder. After moving some messages into the 'marketing' folder, FairEmail will start moving similar messages automatically into this folder. Or, the other way around, after moving some messages out of the 'marketing' folder, FairEmail will stop moving similar messages automatically into this folder. This will work best with messages with similar content (email addresses, subject and message text).
 
 Classification should be considered as a best guess - it might be a wrong guess, or the classifier might not be confident enough to make any guess. If the classifier is unsure, it will simply leave an email where it is.
 
-Classification will be done for new messages in the inbox, spam folder and user folders only. You can clear local messages (long press a folder in the folder list of an account) and synchronize the messages again to classify existing messages.
-
-Moving a message on the device will reclassify the message. Moving a message with another email client will not result in reclassification because IMAP does not support 'moved' notifications.
-
 To prevent the email server from moving a message into the spam folder again and again, auto classification out of the spam folder will not be done.
+
+The message classifier calculates the probability a message belongs in a folder (class). There are two options in the miscellaneous settings which control if a message will be automatically moved into a folder, provided that auto classification is enabled for the folder:
+
+* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 20 %)
+* *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
+
+Both conditions must be satisfied before a message will be moved.
+
+Considering the defaults option values:
+
+* Apples 40 % and bananas 30 % would be disregarded because the difference of 25 % is below the minimum of 50 %
+* Apples 15 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 20 %
+* Apples 50 % and bananas 20 % would result in selecting apples
 
 Classification is optimized to use as little resources as possible, but will inevitably use some extra battery power.
 
-You can delete all classification data by turning classification three times off.
+You can delete all classification data by turning classification in the miscellaneous settings three times off.
+
+[Filter rules](#user-content-faq71) will be executed before classification.
+
+Message classification is a pro feature, except for the spam folder.
 
 <br />
 

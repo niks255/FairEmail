@@ -307,9 +307,9 @@
     <string name="title_advanced_generated_icons">Visa genererade ikoner</string>
     <string name="title_advanced_identicons">Visa identicons</string>
     <string name="title_advanced_circular">Visa runda ikoner</string>
-    <string name="title_advanced_color_saturation">Mättnad</string>
-    <string name="title_advanced_color_value">Ljusstyrka</string>
-    <string name="title_advanced_color_threshold">Tröskelbokstavsfärg</string>
+    <string name="title_advanced_color_saturation">Mättnad: %1$s %%</string>
+    <string name="title_advanced_color_value">Ljusstyrka: %1$s %%</string>
+    <string name="title_advanced_color_threshold">Tröskelvärde för brevfärg: %1$s %%</string>
     <string name="title_advanced_name_email">Visa namn och e-postadresser</string>
     <string name="title_advanced_replace_name">Föredrar ett kontaktnamn över ett skickat namn</string>
     <string name="title_advanced_distinguish_contacts">Understryk avsändaren när avsändaren är känd som lokal \"till\" kontakt</string>
@@ -442,6 +442,8 @@
     <string name="title_advanced_fts">Bygg sökindex</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d meddelanden indexerade (%3$s)</string>
     <string name="title_advanced_classification">Klassificera meddelanden</string>
+    <string name="title_advanced_class_min_chance">Minsta sannolikhet för klass: %1$s %%</string>
+    <string name="title_advanced_class_min_difference">Minsta klasskillnad: %1$s %%</string>
     <string name="title_advanced_language">Språk</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
@@ -630,6 +632,7 @@
     <string name="title_synchronize_now">Synkronisera nu</string>
     <string name="title_synchronize_subfolders">Undermappar</string>
     <string name="title_synchronize_more">Synkronisera fler meddelanden</string>
+    <string name="title_synchronize_more_hint">Detta kommer att resultera i en enda nedladdning av äldre meddelanden, så det kommer inte att resultera i mer batterianvändning för dagligt bruk</string>
     <string name="title_synchronize_enabled">Synkronisera</string>
     <string name="title_synchronize_batch_enable">Aktivera synkronisering</string>
     <string name="title_synchronize_batch_disable">Inaktivera synkronisering</string>
@@ -673,7 +676,6 @@
     <string name="title_poll_folder">Kontrollera regelbundet istället för kontinuerlig synkronisering</string>
     <string name="title_download_folder">Hämta automatiskt meddelandetexter och bilagor</string>
     <string name="title_notify_folder">Notifiera för nya meddelanden</string>
-    <string name="title_auto_classify">Flytta automatiskt klassificerade meddelanden</string>
     <string name="title_sync_days">Synkronisera meddelanden (dagar)</string>
     <string name="title_sync_days_remark">Ökning av detta värde kommer att öka batteri- och dataanvändningen</string>
     <string name="title_keep_days">Behåll meddelanden (dagar)</string>

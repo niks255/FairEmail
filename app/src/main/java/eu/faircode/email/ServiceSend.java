@@ -41,6 +41,8 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
+import com.sun.mail.smtp.SMTPSendFailedException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -389,27 +391,29 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                         Log.e(outbox.name, ex);
                         EntityLog.log(this, "Send " + Log.formatThrowable(ex, false));
 
+                        boolean unrecoverable = (op.tries >= RETRY_MAX ||
+                                ex instanceof OutOfMemoryError ||
+                                ex instanceof MessageRemovedException ||
+                                ex instanceof FileNotFoundException ||
+                                (ex instanceof AuthenticationFailedException && !ConnectionHelper.isIoError(ex)) ||
+                                ex instanceof SendFailedException ||
+                                ex instanceof IllegalArgumentException);
+
                         db.operation().setOperationError(op.id, Log.formatThrowable(ex));
                         if (message != null) {
                             db.message().setMessageError(message.id, Log.formatThrowable(ex));
 
                             try {
+                                int tries_left = (unrecoverable ? 0 : RETRY_MAX - op.tries);
                                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                 nm.notify("send:" + message.id, 1, getNotificationError(
-                                        MessageHelper.formatAddressesShort(message.to), ex, RETRY_MAX - op.tries).build());
+                                        MessageHelper.formatAddressesShort(message.to), ex, tries_left).build());
                             } catch (Throwable ex1) {
                                 Log.w(ex1);
                             }
                         }
 
-                        if (op.tries >= RETRY_MAX ||
-                                ex instanceof OutOfMemoryError ||
-                                ex instanceof MessageRemovedException ||
-                                ex instanceof FileNotFoundException ||
-                                (ex instanceof AuthenticationFailedException &&
-                                        !ConnectionHelper.isIoError(ex)) ||
-                                ex instanceof SendFailedException ||
-                                ex instanceof IllegalArgumentException) {
+                        if (unrecoverable) {
                             Log.w("Unrecoverable");
                             db.operation().deleteOperation(op.id);
                             ops.remove(op);
@@ -468,6 +472,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         } finally {
             db.endTransaction();
         }
+
+        ServiceSend.start(this);
     }
 
     private void onSend(EntityMessage message) throws MessagingException, IOException {
@@ -623,6 +629,18 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             EntityLog.log(this, "Sent " + via + " elapse=" + (end - start) + " ms");
         } catch (MessagingException ex) {
             Log.e(ex);
+
+            if (ex instanceof SMTPSendFailedException) {
+                SMTPSendFailedException sem = (SMTPSendFailedException) ex;
+                ex = new SMTPSendFailedException(
+                        sem.getCommand(),
+                        sem.getReturnCode(),
+                        getString(R.string.title_service_auth, sem.getMessage()),
+                        sem.getNextException(),
+                        sem.getValidSentAddresses(),
+                        sem.getValidUnsentAddresses(),
+                        sem.getInvalidAddresses());
+            }
 
             if (sid != null)
                 db.message().deleteMessage(sid);

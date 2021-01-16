@@ -493,7 +493,10 @@ Some people ask:
 <a name="faq6"></a>
 **(6) How can I login to Gmail / G suite?**
 
-You can use the quick setup wizard to easily setup a Gmail account and identity.
+If you use the Play store or GitHub version of FairEmail,
+you can use the quick setup wizard to easily setup a Gmail account and identity.
+The Gmail quick setup wizard is not available for third party builds, like the F-Droid build
+because Google approved the use of OAuth for official builds only.
 
 If you don't want to use an on-device Gmail account,
 you can either enable access for "less secure apps" and use your account password (not advised)
@@ -967,16 +970,15 @@ and I expect that you take responsibility for informing yourself of what you are
 <a name="faq21"></a>
 **(21) How do I enable the notification light?**
 
-Before Android 8 Oreo: there is an advanced option in the setup for this.
+Before Android 8 Oreo: there is an advanced option in the notification settings of the app for this.
 
-Android 8 Oreo and later: see [here](https://developer.android.com/training/notify-user/channels) about how to configure notification channels.
-You can use the button *Manage notifications* in the setup to directly go to the Android notification settings.
+Android 8 Oreo and later: please see [here](https://developer.android.com/training/notify-user/channels) about how to configure notification channels.
+You can use the button *Default channel* in the notification settings of the app to directly go to the right Android notification channel settings.
+
 Note that apps cannot change notification settings, including the notification light setting, on Android 8 Oreo and later anymore.
-Apps designed and targeting older Android versions might still be able to control the contents of notifications,
-but such apps cannot be updated anymore and recent Android versions will show a warning that such apps are outdated.
 
 Sometimes it is necessary to disable the setting *Show message preview in notifications*
-or to enable the settings *Show notifications with a preview text only* to workaround a bug in Android.
+or to enable the settings *Show notifications with a preview text only* to workaround bugs in Android.
 This might apply to notification sounds and vibrations too.
 
 Setting a light color before Android 8 is not supported and on Android 8 and later not possible.
@@ -2360,10 +2362,15 @@ Moreover, email servers have access to information, like the IP address, etc of 
 Spam filtering based on message headers might have been feasible,
 but unfortunately this technique is [patented by Microsoft](https://patents.google.com/patent/US7543076).
 
+Recent versions of FairEmail can filter spam to a certain extend using a message classifier.
+Please see [this FAQ](#user-content-faq163) for more information about this.
+
 Of course you can report messages as spam with FairEmail,
 which will move the reported messages to the spam folder and train the spam filter of the provider, which is how it is supposed to work.
 This can be done automatically with [filter rules](#user-content-faq71) too.
 Blocking the sender will create a filter rule to automatically move future messages of the same sender into the spam folder.
+
+Note that the POP3 protocol gives access to the inbox only. So, it is won't be possible to report spam for POP3 accounts.
 
 Note that you should not delete spam messages, also not from the spam folder,
 because the email server uses the messages in the spam folder to "learn" what spam messages are.
@@ -3417,36 +3424,55 @@ Message classification will attempt to automatically group emails into classes, 
 using [Bayesian statistics](https://en.wikipedia.org/wiki/Bayesian_statistics).
 In the context of FairEmail, a folder is a class. So, for example, the inbox, the spam folder, a 'marketing' folder, etc, etc.
 
-You can enable message classification in the miscellaneous settings. This will enable learning mode only.
+You can enable message classification in the miscellaneous settings. This will enable 'learning' mode only.
+The classifier will 'learn' from new messages in the inbox and spam folder by default.
+The folder property *Classify new messages in this folder* will enable or disable 'learning' mode for a folder.
+You can clear local messages (long press a folder in the folder list of an account) and synchronize the messages again to classify existing messages.
 
-Each folder has an option to enable automatic message classification.
+Each folder has an option *Automatically move classified messages to this folder* ('auto classification' for short).
 When this is turned on, new messages in other folders which the classifier thinks belong to that folder will be automatically moved.
 
-The option *Use local spam filter* turns on message classification and auto classification for the spam folder.
-Please understand that this is not a replacement for the spam filter of the email server and can result in false positives.
+The option *Use local spam filter* in the report spam dialog will turn on message classification in the miscellaneous settings
+and auto classification for the spam folder.
+Please understand that this is not a replacement for the spam filter of the email server and
+can result in [false positives and false negatives](https://en.wikipedia.org/wiki/False_positives_and_false_negatives).
 See also [this FAQ](#user-content-faq92).
 
 A practical example: suppose there is a folder 'marketing' and auto message classification is enabled for this folder.
 Each time you move a message into this folder you'll train FairEmail that similar messages belong in this folder.
 Each time you move a message out of this folder you'll train FairEmail that similar messages do not belong in this folder.
-After moving some messages into the folder, FairEmail will start to move messages automatically into this folder.
-This will work best with similar messages. 
+After moving some messages into the 'marketing' folder, FairEmail will start moving similar messages automatically into this folder.
+Or, the other way around, after moving some messages out of the 'marketing' folder, FairEmail will stop moving similar messages automatically into this folder.
+This will work best with messages with similar content (email addresses, subject and message text).
 
 Classification should be considered as a best guess - it might be a wrong guess, or the classifier might not be confident enough to make any guess.
 If the classifier is unsure, it will simply leave an email where it is.
 
-Classification will be done for new messages in the inbox, spam folder and user folders only.
-You can clear local messages (long press a folder in the folder list of an account) and synchronize the messages again to classify existing messages.
-
-Moving a message on the device will reclassify the message.
-Moving a message with another email client will not result in reclassification because IMAP does not support 'moved' notifications.
-
 To prevent the email server from moving a message into the spam folder again and again,
 auto classification out of the spam folder will not be done.
 
+The message classifier calculates the probability a message belongs in a folder (class).
+There are two options in the miscellaneous settings which control if a message will be automatically moved into a folder,
+provided that auto classification is enabled for the folder:
+
+* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 20 %)
+* *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
+
+Both conditions must be satisfied before a message will be moved.
+
+Considering the defaults option values:
+
+* Apples 40 % and bananas 30 % would be disregarded because the difference of 25 % is below the minimum of 50 %
+* Apples 15 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 20 %
+* Apples 50 % and bananas 20 % would result in selecting apples
+
 Classification is optimized to use as little resources as possible, but will inevitably use some extra battery power.
 
-You can delete all classification data by turning classification three times off.
+You can delete all classification data by turning classification in the miscellaneous settings three times off.
+
+[Filter rules](#user-content-faq71) will be executed before classification.
+
+Message classification is a pro feature, except for the spam folder.
 
 <br />
 
