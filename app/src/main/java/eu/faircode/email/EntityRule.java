@@ -611,11 +611,14 @@ public class EntityRule {
 
         File file = reply.getFile(context);
         Helper.writeText(file, body);
+        String text = HtmlHelper.getFullText(body);
+        reply.preview = HtmlHelper.getPreview(text);
+        reply.language = HtmlHelper.getLanguage(context, text);
         db.message().setMessageContent(reply.id,
                 true,
-                HtmlHelper.getLanguage(context, body),
+                reply.language,
                 false,
-                HtmlHelper.getPreview(body),
+                reply.preview,
                 null);
 
         if (attachments)
@@ -700,7 +703,9 @@ public class EntityRule {
                     .append(' ').append(message.subject).append(". ");
 
         String body = Helper.readText(message.getFile(context));
-        String preview = HtmlHelper.getPreview(body);
+        String text = HtmlHelper.getFullText(body);
+        String preview = HtmlHelper.getPreview(text);
+
         if (!TextUtils.isEmpty(preview))
             sb.append(res.getString(R.string.title_rule_tts_content))
                     .append(' ').append(preview);

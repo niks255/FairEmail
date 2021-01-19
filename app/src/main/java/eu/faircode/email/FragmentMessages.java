@@ -306,7 +306,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private SelectionPredicateMessage selectionPredicate = null;
     private SelectionTracker<Long> selectionTracker = null;
 
-    private Integer scroll = null;
     private Long prev = null;
     private Long next = null;
     private Long closeId = null;
@@ -797,9 +796,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                ActionData data = (ActionData) bottom_navigation.getTag();
                 switch (menuItem.getItemId()) {
                     case R.id.action_delete:
-                        if ((Boolean) bottom_navigation.getTag())
+                        if (data.delete)
                             onActionDelete();
                         else
                             onActionMove(EntityFolder.TRASH);
@@ -3983,8 +3983,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 (viewType == AdapterMessage.ViewType.UNIFIED ||
                         (viewType == AdapterMessage.ViewType.FOLDER && !outbox));
 
-        String filter_language = prefs.getString("filter_language", null);
-        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown || !TextUtils.isEmpty(filter_language));
+        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown);
         MenuItem menuFilter = menu.findItem(R.id.menu_filter);
         menuFilter.setShowAsAction(folder && filter_active
                 ? MenuItem.SHOW_AS_ACTION_ALWAYS
@@ -4055,8 +4054,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         menu.findItem(R.id.menu_compact).setChecked(compact);
 
-        menu.findItem(R.id.menu_select_language).setVisible(
-                language_detection && folder && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+        menu.findItem(R.id.menu_select_language).setVisible(language_detection && folder);
         menu.findItem(R.id.menu_select_all).setVisible(folder);
         menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
         menu.findItem(R.id.menu_mark_all_read).setVisible(folder);
@@ -4170,6 +4168,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             case R.id.menu_compact:
                 onMenuCompact();
+                return true;
+
+            case R.id.menu_theme:
+                onMenuTheme();
                 return true;
 
             case R.id.menu_select_language:
@@ -4303,6 +4305,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         getActivity().invalidateOptionsMenu();
     }
 
+    private void onMenuTheme() {
+        new FragmentDialogTheme().show(getParentFragmentManager(), "messages:theme");
+    }
+
     private void clearMeasurements() {
         sizes.clear();
         heights.clear();
@@ -4413,8 +4419,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
                 boolean filter_unknown = prefs.getBoolean("filter_unknown", false);
                 boolean filter_snoozed = prefs.getBoolean("filter_snoozed", true);
-                String filter_language = prefs.getString("filter_language", null);
                 boolean language_detection = prefs.getBoolean("language_detection", false);
+                String filter_language = prefs.getString("filter_language", null);
 
                 DB db = DB.getInstance(context);
                 try {
@@ -4675,8 +4681,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         boolean filter_seen = prefs.getBoolean("filter_seen", false);
         boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
         boolean filter_unknown = prefs.getBoolean("filter_unknown", false);
+        boolean language_detection = prefs.getBoolean("language_detection", false);
         String filter_language = prefs.getString("filter_language", null);
-        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown || !TextUtils.isEmpty(filter_language));
+        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown ||
+                (language_detection && !TextUtils.isEmpty(filter_language)));
 
         boolean none = (items == 0 && !loading && tasks == 0 && initialized);
         boolean filtered = (filter_active && viewType != AdapterMessage.ViewType.SEARCH);
@@ -4843,9 +4851,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             args.putString("thread", thread);
             args.putLong("id", id);
 
-            new SimpleTask<Boolean[]>() {
+            new SimpleTask<ActionData>() {
                 @Override
-                protected Boolean[] onExecute(Context context, Bundle args) {
+                protected ActionData onExecute(Context context, Bundle args) {
                     long aid = args.getLong("account");
                     String thread = args.getString("thread");
                     long id = args.getLong("id");
@@ -4899,16 +4907,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         db.endTransaction();
                     }
 
-                    return new Boolean[]{
-                            trash == null ||
-                                    (account != null && account.protocol == EntityAccount.TYPE_POP),
-                            trashable,
-                            snoozable,
-                            archivable && archive != null};
+                    ActionData data = new ActionData();
+                    data.delete = (trash == null ||
+                            (account != null && account.protocol == EntityAccount.TYPE_POP));
+                    data.trashable = trashable;
+                    data.snoozable = snoozable;
+                    data.archivable = (archivable && archive != null);
+                    return data;
                 }
 
                 @Override
-                protected void onExecuted(Bundle args, Boolean[] data) {
+                protected void onExecuted(Bundle args, ActionData data) {
                     if (actionbar_color && args.containsKey("color")) {
                         int color = args.getInt("color");
                         bottom_navigation.setBackgroundColor(color);
@@ -4920,10 +4929,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             bottom_navigation.setItemIconTintList(ColorStateList.valueOf(Color.WHITE));
                     }
 
-                    bottom_navigation.setTag(data[0]);
-                    bottom_navigation.getMenu().findItem(R.id.action_delete).setVisible(data[1]);
-                    bottom_navigation.getMenu().findItem(R.id.action_snooze).setVisible(data[2]);
-                    bottom_navigation.getMenu().findItem(R.id.action_archive).setVisible(data[3]);
+                    bottom_navigation.setTag(data);
+
+                    bottom_navigation.getMenu().findItem(R.id.action_delete).setVisible(data.trashable);
+                    bottom_navigation.getMenu().findItem(R.id.action_snooze).setVisible(data.snoozable);
+                    bottom_navigation.getMenu().findItem(R.id.action_archive).setVisible(data.archivable);
                     bottom_navigation.setVisibility(View.VISIBLE);
                 }
 
@@ -7454,7 +7464,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             PrintJob job = printManager.print(jobName, adapter, new PrintAttributes.Builder().build());
                             EntityLog.log(context, "Print queued job=" + job.getInfo());
                         } catch (Throwable ex) {
-                            Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof ActivityNotFoundException));
+                            try {
+                                Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof ActivityNotFoundException));
+                            } catch (IllegalStateException exex) {
+                                ToastEx.makeText(context, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
+                            }
                         } finally {
                             printWebView = null;
                         }
@@ -7582,6 +7596,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("search");
         fragmentTransaction.commit();
+    }
+
+    private static class ActionData {
+        private boolean delete;
+        private boolean trashable;
+        private boolean snoozable;
+        private boolean archivable;
     }
 
     private class ReplyData {

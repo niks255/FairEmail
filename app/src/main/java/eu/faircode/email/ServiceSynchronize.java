@@ -106,12 +106,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private ConnectionHelper.NetworkState lastNetworkState = null;
 
     private boolean foreground = false;
-    private Map<Long, Core.State> coreStates = new Hashtable<>();
-    private MutableLiveData<ConnectionHelper.NetworkState> liveNetworkState = new MutableLiveData<>();
-    private MutableLiveData<List<TupleAccountState>> liveAccountState = new MutableLiveData<>();
-    private MediatorState liveAccountNetworkState = new MediatorState();
+    private final Map<Long, Core.State> coreStates = new Hashtable<>();
+    private final MutableLiveData<ConnectionHelper.NetworkState> liveNetworkState = new MutableLiveData<>();
+    private final MutableLiveData<List<TupleAccountState>> liveAccountState = new MutableLiveData<>();
+    private final MediatorState liveAccountNetworkState = new MediatorState();
 
-    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "sync");
+    private static final ExecutorService executor = Helper.getBackgroundExecutor(1, "sync");
 
     private static final long BACKUP_DELAY = 30 * 1000L; // milliseconds
     private static final long PURGE_DELAY = 30 * 1000L; // milliseconds
@@ -180,6 +180,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             registerReceiver(idleModeChangedReceiver, new IntentFilter(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            registerReceiver(dataSaverChanged, new IntentFilter(ConnectivityManager.ACTION_RESTRICT_BACKGROUND_CHANGED));
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -266,11 +269,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 start(current, current.accountState.isEnabled(current.enabled), false);
                             }
                         } else {
-                            TupleAccountNetworkState prev = accountStates.get(index);
-                            Core.State state = coreStates.get(current.accountState.id);
-                            if (state != null)
-                                state.setNetworkState(current.networkState);
-
                             boolean reload = false;
                             boolean sync = current.command.getBoolean("sync", false);
                             boolean force = current.command.getBoolean("force", false);
@@ -279,6 +277,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                     reload = true;
                                     break;
                             }
+
+                            TupleAccountNetworkState prev = accountStates.get(index);
+                            Core.State state = coreStates.get(current.accountState.id);
+                            if (state != null)
+                                state.setNetworkState(current.networkState);
 
                             accountStates.remove(index);
 
@@ -730,7 +733,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             liveAccountNetworkState.post(command);
         } else if (PREF_RELOAD.contains(key) || ConnectionHelper.PREF_NETWORK.contains(key)) {
             if (ConnectionHelper.PREF_NETWORK.contains(key))
-                updateNetworkState(ConnectionHelper.getActiveNetwork(this), "preference");
+                updateNetworkState(null, "preference");
             Bundle command = new Bundle();
             command.putString("pref", key);
             command.putString("name", "reload");
@@ -744,6 +747,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            unregisterReceiver(dataSaverChanged);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             unregisterReceiver(idleModeChangedReceiver);
@@ -859,8 +865,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private void onReload(Intent intent) {
         boolean force = intent.getBooleanExtra("force", false);
-        if (force)
+        if (force) {
             lastLost = 0;
+            updateNetworkState(null, "force");
+        }
 
         Bundle command = new Bundle();
         command.putString("name", "reload");
@@ -888,8 +896,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private void onAlarm(Intent intent) {
-        Bundle command = new Bundle();
         schedule(this, true);
+        updateNetworkState(null, "alarm");
+
+        Bundle command = new Bundle();
         command.putString("name", "eval");
         command.putBoolean("sync", true);
         liveAccountNetworkState.post(command);
@@ -898,7 +908,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private void onWatchdog(Intent intent) {
         EntityLog.log(this, "Watchdog");
         schedule(this, false);
-        networkCallback.onCapabilitiesChanged(null, null);
+        updateNetworkState(null, "watchdog");
     }
 
     private NotificationCompat.Builder getNotificationService(Integer accounts, Integer operations) {
@@ -2040,7 +2050,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         }
     }
 
-    private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+    private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(@NonNull Network network) {
             updateNetworkState(network, "available");
@@ -2062,7 +2072,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         }
     };
 
-    private BroadcastReceiver connectionChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver connectionChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("Received intent=" + intent +
@@ -2070,56 +2080,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
             if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(intent.getAction())) {
                 boolean on = intent.getBooleanExtra("state", false);
+                EntityLog.log(context, "Airplane mode on=" + on);
                 if (!on)
                     lastLost = 0;
             }
 
-            Network active = ConnectionHelper.getActiveNetwork(ServiceSynchronize.this);
-            updateNetworkState(active, "connectivity");
+            updateNetworkState(null, "connectivity");
         }
     };
 
-    private synchronized void updateNetworkState(Network network, String reason) {
-        Network active = ConnectionHelper.getActiveNetwork(this);
-        if (active != null && !active.equals(lastActive)) {
-            if (ConnectionHelper.isConnected(this, active)) {
-                EntityLog.log(this, reason + ": new active network=" + active + "/" + lastActive);
-                lastActive = active;
-            }
-        } else if (lastActive != null) {
-            if (!ConnectionHelper.isConnected(this, lastActive)) {
-                EntityLog.log(this, reason + ": lost active network=" + lastActive);
-                lastActive = null;
-                lastLost = new Date().getTime();
-            }
-        }
-
-        if (Objects.equals(network, active)) {
-            ConnectionHelper.NetworkState ns = ConnectionHelper.getNetworkState(this);
-            if (!Objects.equals(lastNetworkState, ns)) {
-                EntityLog.log(this, reason + ": updating state network=" + active +
-                        " info=" + ConnectionHelper.getNetworkInfo(this, active) + " " + ns);
-                lastNetworkState = ns;
-                liveNetworkState.postValue(ns);
-            }
-        }
-
-        boolean isSuitable = (lastNetworkState != null && lastNetworkState.isSuitable());
-        if (lastSuitable == null || lastSuitable != isSuitable) {
-            lastSuitable = isSuitable;
-            EntityLog.log(this, reason + ": updated suitable=" + lastSuitable);
-
-            if (!isBackgroundService(this))
-                try {
-                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
-                } catch (Throwable ex) {
-                    Log.w(ex);
-                }
-        }
-    }
-
-    private BroadcastReceiver idleModeChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver idleModeChangedReceiver = new BroadcastReceiver() {
         @Override
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void onReceive(Context context, Intent intent) {
@@ -2128,6 +2098,74 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     " ignoring=" + pm.isIgnoringBatteryOptimizations(context.getPackageName()));
         }
     };
+
+    private final BroadcastReceiver dataSaverChanged = new BroadcastReceiver() {
+        @Override
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void onReceive(Context context, Intent intent) {
+            Log.i("Received intent=" + intent +
+                    " " + TextUtils.join(" ", Log.getExtras(intent.getExtras())));
+
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            Integer status = (cm == null ? null : cm.getRestrictBackgroundStatus());
+            EntityLog.log(context, "Data saver=" + status);
+
+            updateNetworkState(null, "datasaver");
+        }
+    };
+
+    private void updateNetworkState(final Network network, final String reason) {
+        getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Network active = ConnectionHelper.getActiveNetwork(ServiceSynchronize.this);
+
+                    if (active != null && !active.equals(lastActive)) {
+                        if (ConnectionHelper.isConnected(ServiceSynchronize.this, active)) {
+                            EntityLog.log(ServiceSynchronize.this,
+                                    reason + ": new active network=" + active + "/" + lastActive);
+                            lastActive = active;
+                        }
+                    } else if (lastActive != null) {
+                        if (!ConnectionHelper.isConnected(ServiceSynchronize.this, lastActive)) {
+                            EntityLog.log(ServiceSynchronize.this,
+                                    reason + ": lost active network=" + lastActive);
+                            lastActive = null;
+                            lastLost = new Date().getTime();
+                        }
+                    }
+
+                    if (network == null || Objects.equals(network, active)) {
+                        ConnectionHelper.NetworkState ns = ConnectionHelper.getNetworkState(ServiceSynchronize.this);
+                        if (!Objects.equals(lastNetworkState, ns)) {
+                            EntityLog.log(ServiceSynchronize.this,
+                                    reason + ": updating state network=" + active +
+                                            " info=" + ConnectionHelper.getNetworkInfo(ServiceSynchronize.this, active) + " " + ns);
+                            lastNetworkState = ns;
+                            liveNetworkState.postValue(ns);
+                        }
+                    }
+
+                    boolean isSuitable = (lastNetworkState != null && lastNetworkState.isSuitable());
+                    if (lastSuitable == null || lastSuitable != isSuitable) {
+                        lastSuitable = isSuitable;
+                        EntityLog.log(ServiceSynchronize.this, reason + ": updated suitable=" + lastSuitable);
+
+                        if (!isBackgroundService(ServiceSynchronize.this))
+                            try {
+                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                            }
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
+    }
 
     private class MediatorState extends MediatorLiveData<List<TupleAccountNetworkState>> {
         private boolean running = true;

@@ -7,6 +7,7 @@
 #include <netinet/tcp.h>
 
 #include "compact_enc_det/compact_enc_det.h"
+#include "cld_3/src/nnet_language_identifier.h"
 
 void log_android(int prio, const char *fmt, ...) {
     if (prio >= ANDROID_LOG_DEBUG) {
@@ -20,7 +21,8 @@ void log_android(int prio, const char *fmt, ...) {
 }
 
 extern "C" JNIEXPORT jobject JNICALL
-Java_eu_faircode_email_CharsetHelper_jni_1detect(JNIEnv *env, jclass type, jbyteArray _octets) {
+Java_eu_faircode_email_CharsetHelper_jni_1detect_1charset(JNIEnv *env, jclass type,
+                                                          jbyteArray _octets) {
     int len = env->GetArrayLength(_octets);
     jbyte *octets = env->GetByteArrayElements(_octets, nullptr);
 
@@ -55,6 +57,31 @@ Java_eu_faircode_email_CharsetHelper_jni_1detect(JNIEnv *env, jclass type, jbyte
             (jint) len,
             (jint) bytes_consumed,
             (jboolean) is_reliable);
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_eu_faircode_email_TextHelper_jni_1detect_1language(JNIEnv *env, jclass clazz,
+                                                        jbyteArray _octets) {
+    int len = env->GetArrayLength(_octets);
+    jbyte *octets = env->GetByteArrayElements(_octets, nullptr);
+
+    std::string text(reinterpret_cast<char const *>(octets), len);
+
+    chrome_lang_id::NNetLanguageIdentifier lang_id(0, 1000);
+    const chrome_lang_id::NNetLanguageIdentifier::Result result = lang_id.FindLanguage(text);
+
+    env->ReleaseByteArrayElements(_octets, octets, JNI_ABORT);
+
+    jclass cls = env->FindClass("eu/faircode/email/TextHelper$DetectResult");
+    jmethodID ctor = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;FZF)V");
+    jstring jlanguage = env->NewStringUTF(result.language.c_str());
+    return env->NewObject(
+            cls, ctor,
+            jlanguage,
+            (jfloat) result.probability,
+            (jint) result.is_reliable,
+            (jfloat) result.is_reliable);
 }
 
 extern "C"

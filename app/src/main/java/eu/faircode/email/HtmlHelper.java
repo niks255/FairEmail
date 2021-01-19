@@ -130,7 +130,7 @@ public class HtmlHelper {
     private static final int MAX_ALT = 250;
     private static final int MAX_AUTO_LINK = 250;
     private static final int MAX_FORMAT_TEXT_SIZE = 200 * 1024; // characters
-    private static final int MAX_FULL_TEXT_SIZE = 1024 * 1024; // characters
+    static final int MAX_FULL_TEXT_SIZE = 1024 * 1024; // characters
     private static final int SMALL_IMAGE_SIZE = 5; // pixels
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
     private static final float[] HEADING_SIZES = {1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f};
@@ -356,7 +356,7 @@ public class HtmlHelper {
 
     private static Document sanitize(Context context, Document parsed, boolean view, boolean show_images) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String theme = prefs.getString("theme", "light");
+        String theme = prefs.getString("theme", "blue_orange_system");
         boolean text_color = (!view || (prefs.getBoolean("text_color", true) && !"black_and_white".equals(theme)));
         boolean text_size = (!view || prefs.getBoolean("text_size", true));
         boolean text_font = (!view || prefs.getBoolean("text_font", true));
@@ -403,7 +403,7 @@ public class HtmlHelper {
         normalizeNamespaces(parsed, display_hidden);
 
         // Limit length
-        if (view && truncate(parsed, true)) {
+        if (view && truncate(parsed, MAX_FORMAT_TEXT_SIZE)) {
             parsed.body()
                     .appendElement("p")
                     .appendElement("em")
@@ -1709,14 +1709,13 @@ public class HtmlHelper {
         Log.d(document.head().html());
     }
 
-    static String getLanguage(Context context, String body) {
+    static String getLanguage(Context context, String text) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean language_detection = prefs.getBoolean("language_detection", false);
             if (!language_detection)
                 return null;
 
-            String text = getPreview(body);
             Locale locale = TextHelper.detectLanguage(context, text);
             return (locale == null ? null : locale.getLanguage());
         } catch (Throwable ex) {
@@ -1725,25 +1724,22 @@ public class HtmlHelper {
         }
     }
 
-    static String getPreview(String body) {
-        try {
-            if (body == null)
-                return null;
-            Document d = JsoupEx.parse(body);
-            return _getText(d, false);
-        } catch (OutOfMemoryError ex) {
-            Log.e(ex);
+    static String getPreview(String text) {
+        if (text == null)
             return null;
-        }
+
+        String preview = text
+                .replace("\u200C", "") // Zero-width non-joiner
+                .replaceAll("\\s+", " ");
+        return truncate(preview, PREVIEW_SIZE);
     }
 
-    @Deprecated
     static String getFullText(String body) {
         try {
             if (body == null)
                 return null;
             Document d = JsoupEx.parse(body);
-            return _getText(d, true);
+            return _getText(d);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             return null;
@@ -1753,29 +1749,22 @@ public class HtmlHelper {
     static String getFullText(File file) throws IOException {
         try {
             Document d = JsoupEx.parse(file);
-            return _getText(d, true);
+            return _getText(d);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             return null;
         }
     }
 
-    private static String _getText(Document d, boolean full) {
-        truncate(d, !full);
+    private static String _getText(Document d) {
+        truncate(d, MAX_FULL_TEXT_SIZE);
 
         for (Element bq : d.select("blockquote")) {
             bq.prependChild(new TextNode("["));
             bq.appendChild(new TextNode("]"));
         }
 
-        String text = d.text();
-        if (full)
-            return text;
-
-        String preview = text
-                .replace("\u200C", "") // Zero-width non-joiner
-                .replaceAll("\\s+", " ");
-        return truncate(preview, PREVIEW_SIZE);
+        return d.text();
     }
 
     static String truncate(String text, int at) {
@@ -1793,7 +1782,7 @@ public class HtmlHelper {
     static String getText(Context context, String html) {
         Document d = sanitizeCompose(context, html, false);
 
-        truncate(d, true);
+        truncate(d, MAX_FORMAT_TEXT_SIZE);
 
         SpannableStringBuilder ssb = fromDocument(context, d, null, null);
 
@@ -1880,9 +1869,8 @@ public class HtmlHelper {
         }
     }
 
-    static boolean truncate(Document d, boolean reformat) {
+    static boolean truncate(Document d, int max) {
         final int[] length = new int[1];
-        int max = (reformat ? MAX_FORMAT_TEXT_SIZE : MAX_FULL_TEXT_SIZE);
 
         NodeTraversor.filter(new NodeFilter() {
             @Override

@@ -30,6 +30,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteFullException;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
@@ -99,6 +100,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -365,7 +367,7 @@ public class Log {
                     Boolean ignoringOptimizations = Helper.isIgnoringOptimizations(context);
                     event.addMetadata("extra", "optimizing", (ignoringOptimizations != null && !ignoringOptimizations));
 
-                    String theme = prefs.getString("theme", "light");
+                    String theme = prefs.getString("theme", "blue_orange_system");
                     event.addMetadata("extra", "theme", theme);
                     event.addMetadata("extra", "package", BuildConfig.APPLICATION_ID);
                 }
@@ -1249,12 +1251,7 @@ public class Log {
 
             File file = draft.getFile(context);
             Helper.writeText(file, body);
-            db.message().setMessageContent(draft.id,
-                    true,
-                    HtmlHelper.getLanguage(context, body),
-                    false,
-                    HtmlHelper.getPreview(body),
-                    null);
+            db.message().setMessageContent(draft.id, true, null, false, null, null);
 
             attachSettings(context, draft.id, 1);
             attachAccounts(context, draft.id, 2);
@@ -1373,6 +1370,9 @@ public class Log {
         sb.append(String.format("Display: %s\r\n", Build.DISPLAY));
         sb.append(String.format("Id: %s\r\n", Build.ID));
         sb.append("\r\n");
+
+        Locale slocale = Resources.getSystem().getConfiguration().locale;
+        sb.append(String.format("Locale: %s/%s\r\n", Locale.getDefault(), slocale));
 
         sb.append(String.format("Processors: %d\r\n", Runtime.getRuntime().availableProcessors()));
 

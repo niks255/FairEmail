@@ -76,6 +76,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -458,7 +459,7 @@ public class Helper {
         try {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 ContentResolver resolver = context.getContentResolver();
-                int enabled = Settings.System.getInt(resolver, Settings.System.LOCK_PATTERN_ENABLED, 0);
+                int enabled = Settings.System.getInt(resolver, Settings.Secure.LOCK_PATTERN_ENABLED, 0);
                 return (enabled != 0);
             } else {
                 KeyguardManager kgm = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
@@ -500,6 +501,20 @@ public class Helper {
                         ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
+    }
+
+    static void setKeyboardIncognitoMode(EditText view, Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            return;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean incognito_keyboard = prefs.getBoolean("incognito_keyboard", false);
+        if (incognito_keyboard)
+            try {
+                view.setImeOptions(view.getImeOptions() | EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
     }
 
     // View
@@ -627,12 +642,14 @@ public class Helper {
         } else {
             // https://developer.chrome.com/multidevice/android/customtabs
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-            builder.setToolbarColor(resolveColor(context, R.attr.colorPrimary));
-            builder.setSecondaryToolbarColor(resolveColor(context, R.attr.colorPrimaryDark));
+            builder.setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder()
+                    .setToolbarColor(resolveColor(context, R.attr.colorPrimary))
+                    .setSecondaryToolbarColor(resolveColor(context, R.attr.colorPrimaryDark))
+                    .build());
             builder.setColorScheme(Helper.isDarkTheme(context)
                     ? CustomTabsIntent.COLOR_SCHEME_DARK
                     : CustomTabsIntent.COLOR_SCHEME_LIGHT);
-            builder.setDefaultShareMenuItemEnabled(true);
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
             builder.setUrlBarHidingEnabled(true);
 
             CustomTabsIntent customTabsIntent = builder.build();

@@ -1643,18 +1643,18 @@ Bemærk, at e-mailadresser er formateret således:
 `
 "Nogen" <somebody@example.org>`
 
-You can use multiple rules, possibly with a *stop processing*, for an *or* or a *not* condition.
+Man kan anvende flere regler, muligvis med et *eksekveringsstop*, for en *eller* eller en *ikke* betingelse.
 
-Matching is not case sensitive, unless you use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression). Please see [here](https://developer.android.com/reference/java/util/regex/Pattern) for the documentation of Java regular expressions. You can test a regex [here](https://regexr.com/).
+Matchning er ikke versal-/minuskelfølsom undtagen for [regulære udtryk](https://en.wikipedia.org/wiki/Regular_expression). Tjek [hér](https://developer.android.com/reference/java/util/regex/Pattern) ang. dokumentation for regulære Java-udtryk. En regex kan aftestes [hér](https://regexr.com/).
 
-Note that a regular expression supports an *or* operator, so if you want to match multiple senders, you can do this:
+Bemærk, at et regulært udtryk understøtter en *eller*-operatør, for matchning af flere afsendere om ønsket:
 
 `
-.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*`
+.*anette@eksempel\.org.*|.*bo@eksempel\.org.*|.*karen@eksempel\.org.*`
 
-Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
+Bemærk, at [dot all-tilstand](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) er aktiveret for at kunne matche [udfoldede headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
 
-You can select one of these actions to apply to matching messages:
+En af disse handlinger kan vælges anvendt på matchende beskeder:
 
 * Ingen handling (nyttigt for *ikke*)
 * Markér som læst
@@ -1671,123 +1671,123 @@ You can select one of these actions to apply to matching messages:
 * Tekst-til-tale (afsender og emne)
 * Automatisering (Tasker mv.)
 
-Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
+Regler effektueres umiddelbart efter besked-header'en er hentet, men inden beskedteksten er blevet downloadet, så brug af betingelser ift. beskedteksten er ikke muligt. Bemærk, at på takserede forbindelser downloades store beskedtekster på forlangende for at reducere dataforbruget.
 
-If you want to forward a message, consider to use the move action instead. This will be more reliable than forwarding as well because forwarded messages might be considered as spam.
+Ønskes en besked videresendt, så overvej i stedet at bruge flythandlingen. Dette vil også være mere pålideligt end videresendelse, da videresendte beskeder måske opfattes som spam.
 
-Since message headers are not downloaded and stored by default to save on battery and data usage and to save storage space it is not possible to preview which messages would match a header rule condition.
+Da besked-headers som standard ikke downloades og lagres for at spare strøm- og dataforbrug samt lagerplads, er det ikke muligt at få vist, hvilke beskeder, som evt. matcher en header-regelbetingelse.
 
-Some common header conditions (regex):
+Nogle almindelige header-betingelser (regex):
 
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;Content Type: multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
-In the three-dots *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
+Under *Flere* i trepriksbeskedmenuen findes et element til oprettelse af en regel for en modtaget besked med de mest almindelige betingelser udfyldt.
 
-The POP3 protocol does not support setting keywords and moving or copying messages.
+POP3- protokollen understøtter ikke opsætning af nøgleord og beskedflytning/-kopiering.
 
-Using rules is a pro feature.
+Brug af regler er en Pro-funktion.
 
 <br />
 
 <a name="faq72"></a>
-**(72) What are primary accounts/identities?**
+**(72) Hvad er primære konti/identiteter?**
 
-The primary account is used when the account is ambiguous, for example when starting a new draft from the unified inbox.
+Den primære konto bruges, når kontoen er tvetydig, f.eks. ved start på et nyt udkast fra den fælles indbakke.
 
-Similarly, the primary identity of an account is used when the identity is ambiguous.
+Omvendt anvendes en kontos primære identitet, når identiteten er tvetydig.
 
-There can be just one primary account and there can be just one primary identity per account.
+Der kan kun være én primær konto, og der kan kun være én primær identitet pr. konto.
 
 <br />
 
 <a name="faq73"></a>
-**(73) Is moving messages across accounts safe/efficient?**
+**(73) Er beskedflytning på tværs af konti sikkert/effektiv?**
 
-Moving messages across accounts is safe because the raw, original messages will be downloaded and moved and because the source messages will be deleted only after the target messages have been added
+Beskedflytning på tværs af konti er sikkert, da de rå originalbeskeder downloades og flyttes, og da kildebeskeder først slettes, efter at målbeskeder er tilføjet
 
-Batch moving messages across accounts is efficient if both the source folder and target folder are set to synchronize, else FairEmail needs to connect to the folder(s) for each message.
+Massebeskedflytning på tværs af konti er effektivt, hvis både kilde- og målmappen er opsat til synk, da FairEmail ellers vil skulle oprette mappeforbindelse(r) for hver besked.
 
 <br />
 
 <a name="faq74"></a>
-**(74) Why do I see duplicate messages?**
+**(74) Hvorfor optræder der dubletbeskeder'?**
 
-Some providers, notably Gmail, list all messages in all folders, except trashed messages, in the archive (all messages) folder too. FairEmail shows all these messages in a non obtrusive way to indicate that these messages are in fact the same message.
+Visse udbydere, især Gmail, oplister også alle beskeder i alle mapper, undtagen i papirkurven, i arkivmappen (alle beskeder). FairEmail viser alle disse beskeder på en ikke-påtrængende måde for at indikere, at de i virkeligheden er identiske.
 
-Gmail allows one message to have multiple labels, which are presented to FairEmail as folders. This means that messages with multiple labels will be shown multiple times as well.
+Gmail tillader en besked at have flere etiketter, som præsenteres for FairEmail som mapper. Det betyder også, at beskeder med flere etiketter vil fremgå flere gange.
 
 <br />
 
 <a name="faq75"></a>
-**(75) Can you make an iOS, Windows, Linux, etc version?**
+**(75) Kan der blive lavet en Windows-, Linux-, iOS-version mv.?**
 
-A lot of knowledge and experience is required to successfully develop an app for a specific platform, which is why I develop apps for Android only.
+En masse viden og erfaring kræves for at udvikle en velfungerende app til en bestemt platform, hvilket er grunden til, at jeg kun udvikler apps til Android.
 
 <br />
 
 <a name="faq76"></a>
-**(76) What does 'Clear local messages' do?**
+**(76) Hvad gør 'Ryd lokale beskeder'?**
 
-The folder menu *Clear local messages* removes messages from the device which are present on the server too. It does not delete messages from the server. This can be useful after changing the folder settings to not download the message content (text and attachments), for example to save space.
+Mappemenuen *Ryd lokale beskeder* fjerner beskeder fra enheden, som også er til stede på serveren. Den sletter ikke beskeder fra serveren. Af f.eks. pladshensyn kan dette kan være nyttigt efter ændring af mappeindstillinger for ikke at downloade beskedindhold (tekst og vedhæftninger).
 
 <br />
 
 <a name="faq77"></a>
-**(77) Why are messages sometimes shown with a small delay?**
+**(77) Hvorfor vises beskeder nogle gange med en lille forsinkelse?**
 
-Depending on the speed of your device (processor speed and maybe even more memory speed) messages might be displayed with a small delay. FairEmail is designed to dynamically handle a large number of messages without running out of memory. This means that messages needs to be read from a database and that this database needs to be watched for changes, both of which might cause small delays.
+Afhængigt af enhedens hastighed (CPU-hastighed og måske især hukommelses ditto) kan beskeder blive vist med en lille forsinkelse. FairEmail er designet til dynamisk at håndtere et stort beskedantal uden at løbe tør for hukommelse. Det betyder, at beskeder skal læses fra en database, og at denne skal monitoreres for ændringer, og begge kan forårsage små forsinkelser.
 
-Some convenience features, like grouping messages to display conversation threads and determining the previous/next message, take a little extra time. Note that there is no *the* next message because in the meantime a new message might have been arrived.
+Visse bekvemmelighedsfunktioner, såsom beskedgruppering for at vise konversationstråde samt bestemmelse af den foregående/næste besked, tager lidt ekstra tid. Bemærk, at der ikke er nogen *næste* besked, da der i mellemtiden kan være modtaget en ny besked.
 
-When comparing the speed of FairEmail with similar apps this should be part of the comparison. It is easy to write a similar, faster app which just displays a lineair list of messages while possible using too much memory, but it is not so easy to properly manage resource usage and to offer more advanced features like conversation threading.
+Ved hastighedssammenligning af FairEmail med lignende apps, bør dette indgå i sammenligningen. Det er nemt at kode en lignende, hurtigere app, der blot viser en lineær beskedliste og muligvis samtidigt bruger for megen hukommelse, men det er ikke så nemt at håndtere ressourceforbrug korrekt og at tilbyde mere avancerede funktioner såsom samtaletråde.
 
-FairEmail is based on the state-of-the-art [Android architecture components](https://developer.android.com/topic/libraries/architecture/), so there is little room for performance improvements.
+FairEmail er baseret på de nyeste [Android-arkitekturkomponenter](https://developer.android.com/topic/libraries/architecture/), hvilket ikke giver de store muligheder for ydelsesforbedringer.
 
 <br />
 
 <a name="faq78"></a>
-**(78) How do I use schedules?**
+**(78) Hvordan anvendes tidsplaner?**
 
-In the receive settings you can enable scheduling and set a time period and the days of the week *when* messages should be *received*. Note that an end time equal to or earlier than the start time is considered to be 24 hours later.
+Man kan i modtagelsesindstillingerne aktivere tidsplanlægning og indstille en tidsperiode og ugedage for, *hvornår* beskeder skal *modtages*. Bemærk, at et sluttidspunkt lig med eller før starttidspunktet, anses for 24 timer senere.
 
-Automation, see below, can be used for more advanced schedules, like for example multiple synchronization periods per day or different synchronization periods for different days.
+Automatisering (tjek nedenfor) kan bruges til mere avancerede tidsplaner, såsom flere synk-perioder pr. dag eller forskellige synk-perioder på forskellige dage.
 
-It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile, which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
+Det er muligt at installere FairEmail i flerbrugerprofiler, f.eks. en personlig og en arbejdsprofil, samt at opsætte FairEmail forskelligt i hver profil, hvilket er en anden mulighed for at have forskellige synk-tidsplaner samt synke et andet sæt konti.
 
-It is also possible to create [filter rules](#user-content-faq71) with a time condition and to snooze messages until the end time of the time condition. This way it is possible to *snooze* business related messages until the start of the business hours. This also means that the messages will be on your device for when there is (temporarily) no internet connection.
+Det er også muligt at oprette [filterregler](#user-content-faq71) med en tidsbetingelse og at slumre beskeder indtil sluttidspunktet for tidsbetingelsen. Det er på denne måde muligt at *slumre* forretningsrelaterede beskeder indtil arbejdstidsstart. Det betyder også, at beskederne vil befinde sig på enheend, selv hvis der (midlertidigt) ingen Internetforbindelse er.
 
-Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app, which could be used to (not) silence specific (business) notifications. Please [see here](https://support.google.com/android/answer/9069335) for more information.
+Bemærk, at nyere Android-versioner tillader tilsidesættelse af DND (Forstyr ikke) pr. notifikationskanal og app, hvilket kan bruges til (ikke) at forstumme bestemte (forretnings-)notifikationer. Tjek [hér](https://support.google.com/android/answer/9069335) for yderligere information.
 
-For more complex schemes you could set one or more accounts to manual synchronization and send this command to FairEmail to check for new messages:
+For mere komplekse tidsplaner kan man opsætte en eller flere konti til manuel synk og sende denne kommando til FairEmail for at tjekke for nye beskeder:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.POLL
 ```
 
-For a specific account:
+For en specifik konto:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.POLL --es account Gmail
 ```
 
-You can also automate turning receiving messages on and off by sending these commands to FairEmail:
+Man kan også automatisere at slå beskedmodtagelse til og fra ved at sende disse kommandoer til FairEmail:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.ENABLE
 (adb shell) am startservice -a eu.faircode.email.DISABLE
 ```
 
-To enable/disable a specific account:
+For at aktivere/deaktivere en bestemt konto:
 
 ```
 (adb shell) am startservice -a eu.faircode.email.ENABLE --es account Gmail
 (adb shell) am startservice -a eu.faircode.email.DISABLE --es account Gmail
 ```
 
-Note that disabling an account will hide the account and all associated folders and messages.
+Bemærk, at deaktivering af en konto vil skjule kontoen og alle tilknyttet indhold.
 
-You can automatically send commands with for example [Tasker](https://tasker.joaoapps.com/userguide/en/intents.html):
+Kommandoer kan automatisk sendes med f.eks. [Tasker](https://tasker.joaoapps.com/userguide/en/intents.html):
 
 ```
 Ny opgave: En genkendelig
@@ -1796,94 +1796,94 @@ hensigtshandling: eu.faircode.email.ENABLE
 Mål: Tjeneste
 ```
 
-To enable/disable an account with the name *Gmail*:
+For at aktivere/deaktivere en konto navngivet *Gmail*:
 
 ```
 Ekstra: konto:Gmail
 ```
 
-Account names are case sensitive.
+Kontonavne er minuskel-/versalfølsomme.
 
-Scheduling is a pro feature.
+Tidsplanlægning er en Pro-funktion.
 
 <br />
 
 <a name="faq79"></a>
-**(79) How do I use synchronize on demand (manual)?**
+**(79) Hvordan bruges synk på forlangende (manuelt)?**
 
-Normally, FairEmail maintains a connection to the configured email servers whenever possible to receive messages in real-time. If you don't want this, for example to be not disturbed or to save on battery usage, just disable receiving in the receive settings. This will stop the background service which takes care of automatic synchronization and will remove the associated status bar notification.
+Normalt opretholder FairEmail, når det er muligt, en forbindelse til de opsatte e-mailservere mhp. beskedmodtagelse i realtid. Ønsker dette ikke, f.eks. for ikke at blive forstyrret eller for at spare strøm, så deaktivér modtagelse i modtagelsesindstillinger. Dette stopper baggrundstjenesten, der tager sig af automatisk synk, og fjerner den tilhørende statuslinjenotifikation.
 
-You can also enable *Synchronize manually* in the advanced account settings if you want to manually synchronize specific accounts only.
+Man kan også aktivere *Synkronisér manuelt* i de avancerede kontoindstillinger, hvis man kun vil synke specifikke konti manuelt.
 
-You can use pull-down-to-refresh in a message list or use the folder menu *Synchronize now* to manually synchronize messages.
+Man kan bruge træk-ned-for-at-opfriske i en beskedliste eller bruge mappemenuen *Synkronisér nu* til manuelt at synke beskeder.
 
-If you want to synchronize some or all folders of an account manually, just disable synchronization for the folders (but not of the account).
+Ønsker man at synke visse eller alle kontomapper manuelt, så deaktivér blot synk for disse (men ikke for selve kontoen).
 
-You'll likely want to disabled [browse on server](#user-content-faq24) too.
+[Gennemse på server](#user-content-faq24) vil sandsynligvis også ønskes deaktiveret.
 
 <br />
 
 <a name="faq80"></a>
-**~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE' ?~~**
+**~~(80) Hvordan løses fejlen 'Kan ikke indlæse BODYSTRUCTURE'?~~**
 
-~~The error message *Unable to load BODYSTRUCTURE* is caused by bugs in the email server,~~ ~~see [here](https://javaee.github.io/javamail/FAQ#imapserverbug) for more details.~~
+~~Fejlmeddelelsen *Kan ikke indlæse BODYSTRUCTURE* forårsages af e-mailserverfejl,~~ ~~~~tjek [hér](https://javaee.github.io/javamail/FAQ#imapserverbug) for flere detaljer.~~
 
-~~FairEmail already tries to workaround these bugs, but if this fail you'll need to ask for support from your provider.~~
+~~FairEmail forsøger allerede at løse disse fejl, men lykkes dette ikke, så anmod udbyder om support. ~~
 
 <br />
 
 <a name="faq81"></a>
-**~~(81) Can you make the background of the original message dark in the dark theme?~~**
+**~~(81) Kan baggrunden på originalbeskeder blive gjort mørk i det mørke tema?~~**
 
-~~The original message is shown as the sender has sent it, including all colors.~~ ~~Changing the background color would not only make the original view not original anymore, it can also result in unreadable messages.~~
+~~Den oprindelige besked vises som afsenderen har sendt den, inkl. alle farver.~~ ~~Baggrundsfarveændring vil ikke blot ændre visning af oprindelige beskeder, men kan også gøre dem ulæselige.~~
 
 <br />
 
 <a name="faq82"></a>
-**(82) What is a tracking image?**
+**(82) Hvad er et sporingsbillede?**
 
-Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a tracking image exactly is. In short tracking images keep track if you opened a message.
+Tjek [hér](https://en.wikipedia.org/wiki/Web_beacon) vedr., hvad et sporingsbillede præcist er. Kort fortalt, sporingsbilleder registrerer, om en besked er blevet åbnet.
 
-FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
+FairEmail vil i de fleste tilfælde automatisk genkende sporingsbilleder og erstatte disse med flg. ikon:
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
+![Eksternt billede](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
 
-Automatic recognition of tracking images can be disabled in the privacy settings.
+Automatisk detektering af sporingsbilleder kan deaktiveres i fortrolighedsindstillinger.
 
 <br />
 
 <a name="faq84"></a>
-**(84) What are local contacts for?**
+**(84) Hvad bruges lokale kontakter til?**
 
-Local contact information is based on names and addresses found in incoming and outgoing messages.
+Lokale kontaktoplysninger er baseret på navne og adresser indeholdt i ind- og udgående beskeder.
 
-The main use of the local contacts storage is to offer auto completion when no contacts permission has been granted to FairEmail.
+Hovedanvendelsen for det lokale kontaktlager er at tilbyde autoudfyldelse, hvis FairEmail ikke har fået tildelt kotakttilladelse.
 
-Another use is to generate [shortcuts](#user-content-faq31) on recent Android versions to quickly send a message to frequently contacted people. This is also why the number of times contacted and the last time contacted is being recorded and why you can make a contact a favorite or exclude it from favorites by long pressing it.
+En anden anvendelse på nyere Android-versioner er at generere [genveje](#user-content-faq31)- for hurtig beskedafsendelse til ofte brugte kontakter. Dette er også grunden til registreringen af antal gange kontaktet og senest kontaktet, og hvorfor en kontakt via langt at tryk kan gøres til favorit eller udelukkes fra favoritter.
 
-The list of contacts is sorted on number of times contacted and the last time contacted.
+Kontaktoversigten er sorteret efter antal gange kontaktet og senest kontaktet.
 
-By default only names and addresses to whom you send messages to will be recorded. You can change this in the send settings.
+Som standard registreres kun de navne og adresser, til hvem beskeder sendes. Dette kan ændre i afsendelsesindstillingerne.
 
 <br />
 
 <a name="faq85"></a>
-**(85) Why is an identity not available?**
+**(85) Hvorfor er en identitet ikke tilgængelig?**
 
-An identity is available for sending a new message or replying or forwarding an existing message only if:
+En identitet er kun tilgængelig for afsendelse af en ny besked, besvarelse eller videresendelse af en eksisterende besked, hvis:
 
 * identiteten er opsat til synkronisering (afsendte beskeder)
 * den tilknyttede konto er opsat til synkronisering (modtagne beskeder)
 * den tilknyttede konto har en udkastmappe
 
-FairEmail will try to select the best identity based on the *to* address of the message replied to / being forwarded.
+FairEmail vil forsøge at vælge den bedste identitet baseret på *Til*-adressen på den besvarede/videresendte beskede.
 
 <br />
 
 <a name="faq86"></a>
-**~~(86) What are 'extra privacy features'?~~**
+**~~~(86) Hvad er 'ekstra fortrolighedsfunktioner'?~~**
 
-~~The advanced option *extra privacy features* enables:~~
+~~Den avancerede mulighed *ekstra fortrolighedsfunktioner* aktiverer:~~
 
 * ~~Opslag af ejeren af IP-adressen for et link~~
 * ~~Detektering og fjernelse af [sporingsbilleder](#user-content-faq82)~~
@@ -1891,32 +1891,32 @@ FairEmail will try to select the best identity based on the *to* address of the 
 <br />
 
 <a name="faq87"></a>
-**(87) What does 'invalid credentials' mean?**
+**(87) Hvad betyder 'ugyldige akkreditiver'?**
 
-The error message *invalid credentials* means either that the user name and/or password is incorrect, for example because the password was changed or expired, or that the account authorization has expired.
+Fejlmeddelelsen *ugyldige akkreditiver* betyder, at enten brugernavn og/eller adgangskode er forkert, f.eks. grundet skiftet/udløbet adgangskode eller udløbet kontogodkendelse.
 
-If the password is incorrect/expired, you will have to update the password in the account and/or identity settings.
+Er adgangskoden forkert/udløbet, skal denne opdatere i konto- og/eller identitetsindstillingerne.
 
-If the account authorization has expired, you will have to select the account again. You will likely need to save the associated identity again as well.
+Er kontotilladelsen udløbet, skal kontoen vælges igen. Den tilknyttede identitet skal sandsynligvis også gemmes igen.
 
 <br />
 
 <a name="faq88"></a>
-**(88) How can I use a Yahoo, AOL or Sky account?**
+**(88) Hvordan benyttes en Yahoo-, AOL- ellerr Sky-konto?**
 
-The preferred way to set up a Yahoo account is by using the quick setup wizard, which will use OAuth instead of a password and is therefore safer (and easier as well).
+Den foretrukne måde at opsætte en Yahoo-konto på er vha. hurtigopsætningsguiden, der benytter OAuth i stedet for en adgangskode og derfor er sikrere (samt nemmere).
 
-To authorize a Yahoo, AOL, or Sky account you will need to create an app password. For instructions, please see here:
+For at godkende en Yahoo-, AOL- eller Sky-konto skal en app-adgangskode oprettes. For instruktioner, tjek hér:
 
 * [til Yahoo](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
 * [til AOL](https://help.aol.com/articles/Create-and-manage-app-password)
 * [til Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Andre e-mail apps*)
 
-Please see [this FAQ](#user-content-faq111) about OAuth support.
+Tjek [denne FAQ](#user-content-faq111) vedr. OAuth-understøttelse.
 
-Note that Yahoo, AOL, and Sky do not support standard push messages. The Yahoo email app uses a proprietary, undocumented protocol for push messages.
+Bemærk, at Yahoo, AOL og Sky ikke understøtter standard push-beskeder. Yahoo e-mail appen bruger en proprietær, udokumenteret protokol til push-beskeder.
 
-Push messages require [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) and the Yahoo email server does not report IDLE as capability:
+Push-beskeder kræver [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE), og Yahoos e-mailservere angiver ikke IDLE som en mulighed:
 
 ```
 Y1-EVNE
@@ -1927,63 +1927,63 @@ Y1 OK MULIGHED fuldført
 <br />
 
 <a name="faq89"></a>
-**(89) How can I send plain text only messages?**
+**(89) Hvordan kan rene teksbeskeder sendes?**
 
-By default FairEmail sends each message both as plain text and as HTML formatted text because almost every receiver expects formatted messages these days. If you want/need to send plain text messages only, you can enable this in the advanced identity options. You might want to create a new identity for this if you want/need to select sending plain text messages on a case-by-case basis.
+Som standard sender FairEmail hver besked både som almindelig tekst og HTML-formateret, da næsten alle modtagere i dag forventer formaterede beskeder. Ønskes eller er der behov for kun at sende simple tekstbeskeder, kan dette aktiveres i avancerede identitetsindstillinger. En ny identitet ønskes måske oprettet, hvis man fra gang til gang vil/har behov for at vælge at sende simple tekstbeskeder.
 
 <br />
 
 <a name="faq90"></a>
-**(90) Why are some texts linked while not being a link?**
+**(90) Hvorfor er nogle tekster linket uden at være et link?**
 
-FairEmail will automatically link not linked web links (http and https) and not linked email addresses (mailto) for your convenience. However, texts and links are not easily distinguished, especially not with lots of [top level domains](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) being words. This is why texts with dots are sometimes incorrectly recognized as links, which is better than not recognizing some links.
+FairEmail linker automatisk ikke-linkede weblinks (HTTP og HTTPS) og ikke-linkede e-mailadresser (mailto) for din bekvemmelighed. Tekster og links er imidlertid ikke lette at skelne imellem, da masser af [topniveaudomæner](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) er reelle ord. Dette er grunden til, at tekster med prikker undertiden fejlfortolkes som links, hvilket er bedre end ikke at genkende nogle links.
 
-Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but links for less usual or less safe protocols like telnet and ftp will not be recognized. The regex to recognize links is already *very* complex and adding more protocols will make it only slower and possibly cause errors.
+Links til TEL-, GEO-, RTSP- og XMPP-protokoller genkendes også, hvorimod links til mindre almindelige eller sikre protokoller, såsom TELNET og FTP, ikke genkendes. Regex til at genkende links er allerede *meget* kompleks og tilføjelse af flere protokoller vil kun gøre den langsommere og muligvis forårsage fejl.
 
-Note that original messages are shown exactly as they are, which means also that links are not automatically added.
+Bemærk, at originale beskeder vises, præcist som de er, hvilket også betyder, at links ikke automatisk tilføjes.
 
 <br />
 
 <a name="faq91"></a>
-**~~(91) Can you add periodical synchronization to save battery power?~~**
+**~~(91) Kan der blive tilføjet periodisk synk for at spare støm?~~**
 
-~~Synchronizing messages is an expensive proces because the local and remote messages need to be compared,~~ ~~so periodically synchronizing messages will not result in saving battery power, more likely the contrary.~~
+~~Beskedsynk er en ressourcetung proces, da lokale og eksterne beskeder skal sammenlignes, ~ ~~så periodisk beskedsynk vil ikke være strømbesparende, nok snarere tværtimod.~~
 
-~~See [this FAQ](#user-content-faq39) about optimizing battery usage.~~
+~~Tjek [denne FAQ](#user-content-faq39) om optimering af strømforbrug.~~
 
 <br />
 
 <a name="faq92"></a>
-**(92) Can you add spam filtering, verification of the DKIM signature and SPF authorization?**
+**(92) Kunne der blive tilføjet spamfiltrering, DKIM-signaturbekræftelse og SPF-godkendelse?**
 
-Spam filtering, verification of the [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) signature and [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) authorization is a task of email servers, not of an email client. Servers generally have more memory and computing power, so they are much better suited to this task than battery-powered devices. Also, you'll want spam filtered for all your email clients, possibly including web email, not just one email client. Moreover, email servers have access to information, like the IP address, etc of the connecting server, which an email client has no access to.
+Spamfiltrering, [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail)-signaturbekræftelse og [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework)-godkendelse er e-mailserveropgaver, ikke e-mailklient ditto. Servere har generelt mere hukommelse og computerkraft og derfor bedre egnet til disse opgaver end batteridrevne enheder. Spamfiltrering for alle e-mailklienter, f.eks. også web e-mail, vil give bedre mening end kun for én e-mailklient. Desuden har e-mailservere adgang til oplysninger ( f.eks. IP-adresse mv.) på den forbindende server, hvilket en e-mailklient ikke har.
 
-Spam filtering based on message headers might have been feasible, but unfortunately this technique is [patented by Microsoft](https://patents.google.com/patent/US7543076).
+Spam filtrering baseret på beskedoverskrifter kunne have været mulig, men denne teknik er desværre [patenteret af Microsoft](https://patents.google.com/patent/US7543076).
 
-Recent versions of FairEmail can filter spam to a certain extend using a message classifier. Please see [this FAQ](#user-content-faq163) for more information about this.
+Nyere versioner af FairEmail kan filtrere spam til en vis grad vha. en beskedklassifikator. Tjek [denne FAQ](#user-content-faq163) for yderligere information.
 
-Of course you can report messages as spam with FairEmail, which will move the reported messages to the spam folder and train the spam filter of the provider, which is how it is supposed to work. This can be done automatically with [filter rules](#user-content-faq71) too. Blocking the sender will create a filter rule to automatically move future messages of the same sender into the spam folder.
+Beskeder kan selvfølgelig markeres som spam med FairEmail, der så flytter disse til Spam-mappen og samtidig træner udbyderens spamfilter, hvilket er måden, tingene bør fungere på. Dette kan også udføres automatisk via [filterregler](#user-content-faq71). Blokering af en afsender opretter en filterregel for automatisk at flytte nye beskeder fra denne afsender til Spam-mappen.
 
-Note that the POP3 protocol gives access to the inbox only. So, it is won't be possible to report spam for POP3 accounts.
+Bemærk at POP3- protokollen kun giver adgang til indbakken. Så det er ikke muligt at rapportere spam for POP3-konti.
 
-Note that you should not delete spam messages, also not from the spam folder, because the email server uses the messages in the spam folder to "learn" what spam messages are.
+Bemærk, at spam-beskeder bør ikke slettes, heller ikke fra Spam-mappen, da e-mailservere bruger beskeder i denne mappen til at "lære", hvad der udgør spam-beskeder.
 
-If you receive a lot of spam messages in your inbox, the best you can do is to contact the email provider to ask if spam filtering can be improved.
+Modtages en masse spam-beskeder, er det mest hensigtsmæssigt at kontakte e-mailudbyderen for at anmode om forbedring af spamfiltreringen.
 
-Also, FairEmail can show a small red warning flag when DKIM, SPF or [DMARC](https://en.wikipedia.org/wiki/DMARC) authentication failed on the receiving server. You can enable/disable [authentication verification](https://en.wikipedia.org/wiki/Email_authentication) in the display settings.
+FairEmail kan også vise et lille rødt advarselsflag, når DKIM-, SPF- eller [DMARC](https://en.wikipedia.org/wiki/DMARC)-godkendelse fejler på modtagerserveren. [Godkendelsesbekræftelse](https://en.wikipedia.org/wiki/Email_authentication) kan aktiveres/deaktiveres i Indstillinger.
 
-FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server. This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.
+FairEmail kan også vise et advarselsflag, hvis domænenavnet på afsenderens (svar) e- mailadresse ikke definerer en MX-post pegende på en e-mailserver. Dette kan aktiveres i modtagelsesindstillingerne. Bemærk dog, at dette medfører betydeligt langsommere besked-synkning.
 
-If legitimate messages are failing authentication, you should notify the sender because this will result in a high risk of messages ending up in the spam folder. Moreover, without proper authentication there is a risk the sender will be impersonated. The sender might use [this tool](https://www.mail-tester.com/) to check authentication and other things.
+Mislykkes godkendelse af legitime beskeder, bør afsenderen underrettes, da dette markant øger risikoen for, at disse beskeder ender i Spam-mappen. Uden ordentlig godkendelse er der også risiko for, at andre kan udgive sig for afsenderen. Afsenderen kan bruge [dette værktøj](https://www.mail-tester.com/) til at tjekke godkendelse og andre forhold.
 
 <br />
 
 <a name="faq93"></a>
-**(93) Can you allow installation/data storage on external storage media (sdcard)?**
+**(93) Kunne installation/datalagring på eksternt lagermedie (SD-kort) blive tilladt?**
 
-FairEmail uses services and alarms, provides widgets and listens for the boot completed event to be started on device start, so it is not possible to store the app on external storage media, like an sdcard. See also [here](https://developer.android.com/guide/topics/data/install-location).
+FairEmail bruger tjenester og alarmer, leverer widgets og monitorerer for fuldført opstartsbegivenhed, så den kan starte ved start af enheden, intet af hvilket er muligt fra et eksternt SD-kort. Tjek også [hér](https://developer.android.com/guide/topics/data/install-location).
 
-Messages, attachments, etc stored on external storage media, like an sdcard, can be accessed by other apps and is therefore not safe. See [here](https://developer.android.com/training/data-storage) for the details.
+Beskeder, vedhæftninger mv. gemt på f.eks. et eksternt SD-kortd kan tilgås af andre apps, og sådanne data er derfor ikke sikre. Tjek [hér](https://developer.android.com/training/data-storage) for detaljerne.
 
 When needed you can save (raw) messages via the three-dots menu just above the message text and save attachments by tapping on the floppy icon.
 
