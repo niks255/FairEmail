@@ -126,7 +126,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int CONNECT_BACKOFF_ALARM_MAX = 60; // minutes
     private static final long CONNECT_BACKOFF_GRACE = 2 * 60 * 1000L; // milliseconds
     private static final long LOST_RECENTLY = 150 * 1000L; // milliseconds
-    private static final int ACCOUNT_ERROR_AFTER = 60; // minutes
+    private static final int ACCOUNT_ERROR_AFTER = 90; // minutes
     private static final int ACCOUNT_ERROR_AFTER_POLL = 4; // times
     private static final int FAST_FAIL_THRESHOLD = 75; // percent
     private static final int FETCH_YIELD_DURATION = 50; // milliseconds
@@ -375,8 +375,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     }
 
                     if (!runService && lastQuitId != lastEventId) {
+                        EntityLog.log(ServiceSynchronize.this, "### quitting" +
+                                " run=" + runService +
+                                " startId=" + lastQuitId + "/" + lastEventId);
                         lastQuitId = lastEventId;
-                        EntityLog.log(ServiceSynchronize.this, "### quitting startId=" + lastEventId);
                         quit(lastEventId);
                     }
                 }
@@ -852,7 +854,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 Log.e(ex);
             }
 
-
         return START_STICKY;
     }
 
@@ -897,7 +898,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private void onAlarm(Intent intent) {
         schedule(this, true);
-        updateNetworkState(null, "alarm");
 
         Bundle command = new Bundle();
         command.putString("name", "eval");
@@ -1904,7 +1904,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                 " backoff=" + backoff +
                                                 " host=" + account.host +
                                                 " ex=" + Log.formatThrowable(last_fail, false);
-                                        if (compensate > 1)
+                                        if (compensate > 2)
                                             Log.e(msg);
                                         EntityLog.log(this, msg);
 
@@ -2175,6 +2175,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         private void post(Bundle command) {
             EntityLog.log(ServiceSynchronize.this, "### command " +
                     TextUtils.join(" ", Log.getExtras(command)));
+
+            if (command.getBoolean("sync"))
+                lastNetworkState = ConnectionHelper.getNetworkState(ServiceSynchronize.this);
+
             post(command, lastNetworkState, lastAccountStates);
         }
 

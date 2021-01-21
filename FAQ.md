@@ -47,22 +47,22 @@ Related questions:
 
 ## How to ...?
 
-* Change the account name: Setup, step 1, Manage, tap account
-* Change the swipe left/right target: Setup, Behavior, Set swipe actions
-* Change password: Setup, step 1, Manage, tap account, change password
-* Set a signature: Setup, step 2, Manage, tap identity, Edit signature.
+* Change the account name: Settings, scroll to step 1, tap Manage, tap account
+* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
+* Change password: Settings, scroll to step 1, tap Manage, tap account, change password
+* Set a signature: Settings, scroll to step 2, tap Manage, tap identity, Edit signature.
 * Add CC and BCC addresses: tap the people's icon at the end of the subject
 * Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
 * Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
 * Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
-* Load more messages: long press a folder in the folder list, select *Synchronize more messages*
+* Load more messages: long press a folder in the folder list, select *Fetch more messages*
 * Delete a message, skipping trash: in the 3-dots menu just above the message text *Delete* or alternatively, unselect the trash folder in the account settings
-* Delete an account/identity: Setup step 1/2, Manage, tap account/identity, three-dots menu, Delete
+* Delete an account/identity: Settings, scroll to step 1/2, tap Manage, tap account/identity, three-dots menu, Delete
 * Delete a folder: long press the folder in the folder list, Edit properties, three-dots menu, Delete
 * Undo send: Outbox, tap message, tap undo icon button
 * Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
-* Change system folders: Setup, step 1, Manage, tap account, at the bottom
-* Export/import settings: Setup, navigation/hamburger menu
+* Change system folders: Settings, scroll to step 1, tap Manage, tap account, at the bottom
+* Export/import settings: Settings, navigation/hamburger menu
 
 ## Known problems
 
@@ -289,6 +289,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(161) Can you add a setting to change the primary and accent color?](#user-content-faq161)
 * [(162) Is IMAP NOTIFY supported?](#user-content-faq162)
 * [(163) What is message classification?](#user-content-faq163)
+* [(164) Can you add customizable themes?](#user-content-faq164)
 
 [I have another question.](#user-content-support)
 
@@ -501,7 +502,7 @@ because Google approved the use of OAuth for official builds only.
 If you don't want to use an on-device Gmail account,
 you can either enable access for "less secure apps" and use your account password (not advised)
 or enable two factor authentication and use an app specific password.
-To use a password you'll need to setup an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
+To use a password you'll need to set up an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
 
 Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
@@ -997,6 +998,7 @@ There are general errors and errors specific to Gmail accounts (see below).
 
 **General errors**
 
+<a name="authfailed"></a>
 The error *... Authentication failed ...* or *... AUTHENTICATE failed ...* likely means that your username or password was incorrect.
 Some providers expect as username just *username* and others your full email address *username@example.com*.
 When copying/pasting to enter a username or password, invisible characters might be copied, which could cause this problem as well.
@@ -1033,12 +1035,18 @@ The error *... Software caused connection abort ...*
 means that the email server or something between FairEmail and the email server actively terminated an existing connection.
 This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
 
-The errors *... BYE Logging out ...*, *... Connection reset by peer ...* mean that the email server actively terminated an existing connection.
+The errors *... BYE Logging out ...*, *... Connection reset ...* mean that the email server actively terminated an existing connection.
 
 The error *... Connection closed by peer ...* might be caused by a not updated Exchange server,
 see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
 
 The errors *... Read error ...*, *... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
+
+<a name="connectiondropped"></a>
+The error *... Connection dropped by server? ...* means that the email server unexpectedly terminated the connection.
+This sometimes happen when there were too many connections in a too short time or when a wrong password was used for too many times.
+In this case, please make sure your password is correct and disable receiving in the receive settings for about 30 minutes and try again.
+If needed, see [this FAQ](#user-content-faq23) about how you can reduce the number of connections.
 
 The error *... Unexpected end of zlib input stream ...* means that not all data was received, possibly due to a bad or interrupted connection.
 
@@ -2630,7 +2638,7 @@ Empty messages and/or corrupt attachments are probably being caused by a bug in 
 Older Microsoft Exchange software is known to cause this problem.
 Mostly you can workaround this by disabling *Partial fetch* in the advanced account settings:
 
-Setup > Step 1 > Manage > Tap account > Tap advanced > Partial fetch > uncheck
+Settings > scroll to step 1 > tap Manage > tap account > tap advanced > Partial fetch > uncheck
 
 After disabling this setting, you can use the message 'more' (three dots) menu to 'resync' empty messages.
 Alternatively, you can *Delete local messages* by long pressing the folder(s) in the folder list and synchronize all messages again.
@@ -2658,6 +2666,7 @@ OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth f
 **(112) Which email provider do you recommend?**
 
 FairEmail is an email client only, so you need to bring your own email address.
+Note that this is clearly mentioned in the app description.
 
 There are plenty of email providers to choose from.
 Which email provider is best for you depends on your wishes/requirements.
@@ -2973,7 +2982,7 @@ that non-standard protocols, like Microsoft Exchange Web Services and Microsoft 
 
 *POP3*
 
-In the account settings (Setup, step 1, Manage, tap account) you can enable *Leave deleted messages on server*.
+In the account settings (Settings, scroll to step 1, tap Manage, tap account) you can enable *Leave deleted messages on server*.
 
 *IMAP*
 
@@ -3009,8 +3018,8 @@ It is easy to read through the received messages before continuing to write the 
 
 Deleting an account/identity/folder is a little bit hidden to prevent accidents.
 
-* Account: Setup > Step 1 > Manage > Tap account
-* Identity: Setup > Step 2 > Manage > Tap identity
+* Account: Settings > scroll to step 1 > tap Manage > tap account
+* Identity: Settings > scroll to step 2 > tap Manage > tap identity
 * Folder: Long press the folder in the folder list > Edit properties
 
 In the three-dots overflow menu at the top right there is an item to delete the account/identity/folder.
@@ -3063,6 +3072,8 @@ you@example.com\shared@example.com
 
 Note that it should be a backslash and not a forward slash.
 
+When using a shared mailbox, you'll likely want to enable the option *Synchronize shared folder lists* in the receive settings.
+
 <br />
 
 <a name="faq140"></a>
@@ -3086,7 +3097,7 @@ However, some email servers are not configured properly and do not send these at
 In this case FairEmail tries to identify the drafts folder by name,
 but this might fail if the drafts folder has an unusual name or is not present at all.
 
-You can fix this problem by manually selecting the drafts folder in the account settings (Setup, step 1, tap account, at the bottom).
+You can fix this problem by manually selecting the drafts folder in the account settings (Settings, scroll to step 1, tap account, at the bottom).
 If there is no drafts folder at all,
 you can create a drafts folder by tapping on the '+' button in the folder list of the account (tap on the account name in the navigation menu).
 
@@ -3153,8 +3164,8 @@ Voice notes will automatically be attached.
 
 Account:
 
-* Enable *Separate notifications* in the advanced account settings (Setup, step 1, Manage, tap account, tap Advanced)
-* Long press the account in the account list (Setup, step 1, Manage) and select *Edit notification channel* to change the notification sound
+* Enable *Separate notifications* in the advanced account settings (Settings, scroll to step 1, tap Manage, tap account, tap Advanced)
+* Long press the account in the account list (Settings, scroll to step 1, tap Manage) and select *Edit notification channel* to change the notification sound
 
 Folder:
 
@@ -3182,7 +3193,7 @@ Sometimes the server received date/time is incorrect,
 mostly because messages were incorrectly imported from another server and sometimes due to a bug in the email server.
 
 In these rare cases, it is possible to let FairEmail use either the date/time from the *Date* header (sent time) or from the *Received* header as a workaround.
-This can be changed in the advanced account settings: Setup, step 1, Manage, tap account, tap Advanced.
+This can be changed in the advanced account settings: Settings, scroll to step 1, tap Manage, tap account, tap Advanced.
 
 This will not change the time of already synchronized messages.
 To solve this, long press the folder(s) in the folder list and select *Delete local messages* and *Synchronize now*.
@@ -3473,6 +3484,17 @@ You can delete all classification data by turning classification in the miscella
 [Filter rules](#user-content-faq71) will be executed before classification.
 
 Message classification is a pro feature, except for the spam folder.
+
+<br />
+
+<a name="faq164"></a>
+**(164) Can you add customizable themes?**
+
+Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes,
+which means all themes need to be predefined.
+
+Moreover, a theme is more than just a few colors.
+For example themes with a yellow accent color use a darker link color for enough contrast.
 
 <br />
 

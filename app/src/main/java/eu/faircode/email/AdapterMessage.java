@@ -50,6 +50,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -259,6 +260,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean collapse_quotes;
     private boolean authentication;
     private boolean language_detection;
+    private List<String> languages;
     private static boolean debug;
 
     private boolean gotoTop = false;
@@ -354,6 +356,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageView ivThread;
         private TextView tvExpand;
         private TextView tvPreview;
+        private TextView tvNotes;
         private TextView tvError;
         private ImageButton ibHelp;
 
@@ -427,6 +430,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibSearch;
         private ImageButton ibSeen;
         private ImageButton ibAnswer;
+        private ImageButton ibNotes;
         private ImageButton ibLabels;
         private ImageButton ibKeywords;
         private ImageButton ibCopy;
@@ -514,6 +518,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvKeywords = itemView.findViewById(R.id.tvKeywords);
             tvExpand = itemView.findViewById(R.id.tvExpand);
             tvPreview = itemView.findViewById(R.id.tvPreview);
+            tvNotes = itemView.findViewById(R.id.tvNotes);
             tvFolder = itemView.findViewById(R.id.tvFolder);
             tvLabels = itemView.findViewById(R.id.tvLabels);
             tvCount = itemView.findViewById(R.id.tvCount);
@@ -651,6 +656,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearch = vsBody.findViewById(R.id.ibSearch);
             ibSeen = vsBody.findViewById(R.id.ibSeen);
             ibAnswer = vsBody.findViewById(R.id.ibAnswer);
+            ibNotes = vsBody.findViewById(R.id.ibNotes);
             ibLabels = vsBody.findViewById(R.id.ibLabels);
             ibKeywords = vsBody.findViewById(R.id.ibKeywords);
             ibCopy = vsBody.findViewById(R.id.ibCopy);
@@ -752,6 +758,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearch.setOnClickListener(this);
                 ibSeen.setOnClickListener(this);
                 ibAnswer.setOnClickListener(this);
+                ibNotes.setOnClickListener(this);
                 ibLabels.setOnClickListener(this);
                 ibKeywords.setOnClickListener(this);
                 ibCopy.setOnClickListener(this);
@@ -862,6 +869,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearch.setOnClickListener(null);
                 ibSeen.setOnClickListener(null);
                 ibAnswer.setOnClickListener(null);
+                ibNotes.setOnClickListener(null);
                 ibLabels.setOnClickListener(null);
                 ibKeywords.setOnClickListener(null);
                 ibCopy.setOnClickListener(null);
@@ -920,6 +928,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvFolder.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 0.9f);
                 tvLabels.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 0.9f);
                 tvPreview.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 0.9f);
+                tvNotes.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * 0.9f);
             }
 
             // Selected / disabled
@@ -958,6 +967,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvCount.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivThread.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 tvPreview.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
+                tvNotes.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 tvError.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
             }
 
@@ -1124,6 +1134,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     preview_italic ? Typeface.ITALIC : Typeface.NORMAL);
             tvPreview.setText(message.preview);
             tvPreview.setVisibility(preview && !TextUtils.isEmpty(message.preview) ? View.VISIBLE : View.GONE);
+
+            tvNotes.setText(message.notes);
+            tvNotes.setVisibility(TextUtils.isEmpty(message.notes) ? View.GONE : View.VISIBLE);
 
             // Error / warning
             String error = message.error;
@@ -1325,6 +1338,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearch.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
+            ibNotes.setVisibility(View.GONE);
             ibLabels.setVisibility(View.GONE);
             ibKeywords.setVisibility(View.GONE);
             ibCopy.setVisibility(View.GONE);
@@ -1512,6 +1526,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearch.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
+            ibNotes.setVisibility(View.GONE);
             ibLabels.setVisibility(View.GONE);
             ibKeywords.setVisibility(View.GONE);
             ibCopy.setVisibility(View.GONE);
@@ -1666,6 +1681,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_move = prefs.getBoolean("button_move", true);
                     boolean button_copy = prefs.getBoolean("button_copy", false);
                     boolean button_keywords = prefs.getBoolean("button_keywords", false);
+                    boolean button_notes = prefs.getBoolean("button_notes", false);
                     boolean button_seen = prefs.getBoolean("button_seen", false);
                     boolean button_search = prefs.getBoolean("button_search", false);
                     boolean button_event = prefs.getBoolean("button_event", false);
@@ -1686,6 +1702,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibSearch.setVisibility(tools && button_search && (froms > 0 || tos > 0) ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
                     ibAnswer.setVisibility(!tools || outbox || (!expand_all && expand_one) ? View.GONE : View.VISIBLE);
+                    ibNotes.setVisibility(tools && button_notes ? View.VISIBLE : View.GONE);
                     ibLabels.setVisibility(tools && labels_header && labels ? View.VISIBLE : View.GONE);
                     ibKeywords.setVisibility(tools && button_keywords && keywords ? View.VISIBLE : View.GONE);
                     ibCopy.setVisibility(tools && button_copy && move ? View.VISIBLE : View.GONE);
@@ -1815,12 +1832,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     .append(message.total == null ? "-" : Helper.humanReadableByteCount(message.total));
             tvSizeEx.setText(size.toString());
 
-            tvLanguageTitle.setVisibility(
-                    show_addresses && language_detection && message.language != null
-                            ? View.VISIBLE : View.GONE);
-            tvLanguage.setVisibility(
-                    show_addresses && language_detection && message.language != null
-                            ? View.VISIBLE : View.GONE);
+            boolean showLanguage = (language_detection && message.language != null &&
+                    (show_addresses ||
+                            (languages != null && !languages.contains(message.language))));
+            tvLanguageTitle.setVisibility(showLanguage ? View.VISIBLE : View.GONE);
+            tvLanguage.setVisibility(showLanguage ? View.VISIBLE : View.GONE);
             tvLanguage.setText(message.language == null ? null : new Locale(message.language).getDisplayLanguage());
 
             tvSubjectEx.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
@@ -2973,6 +2989,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     case R.id.ibAnswer:
                         onActionAnswer(message, ibAnswer);
                         break;
+                    case R.id.ibNotes:
+                        onMenuNotes(message);
+                        break;
                     case R.id.ibLabels:
                         onActionLabels(message);
                         break;
@@ -4014,6 +4033,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean button_move = prefs.getBoolean("button_move", true);
             boolean button_copy = prefs.getBoolean("button_copy", false);
             boolean button_keywords = prefs.getBoolean("button_keywords", false);
+            boolean button_notes = prefs.getBoolean("button_notes", false);
             boolean button_seen = prefs.getBoolean("button_seen", false);
             boolean button_search = prefs.getBoolean("button_search", false);
             boolean button_event = prefs.getBoolean("button_event", false);
@@ -4031,6 +4051,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_button_move).setChecked(button_move);
             popupMenu.getMenu().findItem(R.id.menu_button_copy).setChecked(button_copy);
             popupMenu.getMenu().findItem(R.id.menu_button_keywords).setChecked(button_keywords);
+            popupMenu.getMenu().findItem(R.id.menu_button_notes).setChecked(button_notes);
             popupMenu.getMenu().findItem(R.id.menu_button_seen).setChecked(button_seen);
             popupMenu.getMenu().findItem(R.id.menu_button_search).setChecked(button_search);
             popupMenu.getMenu().findItem(R.id.menu_button_event).setChecked(button_event);
@@ -4109,6 +4130,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         case R.id.menu_button_keywords:
                             onMenuButton(message, "keywords", target.isChecked());
                             return true;
+                        case R.id.menu_button_notes:
+                            onMenuButton(message, "notes", target.isChecked());
+                            return true;
                         case R.id.menu_button_seen:
                             onMenuButton(message, "seen", target.isChecked());
                             return true;
@@ -4163,6 +4187,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             return true;
                         case R.id.menu_resync:
                             onMenuResync(message);
+                            return true;
+                        case R.id.menu_edit_notes:
+                            onMenuNotes(message);
                             return true;
                         case R.id.menu_search_in_text:
                             onMenuSearch(message);
@@ -4600,6 +4627,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "message:resync");
+        }
+
+        private void onMenuNotes(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            args.putString("notes", message.notes);
+
+            FragmentDialogNotes fragment = new FragmentDialogNotes();
+            fragment.setArguments(args);
+            fragment.show(parentFragment.getParentFragmentManager(), "edit:notes");
         }
 
         private void onMenuSearch(TupleMessageEx message) {
@@ -5335,6 +5372,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.authentication = prefs.getBoolean("authentication", true);
         this.language_detection = prefs.getBoolean("language_detection", false);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            languages = new ArrayList<>();
+            LocaleList ll = context.getResources().getConfiguration().getLocales();
+            for (int i = 0; i < ll.size(); i++)
+                languages.add(ll.get(i).getLanguage());
+        } else
+            languages = null;
+
         debug = prefs.getBoolean("debug", false);
 
         DiffUtil.ItemCallback<TupleMessageEx> callback = new DiffUtil.ItemCallback<TupleMessageEx>() {
@@ -5499,6 +5544,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!Objects.equals(prev.preview, next.preview)) {
                     same = false;
                     log("preview changed", next.id);
+                }
+                if (!Objects.equals(prev.notes, next.notes)) {
+                    same = false;
+                    log("notes changed", next.id);
                 }
                 if (!Objects.equals(prev.sent, next.sent)) {
                     same = false;
@@ -6616,6 +6665,53 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             getArguments().putBoolean("block_sender", cbBlockSender.isChecked());
                             getArguments().putBoolean("block_domain", cbBlockDomain.isChecked());
                             sendResult(RESULT_OK);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create();
+        }
+    }
+
+    public static class FragmentDialogNotes extends FragmentDialogBase {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            final long id = getArguments().getLong("id");
+            final String notes = getArguments().getString("notes");
+
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_notes, null);
+            final EditText etNote = view.findViewById(R.id.etNote);
+            etNote.setText(notes);
+
+            return new AlertDialog.Builder(getContext())
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Bundle args = new Bundle();
+                            args.putLong("id", id);
+                            args.putString("notes", etNote.getText().toString());
+
+                            new SimpleTask<Void>() {
+                                @Override
+                                protected Void onExecute(Context context, Bundle args) {
+                                    long id = args.getLong("id");
+                                    String notes = args.getString("notes");
+
+                                    if ("".equals(notes.trim()))
+                                        notes = null;
+
+                                    DB db = DB.getInstance(context);
+                                    db.message().setMessageNotes(id, notes);
+
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onException(Bundle args, Throwable ex) {
+                                    Log.unexpectedError(getParentFragmentManager(), ex);
+                                }
+                            }.execute(getContext(), getActivity(), args, "message:note");
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)

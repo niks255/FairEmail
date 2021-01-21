@@ -43,22 +43,22 @@ Domande correlate:
 
 ## Come fare per ...?
 
-* Cambiare il nome dell'account: Impostazioni, passo 1, Gestisci, tocca l'account
-* Cambiare l'azione di scorrimento a sinistra/destra: Impostazioni, Comportamento, Imposta azioni di scorrimento
-* Cambiare password: Impostazioni, passo 1, Gestisci, tocca l'account, cambia la password
-* Impostare una firma: Impostazioni, passo 2, Gestisci, tocca l'identità, Modifica firma.
+* Change the account name: Settings, scroll to step 1, tap Manage, tap account
+* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
+* Change password: Settings, scroll to step 1, tap Manage, tap account, change password
+* Set a signature: Settings, scroll to step 2, tap Manage, tap identity, Edit signature.
 * Aggiungere indirizzi CC e CCN: tocca l'icona persone alla fine dell'oggetto dell'email
 * Andare al messaggio successivo/precedente all'archiviazione/eliminazione: nelle impostazioni di comportamento disattiva *Chiudi automaticamente le conversazioni* e seleziona *Vai alla conversazione precedente/successiva* sotto *Alla chiusura di una conversazione*
 * Aggiungere una cartella nella casella di posta unificata: premi a lungo la cartella nell'elenco delle cartelle e spunta *Mostra nella casella di posta unificata*
 * Aggiungere una cartella al menu di navigazione: premi a lungo la cartella nell'elenco delle cartelle e spunta *Mostra nel menu di navigazione*
-* Caricare più messaggi: premi a lungo una cartella nell'elenco delle cartelle, seleziona *Sincronizza più messaggi*
+* Load more messages: long press a folder in the folder list, select *Fetch more messages*
 * Eliminare un messaggio, evitando il cestino: nel menu a 3 punti appena sopra il testo del messaggio *Elimina* o, in alternativa, deseleziona la cartella cestino nelle impostazioni dell'account
-* Eliminare un account/identità: Impostazioni, passi 1/2, Gestisci, tocca account/identità, menu a tre punti, Elimina
+* Delete an account/identity: Settings, scroll to step 1/2, tap Manage, tap account/identity, three-dots menu, Delete
 * Eliminare una cartella: premi a lungo la cartella nell'elenco delle cartelle, Modifica le proprietà, menu a tre punti, Elimina
 * Annullare l'invio: posta In uscita, tocca il messaggio, tocca l'icona Annulla
 * Conservare i messaggi inviati nella posta in arrivo: [vedi queste domande frequenti](#user-content-faq142)
-* Cambiare cartelle di sistema: Impostazioni, passo 1, Gestisci, tocca l'account, in fondo
-* Impostazioni di esportazione/importazione: Impostazioni, menu di navigazione/menu hamburger
+* Change system folders: Settings, scroll to step 1, tap Manage, tap account, at the bottom
+* Export/import settings: Settings, navigation/hamburger menu
 
 ## Problemi noti
 
@@ -282,6 +282,7 @@ Il design è basato su molte discussioni e se vuoi puoi discuterne anche tu [in 
 * [(161) Puoi aggiungere un'impostazione per modificare il colore primario e di cadenza?](#user-content-faq161)
 * [(162) IMAP NOTIFY è supportato?](#user-content-faq162)
 * [(163) Cos'è la classificazione dei messaggi?](#user-content-faq163)
+* [(164) Can you add customizable themes?](#user-content-faq164)
 
 [Ho un'altra domanda.](#user-content-support)
 
@@ -462,7 +463,7 @@ Alcune persone chiedono:
 
 Se usi la versione del Play Store o di GitHub di FairEmail, puoi usare la procedura guidata di configurazione rapida per configurare facilmente un profilo e un'identità di Gmail. La procedura guidata di configurazione rapida di Gmail non è disponibile per le build di terze parti, come le build di F-Droid, perché Google ha approvato l'uso di OAuth solo per le build ufficiali.
 
-Se non vuoi usare un profilo sul dispositivo di Gmail, puoi abilitare l'accesso per le "app meno sicure" e usare la password del tuo profilo (sconsigliato) o abilitare l'autenticazione a due fattori e usare una password specifica dell'app. Per usare una password dovrai configurare un profilo e identità tramite i passaggi 1 e 2 della configurazione invece che tramite la procedura guidata rapida.
+Se non vuoi usare un profilo sul dispositivo di Gmail, puoi abilitare l'accesso per le "app meno sicure" e usare la password del tuo profilo (sconsigliato) o abilitare l'autenticazione a due fattori e usare una password specifica dell'app. To use a password you'll need to set up an account and identity via setup step 1 and 2 instead of via the quick setup wizard.
 
 Sei pregato di vedere [questa FAQ](#user-content-faq111) sul perché sono utilizzabili i profili su dispositivo.
 
@@ -851,6 +852,7 @@ Esistono degli errori generali e specifici ai profili di Gmail (vedi sotto).
 
 **Errori generali**
 
+<a name="authfailed"></a>
 L'errore *... Autenticazione fallita ...* o *... AUTHENTICATE fallito ...* potrebbe significare che il tuo nome utente o la tua password siano scorretti. Alcuni provider prevedono come nome utente solo il *nome utente* e altri il tuo indirizzo email completo *username@example.com*. Quando copi/incolli per inserire un nome utente o una password, potrebbero essere copiati i caratteri invisibili, che potrebbero anche causare questo problema. Anche alcuni gestori di password sono noti per farlo in modo scorretto. Il nome utente potrebbe essere sensibile alle maiuscole, quindi prova con soli caratteri minuscoli. La password è quasi sempre sensibile alle maiuscole. Alcuni provider richiedono l'uso di una password dell'app invece di quella del profilo, quindi sei pregato di controllare la documentazione del provider. A volte è necessario abilitare l'accesso esterno (IMAP/SMTP) sul sito web del provider prima. Altre cause possibili sono che il profilo è bloccato o che l'accesso è stato limitato amministrativamente in qualche modo, per esempio consentendo di accedere solo da certe reti / indirizzi IP.
 
 L'errore *... Troppi tentativi errati di autenticazione ...* potrebbe significare che stai usando una password del profilo di Yahoo invece di una password dell'app. Sei pregato di vedere [questa FAQ](#user-content-faq88) su come configurare un profilo di Yahoo.
@@ -875,21 +877,24 @@ L'errore *... Connessione chiusa da pari ...* potrebbe esser causata da un serve
 
 Gli errori *... Errore di lettura ...*, *... Errore di scrittura ...*, *... Lettura scaduta ...*, *... Conduttura rotta ...* significa che il server dell'email non risponde più o che la connessione internet non è buona.
 
-L'errore *... Interruzione imprevista del flusso di input di zlib ...* significa che non tutti i dati sono stati ricevuti, possibilmente a causa di una connessione interrotta o non buona.
+<a name="connectiondropped"></a>
+L'errore *... Connection dropped by server? ...* means that the email server unexpectedly terminated the connection. This sometimes happen when there were too many connections in a too short time or when a wrong password was used for too many times. In this case, please make sure your password is correct and disable receiving in the receive settings for about 30 minutes and try again. If needed, see [this FAQ](#user-content-faq23) about how you can reduce the number of connections.
 
-L'errore *... connessione fallita ...* potrebbe indicare [Troppe connessioni simultanee](#user-content-faq23).
+The error *... Unexpected end of zlib input stream ...* means that not all data was received, possibly due to a bad or interrupted connection.
 
-L'avviso *... Crittografia non supportata ...* significa che la serie di caratteri del messaggio è sconosciuta o non supportata. FairEmail presumerà ISO-8859-1 (Latin1), che in gran parte dei casi risulterà nel mostrare correttamente il messaggio.
+The error *... connection failure ...* could indicate [Too many simultaneous connections](#user-content-faq23).
 
-Sei pregato di [vedere qui](#user-content-faq4) per gli errori *... Inaffidabile ... non nel certificato ...*, *... Certificato di sicurezza non valido (Impossibile verificare l'identità del server) ...* o *... Ancoraggio di fiducia per il percorso di certificazione non trovato ...*
+The warning *... Unsupported encoding ...* means that the character set of the message is unknown or not supported. FairEmail will assume ISO-8859-1 (Latin1), which will in most cases result in showing the message correctly.
 
-Sei pregato di [vedere qui](#user-content-faq127) per l'errore *... Argomenti HELO sintatticamente non validi ...*.
+Please [see here](#user-content-faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
-Sei pregato di [vedere qui](#user-content-faq41) per l'errore *... Stretta di mano fallita ...*.
+Please [see here](#user-content-faq127) for the error *... Syntactically invalid HELO argument(s) ...*.
 
-Vedi [qui](https://linux.die.net/man/3/connect) per cosa significano i codici di errore come EHOSTUNREACH e ETIMEDOUT.
+Please [see here](#user-content-faq41) for the error *... Handshake failed ...*.
 
-Cause possibili sono:
+See [here](https://linux.die.net/man/3/connect) for what error codes like EHOSTUNREACH and ETIMEDOUT mean.
+
+Possible causes are:
 
 * Un firewall o router sta bloccando le connessioni al server
 * Il nome dell'host o numero di porta non è valido
@@ -899,13 +904,13 @@ Cause possibili sono:
 * Il server dell'email rifiuta di accettare un messaggio, ad esempio perché troppo grande o contenente collegamenti inaccettabili
 * Ci sono troppe connessioni al server, vedi anche la prossima domanda
 
-Molte reti Wi-Fi pubbliche bloccano le email in uscita per prevenire lo spam. A volte puoi risolverlo usando un'altra porta SMTP. Vedi la documentazione del provider per i numeri di porta utilizzabili.
+Many public Wi-Fi networks block outgoing email to prevent spam. Sometimes you can workaround this by using another SMTP port. See the documentation of the provider for the usable port numbers.
 
-Se stai usando una [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), il provider della VPN potrebbe bloccare la connessione perché prova troppo aggressivamente a prevenire lo spam. Nota che anche [Google Fi](https://fi.google.com/) sta usando una VPN.
+If you are using a [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), the VPN provider might block the connection because it is too aggressively trying to prevent spam. Note that [Google Fi](https://fi.google.com/) is using a VPN too.
 
-**Errori di invio**
+**Send errors**
 
-I server SMTP possono rifiutare i messaggi per [varie motivazioni](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes). Messaggi troppo grandi e l'innesco del filtro di spam di un server email sono i motivi più comuni.
+SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes). Too large messages and triggering the spam filter of an email server are the most common reasons.
 
 * Il limite della dimensione dell'allegato per Gmail [è 25 MB](https://support.google.com/mail/answer/6584)
 * Il limite delle dimensioni dell'allegato per Outlook e Office 365 [è 20 MB](https://support.microsoft.com/en-us/help/2813269/attachment-size-exceeds-the-allowable-limit-error-when-you-add-a-large)
@@ -917,7 +922,7 @@ I server SMTP possono rifiutare i messaggi per [varie motivazioni](https://en.wi
 * *550 Messaggio di spam rifiutato perché l'IP è elencato per ...* significa che il server dell'email ha rifiutato di inviare un messaggio dall'indirizzo di rete attuale (pubblico) perché usato erroneamente per inviare spam da qualcun altro (si spera) in precedenza. Sei pregato di provare ad abilitare la modalità aereo per 10 minuti per acquisire un nuovo indirizzo di rete.
 * *571 5.7.1 Il messaggio contiene spam o virus o il mittente è bloccato ...* significa che il server dell'email ha considerato un messaggio come spam. Questo significa probabilmente che i filtri spam del server email sono troppo rigidi. Dovrai contattare il provider di posta elettronica per avere supporto a riguardo.
 
-Se vuoi usare il server SMTP di Gmail per risolvere un filtro spam in uscita troppo severo o per migliorare la consegna dei messaggi:
+If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
 
 * Verifica il tuo indirizzo email [qui](https://mail.google.com/mail/u/0/#settings/accounts) (dovrai usare un browser desktop)
 * Cambia le impostazioni di identità come queste (configurazione, fase 2, tocca Gestisci, tocca identità):
@@ -926,19 +931,19 @@ Se vuoi usare il server SMTP di Gmail per risolvere un filtro spam in uscita tro
 
 <br />
 
-**Errori di Gmail**
+**Gmail errors**
 
-L'autorizzazione della configurazione dei profili di Gmail con la procedura guidata rapida devono essere ricaricati periodicamente tramite il [gestore del profilo Android](https://developer.android.com/reference/android/accounts/AccountManager). Questo richiede i permessi di contatto/profilo e connettività internet.
+The authorization of Gmail accounts setup with the quick wizard needs to be periodically refreshed via the [Android account manager](https://developer.android.com/reference/android/accounts/AccountManager). This requires contact/account permissions and internet connectivity.
 
-L'errore *... Autenticazione fallita ... Profilo non trovato ...* significa che un profilo di Gmail precedentemente autorizzato è stato rimosso dal dispositivo.
+The error *... Autenticazione fallita ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
 
-Gli errori *... Autenticazione fallita ... Nessun token ...* significa che il manager del profilo di Android non è riuscito a ricaricare l'autorizzazione di un profilo di Gmail.
+The errors *... Authentication failed ... No token ...* means that the Android account manager failed to refresh the authorization of a Gmail account.
 
-L'errore *... Autenticazione fallita ... errore di rete ...* significa che il manager del profilo di Android non è riuscito a ricaricare l'autorizzazione di un profilo di Gmail a causa di problemi con la connessione a internet
+L'errore *... Authentication failed ... network error ...* means that the Android account manager was not able to refresh the authorization of a Gmail account due to problems with the internet connection
 
-L'errore *... Autenticazione fallita ... Credenziali non valide ...* potrebbe essere causato dal cambiamento della password del profilo o avendo revocati i permessi di profilo/contatti necessari. Nel caso in cui la password del profilo fosse cambiata, dovrai autenticare di nuovo le impostazioni del profilo di Android. Nel caso in cui fossero stati revocati i permessi, puoi avviare la procedura guidata di configurazione rapida di Gmail per garantire di nuovo i permessi richiesti (non devi riconfigurare il profilo).
+The error *... Authentication failed ... Invalid credentials ...* could be caused by changing the account password or by having revoked the required account/contacts permissions. In case the account password was changed, you'll need to authenticate the Google account in the Android account settings again. In case the permissions were revoked, you can start the Gmail quick setup wizard to grant the required permissions again (you don't need to setup the account again).
 
-L'errore *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/): "*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*", see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
+The eror *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/): "*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*", see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
 
 When in doubt, you can ask for [support](#user-content-support).
 
@@ -1266,7 +1271,7 @@ See also [this FAQ](#user-content-faq4).
 
 L'errore '*Stretta di mano fallita ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
 
-L'errore '*Stretta di mano fallita ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
+The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
@@ -2176,7 +2181,7 @@ Some email clients use IMAP keywords for colors. However, not all servers suppor
 
 Empty messages and/or corrupt attachments are probably being caused by a bug in the server software. Older Microsoft Exchange software is known to cause this problem. Mostly you can workaround this by disabling *Partial fetch* in the advanced account settings:
 
-Setup > Step 1 > Manage > Tap account > Tap advanced > Partial fetch > uncheck
+Settings > scroll to step 1 > tap Manage > tap account > tap advanced > Partial fetch > uncheck
 
 After disabling this setting, you can use the message 'more' (three dots) menu to 'resync' empty messages. Alternatively, you can *Delete local messages* by long pressing the folder(s) in the folder list and synchronize all messages again.
 
@@ -2198,7 +2203,7 @@ OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth f
 <a name="faq112"></a>
 **(112) Which email provider do you recommend?**
 
-FairEmail is an email client only, so you need to bring your own email address.
+FairEmail is an email client only, so you need to bring your own email address. Note that this is clearly mentioned in the app description.
 
 There are plenty of email providers to choose from. Which email provider is best for you depends on your wishes/requirements. Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/) for a list of privacy oriented email providers with advantages and disadvantages.
 
@@ -2451,7 +2456,7 @@ Note that the desciption of FairEmail starts with the remark that non-standard p
 
 *POP3*
 
-In the account settings (Setup, step 1, Manage, tap account) you can enable *Leave deleted messages on server*.
+In the account settings (Settings, scroll to step 1, tap Manage, tap account) you can enable *Leave deleted messages on server*.
 
 *IMAP*
 
@@ -2479,8 +2484,8 @@ Similarly, drafts are shown in conversations to find them back in the context wh
 
 Deleting an account/identity/folder is a little bit hidden to prevent accidents.
 
-* Profilo: Configurazione > Passaggio 1 > Gestione > Tocca profilo
-* Identità: Configurazione > Passaggio 2 > Gestione > Tocca identità
+* Account: Settings > scroll to step 1 > tap Manage > tap account
+* Identity: Settings > scroll to step 2 > tap Manage > tap identity
 * Cartella: Lunga pressione sulla cartella nell'elenco delle cartelle > Modifica proprietà
 
 In the three-dots overflow menu at the top right there is an item to delete the account/identity/folder.
@@ -2530,6 +2535,8 @@ you@example.com\shared@example.com
 
 Note that it should be a backslash and not a forward slash.
 
+When using a shared mailbox, you'll likely want to enable the option *Synchronize shared folder lists* in the receive settings.
+
 <br />
 
 <a name="faq140"></a>
@@ -2544,7 +2551,7 @@ Displaying strange characters is almost always caused by specifying no or an inv
 
 To store draft messages a drafts folder is required. In most cases FairEmail will automatically select the drafts folders on adding an account based on [the attributes](https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml) the email server sends. However, some email servers are not configured properly and do not send these attributes. In this case FairEmail tries to identify the drafts folder by name, but this might fail if the drafts folder has an unusual name or is not present at all.
 
-You can fix this problem by manually selecting the drafts folder in the account settings (Setup, step 1, tap account, at the bottom). If there is no drafts folder at all, you can create a drafts folder by tapping on the '+' button in the folder list of the account (tap on the account name in the navigation menu).
+You can fix this problem by manually selecting the drafts folder in the account settings (Settings, scroll to step 1, tap account, at the bottom). If there is no drafts folder at all, you can create a drafts folder by tapping on the '+' button in the folder list of the account (tap on the account name in the navigation menu).
 
 Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
 
@@ -2598,8 +2605,8 @@ Voice notes will automatically be attached.
 
 Account:
 
-* Abilita *Notifiche separate* nelle impostazioni avanzate del profilo (Configurazione, passaggio 1, Gestione, tocca profilo, tocca Avanzate)
-* Premi a lungo il profilo nell'elenco dei profili (Configurazione, passaggio 1, Gestione) e seleziona *Modifica canale di notifica* per notificare il suono di notifica
+* Enable *Separate notifications* in the advanced account settings (Settings, scroll to step 1, tap Manage, tap account, tap Advanced)
+* Long press the account in the account list (Settings, scroll to step 1, tap Manage) and select *Edit notification channel* to change the notification sound
 
 Folder:
 
@@ -2625,7 +2632,7 @@ Since the sent date/time is optional and can be manipulated by the sender, FairE
 
 Sometimes the server received date/time is incorrect, mostly because messages were incorrectly imported from another server and sometimes due to a bug in the email server.
 
-In these rare cases, it is possible to let FairEmail use either the date/time from the *Date* header (sent time) or from the *Received* header as a workaround. This can be changed in the advanced account settings: Setup, step 1, Manage, tap account, tap Advanced.
+In these rare cases, it is possible to let FairEmail use either the date/time from the *Date* header (sent time) or from the *Received* header as a workaround. This can be changed in the advanced account settings: Settings, scroll to step 1, tap Manage, tap account, tap Advanced.
 
 This will not change the time of already synchronized messages. To solve this, long press the folder(s) in the folder list and select *Delete local messages* and *Synchronize now*.
 
@@ -2866,6 +2873,15 @@ You can delete all classification data by turning classification in the miscella
 [Filter rules](#user-content-faq71) will be executed before classification.
 
 Message classification is a pro feature, except for the spam folder.
+
+<br />
+
+<a name="faq164"></a>
+**(164) Can you add customizable themes?**
+
+Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need to be predefined.
+
+Moreover, a theme is more than just a few colors. For example themes with a yellow accent color use a darker link color for enough contrast.
 
 <br />
 

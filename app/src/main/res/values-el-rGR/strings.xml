@@ -439,7 +439,7 @@
     <string name="title_advanced_shortcuts">Προβολή των πιο συχνά χρησιμοποιούμενων επαφών στο μενού \"Κοινοποίηση\" του Android</string>
     <string name="title_advanced_conversation_actions">Να προτείνονται ενέργειες (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Να προτείνονται κείμενα απάντησης (Android 10+)</string>
-    <string name="title_advanced_language_detection">Detect message text language</string>
+    <string name="title_advanced_language_detection">Αναγνώριση της γλώσσας του κειμένου του μηνύματος</string>
     <string name="title_advanced_fts">Κατασκευή ευρετηρίου αναζήτησης</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d μηνύματα ευρετηριασμένα (%3$s)</string>
     <string name="title_advanced_classification">Ταξινόμηση μηνυμάτων</string>
@@ -734,6 +734,7 @@
     <string name="title_forward">Προώθηση</string>
     <string name="title_new_message">Νέο μήνυμα</string>
     <string name="title_editasnew">Επεξεργασία ως νέου</string>
+    <string name="title_edit_notes" comment="title_edit_notes&#10;Local notes is a free text you can enter and will be shown in the message header.">Edit local notes</string>
     <string name="title_create_rule">Δημιουργία κανόνα &#8230;</string>
     <string name="title_share">Κοινοποίηση</string>
     <string name="title_event">Προσθήκη στο ημερολόγιο</string>
@@ -851,6 +852,7 @@
     <string name="title_send_now">Αποστολή τώρα</string>
     <string name="title_send_via">Αποστολή μέσω</string>
     <string name="title_send_at">Αποστολή στις &#8230;</string>
+    <string name="title_send_archive">Archive read messages</string>
     <string name="title_send_encryption">Κρυπτογράφηση</string>
     <string name="title_send_priority">Προτεραιότητα</string>
     <string name="title_no_server">Δε βρέθηκε διακομιστής στο \'%1$s\'</string>

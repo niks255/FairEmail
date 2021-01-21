@@ -959,7 +959,7 @@ class Core {
                 if (newuid == null)
                     newuid = found;
                 else if (!newuid.equals(found)) {
-                    Log.e(folder.name + " Added=" + newuid + " found=" + found);
+                    Log.w(folder.name + " Added=" + newuid + " found=" + found);
                     newuid = Math.max(newuid, found);
                 }
 
@@ -1201,6 +1201,8 @@ class Core {
             throw new IllegalArgumentException("account missing");
 
         try {
+            db.folder().setFolderSyncState(folder.id, "syncing");
+
             if (removed) {
                 db.message().deleteMessage(folder.id, uid);
                 throw new MessageRemovedException("removed uid=" + uid);
@@ -1273,6 +1275,7 @@ class Core {
 
             db.message().deleteMessage(folder.id, uid);
         } finally {
+            db.folder().setFolderSyncState(folder.id, null);
             int count = MessageHelper.getMessageCount(ifolder);
             db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
         }

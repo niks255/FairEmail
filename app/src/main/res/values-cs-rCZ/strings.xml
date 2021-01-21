@@ -461,8 +461,8 @@
     <string name="title_advanced_external_search">Povolit ostatním aplikacím vyhledávat ve zprávách</string>
     <string name="title_advanced_shortcuts">Zobrazit často používané kontakty v nabídce sdílení Androidu</string>
     <string name="title_advanced_conversation_actions">Suggest actions (Android 10+)</string>
-    <string name="title_advanced_conversation_actions_replies">Suggest reply texts (Android 10+)</string>
-    <string name="title_advanced_language_detection">Detect message text language</string>
+    <string name="title_advanced_conversation_actions_replies">Navrhovat odpovědní texty (Android 10+)</string>
+    <string name="title_advanced_language_detection">Rozpoznat jazyk textu zprávy</string>
     <string name="title_advanced_fts">Sestavit index vyhledávání</string>
     <string name="title_advanced_fts_indexed">Indexováno %1$d / %2$d zpráv (%3$s)</string>
     <string name="title_advanced_classification">Classify messages</string>
@@ -757,6 +757,7 @@
     <string name="title_forward">Přeposlat</string>
     <string name="title_new_message">Nová zpráva</string>
     <string name="title_editasnew">Upravit jako novou</string>
+    <string name="title_edit_notes" comment="title_edit_notes&#10;Local notes is a free text you can enter and will be shown in the message header.">Edit local notes</string>
     <string name="title_create_rule">Vytvořit pravidlo &#8230;</string>
     <string name="title_share">Sdílet</string>
     <string name="title_event">Přidat do kalendáře</string>
@@ -874,6 +875,7 @@
     <string name="title_send_now">Odeslat nyní</string>
     <string name="title_send_via">Odeslat přes</string>
     <string name="title_send_at">Odeslat později &#8230;</string>
+    <string name="title_send_archive">Archive read messages</string>
     <string name="title_send_encryption">Šifrování</string>
     <string name="title_send_priority">Priorita</string>
     <string name="title_no_server">Nenalezen žádný server na „%1$s“</string>
