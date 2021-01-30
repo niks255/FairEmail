@@ -140,6 +140,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.webkit.WebViewFeature;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -316,7 +317,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             "DTAG_image".toLowerCase(Locale.ROOT),
             "$X-Me-Annot-1".toLowerCase(Locale.ROOT),
             "$X-Me-Annot-2".toLowerCase(Locale.ROOT),
-            "\\Unseen".toLowerCase(Locale.ROOT) // Mail.ru
+            "\\Unseen".toLowerCase(Locale.ROOT), // Mail.ru
+            "$sent".toLowerCase(Locale.ROOT), // Kmail
+            "$attachment".toLowerCase(Locale.ROOT), // Kmail
+            "$signed".toLowerCase(Locale.ROOT), // Kmail
+            "$encrypted".toLowerCase(Locale.ROOT) // Kmail
     ));
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
@@ -910,8 +915,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean inbox = EntityFolder.INBOX.equals(message.folderType);
             boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
             boolean outgoing = isOutgoing(message);
-            boolean reverse = (EntityFolder.isOutgoing(message.folderType) &&
-                    (viewType != ViewType.THREAD || !threading) && !show_recipients);
+            boolean reverse = (!show_recipients && outgoing && (viewType != ViewType.THREAD || !threading));
             Address[] senders = ContactInfo.fillIn(reverse ? message.to : message.senders, prefer_contact);
             Address[] recipients = ContactInfo.fillIn(reverse ? message.from : message.recipients, prefer_contact);
             boolean authenticated =
@@ -2857,10 +2861,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private boolean isOutgoing(TupleMessageEx message) {
             if (EntityFolder.isOutgoing(message.folderType))
                 return true;
-            else
-                return (message.identityEmail != null &&
-                        message.from != null && message.from.length == 1 &&
-                        message.identityEmail.equalsIgnoreCase(((InternetAddress) message.from[0]).getAddress()));
+            else {
+                if (message.identityEmail == null)
+                    return false;
+                if (message.from == null)
+                    return false;
+                for (Address from : message.from)
+                    if (message.identityEmail.equalsIgnoreCase(((InternetAddress) from).getAddress()))
+                        return true;
+                return false;
+            }
         }
 
         private TupleMessageEx getMessage() {
@@ -3698,18 +3708,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     full ? R.layout.dialog_show_full : R.layout.dialog_show_images, null);
             CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             CheckBox cbNotAgainDomain = dview.findViewById(R.id.cbNotAgainDomain);
-            CheckBox cbAlwaysImages = dview.findViewById(R.id.cbAlwaysImages);
-
-            if (full) {
-                cbAlwaysImages.setChecked(prefs.getBoolean("html_always_images", false));
-
-                cbAlwaysImages.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        prefs.edit().putBoolean("html_always_images", isChecked).apply();
-                    }
-                });
-            }
 
             if (message.from == null || message.from.length == 0) {
                 cbNotAgain.setVisibility(View.GONE);
@@ -3740,7 +3738,32 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (full) {
                 TextView tvDark = dview.findViewById(R.id.tvDark);
-                tvDark.setVisibility(Helper.isDarkTheme(context) ? View.VISIBLE : View.GONE);
+                CheckBox cbDark = dview.findViewById(R.id.cbDark);
+                CheckBox cbAlwaysImages = dview.findViewById(R.id.cbAlwaysImages);
+
+                cbDark.setChecked(prefs.getBoolean("html_dark", true));
+                cbAlwaysImages.setChecked(prefs.getBoolean("html_always_images", false));
+
+                cbDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        prefs.edit().putBoolean("html_dark", isChecked).apply();
+                    }
+                });
+
+                cbAlwaysImages.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        prefs.edit().putBoolean("html_always_images", isChecked).apply();
+                    }
+                });
+
+                boolean isDark = Helper.isDarkTheme(context);
+                boolean canDark = WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK);
+
+                tvDark.setVisibility(isDark && !canDark ? View.VISIBLE : View.GONE);
+                cbDark.setVisibility(isDark && canDark ? View.VISIBLE : View.GONE);
+
             } else {
                 boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
 
@@ -3996,6 +4019,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionJunk(TupleMessageEx message) {
+            boolean canBlock = false;
+            if (message.from != null && message.from.length > 0) {
+                String email = ((InternetAddress) message.from[0]).getAddress();
+                canBlock = !TextUtils.isEmpty(email) && Helper.EMAIL_ADDRESS.matcher(email).matches();
+            }
+
             Bundle aargs = new Bundle();
             aargs.putLong("id", message.id);
             aargs.putLong("account", message.account);
@@ -4004,6 +4033,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             aargs.putString("type", message.folderType);
             aargs.putString("from", MessageHelper.formatAddresses(message.from));
             aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
+            aargs.putBoolean("canBlock", canBlock);
 
             FragmentDialogJunk ask = new FragmentDialogJunk();
             ask.setArguments(aargs);
@@ -6475,6 +6505,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final String type = args.getString("type");
             final String from = args.getString("from");
             final boolean inJunk = args.getBoolean("inJunk");
+            final boolean canBlock = args.getBoolean("canBlock");
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
             final TextView tvMessage = view.findViewById(R.id.tvMessage);
@@ -6495,7 +6526,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
 
-            cbBlockSender.setEnabled(ActivityBilling.isPro(getContext()));
+            cbBlockSender.setEnabled(canBlock && ActivityBilling.isPro(getContext()));
             cbBlockDomain.setEnabled(false);
 
             cbBlockSender.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

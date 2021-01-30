@@ -3928,7 +3928,7 @@ public class FragmentCompose extends FragmentBase {
 
                     String text = HtmlHelper.getFullText(html);
                     data.draft.preview = HtmlHelper.getPreview(text);
-                    data.draft.language = HtmlHelper.getLanguage(context, text);
+                    data.draft.language = HtmlHelper.getLanguage(context, data.draft.subject, text);
                     db.message().setMessageContent(data.draft.id,
                             true,
                             data.draft.language,
@@ -4084,7 +4084,7 @@ public class FragmentCompose extends FragmentBase {
 
                         String text = HtmlHelper.getFullText(html);
                         data.draft.preview = HtmlHelper.getPreview(text);
-                        data.draft.language = HtmlHelper.getLanguage(context, text);
+                        data.draft.language = HtmlHelper.getLanguage(context, data.draft.subject, text);
                         db.message().setMessageContent(data.draft.id,
                                 true,
                                 data.draft.language,
@@ -4603,7 +4603,7 @@ public class FragmentCompose extends FragmentBase {
 
                     String full = HtmlHelper.getFullText(body);
                     draft.preview = HtmlHelper.getPreview(full);
-                    draft.language = HtmlHelper.getLanguage(context, full);
+                    draft.language = HtmlHelper.getLanguage(context, draft.subject, full);
                     db.message().setMessageContent(draft.id,
                             true,
                             draft.language,
@@ -4894,15 +4894,17 @@ public class FragmentCompose extends FragmentBase {
                                     draft.account, draft.thread, null, null);
                             for (EntityMessage threaded : messages) {
                                 EntityFolder source = db.folder().getFolder(threaded.folder);
-                                if (threaded.ui_seen && (threading ||
+                                boolean repliedto =
                                         (!TextUtils.isEmpty(draft.inreplyto) &&
-                                                draft.inreplyto.equals(threaded.msgid))) &&
+                                                draft.inreplyto.equals(threaded.msgid));
+                                if ((threaded.ui_seen || repliedto) &&
+                                        (threading || repliedto) &&
                                         source != null && !source.read_only &&
                                         archive != null && !archive.id.equals(threaded.folder) &&
                                         !EntityFolder.isOutgoing(source.type) &&
                                         !EntityFolder.TRASH.equals(source.type) &&
                                         !EntityFolder.JUNK.equals(source.type))
-                                    EntityOperation.queue(context, threaded, EntityOperation.MOVE, archive.id);
+                                    EntityOperation.queue(context, threaded, EntityOperation.MOVE, archive.id, repliedto);
                             }
                         }
                     }

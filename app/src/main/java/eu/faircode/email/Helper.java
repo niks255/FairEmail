@@ -146,6 +146,7 @@ public class Helper {
     static final float LOW_LIGHT = 0.6f;
 
     static final int BUFFER_SIZE = 8192; // Same as in Files class
+    static final long MIN_REQUIRED_SPACE = 250 * 1024L * 1024L;
 
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
     static final String PGP_END_MESSAGE = "-----END PGP MESSAGE-----";
@@ -738,7 +739,7 @@ public class Helper {
         return 0;
     }
 
-    static boolean isFoldable() {
+    static boolean isSurfaceDuo() {
         return ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo".equals(Build.MODEL));
     }
 
@@ -1216,6 +1217,18 @@ public class Helper {
     static long getTotalStorageSpace() {
         StatFs stats = new StatFs(Environment.getDataDirectory().getAbsolutePath());
         return stats.getTotalBytes();
+    }
+
+    static long getSize(File dir) {
+        long size = 0;
+        File[] listed = dir.listFiles();
+        if (listed != null)
+            for (File file : listed)
+                if (file.isDirectory())
+                    size += getSize(file);
+                else
+                    size += file.length();
+        return size;
     }
 
     static void openAdvanced(Intent intent) {

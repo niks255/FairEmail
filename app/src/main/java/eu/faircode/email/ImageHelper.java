@@ -158,7 +158,20 @@ class ImageHelper {
         Paint paint = new Paint();
         paint.setColor(lum < t ? Color.WHITE : Color.BLACK);
         paint.setTextSize(size / 2f);
-        paint.setTypeface(Typeface.DEFAULT_BOLD);
+        try {
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+        } catch (Throwable ex) {
+            Log.e(ex);
+            /*
+                java.lang.NullPointerException: Attempt to invoke interface method 'android.graphics.Typeface miui.util.font.IFontManager.getBaseFont(int)' on a null object reference
+                  at miui.util.TypefaceUtils.updateDefaultFont(TypefaceUtils.java:190)
+                  at miui.util.TypefaceUtils.loadFontManager(TypefaceUtils.java:168)
+                  at miui.util.TypefaceUtils.loadFontSettings(TypefaceUtils.java:64)
+                  at miui.util.TypefaceUtils.useVarFont(TypefaceUtils.java:107)
+                  at android.graphics.Paint.useMiuiVarFont(Paint.java:1460)
+                  at android.graphics.Paint.setTypeface(Paint.java:1443)
+             */
+        }
 
         canvas.drawText(letter,
                 size / 2f - paint.measureText(letter) / 2,
@@ -233,14 +246,13 @@ class ImageHelper {
         boolean inline = prefs.getBoolean("inline_images", false);
 
         final int px = Helper.dp2pixels(context, (zoom + 1) * 24);
-        final Resources.Theme theme = context.getTheme();
         final Resources res = context.getResources();
 
         try {
             final AnnotatedSource a = new AnnotatedSource(source);
 
             if (TextUtils.isEmpty(a.source)) {
-                Drawable d = res.getDrawable(R.drawable.twotone_broken_image_24, theme);
+                Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                 d.setBounds(0, 0, px, px);
                 return d;
             }
@@ -258,12 +270,12 @@ class ImageHelper {
                 EntityAttachment attachment = db.attachment().getAttachment(id, cid);
                 if (attachment == null) {
                     Log.i("Image not found CID=" + cid);
-                    Drawable d = res.getDrawable(R.drawable.twotone_broken_image_24, theme);
+                    Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                     d.setBounds(0, 0, px, px);
                     return d;
                 } else if (!attachment.available) {
                     Log.i("Image not available CID=" + cid);
-                    Drawable d = res.getDrawable(R.drawable.twotone_photo_library_24, theme);
+                    Drawable d = context.getDrawable(R.drawable.twotone_photo_library_24);
                     d.setBounds(0, 0, px, px);
                     return d;
                 } else {
@@ -276,7 +288,7 @@ class ImageHelper {
                             return d;
                         } catch (IOException ex) {
                             Log.w(ex);
-                            Drawable d = res.getDrawable(R.drawable.twotone_broken_image_24, theme);
+                            Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                             d.setBounds(0, 0, px, px);
                             return d;
                         }
@@ -284,7 +296,7 @@ class ImageHelper {
                         Bitmap bm = decodeImage(attachment.getFile(context), scaleToPixels);
                         if (bm == null) {
                             Log.i("Image not decodable CID=" + cid);
-                            Drawable d = res.getDrawable(R.drawable.twotone_broken_image_24, theme);
+                            Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                             d.setBounds(0, 0, px, px);
                             return d;
                         } else {
@@ -316,7 +328,7 @@ class ImageHelper {
                     return d;
                 } catch (IllegalArgumentException ex) {
                     Log.w(ex);
-                    Drawable d = res.getDrawable(R.drawable.twotone_broken_image_24, theme);
+                    Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                     d.setBounds(0, 0, px, px);
                     return d;
                 }
@@ -362,7 +374,7 @@ class ImageHelper {
                 } catch (Throwable ex) {
                     // FileNotFound, Security
                     Log.w(ex);
-                    Drawable d = context.getResources().getDrawable(R.drawable.twotone_broken_image_24);
+                    Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                     d.setBounds(0, 0, px, px);
                     return d;
                 }
@@ -370,7 +382,7 @@ class ImageHelper {
             if (!show) {
                 // Show placeholder icon
                 int resid = (embedded || data ? R.drawable.twotone_photo_library_24 : R.drawable.twotone_image_24);
-                Drawable d = res.getDrawable(resid, theme);
+                Drawable d = context.getDrawable(resid);
                 d.setBounds(0, 0, px, px);
                 return d;
             }
@@ -380,7 +392,7 @@ class ImageHelper {
             if (cached != null || view == null) {
                 if (view == null)
                     if (cached == null) {
-                        Drawable d = res.getDrawable(R.drawable.twotone_hourglass_top_24, theme);
+                        Drawable d = context.getDrawable(R.drawable.twotone_hourglass_top_24);
                         d.setBounds(0, 0, px, px);
                         return d;
                     } else
@@ -391,7 +403,7 @@ class ImageHelper {
             }
 
             final LevelListDrawable lld = new LevelListDrawable();
-            Drawable wait = res.getDrawable(R.drawable.twotone_hourglass_top_24, theme);
+            Drawable wait = context.getDrawable(R.drawable.twotone_hourglass_top_24);
             lld.addLevel(1, 1, wait);
             lld.setBounds(0, 0, px, px);
             lld.setLevel(1);
@@ -442,7 +454,7 @@ class ImageHelper {
                         int resid = (ex instanceof IOException && !(ex instanceof FileNotFoundException)
                                 ? R.drawable.twotone_cloud_off_24
                                 : R.drawable.twotone_broken_image_24);
-                        Drawable d = res.getDrawable(resid, theme);
+                        Drawable d = context.getDrawable(resid);
                         d.setBounds(0, 0, px, px);
                         post(d, a.source);
                     }
@@ -478,7 +490,7 @@ class ImageHelper {
         } catch (Throwable ex) {
             Log.e(ex);
 
-            Drawable d = res.getDrawable(R.drawable.twotone_broken_image_24, theme);
+            Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
             d.setBounds(0, 0, px, px);
             return d;
         }

@@ -2003,7 +2003,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
 
-            Drawable d = getResources().getDrawable(icon, context.getTheme()).mutate();
+            Drawable d = context.getDrawable(icon).mutate();
             d.setTint(Helper.resolveColor(context, android.R.attr.textColorSecondary));
 
             if (dX > 0) {
@@ -2261,6 +2261,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         private void onSwipeJunk(final @NonNull TupleMessageEx message) {
+            boolean canBlock = false;
+            if (message.from != null && message.from.length > 0) {
+                String email = ((InternetAddress) message.from[0]).getAddress();
+                canBlock = !TextUtils.isEmpty(email) && Helper.EMAIL_ADDRESS.matcher(email).matches();
+            }
+
             Bundle aargs = new Bundle();
             aargs.putLong("id", message.id);
             aargs.putLong("account", message.account);
@@ -2269,6 +2275,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             aargs.putString("type", message.folderType);
             aargs.putString("from", MessageHelper.formatAddresses(message.from));
             aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
+            aargs.putBoolean("canBlock", canBlock);
 
             AdapterMessage.FragmentDialogJunk ask = new AdapterMessage.FragmentDialogJunk();
             ask.setArguments(aargs);
@@ -4512,7 +4519,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             tvSelectedCount.setText(NF.format(count));
             if (count > (BuildConfig.DEBUG ? 10 : MAX_MORE)) {
                 int ts = Math.round(tvSelectedCount.getTextSize());
-                Drawable w = context.getResources().getDrawable(R.drawable.twotone_warning_24, context.getTheme());
+                Drawable w = context.getDrawable(R.drawable.twotone_warning_24);
                 w.setBounds(0, 0, ts, ts);
                 w.setTint(tvSelectedCount.getCurrentTextColor());
                 tvSelectedCount.setCompoundDrawablesRelative(null, null, w, null);
@@ -7999,7 +8006,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             Drawable source = null;
             if (sources.size() == 1) {
-                source = getResources().getDrawable(EntityFolder.getIcon(sources.get(0)), null);
+                source = getContext().getDrawable(EntityFolder.getIcon(sources.get(0)));
                 if (source != null)
                     source.setBounds(0, 0, source.getIntrinsicWidth(), source.getIntrinsicHeight());
                 if (sourceColor == null)
@@ -8009,7 +8016,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             Drawable target = null;
             if (targets.size() == 1) {
-                target = getResources().getDrawable(EntityFolder.getIcon(targets.get(0)), null);
+                target = getContext().getDrawable(EntityFolder.getIcon(targets.get(0)));
                 if (target != null)
                     target.setBounds(0, 0, target.getIntrinsicWidth(), target.getIntrinsicHeight());
                 if (targetColor == null)

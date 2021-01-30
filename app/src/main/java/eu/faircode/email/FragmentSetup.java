@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -57,18 +58,15 @@ import java.util.List;
 public class FragmentSetup extends FragmentBase {
     private ViewGroup view;
 
-    private TextView tvWelcome;
-    private ImageButton ibWelcome;
-
     private ImageButton ibHelp;
     private Button btnQuick;
     private TextView tvQuickNew;
-    private TextView tvQuickRemark;
 
-    private TextView tvAccountDone;
+    private ImageButton ibManual;
+    private TextView tvManual;
+
     private Button btnAccount;
 
-    private TextView tvIdentityDone;
     private Button btnIdentity;
     private TextView tvIdentityWhat;
     private TextView tvNoComposable;
@@ -85,12 +83,14 @@ public class FragmentSetup extends FragmentBase {
 
     private Button btnInbox;
 
-    private Group grpWelcome;
+    private Group grpManual;
     private Group grpDataSaver;
 
     private int textColorPrimary;
     private int colorWarning;
     private Drawable check;
+
+    private boolean manual = BuildConfig.DEBUG;
 
     @Override
     @Nullable
@@ -99,23 +99,21 @@ public class FragmentSetup extends FragmentBase {
 
         textColorPrimary = Helper.resolveColor(getContext(), android.R.attr.textColorPrimary);
         colorWarning = Helper.resolveColor(getContext(), R.attr.colorWarning);
-        check = getResources().getDrawable(R.drawable.twotone_check_24, getContext().getTheme());
+        check = getContext().getDrawable(R.drawable.twotone_check_24);
 
         view = (ViewGroup) inflater.inflate(R.layout.fragment_setup, container, false);
 
         // Get controls
-        tvWelcome = view.findViewById(R.id.tvWelcome);
-        ibWelcome = view.findViewById(R.id.ibWelcome);
 
         ibHelp = view.findViewById(R.id.ibHelp);
         btnQuick = view.findViewById(R.id.btnQuick);
         tvQuickNew = view.findViewById(R.id.tvQuickNew);
-        tvQuickRemark = view.findViewById(R.id.tvQuickRemark);
 
-        tvAccountDone = view.findViewById(R.id.tvAccountDone);
+        ibManual = view.findViewById(R.id.ibManual);
+        tvManual = view.findViewById(R.id.tvManual);
+
         btnAccount = view.findViewById(R.id.btnAccount);
 
-        tvIdentityDone = view.findViewById(R.id.tvIdentityDone);
         btnIdentity = view.findViewById(R.id.btnIdentity);
         tvIdentityWhat = view.findViewById(R.id.tvIdentityWhat);
         tvNoComposable = view.findViewById(R.id.tvNoComposable);
@@ -132,24 +130,10 @@ public class FragmentSetup extends FragmentBase {
 
         btnInbox = view.findViewById(R.id.btnInbox);
 
-        grpWelcome = view.findViewById(R.id.grpWelcome);
+        grpManual = view.findViewById(R.id.grpManual);
         grpDataSaver = view.findViewById(R.id.grpDataSaver);
 
-        PackageManager pm = getContext().getPackageManager();
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
         // Wire controls
-
-        tvWelcome.setText(getString(R.string.title_setup_welcome)
-                .replaceAll("^\\s+", "").replaceAll("\\s+", " "));
-
-        ibWelcome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean("welcome", false).apply();
-                grpWelcome.setVisibility(View.GONE);
-            }
-        });
 
         ibHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,6 +215,30 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        ibManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manual = !manual;
+                ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
+                grpManual.setVisibility(manual ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        tvManual.setPaintFlags(tvManual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibManual.setPressed(true);
+                ibManual.setPressed(false);
+                ibManual.performClick();
+            }
+        });
+
+        if (savedInstanceState != null)
+            manual = savedInstanceState.getBoolean("fair:manual");
+        ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
+        grpManual.setVisibility(manual ? View.VISIBLE : View.GONE);
+
         btnAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -298,6 +306,8 @@ public class FragmentSetup extends FragmentBase {
                     startActivity(settings);
                 }
             });
+
+            PackageManager pm = getContext().getPackageManager();
             btnDataSaver.setEnabled(settings.resolveActivity(pm) != null); // system whitelisted
         }
 
@@ -309,13 +319,6 @@ public class FragmentSetup extends FragmentBase {
         });
 
         // Initialize
-        tvQuickRemark.setVisibility(View.GONE);
-
-        tvAccountDone.setText(null);
-        tvAccountDone.setCompoundDrawables(null, null, null, null);
-
-        tvIdentityDone.setText(null);
-        tvIdentityDone.setCompoundDrawables(null, null, null, null);
         btnIdentity.setEnabled(false);
         tvNoComposable.setVisibility(View.GONE);
 
@@ -328,11 +331,25 @@ public class FragmentSetup extends FragmentBase {
 
         btnInbox.setEnabled(false);
 
-        boolean welcome = prefs.getBoolean("welcome", true);
-        grpWelcome.setVisibility(welcome ? View.VISIBLE : View.GONE);
         grpDataSaver.setVisibility(View.GONE);
 
         setContactsPermission(hasPermission(Manifest.permission.READ_CONTACTS));
+
+        return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("fair:manual", manual);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final DB db = DB.getInstance(getContext());
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         // Create outbox
         new SimpleTask<Void>() {
@@ -362,28 +379,12 @@ public class FragmentSetup extends FragmentBase {
             }
         }.execute(this, new Bundle(), "outbox:create");
 
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        final DB db = DB.getInstance(getContext());
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
         db.account().liveSynchronizingAccounts().observe(getViewLifecycleOwner(), new Observer<List<EntityAccount>>() {
             private boolean done = false;
 
             @Override
             public void onChanged(@Nullable List<EntityAccount> accounts) {
                 done = (accounts != null && accounts.size() > 0);
-
-                tvQuickRemark.setVisibility(done ? View.VISIBLE : View.GONE);
-
-                tvAccountDone.setText(done ? R.string.title_setup_done : R.string.title_setup_to_do);
-                tvAccountDone.setTextColor(done ? textColorPrimary : colorWarning);
-                tvAccountDone.setCompoundDrawablesWithIntrinsicBounds(done ? check : null, null, null, null);
 
                 btnIdentity.setEnabled(done);
                 btnInbox.setEnabled(done);
@@ -396,9 +397,6 @@ public class FragmentSetup extends FragmentBase {
             @Override
             public void onChanged(@Nullable List<TupleIdentityEx> identities) {
                 boolean done = (identities != null && identities.size() > 0);
-                tvIdentityDone.setText(done ? R.string.title_setup_done : R.string.title_setup_to_do);
-                tvIdentityDone.setTextColor(done ? textColorPrimary : colorWarning);
-                tvIdentityDone.setCompoundDrawablesWithIntrinsicBounds(done ? check : null, null, null, null);
                 tvNoComposable.setVisibility(done ? View.GONE : View.VISIBLE);
             }
         });
@@ -427,6 +425,7 @@ public class FragmentSetup extends FragmentBase {
 
         tvDozeDone.setText(ignoring ? R.string.title_setup_done : R.string.title_setup_to_do);
         tvDozeDone.setTextColor(ignoring ? textColorPrimary : colorWarning);
+        tvDozeDone.setTypeface(null, ignoring ? Typeface.NORMAL : Typeface.BOLD);
         tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(ignoring ? check : null, null, null, null);
 
         // https://developer.android.com/training/basics/network-ops/data-saver.html
@@ -444,10 +443,8 @@ public class FragmentSetup extends FragmentBase {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         for (int i = 0; i < permissions.length; i++)
-            if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                if (Manifest.permission.READ_CONTACTS.equals(permissions[i]))
-                    setContactsPermission(true);
-            }
+            if (Manifest.permission.READ_CONTACTS.equals(permissions[i]))
+                setContactsPermission(grantResults[i] == PackageManager.PERMISSION_GRANTED);
     }
 
     private void setContactsPermission(boolean granted) {
@@ -456,6 +453,7 @@ public class FragmentSetup extends FragmentBase {
 
         tvPermissionsDone.setText(granted ? R.string.title_setup_done : R.string.title_setup_to_do);
         tvPermissionsDone.setTextColor(granted ? textColorPrimary : colorWarning);
+        tvPermissionsDone.setTypeface(null, granted ? Typeface.NORMAL : Typeface.BOLD);
         tvPermissionsDone.setCompoundDrawablesWithIntrinsicBounds(granted ? check : null, null, null, null);
         btnPermissions.setEnabled(!granted);
     }

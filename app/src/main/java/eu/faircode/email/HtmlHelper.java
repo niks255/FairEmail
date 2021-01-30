@@ -59,7 +59,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
@@ -1564,7 +1563,7 @@ public class HtmlHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean disconnect_images = prefs.getBoolean("disconnect_images", false);
 
-        Drawable d = ContextCompat.getDrawable(context, R.drawable.twotone_my_location_24);
+        Drawable d = context.getDrawable(R.drawable.twotone_my_location_24);
         d.setTint(Helper.resolveColor(context, R.attr.colorWarning));
 
         Bitmap bm = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -1709,14 +1708,22 @@ public class HtmlHelper {
         Log.d(document.head().html());
     }
 
-    static String getLanguage(Context context, String text) {
+    static String getLanguage(Context context, String subject, String text) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean language_detection = prefs.getBoolean("language_detection", false);
             if (!language_detection)
                 return null;
 
-            Locale locale = TextHelper.detectLanguage(context, text);
+            StringBuilder sb = new StringBuilder();
+            if (!TextUtils.isEmpty(subject))
+                sb.append(subject).append('\n');
+            if (!TextUtils.isEmpty(text))
+                sb.append(text);
+            if (sb.length() == 0)
+                return null;
+
+            Locale locale = TextHelper.detectLanguage(context, sb.toString());
             return (locale == null ? null : locale.getLanguage());
         } catch (Throwable ex) {
             Log.e(ex);

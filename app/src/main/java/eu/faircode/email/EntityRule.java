@@ -613,7 +613,7 @@ public class EntityRule {
         Helper.writeText(file, body);
         String text = HtmlHelper.getFullText(body);
         reply.preview = HtmlHelper.getPreview(text);
-        reply.language = HtmlHelper.getLanguage(context, text);
+        reply.language = HtmlHelper.getLanguage(context, reply.subject, text);
         db.message().setMessageContent(reply.id,
                 true,
                 reply.language,
@@ -808,7 +808,8 @@ public class EntityRule {
         String sender = ((InternetAddress) message.from[0]).getAddress();
         String name = MessageHelper.formatAddresses(new Address[]{message.from[0]});
 
-        if (TextUtils.isEmpty(sender))
+        if (TextUtils.isEmpty(sender) ||
+                !Helper.EMAIL_ADDRESS.matcher(sender).matches())
             return null;
 
         boolean regex = false;
