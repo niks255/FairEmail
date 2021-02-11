@@ -63,6 +63,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.bouncycastle.util.encoders.DecoderException;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.json.JSONArray;
@@ -78,6 +79,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.security.SecureRandom;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.KeySpec;
@@ -628,7 +630,6 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 jexport.put("accounts", jaccounts);
                 jexport.put("answers", janswers);
                 jexport.put("certificates", jcertificates);
-                jexport.put("classifier", MessageClassifier.toJson());
                 jexport.put("settings", jsettings);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -953,9 +954,6 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         }
                     }
 
-                    if (jimport.has("classifier"))
-                        MessageClassifier.fromJson(jimport.getJSONObject("classifier"));
-
                     // Settings
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor editor = prefs.edit();
@@ -1121,7 +1119,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             // throws DecoderException extends IllegalStateException
                             PemObject pem = new PemReader(new InputStreamReader(is)).readPemObject();
                             if (pem == null)
-                                throw new IllegalStateException("Invalid key file");
+                                throw new IllegalArgumentException("Invalid key file");
                             ByteArrayInputStream bis = new ByteArrayInputStream(pem.getContent());
                             cert = (X509Certificate) fact.generateCertificate(bis);
                         }
@@ -1147,7 +1145,12 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
-                    boolean expected = (ex instanceof SecurityException);
+                    // DecoderException: unable to decode base64 string: invalid characters encountered in base64 data
+                    boolean expected =
+                            (ex instanceof IllegalArgumentException ||
+                                    ex instanceof CertificateException ||
+                                    ex instanceof DecoderException ||
+                                    ex instanceof SecurityException);
                     Log.unexpectedError(getSupportFragmentManager(), ex, !expected);
                 }
             }.execute(this, args, "setup:cert");

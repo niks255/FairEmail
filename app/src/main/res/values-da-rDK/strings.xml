@@ -208,6 +208,7 @@
     <string name="title_setup_theme_system">Følg system</string>
     <string name="title_setup_theme_black_background">Sort baggrund</string>
     <string name="title_setup_theme_system_hint">Følg system skifter automatisk til lyst/mørkt dag/nat, hvis understøttet af Android</string>
+    <string name="title_setup_theme_more_colors">Flere farver ænskes</string>
     <string name="title_setup_advanced">Avanceret</string>
     <string name="title_setup_options">Valgmuligheder</string>
     <string name="title_setup_defaults">Gendan standardværdier</string>
@@ -539,6 +540,7 @@
     <string name="title_identity_max_size">Maks. beskedstørrelse (MBb)</string>
     <string name="title_identity_receipt">Bed automatisk om leverings/læstkvittering som standard</string>
     <string name="title_identity_use_ip_hint">I tilfælde af \'ugyldig hilsen\', \'kræver gyldig adresse\' eller lignende fejl, prøv da at ændre denne indstilling</string>
+    <string name="title_identity_self_hint">Forhindrer dig oså i at svare dig selv</string>
     <string name="title_optional">Valgfrit</string>
     <string name="title_recommended">Anbefalet</string>
     <string name="title_account_linked">Forbundet konto</string>
@@ -771,6 +773,7 @@
     <string name="title_reply_to_all">Besvar alle</string>
     <string name="title_reply_list">Besvar liste</string>
     <string name="title_reply_receipt">Send læst-kvittering</string>
+    <string name="title_reply_hard_bounce">Send hard bounce</string>
     <string name="title_reply_template">Besvar med skabelon</string>
     <string name="title_move_undo">Flytter til %1$s (%2$d)</string>
     <string name="title_open_with">Åbn med</string>
@@ -806,7 +809,7 @@
     <string name="title_ask_delete_rule">Slet regel permanent?</string>
     <string name="title_ask_discard">Kassér kladde?</string>
     <string name="title_ask_show_html">Visning af beskedindhold kan lække personfølsomme data</string>
-    <string name="title_ask_show_html_dark" comment="title_ask_show_html_dark&#10;Title for checkbox to display original messages with a dark theme">Benyt mørkt tema</string>
+    <string name="title_ask_show_html_dark">Benyt mørkt tema</string>
     <string name="title_ask_show_html_remark">Visning af originalbeskeden på en mørk baggrund er ikke mulig, da det kan afstedkomme usynlige mørke tekster og billeder</string>
     <string name="title_ask_show_html_images">Vis altid billeder, når originalbeskederne vises</string>
     <string name="title_ask_show_image">Visning af billeder kan lække personfølsomme data</string>
@@ -848,7 +851,6 @@
     <string name="title_send_now">Send nu</string>
     <string name="title_send_via">Send via</string>
     <string name="title_send_at">Sendt kl. &#8230;</string>
-    <string name="title_send_archive">Archive read messages</string>
     <string name="title_send_encryption">Kryptering</string>
     <string name="title_send_priority">Prioritet</string>
     <string name="title_no_server">Ingen server fundet på \'%1$s\'</string>
@@ -904,6 +906,7 @@
     <string name="title_key_missing">Ingen tast til %1$s</string>
     <string name="title_send_reminder_remark">Påmindelser kan geaktiveres under Send-indstillinger</string>
     <string name="title_send_plain_text">Kun klartekst</string>
+    <string name="title_send_dsn">Statusrapport</string>
     <string name="title_send_receipt">Bed om kvittering</string>
     <string name="title_send_receipt_remark">De fleste udbydere og e-mailklienter ignorerer kvitteringsanmodninger</string>
     <string name="title_from_missing">Afsender mangler</string>
@@ -915,6 +918,7 @@
     <string name="title_attachment_keywords">vedhæft,vedhæftet,vedhæftede,vedhæftning,vedhæftninger,vedhæftningen</string>
     <string name="title_attachment_reminder">Ville du tilføje en vedhæftning?</string>
     <string name="title_plain_reminder">Al formatering vil gå tabt</string>
+    <string name="title_dsn_reminder">Hard bounces skader den oprindelige afsenders e-mailomdømme!</string>
     <string name="title_size_reminder">Besked (%1$s) større end servergrænsen (%2$s)</string>
     <string name="title_attachments_missing">Ikke alle vedhæftninger er downloadet</string>
     <string name="title_dialog_hint">Denne dialog kan slås til igen via trepriksmenuen i den øverste handlingsbjælke</string>

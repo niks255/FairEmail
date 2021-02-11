@@ -467,9 +467,15 @@ Bruges Play Butik- eller GitHub-versionen af FairEmail, kan hurtigopsætningsgui
 
 Vil du ikke benytte en Gmail-konto på enheden, kan du enten aktivere adgang for "mindre sikre apps" og benytte din kontoadgangskode (ikke anbefalet) eller aktivere tofaktorgodkendelse og benytte en app-specifik adgangskode. For brug af en adgangskode skal der opsættes en konto og identitet via den manuelle opsætning i stedet for hurtigopsætningsguiden.
 
-Tjek [denne FAQ](#user-content-faq111) vedr., hvorfor kun konti på enheden kan benyttes.
+**Vigtigt**: Google udsender af og til denne advarsel:
 
-Bemærk, en app-specifik adgangskode kræves, når tofaktorgodkendelse er aktiveret.
+*[ALERT] Log ind via din webbrowser: https://support.google.com/mail/accounts/answer/78754 (Fejlet)*
+
+Dette sikkerhedstjek fra Google udløses oftere med *mindre sikre apps* aktiveret, mindre med en app-adgangskode og næsten aldrig ved brug af en konto på enheden (OAuth).
+
+Tjek, hvorfor kun konti på enheden kan benyttes i [denne FAQ](#user-content-faq111).
+
+Bemærk, at en app-specifik adgangskode kræves, når tofaktorgodkendelse er aktiveret.
 
 <br />
 
@@ -481,49 +487,49 @@ Tjek [hér](https://support.google.com/accounts/answer/185833), hvordan en app-s
 
 *Aktivér "Mindre sikre apps"*
 
-**Vigtigt**: Brug af denne metode anbefales ikke grundet mindre pålidelighed.
+**Vigtigt**: Brug af denne metode anbefales ikke, da den er mindre pålidelig.
 
 **Vigtigt**: Brugernavn/adgangskode godkendte G Suite-konti vil [i nærmeste fremtid](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html) ophøre med at fungere.
 
-Tjek [hér](https://support.google.com/accounts/answer/6010255), hvordan "mindre sikre apps"aktiveres eller gå [direkte til indstillingerne](https://www.google.com/settings/security/lesssecureapps).
+Tjek [hér](https://support.google.com/accounts/answer/6010255), hvordan "Mindre sikre apps" aktiveres eller gå [direkte til Indstillinger](https://www.google.com/settings/security/lesssecureapps).
 
-Benyttes flere Gmail-konti, skal indstillingen "mindre sikre apps" ændres på alle relevante konti.
+Benyttes flere Gmail-konti, så sørg for at ændre indstillingen "Mindre sikre apps" for enhver relevant konto.
 
-Bemærk, at "mindre sikre apps"-indstillingsskærmen skal forlades vha. Tilbage-pilen, for at indstillingen effektueres.
+Bemærk, at man for at effektuere indstillingen er nødt til at forlade "Mindre sikre apps"-indstillingsskærmen via Tilbage-pilen.
 
-Benyttes denne metode, bør der anvendes en [stærk adgangskode](https://en.wikipedia.org/wiki/Password_strength) til Gmail-kontoen (i øvrigt altid er en god idé). Bemærk, at brug af [standard](https://tools.ietf.org/html/rfc3501) IMAP-protokollen ikke i sig selv er mindre sikker.
+Benyttes denne metode, bør en [stærk adgangskode](https://en.wikipedia.org/wiki/Password_strength) anvendes til Gmail-kontoen (hvilket altid er en god idé). Bemærk, brug af [standard](https://tools.ietf.org/html/rfc3501) IMAP-protokollen er ikke i sig selv er mindre sikker.
 
-Når "mindre sikre apps" ikke er aktiveret, ses fejlen *Godkendelse mislykkedes - ugyldige akkreditiver* for konti (IMAP) og *Brugernavn og adgangskode ikke accepteret* for identiteter (SMTP).
+Når "Mindre sikre apps" ikke er aktiveret, ses fejlen *Godkendelse mislykkedes - ugyldige akkreditiver* for konti (IMAP) og *Brugernavn og adgangskode ikke accepteret* for identiteter (SMTP).
 
 <br />
 
 *Generelt*
 
-Advarslen "*Log ind via din webbrowser*" vises muligvis. Dette sker, når Google anser det netværk, hvormed der forbindes til Internet (hvilket kan være et VPN), som ikke-sikkert. Dette kan forhindres vha. Gmails hurtigopsætningsguide eller en app-specifik adgangskode.
+Muligvis vises advarslen "*Log ind via din webbrowser*". Dette sker, når Google anser netværket, der forbinder til Internet (hvilket kan være et VPN), som ikke-sikkert. Dette kan forhindres vha. Gmails hurtigopsætningsguide eller en app-specifik adgangskode.
 
-Tjek [hér](https://support.google.com/mail/answer/7126229) for Googles vejledning, og [hér](https://support.google.com/mail/accounts/answer/78754) for fejlfinding.
+Tjek [hér](https://support.google.com/mail/answer/7126229) for Googles instruktioner, og [hér](https://support.google.com/mail/accounts/answer/78754) for fejlfinding.
 
 <br />
 
 <a name="faq7"></a>
 **(7) Hvorfor vises sendte beskeder ikke (direkte) i Sendt-mappen?**
 
-Sendte beskeder flyttes normalt fra udbakken til Sendt-mappen, så snart disse af udbyderen er tilføjet Sendt-mappen. Dette kræver valg af en Sendt-mappe i kontoindstillingerne, samt at mappen er opsættes til synk.
+Sendte beskeder flyttes normalt fra udbakken til Sendt-mappen, så snart udbyderen føjer sendte beskeder til Sendt-mappen. Dette kræver, at en Sendt-mappe vælges i kontoindstillingerne, og at Sendt-mappen ligeledes opsættes til synk.
 
 Visse udbydere holder ikke styr på sendte beskeder, eller den anvendte SMTP-server er muligvis ikke relateret til udbyderen. I så tilfælde føjer FairEmail automatisk sendte beskeder til Sendt-mappen under synk af denne, hvilket vil ske, efter at en besked er afsendt. Bemærk, at dette vil forøge Internettrafikken.
 
-~~Sker dette ikke, holder udbyderen muligvis ikke styr på sendte beskeder, eller den anvendte SMTP-server er muligvis ikke udbyderrelateret.~~ ~~I så tilfælde kan den avancerede identitetsindstilling *Gem sendte beskeder* aktiveres for at lade FairEmail føje sendte beskeder til Sendt-mappen umiddelbart efter afsendelsen.~~ ~~Bemærk, at aktivering af indstillingen kan resultere i dubletbeskeder, hvis udbyderen føjer sendte beskeder til Sendt-mappen.~~ ~~Bemærk også, at aktivering af indstillingen vil resultere i forøget dataforbrug især ved afsendelse af beskeder med store vedhæftninger.~~
+~~Sker dette ikke, holder udbyderen muligvis ikke styr på sendte beskeder, eller der anvendes muligvis en ikke-udbyderrelateret SMTP-server.~~ ~~I så tilfælde kan man aktivere den avancerede identitetsindstilling *Gem sendte beskeder* for at lade FairEmail føje sendte beskeder til Sendt-mappen umiddelbart efter beskedafsendelsen.~~ ~~Bemærk, at aktivering af denne indstilling kan resultere i dubletbeskeder, hvis udbyderen også føjer sendte beskeder til Sendt-mappen.~~ ~~Bemærk også, at aktivering af indstillingen vil betyde forøget datatrafik, især når der sendes beskeder med store vedhæftninger.~~
 
-~~Hvis afsendte beskeder i udbakken ikke findes i Sendt-mappen ved en fuld synk, flytes disse også fra udbakken til Sendt-mappen.~~ ~~En fuld synk sker, når der genforbindes til serveren, eller ved periodisk/manuel synk.~~ ~~ Det vil sandsynligvis være ønskeligt i stedet at aktivere den avancerede indstilling *Gem sendte beskeder* for hurtigere at flytte beskeder til Sendt-mappen.~~
+~~Hvis afsendte beskeder i udbakken ikke findes i Sendt-mappen ved en fuld synk, flytes disse også fra udbakken til Sendt-mappen.~~ ~~En fuld synkning sker, når der genforbindes til serveren, eller ved periodisk eller manuel synkning.~~ ~~I stedet er ønsket sandsynligvis at aktivere den avancerede indstilling *Gem sendte beskeder* for hurtigere at flytte beskeder til Sendt-mappen.~~
 
 <br />
 
 <a name="faq8"></a>
 **(8) Kan en Microsoft Exchange-konto benyttes?**
 
-En Microsoft Exchange-konto kan benyttes, såfremt den er tilgængelig via IMAP, hvilket plejer at være tilfældet. Tjek [hér](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for yderligere oplysninger.
+En Microsoft Exchange-konto kan benyttes, såfremt den er tilgængelig via IMAP (er normalt tilfældet). Tjek [hér](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for yderligere information.
 
-Tjek [hér](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for Microsoft-dokumentation vedr. opsætning af e-mailklient. Der er også et afsnit om almindelige forbindelsesfejl og løsninger.
+Tjek [hér](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for Microsoft-dokumentation vedr. opsætning af e-mail klient. Der er også et afsnit om almindelige forbindelsesfejl og løsninger.
 
 Visse ældre Exchange-serverversioner har en fejl, der forårsager tomme beskeder og ødelagte vedhæftninger. Tjek [denne FAQ](#user-content-faq110) for en løsning.
 
@@ -538,13 +544,13 @@ Tjek [denne FAQ](#user-content-faq111) vedr. OAuth-understøttelse.
 
 Identiteter repræsenterer e-mailadresser, der sendes *fra* via en e-mailserver (SMTP).
 
-Visse udbydere tillader brug af flere aliaser. Disse kan opsættes ved at indstille e-mailadressefeltet fra en ekstra identitet til aliasadressen og indstille brugernavnefeltet til hoved e-mailadressen.
+Visse udbydere tillader brug af flere aliaser. Disse kan opsættes ved at angive e-mailadressefeltet fra en ekstra identitet som aliasadressen og angive brugernavnefeltet til hoved e-mailadresse.
 
 Bemærk, at en identitet kan kopieres vha. et langt tryk på den.
 
-Alternativt kan *Tillad redigering af afsenderadresse* aktiveres under Avancerede indstillinger for en eksisterende identitet mhp. at redigere brugernavnet ved beskedoprettelsen, såfremt udbyderen tillader dette.
+Såfremt udbyderen tillader dette, kan *Tillad redigering af afsenderadresse* alternativt aktiveres under Avancerede indstillinger for en eksisterende identitet for at redigere brugernavnet ved beskedoprettelsen.
 
-FairEmail opdaterer automatisk adgangskoder til relaterede identiteter, når adgangskoden til den tilknyttede konto/relaterede identitet opdateres.
+FairEmail opdaterer automatisk adgangskoder til relaterede identiteter, når adgangskoden til den tilknyttede konto/relateret identitet opdateres.
 
 Tjek [denne FAQ](#user-content-faq33) om redigering af brugernavnet til e-mailadresser.
 
@@ -553,20 +559,20 @@ Tjek [denne FAQ](#user-content-faq33) om redigering af brugernavnet til e-mailad
 <a name="faq10"></a>
 **~~(10) Hvad betyder 'UIDPLUS ikke understøttet'?~~**
 
-~~Fejlmeddelelsen *UIDPLUS ikke understøttet * betyder, at e-mailudbyderen ikke tilbyder IMAP-udvidelsen [UIDPLUS](https://tools.ietf.org/html/rfc4315). Denne IMAP-udvidelse kræves for at implementere tovejs-synk, der ikke er en valgfri funktion. Medmindre udbyderen kan aktivere denne udvidelse, kan FairEmail ikke benyttes med udbyderen.~~
+~~Fejlmeddelelsen *UIDPLUS ikke understøttet* betyder, at e-mailudbyderen ikke tilbyder IMAP-udvidelsen [UIDPLUS](https://tools.ietf.org/html/rfc4315). Denne IMAP-udvidelse kræves for at implementere tovejssynk, hvilket ikke er en valgfri funktion. Kan udbyderen ikke aktivere denne udvidelse, er FairEmail ikke kompatibel med udbyderen.~~
 
 <br />
 
 <a name="faq11"></a>
 **~~(11) Hvorfor er POP uunderstøttet?~~**
 
-~~Udover at enhver anstændig e-mail-udbyder i dag understøtter [IMAP](https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol),~~ ~~vil brug af [POP](https://en.wikipedia.org/wiki/Post_Office_Protocol) resultere i unødvendig ekstra strømforbrug samt forsinkede notifikationer om nye beskeder.~~ ~~Desuden er POP uegnet til tovejssynk, og oftere end ikke, læser og skriver folk beskeder på forskellige enheder i dag.~~
+~~Udover at enhver anstændig e-mail udbyder i dag understøtter [IMAP](https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol),~~ ~~vil brug af [POP](https://en.wikipedia.org/wiki/Post_Office_Protocol) resultere i unødvendig ekstra strømforbrug samt forsinkede notifikationer om nye beskeder.~~ ~~Desuden er POP uegnet til tovejssynk, og oftere end ikke, læses og skrives der i dag beskeder på forskellige enheder.~~
 
-~~Grundlæggende understøtter POP kun download og sletning af beskeder fra indbakken.~~ ~~Dvs., at almindelige operationer, såsom indstilling af besekedattributter (læst, besvaret mv.), tilføjelse (sikkerhedskopiering) og flytning af beskeder ikke er mulige.~~
+~~Grundlæggende understøtter POP kun download og sletning af beskeder fra indbakken.~~ ~~Dvs., at almindelige operationer, såsom indstilling af besekedattributter (læst, stjernemarkeret, besvaret mv.), tilføjelse (sikkerhedskopiering) og flytning af beskeder ikke er mulige.~~
 
-~~Tjek også, [hvad Google skriver om det](https://support.google.com/mail/answer/7104828).~~
+~~Tjek også, [Googles skriv herom](https://support.google.com/mail/answer/7104828).~~
 
-~~F.eks. kan [Gmail importere beskeder](https://support.google.com/mail/answer/21289) fra en anden POP-konto,~~ ~~hvilket kan anvendes som en løsning ifm. udbydere, som ikke understøtter IMAP.~~
+~~F.eks. kan [Gmail importere beskeder](https://support.google.com/mail/answer/21289) fra en anden POP-konto,~~ ~~hvilket kan anvendes som en løsning, når en udbyder ikke understøtter IMAP.~~
 
 ~~tl;dr; overvej at skifte til IMAP.~~
 
@@ -575,7 +581,7 @@ Tjek [denne FAQ](#user-content-faq33) om redigering af brugernavnet til e-mailad
 <a name="faq12"></a>
 **(12) Hvordan fungerer kryptering/dekryptering?**
 
-Kommunikation med e-mailservere sker altid krypteret, medmindre dette eksplicit deaktiveres. Dette spørgsmål omhandler valgfri end-to-end kryptering med PGP eller S/MIME. Afsender og modtager bør først aftale dette og udveksle signerede beskeder for at overføre deres offentlige nøgler, før krypterede beskeder kan sendes.
+E-mailserverkommunikation er altid krypteret, medmindre dette eksplicit er fravalgt. Dette spørgsmål angår valgfri end-to-end kryptering med PGP eller S/MIME. For at kommunikere vha. krypterede meddelelser, bør afsender og modtager først enes om dette og derefter udveksle signerede beskeder for at overføre deres respektive offentlige nøgler.
 
 *Generelt*
 
@@ -591,43 +597,43 @@ Signering kort fortalt:
 * **Udgående** beskeder signeres med afsenderens **private nøgle**
 * **Indgående** beskeder bekræftes vha. afsenderens **offentlige nøgle**
 
-For at signere/kryptere en besked, vælg den passende metode i Send-dialogen. Er der tidliger valgt *Vis ikke igen* ifm. Send-dialogen, kan denne altid åbnes igen vha. trepunkts-overløbsmenuen.
+For at signere/kryptere en besked, vælg den passende metode i Send-dialogen. Er der tidliger valgt *Vis ikke igen*, kan Send-dialogen altid åbnes vha. trepunktsmenuen.
 
-For at bekræfte en signatur eller dekryptere en modtaget besked, så åbn beskeden og tryk blot på gestussen eller på hængelåsikonet umiddelbart under beskedhandlingsbjælken.
+For at bekræfte en signatur eller dekryptere en modtaget besked, åbn beskeden og tryk blot på gestussen eller på hængelåsikonet umiddelbart under beskedhandlingsbjælken.
 
-Første gang en signeret/krypteret besked afsendes, anmodes der muligvis om en signaturnøgle. Mhp. efterfølgende brug gemmer FairEmail automatisk den valgte signeringsnøgle i den anvendte identitet. Er der behov for at nulstille signeringsnøglen, så gem blot identiteten eller brug et langt tryk på identiteten på identitetslisten og vælg *Nulstil signeringsnøgle*. Den valgte signeringsnøgle er synlig på identitetslisten. Skal en nøgle vælges fra gang til gang, kan flere identiteter oprettes til den samme konto med den samme e-mailadresse.
+Første gang en signeret/krypteret besked sendes, anmodes muligvis om en signaturnøgle. Mhp. efterfølgende brug gemmer FairEmail automatisk den valgte signeringsnøgle i den anvendte identitet. Ved behov for at nulstille signeringsnøglen, så gem blot identiteten eller brug et langt tryk på identiteten på identitetslisten og vælg *Nulstil signeringsnøgle*. Den valgte signeringsnøgle er synlig på identitetslisten. Skal en nøgle vælges fra gang til gang, kan flere identiteter oprettes for den samme konto med den samme e-mailadresse.
 
-I fortrolighedsindstillingerne kan man vælge standardkrypteringsmetoden (PGP eller S/MIME), aktivere *Signér som standard*, *Kryptér som standard* og *Dekryptér automatisk beskeder*. Bemærk, at automatisk dekryptering ikke er mulig, hvis brugerinteraktion, f.eks.. valg af nøgle eller læsning af et sikkerhedstoken, kræves.
+I fortrolighedsindstillingerne kan man vælge standardkrypteringsmetoden (PGP eller S/MIME), aktivere *Signér som standard*, *Kryptér som standard* samt *Dekryptér automatisk beskeder*, men vær opmærksom på, at automatisk dekryptering ikke er mulig, hvis brugerinteraktion kræves, såsom valg af en nøgle eller læsning af et sikkerhedstoken.
 
-Beskedtekster/vedhæftninger, som skal krypteres, samt dekrypterede ditto, gemmes kun lokalt og tilføjes aldrig den eksterne server. Vil man fortryde dekryptering, kan menupunktet *gensynk* benyttes fra trepunktsmenuen på beskedhandlingsbjælken.
+Beskedtekster/vedhæftninger, som skal krypteres/er dekrypterede gemmes kun lokalt og vil aldrig blive tilføjet den eksterne server. Vil man fortryde dekryptering, kan menupunktet *gensynk* benyttes fra trepunktsmenuen på beskedhandlingsbjælken.
 
 *PGP*
 
-[OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) skal først installere og opsætte. FairEmail er aftestet med OpenKeychain version 5.4. Senere versioner sandsynligvis kompatible, men tidligere versioner er måske ikke.
+[OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) skal først installeres og opsættes. FairEmail er aftestet med OpenKeychain version 5.4. Senere versioner er sansynligvis kompatible, men muligvis ikke tidligere versioner.
 
 **Vigtigt**: OpenKeychain-appen er kendt for at gå ned (upåagtet), når den kaldende app (FairEmail) endnu ikke er godkendt og får en eksisterende offentlig nøgle. Dette kan løses ved at prøve at sende en signeret/krypteret besked til en afsender med en ukendt offentlig nøgle.
 
-**Vigtigt**: Kan OpenKeychain-appen ikke (længere) finde en nøgle, skal en tidligere valgt nøgle muligvis nulstilles. Dette kan gøres via at langt tryk på en identitet i identitetslisten (Indstillinger, Manuel opsætning, flere valg, Identiteter).
+**Vigtigt**: Kan OpenKeychain-appen ikke finde en nøgle (længere), skal den tidligere valgt nøgle muligvis nulstilles. Dette kan gøres via at langt tryk på en identitet i identitetslisten (Indstillinger, Manuel opsætning, flere valg, Identiteter).
 
-**Vigtigt**: For at lade apps såsom FairEmail oprette forbindelse pålideligt til OpenKeychain-tjenesten for at kryptere/dekryptere beskeder, kan deaktivering af batterioptimering af OpenKeychain-appen være nødvendig.
+**Vigtigt**: For at lade en app som FairEmail forbinde pålideligt til OpenKeychain-tjenesten for at kryptere/dekryptere beskeder, kan deaktivering af batterioptimering for OpenKeychain-appen være nødvendig.
 
 **Vigtigt**: OpenKeychain-appen har angiveligt behov for kontakttilladelse for at fungere korrekt.
 
-**Vigtigt**: På visse Android-versioner/-enheder er det nødvendigt at aktivere *Vis popups i baggrundstilstand * i de udvidede tilladelser til Android-app indstillingerne i OpenKeychain-appen. Uden denne tilladelse gemmes udkastet, men OpenKeychain-popup'en til bekræftelse/valg vises muligvis ikke.
+**Vigtigt**: På visse Android-versioner/-enheder er det nødvendigt at aktivere *Vis popups i baggrundstilstand * i de udvidede tilladelser i Androids app-indstillinger til OpenKeychain-appen. Uden denne tilladelse, gemmes udkastet, men OpenKeychain-popup'en til bekræftelse/valg vises muligvis ikke.
 
-FairEmail vil sende [Autocrypt](https://autocrypt.org/)-headeren til brug for andre e-mailklienter, men kun for signerede og krypterede beskeder, da for mange e-mailservere har problemer med den ofte lange Autocrypt-header. Bemærk, at den mest sikre måde at starte en krypteret e-mailudveksling på, er ved først at sende signerede beskeder. Modtagne Autocrypt-headers sendes til og lagres af OpenKeychain-appen til brug for fremtidige signaturbekræftelser/beskeddekrypteringer.
+FairEmail vil sende [Autocrypt](https://autocrypt.org/)-headeren til brug for andre e-mailklienter, men kun for signerede og krypterede beskeder, da for mange e-mailservere har problemer med den ofte lange Autocrypt-header. Bemærk, at den mest sikre måde at starte en krypteret e-mailudveksling er ved først at sende signerede beskeder. Modtagne Autocrypt-headers sendes til og lagres af OpenKeychain-appen til brug for fremtidige signaturbekræftelser eller beskeddekrypteringer.
 
-Al nøglehåndtering uddelegeres af sikkerhedsårsager til OpenKeychain-appen. Dette betyder også, at FairEmail ikke gemmer PGP-nøgler.
+Al nøglehåndtering uddelegeres af sikkerhedshensyn til OpenKeychain-appen. FairEmail gemmer derfor ingen PGP-nøgler.
 
-Inline-krypteret PGP i modtagne beskeder understøttes, men ikke inline PGP-signaturer og inline PGP i udgående beskeder. Tjek [hér](https://josefsson.org/inline-openpgp-considered-harmful.html) for årsagen.
+Inline-krypteret PGP i modtagne beskeder understøttes, men inline PGP-signaturer og inline PGP i udgående beskeder understøttes ikke. Tjek [hér](https://josefsson.org/inline-openpgp-considered-harmful.html) ang. årsagen.
 
-Kun signerede eller kun krypterede beskeder er ikke en god idé. Tjek her for årsagen:
+Kun signerede eller kun krypterede beskeder er en dårlig idé. Tjek her ang. årsagen:
 
 * [Overvejelser vedr. OpenPGP, del I](https://k9mail.github.io/2016/11/24/OpenPGP-Considerations-Part-I.html)
 * [Overvejelser vedr. OpenPGP, del II](https://k9mail.github.io/2017/01/30/OpenPGP-Considerations-Part-II.html)
 * [Overvejelser vedr. OpenPGP, del III, Autocrypt](https://k9mail.github.io/2018/02/26/OpenPGP-Considerations-Part-III-Autocrypt.html)
 
-Kun-signerede beskeder understøttes, men ikke kun-krypterede beskeder.
+Kun signarede beskeder understøttes, men ikke kun krypterede beskeder.
 
 Almindelige fejl:
 
@@ -636,19 +642,19 @@ Almindelige fejl:
 
 *S/MIME*
 
-Den/de offentlige modtagernøgle(r) kræves ved kryptering af en besked. Ens private nøgle kræves ved signering af en besked.
+De(n) offentlige modtagernøgle(r) kræves ved beskedkryptering. Den private nøgle kræves ved beskedsignering.
 
-Private nøgler opbevares af Android og kan importeres via Androids avancerede sikkerhedsindstillinger. En genvej (knap) hertil findes under fortrolighedsindstillingerne. Android anmoder om opsætning af PIN-kode, mønster eller adgangskode, hvis dette ikke allerede er sket. Ved brug af en Nokia-enhed med Android 9, [tjek først dette](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
+Private nøgler gemmes af Android og kan importeres via Androids avancerede sikkerhedsindstillinger. Der er en genvejsknap til dette under fortrolighedsindstillingerne. Android anmoder om opsætning af PIN-kode, mønster eller adgangskode, hvis dette ikke allerede er gjort. Benyttes en Nokia-enhed med Android 9, så [læs først dette](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
 
-Bemærk, at certifikater kan indeholde flere nøgler til flere formål, f.eks. til godkendelse, kryptering og signering. Android importerer kun den første nøgle. For at importere alle nøgler, skal certifikatet først opdeles. Dette er en vigtig handling, så det anbefales at bede certifikatleverandøren om support.
+Bemærk, at certifikater kan indeholde flere nøgler til flere formål, f.eks. til godkendelse, kryptering og signering. Android importerer kun den første nøgle. For at importere alle nøgler, skal certifikatet først opdeles. Dette er ikke en almindeligt forekommende handling, så assistance fra certifikatleverandøren tilrådes.
 
-Bemærk, at S/MIME-signering med andre algoritmer end RSA understøttes, dog understøtter muligvis ikke af af andre e-mailklienter. S/MIME-kryptering er kun mulig med symmetriske algoritmer, hvilket i praksis betyder brug af RSA.
+Bemærk, at S/MIME-signering med andre algoritmer end RSA understøttes, hvilket muligvis ikke gælder andre e-mailklienter. S/MIME-kryptering er kun mulig med symmetriske algoritmer, hvilket i praksis betyder brug af RSA.
 
-Standardkrypteringsmetoden er PGP, dog huskes den senest anvendte krypteringsmetode til næste gang for den valgte identitet. Det kan være nødvendigt igen at aktivere Send-mulighederne via trepriksmenuen for at kunne vælge krypteringsmetoden.
+Standardkrypteringsmetoden er PGP, men den sidst anvendte krypteringsmetode huskes til næste gang for den valgte identitet. Det kan være nødvendigt igen at aktivere Send-mulighederne i trepriksmenuen for at kunne vælge krypteringsmetode.
 
-For at tillade forskellige private nøgler til den samme e-mailadresse, tillader FairEmail altid valg af en nøgle, når flere identiteter findes til den samme e-mailadresse for den samme konto.
+For at tillade forskellige private nøgler til samme e-mailadresse, giver FairEmail altid mulighed for valg af nøgle i tilfælde af flere identiteter til samme e-mailadresse for samme konto.
 
-Offentlige nøgler gemmes af FairEmail og kan importeres ifm. allerførste signaturbekræftelse eller via fortrolighedsindstillingerne (PEM- el. DER-format).
+Offentlige nøgler gemmes af FairEmail og kan importeres ifm. førstegangsbekræftelse af en signatur eller via fortrolighedsindstillingerne (PEM- eller DER-format).
 
 FairEmail foretager bekræftelse af både signaturen og den komplette certifikatkæde.
 
@@ -659,7 +665,7 @@ Almindelige fejl:
 * *Privat nøgle matcher ikke nogle krypteringsnøgler*: Den valgte nøgle kan ikke anvendes til beskeddekrypteringen, da den sandsynligvis ikke er den korrekte nøgle
 * *Ingen privat nøgle*: Intet certifikat er valgt eller intet certifikat var tilgængeligt i Android-nøglelageret
 
-Er certifikatkæden forkert, vil et tryk på den lille infoknap opliste alle eksisterende certifikater. Efter certifikatoplysningerne vises udstederen eller "selfSign". Et certifikat er selvsigneret, når både emne og udsteder er identiske. Certifikater fra en certifikatmyndighed (CA) er markeret med "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)". Certifikater lokaliseret i Android-nøglelageret er markeret "Android".
+Er certifikatkæden forkert, kan alle certifikater vises med et tryk på den lille infoknap. Efter certifikatoplysninger fremgår udstederen eller "selfSign". Er certifikat er selvsigneret, når både emne og udsteder er identiske. Certifikater fra en certifikatmyndighed (CA) er mærket "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)". Certifikater i Android-nøglelageret er markeret "Android".
 
 En gyldig kæde ser således ud:
 
@@ -671,36 +677,36 @@ Bemærk, at en certifikatkæde altid er ugyldig, hvis intet ankercertifikat find
 
 Tjek [hér](https://support.google.com/pixelphone/answer/2844832?hl=en), hvordan certifikater kan importeres til Android-nøglelageret.
 
-Brug af udløbne nøgler, inline-krypterede/-signerede beskeder samt hardwaresikkerhedstokens er uunderstøttet.
+Brug af udløbne nøgler, inline-krypterede/signerede beskeder samt hardwaresikkerhedstokens er uunderstøttet.
 
-Søger man et gratis (test) S/MIME-certifikat, så tjek [hér](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for muligheder. Sørg for at [læse dette først](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219) ved anmodning om et S/MIME Actalis-certifikat. Søger man et billigt S/MIME-certifikat, havde jeg en god oplevelse med [Certum](https://www.certum.eu/en/smime-certificates/).
+Søges et gratis (test) S MIME-certifikat, tjek [hér](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for muligheder. Husk [først at læse dette](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219) ved anmodning om et S/MIME Actalis-certifikat. Søges et billigt S/MIME-certifikat, havde udvikleren en god oplevelse med [Certum](https://www.certum.eu/en/smime-certificates/).
 
-Sådan udtrækkes en offentlig nøgle fra et S/MIME-certifikat:
+Sådan udpakkes en offentlig nøgle fra et S/MIME-certifikat:
 
 ```
 openssl pkcs12 -in filenavn.pfx/p12 -clcerts -nokeys -out cert.pem
 ```
 
-Afkodnig af S/MIME-signaturer mv. kan ske [hér](https://lapo.it/asn1js/).
+S/MIME-signaturer mv. kan afkodes [hér](https://lapo.it/asn1js/).
 
-S/MIME-signering/-kryptering er en Pro-funktion, alle øvrige PGP- og S/MIME-operationer er gratis i brug.
+S/MIME-signering/-kryptering er en Pro-funktion, alle øvrige PGP- og S/MIME-operationer er dog gratis at bruge.
 
 <br />
 
 <a name="faq13"></a>
 **(13) Hvordan fungerer søgning på en enhed/server?**
 
-Beskedsøgning kan ske efter Afsender (fra), Modtager (til, kopi, bcc), Emne, nøgleord eller beskedtekst vha. forstørrelsesglasset i handlingslbjælken i en mappe. Søgning kan også ske fra enhver app ved at vælge *Søg e-mail * i popup-menuen kopiér/indsæt.
+Beskedsøgninger efter Afsender (fra), Modtager (til, kopi, bcc), Emne, nøgleord eller beskedtekst sker vha. forstørrelsesglasset i handlingslbjælken i en mappe. Der kan også søges fra enhver app ved at vælge *Søg e-mail * i popup-menuen kopiér/indsæt.
 
 Søgning i den fælles indbakke udføres i alle mapper på alle konti, søgning i mappelisten udføres kun for den tilknyttede konto og søgning i en mappe udføres kun i dén mappe.
 
-Beskedsøgning sker først på enheden. Der vil være en handlingsknap med et Søg igen-ikon i bunden for at fortsætte søgningen på serveren. Der kan vælges, i hvilken mappe, søgningen skal fortsætte.
+Beskedsøgning sker først på enheden. En handlingsknap med et Søg igen-ikon vises i nederst for at fortsætte søgningen på serveren. Der kan vælges, i hvilken mappe søgningen skal fortsætte.
 
-IMAP-protokollen understøtter ikke søgning i flere end én mappe ad gangen. Søgning på serveren er en ressourcekrævende operation, hvorfor valg af flere mapper ikke er muligt.
+IMAP-protokollen understøtter kun søgning i én mappe ad gangen. Søgning på serveren er ressourcekrævende, hvorfor flere mapper ikke kan vælges.
 
-Søgning i lokale beskeder er versal/minuskel ufølsom på deltekst. Lokale beskedtekster gennemsøges kun, hvis selve beskedteksterne er blevet downloadet. Serversøning kan være både versal/minuskel følsom/ufølsom og kan, afhængigt af udbyderen, være på deltekst eller hele ord.
+Søgning i lokale beskeder er versal/minuskel ufølsom og på deltekst. Lokale beskedtekster gennemsøges kun, hvis selve beskedteksterne er blevet downloadet. Søgning på serveren kan være både versal/minuskel følsom eller ufølsom og kan, afhængigt af udbyderen, være på deltekst eller hele ord.
 
-Visse servere kan ikke håndtere søgning i beskedtekst ifm. større beskedantal. I så tilfælde findes en mulighed for at deaktivere beskedtekstsøgning.
+Visse servere kan ikke håndtere søgning i beskedtekster ifm. et stort beskedantal. I så tilfælde kan søgning i beskedteksten deaktiveres.
 
 Det er muligt at bruge Gmail-søgeoperatører vha. søgekommandopræfikset *raw:*. Er kun én Gmail-konto opsat, kan en raw søgning ske direkte på serveren ved at søge fra den fælles indbakke. Er flere Gmail-konti opsat, skal man først gå til mappelisten eller arkivmappen (alle beskeder) for den Gmail-konto, der skal gennemsøges. [Tjek hér](https://support.google.com/mail/answer/7190) ang. tilgængelige søgeoperatører. F.eks.:
 
@@ -714,7 +720,7 @@ Gennemsøgning af et stort beskedantal på enheden sker ikke særligt hurtigt gr
 
 Det betyder, at søgning efter en beskedtekst kræver, at filer indeholdende beskedteksterne skal åbnes én efter én for at tjekke, om den søgte tekst optræder i filen, hvilket er en relativt ressourcekrævende proces.
 
-Under *Diverse indstillinger* kan *Byg søgeindeks* aktiveres for markant at øge søgehastigheden på enheden, hvilket dog samtidig øger både strøm- og lagerpladsforbrug. Søgeindekset er baseret på ord, så søgning efter deltekster er ikke muligt. Søgning vha. søgeindekset er som standard OG (AND), så søgning efter f.eks. *æble appelsin* vil søge efter både æble OG appelsin. Ord adskilt med komma resulterer i en ELLER (OR) søgning, så f.eks. *æble, appelsin* vil søge efter enten æble ELLER appelsin. Begge kan kombineres, så søgning efter f.eks. *æble, appelsin banan* vil søge efter æble ELLER (appelsin OG banan). Brug af søgeindekset er en Pro-funktion.
+Under *Diverse indstillinger* kan *Byg søgeindeks* aktiveres for markant at øge søgehastigheden på enheden. Det vil dog samtidig øge både strøm- og lagerpladsforbrug. Søgeindekset er baseret på ord, så deltekstssøgning er ikke muligt. Søgning vha. søgeindekset er som standard OG (AND), så søgning efter f.eks. *æble appelsin* vil søge efter både æble OG appelsin. Ord adskilt med komma resulterer i en ELLER (OR) søgning, så f.eks. *æble, appelsin* vil søge efter enten æble ELLER appelsin. Begge kan kombineres, så søgning efter f.eks. *æble, appelsin banan* vil søge efter æble ELLER (appelsin OG banan). Brug af søgeindekset er en Pro-funktion.
 
 Fra version 1.1315 er det muligt at benytte søgeudtryk såsom:
 
@@ -722,13 +728,13 @@ Fra version 1.1315 er det muligt at benytte søgeudtryk såsom:
 æble +banan-kirsebær?nødder
 ```
 
-Dette vil resultere i en søgning ala:
+Dette vil resultere i en søgning som denne:
 
 ```
 ("æble" OG "banana" OG IKKE "kirsebær") ELLER "nødder"
 ```
 
-Søgeudtryk kan benyttes til søgning på enheden via søgeindekset samt til søgning på e-mailserveren, men af ydelsesårsager ikke til søgning på enheden uden søgeindeks.
+Søgeudtryk kan benyttes ved søgning på enheden via søgeindekset samt ved søgning på e-mailserveren, men af ydelsesårsager ikke til søgning på enheden uden søgeindeks.
 
 Søgning på enheden er en gratis funktion vha. søgeindekset, mens søgning på serveren er en Pro-funktion.
 
@@ -750,15 +756,15 @@ Tjek [denne FAQ](#user-content-faq156) vedr. Office365-kontoopsætnig.
 <a name="faq15"></a>
 **(15) Hvorfor genindlæses beskedteksten hele tiden?**
 
-Beskedhovede og -brødtekst hentes separat fra serveren. Brødteksten i større beskeder forudindlæses ikke på takserede forbindelser, men hentes efter behov, når en besked udfoldes. Beskedteksten vil fortsætte med at blive genindlæst ved manglende forbindelse til konto. Tjek også næste spørgsmål, eller hvorvidt andre operationer, såsom beskedsynk, afvikles.
+Beskedhovede og -brødtekst hentes separat fra serveren. Brødteksten i større beskeder forudindlæses ikke på takserede forbindelser, men hentes efter behov, når en besked udfoldes. Beskedteksten vil fortsætte med at blive genindlæst ved manglende forbindelse til en konto. Tjek også næste spørgsmål, eller hvorvidt andre operationer, såsom beskedsynk, afvikles.
 
-Man kan tjekke konto- og mappelisten for kontoen og mappetilstanden (se forklaringen til betydningen af ikonerne) og operationslisten tilgængelig via hovednavigeringsmenuen for afventende operationer (tjek [denne FAQ](#user-content-faq3) for betydningen af operationerne).
+Man kan tjekke kontoen, dens mappeliste og mappetilstand (tjek forklaringen til betydningen af ikonerne) og operationslisten, tilgængelig via hovednavigeringsmenuen, for afventende operationer (tjek [denne FAQ](#user-content-faq3) for betydningen af operationerne).
 
 Har FairEmail stoppet synk grundet forudgående konnektivitetsproblemer, så tjek [denne FAQ](#user-content-faq123). Synk kan også gennemtvinges via trepriksmenuen.
 
-Der kan i modtagelsesindstillingerne opsættes maksimalstørrelse for automatisk besked-downloads på takserede forbindelser.
+I modtagelsesindstillingerne kan maksimalstørrelsen for automatisk besked-download på takserede forbindelser indstilles.
 
-Mobilforbindelser er typisk altid takserede, og visse kommercielle Wi-Fi hotspots er det ligeledes.
+Mobilforbindelser er typisk takserede, og det samme er visse Wi-Fi hotspots.
 
 <br />
 
@@ -773,15 +779,15 @@ Mulige årsager til fejl i beskedsynk (sendte eller modtagne):
 * E-mailserveren er midlertidigt utilgængelig
 * Android har stoppet synkroniseringstjenesten
 
-Tjek derfor konto- og mappeindstillinger, og tjek, at konti/mapper er forbundne (tjek forklaringen i navigeringsmenuen ang. ikonernes betydning).
+Tjek derfor konto- og mappeindstillinger samt at konti/mapper er forbundne (tjek forklaringen i navigeringsmenuen ang. ikonbetydninger).
 
 Er der evt. fejlmeddelelser, så tjek [denne FAQ](#user-content-faq22).
 
 På enheder med en masse hukommelsehungrende apps, vil Android muligvis stoppe synk-tjenesten grundet ressourcemangel.
 
-Visse Android-versioner stopper apps og tjenester for aggressivt. Tjek [dette dedikerede websted](https://dontkillmyapp.com/) samt [dette Android-problem](https://issuetracker.google.com/issues/122098785) for mere info.
+Visse Android-versioner stopper apps og tjenester for aggressivt. Tjek [dette dedikerede websted](https://dontkillmyapp.com/) samt [dette Android-problem](https://issuetracker.google.com/issues/122098785) for yderligere information.
 
-Deaktivering af batterioptimering (opsætningstrin 3) mindsker risikoen for, at Android stopper synk-tjenesten.
+Deaktivering af batterioptimering (opsætningstrin 3) mindsker risikoen for, at Android stopper synktjenesten.
 
 Ved gentagne forbindelsesfejl pauser FairEmail synk i stadigt længere intervaller for ikke at dræne enhedens batteri. Dette beskrives i [denne FAQ](#user-content-faq123).
 
@@ -792,14 +798,14 @@ Ved gentagne forbindelsesfejl pauser FairEmail synk i stadigt længere intervall
 
 ~~Er menuen *Synkronisér nu* nedtonet, er der ingen forbindelse til kontoen.~~
 
-~~Tjek foregående spørgsmål for mere info.~~
+~~Tjek foregående spørgsmål for yderligere info.~~
 
 <br />
 
 <a name="faq18"></a>
-**(18) Hvorfor vises beskedforhåndsvisning ikke altid?**
+**(18) Hvorfor ses beskedforhåndsvisning ikke altid?**
 
-Beskedforhåndsvisning kan ikke ske for beskedtekster, som endnu ikke er downloadet. Tjek også [denne FAQ](#user-content-faq15).
+Beskedforhåndsvisning kan ikke ske, hvis beskedteksten endnu ikke er downloadet. Tjek også [denne FAQ](#user-content-faq15).
 
 <br />
 
@@ -813,84 +819,84 @@ Det rette spørgsmål er, "*hvorfor er der så mange skatter og afgifter?*":
 * Inkomstskat: 50 %
 * <sub>Paypal-gebyr: 5-10 % afhængigt af land/beløb</sub>
 
-Dét, der bliver tilbage til udvikleren, er blot en brøkdel af købsprisen.
+Dét, der er tilbage til udvikleren, er blot en brøkdel af salgsprisen.
 
-Bemærk, det kun er nødvendigt at købe visse bekvemmeligheds og avancerede funktioner, dvs., at FairEmail grundlæggende kan bruges gratis.
+Bemærk, at det kun er nødvendigt at købe visse bekvemmeligheds og avancerede funktioner, hvilket betyder, at FairEmail grundlæggende kan bruges gratis.
 
-Bemærk også, de fleste gratis apps ser ikke ud til at være bæredygtige i længden, hvorimod FairEmail vedligeholdes og supporteres korrekt, samt at gratis apps kan have faldgruber, f.eks. læk af fortrolige oplysninger.
+Bemærk også, at de fleste gratis apps ikke ser ud til at være bæredygtige i længden, hvorimod FairEmail vedligeholdes og understøttes korrekt, samt at gratis apps kan have faldgruber, såsom læk af fortrolige oplysninger.
 
-Der er arbejdet på FairEmail næsten dagligt i flere end to år, så prisen synes mere end rimelig. Af samme årsag vil der heller ikke være rabatter.
+Der er arbejdet på FairEmail næsten dagligt i flere end to år, så prisen synes er mere end rimelig. Af samme årsag vil der heller ikke være rabatter.
 
 <br />
 
 <a name="faq20"></a>
-**(20) Gives der refusion?**
+**(20) Kan man få refusion?**
 
-Fungerer en købt Pro-funktion ikke som tilsigtet, og dette ikke skyldes et problem i de gratis funktioner, og jeg ikke kan løse problemet rettidigt, så gives der refusion. I alle øvrigee tilfælde er refusion ikke mulig. Refusion er under ingen omstændigheder en mulighed for noget problem relateret til de gratis funktioner, da intet er betalt for disse, og da de kan evalueres uden begrænsninger. Jeg tager som sælger ansvar for at levere dét, der er blevet lovet, og jeg forventer, at du tager ansvar for at informere dig om, hvad det er, du køber.
+Fungerer en købt Pro-funktion ikke som tilsigtet, og dette ikke skyldes et problem i de gratis funktioner, og kan jeg ikke løse problemet rettidigt, så gives der refusion. I alle øvrigee tilfælde er refusion ikke mulig. Under ingen omstændigheder er der mulighed for refusion for noget problem relateret til de gratis funktioner, da der ikke blev betalt noget for dem, og da de kan evalueres helt uden begrænsninger. Jeg tager som sælger ansvar for at levere dét, der er blevet lovet, og jeg forventer, at du tager ansvar for at informere dig om, hvad du reelt køber.
 
 <a name="faq21"></a>
 **(21) Hvordan aktiveres notifikationslyset?**
 
 Før Android 8 Oreo: Der findes en avanceret indstilling i opsætningen til dette.
 
-Android 8 Oreo og senere: Tjek [hér](https://developer.android.com/training/notify-user/channels), hvordan notifikationskanaler opsættes. Man kan bruge knappen *Standard kanal* i appens notifikationsindstillinger for at gå direkte til de relaterede Android-notifikationskanalindstillinger.
+Android 8 Oreo og senere: Tjek [hér](https://developer.android.com/training/notify-user/channels), hvordan notifikationskanaler opsættes. Man kan via knappen *Standard kanal* i appens notifikationsindstillinger gå direkte til de relaterede Android-notifikationskanalindstillinger.
 
-Bemærk, at apps ikke længere kan ændre notifikationsindstillinger, herunder indstillinger for notifikationslys, på Android 8 Oreo og senere.
+Bemærk, at apps ikke længere kan ændre notifikationsindstillinger, herunder indstillinger for notifikationslys, i Android 8 Oreo og senere.
 
-Det er undertiden nødvendigt at deaktivere indstillingen *Vis beskedforhåndsvisning i notifikationer* eller at aktivere indstillingerne *Vis kun notifikationer med en forhåndsvisningstekst* for at omgå fejl i Android. Dette gælder muligvis også notifikationslyde og vibrationer.
+Det er undertiden nødvendigt at deaktivere indstillingen *Vis beskedforhåndsvisning i notifikationer* eller at aktivere indstillingerne *Vis kun notifikationer med en forhåndsvisningstekst* for at omgå fejl i Android. Dette gælder muligvis også notifikationslyde og -vibrationer.
 
-Indstilling af lysfarven før Android 8 er uunderstøttes og er ikke muligt på Android 8 og senere.
+Indstilling af lysfarven før Android 8 understøttes ikke og er ikke muligt på Android 8 og senere.
 
 <br />
 
 <a name="faq22"></a>
 **(22) Hvad betyder konto-/mappefejl ...?**
 
-For lettere at diagnosticere problemer, skjuler FairEmail ikke fejl (hvilket lignende apps ofte gør).
+FairEmail skjuler ikke fejl (hvilket lignende apps ofte gør) for lettere at diagnosticere problemer.
 
-FairEmail forsøger automatisk at genoprette forbindelse efter en forsinkelse. Denne forsinkelse fordobles efter hvert mislykket forsøg for at forhindre batteridræning samt at blive låst ude permanent.
+FairEmail forsøger automatisk at genforbinde efter en forsinkelse. Denne forsinkelse fordobles efter hvert fejlet forsøg for at hindre batteridræning samt permanent udlåsning.
 
-Der er generelle såvel som specifikke fejl for Gmail-konti (tjek nedenfor).
+For Gmail-konti findes generelle såvel som specifikke fejl (tjek nedenfor).
 
 **Generelle fejl**
 
 <a name="authfailed"></a>
-Fejlen *... Godkendelse mislykkedes ...* eller *... GODKENDELSE mislykkedes ...* skyldes sandsynligvis forkert brugernavn/adgangskode. Visse udbydere forventer som brugernavn blot *brugernavn* og andre den fulde e-mail *brugernavn@eksempel.dk*. Benyttes kopiér/indsæt ved brugernavn/adgangskode angivelse, medtages muligvis usynlige tegn, hvilket også forårsager denne fejl. Visse adgangskodehåndteringer gøre også dette forkert. Brugernavn kan være minuskel/versal sensitivt, så prøv med kun minuskler. Adgangskoder er fortrinsvis minuskel/versal sensitive. Visse udbydere kræver brug af en app-adgangskode i stedet for kontoadgangskoden, så tjek din leverandørs dokumentation. Det nogle gange nødvendigt først at muliggøre ekstern adgang (IMAP/SMTP) på udbyderens websted. Øvrige mulige årsager er, at kontoen er blokeret, eller at indlogning på en eller anden måde er administrativt begrænset, f.eks. ved kun at tillade indlogning fra bestemte netværk/IP-adresser.
+Fejlen *... Godkendelse mislykkedes ...* eller *... GODKENDELSE mislykkedes ...* skyldes sandsynligvis forkert brugernavn/adgangskode. Nogle udbydere forventer som brugernavn blot *brugernavn* og andre den fulde e-mail *brugernavn@eksempel.dk*. Brug af kopiér/indsæt ved angivelse af brugernavn/adgangskode medtager muligvis usynlige tegn, hvilket også kan forårsage fejlen. Visse adgangskodehåndteringer er kendt for også at gøre dette forkert. Brugernavnet kan være minuskel/versal sensitivt, så prøv med kun minuskler. Adgangskoden er typisk minuskel/versal sensitiv. Nogle udbydere kræver brug af en app-adgangskode i stedet for kontoadgangskoden, tjek derfor leverandørdokumentationen. Det er nogle gange nødvendigt først at muliggøre ekstern adgang (IMAP/SMTP) på udbyderens websted. Andre mulige årsager er, at kontoen er blokeret, eller at indlogning er administrativt begrænset på en eller anden måde (log ind kun tilladt fra bestemte netværk/IP-adresser mv.).
 
-Fejlen *... For mange fejlede godkendelsesforsøg ... *betyder sandsynligvis, at der bruges en Yahoo-kontoadgangskode i stedet for en app ditto. Tjek [denne FAQ](#user-content-faq88) vedr. opsætning af en Yahoo-konto.
+Fejlen *... For mange fejlede auth-forsøg ... *betyder sandsynligvis brug af en Yahoo-kontoadgangskode i stedet for en app ditto. Tjek [denne FAQ](#user-content-faq88) vedr. opsætning af en Yahoo-konto.
 
-Meddelelsen *... + OK ...* betyder sandsynligvis, at en POP3-port (normalt portnummer 995) anvendes til en IMAP-konto (normalt ellers portnummer 993).
+Meddelelsen *... + OK ...* betyder sandsynligvis, at en POP3-port (normalt portnr. 995) anvendes til en IMAP-konto (normalt ellers portnr. 993).
 
 Fejlene *... ugyldig hilsen ...*, *... kræver gyldig adresse ...* og *... Parameter til HELO overholder ikke RFC-syntaks ...* kan sandsynligvis løses ved at ændre den avancerede identitetsindstilling *Anvend lokal IP-adresse i stedet for værtsnavn*.
 
-Fejlen *... Kunne ikke oprette forbindelse til vært...* betyder, at e-mailserveren ikke svarede inden for en rimelig tid (20 sekunder som standard). Dette indikerer i reglen Internetforbindelsesproblemer, muligvis forårsaget af et VPN eller firewall-app. I tilfælde af virkelige langsomme e-mailservere, kan man prøve at øge timeout for forbindelsen i FairEmails forbindelsesindstillinger.
+Fejlen *... Kunne ikke forbinde til vært...* betyder, at e-mailserveren ikke svarede inden for et rimeligt tidsrum (20 sek. som standard). Typisk indikerer dette Internetforbindelsesproblemer, muligvis forårsaget af et VPN eller en firewall-app. Ved er virkelig langsom e-mailserver kan der, via FairEmails forbindelsesindstillinger, forsøges med en øget forbindelsestimeout.
 
 Fejlen *... Forbindelse nægtet ...* betyder, at e-mailserveren eller noget mellem denne og appen, såsom en firewall, aktivt afviste forbindelsen.
 
-Fejlen *... Netværk utilgængeligt ... * betyder, at e-mailserveren ikke kunne nås via den aktuelle netværksforbindelse, dvs. ingen tilgængelig Internetadgang.
+Fejlen *... Netværk utilgængeligt ...* betyder, at e-mailserveren ikke kunne nås via den aktuelle Internetforbindelse, f.eks. fordi Internettrafik er begrænset til alene lokal trafik.
 
 Fejlen *... Vært er uopløst ...*, "*... Kan ikke opløse vært...* eller *... Ingen adresse tilknyttet værtsnavn ...* betyder, at adressen på e-mailserveren ikke kunne opløses til en IP-adresse. Dette kan skyldes et VPN, adblocking eller en utilgængelig/ikke korrekt fungerende (lokal) [DNS-server](https://en.wikipedia.org/wiki/Domain_Name_System).
 
-Fejlen *... Software forårsaget forbindelsesafbrydelse ...* betyder, at e-mailserveren, eller noget imellem denne og FairEmail, aktivt afsluttede en eksisterende forbindelse. Dette kan f.eks. ske, når konnektivitet pludselig mistes. Et typisk eksempel er aktivering af Flytilstand.
+Fejlen *... Softwareforårsaget forbindelsesafbrydelse ...* betyder, at e-mailserveren, eller noget mellem denne og FairEmail, aktivt afsluttede en eksisterende forbindelse. Dette kan f.eks. ske, hvis konnektiviteten mistes pludseligt. Et typisk eksempel er aktivering af Flytilstand.
 
-Fejlene *... BYE, logger ud ...*, *... Forbindelse nulstillet ...* betyder, at e-mailserveren eller noget mellem denne og appen, såsom en router eller firewall(-app), aktivt afsluttede forbindelsen.
+Fejlene *... BYE, logger ud ...*, *... Forbindelse nulstillet ...* betyder, at e-mailserveren, eller noget mellem denne og appen, såsom en router eller firewall(-app), aktivt afsluttede en eksisterende forbindelsen.
 
-Fejlen *... Forbindelse lukket af peer ...* kan forårsages af en ikke-opdateret Exchange-server, tjek [hér](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for mere info.
+Fejlen *... Forbindelse lukket af peer ...* kan forårsages af en ikke-opdateret Exchange-server, tjek [hér](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for yderligere info.
 
 Fejlene *... Læsefejl ...*, *... Skrivefejl ...*, *... Læsning fik timeout ...*, *... Ødelagt pipe ...* betyder, at e-mailserveren ikke længere svarer, eller at Internetforbindelsen er ringe.
 
 <a name="connectiondropped"></a>
-Fejlen *... Forbindelse droppet af server? ...* betyder, at e-mailserveren uventet afsluttede forbindelsen. Dette sker af og til ved for mange forbindelser på for kort tid, eller ved brug af forkert adgangskode for mange gange. Tjek i så tilfælde, at adgangskoden er korrekt, deaktivér modtagelse i modtagelsesindstillingerne i ca. 30 minutter og forsøg så igen. Om nødvendigt, tjek [denne FAQ](#user-content-faq23), vedr. reduktion af forbindelsesantallet.
+Fejlen *... Forbindelse droppet af server? ...* betyder, at e-mailserveren uventet afsluttede forbindelsen. Dette sker af og til ved for mange forbindelser på for kort tid, eller ved brug af en forkert adgangskode for mange gange. Tjek i så fald at adgangskoden er korrekt, deaktivér modtagelse i modtagelsesindstillingerne i ca. 30 min. og forsøg igen. Om nødvendigt, tjek i [denne FAQ](#user-content-faq23), hvordan forbindelsesantallet kan reduceres.
 
-Fejlen *... Uventet afslutning af zlib-inputstrøm ...* betyder, at ikke alle data blev modtaget, muligvis grundet en dårlig/afbrudt forbindelse.
+Fejlen *... Uventet afslutning af zlib-inputstrøm ...* betyder, at ikke alle data er modtaget, f.eks. grundet en dårlig/afbrudt forbindelse.
 
 Fejlen *... forbindelsesfejl ...* kan indikere [For mange samtidige forbindelser](#user-content-faq23).
 
-Advarslen *... Uunderstøttet kodning ...* betyder, at beskedens tegnsæt er ukendt eller uunderstøttet. FairEmail bruger generelt ISO-8859-1 (Latin1), hvilket som oftest resulterer i korrekt beskedvisning.
+Advarslen *... Uunderstøttet kodning ...* betyder, at et beskedtegnsæt er ukendt/uunderstøttet. FairEmail benytter generelt ISO-8859-1 (Latin1), hvilket i de fleste tilfælde vil resultere i korrekte beskedvisninger.
 
-[Tjek hér](#user-content-faq4) vedr. fejlene *... Ikke-betroet ... ikke i certifikat ...*, * ... Ugyldigt sikkerhedscertifikat (kan ikke bekræfte serveridentitet) ...* eller *... Betroet anker til certificeringssti ikke fundet ...*
+[Tjek hér](#user-content-faq4) for fejlene *... Ikke-betroet ... ikke i certifikat ...*, * ... Ugyldigt sikkerhedscertifikat (kan ikke bekræfte serveridentitet) ...* eller *... Betroet anker til certificeringssti ikke fundet ...*
 
-[Tjek hér](#user-content-faq127) vedr. fejlen *... Syntaktisk ugyldig(t/e) HELO-argument(er) ... *.
+[Tjek hér](#user-content-faq127) vedr. fejlen *... Syntaktisk ugyldigt HELO-argument(er) ... *.
 
 [Tjek hér](#user-content-faq41) vedr. fejlen *... Handshake mislykkedes ...*.
 
@@ -906,13 +912,13 @@ Mulige årsager:
 * E-mai-serveren nægter at acceptere en besked, fordi den f.eks. er for stor eller indeholder uacceptable links
 * Der er for mange forbindelser til serveren, se også næste spørgsmål
 
-Grundet spam, blokerer mange offentlige Wi-Fi netværk udgående e-mail. Dette kan somme tider omgås ved brug af en anden SMTP-port. Tjek leverandørdokumentationen ang. anvendelige portnumre.
+Mange offentlige Wi-Fi netværk blokerer udgående e-mail for at forhindre spam. Dette kan somme tider omgås ved brug af en anden SMTP-port. Tjek leverandørdokumentationen ang. anvendelige portnumre.
 
-Benyttes et [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), kan VPN-udbyderen muligvis blokere forbindelsen, hvis den for aggressivt forsøger at forhindre spam. Bemærk, at [Google Fi](https://fi.google.com/) også bruger et VPN.
+Benyttes et [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), blokerer VPN-udbyderen muligvis forbindelsen ved for aggressivt forsøg på at forhindre spam. Bemærk, at [Google Fi](https://fi.google.com/) også benytter et VPN.
 
 **Afsendelsesfejl**
 
-SMTP-servere kan [af forskellige årsager](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes) afvise beskeder. For store beskeder og udløsning af en e-mailservers spamfilter er de mest hyppige årsager.
+SMTP-servere kan [af forskellige årsager](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes) afvise beskeder. For store beskeder samt udløsning af en e-mailservers spamfilter er de mest almindelige årsager.
 
 * Gmails størrelsesbegrænsning for vedhæftninger [udgør 25 MB](https://support.google.com/mail/answer/6584)
 * Outlooks og Office 365' størrelsesbegrænsning for vedhæftninger [udgør 20 MB](https://support.microsoft.com/en-us/help/2813269/attachment-size-exceeds-the-allowable-limit-error-when-you-add-a-large)
@@ -922,37 +928,38 @@ SMTP-servere kan [af forskellige årsager](https://en.wikipedia.org/wiki/List_of
 * *503 5.5.0 Modtager allerede angivet* betyder typisk, at en adresse bruges som både TO- og CC-adresse
 * *554 5.7.1 ... ikke tilladt at videresende* betyder, at e-mailserveren ikke genkender brugernavnet/e-mailadressen. Dobbelttjek værtsnavn og brugernavn/e-mailadresse i identitetsindstillingerne.
 * *550 Spam besked afvist, da IP er listet af ...* betyder, at e-mailserveren har afvist at afsende en besked fra den aktuelle (offentlige) netværksadresse, fordi den tidligere har være misbrugt til spamafsendelse. Prøv at aktivere flytilstand i 10 minutter for at få tildelt en ny netværksadresse.
+* *550 Beklager, din e-mail kan ikke afsendes. Enten emnet, et link, eller en vedhæftet fil indeholder potentielt spam, eller phishing eller malware.* betyder, at e-mailudbyderen anser en udgående besked for skadelig.
 * *571 5.7.1 Besked indeholder spam eller virus eller afsender er blokeret ...* betyder, at e-mailserveren betragtede en udgående besked som spam. Dette betyder sandsynligvis, at e-mailserverens spamfiltre er for strikse. Kontakt e-mailudbyderen for support vedr. dette.
 
-Ønskes Gmail SMTP-serveren brugt mhp. at omgå et for strikst, udgående spamfilter eller til at forbedre beskedlevering:
+Ønskes Gmail SMTP-serveren brugt mhp. at omgå et for strikst, udgående spamfilter eller til at forbedre beskedleveringen:
 
 * Bekræft din e-mailadresse [hér](https://mail.google.com/mail/u/0/#settings/accounts) (en computerbrowser skal bruges til dette)
 * Skift til f.eks. disse identitetsindstillinger (Indstillinger, Manuel opsætning, flere valg, Identiteter, identitet):
 
-&emsp;&emsp;Username: *aktuel Gmail-adresse*<br /> &emsp;&emsp;Password: *[(aktuel) app-adgangskode](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Port: *465*<br /> &emsp;&emsp;Encryption: *SSL/TLS*<br /> &emsp;&emsp;Reply to address: *aktuel e-mailaddresse* (avancerede identititetsindstillinger)<br />
+&emsp;&emsp;Username: *brugerens Gmail-adresse*<br /> &emsp;&emsp;Password: *[en app-adgangskode](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Port: *465*<br /> &emsp;&emsp;Encryption: *SSL/TLS*<br /> &emsp;&emsp;Reply to address: *brugerens e-mailaddresse* (avanceret identititetsindstillinger)<br />
 
 <br />
 
 **Gmail-fejl**
 
-Godkendelsen af Gmail-kontiopsætningen vha. hurtigguiden skal periodisk opfriskes via [Androids Kontohåndtering](https://developer.android.com/reference/android/accounts/AccountManager). Dette kræver kontakt-/konto-tilladelser samt Internetforbindelse.
+Godkendelsen af Gmail-kontiopsætninger vha. hurtigguiden skal periodisk opfriskes via [Android-kontohåndteringen](https://developer.android.com/reference/android/accounts/AccountManager). Dette kræver kontakt-/kontotilladelser samt Internetforbindelse.
 
-Fejlen *... Godkendelse mislykkedes... Konto ikke fundet ...* betyder, at en tidligere godkendt Gmail-konto er fjernet fra enheden.
+Fejlen *... Godkendelse mislykkedes... Konto ikke fundet ...* betyder, at en tidligere godkendt Gmail-konto er blevet fjernet fra enheden.
 
-Fejlene *... Godkendelse mislykkedes... Intet token ...* betyder, at Android-kontohåndteringen ikke kunne opfriske godkendelsen af en Gmail-konto.
+Fejlene *... Godkendelse mislykkedes... Ingen token ...* betyder, at Android-kontohåndteringen ikke kunne opfriske godkendelsen af en Gmail-konto.
 
-Fejlen *... Ugyldige akkreditiverer ... netværksfejl ...* betyder, at Androids Kontohåndtering var ude af stand til at opfriske godkendelsen af en Gmail-konto grundet Internetforbindelsesproblemer
+Fejlen *... Ugyldige akkreditiverer ... netværksfejl ...* betyder, at Android-kontohåndteringen ikke kunne opfriske godkendelsen af en Gmail-konto grundet Internetforbindelsesproblemer
 
-Fejlen *... Godkendelse mislykkedes... Ugyldige akkreditiver ...* kan være forårsaget af et skift af kontoadgangskoden eller ophævelse af de krævede konto-/kontakttilladelser. Er kontoadgangskoden skiftet, så godkend igen Google-kontoen i Android-kontoindstillingerne. Er tilladelserne tilbagekaldt, kan hurtigopsætningsguiden til Gmail startes for at gentildele de nødvendige tilladelser (genopsætning af kontoen er ikke nødvendig).
+Fejlen *... Godkendelse mislykkedes... Ugyldige akkreditiver ...* kan være forårsaget af et skift af kontoadgangskoden eller ophævelse af de krævede konto-/kontakttilladelser. Er kontoadgangskoden skiftet, så godkend Google-kontoen i indstillingerne for Android-kontoen igen. I tilfælde af at tilladelserne er tilbagekaldt, kan hurtigopsætningsguiden til Gmail startes for at gentildele de nødvendige tilladelser (kontogenopsætning ikke nødvendig).
 
-Fejlen *... ServiceDisabled ...* kan skyldes indrullering i [Avanceret Beskyttelsesprogram](https://landing.google.com/advancedprotection/): "*For at læse e-mails, skal Gmail bruges. Google-kontoen kan ikke bruges med apps og tjenester, som kræver adgang til følsomme data såsom e-mails*". Tjek [hér](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881) for mere info.
+Fejlen *... ServiceDisabled ...* kan skyldes indrullering i [Avanceret Beskyttelsesprogram](https://landing.google.com/advancedprotection/): "*For at læse sine e-mail, skal man benytte Gmail. Man kan ikke benytte sin Google-konto med apps og tjenester, som kræver adgang til følsomme data såsom ens e-mails*". Tjek yderligere info [hér](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
 
 Hvis i tvivl, kan der anmodes om [support](#user-content-support).
 
 <br />
 
 <a name="faq23"></a>
-**(23) Hvorfor ses advarslen ... ?**
+**(23) Hvorfor vises advarslen ... ?**
 
 *Generelt*
 
@@ -960,7 +967,7 @@ Avarsler er advarselsmeddelelser sendt af e-mailservere.
 
 *For mange samtidige forbindelser* eller *Maksimalt antal forbindelser overskred*
 
-Denne advarsel udsendes, når der er for mange samtidige mappeforbindelser til den samme e-mailkonto.
+Denne advarsel udsendes ved for mange samtidige mappeforbindelser for en e-mail-konto.
 
 Mulige årsager:
 
@@ -975,44 +982,44 @@ Prøv først at vente lidt for at se, om problemet løser sig selv, ellers:
 
 En nem måde at opsætte periodisk tjek for beskeder for alle mapper undtagen indbakken er at bruge *Anvend for alle . .* i trepriksmenuen på mappelisten og at markere de to nederste afkrydsningsfelter.
 
-Det maksimale antal samtidige mappeforbindelser til Gmail udgør 15, så der kan synkes maks. 15 mapper samtidigt på tværs af *alle* aktuelle enheder. Derfor er Gmail-*brugermapper* også som standard opsat til polling fremfor altid at synke. Dette kan, om nødvendigt eller ønsket, ændres vha. langt tryk på en mappe i mappelisten, vælg *Redigér egenskaber*. Tjek oplysningerne [hér](https://support.google.com/mail/answer/7126229).
+Det maksimale antal samtidige mappeforbindelser til Gmail udgør 15, så der kan maks. synkes 15 mapper samtidigt for *alle* anvendte enheder. Gmail-*brugermapper* er derfor som standard opsat til polling fremfor altid at synke. Om nødvendigt eller ønsket, kan dette ændres via langt tryk på en mappe i mappelisten og vælge *Redigér egenskaber*. Tjek oplysningerne [hér](https://support.google.com/mail/answer/7126229).
 
 Ved brug af en Dovecot-server, skal indstillingen [mail_max_userip_connections](https://doc.dovecot.org/settings/dovecot_core_settings/#mail-max-userip-connections) muligvis ændres.
 
-Bemærk, at det vil tage e-mailserveren et stykke tid at opdage afbrudte/mistede forbindelser, hvilket betyder, at kun halvdelen af mappeforbindelserne reelt er tilgængelige. For Gmail vil det kun være 7 forbindelser.
+Bemærk, at det vil tage en e-mailserver et stykke tid at opdage brudte forbindelser, hvilket betyder, at kun halvdelen af mappeforbindelserne reelt er tilgængelige. For Gmail vil det kun være 7 forbindelser.
 
 <br />
 
 <a name="faq24"></a>
 **(24) Hvad betyder gennemse beskeder på serveren?**
 
-Gennemse beskeder på serveren henter beskeder fra e-mailserveren i realtid, når slutningen af listen over synkede beskeder nås, også hvis mappen er opsat til ikke at synke. Denne funktion kan deaktiveres under Avancerede kontoindstillinger.
+Gennemse beskeder på serveren henter beskeder fra e-mailserveren i realtid, når slutningen af listen over synkede beskeder nås, også selvom mappen er opsat til ikke at synke. Dene funktion kan deaktiveres fra Avancerede kontoindstillinger.
 
 <br />
 
 <a name="faq25"></a>
 **(25) Hvorfor kan der ikke vælges/åbnes/gemmes et billede, vedhæftning eller fil?**
 
-Når et menupunkt til at vælge/åbne/gemme en fil er deaktiveret (nedtonet), eller når meddelelsen *Lageradgangs-framework ikke tilgængelig* vises, så er [lageradgangs-framework'en](https://developer.android.com/guide/topics/providers/document-provider), en standard Android-komponent, sandsynligvis ikke til stede. Dette kan skyldes, at den ikke er indeholdt i en tilpasset (og debloated) ROM.
+Når et menupunkt til at vælge/åbne/gemme en fil er deaktiveret (nedtonet), eller når meddelelsen *Lageradgangs-framework ikke tilgængelig* ses, så er [lageradgangs-framework'en](https://developer.android.com/guide/topics/providers/document-provider), en standard Android-komponent, sandsynligvis ikke til stede. Dette kan skyldes, at den ikke er indeholdt i en tilpasset (og debloated) ROM.
 
-FairEmail anmoder ikke om lagerpladstilladelser, så denne framework kræves for at kunne vælge filer og mapper. Ingen app, undtagen måske filhåndteringer målrettet Android 4.4 KitKat eller senere, bør anmode om lagerpladstilladelser, da dette giver adgang til *alle* filer.
+FairEmail anmoder ikke om lagerpladstilladelser, så denne framework kræves for valg af filer og mapper. Ingen app, undtagen måske filhåndteringer målrettet Android 4.4 KitKat eller senere, bør anmode om lagerpladstilladelser, da dette giver adgang til *alle* filer.
 
-Framework for lagerpladsadgang leveres af pakken *com.android.documentsui*, der er synlig som *Fil*-app i visse Android-versioner (særligt OxygenOS).
+Framework for lagerpladsadgang leveres af pakken *com.android.documentsui*, der er synlig som appen *Filer* i visse Android-versioner (specifikt OxygenOS).
 
-Framework'en for kan aktiveres for lagerpladsadgang (igen) med denne adb-kommando:
+Framework'en for lagerpladsadgang kan aktiveres (igen) via denne adb-kommando:
 
 ```
 pm install -k --user 0 com.android.documentsui
 ```
 
-Alternativt kan *Fil*-appen muligvis aktiveres igen vha. Androids app-indstillinger.
+Alternativt kan appen *Filer* muligvis genaktiveres via Androids app-indstillinger.
 
 <br />
 
 <a name="faq26"></a>
-**(26) Kan man hjælpe med at oversætte FairEmail til ens sprog?**
+**(26) Kan man hjælpe med at oversætte FairEmail til sit sprog?**
 
-Ja, man kan oversætte FairEmail-teksterne til ens sprog [via Crowdin](https://crowdin.com/project/open-source-email). Tilmelding er gratis.
+Ja, det er muligt at bidrage til FairMails oversættelse [via Crowdin](https://crowdin.com/project/open-source-email). Tilmelding er gratis.
 
 Ønsker man sit navn/alias inkluderet på listen over bidragsydere i appens *Om*-afsnit, så [kontakt mig](https://contact.faircode.eu/?product=fairemailsupport) venligst.
 
@@ -1033,7 +1040,7 @@ Indlejret billede:
 
 ![Ødelagt billede](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
 
-Bemærk, at download af eksterne billeder fra en fjernserver kan bruges til at registrere, at en besked er set, hvilket sandsynligvis ikke ønsket, såfremt beskeden er spam eller ondsindet.
+Bemærk, at download af eksterne billeder fra en fjernserver kan bruges til at registrere, at en besked er kigget, hvilket sandsynligvis ikke ønskes, såfremt beskeden er spam eller ondsindet.
 
 <br />
 
@@ -1042,7 +1049,7 @@ Bemærk, at download af eksterne billeder fra en fjernserver kan bruges til at r
 
 I opsætningen findes knappen *Håndtér notifikationer* til at gå direkte til Android-notifikationsindstillingerne for FairEmail.
 
-I Android 8.0 Oreo og senere kan egenskaberne for de individuelle notifikationskanaler håndteres, f.eks. indstilling af en bestemt notifikationslyd eller notifikationsvisning på låseskærmen.
+I Android 8.0 Oreo og senere kan egenskaberne for de individuelle notifikationskanaler håndteres, såsom indstilling af en bestemt notifikationslyd eller notifikationsvisninger på låseskærmen.
 
 FairEmail har flg. beskedkanaler:
 
@@ -1052,55 +1059,57 @@ FairEmail har flg. beskedkanaler:
 * Advarsel: Benyttes til advarselsnotifikationer
 * Fejl: Benyttes til notifikationer om fejl
 
-Tjek oplysningerne [hér](https://developer.android.com/guide/topics/ui/notifiers/notifications#ManageChannels) om notifikationskanaler. Kort sagt: Tryk på notifikationskanalens navn for at tilgå kanalindstillingerne.
+Tjek [hér](https://developer.android.com/guide/topics/ui/notifiers/notifications#ManageChannels) for info om notifikationskanaler. Kort sagt: Tryk på notifikationskanalens navn for at tilgå kanalindstillingerne.
 
-I Android før version 8 Oreo kan notifikationslyd opsættes via indstillingerne.
+I Android før version 8 Oreo kan notifikationslyden opsættes i indstillingerne.
 
 Tjek [denne FAQ](#user-content-faq21), hvis enheden har et notifikationslys.
 
 <br />
 
 <a name="faq29"></a>
-**(29) Hvordan vises notifikationer om nye beskeder for andre mapper?**
+**(29) Hvordan notificeres man om nye beskeder for andre mapper?**
 
-Langt tryk på en mappe, vælg *Redigér egenskaber*, og aktivér enten *Vis i den fælles indbakke* eller *Advisér om nye beskeder* (kun tilgængelig for Android 7 Nougat og senere) og tryk på *Gem*.
+Langt tryk på en mappe, vælg *Redigér egenskaber*, og aktivér enten *Vis i den fælles indbakke* eller *Notificér om nye beskeder* (kun tilgængelig i Android 7 Nougat og senere) og tryk på *Gem*.
 
 <br />
 
 <a name="faq30"></a>
 **(30) Hvordan kan de medfølgende hurtigindstillinger benyttes?**
 
-Hurtigindstillinger (indstillingsfliser) er tilgængelige for:
+Der findes hurtigindstillinger (indstillingsfliser) for:
 
 * globalt aktivere/deaktivere synkronisering
 * vise antallet af nye beskeder og markere dem som set (ikke læst)
 
-Hurtigindstillinger kræver Android 7.0 Nougat eller senere. Brug af indstillingsfliser forklares [hér](https://support.google.com/android/answer/9083864).
+Hurtigindstillinger kræver Android 7.0 Nougat eller senere. Brug af indstillingsfliserne forklares [hér](https://support.google.com/android/answer/9083864).
 
 <br />
 
 <a name="faq31"></a>
-**(31) Hvordan bruges de foruddefinerede genveje?**
+**(31) Hvordan anvendes de medfølgende genveje?**
 
 Der findes genveje til oprettelse af en ny besked til en favoritkontakt.
 
-Genveje kræver Android 7.1 Nougat eller senere. Brug af genveje forklares [hér](https://support.google.com/android/answer/2781850).
+Genveje kræver Android 7.1 Nougat eller senere. Brugen af genveje forklares [hér](https://support.google.com/android/answer/2781850).
+
+Det er også muligt at oprette genveje til mapper via et langt tryk på en mappe i kontolisten -> *Tilføj genvej*.
 
 <br />
 
 <a name="faq32"></a>
 **(32) Hvordan tjekkes, om læsning af e-mails virkelig er sikkert?**
 
-Man kan benytte [E-mail Fortrolighedstester](https://www.emailprivacytester.com/) til dette.
+Benyt [E-mail Fortrolighedstester](https://www.emailprivacytester.com/) til dette.
 
 <br />
 
 <a name="faq33"></a>
 **(33) Hvorfor fungerer redigerede afsenderadresser ikke?**
 
-For at forhindre spam ifm. afsendelser accepterer de fleste udbydere kun bekræftede adresser.
+For at forhindre spam accepterer de fleste udbydere kun bekræftede adresser ifm. afsendelser.
 
-For example Google modifies the message headers like this for *unverified* addresses:
+Google ændre f.eks. beskedhoveder som dette for *ikke-bekræftede* adresser:
 
 ```
 Fra: Nogen <somebody@example.org>
@@ -1116,88 +1125,88 @@ Bemærk, at dette er uafhængigt af at modtage beskeder.
 <a name="faq34"></a>
 **(34) Hvordan matches identiteter?**
 
-Identiteter matches efter konto. For indgående beskeder tjekkes adresserne *til*, *cc*, *bcc*, *fra* og *(X-)leverede/konvolut/originale-til* (i nævnte rækkefølge) og for udgående beskeder (kladder, udbakke og sendt) tjekkes kun *fra*-adresserne. Identiske adresser har forrang frem for delvist matchende ditto, undtagen for *leveret til*-adresser.
+Identitetsmatchning sker efter konto. For indgående beskeder tjekkes adresserne *til*, *cc*, *bcc*, *fra* og *(X-)leverede/konvolut/oprindelig-til* (i nævnte rækkefølge), og for udgående beskeder (kladder, udbakke og sendt) tjekkes kun *fra*-adresserne. Matchende adresser har forrang frem for delvist matchende ditto, undtagen *leveret til*-adresser.
 
-Den matchede adresse vil blive vist som *via* i adresseafsnittet for modtagne beskeder (mellem besked-header og -brødtekst).
+Den matchede adresse blive vist som *via* i adresseafsnittet for modtagne beskeder (mellem besked-headeren og -teksten).
 
-Bemærk, at identiteter skal aktiveres for at kunne matches, samt at identiteter for andre konti ikke medtages.
+Bemærk, at identiteter skal aktiveres for at kunne matches, samt at andre kontoidentiteter ikke medtages.
 
-Matchning udføres kun én gang efter modtagelse af en besked, så eksisterende beskeder påvirkes ikke af opsætningsændringer. You could clear local messages by long pressing a folder in the folder list and synchronize the messages again though.
+Matchning udføres kun én gang efter modtagelse af en besked, så ændring af opsætningen ændrer ikke eksisterende beskeder. Lokale beskeder kan dog ryddes via langt tryk på en mappe i mappelisten og dernæst synke beskederne igen.
 
-It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings to match **the username** of an email address (the part before the @ sign).
+I identitetsindstillingerne er det muligt at opsætte et [regex](https://en.wikipedia.org/wiki/Regular_expression) for at få en e-mailadresses matchende **brugernavn** (delen før @-tegnet).
 
-Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
+Bemærk, at domænenavnet (tekst/tegn efter @) altid skal være identisk med identitetens domænenavn.
 
-If you like to match a catch-all email address, this regex is mostly okay:
+Ønskes en fang-alle e-mailadresse matchet, er dette regex for det meste OK:
 
 ```
 .*
 ```
 
-If you like to match the special purpose email addresses abc@example.com and xyx@example.com and like to have a fallback email address main@example.com as well, you could do something like this:
+Ønskes matchning af e-mailadresserne til specielle formål, abc@eksemepel.dk og xyx@eksemepel.dk, tillige med fallback e-mailadressen hoved@eksemepel.dk, kan noget ala dette gøres:
 
-* Identity: abc@example.com; regex: **(?i)abc**
-* Identity: xyz@example.com; regex: **(?i)xyz**
-* Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
+* Identity: abc@eksempel.dk; regex: **(?i)abc**
+* Identity: xyz@eksempel.dk; regex: **(?i)xyz**
+* Identity: hoved@eskempel.dk; regex: **^(?i)((?!abc|xyz).)\*$**
 
-Matched identities can be used to color code messages. The identity color takes precedence over the account color. Setting identity colors is a pro feature.
+Matchede identiteter kan bruges til beskedfarvekodning. Identitetsfarven har forrang over mappe- og kontofarver. Brug af identitetsfarver er en Pro-funktion.
 
 <br />
 
 <a name="faq35"></a>
-**(35) Why should I be careful with viewing images, attachments, the original message, and opening links?**
+**(35) Hvorfor skal man være forsigtig med at få vist billeder, vedhæftninger, originalbeskeder og åbne links?**
 
-Viewing remotely stored images (see also [this FAQ](#user-content-faq27)) and opening links might not only tell the sender that you have seen the message, but will also leak your IP address. See also this question: [Why email's link is more dangerous than web search's link?](https://security.stackexchange.com/questions/241139/why-emails-link-is-more-dangerous-than-web-searchs-link).
+Visning af fjernlagrede billeder (tjek også [denne FAQ](#user-content-faq27)) og åbning af links fortæller muligvis ikke kun afsenderen, at beskeden er kigget, men lækker også den associerede IP-adresse. Tjek også dette spørgsmål: [Hvorfor et e-mail link er farligere end et websøgningslink.](https://security.stackexchange.com/questions/241139/why-emails-link-is-more-dangerous-than-web-searchs-link).
 
-Opening attachments or viewing an original message might load remote content and execute scripts, that might not only cause privacy sensitive information to leak, but can also be a security risk.
+Åbning af vedhæftninger eller kigning af en original besked kan muligvis indlæse eksternt indhold og eksekvere scripts, hvilket, udover et muligt læk af fortrolige informationer, kan udgøre en sikkerhedsrisiko.
 
-Note that your contacts could unknowingly send malicious messages if they got infected with malware.
+Bemærk, at kontakter, uden deres vidende, kan sende ondsindede beskeder, i tilfælde af malware-infektion.
 
-FairEmail formats messages again causing messages to look different from the original, but also uncovering phishing links.
+FairEmail genformaterer beskeder, hvilket ændre deres udseende ift. originalen, men afslører samtidig også phishing-links.
 
-Note that reformatted messages are often better readable than original messages because the margins are removed, and font colors and sizes are standardized.
+Bemærk, at genformaterede beskeder ofte er mere læsbare end originalerne, da margerne er fjernet, og skrifttypefarver og -størrelser er standardiserede.
 
-The Gmail app shows images by default by downloading the images through a Google proxy server. Since the images are downloaded from the source server [in real-time](https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/), this is even less secure because Google is involved too without providing much benefit.
+Gmail-appen viser som standard billeder ved at downloade disse via en Google-proxyserver. Da billederne downloades fra kildeserveren [i realtid](https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/), er dette endnu mindre sikkert, da dette også, uden nogen umiddelbar fordel, involverer Google.
 
-You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
+Billeder og originale beskeder kan som standard vises for betroede afsendere fra gang til gang ved at markere *Spørg ikke igen om...*.
 
-If you want to reset the default *Open with* apps, please [see here](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
+Ønskes standard apps for *Åbn med* nulstillet, så tjek [hér](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
 
 <br />
 
 <a name="faq36"></a>
-**(36) How are settings files encrypted?**
+**(36) Hvordan krypteres indstillingsfiler?**
 
-Short version: AES 256 bit
+Kort version: AES 256 bit
 
-Long version:
+Lang version:
 
-* The 256 bit key is generated with *PBKDF2WithHmacSHA1* using a 128 bit secure random salt and 65536 iterations
-* The cipher is *AES/CBC/PKCS5Padding*
+* 256 bit nøglen genereres med *PBKDF2WithHmacSHA1* vha. en 128 bit, sikker tilfældigt salt samt 65.536 iterationer
+* Cipher'en er *AES/CBC/PKCS5Padding*
 
 <br />
 
 <a name="faq37"></a>
-**(37) How are passwords stored?**
+**(37) Hvordan lagres adgangskoderr?**
 
-All supported Android versions [encrypt all user data](https://source.android.com/security/encryption), so all data, including usernames, passwords, messages, etc, is stored encrypted.
+Alle understøttede Android-versioner [krypterer alle brugerdata](https://source.android.com/security/encryption), dvs., at brugernavne, adgangskoder, beskeder mv., opbevaes krypteret.
 
-If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible. If this is a problem because you are sharing the device with other people, consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
+Er enheden sikret med en PIN-kode, mønster eller adgangskode, kan konto- og identitetsadgangskoder gøres. synlige. Er dette et problem, fordi enheden deles med andre, så overvej at benytte [brugerprofiler](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
 
 <br />
 
 <a name="faq39"></a>
-**(39) How can I reduce the battery usage of FairEmail?**
+**(39) Hvordan reduceres FairEmails batteriforbrug?**
 
-Recent Android versions by default report *app usage* as a percentage in the Android battery settings screen. **Confusingly, *app usage* is not the same as *battery usage* and is not even directly related to battery usage!** The app usage (while in use) will be very high because FairEmail is using a foreground service which is considered as constant app usage by Android. However, this doesn't mean that FairEmail is constantly using battery power. The real battery usage can be seen by navigating to this screen:
+Som standard viser nyere Android-versioner *app-forbrug* som en procentdel på Android-batteriindstillingssiden. **Forvirrende nok er *app-forbrug* ikke det samme som *batteriforbrug* og er ikke engang direkte relateret til hertil!** App-forbruget (under brug) vil være meget højt, da FairEmail bruger en forgrundstjeneste, der af Android betragtes som konstant app-forbrug. Dette betyder dog ikke, at FairEmail konstant forbruger strøm. Det reelle stømforbrug kan ses ved at gå til denne skærm:
 
-*Android settings*, *Battery*, three-dots menu *Battery usage*, three-dots menu *Show full device usage*
+*Android-indstillinger*, *Batteri*, trepriksmenu *Batteriforbrug*, trepriksmenu *Vis fuld enhedsforbrug*
 
-As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby*. If this isn't the case, please turn on *Auto optimize* in the receive settings. If this doesn't help, please [ask for support](https://contact.faircode.eu/?product=fairemailsupport).
+Som en tommelfingerregel skal strømforbruget være under eller i hvert fald ikke meget højere end for *Mobilnetværks-standby*. Er dette ikke tilfældet, så aktivér *Automatisk optimering* i modtagelsesindstillingerne. Hjælper dette ikke, så [anmod om support](https://contact.faircode.eu/?product=fairemailsupport).
 
-It is inevitable that synchronizing messages will use battery power because it requires network access and accessing the messages database.
+Det er uundgåeligt, at beskedsynkning vil forbruge strøm, da dette kræver adgang til både netværk og beskeddatabase.
 
-If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is setup similarly. For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
+Sammenlignes strømforbruget for FairEmail med en anden e-mailklient, skal dens opsætning modsvare FairMails. For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
 
 Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage. Also, some email servers prematurely terminate idle connections, while [the standard](https://tools.ietf.org/html/rfc2177) says that an idle connection should be kept open for 29 minutes. In these cases you might want to synchronize periodically, for example each hour, instead of continuously. Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always because connecting to the server and comparing the local and remote messages are expensive operations.
 
@@ -1207,21 +1216,21 @@ Most of the battery usage, not considering viewing messages, is due to synchroni
 
 If you have at least once a day internet connectivity, it is sufficient to synchronize messages just for one day.
 
-Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages for, but leave the number of days to keep messages for. After decreasing the number of days to keep messages for, you might want to run the cleanup in the miscellaneous settings to remove old files.
+Note that you can set the number of days to *keep* messages for to a higher number than to *synchronize* messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages for, but leave the number of days to keep messages for. Efter reducering af det antal dage, hvori beskeder beholdes, kan der via Diverse indstillinger køres en oprydning for at fjerne gamle filer.
 
-In the receive settings you can enable to always synchronize starred messages, which will allow you to keep older messages around while synchronizing messages for a limited number of days.
+I modtagelsesindstillingerne kan altid synkning af stjernemarkerede beskeder aktiveres, så ældre beskeder kan beholdes, selvom beskeder kun synkes for et begrænset antal dage.
 
-Disabling the folder option *Automatically download message texts and attachments* will result in less network traffic and thus less battery usage. You could disable this option for example for the sent folder and the archive.
+Deaktivering af mappeindstillingen *Download automatisk beskedtekster og vedhæftninger* vil betyde mindre netværkstrafik og dermed mindre strømforbrug. Denne indstilling kan eksempelvis deaktiveres for Sendt-mappen og arkivet.
 
-Synchronizing messages at night is mostly not useful, so you can save on battery usage by not synchronizing at night. In the settings you can select a schedule for message synchronization (this is a pro feature).
+Synkning af beskeder om natten er for det meste unødvendigt, så der kan spares strøm ved ikke at gøre dette. I indstillingerne kan en tidsplan for beskedsynkning vælges (bemærk, Pro-funktion).
 
-FairEmail will by default synchronize the folder list on each connection. Since folders are mostly not created, renamed and deleted very often, you can save some network and battery usage by disabling this in the receive settings.
+FairEmail vil som standard synke mappelisten ved hver tilslutning. Da mapper typisk ikke oprettes/omdøbes/slettes særligt hyppigt, kan netværks- og strømforbrug reduceres ved at deaktivere dette i modtagelsesindstillingerne.
 
-FairEmail will by default check if old messages were deleted from the server on each connection. If you don't mind that old messages that were delete from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings.
+Som standard vil FairEmail ved hver tilslutning tjekke, om gamle beskeder er slettet fra serveren. Gør det ikke noget, at gamle beskederr, som er slettet fra serveren, stadig optræder i FairEmail, kan der spares netværks- og strømforbrug ved at deaktivere dette i modtagelsesindstillingerne.
 
-Some providers don't follow the IMAP standard and don't keep connections open long enough, forcing FairEmail to reconnect often, causing extra battery usage. You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc). You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes. Note that battery optimizations need to be disabled in setup step 3 to reliably keep connections alive.
+Visse udbydere følger ikke IMAP standarden og holder ikke forbindelser åbne længe nok, hvilket tvinger FairEmail til at genforbinde ofte og dermed forbruge ekstra strøm. *Loggen* kan via hovednavigeringsmenuen tjekkes for at se, om der er hyppige forbindelsesgenoprettelser (forbindelse lukket/nulstillet, læse-/skrivefejl/timeout mv.). Dette kan omgås ved i de avancerede kontoindstillinger at sænke keep-alive intervallet til f.eks. 15 eller 9 min. Bemærk, at batterioptimering skal deaktiveres i opsætningstrin 3 for pålideligt at holde forbindelserne i live.
 
-Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage. You can inspect the *Log* via the main navigation menu to check if your provider is doing this. If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server, you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider to switch to periodically instead of continuous synchronization. You can change this in the receive settings.
+Visse udbydere sender hvert 2. minut noget i retning af en '*Stadig her*'-status, hvilket resulterer i netværkstrafik, vækning af enheden og samlet set et unødigt ekstra strømforbrug. *Loggen* kan tjekkes via hovednavigeringsmenuen for at se, hvorvidt udbyderen gør dette. If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server, you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider to switch to periodically instead of continuous synchronization. You can change this in the receive settings.
 
 If you got the message *This provider does not support push messages* while configuring an account, consider switching to a modern provider which supports push messages (IMAP IDLE) to reduce battery usage.
 
@@ -1229,9 +1238,9 @@ If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen, you
 
 If auto optimize in the receive settings is enabled, an account will automatically be switched to periodically checking for new messages when the email server:
 
-* Says '*Still here*' within 3 minutes
-* The email server does not support push messages
-* The keep-alive interval is lower than 12 minutes
+* Sender et '*Stadig her*' inden for 3 minutter
+* Ikke understøtter push-beskeder
+* Keep-alive intervallet er kortere end 12 min
 
 In addition, the trash and spam folders will be automatically set to checking for new messages after three successive [too many simultaneous connections](#user-content-faq23) errors.
 
@@ -1248,8 +1257,8 @@ If the connection to the email server is lost, FairEmail will always synchronize
 
 To reduce data usage, you could change these advanced receive settings:
 
-* Check if old messages were removed from the server: disable
-* Synchronize (shared) folder list: disable
+* Tjek, om gamle beskeder er fjernet fra serveren
+* Synk (delte) mappelister: Deaktivér
 
 By default FairEmail does not download message texts and attachments larger than 256 KiB when there is a metered (mobile or paid Wi-Fi) internet connection. You can change this in the connection settings.
 
@@ -1268,7 +1277,7 @@ If your provider doesn't support encrypted connections, you should ask to make t
 
 See also [this FAQ](#user-content-faq4).
 
-Fejlen '*Handshake mislykkedes ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
+The error '*Handshake failed ... SSLV3_ALERT_ILLEGAL_PARAMETER ...*' is either caused by a bug in the SSL protocol implementation or by a too short DH key on the email server and can unfortunately not be fixed by FairEmail.
 
 The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4, which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
 
@@ -2357,6 +2366,16 @@ Since this is an experimental feature, my advice is to start with just one folde
 
 <br />
 
+*Send hard bounce (version 1.1477+)*
+
+Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=hard bounce) via the reply/answer menu.
+
+Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
+
+For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -2854,15 +2873,15 @@ To prevent the email server from moving a message into the spam folder again and
 
 The message classifier calculates the probability a message belongs in a folder (class). There are two options in the miscellaneous settings which control if a message will be automatically moved into a folder, provided that auto classification is enabled for the folder:
 
-* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 20 %)
+* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 15 %)
 * *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
 
 Both conditions must be satisfied before a message will be moved.
 
-Considering the defaults option values:
+Considering the default option values:
 
 * Apples 40 % and bananas 30 % would be disregarded because the difference of 25 % is below the minimum of 50 %
-* Apples 15 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 20 %
+* Apples 10 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 15 %
 * Apples 50 % and bananas 20 % would result in selecting apples
 
 Classification is optimized to use as little resources as possible, but will inevitably use some extra battery power.
@@ -2878,35 +2897,39 @@ Message classification is a pro feature, except for the spam folder.
 <a name="faq164"></a>
 **(164) Can you add customizable themes?**
 
-Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need to be predefined.
+Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need [to be predefined](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
 
-Moreover, a theme is more than just a few colors. For example themes with a yellow accent color use a darker link color for enough contrast.
+Da hvert tema kræver en lys, mørk og sort variant, er det ikke muligt at tilføje et prædefineret tema for hver farvekombination (bogstaveligt talt millioner).
+
+Derudover er et tema mere end blot et par farver. F.eks. bruger temaer med gul fremhævningsfarve en mørkere linkfarve af kontrasthensyn.
+
+Temafarverne er baseret på farvecirklen fra [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 
 <br />
 
 ## Get support
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail understøttes kun på smartphones, tablets og ChromeOS.
 
-Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
+Kun seneste Play Butik- og GitHub-versioner understøttes. F-Droid build understøttes kun, hvis versionsnummeret er det samme som versionsnummeret for den seneste GitHub-udgivelse. Dette betyder også, at nedgradering er uunderstøttet.
 
-There is no support on things that are not directly related to FairEmail.
+Der er ingen support for ting, som ikke er direkte relateret til FairEmail.
 
-There is no support on building and developing things by yourself.
+Der er ingen support til egenbyggede og -udviklede ting.
 
-Requested features should:
+Anmodede funktioner skal:
 
 * be useful to most people
 * not complicate the usage of FairEmail
 * fit within the philosophy of FairEmail (privacy oriented, security minded)
 * comply with common standards (IMAP, SMTP, etc)
 
-Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
+Funktioner, som ikke opfylder disse krav, afvises sandsynligvis. Dette er primært for at muliggøre vedligeholdelse og support fremadrettet.
 
-If you have a question, want to request a feature or report a bug, please use [this form](https://contact.faircode.eu/?product=fairemailsupport).
+Ved spørgsmål, funktionalitetsønsker eller fejlindrapportering, benyt venligst [denne formular](https://contact.faircode.eu/?product=fairemailsupport).
 
-GitHub issues are disabled due to frequent misusage.
+GitHub-problemstillinger er deaktiveret grundet hyppigt misbrug.
 
 <br />
 
-Copyright &copy; 2018-2021 Marcel Bokhorst.
+Ophavsrettigheder &copy; 2018-2021 Marcel Bokhorst.

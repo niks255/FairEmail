@@ -14,9 +14,9 @@ Sorununuz olması halinde, öncelikle aşağıda yer alan sıkça sorulan sorula
 
 ## Hesap Yetkilendirme
 
-In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
+Çoğu durumda hızlı kurulum sihirbazı doğru konfigürasyonu otomatik olarak tanımlayacaktır.
 
-If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). Bunun için gerek SSL/TLS veya STARTTLS kullanılan; IMAP ve SMTP sunucu adresi, bağlantı noktası numaraları ve kullanıcı adı (genellikle e-posta adresiniz) ve şifreniz gerekmektedir.
+Hızlı kurulum sihirbazının çalışmadığı durumlarda, manuel olarak bir kimlik oluşturmanız ( e-posta gönderebilmek için) ve hesap kurmanız (e-posta alabilmek için) gerecektir. Bunun için gerek SSL/TLS veya STARTTLS kullanılan; IMAP ve SMTP sunucu adresi, bağlantı noktası numaraları ve kullanıcı adı (genellikle e-posta adresiniz) ve şifreniz gerekmektedir.
 
 *IMAP* ve sağlayıcının adını aramak, çoğunlukla doğru belgeyi bulmak için yeterlidir.
 
@@ -43,17 +43,17 @@ Yaygın hata mesajları ve çözümleri için lütfen [burayı](#user-content-fa
 
 ## Nasıl yapılır ...?
 
-* Change the account name: Settings, tap Manual setup and more options, tap Accounts, tap account
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
-* Change password: Settings, tap Manual setup and more options, tap Accounts, tap account, change password
-* Set a signature: Settings, tap Manual setup and more options, tap Identities, tap identity, Edit signature.
+* Hesap adını değiştir: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokunun, Hesaplar'a dokunun, hesaba dokunun
+* Sağa/sola kaydırma hareketlerini değiştirme: Ayarlar, Sayfa Davranışına dokun, Kaydırma hareketlerini ayarla
+* Şifre değiştir: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokun, Hesaplar'a dokun, hesaba dokun, şifre değiştir
+* Bir imza belirleyin: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokun, Kimlikler'e dokun, İmzayı düzenle.
 * CC ve BCC adresleri ekleme: başlık kısmının sonundaki kişi ikonuna tıklayın
 * Arşiv/silinenlerdeki bir önceki/sonraki mesaja gitme: davranış ayarlarında *konuşmaları otomatik silmeyi* devre dışı bırakıp *bir görüşmeyi kapatırken* *bir sonraki/önceki konuşmaya giti* seçin
 * Birleşik gelen kutusuna klasör ekleme: klasör listesindeki klasöre basılı tutun ve *Birleşik gelen postayı göster*i işaretleyin
 * Dolaşım menüsüne dosya ekleme: klasör listesindeki klasöre basılı tutun ve *Navigasyon menüsünde göster*i işaretleyin
-* Load more messages: long press a folder in the folder list, select *Fetch more messages*
+* Daha fazla mesaj yükleme: klasör listesindeki klasöre basılı tutun ve *Daha fazla mesajı getir*i işaretleyin
 * Çöp kutusuna göndermeden bir mesajı silme: mesaj metninin hemen üstündeki üç noktaya tıklayıp *Sil*e veya hesap ayarlarında çöp kutusu seçeneğini kaldır seçeneğine tıklayınız
-* Delete an account/identity: Settings, tap Manual setup and more options, tap Accounts/Identities, three-dots menu, Delete
+* Bir hesabı/kimliği silin: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokun, Hesaplar/Kimlikler dokun, üç noktaya dokun, Silin
 * Dosya silme: dosya listesindeki dosyaya uzun süre basılı tutun, özellikleri düzenle, üç noktaya tıklayın, silin
 * Gönderilen mesajı iptal etme: mesaja tıklayın, geri al ikonuna tıklayın
 * Gönderilen mesajları gelen kutusunda saklama: lütfen [SSS'ı inceleyin](#user-content-faq142)
@@ -466,6 +466,12 @@ Some people ask:
 If you use the Play store or GitHub version of FairEmail, you can use the quick setup wizard to easily setup a Gmail account and identity. The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only.
 
 If you don't want to use an on-device Gmail account, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to set up an account and identity via the manual setup instead of via the quick setup wizard.
+
+**Important**: sometimes Google issues this alert:
+
+*[ALERT] Please log in via your web browser: https://support.google.com/mail/accounts/answer/78754 (Failure)*
+
+This Google security check is triggered more often with *less secure apps* enabled, less with an app password, and hardly when using an on-device account (OAuth).
 
 Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
@@ -922,6 +928,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 ... not permitted to relay* means that the email server does not recognize the username/email address. Please double check the host name and username/email address in the identity settings.
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
+* *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
@@ -1086,6 +1093,8 @@ There are shortcuts available to compose a new message to a favorite contact.
 
 Shortcuts require Android 7.1 Nougat or later. The usage of shortcuts is explained [here](https://support.google.com/android/answer/2781850).
 
+It is also possible to create shortcuts to folders by long pressing a folder in the folder list of an account and selecting *Add shortcut*.
+
 <br />
 
 <a name="faq32"></a>
@@ -1140,7 +1149,7 @@ If you like to match the special purpose email addresses abc@example.com and xyx
 * Identity: xyz@example.com; regex: **(?i)xyz**
 * Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
 
-Matched identities can be used to color code messages. The identity color takes precedence over the account color. Setting identity colors is a pro feature.
+Matched identities can be used to color code messages. The identity color takes precedence over the folder and account color. Setting identity colors is a pro feature.
 
 <br />
 
@@ -2357,6 +2366,16 @@ Since this is an experimental feature, my advice is to start with just one folde
 
 <br />
 
+*Send hard bounce (version 1.1477+)*
+
+Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=hard bounce) via the reply/answer menu.
+
+Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
+
+For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -2854,15 +2873,15 @@ To prevent the email server from moving a message into the spam folder again and
 
 The message classifier calculates the probability a message belongs in a folder (class). There are two options in the miscellaneous settings which control if a message will be automatically moved into a folder, provided that auto classification is enabled for the folder:
 
-* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 20 %)
+* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 15 %)
 * *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
 
 Both conditions must be satisfied before a message will be moved.
 
-Considering the defaults option values:
+Considering the default option values:
 
 * Apples 40 % and bananas 30 % would be disregarded because the difference of 25 % is below the minimum of 50 %
-* Apples 15 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 20 %
+* Apples 10 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 15 %
 * Apples 50 % and bananas 20 % would result in selecting apples
 
 Classification is optimized to use as little resources as possible, but will inevitably use some extra battery power.
@@ -2878,9 +2897,13 @@ Message classification is a pro feature, except for the spam folder.
 <a name="faq164"></a>
 **(164) Can you add customizable themes?**
 
-Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need to be predefined.
+Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need [to be predefined](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
+
+Since for each theme there needs to be a light, dark and black variant, it is not feasible to add for each color combination (literally millions) a predefined theme.
 
 Moreover, a theme is more than just a few colors. For example themes with a yellow accent color use a darker link color for enough contrast.
+
+The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 
 <br />
 

@@ -231,7 +231,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
 
-                Log.i("Drawer offset=" + slideOffset);
                 if (slideOffset > 0)
                     owner.start();
                 else
@@ -998,7 +997,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }
 
         String action = intent.getAction();
-        Log.i("View intent=" + intent + " action=" + action);
+        Log.i("View intent=" + intent + " " + TextUtils.join(", ", Log.getExtras(intent.getExtras())));
         if (action != null) {
             intent.setAction(null);
             setIntent(intent);

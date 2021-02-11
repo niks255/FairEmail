@@ -258,6 +258,7 @@
     <string name="title_setup_theme_black_background">Black background</string>
 
     <string name="title_setup_theme_system_hint">This will automatically switch to a light/dark theme on day/night mode, if supported by Android</string>
+    <string name="title_setup_theme_more_colors">I want more colors</string>
 
     <string name="title_setup_advanced">Advanced</string>
 
@@ -520,6 +521,7 @@
     <string name="title_advanced_language">Language</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
+    <string name="title_advanced_expunge" translatable="false">EXPUNGE (debug only)</string>
     <string name="title_advanced_auth_plain" translatable="false">PLAIN (debug only)</string>
     <string name="title_advanced_auth_login" translatable="false">LOGIN (debug only)</string>
     <string name="title_advanced_auth_ntlm" translatable="false">NTLM (debug only)</string>
@@ -639,6 +641,7 @@
     <string name="title_identity_max_size">Maximum message size (MB)</string>
     <string name="title_identity_receipt">Request delivery/read receipt by default</string>
     <string name="title_identity_use_ip_hint">In case of \'invalid greeting\', \'requires valid address\' or a similar error, try to change this setting</string>
+    <string name="title_identity_self_hint">Also prevents you from replying to yourself</string>
     <string name="title_optional">Optional</string>
     <string name="title_recommended">Recommended</string>
     <string name="title_account_linked">Linked account</string>
@@ -887,6 +890,7 @@
     <string name="title_reply_to_all">Reply to all</string>
     <string name="title_reply_list">Reply to list</string>
     <string name="title_reply_receipt">Send read receipt</string>
+    <string name="title_reply_hard_bounce">Send hard bounce</string>
     <string name="title_reply_template">Reply with template</string>
     <string name="title_move_undo">Moving to %1$s (%2$d)</string>
     <string name="title_open_with">Open with</string>
@@ -894,6 +898,9 @@
 
     <string name="title_receipt_subject">Read receipt: %1$s</string>
     <string name="title_receipt_text">This read receipt only acknowledges that the message was displayed. There is no guarantee that the recipient has read the message contents.</string>
+
+    <string name="title_hard_bounce_subject" translatable="false">Delivery Status Notification (Failure)</string>
+    <string name="title_hard_bounce_text" translatable="false">Your message wasn\'t delivered because the address couldn\'t be found.</string>
 
     <string name="title_no_answers">No reply templates defined</string>
     <string name="title_no_viewer">No viewer app available for %1$s</string>
@@ -1032,6 +1039,7 @@
     <string name="title_key_missing">No key for %1$s</string>
     <string name="title_send_reminder_remark">Reminders can be enabled again in the send settings</string>
     <string name="title_send_plain_text">Plain text only</string>
+    <string name="title_send_dsn">Status report</string>
     <string name="title_send_receipt">Request receipt</string>
     <string name="title_send_receipt_remark">Most providers and email clients ignore receipt requests</string>
 
@@ -1044,6 +1052,7 @@
     <string name="title_attachment_keywords">attached,attachment,attachments,included</string>
     <string name="title_attachment_reminder">Did you intend to add an attachment?</string>
     <string name="title_plain_reminder">All formatting will be lost</string>
+    <string name="title_dsn_reminder">Hard bounces damage the email reputation of the original sender!</string>
     <string name="title_size_reminder">Message (%1$s) larger than server limit (%2$s)</string>
     <string name="title_attachments_missing">Not all attachments have been downloaded</string>
     <string name="title_dialog_hint">This dialog can be enabled again via the three-dots menu in the top action bar</string>

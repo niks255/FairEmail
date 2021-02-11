@@ -20,12 +20,16 @@ package eu.faircode.email;
 */
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -256,6 +260,22 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
         checkAuthentication();
 
+        int colorPrimaryDark = Helper.resolveColor(this, R.attr.colorPrimaryDark);
+        int colorActionForeground = Helper.resolveColor(this, R.attr.colorActionForeground);
+
+        Drawable d = getDrawable(R.drawable.baseline_mail_24);
+        Bitmap bm = Bitmap.createBitmap(
+                d.getIntrinsicWidth(),
+                d.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        d.setTint(colorActionForeground);
+        d.draw(canvas);
+
+        ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(null, bm, colorPrimaryDark);
+        setTaskDescription(td);
+
         boolean navbar_colorize = prefs.getBoolean("navbar_colorize", false);
         if (navbar_colorize) {
             Window window = getWindow();
@@ -445,7 +465,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             super.startActivity(intent);
         } catch (ActivityNotFoundException ex) {
             Log.w(ex);
-            ToastEx.makeText(this, getString(R.string.title_no_viewer, intent), Toast.LENGTH_LONG).show();
+            Helper.reportNoViewer(this, intent);
         } catch (Throwable ex) {
             Log.e(ex);
             ToastEx.makeText(this, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
@@ -463,7 +483,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             if (Helper.isTnef(intent.getType(), null))
                 Helper.viewFAQ(this, 155);
             else
-                ToastEx.makeText(this, getString(R.string.title_no_viewer, intent), Toast.LENGTH_LONG).show();
+                Helper.reportNoViewer(this, intent);
         } catch (Throwable ex) {
             Log.e(ex);
             ToastEx.makeText(this, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
@@ -582,6 +602,69 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        try {
+            return super.dispatchTouchEvent(ev);
+        } catch (Throwable ex) {
+            Log.w(ex);
+            /*
+                java.lang.IllegalArgumentException: captureChildView: parameter must be a descendant of the ViewDragHelper's tracked parent view (androidx.coordinatorlayout.widget.CoordinatorLayout{35ad956 V.E...... ........ 0,0-1080,2100})
+                        at androidx.customview.widget.ViewDragHelper.captureChildView(ViewDragHelper:472)
+                        at androidx.customview.widget.ViewDragHelper.tryCaptureViewForDrag(ViewDragHelper:914)
+                        at androidx.customview.widget.ViewDragHelper.processTouchEvent(ViewDragHelper:1155)
+                        at com.google.android.material.behavior.SwipeDismissBehavior.onTouchEvent(SwipeDismissBehavior:215)
+                        at androidx.coordinatorlayout.widget.CoordinatorLayout.onTouchEvent(CoordinatorLayout:563)
+                        at android.view.View.dispatchTouchEvent(View.java:13483)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3082)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2767)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3088)
+                        at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2781)
+                        at com.android.internal.policy.DecorView.superDispatchTouchEvent(DecorView.java:496)
+                        at com.android.internal.policy.PhoneWindow.superDispatchTouchEvent(PhoneWindow.java:1853)
+                        at android.app.Activity.dispatchTouchEvent(Activity.java:4059)
+                        at androidx.appcompat.view.WindowCallbackWrapper.dispatchTouchEvent(WindowCallbackWrapper:69)
+                        at com.android.internal.policy.DecorView.dispatchTouchEvent(DecorView.java:454)
+                        at android.view.View.dispatchPointerEvent(View.java:13744)
+                        at android.view.ViewRootImpl$ViewPostImeInputStage.processPointerEvent(ViewRootImpl.java:5635)
+                        at android.view.ViewRootImpl$ViewPostImeInputStage.onProcess(ViewRootImpl.java:5435)
+                        at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:4936)
+                        at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:4989)
+                        at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:4955)
+                        at android.view.ViewRootImpl$AsyncInputStage.forward(ViewRootImpl.java:5095)
+                        at android.view.ViewRootImpl$InputStage.apply(ViewRootImpl.java:4963)
+                        at android.view.ViewRootImpl$AsyncInputStage.apply(ViewRootImpl.java:5152)
+                        at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:4936)
+                        at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:4989)
+                        at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:4955)
+                        at android.view.ViewRootImpl$InputStage.apply(ViewRootImpl.java:4963)
+                        at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:4936)
+                        at android.view.ViewRootImpl.deliverInputEvent(ViewRootImpl.java:7688)
+                        at android.view.ViewRootImpl.doProcessInputEvents(ViewRootImpl.java:7657)
+                        at android.view.ViewRootImpl.enqueueInputEvent(ViewRootImpl.java:7618)
+                        at android.view.ViewRootImpl$WindowInputEventReceiver.onInputEvent(ViewRootImpl.java:7818)
+                        at android.view.InputEventReceiver.dispatchInputEvent(InputEventReceiver.java:251)
+                        at android.os.MessageQueue.nativePollOnce(MessageQueue.java:-2)
+                        at android.os.MessageQueue.next(MessageQueue.java:336)
+                        at android.os.Looper.loop(Looper.java:181)
+                        at android.app.ActivityThread.main(ActivityThread.java:7562)
+             */
+            return false;
+        }
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         try {
             return super.onTouchEvent(event);
@@ -610,14 +693,12 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                    onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     protected boolean backHandled() {

@@ -16,7 +16,7 @@ Wenn Sie eine Frage haben, lesen Sie bitte zuerst die unten stehenden häufig ge
 
 In den meisten Fällen kann der Schnelleinrichtungs-Assistent automatisch die richtige Konfiguration ermitteln.
 
-If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). Hierzu benötigen Sie die Adressen der IMAP- und SMTP-Server sowie die jeweiligen Portnummern, ob SSL/TLS oder STARTTLS verwendet werden soll und Ihren Benutzernamen (meistens, aber nicht immer, Ihre E-Mail-Adresse) und Ihr Passwort.
+Wenn der Schnelleinrichtungs-Assistent fehlschlägt, müssen Sie manuell ein Konto (für den Empfang von E-Mails) und eine Identität (für den Versand von E-Mails) einrichten. Hierzu benötigen Sie die Adressen der IMAP- und SMTP-Server sowie die jeweiligen Portnummern, ob SSL/TLS oder STARTTLS verwendet werden soll und Ihren Benutzernamen (meistens, aber nicht immer, Ihre E-Mail-Adresse) und Ihr Passwort.
 
 Die Suche nach *IMAP* und dem Namen des Email-Anbieters reichen im Internet meist aus, um die richtige Anleitung zu finden.
 
@@ -243,7 +243,7 @@ Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch
 * [~~(122) Warum wird Empfängername/E-Mail-Adresse mit einer Warnfarbe angezeigt?~~](#user-content-faq122)
 * [(123) Was geschieht, wenn FairEmail keine Verbindung zu einem E-Mail-Server herstellen kann?](#user-content-faq123)
 * [(124) Warum erhalte ich den Hinweis »Nachricht zu groß oder zu komplex, um sie anzuzeigen«?](#user-content-faq124)
-* [(125) Was sind die aktuellen experimentellen Eigenschaften?](#user-content-faq125)
+* [(125) Was sind die aktuellen experimentellen Funktionen?](#user-content-faq125)
 * [(126) Können Nachrichtenvorschauen an mein Wearable gesendet werden?](#user-content-faq126)
 * [(127) Wie kann ich den Fehler »Syntaktisch ungültige HELO-Argumente« beheben?](#user-content-faq127)
 * [(128) Wie kann ich die gestellten Fragen zurücksetzen, zum Beispiel um Bilder zu zeigen?](#user-content-faq128)
@@ -443,7 +443,7 @@ In the display section of the settings you can enable or disable for example:
 * *Conversation action bar*: to disable the bottom navigation bar
 * *Hervorhebungsfarbe*: zum Auswählen einer Farbe für den Absender von ungelesenen Nachrichten
 * *Show contact photos*: to hide contact photos
-* *Show names and email addresses*: to show names or to show names and email addresses
+* *Namen und E-Mail-Adressen anzeigen*: um Namen anzuzeigen oder um Namen und E-Mail-Adressen anzuzeigen
 * *Show subject italic*: to show the message subject as normal text
 * *Show stars*: to hide stars (favorites)
 * *Show message preview*: to show 1-4 lines of the message text
@@ -466,6 +466,12 @@ Some people ask:
 If you use the Play store or GitHub version of FairEmail, you can use the quick setup wizard to easily setup a Gmail account and identity. The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only.
 
 If you don't want to use an on-device Gmail account, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to set up an account and identity via the manual setup instead of via the quick setup wizard.
+
+**Important**: sometimes Google issues this alert:
+
+*[ALERT] Please log in via your web browser: https://support.google.com/mail/accounts/answer/78754 (Failure)*
+
+This Google security check is triggered more often with *less secure apps* enabled, less with an app password, and hardly when using an on-device account (OAuth).
 
 Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
@@ -873,7 +879,7 @@ The error *... Host is unresolved ...*, *... Unable to resolve host ...* or *...
 
 The error *... Software caused connection abort ...* means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.
 
-The errors *... BYE Logging out ...*, *... „Verbindung zurückgesetzt …”* bedeutet, dass der E-Mail-Server oder etwas zwischen dem E-Mail-Server und der App, zum Beispiel ein Router oder eine Firewall (App), eine bestehende Verbindung aktiv beendet hat.
+The errors *... BYE Logging out ...*, *... Connection reset ...* mean that the email server or something between the email server and the app, for example a router or a firewall (app), actively terminated an existing connection.
 
 The error *... Connection closed by peer ...* might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
 
@@ -922,6 +928,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *503 5.5.0 Recipient already specified* mostly means that an address is being used both as TO and CC address
 * *554 5.7.1 … nicht zur Weiterleitung zugelassen* bedeutet, dass der E-Mail-Server den Benutzernamen/E-Mail-Adresse nicht erkennen konnte. Bitte überprüfen Sie den Hostnamen, Benutzernamen und E-Mail-Adresse in den Identitätseinstellungen.
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
+* *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
@@ -1086,6 +1093,8 @@ There are shortcuts available to compose a new message to a favorite contact.
 
 Shortcuts require Android 7.1 Nougat or later. The usage of shortcuts is explained [here](https://support.google.com/android/answer/2781850).
 
+It is also possible to create shortcuts to folders by long pressing a folder in the folder list of an account and selecting *Add shortcut*.
+
 <br />
 
 <a name="faq32"></a>
@@ -1140,7 +1149,7 @@ If you like to match the special purpose email addresses abc@example.com and xyx
 * Identity: xyz@example.com; regex: **(?i)xyz**
 * Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
 
-Matched identities can be used to color code messages. The identity color takes precedence over the account color. Setting identity colors is a pro feature.
+Matched identities can be used to color code messages. The identity color takes precedence over the folder and account color. Setting identity colors is a pro feature.
 
 <br />
 
@@ -2357,6 +2366,16 @@ Since this is an experimental feature, my advice is to start with just one folde
 
 <br />
 
+*Send hard bounce (version 1.1477+)*
+
+Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=hard bounce) via the reply/answer menu.
+
+Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
+
+For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -2854,15 +2873,15 @@ To prevent the email server from moving a message into the spam folder again and
 
 The message classifier calculates the probability a message belongs in a folder (class). There are two options in the miscellaneous settings which control if a message will be automatically moved into a folder, provided that auto classification is enabled for the folder:
 
-* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 20 %)
+* *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 15 %)
 * *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
 
 Both conditions must be satisfied before a message will be moved.
 
-Considering the defaults option values:
+Considering the default option values:
 
 * Apples 40 % and bananas 30 % would be disregarded because the difference of 25 % is below the minimum of 50 %
-* Apples 15 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 20 %
+* Apples 10 % and bananas 5 % would be disregarded because the probability for apples is below the minimum of 15 %
 * Apples 50 % and bananas 20 % would result in selecting apples
 
 Classification is optimized to use as little resources as possible, but will inevitably use some extra battery power.
@@ -2878,9 +2897,13 @@ Message classification is a pro feature, except for the spam folder.
 <a name="faq164"></a>
 **(164) Can you add customizable themes?**
 
-Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need to be predefined.
+Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need [to be predefined](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
+
+Since for each theme there needs to be a light, dark and black variant, it is not feasible to add for each color combination (literally millions) a predefined theme.
 
 Moreover, a theme is more than just a few colors. For example themes with a yellow accent color use a darker link color for enough contrast.
+
+The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 
 <br />
 

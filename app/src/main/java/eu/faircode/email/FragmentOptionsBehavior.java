@@ -412,13 +412,11 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_default:
-                onMenuDefault();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu_default) {
+            onMenuDefault();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onMenuDefault() {
@@ -449,7 +447,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swQuickFilter.setChecked(prefs.getBoolean("quick_filter", false));
         swQuickScroll.setChecked(prefs.getBoolean("quick_scroll", true));
 
-        swDoubleTap.setChecked(prefs.getBoolean("doubletap", false));
+        swDoubleTap.setChecked(prefs.getBoolean("doubletap", true));
         swSwipeNav.setChecked(prefs.getBoolean("swipenav", true));
         swVolumeNav.setChecked(prefs.getBoolean("volumenav", false));
         swReversed.setChecked(prefs.getBoolean("reversed", false));

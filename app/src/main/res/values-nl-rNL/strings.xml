@@ -208,6 +208,7 @@
     <string name="title_setup_theme_system">Volg systeem</string>
     <string name="title_setup_theme_black_background">Zwarte achtergrond</string>
     <string name="title_setup_theme_system_hint">Systeemthema volgen zal automatisch overschakelen naar lichte/donker bij dag/nacht, indien ondersteund door Android</string>
+    <string name="title_setup_theme_more_colors">Ik wil meer kleuren</string>
     <string name="title_setup_advanced">Geavanceerd</string>
     <string name="title_setup_options">Opties</string>
     <string name="title_setup_defaults">Verstekwaarden herstellen</string>
@@ -385,7 +386,7 @@
     <string name="title_advanced_notify_preview_all">Voorbeeld van alle tekst</string>
     <string name="title_advanced_notify_preview_only">Alleen meldingen met een voorbeeldtekst weergeven</string>
     <string name="title_advanced_notify_actions">Meldingsacties</string>
-    <string name="title_advanced_notify_action_trash">Weggooien</string>
+    <string name="title_advanced_notify_action_trash">Prullenbak</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archiveren</string>
     <string name="title_advanced_notify_action_move">Verplaatsen</string>
@@ -539,6 +540,7 @@
     <string name="title_identity_max_size">Maximale berichtgrootte (MB)</string>
     <string name="title_identity_receipt">Standaard ontvangst/leesbevestiging vragen</string>
     <string name="title_identity_use_ip_hint">In geval van \'invalid greeting\', \'requires valid address\' of een soortgelijke fout, probeer deze instelling te wijzigen</string>
+    <string name="title_identity_self_hint">Voorkomt ook dat u aan uzelf antwoordt</string>
     <string name="title_optional">Optioneel</string>
     <string name="title_recommended">Aanbevolen</string>
     <string name="title_account_linked">Gekoppeld account</string>
@@ -746,7 +748,7 @@
     <string name="title_download_all">Alles downloaden</string>
     <string name="title_save_all">Alles opslaan</string>
     <string name="title_save_eml">Ruw bericht opslaan</string>
-    <string name="title_trash">Weggooien</string>
+    <string name="title_trash">Prullenbak</string>
     <string name="title_copy">Kopieer &#8230;</string>
     <string name="title_copy_to">Kopieer naar &#8230;</string>
     <string name="title_subscribe">Abonneren</string>
@@ -771,6 +773,7 @@
     <string name="title_reply_to_all">Antwoord aan iedereen</string>
     <string name="title_reply_list">Antwoord aan lijst</string>
     <string name="title_reply_receipt">Stuur leesbevestiging</string>
+    <string name="title_reply_hard_bounce">Stuur hard bounce</string>
     <string name="title_reply_template">Antwoord met sjabloon</string>
     <string name="title_move_undo">Verplaatsen naar %1$s (%2$d)</string>
     <string name="title_open_with">Openen met</string>
@@ -804,9 +807,9 @@
     <string name="title_ask_delete">Verwijder bericht definitief?</string>
     <string name="title_ask_delete_answer">Verwijder antwoordsjabloon definitief?</string>
     <string name="title_ask_delete_rule">Verwijder regel definitief?</string>
-    <string name="title_ask_discard">Concept weggooien?</string>
+    <string name="title_ask_discard">Concept verwijderen?</string>
     <string name="title_ask_show_html">Het originele bericht tonen kan privacy gevoelige informatie lekken</string>
-    <string name="title_ask_show_html_dark" comment="title_ask_show_html_dark&#10;Title for checkbox to display original messages with a dark theme">Gebruik donker thema</string>
+    <string name="title_ask_show_html_dark">Gebruik donker thema</string>
     <string name="title_ask_show_html_remark">Het weergeven van het oorspronkelijke bericht met een donkere achtergrond is niet mogelijk omdat het onzichtbare donkere teksten en afbeeldingen kan veroorzaken</string>
     <string name="title_ask_show_html_images">Altijd afbeeldingen tonen bij het weergeven van originele berichten</string>
     <string name="title_ask_show_image">Afbeeldingen tonen kan privacy gevoelige informatie lekken</string>
@@ -842,7 +845,7 @@
     <string name="title_subject">Onderwerp:</string>
     <string name="title_attachment">Bijlage:</string>
     <string name="title_body_hint">Uw bericht</string>
-    <string name="title_discard">Weggooien</string>
+    <string name="title_discard">Verwijderen</string>
     <string name="title_save">Bewaren</string>
     <string name="title_send">Verzenden</string>
     <string name="title_send_now">Nu verzenden</string>
@@ -904,6 +907,7 @@
     <string name="title_key_missing">Geen sleutel voor %1$s</string>
     <string name="title_send_reminder_remark">Herinneringen kunnen weer worden ingeschakeld in de verzendinstellingen</string>
     <string name="title_send_plain_text">Alleen platte tekst</string>
+    <string name="title_send_dsn">Statusrapport</string>
     <string name="title_send_receipt">Vraag bevestiging</string>
     <string name="title_send_receipt_remark">De meeste providers en e-mail clients negeren bevestigingsverzoeken</string>
     <string name="title_from_missing">Zender ontbreekt</string>
@@ -915,6 +919,7 @@
     <string name="title_attachment_keywords">bijlage,bijlagen</string>
     <string name="title_attachment_reminder">Was u van plan een bijlage toe te voegen?</string>
     <string name="title_plain_reminder">Alle opmaak zal verloren gaan</string>
+    <string name="title_dsn_reminder">Hard bounces schaden de e-mailreputatie van de oorspronkelijke afzender!</string>
     <string name="title_size_reminder">Bericht (%1$s) groter dan de serverlimiet (%2$s)</string>
     <string name="title_attachments_missing">Niet alle bijlagen zijn gedownload</string>
     <string name="title_dialog_hint">Dit dialoogvenster kan opnieuw worden ingeschakeld via het 3-puntenmenu in de bovenste actiebalk</string>

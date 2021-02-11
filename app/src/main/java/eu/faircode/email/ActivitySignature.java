@@ -23,6 +23,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -64,6 +67,9 @@ public class ActivitySignature extends ActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean monospaced = prefs.getBoolean("monospaced", false);
+
         getSupportActionBar().setSubtitle(getString(R.string.title_edit_signature));
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -73,6 +79,8 @@ public class ActivitySignature extends ActivityBase {
         etText = findViewById(R.id.etText);
         style_bar = findViewById(R.id.style_bar);
         bottom_navigation = findViewById(R.id.bottom_navigation);
+
+        etText.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
 
         etText.setSelectionListener(new EditTextCompose.ISelection() {
             @Override
@@ -108,19 +116,18 @@ public class ActivitySignature extends ActivityBase {
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_insert_image:
-                        insertImage();
-                        return true;
-                    case R.id.action_delete:
-                        delete();
-                        return true;
-                    case R.id.action_save:
-                        save();
-                        return true;
-                    default:
-                        return false;
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_insert_image) {
+                    insertImage();
+                    return true;
+                } else if (itemId == R.id.action_delete) {
+                    delete();
+                    return true;
+                } else if (itemId == R.id.action_save) {
+                    save();
+                    return true;
                 }
+                return false;
             }
         });
 
@@ -152,19 +159,16 @@ public class ActivitySignature extends ActivityBase {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_signature, menu);
         return true;
-
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_edit_html:
-                item.setChecked(!item.isChecked());
-                html(item.isChecked());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu_edit_html) {
+            item.setChecked(!item.isChecked());
+            html(item.isChecked());
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

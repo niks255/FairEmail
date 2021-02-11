@@ -229,6 +229,7 @@
     <string name="title_setup_theme_system">Zgodnie z systemem</string>
     <string name="title_setup_theme_black_background">Czarne tło</string>
     <string name="title_setup_theme_system_hint">Zgodnie z motywem systemu automatycznie przełączy się na jasny/ciemny w dzień/noc, jeśli jest wspierane przez Androida</string>
+    <string name="title_setup_theme_more_colors">Chcę więcej kolorów</string>
     <string name="title_setup_advanced">Zaawansowane</string>
     <string name="title_setup_options">Opcje</string>
     <string name="title_setup_defaults">Przywróć domyślne</string>
@@ -792,6 +793,7 @@
     <string name="title_reply_to_all">Odpowiedz wszystkim</string>
     <string name="title_reply_list">Odpowiedz do listy</string>
     <string name="title_reply_receipt">Wyślij potwierdzenie odczytu</string>
+    <string name="title_reply_hard_bounce">Wyślij \"twarde odbicie\"</string>
     <string name="title_reply_template">Odpowiedz z szablonem</string>
     <string name="title_move_undo">Przenoszę do %1$s (%2$d)</string>
     <string name="title_open_with">Otwórz za pomocą</string>
@@ -827,7 +829,7 @@
     <string name="title_ask_delete_rule">Usunąć regułę bezpowrotnie?</string>
     <string name="title_ask_discard">Odrzucić szkic?</string>
     <string name="title_ask_show_html">Pokazywanie oryginalnej wiadomości może spowodować wyciek wrażliwych informacji</string>
-    <string name="title_ask_show_html_dark" comment="title_ask_show_html_dark&#10;Title for checkbox to display original messages with a dark theme">Use dark theme</string>
+    <string name="title_ask_show_html_dark">Użyj ciemnego motywu</string>
     <string name="title_ask_show_html_remark">Wyświetlanie oryginalnej wiadomości na ciemnym tle nie jest możliwe, ponieważ może to powodować brak widoczności ciemnych tekstów i obrazów</string>
     <string name="title_ask_show_html_images">Zawsze pokazuj obrazy przy wyświetlaniu oryginalnych wiadomości</string>
     <string name="title_ask_show_image">Pokazywanie obrazów może spowodować wyciek wrażliwych informacji</string>
@@ -925,6 +927,7 @@
     <string name="title_key_missing">Brak klucza dla %1$s</string>
     <string name="title_send_reminder_remark">Przypomnienia można włączyć ponownie w ustawieniach wysyłania</string>
     <string name="title_send_plain_text">Tylko zwykły tekst</string>
+    <string name="title_send_dsn">Raport o stanie</string>
     <string name="title_send_receipt">Poproś o potwierdzenie</string>
     <string name="title_send_receipt_remark">Większość dostawców i klientów e-mail ignoruje prośby o potwierdzenie</string>
     <string name="title_from_missing">Brak nadawcy</string>
@@ -936,6 +939,7 @@
     <string name="title_attachment_keywords">załączony, załącznik, załączniki, w zestawie, w załączonym</string>
     <string name="title_attachment_reminder">Czy zamierzałeś dodać załącznik?</string>
     <string name="title_plain_reminder">Całe formatowanie zostanie utracone</string>
+    <string name="title_dsn_reminder">\"Twarde odbicia\" szkodzą reputacji e-mail odbiorcy!</string>
     <string name="title_size_reminder">Wiadomość (%1$s) większa niż limit serwera (%2$s)</string>
     <string name="title_attachments_missing">Nie wszystkie załączniki zostały pobrane</string>
     <string name="title_dialog_hint">To okno dialogowe można ponownie włączyć za pomocą menu z trzema kropkami na górnym pasku akcji</string>

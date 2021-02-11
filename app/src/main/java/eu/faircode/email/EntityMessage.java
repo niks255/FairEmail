@@ -29,6 +29,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -101,6 +102,10 @@ public class EntityMessage implements Serializable {
     static final Integer PRIORITIY_NORMAL = 1;
     static final Integer PRIORITIY_HIGH = 2;
 
+    static final Integer DSN_NONE = 0;
+    static final Integer DSN_RECEIPT = 1;
+    static final Integer DSN_HARD_BOUNCE = 2;
+
     static final Long SWIPE_ACTION_ASK = -1L;
     static final Long SWIPE_ACTION_SEEN = -2L;
     static final Long SWIPE_ACTION_SNOOZE = -3L;
@@ -132,7 +137,8 @@ public class EntityMessage implements Serializable {
     public Integer priority;
     public Integer importance;
     public Boolean auto_submitted;
-    public Boolean receipt; // is receipt
+    @ColumnInfo(name = "receipt")
+    public Integer dsn;
     public Boolean receipt_request;
     public Address[] receipt_to;
     public Boolean dkim;
@@ -142,6 +148,7 @@ public class EntityMessage implements Serializable {
     public Boolean reply_domain; // differs from 'from'
     public String avatar; // lookup URI from sender
     public String sender; // sort key: from email address
+    public Address[] return_path;
     public Address[] submitter; // sent on behalf of
     public Address[] from;
     public Address[] to;
@@ -481,7 +488,7 @@ public class EntityMessage implements Serializable {
                     Objects.equals(this.wasforwardedfrom, other.wasforwardedfrom) &&
                     Objects.equals(this.thread, other.thread) &&
                     Objects.equals(this.priority, other.priority) &&
-                    Objects.equals(this.receipt, other.receipt) &&
+                    Objects.equals(this.dsn, other.dsn) &&
                     Objects.equals(this.receipt_request, other.receipt_request) &&
                     MessageHelper.equal(this.receipt_to, other.receipt_to) &&
                     Objects.equals(this.dkim, other.dkim) &&
@@ -491,6 +498,7 @@ public class EntityMessage implements Serializable {
                     Objects.equals(this.reply_domain, other.reply_domain) &&
                     Objects.equals(this.avatar, other.avatar) &&
                     Objects.equals(this.sender, other.sender) &&
+                    MessageHelper.equal(this.return_path, other.return_path) &&
                     MessageHelper.equal(this.submitter, other.submitter) &&
                     MessageHelper.equal(this.from, other.from) &&
                     MessageHelper.equal(this.to, other.to) &&

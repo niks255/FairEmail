@@ -23,6 +23,8 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -89,6 +92,9 @@ public class FragmentAnswer extends FragmentBase {
     @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean monospaced = prefs.getBoolean("monospaced", false);
+
         setSubtitle(R.string.title_answer_caption);
         setHasOptionsMenu(true);
 
@@ -108,6 +114,8 @@ public class FragmentAnswer extends FragmentBase {
         pbWait = view.findViewById(R.id.pbWait);
         grpReady = view.findViewById(R.id.grpReady);
 
+        etText.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
+
         etText.setSelectionListener(new EditTextCompose.ISelection() {
             @Override
             public void onSelected(boolean selection) {
@@ -125,19 +133,18 @@ public class FragmentAnswer extends FragmentBase {
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.action_insert_image:
-                        onInsertImage();
-                        return true;
-                    case R.id.action_delete:
-                        onActionDelete();
-                        return true;
-                    case R.id.action_save:
-                        onActionSave();
-                        return true;
-                    default:
-                        return false;
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.action_insert_image) {
+                    onInsertImage();
+                    return true;
+                } else if (itemId == R.id.action_delete) {
+                    onActionDelete();
+                    return true;
+                } else if (itemId == R.id.action_save) {
+                    onActionSave();
+                    return true;
                 }
+                return false;
             }
         });
 
@@ -215,13 +222,11 @@ public class FragmentAnswer extends FragmentBase {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_help:
-                onMenuHelp();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu_help) {
+            onMenuHelp();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onMenuHelp() {

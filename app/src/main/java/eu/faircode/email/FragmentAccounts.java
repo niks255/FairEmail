@@ -151,16 +151,15 @@ public class FragmentAccounts extends FragmentBase {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.string.title_imap:
-                                onCreate(true);
-                                return true;
-                            case R.string.title_pop3:
-                                onCreate(false);
-                                return true;
-                            default:
-                                return false;
+                        int itemId = item.getItemId();
+                        if (itemId == R.string.title_imap) {
+                            onCreate(true);
+                            return true;
+                        } else if (itemId == R.string.title_pop3) {
+                            onCreate(false);
+                            return true;
                         }
+                        return false;
                     }
 
                     private void onCreate(boolean imap) {
@@ -306,22 +305,21 @@ public class FragmentAccounts extends FragmentBase {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_search:
-                onMenuSearch();
-                return true;
-            case R.id.menu_unified:
-                onMenuUnified();
-                return true;
-            case R.id.menu_theme:
-                onMenuTheme();
-                return true;
-            case R.id.menu_force_sync:
-                onMenuForceSync();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_search) {
+            onMenuSearch();
+            return true;
+        } else if (itemId == R.id.menu_unified) {
+            onMenuUnified();
+            return true;
+        } else if (itemId == R.id.menu_theme) {
+            onMenuTheme();
+            return true;
+        } else if (itemId == R.id.menu_force_sync) {
+            onMenuForceSync();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onMenuSearch() {
@@ -376,10 +374,6 @@ public class FragmentAccounts extends FragmentBase {
                 boolean now = true;
                 boolean force = false;
                 boolean outbox = false;
-
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean enabled = prefs.getBoolean("enabled", true);
-                int pollInterval = prefs.getInt("poll_interval", ServiceSynchronize.DEFAULT_POLL_INTERVAL);
 
                 DB db = DB.getInstance(context);
                 try {

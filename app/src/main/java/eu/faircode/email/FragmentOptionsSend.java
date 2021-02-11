@@ -62,6 +62,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private Spinner spSignatureLocation;
     private SwitchCompat swSignatureReply;
     private SwitchCompat swSignatureForward;
+    private Button btnEditSignature;
     private SwitchCompat swDiscardDelete;
 
     private SwitchCompat swPlainOnly;
@@ -112,6 +113,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         spSignatureLocation = view.findViewById(R.id.spSignatureLocation);
         swSignatureReply = view.findViewById(R.id.swSignatureReply);
         swSignatureForward = view.findViewById(R.id.swSignatureForward);
+        btnEditSignature = view.findViewById(R.id.btnEditSignature);
         swDiscardDelete = view.findViewById(R.id.swDiscardDelete);
 
         swPlainOnly = view.findViewById(R.id.swPlainOnly);
@@ -293,6 +295,14 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             }
         });
 
+        btnEditSignature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(v.getContext());
+                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_VIEW_IDENTITIES));
+            }
+        });
+
         swDiscardDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -379,13 +389,11 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_default:
-                onMenuDefault();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu_default) {
+            onMenuDefault();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onMenuDefault() {

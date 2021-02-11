@@ -256,6 +256,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvNoInternetAttachments" />
 
                 <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvDsn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_send_dsn"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/vSeparator" />
+
+                <eu.faircode.email.FixedTextView
                     android:id="@+id/tvPlainTextOnly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -265,7 +277,7 @@
                     android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/vSeparator" />
+                    app:layout_constraintTop_toBottomOf="@id/tvDsn" />
 
                 <eu.faircode.email.EditTextCompose
                     android:id="@+id/etBody"
@@ -275,7 +287,6 @@
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
                     android:background="@null"
-                    android:fontFamily="monospace"
                     android:gravity="top"
                     android:hint="@string/title_body_hint"
                     android:imeOptions="actionNone|flagNoEnterAction"
@@ -314,7 +325,6 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
-                    android:fontFamily="monospace"
                     android:minHeight="75dp"
                     android:text="Signature"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"

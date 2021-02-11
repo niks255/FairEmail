@@ -3,7 +3,7 @@ package eu.faircode.email;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +25,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
     private RadioGroup rgThemeOptions;
     private SwitchCompat swBlack;
     private TextView tvSystem;
+    private TextView tvMore;
 
     private void eval() {
         int checkedId = rgTheme.getCheckedRadioButtonId();
@@ -50,23 +51,15 @@ public class FragmentDialogTheme extends FragmentDialogBase {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_theme, null);
-        itten = dview.findViewById(R.id.itten);
         rgTheme = dview.findViewById(R.id.rgTheme);
         swReverse = dview.findViewById(R.id.swReverse);
         rgThemeOptions = dview.findViewById(R.id.rgThemeOptions);
         swBlack = dview.findViewById(R.id.swBlack);
         tvSystem = dview.findViewById(R.id.tvSystem);
+        tvMore = dview.findViewById(R.id.tvMore);
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String theme = prefs.getString("theme", "blue_orange_system");
-
-        itten.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse("https://en.wikipedia.org/wiki/Johannes_Itten");
-                Helper.view(getContext(), uri, false);
-            }
-        });
 
         rgTheme.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -169,6 +162,14 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                 break;
         }
 
+        tvMore.setPaintFlags(tvMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 164);
+            }
+        });
+
         return new AlertDialog.Builder(getContext())
                 .setView(dview)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -188,50 +189,44 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
                         editor.remove("highlight_color");
 
-                        switch (rgTheme.getCheckedRadioButtonId()) {
-                            case R.id.rbThemeBlueOrange:
-                                if (system)
-                                    editor.putString("theme",
-                                            (reverse ? "orange_blue_system" : "blue_orange_system") +
-                                                    (black ? "_black" : "")).apply();
-                                else
-                                    editor.putString("theme",
-                                            (reverse ? "orange_blue" : "blue_orange") +
-                                                    (black ? "_black" : dark ? "_dark" : "_light")).apply();
-                                break;
-                            case R.id.rbThemeRedGreen:
-                                if (system)
-                                    editor.putString("theme",
-                                            (reverse ? "green_red_system" : "red_green_system") +
-                                                    (black ? "_black" : "")).apply();
-                                else
-                                    editor.putString("theme",
-                                            (reverse ? "green_red" : "red_green") +
-                                                    (black ? "_black" : dark ? "_dark" : "_light")).apply();
-                                break;
-                            case R.id.rbThemeYellowPurple:
-                                if (system)
-                                    editor.putString("theme",
-                                            (reverse ? "purple_yellow_system" : "yellow_purple_system") +
-                                                    (black ? "_black" : "")).apply();
-                                else
-                                    editor.putString("theme",
-                                            (reverse ? "purple_yellow" : "yellow_purple") +
-                                                    (black ? "_black" : dark ? "_dark" : "_light")).apply();
-                                break;
-                            case R.id.rbThemeGrey:
-                                if (system)
-                                    editor.putString("theme", "grey_system").apply();
-                                else
-                                    editor.putString("theme",
-                                            "grey" + (dark ? "_dark" : "_light")).apply();
-                                break;
-                            case R.id.rbThemeBlack:
-                                editor.putString("theme", "black").apply();
-                                break;
-                            case R.id.rbThemeBlackAndWhite:
-                                editor.putString("theme", "black_and_white").apply();
-                                break;
+                        int checkedRadioButtonId = rgTheme.getCheckedRadioButtonId();
+                        if (checkedRadioButtonId == R.id.rbThemeBlueOrange) {
+                            if (system)
+                                editor.putString("theme",
+                                        (reverse ? "orange_blue_system" : "blue_orange_system") +
+                                                (black ? "_black" : "")).apply();
+                            else
+                                editor.putString("theme",
+                                        (reverse ? "orange_blue" : "blue_orange") +
+                                                (black ? "_black" : dark ? "_dark" : "_light")).apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeRedGreen) {
+                            if (system)
+                                editor.putString("theme",
+                                        (reverse ? "green_red_system" : "red_green_system") +
+                                                (black ? "_black" : "")).apply();
+                            else
+                                editor.putString("theme",
+                                        (reverse ? "green_red" : "red_green") +
+                                                (black ? "_black" : dark ? "_dark" : "_light")).apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeYellowPurple) {
+                            if (system)
+                                editor.putString("theme",
+                                        (reverse ? "purple_yellow_system" : "yellow_purple_system") +
+                                                (black ? "_black" : "")).apply();
+                            else
+                                editor.putString("theme",
+                                        (reverse ? "purple_yellow" : "yellow_purple") +
+                                                (black ? "_black" : dark ? "_dark" : "_light")).apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeGrey) {
+                            if (system)
+                                editor.putString("theme", "grey_system").apply();
+                            else
+                                editor.putString("theme",
+                                        "grey" + (dark ? "_dark" : "_light")).apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeBlack) {
+                            editor.putString("theme", "black").apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeBlackAndWhite) {
+                            editor.putString("theme", "black_and_white").apply();
                         }
 
                         editor.apply();
