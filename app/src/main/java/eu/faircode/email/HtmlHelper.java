@@ -116,7 +116,7 @@ import static androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
 import static org.w3c.css.sac.Condition.SAC_CLASS_CONDITION;
 
 public class HtmlHelper {
-    private static final int PREVIEW_SIZE = 500; // characters
+    static final int PREVIEW_SIZE = 500; // characters
 
     private static final int DEFAULT_FONT_SIZE = 16; // pixels
     private static final int DEFAULT_FONT_SIZE_PT = 12; // points
@@ -1375,9 +1375,11 @@ public class HtmlHelper {
             if (value.endsWith("pc")) // 6 pc = 72 pt
                 return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 12 / DEFAULT_FONT_SIZE_PT;
             if (value.endsWith("cm")) // 1 inch = 2.54 cm
-                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 2.54f / 72 / DEFAULT_FONT_SIZE_PT;
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 2.54f * 72 / DEFAULT_FONT_SIZE_PT;
+            if (value.endsWith("mm")) // 1 inch = 25.4 mm
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 25.4f * 72 / DEFAULT_FONT_SIZE_PT;
             if (value.endsWith("in")) // 1 inch = 72pt
-                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) / 72 / DEFAULT_FONT_SIZE_PT;
+                return Float.parseFloat(value.substring(0, value.length() - 2).trim()) * 72 / DEFAULT_FONT_SIZE_PT;
             return Float.parseFloat(value.trim()) / DEFAULT_FONT_SIZE;
         } catch (NumberFormatException ex) {
             Log.i(ex);
@@ -1791,6 +1793,25 @@ public class HtmlHelper {
         truncate(d, MAX_FORMAT_TEXT_SIZE);
 
         SpannableStringBuilder ssb = fromDocument(context, d, null, null);
+
+        for (StyleSpan span : ssb.getSpans(0, ssb.length(), StyleSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            if (span.getStyle() == Typeface.ITALIC) {
+                ssb.insert(end, "/");
+                ssb.insert(start, "/");
+            } else if (span.getStyle() == Typeface.BOLD) {
+                ssb.insert(end, "*");
+                ssb.insert(start, "*");
+            }
+        }
+
+        for (UnderlineSpan span : ssb.getSpans(0, ssb.length(), UnderlineSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            ssb.insert(end, "_");
+            ssb.insert(start, "_");
+        }
 
         for (URLSpan span : ssb.getSpans(0, ssb.length(), URLSpan.class)) {
             String url = span.getURL();

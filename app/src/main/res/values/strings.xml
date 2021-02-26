@@ -201,6 +201,7 @@
     <string name="title_setup_manage">Manage</string>
     <string name="title_setup_grant">Grant</string>
     <string name="title_setup_grant_again">Grant required permissions</string>
+    <string name="title_setup_exchange_support">Is Microsoft Exchange supported?</string>
     <string name="title_setup_identity_what">What is an identity?</string>
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
@@ -299,7 +300,7 @@
     <string name="title_advanced_sync_folders">Synchronize folder list</string>
     <string name="title_advanced_sync_shared_folders">Synchronize shared folder lists</string>
     <string name="title_advanced_subscriptions">Manage folder subscriptions</string>
-    <string name="title_advanced_sync_subscribed">Automatically synchronize subscribed folders</string>
+    <string name="title_advanced_check_reply_domain">Check reply address on synchronizing messages</string>
     <string name="title_advanced_check_mx">Check sender email addresses on synchronizing messages</string>
     <string name="title_advanced_tune_keep_alive">Automatically tune the keep-alive interval</string>
 
@@ -353,6 +354,7 @@
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_cards_beige">Use beige background when using card style</string>
+    <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_threading_unread">Show number of unread messages in conversations</string>
@@ -530,6 +532,7 @@
     <string name="title_advanced_updates">Check for GitHub updates</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_query_threads">Limit parallel database access</string>
+    <string name="title_advanced_wal">WAL (debug only)</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
     <string name="title_advanced_protocol">Protocol logging</string>
     <string name="title_advanced_debug">Debug mode</string>
@@ -556,6 +559,7 @@
     <string name="title_advanced_sync_kept_hint">This will transfer extra data and consume extra battery power, especially if a lot of messages are stored on the device</string>
     <string name="title_advanced_gmail_thread_hint">This only applies to newly received messages and can break existing groups</string>
     <string name="title_advanced_sync_folders_hint">Disabling this will reduce data and battery usage somewhat, but will disable updating the list of folders too</string>
+    <string name="title_advanced_check_reply_hint">This will check if the domain name of the sender and the reply address are the same</string>
     <string name="title_advanced_lookup_mx_hint">This will check if DNS MX records exist</string>
     <string name="title_advanced_sync_delay_hint">This will slow down synchronizing messages</string>
 
@@ -583,6 +587,7 @@
     <string name="title_advanced_gravatars_hint">There might be a privacy risk</string>
     <string name="title_advanced_name_email_hint">When disabled only names will be shown when available</string>
     <string name="title_advanced_preview_hint">Only available when message text has been downloaded</string>
+    <string name="title_advanced_preview_lines_hint">Maximum %s characters in total</string>
     <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
     <string name="title_advanced_overview_mode_hint">This can result in very small fonts</string>
     <string name="title_advanced_placeholders_hint">This applies to reformatted messages only</string>
@@ -709,6 +714,7 @@
     <string name="title_no_inbox">Inbox not found</string>
     <string name="title_no_drafts">No drafts folder</string>
     <string name="title_no_junk_folder">There is no spam folder selected for this account</string>
+    <string name="title_default_composable">The default email address is determined by the primary identity of the primary account</string>
     <string name="title_no_composable">Sending emails requires an identity to be configured, and a drafts folder to be selected in the account settings</string>
     <string name="title_no_standard">This provider uses a proprietary email protocol and therefore it is not possible to use third party email clients</string>
     <string name="title_no_idle">This provider does not support push messages. This will delay reception of new messages and increase battery usage.</string>
@@ -722,6 +728,7 @@
     <string name="title_identity_delete">Delete this identity permanently?</string>
     <string name="title_edit_html">Edit as HTML</string>
     <string name="title_sign_key">Sign key: %1$s</string>
+    <string name="title_created_at">Created: %1$s</string>
     <string name="title_last_connected">Last connected: %1$s</string>
     <string name="title_backoff_until">Waiting after failure until: %1$s</string>
     <string name="title_storage_quota">Server storage usage: %1$s/%2$s</string>
@@ -830,7 +837,6 @@
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
 
-    <string name="title_buttons">Buttons</string>
     <string name="title_seen">Mark read</string>
     <string name="title_unseen">Mark unread</string>
     <string name="title_toggle_seen">Toggle read</string>
@@ -854,6 +860,8 @@
     <string name="title_pin">Add shortcut</string>
     <string name="title_print">Print</string>
     <string name="title_print_header">Print header</string>
+    <string name="title_print_images">Print images</string>
+    <string name="title_print_images_remark">Downloading images might take some time</string>
     <string name="title_show_headers">Show headers</string>
     <string name="title_raw_save">Save raw message</string>
     <string name="title_raw_send">Send as attachment</string>
@@ -865,6 +873,8 @@
     <string name="title_save_all">Save all</string>
     <string name="title_save_eml">Save raw message file</string>
 
+    <string name="title_buttons">Select buttons</string>
+    <string name="title_configure_buttons">Configure buttons &#8230;</string>
     <string name="title_trash">Trash</string>
     <string name="title_copy">Copy &#8230;</string>
     <string name="title_copy_to">Copy to &#8230;</string>
@@ -978,7 +988,7 @@
     <string name="title_send_now">Send now</string>
     <string name="title_send_via">Send via</string>
     <string name="title_send_at">Send at &#8230;</string>
-    <string name="title_send_archive">Archive read messages</string>
+    <string name="title_send_auto_archive">Archive replied message</string>
     <string name="title_send_encryption">Encryption</string>
     <string name="title_send_priority">Priority</string>
     <string name="title_no_server">No server found at \'%1$s\'</string>
@@ -1047,6 +1057,7 @@
     <string name="title_extra_missing">Username missing</string>
     <string name="title_to_missing">Recipient missing</string>
     <string name="title_pgp_reminder">PGP keys available</string>
+    <string name="title_smime_reminder">S/MIME keys available</string>
     <string name="title_subject_reminder">Subject is empty</string>
     <string name="title_text_reminder">Message is empty</string>
     <string name="title_attachment_keywords">attached,attachment,attachments,included</string>
@@ -1453,7 +1464,7 @@
     <string name="title_pro_activated">All pro features are activated</string>
     <string name="title_pro_valid">All pro features activated</string>
     <string name="title_pro_invalid">Invalid response</string>
-    <string name="title_pro_support">FairEmail needs your help. Tap to purchase pro features to keep the project going.</string>
+    <string name="title_pro_support">FairEmail needs your help. Tap to buy pro features to keep the project going or turn off this message.</string>
 
     <string name="title_boundary_error">Error downloading messages from the mail server</string>
     <string name="title_boundary_retry">Try again</string>
@@ -1683,6 +1694,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
 
     <integer-array name="fontSizeValues" translatable="false">

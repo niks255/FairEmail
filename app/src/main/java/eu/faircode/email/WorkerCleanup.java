@@ -191,6 +191,7 @@ public class WorkerCleanup extends Worker {
             File[] messages = new File(context.getFilesDir(), "messages").listFiles();
             File[] revision = new File(context.getFilesDir(), "revision").listFiles();
             File[] references = new File(context.getFilesDir(), "references").listFiles();
+            File[] encryption = new File(context.getFilesDir(), "encryption").listFiles();
             File[] photos = new File(context.getCacheDir(), "photo").listFiles();
             File[] calendars = new File(context.getCacheDir(), "calendar").listFiles();
 
@@ -200,6 +201,8 @@ public class WorkerCleanup extends Worker {
                 files.addAll(Arrays.asList(revision));
             if (references != null)
                 files.addAll(Arrays.asList(references));
+            if (encryption != null)
+                files.addAll(Arrays.asList(encryption));
             if (photos != null)
                 files.addAll(Arrays.asList(photos));
             if (calendars != null)
@@ -254,7 +257,7 @@ public class WorkerCleanup extends Worker {
             if (images != null)
                 for (File file : images)
                     if (manual || file.lastModified() + KEEP_FILES_DURATION < now) {
-                        long id = Long.parseLong(file.getName().split("_")[0]);
+                        long id = Long.parseLong(file.getName().split("[_\\.]")[0]);
                         EntityMessage message = db.message().getMessage(id);
                         if (manual || message == null ||
                                 file.lastModified() + KEEP_IMAGES_DURATION < now) {

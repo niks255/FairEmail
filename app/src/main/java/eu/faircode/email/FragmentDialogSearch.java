@@ -282,7 +282,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                         else
                             prefs.edit().putString("last_search", criteria.query).apply();
 
-                        if (!cbSearchIndex.isChecked()) {
+                        criteria.fts = cbSearchIndex.isChecked();
+                        if (!fts) {
                             criteria.in_senders = cbSenders.isChecked();
                             criteria.in_recipients = cbRecipients.isChecked();
                             criteria.in_subject = cbSubject.isChecked();
@@ -350,7 +351,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
 
                                 @Override
                                 protected void onException(Bundle args, Throwable ex) {
-                                    Log.unexpectedError(getParentFragmentManager(), ex);
+                                    Log.e(ex);
                                 }
                             }.execute(getContext(), getViewLifecycleOwner(), getArguments(), "search:raw");
                         else

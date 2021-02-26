@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Pair;
@@ -28,6 +29,7 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -42,6 +44,9 @@ import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
 public class WebViewEx extends WebView implements DownloadListener, View.OnLongClickListener {
     private int height;
     private IWebView intf;
+    private Runnable onPageLoaded;
+
+    private static final long PAGE_LOADED_FALLBACK_DELAY = 1500L; // milliseconds
 
     public WebViewEx(Context context) {
         super(context);
@@ -72,11 +77,11 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE))
+        if (WebViewEx.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
 
         if (html_dark &&
-                WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK))
+                WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK))
             WebSettingsCompat.setForceDark(settings,
                     Helper.isDarkTheme(context) ? FORCE_DARK_ON : FORCE_DARK_OFF);
     }
@@ -96,6 +101,35 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         this.intf = intf;
 
         setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                Log.i("Started url=" + url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.i("Finished url=" + url);
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                Log.i("Commit url=" + url + " runnable=" + (onPageLoaded != null));
+                if (onPageLoaded != null) {
+                    ApplicationEx.getMainHandler().post(onPageLoaded);
+                    onPageLoaded = null;
+                }
+            }
+
+            @Override
+            public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
+                Log.e("Render process gone");
+                if (onPageLoaded != null) {
+                    ApplicationEx.getMainHandler().post(onPageLoaded);
+                    onPageLoaded = null;
+                }
+                return super.onRenderProcessGone(view, detail);
+            }
+
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.i("Open url=" + url);
                 return intf.onOpenLink(url);
@@ -116,6 +150,26 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
                     intf.onScrollChange(scrollX, scrollY);
                 }
             });
+    }
+
+    void setOnPageLoaded(Runnable runnable) {
+        Log.i("Set on page finished");
+        onPageLoaded = runnable;
+
+        ApplicationEx.getMainHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (onPageLoaded != null) {
+                        Log.i("Page loaded fallback");
+                        onPageLoaded.run();
+                        onPageLoaded = null;
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        }, PAGE_LOADED_FALLBACK_DELAY);
     }
 
     void setImages(boolean show_images, boolean inline) {
@@ -255,6 +309,25 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         }
 
         return false;
+    }
+
+    public static boolean isFeatureSupported(String feature) {
+        try {
+            return WebViewFeature.isFeatureSupported(feature);
+        } catch (Throwable ex) {
+            /*
+                java.lang.ExceptionInInitializerError
+                  at androidx.webkit.internal.WebViewGlueCommunicator.getFactory(SourceFile:1)
+                  at androidx.webkit.internal.WebViewFeatureInternal$LAZY_HOLDER.<clinit>(SourceFile:2)
+                  at androidx.webkit.internal.WebViewFeatureInternal.isSupportedByWebView(SourceFile:1)
+                  at androidx.webkit.internal.WebViewFeatureInternal.isSupported(SourceFile:13)
+                  at androidx.webkit.internal.WebViewFeatureInternal.isSupported(SourceFile:11)
+                  at androidx.webkit.internal.WebViewFeatureInternal.isSupported(SourceFile:4)
+                  at androidx.webkit.WebViewFeature.isFeatureSupported(SourceFile:1)
+             */
+            Log.w(ex);
+            return false;
+        }
     }
 
     interface IWebView {

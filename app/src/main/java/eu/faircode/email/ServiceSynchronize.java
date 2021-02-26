@@ -36,7 +36,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.OperationCanceledException;
 import android.os.PowerManager;
-import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -146,7 +145,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "sync_folders",
             "sync_shared_folders",
             "prefer_ip4", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
-            "badge", "unseen_ignored", // force update badge/widget
             "experiments", "debug", "protocol", // force reconnect
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl" // force reconnect
     ));
@@ -254,6 +252,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         if (account > 0 && !current.accountState.id.equals(account))
                             continue;
 
+                        boolean sync = current.command.getBoolean("sync", false);
+                        boolean force = current.command.getBoolean("force", false);
+
                         int index = accountStates.indexOf(current);
                         if (index < 0) {
                             if (current.canRun()) {
@@ -268,12 +269,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         " state=" + current.accountState.state +
                                         " active=" + current.networkState.getActive());
                                 event = true;
-                                start(current, current.accountState.isEnabled(current.enabled), false);
+                                start(current, current.accountState.isEnabled(current.enabled) || sync, force);
                             }
                         } else {
                             boolean reload = false;
-                            boolean sync = current.command.getBoolean("sync", false);
-                            boolean force = current.command.getBoolean("force", false);
                             switch (current.command.getString("name")) {
                                 case "reload":
                                     reload = true;
@@ -582,40 +581,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
         });
 
-        Map<Long, List<Long>> groupNotifying = new HashMap<>();
-
-        // Get existing notifications
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            try {
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                for (StatusBarNotification sbn : nm.getActiveNotifications()) {
-                    String tag = sbn.getTag();
-                    if (tag != null && tag.startsWith("unseen.")) {
-                        String[] p = tag.split(("\\."));
-                        long group = Long.parseLong(p[1]);
-                        long id = sbn.getNotification().extras.getLong("id", 0);
-
-                        if (!groupNotifying.containsKey(group))
-                            groupNotifying.put(group, new ArrayList<>());
-
-                        if (id > 0) {
-                            Log.i("Notify restore " + tag + " id=" + id);
-                            groupNotifying.get(group).add(id);
-                        }
-                    }
-                }
-            } catch (Throwable ex) {
-                Log.w(ex);
-                /*
-                    java.lang.RuntimeException: Unable to create service eu.faircode.email.ServiceSynchronize: java.lang.NullPointerException: Attempt to invoke virtual method 'java.util.List android.content.pm.ParceledListSlice.getList()' on a null object reference
-                            at android.app.ActivityThread.handleCreateService(ActivityThread.java:2944)
-                            at android.app.ActivityThread.access$1900(ActivityThread.java:154)
-                            at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1474)
-                            at android.os.Handler.dispatchMessage(Handler.java:102)
-                            at android.os.Looper.loop(Looper.java:234)
-                            at android.app.ActivityThread.main(ActivityThread.java:5526)
-                */
-            }
+        Core.NotificationData notificationData = new Core.NotificationData(this);
 
         db.message().liveUnseenNotify().observe(cowner, new Observer<List<TupleMessageEx>>() {
             private ExecutorService executor =
@@ -627,7 +593,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     @Override
                     public void run() {
                         try {
-                            Core.notifyMessages(ServiceSynchronize.this, messages, groupNotifying, foreground);
+                            Core.notifyMessages(ServiceSynchronize.this, messages, notificationData, foreground);
                         } catch (SecurityException ex) {
                             Log.w(ex);
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
@@ -902,7 +868,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         schedule(this, true);
 
         Bundle command = new Bundle();
-        command.putString("name", "eval");
+        command.putString("name", "reload"); // eval will not work if manual sync running
         command.putBoolean("sync", true);
         liveAccountNetworkState.post(command);
     }
@@ -910,7 +876,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private void onWatchdog(Intent intent) {
         EntityLog.log(this, "Watchdog");
         schedule(this, false);
-        updateNetworkState(null, "watchdog");
+
+        if (lastNetworkState == null || !lastNetworkState.isSuitable())
+            updateNetworkState(null, "watchdog");
     }
 
     private NotificationCompat.Builder getNotificationService(Integer accounts, Integer operations) {
@@ -1359,32 +1327,30 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             });
 
                             // Idle folder
-                            if (!account.isTransient(this)) {
-                                Thread idler = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Log.i(folder.name + " start idle");
-                                            while (ifolder.isOpen() && state.isRunning() && state.isRecoverable()) {
-                                                Log.i(folder.name + " do idle");
-                                                ifolder.idle(false);
-                                                state.activity();
-                                            }
-                                        } catch (Throwable ex) {
-                                            Log.e(folder.name, ex);
-                                            EntityLog.log(
-                                                    ServiceSynchronize.this,
-                                                    folder.name + " " + Log.formatThrowable(ex, false));
-                                            state.error(new FolderClosedException(ifolder, "IDLE", new Exception(ex)));
-                                        } finally {
-                                            Log.i(folder.name + " end idle");
+                            Thread idler = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Log.i(folder.name + " start idle");
+                                        while (ifolder.isOpen() && state.isRunning() && state.isRecoverable()) {
+                                            Log.i(folder.name + " do idle");
+                                            ifolder.idle(false);
+                                            state.activity();
                                         }
+                                    } catch (Throwable ex) {
+                                        Log.e(folder.name, ex);
+                                        EntityLog.log(
+                                                ServiceSynchronize.this,
+                                                folder.name + " " + Log.formatThrowable(ex, false));
+                                        state.error(new FolderClosedException(ifolder, "IDLE", new Exception(ex)));
+                                    } finally {
+                                        Log.i(folder.name + " end idle");
                                     }
-                                }, "idler." + folder.id);
-                                idler.setPriority(THREAD_PRIORITY_BACKGROUND);
-                                idler.start();
-                                idlers.add(idler);
-                            }
+                                }
+                            }, "idler." + folder.id);
+                            idler.setPriority(THREAD_PRIORITY_BACKGROUND);
+                            idler.start();
+                            idlers.add(idler);
 
                             EntityOperation.sync(this, folder.id, false, force && !forced);
 
@@ -2440,6 +2406,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             start(context,
                     new Intent(context, ServiceSynchronize.class)
                             .setAction("watchdog"));
+    }
+
+    static void restart(Context context) {
+        context.stopService(new Intent(context, ServiceSynchronize.class));
+        eval(context, "restart");
     }
 
     private static void start(Context context, Intent intent) {

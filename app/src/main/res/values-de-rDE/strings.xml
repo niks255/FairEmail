@@ -158,6 +158,7 @@
     <string name="title_setup_manage">Verwalten</string>
     <string name="title_setup_grant">Zulassen</string>
     <string name="title_setup_grant_again">Benötigte Rechte erteilen</string>
+    <string name="title_setup_exchange_support">Wird Microsoft Exchange unterstützt?</string>
     <string name="title_setup_identity_what">Was ist eine Identität?</string>
     <string name="title_setup_permissions">Berechtigungen erteilen</string>
     <string name="title_setup_permissions_remark">Um auf Kontaktinformationen zuzugreifen (optional)</string>
@@ -243,7 +244,7 @@
     <string name="title_advanced_sync_folders">Ordnerliste synchronisieren</string>
     <string name="title_advanced_sync_shared_folders">Listen der freigegebenen Ordner synchronisieren</string>
     <string name="title_advanced_subscriptions">Abonnierte Ordner verwalten</string>
-    <string name="title_advanced_sync_subscribed">Abonnierte Ordner automatisch synchronisieren</string>
+    <string name="title_advanced_check_reply_domain">Überprüft die Antwort-An-E-Mail-Adressen beim Synchronisieren von Nachrichten</string>
     <string name="title_advanced_check_mx">Überprüft die Absender-E-Mail-Adressen beim Synchronisieren von Nachrichten per DNS MX</string>
     <string name="title_advanced_tune_keep_alive">Aktivitätsintervall automatisch anpassen</string>
     <string name="title_advanced_keyboard">Tastatur standardmäßig anzeigen</string>
@@ -291,6 +292,7 @@
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
     <string name="title_advanced_cards">Ordner und Unterhaltungen mit Rahmen (breit) statt in Tabellendesign (schmal) zeigen</string>
     <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund bei Kartendarstellung verwenden</string>
+    <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
     <string name="title_advanced_threading">Themenbaum</string>
     <string name="title_advanced_threading_unread">Anzahl ungelesener Nachrichten in Unterhaltungen anzeigen</string>
@@ -467,6 +469,7 @@
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
     <string name="title_advanced_gmail_thread_hint">Dies gilt nur für neu empfangene Nachrichten und kann bestehende Gruppen zerbrechen</string>
     <string name="title_advanced_sync_folders_hint">Die Deaktivierung dieser Funktion verringert den Daten- und Akkuverbrauch etwas, deaktiviert aber auch die Aktualisierung der Ordnerliste.</string>
+    <string name="title_advanced_check_reply_hint">Überprüft, ob die Domain des Absenders und der Antwort-An-Adresse gleich sind</string>
     <string name="title_advanced_lookup_mx_hint">Überprüft, ob DNS-MX-Einträge vorhanden sind</string>
     <string name="title_advanced_sync_delay_hint">Dies verzögert die Synchronisierung von Nachrichten</string>
     <string name="title_advanced_suggest_local_hint">Zusätzlich zu den von Android bereitgestellten Kontakten werden weitere Kontaktdaten für neue gesendete oder erhaltene Nachrichten nur dann gespeichert, wenn dies aktiviert ist.</string>
@@ -490,6 +493,7 @@
     <string name="title_advanced_gravatars_hint">Es könnte ein Datenschutzrisiko geben</string>
     <string name="title_advanced_name_email_hint">Wenn deaktiviert, werden nur Namen angezeigt, sofern verfügbar</string>
     <string name="title_advanced_preview_hint">Nur verfügbar, wenn der E-Mail-Text heruntergeladen wurde</string>
+    <string name="title_advanced_preview_lines_hint">Maximal %s Zeichen</string>
     <string name="title_advanced_preview_issue">Scrollen kann aufgrund eines Fehlers in einigen Android-Versionen langsam sein, wenn die Anzahl der Zeilen mehr als eine ist</string>
     <string name="title_advanced_overview_mode_hint">Dies kann zu sehr kleinen Schriften führen</string>
     <string name="title_advanced_placeholders_hint">Das gilt nur für umformatierte Nachrichten</string>
@@ -602,6 +606,7 @@
     <string name="title_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_no_drafts">Kein Entwürfe-Ordner festgelegt</string>
     <string name="title_no_junk_folder">Es ist kein Spam-Ordner für dieses Konto ausgewählt</string>
+    <string name="title_default_composable">Die Standard-E-Mail-Adresse wird durch die primäre Identität des Hauptkontos bestimmt</string>
     <string name="title_no_composable">Das Versenden von E-Mails erfordert die Konfiguration einer Identität und in den Kontoeinstellungen die Auswahl eines Ordners „Entwürfe”</string>
     <string name="title_no_standard">Dieser Provider verwendet ein proprietäres E-Mail-Protokoll, so dass es nicht möglich ist, E-Mail-Clients von Drittanbietern zu nutzen</string>
     <string name="title_no_idle">Dieser Anbieter unterstützt keine Pushnachrichten. Dies verzögert den Empfang neuer E-Mails und erhöht den Akkuverbrauch.</string>
@@ -714,7 +719,6 @@
     <string name="title_duplicate_in">Doppelte Nachricht in %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
-    <string name="title_buttons">Schaltflächen</string>
     <string name="title_seen">Gelesen</string>
     <string name="title_unseen">Als ungelesen kennzeichnen</string>
     <string name="title_toggle_seen">Gelesen umschalten</string>
@@ -738,6 +742,8 @@
     <string name="title_pin">Verknüpfung hinzufügen</string>
     <string name="title_print">Drucken</string>
     <string name="title_print_header">Kopfzeilen mit drucken</string>
+    <string name="title_print_images">Bilder drucken</string>
+    <string name="title_print_images_remark">Das Herunterladen von Bildern kann einige Zeit dauern</string>
     <string name="title_show_headers">Kopfzeilen anzeigen</string>
     <string name="title_raw_save">Rohdaten speichern</string>
     <string name="title_raw_send">Als Anhang senden</string>
@@ -748,6 +754,8 @@
     <string name="title_download_all">Alle herunterladen</string>
     <string name="title_save_all">Alles speichern</string>
     <string name="title_save_eml">Rohdaten speichern</string>
+    <string name="title_buttons">Schaltflächen auswählen</string>
+    <string name="title_configure_buttons">Schaltflächen &#8230; konfigurieren</string>
     <string name="title_trash">Löschen</string>
     <string name="title_copy">Kopieren &#8230;</string>
     <string name="title_copy_to">Kopieren nach &#8230;</string>
@@ -851,7 +859,7 @@
     <string name="title_send_now">Sofort</string>
     <string name="title_send_via">Senden über</string>
     <string name="title_send_at">Später senden &#8230;</string>
-    <string name="title_send_archive">Gelesene Nachrichten archivieren</string>
+    <string name="title_send_auto_archive">Beantwortete Nachricht archivieren</string>
     <string name="title_send_encryption">Verschlüsselung</string>
     <string name="title_send_priority">Priorität</string>
     <string name="title_no_server">Kein Server gefunden bei \'%1$s\'</string>
@@ -914,6 +922,7 @@
     <string name="title_extra_missing">Benutzername fehlt</string>
     <string name="title_to_missing">Empfänger fehlt</string>
     <string name="title_pgp_reminder">PGP-Schlüssel verfügbar</string>
+    <string name="title_smime_reminder">S/MIME-Schlüssel verfügbar</string>
     <string name="title_subject_reminder">Betreff ist leer</string>
     <string name="title_text_reminder">Nachricht ist leer</string>
     <string name="title_attachment_keywords">angehängt,Anhang,Anhänge,beigefügt,Anlage,Anlagen,anbei</string>
@@ -1285,7 +1294,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_pro_activated">Alle Pro-Funktionen sind aktiviert</string>
     <string name="title_pro_valid">Alle Pro-Funktionen aktiviert</string>
     <string name="title_pro_invalid">Ungültige Antwort</string>
-    <string name="title_pro_support">FairEmail benötigt Ihre Unterstützung. Erwerben Sie die Pro-Funktionen, um das Projekt am Laufen zu halten.</string>
+    <string name="title_pro_support">FairEmail ist auf Ihre Hilfe angewiesen. Bitte tippen Sie auf Kaufen, um die Pro-Funktionen zu erwerben, damit das Projekt fortgeführt werden kann oder deaktivieren Sie diese Meldung.</string>
     <string name="title_boundary_error">Fehler beim Herunterladen der Nachrichten vom E-Mail-Server</string>
     <string name="title_boundary_retry">Erneut versuchen</string>
     <string name="title_unexpected_error">Unerwarteter Fehler</string>
@@ -1427,6 +1436,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Standard</item>

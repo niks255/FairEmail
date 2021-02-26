@@ -212,7 +212,6 @@
     <string name="title_advanced_sync_folders">同步資料夾清單</string>
     <string name="title_advanced_sync_shared_folders">同步分享的資料夾清單</string>
     <string name="title_advanced_subscriptions">管理資料夾訂閱</string>
-    <string name="title_advanced_sync_subscribed">自動同步訂閱的資料夾</string>
     <string name="title_advanced_check_mx">在同步訊息時檢查發送者的email地址。</string>
     <string name="title_advanced_tune_keep_alive">自動調整保持活躍的間隔</string>
     <string name="title_advanced_keyboard">預設顯示鍵盤</string>
@@ -663,7 +662,6 @@
     <string name="title_duplicate_in">消息重複 %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">正向： %1$s</string>
-    <string name="title_buttons">按鈕</string>
     <string name="title_seen">標記為已讀</string>
     <string name="title_unseen">標記為未讀</string>
     <string name="title_toggle_seen">切換閱讀</string>
@@ -1224,7 +1222,6 @@
     <string name="title_pro_activated">所有專業功能均已激活</string>
     <string name="title_pro_valid">所有專業功能已激活</string>
     <string name="title_pro_invalid">無效的回應</string>
-    <string name="title_pro_support">FairEmail需要您的幫助。 點按即可購買專業功能，以使項目繼續進行。</string>
     <string name="title_boundary_error">從郵件服務器下載消息時出錯</string>
     <string name="title_boundary_retry">再試一次</string>
     <string name="title_unexpected_error">意外的錯誤</string>
@@ -1365,6 +1362,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>預設</item>

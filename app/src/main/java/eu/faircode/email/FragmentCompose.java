@@ -271,6 +271,9 @@ public class FragmentCompose extends FragmentBase {
 
     private Uri photoURI = null;
 
+    private int pickRequest;
+    private Uri pickUri;
+
     private OpenPgpServiceConnection pgpService;
     private String[] pgpUserIds;
     private long[] pgpKeyIds;
@@ -297,6 +300,7 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_LINK = 12;
     private static final int REQUEST_DISCARD = 13;
     private static final int REQUEST_SEND = 14;
+    private static final int REQUEST_PERMISSION = 15;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -454,6 +458,7 @@ public class FragmentCompose extends FragmentBase {
                     return;
                 }
 
+                // https://developer.android.com/guide/topics/providers/contacts-provider#Intents
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
                 startActivityForResult(Helper.getChooser(getContext(), pick), request);
             }
@@ -1149,6 +1154,9 @@ public class FragmentCompose extends FragmentBase {
         outState.putBoolean("fair:show_images", show_images);
         outState.putParcelable("fair:photo", photoURI);
 
+        outState.putInt("fair:pickRequest", pickRequest);
+        outState.putParcelable("fair:pickUri", pickUri);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -1205,6 +1213,9 @@ public class FragmentCompose extends FragmentBase {
             working = savedInstanceState.getLong("fair:working");
             show_images = savedInstanceState.getBoolean("fair:show_images");
             photoURI = savedInstanceState.getParcelable("fair:photo");
+
+            pickRequest = savedInstanceState.getInt("fair:pickRequest");
+            pickUri = savedInstanceState.getParcelable("fair:pickUri");
 
             Bundle args = new Bundle();
             args.putString("action", working < 0 ? "new" : "edit");
@@ -1647,6 +1658,8 @@ public class FragmentCompose extends FragmentBase {
                                 Spanned spanned = HtmlHelper.fromHtml(html, new Html.ImageGetter() {
                                     @Override
                                     public Drawable getDrawable(String source) {
+                                        if (source != null && source.startsWith("cid:"))
+                                            source = null;
                                         return ImageHelper.decodeImage(getContext(), working, source, true, zoom, 1.0f, etBody);
                                     }
                                 }, null, getContext());
@@ -2049,6 +2062,11 @@ public class FragmentCompose extends FragmentBase {
                                 ContactsContract.Contacts.DISPLAY_NAME
                         },
                         null, null, null)) {
+                    // https://issuetracker.google.com/issues/118400813
+                    // https://developer.android.com/guide/topics/providers/content-provider-basics#DisplayResults
+                    if (cursor != null && cursor.getCount() == 0)
+                        throw new SecurityException("Could not retrieve selected contact");
+
                     if (cursor != null && cursor.moveToFirst()) {
                         int colEmail = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
                         int colName = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
@@ -2106,9 +2124,24 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
+                if (ex instanceof SecurityException) {
+                    pickRequest = requestCode;
+                    pickUri = uri;
+                    String permission = Manifest.permission.READ_CONTACTS;
+                    requestPermissions(new String[]{permission}, REQUEST_PERMISSION);
+                } else
+                    Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "compose:picked");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        for (int i = 0; i < permissions.length; i++)
+            if (Manifest.permission.READ_CONTACTS.equals(permissions[i]))
+                if (pickUri != null &&
+                        grantResults[i] == PackageManager.PERMISSION_GRANTED)
+                    onPickContact(pickRequest, new Intent().setData(pickUri));
     }
 
     private void onAddImage(boolean photo) {
@@ -2318,8 +2351,11 @@ public class FragmentCompose extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_from_missing));
 
                 // Create files
-                File input = new File(context.getCacheDir(), "pgp_input." + draft.id);
-                File output = new File(context.getCacheDir(), "pgp_output." + draft.id);
+                File tmp = new File(context.getFilesDir(), "encryption");
+                if (!tmp.exists())
+                    tmp.mkdir();
+                File input = new File(tmp, draft.id + ".pgp_input");
+                File output = new File(tmp, draft.id + ".pgp_output");
 
                 // Serializing messages is NOT reproducible
                 if ((EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt) &&
@@ -2650,6 +2686,10 @@ public class FragmentCompose extends FragmentBase {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean check_certificate = prefs.getBoolean("check_certificate", true);
 
+                File tmp = new File(context.getFilesDir(), "encryption");
+                if (!tmp.exists())
+                    tmp.mkdir();
+
                 DB db = DB.getInstance(context);
 
                 // Get data
@@ -2775,7 +2815,7 @@ public class FragmentCompose extends FragmentBase {
                         .build(contentSigner, chain[0]);
                 cmsGenerator.addSignerInfoGenerator(signerInfoGenerator);
 
-                File sinput = new File(context.getCacheDir(), "smime_sign." + draft.id);
+                File sinput = new File(tmp, draft.id + ".smime_sign");
                 try (FileOutputStream fos = new FileOutputStream(sinput)) {
                     bpContent.writeTo(fos);
                 }
@@ -2893,7 +2933,7 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }
 
-                File einput = new File(context.getCacheDir(), "smime_encrypt." + draft.id);
+                File einput = new File(tmp, draft.id + ".smime_encrypt");
                 try (FileOutputStream fos = new FileOutputStream(einput)) {
                     imessage.writeTo(fos);
                 }
@@ -3519,12 +3559,12 @@ public class FragmentCompose extends FragmentBase {
                     if (plain_only)
                         data.draft.plain_only = true;
 
-                    if (encrypt_default)
+                    if (encrypt_default || selected.encrypt_default)
                         if (selected.encrypt == 0)
                             data.draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
                         else
                             data.draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
-                    else if (sign_default)
+                    else if (sign_default || selected.sign_default)
                         if (selected.encrypt == 0)
                             data.draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
                         else
@@ -4136,6 +4176,7 @@ public class FragmentCompose extends FragmentBase {
             if (data.draft.identity != null)
                 for (int pos = 0; pos < data.identities.size(); pos++) {
                     if (data.identities.get(pos).id.equals(data.draft.identity)) {
+                        spIdentity.setTag(pos);
                         spIdentity.setSelection(pos);
                         break;
                     }
@@ -4708,9 +4749,8 @@ public class FragmentCompose extends FragmentBase {
                             //        identity != null && identity.sender_extra)
                             //    args.putBoolean("remind_extra", true);
 
-                            if (pgpService != null && pgpService.isBound() &&
-                                    (draft.ui_encrypt == null ||
-                                            EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))) {
+                            if (draft.ui_encrypt == null ||
+                                    EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt)) {
                                 List<Address> recipients = new ArrayList<>();
                                 if (draft.to != null)
                                     recipients.addAll(Arrays.asList(draft.to));
@@ -4720,28 +4760,40 @@ public class FragmentCompose extends FragmentBase {
                                     recipients.addAll(Arrays.asList(draft.bcc));
 
                                 if (recipients.size() > 0) {
-                                    String[] userIds = new String[recipients.size()];
-                                    for (int i = 0; i < recipients.size(); i++) {
-                                        InternetAddress recipient = (InternetAddress) recipients.get(i);
-                                        userIds[i] = recipient.getAddress().toLowerCase();
+                                    if (pgpService != null && pgpService.isBound()) {
+                                        String[] userIds = new String[recipients.size()];
+                                        for (int i = 0; i < recipients.size(); i++) {
+                                            InternetAddress recipient = (InternetAddress) recipients.get(i);
+                                            userIds[i] = recipient.getAddress().toLowerCase();
+                                        }
+
+                                        Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
+                                        intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds);
+
+                                        try {
+                                            OpenPgpApi api = new OpenPgpApi(context, pgpService.getService());
+                                            Intent result = api.executeApi(intent, (InputStream) null, (OutputStream) null);
+                                            int resultCode = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
+                                            if (resultCode == OpenPgpApi.RESULT_CODE_SUCCESS) {
+                                                long[] keyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
+                                                args.putBoolean("remind_pgp", keyIds.length > 0);
+                                            }
+                                        } catch (Throwable ex) {
+                                            Log.w(ex);
+                                        }
                                     }
 
-                                    Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
-                                    intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds);
-
-                                    try {
-                                        OpenPgpApi api = new OpenPgpApi(context, pgpService.getService());
-                                        Intent result = api.executeApi(intent, (InputStream) null, (OutputStream) null);
-                                        int resultCode = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
-                                        if (resultCode == OpenPgpApi.RESULT_CODE_SUCCESS) {
-                                            long[] keyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
-                                            args.putBoolean("remind_pgp", keyIds.length > 0);
+                                    for (Address address : recipients) {
+                                        String email = ((InternetAddress) address).getAddress();
+                                        List<EntityCertificate> certs = db.certificate().getCertificateByEmail(email);
+                                        if (certs != null && certs.size() > 0) {
+                                            args.putBoolean("remind_smime", true);
+                                            break;
                                         }
-                                    } catch (Throwable ex) {
-                                        Log.w(ex);
                                     }
                                 }
                             }
+
 
                             if (TextUtils.isEmpty(draft.subject))
                                 args.putBoolean("remind_subject", true);
@@ -4896,23 +4948,12 @@ public class FragmentCompose extends FragmentBase {
                         });
 
                         if (extras.getBoolean("archive")) {
-                            boolean threading = prefs.getBoolean("threading", true);
                             EntityFolder archive = db.folder().getFolderByType(draft.account, EntityFolder.ARCHIVE);
-                            List<EntityMessage> messages = db.message().getMessagesByThread(
-                                    draft.account, draft.thread, null, null);
-                            for (EntityMessage threaded : messages) {
-                                EntityFolder source = db.folder().getFolder(threaded.folder);
-                                boolean repliedto =
-                                        (!TextUtils.isEmpty(draft.inreplyto) &&
-                                                draft.inreplyto.equals(threaded.msgid));
-                                if ((threaded.ui_seen || repliedto) &&
-                                        (threading || repliedto) &&
-                                        source != null && !source.read_only &&
-                                        archive != null && !archive.id.equals(threaded.folder) &&
-                                        !EntityFolder.isOutgoing(source.type) &&
-                                        !EntityFolder.TRASH.equals(source.type) &&
-                                        !EntityFolder.JUNK.equals(source.type))
-                                    EntityOperation.queue(context, threaded, EntityOperation.MOVE, archive.id, repliedto);
+                            if (archive != null) {
+                                List<EntityMessage> messages = db.message().getMessagesByMsgId(draft.account, draft.inreplyto);
+                                if (messages != null)
+                                    for (EntityMessage message : messages)
+                                        EntityOperation.queue(context, message, EntityOperation.MOVE, archive.id);
                             }
                         }
                     }
@@ -4988,24 +5029,26 @@ public class FragmentCompose extends FragmentBase {
                 boolean force_dialog = extras.getBoolean("force_dialog", false);
                 String address_error = args.getString("address_error");
                 String mx_error = args.getString("mx_error");
+                boolean remind_dsn = args.getBoolean("remind_dsn", false);
+                boolean remind_size = args.getBoolean("remind_size", false);
+                boolean remind_pgp = args.getBoolean("remind_pgp", false);
+                boolean remind_smime = args.getBoolean("remind_smime", false);
                 boolean remind_to = args.getBoolean("remind_to", false);
                 boolean remind_extra = args.getBoolean("remind_extra", false);
-                boolean remind_pgp = args.getBoolean("remind_pgp", false);
                 boolean remind_subject = args.getBoolean("remind_subject", false);
                 boolean remind_text = args.getBoolean("remind_text", false);
                 boolean remind_attachment = args.getBoolean("remind_attachment", false);
-                boolean remind_dsn = args.getBoolean("remind_dsn", false);
-                boolean remind_size = args.getBoolean("remind_size", false);
                 boolean formatted = args.getBoolean("formatted", false);
 
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
                 if (send_dialog || force_dialog ||
-                        address_error != null || mx_error != null || recipients > RECIPIENTS_WARNING || remind_dsn || remind_size ||
+                        address_error != null || mx_error != null || remind_dsn || remind_size || remind_pgp || remind_smime || remind_to ||
+                        recipients > RECIPIENTS_WARNING ||
                         (formatted && (draft.plain_only != null && draft.plain_only)) ||
                         (send_reminders &&
-                                (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment))) {
+                                (remind_extra || remind_subject || remind_text || remind_attachment))) {
                     setBusy(false);
 
                     FragmentDialogSend fragment = new FragmentDialogSend();
@@ -5314,7 +5357,10 @@ public class FragmentCompose extends FragmentBase {
 
             setBodyPadding();
 
-            updateEncryption();
+            if (!Objects.equals(spIdentity.getTag(), position)) {
+                spIdentity.setTag(position);
+                updateEncryption(identity);
+            }
         }
 
         @Override
@@ -5327,11 +5373,10 @@ public class FragmentCompose extends FragmentBase {
 
             setBodyPadding();
 
-            updateEncryption();
+            updateEncryption(null);
         }
 
-        private void updateEncryption() {
-            EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
+        private void updateEncryption(EntityIdentity identity) {
             if (identity == null)
                 return;
 
@@ -5346,35 +5391,37 @@ public class FragmentCompose extends FragmentBase {
                     long iid = args.getLong("identity");
 
                     DB db = DB.getInstance(context);
-                    EntityMessage draft = db.message().getMessage(id);
-                    if (draft == null ||
-                            draft.ui_encrypt == null || EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))
-                        return null;
 
-                    if (draft.identity != null && draft.identity.equals(iid))
-                        return draft.ui_encrypt;
+                    EntityMessage draft = db.message().getMessage(id);
+                    if (draft == null)
+                        return null;
 
                     EntityIdentity identity = db.identity().getIdentity(iid);
                     if (identity == null)
-                        return null;
+                        return draft.ui_encrypt;
 
-                    int encrypt = draft.ui_encrypt;
+                    if (identity.encrypt_default)
+                        draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                    else if (identity.sign_default)
+                        draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
+                    else
+                        draft.ui_encrypt = null;
+
                     if (identity.encrypt == 0) {
                         if (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt))
-                            encrypt = EntityMessage.PGP_SIGNONLY;
+                            draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
                         else if (EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt))
-                            encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                            draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
                     } else {
                         if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt))
-                            encrypt = EntityMessage.SMIME_SIGNONLY;
+                            draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
                         else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt))
-                            encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                            draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
                     }
 
-                    if (draft.ui_encrypt != encrypt)
-                        db.message().setMessageUiEncrypt(draft.id, encrypt);
+                    db.message().setMessageUiEncrypt(draft.id, draft.ui_encrypt);
 
-                    return encrypt;
+                    return draft.ui_encrypt;
                 }
 
                 @Override
@@ -5624,9 +5671,10 @@ public class FragmentCompose extends FragmentBase {
             String mx_error = args.getString("mx_error");
             final boolean remind_dsn = args.getBoolean("remind_dsn", false);
             final boolean remind_size = args.getBoolean("remind_size", false);
+            final boolean remind_pgp = args.getBoolean("remind_pgp", false);
+            final boolean remind_smime = args.getBoolean("remind_smime", false);
             final boolean remind_to = args.getBoolean("remind_to", false);
             final boolean remind_extra = args.getBoolean("remind_extra", false);
-            final boolean remind_pgp = args.getBoolean("remind_pgp", false);
             final boolean remind_subject = args.getBoolean("remind_subject", false);
             final boolean remind_text = args.getBoolean("remind_text", false);
             final boolean remind_attachment = args.getBoolean("remind_attachment", false);
@@ -5648,9 +5696,10 @@ public class FragmentCompose extends FragmentBase {
             final TextView tvAddressError = dview.findViewById(R.id.tvAddressError);
             final TextView tvRemindDsn = dview.findViewById(R.id.tvRemindDsn);
             final TextView tvRemindSize = dview.findViewById(R.id.tvRemindSize);
+            final TextView tvRemindPgp = dview.findViewById(R.id.tvRemindPgp);
+            final TextView tvRemindSmime = dview.findViewById(R.id.tvRemindSmime);
             final TextView tvRemindTo = dview.findViewById(R.id.tvRemindTo);
             final TextView tvRemindExtra = dview.findViewById(R.id.tvRemindExtra);
-            final TextView tvRemindPgp = dview.findViewById(R.id.tvRemindPgp);
             final TextView tvRemindSubject = dview.findViewById(R.id.tvRemindSubject);
             final TextView tvRemindText = dview.findViewById(R.id.tvRemindText);
             final TextView tvRemindAttachment = dview.findViewById(R.id.tvRemindAttachment);
@@ -5682,9 +5731,11 @@ public class FragmentCompose extends FragmentBase {
                     Helper.humanReadableByteCount(max_size)));
             tvRemindSize.setVisibility(remind_size ? View.VISIBLE : View.GONE);
 
-            tvRemindTo.setVisibility(send_reminders && remind_to ? View.VISIBLE : View.GONE);
+            tvRemindPgp.setVisibility(remind_pgp ? View.VISIBLE : View.GONE);
+            tvRemindSmime.setVisibility(remind_smime ? View.VISIBLE : View.GONE);
+
+            tvRemindTo.setVisibility(remind_to ? View.VISIBLE : View.GONE);
             tvRemindExtra.setVisibility(send_reminders && remind_extra ? View.VISIBLE : View.GONE);
-            tvRemindPgp.setVisibility(send_reminders && remind_pgp ? View.VISIBLE : View.GONE);
             tvRemindSubject.setVisibility(send_reminders && remind_subject ? View.VISIBLE : View.GONE);
             tvRemindText.setVisibility(send_reminders && remind_text ? View.VISIBLE : View.GONE);
             tvRemindAttachment.setVisibility(send_reminders && remind_attachment ? View.VISIBLE : View.GONE);
@@ -5705,7 +5756,7 @@ public class FragmentCompose extends FragmentBase {
 
             Helper.setViewsEnabled(dview, false);
 
-            boolean reminder = (remind_to || remind_extra || remind_pgp || remind_subject || remind_text || remind_attachment);
+            boolean reminder = (remind_extra || remind_subject || remind_text || remind_attachment);
             swSendReminders.setChecked(send_reminders);
             swSendReminders.setVisibility(send_reminders && reminder ? View.VISIBLE : View.GONE);
             tvSendRemindersHint.setVisibility(View.GONE);
@@ -5713,9 +5764,7 @@ public class FragmentCompose extends FragmentBase {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                     prefs.edit().putBoolean("send_reminders", checked).apply();
-                    tvRemindTo.setVisibility(checked && remind_to ? View.VISIBLE : View.GONE);
                     tvRemindExtra.setVisibility(checked && remind_extra ? View.VISIBLE : View.GONE);
-                    tvRemindPgp.setVisibility(checked && remind_pgp ? View.VISIBLE : View.GONE);
                     tvRemindSubject.setVisibility(checked && remind_subject ? View.VISIBLE : View.GONE);
                     tvRemindText.setVisibility(checked && remind_text ? View.VISIBLE : View.GONE);
                     tvRemindAttachment.setVisibility(checked && remind_attachment ? View.VISIBLE : View.GONE);
@@ -5922,8 +5971,6 @@ public class FragmentCompose extends FragmentBase {
 
             DB db = DB.getInstance(getContext());
             db.message().liveMessage(id).observe(getViewLifecycleOwner(), new Observer<TupleMessageEx>() {
-                private Boolean archive = null;
-
                 @Override
                 public void onChanged(TupleMessageEx draft) {
                     if (draft == null) {
@@ -5975,70 +6022,74 @@ public class FragmentCompose extends FragmentBase {
 
                     grpDsn.setVisibility(dsn ? View.GONE : View.VISIBLE);
 
-                    if (!TextUtils.isEmpty(draft.inreplyto))
-                        if (archive == null) {
-                            Bundle args = new Bundle();
-                            args.putLong("account", draft.account);
-                            args.putString("inreplyto", draft.inreplyto);
-
-                            new SimpleTask<Boolean>() {
-                                @Override
-                                protected void onPreExecute(Bundle args) {
-                                    archive = false;
-                                }
-
-                                @Override
-                                protected @NonNull
-                                Boolean onExecute(Context context, Bundle args) {
-                                    long account = args.getLong("account");
-                                    String inreplyto = args.getString("inreplyto");
-
-                                    if (TextUtils.isEmpty(inreplyto))
-                                        return false;
-
-                                    List<EntityMessage> messages = db.message().getMessagesByMsgId(account, inreplyto);
-                                    if (messages == null)
-                                        return false;
-
-                                    boolean canArchive = false;
-                                    for (EntityMessage message : messages) {
-                                        EntityFolder folder = db.folder().getFolder(message.folder);
-                                        if (folder == null)
-                                            continue;
-                                        if (EntityFolder.INBOX.equals(folder.type) ||
-                                                EntityFolder.USER.equals(folder.type)) {
-                                            canArchive = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (!canArchive)
-                                        return false;
-
-                                    DB db = DB.getInstance(context);
-                                    EntityFolder archive = db.folder().getFolderByType(account, EntityFolder.ARCHIVE);
-
-                                    return (archive != null);
-                                }
-
-                                @Override
-                                protected void onExecuted(Bundle args, Boolean data) {
-                                    archive = data;
-                                    cbArchive.setChecked(send_archive && archive);
-                                    cbArchive.setEnabled(archive);
-                                }
-
-                                @Override
-                                protected void onException(Bundle args, Throwable ex) {
-                                    // Ignored
-                                }
-                            }.execute(FragmentDialogSend.this, args, "send:archive");
-                        } else
-                            cbArchive.setEnabled(archive);
-
                     Helper.setViewsEnabled(dview, true);
                 }
             });
+
+            Bundle aargs = new Bundle();
+            aargs.putLong("id", id);
+
+            new SimpleTask<Boolean>() {
+                @Override
+                protected @NonNull
+                Boolean onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage draft = db.message().getMessage(id);
+                    if (draft == null) {
+                        args.putString("reason", "Draft gone");
+                        return false;
+                    }
+
+                    if (TextUtils.isEmpty(draft.inreplyto)) {
+                        args.putString("reason", "No in-reply-to");
+                        return false;
+                    }
+
+                    EntityFolder archive = db.folder().getFolderByType(draft.account, EntityFolder.ARCHIVE);
+                    if (archive == null) {
+                        args.putString("reason", "No archive");
+                        return false;
+                    }
+
+                    List<EntityMessage> messages = db.message().getMessagesByMsgId(draft.account, draft.inreplyto);
+                    if (messages == null || messages.size() == 0) {
+                        args.putString("reason", "In-reply-to gone");
+                        return false;
+                    }
+
+                    for (EntityMessage message : messages) {
+                        EntityFolder folder = db.folder().getFolder(message.folder);
+                        if (folder == null)
+                            continue;
+                        if (EntityFolder.INBOX.equals(folder.type) || EntityFolder.USER.equals(folder.type))
+                            return true;
+                    }
+
+                    args.putString("reason", "Not in inbox or unread");
+                    return false;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Boolean data) {
+                    if (!data) {
+                        String reason = args.getString("reason");
+                        if (BuildConfig.DEBUG)
+                            cbArchive.setText(reason);
+                        else
+                            Log.i("Auto archive reason=" + reason);
+                    }
+                    if (send_archive && data)
+                        cbArchive.setChecked(true);
+                    cbArchive.setEnabled(data);
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    // Ignored
+                }
+            }.execute(FragmentDialogSend.this, aargs, "send:archive");
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                     .setView(dview)

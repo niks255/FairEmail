@@ -89,7 +89,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -151,6 +150,7 @@ import org.bouncycastle.util.Store;
 import org.json.JSONException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openintents.openpgp.AutocryptPeerUpdate;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
@@ -167,6 +167,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -199,6 +201,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.mail.Address;
 import javax.mail.MessageRemovedException;
@@ -347,6 +352,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private static final int REQUEST_EMPTY_FOLDER = 21;
     private static final int REQUEST_BOUNDARY_RETRY = 22;
     static final int REQUEST_PICK_CONTACT = 23;
+    static final int REQUEST_BUTTONS = 24;
 
     static final String ACTION_STORE_RAW = BuildConfig.APPLICATION_ID + ".STORE_RAW";
     static final String ACTION_DECRYPT = BuildConfig.APPLICATION_ID + ".DECRYPT";
@@ -909,47 +915,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fabCompose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCompose();
+                FragmentDialogIdentity.onCompose(
+                        getContext(),
+                        getViewLifecycleOwner(),
+                        getParentFragmentManager(),
+                        fabCompose, account);
             }
         });
 
         fabCompose.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Bundle args = new Bundle();
-                args.putLong("account", account);
-
-                new SimpleTask<EntityFolder>() {
-                    @Override
-                    protected EntityFolder onExecute(Context context, Bundle args) {
-                        long account = args.getLong("account");
-
-                        DB db = DB.getInstance(context);
-                        if (account < 0)
-                            return db.folder().getPrimaryDrafts();
-                        else
-                            return db.folder().getFolderByType(account, EntityFolder.DRAFTS);
-                    }
-
-                    @Override
-                    protected void onExecuted(Bundle args, EntityFolder drafts) {
-                        if (drafts == null)
-                            return;
-
-                        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                        lbm.sendBroadcast(
-                                new Intent(ActivityView.ACTION_VIEW_MESSAGES)
-                                        .putExtra("account", drafts.account)
-                                        .putExtra("folder", drafts.id)
-                                        .putExtra("type", drafts.type));
-                    }
-
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        Log.unexpectedError(getParentFragmentManager(), ex);
-                    }
-                }.execute(FragmentMessages.this, args, "messages:drafts");
-
+                FragmentDialogIdentity.onDrafts(
+                        getContext(),
+                        getViewLifecycleOwner(),
+                        getParentFragmentManager(),
+                        fabCompose, account);
                 return true;
             }
         });
@@ -2093,7 +2074,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else if (EntityMessage.SWIPE_ACTION_FLAG.equals(action))
                 onActionFlagSelection(!message.ui_flagged, null, message.id);
             else if (EntityMessage.SWIPE_ACTION_SNOOZE.equals(action))
-                onActionSnooze(message);
+                if (ActivityBilling.isPro(getContext()))
+                    onActionSnooze(message);
+                else {
+                    adapter.notifyItemChanged(pos);
+                    startActivity(new Intent(getContext(), ActivityBilling.class));
+                }
             else if (EntityMessage.SWIPE_ACTION_HIDE.equals(action))
                 onActionHide(message);
             else if (EntityMessage.SWIPE_ACTION_MOVE.equals(action)) {
@@ -2381,6 +2367,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         new SimpleTask<ReplyData>() {
             @Override
+            protected void onPreExecute(Bundle args) {
+                fabReply.setEnabled(false);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                fabReply.setEnabled(true);
+            }
+
+            @Override
             protected ReplyData onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
 
@@ -2424,15 +2420,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 boolean canBounce = false;
                 if (message.return_path != null && message.return_path.length == 1) {
                     canBounce = true;
-                    List<Address> addresses = new ArrayList<>();
-                    if (message.to != null)
-                        addresses.addAll(Arrays.asList(message.to));
-                    if (message.cc != null)
-                        addresses.addAll(Arrays.asList(message.cc));
-                    if (message.bcc != null)
-                        addresses.addAll(Arrays.asList(message.bcc));
-                    for (Address address : addresses)
-                        if (MessageHelper.equalEmail(address, message.return_path[0])) {
+                    for (EntityIdentity identity : data.identities)
+                        if (identity.similarAddress(message.return_path[0])) {
                             canBounce = false;
                             break;
                         }
@@ -2613,42 +2602,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(getContext(), getViewLifecycleOwner(), new Bundle(), "message:answer");
-    }
-
-    private void onCompose() {
-        Bundle args = new Bundle();
-        args.putLong("account", account);
-
-        new SimpleTask<Boolean>() {
-            @Override
-            protected Boolean onExecute(Context context, Bundle args) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean identities_asked = prefs.getBoolean("identities_asked", false);
-                if (identities_asked)
-                    return false;
-
-                DB db = DB.getInstance(context);
-                List<TupleIdentityEx> identities = db.identity().getComposableIdentities(null);
-                return (identities != null && identities.size() > 1);
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, Boolean ask) {
-                if (ask) {
-                    FragmentDialogIdentity fragment = new FragmentDialogIdentity();
-                    fragment.setArguments(args);
-                    fragment.show(getParentFragmentManager(), "messages:identities");
-                } else
-                    startActivity(new Intent(getContext(), ActivityCompose.class)
-                            .putExtra("action", "new")
-                            .putExtra("account", account));
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
-            }
-        }.execute(this, args, "message:compose");
     }
 
     private void onMore() {
@@ -2968,7 +2921,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         Bundle args = new Bundle();
         args.putLongArray("ids", id == null ? getSelection() : new long[]{id});
         args.putBoolean("seen", seen);
-        args.putBoolean("threading", threading && id == null);
+        args.putBoolean("threading", threading &&
+                (id == null || viewType != AdapterMessage.ViewType.THREAD));
 
         //if (selectionTracker != null)
         //    selectionTracker.clearSelection();
@@ -3106,7 +3060,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         args.putBoolean("flagged", flagged);
         if (color != null)
             args.putInt("color", color);
-        args.putBoolean("threading", threading && id == null);
+        args.putBoolean("threading", threading &&
+                (id == null || viewType != AdapterMessage.ViewType.THREAD));
 
         //selectionTracker.clearSelection();
 
@@ -4129,6 +4084,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
         menu.findItem(R.id.menu_mark_all_read).setVisible(folder);
 
+        menu.findItem(R.id.menu_sync_more).setVisible(folder);
         menu.findItem(R.id.menu_force_sync).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
         menu.findItem(R.id.menu_force_send).setVisible(outbox);
 
@@ -4229,6 +4185,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return true;
         } else if (itemId == R.id.menu_mark_all_read) {
             onMenuMarkAllRead();
+            return true;
+        } else if (itemId == R.id.menu_sync_more) {
+            onMenuSyncMore();
             return true;
         } else if (itemId == R.id.menu_force_sync) {
             onMenuForceSync();
@@ -4490,6 +4449,40 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(FragmentMessages.this, args, "message:read");
+    }
+
+    private void onMenuSyncMore() {
+        Bundle args = new Bundle();
+        args.putLong("folder", folder);
+        args.putString("type", type);
+
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) {
+                long fid = args.getLong("folder");
+                if (fid < 0)
+                    return null;
+
+                DB db = DB.getInstance(context);
+                EntityFolder folder = db.folder().getFolder(fid);
+                if (folder != null)
+                    args.putString("name", folder.getDisplayName(context));
+
+                return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                FragmentDialogSync sync = new FragmentDialogSync();
+                sync.setArguments(args);
+                sync.show(getParentFragmentManager(), "folder:months");
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "folder:months");
     }
 
     private void onMenuForceSync() {
@@ -4783,8 +4776,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             int count = 0;
             int unseen = 0;
+            int flagged = 0;
             TupleMessageEx single = null;
             TupleMessageEx see = null;
+            TupleMessageEx flag = null;
             for (TupleMessageEx message : messages) {
                 if (message == null)
                     continue;
@@ -4793,10 +4788,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         !EntityFolder.DRAFTS.equals(message.folderType) &&
                         !EntityFolder.TRASH.equals(message.folderType)) {
                     count++;
+
                     single = message;
                     if (!message.ui_seen) {
                         unseen++;
                         see = message;
+                    }
+
+                    if (message.ui_flagged) {
+                        flagged++;
+                        flag = message;
                     }
                 }
 
@@ -4815,6 +4816,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     expand = single;
                 else if (unseen == 1)
                     expand = see;
+                else if (unseen == 0 && flagged == 1)
+                    expand = flag;
                 else if (messages.size() == 1)
                     expand = messages.get(0);
                 else if (messages.size() > 0) {
@@ -5071,7 +5074,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             protected void onException(Bundle args, Throwable ex) {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
-        }.execute(this, args, "messages:expand");
+        }.setLog(false).execute(this, args, "messages:expand");
     }
 
     private void handleAutoClose() {
@@ -5946,6 +5949,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (resultCode == RESULT_OK && data != null)
                         onPickContact(data.getData());
                     break;
+                case REQUEST_BUTTONS:
+                    adapter.notifyDataSetChanged();
+                    break;
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -6226,6 +6232,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         List<EntityAttachment> remotes = parts.getAttachments();
                                         for (int index = 0; index < remotes.size(); index++) {
                                             EntityAttachment remote = remotes.get(index);
+                                            if (remote.encryption != null)
+                                                continue;
                                             remote.message = message.id;
                                             remote.sequence = index + 1;
                                             remote.id = db.attachment().insertAttachment(remote);
@@ -7341,11 +7349,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onPrint(Bundle args) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean print_html_header = prefs.getBoolean("print_html_header", true);
+        boolean print_html_images = prefs.getBoolean("print_html_images", true);
+
+        args.putBoolean("print_html_header", print_html_header);
+        args.putBoolean("print_html_images", print_html_images);
+
         new SimpleTask<String[]>() {
+            private final ExecutorService executor = Helper.getBackgroundExecutor(0, "print");
+
             @Override
             protected String[] onExecute(Context context, Bundle args) throws IOException {
                 long id = args.getLong("id");
                 boolean headers = args.getBoolean("headers");
+                boolean print_html_header = args.getBoolean("print_html_header");
+                boolean print_html_images = args.getBoolean("print_html_images");
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                int timeout = prefs.getInt("timeout", ImageHelper.DOWNLOAD_TIMEOUT) * 1000;
 
                 DB db = DB.getInstance(context);
                 EntityMessage message = db.message().getMessage(id);
@@ -7363,6 +7385,62 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Document document = JsoupEx.parse(file);
                 HtmlHelper.embedInlineImages(context, id, document, true);
 
+                // onPageFinished will not be called if not all images can be loaded
+                File dir = new File(context.getCacheDir(), "images");
+                List<Future<Void>> futures = new ArrayList<>();
+                Elements imgs = document.select("img");
+                for (int i = 0; i < imgs.size(); i++) {
+                    Element img = imgs.get(i);
+                    String src = img.attr("src");
+                    if (src.startsWith("http:") || src.startsWith("https:")) {
+                        final File out = new File(dir, id + "." + i + ".print");
+                        img.attr("src", "file:" + out.getAbsolutePath());
+
+                        if (print_html_images) {
+                            if (out.exists() && out.length() > 0)
+                                continue;
+                        } else {
+                            out.delete();
+                            continue;
+                        }
+
+                        futures.add(executor.submit(new Callable<Void>() {
+                            @Override
+                            public Void call() throws Exception {
+                                try (OutputStream os = new FileOutputStream(out)) {
+                                    URL url = new URL(src);
+                                    Log.i("Caching url=" + url);
+
+                                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                    connection.setRequestMethod("GET");
+                                    connection.setReadTimeout(timeout);
+                                    connection.setConnectTimeout(timeout);
+                                    connection.setInstanceFollowRedirects(true);
+                                    connection.connect();
+
+                                    try {
+                                        Helper.copy(connection.getInputStream(), os);
+                                    } finally {
+                                        connection.disconnect();
+                                    }
+                                } catch (Throwable ex) {
+                                    Log.w(ex);
+                                }
+
+                                return null;
+                            }
+                        }));
+                    } else
+                        img.removeAttr("src");
+                }
+
+                for (Future<Void> future : futures)
+                    try {
+                        future.get();
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
+
                 // @page WordSection1 {size:612.0pt 792.0pt; margin:70.85pt 70.85pt 70.85pt 70.85pt;}
                 // div.WordSection1 {page:WordSection1;}
                 // <body><div class=WordSection1>
@@ -7373,8 +7451,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         element.removeClass(clazz);
                 }
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean print_html_header = prefs.getBoolean("print_html_header", true);
                 if (print_html_header) {
                     Element header = document.createElement("p");
 
@@ -7470,14 +7546,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 }
 
                 final Context context = activity.getOriginalContext();
+                boolean print_html_images = args.getBoolean("print_html_images");
 
                 // https://developer.android.com/training/printing/html-docs.html
                 printWebView = new WebView(context);
 
                 WebSettings settings = printWebView.getSettings();
-                settings.setLoadsImagesAutomatically(true);
+                settings.setLoadsImagesAutomatically(print_html_images);
                 settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                settings.setAllowFileAccess(false);
+                settings.setAllowFileAccess(true);
 
                 printWebView.setWebViewClient(new WebViewClient() {
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -7866,106 +7943,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             EntityAccount account = adapter.getItem(which);
                             getArguments().putLong("account", account.id);
                             sendResult(RESULT_OK);
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
-        }
-    }
-
-    public static class FragmentDialogIdentity extends FragmentDialogBase {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_identity, null);
-            final Spinner spIdentity = dview.findViewById(R.id.spIdentity);
-            final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
-            final Button btnFix = dview.findViewById(R.id.btnFix);
-            final Group grpIdentities = dview.findViewById(R.id.grpIdentities);
-            final Group grpNoIdentities = dview.findViewById(R.id.grpNoIdentities);
-            final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
-
-            cbNotAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    prefs.edit().putBoolean("identities_asked", isChecked).apply();
-                }
-            });
-
-            btnFix.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getContext(), ActivitySetup.class));
-                    getActivity().finish();
-                    dismiss();
-                }
-            });
-
-            grpIdentities.setVisibility(View.GONE);
-            grpNoIdentities.setVisibility(View.GONE);
-
-            new SimpleTask<List<TupleIdentityEx>>() {
-                @Override
-                protected void onPreExecute(Bundle args) {
-                    pbWait.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                protected void onPostExecute(Bundle args) {
-                    pbWait.setVisibility(View.GONE);
-                }
-
-                @Override
-                protected List<TupleIdentityEx> onExecute(Context context, Bundle args) {
-                    DB db = DB.getInstance(context);
-                    return db.identity().getComposableIdentities(null);
-                }
-
-                @Override
-                protected void onExecuted(Bundle args, List<TupleIdentityEx> identities) {
-                    AdapterIdentitySelect iadapter = new AdapterIdentitySelect(getContext(), identities);
-                    spIdentity.setAdapter(iadapter);
-
-                    Integer fallback = null;
-                    long account = getArguments().getLong("account");
-                    for (int pos = 0; pos < identities.size(); pos++) {
-                        EntityIdentity identity = identities.get(pos);
-                        if (identity.account.equals(account)) {
-                            if (identity.primary) {
-                                fallback = null;
-                                spIdentity.setSelection(pos);
-                                break;
-                            }
-                            if (fallback == null)
-                                fallback = pos;
-                        }
-                    }
-                    if (fallback != null)
-                        spIdentity.setSelection(fallback);
-
-                    grpIdentities.setVisibility(identities.size() > 0 ? View.VISIBLE : View.GONE);
-                    grpNoIdentities.setVisibility(identities.size() > 0 ? View.GONE : View.VISIBLE);
-                }
-
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getParentFragmentManager(), ex);
-                }
-            }.execute(this, new Bundle(), "identity:select");
-
-            return new AlertDialog.Builder(getContext())
-                    .setView(dview)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            TupleIdentityEx identity = (TupleIdentityEx) spIdentity.getSelectedItem();
-                            if (identity != null)
-                                startActivity(new Intent(getContext(), ActivityCompose.class)
-                                        .putExtra("action", "new")
-                                        .putExtra("account", identity.account)
-                                        .putExtra("identity", identity.id)
-                                );
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)

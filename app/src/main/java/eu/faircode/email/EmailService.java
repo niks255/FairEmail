@@ -315,8 +315,9 @@ public class EmailService implements AutoCloseable {
                     @Override
                     public void onPasswordChanged(String newPassword) {
                         DB db = DB.getInstance(context);
-                        int count = db.account().setAccountPassword(account.id, newPassword);
-                        EntityLog.log(context, account.name + " token refreshed=" + count);
+                        int accounts = db.account().setAccountPassword(account.id, newPassword);
+                        int identities = db.identity().setIdentityPassword(account.id, account.user, newPassword, account.auth_type);
+                        EntityLog.log(context, account.name + " token refreshed=" + accounts + "/" + identities);
                     }
                 },
                 account.certificate_alias, account.fingerprint);
@@ -461,14 +462,18 @@ public class EmailService implements AutoCloseable {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean prefer_ip4 = prefs.getBoolean("prefer_ip4", true);
-            if (prefer_ip4 && main instanceof Inet6Address) {
-                for (InetAddress iaddr : InetAddress.getAllByName(host))
-                    if (iaddr instanceof Inet4Address) {
-                        main = iaddr;
-                        EntityLog.log(context, "Preferring=" + main);
-                        break;
-                    }
-            }
+            if (prefer_ip4 &&
+                    main instanceof Inet6Address)
+                try {
+                    for (InetAddress iaddr : InetAddress.getAllByName(host))
+                        if (iaddr instanceof Inet4Address) {
+                            main = iaddr;
+                            EntityLog.log(context, "Preferring=" + main);
+                            break;
+                        }
+                } catch (UnknownHostException ex) {
+                    Log.w(ex);
+                }
 
             EntityLog.log(context, "Connecting to " + main);
             _connect(main, port, require_id, user, authenticator, factory);

@@ -1,6 +1,8 @@
 # Підтримка FairEmail
 
-Якщо у вас виникли  запитання, спершу ознайомтеся з найпоширенішими питаннями нижче. Нижче, Ви можете отримати відповіді або задати питаня.
+If you have a question, please check the following frequently asked questions first. [At the bottom](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
+
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Перелік
 
@@ -14,15 +16,15 @@
 
 ## Авторизація облікового акаунту
 
-У більшості випадків, майстер швидкого налаштування зможе автоматично визначити правильну конфігурацію.
+In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
 
-Якщо швидкі налаштування не вдалось виконати, Вам потрібно буде вручну створити обліковий запис (для отримання електронної пошти) та посвідчення особи (для надсилання електронної пошти). Для цього Вам знадобляться адреси серверів IMAP, SMTP та номери портів, слід використовувати порти SSL/TLS або STARTTLS також потрібне Ваше ім’я користувача (зазвичай, але не завжди, це Ваша електронна адреса) та Ваш пароль.
+If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
 
-Пошуку * IMAP * та імені постачальника здебільшого достатньо, щоб знайти потрібну документацію.
+Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
 
-У деяких випадках вам потрібно буде ввімкнути зовнішній доступ до свого облікового запису та / або використовувати спеціальний (додаток) пароль, наприклад, коли увімкнено двофакторну автентифікацію.
+In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
 
-Для авторизації:
+For authorizing:
 
 * Gmail / G набори, дивіться [питання 6](#user-content-faq6)
 * Outlook / Live / Hotmail, дивіться[питання14](#user-content-faq14)
@@ -32,9 +34,9 @@
 * Apple iCloud, див. [питання 148](#user-content-faq148)
 * Free.fr, див. [питання 157](#user-content-faq157)
 
-Будь ласка, перегляньте [ тут ](#user-content-faq22), щоб отримати поширені повідомлення про помилки та способи їх усунення.
+Please see [here](#user-content-faq22) for common error messages and solutions.
 
-Інші питання
+Related questions:
 
 * [Чи підтримується OAuth?](#user-content-faq111)
 * [Чому ActiveSync не підтримується?](#user-content-faq133)
@@ -53,7 +55,7 @@
 * Додайте папку в меню навігації: натисніть і утримуйте папку у списку папок і поставте галочку * Показати в меню навігації *
 * Load more messages: long press a folder in the folder list, select *Fetch more messages*
 * Видаліть повідомлення, пропустивши кошик: у меню з трьома крапками безпосередньо над текстом повідомлення * Видалити * або скасуйте вибір папки кошика в налаштуваннях облікового запису
-* Delete an account/identity: Settings, tap Manual setup and more options, tap Accounts/Identities, three-dots menu, Delete
+* Видалення облікового запису/особистих даних: Налаштування, виберіть Налаштування вручну та додаткові параметри, торкніться облікові записи/особисті дані, торкніться облікового запису/особистих даних, меню три крапки, видалити
 * Видалення папки: тривале натискання папки зі списку папок, редагування властивостей, меню з трьома крапками, видалення
 * Скасувати надсилання: Вихідні, торкніться повідомлення, торкніться кнопки скасувати піктограму
 * Зберігайте надіслані повідомлення у папці "Вхідні": [ див. Цей FAQ ](#user-content-faq142)
@@ -256,7 +258,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(135) Why are trashed messages and drafts shown in conversations?](#user-content-faq135)
 * [(136) How can I delete an account/identity/folder?](#user-content-faq136)
 * [(137) How can I reset 'Don't ask again'?](#user-content-faq137)
-* [(138) Can you add calendar/contact management/synchronizing?](#user-content-faq138)
+* [(138) Can you add calendar/contact/tasks/notes management?](#user-content-faq138)
 * [(139) How do I fix 'User is authenticated but not connected'?](#user-content-faq139)
 * [(140) Why does the message text contain strange characters?](#user-content-faq140)
 * [(141) How can I fix 'A drafts folder is required to send messages'?](#user-content-faq141)
@@ -283,6 +285,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(162) Is IMAP NOTIFY supported?](#user-content-faq162)
 * [(163) What is message classification?](#user-content-faq163)
 * [(164) Can you add customizable themes?](#user-content-faq164)
+* [(165) Чи підтримується Android авто?](#user-content-faq165)
 
 [I have another question.](#user-content-support)
 
@@ -378,6 +381,7 @@ The low priority status bar notification shows the number of pending operations,
 * *send*: send message
 * *exists*: check if message exists
 * *rule*: execute rule on body text
+* *expunge*: permanently delete messages
 
 Operations are processed only when there is a connection to the email server or when manually synchronizing. See also [this FAQ](#user-content-faq16).
 
@@ -527,7 +531,11 @@ Some providers do not keep track of sent messages or the used SMTP server might 
 <a name="faq8"></a>
 **(8) Can I use a Microsoft Exchange account?**
 
+The Microsoft Exchange Web Services protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055). So, it makes little sense to add this protocol anymore.
+
 You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case. See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
+
+Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
 
 Please see [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for the Microsoft documentation about configuring an email client. There is also a section about common connection errors and solutions.
 
@@ -603,7 +611,7 @@ To verify a signature or to decrypt a received message, open the message and jus
 
 The first time you send a signed/encrypted message you might be asked for a sign key. FairEmail will automatically store the selected sign key in the used identity for the next time. If you need to reset the sign key, just save the identity or long press the identity in the list of identities and select *Reset sign key*. The selected sign key is visible in the list of identities. If need to select a key on a case by case basis, you can create multiple identities for the same account with the same email address.
 
-In the privacy settings you can select the default encryption method (PGP or S/MIME), enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*, but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
+In the encryption settings you can select the default encryption method (PGP or S/MIME), enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*, but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
 
 The to be encrypted message text/attachments and the decrypted message text/attachments are stored locally only and will never be added to the remote server. If you want to undo decryption, you can use the *resync* menu item in the three-dots menu of the message action bar.
 
@@ -623,6 +631,8 @@ You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packa
 
 FairEmail will send the [Autocrypt](https://autocrypt.org/) header for use by other email clients, but only for signed and encrypted messages because too many email servers have problems with the often long Autocrypt header. Note that the most secure way to start an encrypted email exchange is by sending signed messages first. Received Autocrypt headers will be sent to the OpenKeychain app for storage on verifying a signature or decrypting a message.
 
+Although this shouldn't be necessary for most email clients, you can attach your public key to a message and if you use *.key* as extension, the mime type will correctly be *application/pgp-keys*.
+
 All key handling is delegated to the OpenKey chain app for security reasons. This also means that FairEmail does not store PGP keys.
 
 Inline encrypted PGP in received messages is supported, but inline PGP signatures and inline PGP in outgoing messages is not supported, see [here](https://josefsson.org/inline-openpgp-considered-harmful.html) about why not.
@@ -639,12 +649,13 @@ Common errors:
 
 * *No key*: there is no PGP key available for one of the listed email addresses
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
+* *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
 
 *S/MIME*
 
 Encrypting a message requires the public key(s) of the recipient(s). Signing a message requires your private key.
 
-Private keys are stored by Android and can be imported via the Android advanced security settings. There is a shortcut (button) for this in the privacy settings. Android will ask you to set a PIN, pattern, or password if you didn't before. If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
+Private keys are stored by Android and can be imported via the Android advanced security settings. There is a shortcut (button) for this in the encryption settings. Android will ask you to set a PIN, pattern, or password if you didn't before. If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
@@ -654,7 +665,7 @@ The default encryption method is PGP, but the last used encryption method will b
 
 To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
-Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the privacy settings (PEM or DER format).
+Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the encryption settings (PEM or DER format).
 
 FairEmail verifies both the signature and the complete certificate chain.
 
@@ -943,6 +954,8 @@ If you want to use the Gmail SMTP server to workaround a too strict outgoing spa
 **Gmail errors**
 
 The authorization of Gmail accounts setup with the quick wizard needs to be periodically refreshed via the [Android account manager](https://developer.android.com/reference/android/accounts/AccountManager). This requires contact/account permissions and internet connectivity.
+
+In case of errors it is possible to authorize/restore a Gmail account again via the Gmail quick setup wizard.
 
 The error *... Authentication failed ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
 
@@ -1775,27 +1788,27 @@ Note that recent Android versions allow overriding DND (Do Not Disturb) per noti
 For more complex schemes you could set one or more accounts to manual synchronization and send this command to FairEmail to check for new messages:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.POLL
+(adb shell) am start-foreground-service -a eu.faircode.email.POLL
 ```
 
 For a specific account:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.POLL --es account Gmail
+(adb shell) am start-foreground-service -a eu.faircode.email.POLL --es account Gmail
 ```
 
 You can also automate turning receiving messages on and off by sending these commands to FairEmail:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.ENABLE
-(adb shell) am startservice -a eu.faircode.email.DISABLE
+(adb shell) am start-foreground-service -a eu.faircode.email.ENABLE
+(adb shell) am start-foreground-service -a eu.faircode.email.DISABLE
 ```
 
 To enable/disable a specific account:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.ENABLE --es account Gmail
-(adb shell) am startservice -a eu.faircode.email.DISABLE --es account Gmail
+(adb shell) am start-foreground-service -a eu.faircode.email.ENABLE --es account Gmail
+(adb shell) am start-foreground-service -a eu.faircode.email.DISABLE --es account Gmail
 ```
 
 Note that disabling an account will hide the account and all associated folders and messages.
@@ -1986,6 +1999,8 @@ If you receive a lot of spam messages in your inbox, the best you can do is to c
 Also, FairEmail can show a small red warning flag when DKIM, SPF or [DMARC](https://en.wikipedia.org/wiki/DMARC) authentication failed on the receiving server. You can enable/disable [authentication verification](https://en.wikipedia.org/wiki/Email_authentication) in the display settings.
 
 FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server. This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.
+
+If the domain name of the sender and the domain name of the reply address differ, always a warning flag will be shown because this is most often the case with phishing messages.
 
 If legitimate messages are failing authentication, you should notify the sender because this will result in a high risk of messages ending up in the spam folder. Moreover, without proper authentication there is a risk the sender will be impersonated. The sender might use [this tool](https://www.mail-tester.com/) to check authentication and other things.
 
@@ -2265,6 +2280,8 @@ Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f4
 <a name="faq117"></a>
 **(117) Can you help me restore my purchase?**
 
+First of all, a purchase will be available on all devices logged into the same Google account, *if* the app is installed via the same Google account too. You can select the account in the Play store app.
+
 Google manages all purchases, so as a developer I have little control over purchases. So, basically the only thing I can do, is give some advice:
 
 * Make sure you have an active, working internet connection
@@ -2376,6 +2393,10 @@ For some background, see for [this Wikipedia article](https://en.wikipedia.org/w
 
 <br />
 
+*Background for unread messages*
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -2463,8 +2484,6 @@ Android might rate limit the notification sound, which can cause some new messag
 
 The Microsoft Exchange ActiveSync protocol [is patented](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) and can therefore not be supported. For this reason you won't find many, if any, other email clients supporting ActiveSync.
 
-The Microsoft Exchange Web Services protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055).
-
 Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
 
 <br />
@@ -2518,9 +2537,9 @@ You can reset all questions set to be not asked again in the miscellaneous setti
 <br />
 
 <a name="faq138"></a>
-**(138) Can you add calendar/contact management/synchronizing?**
+**(138) Can you add calendar/contact/tasks/notes management?**
 
-Calendar and contact management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
+Calendar, contact, task and note management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
 
 Also, I prefer to do a few things very well, instead of many things only half. Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.
 
@@ -2744,6 +2763,14 @@ Note that archived messages can be deleted only by moving them to the trash fold
 
 Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.
 
+Another oddity is that a star (favorite message) set via the web interface cannot be removed with the IMAP command
+
+```
+STORE <message number> -FLAGS (\Flagged)
+```
+
+On the other hand, a star set via IMAP is being shown in the web interface and can be removed via IMAP.
+
 <br />
 
 <a name="faq154"></a>
@@ -2816,7 +2843,7 @@ Tracking images will not be recognized when the domain is classified as '*Conten
 This command can be sent to FairEmail from an automation app to update the protection lists:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.DISCONNECT.ME
+(adb shell) am start-foreground-service -a eu.faircode.email.DISCONNECT.ME
 ```
 
 Updating once a week will probably be sufficient, please see [here](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) for recent lists changes.
@@ -2829,6 +2856,8 @@ Updating once a week will probably be sufficient, please see [here](https://gith
 Permanent deletion means that messages will *irreversibly* be lost, and to prevent this from happening accidentally, this always needs to be confirmed. Even with a confirmation, some very angry people who lost some of their messages through their own fault contacted me, which was a rather unpleasant experience :-(
 
 Advanced: the IMAP delete flag in combination with the EXPUNGE command is not supportable because both email servers and not all people can handle this, risking unexpected loss of messages. A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
+
+From version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable expunging messages. Note that messages with a *\Deleted* flag will not be shown in FairEmail.
 
 <br />
 
@@ -2907,6 +2936,22 @@ The theme colors are based on the color circle of [Johannes Itten](https://en.wi
 
 <br />
 
+<a name="faq165"></a>
+**(165) Is Android Auto supported?**
+
+Yes, Android Auto is supported, but only with the GitHub version, please [see here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-83801249) about why.
+
+For notification (messaging) support you'll need to enable the following notification options:
+
+* *Використовувати для сповіщень стиль Android*
+* Дії з сповіщеннями: *Пряма відповідь* та (позначити як) *Прочитане*
+
+You can enable other notification actions too, if you like, but they are not supported by Android Auto.
+
+The developers guide is [here](https://developer.android.com/training/cars/messaging).
+
+<br />
+
 ## Get support
 
 FairEmail is supported on smartphones, tablets and ChromeOS only.
@@ -2926,7 +2971,7 @@ Requested features should:
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 
-If you have a question, want to request a feature or report a bug, please use [this form](https://contact.faircode.eu/?product=fairemailsupport).
+If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
 
 GitHub issues are disabled due to frequent misusage.
 

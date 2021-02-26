@@ -81,7 +81,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private SwitchCompat swSyncFolders;
     private SwitchCompat swSyncSharedFolders;
     private SwitchCompat swSubscriptions;
-    private SwitchCompat swSyncSubscribed;
+    private SwitchCompat swCheckReply;
     private SwitchCompat swCheckMx;
     private SwitchCompat swTuneKeepAlive;
     private Group grpExempted;
@@ -91,8 +91,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private final static String[] RESET_OPTIONS = new String[]{
             "enabled", "poll_interval", "auto_optimize", "schedule", "schedule_start", "schedule_end",
             "sync_nodate", "sync_unseen", "sync_flagged", "delete_unseen", "sync_kept", "gmail_thread_id",
-            "sync_folders", "sync_shared_folders", "subscriptions", "sync_subscribed",
-            "check_mx", "tune_keep_alive"
+            "sync_folders", "sync_shared_folders", "subscriptions",
+            "check_reply_domain", "check_mx", "tune_keep_alive"
     };
 
     @Override
@@ -135,7 +135,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swSyncFolders = view.findViewById(R.id.swSyncFolders);
         swSyncSharedFolders = view.findViewById(R.id.swSyncSharedFolders);
         swSubscriptions = view.findViewById(R.id.swSubscriptions);
-        swSyncSubscribed = view.findViewById(R.id.swSyncSubscribed);
+        swCheckReply = view.findViewById(R.id.swCheckReply);
         swCheckMx = view.findViewById(R.id.swCheckMx);
         swTuneKeepAlive = view.findViewById(R.id.swTuneKeepAlive);
         grpExempted = view.findViewById(R.id.grpExempted);
@@ -308,14 +308,13 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("subscriptions", checked).apply();
-                swSyncSubscribed.setEnabled(checked);
             }
         });
 
-        swSyncSubscribed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swCheckReply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("sync_subscribed", checked).apply();
+                prefs.edit().putBoolean("check_reply_domain", checked).apply();
             }
         });
 
@@ -419,8 +418,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swSyncSharedFolders.setChecked(prefs.getBoolean("sync_shared_folders", false));
         swSyncSharedFolders.setEnabled(swSyncFolders.isChecked());
         swSubscriptions.setChecked(prefs.getBoolean("subscriptions", false));
-        swSyncSubscribed.setChecked(prefs.getBoolean("sync_subscribed", false));
-        swSyncSubscribed.setEnabled(swSubscriptions.isChecked());
+        swCheckReply.setChecked(prefs.getBoolean("check_reply_domain", true));
         swCheckMx.setChecked(prefs.getBoolean("check_mx", false));
         swTuneKeepAlive.setChecked(prefs.getBoolean("tune_keep_alive", true));
     }

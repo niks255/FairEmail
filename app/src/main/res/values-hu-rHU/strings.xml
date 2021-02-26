@@ -232,7 +232,6 @@
     <string name="title_advanced_sync_folders">Mappák listájának szinkronizálása</string>
     <string name="title_advanced_sync_shared_folders">Szinkronizált mappák listája</string>
     <string name="title_advanced_subscriptions">Mappa feliratkozások kezelése</string>
-    <string name="title_advanced_sync_subscribed">Feliratkozott mappák automatikus szinkronizálása</string>
     <string name="title_advanced_check_mx">Küldő email címek ellenőrzése az üzenetek szinkronizálásakor</string>
     <string name="title_advanced_tune_keep_alive">Az ébrentartás időtartamának automatikus hangolása</string>
     <string name="title_advanced_keyboard">Billentyűzet alapértelmezett megjelenítése</string>
@@ -682,7 +681,6 @@
     <string name="title_duplicate_in">Duplikált üzenet a(z) %1$s mappában</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
-    <string name="title_buttons">Gombok</string>
     <string name="title_seen">Megjelölés olvasottként</string>
     <string name="title_unseen">Megjelölés olvasatlanként</string>
     <string name="title_toggle_seen">Megjelölés olvasottként</string>
@@ -1248,7 +1246,6 @@
     <string name="title_pro_activated">Minden pro szolgáltatás aktiválva van</string>
     <string name="title_pro_valid">Minden pro szolgáltatás aktiválva</string>
     <string name="title_pro_invalid">Érvénytelen válasz</string>
-    <string name="title_pro_support">A FairEmail-nek szüksége van a segítségére. Koppintson a pro szolgáltatások megvásárlásához, hogy a projekt fennmaradhasson.</string>
     <string name="title_boundary_error">Hiba az üzenetek levélszerverről való letöltése során</string>
     <string name="title_boundary_retry">Próbálja újra</string>
     <string name="title_unexpected_error">Váratlan hiba</string>
@@ -1390,6 +1387,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Alapértelmezett</item>

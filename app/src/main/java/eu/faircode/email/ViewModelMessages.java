@@ -251,7 +251,7 @@ public class ViewModelMessages extends ViewModel {
     }
 
     void observePrevNext(Context context, LifecycleOwner owner, final long id, final IPrevNext intf) {
-        Log.d("Observe prev/next model=" + last);
+        Log.i("Observe prev/next model=" + last);
 
         final Model model = models.get(last);
         if (model == null) {
@@ -262,7 +262,7 @@ public class ViewModelMessages extends ViewModel {
             return;
         }
 
-        Log.d("Observe previous/next id=" + id);
+        Log.i("Observe previous/next id=" + id);
         model.list.observe(owner, new Observer<PagedList<TupleMessageEx>>() {
             private boolean fallback = false;
 
@@ -274,15 +274,18 @@ public class ViewModelMessages extends ViewModel {
                     TupleMessageEx item = messages.get(pos);
                     if (item != null && id == item.id) {
                         fallback = true;
+                        Log.i("Observe previous/next found id=" + id + " pos=" + pos);
 
                         if (pos - 1 >= 0) {
                             TupleMessageEx next = messages.get(pos - 1);
+                            Log.i("Observe previous/next found id=" + id + " next=" + (next == null ? null : next.id));
                             intf.onNext(true, next == null ? null : next.id);
                         } else
                             intf.onNext(false, null);
 
                         if (pos + 1 < messages.size()) {
                             TupleMessageEx prev = messages.get(pos + 1);
+                            Log.i("Observe previous/next found id=" + id + " prev=" + (prev == null ? null : prev.id));
                             intf.onPrevious(true, prev == null ? null : prev.id);
                         } else
                             intf.onPrevious(false, null);
@@ -293,7 +296,7 @@ public class ViewModelMessages extends ViewModel {
                     }
                 }
 
-                Log.w("Observe previous/next gone id=" + id);
+                Log.w("Observe previous/next gone id=" + id + " fallback=" + fallback);
 
                 if (fallback)
                     return;

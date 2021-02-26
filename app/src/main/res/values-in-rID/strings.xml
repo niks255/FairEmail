@@ -208,7 +208,6 @@
     <string name="title_advanced_sync_folders">Sinkronkan daftar folder</string>
     <string name="title_advanced_sync_shared_folders">Sinkronkan daftar folder bersama</string>
     <string name="title_advanced_subscriptions">Kelola folder langganan</string>
-    <string name="title_advanced_sync_subscribed">Sinkronisasi folder langganan secara otomatis</string>
     <string name="title_advanced_check_mx">Periksa alamat email pengirim di sinkronisasi pesan</string>
     <string name="title_advanced_tune_keep_alive">Secara otomatis mengatur interval tetap-hidup</string>
     <string name="title_advanced_keyboard">Tampilkan keyboard secara bawaan</string>
@@ -654,7 +653,6 @@
     <string name="title_duplicate_in">Pesan duplikat dalam %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
-    <string name="title_buttons">Tombol</string>
     <string name="title_seen">Tandai sudah dibaca</string>
     <string name="title_unseen">Tandai belum dibaca</string>
     <string name="title_toggle_seen">Alihkan ke mode baca</string>
@@ -1208,6 +1206,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Standar</item>

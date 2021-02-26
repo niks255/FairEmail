@@ -573,6 +573,34 @@ public class IMAPMessage extends MimeMessage implements ReadableMime {
 	// If we haven't cached the type yet ..
 	if (type == null) {
 	    loadBODYSTRUCTURE();
+
+		// Some servers, like Yandex, report an incorrect/incomplete BODYSTRUCTURE
+		if (("text".equalsIgnoreCase(bs.type) &&
+				"plain".equalsIgnoreCase(bs.subtype)) ||
+				("multipart".equalsIgnoreCase(bs.type) &&
+						("signed".equalsIgnoreCase(bs.subtype) || "encrypted".equalsIgnoreCase(bs.subtype)) &&
+						(bs.cParams == null || bs.cParams.get("protocol") == null)) ||
+				("application".equalsIgnoreCase(bs.type) &&
+						("pkcs7-mime".equalsIgnoreCase(bs.subtype) || "x-pkcs7-mime".equalsIgnoreCase(bs.subtype)) &&
+						(bs.cParams == null || bs.cParams.get("smime-type") == null)))
+			try {
+				String[] c = getHeader("Content-type"); // Fetches header
+				if (c != null && c.length == 1) {
+					ContentType ct = new ContentType(c[0]);
+					if (!("text".equalsIgnoreCase(bs.type) &&
+							"plain".equalsIgnoreCase(bs.subtype)) ||
+							!(bs.type.equalsIgnoreCase(ct.getPrimaryType()) &&
+									bs.subtype.equalsIgnoreCase(ct.getSubType()))) {
+						eu.faircode.email.Log.e("Inconsistent" +
+								" bs=" + bs.type + "/" + bs.subtype + "/" + bs.cParams + " header=" + ct);
+						type = ct.toString();
+						return type;
+					}
+				}
+			} catch (MessagingException ex) {
+				eu.faircode.email.Log.e(ex);
+			}
+
 	    // generate content-type from BODYSTRUCTURE
 	    ContentType ct = new ContentType(bs.type, bs.subtype, bs.cParams);
 	    type = ct.toString();

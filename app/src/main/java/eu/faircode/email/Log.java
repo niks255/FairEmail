@@ -29,6 +29,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteFullException;
@@ -978,6 +980,57 @@ public class Log {
              */
         }
 
+        if (ex instanceof IndexOutOfBoundsException) {
+            for (StackTraceElement ste : stack)
+                if ("android.graphics.Paint".equals(ste.getClassName()) &&
+                        "getTextRunCursor".equals(ste.getMethodName()))
+                    return false;
+            /*
+                Android 6.0.1
+                java.lang.IndexOutOfBoundsException
+                  at android.graphics.Paint.getTextRunCursor(Paint.java:2160)
+                  at android.graphics.Paint.getTextRunCursor(Paint.java:2112)
+                  at android.widget.Editor.getNextCursorOffset(Editor.java:924)
+                  at android.widget.Editor.access$4700(Editor.java:126)
+                  at android.widget.Editor$SelectionEndHandleView.positionAndAdjustForCrossingHandles(Editor.java:4708)
+                  at android.widget.Editor$SelectionEndHandleView.updatePosition(Editor.java:4692)
+                  at android.widget.Editor$HandleView.onTouchEvent(Editor.java:4012)
+                  at android.widget.Editor$SelectionEndHandleView.onTouchEvent(Editor.java:4726)
+                  at android.view.View.dispatchTouchEvent(View.java:9377)
+                  at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2554)
+                  at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2255)
+                  at android.widget.PopupWindow$PopupDecorView.dispatchTouchEvent(PopupWindow.java:2015)
+                  at android.view.View.dispatchPointerEvent(View.java:9597)
+                  at android.view.ViewRootImpl$ViewPostImeInputStage.processPointerEvent(ViewRootImpl.java:4234)
+                  at android.view.ViewRootImpl$ViewPostImeInputStage.onProcess(ViewRootImpl.java:4100)
+                  at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:3646)
+                  at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:3699)
+                  at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:3665)
+                  at android.view.ViewRootImpl$AsyncInputStage.forward(ViewRootImpl.java:3791)
+                  at android.view.ViewRootImpl$InputStage.apply(ViewRootImpl.java:3673)
+                  at android.view.ViewRootImpl$AsyncInputStage.apply(ViewRootImpl.java:3848)
+                  at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:3646)
+                  at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:3699)
+                  at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:3665)
+                  at android.view.ViewRootImpl$InputStage.apply(ViewRootImpl.java:3673)
+                  at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:3646)
+                  at android.view.ViewRootImpl.deliverInputEvent(ViewRootImpl.java:5926)
+                  at android.view.ViewRootImpl.doProcessInputEvents(ViewRootImpl.java:5900)
+                  at android.view.ViewRootImpl.enqueueInputEvent(ViewRootImpl.java:5861)
+                  at android.view.ViewRootImpl$WindowInputEventReceiver.onInputEvent(ViewRootImpl.java:6029)
+                  at android.view.InputEventReceiver.dispatchInputEvent(InputEventReceiver.java:185)
+                  at android.view.InputEventReceiver.nativeConsumeBatchedInputEvents(Native Method)
+                  at android.view.InputEventReceiver.consumeBatchedInputEvents(InputEventReceiver.java:176)
+                  at android.view.ViewRootImpl.doConsumeBatchedInput(ViewRootImpl.java:6000)
+                  at android.view.ViewRootImpl$ConsumeBatchedInputRunnable.run(ViewRootImpl.java:6052)
+                  at android.view.Choreographer$CallbackRecord.run(Choreographer.java:858)
+                  at android.view.Choreographer.doCallbacks(Choreographer.java:670)
+                  at android.view.Choreographer.doFrame(Choreographer.java:600)
+                  at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:844)
+                  at android.os.Handler.handleCallback(Handler.java:739)
+             */
+        }
+
         if (ex instanceof IllegalArgumentException &&
                 stack.length > 0 &&
                 "android.text.method.WordIterator".equals(stack[0].getClassName()) &&
@@ -1098,6 +1151,38 @@ public class Log {
                 return false;
         }
 
+        if (ex instanceof SecurityException &&
+                ex.getMessage() != null &&
+                ex.getMessage().contains("com.opera.browser"))
+            /*
+                java.lang.SecurityException: Permission Denial: starting Intent { act=android.intent.action.VIEW dat=https://tracking.dpd.de/... cmp=com.opera.browser/.leanplum.LeanplumCatchActivity (has extras) } from ProcessRecord{3d9efb1 6332:eu.faircode.email/u0a54} (pid=6332, uid=10054) not exported from uid 10113
+                  at android.os.Parcel.readException(Parcel.java:1951)
+                  at android.os.Parcel.readException(Parcel.java:1897)
+                  at android.app.IActivityManager$Stub$Proxy.startActivity(IActivityManager.java:4430)
+                  at android.app.Instrumentation.execStartActivity(Instrumentation.java:1610)
+                  at android.app.ContextImpl.startActivity(ContextImpl.java:862)
+                  at android.app.ContextImpl.startActivity(ContextImpl.java:839)
+                  at android.view.textclassifier.TextClassification.lambda$-android_view_textclassifier_TextClassification_5020(TextClassification.java:166)
+                  at android.view.textclassifier.-$Lambda$mxr44OLodDKdoE5ddAZvMdsFssQ.$m$0(Unknown Source:8)
+                  at android.view.textclassifier.-$Lambda$mxr44OLodDKdoE5ddAZvMdsFssQ.onClick(Unknown Source:0)
+                  at org.chromium.content.browser.selection.SelectionPopupControllerImpl.m(chromium-SystemWebViewGoogle.aab-stable-432415203:17)
+                  at y5.onActionItemClicked(chromium-SystemWebViewGoogle.aab-stable-432415203:20)
+                  at Bn.onActionItemClicked(chromium-SystemWebViewGoogle.aab-stable-432415203:1)
+                  at com.android.internal.policy.DecorView$ActionModeCallback2Wrapper.onActionItemClicked(DecorView.java:2472)
+                  at com.android.internal.view.FloatingActionMode$3.onMenuItemSelected(FloatingActionMode.java:101)
+                  at com.android.internal.view.menu.MenuBuilder.dispatchMenuItemSelected(MenuBuilder.java:761)
+                  at com.android.internal.view.menu.MenuItemImpl.invoke(MenuItemImpl.java:167)
+                  at com.android.internal.view.menu.MenuBuilder.performItemAction(MenuBuilder.java:908)
+                  at com.android.internal.view.menu.MenuBuilder.performItemAction(MenuBuilder.java:898)
+                  at com.android.internal.view.FloatingActionMode.lambda$-com_android_internal_view_FloatingActionMode_5176(FloatingActionMode.java:129)
+                  at com.android.internal.view.-$Lambda$IoKM3AcgDw3Ok5aFi0zlym2p3IA.$m$0(Unknown Source:4)
+                  at com.android.internal.view.-$Lambda$IoKM3AcgDw3Ok5aFi0zlym2p3IA.onMenuItemClick(Unknown Source:0)
+                  at com.android.internal.widget.FloatingToolbar$FloatingToolbarPopup$2.onClick(FloatingToolbar.java:423)
+                  at android.view.View.performClick(View.java:6320)
+                  at android.view.View$PerformClick.run(View.java:25087)
+             */
+            return false;
+
         if (isDead(ex))
             return false;
 
@@ -1105,7 +1190,7 @@ public class Log {
             return true;
 
         while (ex != null) {
-            for (StackTraceElement ste :stack)
+            for (StackTraceElement ste : stack)
                 if (ste.getClassName().startsWith(BuildConfig.APPLICATION_ID))
                     return true;
             ex = ex.getCause();
@@ -1423,8 +1508,8 @@ public class Log {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         am.getMemoryInfo(mi);
-        sb.append(String.format("Memory class: %d MB/%s\r\n",
-                am.getMemoryClass(), Helper.humanReadableByteCount(mi.totalMem)));
+        sb.append(String.format("Memory class: %d/%d MB/%s\r\n",
+                am.getMemoryClass(), am.getLargeMemoryClass(), Helper.humanReadableByteCount(mi.totalMem)));
 
         sb.append(String.format("Storage space: %s/%s App: %s\r\n",
                 Helper.humanReadableByteCount(Helper.getAvailableStorageSpace()),
@@ -1474,6 +1559,22 @@ public class Log {
         if (reporting) {
             String uuid = prefs.getString("uuid", null);
             sb.append(String.format("UUID: %s\r\n", uuid == null ? "-" : uuid));
+        }
+
+        sb.append("\r\n");
+
+        try {
+            PackageInfo pi = context.getPackageManager()
+                    .getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PERMISSIONS);
+            for (int i = 0; i < pi.requestedPermissions.length; i++)
+                if (pi.requestedPermissions[i] != null &&
+                        pi.requestedPermissions[i].startsWith("android.permission.")) {
+                    boolean granted = ((pi.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0);
+                    sb.append(pi.requestedPermissions[i].replace("android.permission.", ""))
+                            .append('=').append(granted).append("\r\n");
+                }
+        } catch (Throwable ex) {
+            sb.append(ex.toString()).append("\r\n");
         }
 
         sb.append("\r\n");

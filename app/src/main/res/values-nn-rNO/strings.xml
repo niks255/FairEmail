@@ -221,7 +221,6 @@
     <string name="title_advanced_sync_folders">Synkroniser mappeliste</string>
     <string name="title_advanced_sync_shared_folders">Synkroniser delte mappelister</string>
     <string name="title_advanced_subscriptions">Administrere mappeabonnementer</string>
-    <string name="title_advanced_sync_subscribed">Synkroniser abonnerte mapper automatisk</string>
     <string name="title_advanced_check_mx">Sjekk avsenderens e-postadresser når meldinger synkroniseres</string>
     <string name="title_advanced_tune_keep_alive">Juster automatisk hold i live intervallet</string>
     <string name="title_advanced_keyboard">Vis tastatur som standard</string>
@@ -677,7 +676,6 @@
     <string name="title_duplicate_in">Dupliser melding i %1$s</string>
     <string name="title_subject_reply">Sv: %1$s</string>
     <string name="title_subject_forward">Videresend: %1$s</string>
-    <string name="title_buttons">Knapper</string>
     <string name="title_seen">Merk som lest</string>
     <string name="title_unseen">Merk som ulest</string>
     <string name="title_toggle_seen">Skru av/på \"lest\"</string>
@@ -1242,7 +1240,6 @@
     <string name="title_pro_activated">Alle pro-funksjoner er aktivert</string>
     <string name="title_pro_valid">Alle pro-funksjoner aktivert</string>
     <string name="title_pro_invalid">Ugyldig respons</string>
-    <string name="title_pro_support">FairEmail trenger din hjelp. Trykk for å kjøpe Pro-funksjoner for å holde prosjektet i gang.</string>
     <string name="title_boundary_error">Feil ved nedlasting av meldinger fra e-posttjeneren</string>
     <string name="title_boundary_retry">Prøv igjen</string>
     <string name="title_unexpected_error">Uventet feil</string>
@@ -1384,6 +1381,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Standard</item>

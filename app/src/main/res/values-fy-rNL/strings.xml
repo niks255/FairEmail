@@ -220,7 +220,6 @@
     <string name="title_advanced_sync_folders">Maplist syngronisearje</string>
     <string name="title_advanced_sync_shared_folders">Syngronisearje dielde maplisten</string>
     <string name="title_advanced_subscriptions">Mapabonneminten beheare</string>
-    <string name="title_advanced_sync_subscribed">Syngroniseare mappen automatysk syngronisearje</string>
     <string name="title_advanced_check_mx">Kontrolearje e-postadressen fan stjoerder op syngronisearjen fan berjochten</string>
     <string name="title_advanced_tune_keep_alive">Tune it ynterval foar libbenhâlden automatysk</string>
     <string name="title_advanced_keyboard">Sjoch toetseboerd mei standert</string>
@@ -673,7 +672,6 @@
     <string name="title_duplicate_in">Berjocht duplisearje yn %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Foarút: %1$s</string>
-    <string name="title_buttons">Knoppen</string>
     <string name="title_seen">Mark lêzen</string>
     <string name="title_unseen">Markearje as net lêzen</string>
     <string name="title_toggle_seen">Wikselje lêze</string>
@@ -1238,7 +1236,6 @@
     <string name="title_pro_activated">Alle pro-funksjes binne aktivearre</string>
     <string name="title_pro_valid">Alle pro-funksjes aktivearre</string>
     <string name="title_pro_invalid">Unjildich antwurd</string>
-    <string name="title_pro_support">FairEmail hat jo help nedich. Tikje om pro-funksjes te keapjen om it projekt troch te gean.</string>
     <string name="title_boundary_error">Flater by it downloaden fan berjochten fan \'e mailserver</string>
     <string name="title_boundary_retry">Besykje opnij</string>
     <string name="title_unexpected_error">Net ferwachte flater</string>
@@ -1380,6 +1377,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Standert</item>

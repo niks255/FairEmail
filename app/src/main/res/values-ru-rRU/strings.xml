@@ -3,13 +3,13 @@
     <string name="app_search">Поиск по FairEmail</string>
     <string name="app_changelog">Что нового</string>
     <string name="app_welcome">FairEmail — это почтовое приложение с открытым исходным кодом, ориентированное на конфиденциальность и безопасность. По этой причине некоторые функции могут работать не так, как вы привыкли.</string>
-    <string name="app_limitations">Например, сообщения по умолчанию переформатируются для удаления небезопасных элементов и улучшения читаемости, а открытие ссылок нуждается в подтверждении в целях безопасности. Обе функции, при желании, могут быть отключены.</string>
-    <string name="app_crash">FairEmail не поддерживается на этом устройстве, так как ошибки в Android вызывают сбои</string>
+    <string name="app_limitations">Например, по умолчанию сообщения переформатируются, так чтобы удалять небезопасные элементы и улучшать читаемость, а открытие ссылок нужно в целях безопасности подтверждать. Обе функции можно отключить.</string>
+    <string name="app_crash">Это устройство не поддерживает FairEmail, так как ошибки Android вызывают сбои</string>
     <string name="app_exit">Для выхода снова перейдите \"назад\"</string>
     <string name="app_cake">Недостаточно места</string>
     <string name="channel_service">Получение</string>
     <string name="channel_send">Отправка</string>
-    <string name="channel_notification">Почта</string>
+    <string name="channel_notification">Эл. почта</string>
     <string name="channel_update">Обновления</string>
     <string name="channel_warning">Предупреждения</string>
     <string name="channel_error">Ошибки</string>
@@ -179,6 +179,7 @@
     <string name="title_setup_manage">Редактировать</string>
     <string name="title_setup_grant">Предоставить</string>
     <string name="title_setup_grant_again">Предоставить необходимые разрешения</string>
+    <string name="title_setup_exchange_support">Поддерживается ли Microsoft Exchange?</string>
     <string name="title_setup_identity_what">Что такое идентификатор?</string>
     <string name="title_setup_permissions">Предоставить доступ</string>
     <string name="title_setup_permissions_remark">Доступ к контактной информации (необязательно)</string>
@@ -264,7 +265,7 @@
     <string name="title_advanced_sync_folders">Синхронизировать список папок</string>
     <string name="title_advanced_sync_shared_folders">Синхронизировать списки общих папок</string>
     <string name="title_advanced_subscriptions">Управление подпиской на папки</string>
-    <string name="title_advanced_sync_subscribed">Автоматически синхронизировать подписанные папки</string>
+    <string name="title_advanced_check_reply_domain">Проверять адрес для ответа при синхронизации сообщений</string>
     <string name="title_advanced_check_mx">Проверять адреса электронной почты отправителя при синхронизации сообщений</string>
     <string name="title_advanced_tune_keep_alive">Автоматически настраивать интервал keep-alive</string>
     <string name="title_advanced_keyboard">Показывать клавиатуру по умолчанию</string>
@@ -311,7 +312,8 @@
     <string name="title_advanced_landscape3">Показывать меню навигации в альбомном режиме по умолчанию</string>
     <string name="title_advanced_startup">При запуске показывать</string>
     <string name="title_advanced_cards">Использовать карточный стиль вместо табличного</string>
-    <string name="title_advanced_cards_beige">Использовать бежевый фон при использовании карточного стиля</string>
+    <string name="title_advanced_cards_beige">Использовать бежевый фон для карточного стиля</string>
+    <string name="title_advanced_cards_shadow">Использовать тень для непрочитанных сообщений для карточного стиля</string>
     <string name="title_advanced_date_header">Группировать по дате</string>
     <string name="title_advanced_threading">Связанные диалоги</string>
     <string name="title_advanced_threading_unread">Показывать количество непрочитанных сообщений в диалогах</string>
@@ -488,6 +490,7 @@
     <string name="title_advanced_sync_kept_hint">Это приведёт к большему потреблению трафика и заряда батареи, особенно если на устройстве хранится много сообщений</string>
     <string name="title_advanced_gmail_thread_hint">Это относится только к вновь полученным сообщениям и может нарушить существующие группы</string>
     <string name="title_advanced_sync_folders_hint">Отключение этой функции уменьшит потребление трафика и заряда батареи, но также отключит обновление списка папок</string>
+    <string name="title_advanced_check_reply_hint">Проверяет, совпадает ли доменное имя отправителя и адреса для ответа</string>
     <string name="title_advanced_lookup_mx_hint">Проверка наличия записей DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Это замедлит синхронизацию сообщений</string>
     <string name="title_advanced_suggest_local_hint">В дополнение к контактам, предоставляемым Android. Контактные данные будут сохранены только для вновь отправленных или полученных сообщений при включении этой функции.</string>
@@ -511,6 +514,7 @@
     <string name="title_advanced_gravatars_hint">Возможен риск нарушения конфиденциальности</string>
     <string name="title_advanced_name_email_hint">Если отключено, будут показаны только имена (при наличии)</string>
     <string name="title_advanced_preview_hint">Доступно, только если был загружен текст сообщения</string>
+    <string name="title_advanced_preview_lines_hint">Всего не более %s символов</string>
     <string name="title_advanced_preview_issue">Прокрутка может быть медленной из-за ошибки в некоторых версиях Android, когда строк больше одной</string>
     <string name="title_advanced_overview_mode_hint">Может привести к очень маленьким шрифтам</string>
     <string name="title_advanced_placeholders_hint">Относится только к изменённым сообщениям</string>
@@ -623,6 +627,7 @@
     <string name="title_no_inbox">Папка \"Входящие\" не найдена</string>
     <string name="title_no_drafts">Нет папки черновиков</string>
     <string name="title_no_junk_folder">Для этой учётной записи не выбрана папка со спамом</string>
+    <string name="title_default_composable">Адрес электронной почты по умолчанию определяется основным идентификатором основной учётной записи</string>
     <string name="title_no_composable">Отправка писем требует настройки идентификатора, также должна быть выбрана папка черновиков в настройках учётной записи</string>
     <string name="title_no_standard">Этот провайдер использует проприетарный протокол электронной почты, что не позволяет использовать сторонние почтовые клиенты</string>
     <string name="title_no_idle">Данный провайдер не поддерживает push-сообщения. Это задержит получение новых сообщений и увеличит расход заряда батареи.</string>
@@ -736,7 +741,6 @@
     <string name="title_duplicate_in">Дубликат сообщения в %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
-    <string name="title_buttons">Кнопки</string>
     <string name="title_seen">Отметить как прочитанное</string>
     <string name="title_unseen">Отметить как непрочитанное</string>
     <string name="title_toggle_seen">Прочитано/непрочитано</string>
@@ -760,6 +764,8 @@
     <string name="title_pin">Добавить ярлык</string>
     <string name="title_print">Печать</string>
     <string name="title_print_header">Печать заголовка</string>
+    <string name="title_print_images">Печать изображений</string>
+    <string name="title_print_images_remark">Загрузка изображений может занять некоторое время</string>
     <string name="title_show_headers">Показать заголовки</string>
     <string name="title_raw_save">Сохранить оригинал сообщения</string>
     <string name="title_raw_send">Отправить как вложение</string>
@@ -770,6 +776,8 @@
     <string name="title_download_all">Загрузить все</string>
     <string name="title_save_all">Сохранить все</string>
     <string name="title_save_eml">Сохранить оригинальный файл сообщения</string>
+    <string name="title_buttons">Выбрать кнопки</string>
+    <string name="title_configure_buttons">Настройка кнопок&#8230;</string>
     <string name="title_trash">Корзина</string>
     <string name="title_copy">Копировать&#8230;</string>
     <string name="title_copy_to">Копировать в&#8230;</string>
@@ -873,7 +881,7 @@
     <string name="title_send_now">Отправить сейчас</string>
     <string name="title_send_via">Отправить через</string>
     <string name="title_send_at">Отправить в&#8230;</string>
-    <string name="title_send_archive">Архивировать прочитанные сообщения</string>
+    <string name="title_send_auto_archive">Архивировать исходное сообщение</string>
     <string name="title_send_encryption">Шифрование</string>
     <string name="title_send_priority">Приоритет</string>
     <string name="title_no_server">Сервер не найден на \"%1$s\"</string>
@@ -935,7 +943,8 @@
     <string name="title_from_missing">Отсутствует отправитель</string>
     <string name="title_extra_missing">Отсутствует имя пользователя</string>
     <string name="title_to_missing">Отсутствует получатель</string>
-    <string name="title_pgp_reminder">Доступные PGP-ключи</string>
+    <string name="title_pgp_reminder">Доступные ключи PGP</string>
+    <string name="title_smime_reminder">Доступные ключи S/MIME</string>
     <string name="title_subject_reminder">Тема пустая</string>
     <string name="title_text_reminder">Сообщение пустое</string>
     <string name="title_attachment_keywords">attached,attachment,attachments,included,вложение,вложения,вложении,приложено</string>
@@ -1309,7 +1318,7 @@
     <string name="title_pro_activated">Все функции Pro активированы</string>
     <string name="title_pro_valid">Все функции Pro активированы</string>
     <string name="title_pro_invalid">Неверный ответ</string>
-    <string name="title_pro_support">FairEmail нуждается в вашей помощи. Нажмите, чтобы купить функции Pro и поддержать развитие проекта.</string>
+    <string name="title_pro_support">FairEmail нужна ваша помощь. Нажмите, чтобы купить профессиональный функционал и поддержать проект, либо отключите это напоминание.</string>
     <string name="title_boundary_error">Ошибка при загрузке сообщений с почтового сервера</string>
     <string name="title_boundary_retry">Повторить</string>
     <string name="title_unexpected_error">Непредвиденная ошибка</string>
@@ -1453,6 +1462,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>По умолчанию</item>

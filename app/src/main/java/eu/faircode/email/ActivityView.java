@@ -489,7 +489,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             }
         }));
 
-        extra.add(new NavMenuItem(R.drawable.twotone_question_answer_24, R.string.menu_faq, new Runnable() {
+        extra.add(new NavMenuItem(R.drawable.twotone_support_24, R.string.menu_faq, new Runnable() {
             @Override
             public void run() {
                 if (!drawerLayout.isLocked(drawerContainer))
@@ -556,7 +556,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     checkUpdate(true);
                 }
             }
-        }).setSeparated());
+        }).setSeparated().setSubtitle(BuildConfig.VERSION_NAME));
 
         extra.add(new NavMenuItem(R.drawable.twotone_monetization_on_24, R.string.menu_pro, new Runnable() {
             @Override
@@ -909,12 +909,13 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     //    throw new IOException("html_url field missing");
                     if (!jroot.has("assets") || jroot.isNull("assets"))
                         throw new IOException("assets section missing");
-
+                    String abi = Build.SUPPORTED_ABIS[0];
                     // Get update info
                     UpdateInfo info = new UpdateInfo();
                     info.tag_name = jroot.getString("tag_name");
-                    //info.html_url = jroot.getString("html_url");
-                    String abi = Build.SUPPORTED_ABIS[0];
+                    info.html_url = jroot.getString("html_url");
+                    //if (TextUtils.isEmpty(info.html_url))
+                    info.html_url = BuildConfig.GITHUB_LATEST_URI;
 
                     // Check if new release
                     JSONArray jassets = jroot.getJSONArray("assets");
@@ -987,6 +988,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     private void checkIntent() {
         Intent intent = getIntent();
+        Log.i("View intent=" + intent +
+                " " + TextUtils.join(", ", Log.getExtras(intent.getExtras())));
 
         // Refresh from widget
         if (intent.getBooleanExtra("refresh", false)) {
@@ -997,7 +1000,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }
 
         String action = intent.getAction();
-        Log.i("View intent=" + intent + " " + TextUtils.join(", ", Log.getExtras(intent.getExtras())));
         if (action != null) {
             intent.setAction(null);
             setIntent(intent);

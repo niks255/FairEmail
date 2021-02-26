@@ -236,7 +236,8 @@ public interface DaoMessage {
             " WHEN folder.type = '" + EntityFolder.JUNK + "' THEN 6" +
             " WHEN folder.type = '" + EntityFolder.SYSTEM + "' THEN 7" +
             " WHEN folder.type = '" + EntityFolder.USER + "' THEN 8" +
-            " WHEN folder.type = '" + EntityFolder.ARCHIVE + "' THEN 9" +
+            " WHEN folder.type = '" + EntityFolder.ARCHIVE + "' THEN" +
+            "  CASE WHEN :filter_archive THEN 9 ELSE 0 END" +
             " ELSE 999 END")
         // The folder type sort order should match the duplicate algorithm
     DataSource.Factory<Integer, TupleMessageEx> pagedThread(
@@ -476,12 +477,14 @@ public interface DaoMessage {
             " AND folder.notify" +
             " AND (account.created IS NULL OR message.received > account.created OR message.sent > account.created)" +
             " AND message.notifying <> " + EntityMessage.NOTIFYING_IGNORE +
-            " AND (message.notifying <> 0 OR NOT (message.ui_seen OR message.ui_hide))" +
+            " AND (message.notifying <> 0 OR NOT (message.ui_seen OR message.ui_ignored OR message.ui_hide))" +
             " ORDER BY message.received DESC")
     LiveData<List<TupleMessageEx>> liveUnseenNotify();
 
     @Transaction
-    @Query("SELECT account.id AS account, COUNT(message.id) AS unseen, SUM(ABS(notifying)) AS notifying" +
+    @Query("SELECT account.id AS account," +
+            " COUNT(message.id) AS unseen," +
+            " SUM(CASE WHEN account.created IS NULL OR message.received > account.created OR message.sent > account.created THEN NOT ui_ignored ELSE 0 END) AS notifying" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
@@ -494,7 +497,9 @@ public interface DaoMessage {
             " ORDER BY account.id")
     LiveData<List<TupleMessageStats>> liveWidgetUnseen(Long account);
 
-    @Query("SELECT :account AS account, COUNT(message.id) AS unseen, SUM(ABS(notifying)) AS notifying" +
+    @Query("SELECT :account AS account," +
+            " COUNT(message.id) AS unseen," +
+            " SUM(CASE WHEN account.created IS NULL OR message.received > account.created OR message.sent > account.created THEN NOT ui_ignored ELSE 0 END) AS notifying" +
             " FROM message" +
             " JOIN account_view AS account ON account.id = message.account" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
@@ -628,6 +633,9 @@ public interface DaoMessage {
     @Query("UPDATE message SET flagged = :flagged WHERE id = :id AND NOT (flagged IS :flagged)")
     int setMessageFlagged(long id, boolean flagged);
 
+    @Query("UPDATE message SET deleted = :deleted WHERE id = :id AND NOT (deleted IS :deleted)")
+    int setMessageDeleted(long id, boolean deleted);
+
     @Query("UPDATE message SET answered = :answered WHERE id = :id AND NOT (answered IS :answered)")
     int setMessageAnswered(long id, boolean answered);
 
@@ -646,6 +654,9 @@ public interface DaoMessage {
             " AND (NOT (ui_flagged IS :ui_flagged) OR NOT (color IS :color))")
     int setMessageUiFlagged(long id, boolean ui_flagged, Integer color);
 
+    @Query("UPDATE message SET ui_deleted = :ui_deleted WHERE id = :id AND NOT (ui_deleted IS :ui_deleted)")
+    int setMessageUiDeleted(long id, boolean ui_deleted);
+
     @Query("UPDATE message SET ui_answered = :ui_answered WHERE id = :id AND NOT (ui_answered IS :ui_answered)")
     int setMessageUiAnswered(long id, boolean ui_answered);
 
@@ -654,6 +665,9 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET ui_ignored = :ui_ignored WHERE id = :id AND NOT (ui_ignored IS :ui_ignored)")
     int setMessageUiIgnored(long id, boolean ui_ignored);
+
+    @Query("UPDATE message SET ui_silent = :ui_silent WHERE id = :id AND NOT (ui_silent IS :ui_silent)")
+    int setMessageUiSilent(long id, boolean ui_silent);
 
     @Query("UPDATE message SET ui_busy = :busy WHERE id = :id AND NOT (ui_busy IS :busy)")
     int setMessageUiBusy(long id, Long busy);

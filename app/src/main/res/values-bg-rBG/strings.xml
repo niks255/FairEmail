@@ -567,7 +567,6 @@
     <string name="title_duplicate_in">Дублиращо съобщение в %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
-    <string name="title_buttons">Бутони</string>
     <string name="title_seen">Отбелязвам като прочетено</string>
     <string name="title_unseen">Отбелязвам като непрочетено</string>
     <string name="title_hide">Скриване</string>
@@ -1077,7 +1076,6 @@
     <string name="title_pro_activated">Всички pro функции са активирани</string>
     <string name="title_pro_valid">Активирай всички pro функции</string>
     <string name="title_pro_invalid">Невалиден отговор</string>
-    <string name="title_pro_support">FairEmail се нуждае от вашата помощ. Докоснете, за да закупите професионалните функции, за да продължи проекта да се развива.</string>
     <string name="title_boundary_error">Грешка при изтеглянето на съобщения от пощенския сървър</string>
     <string name="title_boundary_retry">Опитайте отново</string>
     <string name="title_unexpected_error">Неочаквана грешка</string>
@@ -1209,6 +1207,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>По подразбиране</item>

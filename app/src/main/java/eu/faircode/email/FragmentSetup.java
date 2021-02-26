@@ -49,6 +49,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -68,6 +69,7 @@ public class FragmentSetup extends FragmentBase {
     private Button btnAccount;
 
     private Button btnIdentity;
+    private TextView tvExchangeSupport;
     private TextView tvIdentityWhat;
     private TextView tvNoComposable;
 
@@ -90,12 +92,19 @@ public class FragmentSetup extends FragmentBase {
     private int colorWarning;
     private Drawable check;
 
-    private boolean manual = BuildConfig.DEBUG;
+    private boolean manual = false;
 
     @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setSubtitle(R.string.title_setup);
+
+        if (savedInstanceState == null) {
+            FragmentActivity activity = getActivity();
+            if (activity != null)
+                manual = activity.getIntent().getBooleanExtra("manual", false);
+        } else
+            manual = savedInstanceState.getBoolean("fair:manual");
 
         textColorPrimary = Helper.resolveColor(getContext(), android.R.attr.textColorPrimary);
         colorWarning = Helper.resolveColor(getContext(), R.attr.colorWarning);
@@ -115,6 +124,7 @@ public class FragmentSetup extends FragmentBase {
         btnAccount = view.findViewById(R.id.btnAccount);
 
         btnIdentity = view.findViewById(R.id.btnIdentity);
+        tvExchangeSupport = view.findViewById(R.id.tvExchangeSupport);
         tvIdentityWhat = view.findViewById(R.id.tvIdentityWhat);
         tvNoComposable = view.findViewById(R.id.tvNoComposable);
 
@@ -232,8 +242,6 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
-        if (savedInstanceState != null)
-            manual = savedInstanceState.getBoolean("fair:manual");
         ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
         grpManual.setVisibility(manual ? View.VISIBLE : View.GONE);
 
@@ -250,6 +258,14 @@ public class FragmentSetup extends FragmentBase {
             public void onClick(View view) {
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
                 lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_VIEW_IDENTITIES));
+            }
+        });
+
+        tvExchangeSupport.setPaintFlags(tvExchangeSupport.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvExchangeSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 8);
             }
         });
 

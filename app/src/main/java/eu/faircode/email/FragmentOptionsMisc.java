@@ -98,6 +98,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swExperiments;
     private TextView tvExperimentsHint;
     private SwitchCompat swQueries;
+    private SwitchCompat swWal;
     private SwitchCompat swCrashReports;
     private TextView tvUuid;
     private Button btnReset;
@@ -133,17 +134,20 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
             "language", "watchdog", "updates",
-            "experiments", "query_threads", "crash_reports", "cleanup_attachments",
+            "experiments", "wal", "query_threads", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "perform_expunge", "auth_plain", "auth_login", "auth_ntlm", "auth_sasl"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "crash_reports_asked", "review_asked", "review_later", "why",
-            "reply_hint", "html_always_images", "open_full_confirmed", "print_html_confirmed", "reformatted_hint",
+            "reply_hint", "html_always_images", "open_full_confirmed",
+            "print_html_confirmed", "print_html_header", "print_html_images",
+            "reformatted_hint",
             "selected_folders", "move_1_confirmed", "move_n_confirmed",
             "last_search_senders", "last_search_recipients", "last_search_subject", "last_search_keywords", "last_search_message", "last_search",
-            "identities_asked", "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
+            "identities_asked", "identities_primary_hint",
+            "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
             "setup_reminder", "setup_advanced"
     };
 
@@ -190,6 +194,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExperiments = view.findViewById(R.id.swExperiments);
         tvExperimentsHint = view.findViewById(R.id.tvExperimentsHint);
         swQueries = view.findViewById(R.id.swQueries);
+        swWal = view.findViewById(R.id.swWal);
         swCrashReports = view.findViewById(R.id.swCrashReports);
         tvUuid = view.findViewById(R.id.tvUuid);
         btnReset = view.findViewById(R.id.btnReset);
@@ -401,6 +406,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swWal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("wal", checked).commit(); // apply won't work here
+            }
+        });
+
         swCrashReports.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -475,6 +487,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("perform_expunge", checked).apply();
+                ServiceSynchronize.reload(getContext(), null, true, "perform_expunge");
             }
         });
 
@@ -848,6 +861,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         ? View.GONE : View.VISIBLE);
         swExperiments.setChecked(prefs.getBoolean("experiments", false));
         swQueries.setChecked(prefs.getInt("query_threads", 4) < 4);
+        swWal.setChecked(prefs.getBoolean("wal", true));
         swCrashReports.setChecked(prefs.getBoolean("crash_reports", false));
         tvUuid.setText(prefs.getString("uuid", null));
         swCleanupAttachments.setChecked(prefs.getBoolean("cleanup_attachments", false));

@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
@@ -232,7 +233,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
         }));
 
-        menus.add(new NavMenuItem(R.drawable.twotone_question_answer_24, R.string.menu_faq, new Runnable() {
+        menus.add(new NavMenuItem(R.drawable.twotone_support_24, R.string.menu_faq, new Runnable() {
             @Override
             public void run() {
                 drawerLayout.closeDrawer(drawerContainer);
@@ -243,6 +244,14 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             public void run() {
                 drawerLayout.closeDrawer(drawerContainer);
                 onDebugInfo();
+            }
+        }).setExternal(true));
+
+        menus.add(new NavMenuItem(R.drawable.twotone_feedback_24, R.string.menu_issue, new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.closeDrawer(drawerContainer);
+                onMenuIssue();
             }
         }).setExternal(true));
 
@@ -260,7 +269,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 drawerLayout.closeDrawer(drawerContainer);
                 onMenuAbout();
             }
-        }));
+        }).setSubtitle(BuildConfig.VERSION_NAME));
 
         adapter.set(menus);
 
@@ -485,6 +494,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
 
         }.execute(this, new Bundle(), "debug:info");
+    }
+
+    private void onMenuIssue() {
+        startActivity(Helper.getIntentIssue(this));
     }
 
     private void onMenuPrivacy() {
@@ -712,7 +725,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 Uri uri = args.getParcelable("uri");
                 String password = args.getString("password");
 
-                if (!"content".equals(uri.getScheme())) {
+                if (!"content".equals(uri.getScheme()) &&
+                        !Helper.hasPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     Log.w("Import uri=" + uri);
                     throw new IllegalArgumentException(context.getString(R.string.title_no_stream));
                 }
@@ -979,7 +993,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         if ("secure".equals(key) ||
                                 "shortcuts".equals(key) ||
                                 "language".equals(key) ||
-                                "query_threads".equals(key))
+                                "query_threads".equals(key) ||
+                                "wal".equals(key))
                             continue;
 
                         if (key != null && key.startsWith("widget."))
@@ -1074,6 +1089,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 else {
                     boolean expected =
                             (ex instanceof IllegalArgumentException ||
+                                    ex instanceof IOException ||
                                     ex instanceof FileNotFoundException ||
                                     ex instanceof JSONException ||
                                     ex instanceof SecurityException);

@@ -1,6 +1,8 @@
 # FairEmail podpora
 
-Máte-li dotaz, podívejte se prosím nejprve na často kladené dotazy. Ve spodní části se dozvíte, jak pokládat další dotazy, žádat o nové funkce a hlásit chyby.
+Máte-li dotaz, nejprve se prosím podívejte na následující často kladené dotazy (FAQ). Jak pokládat další otázky, žádat o funkce a hlásit chyby naleznete [v dolní části](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support).
+
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Obsah
 
@@ -14,13 +16,13 @@ Máte-li dotaz, podívejte se prosím nejprve na často kladené dotazy. Ve spod
 
 ## Autorizace účtů
 
-In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
+Ve většině případů bude průvodce rychlého nastavení schopen automaticky identifikovat správnou konfiguraci.
 
-If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). K tomu budete potřebovat adresy serverů IMAP a SMTP a čísla portů, typu použitého protokolu SSL/TLS či STARTTLS a své uživatelské jméno (většinou, ale ne vždy, je shodné s e-mailovou adresou) a heslo.
+Pokud průvodce selže, budete muset ručně nastavit účet (pro příjem e-mailů) a identitu (pro odesílání e-mailů). K tomu budete potřebovat adresy serverů IMAP a SMTP a čísla portů, zda má být použito SSL/TLS či STARTTLS, své uživatelské jméno (většinou, ale ne vždy, je shodné s e-mailovou adresou) a své heslo.
 
-Hledáním *IMAP* a jména poskytovatele je většinou dostatečné k nalezení správné dokumentace.
+Pro nalezení správné dokumentace obvykle stačí vyhledávat pro *IMAP* a jméno poskytovatele.
 
-V některých případech je potřeba pro přihlášení povolit externí přístup k vašemu účtu a/nebo použít speciální (aplikační) heslo, například když je povoleno dvoufaktorové ověřování k vašemu účtu.
+V některých případech je pro přihlášení potřeba povolit externí přístup k vašemu účtu a/nebo použít speciální (aplikační) heslo, například když je u vašeho účtu povoleno dvoufázové ověření.
 
 Pro autorizaci:
 
@@ -43,22 +45,22 @@ Související dotazy:
 
 ## Jak na ...?
 
-* Change the account name: Settings, tap Manual setup and more options, tap Accounts, tap account
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
-* Change password: Settings, tap Manual setup and more options, tap Accounts, tap account, change password
-* Set a signature: Settings, tap Manual setup and more options, tap Identities, tap identity, Edit signature.
+* Změnu názvu účtu: Nastavení, stiskněte Ruční nastavení a další možnosti, dále Účty, stiskněte účet
+* Změnu chování při tažení vlevo/vpravo: Nastavení, záložka Chování, Nastavit akce tažení prstem
+* Změnu hesla: Nastavení, stiskněte Ruční nastavení a další možnosti, dále Účty, stiskněte účet, změňte heslo
+* Nastavení podpisu: Nastavení, stiskněte Ruční nastavení a další možnosti, dále Účty, stiskněte identitu, Upravit podpis.
 * Přidání CC a BCC adres: stiskněte ikonu lidí na konci řádku s předmětem
-* Přejítí na další/předchozí zprávu po archivaci/smazání: v nastavení chování vypněte *Zavírat konverzace automaticky* a pod *Při zavření konverzace* zvolte *Přejít na další/předchozí konverzaci*
+* Přechod na další/předchozí zprávu po archivaci/smazání: v nastavení chování vypněte *Zavírat konverzace automaticky* a pod *Při zavření konverzace* zvolte *Přejít na další/předchozí konverzaci*
 * Přidání složky do sjednocené doručené pošty: dlouze podržte složku v seznamu složek a zaškrtněte *Zobrazit ve sjednocené doručené poště*
 * Přidání složky do navigačního menu: dlouze podržte složku v seznamu složek a zaškrtněte *Zobrazit v navigačním menu*
-* Load more messages: long press a folder in the folder list, select *Fetch more messages*
+* Načtení více zpráv: dlouze podržte složku v seznamu složek a zvolte *Načíst další zprávy*
 * Smazání zprávy s přeskočením koše: v menu (3 tečky), hned nad textem zprávy, zvolte *Smazat*, nebo případně, v nastavení účtu, změňte složku koše na prázdné
-* Delete an account/identity: Settings, tap Manual setup and more options, tap Accounts/Identities, three-dots menu, Delete
+* Odebrání účtu/identity: Nastavení, stiskněte Ruční nastavení a další možnosti, dále Účty/Identity, stiskněte účet/identitu, menu (3 tečky), Smazat
 * Odstranění složky: dlouze podržte složku v seznamu složek, Upravit vlastnosti, menu (3 tečky), Smazat
 * Vrácení zpět odeslání: složka K odeslání, stiskněte zprávu, stiskněte tlačítko s ikonou šipky zpět
 * Ukládání odeslaných zpráv v doručených: přečtěte si prosím [tyto nejčastější dotazy](#user-content-faq142)
-* Change system folders: Settings, tap Manual setup and more options, tap Accounts, tap account, at the bottom
-* Export/import settings: Settings, navigation/hamburger menu
+* Změna systémových složek: Nastavení, stiskněte Ruční nastavení a další možnosti, dále Účty, stiskněte účet, sjeďte úplně dolů
+* Export/import nastavení: Nastavení, navigační (hamburger) menu
 
 ## Známé problémy
 
@@ -75,10 +77,10 @@ Související dotazy:
 * ~~[Chyba v AndroidX](https://issuetracker.google.com/issues/64729576) ztěžuje uchopení posuvníku pro rychlý posun. Bylo přidáno provizorní řešení.~~
 * ~~Šifrování s YubiKey vyústí v nekonečnou smyčku. Toto je zdá se způsobeno [chybou v OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
 * Posun na interně odkazovanou pozici v původních zprávách nefunguje. Toto nelze opravit, protože zobrazení původní zprávy je uvnitř posuvného náhledu.
-* Náhled textu zprávy se na Samsung hodinkách někdy (nikdy) nezobrazí, protože [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) se zdá být ignorován. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. Viz také [tento nejčastější dotaz](#user-content-faq126).
-* A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. Tato chyba byla opravena v Androidu 6.0.1.
-* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
-* Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* Náhled textu zprávy se na Samsung hodinkách někdy (nikdy) nezobrazí, protože [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) se zdá být ignorován. Správné zobrazování náhledu zpráv je ověřeno s nositelnými zařízeními Pebble 2, Fitbit Charge 3, Mi band 3, a Xiaomi Amazfit BIP. Viz také [tento nejčastější dotaz](#user-content-faq126).
+* [Chyba v Androidu 6.0](https://issuetracker.google.com/issues/37068143) způsobuje pád s *... Invalid offset: ... Valid range is ...* při výběru textu a následném stisku mimo vybraný text. Tato chyba byla opravena v Androidu 6.0.1.
+* Interní (kotevní) odkazy nebudou fungovat, protože původní zprávy jsou zobrazeny ve vloženém WebView, v posouvajícím se zobrazení (seznam konverzací). Jedná se o omezení Androidu, které nelze opravit či obejít.
+* Detekce jazyka [přestala fungovat](https://issuetracker.google.com/issues/173337263) na zařízeních Pixel s (aktualizovaným?) Android 11
 
 ## Plánované funkce
 
@@ -87,19 +89,19 @@ Související dotazy:
 * ~~Kopírování zprávy~~
 * ~~Barevné hvězdičky~~
 * ~~Nastavení oznámení pro každou složku~~
-* ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
+* ~~Výběr lokálních obrázků pro podpisy~~ (nebude přidáno, protože to vyžaduje správu souborů obrázků a protože většina e-mailových klientů stejně obrázky ve výchozím nastavení nezobrazuje)
 * ~~Zobrazení zpráv odpovídajících pravidlu~~
-* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
+* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (pro jazyk Java neexistují žádné udržované knihovny s vhodnou licencí a bez dalších závislostí a navíc má FairEmail svá vlastní pravidla pro filtrování)
 * ~~Vyhledávání zpráv s/bez příloh~~ (nelze přidat, neboť IMAP nepodporuje hledání příloh)
 * ~~Vyhledání složky~~ (filtrování hierarchického seznamu složek je problematické)
 * ~~Návrhy vyhledávání~~
-* ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
+* ~~[Nastavovací zpráva Autocrypt (Autocrypt Setup Message)](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (sekce 4.4)~~ (Dle mého názoru není dobrý nápad přenechávat e-mailovému klientovi správu citlivých šifrovacích klíčů kvůli vyjímečnému případu použití, když OpenKeychain může klíče exportovat také)
 * ~~Obecné sjednocené složky~~
-* ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
+* ~~Nové plánování oznámení zpráv pro jednotlivé účty~~ (implementováno přidáním časové podmínky pro pravidla, aby zprávy mohly být uspány ve vybraných obdobích)
 * ~~Kopírování účtů a identit~~
 * ~~Přiblížení roztažením prstů~~ (v posuvném seznamu spolehlivě nelze; namísto toho lze přibližovat zobrazení celé zprávy)
 * ~~Kompaktnější pohled na složky~~
-* ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
+* ~~Vytváření seznamů a tabulek~~ (vyžaduje editor formátovaného textu, viz [tento nejčastější dotaz](#user-content-faq99))
 * ~~Zvětšení textu roztažením prstů~~
 * ~~Zobrazení GIFů~~
 * ~~Motivy~~ (šedý světlý a tmavý motiv byly přidány, protože jak se zdá, toto je co většina lidí chce)
@@ -113,11 +115,11 @@ Související dotazy:
 * ~~S/MIME podpora~~
 * ~~Vyhledávání pro nastavení~~
 
-Cokoli na tomto seznamu je v náhodném pořadí a *může* být přidáno v blízké budoucnosti.
+Vše na tomto seznamu je v náhodném pořadí a *může* být přidáno v blízké budoucnosti.
 
 ## Často požadované funkce
 
-Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze zapojit i vy [na tomto fóru](https://forum.xda-developers.com/android/apps-games/source-email-t3824168). Cílem designu je být minimalistický (žádné zbytečné nabídky, tlačítka, apod.) a nerozptylující (žádné úžasné barvy, animace, apod.). Všechny zobrazené prvky by měly být nějakým způsobem užitečné a měly by být umisťovány s citem pro snadné používání. Písma, velikosti, barvy, apod. by měly odpovídat material designu, kdykoli je to možné.
+Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze zapojit i vy [na tomto fóru](https://forum.xda-developers.com/android/apps-games/source-email-t3824168). Cílem designu je být minimalistický (žádné zbytečné nabídky, tlačítka, apod.) a nerozptylující (žádné úžasné barvy, animace, apod.). Všechny zobrazené prvky by měly být nějakým způsobem užitečné a měly by být umisťovány s citem pro snadné používání. Písma, velikosti, barvy, apod., by měly odpovídat material designu, kdykoli je to možné.
 
 ## Často kladené dotazy
 
@@ -155,7 +157,7 @@ Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze za
 * [(32) Jak ověřím, že čtení e-mailu je skutečně bezpečné?](#user-content-faq32)
 * [(33) Why are edited sender addresses not working?](#user-content-faq33)
 * [(34) How are identities matched?](#user-content-faq34)
-* [(35) Why should I be careful with viewing images, attachments, the original message, and opening links?](#user-content-faq35)
+* [(35) Proč bych měl být opatrný při prohlížení obrázků, příloh, původních zpráv a otevírání odkazů?](#user-content-faq35)
 * [(36) Jak jsou soubory nastavení šifrovány?](#user-content-faq36)
 * [(37) Jak jsou ukládána hesla?](#user-content-faq37)
 * [(39) Jak mohu snížit spotřebu baterie FairEmailem?](#user-content-faq39)
@@ -163,13 +165,13 @@ Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze za
 * [(41) Jak opravím chybu 'Handshake failed' ?](#user-content-faq41)
 * [(42) Můžete na seznam poskytovatelů přidat nového poskytovatele?](#user-content-faq42)
 * [(43) Můžete ukázat originální ... ?](#user-content-faq43)
-* [(44) Můžete zobrazit fotografie kontaktů / identikony v odeslané složce?](#user-content-faq44)
-* [(45) Jak mohu opravit 'tento klíč není k dispozici. Abyste jej mohli použít, musíte ho importovat jako jeden z vlastní!" ?](#user-content-faq45)
+* [(44) Můžete zobrazit fotografie kontaktů / identikony ve složce odeslané?](#user-content-faq44)
+* [(45) Jak mohu opravit „This key is not available. To use it, you must import it as one of your own!“ ?](#user-content-faq45)
 * [(46) Proč se seznam zpráv stále obnovuje?](#user-content-faq46)
-* [(47) Jak vyřeším chybu 'Žádný primární účet nebo žádná složka konceptů' ?](#user-content-faq47)
-* [~~(48) Jak vyřeším chybu 'Žádný primární účet nebo žádná složka konceptů' ?~~](#user-content-faq48)
-* [(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?](#user-content-faq49)
-* [(50) Can you add an option to synchronize all messages?](#user-content-faq50)
+* [(47) Jak vyřeším chybu „Žádný hlavní účet nebo žádná složka konceptů“ ?](#user-content-faq47)
+* [~~(48) Jak vyřeším chybu „Žádný hlavní účet nebo žádná složka konceptů“ ?~~](#user-content-faq48)
+* [(49) Jak opravit „Zastaralá aplikace poslala cestu k souboru namísto datového proudu“?](#user-content-faq49)
+* [(50) Můžete přidat možnost pro synchronizaci všech zpráv?](#user-content-faq50)
 * [(51) Jak jsou složky řazeny?](#user-content-faq51)
 * [(52) Why does it take some time to reconnect to an account?](#user-content-faq52)
 * [(53) Can you stick the message action bar to the top/bottom?](#user-content-faq53)
@@ -256,7 +258,7 @@ Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze za
 * [(135) Why are trashed messages and drafts shown in conversations?](#user-content-faq135)
 * [(136) How can I delete an account/identity/folder?](#user-content-faq136)
 * [(137) How can I reset 'Don't ask again'?](#user-content-faq137)
-* [(138) Can you add calendar/contact management/synchronizing?](#user-content-faq138)
+* [(138) Can you add calendar/contact/tasks/notes management?](#user-content-faq138)
 * [(139) How do I fix 'User is authenticated but not connected'?](#user-content-faq139)
 * [(140) Why does the message text contain strange characters?](#user-content-faq140)
 * [(141) How can I fix 'A drafts folder is required to send messages'?](#user-content-faq141)
@@ -280,25 +282,26 @@ Design je založen na mnoha diskuzích a pokud chcete, můžete se do diskuze za
 * [(159) What are Disconnect's tracker protection lists?](#user-content-faq159)
 * [(160) Can you add permanent deletion of messages without confirmation?](#user-content-faq160)
 * [(161) Can you add a setting to change the primary and accent color?](#user-content-faq161)
-* [(162) Is IMAP NOTIFY supported?](#user-content-faq162)
-* [(163) What is message classification?](#user-content-faq163)
-* [(164) Can you add customizable themes?](#user-content-faq164)
+* [(162) Je podporováno IMAP NOTIFY?](#user-content-faq162)
+* [(163) Co je to klasifikace zpráv?](#user-content-faq163)
+* [(164) Můžete přidat přizpůsobitelné motivy?](#user-content-faq164)
+* [(165) Je podporováno Android Auto?](#user-content-faq165)
 
 [Mám jiný dotaz.](#user-content-support)
 
 <a name="faq1"></a>
 **(1) Jaká oprávnění jsou potřebná a proč?**
 
-The following Android permissions are needed:
+Následující Android oprávnění jsou potřeba:
 
-* *have full network access* (INTERNET): to send and receive email
-* *view network connections* (ACCESS_NETWORK_STATE): to monitor internet connectivity changes
-* *run at startup* (RECEIVE_BOOT_COMPLETED): to start monitoring on device start
-* *foreground service* (FOREGROUND_SERVICE): to run a foreground service on Android 9 Pie and later, see also the next question
-* *prevent device from sleeping* (WAKE_LOCK): to keep the device awake while synchronizing messages
-* *in-app billing* (BILLING): to allow in-app purchases
-* Optional: *read your contacts* (READ_CONTACTS): to autocomplete addresses and to show photos
-* Optional: *read the contents of your SD card* (READ_EXTERNAL_STORAGE): to accept files from other, outdated apps, see also [this FAQ](#user-content-faq49)
+* *mít plný přístup k síti* (INTERNET): pro odesílání a příjem e-mailů
+* *zobrazení síťových připojení* (ACCESS_NETWORK_STATE): pro sledování změn internetového připojení
+* *spuštění po startu* (RECEIVE_BOOT_COMPLETED): pro spuštění monitorování po startu zařízení
+* *služba na popředí* (FOREGROUND_SERVICE): pro spuštění služby na popředí na Androidu 9 Pie a pozdějších, viz také další otázka
+* *bránění spánku zařízení* (WAKE_LOCK): pro udržení zařízení vzhůru v průběhu synchronizace zpráv
+* *nákupy v aplikaci* (BILLING): pro umožnění nákupů v aplikaci
+* Volitelně: *čtení vašich kontaktů* (READ_CONTACTS): pro automatické vyplňování adres a zobrazení fotografií
+* Volitelně: *čtení obsahu vaší SD karty* (READ_EXTERNAL_STORAGE): pro příjem souborů od jiných, zastaralých aplikací, viz také [tento nejčastější dotaz](#user-content-faq49)
 * Optional: *use fingerprint hardware* (USE_FINGERPRINT) and use *biometric hardware* (USE_BIOMETRIC): to use biometric authentication
 * Optional: *find accounts on the device* (GET_ACCOUNTS): to select an account when using the Gmail quick setup
 * Android 5.1 Lollipop and before: *use accounts on the device* (USE_CREDENTIALS): to select an account when using the Gmail quick setup (not requested on later Android versions)
@@ -330,7 +333,7 @@ FairEmail will keep a list of addresses you receive messages from and send messa
 <br />
 
 <a name="faq2"></a>
-**(2) Proč je zobrazeno permanentní oznámení?**
+**(2) Why is there a permanent notification shown?**
 
 A low priority permanent status bar notification with the number of accounts being monitored and the number of operations pending (see the next question) is shown to prevent Android from killing the service that takes care of continuous receiving email. This was [already necessary](https://developer.android.com/reference/android/app/Service.html#startForeground(int,%20android.app.Notification)), but with the introduction of [doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) in Android 6 Marshmallow this is more than ever necessary. Doze mode will stop all apps when the screen is off for some time, unless the app did start a foreground service, which requires showing a status bar notification.
 
@@ -354,7 +357,7 @@ If you came here by clicking on the notification, you should know that the next 
 <br />
 
 <a name="faq3"></a>
-**(3) Co jsou operace a proč probíhají?**
+**(3) What are operations and why are they pending?**
 
 The low priority status bar notification shows the number of pending operations, which can be:
 
@@ -378,13 +381,14 @@ The low priority status bar notification shows the number of pending operations,
 * *send*: send message
 * *exists*: check if message exists
 * *rule*: execute rule on body text
+* *expunge*: permanently delete messages
 
-Operations are processed only when there is a connection to the email server or when manually synchronizing. Viz také [tento nejčastější dotaz](#user-content-faq16).
+Operations are processed only when there is a connection to the email server or when manually synchronizing. See also [this FAQ](#user-content-faq16).
 
 <br />
 
 <a name="faq4"></a>
-**(4) Jak mohu použít neplatný bezpečnostní certifikát / prázdné heslo / prosté textové připojení?**
+**(4) How can I use an invalid security certificate / empty password / plain text connection?**
 
 *... Untrusted ... not in certificate ...*
 <br />
@@ -527,11 +531,15 @@ Some providers do not keep track of sent messages or the used SMTP server might 
 <a name="faq8"></a>
 **(8) Can I use a Microsoft Exchange account?**
 
+The Microsoft Exchange Web Services protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055). So, it makes little sense to add this protocol anymore.
+
 You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case. See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
+
+Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
 
 Please see [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for the Microsoft documentation about configuring an email client. There is also a section about common connection errors and solutions.
 
-Some older Exchange server versions have a bug causing empty message and corrupt attachments. Please see [this FAQ](#user-content-faq110) for a workaround.
+Some older Exchange server versions have a bug causing empty message and corrupt attachments. Pro provizorní řešení se prosím podívejte na [tento nejčastější dotaz](#user-content-faq110).
 
 Please see [this FAQ](#user-content-faq133) about ActiveSync support.
 
@@ -603,7 +611,7 @@ To verify a signature or to decrypt a received message, open the message and jus
 
 The first time you send a signed/encrypted message you might be asked for a sign key. FairEmail will automatically store the selected sign key in the used identity for the next time. If you need to reset the sign key, just save the identity or long press the identity in the list of identities and select *Reset sign key*. The selected sign key is visible in the list of identities. If need to select a key on a case by case basis, you can create multiple identities for the same account with the same email address.
 
-In the privacy settings you can select the default encryption method (PGP or S/MIME), enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*, but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
+In the encryption settings you can select the default encryption method (PGP or S/MIME), enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*, but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
 
 The to be encrypted message text/attachments and the decrypted message text/attachments are stored locally only and will never be added to the remote server. If you want to undo decryption, you can use the *resync* menu item in the three-dots menu of the message action bar.
 
@@ -623,6 +631,8 @@ You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packa
 
 FairEmail will send the [Autocrypt](https://autocrypt.org/) header for use by other email clients, but only for signed and encrypted messages because too many email servers have problems with the often long Autocrypt header. Note that the most secure way to start an encrypted email exchange is by sending signed messages first. Received Autocrypt headers will be sent to the OpenKeychain app for storage on verifying a signature or decrypting a message.
 
+Although this shouldn't be necessary for most email clients, you can attach your public key to a message and if you use *.key* as extension, the mime type will correctly be *application/pgp-keys*.
+
 All key handling is delegated to the OpenKey chain app for security reasons. This also means that FairEmail does not store PGP keys.
 
 Inline encrypted PGP in received messages is supported, but inline PGP signatures and inline PGP in outgoing messages is not supported, see [here](https://josefsson.org/inline-openpgp-considered-harmful.html) about why not.
@@ -639,12 +649,13 @@ Common errors:
 
 * *No key*: there is no PGP key available for one of the listed email addresses
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
+* *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
 
 *S/MIME*
 
 Encrypting a message requires the public key(s) of the recipient(s). Signing a message requires your private key.
 
-Private keys are stored by Android and can be imported via the Android advanced security settings. There is a shortcut (button) for this in the privacy settings. Android will ask you to set a PIN, pattern, or password if you didn't before. If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
+Private keys are stored by Android and can be imported via the Android advanced security settings. There is a shortcut (button) for this in the encryption settings. Android will ask you to set a PIN, pattern, or password if you didn't before. If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
@@ -654,7 +665,7 @@ The default encryption method is PGP, but the last used encryption method will b
 
 To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
-Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the privacy settings (PEM or DER format).
+Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the encryption settings (PEM or DER format).
 
 FairEmail verifies both the signature and the complete certificate chain.
 
@@ -912,7 +923,7 @@ Possible causes are:
 * The email server is refusing to accept a message, for example because it is too large or contains unacceptable links
 * There are too many connections to the server, see also the next question
 
-Many public Wi-Fi networks block outgoing email to prevent spam. Sometimes you can workaround this by using another SMTP port. See the documentation of the provider for the usable port numbers.
+Many public Wi-Fi networks block outgoing email to prevent spam. Někdy to lze obejít použitím jiného SMTP portu. See the documentation of the provider for the usable port numbers.
 
 If you are using a [VPN](https://en.wikipedia.org/wiki/Virtual_private_network), the VPN provider might block the connection because it is too aggressively trying to prevent spam. Note that [Google Fi](https://fi.google.com/) is using a VPN too.
 
@@ -943,6 +954,8 @@ If you want to use the Gmail SMTP server to workaround a too strict outgoing spa
 **Gmail errors**
 
 The authorization of Gmail accounts setup with the quick wizard needs to be periodically refreshed via the [Android account manager](https://developer.android.com/reference/android/accounts/AccountManager). This requires contact/account permissions and internet connectivity.
+
+In case of errors it is possible to authorize/restore a Gmail account again via the Gmail quick setup wizard.
 
 The error *... Authentication failed ... Account not found ...* means that a previously authorized Gmail account was removed from the device.
 
@@ -1228,7 +1241,7 @@ FairEmail will by default synchronize the folder list on each connection. Since 
 
 FairEmail will by default check if old messages were deleted from the server on each connection. If you don't mind that old messages that were delete from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings.
 
-Some providers don't follow the IMAP standard and don't keep connections open long enough, forcing FairEmail to reconnect often, causing extra battery usage. You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc). You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes. Note that battery optimizations need to be disabled in setup step 3 to reliably keep connections alive.
+Some providers don't follow the IMAP standard and don't keep connections open long enough, forcing FairEmail to reconnect often, causing extra battery usage. You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc). Toto lze obejít snížením intervalu udržování spojení v pokročilém nastavení účtu, např. na 9 nebo 15 minut. Note that battery optimizations need to be disabled in setup step 3 to reliably keep connections alive.
 
 Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage. You can inspect the *Log* via the main navigation menu to check if your provider is doing this. If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server, you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider to switch to periodically instead of continuous synchronization. You can change this in the receive settings.
 
@@ -1283,7 +1296,7 @@ The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might b
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION ...*' might be caused by enabling hardening connections in the connection settings or by Android not supporting older protocols anymore, like SSLv3.
 
-Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore. There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
+Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore. Neexistuje způsob, jak chybějící podporu RC4 a SSLv3 obejít, neboť byla z Androidu zcela odstraněna (což by o něčem mělo vypovídat).
 
 You can use [this website](https://ssl-tools.net/mailservers) or [this website](https://www.immuniweb.com/ssl/) to check for SSL/TLS problems of email servers.
 
@@ -1375,7 +1388,7 @@ Please see [this FAQ](#user-content-faq141) for some more information.
 
 You likely selected or sent an attachment or image with an outdated file manager or an outdated app which assumes all apps still have storage permissions. For security and privacy reasons modern apps like FairEmail have no full access to all files anymore. This can result into the error message *An outdated app sent a file path instead of a file stream* if a file name instead of a file stream is being shared with FairEmail because FairEmail cannot randomly open files.
 
-You can fix this by switching to an up-to-date file manager or an app designed for recent Android versions. Alternatively, you can grant FairEmail read access to the storage space on your device in the Android app settings. Note that this workaround [won't work on Android Q](https://developer.android.com/preview/privacy/scoped-storage) anymore.
+You can fix this by switching to an up-to-date file manager or an app designed for recent Android versions. Alternatively, you can grant FairEmail read access to the storage space on your device in the Android app settings. [Na Androidu Q již toto provizorní řešení nefunguje](https://developer.android.com/preview/privacy/scoped-storage).
 
 See also [question 25](#user-content-faq25) and [what Google writes about it](https://developer.android.com/training/secure-file-sharing/share-file#RespondToRequest).
 
@@ -1775,27 +1788,27 @@ Note that recent Android versions allow overriding DND (Do Not Disturb) per noti
 For more complex schemes you could set one or more accounts to manual synchronization and send this command to FairEmail to check for new messages:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.POLL
+(adb shell) am start-foreground-service -a eu.faircode.email.POLL
 ```
 
 For a specific account:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.POLL --es account Gmail
+(adb shell) am start-foreground-service -a eu.faircode.email.POLL --es account Gmail
 ```
 
 You can also automate turning receiving messages on and off by sending these commands to FairEmail:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.ENABLE
-(adb shell) am startservice -a eu.faircode.email.DISABLE
+(adb shell) am start-foreground-service -a eu.faircode.email.ENABLE
+(adb shell) am start-foreground-service -a eu.faircode.email.DISABLE
 ```
 
 To enable/disable a specific account:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.ENABLE --es account Gmail
-(adb shell) am startservice -a eu.faircode.email.DISABLE --es account Gmail
+(adb shell) am start-foreground-service -a eu.faircode.email.ENABLE --es account Gmail
+(adb shell) am start-foreground-service -a eu.faircode.email.DISABLE --es account Gmail
 ```
 
 Note that disabling an account will hide the account and all associated folders and messages.
@@ -1986,6 +1999,8 @@ If you receive a lot of spam messages in your inbox, the best you can do is to c
 Also, FairEmail can show a small red warning flag when DKIM, SPF or [DMARC](https://en.wikipedia.org/wiki/DMARC) authentication failed on the receiving server. You can enable/disable [authentication verification](https://en.wikipedia.org/wiki/Email_authentication) in the display settings.
 
 FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server. This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.
+
+If the domain name of the sender and the domain name of the reply address differ, always a warning flag will be shown because this is most often the case with phishing messages.
 
 If legitimate messages are failing authentication, you should notify the sender because this will result in a high risk of messages ending up in the spam folder. Moreover, without proper authentication there is a risk the sender will be impersonated. The sender might use [this tool](https://www.mail-tester.com/) to check authentication and other things.
 
@@ -2265,6 +2280,8 @@ Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f4
 <a name="faq117"></a>
 **(117) Can you help me restore my purchase?**
 
+First of all, a purchase will be available on all devices logged into the same Google account, *if* the app is installed via the same Google account too. You can select the account in the Play store app.
+
 Google manages all purchases, so as a developer I have little control over purchases. So, basically the only thing I can do, is give some advice:
 
 * Make sure you have an active, working internet connection
@@ -2376,6 +2393,10 @@ For some background, see for [this Wikipedia article](https://en.wikipedia.org/w
 
 <br />
 
+*Background for unread messages*
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -2463,8 +2484,6 @@ Android might rate limit the notification sound, which can cause some new messag
 
 The Microsoft Exchange ActiveSync protocol [is patented](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) and can therefore not be supported. For this reason you won't find many, if any, other email clients supporting ActiveSync.
 
-The Microsoft Exchange Web Services protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055).
-
 Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
 
 <br />
@@ -2518,9 +2537,9 @@ You can reset all questions set to be not asked again in the miscellaneous setti
 <br />
 
 <a name="faq138"></a>
-**(138) Can you add calendar/contact management/synchronizing?**
+**(138) Can you add calendar/contact/tasks/notes management?**
 
-Calendar and contact management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
+Calendar, contact, task and note management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
 
 Also, I prefer to do a few things very well, instead of many things only half. Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.
 
@@ -2744,6 +2763,14 @@ Note that archived messages can be deleted only by moving them to the trash fold
 
 Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.
 
+Another oddity is that a star (favorite message) set via the web interface cannot be removed with the IMAP command
+
+```
+STORE <message number> -FLAGS (\Flagged)
+```
+
+On the other hand, a star set via IMAP is being shown in the web interface and can be removed via IMAP.
+
 <br />
 
 <a name="faq154"></a>
@@ -2816,7 +2843,7 @@ Tracking images will not be recognized when the domain is classified as '*Conten
 This command can be sent to FairEmail from an automation app to update the protection lists:
 
 ```
-(adb shell) am startservice -a eu.faircode.email.DISCONNECT.ME
+(adb shell) am start-foreground-service -a eu.faircode.email.DISCONNECT.ME
 ```
 
 Updating once a week will probably be sufficient, please see [here](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) for recent lists changes.
@@ -2829,6 +2856,8 @@ Updating once a week will probably be sufficient, please see [here](https://gith
 Permanent deletion means that messages will *irreversibly* be lost, and to prevent this from happening accidentally, this always needs to be confirmed. Even with a confirmation, some very angry people who lost some of their messages through their own fault contacted me, which was a rather unpleasant experience :-(
 
 Advanced: the IMAP delete flag in combination with the EXPUNGE command is not supportable because both email servers and not all people can handle this, risking unexpected loss of messages. A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
+
+From version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable expunging messages. Note that messages with a *\Deleted* flag will not be shown in FairEmail.
 
 <br />
 
@@ -2907,6 +2936,22 @@ The theme colors are based on the color circle of [Johannes Itten](https://en.wi
 
 <br />
 
+<a name="faq165"></a>
+**(165) Is Android Auto supported?**
+
+Yes, Android Auto is supported, but only with the GitHub version, please [see here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-83801249) about why.
+
+For notification (messaging) support you'll need to enable the following notification options:
+
+* *Use Android 'messaging style' notification format*
+* Notification actions: *Direct reply* and (mark as) *Read*
+
+You can enable other notification actions too, if you like, but they are not supported by Android Auto.
+
+The developers guide is [here](https://developer.android.com/training/cars/messaging).
+
+<br />
+
 ## Get support
 
 FairEmail is supported on smartphones, tablets and ChromeOS only.
@@ -2926,7 +2971,7 @@ Requested features should:
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 
-If you have a question, want to request a feature or report a bug, please use [this form](https://contact.faircode.eu/?product=fairemailsupport).
+If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
 
 GitHub issues are disabled due to frequent misusage.
 

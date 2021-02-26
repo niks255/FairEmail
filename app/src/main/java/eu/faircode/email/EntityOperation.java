@@ -100,6 +100,7 @@ public class EntityOperation {
     static final String EXISTS = "exists";
     static final String RULE = "rule";
     static final String PURGE = "purge";
+    static final String EXPUNGE = "expunge";
 
     private static final int MAX_FETCH = 100; // operations
 
@@ -224,7 +225,8 @@ public class EntityOperation {
                 if ((account != null && !account.isGmail()) ||
                         !EntityFolder.ARCHIVE.equals(source.type) ||
                         EntityFolder.TRASH.equals(target.type) || EntityFolder.JUNK.equals(target.type))
-                    db.message().setMessageUiHide(message.id, true);
+                    if (!message.ui_deleted)
+                        db.message().setMessageUiHide(message.id, true);
 
                 if (account != null && account.isGmail() &&
                         EntityFolder.ARCHIVE.equals(source.type) &&
@@ -341,7 +343,14 @@ public class EntityOperation {
 
                 return;
             } else if (DELETE.equals(name)) {
-                db.message().setMessageUiHide(message.id, true);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+                if (perform_expunge)
+                    db.message().setMessageUiHide(message.id, true);
+                else {
+                    message.ui_deleted = !message.ui_deleted;
+                    db.message().setMessageUiDeleted(message.id, message.ui_deleted);
+                }
 /*
                 if (message.hash != null) {
                     List<EntityMessage> sames = db.message().getMessagesByHash(message.account, message.hash);

@@ -188,6 +188,8 @@ public class EntityMessage implements Serializable {
     public Boolean answered = false;
     @NonNull
     public Boolean flagged = false;
+    @NonNull
+    public Boolean deleted = false;
     public String flags; // system flags
     public String[] keywords; // user flags
     public String[] labels; // Gmail
@@ -204,11 +206,15 @@ public class EntityMessage implements Serializable {
     @NonNull
     public Boolean ui_flagged = false;
     @NonNull
+    public Boolean ui_deleted = false;
+    @NonNull
     public Boolean ui_hide = false;
     @NonNull
     public Boolean ui_found = false;
     @NonNull
     public Boolean ui_ignored = false;
+    @NonNull
+    public Boolean ui_silent = false;
     @NonNull
     public Boolean ui_browsed = false;
     public Long ui_busy;
@@ -362,8 +368,12 @@ public class EntityMessage implements Serializable {
                 p.appendText(subject);
                 p.appendElement("br");
             }
-        } else
-            p.text(DF.format(new Date(received)) + " " + MessageHelper.formatAddresses(from) + ":");
+        } else {
+            DB db = DB.getInstance(context);
+            List<TupleIdentityEx> identities = db.identity().getComposableIdentities(account);
+            boolean self = replySelf(identities, account);
+            p.text(DF.format(new Date(received)) + " " + MessageHelper.formatAddresses(self ? to : from) + ":");
+        }
 
         if (separate) {
             Element div = document.createElement("div");
@@ -529,15 +539,18 @@ public class EntityMessage implements Serializable {
                     this.seen.equals(other.seen) &&
                     this.answered.equals(other.answered) &&
                     this.flagged.equals(other.flagged) &&
+                    this.deleted.equals(other.deleted) &&
                     Objects.equals(this.flags, other.flags) &&
                     Helper.equal(this.keywords, other.keywords) &&
                     this.notifying.equals(other.notifying) &&
                     this.ui_seen.equals(other.ui_seen) &&
                     this.ui_answered.equals(other.ui_answered) &&
                     this.ui_flagged.equals(other.ui_flagged) &&
+                    this.ui_deleted.equals(other.ui_deleted) &&
                     this.ui_hide.equals(other.ui_hide) &&
                     this.ui_found.equals(other.ui_found) &&
                     this.ui_ignored.equals(other.ui_ignored) &&
+                    this.ui_silent.equals(other.ui_silent) &&
                     this.ui_browsed.equals(other.ui_browsed) &&
                     Objects.equals(this.ui_busy, other.ui_busy) &&
                     Objects.equals(this.ui_snoozed, other.ui_snoozed) &&

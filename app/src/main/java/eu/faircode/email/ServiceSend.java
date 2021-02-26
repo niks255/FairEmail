@@ -78,7 +78,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     private static final int PI_SEND = 1;
     private static final int RETRY_MAX = 3;
     private static final int CONNECTIVITY_DELAY = 5000; // milliseconds
-    private static final long EXISTS_DELAY = 20 * 1000L; // milliseconds
 
     @Override
     public void onCreate() {
@@ -198,6 +197,9 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     }
 
     NotificationCompat.Builder getNotificationService() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean alert_once = prefs.getBoolean("alert_once", true);
+
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "send")
                         .setSmallIcon(R.drawable.baseline_send_white_24)
@@ -205,7 +207,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                         .setContentIntent(getPendingIntent(this))
                         .setAutoCancel(false)
                         .setShowWhen(true)
-                        .setOnlyAlertOnce(true)
+                        .setOnlyAlertOnce(alert_once)
                         .setDefaults(0) // disable sound on pre Android 8
                         .setLocalOnly(true)
                         .setPriority(NotificationCompat.PRIORITY_MIN)
@@ -509,6 +511,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                 message.msgid = EntityMessage.generateMessageId(from.substring(at + 1));
         }
 
+        // Set sent time
+        message.sent = new Date().getTime();
+        db.message().setMessageSent(message.id, message.sent);
+
         // Create message
         Properties props = MessageHelper.getSessionProperties();
         // https://javaee.github.io/javamail/docs/api/javax/mail/internet/package-summary.html
@@ -699,13 +705,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
         // Check sent message
         if (sid != null) {
-            try {
-                // Some email servers are slow with adding sent messages
-                Thread.sleep(EXISTS_DELAY);
-            } catch (InterruptedException ex) {
-                Log.e(ex);
-            }
-
             try {
                 db.beginTransaction();
 

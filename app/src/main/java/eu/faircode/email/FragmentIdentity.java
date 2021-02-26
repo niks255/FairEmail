@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Lifecycle;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -111,6 +113,8 @@ public class FragmentIdentity extends FragmentBase {
     private EditText etReplyTo;
     private EditText etCc;
     private EditText etBcc;
+    private CheckBox cbSignDefault;
+    private CheckBox cbEncryptDefault;
     private CheckBox cbUnicode;
     private EditText etMaxSize;
 
@@ -204,6 +208,8 @@ public class FragmentIdentity extends FragmentBase {
         etReplyTo = view.findViewById(R.id.etReplyTo);
         etCc = view.findViewById(R.id.etCc);
         etBcc = view.findViewById(R.id.etBcc);
+        cbSignDefault = view.findViewById(R.id.cbSignDefault);
+        cbEncryptDefault = view.findViewById(R.id.cbEncryptDefault);
         cbUnicode = view.findViewById(R.id.cbUnicode);
         etMaxSize = view.findViewById(R.id.etMaxSize);
 
@@ -390,7 +396,7 @@ public class FragmentIdentity extends FragmentBase {
             public void onCheckedChanged(RadioGroup group, int id) {
                 if (id == R.id.radio_starttls)
                     etPort.setHint("587");
-                if (id == R.id.radio_none)
+                else if (id == R.id.radio_none)
                     etPort.setHint("25");
                 else
                     etPort.setHint("465");
@@ -420,6 +426,13 @@ public class FragmentIdentity extends FragmentBase {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 cbPrimary.setEnabled(checked);
+            }
+        });
+
+        cbEncryptDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cbSignDefault.setEnabled(!isChecked);
             }
         });
 
@@ -597,6 +610,8 @@ public class FragmentIdentity extends FragmentBase {
         args.putString("replyto", etReplyTo.getText().toString().trim());
         args.putString("cc", etCc.getText().toString().trim());
         args.putString("bcc", etBcc.getText().toString().trim());
+        args.putBoolean("sign_default", cbSignDefault.isChecked());
+        args.putBoolean("encrypt_default", cbEncryptDefault.isChecked());
         args.putBoolean("unicode", cbUnicode.isChecked());
         args.putString("max_size", etMaxSize.getText().toString());
         args.putLong("account", account == null ? -1 : account.id);
@@ -638,6 +653,11 @@ public class FragmentIdentity extends FragmentBase {
                 saving = false;
                 getActivity().invalidateOptionsMenu();
                 Helper.setViewsEnabled(view, true);
+                if (auth != AUTH_TYPE_PASSWORD) {
+                    etUser.setEnabled(false);
+                    tilPassword.setEnabled(false);
+                    btnCertificate.setEnabled(false);
+                }
                 pbSave.setVisibility(View.GONE);
             }
 
@@ -674,6 +694,8 @@ public class FragmentIdentity extends FragmentBase {
                 String replyto = args.getString("replyto");
                 String cc = args.getString("cc");
                 String bcc = args.getString("bcc");
+                boolean sign_default = args.getBoolean("sign_default");
+                boolean encrypt_default = args.getBoolean("encrypt_default");
                 boolean unicode = args.getBoolean("unicode");
                 String max_size = args.getString("max_size");
 
@@ -818,6 +840,10 @@ public class FragmentIdentity extends FragmentBase {
                         return true;
                     if (!Objects.equals(identity.bcc, bcc))
                         return true;
+                    if (!Objects.equals(identity.sign_default, sign_default))
+                        return true;
+                    if (!Objects.equals(identity.encrypt_default, encrypt_default))
+                        return true;
                     if (!Objects.equals(identity.unicode, unicode))
                         return true;
                     if (user_max_size != null && !Objects.equals(identity.max_size, user_max_size))
@@ -910,6 +936,8 @@ public class FragmentIdentity extends FragmentBase {
                     identity.replyto = replyto;
                     identity.cc = cc;
                     identity.bcc = bcc;
+                    identity.sign_default = sign_default;
+                    identity.encrypt_default = encrypt_default;
                     identity.unicode = unicode;
                     identity.sent_folder = null;
                     identity.sign_key = null;
@@ -1085,6 +1113,8 @@ public class FragmentIdentity extends FragmentBase {
                     etReplyTo.setText(identity == null ? null : identity.replyto);
                     etCc.setText(identity == null ? null : identity.cc);
                     etBcc.setText(identity == null ? null : identity.bcc);
+                    cbSignDefault.setChecked(identity != null && identity.sign_default);
+                    cbEncryptDefault.setChecked(identity != null && identity.encrypt_default);
                     cbUnicode.setChecked(identity != null && identity.unicode);
 
                     auth = (identity == null ? AUTH_TYPE_PASSWORD : identity.auth_type);
@@ -1128,6 +1158,12 @@ public class FragmentIdentity extends FragmentBase {
                 }
 
                 cbPrimary.setEnabled(cbSynchronize.isChecked());
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean sign_default = prefs.getBoolean("sign_default", false);
+                boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
+                cbSignDefault.setEnabled(!sign_default && !cbEncryptDefault.isChecked());
+                cbEncryptDefault.setEnabled(!encrypt_default);
 
                 // Get providers
                 List<EmailProvider> providers = EmailProvider.loadProfiles(getContext());

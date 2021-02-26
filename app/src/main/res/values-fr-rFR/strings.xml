@@ -157,6 +157,7 @@
     <string name="title_setup_manage">Gérer</string>
     <string name="title_setup_grant">Autoriser</string>
     <string name="title_setup_grant_again">Accorder les autorisations requises</string>
+    <string name="title_setup_exchange_support">Microsoft Exchange est-il pris en charge ?</string>
     <string name="title_setup_identity_what">Qu\'est-ce qu\'une identité ?</string>
     <string name="title_setup_permissions">Accorder les autorisations</string>
     <string name="title_setup_permissions_remark">Pour accéder aux informations des contacts (facultatif)</string>
@@ -242,7 +243,7 @@
     <string name="title_advanced_sync_folders">Synchroniser la liste des dossiers</string>
     <string name="title_advanced_sync_shared_folders">Synchroniser les listes de dossiers partagés</string>
     <string name="title_advanced_subscriptions">Gérer les abonnements aux dossiers</string>
-    <string name="title_advanced_sync_subscribed">Synchroniser automatiquement les dossiers abonnés</string>
+    <string name="title_advanced_check_reply_domain">Vérifier l\'adresse de réponse lors de la synchronisation des messages</string>
     <string name="title_advanced_check_mx">Vérifier l\'adresse e-mail de l\'expéditeur lors de la synchronisation des messages</string>
     <string name="title_advanced_tune_keep_alive">Ajuster automatiquement l\'intervalle de connexion</string>
     <string name="title_advanced_keyboard">Afficher le clavier par défaut</string>
@@ -290,6 +291,7 @@
     <string name="title_advanced_startup">Afficher sur l\'écran de démarrage</string>
     <string name="title_advanced_cards">Utiliser le style carte au lieu du style tableau</string>
     <string name="title_advanced_cards_beige">Utiliser un arrière-plan beige pour le style carte</string>
+    <string name="title_advanced_cards_shadow">Utiliser une ombre autour des messages non lus pour le style carte</string>
     <string name="title_advanced_date_header">Grouper par date</string>
     <string name="title_advanced_threading">Afficher en mode conversation</string>
     <string name="title_advanced_threading_unread">Afficher le nombre de messages non lus dans les conversations</string>
@@ -466,6 +468,7 @@
     <string name="title_advanced_sync_kept_hint">Ceci utilisera des données et de la batterie supplémentaires, surtout s\'il y a beaucoup de messages conservés sur l\'appareil</string>
     <string name="title_advanced_gmail_thread_hint">Ceci s\'applique uniquement aux messages nouvellement reçus et peut corrompre les groupes existants</string>
     <string name="title_advanced_sync_folders_hint">Désactiver ceci réduira quelque peu l\'utilisation des données et de la batterie mais désactivera également la mise à jour de la liste des dossiers</string>
+    <string name="title_advanced_check_reply_hint">Ceci vérifiera si le nom de domaine de l\'expéditeur et l\'adresse de réponse sont les mêmes</string>
     <string name="title_advanced_lookup_mx_hint">Ceci vérifiera l’existence d’enregistrements DNS mail exchanger (MX)</string>
     <string name="title_advanced_sync_delay_hint">Ceci ralentira la synchronisation des messages</string>
     <string name="title_advanced_suggest_local_hint">En plus des contacts fournis par Android. Les informations des contacts seront stockées pour les messages récemment envoyés ou reçus seulement si ceci est activé.</string>
@@ -489,6 +492,7 @@
     <string name="title_advanced_gravatars_hint">Ceci pourrait présenter un risque pour la confidentialité</string>
     <string name="title_advanced_name_email_hint">Si désactivé, seuls les noms seront affichés si disponibles</string>
     <string name="title_advanced_preview_hint">Disponible uniquement lorsque le texte du message a été téléchargé</string>
+    <string name="title_advanced_preview_lines_hint">Maximum %s caractères au total</string>
     <string name="title_advanced_preview_issue">Le défilement peut être lent lorsqu’il y a plus d’une ligne en raison d’un bogue dans certaines versions d’Android</string>
     <string name="title_advanced_overview_mode_hint">Ceci peut afficher de très petites polices de caractères</string>
     <string name="title_advanced_placeholders_hint">Ceci s\'applique uniquement aux messages reformatés</string>
@@ -601,6 +605,7 @@
     <string name="title_no_inbox">Boîte de réception introuvable</string>
     <string name="title_no_drafts">Aucun dossier Brouillons</string>
     <string name="title_no_junk_folder">Il n\'y a aucun dossier spam sélectionné pour ce compte</string>
+    <string name="title_default_composable">L\'adresse e-mail par défaut est déterminée par l\'identité principale du compte principal</string>
     <string name="title_no_composable">L\'envoi d\'e-mails nécessite la configuration d\'une identité et la sélection d\'un dossier brouillons dans les paramètres du compte</string>
     <string name="title_no_standard">Ce fournisseur utilise un protocole de messagerie propriétaire, il n’est donc pas possible d’utiliser des clients de messagerie tiers</string>
     <string name="title_no_idle">Ce fournisseur ne gère pas les messages en mode push. Ceci retardera la réception des nouveaux messages et entraînera une utilisation accrue de la batterie.</string>
@@ -714,7 +719,6 @@
     <string name="title_duplicate_in">Message en double dans %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Tr: %1$s</string>
-    <string name="title_buttons">Boutons</string>
     <string name="title_seen">Marquer comme lu</string>
     <string name="title_unseen">Marquer comme non lu</string>
     <string name="title_toggle_seen">Marquer lu/non lu</string>
@@ -738,6 +742,8 @@
     <string name="title_pin">Ajouter un raccourci</string>
     <string name="title_print">Imprimer</string>
     <string name="title_print_header">Imprimer l\'en-tête</string>
+    <string name="title_print_images">Imprimer les images</string>
+    <string name="title_print_images_remark">Le téléchargement des images peut prendre un certain temps</string>
     <string name="title_show_headers">Afficher l’en-tête</string>
     <string name="title_raw_save">Enregistrer le message original</string>
     <string name="title_raw_send">Envoyer comme pièce jointe</string>
@@ -748,6 +754,8 @@
     <string name="title_download_all">Tout télécharger</string>
     <string name="title_save_all">Tout enregistrer</string>
     <string name="title_save_eml">Enregistrer le message original dans un fichier</string>
+    <string name="title_buttons">Sélectionner les boutons</string>
+    <string name="title_configure_buttons">Configurer les boutons&#8230;</string>
     <string name="title_trash">Supprimer</string>
     <string name="title_copy">Copier&#8230;</string>
     <string name="title_copy_to">Copier vers&#8230;</string>
@@ -851,7 +859,7 @@
     <string name="title_send_now">Env. maint.</string>
     <string name="title_send_via">Envoyer via</string>
     <string name="title_send_at">Envoyer à&#8230;</string>
-    <string name="title_send_archive">Archiver les messages lus</string>
+    <string name="title_send_auto_archive">Archiver un message avec réponse</string>
     <string name="title_send_encryption">Chiffrement</string>
     <string name="title_send_priority">Priorité</string>
     <string name="title_no_server">Aucun serveur trouvé à \'%1$s\'</string>
@@ -914,6 +922,7 @@
     <string name="title_extra_missing">Nom d\'utilisateur manquant</string>
     <string name="title_to_missing">Destinataire manquant</string>
     <string name="title_pgp_reminder">Clés PGP disponibles</string>
+    <string name="title_smime_reminder">Clés S/MIME disponibles</string>
     <string name="title_subject_reminder">L\'objet est vide</string>
     <string name="title_text_reminder">Le message est vide</string>
     <string name="title_attachment_keywords">joint,jointe,joints,jointes,ci-joint,ci-jointe,ci-joints,ci-jointes,attaché,attachés,attachée,attachées,lettre de motivation,cv</string>
@@ -1287,7 +1296,7 @@
     <string name="title_pro_activated">Toutes les fonctionnalités Pro sont activées</string>
     <string name="title_pro_valid">Toutes les fonctionnalités Pro activées</string>
     <string name="title_pro_invalid">Réponse non valide</string>
-    <string name="title_pro_support">FairEmail a besoin de votre aide. Appuyez pour acheter des fonctionnalités Pro pour continuer à faire avancer le projet.</string>
+    <string name="title_pro_support">FairEmail a besoin de votre aide. Tapez pour acheter des fonctionnalités Pro pour faire avancer le projet ou pour désactiver ce message.</string>
     <string name="title_boundary_error">Erreur lors du téléchargement des messages depuis le serveur de messagerie</string>
     <string name="title_boundary_retry">Veuillez réessayer</string>
     <string name="title_unexpected_error">Erreur inattendue</string>
@@ -1429,6 +1438,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Par défaut</item>

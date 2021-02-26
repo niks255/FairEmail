@@ -31,7 +31,6 @@ import androidx.preference.PreferenceManager;
 import com.sun.mail.gimap.GmailMessage;
 import com.sun.mail.iap.ProtocolException;
 import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.IMAPInputStream;
 import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.imap.protocol.IMAPProtocol;
 import com.sun.mail.util.ASCIIUtility;
@@ -867,6 +866,10 @@ public class MessageHelper {
 
     boolean getFlagged() throws MessagingException {
         return imessage.isSet(Flags.Flag.FLAGGED);
+    }
+
+    boolean getDeleted() throws MessagingException {
+        return imessage.isSet(Flags.Flag.DELETED);
     }
 
     String getFlags() throws MessagingException {
@@ -2328,12 +2331,8 @@ public class MessageHelper {
                             break;
                         }
                     }
-                } else if (content instanceof String) {
-                    String text = (String) content;
-                    String sample = text.substring(0, Math.min(200, text.length()));
-                    Log.e("Mixed string=" + sample);
                 } else
-                    Log.e("Mixed type=" + (content == null ? null : content.getClass().getName()));
+                    throw new MessagingException("Multipart=" + (content == null ? null : content.getClass().getName()));
             }
 
             if (part.isMimeType("multipart/signed")) {
@@ -2380,7 +2379,7 @@ public class MessageHelper {
             } else if (part.isMimeType("multipart/encrypted")) {
                 ContentType ct = new ContentType(part.getContentType());
                 String protocol = ct.getParameter("protocol");
-                if ("application/pgp-encrypted".equals(protocol)) {
+                if ("application/pgp-encrypted".equals(protocol) || protocol == null) {
                     Multipart multipart = (Multipart) part.getContent();
                     if (multipart.getCount() == 2) {
                         // Ignore header
@@ -2448,16 +2447,8 @@ public class MessageHelper {
                 Object content = part.getContent(); // Should always be Multipart
                 if (content instanceof Multipart)
                     multipart = (Multipart) part.getContent();
-                else if (content instanceof String) {
-                    String text = (String) content;
-                    String sample = text.substring(0, Math.min(200, text.length()));
-                    throw new ParseException(content.getClass().getName() + ": " + sample);
-                } else if (content instanceof IMAPInputStream) {
-                    String text = Helper.readStream((IMAPInputStream) content);
-                    String sample = text.substring(0, Math.min(200, text.length()));
-                    throw new ParseException(content.getClass().getName() + ": " + sample);
-                } else
-                    throw new IllegalArgumentException(content.getClass().getName());
+                else
+                    throw new MessagingException("Multipart=" + (content == null ? null : content.getClass().getName()));
 
                 boolean other = false;
                 List<Part> plain = new ArrayList<>();
@@ -2541,22 +2532,6 @@ public class MessageHelper {
                 try {
                     // From the body structure
                     contentType = new ContentType(part.getContentType());
-
-                    // Workaround bodystructure not matching header
-                    if (part instanceof MimeMessage &&
-                            "text/plain".equalsIgnoreCase(contentType.getBaseType()))
-                        try {
-                            String[] c = part.getHeader("Content-type");
-                            if (c != null && c.length > 0) {
-                                ContentType ct = new ContentType(c[0]);
-                                if ("text/html".equalsIgnoreCase(ct.getBaseType())) {
-                                    Log.e("Inconsistent bs=" + contentType + " header=" + ct);
-                                    contentType = ct;
-                                }
-                            }
-                        } catch (MessagingException ex) {
-                            Log.w(ex);
-                        }
                 } catch (ParseException ex) {
                     if (part instanceof MimeMessage)
                         Log.w("MimeMessage content type=" + ex.getMessage());
@@ -2657,32 +2632,9 @@ public class MessageHelper {
 
         try {
             if (imessage instanceof IMAPMessage) {
-                if (structure) {
-                    String contentType = imessage.getContentType(); // force loadBODYSTRUCTURE
-
-                    // Workaround protocol parameter missing
-                    // Happens with Yandex and possibly other providers
-                    boolean load = false;
-                    try {
-                        ContentType ct = new ContentType(contentType);
-                        if (ct.match("multipart/signed") || ct.match("multipart/encrypted")) {
-                            String protocol = ct.getParameter("protocol");
-                            if (protocol == null)
-                                load = true;
-                        } else if (ct.match("application/pkcs7-mime") || ct.match("application/x-pkcs7-mime")) {
-                            String smimeType = ct.getParameter("smime-type");
-                            if (smimeType == null)
-                                load = true;
-                        }
-                    } catch (Throwable ex) {
-                        Log.w(ex);
-                    }
-
-                    if (load) {
-                        Log.w("Protocol missing content-type=" + contentType);
-                        throw new MessagingException("Failed to load IMAP envelope");
-                    }
-                } else {
+                if (structure)
+                    imessage.getContentType(); // force loadBODYSTRUCTURE
+                else {
                     if (headers)
                         imessage.getAllHeaders(); // force loadHeaders
                     else
