@@ -135,7 +135,6 @@
     <string name="title_setup_wizard">Майстер встановлення</string>
     <string name="title_setup_wizard_multiple">Майстер можна використати кілька разів, щоб налаштувати кілька облікових записів</string>
     <string name="title_setup_wizard_new">Вкажіть нову електронну адресу</string>
-    <string name="title_setup_manual">Налаштування вручну та додаткові параметри</string>
     <string name="title_setup_account_remark">Отримання email</string>
     <string name="title_setup_identity_remark">Надсилання email</string>
     <string name="title_setup_account_identity_hint">Ви можете налаштувати ім\'я, колір і свайп дії в налаштуваннях облікового запису та налаштувати підпис в налаштуваннях ідентифікації</string>
@@ -169,6 +168,7 @@
     <string name="title_setup_grant_again">Надати необхідні дозволи</string>
     <string name="title_setup_exchange_support">Чи підтримується Microsoft Exchange?</string>
     <string name="title_setup_identity_what">Що таке особисті данні?</string>
+    <string name="title_setup_free">Цей додаток може використовуватися безкоштовно?</string>
     <string name="title_setup_permissions">Надати дозволи</string>
     <string name="title_setup_permissions_remark">Доступ до контактної інформації (необов\'язково)</string>
     <string name="title_setup_doze">Вимкнути оптимізацію використання батареї</string>
@@ -188,6 +188,7 @@
     <string name="title_setup_configuring">Налаштування облікового запису &#8230;</string>
     <string name="title_setup_export">Експорт налаштувань</string>
     <string name="title_setup_import">Імпорт налаштувань</string>
+    <string name="title_setup_export_do">Пароль використовується для шифрування налаштувань і він потрібен для повторного імпорту налаштувань</string>
     <string name="title_setup_import_do">Імпортовані облікові записи будуть додані без перезапису будь-яких записів що існують</string>
     <string name="title_setup_password">Пароль</string>
     <string name="title_setup_password_chars">Пароль містить елементи керування або пробіли</string>
@@ -228,7 +229,6 @@
     <string name="title_advanced_hint_message">        Ви переходите до більш розширених параметрів.
         Всі параметри мають загальновизнані стандартні значення, які не треба змінювати, якщо ви не маєте інших уподобань.
     </string>
-    <string name="title_advanced_section_main">Початок</string>
     <string name="title_advanced_section_synchronize">Отримання</string>
     <string name="title_advanced_section_send">Надсилання</string>
     <string name="title_advanced_section_connection">Підключення</string>
@@ -253,10 +253,12 @@
     <string name="title_advanced_sync_folders">Синхронізувати список тек</string>
     <string name="title_advanced_sync_shared_folders">Синхронізувати спільний список тек</string>
     <string name="title_advanced_subscriptions">Керувати підписками тек</string>
+    <string name="title_advanced_check_reply_domain">Перевіряти адреси електронної пошти для відповіді при синхронізації повідомлень</string>
     <string name="title_advanced_check_mx">Перевіряти адреси електронної пошти відправника при синхронізації повідомлень</string>
     <string name="title_advanced_tune_keep_alive">Автоматично налаштовувати інтервал активності</string>
     <string name="title_advanced_keyboard">Показувати клавіатуру за замовчуванням</string>
     <string name="title_advanced_keyboard_no_fullscreen">Заборонити повноекранну клавіатуру</string>
+    <string name="title_advanced_suggest_names">Показати імена та адреси електронної пошти</string>
     <string name="title_advanced_suggest_local">Пропонувати локально збережені контакти</string>
     <string name="title_advanced_suggest_sent">Пропонувати адреси, що були знайдені у надісланих повідомленнях</string>
     <string name="title_advanced_suggest_received">Пропонувати адреси, що були знайдені в отриманих повідомленнях</string>
@@ -319,6 +321,7 @@
     <string name="title_advanced_color_threshold">Поріг для кольору літери: %1$s %%</string>
     <string name="title_advanced_name_email">Показати імена та адреси електронної пошти</string>
     <string name="title_advanced_replace_name">Віддавати перевагу імені контакту над надісланим іменем</string>
+    <string name="title_advanced_only_name">Показувати тільки імена контактів</string>
     <string name="title_advanced_distinguish_contacts">Підкреслювати відправника в полі \'to\', коли відправник відомий як місцевий контакт</string>
     <string name="title_advanced_show_recipients">Показувати отримувачів в заголовку повідомлення</string>
     <string name="title_advanced_font_size_sender">Розмір тексту в полі відправник</string>
@@ -461,6 +464,7 @@
     <string name="title_advanced_query_threads">Обмежити паралельний доступ до бази даних</string>
     <string name="title_advanced_crash_reports">Надіслати звіт про помилки</string>
     <string name="title_advanced_protocol">Журналювання протоколів</string>
+    <string name="title_advanced_log_info">Журнал налагодження</string>
     <string name="title_advanced_debug">Режим зневадження</string>
     <string name="title_advanced_cleanup_attachments">Видалити вкладення для старих повідомлень</string>
     <string name="title_advanced_cleanup">Очищення</string>
@@ -476,8 +480,10 @@
     <string name="title_advanced_sync_kept_hint">Це призведе до передачі додаткових даних та більшого споживання заряду акумулятора, особливо якщо багато повідомлень зберігаються на пристрої</string>
     <string name="title_advanced_gmail_thread_hint">Це відноситься тільки до нових повідомлень і може не стосуватися існуючих груп</string>
     <string name="title_advanced_sync_folders_hint">Вимкнення цього призведе до зменшення споживання даних та використання акумулятора, але також вимкне оновлення списку тек</string>
+    <string name="title_advanced_check_reply_hint">Це перевірить, чи доменне ім\'я відправника та адреса для відповіді співпадають</string>
     <string name="title_advanced_lookup_mx_hint">Це перевірить, чи існують записи DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Це призведе до уповільнення синхронізації повідомлень</string>
+    <string name="title_advanced_suggest_names_hint">Якщо вимкнено, використовуватимуться лише адреси електронної пошти при виборі контактів</string>
     <string name="title_advanced_suggest_local_hint">На додаток до контактів, що надаються Android. Будуть зберігатися дані про контакт для щойно надісланих або отриманих повідомлень лише тоді, коли увімкнено.</string>
     <string name="title_advanced_usenet_hint">Вставити \'-- \' між текстом і підписом</string>
     <string name="title_advanced_send_reminders_hint">Показувати попередження, коли відсутній текст повідомлення або тема пуста або якщо вкладення може бути відсутнє</string>
@@ -494,6 +500,7 @@
     <string name="title_advanced_beige_hint">Лише світлі теми</string>
     <string name="title_advanced_date_hint">Повідомлення групуються тільки за датою при сортуванні їх за часом</string>
     <string name="title_advanced_navbar_colorize_hint">В цілому робота залежить від версії Android та її модифікації</string>
+    <string name="title_advanced_split_hint">Це розділить екран на частини</string>
     <string name="title_advanced_threading_hint">Групові повідомлення, пов\'язані один з одним</string>
     <string name="title_advanced_highlight_hint">Акцентований колір теми буде використаний для виділення</string>
     <string name="title_advanced_gravatars_hint">Там може бути ризик приватності</string>
@@ -532,7 +539,7 @@
     <string name="title_advanced_english_hint">Буде перезапущено додаток</string>
     <string name="title_advanced_experiments_hint">Список експериментальних функцій</string>
     <string name="title_advanced_protocol_hint">Це істотно збільшить використання акумулятора та простору для зберігання!</string>
-    <string name="title_advanced_debug_hint">Вмикає додаткове ведення журналів та показує інформацію для зневадження</string>
+    <string name="title_advanced_debug_hint">В різних місцях може показати інформацію для налагодження в недуже приємному вигляді</string>
     <string name="title_advanced_cleanup_attachments_hint">При очищенні вручну будуть видалені вкладення з повідомлень, які більше не синхронізуються</string>
     <string name="title_advanced_cleanup_hint">Це призведе до видалення всіх тимчасових файлів</string>
     <string name="title_advanced_never_favorite">Ніколи не додавати до улюбленого</string>
@@ -749,6 +756,8 @@
     <string name="title_pin">Додати ярлик</string>
     <string name="title_print">Друк</string>
     <string name="title_print_header">Друкувати заголовок</string>
+    <string name="title_print_images">Друкувати зображення</string>
+    <string name="title_print_images_remark">Завантаження зображень може зайняти деякий час</string>
     <string name="title_show_headers">Відображати заголовки</string>
     <string name="title_raw_save">Зберігти raw повідомлення</string>
     <string name="title_raw_send">Надіслати як вкладення</string>
@@ -984,6 +993,7 @@
     <string name="title_search_in_subject">У темі</string>
     <string name="title_search_in_keywords">У ключових словах (якщо підтримується)</string>
     <string name="title_search_in_message">У тексті повідомлення</string>
+    <string name="title_search_in_notes">У локальних нотатках</string>
     <string name="title_search_with">Обмежити пошук, тільки</string>
     <string name="title_search_with_unseen">Непрочитані</string>
     <string name="title_search_with_flagged">Обрані</string>
@@ -1042,8 +1052,11 @@
     <string name="title_answer_favorite">Обране</string>
     <string name="title_answer_hide">Не показувати в меню</string>
     <string name="title_answer_text">Текст шаблону</string>
-    <string name="title_answer_template_name">$name$ буде замінено на повне ім\'я відправника</string>
-    <string name="title_answer_template_email">$email$ буде замінено на еmail відправника</string>
+    <string name="title_answer_placeholder">Поле для заповнення</string>
+    <string name="title_answer_placeholder_name">Повне ім\'я відправника</string>
+    <string name="title_answer_placeholder_email">Адреса електронної пошти відправника</string>
+    <string name="title_answer_placeholder_firstname">Ім\'я відправника</string>
+    <string name="title_answer_placeholder_lastname">Прізвище відправника</string>
     <string name="title_rule_noop">Жодної дії</string>
     <string name="title_rule_seen">Позначити як прочитане</string>
     <string name="title_rule_unseen">Позначити як непрочитане</string>

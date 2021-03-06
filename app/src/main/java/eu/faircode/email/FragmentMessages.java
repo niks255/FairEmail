@@ -2267,6 +2267,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         private void onSwipeDelete(@NonNull TupleMessageEx message) {
             Bundle args = new Bundle();
             args.putString("question", getString(R.string.title_ask_delete));
+            args.putString("remark", message.getRemark());
             args.putLong("id", message.id);
             args.putBoolean("warning", true);
 
@@ -2528,7 +2529,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void onMenuNew(TupleMessageEx message, Address[] to) {
         Intent reply = new Intent(getContext(), ActivityCompose.class)
                 .putExtra("action", "new")
-                .putExtra("to", MessageHelper.formatAddresses(to, true, true));
+                .putExtra("to", MessageHelper.formatAddressesCompose(to));
         startActivity(reply);
     }
 
@@ -6214,16 +6215,29 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                                     MessageHelper helper = new MessageHelper(imessage, context);
                                     parts = helper.getMessageParts();
-                                    String subject = parts.getProtectedSubject();
-                                    if (subject != null)
-                                        db.message().setMessageSubject(message.id, subject);
+                                    String protect_subject = parts.getProtectedSubject();
+
+                                    // Write decrypted body
+                                    String html = parts.getHtml(context);
+                                    Helper.writeText(message.getFile(context), html);
+                                    Log.i("pgp html=" + (html == null ? null : html.length()));
+
+                                    String text = HtmlHelper.getFullText(html);
+                                    message.preview = HtmlHelper.getPreview(text);
+                                    message.language = HtmlHelper.getLanguage(context, message.subject, text);
 
                                     try {
                                         db.beginTransaction();
 
-                                        // Write decrypted body
-                                        String html = parts.getHtml(context);
-                                        Helper.writeText(message.getFile(context), html);
+                                        if (protect_subject != null)
+                                            db.message().setMessageSubject(message.id, protect_subject);
+
+                                        db.message().setMessageContent(message.id,
+                                                true,
+                                                message.language,
+                                                parts.isPlainOnly(),
+                                                message.preview,
+                                                message.warning);
 
                                         // Remove existing attachments
                                         db.attachment().deleteAttachments(message.id);
@@ -6244,9 +6258,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             }
                                         }
 
+                                        checkPep(message, remotes, context);
+
                                         db.message().setMessageEncrypt(message.id, parts.getEncryption());
                                         db.message().setMessageStored(message.id, new Date().getTime());
                                         db.message().setMessageFts(message.id, false);
+
+                                        if (BuildConfig.DEBUG) {
+                                            File raw = message.getRawFile(context);
+                                            Helper.copy(plain, raw);
+                                            db.message().setMessageRaw(message.id, true);
+                                        }
 
                                         db.setTransactionSuccessful();
                                     } catch (SQLiteConstraintException ex) {
@@ -6842,14 +6864,25 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 MessageHelper helper = new MessageHelper(imessage, context);
                 MessageHelper.MessageParts parts = helper.getMessageParts();
 
+                // Write decrypted body
+                String html = parts.getHtml(context);
+                Helper.writeText(message.getFile(context), html);
+                Log.i("s/mime html=" + (html == null ? null : html.length()));
+
+                String text = HtmlHelper.getFullText(html);
+                message.preview = HtmlHelper.getPreview(text);
+                message.language = HtmlHelper.getLanguage(context, message.subject, text);
+
                 DB db = DB.getInstance(context);
                 try {
                     db.beginTransaction();
 
-                    // Write decrypted body
-                    String html = parts.getHtml(context);
-                    Helper.writeText(message.getFile(context), html);
-                    Log.i("s/mime html=" + (html == null ? null : html.length()));
+                    db.message().setMessageContent(message.id,
+                            true,
+                            message.language,
+                            parts.isPlainOnly(),
+                            message.preview,
+                            message.warning);
 
                     // Remove existing attachments
                     db.attachment().deleteAttachments(message.id);
@@ -6868,6 +6901,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         }
                         Log.i("s/mime attachment=" + remote);
                     }
+
+                    checkPep(message, remotes, context);
 
                     db.message().setMessageEncrypt(message.id, parts.getEncryption());
                     db.message().setMessageStored(message.id, new Date().getTime());
@@ -6908,6 +6943,50 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return trace;
             }
         }.execute(this, args, "decrypt:s/mime");
+    }
+
+    private static void checkPep(EntityMessage message, List<EntityAttachment> remotes, Context context) {
+        DB db = DB.getInstance(context);
+        for (EntityAttachment remote : remotes)
+            if ("message/rfc822".equals(remote.getMimeType()))
+                try {
+                    Properties props = MessageHelper.getSessionProperties();
+                    Session isession = Session.getInstance(props, null);
+
+                    MimeMessage imessage;
+                    try (InputStream fis = new FileInputStream(remote.getFile(context))) {
+                        imessage = new MimeMessage(isession, fis);
+                    }
+
+                    String[] xpep = imessage.getHeader("X-pEp-Wrapped-Message-Info");
+                    if (xpep == null || xpep.length == 0 && !"INNER".equalsIgnoreCase(xpep[0]))
+                        continue;
+
+                    MessageHelper helper = new MessageHelper(imessage, context);
+                    String subject = helper.getSubject();
+                    String html = helper.getMessageParts().getHtml(context);
+
+                    if (!TextUtils.isEmpty(html))
+                        Helper.writeText(message.getFile(context), html);
+
+                    try {
+                        db.beginTransaction();
+
+                        if (!TextUtils.isEmpty(subject))
+                            db.message().setMessageSubject(message.id, subject);
+
+                        // Prevent showing the embedded message
+                        db.attachment().setType(remote.id, "application/octet-stream");
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                    break;
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
     }
 
     private void onDelete(long id) {
@@ -7680,14 +7759,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         edit.setAction(Intent.ACTION_EDIT);
         edit.setDataAndTypeAndNormalize(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
         startActivity(edit);
-    }
-
-    static void search(
-            final Context context, final LifecycleOwner owner, final FragmentManager manager,
-            long account, long folder, boolean server, String query) {
-        search(context, owner, manager,
-                account, folder,
-                server, new BoundaryCallbackMessages.SearchCriteria(query));
     }
 
     static void search(

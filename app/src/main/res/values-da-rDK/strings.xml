@@ -125,7 +125,6 @@
     <string name="title_setup_wizard">Guide</string>
     <string name="title_setup_wizard_multiple">Installationsguiden kan anvendes flere gange til opsætning af flere konti</string>
     <string name="title_setup_wizard_new">Jeg behøver en ny e-mailadresse</string>
-    <string name="title_setup_manual">Manuel opsætning og flere muligheder</string>
     <string name="title_setup_account_remark">Modtag e-mail</string>
     <string name="title_setup_identity_remark">Send e-mail</string>
     <string name="title_setup_account_identity_hint">Du kan indstille navn, farve og stryg handlinger i kontoindstillingerne, og konfigurere en signatur i identitetsindstillingerne</string>
@@ -177,6 +176,7 @@
     <string name="title_setup_configuring">Opsætter konto &#8230;</string>
     <string name="title_setup_export">Eksportindstillinger</string>
     <string name="title_setup_import">Importindstillinger</string>
+    <string name="title_setup_export_do">Adgangskoden bruges til at kryptere indstillingerne og kræves for at genimportere dem</string>
     <string name="title_setup_import_do">Importerede konti tilføjes uden at overskrive eksisterende ditto</string>
     <string name="title_setup_password">Adgangskode</string>
     <string name="title_setup_password_chars">Adgangskode indeholder kontrol- eller mellemrumstegn</string>
@@ -217,7 +217,6 @@
     <string name="title_advanced_hint_message">        De mere avancerede indstillinger tilgås nu.
         Alle valgmuligheder har almindeligt brugte standardværdier, som kan ændres jf. dine præferencer.
     </string>
-    <string name="title_advanced_section_main">Start</string>
     <string name="title_advanced_section_synchronize">Modtag</string>
     <string name="title_advanced_section_send">Send</string>
     <string name="title_advanced_section_connection">Forbindelse</string>
@@ -246,6 +245,7 @@
     <string name="title_advanced_tune_keep_alive">Justér automatisk hold i live intervallet</string>
     <string name="title_advanced_keyboard">Vis tastatur som standard</string>
     <string name="title_advanced_keyboard_no_fullscreen">Forhindr fuldskærmstastatur</string>
+    <string name="title_advanced_suggest_names">Brugernavne og e-mailadresser</string>
     <string name="title_advanced_suggest_local">Foreslår lokalt lagrede kontakter</string>
     <string name="title_advanced_suggest_sent">Foreslå adresser fra sendte beskeder</string>
     <string name="title_advanced_suggest_received">Foreslå adresser fra modtagne beskeder</string>
@@ -307,6 +307,7 @@
     <string name="title_advanced_color_threshold">Grænseværdi, bogstavsfarve: %1$s %%</string>
     <string name="title_advanced_name_email">Vis navne og e-mailadresser</string>
     <string name="title_advanced_replace_name">Foretræk Kontakt- fremfor Afsendernavn</string>
+    <string name="title_advanced_only_name">Vis kun kontaktnavne</string>
     <string name="title_advanced_distinguish_contacts">Understreg afsender, når denne er kendt som lokal \'Til\'-kontakt</string>
     <string name="title_advanced_show_recipients">Vis modtagere i beskedhoved</string>
     <string name="title_advanced_font_size_sender">Tekststørrelse, Afsender</string>
@@ -449,6 +450,7 @@
     <string name="title_advanced_query_threads">Begræns parallel databaseadgang</string>
     <string name="title_advanced_crash_reports">Send fejlrapporter</string>
     <string name="title_advanced_protocol">Protokollogning</string>
+    <string name="title_advanced_log_info">Fejllogning</string>
     <string name="title_advanced_debug">Fejlretningstilstand</string>
     <string name="title_advanced_cleanup_attachments">Slet gamle beskeders vedhæftninger</string>
     <string name="title_advanced_cleanup">Oprydning</string>
@@ -467,6 +469,7 @@
     <string name="title_advanced_sync_folders_hint">Deaktivering af dette reducerer data- og strømforbruget noget, men deaktiverer også mappelisteopdatering</string>
     <string name="title_advanced_lookup_mx_hint">Dette tjekker, om der findes DNS MX-poster</string>
     <string name="title_advanced_sync_delay_hint">Dette vil forøge beskedsynkroniseringstiden</string>
+    <string name="title_advanced_suggest_names_hint">Hvis deaktiveret, bruges kun e-mailadresser ved valg af kontakter</string>
     <string name="title_advanced_suggest_local_hint">Ud over kontakter fra Android. Kontaktdata gemmes kun for nyligt afsendte eller modtagne beskeder, når aktiveret.</string>
     <string name="title_advanced_usenet_hint">Indsæt \'-- \' mellem teksten og signaturen</string>
     <string name="title_advanced_send_reminders_hint">Vis en advarsel, når beskedtekst eller emne er tomt, eller en vedhæftet fil muligvis mangler</string>
@@ -521,7 +524,7 @@
     <string name="title_advanced_english_hint">Dette vil genstarte app\'en</string>
     <string name="title_advanced_experiments_hint">Liste over aktuelle eksperimentelle funktioner</string>
     <string name="title_advanced_protocol_hint">Dette vil øge batteri- og lagerpladsforbruget betydeligt!</string>
-    <string name="title_advanced_debug_hint">Aktivér ekstra logning og vis fejlretningsoplysninger forskellige steder</string>
+    <string name="title_advanced_debug_hint">Dette vil vise grim fejlfindingsinformation forskellige steder</string>
     <string name="title_advanced_cleanup_attachments_hint">Ved manuel rensning, vil dette fjerner vedhæftninger fra beskeder, som ikke længere synkroniseres</string>
     <string name="title_advanced_cleanup_hint">Dette vil slette alle midlertidige filer</string>
     <string name="title_advanced_never_favorite">Gør aldrig til favorit</string>
@@ -1029,8 +1032,11 @@
     <string name="title_answer_favorite">Favorit</string>
     <string name="title_answer_hide">Skjul fra menuer</string>
     <string name="title_answer_text">Skabelontekst</string>
-    <string name="title_answer_template_name">$name$ bliver erstattet med afsenders fulde navn</string>
-    <string name="title_answer_template_email">$email$ bliver erstattet med afsenders e-mailadresse</string>
+    <string name="title_answer_placeholder">Variabel</string>
+    <string name="title_answer_placeholder_name">Afsenders: fulde navn</string>
+    <string name="title_answer_placeholder_email">Afsenders e-mailadresse</string>
+    <string name="title_answer_placeholder_firstname">Afsenders: fornavn</string>
+    <string name="title_answer_placeholder_lastname">Afsenders: efternavn</string>
     <string name="title_rule_noop">Ingen handling</string>
     <string name="title_rule_seen">Markér som læst</string>
     <string name="title_rule_unseen">Markér som ulæst</string>

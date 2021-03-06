@@ -434,8 +434,7 @@ public class HtmlHelper {
                 .removeAttributes("th", "colspan", "rowspan", "width")
                 .addProtocols("img", "src", "cid")
                 .addProtocols("img", "src", "data")
-                .removeProtocols("a", "href", "ftp")
-                .addProtocols("a", "href", "full", "xmpp", "geo", "tel");
+                .removeTags("a").addAttributes("a", "href", "title");
         if (text_color)
             whitelist.addAttributes("font", "color");
         if (text_size)
@@ -1868,7 +1867,7 @@ public class HtmlHelper {
     }
 
     static Spanned highlightHeaders(Context context, String headers) {
-        int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
+        int colorAccent = Helper.resolveColor(context, android.R.attr.textColorLink);
         SpannableStringBuilder ssb = new SpannableStringBuilder(headers);
         int index = 0;
         for (String line : headers.split("\n")) {

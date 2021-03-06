@@ -129,7 +129,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     static final String ACTION_VIEW_FOLDERS = BuildConfig.APPLICATION_ID + ".VIEW_FOLDERS";
     static final String ACTION_VIEW_MESSAGES = BuildConfig.APPLICATION_ID + ".VIEW_MESSAGES";
-    static final String ACTION_SEARCH = BuildConfig.APPLICATION_ID + ".SEARCH";
+    static final String ACTION_SEARCH_ADDRESS = BuildConfig.APPLICATION_ID + ".SEARCH_ADDRESS";
     static final String ACTION_VIEW_THREAD = BuildConfig.APPLICATION_ID + ".VIEW_THREAD";
     static final String ACTION_EDIT_FOLDER = BuildConfig.APPLICATION_ID + ".EDIT_FOLDER";
     static final String ACTION_EDIT_ANSWERS = BuildConfig.APPLICATION_ID + ".EDIT_ANSWERS";
@@ -640,7 +640,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         IntentFilter iff = new IntentFilter();
         iff.addAction(ACTION_VIEW_FOLDERS);
         iff.addAction(ACTION_VIEW_MESSAGES);
-        iff.addAction(ACTION_SEARCH);
+        iff.addAction(ACTION_SEARCH_ADDRESS);
         iff.addAction(ACTION_VIEW_THREAD);
         iff.addAction(ACTION_EDIT_FOLDER);
         iff.addAction(ACTION_EDIT_ANSWERS);
@@ -1096,9 +1096,17 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             String search = (csearch == null ? null : csearch.toString());
             if (!TextUtils.isEmpty(search)) {
                 searching = true;
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                boolean fts = prefs.getBoolean("fts", false);
+
+                BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
+                criteria.query = search;
+                criteria.fts = fts;
+
                 FragmentMessages.search(
                         ActivityView.this, ActivityView.this, getSupportFragmentManager(),
-                        -1, -1, false, search);
+                        -1, -1, false, criteria);
             }
 
             intent.removeExtra(Intent.EXTRA_PROCESS_TEXT);
@@ -1293,8 +1301,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     onViewFolders(intent);
                 else if (ACTION_VIEW_MESSAGES.equals(action))
                     onViewMessages(intent);
-                else if (ACTION_SEARCH.equals(action))
-                    onSearchMessages(intent);
+                else if (ACTION_SEARCH_ADDRESS.equals(action))
+                    onSearchAddress(intent);
                 else if (ACTION_VIEW_THREAD.equals(action))
                     onViewThread(intent);
                 else if (ACTION_EDIT_FOLDER.equals(action))
@@ -1333,13 +1341,21 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         fragmentTransaction.commit();
     }
 
-    private void onSearchMessages(Intent intent) {
+    private void onSearchAddress(Intent intent) {
         long account = intent.getLongExtra("account", -1);
         long folder = intent.getLongExtra("folder", -1);
         String query = intent.getStringExtra("query");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean fts = prefs.getBoolean("fts", false);
+
+        BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
+        criteria.query = query;
+        criteria.fts = fts;
+
         FragmentMessages.search(
                 this, this, getSupportFragmentManager(),
-                account, folder, false, query);
+                account, folder, false, criteria);
     }
 
     private void onViewThread(Intent intent) {

@@ -125,7 +125,6 @@
     <string name="title_setup_wizard">Varázsló</string>
     <string name="title_setup_wizard_multiple">A varázsló többször is használható több fiók hozzáadásához</string>
     <string name="title_setup_wizard_new">Új e-mail cím megadása</string>
-    <string name="title_setup_manual">Kézi beállítás és több opció</string>
     <string name="title_setup_account_remark">E-mailek fogadása</string>
     <string name="title_setup_identity_remark">E-mailek küldése</string>
     <string name="title_setup_accounts">Fiókok</string>
@@ -495,7 +494,6 @@
     <string name="title_advanced_english_hint">Ez újraindítja az alkalmazást</string>
     <string name="title_advanced_experiments_hint">A jelenlegi kísérleti funkciók listája</string>
     <string name="title_advanced_protocol_hint">Ez lényegesen növelni fogja az akkumulátor és tárhely használatot!</string>
-    <string name="title_advanced_debug_hint">Bővített naplók engedélyezése és debug információk megjelenítése sok helyen</string>
     <string name="title_advanced_cleanup_attachments_hint">Manuális ürítésnél ez törölni fogja a mellékleteket olyan üzenetekről, amik már nem szinkronizáltak</string>
     <string name="title_advanced_cleanup_hint">Ez törli az összes ideiglenes fájlt</string>
     <string name="title_advanced_never_favorite">Kedvencként megjelölés tiltása</string>
@@ -988,8 +986,6 @@
     <string name="title_answer_favorite">Kedvenc</string>
     <string name="title_answer_hide">Elrejtés a menüben</string>
     <string name="title_answer_text">Sablon szövege</string>
-    <string name="title_answer_template_name">$name$ behelyettesíti a feladó teljes nevét</string>
-    <string name="title_answer_template_email">$email$ behelyettesíti a feladó email címét</string>
     <string name="title_rule_noop">Nincs művelet</string>
     <string name="title_rule_seen">Megjelölés olvasottként</string>
     <string name="title_rule_unseen">Megjelölés olvasatlanként</string>

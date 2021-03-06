@@ -207,6 +207,18 @@
             app:layout_constraintTop_toBottomOf="@id/tvNavBarColorizeHint"
             app:switchPadding="12dp" />
 
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvPortrait2Hint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="48dp"
+            android:text="@string/title_advanced_split_hint"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swPortrait2" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swLandscape"
             android:layout_width="0dp"
@@ -216,8 +228,20 @@
             android:text="@string/title_advanced_landscape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swPortrait2"
+            app:layout_constraintTop_toBottomOf="@id/tvPortrait2Hint"
             app:switchPadding="12dp" />
+
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvLandscapeHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="48dp"
+            android:text="@string/title_advanced_split_hint"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swLandscape" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swLandscape3"
@@ -228,7 +252,7 @@
             android:text="@string/title_advanced_landscape3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swLandscape"
+            app:layout_constraintTop_toBottomOf="@id/tvLandscapeHint"
             app:switchPadding="12dp" />
 
         <!-- conversation -->
@@ -403,8 +427,9 @@
             android:id="@+id/tvGravatarsHint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/twotone_open_in_new_24"
+            android:drawableEnd="@drawable/twotone_open_in_new_12"
             android:drawablePadding="6dp"
+            android:drawableTint="?android:attr/textColorLink"
             android:text="@string/title_advanced_gravatars_hint"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="?attr/colorWarning"
@@ -603,6 +628,17 @@
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swOnlyContact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_advanced_only_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swPreferContact"
+            app:switchPadding="12dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swDistinguishContacts"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -610,7 +646,7 @@
             android:text="@string/title_advanced_distinguish_contacts"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swPreferContact"
+            app:layout_constraintTop_toBottomOf="@id/swOnlyContact"
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat

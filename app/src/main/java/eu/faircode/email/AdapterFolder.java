@@ -276,15 +276,17 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 ivNotify.setVisibility(folder.notify ? View.VISIBLE : View.GONE);
             }
 
-            if (folder.unseen > 0)
+            int cunseen = (folder.collapsed ? folder.childs_unseen : 0);
+            int unseen = folder.unseen + cunseen;
+            if (unseen > 0)
                 tvName.setText(context.getString(R.string.title_name_count,
                         folder.getDisplayName(context, folder.parent_ref == null ? null : folder.parent_ref),
-                        NF.format(folder.unseen)));
+                        (cunseen > 0 ? "▾" : "") + NF.format(unseen)));
             else
                 tvName.setText(folder.getDisplayName(context, folder.parent_ref));
 
-            tvName.setTypeface(folder.unseen > 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
-            tvName.setTextColor(folder.unseen > 0 ? colorUnread : textColorSecondary);
+            tvName.setTypeface(unseen > 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+            tvName.setTextColor(unseen > 0 ? colorUnread : textColorSecondary);
 
             if (listener == null && folder.selectable) {
                 StringBuilder sb = new StringBuilder();
@@ -453,6 +455,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             criteria.in_subject = false;
             criteria.in_keywords = false;
             criteria.in_message = false;
+            criteria.in_notes = false;
             criteria.with_flagged = true;
             FragmentMessages.search(
                     context, owner, parentFragment.getParentFragmentManager(),
@@ -1225,8 +1228,14 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 continue;
 
             List<TupleFolderEx> childs = null;
-            if (parent.child_refs != null)
+            if (parent.child_refs != null) {
                 childs = getHierarchical(parent.child_refs, indentation + 1);
+                for (TupleFolderEx child : childs) {
+                    parent.childs_unseen += child.unseen;
+                    if (child.collapsed)
+                        parent.childs_unseen += child.childs_unseen;
+                }
+            }
 
             if (!subscribed_only ||
                     parent.accountProtocol != EntityAccount.TYPE_IMAP ||

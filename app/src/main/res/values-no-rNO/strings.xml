@@ -490,7 +490,6 @@
     <string name="title_advanced_english_hint">Dette vil starte appen på nytt</string>
     <string name="title_advanced_experiments_hint">Liste over aktuelle eksperimentelle funksjoner</string>
     <string name="title_advanced_protocol_hint">Dette valget vil drastisk øke batteriforbruk og redusere lagringskapasitet!</string>
-    <string name="title_advanced_debug_hint">Skru på ekstra loggføring og vis stygg feilsøkings-informasjon her og der</string>
     <string name="title_advanced_cleanup_attachments_hint">Ved manuell opprydding vil vedlegg til usynkroniserte meldinger fjernes</string>
     <string name="title_advanced_cleanup_hint">Dette vil slette alle midlertidige filer</string>
     <string name="title_advanced_never_favorite">Aldri favoritt</string>
@@ -983,8 +982,6 @@
     <string name="title_answer_favorite">Favoritt</string>
     <string name="title_answer_hide">Skjul i menyer</string>
     <string name="title_answer_text">Maltekst</string>
-    <string name="title_answer_template_name">$name$ vil bli erstattet med avsenderens fulle navn</string>
-    <string name="title_answer_template_email">$email$ vil bli erstattet med avsenderens e-postadresse</string>
     <string name="title_rule_noop">Ingen handling</string>
     <string name="title_rule_seen">Merk som lest</string>
     <string name="title_rule_unseen">Merk som ulest</string>

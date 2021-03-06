@@ -59,7 +59,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             long start = new Date().getTime();
             Log.i("Main boot");
 
-            final SimpleTask boot = new SimpleTask<Boolean>() {
+            final SimpleTask<Boolean> boot = new SimpleTask<Boolean>() {
                 @Override
                 protected void onPreExecute(Bundle args) {
                     getMainHandler().postDelayed(new Runnable() {
@@ -181,7 +181,10 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             else
                 prefs.edit().putBoolean("compact", true).apply();
 
-            setTheme(R.style.AppThemeBlueOrangeLight);
+            if (Helper.isNight(this))
+                setTheme(R.style.AppThemeBlueOrangeDark);
+            else
+                setTheme(R.style.AppThemeBlueOrangeLight);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 

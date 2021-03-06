@@ -78,7 +78,7 @@ public class ApplicationEx extends Application
         super.onCreate();
 
         long start = new Date().getTime();
-        EntityLog.log(this, "App create" +
+        Log.i("App create" +
                 " version=" + BuildConfig.VERSION_NAME +
                 " process=" + android.os.Process.myPid());
         Log.logMemory(this, "App");
@@ -199,6 +199,10 @@ public class ApplicationEx extends Application
             case "wal": // misc
                 // Should be excluded for import
                 restart();
+                break;
+            case "debug":
+            case "log_level":
+                Log.setLevel(this);
                 break;
         }
     }

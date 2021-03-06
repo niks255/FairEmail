@@ -1,18 +1,18 @@
 # 設定說明
 
-設定FairEmail相當簡單。 你需要新增至少一個帳號來接收電子郵件，如果想要寄電子郵件則需要新增至少一個身分。 The quick setup will add an account and an identity in one go for most major providers.
+設定FairEmail相當簡單。 你需要新增至少一個帳號來接收電子郵件，如果想要寄電子郵件則需要新增至少一個身分。 這個快速設定將會新增一個適用於大部分電子郵件服務商的帳戶和身分。
 
 ## 需求
 
-需要一個網際網路連線來設定帳戶和身分。
+需要網路連線來設定帳戶和身分。
 
 ## 快速設定
 
 Just select the appropriate provider or *Other provider* and enter your name, email address and password and tap *Check*.
 
-This will work for most email providers.
+這適用於大部分的電子郵件服務商。
 
-If the quick setup doesn't work, you'll need to set up an account and an identity manually, see below for instructions.
+如果快速設定失敗，那麼你就得手動設定帳戶和身分，請看以下說明。
 
 ## 設定帳戶以接收電子郵件
 
@@ -30,11 +30,11 @@ See [this FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#FAQ9) about 
 
 ## 取得權限 - 存取聯絡人資訊
 
-If you want to lookup email addresses, have contact photos shown, etc, you'll need to grant permission to read contact information to FairEmail. Just tap *Grant* and select *Allow*.
+如果您想搜尋電子郵件地址、顯示聯絡人頭貼等，您需要授權FairEmail讀取聯絡人。 輕觸 *給予權限(Grant)* 之後選擇 *允許(Allow)*.
 
 ## 關閉電池效能最佳化 - 持續接收電子郵件
 
-在近期Android版本中，為了減少電池使用量，Android在關閉螢幕後有時會使應用程式進入睡眠。 如果您想要實時接收新電子郵件通知，您應關閉FailEmail的電池最佳化設定。 Tap *Manage* and follow the instructions.
+在近期Android版本中，為了減少電池使用量，Android在關閉螢幕後有時會使應用程式進入睡眠。 若您想要及時接收新電子郵件通知，您需要關閉FailEmail的電池最佳化設定。 點擊 *管理(Manage)*並跟從指示。
 
 ## 問題
 

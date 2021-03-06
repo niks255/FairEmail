@@ -793,6 +793,7 @@ public class FragmentCompose extends FragmentBase {
 
         final DB db = DB.getInstance(getContext());
 
+        final boolean suggest_names = prefs.getBoolean("suggest_names", true);
         final boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
         final boolean suggest_received = prefs.getBoolean("suggest_received", false);
         final boolean suggest_frequently = prefs.getBoolean("suggest_frequently", false);
@@ -870,7 +871,7 @@ public class FragmentCompose extends FragmentBase {
                     String name = cursor.getString(colName);
                     String email = MessageHelper.sanitizeEmail(cursor.getString(colEmail));
                     StringBuilder sb = new StringBuilder();
-                    if (name == null)
+                    if (name == null || !suggest_names)
                         sb.append(email);
                     else {
                         sb.append("\"").append(name).append("\" ");
@@ -1327,7 +1328,8 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_compact).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_contact_group).setEnabled(
                 state == State.LOADED && hasPermission(Manifest.permission.READ_CONTACTS));
-        menu.findItem(R.id.menu_answer).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_answer_insert).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_answer_create).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
 
         int colorEncrypt = Helper.resolveColor(getContext(), R.attr.colorEncrypt);
@@ -1411,8 +1413,11 @@ public class FragmentCompose extends FragmentBase {
         } else if (itemId == R.id.menu_contact_group) {
             onMenuContactGroup();
             return true;
-        } else if (itemId == R.id.menu_answer) {
-            onMenuAnswer();
+        } else if (itemId == R.id.menu_answer_insert) {
+            onMenuAnswerInsert();
+            return true;
+        } else if (itemId == R.id.menu_answer_create) {
+            onMenuAnswerCreate();
             return true;
         } else if (itemId == R.id.menu_clear) {
             StyleHelper.apply(R.id.menu_clear, getViewLifecycleOwner(), null, etBody);
@@ -1594,7 +1599,7 @@ public class FragmentCompose extends FragmentBase {
         fragment.show(getParentFragmentManager(), "compose:groups");
     }
 
-    private void onMenuAnswer() {
+    private void onMenuAnswerInsert() {
         new SimpleTask<List<EntityAnswer>>() {
             @Override
             protected List<EntityAnswer> onExecute(Context context, Bundle args) {
@@ -1701,6 +1706,18 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(getContext(), getViewLifecycleOwner(), new Bundle(), "compose:answer");
+    }
+
+    private void onMenuAnswerCreate() {
+        Bundle args = new Bundle();
+        args.putString("subject", etSubject.getText().toString());
+        args.putString("html", HtmlHelper.toHtml(etBody.getText(), getContext()));
+
+        FragmentAnswer fragment = new FragmentAnswer();
+        fragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("compose:answer");
+        fragmentTransaction.commit();
     }
 
     private boolean onActionStyle(int action, View anchor) {
@@ -2052,6 +2069,9 @@ public class FragmentCompose extends FragmentBase {
                 int requestCode = args.getInt("requestCode");
                 Uri uri = args.getParcelable("uri");
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean suggest_names = prefs.getBoolean("suggest_names", true);
+
                 EntityMessage draft = null;
                 DB db = DB.getInstance(context);
 
@@ -2092,7 +2112,7 @@ public class FragmentCompose extends FragmentBase {
                             if (address != null)
                                 list.addAll(Arrays.asList(address));
 
-                            list.add(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
+                            list.add(new InternetAddress(email, suggest_names ? name : null, StandardCharsets.UTF_8.name()));
 
                             if (requestCode == REQUEST_CONTACT_TO)
                                 draft.to = list.toArray(new Address[0]);
@@ -2417,7 +2437,7 @@ public class FragmentCompose extends FragmentBase {
                                     ContentType ct = new ContentType(type);
                                     ct.setParameter("protected-headers", "v1");
                                     setHeader("Content-Type", ct.toString());
-                                    String subject = draft.subject == null ? "" : draft.subject;
+                                    String subject = (draft.subject == null ? "" : draft.subject);
                                     try {
                                         setHeader("Subject", MimeUtility.encodeWord(subject));
                                     } catch (UnsupportedEncodingException ex) {
@@ -2533,6 +2553,8 @@ public class FragmentCompose extends FragmentBase {
                                     // Get public key
                                     Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                     intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
+                                    intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE, true);
+                                    intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email);
                                     intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                                     intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
@@ -2551,6 +2573,8 @@ public class FragmentCompose extends FragmentBase {
                                 // Get public key
                                 Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                 intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
+                                intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE, true);
+                                intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email);
                                 intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                                 intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                 return intent;

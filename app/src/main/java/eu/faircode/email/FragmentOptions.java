@@ -28,7 +28,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,7 +86,7 @@ public class FragmentOptions extends FragmentBase {
             "indentation", "date", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
-            "name_email", "prefer_contact", "distinguish_contacts", "show_recipients", "authentication",
+            "name_email", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients", "authentication",
             "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
             "keywords_header", "labels_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines",
             "message_zoom", "overview_mode", "addresses", "attachments_alt", "thumbnails",
@@ -250,7 +252,7 @@ public class FragmentOptions extends FragmentBase {
                         views = new View[TAB_PAGES.length];
                         LayoutInflater inflater = LayoutInflater.from(searchView.getContext());
                         for (int tab = 0; tab < TAB_PAGES.length; tab++) {
-                            titles[tab] = (String) adapter.getPageTitle(tab);
+                            titles[tab] = adapter.getPageTitle(tab).toString();
                             views[tab] = inflater.inflate(TAB_PAGES[tab], null);
                         }
                     }
@@ -411,6 +413,17 @@ public class FragmentOptions extends FragmentBase {
 
         @Override
         public CharSequence getPageTitle(int position) {
+            CharSequence title = getTitle(position);
+            if (position == 0)
+                return title;
+
+            SpannableStringBuilder ssb = new SpannableStringBuilder(title);
+            ssb.setSpan(new RelativeSizeSpan(0.85f), 0, ssb.length(), 0);
+            return ssb;
+        }
+
+        @NotNull
+        private CharSequence getTitle(int position) {
             switch (position) {
                 case 0:
                     return getString(R.string.title_advanced_section_main);

@@ -323,6 +323,8 @@ public class WorkerCleanup extends Worker {
                 EntityLog.log(context, "Analyze=" + (new Date().getTime() - analyze) + " ms");
             }
 
+            DB.createEmergencyBackup(context);
+
             if (manual) {
                 // https://www.sqlite.org/lang_vacuum.html
                 long size = context.getDatabasePath(db.getOpenHelper().getDatabaseName()).length();

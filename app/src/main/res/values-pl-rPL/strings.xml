@@ -146,7 +146,6 @@
     <string name="title_setup_wizard">Kreator</string>
     <string name="title_setup_wizard_multiple">Kreator może być używany wielokrotnie, aby skonfigurować wiele kont</string>
     <string name="title_setup_wizard_new">Potrzebujesz nowego adresu e-mail?</string>
-    <string name="title_setup_manual">Konfiguracja ręczna i więcej opcji</string>
     <string name="title_setup_account_remark">Odbieranie wiadomości e-mail</string>
     <string name="title_setup_identity_remark">Wysyłanie wiadomości e-mail</string>
     <string name="title_setup_account_identity_hint">Możesz skonfigurować nazwę, kolor i akcje przesuwania w ustawieniach konta oraz skonfigurować podpis w ustawieniach tożsamości</string>
@@ -180,6 +179,7 @@
     <string name="title_setup_grant_again">Udziel wymaganych uprawnień</string>
     <string name="title_setup_exchange_support">Czy Microsoft Exchange jest wspierany?</string>
     <string name="title_setup_identity_what">Czym jest tożsamość?</string>
+    <string name="title_setup_free">Czy ta aplikacja jest darmowa?</string>
     <string name="title_setup_permissions">Przyznaj uprawnienia</string>
     <string name="title_setup_permissions_remark">Dostęp do kontaktów (opcjonalnie)</string>
     <string name="title_setup_doze">Wyłącz optymalizację baterii</string>
@@ -199,6 +199,7 @@
     <string name="title_setup_configuring">Konfigurowanie konta &#8230;</string>
     <string name="title_setup_export">Eksport ustawień</string>
     <string name="title_setup_import">Import ustawień</string>
+    <string name="title_setup_export_do">Hasło służy do szyfrowania ustawień i jest wymagane do ponownego zaimportowania ustawień</string>
     <string name="title_setup_import_do">Zaimportowane konta zostaną dodane bez nadpisywania istniejących</string>
     <string name="title_setup_password">Hasło</string>
     <string name="title_setup_password_chars">Hasło zawiera znaki kontrolne lub znaki spacji</string>
@@ -239,7 +240,6 @@
     <string name="title_advanced_hint_message">        Przechodzisz do bardziej zaawansowanych opcji.
          Wszystkie opcje mają powszechnie używane wartości standardowe, których nie trzeba zmieniać, chyba że masz inne preferencje.
     </string>
-    <string name="title_advanced_section_main">Rozpocznij</string>
     <string name="title_advanced_section_synchronize">Odbieranie</string>
     <string name="title_advanced_section_send">Wysyłanie</string>
     <string name="title_advanced_section_connection">Połączenie</string>
@@ -269,6 +269,7 @@
     <string name="title_advanced_tune_keep_alive">Automatycznie dostosuj interwał zachowania aktywności</string>
     <string name="title_advanced_keyboard">Domyślnie pokaż klawiaturę</string>
     <string name="title_advanced_keyboard_no_fullscreen">Blokuj klawiaturę pełnoekranową</string>
+    <string name="title_advanced_suggest_names">Użyj nazw i adresów e-mail</string>
     <string name="title_advanced_suggest_local">Proponuj kontakty przechowywane lokalnie</string>
     <string name="title_advanced_suggest_sent">Proponuj adresy znalezione w wysłanych wiadomościach</string>
     <string name="title_advanced_suggest_received">Proponuj adresy znalezione w otrzymanych wiadomościach</string>
@@ -331,6 +332,7 @@
     <string name="title_advanced_color_threshold">Próg koloru czcionki: %1$s %%</string>
     <string name="title_advanced_name_email">Pokaż nazwy i adresy e-mail</string>
     <string name="title_advanced_replace_name">Preferuj nazwę kontaktu nad nazwą wysłaną</string>
+    <string name="title_advanced_only_name">Wyświetlaj tylko nazwy kontaktów</string>
     <string name="title_advanced_distinguish_contacts">Podkreśl nadawcę, gdy znany jest jako lokalny kontakt „do”</string>
     <string name="title_advanced_show_recipients">Pokaż odbiorców w nagłówku wiadomości</string>
     <string name="title_advanced_font_size_sender">Rozmiar tekstu nadawcy</string>
@@ -473,6 +475,7 @@
     <string name="title_advanced_query_threads">Ogranicz równoległy dostęp do bazy danych</string>
     <string name="title_advanced_crash_reports">Wyślij raport o błędach</string>
     <string name="title_advanced_protocol">Rejestrowanie protokołów</string>
+    <string name="title_advanced_log_info">Rejestrowanie debugowania</string>
     <string name="title_advanced_debug">Debuguj</string>
     <string name="title_advanced_cleanup_attachments">Usuń załączniki starych wiadomości</string>
     <string name="title_advanced_cleanup">Oczyszczanie</string>
@@ -492,6 +495,7 @@
     <string name="title_advanced_check_reply_hint">Spowoduje to sprawdzenie, czy nazwa domeny nadawcy i adres odpowiedzi są takie same</string>
     <string name="title_advanced_lookup_mx_hint">To sprawdzi, czy istnieją rekordy MX DNS</string>
     <string name="title_advanced_sync_delay_hint">Wydłuży to synchronizację wiadomości</string>
+    <string name="title_advanced_suggest_names_hint">Jeśli wyłączone, tylko adresy e-mail będą używane podczas wybierania kontaktów</string>
     <string name="title_advanced_suggest_local_hint">Oprócz kontaktów dostarczanych przez Androida. Dane kontaktowe będą przechowywane dla nowo wysłanych lub odebranych wiadomości tylko kiedy włączone.</string>
     <string name="title_advanced_usenet_hint">Wstaw \'-- \' między tekstem a podpisem</string>
     <string name="title_advanced_send_reminders_hint">Pokaż ostrzeżenie, gdy tekst wiadomości lub temat jest pusty lub gdy może brakować załącznika</string>
@@ -508,6 +512,7 @@
     <string name="title_advanced_beige_hint">Tylko jasne motywy</string>
     <string name="title_advanced_date_hint">Wiadomości są pogrupowane według daty, tylko jeśli są posortowane według czasu</string>
     <string name="title_advanced_navbar_colorize_hint">Czy to zadziała zależy od wersji i wariantu Androida</string>
+    <string name="title_advanced_split_hint">Spowoduje to podzielenie ekranu na części</string>
     <string name="title_advanced_threading_hint">Grupuj wiadomości powiązane ze sobą</string>
     <string name="title_advanced_highlight_hint">Do podświetlenia zostanie użyty akcent kolorystyczny motywu</string>
     <string name="title_advanced_gravatars_hint">Może istnieć ryzyko naruszenia prywatności</string>
@@ -546,7 +551,7 @@
     <string name="title_advanced_english_hint">To uruchomi aplikację ponownie</string>
     <string name="title_advanced_experiments_hint">Lista aktualnych funkcji eksperymentalnych</string>
     <string name="title_advanced_protocol_hint">Zwiększy to zużycie baterii i miejsca na dysku!</string>
-    <string name="title_advanced_debug_hint">Włącz dodatkowe rejestrowanie i wyświetlaj informacje debugowania w różnych miejscach</string>
+    <string name="title_advanced_debug_hint">To pokaże brzydkie informacje o debugowaniu w różnych miejscach</string>
     <string name="title_advanced_cleanup_attachments_hint">Podczas ręcznego czyszczenia spowoduje to usunięcie załączników z wiadomości, które nie są już synchronizowane</string>
     <string name="title_advanced_cleanup_hint">Spowoduje to usunięcie wszystkich plików tymczasowych</string>
     <string name="title_advanced_never_favorite">Nigdy ulubiony</string>
@@ -925,6 +930,7 @@
     <string name="title_media_toolbar">Pasek mediów</string>
     <string name="title_insert_contact_group">Wstaw grupę kontaktów</string>
     <string name="title_insert_template">Wstaw szablon</string>
+    <string name="title_create_template">Utwórz szablon</string>
     <string name="title_edit_plain_text">Edytuj jako zwykły tekst</string>
     <string name="title_edit_formatted_text">Edytuj jako sformatowany tekst</string>
     <string name="title_select_certificate">Wybierz klucz publiczny</string>
@@ -1000,6 +1006,7 @@
     <string name="title_search_in_subject">W temacie</string>
     <string name="title_search_in_keywords">W słowach kluczowych (jeśli obsługiwane)</string>
     <string name="title_search_in_message">W tekście wiadomości</string>
+    <string name="title_search_in_notes">W notatkach lokalnych</string>
     <string name="title_search_with">Ogranicz wyszukiwanie do</string>
     <string name="title_search_with_unseen">Nieprzeczytane</string>
     <string name="title_search_with_flagged">Oznaczone</string>
@@ -1058,8 +1065,11 @@
     <string name="title_answer_favorite">Ulubione</string>
     <string name="title_answer_hide">Ukryj z menu</string>
     <string name="title_answer_text">Tekst szablonu</string>
-    <string name="title_answer_template_name">$name$ zostanie zastąpiony przez pełną nazwę nadawcy</string>
-    <string name="title_answer_template_email">$email$ zostanie zastąpiony przez adres nadawcy wiadomości</string>
+    <string name="title_answer_placeholder">Symbol zastępczy</string>
+    <string name="title_answer_placeholder_name">Pełna nazwa nadawcy</string>
+    <string name="title_answer_placeholder_email">Adres e-mail nadawcy</string>
+    <string name="title_answer_placeholder_firstname">Imię nadawcy</string>
+    <string name="title_answer_placeholder_lastname">Nazwisko nadawcy</string>
     <string name="title_rule_noop">Brak akcji</string>
     <string name="title_rule_seen">Oznacz jako przeczytane</string>
     <string name="title_rule_unseen">Oznacz jako nieprzeczytane</string>

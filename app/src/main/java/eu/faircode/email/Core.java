@@ -326,7 +326,9 @@ class Core {
                                     break;
 
                                 case EntityOperation.SYNC:
+                                    Helper.gc();
                                     onSynchronizeMessages(context, jargs, account, folder, (POP3Folder) ifolder, (POP3Store) istore, state);
+                                    Helper.gc();
                                     break;
 
                                 case EntityOperation.PURGE:
@@ -404,7 +406,9 @@ class Core {
                                     break;
 
                                 case EntityOperation.SYNC:
+                                    Helper.gc();
                                     onSynchronizeMessages(context, jargs, account, folder, (IMAPStore) istore, (IMAPFolder) ifolder, state);
+                                    Helper.gc();
                                     break;
 
                                 case EntityOperation.SUBSCRIBE:
@@ -525,6 +529,7 @@ class Core {
                             // Move: NO mailbox selected READ-ONLY
                             // Move: NO System Error (Failure)
                             // Move: NO APPEND processing failed.
+                            // Copy: NO Client tried to access nonexistent namespace. (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
                             // Add: BAD Data length exceeds limit
                             // Add: NO [LIMIT] APPEND Command exceeds the maximum allowed size
                             // Add: NO APPEND failed: Unknown flag: SEEN
@@ -971,7 +976,7 @@ class Core {
                         " size=" + Helper.humanReadableByteCount(size) +
                         "/" + Helper.humanReadableByteCount(account.max_size) +
                         " host=" + account.host;
-                Log.e(msg);
+                Log.w(msg);
                 throw new IllegalArgumentException(msg);
             }
         }
@@ -1030,7 +1035,7 @@ class Core {
         } else {
             Long found = findUid(context, ifolder, message.msgid, false);
             if (found == null) {
-                String msg = "Added message not found msgid" + message.msgid;
+                String msg = "Added message not found msgid=" + message.msgid;
                 Log.e(msg);
                 throw new IllegalArgumentException(msg);
             }
@@ -1902,6 +1907,9 @@ class Core {
             selectable = selectable && ((ifolder.getType() & IMAPFolder.HOLDS_MESSAGES) != 0);
             inferiors = inferiors && ((ifolder.getType() & IMAPFolder.HOLDS_FOLDERS) != 0);
 
+            if (EntityFolder.INBOX.equals(type))
+                selectable = true;
+
             Log.i(account.name + ":" + fullName + " type=" + type +
                     " subscribed=" + subscribed +
                     " selectable=" + selectable +
@@ -2497,7 +2505,7 @@ class Core {
             try {
                 imessages = ifolder.search(searchTerm);
             } catch (MessagingException ex) {
-                Log.w(ex.getMessage());
+                Log.w(ex);
                 // Fallback to date only search
                 // BAD Could not parse command
                 imessages = ifolder.search(new ReceivedDateTerm(ComparisonTerm.GE, new Date(sync_time)));
@@ -2809,6 +2817,7 @@ class Core {
                     int from = Math.max(0, i - DOWNLOAD_BATCH_SIZE + 1);
 
                     Message[] isub = Arrays.copyOfRange(imessages, from, i + 1);
+                    Arrays.fill(imessages, from, i + 1, null);
                     // Fetch on demand
 
                     int free = Log.getFreeMemMb();
@@ -2846,7 +2855,8 @@ class Core {
                             Log.e(folder.name, ex);
                         } finally {
                             // Free memory
-                            ((IMAPMessage) isub[j]).invalidateHeaders();
+                            isub[j] = null;
+                            //((IMAPMessage) isub[j]).invalidateHeaders();
                         }
                 }
             }
@@ -2870,7 +2880,7 @@ class Core {
             }
 
             db.folder().setFolderLastSync(folder.id, new Date().getTime());
-            db.folder().setFolderError(folder.id, null);
+            //db.folder().setFolderError(folder.id, null);
 
             stats.total = (SystemClock.elapsedRealtime() - search);
 
@@ -2895,16 +2905,16 @@ class Core {
 
         long uid = ifolder.getUID(imessage);
         if (uid < 0) {
-            Log.i(folder.name + " invalid uid=" + uid);
+            Log.w(folder.name + " invalid uid=" + uid);
             throw new MessageRemovedException("uid");
         }
 
         if (imessage.isExpunged()) {
-            Log.i(folder.name + " expunged uid=" + uid);
+            Log.w(folder.name + " expunged uid=" + uid);
             throw new MessageRemovedException("Expunged");
         }
         if (perform_expunge && imessage.isSet(Flags.Flag.DELETED)) {
-            Log.i(folder.name + " deleted uid=" + uid);
+            Log.w(folder.name + " deleted uid=" + uid);
             try {
                 ifolder.expunge();
             } catch (MessagingException ex) {
@@ -2932,6 +2942,7 @@ class Core {
         // - messages in inbox have same id as message sent to self
         // - messages in archive have same id as original
         Integer color = null;
+        String notes = null;
         if (message == null) {
             String msgid = helper.getMessageID();
             Log.i(folder.name + " searching for " + msgid);
@@ -2974,6 +2985,8 @@ class Core {
 
                 if (dup.flagged && dup.color != null)
                     color = dup.color;
+                if (dup.notes != null)
+                    notes = dup.notes;
             }
         }
 
@@ -3042,6 +3055,7 @@ class Core {
             message.encrypt = parts.getEncryption();
             message.ui_encrypt = message.encrypt;
             message.received = received;
+            message.notes = notes;
             message.sent = sent;
             message.seen = seen;
             message.answered = answered;
@@ -3868,13 +3882,11 @@ class Core {
                 }
             }
 
-            Integer prev = data.newMessages.get(group);
-            if (prev == null)
-                prev = 0;
+            Integer prev = prefs.getInt("new_messages." + group, 0);
             Integer current = newMessages.get(group);
             if (current == null)
                 current = 0;
-            data.newMessages.put(group, current);
+            prefs.edit().putInt("new_messages." + group, current).apply();
 
             if (prev.equals(current) &&
                     remove.size() + add.size() == 0) {
@@ -4868,7 +4880,6 @@ class Core {
     }
 
     static class NotificationData {
-        private Map<Long, Integer> newMessages = new HashMap<>();
         private Map<Long, List<Long>> groupNotifying = new HashMap<>();
 
         NotificationData(Context context) {

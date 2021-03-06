@@ -165,7 +165,7 @@
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">The wizard can be used multiple times to set up multiple accounts</string>
     <string name="title_setup_wizard_new">I need a new email address</string>
-    <string name="title_setup_manual">Manual setup and more options</string>
+    <string name="title_setup_manual">Manual setup and more account options</string>
     <string name="title_setup_account_remark">Receive email</string>
     <string name="title_setup_identity_remark">Send email</string>
     <string name="title_setup_account_identity_hint">You can configure the name, color and swipe actions in the account settings, and configure a signature in the identity settings</string>
@@ -203,6 +203,7 @@
     <string name="title_setup_grant_again">Grant required permissions</string>
     <string name="title_setup_exchange_support">Is Microsoft Exchange supported?</string>
     <string name="title_setup_identity_what">What is an identity?</string>
+    <string name="title_setup_free">Is this app free to use?</string>
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
     <string name="title_setup_doze">Disable battery optimizations</string>
@@ -223,6 +224,7 @@
 
     <string name="title_setup_export">Export settings</string>
     <string name="title_setup_import">Import settings</string>
+    <string name="title_setup_export_do">The password is used to encrypt the settings and is required to import the settings again</string>
     <string name="title_setup_import_do">Imported accounts will be added without overwriting any existing ones</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
@@ -273,7 +275,7 @@
         All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
 
-    <string name="title_advanced_section_main">Start</string>
+    <string name="title_advanced_section_main">Main</string>
     <string name="title_advanced_section_synchronize">Receive</string>
     <string name="title_advanced_section_send">Send</string>
     <string name="title_advanced_section_connection">Connection</string>
@@ -306,6 +308,7 @@
 
     <string name="title_advanced_keyboard">Show keyboard by default</string>
     <string name="title_advanced_keyboard_no_fullscreen">Prevent fullscreen keyboard</string>
+    <string name="title_advanced_suggest_names">Use names and email addresses</string>
     <string name="title_advanced_suggest_local">Suggest locally stored contacts</string>
     <string name="title_advanced_suggest_sent">Suggest addresses found in sent messages</string>
     <string name="title_advanced_suggest_received">Suggest addresses found in received messages</string>
@@ -373,6 +376,7 @@
     <string name="title_advanced_color_threshold">Threshold letter color: %1$s %%</string>
     <string name="title_advanced_name_email">Show names and email addresses</string>
     <string name="title_advanced_replace_name">Prefer a contact name over a sent name</string>
+    <string name="title_advanced_only_name">Display contact names only</string>
     <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
     <string name="title_advanced_show_recipients">Show recipients in message header</string>
     <string name="title_advanced_font_size_sender">Text size sender</string>
@@ -535,6 +539,7 @@
     <string name="title_advanced_wal">WAL (debug only)</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
     <string name="title_advanced_protocol">Protocol logging</string>
+    <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Debug mode</string>
     <string name="title_advanced_cleanup_attachments">Delete attachments of old messages</string>
     <string name="title_advanced_cleanup">Cleanup</string>
@@ -545,6 +550,7 @@
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
     <string name="title_advanced_memory_usage" translatable="false">Memory usage: %1$s/%2$s Native: %3$s</string>
     <string name="title_advanced_storage_usage" translatable="false">Storage space: %1$s/%2$s App: %3$s</string>
+    <string name="title_advanced_gc" translatable="false">GC</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
     <string name="title_advanced_files" translatable="false">Files &gt;%1$s</string>
@@ -563,6 +569,7 @@
     <string name="title_advanced_lookup_mx_hint">This will check if DNS MX records exist</string>
     <string name="title_advanced_sync_delay_hint">This will slow down synchronizing messages</string>
 
+    <string name="title_advanced_suggest_names_hint">If disabled, only email addresses will be used when selecting contacts</string>
     <string name="title_advanced_suggest_local_hint">In addition to contacts provided by Android. Contact data will be stored for newly sent or received messages only when enabled.</string>
     <string name="title_advanced_usenet_hint">Insert \'-- \' between the text and the signature</string>
     <string name="title_advanced_send_reminders_hint">Show a warning when the message text or the subject is empty or when an attachment might be missing</string>
@@ -582,6 +589,7 @@
     <string name="title_advanced_beige_hint">Light themes only</string>
     <string name="title_advanced_date_hint">Messages are only grouped by date if they are sorted by time</string>
     <string name="title_advanced_navbar_colorize_hint">Whether this works depends on the Android version and variant</string>
+    <string name="title_advanced_split_hint">This will split the screen into parts</string>
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
     <string name="title_advanced_highlight_hint">The accent color of the theme will be used for highlighting</string>
     <string name="title_advanced_gravatars_hint">There might be a privacy risk</string>
@@ -624,7 +632,7 @@
     <string name="title_advanced_english_hint">This will restart the app</string>
     <string name="title_advanced_experiments_hint">List of current experimental features</string>
     <string name="title_advanced_protocol_hint">This will significantly increase battery and storage space usage!</string>
-    <string name="title_advanced_debug_hint">Enable extra logging and show ugly debug information at various places</string>
+    <string name="title_advanced_debug_hint">This will show ugly debug information at various places</string>
     <string name="title_advanced_cleanup_attachments_hint">When manually cleaning, this will remove attachments from messages that are no longer synchronized</string>
     <string name="title_advanced_cleanup_hint">This will delete all temporary files</string>
 
@@ -1038,6 +1046,7 @@
     <string name="title_media_toolbar">Media toolbar</string>
     <string name="title_insert_contact_group">Insert contact group</string>
     <string name="title_insert_template">Insert template</string>
+    <string name="title_create_template">Create template</string>
     <string name="title_edit_plain_text">Edit as plain text</string>
     <string name="title_edit_formatted_text">Edit as reformatted text</string>
     <string name="title_select_certificate">Select public key</string>
@@ -1118,6 +1127,7 @@
     <string name="title_search_in_subject">In subject</string>
     <string name="title_search_in_keywords">In keywords (if supported)</string>
     <string name="title_search_in_message">In message text</string>
+    <string name="title_search_in_notes">In local notes</string>
     <string name="title_search_with">Limit search to</string>
     <string name="title_search_with_unseen">Unread</string>
     <string name="title_search_with_flagged">Starred</string>
@@ -1184,8 +1194,11 @@
     <string name="title_answer_favorite">Favorite</string>
     <string name="title_answer_hide">Hide from menus</string>
     <string name="title_answer_text">Template text</string>
-    <string name="title_answer_template_name">$name$ will be replaced by the sender full name</string>
-    <string name="title_answer_template_email">$email$ will be replaced by the sender email address</string>
+    <string name="title_answer_placeholder">Placeholder</string>
+    <string name="title_answer_placeholder_name">Sender\'s full name</string>
+    <string name="title_answer_placeholder_email">Sender\'s email address</string>
+    <string name="title_answer_placeholder_firstname">Sender\'s first name</string>
+    <string name="title_answer_placeholder_lastname">Sender\'s last name</string>
 
     <string name="title_rule_noop">No action</string>
     <string name="title_rule_seen">Mark read</string>

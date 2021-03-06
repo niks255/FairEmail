@@ -220,6 +220,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int colorAccent;
     private int textColorPrimary;
     private int textColorSecondary;
+    private int textColorLink;
     private int colorUnread;
     private int colorRead;
     private int colorSubject;
@@ -243,6 +244,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean color_stripe;
     private boolean name_email;
     private boolean prefer_contact;
+    private boolean only_contact;
     private boolean distinguish_contacts;
     private boolean show_recipients;
     private Float font_size_sender;
@@ -780,6 +782,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSeen.setOnClickListener(this);
                 ibAnswer.setOnClickListener(this);
                 ibNotes.setOnClickListener(this);
+                ibNotes.setOnLongClickListener(this);
                 ibLabels.setOnClickListener(this);
                 ibKeywords.setOnClickListener(this);
                 ibCopy.setOnClickListener(this);
@@ -891,6 +894,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSeen.setOnClickListener(null);
                 ibAnswer.setOnClickListener(null);
                 ibNotes.setOnClickListener(null);
+                ibNotes.setOnLongClickListener(null);
                 ibLabels.setOnClickListener(null);
                 ibKeywords.setOnClickListener(null);
                 ibCopy.setOnClickListener(null);
@@ -934,9 +938,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean reverse = (outgoing && (viewType != ViewType.THREAD || !threading));
             Address[] addresses = (reverse ? message.to : message.from);
             Address[] senders = ContactInfo.fillIn(
-                    reverse && !show_recipients ? message.to : message.senders, prefer_contact);
+                    reverse && !show_recipients ? message.to : message.senders, prefer_contact, only_contact);
             Address[] recipients = ContactInfo.fillIn(
-                    reverse && !show_recipients ? message.from : message.recipients, prefer_contact);
+                    reverse && !show_recipients ? message.from : message.recipients, prefer_contact, only_contact);
             boolean authenticated =
                     !(Boolean.FALSE.equals(message.dkim) ||
                             Boolean.FALSE.equals(message.spf) ||
@@ -1772,6 +1776,46 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.setLog(false).execute(context, owner, sargs, "message:tools");
         }
 
+        private Spanned formatAddresses(Address[] addresses, boolean full) {
+            SpannableStringBuilder ssb = new SpannableStringBuilder();
+
+            if (addresses == null || addresses.length == 0)
+                return ssb;
+
+            for (int i = 0; i < addresses.length; i++) {
+                if (i > 0)
+                    ssb.append("; ");
+
+                if (addresses[i] instanceof InternetAddress) {
+                    InternetAddress address = (InternetAddress) addresses[i];
+                    String email = address.getAddress();
+                    String personal = address.getPersonal();
+
+                    if (TextUtils.isEmpty(personal)) {
+                        if (email != null) {
+                            int start = ssb.length();
+                            ssb.append(email);
+                            ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
+                        }
+                    } else {
+                        if (full) {
+                            ssb.append(personal).append(" <");
+                            if (email != null) {
+                                int start = ssb.length();
+                                ssb.append(email);
+                                ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
+                            }
+                            ssb.append(">");
+                        } else
+                            ssb.append(personal);
+                    }
+                } else
+                    ssb.append(addresses[i].toString());
+            }
+
+            return ssb;
+        }
+
         private void bindAddresses(TupleMessageEx message) {
             boolean show_addresses = properties.getValue("addresses", message.id);
             boolean full = (show_addresses || name_email);
@@ -1780,12 +1824,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             int tos = (message.to == null ? 0 : message.to.length);
             boolean hasChannel = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
 
-            String submitter = MessageHelper.formatAddresses(message.submitter);
-            String from = MessageHelper.formatAddresses(message.senders);
-            String to = MessageHelper.formatAddresses(message.to, full, false);
-            String replyto = MessageHelper.formatAddresses(message.reply);
-            String cc = MessageHelper.formatAddresses(message.cc, full, false);
-            String bcc = MessageHelper.formatAddresses(message.bcc, full, false);
+            Spanned submitter = formatAddresses(message.submitter, true);
+            Spanned from = formatAddresses(message.senders, true);
+            Spanned to = formatAddresses(message.to, full);
+            Spanned replyto = formatAddresses(message.reply, true);
+            Spanned cc = formatAddresses(message.cc, full);
+            Spanned bcc = formatAddresses(message.bcc, full);
 
             grpAddresses.setVisibility(View.VISIBLE);
 
@@ -1808,9 +1852,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSubmitter.setVisibility(!TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
             tvSubmitter.setText(submitter);
 
+            InternetAddress deliveredto = new InternetAddress();
+            deliveredto.setAddress(message.deliveredto);
             tvDeliveredToTitle.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
             tvDeliveredTo.setVisibility(show_addresses && !TextUtils.isEmpty(message.deliveredto) ? View.VISIBLE : View.GONE);
-            tvDeliveredTo.setText(message.deliveredto);
+            tvDeliveredTo.setText(formatAddresses(new Address[]{deliveredto}, true));
 
             tvFromExTitle.setVisibility((froms > 1 || show_addresses) && !TextUtils.isEmpty(from) ? View.VISIBLE : View.GONE);
             tvFromEx.setVisibility((froms > 1 || show_addresses) && !TextUtils.isEmpty(from) ? View.VISIBLE : View.GONE);
@@ -1850,7 +1896,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             tvIdentityTitle.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
             tvIdentity.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
-            tvIdentity.setText(via == null ? null : MessageHelper.formatAddresses(new Address[]{via}));
+            tvIdentity.setText(via == null ? null : formatAddresses(new Address[]{via}, true));
 
             tvSentTitle.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
             tvSent.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
@@ -2991,9 +3037,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
                                     (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
                                             !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt));
-                    if (lock)
+                    if (lock) {
                         properties.lock(message.id);
-                    else
+                        properties.setExpanded(message, false, false);
+                        properties.setHeight(message.id, null);
+                    } else
                         onActionDecrypt(message, false);
                 } else if (id == R.id.ibVerify) {
                     onActionDecrypt(message, false);
@@ -3165,6 +3213,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             int id = view.getId();
             if (id == R.id.ibFlagged) {
                 onMenuColoredStar(message);
+                return true;
+            } else if (id == R.id.ibNotes) {
+                onActionCopyNote(message);
                 return true;
             } else if (id == R.id.ibFull) {
                 onActionOpenFull(message);
@@ -3408,7 +3459,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String query = ((InternetAddress) addresses[0]).getAddress();
                     LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
                     lbm.sendBroadcast(
-                            new Intent(ActivityView.ACTION_SEARCH)
+                            new Intent(ActivityView.ACTION_SEARCH_ADDRESS)
                                     .putExtra("account", -1L)
                                     .putExtra("folder", -1L)
                                     .putExtra("query", query));
@@ -3655,6 +3706,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             lbm.sendBroadcast(
                     new Intent(FragmentBase.ACTION_STORE_ATTACHMENTS)
                             .putExtra("id", message.id));
+        }
+
+        private void onActionCopyNote(TupleMessageEx message) {
+            ClipboardManager clipboard =
+                    (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null && !TextUtils.isEmpty(message.notes)) {
+                ClipData clip = ClipData.newPlainText(context.getString(R.string.app_name), message.notes);
+                clipboard.setPrimaryClip(clip);
+                ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+            }
         }
 
         private void onShow(final TupleMessageEx message, boolean full) {
@@ -3995,6 +4056,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onActionDelete(TupleMessageEx message) {
             Bundle aargs = new Bundle();
             aargs.putString("question", context.getString(R.string.title_ask_delete));
+            aargs.putString("remark", message.getRemark());
             aargs.putLong("id", message.id);
             aargs.putBoolean("warning", true);
 
@@ -4513,6 +4575,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onMenuDelete(final TupleMessageEx message) {
             Bundle aargs = new Bundle();
             aargs.putString("question", context.getString(R.string.title_ask_delete));
+            aargs.putString("remark", message.getRemark());
             aargs.putLong("id", message.id);
             aargs.putBoolean("warning", true);
 
@@ -5252,6 +5315,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
         this.textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
         this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
+        this.textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
 
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         boolean highlight_subject = prefs.getBoolean("highlight_subject", false);
@@ -5287,6 +5351,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.color_stripe = prefs.getBoolean("color_stripe", true);
         this.name_email = prefs.getBoolean("name_email", false);
         this.prefer_contact = prefs.getBoolean("prefer_contact", false);
+        this.only_contact = prefs.getBoolean("only_contact", false);
         this.distinguish_contacts = prefs.getBoolean("distinguish_contacts", false);
         this.show_recipients = prefs.getBoolean("show_recipients", false);
 
@@ -6651,18 +6716,25 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final long id = getArguments().getLong("id");
             final String notes = getArguments().getString("notes");
 
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_notes, null);
-            final EditText etNote = view.findViewById(R.id.etNote);
-            etNote.setText(notes);
+            final Context context = getContext();
+            final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-            return new AlertDialog.Builder(getContext())
+            View view = LayoutInflater.from(context).inflate(R.layout.dialog_notes, null);
+            final EditText etNotes = view.findViewById(R.id.etNotes);
+            etNotes.setText(notes);
+            etNotes.selectAll();
+
+            etNotes.requestFocus();
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+            return new AlertDialog.Builder(context)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Bundle args = new Bundle();
                             args.putLong("id", id);
-                            args.putString("notes", etNote.getText().toString());
+                            args.putString("notes", etNotes.getText().toString());
 
                             new SimpleTask<Void>() {
                                 @Override
@@ -6674,7 +6746,29 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         notes = null;
 
                                     DB db = DB.getInstance(context);
-                                    db.message().setMessageNotes(id, notes);
+                                    try {
+                                        db.beginTransaction();
+
+                                        EntityMessage message = db.message().getMessage(id);
+                                        if (message == null)
+                                            return null;
+
+                                        db.message().setMessageNotes(message.id, notes);
+
+                                        if (TextUtils.isEmpty(message.hash))
+                                            return null;
+
+                                        List<EntityMessage> messages = db.message().getMessagesByHash(message.account, message.hash);
+                                        if (messages == null)
+                                            return null;
+
+                                        for (EntityMessage m : messages)
+                                            db.message().setMessageNotes(m.id, notes);
+
+                                        db.setTransactionSuccessful();
+                                    } finally {
+                                        db.endTransaction();
+                                    }
 
                                     return null;
                                 }
@@ -6750,11 +6844,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             final long id = getArguments().getLong("id");
 
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_keyword_add, null);
+            final Context context = getContext();
+            final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            View view = LayoutInflater.from(context).inflate(R.layout.dialog_keyword_add, null);
             final EditText etKeyword = view.findViewById(R.id.etKeyword);
             etKeyword.setText(null);
 
-            return new AlertDialog.Builder(getContext())
+            etKeyword.requestFocus();
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+            return new AlertDialog.Builder(context)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override

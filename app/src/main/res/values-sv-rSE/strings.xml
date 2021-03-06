@@ -499,7 +499,6 @@
     <string name="title_advanced_english_hint">Detta startar om appen</string>
     <string name="title_advanced_experiments_hint">Lista över aktuella experimentella funktioner</string>
     <string name="title_advanced_protocol_hint">Detta kommer att avsevärt öka batteri- och lagringsutrymmets användning!</string>
-    <string name="title_advanced_debug_hint">Aktivera extra loggning och visa felsökningsinformation på olika ställen</string>
     <string name="title_advanced_cleanup_attachments_hint">När du städar manuellt kommer detta att ta bort bilagor från meddelanden som inte längre är synkroniserade</string>
     <string name="title_advanced_cleanup_hint">Detta tar bort alla temporära filer</string>
     <string name="title_advanced_never_favorite">Aldrig favorit</string>
@@ -994,8 +993,6 @@
     <string name="title_answer_favorite">Favorit</string>
     <string name="title_answer_hide">Dölj från menyer</string>
     <string name="title_answer_text">Malltext</string>
-    <string name="title_answer_template_name">$name$ kommer att ersättas av avsändarens fullständiga namn</string>
-    <string name="title_answer_template_email">$email$ kommer att ersättas av avsändarens e-postadress</string>
     <string name="title_rule_noop">Ingen åtgärd</string>
     <string name="title_rule_seen">Markera som läst</string>
     <string name="title_rule_unseen">Markera som oläst</string>

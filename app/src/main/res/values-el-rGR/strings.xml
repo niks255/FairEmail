@@ -125,7 +125,7 @@
     <string name="title_setup_wizard">Οδηγός</string>
     <string name="title_setup_wizard_multiple">Ο οδηγός μπορεί να χρησιμοποιηθεί πολλές φορές για τη ρύθμιση πολλαπλών λογαριασμών</string>
     <string name="title_setup_wizard_new">Χρειάζομαι μια νέα διεύθυνση ηλ. ταχυδρομείου</string>
-    <string name="title_setup_manual">Χειροκίνητη ρύθμιση και περισσότερες επιλογές</string>
+    <string name="title_setup_manual">Χειροκίνητη ρύθμιση και περισσότερες επιλογές λογαριασμού</string>
     <string name="title_setup_account_remark">Λήψη μηνυμάτων</string>
     <string name="title_setup_identity_remark">Αποστολή μηνυμάτων</string>
     <string name="title_setup_account_identity_hint">Μπορείτε να ρυθμίσετε το όνομα, το χρώμα και τις ενέργειες σάρωσης στις ρυθμίσεις του λογαριασμού, και να ρυθμίσετε μία υπογραφή στις ρυθμίσεις ταυτότητας</string>
@@ -159,6 +159,7 @@
     <string name="title_setup_grant_again">Παραχώρηση απαιτούμενων δικαιωμάτων</string>
     <string name="title_setup_exchange_support">Υποστηρίζεται το Microsoft Exchange;</string>
     <string name="title_setup_identity_what">Τι είναι μια ταυτότητα;</string>
+    <string name="title_setup_free">Η εφαρμογή αυτή χρησιμοποιείται δωρεάν;</string>
     <string name="title_setup_permissions">Απαιτούμενα δικαιώματα</string>
     <string name="title_setup_permissions_remark">Για πρόσβαση στις πληροφορίες επαφών (προαιρετικό)</string>
     <string name="title_setup_doze">Απενεργοποίηση βελτιστοποίησης μπαταρίας</string>
@@ -178,6 +179,7 @@
     <string name="title_setup_configuring">Ρύθμιση λογαριασμού &#8230;</string>
     <string name="title_setup_export">Εξαγωγή ρυθμίσεων</string>
     <string name="title_setup_import">Εισαγωγή ρυθμίσεων</string>
+    <string name="title_setup_export_do">Ο κωδικός πρόσβασης χρησιμοποιείται για την κρυπτογράφηση των ρυθμίσεων και απαιτείται για την εκ νέου εισαγωγή των ρυθμίσεων</string>
     <string name="title_setup_import_do">Οι εισαγόμενοι λογαριασμοί θα προστεθούν χωρίς να αντικατασταθεί κάποιος από τους ήδη υπάρχοντες</string>
     <string name="title_setup_password">Κωδικός πρόσβασης</string>
     <string name="title_setup_password_chars">Ο κωδικός πρόσβασης περιέχει χαρακτήρες ελέγχου ή διαστήματα</string>
@@ -218,7 +220,7 @@
     <string name="title_advanced_hint_message">        Τώρα περιηγείστε στις πιο προχωρημένες ρυθμίσεις.
         Όλες οι επιλογές έχουν τις πιο συνηθισμένες τυπικές τιμές, τις οποίες δεν χρειάζεται να αλλάξετε εκτός εάν έχετε μία διαφορετική προτίμηση.
     </string>
-    <string name="title_advanced_section_main">Έναρξη</string>
+    <string name="title_advanced_section_main">Κύριες</string>
     <string name="title_advanced_section_synchronize">Λήψη</string>
     <string name="title_advanced_section_send">Αποστολή</string>
     <string name="title_advanced_section_connection">Σύνδεση</string>
@@ -248,6 +250,7 @@
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
     <string name="title_advanced_keyboard">Εμφάνιση του πληκτρολογίου από προεπιλογή</string>
     <string name="title_advanced_keyboard_no_fullscreen">Να μην προβάλλεται το πληκτρολόγιο σε πλήρη οθόνη</string>
+    <string name="title_advanced_suggest_names">Χρήση ονομάτων και διευθύνσεων ηλεκτρονικού ταχυδρομείου</string>
     <string name="title_advanced_suggest_local">Προτείνονται τοπικά αποθηκευμένες επαφές</string>
     <string name="title_advanced_suggest_sent">Προτείνονται διευθύνσεις που βρέθηκαν σε απεσταλμένα μηνύματα</string>
     <string name="title_advanced_suggest_received">Προτείνονται διευθύνσεις που βρέθηκαν σε μηνύματα που έχουν ληφθεί</string>
@@ -310,6 +313,7 @@
     <string name="title_advanced_color_threshold">Κατώφλι για τον καθορισμό του χρώματος του γράμματος: %1$s%%</string>
     <string name="title_advanced_name_email">Να προβάλλονται τα ονόματα και οι διευθύνσεις ηλεκτρονικού ταχυδρομείου</string>
     <string name="title_advanced_replace_name">Να προτιμάται το όνομα της επαφής αντί για το όνομα του αποστολέα</string>
+    <string name="title_advanced_only_name">Να προβάλλονται μόνο τα ονόματα των επαφών</string>
     <string name="title_advanced_distinguish_contacts">Να υπογραμμίζεται ο αποστολέας όταν ο αποστολέας είναι γνωστός ως τοπική επαφή</string>
     <string name="title_advanced_show_recipients">Να προβάλλονται οι παραλήπτες στην κεφαλίδα του μηνύματος</string>
     <string name="title_advanced_font_size_sender">Μέγεθος γραμματοσειράς για το πεδίο \"Αποστολέας\"</string>
@@ -451,6 +455,7 @@
     <string name="title_advanced_query_threads">Περιορισμός παράλληλων προσβάσεων στη βάση δεδομένων</string>
     <string name="title_advanced_crash_reports">Αποστολή αναφοράς σφαλμάτων</string>
     <string name="title_advanced_protocol">Τήρηση αρχείων καταγραφής πρωτοκόλλου</string>
+    <string name="title_advanced_log_info">Καταγραφές αποσφαλμάτωσης</string>
     <string name="title_advanced_debug">Λειτουργία αποσφαλμάτωσης</string>
     <string name="title_advanced_cleanup_attachments">Διαγραφή συνημμένων από παλιά μηνύματα</string>
     <string name="title_advanced_cleanup">Καθαρισμός</string>
@@ -469,6 +474,7 @@
     <string name="title_advanced_check_reply_hint">Ελέγχει αν το το όνομα τομέα του αποστολέα και η διεύθυνση απάντησης είναι ίδια</string>
     <string name="title_advanced_lookup_mx_hint">Ελέγχει αν υπάρχουν καταγραφές DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Η επιλογή αυτή θα επιβραδύνει τον συγχρονισμό των μηνυμάτων</string>
+    <string name="title_advanced_suggest_names_hint">Εάν απενεργοποιηθεί, θα χρησιμοποιούνται μόνο διευθύνσεις ηλ. ταχυδρομείου κατά την επιλογή επαφών</string>
     <string name="title_advanced_suggest_local_hint">Επιπρόσθετα στις παρεχόμενες από το Android επαφές, θα αποθηκεύονται πληροφορίες επαφών για πρόσφατα απεσταλμένα ή ειλημμένα μηνύματα, μόνον εφόσον οι σχετικές δυνατότητες έχουν ενεργοποιηθεί.</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
@@ -485,6 +491,7 @@
     <string name="title_advanced_beige_hint">Φωτεινά θέματα μόνο</string>
     <string name="title_advanced_date_hint">Τα μηνύματα ομαδοποιούνται μόνον κατά ημερομηνία όταν ταξινομούνται σε χρονολογική σειρά</string>
     <string name="title_advanced_navbar_colorize_hint">Το αν αυτό λειτουργεί ή όχι, εξαρτάται από την έκδοση και εκδοχή του Android</string>
+    <string name="title_advanced_split_hint">Θα χωρίσει την οθόνη σε μέρη</string>
     <string name="title_advanced_threading_hint">Ομαδοποίηση των μηνυμάτων που σχετίζονται αναμεταξύ τους</string>
     <string name="title_advanced_highlight_hint">Το χρώμα επισήμανσης του θέματος θα χρησιμοποιηθεί για έμφαση</string>
     <string name="title_advanced_gravatars_hint">Το προσωπικό σας απόρρητο μπορεί να τεθεί σε κίνδυνο</string>
@@ -523,7 +530,7 @@
     <string name="title_advanced_english_hint">Θα επανεκκινήσει την εφαρμογή</string>
     <string name="title_advanced_experiments_hint">Λίστα των τρεχόντων πειραματικών χαρακτηριστικών</string>
     <string name="title_advanced_protocol_hint">Αυτό θα αυξήσει σημαντικά τη χρήση μπαταρίας και αποθηκευτικού χώρου!</string>
-    <string name="title_advanced_debug_hint">Ενεργοποίηση επιπλέον καταγραφών και προβολή αντιαισθητικών πληροφοριών αποσφαλμάτωσης σε διάφορες θέσεις</string>
+    <string name="title_advanced_debug_hint">Θα προβάλλονται αντιαισθητικές πληροφορίες αποσφαλμάτωσης σε διάφορα μέρη</string>
     <string name="title_advanced_cleanup_attachments_hint">Κατά τον χειροκίνητο καθαρισμό, θα απομακρύνονται τα συνημμένα από τα μηνύματα που πλέον δεν συγχρονίζονται</string>
     <string name="title_advanced_cleanup_hint">Θα διαγράψει όλα τα προσωρινά αρχεία</string>
     <string name="title_advanced_never_favorite">Ποτέ ως αγαπημένο</string>
@@ -902,6 +909,7 @@
     <string name="title_media_toolbar">Γραμμή εργαλείων πολυμέσων</string>
     <string name="title_insert_contact_group">Εισαγωγή ομάδας επαφών</string>
     <string name="title_insert_template">Εισαγωγή προτύπου</string>
+    <string name="title_create_template">Δημιουργία προτύπου</string>
     <string name="title_edit_plain_text">Επεξεργασία ως απλό κείμενο</string>
     <string name="title_edit_formatted_text">Επεξεργασία ως αναμορφοποιημένο κείμενο</string>
     <string name="title_select_certificate">Επιλογή δημοσίου κλειδιού</string>
@@ -977,6 +985,7 @@
     <string name="title_search_in_subject">Στο θέμα</string>
     <string name="title_search_in_keywords">Στις λέξεις-κλειδιά (εάν υποστηρίζεται)</string>
     <string name="title_search_in_message">Στο κείμενο του μηνύματος</string>
+    <string name="title_search_in_notes">Στις τοπικές σημειώσεις</string>
     <string name="title_search_with">Περιορισμός αναζήτησης σε</string>
     <string name="title_search_with_unseen">Μη αναγνωσμένα</string>
     <string name="title_search_with_flagged">Με αστέρι</string>
@@ -1035,8 +1044,11 @@
     <string name="title_answer_favorite">Αγαπημένα</string>
     <string name="title_answer_hide">Απόκρυψη από τα μενού</string>
     <string name="title_answer_text">Κείμενο προτύπου</string>
-    <string name="title_answer_template_name">$name$ θα αντικατασταθεί από το πλήρες όνομα του αποστολέα</string>
-    <string name="title_answer_template_email">$email$ θα αντικατασταθεί από τη διεύθυνση ηλ. ταχυδρομείου του αποστολέα</string>
+    <string name="title_answer_placeholder">Κρατημένη θέση</string>
+    <string name="title_answer_placeholder_name">Πλήρες όνομα αποστολέα</string>
+    <string name="title_answer_placeholder_email">Διεύθυνση ηλ. ταχυδρομείου αποστολέα</string>
+    <string name="title_answer_placeholder_firstname">Όνομα αποστολέα</string>
+    <string name="title_answer_placeholder_lastname">Επίθετο αποστολέα</string>
     <string name="title_rule_noop">Καμία ενέργεια</string>
     <string name="title_rule_seen">Σήμανση ως αναγνωσμένο</string>
     <string name="title_rule_unseen">Σήμανση ως μη αναγνωσμένο</string>

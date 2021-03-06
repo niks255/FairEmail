@@ -63,18 +63,20 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final long account = getArguments().getLong("account", -1);
         final long folder = getArguments().getLong("folder", -1);
 
-        boolean pro = ActivityBilling.isPro(getContext());
+        final Context context = getContext();
+        boolean pro = ActivityBilling.isPro(context);
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean fts = prefs.getBoolean("fts", false);
         boolean last_search_senders = prefs.getBoolean("last_search_senders", true);
         boolean last_search_recipients = prefs.getBoolean("last_search_recipients", true);
         boolean last_search_subject = prefs.getBoolean("last_search_subject", true);
         boolean last_search_keywords = prefs.getBoolean("last_search_keywords", false);
         boolean last_search_message = prefs.getBoolean("last_search_message", true);
+        boolean last_search_notes = prefs.getBoolean("last_search_notes", true);
         String last_search = prefs.getString("last_search", null);
 
-        View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_search, null);
+        View dview = LayoutInflater.from(context).inflate(R.layout.dialog_search, null);
 
         final AutoCompleteTextView etQuery = dview.findViewById(R.id.etQuery);
         final ImageButton ibAttachment = dview.findViewById(R.id.ibAttachment);
@@ -90,6 +92,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final CheckBox cbSubject = dview.findViewById(R.id.cbSubject);
         final CheckBox cbKeywords = dview.findViewById(R.id.cbKeywords);
         final CheckBox cbMessage = dview.findViewById(R.id.cbMessage);
+        final CheckBox cbNotes = dview.findViewById(R.id.cbNotes);
         final CheckBox cbUnseen = dview.findViewById(R.id.cbUnseen);
         final CheckBox cbFlagged = dview.findViewById(R.id.cbFlagged);
         final CheckBox cbHidden = dview.findViewById(R.id.cbHidden);
@@ -102,7 +105,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final TextView tvAfter = dview.findViewById(R.id.tvAfter);
         final Group grpMore = dview.findViewById(R.id.grpMore);
 
-        final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         ibInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +116,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         });
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                getContext(),
+                context,
                 R.layout.search_suggestion,
                 null,
                 new String[]{"suggestion"},
@@ -129,7 +132,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                     return cursor;
 
                 String query = "%" + typed + "%";
-                DB db = DB.getInstance(getContext());
+                DB db = DB.getInstance(context);
                 return db.message().getSuggestions(
                         account < 0 ? null : account,
                         folder < 0 ? null : folder,
@@ -173,6 +176,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                 cbSubject.setEnabled(!isChecked);
                 cbKeywords.setEnabled(!isChecked);
                 cbMessage.setEnabled(!isChecked);
+                cbNotes.setEnabled(!isChecked);
                 cbUnseen.setEnabled(!isChecked);
                 cbFlagged.setEnabled(!isChecked);
                 cbHidden.setEnabled(!isChecked);
@@ -217,6 +221,13 @@ public class FragmentDialogSearch extends FragmentDialogBase {
             }
         });
 
+        cbNotes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("last_search_notes", isChecked).apply();
+            }
+        });
+
         spMessageSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -256,6 +267,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         cbSubject.setChecked(last_search_subject);
         cbKeywords.setChecked(last_search_keywords);
         cbMessage.setChecked(last_search_message);
+        cbNotes.setChecked(last_search_notes);
         tvAfter.setText(null);
         tvBefore.setText(null);
 
@@ -269,7 +281,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         etQuery.requestFocus();
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
+        final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(dview)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
@@ -289,6 +301,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                             criteria.in_subject = cbSubject.isChecked();
                             criteria.in_keywords = cbKeywords.isChecked();
                             criteria.in_message = cbMessage.isChecked();
+                            criteria.in_notes = cbNotes.isChecked();
                             criteria.with_unseen = cbUnseen.isChecked();
                             criteria.with_flagged = cbFlagged.isChecked();
                             criteria.with_hidden = cbHidden.isChecked();
@@ -342,7 +355,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                                 @Override
                                 protected void onExecuted(Bundle args, EntityFolder archive) {
                                     FragmentMessages.search(
-                                            getContext(), getViewLifecycleOwner(), getParentFragmentManager(),
+                                            context, getViewLifecycleOwner(), getParentFragmentManager(),
                                             account,
                                             archive == null ? folder : archive.id,
                                             archive != null,
@@ -353,10 +366,10 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                                 protected void onException(Bundle args, Throwable ex) {
                                     Log.e(ex);
                                 }
-                            }.execute(getContext(), getViewLifecycleOwner(), getArguments(), "search:raw");
+                            }.execute(context, getViewLifecycleOwner(), getArguments(), "search:raw");
                         else
                             FragmentMessages.search(
-                                    getContext(), getViewLifecycleOwner(), getParentFragmentManager(),
+                                    context, getViewLifecycleOwner(), getParentFragmentManager(),
                                     account, folder, false, criteria);
                     }
                 })
@@ -387,7 +400,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                 }
 
                 FragmentMessages.search(
-                        getContext(), getViewLifecycleOwner(), getParentFragmentManager(),
+                        context, getViewLifecycleOwner(), getParentFragmentManager(),
                         account, folder, false, criteria);
             }
         };

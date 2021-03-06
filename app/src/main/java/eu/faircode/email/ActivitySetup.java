@@ -225,6 +225,14 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
         }).setSeparated());
 
+        menus.add(new NavMenuItem(R.drawable.twotone_list_alt_24, R.string.title_log, new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.closeDrawer(drawerContainer);
+                onMenuLog();
+            }
+        }));
+
         menus.add(new NavMenuItem(R.drawable.twotone_help_24, R.string.menu_legend, new Runnable() {
             @Override
             public void run() {
@@ -455,6 +463,15 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("order");
+        fragmentTransaction.commit();
+    }
+
+    private void onMenuLog() {
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+            getSupportFragmentManager().popBackStack("logs", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, new FragmentLogs()).addToBackStack("logs");
         fragmentTransaction.commit();
     }
 
@@ -1308,9 +1325,13 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             final boolean export = getArguments().getBoolean("export");
 
             View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_password, null);
+            TextView tvCaption = dview.findViewById(R.id.tvCaption);
             etPassword1 = dview.findViewById(R.id.tilPassword1);
             etPassword2 = dview.findViewById(R.id.tilPassword2);
+            TextView tvExportHint = dview.findViewById(R.id.tvExportHint);
             TextView tvImportHint = dview.findViewById(R.id.tvImportHint);
+
+            tvCaption.setText(export ? R.string.title_setup_export : R.string.title_setup_import);
 
             if (savedInstanceState != null) {
                 etPassword1.getEditText().setText(savedInstanceState.getString("fair:password1"));
@@ -1318,6 +1339,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
 
             etPassword2.setVisibility(export ? View.VISIBLE : View.GONE);
+            tvExportHint.setVisibility(export ? View.VISIBLE : View.GONE);
             tvImportHint.setVisibility(export ? View.GONE : View.VISIBLE);
 
             return new AlertDialog.Builder(getContext())

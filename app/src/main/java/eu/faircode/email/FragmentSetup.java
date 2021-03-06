@@ -34,6 +34,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,6 +73,7 @@ public class FragmentSetup extends FragmentBase {
     private Button btnIdentity;
     private TextView tvExchangeSupport;
     private TextView tvIdentityWhat;
+    private TextView tvFree;
     private TextView tvNoComposable;
 
     private TextView tvPermissionsDone;
@@ -101,8 +104,14 @@ public class FragmentSetup extends FragmentBase {
 
         if (savedInstanceState == null) {
             FragmentActivity activity = getActivity();
-            if (activity != null)
-                manual = activity.getIntent().getBooleanExtra("manual", false);
+            if (activity != null) {
+                Intent intent = activity.getIntent();
+                if (intent.hasExtra("manual")) {
+                    manual = intent.getBooleanExtra("manual", false);
+                    intent.removeExtra("manual");
+                    activity.setIntent(intent);
+                }
+            }
         } else
             manual = savedInstanceState.getBoolean("fair:manual");
 
@@ -126,6 +135,7 @@ public class FragmentSetup extends FragmentBase {
         btnIdentity = view.findViewById(R.id.btnIdentity);
         tvExchangeSupport = view.findViewById(R.id.tvExchangeSupport);
         tvIdentityWhat = view.findViewById(R.id.tvIdentityWhat);
+        tvFree = view.findViewById(R.id.tvFree);
         tvNoComposable = view.findViewById(R.id.tvNoComposable);
 
         tvPermissionsDone = view.findViewById(R.id.tvPermissionsDone);
@@ -176,7 +186,10 @@ public class FragmentSetup extends FragmentBase {
 
                 //popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_activesync, order++, R.string.title_setup_activesync);
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other);
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_pop3, order++, R.string.title_setup_pop3);
+
+                SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
+                ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_pop3, order++, ss);
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -232,7 +245,6 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
-        tvManual.setPaintFlags(tvManual.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,6 +286,14 @@ public class FragmentSetup extends FragmentBase {
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 9);
+            }
+        });
+
+        tvFree.setPaintFlags(tvFree.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvFree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 19);
             }
         });
 

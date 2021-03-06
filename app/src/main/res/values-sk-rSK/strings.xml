@@ -147,7 +147,6 @@
     <string name="title_setup_wizard">Sprievodca</string>
     <string name="title_setup_wizard_multiple">Sprievodca môže byť použitý viac krát pre nastavenie viacerých účtov</string>
     <string name="title_setup_wizard_new">Potrebujem novú emailovú adresu</string>
-    <string name="title_setup_manual">Manuálne nastavenie a viac možností</string>
     <string name="title_setup_account_remark">Obdržať email</string>
     <string name="title_setup_identity_remark">Poslať email</string>
     <string name="title_setup_account_identity_hint">Môžete nastaviť meno, farbu a akcie pre potiahnutie v nastaveniach konta, a nastaviť podpis v nastaveniach totožnosti</string>
@@ -529,7 +528,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_advanced_english_hint">Toto reštartuje aplikáciu</string>
     <string name="title_advanced_experiments_hint">Zoznam aktuálnych experimentálnych funkcií</string>
     <string name="title_advanced_protocol_hint">Toto výrazne ovplivní nároky na úložisko a využívanie batérie!</string>
-    <string name="title_advanced_debug_hint">Povoliť rozšírené zaznamenávanie a zobrazovať ladiace informácie na rôznych miestach</string>
     <string name="title_advanced_cleanup_attachments_hint">Pri manuálnom čistení táto možnosť odstráni prílohy zo správ, ktoré už nie sú synchronizované</string>
     <string name="title_advanced_cleanup_hint">Toto odstráni všetky dočasné súbory</string>
     <string name="title_advanced_never_favorite">Nikdy nepovažovať za obľúbený</string>
@@ -1021,8 +1019,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_answer_favorite">Obľúbená</string>
     <string name="title_answer_hide">Skryť z ponuky</string>
     <string name="title_answer_text">Text šablóny</string>
-    <string name="title_answer_template_name">$name$ bude nahradené zobrazeným menom odosielateľa</string>
-    <string name="title_answer_template_email">$email$ bude nahradené emailovou adresou odosielateľa</string>
     <string name="title_rule_noop">Žiadna akcia</string>
     <string name="title_rule_seen">Označiť ako prečítané</string>
     <string name="title_rule_unseen">Označiť ako neprečítané</string>

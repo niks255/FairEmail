@@ -1208,7 +1208,7 @@ public class MessageHelper {
             return header;
 
         if (CharsetHelper.isUTF8(header)) {
-            Log.w("Converting " + name + " to UTF-8");
+            Log.i("Converting " + name + " to UTF-8");
             return new String(header.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         } else {
             Log.i("Converting " + name + " to ISO8859-1");
@@ -1257,7 +1257,23 @@ public class MessageHelper {
     }
 
     Address[] getReturnPath() throws MessagingException {
-        return getAddressHeader("Return-Path");
+        Address[] addresses = getAddressHeader("Return-Path");
+        if (addresses == null)
+            return null;
+
+        List<Address> result = new ArrayList<>();
+        for (int i = 0; i < addresses.length; i++) {
+            boolean duplicate = false;
+            for (int j = 0; j < i; j++)
+                if (addresses[i].equals(addresses[j])) {
+                    duplicate = true;
+                    break;
+                }
+            if (!duplicate)
+                result.add(addresses[i]);
+        }
+
+        return result.toArray(new Address[0]);
     }
 
     Address[] getSender() throws MessagingException {
@@ -1532,7 +1548,7 @@ public class MessageHelper {
             } else
                 formatted.add(addresses[i].toString());
         }
-        return TextUtils.join(", ", formatted);
+        return TextUtils.join(compose ? ", " : "; ", formatted);
     }
 
     static String punyCode(String email) {

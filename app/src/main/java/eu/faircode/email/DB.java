@@ -220,11 +220,100 @@ public abstract class DB extends RoomDatabase {
         });
     }
 
+    static void createEmergencyBackup(Context context) {
+        Log.i("Creating emergency backup");
+        try {
+            DB db = DB.getInstance(context);
+
+            JSONArray jaccounts = new JSONArray();
+            List<EntityAccount> accounts = db.account().getAccounts();
+            for (EntityAccount account : accounts) {
+                JSONObject jaccount = account.toJSON();
+
+                JSONArray jfolders = new JSONArray();
+                List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
+                for (EntityFolder folder : folders)
+                    jfolders.put(folder.toJSON());
+                jaccount.put("folders", jfolders);
+
+                JSONArray jidentities = new JSONArray();
+                List<EntityIdentity> identities = db.identity().getIdentities(account.id);
+                for (EntityIdentity identity : identities)
+                    jidentities.put(identity.toJSON());
+                jaccount.put("identities", jidentities);
+
+                jaccounts.put(jaccount);
+            }
+
+            File emergency = new File(context.getFilesDir(), "emergency.json");
+            Helper.writeText(emergency, jaccounts.toString(2));
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    private static void checkEmergencyBackup(Context context) {
+        try {
+            File dbfile = context.getDatabasePath(DB_NAME);
+            if (dbfile.exists()) {
+                Log.i("Emergency restore /dbfile");
+                return;
+            }
+
+            File emergency = new File(context.getFilesDir(), "emergency.json");
+            if (!emergency.exists()) {
+                Log.i("Emergency restore /json");
+                return;
+            }
+
+            DB db = DB.getInstance(context);
+            if (db.account().getAccounts().size() > 0) {
+                Log.e("Emergency restore /accounts");
+                return;
+            }
+
+            Log.e("Emergency restore");
+
+            String json = Helper.readText(emergency);
+            JSONArray jaccounts = new JSONArray(json);
+            for (int a = 0; a < jaccounts.length(); a++) {
+                JSONObject jaccount = jaccounts.getJSONObject(a);
+                EntityAccount account = EntityAccount.fromJSON(jaccount);
+                account.created = new Date().getTime();
+                account.id = db.account().insertAccount(account);
+
+                JSONArray jfolders = jaccount.getJSONArray("folders");
+                for (int f = 0; f < jfolders.length(); f++) {
+                    EntityFolder folder = EntityFolder.fromJSON(jfolders.getJSONObject(f));
+                    folder.account = account.id;
+                    db.folder().insertFolder(folder);
+                }
+
+                JSONArray jidentities = jaccount.getJSONArray("identities");
+                for (int i = 0; i < jidentities.length(); i++) {
+                    EntityIdentity identity = EntityIdentity.fromJSON(jidentities.getJSONObject(i));
+                    identity.account = account.id;
+                    db.identity().insertIdentity(identity);
+                }
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
     public static synchronized DB getInstance(Context context) {
         if (sInstance == null) {
+            Log.i("Creating database instance");
             Context acontext = context.getApplicationContext();
 
             sInstance = migrate(acontext, getBuilder(acontext)).build();
+
+            sInstance.getQueryExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    checkEmergencyBackup(acontext);
+                }
+            });
 
             try {
                 Log.i("Disabling view invalidation");
@@ -269,12 +358,14 @@ public abstract class DB extends RoomDatabase {
         int threads = prefs.getInt("query_threads", 4); // AndroidX default thread count: 4
         boolean wal = prefs.getBoolean("wal", true);
         Log.i("DB query threads=" + threads + " wal=" + wal);
-        ExecutorService executor = Helper.getBackgroundExecutor(threads, "query");
+        ExecutorService executorQuery = Helper.getBackgroundExecutor(threads, "query");
+        ExecutorService executorTransaction = Helper.getBackgroundExecutor(0, "transaction");
 
         return Room
                 .databaseBuilder(context, DB.class, DB_NAME)
                 .openHelperFactory(new RequerySQLiteOpenHelperFactory())
-                .setQueryExecutor(executor)
+                .setQueryExecutor(executorQuery)
+                .setTransactionExecutor(executorTransaction)
                 .setJournalMode(wal ? JournalMode.WRITE_AHEAD_LOGGING : JournalMode.TRUNCATE) // using the latest sqlite
                 .addCallback(new Callback() {
                     @Override

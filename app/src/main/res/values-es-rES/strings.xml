@@ -125,7 +125,6 @@
     <string name="title_setup_wizard">Asistente</string>
     <string name="title_setup_wizard_multiple">El asistente puede utilizarse varias veces para configurar múltiples cuentas</string>
     <string name="title_setup_wizard_new">Necesito una nueva dirección de correo electrónico</string>
-    <string name="title_setup_manual">Configuración manual y más opciones</string>
     <string name="title_setup_account_remark">Recibir correo electrónico</string>
     <string name="title_setup_identity_remark">Enviar correo electrónico</string>
     <string name="title_setup_account_identity_hint">Puede configurar el nombre, color y acciones de deslizamiento en la configuración de la cuenta, y configurar una firma en los ajustes de identidad</string>
@@ -159,6 +158,7 @@
     <string name="title_setup_grant_again">Otorgar permisos requeridos</string>
     <string name="title_setup_exchange_support">¿Es compatible con Microsoft Exchange?</string>
     <string name="title_setup_identity_what">¿Qué es una identidad?</string>
+    <string name="title_setup_free">¿Esta aplicación es gratuita?</string>
     <string name="title_setup_permissions">Conceder permisos</string>
     <string name="title_setup_permissions_remark">Para acceder a información de contactos (opcional)</string>
     <string name="title_setup_doze">Desactivar las optimizaciones de la batería</string>
@@ -178,6 +178,7 @@
     <string name="title_setup_configuring">Configurando cuenta &#8230;</string>
     <string name="title_setup_export">Exportar ajustes</string>
     <string name="title_setup_import">Importar ajustes</string>
+    <string name="title_setup_export_do">La contraseña se utiliza para cifrar la configuración y es necesaria para importar la configuración de nuevo</string>
     <string name="title_setup_import_do">Las cuentas importadas serán añadidas sin sobreescribir las existentes</string>
     <string name="title_setup_password">Contraseña</string>
     <string name="title_setup_password_chars">La contraseña contiene caracteres de control o espacios en blanco</string>
@@ -218,7 +219,6 @@
     <string name="title_advanced_hint_message">        Está navegando a las opciones más avanzadas.
         Todas las opciones tienen por defecto valores estándar, que no necesitan ser modificados a menos que así lo prefiera.
     </string>
-    <string name="title_advanced_section_main">Comienzo</string>
     <string name="title_advanced_section_synchronize">Recibir</string>
     <string name="title_advanced_section_send">Enviar</string>
     <string name="title_advanced_section_connection">Conexión</string>
@@ -248,6 +248,7 @@
     <string name="title_advanced_tune_keep_alive">Ajustar automáticamente el intervalo de keep-alive</string>
     <string name="title_advanced_keyboard">Mostrar teclado por defecto</string>
     <string name="title_advanced_keyboard_no_fullscreen">Evitar teclado de pantalla completa</string>
+    <string name="title_advanced_suggest_names">Usar nombres y direcciones de correo electrónico</string>
     <string name="title_advanced_suggest_local">Sugerir contactos almacenados localmente</string>
     <string name="title_advanced_suggest_sent">Sugerir direcciones encontradas en mensajes enviados</string>
     <string name="title_advanced_suggest_received">Sugerir direcciones encontradas en mensajes recibidos</string>
@@ -310,6 +311,7 @@
     <string name="title_advanced_color_threshold">Umbral de color de letras: %1$s %%</string>
     <string name="title_advanced_name_email">Mostrar nombres y direcciones de correo electrónico</string>
     <string name="title_advanced_replace_name">Preferir un nombre de contacto sobre un nombre enviado</string>
+    <string name="title_advanced_only_name">Mostrar sólo nombres de contactos</string>
     <string name="title_advanced_distinguish_contacts">Subrayar el remitente cuando el remitente es conocido como contacto \'a:\' local</string>
     <string name="title_advanced_show_recipients">Mostrar destinatarios en el encabezado del mensaje</string>
     <string name="title_advanced_font_size_sender">Tamaño de fuente de remitente</string>
@@ -339,7 +341,7 @@
     <string name="title_advanced_text_align">Usar alineación de texto</string>
     <string name="title_advanced_text_separators">Usar líneas separadoras</string>
     <string name="title_advanced_collapse_quotes">Colapsar texto citado</string>
-    <string name="title_advanced_image_placeholders">Mostrar lugar reservados de imágenes</string>
+    <string name="title_advanced_image_placeholders">Mostrar marcadores de posición de imagen</string>
     <string name="title_advanced_images_inline">Mostrar imágenes embebidas automáticamente</string>
     <string name="title_advanced_seekbar">Mostrar posición relativa de conversación con un punto</string>
     <string name="title_advanced_actionbar">Mostrar barra de acción de conversación</string>
@@ -452,6 +454,7 @@
     <string name="title_advanced_query_threads">Limitar acceso paralelo a la base de datos</string>
     <string name="title_advanced_crash_reports">Enviar informes de errores</string>
     <string name="title_advanced_protocol">Registro de protocolos</string>
+    <string name="title_advanced_log_info">Registro de depuración</string>
     <string name="title_advanced_debug">Modo de depuración</string>
     <string name="title_advanced_cleanup_attachments">Eliminar archivos adjuntos de mensajes antiguos</string>
     <string name="title_advanced_cleanup">Limpieza</string>
@@ -471,6 +474,7 @@
     <string name="title_advanced_check_reply_hint">Esto comprobará si el nombre de dominio del remitente y la dirección de respuesta son los mismos</string>
     <string name="title_advanced_lookup_mx_hint">Esto comprobará si existen registros DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Esto ralentizará la sincronización de mensajes</string>
+    <string name="title_advanced_suggest_names_hint">Si está desactivado, sólo se usarán direcciones de correo electrónico al seleccionar contactos</string>
     <string name="title_advanced_suggest_local_hint">Además de los contactos proporcionados por Android, los datos de contactos se almacenarán para nuevos mensajes enviados o recibidos sólo cuando esté activado.</string>
     <string name="title_advanced_usenet_hint">Insertar \'-- \' entre el texto y la firma</string>
     <string name="title_advanced_send_reminders_hint">Mostrar una advertencia cuando el texto del mensaje o el asunto estén vacíos o cuando un archivo adjunto pueda estar ausente</string>
@@ -487,6 +491,7 @@
     <string name="title_advanced_beige_hint">Sólo temas claros</string>
     <string name="title_advanced_date_hint">Los mensajes sólo se agrupan por fecha si se ordenan por antigüedad</string>
     <string name="title_advanced_navbar_colorize_hint">Que esto funcione dependerá de la versión y variante de Android</string>
+    <string name="title_advanced_split_hint">Esto dividirá la pantalla en partes</string>
     <string name="title_advanced_threading_hint">Agrupar mensajes relacionados entre sí</string>
     <string name="title_advanced_highlight_hint">El color de acento del tema se utilizará para resaltar</string>
     <string name="title_advanced_gravatars_hint">Puede haber un riesgo para la privacidad</string>
@@ -525,7 +530,7 @@
     <string name="title_advanced_english_hint">Esto reiniciará la app</string>
     <string name="title_advanced_experiments_hint">Lista de características experimentales actuales</string>
     <string name="title_advanced_protocol_hint">¡Esto aumentará significativamente el uso de la batería y el espacio de almacenamiento!</string>
-    <string name="title_advanced_debug_hint">Activar registro extra y mostrar desagradable información de depuración en distintos lugares</string>
+    <string name="title_advanced_debug_hint">Esto mostrará desagradable información de depuración en varios lugares</string>
     <string name="title_advanced_cleanup_attachments_hint">Esto eliminará los archivos adjuntos de los mensajes que ya no están sincronizados al limpiar manualmente</string>
     <string name="title_advanced_cleanup_hint">Esto eliminará todos los archivos temporales</string>
     <string name="title_advanced_never_favorite">Nunca favorito</string>
@@ -904,6 +909,7 @@
     <string name="title_media_toolbar">Barra de herramientas multimedia</string>
     <string name="title_insert_contact_group">Insertar grupo de contactos</string>
     <string name="title_insert_template">Insertar plantilla</string>
+    <string name="title_create_template">Crear plantilla</string>
     <string name="title_edit_plain_text">Editar como texto plano</string>
     <string name="title_edit_formatted_text">Editar como texto con formato</string>
     <string name="title_select_certificate">Seleccionar clave pública</string>
@@ -979,6 +985,7 @@
     <string name="title_search_in_subject">En asunto</string>
     <string name="title_search_in_keywords">En palabras clave (si es compatible)</string>
     <string name="title_search_in_message">En texto del mensaje</string>
+    <string name="title_search_in_notes">En notas locales</string>
     <string name="title_search_with">Limitar búsqueda a</string>
     <string name="title_search_with_unseen">No leído</string>
     <string name="title_search_with_flagged">Destacado</string>
@@ -1037,8 +1044,11 @@
     <string name="title_answer_favorite">Favorito</string>
     <string name="title_answer_hide">Ocultar de menús</string>
     <string name="title_answer_text">Texto de plantilla</string>
-    <string name="title_answer_template_name">$name$ será reemplazado por el nombre completo del remitente</string>
-    <string name="title_answer_template_email">$email$ será reemplazado por la dirección de correo electrónico del remitente</string>
+    <string name="title_answer_placeholder">Marcador de posición</string>
+    <string name="title_answer_placeholder_name">Nombre completo del remitente</string>
+    <string name="title_answer_placeholder_email">Dirección de correo del remitente</string>
+    <string name="title_answer_placeholder_firstname">Nombre del remitente</string>
+    <string name="title_answer_placeholder_lastname">Apellido del remitente</string>
     <string name="title_rule_noop">Ninguna acción</string>
     <string name="title_rule_seen">Marcar como leído</string>
     <string name="title_rule_unseen">Marcar como no leído</string>
@@ -1163,8 +1173,8 @@
     <string name="title_legend_view">Ver contenido</string>
     <string name="title_legend_hide">Ocultar contenido</string>
     <string name="title_legend_download">Descargar contenido</string>
-    <string name="title_legend_external_image">Lugar reservado de imagen externa</string>
-    <string name="title_legend_embedded_image">Lugar reservado de imagen incrustada</string>
+    <string name="title_legend_external_image">Marcador de posición de imagen externa</string>
+    <string name="title_legend_embedded_image">Marcador de posición de imagen incrustada</string>
     <string name="title_legend_tracking_pixel">Imagen de rastreo</string>
     <string name="title_legend_broken_image">Imagen rota</string>
     <string name="title_legend_pick">Seleccionar contacto</string>

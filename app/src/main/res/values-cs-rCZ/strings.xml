@@ -147,7 +147,6 @@
     <string name="title_setup_wizard">Průvodce</string>
     <string name="title_setup_wizard_multiple">Průvodce lze použít vícekrát, pro nastavení libovolného počtu účtů</string>
     <string name="title_setup_wizard_new">Potřebuji novou e-mailovou adresu</string>
-    <string name="title_setup_manual">Ruční nastavení a další možnosti</string>
     <string name="title_setup_account_remark">Příjem e-mailů</string>
     <string name="title_setup_identity_remark">Odesílání e-mailů</string>
     <string name="title_setup_account_identity_hint">Jméno, barvu a akce přejetím nakonfigurujete v nastavení účtu, a podpis v nastavení identity</string>
@@ -181,6 +180,7 @@
     <string name="title_setup_grant_again">Udělit požadovaná oprávnění</string>
     <string name="title_setup_exchange_support">Je podporován Microsoft Exchange?</string>
     <string name="title_setup_identity_what">Co je to identita?</string>
+    <string name="title_setup_free">Je tato aplikace zdarma?</string>
     <string name="title_setup_permissions">Udělit oprávnění</string>
     <string name="title_setup_permissions_remark">Pro přístup k údajům kontaktů (nepovinné)</string>
     <string name="title_setup_doze">Zakázat optimalizace výdrže baterie</string>
@@ -200,6 +200,7 @@
     <string name="title_setup_configuring">Probíhá konfigurace účtu &#8230;</string>
     <string name="title_setup_export">Export nastavení</string>
     <string name="title_setup_import">Import nastavení</string>
+    <string name="title_setup_export_do">Heslo slouží k zašifrování nastavení a je vyžadováno pro jeho zpětný import</string>
     <string name="title_setup_import_do">Importované účty budou přidány bez přepsání stávajících účtů</string>
     <string name="title_setup_password">Heslo</string>
     <string name="title_setup_password_chars">Heslo obsahuje řídící znaky či mezery</string>
@@ -240,7 +241,6 @@
     <string name="title_advanced_hint_message">        Vcházíte do rozšířených možností.
         Všechny volby jsou nastaveny dle běžných konvencí, tudíž je není potřeba měnit, nemáte-li odlišnou preferenci.
     </string>
-    <string name="title_advanced_section_main">Začít</string>
     <string name="title_advanced_section_synchronize">Příjem</string>
     <string name="title_advanced_section_send">Odesílání</string>
     <string name="title_advanced_section_connection">Připojení</string>
@@ -270,6 +270,7 @@
     <string name="title_advanced_tune_keep_alive">Automaticky vyladit interval udržení naživu</string>
     <string name="title_advanced_keyboard">Automaticky zobrazit klávesnici</string>
     <string name="title_advanced_keyboard_no_fullscreen">Zabránit zobrazení klávesnice na celou obrazovku</string>
+    <string name="title_advanced_suggest_names">Použít jména a e-mailové adresy</string>
     <string name="title_advanced_suggest_local">Navrhovat lokálně uložené kontakty</string>
     <string name="title_advanced_suggest_sent">Navrhovat adresy nalezené v odeslaných zprávách</string>
     <string name="title_advanced_suggest_received">Navrhovat adresy nalezené v přijatých zprávách</string>
@@ -332,6 +333,7 @@
     <string name="title_advanced_color_threshold">Mezní hodnota barvy písmena: %1$s %%</string>
     <string name="title_advanced_name_email">Zobrazit jména a e-mailové adresy</string>
     <string name="title_advanced_replace_name">Preferovat jméno z kontaktu namísto z hlavičky</string>
+    <string name="title_advanced_only_name">Zobrazit pouze jména kontaktů</string>
     <string name="title_advanced_distinguish_contacts">Podtrhnout odesílatele, je-li známý jako lokální „komu“ kontakt</string>
     <string name="title_advanced_show_recipients">Zobrazit příjemce v hlavičce zprávy</string>
     <string name="title_advanced_font_size_sender">Velikost textu odesílatele</string>
@@ -474,6 +476,7 @@
     <string name="title_advanced_query_threads">Omezit paralelní přístup k databázi</string>
     <string name="title_advanced_crash_reports">Odesílat zprávy o chybách</string>
     <string name="title_advanced_protocol">Protokolovat protokoly</string>
+    <string name="title_advanced_log_info">Protokolování při ladění</string>
     <string name="title_advanced_debug">Režim ladění</string>
     <string name="title_advanced_cleanup_attachments">Odstranit přílohy starých zpráv</string>
     <string name="title_advanced_cleanup">Úklid</string>
@@ -493,6 +496,7 @@
     <string name="title_advanced_check_reply_hint">Ověří, zda je název domény odesílatele totožný s adresou pro odpověď</string>
     <string name="title_advanced_lookup_mx_hint">Ověří existenci DNS MX záznamů</string>
     <string name="title_advanced_sync_delay_hint">Zpomalí synchronizaci zpráv</string>
+    <string name="title_advanced_suggest_names_hint">Je-li vypnuto, budou při výběru kontaktů použity pouze e-mailové adresy</string>
     <string name="title_advanced_suggest_local_hint">Jako dodatek ke kontaktům poskytnutých Androidem. Je-li povoleno, kontaktní údaje budou ukládány pro nově odeslané či přijaté zprávy.</string>
     <string name="title_advanced_usenet_hint">Vložit „-- “ mezi text a podpis</string>
     <string name="title_advanced_send_reminders_hint">Zobrazit upozornění, je-li text zprávy či předmět prázdný nebo může-li chybět příloha</string>
@@ -509,6 +513,7 @@
     <string name="title_advanced_beige_hint">Pouze světlé motivy</string>
     <string name="title_advanced_date_hint">Zprávy jsou seskupovány podle data, pouze pokud jsou řazeny dle času</string>
     <string name="title_advanced_navbar_colorize_hint">Zda volba funguje, závisí na verzi a variantě Androidu</string>
+    <string name="title_advanced_split_hint">Toto rozdělí obrazovku na části</string>
     <string name="title_advanced_threading_hint">Seskupit související zprávy</string>
     <string name="title_advanced_highlight_hint">Pro zvýrazňování bude použita sekundární barva motivu</string>
     <string name="title_advanced_gravatars_hint">Může dojít k ohrožení soukromí</string>
@@ -547,7 +552,7 @@
     <string name="title_advanced_english_hint">Restartuje aplikaci</string>
     <string name="title_advanced_experiments_hint">Seznam aktuálních experimentálních funkcí</string>
     <string name="title_advanced_protocol_hint">Výrazně zvýší spotřebu baterie a potřebu úložného prostoru!</string>
-    <string name="title_advanced_debug_hint">Povolit rozšířené protokolování a zobrazit nevzhledné ladící informace na různých místech</string>
+    <string name="title_advanced_debug_hint">Na různých místech zobrazí nevzhledné ladící informace</string>
     <string name="title_advanced_cleanup_attachments_hint">Při ručním čištění odebere přílohy ze zpráv, které již nejsou synchronizovány</string>
     <string name="title_advanced_cleanup_hint">Smaže dočasné soubory</string>
     <string name="title_advanced_never_favorite">Nikdy oblíbený</string>
@@ -925,6 +930,7 @@
     <string name="title_media_toolbar">Panel médií</string>
     <string name="title_insert_contact_group">Vložit skupinu kontaktů</string>
     <string name="title_insert_template">Vložit šablonu</string>
+    <string name="title_create_template">Vytvořit šablonu</string>
     <string name="title_edit_plain_text">Upravit jako prostý text</string>
     <string name="title_edit_formatted_text">Upravit jako přeformátovaný text</string>
     <string name="title_select_certificate">Vybrat veřejný klíč</string>
@@ -1000,6 +1006,7 @@
     <string name="title_search_in_subject">V předmětu</string>
     <string name="title_search_in_keywords">V klíčových slovech (je-li podporováno)</string>
     <string name="title_search_in_message">V textu zprávy</string>
+    <string name="title_search_in_notes">V místních poznámkách</string>
     <string name="title_search_with">Omezit hledání na</string>
     <string name="title_search_with_unseen">Nepřečteno</string>
     <string name="title_search_with_flagged">S hvězdičkou</string>
@@ -1058,8 +1065,11 @@
     <string name="title_answer_favorite">Oblíbená</string>
     <string name="title_answer_hide">Skrýt z nabídek</string>
     <string name="title_answer_text">Text šablony</string>
-    <string name="title_answer_template_name">$name$ bude nahrazeno celým jménem odesílatele</string>
-    <string name="title_answer_template_email">$email$ bude nahrazeno e-mailovou adresou odesílatele</string>
+    <string name="title_answer_placeholder">Zástupný text</string>
+    <string name="title_answer_placeholder_name">Celé jméno odesílatele</string>
+    <string name="title_answer_placeholder_email">E-mailová adresa odesílatele</string>
+    <string name="title_answer_placeholder_firstname">Křestní jméno odesílatele</string>
+    <string name="title_answer_placeholder_lastname">Příjmení odesílatele</string>
     <string name="title_rule_noop">Žádná akce</string>
     <string name="title_rule_seen">Označit přečtené</string>
     <string name="title_rule_unseen">Označit nepřečtené</string>
