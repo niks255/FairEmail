@@ -95,6 +95,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private ImageButton ibResetLanguage;
     private SwitchCompat swWatchdog;
     private SwitchCompat swUpdates;
+    private SwitchCompat swCheckWeekly;
     private SwitchCompat swExperiments;
     private TextView tvExperimentsHint;
     private SwitchCompat swCrashReports;
@@ -126,6 +127,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Button btnCiphers;
     private Button btnFiles;
 
+    private Group grpUpdates;
     private Group grpDebug;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -193,6 +195,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         ibResetLanguage = view.findViewById(R.id.ibResetLanguage);
         swWatchdog = view.findViewById(R.id.swWatchdog);
         swUpdates = view.findViewById(R.id.swUpdates);
+        swCheckWeekly = view.findViewById(R.id.swWeekly);
         swExperiments = view.findViewById(R.id.swExperiments);
         tvExperimentsHint = view.findViewById(R.id.tvExperimentsHint);
         swCrashReports = view.findViewById(R.id.swCrashReports);
@@ -224,6 +227,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnCiphers = view.findViewById(R.id.btnCiphers);
         btnFiles = view.findViewById(R.id.btnFiles);
 
+        grpUpdates = view.findViewById(R.id.grpUpdates);
         grpDebug = view.findViewById(R.id.grpDebug);
 
         setOptions();
@@ -350,7 +354,30 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     onNothingSelected(adapterView);
                 else {
                     String tag = languages.get(position - 1).first;
-                    prefs.edit().putString("language", tag).commit(); // apply won't work here
+                    if (tag.equals(spLanguage.getTag()))
+                        return;
+
+                    new AlertDialog.Builder(view.getContext())
+                            .setTitle(languages.get(position - 1).second)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    prefs.edit().putString("language", tag).commit(); // apply won't work here
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing
+                                }
+                            })
+                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    setOptions();
+                                }
+                            })
+                            .show();
                 }
             }
 
@@ -378,10 +405,18 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("updates", checked).apply();
+                swCheckWeekly.setEnabled(checked);
                 if (!checked) {
                     NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.cancel(Helper.NOTIFICATION_UPDATE);
                 }
+            }
+        });
+
+        swCheckWeekly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("weekly", checked).apply();
             }
         });
 
@@ -865,6 +900,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 selected = pos + 1;
         }
 
+        spLanguage.setTag(language);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, android.R.id.text1, display);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLanguage.setAdapter(adapter);
@@ -873,9 +910,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         swWatchdog.setChecked(prefs.getBoolean("watchdog", true));
         swUpdates.setChecked(prefs.getBoolean("updates", true));
-        swUpdates.setVisibility(
-                Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext())
-                        ? View.GONE : View.VISIBLE);
+        swCheckWeekly.setChecked(prefs.getBoolean("weekly", false));
+        swCheckWeekly.setEnabled(swUpdates.isChecked());
+        grpUpdates.setVisibility(!BuildConfig.DEBUG &&
+                (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
+                ? View.GONE : View.VISIBLE);
         swExperiments.setChecked(prefs.getBoolean("experiments", false));
         swCrashReports.setChecked(prefs.getBoolean("crash_reports", false));
         tvUuid.setText(prefs.getString("uuid", null));

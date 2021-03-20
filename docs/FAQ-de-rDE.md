@@ -1,8 +1,8 @@
 # FairEmail - Support
 
-Bei Fragen, machen Sie sich zu erst mit dem Bereich "häufig gestellte Fragen" vertraut. [ Unten ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), Können Sie herausfinden, wie Sie andere Fragen stellen, Funktionen anfragen und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen. [Unten](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support) können Sie herausfinden, wie Sie weitere Fragen stellen, Funktionen anfragen und Fehler melden können.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen. [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Übersicht
 
@@ -12,19 +12,19 @@ Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häuf
 * [Geplante Funktionen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
 * [Häufig angefragte Funktionen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
 * [Häufig gestellte Fragen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Hilfe bekommen](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Hilfe erhalten](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
 
 ## Konten autorisieren
 
-In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
+In den meisten Fällen kann der Schnelleinrichtungs-Assistent automatisch die richtige Konfiguration ermitteln.
 
-Wenn der Schnelleinrichtungs-Assistent fehlschlägt, müssen Sie manuell ein Konto (für den Empfang von E-Mails) und eine Identität (für den Versand von E-Mails) einrichten. For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Sollte der Schnelleinrichtungs-Assistent fehlschlagen, müssen Sie Ihr Konto für das Versenden und Empfangen von E-Mails, manuell einrichten. Hierzu benötigen Sie die Adressen der IMAP- und SMTP-Server sowie die jeweiligen Portnummern. Verwenden Sie SSL/TLS oder STARTTLS und Ihren Benutzernamen (meistens, aber nicht immer Ihre E-Mail-Adresse) mit dem dazugehörigen Passwort.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+Die Suche nach *IMAP* und dem Namen des E-Mail-Anbieters reichen meist aus, um die richtige Anleitung zu finden.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+In einigen Fällen müssen Sie den externen Zugriff auf Ihr Konto erlauben und/oder ein spezielles (App-)Passwort verwenden, wenn beispielsweise eine Zwei-Faktor-Authentifizierung aktiviert ist.
 
-For authorizing:
+Für die Anmeldung:
 
 * Gmail / G Suite: siehe [Frage 6](#user-content-faq6)
 * Outlook / Live / Hotmail: siehe [Frage 14](#user-content-faq14)
@@ -34,9 +34,9 @@ For authorizing:
 * Apple iCloud: siehe [Frage 148](#user-content-faq148)
 * Free.fr: siehe [Frage 157](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+[Hier](#user-content-faq22) finden Sie häufige Fehlermeldungen und Lösungen.
 
-Related questions:
+Ähnliche Fragen:
 
 * [Wird OAuth unterstützt?](#user-content-faq111)
 * [Warum wird ActiveSync nicht unterstützt?](#user-content-faq133)
@@ -45,22 +45,22 @@ Related questions:
 
 ## Wie kann ich …?
 
-* Change the account name: Settings, tap Manual setup and more options, tap Accounts, tap account
-* Aktion für Links-/Rechtswischen ändern: Einstellungen -> Verhalten -> Wischgesten festlegen
-* Change password: Settings, tap Manual setup and more options, tap Accounts, tap account, change password
-* Set a signature: Settings, tap Manual setup and more options, tap Identities, tap identity, Edit signature.
+* Kontonamen ändern: Einstellungen → Manuelle Einrichtung und weitere Optionen → Konten → Konto auswählen
+* Aktion für Links-/Rechtswischen ändern: Einstellungen → Verhalten → Wischgesten festlegen
+* Passwort ändern: Einstellungen → Manuelle Einrichtung und weitere Optionen → Konten → Konto auswählen → Passwort ändern
+* Signatur festlegen: Einstellungen → Manuelle Einrichtung und weitere Optionen → Identitäten → Identität auswählen → Signatur bearbeiten.
 * Kopie- und Blindkopie-Adressen (CC und BCC) hinzufügen: auf das Bild der Person am Ende des Betreffs tippen
 * Zur nächsten/vorherigen Nachricht beim Archiviren/Löschen gehen: in den Einstellungen unter »Verhalten« *Unterhaltungen automatisch schließen* deaktivieren und unter *Beim schließen einer Unterhaltung* bitte *Zur nächsten/vorherigen Unterhaltung wechseln* auswählen
 * Einen Ordner zum Sammeleingang hinzufügen: lange auf den Ordner in der Ordnerliste drücken und *Im Sammeleingang anzeigen* ankreuzen
 * Einen Ordner zum Navigationsmenü hinzufügen: lange auf den Ordner in der Ordnerliste drücken und *Im Navigationsmenü anzeigen* ankreuzen
-* Load more messages: long press a folder in the folder list, select *Fetch more messages*
+* Weitere Nachrichten laden: lange auf den Ordner in der Ordnerliste drücken und *Weitere Nachrichten abrufen* auswählen
 * Eine Nachricht löschen und den den Papierkorb überspringen: im 3-Punkte-Menü direkt über dem Nachrichtentext *Löschen* oder den Papierkorb in den Kontoeinstellungen deaktivieren
-* Ein Konto/Identität löschen: „Einstellungen” ➜ „Manuelle Einrichtung” ➜ „Weitere Optionen” ➜ „Konten/Identitäten” ➜ Konto/Identität auswählen ➜ „⁝” Drei-Punkte-Menü ➜ „Löschen”
+* Konto/Identität löschen: Einstellungen → Manuelle Einrichtung und weitere Optionen → Konten/Identitäten → Konto/Identität auswählen → Drei-Punkte-Menü → Löschen
 * Ordner löschen: lange auf den Ordner in der Ordnerliste drücken, Eigenschaften, Drei-Punkte-Menü, Löschen
 * Absenden rückgängig machen: Postausgang, Nachricht antippen, Symbol rückgängig tippen
 * Gesendete Nachrichten im Posteingang speichern: [Siehe diese F&A](#user-content-faq142)
-* Change system folders: Settings, tap Manual setup and more options, tap Accounts, tap account, at the bottom
-* Export/import settings: Settings, navigation/hamburger menu
+* Systemordner ändern: Einstellungen → Manuelle Einrichtung und weitere Optionen → Konten → Konto auswählen → im unteren Bereich
+* Einstellungen exportieren/importieren: Einstellungen → Hamburgermenü → Einstellungen exportieren/importieren
 
 ## Bekannte Probleme
 
@@ -115,11 +115,11 @@ Related questions:
 * ~~S/MIME-Unterstützung~~
 * ~~Einstellungen durchsuchen~~
 
-Anything on this list is in random order and *might* be added in the near future.
+Alles auf dieser Liste ist in zufälliger Reihenfolge und *könnte* in naher Zukunft hinzugefügt werden.
 
 ## Häufig angefragte Funktionen
 
-The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
+Das Design basiert auf vielen Diskussionen und wenn du möchtest, kannst du auch [in diesem Forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) darüber diskutieren. Ziel des Designs ist es, minimalistisch (keine unnötigen Menüs, Knöpfe usw.) und nicht ablenkend (keine ausgefallenen Farben, Animationen usw.), zu sein. Alle angezeigten Dinge sollten auf die eine oder andere Weise nützlich sein und sorgfältig positioniert werden, um sie einfach zu verwenden zu können. Schriften, Größen, Farben usw. sollten nach Möglichkeit dem 'Material Design' von Android entsprechen.
 
 ## Häufig gestellte Fragen
 
@@ -258,7 +258,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(135) Warum werden gelöschte Nachrichten oder Entwürfe in Konversationen angezeigt?](#user-content-faq135)
 * [(136) Wie kann ich ein Konto/Identität/Ordner löschen?](#user-content-faq136)
 * [(137) Wie kann ich »Nicht erneut fragen« zurücksetzen?](#user-content-faq137)
-* [(138) Can you add calendar/contact/tasks/notes management?](#user-content-faq138)
+* [(138) Können Kalender/Kontakte/Aufgaben/Notizverwaltung hinzugefügt werden?](#user-content-faq138)
 * [(139) Wie behebe ich »Benutzer ist angemeldet, aber nicht verbunden«?](#user-content-faq139)
 * [(140) Warum enthält der Nachrichtentext seltsame Zeichen?](#user-content-faq140)
 * [(141) Wie kann ich »Ein Entwürfe-Ordner ist erforderlich, um Nachrichten zu senden« beheben?](#user-content-faq141)
@@ -285,14 +285,14 @@ The design is based on many discussions and if you like you can discuss about it
 * [(162) Wird IMAP NOTIFY unterstützt?](#user-content-faq162)
 * [(163) Was ist Nachrichtenklassifizierung?](#user-content-faq163)
 * [(164) Können Sie anpassbare Designs hinzufügen?](#user-content-faq164)
-* [(165) Is Android Auto supported?](#user-content-faq165)
+* [(165) Wird Android Auto unterstützt?](#user-content-faq165)
 
-[I have another question.](#user-content-support)
+[Ich habe eine andere Frage.](#user-content-support)
 
 <a name="faq1"></a>
-**(1) Which permissions are needed and why?**
+**(1) Welche Berechtigungen werden benötigt und warum?**
 
-The following Android permissions are needed:
+Die folgenden Android-Berechtigungen sind notwendig:
 
 * *Auf alle Netzwerke zugreifen * (INTERNET): E-Mails senden und empfangen
 * *Netzwerkverbindungen abrufen* (ACCESS_NETWORK_STATE): Um Änderungen bei der Internetverbindung zu überwachen
@@ -307,9 +307,9 @@ The following Android permissions are needed:
 * Android 5.1 Lollipop und vorher: *Benutzen Sie Konten auf dem Gerät* (USE_CREDENTIALS): Wählen Sie ein Konto bei der Verwendung der Google-Mail-Schnelleinstellung (nicht bei späteren Android-Versionen erforderlich)
 * Android 5.1 Lollipop und vorher: *Profil lesen* (READ_PROFILE): um Ihren Namen bei der Verwendung der Gmail-Schnelleinrichtung zu lesen (nicht bei späteren Android-Versionen erforderlich)
 
-[Optional permissions](https://developer.android.com/training/permissions/requesting) are supported on Android 6 Marshmallow and later only. On earlier Android versions you will be asked to grant the optional permissions on installing FairEmail.
+[Optionale Berechtigungen](https://developer.android.com/training/permissions/requesting) werden nur auf Android 6 Marshmallow und später unterstützt. Bei früheren Android-Versionen werden Sie aufgefordert, die optionalen Berechtigungen bei der Installation von FairEmail zu erteilen.
 
-The following permissions are needed to show the count of unread messages as a badge (see also [this FAQ](#user-content-faq106)):
+Die folgenden Berechtigungen werden benötigt, um die Anzahl ungelesener Nachrichten auf dem App-Icon anzuzeigen (siehe auch [diese FAQ](#user-content-faq106)):
 
 * *com.sec.android.provider.badge.permission.READ*
 * *com.sec.android.provider.badge.permission.WRITE*
@@ -328,20 +328,20 @@ The following permissions are needed to show the count of unread messages as a b
 * *me.everything.badger.permission.BADGE_COUNT_READ*
 * *me.everything.badger.permission.BADGE_COUNT_WRITE*
 
-FairEmail will keep a list of addresses you receive messages from and send messages to and will use this list for contact suggestions when no contacts permissions is granted to FairEmail. This means you can use FairEmail without the Android contacts provider (address book). Note that you can still pick contacts without granting contacts permissions to FairEmail, only suggesting contacts won't work without contacts permissions.
+FairEmail wird eine Liste der E-Mail-Adressen aufbewahren, von denen Sie Nachrichten erhalten und an die Sie Nachrichten gesendet haben und wird diese Liste für Kontaktvorschläge verwenden, wenn FairEmail keine Berechtigung für das Lesen der Kontakte erteilt wurde. Das bedeutet, dass Sie FairEmail ohne den Android-Kontaktanbieter (das Adressbuch) verwenden können. Beachten Sie, dass Sie immer noch Kontakte auswählen können, ohne FairEmail die Berechtigung auf Kontakte zu erteilen, nur vorgeschlagene Kontakte werden ohne Kontaktberechtigungen nicht funktionieren.
 
 <br />
 
 <a name="faq2"></a>
-**(2) Why is there a permanent notification shown?**
+**(2) Warum wird eine permanente Benachrichtigung angezeigt?**
 
-A low priority permanent status bar notification with the number of accounts being monitored and the number of operations pending (see the next question) is shown to prevent Android from killing the service that takes care of continuous receiving email. This was [already necessary](https://developer.android.com/reference/android/app/Service.html#startForeground(int,%20android.app.Notification)), but with the introduction of [doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) in Android 6 Marshmallow this is more than ever necessary. Doze mode will stop all apps when the screen is off for some time, unless the app did start a foreground service, which requires showing a status bar notification.
+Eine permanente Statusleiste mit niedriger Priorität mit der Anzahl der zu überwachenden Konten und der Anzahl der ausstehenden Operationen (siehe die nächste Frage) wird angezeigt, um zu verhindern, dass Android den Dienst beendet, der sich um den kontinuierlichen Empfang von E-Mails kümmert. Das war [immer notwendig](https://developer.android.com/reference/android/app/Service.html#startForeground(int,%20android.app.Notification)), aber mit der Einführung des [Doze-Modus](https://developer.android.com/training/monitoring-device-state/doze-standby) in Android 6 Marshmallow ist das nun notwendiger denn je. Der Doze-Modus beendet alle Apps, wenn der Bildschirm für einige Zeit ausgeschaltet ist, es sei denn, die App hat einen Vordergrund-Dienst gestartet, was die Anzeige einer Statusleisten-Benachrichtigung erfordert.
 
-Most, if not all, other email apps don't show a notification with the "side effect" that new messages are often not or late being reported and that messages are not or late being sent.
+Die meisten, wenn nicht gar alle anderen E-Mail-Apps zeigen keine Benachrichtigungen an, was zu den "Nebeneffekten" führt, dass es keinen oder nur einen verspäteten Hinweis auf neu eingegangene Nachrichten gibt oder ausgehende Nachrichten nicht oder nur verzögert versandt werden.
 
 Android shows icons of high priority status bar notifications first and will hide the icon of FairEmail's notification if there is no space to show icons anymore. In practice this means that the status bar notification doesn't take space in the status bar, unless there is space available.
 
-The status bar notification can be disabled via the notification settings of FairEmail:
+Die Statusleisten-Benachrichtigung kann über die Benachrichtigungseinstellungen von FairEmail deaktiviert werden:
 
 * Android 8 Oreo und später: Tippen Sie auf *Kanal empfangen* und deaktivieren Sie den Kanal über die Android-Einstellungen (dies wird keine neuen Nachrichten deaktivieren)
 * Android 7 Nougat und vorher: aktiviert *Hintergrunddienst verwenden, um Nachrichten zu synchronisieren*, aber lesen Sie die Bemerkung unter der Einstellung
@@ -398,6 +398,8 @@ This can be caused by using an incorrect host name, so first double check the ho
 
 You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
+The quick, but unsafe solution (not advised), is to enable *Insecure connections* in the advanced identity settings (navigation menu, tap *Settings*, tap *Manual setup and more options*, tap *Identities*, tap the identity, tap *Advanced*).
+
 Alternatively, you can accept the fingerprint of invalid server certificates like this:
 
 1. Stellen Sie sicher, dass Sie eine vertrauenswürdige Internetverbindung verwenden (keine öffentlichen WLAN-Netzwerke, etc)
@@ -410,17 +412,25 @@ This will "pin" the server certificate to prevent man-in-the-middle attacks.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
 
+<br />
+
 *Trust anchor for certification path not found*
 
 *... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* means that the default Android trust manager was not able to verify the server certificate chain.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+This could be due to the root certificate not being installed on your device or because intermediate certificates are missing, for example because the email server didn't send them.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+You can fix the first problem by downloading and installing the root certificate from the website of the provider of the certificate.
+
+The second problem should be fixed by changing the server configuration or by importing the intermediate certificates on your device.
+
+You can pin the certificate too, see above.
+
+<br />
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Ihr Benutzername ist möglicherweise leicht zu erraten, daher ist das unsicher.
 
 *Plain text connection*
 
@@ -469,7 +479,7 @@ Some people ask:
 
 If you use the Play store or GitHub version of FairEmail, you can use the quick setup wizard to easily setup a Gmail account and identity. The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only.
 
-Wenn Sie kein Gmail-Konto auf dem Gerät verwenden möchten oder können, z. B. auf neueren Huawei-Geräten, können Sie entweder den Zugriff für „weniger sichere Apps” aktivieren und Ihr Kontenpasswort verwenden (nicht empfohlen) oder die Zwei-Faktor-Authentifizierung aktivieren und ein appspezifisches Passwort verwenden. To use a password you'll need to set up an account and identity via the manual setup instead of via the quick setup wizard.
+If you don't want to use or can't use an on-device Google account, for example on recent Huawei devices, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to set up an account and identity via the manual setup instead of via the quick setup wizard.
 
 **Important**: sometimes Google issues this alert:
 
@@ -904,9 +914,9 @@ The message *... +OK ...* likely means that a POP3 port (usually port number 995
 
 The errors *... invalid greeting ...*, *... requires valid address ...* and *... Parameter to HELO does not conform to RFC syntax ...* can likely be solved by changing the advanced identity setting *Use local IP address instead of host name*.
 
-Der Fehler *… Couldn't connect to host ...* means that there was no response from the email server within a reasonable time (20 seconds by default). Mostly this indicates internet connectivity issues, possibly caused by a VPN or by a firewall app. You can try to increase the connection timeout in the connection settings of FairEmail, for when the email server is really slow.
+The error *... Couldn't connect to host ...* means that there was no response from the email server within a reasonable time (20 seconds by default). Mostly this indicates internet connectivity issues, possibly caused by a VPN or by a firewall app. You can try to increase the connection timeout in the connection settings of FairEmail, for when the email server is really slow.
 
-Der Fehler *… Connection refused ...* means that the email server or something between the email server and the app, like a firewall, actively refused the connection.
+The error *... Connection refused ...* means that the email server or something between the email server and the app, like a firewall, actively refused the connection.
 
 The error *... Network unreachable ...* means that the email server was not reachable via the current internet connection, for example because internet traffic is restricted to local traffic only.
 
@@ -929,7 +939,7 @@ The error *... connection failure ...* could indicate [Too many simultaneous con
 
 The warning *... Unsupported encoding ...* means that the character set of the message is unknown or not supported. FairEmail will assume ISO-8859-1 (Latin1), which will in most cases result in showing the message correctly.
 
-Der Fehler * … Anmelderaten-Beschränkung überschritten …* bedeutet, dass es zu viele Anmeldeversuche mit einem falschen Passwort gab. Please double check your password or authenticate the account again with the quick setup wizard (OAuth only).
+The error *... Login Rate Limit Hit ...* means that there were too many login attempts with an incorrect password. Please double check your password or authenticate the account again with the quick setup wizard (OAuth only).
 
 Please [see here](#user-content-faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
@@ -967,6 +977,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 * *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
+* *451 4.7.0 Temporary server error. Please try again later. PRX4 …*: bitte [siehe hier](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) oder [siehe hier](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
 
@@ -2184,7 +2195,7 @@ Depending on what you want, the notification settings *Let the number of new mes
 
 This feature depends on support of your launcher. FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library. If it doesn't work, this cannot be fixed by changes in FairEmail.
 
-Some launchers display '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a badge for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
+Some launchers display a dot or a '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a *badge* for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot (badge) is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
 
 FairEmail does send a new message count intent as well:
 
@@ -2382,7 +2393,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+Wenn FairEmail keine Verbindung zu einem E-Mail-Server herstellen kann, um Nachrichten zu synchronisieren (z. B. wenn die Internetverbindung schlecht ist oder eine Firewall oder ein VPN die Verbindung unterbindet), wird FairEmail nach einer Wartezeit von 8 Sekunden einen erneuten Versuch unternehmen, während das Gerät eingeschaltet bleibt (=verwendet Batterieleistung). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2419,10 +2430,6 @@ Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=har
 Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
-
-<br />
-
-*Background for unread messages*
 
 <br />
 
@@ -2621,7 +2628,7 @@ You can fix this problem by manually selecting the drafts folder in the account 
 
 Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
 
-Quick link for Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Quick link for Gmail (will work on a desktop computer only): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 
@@ -2966,9 +2973,9 @@ The theme colors are based on the color circle of [Johannes Itten](https://en.wi
 <br />
 
 <a name="faq165"></a>
-**(165) Is Android Auto supported?**
+**(165) Wird Android Auto unterstützt?**
 
-Yes, Android Auto is supported, but only with the GitHub version, please [see here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-83801249) about why.
+Ja, Android Auto wird unterstützt, aber nur mit der GitHub Version, bitte [sehen Sie hier](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-83801249) nach, warum.
 
 For notification (messaging) support you'll need to enable the following notification options:
 
@@ -2977,33 +2984,33 @@ For notification (messaging) support you'll need to enable the following notific
 
 You can enable other notification actions too, if you like, but they are not supported by Android Auto.
 
-The developers guide is [here](https://developer.android.com/training/cars/messaging).
+Die Anleitung für Entwickler ist [hier](https://developer.android.com/training/cars/messaging).
 
 <br />
 
-## Support erhalten
+## Hilfe erhalten
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail kann nur auf Smartphones, Tablets und ChromeOS genutzt werden.
 
-Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
+Nur die neuesten Versionen aus dem Play-Store oder von GitHub werden unterstützt. Der F-Droid-Build wird nur unterstützt, wenn die Versionsnummer mit der Versionsnummer der neuesten GitHub-Version übereinstimmt. Das bedeutet auch, dass ein Downgrade nicht unterstützt wird.
 
-There is no support on things that are not directly related to FairEmail.
+Für Funktionen, die nicht direkt mit FairEmail zusammenhängen, gibt es keine Unterstützung.
 
-There is no support on building and developing things by yourself.
+Es gibt keinem Support für eigene Builds und selbstentwickelte Funktionen.
 
-Requested features should:
+Angeforderte Funktionen sollten:
 
-* be useful to most people
-* not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
-* comply with common standards (IMAP, SMTP, etc)
+* für die meisten Menschen nützlich sein
+* die Nutzung von FairEmail nicht verkomplizieren
+* in die Philosophie von FairEmail passen (privatsphäre- und sicherheitsorientiert)
+* den gängigen Standards entsprechen (IMAP, SMTP, etc)
 
-Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
+Funktionen, die diese Anforderungen nicht erfüllen, werden wahrscheinlich abgelehnt. Das soll auch langfristig die Wartung und Unterstützung ermöglichen.
 
-If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+Wenn Sie eine Frage haben, eine Funktion wünschen oder einen Fehler melden möchten, **benutzen Sie bitte [dieses Formular](https://contact.faircode.eu/?product=fairemailsupport)**.
 
-GitHub issues are disabled due to frequent misusage.
+GitHub Issues sind wegen häufigen Missbrauchs deaktiviert.
 
 <br />
 
-Copyright &copy; 2018-2021 Marcel Bokhorst.
+Urheberrecht &copy; 2018-2021 Marcel Bokhorst.

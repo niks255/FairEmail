@@ -135,6 +135,7 @@
     <string name="title_setup_wizard">Майстер встановлення</string>
     <string name="title_setup_wizard_multiple">Майстер можна використати кілька разів, щоб налаштувати кілька облікових записів</string>
     <string name="title_setup_wizard_new">Вкажіть нову електронну адресу</string>
+    <string name="title_setup_manual">Налаштування вручну та параметри облікового запису</string>
     <string name="title_setup_account_remark">Отримання email</string>
     <string name="title_setup_identity_remark">Надсилання email</string>
     <string name="title_setup_account_identity_hint">Ви можете налаштувати ім\'я, колір і свайп дії в налаштуваннях облікового запису та налаштувати підпис в налаштуваннях ідентифікації</string>
@@ -174,7 +175,7 @@
     <string name="title_setup_doze">Вимкнути оптимізацію використання батареї</string>
     <string name="title_setup_doze_remark">Для надійного отримання електронної пошти</string>
     <string name="title_setup_doze_hint">Хоча це може звучати суперечливо, вимкнення оптимізації заряду акумулятора призведе до меншого використання батареї</string>
-    <string name="title_setup_doze_instructions">У наступному діалозі виберіть зверху пункт \"Всі програми\", виберіть цей додаток та виберіть і підтвердьте \"Не оптимізувати\"</string>
+    <string name="title_setup_doze_instructions">В наступному діалозі Android змініть в меню \"Додатки без оптимізації\" на \"Усі додатки\", виберіть додаток FairEmail і далі \"Не оптимізувати\"</string>
     <string name="title_setup_doze_battery">Високе споживання заряду акумулятора?</string>
     <string name="title_setup_doze_stopped">Синхронізацію зупинено?</string>
     <string name="title_setup_data">Задіяно економію передачі даних</string>
@@ -229,6 +230,7 @@
     <string name="title_advanced_hint_message">        Ви переходите до більш розширених параметрів.
         Всі параметри мають загальновизнані стандартні значення, які не треба змінювати, якщо ви не маєте інших уподобань.
     </string>
+    <string name="title_advanced_section_main">Головне</string>
     <string name="title_advanced_section_synchronize">Отримання</string>
     <string name="title_advanced_section_send">Надсилання</string>
     <string name="title_advanced_section_connection">Підключення</string>
@@ -286,6 +288,7 @@
     <string name="title_advanced_download">Автоматично завантажувати повідомлення і вкладення при лімітованому з\'єднанні</string>
     <string name="title_advanced_roaming">Завантажити повідомлення та вкладення у роумінгу</string>
     <string name="title_advanced_rlah">В роумінгу як вдома</string>
+    <string name="title_advanced_validated">Вимагати надійне (перевірене) підключення</string>
     <string name="title_advanced_timeout">Час очікування зв\'язку (секунди)</string>
     <string name="title_advanced_prefer_ip4">Віддавати перевагу IPv4 над IPv6</string>
     <string name="title_advanced_ssl_harden">Посилене SSL з\'єднання</string>
@@ -460,6 +463,7 @@
     <string name="title_advanced_watchdog">Періодично перевіряти, чи ще активнний додатк FairEmail</string>
     <string name="title_advanced_optimize">Автоматично оптимізувати</string>
     <string name="title_advanced_updates">Перевірити наявність оновлень з GitHub</string>
+    <string name="title_advanced_check_weekly">Щотижнева перевірка замість щоденної</string>
     <string name="title_advanced_experiments">Спробуйте експериментальні функції</string>
     <string name="title_advanced_query_threads">Обмежити паралельний доступ до бази даних</string>
     <string name="title_advanced_crash_reports">Надіслати звіт про помилки</string>
@@ -491,6 +495,7 @@
     <string name="title_advanced_metered_warning">Вимкнення цієї опції вимкне отримання та надсилання повідомлень через мобільні підключення до Інтернету</string>
     <string name="title_advanced_rlah_hint">Якщо без роумінгу в межах ЄС</string>
     <string name="title_advanced_tcp_keep_alive_hint">Включення може викликати проблеми з підключенням на деяких пристроях</string>
+    <string name="title_advanced_validate_hint">Це може призвести до того що повідомленя можуть бути не синхронізованні, наприклад, при використанні VPN, а також в інших ситуаціях</string>
     <string name="title_advanced_timeout_hint">Тайм-аут читання/запису буде застосовано два рази часу підключення. Більш високі значення призведуть до збільшення використання заряду акумулятора.</string>
     <string name="title_advanced_ssl_harden_hint">Увімкнення цієї опції дозволить відключити слабкі SSL протоколи і шифри, що може призвести до проблем з підключенням</string>
     <string name="title_advanced_roaming_hint">Заголовки повідомлень завжди будуть отримуватися під час роумінгу. Ви можете використовувати налаштування роумінгу в Вашому пристрої для вимкнення Інтернету під час роумінгу.</string>
@@ -586,6 +591,7 @@
     <string name="title_port">Номер порту</string>
     <string name="title_user">Ім\'я користувача</string>
     <string name="title_password">Пароль</string>
+    <string name="title_password_storage">Як зберігаються паролі?</string>
     <string name="title_case_sensitive">Імена користувачів і паролі зазвичай залежні від регістру</string>
     <string name="title_client_certificate">Сертифікат клієнта</string>
     <string name="title_realm">Realm</string>
@@ -691,6 +697,7 @@
     <string name="title_navigation_folder">Показати в меню навігації</string>
     <string name="title_synchronize_folder">Синхронізувати (отрим. повідомлення)</string>
     <string name="title_poll_folder">Перевіряти періодично замість неперервної синхронізації</string>
+    <string name="title_poll_folder_remark">Більшість серверів електронної пошти дозволяють push повідомлення тільки для невеликої кількості тек!</string>
     <string name="title_download_folder">Автоматично завантажувати тексти та вкладення</string>
     <string name="title_notify_folder">Сповіщати про нові повідомлення</string>
     <string name="title_auto_classify_source">Класифікувати нові повідомлення в цій теці</string>
@@ -918,6 +925,7 @@
     <string name="title_media_toolbar">Панель інструментів мультимедіа</string>
     <string name="title_insert_contact_group">Вставити групу контактів</string>
     <string name="title_insert_template">Вставити шаблон</string>
+    <string name="title_create_template">Створити шаблон</string>
     <string name="title_edit_plain_text">Редагувати як звичайний текст</string>
     <string name="title_edit_formatted_text">Редагувати як переформатований текст</string>
     <string name="title_select_certificate">Виберіть відкритий ключ</string>
@@ -1409,6 +1417,9 @@
         <item>512 КБ</item>
         <item>1 МБ</item>
         <item>2 МБ</item>
+        <item>4 МБ</item>
+        <item>8 МБ</item>
+        <item>16 МБ</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

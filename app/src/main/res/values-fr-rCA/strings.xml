@@ -125,7 +125,7 @@
     <string name="title_setup_wizard">Assistant</string>
     <string name="title_setup_wizard_multiple">L\'assistant peut être utilisé plusieurs fois pour configurer plusieurs comptes</string>
     <string name="title_setup_wizard_new">J\'ai besoin d\'une nouvelle adresse courriel</string>
-    <string name="title_setup_manual">Configuration manuelle et plus d\'options sur les comptes</string>
+    <string name="title_setup_manual">Configuration manuelle et options des comptes</string>
     <string name="title_setup_account_remark">Recevoir des courriels</string>
     <string name="title_setup_identity_remark">Envoyer des courriels</string>
     <string name="title_setup_account_identity_hint">Vous pouvez configurer le nom, la couleur et les actions de balayage dans les paramètres du compte et configurer une signature dans les paramètres d\'identité</string>
@@ -165,7 +165,7 @@
     <string name="title_setup_doze">Désactiver les optimisations de la pile</string>
     <string name="title_setup_doze_remark">Recevoir des courriels de manière fiable</string>
     <string name="title_setup_doze_hint">Bien que cela puisse paraître contradictoire, désactiver les optimisations de la pile réduira l\'utilisation de la pile</string>
-    <string name="title_setup_doze_instructions">Sur le prochain écran, sélectionnez « Toutes les applications » en haut, recherchez cette application puis sélectionnez et validez « Ne pas optimiser »</string>
+    <string name="title_setup_doze_instructions">Dans la prochaine fenêtre de dialogue Android, changez « Non optimisées » en « Toutes les applications », sélectionnez cette application et cochez « Ne pas optimiser »</string>
     <string name="title_setup_doze_battery">Utilisation élevée de la pile?</string>
     <string name="title_setup_doze_stopped">Synchronisation arrêtée?</string>
     <string name="title_setup_data">L\'économiseur de données est activé</string>
@@ -278,6 +278,7 @@
     <string name="title_advanced_download">Télécharger automatiquement les messages et les pièces jointes sur une connexion limitée jusqu’à</string>
     <string name="title_advanced_roaming">Télécharger les messages et les pièces jointes en itinérance</string>
     <string name="title_advanced_rlah">Ignorer l’itinérance chez soi</string>
+    <string name="title_advanced_validated">Nécessite une connexion validée (vérifiée)</string>
     <string name="title_advanced_timeout">Délai d’expiration de la connexion (secondes)</string>
     <string name="title_advanced_prefer_ip4">Préférer IPv4 à IPv6</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
@@ -452,6 +453,7 @@
     <string name="title_advanced_watchdog">Vérifier périodiquement si FairEmail est toujours actif</string>
     <string name="title_advanced_optimize">Optimiser automatiquement</string>
     <string name="title_advanced_updates">Rechercher des mises à jour sur GitHub</string>
+    <string name="title_advanced_check_weekly">Vérifier une fois par semaine au lieu d\'une fois par jour</string>
     <string name="title_advanced_experiments">Essayer les fonctionnalités expérimentales</string>
     <string name="title_advanced_query_threads">Limiter les accès multiples à la base de données</string>
     <string name="title_advanced_crash_reports">Envoyer les rapports d’erreur</string>
@@ -484,6 +486,7 @@
     <string name="title_advanced_metered_warning">Désactiver cette option désactivera la réception et l’envoi de messages sur les connexions Internet mobiles</string>
     <string name="title_advanced_rlah_hint">Considérer qu’il n’y a pas d’itinérance au sein de l’UE</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activer ceci peut provoquer des problèmes de connexion sur certains appareils</string>
+    <string name="title_advanced_validate_hint">Ceci peut entraîner la non-synchronisation des messages, par exemple lors de l\'utilisation d\'un VPN mais aussi dans d\'autres situations</string>
     <string name="title_advanced_timeout_hint">Le délai d’expiration de la connexion sera doublé s’il reste encore des opérations de lecture/écriture. Des valeurs plus élevées entraîneront une utilisation acrue de la pile.</string>
     <string name="title_advanced_ssl_harden_hint">Activer ceci désactivera les protocoles et algorithmes SSL faibles, ce qui peut entraîner des problèmes de connexion</string>
     <string name="title_advanced_roaming_hint">Les en-têtes des messages seront toujours récupérés en itinérance. Vous pouvez utiliser les paramètres d’itinérance de l’appareil pour désactiver l’accès Internet en itinérance.</string>
@@ -579,6 +582,7 @@
     <string name="title_port">Numéro de port</string>
     <string name="title_user">Nom d’utilisateur</string>
     <string name="title_password">Mot de passe</string>
+    <string name="title_password_storage">Comment les mots de passe sont-ils stockés?</string>
     <string name="title_case_sensitive">Les noms d\'utilisateur et les mots de passe sont généralement sensibles à la casse</string>
     <string name="title_client_certificate">Certificat client</string>
     <string name="title_realm">Domaine</string>
@@ -684,6 +688,7 @@
     <string name="title_navigation_folder">Afficher dans le menu de navigation</string>
     <string name="title_synchronize_folder">Synchroniser (recevoir les messages)</string>
     <string name="title_poll_folder">Vérifier périodiquement au lieu de synchroniser en continu</string>
+    <string name="title_poll_folder_remark">La plupart des serveurs de messagerie autorisent les messages poussés pour un petit nombre de dossiers seulement!</string>
     <string name="title_download_folder">Télécharger automatiquement le texte des messages et les pièces-jointes</string>
     <string name="title_notify_folder">Notifier les nouveaux messages</string>
     <string name="title_auto_classify_source">Classer les nouveaux messages de ce dossier</string>
@@ -1407,6 +1412,9 @@
         <item>512 Ko</item>
         <item>1 Mo</item>
         <item>2 Mo</item>
+        <item>4 Mo</item>
+        <item>8 Mo</item>
+        <item>16 Mo</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

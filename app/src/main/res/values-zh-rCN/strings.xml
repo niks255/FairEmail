@@ -153,7 +153,7 @@
     <string name="title_setup_doze">禁用电池优化</string>
     <string name="title_setup_doze_remark">使接收邮件更可靠</string>
     <string name="title_setup_doze_hint">虽然这听起来自相矛盾，但关闭电池优化将减少电池用量</string>
-    <string name="title_setup_doze_instructions">在下以个界面，选择最上面的\"所有应用\"，找到此应用并选择\"不优化\"</string>
+    <string name="title_setup_doze_instructions">请在下一页面中，将 \"未优化\" 切换为 \"所有应用\"，然后下拉找到本应用，并选择\"不优化\"</string>
     <string name="title_setup_doze_battery">太耗电？</string>
     <string name="title_setup_doze_stopped">同步已停止？</string>
     <string name="title_setup_data">已启用数据节省</string>
@@ -266,6 +266,7 @@
     <string name="title_advanced_download">在计量的连接下自动下载邮件和附件, 最高可达</string>
     <string name="title_advanced_roaming">漫游时下载邮件和附件</string>
     <string name="title_advanced_rlah">国内漫游</string>
+    <string name="title_advanced_validated">需要已验证 (已检查) 的连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
@@ -440,6 +441,7 @@
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
     <string name="title_advanced_optimize">自动优化</string>
     <string name="title_advanced_updates">检查 GitHub 更新</string>
+    <string name="title_advanced_check_weekly">每周而不是每天检查</string>
     <string name="title_advanced_experiments">尝试实验性功能</string>
     <string name="title_advanced_query_threads">限制并行数据库访问</string>
     <string name="title_advanced_crash_reports">发送错误报告</string>
@@ -472,6 +474,7 @@
     <string name="title_advanced_metered_warning">禁用此选项将禁止在使用移动互联网连接时接收和发送消息</string>
     <string name="title_advanced_rlah_hint">假定欧盟境内不漫游</string>
     <string name="title_advanced_tcp_keep_alive_hint">启用此选项可能会在某些设备上造成连接问题</string>
+    <string name="title_advanced_validate_hint">这可能导致消息不同步，例如在使用 VPN 时，其他情况下也可能发生</string>
     <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
     <string name="title_advanced_ssl_harden_hint">启用此选项将禁用较弱的SSL协议和密码，这可能导致连接问题</string>
     <string name="title_advanced_roaming_hint">当漫游时，将始终获取消息头。您可以使用设备的漫游设置在漫游时禁用互联网。</string>
@@ -567,6 +570,7 @@
     <string name="title_port">端口号</string>
     <string name="title_user">用户名</string>
     <string name="title_password">密码</string>
+    <string name="title_password_storage">密码是如何存储的？</string>
     <string name="title_case_sensitive">用户名和密码通常是区分大小写的</string>
     <string name="title_client_certificate">客户端证书</string>
     <string name="title_realm">移动数据库</string>
@@ -672,6 +676,7 @@
     <string name="title_navigation_folder">在导航菜单中显示</string>
     <string name="title_synchronize_folder">同步(接收邮件)</string>
     <string name="title_poll_folder">定期检查而非持续同步</string>
+    <string name="title_poll_folder_remark">大多数电子邮件服务器仅允许少数文件夹推送消息！</string>
     <string name="title_download_folder">自动下载邮件文本和附件</string>
     <string name="title_notify_folder">通知新邮件</string>
     <string name="title_auto_classify_source">对此文件夹中的新消息进行分类</string>
@@ -1393,6 +1398,9 @@
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
+        <item>4 MB</item>
+        <item>8 MB</item>
+        <item>16 MB</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

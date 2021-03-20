@@ -165,7 +165,7 @@
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">The wizard can be used multiple times to set up multiple accounts</string>
     <string name="title_setup_wizard_new">I need a new email address</string>
-    <string name="title_setup_manual">Manual setup and more account options</string>
+    <string name="title_setup_manual">Manual setup and account options</string>
     <string name="title_setup_account_remark">Receive email</string>
     <string name="title_setup_identity_remark">Send email</string>
     <string name="title_setup_account_identity_hint">You can configure the name, color and swipe actions in the account settings, and configure a signature in the identity settings</string>
@@ -209,7 +209,7 @@
     <string name="title_setup_doze">Disable battery optimizations</string>
     <string name="title_setup_doze_remark">To reliably receive email</string>
     <string name="title_setup_doze_hint">Although this may sound contradictory, turning off battery optimizations will result in less battery usage</string>
-    <string name="title_setup_doze_instructions">In the next dialog, select \"All apps\" at the top, select this app and select and confirm \"Don\'t optimize\"</string>
+    <string name="title_setup_doze_instructions">In the next Android dialog change "Not optimized" to "All apps", select this app and select "Don\'t optimize"</string>
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
     <string name="title_setup_data">Data saver is enabled</string>
@@ -337,6 +337,7 @@
     <string name="title_advanced_download">Automatically download messages and attachments on a metered connection up to</string>
     <string name="title_advanced_roaming">Download messages and attachments while roaming</string>
     <string name="title_advanced_rlah">Roam like at home</string>
+    <string name="title_advanced_validated">Require a validated (checked) connection</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
     <string name="title_advanced_standalone_vpn" translatable="false">Standalone VPN (debug only)</string>
@@ -534,6 +535,7 @@
     <string name="title_advanced_auth_sasl" translatable="false">SASL (debug only)</string>
     <string name="title_advanced_optimize">Automatically optimize</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
+    <string name="title_advanced_check_weekly">Check weekly instead of daily</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_query_threads">Limit parallel database access</string>
     <string name="title_advanced_wal">WAL (debug only)</string>
@@ -578,6 +580,7 @@
     <string name="title_advanced_metered_warning">Disabling this option will disable receiving and sending messages on mobile internet connections</string>
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
     <string name="title_advanced_tcp_keep_alive_hint">Enabling this can cause connection problems on some devices</string>
+    <string name="title_advanced_validate_hint">This can result in not synchronizing messages, for example when using a VPN, but also in other situations</string>
     <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
     <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers, which can lead to connection problems</string>
     <string name="title_advanced_roaming_hint">Messages headers will always be fetched when roaming. You can use the device\'s roaming setting to disable internet while roaming.</string>
@@ -687,6 +690,7 @@
     <string name="title_port">Port number</string>
     <string name="title_user">User name</string>
     <string name="title_password">Password</string>
+    <string name="title_password_storage">How are passwords stored?</string>
     <string name="title_case_sensitive">Usernames and passwords are usually case sensitive</string>
     <string name="title_client_certificate">Client certificate</string>
     <string name="title_realm">Realm</string>
@@ -799,6 +803,7 @@
     <string name="title_navigation_folder">Show in navigation menu</string>
     <string name="title_synchronize_folder">Synchronize (receive messages)</string>
     <string name="title_poll_folder">Check periodically instead of continuous synchronize</string>
+    <string name="title_poll_folder_remark">Most email servers allow push messages for a handful of folders only!</string>
     <string name="title_download_folder">Automatically download message texts and attachments</string>
     <string name="title_notify_folder">Notify on new messages</string>
     <string name="title_auto_classify_source">Classify new messages in this folder</string>
@@ -1617,6 +1622,9 @@
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
+        <item>4 MB</item>
+        <item>8 MB</item>
+        <item>16 MB</item>
         <item>∞</item>
     </string-array>
 
@@ -1629,6 +1637,9 @@
         <item>524288</item>
         <item>1048576</item>
         <item>2097152</item>
+        <item>4194304</item>
+        <item>8388608</item>
+        <item>16777216</item>
         <item>0</item>
     </integer-array>
 

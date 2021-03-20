@@ -398,6 +398,8 @@ This can be caused by using an incorrect host name, so first double check the ho
 
 You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
+The quick, but unsafe solution (not advised), is to enable *Insecure connections* in the advanced identity settings (navigation menu, tap *Settings*, tap *Manual setup and more options*, tap *Identities*, tap the identity, tap *Advanced*).
+
 Alternatively, you can accept the fingerprint of invalid server certificates like this:
 
 1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
@@ -410,17 +412,25 @@ This will "pin" the server certificate to prevent man-in-the-middle attacks.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
 
+<br />
+
 *Trust anchor for certification path not found*
 
 *... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* means that the default Android trust manager was not able to verify the server certificate chain.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+This could be due to the root certificate not being installed on your device or because intermediate certificates are missing, for example because the email server didn't send them.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+You can fix the first problem by downloading and installing the root certificate from the website of the provider of the certificate.
 
-*未輸入密碼*
+The second problem should be fixed by changing the server configuration or by importing the intermediate certificates on your device.
 
-使用者名稱太容易猜到了，這樣很不安全喔。
+You can pin the certificate too, see above.
+
+<br />
+
+*Empty password*
+
+Your username is likely easily guessed, so this is insecure.
 
 *Plain text connection*
 
@@ -457,7 +467,7 @@ In the display section of the settings you can enable or disable for example:
 
 Note that messages can be previewed only when the message text was downloaded. Larger message texts are not downloaded by default on metered (generally mobile) networks. You can change this in the connection settings.
 
-有的人會問:
+Some people ask:
 
 * to show the subject bold, but bold is already being used to highlight unread messages
 * to move the star to the left, but it is much easier to operate the star on the right side
@@ -465,9 +475,9 @@ Note that messages can be previewed only when the message text was downloaded. L
 <br />
 
 <a name="faq6"></a>
-**(6) 我要怎麼登入Gmail / G suite?**
+**(6) How can I login to Gmail / G suite?**
 
-如果你用 Play 商店或 GitHub 版本的 FairEmail, 那麼快速設定精靈可以幫你設定 Gmail 帳號跟身分。 The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only.
+If you use the Play store or GitHub version of FairEmail, you can use the quick setup wizard to easily setup a Gmail account and identity. The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only.
 
 If you don't want to use or can't use an on-device Google account, for example on recent Huawei devices, you can either enable access for "less secure apps" and use your account password (not advised) or enable two factor authentication and use an app specific password. To use a password you'll need to set up an account and identity via the manual setup instead of via the quick setup wizard.
 
@@ -483,9 +493,9 @@ Note that an app specific password is required when two factor authentication is
 
 <br />
 
-*App專用密碼*
+*App specific password*
 
-[這裡](https://support.google.com/accounts/answer/185833) 告訴你如何產生app專用密碼。
+See [here](https://support.google.com/accounts/answer/185833) about how to generate an app specific password.
 
 <br />
 
@@ -967,6 +977,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 * *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
+* *451 4.7.0 Temporary server error. Please try again later. PRX4 ...*: please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
 
@@ -2184,7 +2195,7 @@ Depending on what you want, the notification settings *Let the number of new mes
 
 This feature depends on support of your launcher. FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library. If it doesn't work, this cannot be fixed by changes in FairEmail.
 
-Some launchers display '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a badge for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
+Some launchers display a dot or a '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a *badge* for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot (badge) is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
 
 FairEmail does send a new message count intent as well:
 
@@ -2382,7 +2393,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2419,10 +2430,6 @@ Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=har
 Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
-
-<br />
-
-*Background for unread messages*
 
 <br />
 
@@ -2621,7 +2628,7 @@ You can fix this problem by manually selecting the drafts folder in the account 
 
 Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
 
-Quick link for Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Quick link for Gmail (will work on a desktop computer only): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 
@@ -2977,11 +2984,11 @@ For notification (messaging) support you'll need to enable the following notific
 
 You can enable other notification actions too, if you like, but they are not supported by Android Auto.
 
-The developers guide is [here](https://developer.android.com/training/cars/messaging).
+開發者指引請看 [這裡](https://developer.android.com/training/cars/messaging).
 
 <br />
 
-## Get support
+## 取得支援
 
 FairEmail is supported on smartphones, tablets and ChromeOS only.
 
@@ -2991,16 +2998,16 @@ There is no support on things that are not directly related to FairEmail.
 
 There is no support on building and developing things by yourself.
 
-Requested features should:
+請求新增的功能須有下列特質：
 
-* be useful to most people
-* not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
-* comply with common standards (IMAP, SMTP, etc)
+* 對大部分人來說是好用的
+* 不會讓FairEmail變得複雜
+* 符合FairEmail重視隱私及安全性的原則
+* 與常見標準相容(如：IMAP、SMTP等等)
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 
-If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+如果您有問題、想要要求新功能，或是回報bug，</strong>請使用[此格式](https://contact.faircode.eu/?product=fairemailsupport)</0>
 
 GitHub issues are disabled due to frequent misusage.
 

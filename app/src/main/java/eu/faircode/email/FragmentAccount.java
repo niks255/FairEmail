@@ -23,6 +23,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -91,6 +92,7 @@ public class FragmentAccount extends FragmentBase {
     private EditText etUser;
     private TextInputLayout tilPassword;
     private TextView tvCharacters;
+    private TextView tvPasswordStorage;
     private Button btnCertificate;
     private TextView tvCertificate;
     private EditText etRealm;
@@ -195,6 +197,7 @@ public class FragmentAccount extends FragmentBase {
         etUser = view.findViewById(R.id.etUser);
         tilPassword = view.findViewById(R.id.tilPassword);
         tvCharacters = view.findViewById(R.id.tvCharacters);
+        tvPasswordStorage = view.findViewById(R.id.tvPasswordStorage);
         btnCertificate = view.findViewById(R.id.btnCertificate);
         tvCertificate = view.findViewById(R.id.tvCertificate);
         etRealm = view.findViewById(R.id.etRealm);
@@ -335,6 +338,14 @@ public class FragmentAccount extends FragmentBase {
                 tvCharacters.setVisibility(warning &&
                         tilPassword.getVisibility() == View.VISIBLE
                         ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        tvPasswordStorage.setPaintFlags(tvPasswordStorage.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPasswordStorage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 37);
             }
         });
 
@@ -649,7 +660,7 @@ public class FragmentAccount extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_no_host));
                 if (TextUtils.isEmpty(port))
                     port = (encryption == EmailService.ENCRYPTION_SSL ? "993" : "143");
-                if (TextUtils.isEmpty(user))
+                if (TextUtils.isEmpty(user) && !insecure)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_user));
                 if (TextUtils.isEmpty(password) && !insecure && certificate == null)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));
@@ -899,7 +910,7 @@ public class FragmentAccount extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_no_host));
                 if (TextUtils.isEmpty(port))
                     port = (encryption == EmailService.ENCRYPTION_SSL ? "993" : "143");
-                if (TextUtils.isEmpty(user) && !should)
+                if (TextUtils.isEmpty(user) && !insecure && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_user));
                 if (synchronize && TextUtils.isEmpty(password) && !insecure && certificate == null && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));

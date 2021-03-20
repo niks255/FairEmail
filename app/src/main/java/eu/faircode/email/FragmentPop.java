@@ -23,6 +23,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -76,6 +77,7 @@ public class FragmentPop extends FragmentBase {
     private EditText etUser;
     private TextInputLayout tilPassword;
     private TextView tvCharacters;
+    private TextView tvPasswordStorage;
 
     private EditText etName;
     private ViewButtonColor btnColor;
@@ -138,6 +140,7 @@ public class FragmentPop extends FragmentBase {
         etUser = view.findViewById(R.id.etUser);
         tilPassword = view.findViewById(R.id.tilPassword);
         tvCharacters = view.findViewById(R.id.tvCharacters);
+        tvPasswordStorage = view.findViewById(R.id.tvPasswordStorage);
 
         etName = view.findViewById(R.id.etName);
         btnColor = view.findViewById(R.id.btnColor);
@@ -194,6 +197,14 @@ public class FragmentPop extends FragmentBase {
                 tvCharacters.setVisibility(warning &&
                         tilPassword.getVisibility() == View.VISIBLE
                         ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        tvPasswordStorage.setPaintFlags(tvPasswordStorage.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPasswordStorage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 37);
             }
         });
 
@@ -365,7 +376,7 @@ public class FragmentPop extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_no_host));
                 if (TextUtils.isEmpty(port))
                     port = (encryption == EmailService.ENCRYPTION_SSL ? "995" : "110");
-                if (TextUtils.isEmpty(user) && !should)
+                if (TextUtils.isEmpty(user) && !insecure && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_user));
                 if (synchronize && TextUtils.isEmpty(password) && !insecure && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));

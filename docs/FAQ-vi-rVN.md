@@ -1,6 +1,6 @@
-# Hỗ trợ FairEmail
+# Hỗ trợ của FairEmail
 
-If you have a question, please check the following frequently asked questions first. [At the bottom](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
+Nếu bạn có câu hỏi, vui lòng kiểm tra các câu hỏi thường gặp sau đây trước. [Ở dưới cùng](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), bạn có thể tìm ra cách hỏi các câu hỏi khác, yêu cầu tính năng, và báo cáo lỗi.
 
 Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
@@ -34,7 +34,7 @@ In some cases, you'll need to enable external access to your account and/or to u
 * Icloud của Apple, xem [ câu hỏi 148 ](#user-content-faq148)
 * Free.fr, xem [ câu hỏi 157 ](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+Hãy xem [chỗ này](#user-content-faq22) để tìm các thông báo lỗi phổ biến và giải pháp.
 
 Câu hỏi liên quan:
 
@@ -45,9 +45,9 @@ Câu hỏi liên quan:
 
 ## Làm thế nào để ...?
 
-* Change the account name: Settings, tap Manual setup and more options, tap Accounts, tap account
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
-* Change password: Settings, tap Manual setup and more options, tap Accounts, tap account, change password
+* Đổi tên tài khoản: Cài đặt, nhấn Thiết lập thủ công và thêm tuỳ chọn, nhấn Tài khoản, nhấn tài khoản
+* Thay đổi mục tiêu vuốt trái/phải: Cài đặt, trang Hành vi, Đặt hành động vuốt
+* Thay đổi mật khẩu: Cài đặt, nhấn Thiết lập thủ công và thêm tuỳ chọn, nhấn Tài khoản, nhấn tài khoản, thay đổi mật khẩu
 * Set a signature: Settings, tap Manual setup and more options, tap Identities, tap identity, Edit signature.
 * Add CC and BCC addresses: tap the people's icon at the end of the subject
 * Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
@@ -80,30 +80,30 @@ Câu hỏi liên quan:
 * A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. See also [this FAQ](#user-content-faq126).
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
-* Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* Dò tìm ngôn ngữ [không hoạt động nữa](https://issuetracker.google.com/issues/173337263) trên các thiết bị Pixel với (được nâng cấp lên?) Android 11
 
 ## Các tính năng được lên kế hoạch
 
-* ~~Synchronize on demand (manual)~~
-* ~~Semi-automatic encryption~~
-* ~~Copy message~~
-* ~~Colored stars~~
-* ~~Notification settings per folder~~
+* ~~Đồng bộ hoá theo yêu cầu (thủ công)~~
+* ~~Mã hoá bán tự động~~
+* ~~Sao chép thư~~
+* ~~Sao có màu~~
+* ~~Cài đặt thông báo cho từng thư mục~~
 * ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
 * ~~Show messages matched by a rule~~
 * ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
 * ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
 * ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
-* ~~Search suggestions~~
+* ~~Đề xuất tìm kiếm~~
 * ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
-* ~~Generic unified folders~~
+* ~~Các thư mục hợp nhất chung chung~~
 * ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
 * ~~Copy accounts and identities~~
 * ~~Pinch zoom~~ (not reliably possible in a scrolling list; the full message view can be zoomed instead)
 * ~~More compact folder view~~
 * ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
 * ~~Pinch zoom text size~~
-* ~~Display GIFs~~
+* ~~Hiển thị GIF~~
 * ~~Themes~~ (a grey light and dark theme were added because this is what most people seems to want)
 * ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
 * ~~Send as attachment~~
@@ -112,12 +112,12 @@ Câu hỏi liên quan:
 * ~~Select domains to show images for~~ (this will be too complicated to use)
 * ~~Unified starred messages view~~ (there is already a special search for this)
 * ~~Move notification action~~
-* ~~S/MIME support~~
-* ~~Search for settings~~
+* ~~Hỗ trợ S/MIME~~
+* ~~Tìm kiếm cài đặt~~
 
 Anything on this list is in random order and *might* be added in the near future.
 
-## Frequently requested features
+## Các tính năng thường được yêu cầu
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
 
@@ -137,14 +137,14 @@ The design is based on many discussions and if you like you can discuss about it
 * [(12) Việc mã hoá/giải mã hoạt động như thế nào?](#user-content-faq12)
 * [(13) Tìm kiếm trên thiết bị/máy chủ hoạt động như thế nào?](#user-content-faq13)
 * [(14) Tôi có thể thiết lập một tài khoản Outlook / Live / Hotmail như thế nào?](#user-content-faq14)
-* [(15) Why does the message text keep loading?](#user-content-faq15)
-* [(16) Why are messages not being synchronized?](#user-content-faq16)
-* [~~(17) Why does manual synchronize not work?~~](#user-content-faq17)
+* [(15) Tại sao văn bản thư cứ đang tải thế?](#user-content-faq15)
+* [(16) Tại sao thư không được đồng bộ hoá?](#user-content-faq16)
+* [~~(17) Tại sao đồng bộ hoá thủ công không được?~~](#user-content-faq17)
 * [(18) Why is the message preview not always shown?](#user-content-faq18)
-* [(19) Why are the pro features so expensive?](#user-content-faq19)
+* [(19) Tại sao các tính năng pro lại đắt thế?](#user-content-faq19)
 * [(20) Tôi có thể được hoàn tiền không?](#user-content-faq20)
-* [(21) How do I enable the notification light?](#user-content-faq21)
-* [(22) What does account/folder error ... mean?](#user-content-faq22)
+* [(21) Tôi bật đèn thông báo như thế nào?](#user-content-faq21)
+* [(22) Lỗi tài khoản/thư mục ... có nghĩa là gì?](#user-content-faq22)
 * [(23) Why do I get alert .. ?](#user-content-faq23)
 * [(24) What is browse messages on the server?](#user-content-faq24)
 * [(25) Why can't I select/open/save an image, attachment or a file?](#user-content-faq25)
@@ -194,18 +194,18 @@ The design is based on many discussions and if you like you can discuss about it
 * [(70) When will messages be auto expanded?](#user-content-faq70)
 * [(71) How do I use filter rules?](#user-content-faq71)
 * [(72) What are primary accounts/identities?](#user-content-faq72)
-* [(73) Is moving messages across accounts safe/efficient?](#user-content-faq73)
+* [(73) Việc di chuyển thư qua các tài khoản có an toàn/hiệu quả không?](#user-content-faq73)
 * [(74) Why do I see duplicate messages?](#user-content-faq74)
-* [(75) Can you make an iOS, Windows, Linux, etc version?](#user-content-faq75)
+* [(75) Bạn có thể tạo phiên bản cho iOS, Windows, Linux, v.v. không?](#user-content-faq75)
 * [(76) What does 'Clear local messages' do?](#user-content-faq76)
 * [(77) Why are messages sometimes shown with a small delay?](#user-content-faq77)
 * [(78) How do I use schedules?](#user-content-faq78)
 * [(79) How do I use synchronize on demand (manual)?](#user-content-faq79)
 * [~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE'?~~](#user-content-faq80)
 * [~~(81) Can you make the background of the original message dark in the dark theme?~~](#user-content-faq81)
-* [(82) What is a tracking image?](#user-content-faq82)
-* [(84) What are local contacts for?](#user-content-faq84)
-* [(85) Why is an identity not available?](#user-content-faq85)
+* [(82) Hình ảnh theo dõi là gì?](#user-content-faq82)
+* [(84) Các liên hệ cục bộ dùng để làm gì?](#user-content-faq84)
+* [(84) Tại sao một danh tính không có sẵn?](#user-content-faq85)
 * [~~(86) What are 'extra privacy features'?~~](#user-content-faq86)
 * [(87) What does 'invalid credentials' mean?](#user-content-faq87)
 * [(88) How can I use a Yahoo, AOL or Sky account?](#user-content-faq88)
@@ -217,7 +217,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(94) What does the red/orange stripe at the end of the header mean?](#user-content-faq94)
 * [(95) Why are not all apps shown when selecting an attachment or image?](#user-content-faq95)
 * [(96) Where can I find the IMAP and SMTP settings?](#user-content-faq96)
-* [(97) What is 'cleanup' ?](#user-content-faq97)
+* [(97) 'Dọn dẹp' là gì?](#user-content-faq97)
 * [(98) Why can I still pick contacts after revoking contacts permissions?](#user-content-faq98)
 * [(99) Can you add a rich text or markdown editor?](#user-content-faq99)
 * [(100) How can I synchronize Gmail categories?](#user-content-faq100)
@@ -231,9 +231,9 @@ The design is based on many discussions and if you like you can discuss about it
 * [~~(108) Can you add permanently delete messages from any folder?~~](#user-content-faq108)
 * [~~(109) Why is 'select account' available in official versions only?~~](#user-content-faq109)
 * [(110) Why are (some) messages empty and/or attachments corrupted?](#user-content-faq110)
-* [(111) Is OAuth supported?](#user-content-faq111)
-* [(112) Which email provider do you recommend?](#user-content-faq112)
-* [(113) How does biometric authentication work?](#user-content-faq113)
+* [(111) OAuth có được hỗ trợ không?](#user-content-faq111)
+* [(112) Bạn khuyên dùng nhà cung cấp email nào?](#user-content-faq112)
+* [(113) Xác thực sinh trắc học hoạt động như thế nào?](#user-content-faq113)
 * [(114) Can you add an import for the settings of other email apps?](#user-content-faq114)
 * [(115) Can you add email address chips?](#user-content-faq115)
 * [~~(116) How can I show images in messages from trusted senders by default?~~](#user-content-faq116)
@@ -287,7 +287,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [(164) Can you add customizable themes?](#user-content-faq164)
 * [(165) Is Android Auto supported?](#user-content-faq165)
 
-[I have another question.](#user-content-support)
+[Tôi có một câu hỏi khác.](#user-content-support)
 
 <a name="faq1"></a>
 **(1) Which permissions are needed and why?**
@@ -398,6 +398,8 @@ This can be caused by using an incorrect host name, so first double check the ho
 
 You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
+The quick, but unsafe solution (not advised), is to enable *Insecure connections* in the advanced identity settings (navigation menu, tap *Settings*, tap *Manual setup and more options*, tap *Identities*, tap the identity, tap *Advanced*).
+
 Alternatively, you can accept the fingerprint of invalid server certificates like this:
 
 1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
@@ -410,13 +412,21 @@ This will "pin" the server certificate to prevent man-in-the-middle attacks.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
 
+<br />
+
 *Trust anchor for certification path not found*
 
 *... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* means that the default Android trust manager was not able to verify the server certificate chain.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+This could be due to the root certificate not being installed on your device or because intermediate certificates are missing, for example because the email server didn't send them.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+You can fix the first problem by downloading and installing the root certificate from the website of the provider of the certificate.
+
+The second problem should be fixed by changing the server configuration or by importing the intermediate certificates on your device.
+
+You can pin the certificate too, see above.
+
+<br />
 
 *Empty password*
 
@@ -967,6 +977,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 * *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
+* *451 4.7.0 Temporary server error. Please try again later. PRX4 ...*: please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
 
@@ -2184,7 +2195,7 @@ Depending on what you want, the notification settings *Let the number of new mes
 
 This feature depends on support of your launcher. FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library. If it doesn't work, this cannot be fixed by changes in FairEmail.
 
-Some launchers display '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a badge for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
+Some launchers display a dot or a '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a *badge* for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot (badge) is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
 
 FairEmail does send a new message count intent as well:
 
@@ -2382,7 +2393,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2419,10 +2430,6 @@ Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=har
 Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
-
-<br />
-
-*Background for unread messages*
 
 <br />
 
@@ -2621,7 +2628,7 @@ You can fix this problem by manually selecting the drafts folder in the account 
 
 Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
 
-Quick link for Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Quick link for Gmail (will work on a desktop computer only): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 

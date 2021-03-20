@@ -116,7 +116,7 @@ public class MessageHelper {
     private static File cacheDir = null;
 
     static final int SMALL_MESSAGE_SIZE = 192 * 1024; // bytes
-    static final int DEFAULT_DOWNLOAD_SIZE = 512 * 1024; // bytes
+    static final int DEFAULT_DOWNLOAD_SIZE = 4 * 1024 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
 
     private static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
@@ -1236,6 +1236,14 @@ public class MessageHelper {
             if (TextUtils.isEmpty(email) && TextUtils.isEmpty(personal))
                 continue;
 
+            if (personal != null && personal.equals(email))
+                try {
+                    iaddress.setPersonal(null);
+                    personal = null;
+                } catch (UnsupportedEncodingException ex) {
+                    Log.w(ex);
+                }
+
             email = decodeMime(email);
             if (!Helper.isSingleScript(email))
                 email = punyCode(email);
@@ -1931,12 +1939,19 @@ public class MessageHelper {
                                     }
 
                                     Charset detected = CharsetHelper.detect(result);
-                                    if (!(StandardCharsets.US_ASCII.equals(detected) &&
-                                            StandardCharsets.UTF_8.equals(c)))
-                                        if (BuildConfig.PLAY_STORE_RELEASE)
-                                            Log.w("Converting detected=" + detected + " meta=" + c);
-                                        else
-                                            Log.e("Converting detected=" + detected + " meta=" + c);
+                                    if (c.equals(detected))
+                                        break;
+
+                                    if (StandardCharsets.US_ASCII.equals(detected) &&
+                                            ("windows-1252".equals(c.name()) ||
+                                                    StandardCharsets.UTF_8.equals(c) ||
+                                                    StandardCharsets.ISO_8859_1.equals(c)))
+                                        break;
+
+                                    if (BuildConfig.PLAY_STORE_RELEASE)
+                                        Log.w("Converting detected=" + detected + " meta=" + c);
+                                    else
+                                        Log.e("Converting detected=" + detected + " meta=" + c);
 
                                     // Convert
                                     result = new String(result.getBytes(StandardCharsets.ISO_8859_1), c);

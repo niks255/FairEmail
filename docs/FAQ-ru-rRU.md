@@ -258,7 +258,7 @@ Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häuf
 * [(135) Почему в беседах отображаются удаленные сообщения и черновики?](#user-content-faq135)
 * [(136) Как я могу удалить учетную запись / личность / папку?](#user-content-faq136)
 * [(137) Как сбросить параметр «Больше не спрашивать»?](#user-content-faq137)
-* [(138) Can you add calendar/contact/tasks/notes management?](#user-content-faq138)
+* [(138) Можно ли добавить управление календарём/контактами/задачами/заметками?](#user-content-faq138)
 * [(139) Как исправить ошибку «Пользователь аутентифицирован, но не подключен»?](#user-content-faq139)
 * [(140) Почему текст сообщения содержит странные символы?](#user-content-faq140)
 * [(141) Как исправить ошибку "Для отправки сообщений требуется папка с черновиками"?](#user-content-faq141)
@@ -300,8 +300,8 @@ Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häuf
 * * служба переднего плана * (FOREGROUND_SERVICE): чтобы запустить службу переднего плана на Android 9 Pie и более поздних версиях, см. также следующий вопрос
 * * запретить переход устройства в спящий режим * (WAKE_LOCK): чтобы устройство не спало во время синхронизации сообщений.
 * * биллинг в приложении * (BILLING): для разрешения покупок в приложении
-* Optional: *read your contacts* (READ_CONTACTS): to auto complete addresses, to show contact photos and [to pick contacts](https://developer.android.com/guide/components/intents-common#PickContactDat)
-* Необязательно: * прочтите содержимое вашей SD-карты * (READ_EXTERNAL_STORAGE): чтобы принимать файлы из других устаревших приложений, см. Также [ этот FAQ ](# user-content-faq49)
+* Необязательно: *чтение ваших контактов* (READ_CONTACTS): для автозаполнения адресов, отображения фото и [выбора контактов](https://developer.android.com/guide/components/intents-common#PickContactDat)
+* Необязательно: *считывание содержимого вашей SD-карты* (READ_EXTERNAL_STORAGE): чтобы принимать файлы из других устаревших приложений, см. также [этот FAQ](#user-content-faq49)
 * Необязательно: * используйте оборудование для снятия отпечатков пальцев * (USE_FINGERPRINT) и используйте * биометрическое оборудование * (USE_BIOMETRIC): для использования биометрической аутентификации
 * Необязательно: * поиск учетных записей на устройстве * (GET_ACCOUNTS): для выбора учетной записи при использовании быстрой настройки Gmail
 * Android 5.1 Lollipop и более ранние версии: * использовать учетные записи на устройстве * (USE_CREDENTIALS): для выбора учетной записи при использовании быстрой настройки Gmail (не требуется в более поздних версиях Android)
@@ -398,6 +398,8 @@ This can be caused by using an incorrect host name, so first double check the ho
 
 You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
+The quick, but unsafe solution (not advised), is to enable *Insecure connections* in the advanced identity settings (navigation menu, tap *Settings*, tap *Manual setup and more options*, tap *Identities*, tap the identity, tap *Advanced*).
+
 Alternatively, you can accept the fingerprint of invalid server certificates like this:
 
 1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
@@ -410,13 +412,21 @@ This will "pin" the server certificate to prevent man-in-the-middle attacks.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also [here](https://developer.android.com/training/articles/security-ssl).
 
+<br />
+
 *Trust anchor for certification path not found*
 
 *... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...* means that the default Android trust manager was not able to verify the server certificate chain.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+This could be due to the root certificate not being installed on your device or because intermediate certificates are missing, for example because the email server didn't send them.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+You can fix the first problem by downloading and installing the root certificate from the website of the provider of the certificate.
+
+The second problem should be fixed by changing the server configuration or by importing the intermediate certificates on your device.
+
+You can pin the certificate too, see above.
+
+<br />
 
 *Empty password*
 
@@ -967,6 +977,7 @@ SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 * *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
+* *451 4.7.0 Temporary server error. Please try again later. PRX4 ...*: please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
 
@@ -2184,7 +2195,7 @@ Depending on what you want, the notification settings *Let the number of new mes
 
 This feature depends on support of your launcher. FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library. If it doesn't work, this cannot be fixed by changes in FairEmail.
 
-Some launchers display '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a badge for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
+Some launchers display a dot or a '1' for [the monitoring notification](#user-content-faq2), despite FairEmail explicitly requesting not to show a *badge* for this notification. This could be caused by a bug in the launcher app or in your Android version. Please double check if the notification dot (badge) is disabled for the receive (service) notification channel. You can go to the right notification channel settings via the notification settings of FairEmail. This might not be obvious, but you can tap on the channel name for more settings.
 
 FairEmail does send a new message count intent as well:
 
@@ -2382,7 +2393,7 @@ FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and 
 <a name="faq123"></a>
 **(123) What will happen when FairEmail cannot connect to an email server?**
 
-If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
 
@@ -2419,10 +2430,6 @@ Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=har
 Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
-
-<br />
-
-*Background for unread messages*
 
 <br />
 
@@ -2621,7 +2628,7 @@ You can fix this problem by manually selecting the drafts folder in the account 
 
 Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
 
-Quick link for Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Quick link for Gmail (will work on a desktop computer only): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 

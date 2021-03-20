@@ -282,6 +282,7 @@ public class FragmentCompose extends FragmentBase {
     private static final int REDUCED_IMAGE_SIZE = 1440; // pixels
     private static final int REDUCED_IMAGE_QUALITY = 90; // percent
 
+    private static final int MAX_SHOW_RECIPIENTS = 5;
     private static final int RECIPIENTS_WARNING = 10;
 
     private static final int MAX_QUOTE_LEVEL = 5;
@@ -5329,15 +5330,19 @@ public class FragmentCompose extends FragmentBase {
                 getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        target.requestFocus();
+                        try {
+                            target.requestFocus();
 
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                        boolean keyboard = prefs.getBoolean("keyboard", true);
-                        if (keyboard) {
-                            InputMethodManager imm =
-                                    (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            if (imm != null)
-                                imm.showSoftInput(target, InputMethodManager.SHOW_IMPLICIT);
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                            boolean keyboard = prefs.getBoolean("keyboard", true);
+                            if (keyboard) {
+                                InputMethodManager imm =
+                                        (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null)
+                                    imm.showSoftInput(target, InputMethodManager.SHOW_IMPLICIT);
+                            }
+                        } catch (Throwable ex) {
+                            Log.e(ex);
                         }
                     }
                 });
@@ -5706,17 +5711,20 @@ public class FragmentCompose extends FragmentBase {
             final long size = args.getLong("size", -1);
             final long max_size = args.getLong("max_size", -1);
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            final Context context = getContext();
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             final boolean send_reminders = prefs.getBoolean("send_reminders", true);
             final int send_delayed = prefs.getInt("send_delayed", 0);
             final boolean send_dialog = prefs.getBoolean("send_dialog", true);
             final boolean send_archive = prefs.getBoolean("send_archive", false);
+            final boolean name_email = prefs.getBoolean("name_email", false);
 
             final int[] encryptValues = getResources().getIntArray(R.array.encryptValues);
             final int[] sendDelayedValues = getResources().getIntArray(R.array.sendDelayedValues);
             final String[] sendDelayedNames = getResources().getStringArray(R.array.sendDelayedNames);
 
-            final ViewGroup dview = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.dialog_send, null);
+            final ViewGroup dview = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.dialog_send, null);
             final TextView tvAddressError = dview.findViewById(R.id.tvAddressError);
             final TextView tvRemindDsn = dview.findViewById(R.id.tvRemindDsn);
             final TextView tvRemindSize = dview.findViewById(R.id.tvRemindSize);
@@ -5993,7 +6001,7 @@ public class FragmentCompose extends FragmentBase {
                 }
             });
 
-            DB db = DB.getInstance(getContext());
+            DB db = DB.getInstance(context);
             db.message().liveMessage(id).observe(getViewLifecycleOwner(), new Observer<TupleMessageEx>() {
                 @Override
                 public void onChanged(TupleMessageEx draft) {
@@ -6004,14 +6012,25 @@ public class FragmentCompose extends FragmentBase {
 
                     boolean dsn = (draft.dsn != null && !EntityMessage.DSN_NONE.equals(draft.dsn));
                     int to = (draft.to == null ? 0 : draft.to.length);
-                    int cc = (draft.cc == null ? 0 : draft.cc.length) + (draft.bcc == null ? 0 : draft.bcc.length);
-                    if (cc == 0)
-                        tvTo.setText(MessageHelper.formatAddressesShort(draft.to));
+                    int extra = (draft.cc == null ? 0 : draft.cc.length) + (draft.bcc == null ? 0 : draft.bcc.length);
+
+                    List<Address> t = new ArrayList<>();
+                    if (draft.to != null)
+                        if (to <= MAX_SHOW_RECIPIENTS)
+                            t.addAll(Arrays.asList(draft.to));
+                        else {
+                            t.addAll((Arrays.asList(Arrays.copyOf(draft.to, MAX_SHOW_RECIPIENTS))));
+                            extra += draft.to.length - MAX_SHOW_RECIPIENTS;
+                        }
+                    Address[] tos = t.toArray(new Address[0]);
+
+                    if (extra == 0)
+                        tvTo.setText(MessageHelper.formatAddresses(tos, name_email, false));
                     else
                         tvTo.setText(getString(R.string.title_name_plus,
-                                MessageHelper.formatAddressesShort(draft.to), cc));
-                    tvTo.setTextColor(Helper.resolveColor(getContext(),
-                            to + cc > RECIPIENTS_WARNING ? R.attr.colorWarning : android.R.attr.textColorPrimary));
+                                MessageHelper.formatAddresses(tos, name_email, false), extra));
+                    tvTo.setTextColor(Helper.resolveColor(context,
+                            to + extra > RECIPIENTS_WARNING ? R.attr.colorWarning : android.R.attr.textColorPrimary));
                     tvVia.setText(draft.identityEmail);
 
                     cbPlainOnly.setChecked(draft.plain_only != null && draft.plain_only && !dsn);
@@ -6039,7 +6058,7 @@ public class FragmentCompose extends FragmentBase {
                                     break;
                                 }
                     } else {
-                        DateFormat DTF = Helper.getDateTimeInstance(getContext(), SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT);
+                        DateFormat DTF = Helper.getDateTimeInstance(context, SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT);
                         DateFormat D = new SimpleDateFormat("E");
                         tvSendAt.setText(D.format(draft.ui_snoozed) + " " + DTF.format(draft.ui_snoozed));
                     }
@@ -6115,7 +6134,7 @@ public class FragmentCompose extends FragmentBase {
                 }
             }.execute(FragmentDialogSend.this, aargs, "send:archive");
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+            AlertDialog.Builder builder = new AlertDialog.Builder(context)
                     .setView(dview)
                     .setNegativeButton(android.R.string.cancel, null);
 

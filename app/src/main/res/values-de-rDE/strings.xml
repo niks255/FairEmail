@@ -126,7 +126,7 @@
     <string name="title_setup_wizard">Assistent</string>
     <string name="title_setup_wizard_multiple">Der Assistent kann mehrfach verwendet werden, um mehrere Konten einzurichten</string>
     <string name="title_setup_wizard_new">Ich benötige eine neue E-Mail-Adresse</string>
-    <string name="title_setup_manual">Manuelle Einrichtung und weitere Kontooptionen</string>
+    <string name="title_setup_manual">Manuelle Einrichtung und Kontooptionen</string>
     <string name="title_setup_account_remark">E-Mail empfangen</string>
     <string name="title_setup_identity_remark">E-Mail senden</string>
     <string name="title_setup_account_identity_hint">Sie können Namen, Farbe und Wischen in den Kontoeinstellungen und eine Signatur in den Identitätseinstellungen konfigurieren</string>
@@ -166,7 +166,7 @@
     <string name="title_setup_doze">Akkuoptimierung deaktivieren</string>
     <string name="title_setup_doze_remark">Um Nachrichten zuverlässig abzurufen</string>
     <string name="title_setup_doze_hint">Auch wenn es widersprüchlich klingt, wird das Ausschalten der Akkuoptimierung zu weniger Akkuverbrauch führen</string>
-    <string name="title_setup_doze_instructions">Bitte oben im folgenden Auswahldialog »Alle Apps« aufrufen und anschließend FairEmail auswählen, danach die Option »Nicht optimieren« mit »Fertig« bestätigen.</string>
+    <string name="title_setup_doze_instructions">Im nächsten Android-Dialog bitte »Nicht optimiert« in »Alle Apps« ändern und bei FairEmail »Nicht optimieren« auswählen</string>
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
     <string name="title_setup_data">Datensparmodus aktiviert</string>
@@ -279,6 +279,7 @@
     <string name="title_advanced_download">Automatisches Herunterladen von E-Mails und Anhängen auf getakteten Verbindungen bis zu einer Größe von</string>
     <string name="title_advanced_roaming">Nachrichten und Anhänge bei Roaming herunterladen</string>
     <string name="title_advanced_rlah">Roaming wie zu Hause</string>
+    <string name="title_advanced_validated">Erfordert eine validierte (geprüfte) Verbindung</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
@@ -453,6 +454,7 @@
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_optimize">Automatisch optimieren</string>
     <string name="title_advanced_updates">Auf GitHub nach Aktualisierungen suchen</string>
+    <string name="title_advanced_check_weekly">Wöchentlich statt täglich prüfen</string>
     <string name="title_advanced_experiments">Experimentelle Funktionen ausprobieren</string>
     <string name="title_advanced_query_threads">Parallelen Datenbankzugriff beschränken</string>
     <string name="title_advanced_crash_reports">Fehlerberichte senden</string>
@@ -485,6 +487,7 @@
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
     <string name="title_advanced_tcp_keep_alive_hint">Das Aktivieren dieser Funktion kann bei einigen Geräten zu Verbindungsproblemen führen</string>
+    <string name="title_advanced_validate_hint">Dies kann dazu führen, dass Nachrichten nicht synchronisiert werden, zum Beispiel bei der Verwendung eines VPN, aber auch in anderen Situationen</string>
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
     <string name="title_advanced_ssl_harden_hint">Wenn dies eingeschaltet ist, werden schwache SSL-Protokolle und Chiffren deaktiviert, was zu Verbindungsproblemen führen kann</string>
     <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgerufen. Sie können die Roaming-Einstellung des Gerätes verwenden, um das Internet während des Roamings zu deaktivieren.</string>
@@ -580,6 +583,7 @@
     <string name="title_port">Portnummer</string>
     <string name="title_user">Benutzername</string>
     <string name="title_password">Passwort</string>
+    <string name="title_password_storage">Wie werden Passwörter gespeichert?</string>
     <string name="title_case_sensitive">Bei Benutzernamen und Passwörtern wird normalerweise zwischen Groß- und Kleinschreibung unterschieden</string>
     <string name="title_client_certificate">Clientzertifikat</string>
     <string name="title_realm">Bereich</string>
@@ -685,6 +689,7 @@
     <string name="title_navigation_folder">Im Navigationsmenü anzeigen</string>
     <string name="title_synchronize_folder">Synchronisieren (E-Mails empfangen)</string>
     <string name="title_poll_folder">Periodisch überprüfen anstatt kontinuierlicher Synchronisierung</string>
+    <string name="title_poll_folder_remark">Die meisten E-Mail-Server erlauben Push-Nachrichten nur für einige wenige Ordner!</string>
     <string name="title_download_folder">Automatisch den Nachrichtentext und Anhänge herunterladen</string>
     <string name="title_notify_folder">Eingangsbenachrichtigung</string>
     <string name="title_auto_classify_source">Neue Nachrichten in diesem Ordner klassifizieren</string>
@@ -1405,6 +1410,9 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
+        <item>4 MB</item>
+        <item>8 MB</item>
+        <item>16 MB</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

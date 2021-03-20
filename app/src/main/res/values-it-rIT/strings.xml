@@ -125,7 +125,7 @@
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">L\'assistente può essere usato più volte per impostare più account</string>
     <string name="title_setup_wizard_new">Ho bisogno di un nuovo indirizzo e-mail</string>
-    <string name="title_setup_manual">Configurazione manuale e più opzioni account</string>
+    <string name="title_setup_manual">Configurazione manuale e opzioni account</string>
     <string name="title_setup_account_remark">Ricevi e-mail</string>
     <string name="title_setup_identity_remark">Invia e-mail</string>
     <string name="title_setup_account_identity_hint">È possibile configurare il nome, il colore e lo scorrimento delle azioni nelle impostazioni dell\'account e configurare una firma nelle impostazioni dell\'identità</string>
@@ -165,7 +165,6 @@
     <string name="title_setup_doze">Disabilita le ottimizzazioni della batteria</string>
     <string name="title_setup_doze_remark">Per ricevere e-mail in modo affidabile</string>
     <string name="title_setup_doze_hint">Anche se questo può sembrare contraddittorio, spegnere le ottimizzazioni della batteria si tradurrà in un minore utilizzo della batteria</string>
-    <string name="title_setup_doze_instructions">Nella prossima finestra, seleziona \"Tutte le app\" in alto, seleziona questa app e seleziona e conferma \"Non ottimizzare\"</string>
     <string name="title_setup_doze_battery">Consumo elevato della batteria?</string>
     <string name="title_setup_doze_stopped">Sincronizzazione interrotta?</string>
     <string name="title_setup_data">Risparmio dati attivato</string>
@@ -452,6 +451,7 @@
     <string name="title_advanced_watchdog">Controlla periodicamente se FairEmail è ancora attiva</string>
     <string name="title_advanced_optimize">Ottimizza automaticamente</string>
     <string name="title_advanced_updates">Controlla gli aggiornamenti su GitHub</string>
+    <string name="title_advanced_check_weekly">Controlla settimanalmente invece che quotidianamente</string>
     <string name="title_advanced_experiments">Prova le funzionalità sperimentali</string>
     <string name="title_advanced_query_threads">Limita l\'accesso alla banca dati parallela</string>
     <string name="title_advanced_crash_reports">Invia rapporti di errore</string>
@@ -579,6 +579,7 @@
     <string name="title_port">Numero porta</string>
     <string name="title_user">Nome utente</string>
     <string name="title_password">Password</string>
+    <string name="title_password_storage">Come vengono memorizzate le password?</string>
     <string name="title_case_sensitive">I nomi utente e le password sono solitamente maiuscole e minuscole</string>
     <string name="title_client_certificate">Certificato client</string>
     <string name="title_realm">Dominio</string>
@@ -684,6 +685,7 @@
     <string name="title_navigation_folder">Mostra nel menu di navigazione</string>
     <string name="title_synchronize_folder">Sincronizza (ricevi messaggi)</string>
     <string name="title_poll_folder">Controllare periodicamente anziché sincronizzare continuamente</string>
+    <string name="title_poll_folder_remark">La maggior parte dei server di posta elettronica consente di inviare messaggi solo per una manciata di cartelle!</string>
     <string name="title_download_folder">Scarica automaticamente messaggi di testo e allegati</string>
     <string name="title_notify_folder">Notifica nuovi messaggi</string>
     <string name="title_auto_classify_source">Classifica i nuovi messaggi in questa cartella</string>
@@ -1407,6 +1409,9 @@
         <item>512 KB</item>
         <item>1 MB</item>
         <item>2 MB</item>
+        <item>4 MB</item>
+        <item>8 MB</item>
+        <item>16 MB</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

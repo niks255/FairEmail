@@ -35,6 +35,8 @@ import android.webkit.CookieManager;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -98,7 +100,7 @@ public class ApplicationEx extends Application
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException(Thread thread, Throwable ex) {
+            public void uncaughtException(@NotNull Thread thread, @NotNull Throwable ex) {
                 if (!crash_reports && Log.isOwnFault(ex)) {
                     Log.e(ex);
 
@@ -415,8 +417,16 @@ public class ApplicationEx extends Application
         } else if (version < 1477) {
             if (!BuildConfig.DEBUG)
                 editor.remove("experiments");
-        } else if (version == 1492)
-            editor.putBoolean("experiments", !BuildConfig.PLAY_STORE_RELEASE);
+        } else if (version < 1524) {
+            if (BuildConfig.PLAY_STORE_RELEASE)
+                editor.remove("experiments");
+        } else if (version < 1525) {
+            if (!prefs.contains("download"))
+                editor.putInt("download", 512 * 1024);
+        } else if (version < 1533) {
+            if (!prefs.contains("biometrics_notify"))
+                editor.putBoolean("biometrics_notify", false);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
             editor.remove("background_service");
@@ -428,7 +438,7 @@ public class ApplicationEx extends Application
         editor.apply();
     }
 
-    private BroadcastReceiver onScreenOff = new BroadcastReceiver() {
+    private final BroadcastReceiver onScreenOff = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("Received " + intent);

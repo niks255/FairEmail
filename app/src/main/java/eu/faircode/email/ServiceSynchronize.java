@@ -254,12 +254,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         boolean sync = current.command.getBoolean("sync", false);
                         boolean force = current.command.getBoolean("force", false);
+                        if (force)
+                            sync = true;
 
                         int index = accountStates.indexOf(current);
                         if (index < 0) {
-                            if (current.canRun()) {
+                            if (current.canRun(force)) {
                                 EntityLog.log(ServiceSynchronize.this, "### new " + current +
-                                        " start=" + current.canRun() +
+                                        " start=" + current.canRun(force) +
                                         " sync=" + current.accountState.isEnabled(current.enabled) +
                                         " enabled=" + current.accountState.synchronize +
                                         " ondemand=" + current.accountState.ondemand +
@@ -289,14 +291,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             // Some networks disallow email server connections:
                             // - reload on network type change when disconnected
                             if (reload ||
-                                    prev.canRun() != current.canRun() ||
+                                    prev.canRun(force) != current.canRun(force) ||
                                     !prev.accountState.equals(current.accountState)) {
-                                if (prev.canRun() || current.canRun())
+                                if (prev.canRun(force) || current.canRun(force))
                                     EntityLog.log(ServiceSynchronize.this, "### changed " + current +
                                             " reload=" + reload +
                                             " force=" + force +
-                                            " stop=" + prev.canRun() +
-                                            " start=" + current.canRun() +
+                                            " stop=" + prev.canRun(force) +
+                                            " start=" + current.canRun(force) +
                                             " sync=" + sync +
                                             " enabled=" + current.accountState.isEnabled(current.enabled) +
                                             " should=" + current.accountState.shouldRun(current.enabled) +
@@ -308,11 +310,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             " tbd=" + current.accountState.tbd +
                                             " state=" + current.accountState.state +
                                             " active=" + prev.networkState.getActive() + "/" + current.networkState.getActive());
-                                if (prev.canRun()) {
+                                if (prev.canRun(force)) {
                                     event = true;
                                     stop(prev);
                                 }
-                                if (current.canRun()) {
+                                if (current.canRun(force)) {
                                     event = true;
                                     start(current, current.accountState.isEnabled(current.enabled) || sync, force);
                                 }
@@ -2028,7 +2030,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(@NonNull Network network) {
-            updateNetworkState(network, "available");
+            // Android O+: this will always immediately be followed by a call to onCapabilitiesChanged/onLinkPropertiesChanged
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                updateNetworkState(network, "available");
         }
 
         @Override
@@ -2039,6 +2043,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         @Override
         public void onLinkPropertiesChanged(@NonNull Network network, @NonNull LinkProperties props) {
             updateNetworkState(network, "properties");
+        }
+
+        @Override
+        public void onBlockedStatusChanged(@NonNull Network network, boolean blocked) {
+            EntityLog.log(ServiceSynchronize.this, "Network " + network + " blocked=" + blocked);
         }
 
         @Override
@@ -2144,6 +2153,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private class MediatorState extends MediatorLiveData<List<TupleAccountNetworkState>> {
         private boolean running = true;
+        private Bundle lastCommand = null;
         private ConnectionHelper.NetworkState lastNetworkState = null;
         private List<TupleAccountState> lastAccountStates = null;
 
@@ -2151,7 +2161,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             EntityLog.log(ServiceSynchronize.this, "### command " +
                     TextUtils.join(" ", Log.getExtras(command)));
 
-            if (command.getBoolean("sync"))
+            if (command.getBoolean("sync") || command.getBoolean("force"))
                 lastNetworkState = ConnectionHelper.getNetworkState(ServiceSynchronize.this);
 
             post(command, lastNetworkState, lastAccountStates);
@@ -2159,12 +2169,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         private void post(ConnectionHelper.NetworkState networkState) {
             lastNetworkState = networkState;
-            post(null, lastNetworkState, lastAccountStates);
+            post(lastCommand, lastNetworkState, lastAccountStates);
         }
 
         private void post(List<TupleAccountState> accountStates) {
             lastAccountStates = accountStates;
-            post(null, lastNetworkState, lastAccountStates);
+            post(lastCommand, lastNetworkState, lastAccountStates);
         }
 
         private void postDestroy() {
@@ -2185,8 +2195,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
             if (accountStates == null) {
                 EntityLog.log(ServiceSynchronize.this, "### no accounts");
+                lastCommand = command;
                 return;
             }
+
+            lastCommand = null;
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
             boolean enabled = prefs.getBoolean("enabled", true);

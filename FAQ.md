@@ -427,6 +427,9 @@ You should try to fix this by contacting your provider or by getting a valid sec
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
 If money is an obstacle, you can get free security certificates from [Let’s Encrypt](https://letsencrypt.org).
 
+The quick, but unsafe solution (not advised), is to enable *Insecure connections* in the advanced identity settings
+(navigation menu, tap *Settings*, tap *Manual setup and more options*, tap *Identities*, tap the identity, tap *Advanced*).
+
 Alternatively, you can accept the fingerprint of invalid server certificates like this:
 
 1. Make sure you are using a trusted internet connection (no public Wi-Fi networks, etc)
@@ -440,14 +443,23 @@ This will "pin" the server certificate to prevent man-in-the-middle attacks.
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure,
 see also [here](https://developer.android.com/training/articles/security-ssl).
 
+<br />
+
 *Trust anchor for certification path not found*
 
 *... java.security.cert.CertPathValidatorException: Trust anchor for certification path not found ...*
 means that the default Android trust manager was not able to verify the server certificate chain.
 
-You should either fix the server configuration or accept the fingerprint shown below the error message.
+This could be due to the root certificate not being installed on your device
+or because intermediate certificates are missing, for example because the email server didn't send them.
 
-Note that this problem can be caused by the server not sending all intermediate certificates too.
+You can fix the first problem by downloading and installing the root certificate from the website of the provider of the certificate.
+
+The second problem should be fixed by changing the server configuration or by importing the intermediate certificates on your device.
+
+You can pin the certificate too, see above.
+
+<br />
 
 *Empty password*
 
@@ -1157,6 +1169,7 @@ Too large messages and triggering the spam filter of an email server are the mos
 * *550 Spam message rejected because IP is listed by ...* means that the email server rejected to send a message from the current (public) network address because it was misused to send spam by (hopefully) somebody else before. Please try to enable flight mode for 10 minutes to acquire a new network address.
 * *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgong message as harmful.
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
+* *451 4.7.0 Temporary server error. Please try again later. PRX4 ...*: please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
 
@@ -2899,7 +2912,7 @@ because this could result in grouping unrelated messages and would be at the exp
 
 If FairEmail cannot connect to an email server to synchronize messages,
 for example if the internet connection is bad or a firewall or a VPN is blocking the connection,
-FairEmail will retry two times after waiting 4 and 8 seconds while keeping the device awake (=use battery power).
+FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power).
 If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby)
@@ -2944,10 +2957,6 @@ Hard bounces will mostly be processed automatically because they affect the repu
 The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
-
-<br />
-
-*Background for unread messages*
 
 <br />
 
@@ -3193,7 +3202,7 @@ you can create a drafts folder by tapping on the '+' button in the folder list o
 Some providers, like Gmail, allow enabling/disabling IMAP for individual folders.
 So, if a folder is not visible, you might need to enable IMAP for the folder.
 
-Quick link for Gmail: [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Quick link for Gmail (will work on a desktop computer only): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 

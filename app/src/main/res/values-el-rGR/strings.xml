@@ -125,7 +125,7 @@
     <string name="title_setup_wizard">Οδηγός</string>
     <string name="title_setup_wizard_multiple">Ο οδηγός μπορεί να χρησιμοποιηθεί πολλές φορές για τη ρύθμιση πολλαπλών λογαριασμών</string>
     <string name="title_setup_wizard_new">Χρειάζομαι μια νέα διεύθυνση ηλ. ταχυδρομείου</string>
-    <string name="title_setup_manual">Χειροκίνητη ρύθμιση και περισσότερες επιλογές λογαριασμού</string>
+    <string name="title_setup_manual">Χειροκίνητη ρύθμιση και επιλογές λογαριασμού</string>
     <string name="title_setup_account_remark">Λήψη μηνυμάτων</string>
     <string name="title_setup_identity_remark">Αποστολή μηνυμάτων</string>
     <string name="title_setup_account_identity_hint">Μπορείτε να ρυθμίσετε το όνομα, το χρώμα και τις ενέργειες σάρωσης στις ρυθμίσεις του λογαριασμού, και να ρυθμίσετε μία υπογραφή στις ρυθμίσεις ταυτότητας</string>
@@ -165,7 +165,7 @@
     <string name="title_setup_doze">Απενεργοποίηση βελτιστοποίησης μπαταρίας</string>
     <string name="title_setup_doze_remark">Για λήψη μηνυμάτων χωρίς καθυστερήσεις</string>
     <string name="title_setup_doze_hint">Αν και μπορεί να ακούγεται αντιφατικό, η απενεργοποίηση των βελτιστοποιήσεων μπαταρίας θα έχει ως αποτέλεσμα λιγότερη χρήση μπαταρίας</string>
-    <string name="title_setup_doze_instructions">Στην επόμενη οθόνη, επιλέξτε \"Όλες οι εφαρμογές\" στο πάνω μέρος, διαλέξτε το FairEmail από τη λίστα των εφαρμογών, επιλέξτε: \"Να μην γίνεται βελτιστοποίηση\", και επιβεβαιώστε την επιλογή αυτή</string>
+    <string name="title_setup_doze_instructions">Στο επόμενο παράθυρο διαλόγου του Android αλλάζετε το \"Μη βελτιστοποιημένες\" σε \"Όλες οι εφαρμογές\", επιλέγετε αυτήν την εφαρμογή και επιλέγετε \"Να μην γίνεται βελτιστοποίηση\"</string>
     <string name="title_setup_doze_battery">Η μπαταρία χρησιμοποιείται παραπάνω από το κανονικό;</string>
     <string name="title_setup_doze_stopped">Σταμάτησε ο συγχρονισμός;</string>
     <string name="title_setup_data">Η εξοικονόμηση δεδομένων είναι ενεργή</string>
@@ -278,6 +278,7 @@
     <string name="title_advanced_download">Αυτόματο κατέβασμα μηνυμάτων και συνημμένων με σύνδεση ογκοχρέωσης μέχρι</string>
     <string name="title_advanced_roaming">Κατέβασμα μηνυμάτων και συνημμένων σε λειτουργία περιαγωγής</string>
     <string name="title_advanced_rlah">Περιήγηση όπως στο σπίτι</string>
+    <string name="title_advanced_validated">Απαιτείται επικυρωμένη (επαληθευμένη) σύνδεση</string>
     <string name="title_advanced_timeout">Χρονικό όριο σύνδεσης (δευτερόλεπτα)</string>
     <string name="title_advanced_prefer_ip4">Να προτιμάται IPv4 παρά IPv6</string>
     <string name="title_advanced_ssl_harden">Θωράκιση συνδέσεων SSL</string>
@@ -451,6 +452,7 @@
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_optimize">Αυτόματη βελτιστοποίηση</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
+    <string name="title_advanced_check_weekly">Εβδομαδιαίος έλεγχος αντί για καθημερινός</string>
     <string name="title_advanced_experiments">Δοκιμή πειραματικών χαρακτηριστικών</string>
     <string name="title_advanced_query_threads">Περιορισμός παράλληλων προσβάσεων στη βάση δεδομένων</string>
     <string name="title_advanced_crash_reports">Αποστολή αναφοράς σφαλμάτων</string>
@@ -482,6 +484,7 @@
     <string name="title_advanced_metered_warning">Αν απενεργοποιηθεί, θα απενεργοποιηθούν η λήψη και η αποστολή μηνυμάτων σε κινητές συνδέσεις διαδικτύου</string>
     <string name="title_advanced_rlah_hint">Υπό την προϋπόθεση ότι δεν λαμβάνει χώρα περιαγωγή εντός της ΕΕ</string>
     <string name="title_advanced_tcp_keep_alive_hint">Αν ενεργοποιηθεί, μπορεί να προκαλέσει προβλήματα σύνδεσης σε ορισμένες συσκευές</string>
+    <string name="title_advanced_validate_hint">Μπορεί να έχει ως αποτέλεσμα να μην συγχρονίζονται τα μηνύματα, για παράδειγμα όταν χρησιμοποιείτε VPN, αλλά και σε άλλες περιπτώσεις</string>
     <string name="title_advanced_timeout_hint">Το χρονικό όριο για τις διαδικασίες ανάγνωσης/εγγραφής θα τεθεί στο διπλάσιο από εκείνο για τη λήξη της σύνδεσης. Υψηλότερες τιμές συνεπάγονται μεγαλύτερη χρήση μπαταρίας.</string>
     <string name="title_advanced_ssl_harden_hint">Αν ενεργοποιηθεί, θα απενεργοποιηθούν τα ασθενή πρωτόκολλα SSL και οι αλγόριθμοι κρυπτογράφησης, το οποίο ενδέχεται να οδηγήσει σε προβλήματα σύνδεσης</string>
     <string name="title_advanced_roaming_hint">Οι κεφαλίδες μηνυμάτων θα λαμβάνονται πάντα κατά την περιαγωγή. Από τις ρυθμίσεις περιαγωγής της συσκευής σας, μπορείτε να απενεργοποίησετε το ίντερνετ κατά την περιαγωγή.</string>
@@ -577,6 +580,7 @@
     <string name="title_port">Αριθμός θύρας</string>
     <string name="title_user">Όνομα χρήστη</string>
     <string name="title_password">Κωδικός πρόσβασης</string>
+    <string name="title_password_storage">Πώς αποθηκεύονται οι κωδικοί πρόσβασης;</string>
     <string name="title_case_sensitive">Τα ονόματα χρηστών και οι κωδικοί πρόσβασης επηρεάζονται συνήθως από τις αλλαγές κεφαλαίων και μικρών γραμμάτων</string>
     <string name="title_client_certificate">Πιστοποιητικό πελάτη</string>
     <string name="title_realm">Realm</string>
@@ -682,6 +686,7 @@
     <string name="title_navigation_folder">Προβολή στο μενού πλοήγησης</string>
     <string name="title_synchronize_folder">Συγχρονισμός (λήψη μηνυμάτων)</string>
     <string name="title_poll_folder">Περιοδικός έλεγχος αντί για συνεχής συγχρονισμός</string>
+    <string name="title_poll_folder_remark">Οι περισσότεροι διακομιστές ηλ. ταχυδρομείου επιτρέπουν μηνύματα ώθησης μόνον για έναν πολύ μικρό αριθμό φακέλων!</string>
     <string name="title_download_folder">Αυτόματο κατέβασμα των κειμένων των μηνυμάτων και των συνημμένων</string>
     <string name="title_notify_folder">Να ειδοποιούμαι για νέα μηνύματα</string>
     <string name="title_auto_classify_source">Ταξινόμηση νέων μηνυμάτων σε αυτόν το φάκελο</string>
@@ -1405,6 +1410,9 @@
         <item>512 kB</item>
         <item>1 MB</item>
         <item>2 MB</item>
+        <item>4 MB</item>
+        <item>8 MB</item>
+        <item>16 MB</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

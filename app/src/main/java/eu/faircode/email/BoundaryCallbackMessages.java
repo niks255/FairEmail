@@ -225,6 +225,10 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     private int load_device(State state) {
         DB db = DB.getInstance(context);
 
+        Log.i("Boundary device" +
+                " index=" + state.index +
+                " matches=" + (state.matches == null ? null : state.matches.size()));
+
         int found = 0;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -293,35 +297,43 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             if (state.matches.size() == 0)
                 break;
 
+            String query = (criteria.query == null ? null : criteria.query.toLowerCase());
+
             for (int i = state.index; i < state.matches.size() && found < pageSize && !state.destroyed; i++) {
                 state.index = i + 1;
 
                 TupleMatch match = state.matches.get(i);
-                if (criteria.query != null &&
-                        criteria.in_message &&
-                        (match.matched == null || !match.matched))
-                    try {
-                        File file = EntityMessage.getFile(context, match.id);
-                        if (file.exists()) {
-                            String html = Helper.readText(file);
-                            if (html.toLowerCase().contains(criteria.query)) {
-                                String text = HtmlHelper.getFullText(html);
-                                if (text.toLowerCase().contains(criteria.query))
-                                    match.matched = true;
-                            }
-                        }
-                    } catch (IOException ex) {
-                        Log.e(ex);
-                    }
+                boolean matched = (match.matched != null && match.matched);
 
-                if (match.matched != null && match.matched) {
+                if (query != null) {
+                    if (!matched && criteria.in_message)
+                        try {
+                            File file = EntityMessage.getFile(context, match.id);
+                            if (file.exists()) {
+                                String html = Helper.readText(file);
+                                if (html.toLowerCase().contains(query)) {
+                                    String text = HtmlHelper.getFullText(html);
+                                    if (text != null && text.toLowerCase().contains(query))
+                                        matched = true;
+                                }
+                            }
+                        } catch (IOException ex) {
+                            Log.e(ex);
+                        }
+                }
+
+                if (matched) {
                     found++;
+                    Log.i("Boundary matched=" + match.id);
                     db.message().setMessageFound(match.id);
                 }
             }
         }
 
-        Log.i("Boundary device done memory=" + Log.getFreeMemMb());
+        Log.i("Boundary device done" +
+                " found=" + found + "/" + pageSize +
+                " destroyed=" + state.destroyed +
+                " memory=" + Log.getFreeMemMb());
         return found;
     }
 

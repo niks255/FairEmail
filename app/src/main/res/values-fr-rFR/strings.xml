@@ -125,10 +125,10 @@
     <string name="title_setup_wizard">Assistant</string>
     <string name="title_setup_wizard_multiple">L\'assistant peut être utilisé plusieurs fois pour configurer plusieurs comptes</string>
     <string name="title_setup_wizard_new">J\'ai besoin d\'une nouvelle adresse e-mail</string>
-    <string name="title_setup_manual">Configuration manuelle et plus d\'options sur les comptes</string>
+    <string name="title_setup_manual">Configuration manuelle et options des comptes</string>
     <string name="title_setup_account_remark">Recevoir des e-mails</string>
     <string name="title_setup_identity_remark">Envoyer des e-mails</string>
-    <string name="title_setup_account_identity_hint">Vous pouvez configurer le nom, la couleur et les actions de balayage dans les paramètres du compte et configurer une signature dans les paramètres d\'identité</string>
+    <string name="title_setup_account_identity_hint">Vous pouvez configurer le nom, la couleur et les actions de balayage dans les paramètres de compte et configurer une signature dans les paramètres d\'identité</string>
     <string name="title_setup_accounts">Comptes</string>
     <string name="title_setup_identities">Identités</string>
     <string name="title_setup_oauth_permission">Le fournisseur de messagerie a approuvé OAuth uniquement pour les versions officielles de l\'application</string>
@@ -165,7 +165,7 @@
     <string name="title_setup_doze">Désactiver les optimisations de la batterie</string>
     <string name="title_setup_doze_remark">Pour recevoir des e-mails de manière fiable</string>
     <string name="title_setup_doze_hint">Bien que cela puisse paraître contradictoire, désactiver les optimisations de la batterie réduira l\'utilisation de la batterie</string>
-    <string name="title_setup_doze_instructions">Sur le prochain écran, sélectionnez « Toutes les applications » en haut, recherchez cette application puis sélectionnez et validez « Ne pas optimiser »</string>
+    <string name="title_setup_doze_instructions">Dans la prochaine fenêtre de dialogue Android, changez « Non optimisées » en « Toutes les applications », sélectionnez cette application et cochez « Ne pas optimiser »</string>
     <string name="title_setup_doze_battery">Utilisation élevée de la batterie ?</string>
     <string name="title_setup_doze_stopped">Synchronisation arrêtée ?</string>
     <string name="title_setup_data">L\'économiseur de données est activé</string>
@@ -278,6 +278,7 @@
     <string name="title_advanced_download">Télécharger automatiquement les messages et les pièces jointes sur les connexions limitées jusqu’à</string>
     <string name="title_advanced_roaming">Télécharger les messages et les pièces jointes en itinérance</string>
     <string name="title_advanced_rlah">Ignorer l\'itinérance en Europe</string>
+    <string name="title_advanced_validated">Nécessite une connexion validée (vérifiée)</string>
     <string name="title_advanced_timeout">Délai d’expiration de la connexion (secondes)</string>
     <string name="title_advanced_prefer_ip4">Préférer IPv4 à IPv6</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
@@ -452,6 +453,7 @@
     <string name="title_advanced_watchdog">Vérifier périodiquement si FairEmail est toujours actif</string>
     <string name="title_advanced_optimize">Optimiser automatiquement</string>
     <string name="title_advanced_updates">Rechercher des mises à jour sur GitHub</string>
+    <string name="title_advanced_check_weekly">Vérifier une fois par semaine au lieu d\'une fois par jour</string>
     <string name="title_advanced_experiments">Essayer les fonctionnalités expérimentales</string>
     <string name="title_advanced_query_threads">Limiter les accès multiples à la base de données</string>
     <string name="title_advanced_crash_reports">Envoyer les rapports d’erreur</string>
@@ -464,7 +466,7 @@
     <string name="title_advanced_app">Paramètres Android de l\'application</string>
     <string name="title_advanced_more">Plus d\'options</string>
     <string name="title_advanced_manual_hint">Si la réception de messages est désactivée, il est toujours possible de recevoir manuellement des messages en tirant vers le bas la liste des messages</string>
-    <string name="title_advanced_poll_hint">La synchronisation périodique comparera les messages locaux et distants à chaque fois, ce qui est une opération coûteuse qui peut entraîner une utilisation supplémentaire de la batterie, surtout lorsqu\'il y a beaucoup de messages à synchroniser. La synchronisation en continu évitera cela en surveillant uniquement les changements.</string>
+    <string name="title_advanced_poll_hint">La synchronisation périodique comparera les messages locaux et distants à chaque fois, ce qui est une opération coûteuse qui peut entraîner une utilisation supplémentaire de la batterie surtout lorsqu\'il y a beaucoup de messages à synchroniser. La synchronisation en continu évitera cela en surveillant uniquement les changements.</string>
     <string name="title_advanced_optimize_hint">Ceci peut changer la fréquence de synchronisation pour économiser la batterie en fonction des capacités et du comportement des serveurs de messagerie</string>
     <string name="title_advanced_schedule_hint">Appuyez sur une heure pour définir une période</string>
     <string name="title_advanced_no_date_hint">Certains fournisseurs stockent les messages avec une date inconnue, non valide ou future comme étant des messages sans date</string>
@@ -484,6 +486,7 @@
     <string name="title_advanced_metered_warning">La désactivation de cette option empêchera la réception et l’envoi de messages sur les connexions de données mobiles</string>
     <string name="title_advanced_rlah_hint">Considérer qu’il n’y a pas d’itinérance au sein de l’Union Européenne (Roam Like at Home)</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activer ceci peut provoquer des problèmes de connexion sur certains appareils</string>
+    <string name="title_advanced_validate_hint">Ceci peut entraîner la non-synchronisation des messages, par exemple lors de l\'utilisation d\'un VPN mais aussi dans d\'autres situations</string>
     <string name="title_advanced_timeout_hint">Le délai d’expiration de la connexion sera doublé s’il reste encore des opérations de lecture/écriture. Des valeurs plus élevées entraîneront une utilisation accrue de la batterie.</string>
     <string name="title_advanced_ssl_harden_hint">Activer ceci désactivera les protocoles et algorithmes SSL faibles, ce qui peut entraîner des problèmes de connexion</string>
     <string name="title_advanced_roaming_hint">Les en-têtes des messages seront toujours récupérés en itinérance. Vous pouvez utiliser les paramètres d’itinérance de l’appareil pour désactiver l’accès Internet en itinérance.</string>
@@ -579,6 +582,7 @@
     <string name="title_port">Numéro de port</string>
     <string name="title_user">Nom d’utilisateur</string>
     <string name="title_password">Mot de passe</string>
+    <string name="title_password_storage">Comment les mots de passe sont-ils stockés ?</string>
     <string name="title_case_sensitive">Les noms d\'utilisateur et les mots de passe sont généralement sensibles à la casse</string>
     <string name="title_client_certificate">Certificat client</string>
     <string name="title_realm">Domaine</string>
@@ -603,7 +607,7 @@
     <string name="title_no_name">Nom manquant</string>
     <string name="title_no_email">Adresse e-mail manquante</string>
     <string name="title_email_invalid">Adresse e-mail invalide : \'%1$s\'</string>
-    <string name="title_address_duplicate">Duplication de l\'adresse « %1$s »</string>
+    <string name="title_address_duplicate">Adresse « %1$s » en double</string>
     <string name="title_address_parse_error">Adresse \'%1$s\' non valide : %2$s</string>
     <string name="title_no_account">Compte manquant</string>
     <string name="title_no_host">Nom d\'hôte manquant</string>
@@ -642,7 +646,7 @@
     <string name="title_synchronize_now">Synchroniser maintenant</string>
     <string name="title_synchronize_subfolders">Sous-dossiers</string>
     <string name="title_synchronize_more">Récupérer plus de messages</string>
-    <string name="title_synchronize_more_hint">Ceci se traduira par un seul téléchargement des messages les plus anciens, ce qui n\'entraînera pas une plus grande utilisation de la batterie pour une utilisation quotidienne</string>
+    <string name="title_synchronize_more_hint">Ceci téléchargera les messages les plus anciens une seule fois, ce qui n\'engendrera pas une plus grande utilisation de la batterie pour une utilisation quotidienne</string>
     <string name="title_synchronize_enabled">Synchroniser</string>
     <string name="title_synchronize_batch_enable">Activer la synchronisation</string>
     <string name="title_synchronize_batch_disable">Désactiver la synchronisation</string>
@@ -684,6 +688,7 @@
     <string name="title_navigation_folder">Afficher dans le menu de navigation</string>
     <string name="title_synchronize_folder">Synchroniser (recevoir des messages)</string>
     <string name="title_poll_folder">Vérifier périodiquement au lieu de synchroniser en continu</string>
+    <string name="title_poll_folder_remark">La plupart des serveurs de messagerie autorisent les messages push pour un petit nombre de dossiers seulement !</string>
     <string name="title_download_folder">Télécharger automatiquement le texte des messages et les pièces jointes</string>
     <string name="title_notify_folder">Notifier les nouveaux messages</string>
     <string name="title_auto_classify_source">Classer les nouveaux messages de ce dossier</string>
@@ -693,8 +698,8 @@
     <string name="title_keep_days">Conserver les messages (jours)</string>
     <string name="title_keep_days_remark">Les anciens messages seront supprimés de l\'appareil, mais resteront sur le serveur</string>
     <string name="title_keep_all">Conserver tous les messages</string>
-    <string name="title_poll_system">Définir les dossiers système pour vérifier périodiquement s\'il y a de nouveaux messages</string>
-    <string name="title_poll_user">Définir les dossiers utilisateur pour vérifier périodiquement s\'il y a de nouveaux messages</string>
+    <string name="title_poll_system">Vérifier périodiquement s\'il y a de nouveaux messages dans les dossiers système</string>
+    <string name="title_poll_user">Vérifier périodiquement s\'il y a de nouveaux messages dans les dossiers utilisateur</string>
     <string name="title_auto_trash">Mettre automatiquement les anciens messages à la corbeille</string>
     <string name="title_auto_delete">Supprimer automatiquement et définitivement les anciens messages</string>
     <string name="title_auto_delete_hint">Les anciens messages sont ceux qui ne sont plus conservés sur l’appareil</string>
@@ -1232,7 +1237,7 @@
     <string name="title_hint_battery">Étant donné que FairEmail reçoit toujours des messages par défaut, Android signalera FairEmail comme étant toujours actif. Ceci peut donner l’impression que FairEmail utilise de la batterie en permanence alors que ce n’est pas le cas.</string>
     <string name="title_hint_reformat">FairEmail reformate par défaut les messages pour des raisons de confidentialité et de sécurité. Pour afficher le message original, appuyez sur l’icône « plein écran » au-dessus du texte du message.</string>
     <string name="title_hint_design">La conception est intentionnellement peu agrémentée mais elle reste très fonctionnelle. Il y a beaucoup d\'options pour personnaliser l\'apparence mais s\'il vous plaît, comprenez qu\'il est impossible de satisfaire pleinement tout le monde à la fois.</string>
-    <string name="title_hint_junk">Le filtrage des spams devrait être fait par le serveur de messagerie et ne peut pas être fait de manière fiable sur un appareil ayant des capacités limitées et alimenté par une batterie.</string>
+    <string name="title_hint_junk">Le filtrage des spams devrait être effectué par le serveur de messagerie et ne peut pas être réalisé de manière fiable sur un appareil alimenté par une batterie et ayant des capacités limitées.</string>
     <string name="title_hint_contact_actions">Appui long pour les options</string>
     <string name="title_hint_eml">Ceci est l’aperçu du contenu d’un fichier de message original. Enregistrez le message original au moyen de l’icône de sauvegarde dans la barre d’action pour afficher tout son contenu.</string>
     <string name="title_open_link">Ouvrir le lien</string>
@@ -1407,6 +1412,9 @@
         <item>512 Ko</item>
         <item>1 Mo</item>
         <item>2 Mo</item>
+        <item>4 Mo</item>
+        <item>8 Mo</item>
+        <item>16 Mo</item>
         <item>∞</item>
     </string-array>
     <string-array name="onCloseNames">

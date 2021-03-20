@@ -51,6 +51,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 
@@ -59,6 +60,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private Spinner spDownload;
     private SwitchCompat swRoaming;
     private SwitchCompat swRlah;
+    private SwitchCompat swValidated;
     private EditText etTimeout;
     private SwitchCompat swPreferIp4;
     private SwitchCompat swStandaloneVpn;
@@ -70,8 +72,11 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private TextView tvNetworkRoaming;
     private TextView tvNetworkInfo;
 
+    private Group grpValidated;
+
     private final static String[] RESET_OPTIONS = new String[]{
-            "metered", "download", "roaming", "rlah", "timeout", "prefer_ip4", "standalone_vpn", "tcp_keep_alive", "ssl_harden"
+            "metered", "download", "roaming", "rlah",
+            "require_validated", "timeout", "prefer_ip4", "standalone_vpn", "tcp_keep_alive", "ssl_harden"
     };
 
     @Override
@@ -88,6 +93,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         spDownload = view.findViewById(R.id.spDownload);
         swRoaming = view.findViewById(R.id.swRoaming);
         swRlah = view.findViewById(R.id.swRlah);
+        swValidated = view.findViewById(R.id.swValidated);
         etTimeout = view.findViewById(R.id.etTimeout);
         swPreferIp4 = view.findViewById(R.id.swPreferIp4);
         swStandaloneVpn = view.findViewById(R.id.swStandaloneVpn);
@@ -99,6 +105,8 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         tvNetworkMetered = view.findViewById(R.id.tvNetworkMetered);
         tvNetworkRoaming = view.findViewById(R.id.tvNetworkRoaming);
         tvNetworkInfo = view.findViewById(R.id.tvNetworkInfo);
+
+        grpValidated = view.findViewById(R.id.grpValidated);
 
         setOptions();
 
@@ -138,6 +146,14 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("rlah", checked).apply();
+            }
+        });
+
+        grpValidated.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? View.GONE : View.VISIBLE);
+        swValidated.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("require_validated", checked).apply();
             }
         });
 
@@ -306,6 +322,8 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
 
         swRoaming.setChecked(prefs.getBoolean("roaming", true));
         swRlah.setChecked(prefs.getBoolean("rlah", true));
+
+        swValidated.setChecked(prefs.getBoolean("require_validated", false));
 
         int timeout = prefs.getInt("timeout", 0);
         etTimeout.setText(timeout == 0 ? null : Integer.toString(timeout));
