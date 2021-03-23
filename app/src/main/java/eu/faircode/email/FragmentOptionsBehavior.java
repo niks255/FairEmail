@@ -158,7 +158,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("conversation_actions", checked).apply();
-                swConversationActionsReplies.setEnabled(checked);
+                swConversationActionsReplies.setEnabled(checked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
             }
         });
 
@@ -413,19 +413,10 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_default) {
-            onMenuDefault();
+            FragmentOptions.reset(getContext(), RESET_OPTIONS);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuDefault() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = prefs.edit();
-        for (String option : RESET_OPTIONS)
-            editor.remove(option);
-        editor.apply();
-        ToastEx.makeText(getContext(), R.string.title_setup_done, Toast.LENGTH_LONG).show();
     }
 
     private void setOptions() {

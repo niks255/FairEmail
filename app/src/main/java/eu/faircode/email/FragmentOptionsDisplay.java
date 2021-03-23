@@ -44,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -452,7 +451,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         tvGravatarsHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(getContext(), Uri.parse(Helper.GRAVATAR_PRIVACY_URI), true);
+                Helper.view(v.getContext(), Uri.parse(Helper.GRAVATAR_PRIVACY_URI), true);
             }
         });
 
@@ -873,22 +872,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_default) {
-            onMenuDefault();
+            FragmentOptions.reset(getContext(), RESET_OPTIONS);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuDefault() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = prefs.edit();
-        for (String option : RESET_OPTIONS)
-            editor.remove(option);
-        editor.apply();
-
-        setNavigationBarColor(Color.BLACK);
-
-        ToastEx.makeText(getContext(), R.string.title_setup_done, Toast.LENGTH_LONG).show();
     }
 
     private void setOptions() {

@@ -44,7 +44,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -243,7 +242,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         ibIncognitoKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(getContext(), Uri.parse("https://developer.android.com/reference/android/view/inputmethod/EditorInfo#IME_FLAG_NO_PERSONALIZED_LEARNING"), true);
+                Helper.view(v.getContext(), Uri.parse("https://developer.android.com/reference/android/view/inputmethod/EditorInfo#IME_FLAG_NO_PERSONALIZED_LEARNING"), true);
             }
         });
 
@@ -264,7 +263,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         ibSafeBrowsing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(getContext(), Uri.parse("https://developers.google.com/safe-browsing"), true);
+                Helper.view(v.getContext(), Uri.parse("https://developers.google.com/safe-browsing"), true);
             }
         });
 
@@ -350,19 +349,10 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_default) {
-            onMenuDefault();
+            FragmentOptions.reset(getContext(), RESET_OPTIONS);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuDefault() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = prefs.edit();
-        for (String option : RESET_OPTIONS)
-            editor.remove(option);
-        editor.apply();
-        ToastEx.makeText(getContext(), R.string.title_setup_done, Toast.LENGTH_LONG).show();
     }
 
     private void setOptions() {

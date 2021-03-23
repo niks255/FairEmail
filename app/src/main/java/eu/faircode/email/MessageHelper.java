@@ -2362,8 +2362,11 @@ public class MessageHelper {
                             break;
                         }
                     }
-                } else
-                    throw new MessagingException("Multipart=" + (content == null ? null : content.getClass().getName()));
+                } else {
+                    String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
+                    Log.e(msg);
+                    throw new MessagingException(msg);
+                }
             }
 
             if (part.isMimeType("multipart/signed")) {
@@ -2372,38 +2375,45 @@ public class MessageHelper {
                 if ("application/pgp-signature".equals(protocol) ||
                         "application/pkcs7-signature".equals(protocol) ||
                         "application/x-pkcs7-signature".equals(protocol)) {
-                    Multipart multipart = (Multipart) part.getContent();
-                    if (multipart.getCount() == 2) {
-                        getMessageParts(multipart.getBodyPart(0), parts, null);
-                        getMessageParts(multipart.getBodyPart(1), parts,
-                                "application/pgp-signature".equals(protocol)
-                                        ? EntityAttachment.PGP_SIGNATURE
-                                        : EntityAttachment.SMIME_SIGNATURE);
+                    Object content = part.getContent();
+                    if (content instanceof Multipart) {
+                        Multipart multipart = (Multipart) content;
+                        if (multipart.getCount() == 2) {
+                            getMessageParts(multipart.getBodyPart(0), parts, null);
+                            getMessageParts(multipart.getBodyPart(1), parts,
+                                    "application/pgp-signature".equals(protocol)
+                                            ? EntityAttachment.PGP_SIGNATURE
+                                            : EntityAttachment.SMIME_SIGNATURE);
 
-                        AttachmentPart apart = new AttachmentPart();
-                        apart.disposition = Part.INLINE;
-                        apart.filename = "content.asc";
-                        apart.encrypt = "application/pgp-signature".equals(protocol)
-                                ? EntityAttachment.PGP_CONTENT
-                                : EntityAttachment.SMIME_CONTENT;
-                        apart.part = part;
+                            AttachmentPart apart = new AttachmentPart();
+                            apart.disposition = Part.INLINE;
+                            apart.filename = "content.asc";
+                            apart.encrypt = "application/pgp-signature".equals(protocol)
+                                    ? EntityAttachment.PGP_CONTENT
+                                    : EntityAttachment.SMIME_CONTENT;
+                            apart.part = part;
 
-                        apart.attachment = new EntityAttachment();
-                        apart.attachment.disposition = apart.disposition;
-                        apart.attachment.name = apart.filename;
-                        apart.attachment.type = "text/plain";
-                        apart.attachment.size = getSize();
-                        apart.attachment.encryption = apart.encrypt;
+                            apart.attachment = new EntityAttachment();
+                            apart.attachment.disposition = apart.disposition;
+                            apart.attachment.name = apart.filename;
+                            apart.attachment.type = "text/plain";
+                            apart.attachment.size = getSize();
+                            apart.attachment.encryption = apart.encrypt;
 
-                        parts.attachments.add(apart);
+                            parts.attachments.add(apart);
 
-                        return parts;
+                            return parts;
+                        } else {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(ct);
+                            for (int i = 0; i < multipart.getCount(); i++)
+                                sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
+                            Log.e(sb.toString());
+                        }
                     } else {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(ct);
-                        for (int i = 0; i < multipart.getCount(); i++)
-                            sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
-                        Log.e(sb.toString());
+                        String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
+                        Log.e(msg);
+                        throw new MessagingException(msg);
                     }
                 } else
                     Log.e(ct.toString());
@@ -2411,17 +2421,24 @@ public class MessageHelper {
                 ContentType ct = new ContentType(part.getContentType());
                 String protocol = ct.getParameter("protocol");
                 if ("application/pgp-encrypted".equals(protocol) || protocol == null) {
-                    Multipart multipart = (Multipart) part.getContent();
-                    if (multipart.getCount() == 2) {
-                        // Ignore header
-                        getMessageParts(multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
-                        return parts;
+                    Object content = part.getContent();
+                    if (content instanceof Multipart) {
+                        Multipart multipart = (Multipart) content;
+                        if (multipart.getCount() == 2) {
+                            // Ignore header
+                            getMessageParts(multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
+                            return parts;
+                        } else {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(ct);
+                            for (int i = 0; i < multipart.getCount(); i++)
+                                sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
+                            Log.e(sb.toString());
+                        }
                     } else {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(ct);
-                        for (int i = 0; i < multipart.getCount(); i++)
-                            sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
-                        Log.e(sb.toString());
+                        String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
+                        Log.e(msg);
+                        throw new MessagingException(msg);
                     }
                 } else
                     Log.e(ct.toString());
@@ -2478,8 +2495,11 @@ public class MessageHelper {
                 Object content = part.getContent(); // Should always be Multipart
                 if (content instanceof Multipart)
                     multipart = (Multipart) part.getContent();
-                else
-                    throw new MessagingException("Multipart=" + (content == null ? null : content.getClass().getName()));
+                else {
+                    String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
+                    Log.e(msg);
+                    throw new MessagingException(msg);
+                }
 
                 boolean other = false;
                 List<Part> plain = new ArrayList<>();

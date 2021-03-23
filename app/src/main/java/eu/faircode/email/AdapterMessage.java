@@ -3054,7 +3054,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 } else if (id == R.id.ibVerify) {
                     onActionDecrypt(message, false);
                 } else if (id == R.id.ibUndo) {
-                    FragmentMessages.onActionUndo(message, context, owner, parentFragment.getParentFragmentManager());
+                    FragmentMessages.onActionUndoSend(message, context, owner, parentFragment.getParentFragmentManager());
                 } else if (id == R.id.ibRule) {
                     onMenuCreateRule(message);
                 } else if (id == R.id.ibUnsubscribe) {
@@ -4321,7 +4321,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private boolean onOpenLink(final Uri uri, String title, boolean always_confirm) {
             Log.i("Opening uri=" + uri + " title=" + title);
 
-            if ("eu.faircode.email".equals(uri.getHost()) && "/activate/".equals(uri.getPath())) {
+            if ("email.faircode.eu".equals(uri.getHost()) && "/activate/".equals(uri.getPath())) {
                 try {
                     if (ActivityBilling.activatePro(context, uri))
                         ToastEx.makeText(context, R.string.title_pro_valid, Toast.LENGTH_LONG).show();
@@ -4968,6 +4968,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
 
                     Intent send = new Intent(Intent.ACTION_SEND);
+                    send.setPackage(BuildConfig.APPLICATION_ID);
                     send.putExtra(Intent.EXTRA_STREAM, uri);
                     send.setType("message/rfc822");
                     send.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
