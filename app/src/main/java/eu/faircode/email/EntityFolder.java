@@ -71,6 +71,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
     public Long account; // Outbox = null
     public Long parent;
     public Long uidv; // UIDValidity
+    public Long modseq;
     @NonNull
     public String name;
     @NonNull
@@ -115,6 +116,11 @@ public class EntityFolder extends EntityOrder implements Serializable {
 
     public Integer total; // messages on server
     public String[] keywords;
+
+    @NonNull
+    public Long selected_last = 0L;
+    @NonNull
+    public Integer selected_count = 0;
 
     @NonNull
     public Integer initialize = DEFAULT_KEEP;
@@ -182,6 +188,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("all", new TypeScore(EntityFolder.ARCHIVE, 100));
         put("archive", new TypeScore(EntityFolder.ARCHIVE, 100));
         put("archief", new TypeScore(EntityFolder.ARCHIVE, 100)); // Dutch
+        put("Архив", new TypeScore(EntityFolder.ARCHIVE, 100));
 
         put("draft", new TypeScore(EntityFolder.DRAFTS, 100));
         put("concept", new TypeScore(EntityFolder.DRAFTS, 100));
@@ -194,7 +201,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("Papierkorb", new TypeScore(EntityFolder.TRASH, 100));
         put("corbeille", new TypeScore(EntityFolder.TRASH, 100));
         put("Корзина", new TypeScore(EntityFolder.TRASH, 100));
-        // Deleted items?
+        put("Eliminata", new TypeScore(EntityFolder.TRASH, 100));
 
         put("junk", new TypeScore(EntityFolder.JUNK, 100));
         put("spam", new TypeScore(EntityFolder.JUNK, 100));
@@ -202,6 +209,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("quarantaine", new TypeScore(EntityFolder.JUNK, 50));
         put("Спам", new TypeScore(EntityFolder.JUNK, 100));
         put("Cestino", new TypeScore(EntityFolder.JUNK, 100));
+        put("Indesiderata", new TypeScore(EntityFolder.JUNK, 100));
 
         put("sent", new TypeScore(EntityFolder.SENT, 100));
         put("Gesendet", new TypeScore(EntityFolder.SENT, 100));

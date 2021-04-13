@@ -22,6 +22,7 @@ package eu.faircode.email;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,6 +49,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Lifecycle;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
@@ -71,9 +74,11 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private SwitchCompat swSwipeClose;
     private SwitchCompat swSwipeMove;
     private SwitchCompat swAutoExpand;
+    private SwitchCompat swExpandFirst;
     private SwitchCompat swExpandAll;
     private SwitchCompat swExpandOne;
     private SwitchCompat swAutoClose;
+    private TextView tvAutoSeenHint;
     private Spinner spOnClose;
     private Spinner spUndoTimeout;
     private SwitchCompat swCollapseMultiple;
@@ -88,7 +93,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             "default_snooze",
             "pull", "autoscroll", "quick_filter", "quick_scroll",
             "doubletap", "swipenav", "volumenav", "reversed", "swipe_close", "swipe_move",
-            "autoexpand", "expand_all", "expand_one", "collapse_multiple",
+            "autoexpand", "expand_first", "expand_all", "expand_one", "collapse_multiple",
             "autoclose", "onclose", "undo_timeout",
             "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance"
     };
@@ -121,9 +126,11 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swSwipeClose = view.findViewById(R.id.swSwipeClose);
         swSwipeMove = view.findViewById(R.id.swSwipeMove);
         swAutoExpand = view.findViewById(R.id.swAutoExpand);
+        swExpandFirst = view.findViewById(R.id.swExpandFirst);
         swExpandAll = view.findViewById(R.id.swExpandAll);
         swExpandOne = view.findViewById(R.id.swExpandOne);
         swCollapseMultiple = view.findViewById(R.id.swCollapseMultiple);
+        tvAutoSeenHint = view.findViewById(R.id.tvAutoSeenHint);
         swAutoClose = view.findViewById(R.id.swAutoClose);
         spOnClose = view.findViewById(R.id.spOnClose);
         spUndoTimeout = view.findViewById(R.id.spUndoTimeout);
@@ -283,6 +290,14 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("autoexpand", checked).apply();
+                swExpandFirst.setEnabled(checked);
+            }
+        });
+
+        swExpandFirst.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("expand_first", checked).apply();
             }
         });
 
@@ -307,6 +322,14 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("collapse_multiple", checked).apply();
+            }
+        });
+
+        tvAutoSeenHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(v.getContext());
+                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_VIEW_ACCOUNTS));
             }
         });
 
@@ -423,7 +446,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         swSyncOnlaunch.setChecked(prefs.getBoolean("sync_on_launch", false));
-        swDoubleBack.setChecked(prefs.getBoolean("double_back", true));
+        swDoubleBack.setChecked(prefs.getBoolean("double_back", false));
         swConversationActions.setChecked(prefs.getBoolean("conversation_actions", true));
         swConversationActionsReplies.setChecked(prefs.getBoolean("conversation_actions_replies", true));
         swConversationActionsReplies.setEnabled(swConversationActions.isChecked());
@@ -446,6 +469,8 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swSwipeMove.setChecked(prefs.getBoolean("swipe_move", false));
 
         swAutoExpand.setChecked(prefs.getBoolean("autoexpand", true));
+        swExpandFirst.setChecked(prefs.getBoolean("expand_first", true));
+        swExpandFirst.setEnabled(swAutoExpand.isChecked());
         swExpandAll.setChecked(prefs.getBoolean("expand_all", false));
         swExpandOne.setChecked(prefs.getBoolean("expand_one", true));
         swExpandOne.setEnabled(!swExpandAll.isChecked());

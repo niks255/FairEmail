@@ -9,7 +9,7 @@
     <string name="app_cake">Espaço de armazenamento insuficiente</string>
     <string name="channel_service">﻿Receber</string>
     <string name="channel_send">Enviar</string>
-    <string name="channel_notification">Email</string>
+    <string name="channel_notification">E-mail</string>
     <string name="channel_update">Atualizações</string>
     <string name="channel_warning">Avisos</string>
     <string name="channel_error">Erros</string>
@@ -160,7 +160,6 @@
     <string name="title_setup_permissions">Conceder permissões</string>
     <string name="title_setup_permissions_remark">Para acessar informações de contato (opcional)</string>
     <string name="title_setup_doze">Desativar otimizações de bateria</string>
-    <string name="title_setup_doze_remark">Para receber e-mails corretamente</string>
     <string name="title_setup_doze_hint">Embora isso possa parecer contraditório, desativar as otimizações de bateria resultará em menos uso de bateria</string>
     <string name="title_setup_doze_battery">Alto uso de bateria?</string>
     <string name="title_setup_doze_stopped">A sincronização parou?</string>
@@ -247,6 +246,8 @@
     <string name="title_advanced_suggest_sent">Sugerir endereços encontrados em mensagens enviadas</string>
     <string name="title_advanced_suggest_received">Sugerir endereços encontrados em mensagens recebidas</string>
     <string name="title_advanced_suggest_frequently">Ordenar endereços sugeridos de acordo com a frequência de uso</string>
+    <string name="title_advanced_send_reminders">Mostrar lembretes</string>
+    <string name="title_advanced_send_delayed">Atraso ao enviar mensagens</string>
     <string name="title_advanced_compose_font">Fonte padrão</string>
     <string name="title_advanced_prefix_once">Prefixo de assunto apenas uma vez na resposta ou encaminhamento</string>
     <string name="title_advanced_extended_reply">Usar cabeçalho de resposta/encaminhamento estendido</string>
@@ -255,14 +256,13 @@
     <string name="title_advanced_signature_location">Posição da assinatura</string>
     <string name="title_advanced_signature_reply">Usar assinatura quando responder</string>
     <string name="title_advanced_signature_forward">Usar assinatura quando encaminhar</string>
+    <string name="title_advanced_discard_delete">No rascunho de descarte, excluir permanentemente o rascunho</string>
     <string name="title_advanced_plain_only">Enviar texto simples por padrão</string>
     <string name="title_advanced_flow">Usar \'formato fluído\' para texto simples</string>
-    <string name="title_advanced_receipt">Ao solicitar confirmação de entrega</string>
     <string name="title_advanced_usenet_signature">Convenção de assinatura do Usenet</string>
     <string name="title_advanced_remove_signatures">Remover assinaturas reconhecidas</string>
-    <string name="title_advanced_send_reminders">Mostrar lembretes</string>
+    <string name="title_advanced_receipt">Ao solicitar confirmação de entrega</string>
     <string name="title_advanced_lookup_mx">Verifique os endereços de e-mail do destinatário antes de enviar</string>
-    <string name="title_advanced_send_delayed">Atraso ao enviar mensagens</string>
     <string name="title_advanced_metered">Usar conexões limitadas</string>
     <string name="title_advanced_download">Fazer download automático de mensagens e anexos em uma conexão limitada até</string>
     <string name="title_advanced_roaming">Fazer o download de mensagens e anexos de roaming</string>
@@ -354,7 +354,6 @@
     <string name="title_advanced_autounstar">Remover estrelas automaticamente das mensagens ao movê-las</string>
     <string name="title_advanced_auto_important">Torne as mensagens com estrela automaticamente importantes</string>
     <string name="title_advanced_reset_importance">Redefinir importância de mensagens em movimento</string>
-    <string name="title_advanced_discard_delete">No rascunho de descarte, excluir permanentemente o rascunho</string>
     <string name="title_advanced_default_snooze">Tempo padrão de soneca</string>
     <string name="title_advanced_notifications">Gerenciar notificações</string>
     <string name="title_advanced_notifications_default">Canal padrão</string>
@@ -462,7 +461,6 @@
     <string name="title_advanced_inline_hint">Imagens em linha são incluídas na mensagem</string>
     <string name="title_advanced_parse_classes_hint">Isto irá exibir mensagens com mais precisão, mas possivelmente com um atraso</string>
     <string name="title_advanced_autoexpand_hint">Abrir automaticamente a mensagem quando há apenas uma mensagem ou uma mensagem não-lida em uma conversa</string>
-    <string name="title_advanced_autoseen_hint">A marcação automática de mensagens lidas na expansão pode ser desativada nas configurações individuais da conta</string>
     <string name="title_advanced_autoclose_hint">Fechar automaticamente conversas quando todas as mensagens estiverem arquivadas, enviadas ou na lixeira</string>
     <string name="title_advanced_sender_hint">A maioria dos provedores não permite endereços de remetente modificados</string>
     <string name="title_advanced_bcc_hint">O endereço não será mostrado, mas será adicionado no envio</string>
@@ -777,7 +775,6 @@
     <string name="title_third_party">Você está usando uma versão de terceiros</string>
     <string name="title_expand_warning">Expandir esta mensagem irá baixar %1$s</string>
     <string name="title_download_message">Baixando &#8230;</string>
-    <string name="title_reformatted">Esta é a visualização de mensagem reformatada. Você pode tocar no ícone &#x26F6; para ver a mensagem original e ocultar esta mensagem.</string>
     <string name="title_compose">Escrever</string>
     <string name="title_submitter">Enviado por:</string>
     <string name="title_delivered_to">Entregue a:</string>
@@ -1005,7 +1002,6 @@
     <string name="title_rule_subject">Assunto contém</string>
     <string name="title_rule_attachments">Possui anexos</string>
     <string name="title_rule_header">Cabeçalho contém</string>
-    <string name="title_rule_time">Tempo entre</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">E</string>
     <string name="title_rule_action">Ação</string>

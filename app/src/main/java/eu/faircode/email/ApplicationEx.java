@@ -29,11 +29,13 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
+import android.os.strictmode.Violation;
 import android.util.Printer;
 import android.webkit.CookieManager;
 
-import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+import androidx.work.WorkManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +45,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ApplicationEx extends Application
-        implements androidx.work.Configuration.Provider, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Thread.UncaughtExceptionHandler prev = null;
 
     @Override
@@ -92,6 +94,35 @@ public class ApplicationEx extends Application
                     Log.d("Loop: " + msg);
             }
         });
+
+        if (BuildConfig.DEBUG &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder(StrictMode.getVmPolicy())
+                    .detectNonSdkApiUsage()
+                    .penaltyListener(getMainExecutor(), new StrictMode.OnVmViolationListener() {
+                        @Override
+                        public void onVmViolation(Violation v) {
+                            String message = v.getMessage();
+                            if (message != null &&
+                                    (message.contains("computeFitSystemWindows") ||
+                                            message.contains("makeOptionalFitsSystemWindows")))
+                                return;
+
+                            StackTraceElement[] stack = v.getStackTrace();
+                            for (StackTraceElement ste : stack) {
+                                String clazz = ste.getClassName();
+                                if (clazz != null &&
+                                        (clazz.startsWith("com.android.webview.chromium") ||
+                                                clazz.startsWith("androidx.appcompat.widget")))
+                                    return;
+                            }
+
+                            Log.e(v);
+                        }
+                    })
+                    .build();
+            StrictMode.setVmPolicy(policy);
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean crash_reports = prefs.getBoolean("crash_reports", false);
@@ -144,14 +175,11 @@ public class ApplicationEx extends Application
 
         DisconnectBlacklist.init(this);
 
-        boolean watchdog = prefs.getBoolean("watchdog", true);
-        boolean enabled = prefs.getBoolean("enabled", true);
-        if (watchdog && enabled)
-            WorkerWatchdog.init(this);
-        else {
-            ServiceSynchronize.watchdog(this);
-            ServiceSend.watchdog(this);
-        }
+        ServiceSynchronize.watchdog(this);
+        ServiceSend.watchdog(this);
+
+        ServiceSynchronize.scheduleWatchdog(this);
+        WorkManager.getInstance(this).cancelUniqueWork("WorkerWatchdog");
 
         WorkerCleanup.init(this);
 
@@ -161,22 +189,14 @@ public class ApplicationEx extends Application
         Log.i("App created " + (end - start) + " ms");
     }
 
-    @NonNull
-    @Override
-    public androidx.work.Configuration getWorkManagerConfiguration() {
-        // https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration
-        return new androidx.work.Configuration.Builder()
-                .setMinimumLoggingLevel(android.util.Log.INFO)
-                .build();
-    }
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
             case "enabled":
                 ServiceSynchronize.reschedule(this);
                 WorkerCleanup.init(this);
-                WorkerWatchdog.init(this);
+                ServiceSynchronize.scheduleWatchdog(this);
+                WidgetSync.update(this);
                 break;
             case "poll_interval":
             case "schedule":
@@ -192,7 +212,7 @@ public class ApplicationEx extends Application
                 ServiceSynchronize.reschedule(this);
                 break;
             case "watchdog":
-                WorkerWatchdog.init(this);
+                ServiceSynchronize.scheduleWatchdog(this);
                 break;
             case "secure": // privacy
             case "shortcuts": // misc
@@ -429,6 +449,22 @@ public class ApplicationEx extends Application
         } else if (version < 1535) {
             editor.remove("identities_asked");
             editor.remove("identities_primary_hint");
+        } else if (version < 1539) {
+            if (!prefs.contains("double_back"))
+                editor.putBoolean("double_back", true);
+        } else if (version < 1540) {
+            Map<String, ?> all = prefs.getAll();
+            for (String key : all.keySet())
+                if (key.startsWith("widget.") && key.endsWith(".semi")) {
+                    String[] k = key.split("\\.");
+                    if (k.length == 3)
+                        try {
+                            int appWidgetId = Integer.parseInt(k[1]);
+                            editor.remove("widget." + appWidgetId + ".background");
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

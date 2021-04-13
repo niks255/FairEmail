@@ -56,17 +56,19 @@ import android.security.KeyChain;
 import android.system.ErrnoException;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
+import android.text.method.ArrowKeyMovementMethod;
 import android.text.style.BulletSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ImageSpan;
 import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 import android.text.style.URLSpan;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -654,15 +656,16 @@ public class FragmentCompose extends FragmentBase {
 
                 ClipboardManager clipboard =
                         (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboard != null) {
-                    ClipData clip = ClipData.newHtmlText(
-                            getContext().getString(R.string.title_edit_signature_text),
-                            HtmlHelper.getText(getContext(), identity.signature),
-                            identity.signature);
-                    clipboard.setPrimaryClip(clip);
+                if (clipboard == null)
+                    return;
 
-                    ToastEx.makeText(getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
-                }
+                ClipData clip = ClipData.newHtmlText(
+                        getContext().getString(R.string.title_edit_signature_text),
+                        HtmlHelper.getText(getContext(), identity.signature),
+                        identity.signature);
+                clipboard.setPrimaryClip(clip);
+
+                ToastEx.makeText(getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -692,7 +695,41 @@ public class FragmentCompose extends FragmentBase {
 
         etBody.setTypeface(Typeface.create(compose_font, Typeface.NORMAL));
         tvReference.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
-        tvReference.setMovementMethod(LinkMovementMethod.getInstance());
+
+        tvReference.setMovementMethod(new ArrowKeyMovementMethod() {
+            @Override
+            public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int off = Helper.getOffset(widget, buffer, event);
+                    URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
+                    if (link.length > 0) {
+                        String url = link[0].getURL();
+                        Uri uri = Uri.parse(url);
+                        if (uri.getScheme() == null)
+                            uri = Uri.parse("https://" + url);
+
+                        int start = buffer.getSpanStart(link[0]);
+                        int end = buffer.getSpanEnd(link[0]);
+                        String title = (start < 0 || end < 0 || end <= start
+                                ? null : buffer.subSequence(start, end).toString());
+                        if (url.equals(title))
+                            title = null;
+
+                        Bundle args = new Bundle();
+                        args.putParcelable("uri", uri);
+                        args.putString("title", title);
+
+                        FragmentDialogOpenLink fragment = new FragmentDialogOpenLink();
+                        fragment.setArguments(args);
+                        fragment.show(getParentFragmentManager(), "open:link");
+
+                        return true;
+                    }
+                }
+
+                return super.onTouchEvent(widget, buffer, event);
+            }
+        });
 
         style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -1036,7 +1073,8 @@ public class FragmentCompose extends FragmentBase {
 
         popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_plain_text, 1, R.string.title_edit_plain_text);
         popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_formatted_text, 2, R.string.title_edit_formatted_text);
-        popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, 3, R.string.title_delete);
+        popupMenu.getMenu().add(Menu.NONE, R.string.title_clipboard_copy, 3, R.string.title_clipboard_copy);
+        popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, 4, R.string.title_delete);
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -1047,6 +1085,9 @@ public class FragmentCompose extends FragmentBase {
                     return true;
                 } else if (itemId == R.string.title_edit_formatted_text) {
                     convertRef(false);
+                    return true;
+                } else if (itemId == R.string.title_clipboard_copy) {
+                    copyRef();
                     return true;
                 } else if (itemId == R.string.title_delete) {
                     deleteRef();
@@ -1117,6 +1158,26 @@ public class FragmentCompose extends FragmentBase {
                         Log.unexpectedError(getParentFragmentManager(), ex);
                     }
                 }.execute(FragmentCompose.this, args, "compose:convert");
+            }
+
+            private void copyRef() {
+                Context context = getContext();
+                if (context == null)
+                    return;
+
+                ClipboardManager clipboard =
+                        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboard == null)
+                    return;
+
+                String html = HtmlHelper.toHtml((Spanned) tvReference.getText(), context);
+
+                ClipData clip = ClipData.newHtmlText(
+                        etSubject.getText().toString(),
+                        HtmlHelper.getText(getContext(), html),
+                        html);
+                clipboard.setPrimaryClip(clip);
+                ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
             }
 
             private void deleteRef() {
@@ -1619,16 +1680,27 @@ public class FragmentCompose extends FragmentBase {
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchorMenu);
                 Menu main = popupMenu.getMenu();
 
+                List<String> groups = new ArrayList<>();
+                for (EntityAnswer answer : answers)
+                    if (answer.group != null && !groups.contains(answer.group))
+                        groups.add(answer.group);
+
+                Collator collator = Collator.getInstance(Locale.getDefault());
+                collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
+                Collections.sort(groups, collator);
+
                 int order = 0;
+
                 Map<String, SubMenu> map = new HashMap<>();
+                for (String group : groups)
+                    map.put(group, main.addSubMenu(Menu.NONE, order, order++, group));
+
                 for (EntityAnswer answer : answers) {
                     order++;
                     if (answer.group == null)
                         main.add(Menu.NONE, order, order++, answer.toString())
                                 .setIntent(new Intent().putExtra("id", answer.id));
                     else {
-                        if (!map.containsKey(answer.group))
-                            map.put(answer.group, main.addSubMenu(Menu.NONE, order, order++, answer.group));
                         SubMenu smenu = map.get(answer.group);
                         smenu.add(Menu.NONE, smenu.size(), smenu.size() + 1, answer.toString())
                                 .setIntent(new Intent().putExtra("id", answer.id));
@@ -1820,7 +1892,7 @@ public class FragmentCompose extends FragmentBase {
         args.putInt("start", etBody.getSelectionStart());
         args.putInt("end", etBody.getSelectionEnd());
 
-        FragmentDialogLink fragment = new FragmentDialogLink();
+        FragmentDialogInsertLink fragment = new FragmentDialogInsertLink();
         fragment.setArguments(args);
         fragment.setTargetFragment(this, REQUEST_LINK);
         fragment.show(getParentFragmentManager(), "compose:link");
@@ -3061,6 +3133,8 @@ public class FragmentCompose extends FragmentBase {
                 int target = args.getInt("target");
                 long group = args.getLong("group");
 
+                EntityLog.log(context, "Selected group=" + group);
+
                 List<Address> selected = new ArrayList<>();
 
                 try (Cursor cursor = context.getContentResolver().query(
@@ -3083,7 +3157,10 @@ public class FragmentCompose extends FragmentBase {
                             if (contact != null && contact.moveToNext()) {
                                 String name = contact.getString(0);
                                 String email = contact.getString(1);
-                                selected.add(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
+                                Address address = new InternetAddress(email, name, StandardCharsets.UTF_8.name());
+                                EntityLog.log(context, "Selected group=" + group +
+                                        " address=" + MessageHelper.formatAddresses(new Address[]{address}));
+                                selected.add(address);
                             }
                         }
                     }
@@ -3327,7 +3404,7 @@ public class FragmentCompose extends FragmentBase {
             if (resize > 0)
                 resizeAttachment(context, attachment, resize);
 
-            if (privacy)
+            if (privacy && resize == 0)
                 try {
                     ExifInterface exif = new ExifInterface(file.getAbsolutePath());
 
@@ -3664,6 +3741,9 @@ public class FragmentCompose extends FragmentBase {
                                 "list".equals(action) ||
                                 "dsn".equals(action) ||
                                 "participation".equals(action)) {
+                            // https://tools.ietf.org/html/rfc5322#section-3.6.4
+                            // The "References:" field will contain the contents of the parent's "References:" field (if any)
+                            // followed by the contents of the parent's "Message-ID:" field (if any).
                             data.draft.references = (ref.references == null ? "" : ref.references + " ") + ref.msgid;
                             data.draft.inreplyto = ref.msgid;
                             data.draft.thread = ref.thread;
@@ -3741,8 +3821,7 @@ public class FragmentCompose extends FragmentBase {
                         String subject = (ref.subject == null ? "" : ref.subject);
                         if ("reply".equals(action) || "reply_all".equals(action)) {
                             if (prefix_once)
-                                for (String re : Helper.getStrings(context, ref.language, R.string.title_subject_reply, ""))
-                                    subject = unprefix(subject, re);
+                                subject = collapsePrefixes(context, ref.language, subject, false);
                             data.draft.subject = Helper.getString(context, ref.language, R.string.title_subject_reply, subject);
 
                             String t = args.getString("text");
@@ -3758,8 +3837,7 @@ public class FragmentCompose extends FragmentBase {
                             }
                         } else if ("forward".equals(action)) {
                             if (prefix_once)
-                                for (String fwd : Helper.getStrings(context, ref.language, R.string.title_subject_forward, ""))
-                                    subject = unprefix(subject, fwd);
+                                subject = collapsePrefixes(context, ref.language, subject, true);
                             data.draft.subject = Helper.getString(context, ref.language, R.string.title_subject_forward, subject);
                         } else if ("editasnew".equals(action)) {
                             if (ref.from != null && ref.from.length == 1) {
@@ -3827,9 +3905,14 @@ public class FragmentCompose extends FragmentBase {
                         }
 
                         // Reply template
-                        EntityAnswer a = (answer < 0
-                                ? db.answer().getStandardAnswer()
-                                : db.answer().getAnswer(answer));
+                        EntityAnswer a = null;
+                        if (answer < 0) {
+                            if ("reply".equals(action) || "reply_all".equals(action) ||
+                                    "forward".equals(action) || "list".equals(action))
+                                a = db.answer().getStandardAnswer();
+                        } else
+                            a = db.answer().getAnswer(answer);
+
                         if (a != null) {
                             Document d = JsoupEx.parse(a.getText(data.draft.to));
                             document.body().append(d.body().html());
@@ -3868,6 +3951,9 @@ public class FragmentCompose extends FragmentBase {
                                 HtmlHelper.normalizeNamespaces(d, false);
                                 for (Element e : d.select("[x-plain=true]"))
                                     e.removeAttr("x-plain");
+
+                                if (BuildConfig.DEBUG)
+                                    d.select(".faircode_remove").remove();
 
                                 if ("reply".equals(action) || "reply_all".equals(action)) {
                                     // Remove signature separators
@@ -4072,6 +4158,10 @@ public class FragmentCompose extends FragmentBase {
 
                                     if (cid.contains(attachment.cid))
                                         attachment.disposition = Part.INLINE;
+                                    else {
+                                        attachment.cid = null;
+                                        attachment.disposition = Part.ATTACHMENT;
+                                    }
 
                                     attachment.id = null;
                                     attachment.message = data.draft.id;
@@ -4426,8 +4516,13 @@ public class FragmentCompose extends FragmentBase {
             boolean dirty = false;
             EntityMessage draft;
 
-            DB db = DB.getInstance(context);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean discard_delete = prefs.getBoolean("discard_delete", false);
+            boolean write_below = prefs.getBoolean("write_below", false);
+            boolean save_drafts = prefs.getBoolean("save_drafts", true);
+            int send_delayed = prefs.getInt("send_delayed", 0);
+
+            DB db = DB.getInstance(context);
             try {
                 db.beginTransaction();
 
@@ -4443,7 +4538,6 @@ public class FragmentCompose extends FragmentBase {
 
                 if (action == R.id.action_delete) {
                     dirty = true;
-                    boolean discard_delete = prefs.getBoolean("discard_delete", false);
                     EntityFolder trash = db.folder().getFolderByType(draft.account, EntityFolder.TRASH);
                     EntityFolder drafts = db.folder().getFolderByType(draft.account, EntityFolder.DRAFTS);
                     if (empty || trash == null || discard_delete || (drafts != null && drafts.local))
@@ -4606,7 +4700,6 @@ public class FragmentCompose extends FragmentBase {
 
                         // Get saved body
                         Document d;
-                        boolean write_below = prefs.getBoolean("write_below", false);
                         if (extras != null && extras.containsKey("html")) {
                             // Save current revision
                             Document c = JsoupEx.parse(body);
@@ -4705,7 +4798,7 @@ public class FragmentCompose extends FragmentBase {
                         return draft;
                     }
 
-                    if (!shouldEncrypt)
+                    if (!shouldEncrypt && !autosave)
                         for (EntityAttachment attachment : attachments)
                             if (attachment.isEncryption())
                                 db.attachment().deleteAttachment(attachment.id);
@@ -4715,7 +4808,6 @@ public class FragmentCompose extends FragmentBase {
                             action == R.id.action_redo ||
                             action == R.id.action_check) {
                         if ((dirty || encrypted) && !needsEncryption) {
-                            boolean save_drafts = prefs.getBoolean("save_drafts", true);
                             if (save_drafts)
                                 EntityOperation.queue(context, draft, EntityOperation.ADD);
                         }
@@ -4945,7 +5037,6 @@ public class FragmentCompose extends FragmentBase {
                             db.attachment().setMessage(attachment.id, draft.id);
 
                         // Delay sending message
-                        int send_delayed = prefs.getInt("send_delayed", 0);
                         if (draft.ui_snoozed == null && send_delayed != 0) {
                             if (extras.getBoolean("now"))
                                 draft.ui_snoozed = null;
@@ -5161,6 +5252,42 @@ public class FragmentCompose extends FragmentBase {
         while (subject.toLowerCase().startsWith(prefix))
             subject = subject.substring(prefix.length()).trim();
         return subject;
+    }
+
+    private static String collapsePrefixes(Context context, String language, String subject, boolean forward) {
+        List<Pair<String, Boolean>> prefixes = new ArrayList<>();
+        for (String re : Helper.getStrings(context, language, R.string.title_subject_reply, ""))
+            prefixes.add(new Pair<>(re.trim().toLowerCase(), false));
+        for (String re : Helper.getStrings(context, language, R.string.title_subject_reply_alt, ""))
+            prefixes.add(new Pair<>(re.trim().toLowerCase(), false));
+        for (String fwd : Helper.getStrings(context, language, R.string.title_subject_forward, ""))
+            prefixes.add(new Pair<>(fwd.trim().toLowerCase(), true));
+        for (String fwd : Helper.getStrings(context, language, R.string.title_subject_forward_alt, ""))
+            prefixes.add(new Pair<>(fwd.trim().toLowerCase(), true));
+
+        List<Boolean> scanned = new ArrayList<>();
+        subject = subject.trim();
+        while (true) {
+            boolean found = false;
+            for (Pair<String, Boolean> prefix : prefixes)
+                if (subject.toLowerCase().startsWith(prefix.first)) {
+                    found = true;
+                    int count = scanned.size();
+                    if (!prefix.second.equals(count == 0 ? forward : scanned.get(count - 1)))
+                        scanned.add(prefix.second);
+                    subject = subject.substring(prefix.first.length()).trim();
+                    break;
+                }
+            if (!found)
+                break;
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < scanned.size(); i++)
+            result.append(context.getString(scanned.get(i) ? R.string.title_subject_forward : R.string.title_subject_reply, ""));
+        result.append(subject);
+
+        return result.toString();
     }
 
     private static void addSignature(Context context, Document document, EntityMessage message, EntityIdentity identity) {

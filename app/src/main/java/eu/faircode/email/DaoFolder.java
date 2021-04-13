@@ -198,6 +198,23 @@ public interface DaoFolder {
             " GROUP BY folder.type")
     LiveData<List<TupleFolderUnified>> liveUnified();
 
+    @Query("SELECT * FROM folder" +
+            " WHERE selected_count > 0" +
+            " AND NOT folder.id IN (:disabled)" +
+            " ORDER BY selected_count DESC, selected_last DESC" +
+            " LIMIT :count")
+    List<EntityFolder> getFavoriteFolders(int count, long[] disabled);
+
+    @Query("UPDATE folder" +
+            " SET selected_last = :last, selected_count = selected_count + 1" +
+            " WHERE id = :id")
+    int increaseSelectedCount(long id, long last);
+
+    @Query("UPDATE folder" +
+            " SET selected_last = 0, selected_count = 0" +
+            " WHERE account = :account")
+    int resetSelectedCount(long account);
+
     @Query("SELECT * FROM folder WHERE id = :id")
     EntityFolder getFolder(Long id);
 
@@ -326,6 +343,9 @@ public interface DaoFolder {
 
     @Query("UPDATE folder SET uidv = :uidv WHERE id = :id AND NOT (uidv IS :uidv)")
     int setFolderUidValidity(long id, Long uidv);
+
+    @Query("UPDATE folder SET modseq = :modseq WHERE id = :id AND NOT (modseq IS :modseq)")
+    int setFolderModSeq(long id, Long modseq);
 
     @Query("UPDATE folder SET last_sync = :last_sync WHERE id = :id AND NOT (last_sync IS :last_sync)")
     int setFolderLastSync(long id, long last_sync);

@@ -47,6 +47,8 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Date;
+
 public class FragmentPro extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private TextView tvPending;
     private TextView tvActivated;
@@ -58,8 +60,11 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
     private TextView tvPrice;
     private ImageView ivExternal;
     private TextView tvPriceHint;
+    private TextView tvFamilyHint;
     private TextView tvRestoreHint;
     private Button btnCheck;
+
+    private static final int HIDE_BANNER = 3; // weeks
 
     @Override
     @Nullable
@@ -82,6 +87,7 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
         tvPrice = view.findViewById(R.id.tvPrice);
         ivExternal = view.findViewById(R.id.ivExternal);
         tvPriceHint = view.findViewById(R.id.tvPriceHint);
+        tvFamilyHint = view.findViewById(R.id.tvFamilyHint);
         tvRestoreHint = view.findViewById(R.id.tvRestoreHint);
 
         btnCheck = view.findViewById(R.id.btnCheck);
@@ -97,14 +103,19 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
         tvInfo.setText(getString(R.string.title_pro_info)
                 .replaceAll("^\\s+", "").replaceAll("\\s+", " "));
 
+        long now = new Date().getTime();
         long banner_hidden = prefs.getLong("banner_hidden", 0);
-        cbHide.setChecked(banner_hidden > 0);
-        cbHide.setText(getString(R.string.title_pro_hide, ServiceUI.HIDE_BANNER));
+        cbHide.setChecked(banner_hidden > 0 && now < banner_hidden);
+        cbHide.setText(getString(R.string.title_pro_hide, HIDE_BANNER));
 
         cbHide.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ServiceUI.scheduleBanner(getContext(), isChecked);
+                if (isChecked) {
+                    long banner_hidden = new Date().getTime() + HIDE_BANNER * 7 * 24 * 3600 * 1000L;
+                    prefs.edit().putLong("banner_hidden", banner_hidden).apply();
+                } else
+                    prefs.edit().remove("banner_hidden").apply();
             }
         });
 
@@ -131,6 +142,14 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 19);
+            }
+        });
+
+        tvFamilyHint.setPaintFlags(tvFamilyHint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvFamilyHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 66);
             }
         });
 
@@ -294,8 +313,9 @@ public class FragmentPro extends FragmentBase implements SharedPreferences.OnSha
             btnBackup.setVisibility(pro ? View.VISIBLE : View.GONE);
             cbHide.setVisibility(pro ? View.GONE : View.VISIBLE);
         } else if ("banner_hidden".equals(key)) {
+            long now = new Date().getTime();
             long banner_hidden = prefs.getLong("banner_hidden", 0);
-            cbHide.setChecked(banner_hidden > 0);
+            cbHide.setChecked(banner_hidden > 0 && now < banner_hidden);
         }
     }
 }

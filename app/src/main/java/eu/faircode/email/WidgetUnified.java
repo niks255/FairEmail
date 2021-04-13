@@ -48,19 +48,19 @@ public class WidgetUnified extends AppWidgetProvider {
             int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
             int font = prefs.getInt("widget." + appWidgetId + ".font", 0);
             int padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
+            int version = prefs.getInt("widget." + appWidgetId + ".version", 0);
 
             Intent view = new Intent(context, ActivityView.class);
             view.setAction("folder:" + folder);
             view.putExtra("account", account);
             view.putExtra("type", type);
             view.putExtra("refresh", true);
+            view.putExtra("version", version);
             view.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pi = PendingIntent.getActivity(context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pi = PendingIntentCompat.getActivity(
+                    context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_unified);
-
-            if (!semi)
-                views.setInt(R.id.widget, "setBackgroundColor", background);
 
             if (font > 0)
                 views.setTextViewTextSize(R.id.title, TypedValue.COMPLEX_UNIT_SP, getFontSizeSp(font));
@@ -69,10 +69,6 @@ public class WidgetUnified extends AppWidgetProvider {
                 int px = getPaddingPx(padding, context);
                 views.setViewPadding(R.id.title, px, px, px, px);
             }
-
-            float lum = (float) ColorUtils.calculateLuminance(background);
-            if (lum > 0.7f)
-                views.setTextColor(R.id.title, Color.BLACK);
 
             if (name == null)
                 views.setTextViewText(R.id.title, context.getString(R.string.title_folder_unified));
@@ -95,9 +91,24 @@ public class WidgetUnified extends AppWidgetProvider {
             thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(type));
             thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent piItem = PendingIntent.getActivity(
-                    context, ActivityView.REQUEST_WIDGET, thread, PendingIntent.FLAG_UPDATE_CURRENT);
+                    context, ActivityView.REQUEST_WIDGET, thread, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntentCompat.FLAG_MUTABLE);
 
             views.setPendingIntentTemplate(R.id.lv, piItem);
+
+            if (background == Color.TRANSPARENT) {
+                if (!semi && version > 1550)
+                    views.setInt(R.id.widget, "setBackgroundColor", background);
+            } else {
+                float lum = (float) ColorUtils.calculateLuminance(background);
+
+                if (semi)
+                    background = ColorUtils.setAlphaComponent(background, 127);
+
+                views.setInt(R.id.widget, "setBackgroundColor", background);
+
+                if (lum > 0.7f)
+                    views.setTextColor(R.id.title, Color.BLACK);
+            }
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }

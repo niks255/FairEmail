@@ -7,6 +7,7 @@
     <string name="app_crash">FairEmail nu suportă acest dispozitiv din cauza erorilor din Android ce duc la blocaje</string>
     <string name="app_exit">Apăsați din nou \'Înapoi\' pentru a ieși</string>
     <string name="app_cake">Spațiu de stocare insuficient rămas</string>
+    <string name="app_updated">Ultima actualizare: %1$s</string>
     <string name="channel_service">Primește</string>
     <string name="channel_send">Trimite</string>
     <string name="channel_notification">E-mail</string>
@@ -174,8 +175,8 @@
     <string name="title_setup_permissions">Acordă permisiuni</string>
     <string name="title_setup_permissions_remark">Pentru a obține informațiile contactelor (opțional)</string>
     <string name="title_setup_doze">Dezactivează optimizarea bateriei</string>
-    <string name="title_setup_doze_remark">Pentru a primi e-mail la timp</string>
     <string name="title_setup_doze_hint">Deși acest lucru poate suna contradictoriu, dezactivarea optimizărilor bateriei va duce la o utilizare mai mică a bateriei</string>
+    <string name="title_setup_doze_instructions">În următorul dialog Android schimbați opțiunea \"Nu se optimizează\" în \"Toate aplicațiile\", selectați această aplicație și selectați \"Nu se optimizează\"</string>
     <string name="title_setup_doze_battery">Utilizare intensă a bateriei?</string>
     <string name="title_setup_doze_stopped">Sincronizarea e oprită?</string>
     <string name="title_setup_data">Economizorul de date este activat</string>
@@ -240,7 +241,6 @@
     <string name="title_advanced_section_encryption">Criptare</string>
     <string name="title_advanced_section_notifications">Notificări</string>
     <string name="title_advanced_section_misc">Diverse</string>
-    <string name="title_advanced_default">Toate opțiunile au valori standard utilizate în mod obișnuit</string>
     <string name="title_advanced_receive">Primește mesaje pentru toate conturile</string>
     <string name="title_advanced_when">Când</string>
     <string name="title_advanced_always">Primiți întotdeauna mesaje pentru aceste conturi</string>
@@ -265,6 +265,8 @@
     <string name="title_advanced_suggest_sent">Sugerează adrese găsite în mesajele trimise</string>
     <string name="title_advanced_suggest_received">Sugerează adrese găsite în mesajele primite</string>
     <string name="title_advanced_suggest_frequently">Sortați adresele sugerate în funcție de frecvența de utilizare</string>
+    <string name="title_advanced_send_reminders">Arată mementouri</string>
+    <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
     <string name="title_advanced_compose_font">Font prestabilit</string>
     <string name="title_advanced_prefix_once">Adaugă prefix la subiect o singură dată pentru răspuns sau redirecționare</string>
     <string name="title_advanced_separate_reply">Introduceți o linie orizontală înaintea unui antet răspuns/forward</string>
@@ -276,18 +278,19 @@
     <string name="title_advanced_signature_location">Poziție semnătură</string>
     <string name="title_advanced_signature_reply">Utilizați semnătura la răspuns</string>
     <string name="title_advanced_signature_forward">Utilizați semnătura la redirecționare</string>
+    <string name="title_advanced_discard_delete">Ciorna se șterge când renunțați la ea</string>
+    <string name="title_advanced_auto_link">Creează automat adrese</string>
     <string name="title_advanced_plain_only">Trimite implicit ca text simplu</string>
     <string name="title_advanced_flow">\'format fluent\' pentru text simplu</string>
-    <string name="title_advanced_receipt">Când se cere o confirmare</string>
     <string name="title_advanced_usenet_signature">Semnatură conform Usenet</string>
     <string name="title_advanced_remove_signatures">Elimină semnăturile cunoscute</string>
-    <string name="title_advanced_send_reminders">Arată mementouri</string>
+    <string name="title_advanced_receipt">Când se cere o confirmare</string>
     <string name="title_advanced_lookup_mx">Verifică adresele destinatarilor înainte de a trimite</string>
-    <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
     <string name="title_advanced_metered">Folosește conexiuni contorizate</string>
     <string name="title_advanced_download">Descarcă automat mesajele și atașamentele, folosind o conexiune contorizată, până în</string>
     <string name="title_advanced_roaming">Descărcarea mesajelor și a atașamentelor prin conexiuni roaming</string>
     <string name="title_advanced_rlah">Consideră roamingul ca național</string>
+    <string name="title_advanced_validated">Necesită o conexiune validată (verificată)</string>
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
     <string name="title_advanced_prefer_ip4">Preferă IPv4 înaintea IPv6</string>
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
@@ -372,6 +375,7 @@
     <string name="title_advanced_swipe_close">Glisați în jos pentru a închide conversația</string>
     <string name="title_advanced_swipe_move">Glisați în sus pentru a muta conversația</string>
     <string name="title_advanced_autoexpand">Extinde mesajele automat</string>
+    <string name="title_advanced_expand_first">Extinde automat primul mesaj atunci când conversația este citită</string>
     <string name="title_advanced_expand_all">Extinde automat toate mesajele citate</string>
     <string name="title_advanced_expand_one">Extinde doar câte un mesaj odată</string>
     <string name="title_advanced_collapse_multiple">La apăsarea \'înapoi\' restrânge mesajele dintr-o conversație cu mai multe mesaje</string>
@@ -385,7 +389,6 @@
     <string name="title_advanced_autounstar">Elimină automat steaua mesajelor mutate</string>
     <string name="title_advanced_auto_important">Marcheză automat mesajele cu stea ca importante</string>
     <string name="title_advanced_reset_importance">Resetează importanța la mutarea mesajelor</string>
-    <string name="title_advanced_discard_delete">Ciorna se șterge când renunțați la ea</string>
     <string name="title_advanced_default_snooze">Timpul implicit de amânare</string>
     <string name="title_advanced_notifications">Gestionarea notificărilor</string>
     <string name="title_advanced_notifications_default">Canal implicit</string>
@@ -462,6 +465,7 @@
     <string name="title_advanced_watchdog">Verifică periodic dacă FairEmail este încă activ</string>
     <string name="title_advanced_optimize">Optimizare automată</string>
     <string name="title_advanced_updates">Verificați dacă există actualizări pe Github</string>
+    <string name="title_advanced_check_weekly">Verifică săptămânal în loc de zilnic</string>
     <string name="title_advanced_experiments">Încercați funcţii experimentale</string>
     <string name="title_advanced_query_threads">Limitează accesul paralel la baza de date</string>
     <string name="title_advanced_crash_reports">Trimite rapoarte de eroare</string>
@@ -494,6 +498,7 @@
     <string name="title_advanced_metered_warning">Dezactivarea acestei opțiuni va opri primirea și trimiterea mesajelor pe conexiunile mobile de internet</string>
     <string name="title_advanced_rlah_hint">În zona UE nu se tratează ca roaming</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activarea acesteia poate cauza probleme de conexiune pe unele dispozitive</string>
+    <string name="title_advanced_validate_hint">Acest lucru poate duce la nesincronizarea mesajelor, de exemplu atunci când se utilizează un VPN, dar și în alte situații</string>
     <string name="title_advanced_timeout_hint">Timpul de expirare a citirii/scrierii va fi setat la dublul intervalului de expirare a conexiunii. Valori mai mari au ca rezultat o utilizare mai mare a bateriei.</string>
     <string name="title_advanced_ssl_harden_hint">Activând această setare se vor dezactiva protocoalele și cifrările SSL slabe, putând duce la probleme de conectare</string>
     <string name="title_advanced_roaming_hint">Antetele mesajelor vor fi mereu descărcate și în roaming. Puteți folosi setările roaming ale dispozitivului pentru a dezactiva internetul atunci când sunteți în roaming.</string>
@@ -517,7 +522,7 @@
     <string name="title_advanced_parse_classes_hint">Acest lucru va afișa cu mai multă precizie mesajele, dar posibil cu o întârziere</string>
     <string name="title_advanced_language_detection_hint">Detectarea limbii depinde de producătorul dispozitivului</string>
     <string name="title_advanced_autoexpand_hint">Atunci când este doar un mesaj sau doar un mesaj necitit într-o conversație</string>
-    <string name="title_advanced_autoseen_hint">Marcarea mesajelor drept citite la extindere poate fi dezactivată în setările individuale ale contului</string>
+    <string name="title_advanced_autoseen_hint">Marcarea automată a mesajelor ca fiind citite la extindere poate fi dezactivată în setările avansate ale fiecărui cont</string>
     <string name="title_advanced_autoclose_hint">Atunci când toate mesajele sunt arhivate, trimise sau mutate la gunoi</string>
     <string name="title_advanced_sender_hint">Majoritatea furnizorilor nu permit modificarea adresei expeditorului</string>
     <string name="title_advanced_bcc_hint">Adresa nu va fi afișată, dar va fi adăugată la trimitere</string>
@@ -589,6 +594,7 @@
     <string name="title_port">Număr port</string>
     <string name="title_user">Nume utilizator</string>
     <string name="title_password">Parolă</string>
+    <string name="title_password_storage">Cum sunt stocate parolele?</string>
     <string name="title_case_sensitive">Numele de utilizator și parolele sunt de obicei sensibile la majuscule</string>
     <string name="title_client_certificate">Certificat client</string>
     <string name="title_realm">Domeniu</string>
@@ -694,6 +700,7 @@
     <string name="title_navigation_folder">Arată în meniul de navigație</string>
     <string name="title_synchronize_folder">Sincronizare (primire mesaje)</string>
     <string name="title_poll_folder">Verifică periodic în loc de a sincroniza în continuu</string>
+    <string name="title_poll_folder_remark">Majoritatea serverelor de e-mail permit transmiterea de mesaje doar pentru câteva dosare!</string>
     <string name="title_download_folder">Descarcă mesajele text și atașamentele în mod automat</string>
     <string name="title_notify_folder">Notifică la mesaje noi</string>
     <string name="title_auto_classify_source">Clasifică mesajele noi în acest dosar</string>
@@ -771,6 +778,8 @@
     <string name="title_download_all">Descarcă tot</string>
     <string name="title_save_all">Salvează tot</string>
     <string name="title_save_eml">Salvează mesaj original în fișier</string>
+    <string name="title_raw_remaining">Mesaje brute pentru descărcare: %1$d</string>
+    <string name="title_ask_raw">Pentru a redirecționa mesaje, mesajele brute (originale) trebuie descărcate de pe server. Acest lucru necesită o conexiune la internet.</string>
     <string name="title_buttons">Selectare butoane</string>
     <string name="title_configure_buttons">Configurare butoane &#8230;</string>
     <string name="title_trash">Gunoi</string>
@@ -851,7 +860,6 @@
     <string name="title_third_party">Folosiți o versiune a unei terțe părți</string>
     <string name="title_expand_warning">Extinderea acestui mesaj va descărca %1$s</string>
     <string name="title_download_message">Se descarcă &#8230;</string>
-    <string name="title_reformatted">Aceasta este vizualizarea mesajelor reformatate. Puteți apăsa pe pictograma &#x26F6; pentru a vizualiza mesajul original și pentru a ascunde acest mesaj.</string>
     <string name="title_compose">Compune</string>
     <string name="title_submitter">Trimis de:</string>
     <string name="title_delivered_to">Livrare către:</string>
@@ -873,6 +881,7 @@
     <string name="title_discard">Renunță</string>
     <string name="title_save">Salvează</string>
     <string name="title_send">Trimite</string>
+    <string name="title_sending">Se trimite &#8230;</string>
     <string name="title_send_now">Trimite acum</string>
     <string name="title_send_via">Trimite prin</string>
     <string name="title_send_at">Trimite la &#8230;</string>
@@ -1012,6 +1021,7 @@
     <string name="title_search_flag_hidden">ascuns</string>
     <string name="title_search_flag_encrypted">criptat</string>
     <string name="title_search_flag_attachments">atașamente</string>
+    <string name="title_search_flag_notes">notițe</string>
     <string name="title_search_flag_invite">invitație</string>
     <string name="title_search_flag_size">dimensiune &gt; %1$s</string>
     <string name="title_search_device">Căutare pe dispozitiv</string>
@@ -1087,7 +1097,10 @@
     <string name="title_rule_subject">Subiectul conține</string>
     <string name="title_rule_attachments">Are atașament</string>
     <string name="title_rule_header">Antetul conține</string>
-    <string name="title_rule_time">Interval de timp</string>
+    <string name="title_rule_time_abs">Timp absolut (primit) între</string>
+    <string name="title_rule_time_after">Primit după</string>
+    <string name="title_rule_time_before">Primit înainte</string>
+    <string name="title_rule_time_rel">Timp relativ (primit) între</string>
     <string name="title_rule_regex">Expresie regulată (regex)</string>
     <string name="title_rule_and">ȘI</string>
     <string name="title_rule_action">Acțiune</string>
@@ -1338,6 +1351,7 @@
     <string name="title_unexpected_info_remark">Vă rugăm să descrieți ce faceți atunci când ați primit eroarea:</string>
     <string name="title_widget_title_count">Contor mesaje noi</string>
     <string name="title_widget_title_list">Listă mesaje</string>
+    <string name="title_widget_title_sync">Sincronizare pornită/oprită</string>
     <string name="title_widget_account">Cont</string>
     <string name="title_widget_account_all">Toate</string>
     <string name="title_widget_folder">Dosar</string>

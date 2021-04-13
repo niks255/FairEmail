@@ -335,6 +335,18 @@
             app:layout_constraintTop_toBottomOf="@id/swAutoExpand" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swExpandFirst"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:checked="true"
+            android:text="@string/title_advanced_expand_first"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAutoExpandHint"
+            app:switchPadding="12dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swExpandAll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -342,7 +354,7 @@
             android:text="@string/title_advanced_expand_all"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAutoExpandHint"
+            app:layout_constraintTop_toBottomOf="@id/swExpandFirst"
             app:switchPadding="12dp" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -356,19 +368,6 @@
             app:layout_constraintTop_toBottomOf="@id/swExpandAll"
             app:switchPadding="12dp" />
 
-        <eu.faircode.email.FixedTextView
-            android:id="@+id/tvAutoSeenHint"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="48dp"
-            android:text="@string/title_advanced_autoseen_hint"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swExpandOne" />
-
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swCollapseMultiple"
             android:layout_width="0dp"
@@ -377,8 +376,23 @@
             android:text="@string/title_advanced_collapse_multiple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAutoSeenHint"
+            app:layout_constraintTop_toBottomOf="@id/swExpandOne"
             app:switchPadding="12dp" />
+
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvAutoSeenHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:drawableEnd="@drawable/twotone_settings_24"
+            android:drawablePadding="6dp"
+            android:text="@string/title_advanced_autoseen_hint"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swCollapseMultiple" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/swAutoClose"
@@ -389,7 +403,7 @@
             android:text="@string/title_advanced_autoclose"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/swCollapseMultiple"
+            app:layout_constraintTop_toBottomOf="@id/tvAutoSeenHint"
             app:switchPadding="12dp" />
 
         <eu.faircode.email.FixedTextView

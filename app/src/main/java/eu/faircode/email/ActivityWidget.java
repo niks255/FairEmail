@@ -52,7 +52,7 @@ public class ActivityWidget extends ActivityBase {
 
     private Spinner spAccount;
     private CheckBox cbSemiTransparent;
-    private Button btnColor;
+    private ViewButtonColor btnColor;
     private View inOld;
     private View inNew;
     private RadioButton rbOld;
@@ -61,7 +61,6 @@ public class ActivityWidget extends ActivityBase {
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
 
-    private int background = Color.TRANSPARENT;
     private ArrayAdapter<EntityAccount> adapterAccount;
 
     @Override
@@ -73,9 +72,6 @@ public class ActivityWidget extends ActivityBase {
             finish();
             return;
         }
-
-        if (savedInstanceState != null)
-            background = savedInstanceState.getInt("fair:color");
 
         appWidgetId = extras.getInt(
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -101,7 +97,6 @@ public class ActivityWidget extends ActivityBase {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setBackground();
-                btnColor.setEnabled(!isChecked);
             }
         });
 
@@ -121,14 +116,15 @@ public class ActivityWidget extends ActivityBase {
                         .setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                background = selectedColor;
+                                btnColor.setColor(selectedColor);
                                 setBackground();
                             }
                         })
-                        .setNegativeButton(R.string.title_reset, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.title_transparent, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                background = Color.TRANSPARENT;
+                                cbSemiTransparent.setChecked(false);
+                                btnColor.setColor(Color.TRANSPARENT);
                                 setBackground();
                             }
                         })
@@ -166,8 +162,9 @@ public class ActivityWidget extends ActivityBase {
                     editor.remove("widget." + appWidgetId + ".name");
                 editor.putLong("widget." + appWidgetId + ".account", account == null ? -1L : account.id);
                 editor.putBoolean("widget." + appWidgetId + ".semi", cbSemiTransparent.isChecked());
-                editor.putInt("widget." + appWidgetId + ".background", background);
+                editor.putInt("widget." + appWidgetId + ".background", btnColor.getColor());
                 editor.putInt("widget." + appWidgetId + ".layout", rbNew.isChecked() ? 1 : 0);
+                editor.putInt("widget." + appWidgetId + ".version", BuildConfig.VERSION_CODE);
                 editor.apply();
 
                 Widget.init(ActivityWidget.this, appWidgetId);
@@ -184,7 +181,9 @@ public class ActivityWidget extends ActivityBase {
         ((TextView) inOld.findViewById(R.id.tvCount)).setText("12");
         ((TextView) inNew.findViewById(R.id.tvCount)).setText("12");
 
-        btnColor.setEnabled(!cbSemiTransparent.isChecked());
+        btnColor.setColor(Color.TRANSPARENT);
+        setBackground();
+
         grpReady.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);
 
@@ -222,21 +221,25 @@ public class ActivityWidget extends ActivityBase {
         }.execute(this, new Bundle(), "widget:accounts");
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("fair:color", background);
-        super.onSaveInstanceState(outState);
-    }
-
     private void setBackground() {
-        if (cbSemiTransparent.isChecked()) {
-            inOld.setBackgroundResource(R.drawable.widget_background);
-            inNew.setBackgroundResource(R.drawable.widget_background);
+        boolean semi = cbSemiTransparent.isChecked();
+        int background = btnColor.getColor();
+        if (background == Color.TRANSPARENT) {
+            if (semi) {
+                inOld.setBackgroundResource(R.drawable.widget_background);
+                inNew.setBackgroundResource(R.drawable.widget_background);
+            } else {
+                inOld.setBackgroundColor(background);
+                inNew.setBackgroundColor(background);
+            }
         } else {
-            inOld.setBackgroundColor(background);
-            inNew.setBackgroundColor(background);
             float lum = (float) ColorUtils.calculateLuminance(background);
             int color = (lum > 0.7 ? Color.BLACK : getResources().getColor(R.color.colorWidgetForeground));
+            if (semi)
+                background = ColorUtils.setAlphaComponent(background, 127);
+
+            inOld.setBackgroundColor(background);
+            inNew.setBackgroundColor(background);
 
             ((ImageView) inOld.findViewById(R.id.ivMessage)).setColorFilter(color);
             ((TextView) inOld.findViewById(R.id.tvCount)).setTextColor(color);

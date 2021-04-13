@@ -46,7 +46,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -54,6 +56,9 @@ public class FragmentDialogFolder extends FragmentDialogBase {
     private int result = 0;
 
     private static final int MAX_SELECTED_FOLDERS = 5;
+
+    private static final ExecutorService executor =
+            Helper.getBackgroundExecutor(1, "folder");
 
     @NonNull
     @Override
@@ -77,9 +82,13 @@ public class FragmentDialogFolder extends FragmentDialogBase {
         }
 
         final View dview = LayoutInflater.from(context).inflate(R.layout.dialog_folder_select, null);
-        final TextView tvNoFolder = dview.findViewById(R.id.tvNoFolder);
         final AutoCompleteTextView etSearch = dview.findViewById(R.id.etSearch);
         final ImageButton ibNext = dview.findViewById(R.id.ibNext);
+        final TextView tvNoFolder = dview.findViewById(R.id.tvNoFolder);
+        final TextView tvFavorite1 = dview.findViewById(R.id.tvFavorite1);
+        final TextView tvFavorite2 = dview.findViewById(R.id.tvFavorite2);
+        final TextView tvFavorite3 = dview.findViewById(R.id.tvFavorite3);
+        final ImageButton ibResetFavorites = dview.findViewById(R.id.ibResetFavorites);
         final RecyclerView rvFolder = dview.findViewById(R.id.rvFolder);
         final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
         final Group grpReady = dview.findViewById(R.id.grpReady);
@@ -123,7 +132,7 @@ public class FragmentDialogFolder extends FragmentDialogBase {
         final AdapterFolder adapter = new AdapterFolder(context, getViewLifecycleOwner(),
                 account, false, false, false, false, new AdapterFolder.IFolderSelectedListener() {
             @Override
-            public void onFolderSelected(TupleFolderEx folder) {
+            public void onFolderSelected(@NonNull TupleFolderEx folder) {
                 String name = folder.getDisplayName(context, folder.parent_ref);
                 selected_folders.remove(name);
                 selected_folders.add(0, name);
@@ -132,11 +141,61 @@ public class FragmentDialogFolder extends FragmentDialogBase {
                 JSONArray jarray = new JSONArray(selected_folders);
                 prefs.edit().putString("selected_folders", jarray.toString()).apply();
 
+                increaseSelectedCount(folder.id, context);
+
                 Bundle args = getArguments();
                 args.putLong("folder", folder.id);
 
                 sendResult(RESULT_OK);
                 dismiss();
+            }
+        });
+
+        tvFavorite1.setVisibility(View.GONE);
+        tvFavorite2.setVisibility(View.GONE);
+        tvFavorite3.setVisibility(View.GONE);
+        ibResetFavorites.setVisibility(View.GONE);
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Long id = (Long) v.getTag();
+                if (id == null)
+                    return;
+
+                increaseSelectedCount(id, context);
+
+                Bundle args = getArguments();
+                args.putLong("folder", id);
+
+                sendResult(RESULT_OK);
+                dismiss();
+            }
+        };
+        tvFavorite1.setOnClickListener(listener);
+        tvFavorite2.setOnClickListener(listener);
+        tvFavorite3.setOnClickListener(listener);
+
+        ibResetFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvFavorite1.setVisibility(View.GONE);
+                tvFavorite2.setVisibility(View.GONE);
+                tvFavorite3.setVisibility(View.GONE);
+                ibResetFavorites.setVisibility(View.GONE);
+
+                final DB db = DB.getInstance(context);
+
+                executor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            db.folder().resetSelectedCount(account);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
             }
         });
 
@@ -200,8 +259,9 @@ public class FragmentDialogFolder extends FragmentDialogBase {
 
         Bundle args = new Bundle();
         args.putLong("account", account);
+        args.putLongArray("disabled", disabled);
 
-        new SimpleTask<List<TupleFolderEx>>() {
+        new SimpleTask<Data>() {
             @Override
             protected void onPreExecute(Bundle args) {
                 tvNoFolder.setVisibility(View.GONE);
@@ -215,20 +275,39 @@ public class FragmentDialogFolder extends FragmentDialogBase {
             }
 
             @Override
-            protected List<TupleFolderEx> onExecute(Context context, Bundle args) {
+            protected Data onExecute(Context context, Bundle args) {
                 long account = args.getLong("account");
+                long[] disabled = args.getLongArray("disabled");
 
                 DB db = DB.getInstance(context);
-                return db.folder().getFoldersEx(account);
+
+                Data data = new Data();
+                data.folders = db.folder().getFoldersEx(account);
+                data.favorites = db.folder().getFavoriteFolders(3, disabled);
+
+                return data;
             }
 
             @Override
-            protected void onExecuted(final Bundle args, List<TupleFolderEx> folders) {
-                if (folders == null || folders.size() == 0)
+            protected void onExecuted(final Bundle args, Data data) {
+                if (data.folders == null || data.folders.size() == 0)
                     tvNoFolder.setVisibility(View.VISIBLE);
                 else {
+                    if (data.favorites != null && data.favorites.size() > 0) {
+                        TextView[] tv = new TextView[]{tvFavorite1, tvFavorite2, tvFavorite3};
+                        for (int i = 0; i < data.favorites.size(); i++) {
+                            EntityFolder favorite = data.favorites.get(i);
+                            tv[i].setTag(favorite.id);
+                            tv[i].setText(favorite.getDisplayName(context));
+                            tv[i].setVisibility(View.VISIBLE);
+                        }
+
+                        ibResetFavorites.setVisibility(View.VISIBLE);
+                    }
+
                     adapter.setDisabled(Helper.fromLongArray(disabled));
-                    adapter.set(folders);
+                    adapter.set(data.folders);
+
                     grpReady.setVisibility(View.VISIBLE);
                 }
             }
@@ -245,5 +324,27 @@ public class FragmentDialogFolder extends FragmentDialogBase {
                 .setView(dview)
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
+    }
+
+    private static void increaseSelectedCount(Long id, Context context) {
+        final DB db = DB.getInstance(context);
+
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EntityFolder folder = db.folder().getFolder(id);
+                    if (folder != null && EntityFolder.USER.equals(folder.type))
+                        db.folder().increaseSelectedCount(folder.id, new Date().getTime());
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
+    }
+
+    private static class Data {
+        private List<TupleFolderEx> folders;
+        private List<EntityFolder> favorites;
     }
 }

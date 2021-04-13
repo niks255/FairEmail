@@ -50,6 +50,8 @@ import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainAliasCallback;
 import android.security.KeyChainException;
+import android.text.Layout;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -57,6 +59,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -154,7 +157,7 @@ public class Helper {
 
     static final String FAQ_URI = "https://email.faircode.eu/faq/";
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
-    static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport";
+    static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport&version=" + BuildConfig.VERSION_NAME;
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
     static final String GRAVATAR_PRIVACY_URI = "https://meta.stackexchange.com/questions/44717/is-gravatar-a-privacy-risk";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
@@ -647,17 +650,27 @@ public class Helper {
                 ToastEx.makeText(context, Log.formatThrowable(ex, false), Toast.LENGTH_LONG).show();
             }
         } else {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean navbar_colorize = prefs.getBoolean("navbar_colorize", false);
+            int colorPrimary = resolveColor(context, R.attr.colorPrimary);
+            int colorPrimaryDark = resolveColor(context, R.attr.colorPrimaryDark);
+
+            CustomTabColorSchemeParams.Builder schemes = new CustomTabColorSchemeParams.Builder()
+                    .setToolbarColor(colorPrimary)
+                    .setSecondaryToolbarColor(colorPrimaryDark);
+            if (navbar_colorize)
+                schemes.setNavigationBarColor(colorPrimaryDark);
+
             // https://developer.chrome.com/multidevice/android/customtabs
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-            builder.setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder()
-                    .setToolbarColor(resolveColor(context, R.attr.colorPrimary))
-                    .setSecondaryToolbarColor(resolveColor(context, R.attr.colorPrimaryDark))
-                    .build());
-            builder.setColorScheme(Helper.isDarkTheme(context)
-                    ? CustomTabsIntent.COLOR_SCHEME_DARK
-                    : CustomTabsIntent.COLOR_SCHEME_LIGHT);
-            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
-            builder.setUrlBarHidingEnabled(true);
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder()
+                    .setDefaultColorSchemeParams(schemes.build())
+                    .setColorScheme(Helper.isDarkTheme(context)
+                            ? CustomTabsIntent.COLOR_SCHEME_DARK
+                            : CustomTabsIntent.COLOR_SCHEME_LIGHT)
+                    .setShareState(CustomTabsIntent.SHARE_STATE_ON)
+                    .setUrlBarHidingEnabled(true)
+                    .setStartAnimations(context, R.anim.activity_open_enter, R.anim.activity_open_exit)
+                    .setExitAnimations(context, R.anim.activity_close_enter, R.anim.activity_close_exit);
 
             CustomTabsIntent customTabsIntent = builder.build();
             try {
@@ -697,7 +710,7 @@ public class Helper {
 
     static void viewFAQ(Context context, int question) {
         if (question == 0)
-            view(context, Uri.parse(FAQ_URI), false);
+            view(context, Uri.parse(FAQ_URI + "#top"), false);
         else
             view(context, Uri.parse(FAQ_URI + "#user-content-faq" + question), false);
     }
@@ -705,6 +718,13 @@ public class Helper {
     static String getOpenKeychainPackage(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("openpgp_provider", "org.sufficientlysecure.keychain");
+    }
+
+    static Uri getSupportUri(Context context) {
+        return Uri.parse(SUPPORT_URI)
+                .buildUpon()
+                .appendQueryParameter("installed", Helper.hasValidFingerprint(context) ? "" : "Other")
+                .build();
     }
 
     static Intent getIntentIssue(Context context) {
@@ -715,7 +735,7 @@ public class Helper {
                     (BuildConfig.DEBUG ? "d" : "") +
                     (ActivityBilling.isPro(context) ? "+" : "");
             Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setPackage(BuildConfig.APPLICATION_ID);
+            //intent.setPackage(BuildConfig.APPLICATION_ID);
             intent.setType("text/plain");
             try {
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{Log.myAddress().getAddress()});
@@ -726,7 +746,7 @@ public class Helper {
             return intent;
         } else {
             if (Helper.hasValidFingerprint(context))
-                return new Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_URI));
+                return new Intent(Intent.ACTION_VIEW, getSupportUri(context));
             else
                 return new Intent(Intent.ACTION_VIEW, Uri.parse(XDA_URI));
         }
@@ -791,6 +811,21 @@ public class Helper {
         } catch (Throwable ex) {
             Log.e(ex);
         }
+    }
+
+    static int getOffset(TextView widget, Spannable buffer, MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+
+        x -= widget.getTotalPaddingLeft();
+        y -= widget.getTotalPaddingTop();
+
+        x += widget.getScrollX();
+        y += widget.getScrollY();
+
+        Layout layout = widget.getLayout();
+        int line = layout.getLineForVertical(y);
+        return layout.getOffsetForHorizontal(line, x);
     }
 
     // Graphics
@@ -868,8 +903,8 @@ public class Helper {
     static boolean isNight(Context context) {
         // https://developer.android.com/guide/topics/ui/look-and-feel/darktheme#configuration_changes
         int uiMode = context.getResources().getConfiguration().uiMode;
-        Log.i("UI mode=" + uiMode);
-        return ((uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES);
+        Log.i("UI mode=" + Integer.toHexString(uiMode));
+        return ((uiMode & Configuration.UI_MODE_NIGHT_YES) != 0);
     }
 
     static boolean isDarkTheme(Context context) {
@@ -1113,6 +1148,10 @@ public class Helper {
 
     static boolean isSingleScript(String s) {
         // https://en.wikipedia.org/wiki/IDN_homograph_attack
+
+        if (TextUtils.isEmpty(s))
+            return true;
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             return true;
 

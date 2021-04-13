@@ -231,10 +231,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         int found = 0;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean fts = prefs.getBoolean("fts", false);
-        boolean pro = ActivityBilling.isPro(context);
-        if (fts && pro && criteria.fts && criteria.query != null) {
+        if (criteria.fts && criteria.query != null) {
             if (state.ids == null) {
                 SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
                 state.ids = FtsDbHelper.match(sdb, account, folder, criteria);
@@ -278,6 +275,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         criteria.with_hidden,
                         criteria.with_encrypted,
                         criteria.with_attachments,
+                        criteria.with_notes,
                         criteria.with_types == null ? 0 : criteria.with_types.length,
                         criteria.with_types == null ? new String[]{} : criteria.with_types,
                         criteria.with_size,
@@ -383,8 +381,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 db.folder().setFolderTotal(browsable.id, count < 0 ? null : count);
 
                 if (criteria == null) {
-                    boolean filter_seen = prefs.getBoolean("filter_seen", false);
-                    boolean filter_unflagged = prefs.getBoolean("filter_unflagged", false);
+                    boolean filter_seen = prefs.getBoolean(FragmentMessages.getFilter("seen", browsable.type), false);
+                    boolean filter_unflagged = prefs.getBoolean(FragmentMessages.getFilter("unflagged", browsable.type), false);
                     EntityLog.log(context, "Boundary filter seen=" + filter_seen + " unflagged=" + filter_unflagged);
 
                     List<SearchTerm> and = new ArrayList<>();
@@ -682,6 +680,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         boolean with_hidden;
         boolean with_encrypted;
         boolean with_attachments;
+        boolean with_notes;
         String[] with_types;
         Integer with_size = null;
         Long after = null;
@@ -843,6 +842,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 flags.add(context.getString(R.string.title_search_flag_encrypted));
             if (with_attachments)
                 flags.add(context.getString(R.string.title_search_flag_attachments));
+            if (with_notes)
+                flags.add(context.getString(R.string.title_search_flag_notes));
             if (with_types != null)
                 if (with_types.length == 1 && "text/calendar".equals(with_types[0]))
                     flags.add(context.getString(R.string.title_search_flag_invite));
@@ -872,6 +873,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         this.with_hidden == other.with_hidden &&
                         this.with_encrypted == other.with_encrypted &&
                         this.with_attachments == other.with_attachments &&
+                        this.with_notes == other.with_notes &&
                         Arrays.equals(this.with_types, other.with_types) &&
                         Objects.equals(this.with_size, other.with_size) &&
                         Objects.equals(this.after, other.after) &&
@@ -895,7 +897,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     " flagged=" + with_flagged +
                     " hidden=" + with_hidden +
                     " encrypted=" + with_encrypted +
-                    " attachments=" + with_attachments +
+                    " w/attachments=" + with_attachments +
+                    " w/notes=" + with_notes +
                     " type=" + (with_types == null ? null : TextUtils.join(",", with_types)) +
                     " size=" + with_size +
                     " after=" + (after == null ? "" : new Date(after)) +

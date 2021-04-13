@@ -41,7 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="3dp"
-        app:constraint_referenced_ids="ibMore,ibInbox,ibJunk,ibTrash,ibArchive,ibMove,ibCopy,ibKeywords,ibLabels,ibNotes,ibAnswer,ibSeen,ibSearch,ibEvent,ibShare,ibPrint,ibUnsubscribe,ibRule,ibUndo"
+        app:constraint_referenced_ids="ibMore,ibInbox,ibJunk,ibTrash,ibArchive,ibMove,ibCopy,ibKeywords,ibLabels,ibNotes,ibAnswer,ibSeen,ibSearch,ibEvent,ibShare,ibPin,ibPrint,ibUnsubscribe,ibRule,ibUndo"
         app:flow_horizontalBias="0"
         app:flow_horizontalGap="3dp"
         app:flow_horizontalStyle="packed"
@@ -225,6 +225,18 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
+        android:id="@+id/ibPin"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/title_pin"
+        android:padding="6dp"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/title_pin"
+        app:srcCompat="@drawable/baseline_push_pin_24"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
         android:id="@+id/ibPrint"
         android:layout_width="36dp"
         android:layout_height="36dp"
@@ -269,7 +281,7 @@
         android:padding="6dp"
         android:scaleType="fitCenter"
         android:tooltipText="@string/title_undo"
-        app:srcCompat="@drawable/twotone_undo_24"
+        app:srcCompat="@drawable/twotone_cancel_schedule_send_24"
         tools:ignore="MissingConstraints" />
 
     <ImageButton

@@ -245,6 +245,12 @@ public interface DaoMessage {
             boolean filter_archive,
             boolean ascending, boolean debug);
 
+    @Query("SELECT COUNT(*) FROM message" +
+            " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " WHERE " + is_outbox +
+            " AND NOT ui_snoozed IS NULL")
+    LiveData<Integer> liveOutboxPending();
+
     @Query("SELECT account.name AS accountName" +
             ", COUNT(message.id) AS count" +
             ", SUM(message.ui_seen) AS seen" +
@@ -304,13 +310,14 @@ public interface DaoMessage {
             " ORDER BY message.received DESC")
     List<Long> getMessageIdsByFolder(Long folder);
 
+    @Transaction
     @Query("SELECT message.id FROM message" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
             " WHERE content" +
             " AND NOT fts" +
             " AND folder.type <> '" + EntityFolder.OUTBOX + "'" +
             " ORDER BY message.received")
-    Cursor getMessageFts();
+    List<Long> getMessageFts();
 
     @Query("SELECT message.id, account, thread, (:find IS NULL" +
             " OR (:senders AND `from` LIKE :find COLLATE NOCASE)" + // no index
@@ -332,7 +339,8 @@ public interface DaoMessage {
             " AND (NOT :flagged OR ui_flagged)" +
             " AND (NOT :hidden OR NOT ui_snoozed IS NULL)" +
             " AND (NOT :encrypted OR ui_encrypt > 0)" +
-            " AND (NOT :attachments OR attachments > 0)" +
+            " AND (NOT :with_attachments OR attachments > 0)" +
+            " AND (NOT :with_notes OR NOT `notes` IS NULL)" +
             " AND (:type_count = 0 OR attachment.type IN (:types))" +
             " AND (:size IS NULL OR total > :size)" +
             " AND (:after IS NULL OR received > :after)" +
@@ -343,7 +351,7 @@ public interface DaoMessage {
     List<TupleMatch> matchMessages(
             Long account, Long folder, String find,
             boolean senders, boolean recipients, boolean subject, boolean keywords, boolean message, boolean notes,
-            boolean unseen, boolean flagged, boolean hidden, boolean encrypted, boolean attachments,
+            boolean unseen, boolean flagged, boolean hidden, boolean encrypted, boolean with_attachments, boolean with_notes,
             int type_count, String[] types,
             Integer size,
             Long after, Long before,
@@ -400,11 +408,6 @@ public interface DaoMessage {
             " WHERE account = :account" +
             " AND (id = :id OR msgid = :msgid)")
     List<EntityMessage> getMessagesBySimilarity(long account, long id, String msgid);
-
-    @Query("SELECT * FROM message" +
-            " WHERE account = :account" +
-            " AND hash = :hash")
-    List<EntityMessage> getMessagesByHash(long account, String hash);
 
     @Query("SELECT COUNT(*) FROM message" +
             " WHERE folder = :folder" +
@@ -723,8 +726,11 @@ public interface DaoMessage {
             "  OR NOT (warning IS :warning))")
     int setMessageContent(long id, boolean content, String language, Boolean plain_only, String preview, String warning);
 
-    @Query("UPDATE message SET notes = :notes WHERE id = :id AND NOT (notes IS :notes)")
-    int setMessageNotes(long id, String notes);
+    @Query("UPDATE message" +
+            " SET notes = :notes, notes_color = :color" +
+            " WHERE id = :id" +
+            " AND NOT (notes IS :notes AND notes_color IS :color)")
+    int setMessageNotes(long id, String notes, Integer color);
 
     @Query("UPDATE message" +
             " SET size = :size, total = :total" +

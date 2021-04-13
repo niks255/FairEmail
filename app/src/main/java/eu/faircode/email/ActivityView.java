@@ -103,7 +103,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private RecyclerView rvAccount;
     private ImageButton ibExpanderUnified;
     private RecyclerView rvUnified;
+    private ImageButton ibExpanderFolder;
     private RecyclerView rvFolder;
+    private ImageButton ibExpanderMenu;
     private RecyclerView rvMenu;
     private ImageButton ibExpanderExtra;
     private RecyclerView rvMenuExtra;
@@ -116,6 +118,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     private boolean exit = false;
     private boolean searching = false;
+    private int lastBackStackCount = 0;
     private Snackbar lastSnackbar = null;
 
     static final int REQUEST_UNIFIED = 1;
@@ -132,6 +135,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     static final String ACTION_SEARCH_ADDRESS = BuildConfig.APPLICATION_ID + ".SEARCH_ADDRESS";
     static final String ACTION_VIEW_THREAD = BuildConfig.APPLICATION_ID + ".VIEW_THREAD";
     static final String ACTION_EDIT_FOLDER = BuildConfig.APPLICATION_ID + ".EDIT_FOLDER";
+    static final String ACTION_VIEW_OUTBOX = BuildConfig.APPLICATION_ID + ".VIEW_OUTBOX";
     static final String ACTION_EDIT_ANSWERS = BuildConfig.APPLICATION_ID + ".EDIT_ANSWERS";
     static final String ACTION_EDIT_ANSWER = BuildConfig.APPLICATION_ID + ".EDIT_ANSWER";
     static final String ACTION_EDIT_RULES = BuildConfig.APPLICATION_ID + ".EDIT_RULES";
@@ -148,16 +152,24 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, false);
 
+        if (savedInstanceState != null) {
+            Intent intent = savedInstanceState.getParcelable("fair:intent");
+            if (intent != null)
+                setIntent(intent);
+        }
+
         // Workaround stale intents from recent apps screen
         boolean recents = (getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0;
         if (recents) {
             Intent intent = getIntent();
+            Log.i("Stale intent=" + intent);
             intent.setAction(null);
-            setIntent(intent);
         }
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        lbm.registerReceiver(creceiver, new IntentFilter(ACTION_NEW_MESSAGE));
+        IntentFilter iff = new IntentFilter();
+        iff.addAction(ACTION_NEW_MESSAGE);
+        lbm.registerReceiver(creceiver, iff);
 
         if (savedInstanceState != null)
             searching = savedInstanceState.getBoolean("fair:searching");
@@ -312,15 +324,48 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         });
 
         // Navigation folders
+        ibExpanderFolder = drawerContainer.findViewById(R.id.ibExpanderFolder);
+
         rvFolder = drawerContainer.findViewById(R.id.rvFolder);
         rvFolder.setLayoutManager(new LinearLayoutManager(this));
         adapterNavFolder = new AdapterNavFolder(this, this);
         rvFolder.setAdapter(adapterNavFolder);
 
+        boolean nav_folder = prefs.getBoolean("nav_folder", true);
+        ibExpanderFolder.setImageLevel(nav_folder ? 0 /* less */ : 1 /* more */);
+        rvFolder.setVisibility(nav_folder ? View.VISIBLE : View.GONE);
+
+        ibExpanderFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean nav_folder = !prefs.getBoolean("nav_folder", true);
+                prefs.edit().putBoolean("nav_folder", nav_folder).apply();
+                ibExpanderFolder.setImageLevel(nav_folder ? 0 /* less */ : 1 /* more */);
+                rvFolder.setVisibility(nav_folder ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        // Menus
+        ibExpanderMenu = drawerContainer.findViewById(R.id.ibExpanderMenu);
+
         rvMenu = drawerContainer.findViewById(R.id.rvMenu);
         rvMenu.setLayoutManager(new LinearLayoutManager(this));
         adapterNavMenu = new AdapterNavMenu(this, this);
         rvMenu.setAdapter(adapterNavMenu);
+
+        boolean nav_menu = prefs.getBoolean("nav_menu", true);
+        ibExpanderMenu.setImageLevel(nav_menu ? 0 /* less */ : 1 /* more */);
+        rvMenu.setVisibility(nav_menu ? View.VISIBLE : View.GONE);
+
+        ibExpanderMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean nav_menu = !prefs.getBoolean("nav_menu", true);
+                prefs.edit().putBoolean("nav_menu", nav_menu).apply();
+                ibExpanderMenu.setImageLevel(nav_menu ? 0 /* less */ : 1 /* more */);
+                rvMenu.setVisibility(nav_menu ? View.VISIBLE : View.GONE);
+            }
+        });
 
         // Extra menus
         ibExpanderExtra = drawerContainer.findViewById(R.id.ibExpanderExtra);
@@ -381,6 +426,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             drawerToggle.setDrawerIndicatorEnabled(savedInstanceState.getBoolean("fair:toggle"));
 
         checkFirst();
+        checkBanner();
         checkCrash();
 
         Shortcuts.update(this, this);
@@ -424,6 +470,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("fair:intent", getIntent());
         outState.putBoolean("fair:toggle", drawerToggle.isDrawerIndicatorEnabled());
         outState.putBoolean("fair:searching", searching);
         super.onSaveInstanceState(outState);
@@ -644,6 +691,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         iff.addAction(ACTION_SEARCH_ADDRESS);
         iff.addAction(ACTION_VIEW_THREAD);
         iff.addAction(ACTION_EDIT_FOLDER);
+        iff.addAction(ACTION_VIEW_OUTBOX);
         iff.addAction(ACTION_EDIT_ANSWERS);
         iff.addAction(ACTION_EDIT_ANSWER);
         iff.addAction(ACTION_EDIT_RULES);
@@ -691,7 +739,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 super.onBackPressed();
             else if (!backHandled()) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivityView.this);
-                boolean double_back = prefs.getBoolean("double_back", true);
+                boolean double_back = prefs.getBoolean("double_back", false);
                 if (searching || !double_back)
                     super.onBackPressed();
                 else {
@@ -714,6 +762,13 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (count == 0)
             finish();
         else {
+            if (count < lastBackStackCount) {
+                Intent intent = getIntent();
+                intent.setAction(null);
+                Log.i("Reset intent");
+            }
+            lastBackStackCount = count;
+
             if (drawerLayout.isDrawerOpen(drawerContainer) &&
                     !drawerLayout.isLocked(drawerContainer))
                 drawerLayout.closeDrawer(drawerContainer);
@@ -747,13 +802,17 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         int undo_timeout = prefs.getInt("undo_timeout", 5000);
 
         if (undo_timeout == 0) {
-            move.execute(this, args, "undo:move");
-            return;
-        }
+            if (move != null)
+                move.execute(this, args, "undo:move");
+        } else
+            undo(undo_timeout, title, args, move, show);
+    }
 
+    public void undo(long undo_timeout, String title, final Bundle args, final SimpleTask move, final SimpleTask show) {
         if (drawerLayout == null || drawerLayout.getChildCount() == 0) {
             Log.e("Undo: drawer missing");
-            show.execute(this, args, "undo:move");
+            if (show != null)
+                show.execute(this, args, "undo:show");
             return;
         }
 
@@ -769,7 +828,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             public void run() {
                 Log.i("Undo timeout");
                 snackbar.dismiss();
-                move.execute(ActivityView.this, args, "undo:move");
+                if (move != null)
+                    move.execute(ActivityView.this, args, "undo:move");
             }
         };
 
@@ -779,7 +839,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 Log.i("Undo cancel");
                 getMainHandler().removeCallbacks(timeout);
                 snackbar.dismiss();
-                show.execute(ActivityView.this, args, "undo:show");
+                if (show != null)
+                    show.execute(ActivityView.this, args, "undo:show");
             }
         });
 
@@ -811,6 +872,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("first", true))
             new FragmentDialogFirst().show(getSupportFragmentManager(), "first");
+    }
+
+    private void checkBanner() {
+        long now = new Date().getTime();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        long banner_hidden = prefs.getLong("banner_hidden", 0);
+        if (banner_hidden > 0 && now > banner_hidden)
+            prefs.edit().remove("banner_hidden").apply();
     }
 
     private void checkCrash() {
@@ -970,7 +1039,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
                 Intent update = new Intent(Intent.ACTION_VIEW, Uri.parse(info.html_url));
                 update.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent piUpdate = PendingIntent.getActivity(
+                PendingIntent piUpdate = PendingIntentCompat.getActivity(
                         ActivityView.this, REQUEST_UPDATE, update, PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(piUpdate);
 
@@ -1001,16 +1070,17 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         // Refresh from widget
         if (intent.getBooleanExtra("refresh", false)) {
             intent.removeExtra("refresh");
-            setIntent(intent);
 
-            ServiceUI.sync(this, null);
+            int version = intent.getIntExtra("version", 0);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivityView.this);
+            boolean sync_on_launch = prefs.getBoolean("sync_on_launch", false);
+            if (sync_on_launch || version < 1541)
+                ServiceUI.sync(this, null);
         }
 
         String action = intent.getAction();
         if (action != null) {
-            intent.setAction(null);
-            setIntent(intent);
-
             if (action.startsWith("unified")) {
                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                     getSupportFragmentManager().popBackStack("unified", 0);
@@ -1019,6 +1089,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     Intent clear = new Intent(this, ServiceUI.class)
                             .setAction(action.replace("unified", "clear"));
                     startService(clear);
+                    intent.setAction("unified");
                 }
 
             } else if (action.startsWith("folders")) {
@@ -1044,6 +1115,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     Intent clear = new Intent(this, ServiceUI.class)
                             .setAction("clear:" + parts[2]);
                     startService(clear);
+                    intent.setAction("folder:" + folder);
                 }
 
             } else if ("why".equals(action)) {
@@ -1057,11 +1129,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     Helper.viewFAQ(this, 2);
                 }
 
+                intent.setAction(null);
+
             } else if ("alert".equals(action) || "error".equals(action)) {
                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                     getSupportFragmentManager().popBackStack("unified", 0);
 
                 Helper.viewFAQ(this, "alert".equals(action) ? 23 : 22);
+
+                intent.setAction(null);
 
             } else if ("outbox".equals(action)) {
                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
@@ -1117,7 +1193,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             }
 
             intent.removeExtra(Intent.EXTRA_PROCESS_TEXT);
-            setIntent(intent);
         }
     }
 
@@ -1275,7 +1350,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private BroadcastReceiver creceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onNewMessage(intent);
+            String action = intent.getAction();
+            if (ACTION_NEW_MESSAGE.equals(action))
+                onNewMessage(intent);
         }
     };
 
@@ -1314,6 +1391,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     onViewThread(intent);
                 else if (ACTION_EDIT_FOLDER.equals(action))
                     onEditFolder(intent);
+                else if (ACTION_VIEW_OUTBOX.equals(action))
+                    onMenuOutbox();
                 else if (ACTION_EDIT_ANSWERS.equals(action))
                     onEditAnswers(intent);
                 else if (ACTION_EDIT_ANSWER.equals(action))
@@ -1381,6 +1460,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         args.putLong("id", intent.getLongExtra("id", -1));
         args.putBoolean("filter_archive", intent.getBooleanExtra("filter_archive", true));
         args.putBoolean("found", found);
+        args.putBoolean("pinned", intent.getBooleanExtra("pinned", false));
 
         FragmentMessages fragment = new FragmentMessages();
         fragment.setArguments(args);

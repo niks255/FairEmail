@@ -209,19 +209,20 @@
     <string name="title_advanced_suggest_sent">Predlagaj naslove, najdene v poslanih sporočilih</string>
     <string name="title_advanced_suggest_received">Predlagaj naslove, najdene v prejetih sporočilih</string>
     <string name="title_advanced_suggest_frequently">Razvrsti predlagane naslove po pogostosti uporabe</string>
+    <string name="title_advanced_send_reminders">Prikaži opomnike</string>
+    <string name="title_advanced_send_delayed">Odloži pošiljanje sporočil</string>
     <string name="title_advanced_prefix_once">V odgovorih ali posredovanih sporočilih zadevi dodaj predpono samo enkrat</string>
     <string name="title_advanced_extended_reply">V odgovorih/posredovanih sporočilih uporabi razširjeno glavo</string>
     <string name="title_advanced_quote_reply">Navedi besedilo, na katerega odgovarjam</string>
     <string name="title_advanced_resize_reply">V navedenem besedilu prilagodi velikost slik</string>
     <string name="title_advanced_signature_location">Položaj podpisa</string>
+    <string name="title_advanced_discard_delete">Trajno izbriši osnutek ob opustitvi osnutka</string>
     <string name="title_advanced_plain_only">Privzeto pošlji samo golo besedilo</string>
     <string name="title_advanced_flow">\'Tekoča oblika\' za golo besedilo</string>
-    <string name="title_advanced_receipt">Kadar zahtevam potrdilo</string>
     <string name="title_advanced_usenet_signature">Dogovor za podpis Usenet</string>
     <string name="title_advanced_remove_signatures">Odstrani prepoznane podpise</string>
-    <string name="title_advanced_send_reminders">Prikaži opomnike</string>
+    <string name="title_advanced_receipt">Kadar zahtevam potrdilo</string>
     <string name="title_advanced_lookup_mx">Pred pošiljanjem preveri prejemnikove e-poštne naslove</string>
-    <string name="title_advanced_send_delayed">Odloži pošiljanje sporočil</string>
     <string name="title_advanced_metered">Uporabi merjene povezave</string>
     <string name="title_advanced_download">Samodejno prejmi sporočila in priloge ob merjeni povezavi do</string>
     <string name="title_advanced_roaming">Prejmi sporočila in priloge med gostovanjem</string>
@@ -292,7 +293,6 @@
     <string name="title_advanced_autounstar">Ob premikanju sporočil samodejno odstrani zvezdice</string>
     <string name="title_advanced_auto_important">Samodejno naredi sporočila, označena z zvezdico, pomembna</string>
     <string name="title_advanced_reset_importance">Ponastavi pomembnost ob premikanju sporočil</string>
-    <string name="title_advanced_discard_delete">Trajno izbriši osnutek ob opustitvi osnutka</string>
     <string name="title_advanced_default_snooze">Privzeti čas dremeža</string>
     <string name="title_advanced_notifications">Upravljaj z obvestili</string>
     <string name="title_advanced_notifications_default">Privzeti kanal</string>
@@ -376,7 +376,6 @@
     <string name="title_advanced_inline_hint">Slike v besedilu so vključene v sporočilo.</string>
     <string name="title_advanced_parse_classes_hint">To bo natančneje prikazalo sporočila, vendar morda z zakasnitvijo.</string>
     <string name="title_advanced_autoexpand_hint">Samodejno odpri sporočilo, ko je v pogovoru samo eno sporočilo ali eno neprebrano sporočilo.</string>
-    <string name="title_advanced_autoseen_hint">Samodejno označevanje sporočil kot prebranih ob razširitvi lahko onemogočite v nastavitvah za posamezni račun.</string>
     <string name="title_advanced_autoclose_hint">Samodejno zapri pogovore, ko so vsa sporočila arhivirana, poslana ali premaknjena v smeti.</string>
     <string name="title_advanced_sender_hint">Večina ponudnikov ne dovoli spreminjanja naslovov pošiljatelja.</string>
     <string name="title_advanced_bcc_hint">Naslov ne bo prikazan, ampak bo dodan ob pošiljanju.</string>
@@ -824,7 +823,6 @@
     <string name="title_rule_subject">Zadeva vsebuje</string>
     <string name="title_rule_attachments">Vsebuje priloge</string>
     <string name="title_rule_header">Glava vsebuje</string>
-    <string name="title_rule_time">Čas je med</string>
     <string name="title_rule_regex">Reg. izraz</string>
     <string name="title_rule_and">IN</string>
     <string name="title_rule_action">Dejanje</string>

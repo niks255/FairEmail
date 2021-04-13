@@ -7,6 +7,7 @@
     <string name="app_crash">FairEmail non è supportata su questo dispositivo a causa di bug in Android che causano crash</string>
     <string name="app_exit">Premi di nuovo «indietro» per uscire</string>
     <string name="app_cake">Spazio di archiviazione insufficiente</string>
+    <string name="app_updated">Ultimo aggiornamento: %1$s</string>
     <string name="channel_service">Ricevi</string>
     <string name="channel_send">Invia</string>
     <string name="channel_notification">E-mail</string>
@@ -117,6 +118,8 @@
     <string name="title_setup">Impostazioni</string>
     <string name="title_setup_help">Aiuto</string>
     <string name="title_setup_quick">Configurazione rapida</string>
+    <string name="title_setup_intro">Configurare un account richiede solo tre passaggi e poi potrai già inviare e ricevere email</string>
+    <string name="title_setup_simple">Non c\'è bisogno di cambiare altre opzioni</string>
     <string name="title_setup_quick_accounts">Aggiungi account</string>
     <string name="title_setup_quick_support">Alcuni fornitori rendono difficile aggiungere un account. Per favore non incolpare FairEmail per questo ma chiedi aiuto invece.</string>
     <string name="title_setup_quick_hint">La configurazione rapida recupererà le informazioni di configurazione da autoconfig.thunderbird.net</string>
@@ -163,11 +166,12 @@
     <string name="title_setup_permissions">Concedi permessi</string>
     <string name="title_setup_permissions_remark">Per accedere a informazioni di contatto (facoltativo)</string>
     <string name="title_setup_doze">Disabilita le ottimizzazioni della batteria</string>
-    <string name="title_setup_doze_remark">Per ricevere e-mail in modo affidabile</string>
+    <string name="title_setup_doze_remark">Per inviare e ricevere posta elettronica in modo affidabile</string>
     <string name="title_setup_doze_hint">Anche se questo può sembrare contraddittorio, spegnere le ottimizzazioni della batteria si tradurrà in un minore utilizzo della batteria</string>
     <string name="title_setup_doze_instructions">Nella prossima finestra di dialogo Android, cambia «Non ottimizzato» in «Tutte le app», seleziona questa app e seleziona «Non ottimizzare»</string>
     <string name="title_setup_doze_battery">Consumo elevato della batteria?</string>
     <string name="title_setup_doze_stopped">Sincronizzazione interrotta?</string>
+    <string name="title_setup_background">Le restrizioni in sfondo sono abilitate</string>
     <string name="title_setup_data">Risparmio dati attivato</string>
     <string name="title_setup_advanced_options">Mostra opzioni avanzate</string>
     <string name="title_setup_inbox">Vai alla posta in arrivo</string>
@@ -230,7 +234,7 @@
     <string name="title_advanced_section_encryption">Crittografia</string>
     <string name="title_advanced_section_notifications">Notifiche</string>
     <string name="title_advanced_section_misc">Altro</string>
-    <string name="title_advanced_default">Tutte le opzioni hanno valori standard comunemente utilizzati</string>
+    <string name="title_advanced_default">Tutte le opzioni hanno valori standard comunemente usati, che non devono essere modificati per utilizzare l\'app</string>
     <string name="title_advanced_receive">Ricevi messaggi per tutti gli account</string>
     <string name="title_advanced_when">Quando</string>
     <string name="title_advanced_always">Ricevi sempre messaggi per questi account</string>
@@ -255,6 +259,9 @@
     <string name="title_advanced_suggest_sent">Suggerisci indirizzi trovati nei messaggi inviati</string>
     <string name="title_advanced_suggest_received">Suggerisci indirizzi trovati nei messaggi ricevuti</string>
     <string name="title_advanced_suggest_frequently">Ordina gli indirizzi suggeriti in base alla frequenza d\'uso</string>
+    <string name="title_advanced_send_reminders">Mostra promemoria</string>
+    <string name="title_advanced_send_delayed">Ritardo invio messaggi</string>
+    <string name="title_advanced_send_pending">Mostra l\'icona discreta di invio ritardato</string>
     <string name="title_advanced_compose_font">Tipo di carattere predefinito</string>
     <string name="title_advanced_prefix_once">Prefissa l\'oggetto solo una volta per rispondere o inoltrare</string>
     <string name="title_advanced_separate_reply">Inserisci una riga orizzontale prima dell\'intestazione di una risposta/inoltro</string>
@@ -266,14 +273,15 @@
     <string name="title_advanced_signature_location">Posizione della firma</string>
     <string name="title_advanced_signature_reply">Usa la firma quando rispondi</string>
     <string name="title_advanced_signature_forward">Usa la firma durante l\'inoltro</string>
+    <string name="title_advanced_discard_delete">In caso la bozza venga scartata, eliminala definitivamente</string>
+    <string name="title_advanced_reply_move">Quando si risponde a un messaggio in una cartella utente, salva la risposta nella stessa cartella</string>
+    <string name="title_advanced_auto_link">Crea automaticamente collegamenti</string>
     <string name="title_advanced_plain_only">Invia solo in testo semplice per impostazione predefinita</string>
     <string name="title_advanced_flow">\'format flowed\' per il testo normale</string>
-    <string name="title_advanced_receipt">Quando si richiede una ricevuta</string>
     <string name="title_advanced_usenet_signature">Segui convenzione di firma di Usenet</string>
     <string name="title_advanced_remove_signatures">Rimuovi firme riconosciute</string>
-    <string name="title_advanced_send_reminders">Mostra promemoria</string>
+    <string name="title_advanced_receipt">Quando si richiede una ricevuta</string>
     <string name="title_advanced_lookup_mx">Controlla gli indirizzi e-mail dei destinatari prima di inviare</string>
-    <string name="title_advanced_send_delayed">Ritardo invio messaggi</string>
     <string name="title_advanced_metered">Usa connessioni a consumo</string>
     <string name="title_advanced_download">Scarica automaticamente i messaggi e gli allegati con una connessione a consumo fino a</string>
     <string name="title_advanced_roaming">Scarica messaggi e allegati durante il roaming</string>
@@ -363,6 +371,7 @@
     <string name="title_advanced_swipe_close">Scorri verso il basso per chiudere la conversazione</string>
     <string name="title_advanced_swipe_move">Scorri verso l\'alto per spostare la conversazione</string>
     <string name="title_advanced_autoexpand">Espandi automaticamente i messaggi</string>
+    <string name="title_advanced_expand_first">Espandi automaticamente il primo messaggio quando la conversazione è letta</string>
     <string name="title_advanced_expand_all">Espandi automaticamente tutti i messaggi letti</string>
     <string name="title_advanced_expand_one">Espandi solo un messaggio alla volta</string>
     <string name="title_advanced_collapse_multiple">Comprimi i messaggi in una conversazione con più messaggi premendo \'indietro\'</string>
@@ -376,7 +385,6 @@
     <string name="title_advanced_autounstar">Rimuovi automaticamente la stella dai messaggi sullo spostamento dei messaggi</string>
     <string name="title_advanced_auto_important">Rendi automaticamente importanti i messaggi preferiti</string>
     <string name="title_advanced_reset_importance">Ripristina l\'importanza dei messaggi spostati</string>
-    <string name="title_advanced_discard_delete">In caso la bozza venga scartata, eliminala definitivamente</string>
     <string name="title_advanced_default_snooze">Tempo di rinvio predefinito</string>
     <string name="title_advanced_notifications">Gestisci notifiche</string>
     <string name="title_advanced_notifications_default">Canale predefinito</string>
@@ -482,10 +490,12 @@
     <string name="title_advanced_suggest_local_hint">Oltre ai contatti forniti da Android. I dati di contatto verranno archiviati per i messaggi appena inviati o ricevuti solo quando abilitato.</string>
     <string name="title_advanced_usenet_hint">Inserisci \'-- \' tra il testo e la firma</string>
     <string name="title_advanced_send_reminders_hint">Mostra un avviso quando il testo del messaggio o l\'oggetto è vuoto o quando un allegato potrebbe mancare</string>
+    <string name="title_advanced_reply_move_hint">Il server di posta elettronica potrebbe ancora aggiungere i messaggi alla cartella dei messaggi inviati</string>
     <string name="title_advanced_metered_hint">Le connessioni a consumo sono generalmente connessioni mobili o hotspot Wi-Fi a pagamento</string>
     <string name="title_advanced_metered_warning">Disabilitando questa opzione disattiverai la ricezione e l\'invio di messaggi sulle connessioni internet mobili</string>
     <string name="title_advanced_rlah_hint">Presumi nessun roaming all\'interno dell\'UE</string>
     <string name="title_advanced_tcp_keep_alive_hint">Abilitare questo può causare problemi di connessione su alcuni dispositivi</string>
+    <string name="title_advanced_validate_hint">Questo può portare a non sincronizzare i messaggi, ad esempio quando si utilizza una VPN, ma anche in altre situazioni</string>
     <string name="title_advanced_timeout_hint">Il timeout di lettura/scrittura verrà impostato sul doppio del timeout di connessione. Valori più alti comporteranno più utilizzo della batteria.</string>
     <string name="title_advanced_ssl_harden_hint">Abilitando questa opzione disabiliterai i protocolli SSL e i cifrari deboli, che possono causare problemi di connessione</string>
     <string name="title_advanced_roaming_hint">Le intestazioni dei messaggi saranno sempre recuperate quando in roaming. Puoi utilizzare le impostazioni di roaming del dispositivo per disabilitare internet durante il roaming.</string>
@@ -509,7 +519,7 @@
     <string name="title_advanced_parse_classes_hint">Questo mostrerà più accuratamente i messaggi, ma probabilmente con un ritardo</string>
     <string name="title_advanced_language_detection_hint">Il supporto per il rilevamento linguistico dipende dal produttore del dispositivo</string>
     <string name="title_advanced_autoexpand_hint">Apri automaticamente il messaggio quando c\'è un solo messaggio o solo un messaggio da leggere in una conversazione</string>
-    <string name="title_advanced_autoseen_hint">La marcatura automatica dei messaggi letti all\'apertura può essere disabilitata nelle impostazioni dei singoli account</string>
+    <string name="title_advanced_autoseen_hint">Contrassegnare automaticamente i messaggi come letti in espansione può essere disabilitato nelle impostazioni avanzate dell\'account di ogni account</string>
     <string name="title_advanced_autoclose_hint">Chiudi automaticamente le conversazioni raggruppate quando tutti i messaggi sono archiviati, inviati o cestinati</string>
     <string name="title_advanced_sender_hint">La maggior parte dei fornitori non consente indirizzi mittente modificati</string>
     <string name="title_advanced_bcc_hint">L\'indirizzo non sarà mostrato, ma verrà aggiunto all\'invio</string>
@@ -633,6 +643,8 @@
     <string name="title_backoff_until">Attesa dopo il fallimento fino a: %1$s</string>
     <string name="title_storage_quota">Utilizzo archiviazione server: %1$s/%2$s</string>
     <string name="title_pop_support">Il protocollo POP3 supporta il download e l\'eliminazione dei messaggi solo dalla casella di posta in arrivo. POP3 non può contrassegnare i messaggi come letti, spostare i messaggi, ecc. POP3 userà più energia e dati di IMAP. Quindi, considera l\'uso del protocollo IMAP quando possibile.</string>
+    <string name="title_pop_warning">Se un server POP3 non supporta il comando UIDL, l\'utilizzo dei dati potrebbe essere elevato. Quindi, regola in modo appropriato la frequenza di ricezione.</string>
+    <string name="title_pop_folders">Il protocollo POP3 non supporta la creazione di cartelle</string>
     <string name="title_oauth_support">OAuth non è supportato</string>
     <string name="title_review">Revisione</string>
     <string name="title_hint_alias">Premi a lungo per le opzioni, come copia per creare le identità alias</string>
@@ -702,6 +714,7 @@
     <string name="title_auto_trash">Sposta automaticamente i vecchi messaggi nel cestino</string>
     <string name="title_auto_delete">Elimina automaticamente i vecchi messaggi</string>
     <string name="title_auto_delete_hint">I vecchi messaggi sono messaggi che non sono più conservati sul dispositivo</string>
+    <string name="title_auto_delete_archive_hint">L\'eliminazione dalla cartella d\'archivio non è sempre consentita dal server email</string>
     <string name="title_inbox_root_hint">        Alcuni provider richiedono la creazione di nuove cartelle sotto la posta in entrata.
         In questo caso, puoi premere a lungo la posta in arrivo nell\'elenco cartelle e selezionare \'Crea sottocartella\'.
     </string>
@@ -730,6 +743,8 @@
     <string name="title_duplicate_in">Duplica messaggio in %1$s</string>
     <string name="title_subject_reply">R: %1$s</string>
     <string name="title_subject_forward">I: %1$s</string>
+    <string name="title_subject_reply_alt">Re: %1$s</string>
+    <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">Segna come letto</string>
     <string name="title_unseen">Segna come non letto</string>
     <string name="title_toggle_seen">Attiva/disattiva lettura</string>
@@ -765,7 +780,10 @@
     <string name="title_download_all">Scarica tutti</string>
     <string name="title_save_all">Salva tutto</string>
     <string name="title_save_eml">Salva il file del messaggio grezzo</string>
+    <string name="title_raw_remaining">Messaggi grezzi da scaricare: %1$d</string>
+    <string name="title_ask_raw">Per inoltrare i messaggi, i messaggi grezzi (originali) devono essere scaricati dal server. Ciò richiede una connessione Internet.</string>
     <string name="title_buttons">Seleziona pulsanti</string>
+    <string name="title_buttons_hint">Le azioni effettive disponibili dipendono dal tipo di account e dalla configurazione</string>
     <string name="title_configure_buttons">Configura pulsanti &#8230;</string>
     <string name="title_trash">Cestino</string>
     <string name="title_copy">Copia &#8230;</string>
@@ -841,11 +859,15 @@
     <string name="title_ask_review_rationale">        Stai usando FairEmail da un po’.
         Sarebbe apprezzato se potessi votare FairEmail nel Play Store.
     </string>
+    <string name="title_need_help">Ho bisogno di aiuto</string>
     <string name="title_ask_once">Questo messaggio apparirà solo una volta, a meno che tu selezioni «Più tardi»</string>
     <string name="title_third_party">Stai usando una versione di terze parti</string>
     <string name="title_expand_warning">Espandendo questo messaggio verrà scaricato %1$s</string>
     <string name="title_download_message">Download &#8230;</string>
-    <string name="title_reformatted">Questa è la vista dei messaggi riformattati. Puoi toccare l\'icona &#x26F6; per visualizzare il messaggio originale e nascondere questo messaggio.</string>
+    <string name="title_reformatted">        Questa è la vista dei messaggi riformattati.
+        Puoi toccare l\'icona &#x26F6; per visualizzare il messaggio originale e nascondere questo messaggio.
+        La formattazione dei messaggi richiede un po\' di tempo, a seconda della dimensione del messaggio e della velocità del dispositivo.
+    </string>
     <string name="title_compose">Scrivi</string>
     <string name="title_submitter">Inviato da:</string>
     <string name="title_delivered_to">Consegnato a:</string>
@@ -867,6 +889,7 @@
     <string name="title_discard">Elimina</string>
     <string name="title_save">Salva</string>
     <string name="title_send">Invia</string>
+    <string name="title_sending">Invio in corso &#8230;</string>
     <string name="title_send_now">Invia ora</string>
     <string name="title_send_via">Invia tramite</string>
     <string name="title_send_at">Invia alle &#8230;</string>
@@ -1006,6 +1029,7 @@
     <string name="title_search_flag_hidden">nascosto</string>
     <string name="title_search_flag_encrypted">crittografato</string>
     <string name="title_search_flag_attachments">allegati</string>
+    <string name="title_search_flag_notes">note</string>
     <string name="title_search_flag_invite">invito</string>
     <string name="title_search_flag_size">dimensione &gt; %1$s</string>
     <string name="title_search_device">Cerca sul dispositivo</string>
@@ -1081,7 +1105,10 @@
     <string name="title_rule_subject">L\'oggetto contiene</string>
     <string name="title_rule_attachments">Ha allegati</string>
     <string name="title_rule_header">L\'intestazione contiene</string>
-    <string name="title_rule_time">Tempo tra</string>
+    <string name="title_rule_time_abs">Tempo assoluto (ricevuto) tra</string>
+    <string name="title_rule_time_after">Ricevuto dopo</string>
+    <string name="title_rule_time_before">Ricevuto prima</string>
+    <string name="title_rule_time_rel">Tempo relativo (ricevuto) tra</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">E</string>
     <string name="title_rule_action">Azione</string>
@@ -1242,6 +1269,7 @@
     <string name="title_open_link">Apri collegamento</string>
     <string name="title_different_link">Il titolo del link e l\'indirizzo sono diversi</string>
     <string name="title_tracking_link">Questo sito web potrebbe tracciarti</string>
+    <string name="title_suspicious_link">Questo è un collegamento sospetto</string>
     <string name="title_link_http">Il traffico non verrà criptato</string>
     <string name="title_link_https">Il traffico verrà crittografato</string>
     <string name="title_sanitize_link">Rimuovi i parametri di tracciamento</string>
@@ -1307,6 +1335,7 @@
     <string name="title_pro_hide">Nascondi il piccolo messaggio per %1$d settimane</string>
     <string name="title_pro_hint">L\'acquisto di funzionalità a pagamento ti permetterà di utilizzare tutte le attuali e future funzioni, aiuterà il mantenimento e il supporto dell\'app</string>
     <string name="title_pro_price">Perché le caratteristiche pro sono così costose?</string>
+    <string name="title_pro_family">Posso usare la Raccolta di famiglia di Google Play?</string>
     <string name="title_pro_restore">Come posso ripristinare un acquisto?</string>
     <string name="title_pro_pending">Acquisto in sospeso</string>
     <string name="title_pro_activated">Tutte le funzionalità sono attivate</string>
@@ -1332,6 +1361,7 @@
     <string name="title_unexpected_info_remark">Descrivi cosa stavi facendo quando l\'errore è successo:</string>
     <string name="title_widget_title_count">Nuovo conteggio dei messaggi</string>
     <string name="title_widget_title_list">Elenco messaggi</string>
+    <string name="title_widget_title_sync">Sincro sì/no</string>
     <string name="title_widget_account">Account</string>
     <string name="title_widget_account_all">Tutti</string>
     <string name="title_widget_folder">Cartella</string>

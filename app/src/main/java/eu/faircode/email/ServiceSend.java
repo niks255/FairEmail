@@ -75,9 +75,11 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "send");
 
-    private static final int PI_SEND = 1;
     private static final int RETRY_MAX = 3;
     private static final int CONNECTIVITY_DELAY = 5000; // milliseconds
+
+    static final int PI_SEND = 1;
+    static final int PI_EXISTS = 2;
 
     @Override
     public void onCreate() {
@@ -193,6 +195,24 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         startForeground(Helper.NOTIFICATION_SEND, getNotificationService().build());
+
+        Log.i("Send intent=" + intent);
+        Log.logExtras(intent);
+
+        if (intent == null)
+            return START_STICKY;
+
+        String action = intent.getAction();
+        if (action == null)
+            return START_STICKY;
+
+        String[] parts = action.split(":");
+        switch (parts[0]) {
+            case "exists":
+                onExists(intent);
+                break;
+        }
+
         return START_STICKY;
     }
 
@@ -250,7 +270,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         Intent intent = new Intent(context, ActivityView.class);
         intent.setAction("outbox");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return PendingIntent.getActivity(context, ActivityView.REQUEST_OUTBOX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntentCompat.getActivity(
+                context, ActivityView.REQUEST_OUTBOX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
@@ -493,6 +514,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean reply_move = prefs.getBoolean("reply_move", false);
         boolean debug = prefs.getBoolean("debug", false);
 
         if (message.identity == null)
@@ -529,14 +551,31 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
         // Prepare sent message
         Long sid = null;
-        EntityFolder sent = db.folder().getFolderByType(message.account, EntityFolder.SENT);
+        EntityFolder sent = null;
+
+        if (reply_move && !TextUtils.isEmpty(message.inreplyto)) {
+            List<EntityMessage> replied = db.message().getMessagesByMsgId(message.account, message.inreplyto);
+            if (replied != null)
+                for (EntityMessage m : replied) {
+                    EntityFolder folder = db.folder().getFolder(m.folder);
+                    if (folder != null && EntityFolder.USER.equals(folder.type)) {
+                        sent = folder;
+                        break;
+                    }
+                }
+        }
+
+        if (sent == null)
+            sent = db.folder().getFolderByType(message.account, EntityFolder.SENT);
+
         if (sent != null) {
-            Log.i(sent.name + " Preparing sent message");
+            EntityLog.log(this, sent.name + " Preparing sent message" +
+                    " folder=" + sent.name + "/" + sent.type);
 
             long id = message.id;
 
             imessage.saveChanges();
-            MessageHelper helper = new MessageHelper(imessage, ServiceSend.this);
+            MessageHelper helper = new MessageHelper(imessage, this);
 
             if (message.uid != null) {
                 Log.e("Outbox id=" + message.id + " uid=" + message.uid);
@@ -726,6 +765,38 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         }
     }
 
+    private void onExists(Intent intent) {
+        String action = intent.getAction();
+        long id = Long.parseLong(action.split(":")[1]);
+
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DB db = DB.getInstance(ServiceSend.this);
+
+                    try {
+                        db.beginTransaction();
+
+                        // Message could have been deleted in the meantime
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message == null)
+                            return;
+
+                        EntityOperation.queue(ServiceSend.this, message, EntityOperation.EXISTS, true);
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
+    }
+
     static void boot(final Context context) {
         executor.submit(new Runnable() {
             @Override
@@ -753,8 +824,11 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     }
 
     static void start(Context context) {
-        ContextCompat.startForegroundService(context,
-                new Intent(context, ServiceSend.class));
+        try {
+            ContextCompat.startForegroundService(context, new Intent(context, ServiceSend.class));
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     static void schedule(Context context, long delay) {

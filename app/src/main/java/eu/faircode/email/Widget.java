@@ -60,6 +60,7 @@ public class Widget extends AppWidgetProvider {
                     boolean semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
                     int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
                     int layout = prefs.getInt("widget." + appWidgetId + ".layout", 0);
+                    int version = prefs.getInt("widget." + appWidgetId + ".version", 0);
 
                     List<EntityFolder> folders = db.folder().getNotifyingFolders(account);
                     if (folders == null)
@@ -72,21 +73,27 @@ public class Widget extends AppWidgetProvider {
                         view.putExtra("account", account);
                         view.putExtra("type", folders.get(0).type);
                         view.putExtra("refresh", true);
+                        view.putExtra("version", version);
                         view.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        pi = PendingIntent.getActivity(context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
+                        pi = PendingIntentCompat.getActivity(
+                                context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
                     } else {
                         if (account < 0) {
                             Intent view = new Intent(context, ActivityView.class);
                             view.setAction("unified");
                             view.putExtra("refresh", true);
+                            view.putExtra("version", version);
                             view.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            pi = PendingIntent.getActivity(context, ActivityView.REQUEST_UNIFIED, view, PendingIntent.FLAG_UPDATE_CURRENT);
+                            pi = PendingIntentCompat.getActivity(
+                                    context, ActivityView.REQUEST_UNIFIED, view, PendingIntent.FLAG_UPDATE_CURRENT);
                         } else {
                             Intent view = new Intent(context, ActivityView.class);
                             view.setAction("folders:" + account);
                             view.putExtra("refresh", true);
+                            view.putExtra("version", version);
                             view.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            pi = PendingIntent.getActivity(context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
+                            pi = PendingIntentCompat.getActivity(
+                                    context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
                         }
                     }
 
@@ -99,9 +106,6 @@ public class Widget extends AppWidgetProvider {
                             layout == 0 ? R.layout.widget : R.layout.widget_new);
 
                     views.setOnClickPendingIntent(R.id.widget, pi);
-
-                    if (!semi)
-                        views.setInt(R.id.widget, "setBackgroundColor", background);
 
                     if (layout == 1)
                         views.setImageViewResource(R.id.ivMessage, unseen == 0
@@ -119,8 +123,17 @@ public class Widget extends AppWidgetProvider {
                         views.setViewVisibility(R.id.tvAccount, ViewStripe.VISIBLE);
                     }
 
-                    if (!semi && background != Color.TRANSPARENT) {
+                    if (background == Color.TRANSPARENT) {
+                        if (!semi && version > 1550)
+                            views.setInt(R.id.widget, "setBackgroundColor", background);
+                    } else {
                         float lum = (float) ColorUtils.calculateLuminance(background);
+
+                        if (semi)
+                            background = ColorUtils.setAlphaComponent(background, 127);
+
+                        views.setInt(R.id.widget, "setBackgroundColor", background);
+
                         if (lum > 0.7f) {
                             views.setInt(R.id.ivMessage, "setColorFilter", Color.BLACK);
                             views.setTextColor(R.id.tvCount, Color.BLACK);

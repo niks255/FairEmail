@@ -147,7 +147,6 @@
     <string name="title_setup_identity_what">Hva er en identitet?</string>
     <string name="title_setup_permissions">Gi tillatelser</string>
     <string name="title_setup_permissions_remark">Få tilgang til kontaktinformasjon (valgfritt)</string>
-    <string name="title_setup_doze_remark">Å motta e-post pålitelig</string>
     <string name="title_setup_doze_hint">Selv om dette kan lyde motstridende, vil det å slå av batterioptimaliseringer føre til mindre batteribruk</string>
     <string name="title_setup_doze_battery">Høy batteriforbruk?</string>
     <string name="title_setup_doze_stopped">Synkroniseringen stoppet?</string>
@@ -228,6 +227,8 @@
     <string name="title_advanced_suggest_sent">Foreslå adresser som er funnet i sendte meldinger</string>
     <string name="title_advanced_suggest_received">Foreslå adresser som er funnet i sendte meldinger</string>
     <string name="title_advanced_suggest_frequently">Sorter foreslåtte adresser på bruksfrekvens</string>
+    <string name="title_advanced_send_reminders">Vis påminnelser</string>
+    <string name="title_advanced_send_delayed">Forsink sending av meldinger</string>
     <string name="title_advanced_compose_font">Standard skriftstil</string>
     <string name="title_advanced_prefix_once">Prefiks emne bare en gang på svar eller videresending</string>
     <string name="title_advanced_separate_reply">Sett inn en horisontal linje før et svar/videresendt tekst</string>
@@ -239,14 +240,13 @@
     <string name="title_advanced_signature_location">Signaturposisjon</string>
     <string name="title_advanced_signature_reply">Bruk signatur når du svarer</string>
     <string name="title_advanced_signature_forward">Bruk signatur når du videresender</string>
+    <string name="title_advanced_discard_delete">Ved å kaste utkast permanent slett utkast</string>
     <string name="title_advanced_plain_only">Send bare vanlig tekst som standard</string>
     <string name="title_advanced_flow">\'format strømmet\' for ren tekst</string>
-    <string name="title_advanced_receipt">Når du ber om kvittering</string>
     <string name="title_advanced_usenet_signature">Usenet signaturkonvensjon</string>
     <string name="title_advanced_remove_signatures">Fjern gjenkjennte signaturer</string>
-    <string name="title_advanced_send_reminders">Vis påminnelser</string>
+    <string name="title_advanced_receipt">Når du ber om kvittering</string>
     <string name="title_advanced_lookup_mx">Sjekk mottakerens e-postadresser før du sender</string>
-    <string name="title_advanced_send_delayed">Forsink sending av meldinger</string>
     <string name="title_advanced_metered">Bruk målte tilkoblinger</string>
     <string name="title_advanced_download">Last ned meldinger og vedlegg automatisk på en målingstilkobling opp til</string>
     <string name="title_advanced_roaming">Laste ned meldinger og vedlegg under roaming</string>
@@ -343,7 +343,6 @@
     <string name="title_advanced_autounstar">Fjern stjernen automatisk fra meldinger som blir flyttet</string>
     <string name="title_advanced_auto_important">Gjør stjernemerkede meldinger automatisk viktige</string>
     <string name="title_advanced_reset_importance">Tilbakestill viktigheten for å flytte meldinger</string>
-    <string name="title_advanced_discard_delete">Ved å kaste utkast permanent slett utkast</string>
     <string name="title_advanced_default_snooze">Standard slumretid</string>
     <string name="title_advanced_notifications">Administrer varsler</string>
     <string name="title_advanced_notifications_default">Standard kanal</string>
@@ -464,7 +463,6 @@
     <string name="title_advanced_parse_classes_hint">Dette vil mer nøyaktig vise meldinger, men muligens med en forsinkelse</string>
     <string name="title_advanced_language_detection_hint">Støtte for oppdagelse av språk avhenger av produsenten av enheten</string>
     <string name="title_advanced_autoexpand_hint">Åpne automatisk melding når det bare er én melding eller bare en ulest melding i en samtale</string>
-    <string name="title_advanced_autoseen_hint">Automatisk merking av meldinger som lest ved utvidelse, kan deaktiveres i de enkelte kontoinnstillingene</string>
     <string name="title_advanced_autoclose_hint">Lukk samtaler automatisk når alle meldinger arkiveres, sendes eller kastet</string>
     <string name="title_advanced_sender_hint">De fleste leverandører tillater ikke endret avsender adresser</string>
     <string name="title_advanced_bcc_hint">Adressen vises ikke, men legges til ved sending</string>
@@ -782,7 +780,6 @@
     <string name="title_third_party">Du bruker en versjon av en tredjepart</string>
     <string name="title_expand_warning">Å utvide denne meldingen vil laste ned %1$s</string>
     <string name="title_download_message">Laster ned &#8230;</string>
-    <string name="title_reformatted">Dette er den omformaterte meldingsvisningen. Du kan trykke på &#x26F6; ikonet for å vise den opprinnelige meldingen og skjule denne meldingen.</string>
     <string name="title_compose">Skriv</string>
     <string name="title_submitter">Sendt av:</string>
     <string name="title_delivered_to">Levert til:</string>
@@ -1007,7 +1004,6 @@
     <string name="title_rule_subject">Emne inneholder</string>
     <string name="title_rule_attachments">Har vedlegg</string>
     <string name="title_rule_header">Overskriften inneholder</string>
-    <string name="title_rule_time">Tid mellom kl</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">OG</string>
     <string name="title_rule_action">Handling</string>

@@ -197,8 +197,19 @@ public class MessageHelper {
         }
 
         // References
-        if (message.references != null)
-            imessage.addHeader("References", message.references);
+        if (message.references != null) {
+            // https://tools.ietf.org/html/rfc5322#section-2.1.1
+            // Each line of characters MUST be no more than 998 characters
+            String references = message.references;
+            int hlen = "References: ".length();
+            int sp = references.indexOf(' ');
+            while (references.length() > 998 - hlen && sp > 0) {
+                Log.i("Dropping reference=" + references.substring(0, sp));
+                references = references.substring(sp);
+                sp = references.indexOf(' ');
+            }
+            imessage.addHeader("References", references);
+        }
         if (message.inreplyto != null)
             imessage.addHeader("In-Reply-To", message.inreplyto);
         imessage.addHeader(HEADER_CORRELATION_ID, message.msgid);
@@ -215,7 +226,8 @@ public class MessageHelper {
                     !message.extra.equals(identity.email.split("@")[0])) {
                 int at = email.indexOf('@');
                 email = message.extra + email.substring(at);
-                name = null;
+                if (!identity.sender_extra_name)
+                    name = null;
                 Log.i("extra=" + email);
             }
             imessage.setFrom(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
@@ -617,12 +629,16 @@ public class MessageHelper {
         boolean format_flowed = prefs.getBoolean("format_flowed", false);
         boolean monospaced = prefs.getBoolean("monospaced", false);
         String compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
+        boolean auto_link = prefs.getBoolean("auto_link", false);
 
         // Build html body
         Document document = JsoupEx.parse(message.getFile(context));
 
         // When sending message
         if (identity != null && send) {
+            if (auto_link)
+                HtmlHelper.autoLink(document);
+
             for (Element child : document.body().children())
                 if (!TextUtils.isEmpty(child.text()) &&
                         TextUtils.isEmpty(child.attr("fairemail"))) {
@@ -1245,8 +1261,7 @@ public class MessageHelper {
                 }
 
             email = decodeMime(email);
-            if (!Helper.isSingleScript(email))
-                email = punyCode(email);
+            email = punyCode(email);
 
             iaddress.setAddress(email);
 
@@ -1566,17 +1581,17 @@ public class MessageHelper {
             String domain = email.substring(at + 1);
 
             try {
-                user = IDN.toASCII(user);
-            } catch (IllegalArgumentException ex) {
-                Log.e(ex);
+                user = IDN.toASCII(user, IDN.ALLOW_UNASSIGNED);
+            } catch (Throwable ex) {
+                Log.i(ex);
             }
 
             String[] parts = domain.split("\\.");
             for (int p = 0; p < parts.length; p++)
                 try {
-                    parts[p] = IDN.toASCII(parts[p]);
-                } catch (IllegalArgumentException ex) {
-                    Log.e(ex);
+                    parts[p] = IDN.toASCII(parts[p], IDN.ALLOW_UNASSIGNED);
+                } catch (Throwable ex) {
+                    Log.i(ex);
                 }
 
             email = user + '@' + TextUtils.join(".", parts);
@@ -2784,7 +2799,8 @@ public class MessageHelper {
             try {
                 InternetAddress address = new InternetAddress(email);
                 return address.getAddress();
-            } catch (AddressException ignored) {
+            } catch (AddressException ex) {
+                Log.e(ex);
             }
 
         return email;

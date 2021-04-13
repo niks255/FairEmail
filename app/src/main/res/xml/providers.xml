@@ -483,6 +483,7 @@
     <provider
         name="Mail.ru"
         domain="mail\\.ru,inbox\\.ru,list\\.ru,bk\\.ru"
+        id="mailru"
         link="https://help.mail.ru/mail-help/mailer/popsmtp">
         <imap
             host="imap.mail.ru"
@@ -492,6 +493,16 @@
             host="smtp.mail.ru"
             port="465"
             starttls="false" />
+        <oauth
+            askAccount="true"
+            authorizationEndpoint="https://oauth.mail.ru/login"
+            clientId="ce54d27dc1574b3a8b50e6789cd1a44a"
+            clientSecret="5f1525783e1d4defb3bc9c2c4b7d0c54"
+            enabled="false"
+            redirectUri="https://oauth.faircode.eu/"
+            scopes="userinfo mail.imap"
+            tokenEndpoint="https://oauth.mail.ru/token" />
+        <!-- https://oauth.mail.ru/docs -->
     </provider>
     <provider
         name="KPN mail"
@@ -808,14 +819,14 @@
     <provider
         name="Alice.it"
         appPassword="true"
-        domain="alice\\.it"
-        link="https://assistenzatecnica.tim.it/at/portals/assistenzatecnica.portal">
+        domain="alice\\.it,tim\\.it"
+        link="https://assistenzatecnica.tim.it/at/portals/mini.portal?_nfpb=true&amp;_pageLabel=null&amp;nodeId=/AT_REPOSITORY/302010&amp;radice=help_virgilio">
         <imap
-            host="in.alice.it"
+            host="imap.tim.it"
             port="143"
             starttls="true" />
         <smtp
-            host="out.alice.it"
+            host="smtp.tim.it"
             port="587"
             starttls="true" />
     </provider>
@@ -1069,5 +1080,30 @@
             host="smtps.tin.it"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="Charter.net"
+        appPassword="true"
+        link="https://www.spectrum.net/support/internet/spectrum-email-server-settings/">
+        <imap
+            host="mobile.charter.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mobile.charter.net"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="Telia"
+        link="https://www.telia.se/privat/support/info/konfigurera-e-post-android">
+        <imap
+            host="mailin.telia.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mailout.telia.com"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

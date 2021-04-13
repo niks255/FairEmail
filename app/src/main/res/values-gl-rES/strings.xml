@@ -161,7 +161,6 @@
     <string name="title_setup_permissions">Conceder permisos</string>
     <string name="title_setup_permissions_remark">Para acceder á información de contacto (opcional)</string>
     <string name="title_setup_doze">Desactivar as optimizacións da batería</string>
-    <string name="title_setup_doze_remark">Para recibir o correo de maneira fiable</string>
     <string name="title_setup_doze_hint">Aínda que poida soar contraditorio, desactivar as optimizacións da batería podería resultar nun menor uso da batería</string>
     <string name="title_setup_doze_battery">Uso elevado da batería?</string>
     <string name="title_setup_doze_stopped">Detívose a sincronización?</string>
@@ -226,7 +225,6 @@
     <string name="title_advanced_section_encryption">Cifrado</string>
     <string name="title_advanced_section_notifications">Notificacións</string>
     <string name="title_advanced_section_misc">Varios</string>
-    <string name="title_advanced_default">Todas as opcións teñen valores habituais estándar</string>
     <string name="title_advanced_receive">Recibir mensaxes de todas as contas</string>
     <string name="title_advanced_when">Cando</string>
     <string name="title_advanced_always">Sempre recibir mensaxes destas contas</string>
@@ -250,6 +248,8 @@
     <string name="title_advanced_suggest_sent">Suxerir enderezos atopados en mensaxes enviadas</string>
     <string name="title_advanced_suggest_received">Suxerir enderezos atopados en mensaxes recibidas</string>
     <string name="title_advanced_suggest_frequently">Ordenar enderezos suxeridos pola frecuencia de uso</string>
+    <string name="title_advanced_send_reminders">Mostrar recordatorios</string>
+    <string name="title_advanced_send_delayed">Adiar o envío de mensaxes</string>
     <string name="title_advanced_compose_font">Fonte predefinida</string>
     <string name="title_advanced_prefix_once">Só poñer un único prefixo no asunto cando se responde ou reenvía</string>
     <string name="title_advanced_separate_reply">Inserir unha liña horizontal antes dunha cabeceira de resposta ou reenvío</string>
@@ -261,14 +261,13 @@
     <string name="title_advanced_signature_location">Posición da sinatura</string>
     <string name="title_advanced_signature_reply">Usar sinatura nas contestacións</string>
     <string name="title_advanced_signature_forward">Usar sinatura nos reenvíos</string>
+    <string name="title_advanced_discard_delete">Borrar permanentemente os borradores descartados</string>
     <string name="title_advanced_plain_only">Enviar só en formato texto por defecto</string>
     <string name="title_advanced_flow">\'format flowed\' para formato texto</string>
-    <string name="title_advanced_receipt">Cando se empregue acuse de recibo</string>
     <string name="title_advanced_usenet_signature">Seguir a convención de sinatura de Usenet</string>
     <string name="title_advanced_remove_signatures">Eliminar sinaturas recoñecidas</string>
-    <string name="title_advanced_send_reminders">Mostrar recordatorios</string>
+    <string name="title_advanced_receipt">Cando se empregue acuse de recibo</string>
     <string name="title_advanced_lookup_mx">Comprobar as direccións de email dos destinatarios antes de enviar</string>
-    <string name="title_advanced_send_delayed">Adiar o envío de mensaxes</string>
     <string name="title_advanced_metered">Usar conexións con límite de datos</string>
     <string name="title_advanced_download">Baixar automaticamente mensaxes e anexos en conexións con límite de datos até</string>
     <string name="title_advanced_roaming">Baixar mensaxes e anexos con roaming</string>
@@ -370,7 +369,6 @@
     <string name="title_advanced_autounstar">Quitar as estrelas automaticamente das mensaxes ao movelas</string>
     <string name="title_advanced_auto_important">Marcar como importantes as mensaxes con estrela</string>
     <string name="title_advanced_reset_importance">Reiniciar a importancia ao mover as mensaxes</string>
-    <string name="title_advanced_discard_delete">Borrar permanentemente os borradores descartados</string>
     <string name="title_advanced_default_snooze">Tempo predeterminado do adiamento</string>
     <string name="title_advanced_notifications">Xestionar notificacións</string>
     <string name="title_advanced_notifications_default">Canal por omisión</string>
@@ -497,7 +495,6 @@
     <string name="title_advanced_parse_classes_hint">Esto fará máis precisa a mostra das mensaxes, pero posiblemente cun atraso</string>
     <string name="title_advanced_language_detection_hint">A detección da linguaxe depende do fabricante do dispositivo</string>
     <string name="title_advanced_autoexpand_hint">Abrir automaticamente unha mensaxe cando é a única ou é a única mensaxe non lida nunha conversa</string>
-    <string name="title_advanced_autoseen_hint">A marca automática de mensaxes como lidas ao seren expandidas pódese desactivar nas configuracións individuais das contas</string>
     <string name="title_advanced_autoclose_hint">Pechar automaticamente as conversas cando todas as mensaxes foron arquivadas, enviadas ou botadas ao lixo</string>
     <string name="title_advanced_sender_hint">Moitos provedores non permiten modificar os enderezos dos remitentes</string>
     <string name="title_advanced_bcc_hint">O enderezo non vai ser mostrado, pero será engadido ao enviar</string>
@@ -830,7 +827,6 @@
     <string name="title_third_party">A súa versión é de terceiros</string>
     <string name="title_expand_warning">Expandir esta mensaxe descargará %1$s</string>
     <string name="title_download_message">Descargando &#8230;</string>
-    <string name="title_reformatted">Esta é a vista de mensaxe reformatada. Pode tocar na icona &#x26F6; para ver a mensaxe orixinal e agochar esta mensaxe.</string>
     <string name="title_compose">Redactar</string>
     <string name="title_submitter">Enviada por:</string>
     <string name="title_delivered_to">Enviada a:</string>
@@ -1058,7 +1054,6 @@
     <string name="title_rule_subject">O asunto contén</string>
     <string name="title_rule_attachments">Ten anexos</string>
     <string name="title_rule_header">A cabeceira contén</string>
-    <string name="title_rule_time">Tempo entre</string>
     <string name="title_rule_regex">Expresión regular</string>
     <string name="title_rule_and">E</string>
     <string name="title_rule_action">Acción</string>

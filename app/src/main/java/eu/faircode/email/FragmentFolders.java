@@ -85,7 +85,7 @@ public class FragmentFolders extends FragmentBase {
     private boolean imap = false;
     private boolean primary;
     private boolean show_hidden = false;
-    private boolean show_flagged;
+    private boolean show_flagged = false;
     private AdapterFolder adapter;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -107,6 +107,7 @@ public class FragmentFolders extends FragmentBase {
         cards = prefs.getBoolean("cards", true);
         beige = prefs.getBoolean("beige", true);
         compact = prefs.getBoolean("compact_folders", false);
+        show_hidden = false; // prefs.getBoolean("hidden_folders", false);
         show_flagged = prefs.getBoolean("flagged_folders", false);
 
         setTitle(R.string.page_folders);
@@ -186,6 +187,12 @@ public class FragmentFolders extends FragmentBase {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Boolean pop = (Boolean) v.getTag();
+                if (pop != null && pop) {
+                    ToastEx.makeText(v.getContext(), R.string.title_pop_folders, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 Bundle args = new Bundle();
                 args.putLong("account", account);
                 FragmentFolder fragment = new FragmentFolder();
@@ -258,8 +265,11 @@ public class FragmentFolders extends FragmentBase {
         super.onActivityCreated(savedInstanceState);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        grpHintActions.setVisibility(prefs.getBoolean("folder_actions", false) ? View.GONE : View.VISIBLE);
-        grpHintSync.setVisibility(prefs.getBoolean("folder_sync", false) ? View.GONE : View.VISIBLE);
+        boolean folder_actions = prefs.getBoolean("folder_actions", false);
+        boolean folder_sync = prefs.getBoolean("folder_sync", false);
+
+        grpHintActions.setVisibility(folder_actions ? View.GONE : View.VISIBLE);
+        grpHintSync.setVisibility(folder_sync ? View.GONE : View.VISIBLE);
 
         DB db = DB.getInstance(getContext());
 
@@ -287,11 +297,11 @@ public class FragmentFolders extends FragmentBase {
                     else
                         fabError.hide();
 
-                    if (!primary) {
-                        if (account == null || account.protocol != EntityAccount.TYPE_IMAP)
-                            fabAdd.hide();
-                        else
-                            fabAdd.show();
+                    if (account == null || primary)
+                        fabAdd.hide();
+                    else {
+                        fabAdd.setTag(!imap);
+                        fabAdd.show();
                     }
                 }
             });
@@ -514,6 +524,10 @@ public class FragmentFolders extends FragmentBase {
 
     private void onMenuShowHidden() {
         show_hidden = !show_hidden;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefs.edit().putBoolean("hidden_folders", show_hidden).apply();
+
         getActivity().invalidateOptionsMenu();
         adapter.setShowHidden(show_hidden);
     }

@@ -227,7 +227,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && // should be system whitelisted
                     share.resolveActivity(context.getPackageManager()) != null)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_share, 2, R.string.title_share);
-            if (ShortcutManagerCompat.isRequestPinShortcutSupported(context))
+            if (Shortcuts.can(context))
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_pin, 3, R.string.title_pin);
             popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_edit_name, 4, R.string.title_advanced_edit_name);
             popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, 5, R.string.title_delete);
@@ -363,7 +363,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     }
 
     public void set(@NonNull List<TupleContactEx> contacts) {
-        Log.i("Set contacts=" + contacts.size());
+        Log.i("Set contacts=" + contacts.size() + " search=" + search);
 
         all = contacts;
 
@@ -408,6 +408,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     }
 
     public void search(String query) {
+        Log.i("Contacts query=" + query);
         search = query;
         set(all);
     }

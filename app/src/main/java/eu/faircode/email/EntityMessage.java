@@ -24,10 +24,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.AlarmManagerCompat;
 import androidx.preference.PreferenceManager;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -175,6 +175,7 @@ public class EntityMessage implements Serializable {
     public Boolean verified = false;
     public String preview;
     public String notes;
+    public Integer notes_color;
     @NonNull
     public Boolean signature = true;
     public Long sent; // compose = null
@@ -452,9 +453,10 @@ public class EntityMessage implements Serializable {
     }
 
     static void snooze(Context context, long id, Long wakeup) {
-        Intent snoozed = new Intent(context, ServiceUI.class);
-        snoozed.setAction("wakeup:" + id);
-        PendingIntent pi = PendingIntent.getService(context, ServiceUI.PI_WAKEUP, snoozed, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent snoozed = new Intent(context, ServiceSynchronize.class);
+        snoozed.setAction("unsnooze:" + id);
+        PendingIntent pi = PendingIntentCompat.getForegroundService(
+                context, ServiceSynchronize.PI_UNSNOOZE, snoozed, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (wakeup == null || wakeup == Long.MAX_VALUE) {
@@ -462,10 +464,7 @@ public class EntityMessage implements Serializable {
             am.cancel(pi);
         } else {
             Log.i("Set snooze id=" + id + " wakeup=" + new Date(wakeup));
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-                am.set(AlarmManager.RTC_WAKEUP, wakeup, pi);
-            else
-                am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeup, pi);
+            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, wakeup, pi);
         }
     }
 
@@ -536,6 +535,7 @@ public class EntityMessage implements Serializable {
                     this.verified == other.verified &&
                     Objects.equals(this.preview, other.preview) &&
                     Objects.equals(this.notes, other.notes) &&
+                    Objects.equals(this.notes_color, other.notes_color) &&
                     this.signature.equals(other.signature) &&
                     Objects.equals(this.sent, other.sent) &&
                     this.received.equals(other.received) &&

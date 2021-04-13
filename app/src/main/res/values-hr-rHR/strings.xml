@@ -146,7 +146,6 @@
     <string name="title_setup_grant_again">Odobri potrebne dozvola</string>
     <string name="title_setup_permissions">Odobri dopuštenja</string>
     <string name="title_setup_permissions_remark">Pristup informacijama o kontaktu (izborno)</string>
-    <string name="title_setup_doze_remark">Za pouzdano primanje e-pošte</string>
     <string name="title_setup_doze_battery">Visoka potrošnja baterije?</string>
     <string name="title_setup_doze_stopped">Sinkronizacija zaustavljena?</string>
     <string name="title_setup_data">Ušteda podataka je omogućena</string>
@@ -215,19 +214,20 @@
     <string name="title_advanced_suggest_local">Predložiti lokalno pohranjene kontakte</string>
     <string name="title_advanced_suggest_sent">Predložiti adrese pronađene u poslanim porukama</string>
     <string name="title_advanced_suggest_received">Predložiti adrese pronađene u primljenim porukama</string>
+    <string name="title_advanced_send_reminders">Prikaži podsjetnike</string>
+    <string name="title_advanced_send_delayed">Odgoda slanja poruka</string>
     <string name="title_advanced_compose_font">Zadani font</string>
     <string name="title_advanced_prefix_once">Dodati predmet samo jednom prilikom odgovaranja ili prosljeđivanja</string>
     <string name="title_advanced_extended_reply">Koristi prošireno zaglavlje odgovora / naprijed</string>
     <string name="title_advanced_quote_reply">Citiraj odgovoreni tekst</string>
     <string name="title_advanced_signature_location">Položaj potpisa</string>
+    <string name="title_advanced_discard_delete">Pri odbacivanju skice trajno izbrisati skicu</string>
     <string name="title_advanced_plain_only">Standardno šaljite samo običan tekst</string>
     <string name="title_advanced_flow">\'format teče\' za obični tekst</string>
-    <string name="title_advanced_receipt">Kada tražite potvrdu</string>
     <string name="title_advanced_usenet_signature">Usenet konvencija potpisa</string>
     <string name="title_advanced_remove_signatures">Uklonite prepoznate potpise</string>
-    <string name="title_advanced_send_reminders">Prikaži podsjetnike</string>
+    <string name="title_advanced_receipt">Kada tražite potvrdu</string>
     <string name="title_advanced_lookup_mx">Provjeriva adrese e-pošte primatelja prije slanja</string>
-    <string name="title_advanced_send_delayed">Odgoda slanja poruka</string>
     <string name="title_advanced_metered">Koristiti mjerne veze</string>
     <string name="title_advanced_download">Automatski preuzimati poruke i privitke na izmjerenu vezu do</string>
     <string name="title_advanced_roaming">Download messages and attachments while roaming</string>
@@ -294,7 +294,6 @@
     <string name="title_advanced_autounstar">Automatsko uklanjanje zvijezda iz poruka prema pokretu</string>
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_reset_importance">Povrati važnost pri pokretu poruke</string>
-    <string name="title_advanced_discard_delete">Pri odbacivanju skice trajno izbrisati skicu</string>
     <string name="title_advanced_default_snooze">Zadano vrijeme odgode</string>
     <string name="title_advanced_notifications">Upravljaj obavijestima</string>
     <string name="title_advanced_notifications_default">Zadani kanal</string>
@@ -376,7 +375,6 @@
     <string name="title_advanced_preview_issue">Pomicanje može biti sporo zbog pogreške u nekim verzijama Androida kada je broj linija veći od jedan</string>
     <string name="title_advanced_inline_hint">Inline slike su slike uključene u poruku</string>
     <string name="title_advanced_autoexpand_hint">Automatski otvori poruku ako postoji samo jedna poruka ili samo jedna nepročitana poruka u razgovoru</string>
-    <string name="title_advanced_autoseen_hint">Automatsko označavanje poruka pročitanih pri širenju može se onemogućiti u pojedinačnim postavkama računa</string>
     <string name="title_advanced_autoclose_hint">Automatski zatvori razgovore kada su sve poruke arhivirane, poslane ili stavljene u otpad</string>
     <string name="title_advanced_sender_hint">Većina pružatelja usluga ne dopušta modificirane adrese pošaljitelja</string>
     <string name="title_advanced_display_harmful_hint">Onemogućavanje ove opcije može biti štetno za vašu privatnost</string>
@@ -768,7 +766,6 @@
     <string name="title_rule_subject">Predmet sadrži</string>
     <string name="title_rule_attachments">Ima priloge</string>
     <string name="title_rule_header">Zaglavlje sadrži</string>
-    <string name="title_rule_time">Vrijeme između</string>
     <string name="title_rule_regex">Regularni izraz</string>
     <string name="title_rule_and">I</string>
     <string name="title_rule_action">Akcija</string>

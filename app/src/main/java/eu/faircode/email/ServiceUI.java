@@ -19,17 +19,14 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
-import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.AlarmManagerCompat;
 import androidx.core.app.RemoteInput;
 import androidx.preference.PreferenceManager;
 
@@ -57,15 +54,10 @@ public class ServiceUI extends IntentService {
     static final int PI_REPLY_DIRECT = 6;
     static final int PI_FLAG = 7;
     static final int PI_SEEN = 8;
-    static final int PI_SNOOZE = 9;
-    static final int PI_IGNORED = 10;
-    static final int PI_THREAD = 11;
-    static final int PI_WAKEUP = 12;
-    static final int PI_SYNC = 13;
-    static final int PI_BANNER = 14;
-    static final int PI_EXISTS = 15;
-
-    static final int HIDE_BANNER = 3; // weeks
+    static final int PI_HIDE = 9;
+    static final int PI_SNOOZE = 10;
+    static final int PI_IGNORED = 11;
+    static final int PI_THREAD = 12;
 
     public ServiceUI() {
         this(ServiceUI.class.getName());
@@ -148,6 +140,11 @@ public class ServiceUI extends IntentService {
                     onSeen(id);
                     break;
 
+                case "hide":
+                    cancel(group, id);
+                    onHide(id);
+                    break;
+
                 case "snooze":
                     cancel(group, id);
                     onSnooze(id);
@@ -159,26 +156,17 @@ public class ServiceUI extends IntentService {
                     break;
 
                 case "wakeup":
-                    // AlarmManager.RTC_WAKEUP
-                    // When the alarm is dispatched, the app will also be added to the system's temporary whitelist
-                    // for approximately 10 seconds to allow that application to acquire further wake locks in which to complete its work.
-                    // https://developer.android.com/reference/android/app/AlarmManager
-                    onWakeup(id);
+                    // ignore
                     break;
 
                 case "sync":
-                    boolean reschedule = intent.getBooleanExtra("reschedule", false);
-                    onSync(id, reschedule);
+                    onSync(id);
                     break;
 
                 case "exists":
-                    onExists(id);
+                    // ignore
                     break;
 
-                case "daily":
-                case "banner":
-                    onBanner();
-                    break;
                 default:
                     throw new IllegalArgumentException("Unknown UI action: " + parts[0]);
             }
@@ -397,6 +385,25 @@ public class ServiceUI extends IntentService {
         }
     }
 
+    private void onHide(long id) {
+        DB db = DB.getInstance(this);
+        try {
+            db.beginTransaction();
+
+            EntityMessage message = db.message().getMessage(id);
+            if (message == null)
+                return;
+
+            db.message().setMessageSnoozed(message.id, Long.MAX_VALUE);
+            db.message().setMessageUiIgnored(message.id, true);
+
+            db.setTransactionSuccessful();
+
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     private void onSnooze(long id) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         int notify_snooze_duration = prefs.getInt("default_snooze", 1);
@@ -457,86 +464,7 @@ public class ServiceUI extends IntentService {
         }
     }
 
-    private void onWakeup(long id) {
-        EntityFolder folder;
-
-        DB db = DB.getInstance(this);
-        try {
-            db.beginTransaction();
-
-            EntityMessage message = db.message().getMessage(id);
-            if (message == null)
-                return;
-
-            folder = db.folder().getFolder(message.folder);
-            if (folder == null)
-                return;
-
-            if (EntityFolder.OUTBOX.equals(folder.type)) {
-                Log.i("Delayed send id=" + message.id);
-                if (message.ui_snoozed != null) {
-                    db.message().setMessageSnoozed(message.id, null);
-                    EntityOperation.queue(this, message, EntityOperation.SEND);
-                }
-            } else {
-                if (folder.notify) {
-                    List<EntityAttachment> attachments = db.attachment().getAttachments(id);
-
-                    // A new message ID is needed for a new (wearable) notification
-                    db.message().deleteMessage(id);
-
-                    message.id = null;
-                    message.fts = false;
-                    message.id = db.message().insertMessage(message);
-
-                    if (message.content) {
-                        File source = EntityMessage.getFile(this, id);
-                        File target = message.getFile(this);
-                        try {
-                            Helper.copy(source, target);
-                        } catch (IOException ex) {
-                            Log.e(ex);
-                            db.message().resetMessageContent(message.id);
-                        }
-                    }
-
-                    for (EntityAttachment attachment : attachments) {
-                        File source = attachment.getFile(this);
-
-                        attachment.id = null;
-                        attachment.message = message.id;
-                        attachment.progress = null;
-                        attachment.id = db.attachment().insertAttachment(attachment);
-
-                        if (attachment.available) {
-                            File target = attachment.getFile(this);
-                            try {
-                                Helper.copy(source, target);
-                            } catch (IOException ex) {
-                                Log.e(ex);
-                                db.attachment().setError(attachment.id, Log.formatThrowable(ex, false));
-                            }
-                        }
-                    }
-                }
-
-                db.message().setMessageSnoozed(message.id, null);
-                if (!message.ui_ignored) {
-                    db.message().setMessageUnsnoozed(message.id, true);
-                    EntityOperation.queue(this, message, EntityOperation.SEEN, false, false);
-                }
-            }
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
-        if (EntityFolder.OUTBOX.equals(folder.type))
-            ServiceSend.start(this);
-    }
-
-    private void onSync(long aid, boolean reschedule) {
+    private void onSync(long aid) {
         DB db = DB.getInstance(this);
         try {
             db.beginTransaction();
@@ -554,104 +482,10 @@ public class ServiceUI extends IntentService {
         } finally {
             db.endTransaction();
         }
-
-        if (reschedule) {
-            long now = new Date().getTime();
-            long[] schedule = ServiceSynchronize.getSchedule(this);
-            boolean poll = (schedule == null || (now >= schedule[0] && now < schedule[1]));
-            schedule(this, poll, null);
-        }
-    }
-
-    private void onExists(long id) {
-        DB db = DB.getInstance(this);
-
-        try {
-            db.beginTransaction();
-
-            // Message could have been deleted in the meantime
-            EntityMessage message = db.message().getMessage(id);
-            if (message == null)
-                return;
-
-            EntityOperation.queue(this, message, EntityOperation.EXISTS, true);
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-    }
-
-    private void onBanner() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().remove("banner_hidden").apply();
     }
 
     static void sync(Context context, Long account) {
         context.startService(new Intent(context, ServiceUI.class)
                 .setAction(account == null ? "sync" : "sync:" + account));
-    }
-
-    static void schedule(Context context, boolean poll, Long at) {
-        Intent intent = new Intent(context, ServiceUI.class);
-        intent.setAction("sync");
-        intent.putExtra("reschedule", true);
-        PendingIntent piSync = PendingIntent.getService(
-                context, ServiceUI.PI_SYNC, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.cancel(piSync);
-
-        if (at == null) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean enabled = prefs.getBoolean("enabled", true);
-            int pollInterval = prefs.getInt("poll_interval", ServiceSynchronize.DEFAULT_POLL_INTERVAL);
-            if (poll && enabled && pollInterval > 0) {
-                long now = new Date().getTime();
-                long interval = pollInterval * 60 * 1000L;
-                long next = now + interval - now % interval + 30 * 1000L;
-                if (next < now + interval / 5)
-                    next += interval;
-
-                EntityLog.log(context, "Poll next=" + new Date(next));
-
-                AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, piSync);
-            }
-        } else
-            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, at, piSync);
-    }
-
-    private static PendingIntent getBannerIntent(Context context) {
-        Intent banner = new Intent(context, ServiceUI.class);
-        banner.setAction("banner");
-        return PendingIntent.getService(context, ServiceUI.PI_BANNER, banner, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    static void scheduleBanner(Context context, boolean set) {
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (set) {
-            long now = new Date().getTime();
-            long interval = AlarmManager.INTERVAL_DAY * HIDE_BANNER * 7;
-            long due = interval - (now % interval);
-            long trigger = now + due;
-            Log.i("Set banner alarm at " + new Date(trigger) + " due=" + due);
-            am.set(AlarmManager.RTC, trigger, getBannerIntent(context));
-            prefs.edit().putLong("banner_hidden", trigger).apply();
-        } else {
-            Log.i("Cancel banner alarm");
-            am.cancel(getBannerIntent(context));
-            prefs.edit().remove("banner_hidden").apply();
-        }
-    }
-
-    static void boot(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        long banner_hidden = prefs.getLong("banner_hidden", 0);
-        if (banner_hidden > 0) {
-            Log.i("Restore banner alarm at " + new Date(banner_hidden));
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.set(AlarmManager.RTC, banner_hidden, getBannerIntent(context));
-        }
     }
 }

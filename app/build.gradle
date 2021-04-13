@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.bugsnag.android.gradle'
 
-def getVersionCode = { -> return 1537 }
-def getReleaseName = { -> return "\"Nullotitan\"" }
+def getVersionCode = { -> return 1555 }
+def getReleaseName = { -> return "\"Ornatops\"" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -239,13 +239,13 @@ configurations.all {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    def annotation_version = "1.1.0-rc01"
+    def annotation_version = "1.1.0"
     def core_version = "1.5.0-beta03"
-    def appcompat_version = "1.3.0-beta01"
-    def activity_version = "1.2.1"
-    def fragment_version = "1.3.1"
+    def appcompat_version = "1.3.0-rc01"
+    def activity_version = "1.2.2"
+    def fragment_version = "1.3.2"
     def webkit_version = "1.4.0"
-    def recyclerview_version = "1.2.0-beta02"
+    def recyclerview_version = "1.2.0"
     def coordinatorlayout_version = "1.1.0"
     def constraintlayout_version = "2.0.2"
     def material_version = "1.3.0"
@@ -253,13 +253,13 @@ dependencies {
     def lbm_version = "1.0.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.0.1"
-    def lifecycle_version = "2.3.0"
+    def lifecycle_version = "2.4.0-alpha01"
     def lifecycle_extensions_version = "2.2.0"
     def sqlite_version = "2.1.0"
-    def room_version = "2.3.0-beta03"
+    def room_version = "2.3.0-rc01"
     def paging_version = "2.1.2" // 3.0.0-alpha11
     def preference_version = "1.1.1"
-    def work_version = "2.5.0"
+    def work_version = "2.6.0-alpha01"
     def exif_version = "1.3.2"
     def biometric_version = "1.2.0-alpha03"
     def billingclient_version = "3.0.3"
@@ -271,7 +271,7 @@ dependencies {
     def openpgp_version = "12.0"
     def requery_version = "3.34.1"
     def badge_version = "1.1.22"
-    def bugsnag_version = "5.7.1"
+    def bugsnag_version = "5.9.0"
     def biweekly_version = "0.6.6"
     def relinker_version = "1.4.1"
     def markwon_version = "4.6.2"

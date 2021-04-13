@@ -229,7 +229,9 @@ public class ActivityBilling extends ActivityBase implements PurchasesUpdatedLis
                 reportError(result, "IAB launch billing flow");
         } else
             try {
-                Uri uri = Uri.parse(BuildConfig.PRO_FEATURES_URI + "?challenge=" + getChallenge(this));
+                Uri uri = Uri.parse(BuildConfig.PRO_FEATURES_URI +
+                        "?challenge=" + getChallenge(this) +
+                        "&version=" + BuildConfig.VERSION_CODE);
                 Helper.view(this, uri, true);
             } catch (NoSuchAlgorithmException ex) {
                 Log.unexpectedError(getSupportFragmentManager(), ex);
@@ -375,6 +377,7 @@ public class ActivityBilling extends ActivityBase implements PurchasesUpdatedLis
                             " purchased=" + isPurchased(purchase) +
                             " valid=" + isPurchaseValid(purchase) +
                             " time=" + new Date(time));
+                    Log.i("IAB json=" + purchase.getOriginalJson());
 
                     //if (new Date().getTime() - purchase.getPurchaseTime() > 3 * 60 * 1000L) {
                     //    consumePurchase(purchase);
