@@ -224,7 +224,7 @@ class Shortcuts {
     }
 
     @NonNull
-    static ShortcutInfoCompat.Builder getMessage(Context context, EntityMessage message, ContactInfo[] contactInfo) {
+    static ShortcutInfoCompat.Builder getShortcut(Context context, EntityMessage message, ContactInfo[] contactInfo) {
         Intent thread = new Intent(context, ActivityView.class);
         thread.setAction("thread:" + message.id);
         thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -233,6 +233,7 @@ class Shortcuts {
         thread.putExtra("thread", message.thread);
         thread.putExtra("filter_archive", true);
         thread.putExtra("pinned", true);
+        thread.putExtra("msgid", message.msgid);
 
         Bitmap bm;
         if (contactInfo[0].hasPhoto())
@@ -264,7 +265,7 @@ class Shortcuts {
     }
 
     @NonNull
-    static ShortcutInfoCompat.Builder getFolder(Context context, EntityFolder folder) {
+    static ShortcutInfoCompat.Builder getShortcut(Context context, EntityFolder folder) {
         Intent view = new Intent(context, ActivityView.class);
         view.setAction("folder:" + folder.id);
         view.putExtra("account", folder.account);

@@ -147,6 +147,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "sync_kept",
             "sync_folders",
             "sync_shared_folders",
+            "download_headers", "download_eml",
             "prefer_ip4", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl" // force reconnect
@@ -2130,7 +2131,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             if (!currentThread.equals(accountThread) && accountThread != null)
-                Log.e(account.name + " orphan thread id=" + currentThread + "/" + accountThread);
+                Log.w(account.name + " orphan thread id=" + currentThread + "/" + accountThread);
         } finally {
             EntityLog.log(this, account.name + " stopped");
             wlAccount.release();

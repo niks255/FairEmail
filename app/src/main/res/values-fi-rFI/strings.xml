@@ -11,6 +11,7 @@
     <string name="channel_service">Vastaanottaminen</string>
     <string name="channel_send">Lähettäminen</string>
     <string name="channel_notification">Sähköposti</string>
+    <string name="channel_progress">Edistyminen</string>
     <string name="channel_update">Päivitykset</string>
     <string name="channel_warning">Varoitukset</string>
     <string name="channel_error">Virheet</string>
@@ -19,6 +20,7 @@
     <string name="channel_service_description">Tilien synkronointi ja seuranta</string>
     <string name="channel_send_description">Viestien lähettäminen</string>
     <string name="channel_notification_description">Uusien viestien ilmoitukset</string>
+    <string name="channel_progress_description">Pitkäkestoisempien toimintojen edistymisilmoitukset</string>
     <plurals name="page_conversation">
         <item quantity="one">Keskustelu</item>
         <item quantity="other">Keskustelut</item>
@@ -119,13 +121,12 @@
     <string name="title_setup_quick">Pika-asennus</string>
     <string name="title_setup_intro">Tilin asettaminen sisältää vain kolme vaihetta, joiden jälkeen voit lähettää ja vastaanottaa sähköpostia</string>
     <string name="title_setup_simple">Muita valintoja ei tarvitse muuttaa</string>
-    <string name="title_setup_quick_accounts">Lisää tilejä</string>
     <string name="title_setup_quick_support">Jotkin palveluntarjoajat tekevät tilin lisäämisestä vaikeaa. Älä syytä tästä FairEmailia, vaan kysy sen sijaan tukea.</string>
     <string name="title_setup_quick_hint">Pika-asennus hakee asetustiedot osoitteesta autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-palvelin viestien vastaanottamiseen</string>
     <string name="title_setup_quick_smtp">SMTP-palvelin viestien lähettämiseen</string>
     <string name="title_setup_wizard">Asetusvelho</string>
-    <string name="title_setup_wizard_multiple">Asetusvelhoa voidaan käyttää moneen kertaan useamman tilin asettamiseksi</string>
+    <string name="title_setup_wizard_multiple">Asetusvelholla voidaan asettaa monta tiliä käyttämällä sitä useamman kerran</string>
     <string name="title_setup_wizard_new">Tarvitsen uuden sähköpostiosoitteen</string>
     <string name="title_setup_manual">Manuaalinen asettaminen ja tiliasetukset</string>
     <string name="title_setup_account_remark">Vastaanota sähköpostia</string>
@@ -353,6 +354,7 @@
     <string name="title_advanced_collapse_quotes">Tiivistä lainattu teksti</string>
     <string name="title_advanced_image_placeholders">Näytä kuvien paikkamerkit</string>
     <string name="title_advanced_images_inline">Näytä tekstiin upotetut kuvat oletuksena</string>
+    <string name="title_advanced_button_extra">Näytä ylimääräiset painikkeet viestin alareunassa</string>
     <string name="title_advanced_seekbar">Näytä suhteellinen sijainti keskustelussa pisteellä</string>
     <string name="title_advanced_actionbar">Näytä keskustelun toimintopalkki</string>
     <string name="title_advanced_actionbar_color">Käytä tilin väriä taustavärinä keskustelun toimintopalkissa</string>
@@ -555,6 +557,7 @@
     <string name="title_identity_email">Sähköpostiosoitteesi</string>
     <string name="title_identity_color_hint">Identiteettien värit ovat etusijalla ennen kansioiden ja tilien värejä</string>
     <string name="title_advanced_sender">Salli lähetysosoitteen muokkaaminen</string>
+    <string name="title_advanced_sender_name">Käytä nimeä, kun lähetysosoitetta on muokattu</string>
     <string name="title_advanced_sender_regex">Regex lähettäjän sähköpostiosoitteen käyttäjätunnuksen vastaavuuden määrittämiseen</string>
     <string name="title_identity_reply_to">Vastausosoite</string>
     <string name="title_identity_unicode">Käytä Unicode-tiedonsiirtoa</string>
@@ -571,6 +574,7 @@
     <string name="title_account_interval_hint">Push-viestien tai uusien viestien tarkistuksen aikaväli</string>
     <string name="title_account_partial_fetch_hint">Kytke tämä pois ainoastaan, jos ilmenee tyhjiä viestejä tai korruptoituneita liitteitä</string>
     <string name="title_color">Väri</string>
+    <string name="title_transparent">Läpinäkyvä</string>
     <string name="title_account_ondemand">Synkronoi manuaalisesti</string>
     <string name="title_account_notify">Erilliset ilmoitukset</string>
     <string name="title_account_left">Pyyhkäisy vasemmalle</string>
@@ -609,7 +613,7 @@
     <string name="title_received_header">Käytä \'Received\'-tunnistetta</string>
     <string name="title_date_header">Käytä \'Date\'-tunnistetta (lähetysaika)</string>
     <string name="title_date_remark">Muutokset vaikuttavat vain uusiin viesteihin</string>
-    <string name="title_related_identity">Lisää liittyvä identiteetti</string>
+    <string name="title_related_identity">Lisää vastaava identiteetti (SMTP-palvelin)</string>
     <string name="title_check">Tarkista</string>
     <string name="title_trust">Luota palvelimen sertifikaattiin, jolla on sormenjälki %1$s</string>
     <string name="title_no_name">Nimi puuttuu</string>
@@ -667,6 +671,8 @@
     <string name="title_empty_spam">Tyhjennä roskapostit</string>
     <string name="title_edit_properties">Muokkaa ominaisuuksia</string>
     <string name="title_edit_rules">Muokkaa sääntöjä</string>
+    <string name="title_execute_rules">Suorita säännöt</string>
+    <string name="title_export_messages">Vie viestejä</string>
     <string name="title_create_channel">Luo ilmoituskanava</string>
     <string name="title_edit_channel">Muokkaa ilmoituskanavaa</string>
     <string name="title_delete_channel">Poista ilmoituskanava</string>
@@ -879,6 +885,7 @@
     <string name="title_via_identity">Kautta:</string>
     <string name="title_sent">Lähetetty:</string>
     <string name="title_received">Vastaanotettu:</string>
+    <string name="title_date">Päivämäärä:</string>
     <string name="title_stored">Tallennettu:</string>
     <string name="title_size">Koko:</string>
     <string name="title_language">Kieli:</string>

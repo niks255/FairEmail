@@ -278,12 +278,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private boolean filter_archive;
     private boolean found;
     private boolean pinned;
+    private String msgid;
     private BoundaryCallbackMessages.SearchCriteria criteria = null;
     private boolean pane;
 
     private WebView printWebView = null;
 
-    private long message = -1;
     private OpenPgpServiceConnection pgpService;
 
     private boolean cards;
@@ -375,6 +375,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             "time", "unread", "starred", "priority"
     ));
 
+    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "decrypt");
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -390,6 +392,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         filter_archive = args.getBoolean("filter_archive", true);
         found = args.getBoolean("found", false);
         pinned = args.getBoolean("pinned", false);
+        msgid = args.getString("msgid");
         criteria = (BoundaryCallbackMessages.SearchCriteria) args.getSerializable("criteria");
         pane = args.getBoolean("pane", false);
         primary = args.getLong("primary", -1);
@@ -933,7 +936,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fabReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onReply();
+                onReply(false);
+            }
+        });
+
+        fabReply.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onReply(true);
+                return true;
             }
         });
 
@@ -2363,7 +2374,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
     };
 
-    private void onReply() {
+    private void onReply(boolean sender) {
         if (values.containsKey("expanded") && values.get("expanded").size() > 0) {
             long id = values.get("expanded").get(0);
             int pos = adapter.getPositionForKey(id);
@@ -2373,7 +2384,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             String selected = (holder == null ? null : holder.getSelectedText());
             if (message == null)
                 return;
-            onReply(message, selected, fabReply);
+
+            if (sender && message.content)
+                onMenuReply(message, "reply", selected);
+            else
+                onReply(message, selected, fabReply);
         }
     }
 
@@ -4888,6 +4903,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             TupleMessageEx single = null;
             TupleMessageEx see = null;
             TupleMessageEx flag = null;
+            TupleMessageEx pin = null;
             for (TupleMessageEx message : messages) {
                 if (message == null)
                     continue;
@@ -4909,6 +4925,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
                 }
 
+                if (pinned &&
+                        (message.id.equals(id) || Objects.equals(message.msgid, msgid)))
+                    pin = message;
+
                 if (message.folder == folder &&
                         !EntityFolder.OUTBOX.equals(message.folderType))
                     autoCloseCount++;
@@ -4920,7 +4940,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             // - sole message
             if (autoexpand) {
                 TupleMessageEx expand = null;
-                if (count == 1)
+                if (pin != null)
+                    expand = pin;
+                else if (count == 1)
                     expand = single;
                 else if (unseen == 1)
                     expand = see;
@@ -5570,12 +5592,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             boolean inline = true;
             List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
-            for (EntityAttachment attachment : attachments) {
+            for (EntityAttachment attachment : attachments)
                 if (attachment.encryption != null) {
                     inline = false;
-                    break;
+                    if (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
+                            !EntityAttachment.SMIME_MESSAGE.equals(attachment.encryption))
+                        db.attachment().deleteAttachment(attachment.id);
                 }
-            }
 
             if (inline) {
                 if (message.uid == null)
@@ -5830,7 +5853,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onStoreRaw(Intent intent) {
-        message = intent.getLongExtra("id", -1);
+        getArguments().putLong("selected_message", intent.getLongExtra("id", -1));
         String subject = intent.getStringExtra("subject");
         String name = (TextUtils.isEmpty(subject) ? "email" : Helper.sanitizeFilename(subject)) + ".eml";
 
@@ -6082,7 +6105,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private void onSaveRaw(Intent data) {
         Bundle args = new Bundle();
-        args.putLong("id", message);
+        args.putLong("id", getArguments().getLong("selected_message", -1L));
         args.putParcelable("uri", data.getData());
 
         new SimpleTask<Void>() {
@@ -6488,7 +6511,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
-        }.execute(this, args, "decrypt:pgp");
+        }.setExecutor(executor).execute(this, args, "decrypt:pgp");
     }
 
     private void onSmime(Bundle args) {
@@ -7063,7 +7086,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
                 return trace;
             }
-        }.execute(this, args, "decrypt:s/mime");
+        }.setExecutor(executor).execute(this, args, "decrypt:s/mime");
     }
 
     private static void checkPep(EntityMessage message, List<EntityAttachment> remotes, Context context) {

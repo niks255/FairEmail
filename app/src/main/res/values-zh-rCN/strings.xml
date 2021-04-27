@@ -11,6 +11,7 @@
     <string name="channel_service">接收</string>
     <string name="channel_send">发送</string>
     <string name="channel_notification">电子邮件</string>
+    <string name="channel_progress">进度</string>
     <string name="channel_update">更新</string>
     <string name="channel_warning">警告</string>
     <string name="channel_error">错误</string>
@@ -19,6 +20,7 @@
     <string name="channel_service_description">账户的同步与监测</string>
     <string name="channel_send_description">消息的发送</string>
     <string name="channel_notification_description">新消息通知</string>
+    <string name="channel_progress_description">较长时间运行活动的进度通知</string>
     <plurals name="page_conversation">
         <item quantity="other">会话</item>
     </plurals>
@@ -108,7 +110,7 @@
     <string name="title_setup_quick">快速设置</string>
     <string name="title_setup_intro">设置一个帐户只需三步，之后您就可以发送和接收电子邮件了</string>
     <string name="title_setup_simple">无需更改任何其他选项</string>
-    <string name="title_setup_quick_accounts">添加帐户</string>
+    <string name="title_setup_quick_accounts">添加或更改账户</string>
     <string name="title_setup_quick_support">有些邮件服务提供商很难添加账户，对此请不要怪责于 FairEmail, 而应向提供商寻求支持</string>
     <string name="title_setup_quick_hint">快速设置将从autoconfig.thunderbird.net 获取配置信息</string>
     <string name="title_setup_quick_imap">接收邮件的IMAP服务器</string>
@@ -274,6 +276,8 @@
     <string name="title_advanced_download">在计量的连接下自动下载邮件和附件, 最高可达</string>
     <string name="title_advanced_roaming">漫游时下载邮件和附件</string>
     <string name="title_advanced_rlah">国内漫游</string>
+    <string name="title_advanced_download_headers">下载所有消息标题</string>
+    <string name="title_advanced_download_eml">下载原始消息文件</string>
     <string name="title_advanced_validated">需要已验证 (已检查) 的连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
@@ -342,6 +346,7 @@
     <string name="title_advanced_collapse_quotes">折叠引用文本</string>
     <string name="title_advanced_image_placeholders">显示图像占位符</string>
     <string name="title_advanced_images_inline">自动显示内联图像</string>
+    <string name="title_advanced_button_extra">在消息底部显示额外按钮</string>
     <string name="title_advanced_seekbar">在底部用一个圆点显示会话相对位置</string>
     <string name="title_advanced_actionbar">显示对话操作栏</string>
     <string name="title_advanced_actionbar_color">使用账户颜色作为对话操作栏的背景色</string>
@@ -483,6 +488,7 @@
     <string name="title_advanced_metered_hint">计量连接通常是指移动连接或付费WiFi热点</string>
     <string name="title_advanced_metered_warning">禁用此选项将禁止在使用移动互联网连接时接收和发送消息</string>
     <string name="title_advanced_rlah_hint">假定欧盟境内不漫游</string>
+    <string name="title_advanced_usage_hint">这将增加电池、数据和存储空间的使用</string>
     <string name="title_advanced_tcp_keep_alive_hint">启用此选项可能会在某些设备上造成连接问题</string>
     <string name="title_advanced_validate_hint">这可能导致消息不同步，例如在使用 VPN 时，其他情况下也可能发生</string>
     <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
@@ -545,7 +551,7 @@
     <string name="title_identity_email">邮箱地址</string>
     <string name="title_identity_color_hint">身份颜色优先于文件夹和账户颜色</string>
     <string name="title_advanced_sender">允许编辑发件人地址</string>
-    <string name="title_advanced_sender_name">当发送者地址被编辑时使用名称</string>
+    <string name="title_advanced_sender_name">修改发件人地址后使用名称</string>
     <string name="title_advanced_sender_regex">用正则表达式来匹配收到的邮箱地址的用户名</string>
     <string name="title_identity_reply_to">回复给该地址</string>
     <string name="title_identity_unicode">使用 Unicode 传输</string>
@@ -562,7 +568,7 @@
     <string name="title_account_interval_hint">刷新连接推送消息的频率或检查新消息的频率</string>
     <string name="title_account_partial_fetch_hint">仅在空消息或损坏的附件时禁用此功能</string>
     <string name="title_color">颜色</string>
-    <string name="title_transparent" comment="title_transparent&#10;Title for color dialog choice&#10;Needs to be short (one word)&#10;">透明</string>
+    <string name="title_transparent">透明</string>
     <string name="title_account_ondemand">手动同步</string>
     <string name="title_account_notify">单独的通知</string>
     <string name="title_account_left">左滑</string>
@@ -601,7 +607,7 @@
     <string name="title_received_header">使用“已接收”标头</string>
     <string name="title_date_header">使用“日期”标头 (发送时间)</string>
     <string name="title_date_remark">更改将仅会应用于新消息</string>
-    <string name="title_related_identity">添加相关身份</string>
+    <string name="title_related_identity">添加相关身份 (SMTP 服务器)</string>
     <string name="title_check">检查</string>
     <string name="title_trust">信任具有指纹 %1$s的服务器证书</string>
     <string name="title_no_name">缺少名称</string>
@@ -659,6 +665,8 @@
     <string name="title_empty_spam">清空垃圾邮件</string>
     <string name="title_edit_properties">编辑属性</string>
     <string name="title_edit_rules">编辑规则</string>
+    <string name="title_execute_rules">执行规则</string>
+    <string name="title_export_messages">导出消息</string>
     <string name="title_create_channel">创建通知通道</string>
     <string name="title_edit_channel">编辑通知通道</string>
     <string name="title_delete_channel">删除通知通道</string>
@@ -742,6 +750,7 @@
     <string name="title_toggle_seen">切换已读状态</string>
     <string name="title_hide">隐藏</string>
     <string name="title_unhide">显示</string>
+    <string name="title_toggle_hide">隐藏/显示</string>
     <string name="title_flag">加注星标</string>
     <string name="title_flag_color">多彩星标 &#8230;</string>
     <string name="title_unflag">移除星标</string>
@@ -872,6 +881,7 @@
     <string name="title_via_identity">账号：</string>
     <string name="title_sent">发送时间：</string>
     <string name="title_received">接收时间：</string>
+    <string name="title_date">日期:</string>
     <string name="title_stored">消息存储于：</string>
     <string name="title_size">大小：</string>
     <string name="title_language">语言：</string>
@@ -1064,6 +1074,7 @@
     <string name="title_answer_group">模板组 (可选)</string>
     <string name="title_answer_standard">默认</string>
     <string name="title_answer_favorite">收藏</string>
+    <string name="title_answer_receipt" comment="title_answer_receipt&#10;Title for option to use template as read receipt text">用作已读回执</string>
     <string name="title_answer_hide">从菜单中隐藏</string>
     <string name="title_answer_text">模板内容</string>
     <string name="title_answer_placeholder">占位符</string>

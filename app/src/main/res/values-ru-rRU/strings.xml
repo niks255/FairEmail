@@ -11,6 +11,7 @@
     <string name="channel_service">Получение</string>
     <string name="channel_send">Отправка</string>
     <string name="channel_notification">Эл. почта</string>
+    <string name="channel_progress">Выполнение</string>
     <string name="channel_update">Обновления</string>
     <string name="channel_warning">Предупреждения</string>
     <string name="channel_error">Ошибки</string>
@@ -19,6 +20,7 @@
     <string name="channel_service_description">Синхронизация и отслеживание учётных записей</string>
     <string name="channel_send_description">Отправка сообщений</string>
     <string name="channel_notification_description">Уведомления о новых сообщениях</string>
+    <string name="channel_progress_description">Уведомления о выполнении длительных запущенных действий</string>
     <plurals name="page_conversation">
         <item quantity="one">Диалог</item>
         <item quantity="few">Диалоги</item>
@@ -142,7 +144,7 @@
     <string name="title_setup_quick">Быстрая настройка</string>
     <string name="title_setup_intro">Настройте учётную запись всего за три шага и сможете отправлять и получать письма</string>
     <string name="title_setup_simple">Нет необходимости менять другие параметры</string>
-    <string name="title_setup_quick_accounts">Добавить учётные записи</string>
+    <string name="title_setup_quick_accounts">Добавить или изменить учётные записи</string>
     <string name="title_setup_quick_support">Некоторые провайдеры затрудняют добавление учётной записи. Пожалуйста, не обвиняйте в этом FairEmail, а попросите поддержку.</string>
     <string name="title_setup_quick_hint">Быстрая настройка считывает информацию о конфигурации с autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-сервер для получения сообщений</string>
@@ -308,6 +310,8 @@
     <string name="title_advanced_download">Автоматически загружать сообщения и вложения для лимитного подключения до</string>
     <string name="title_advanced_roaming">Загружать сообщения и вложения в роуминге</string>
     <string name="title_advanced_rlah">В роуминге как дома</string>
+    <string name="title_advanced_download_headers">Загружать все заголовки сообщений</string>
+    <string name="title_advanced_download_eml">Загружать оригиналы сообщений</string>
     <string name="title_advanced_validated">Требовать проверенное подключение</string>
     <string name="title_advanced_timeout">Время ожидания подключения (сек.)</string>
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
@@ -376,6 +380,7 @@
     <string name="title_advanced_collapse_quotes">Сворачивать цитируемый текст</string>
     <string name="title_advanced_image_placeholders">Показывать места расположения изображений</string>
     <string name="title_advanced_images_inline">Автоматически показывать встроенные изображения</string>
+    <string name="title_advanced_button_extra">Показывать дополнительные кнопки внизу сообщения</string>
     <string name="title_advanced_seekbar">Показывать относительное положение диалога точкой</string>
     <string name="title_advanced_actionbar">Показывать панель управления диалогами</string>
     <string name="title_advanced_actionbar_color">Использовать цвет учётной записи в качестве фонового для панели действий в диалоге</string>
@@ -517,6 +522,7 @@
     <string name="title_advanced_metered_hint">Лимитированные подключения — это обычно мобильные сети или платные Wi-Fi</string>
     <string name="title_advanced_metered_warning">Отключение данной функции отключит получение и отправку сообщений при мобильном подключении к интернету</string>
     <string name="title_advanced_rlah_hint">Предполагать отсутствие роуминга внутри ЕС</string>
+    <string name="title_advanced_usage_hint">Это увеличит расход заряда батареи, трафика и места в хранилище</string>
     <string name="title_advanced_tcp_keep_alive_hint">Включение может вызвать проблемы с подключением на некоторых устройствах</string>
     <string name="title_advanced_validate_hint">Может привести к тому, что сообщения не синхронизируются, например, при использовании VPN, а также в других ситуациях</string>
     <string name="title_advanced_timeout_hint">Время ожидания для чтения/записи будет установлено в два раза больше времени ожидания подключения. Ещё большие значения могут увеличить расход аккумулятора.</string>
@@ -596,7 +602,7 @@
     <string name="title_account_interval_hint">Частота обновления соединения для push-сообщений или частота проверки новых сообщений</string>
     <string name="title_account_partial_fetch_hint">Отключайте это только в случае пустых сообщений или повреждённых вложений</string>
     <string name="title_color">Цвет</string>
-    <string name="title_transparent" comment="title_transparent&#10;Title for color dialog choice&#10;Needs to be short (one word)&#10;">Прозрачность</string>
+    <string name="title_transparent">Прозрачность</string>
     <string name="title_account_ondemand">Синхронизировать вручную</string>
     <string name="title_account_notify">Раздельные уведомления</string>
     <string name="title_account_left">Смахивание влево</string>
@@ -635,7 +641,7 @@
     <string name="title_received_header">Использовать заголовок \'Received\'</string>
     <string name="title_date_header">Использовать заголовок \'Date\' (время отправки)</string>
     <string name="title_date_remark">Изменения будут применены только к новым сообщениям</string>
-    <string name="title_related_identity">Добавить связанный идентификатор</string>
+    <string name="title_related_identity">Добавить связанный идентификатор (сервер SMTP)</string>
     <string name="title_check">Проверить</string>
     <string name="title_trust">Доверять сертификату сервера с отпечатком %1$s</string>
     <string name="title_no_name">Отсутствует имя</string>
@@ -693,6 +699,8 @@
     <string name="title_empty_spam">Очистить \"Спам\"</string>
     <string name="title_edit_properties">Изменить свойства</string>
     <string name="title_edit_rules">Редактировать правила</string>
+    <string name="title_execute_rules">Выполнить правила</string>
+    <string name="title_export_messages">Экспорт сообщений</string>
     <string name="title_create_channel">Создать канал уведомлений</string>
     <string name="title_edit_channel">Изменить канал уведомлений</string>
     <string name="title_delete_channel">Удалить канал уведомлений</string>
@@ -776,6 +784,7 @@
     <string name="title_toggle_seen">Прочитано/непрочитано</string>
     <string name="title_hide">Скрыть</string>
     <string name="title_unhide">Показать</string>
+    <string name="title_toggle_hide">Переключить видимость</string>
     <string name="title_flag">В избранное</string>
     <string name="title_flag_color">Цветная метка&#8230;</string>
     <string name="title_unflag">Удалить из избранного</string>
@@ -906,6 +915,7 @@
     <string name="title_via_identity">Через:</string>
     <string name="title_sent">Отправлено:</string>
     <string name="title_received">Получено:</string>
+    <string name="title_date">Дата:</string>
     <string name="title_stored">Сохранено:</string>
     <string name="title_size">Размер:</string>
     <string name="title_language">Язык:</string>
@@ -1098,6 +1108,7 @@
     <string name="title_answer_group">Группа шаблонов (необязательно)</string>
     <string name="title_answer_standard">По умолчанию</string>
     <string name="title_answer_favorite">Избранное</string>
+    <string name="title_answer_receipt" comment="title_answer_receipt&#10;Title for option to use template as read receipt text">Использовать как уведомление о прочтении</string>
     <string name="title_answer_hide">Скрыть из меню</string>
     <string name="title_answer_text">Текст шаблона</string>
     <string name="title_answer_placeholder">Заполнение</string>

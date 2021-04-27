@@ -11,6 +11,7 @@
     <string name="channel_service">Odbierz</string>
     <string name="channel_send">Wyślij</string>
     <string name="channel_notification">E-mail</string>
+    <string name="channel_progress">Postęp</string>
     <string name="channel_update">Aktualizacje</string>
     <string name="channel_warning">Ostrzeżenia</string>
     <string name="channel_error">Błędy</string>
@@ -19,6 +20,7 @@
     <string name="channel_service_description">Synchronizacja i monitorowanie kont</string>
     <string name="channel_send_description">Wysyłanie wiadomości</string>
     <string name="channel_notification_description">Powiadomienia o nowych wiadomościach</string>
+    <string name="channel_progress_description">Powiadomienia o postępach dotyczące dłuższych działań</string>
     <plurals name="page_conversation">
         <item quantity="one">Wątek</item>
         <item quantity="few">Wątki</item>
@@ -141,7 +143,7 @@
     <string name="title_setup_quick">Szybkie ustawienia</string>
     <string name="title_setup_intro">Założenie konta to tylko trzy kroki, po których możesz wysyłać i odbierać wiadomości e-mail</string>
     <string name="title_setup_simple">Nie ma potrzeby zmiany innych opcji</string>
-    <string name="title_setup_quick_accounts">Dodaj konto</string>
+    <string name="title_setup_quick_accounts">Dodaj lub zmień konta</string>
     <string name="title_setup_quick_support">Niektórzy dostawcy utrudniają dodanie konta. To nie jest wina FairEmail. W razie problemów poproś o pomoc.</string>
     <string name="title_setup_quick_hint">Szybka konfiguracja pobierze informacje o ustawieniach z autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">Serwer IMAP do odbierania wiadomości</string>
@@ -307,6 +309,8 @@
     <string name="title_advanced_download">Automatycznie pobieraj wiadomości i załączniki przy połączeniach taryfowych do</string>
     <string name="title_advanced_roaming">Pobieraj wiadomości i załączniki podczas roamingu</string>
     <string name="title_advanced_rlah">Roaming jak w domu</string>
+    <string name="title_advanced_download_headers">Pobierz wszystkie nagłówki wiadomości</string>
+    <string name="title_advanced_download_eml">Pobierz nieprzetworzone pliki wiadomości</string>
     <string name="title_advanced_validated">Wymagaj zweryfikowanego (sprawdzonego) połączenia</string>
     <string name="title_advanced_timeout">Limit czasu połączenia (sekundy)</string>
     <string name="title_advanced_prefer_ip4">Preferuj IPv4 nad IPv6</string>
@@ -375,6 +379,7 @@
     <string name="title_advanced_collapse_quotes">Zwiń cytowany tekst</string>
     <string name="title_advanced_image_placeholders">Pokaż symbole zastępcze obrazu</string>
     <string name="title_advanced_images_inline">Automatycznie pokazuj wstawione obrazy</string>
+    <string name="title_advanced_button_extra">Pokaż dodatkowe przyciski na dole wiadomości</string>
     <string name="title_advanced_seekbar">Pokaż względną pozycję rozmowy za pomocą kropki</string>
     <string name="title_advanced_actionbar">Pokaż pasek akcji konwersacji</string>
     <string name="title_advanced_actionbar_color">Użyj koloru konta jako koloru tła dla paska akcji rozmowy</string>
@@ -430,6 +435,7 @@
     <string name="title_advanced_notify_action_reply_direct">Odpowiedź</string>
     <string name="title_advanced_notify_action_flag">Oznacz gwiazdką</string>
     <string name="title_advanced_notify_action_seen">Odczytana</string>
+    <string name="title_advanced_notify_action_hide">Ukryj</string>
     <string name="title_advanced_notify_action_snooze">Odłóż</string>
     <string name="title_advanced_notify_remove">Usuń powiadomienie o nowej wiadomości po dotknięciu powiadomienia</string>
     <string name="title_advanced_notify_clear">Usuń powiadomienia o nowych wiadomościach podczas przeglądania listy wiadomości</string>
@@ -515,6 +521,7 @@
     <string name="title_advanced_metered_hint">Połączenia taryfowe to głównie połączenia komórkowe lub płatne hotspoty Wi-Fi</string>
     <string name="title_advanced_metered_warning">Wyłączenie tej opcji uniemożliwi odbieranie i wysyłanie wiadomości przy użyciu komórkowego połączenia internetowego</string>
     <string name="title_advanced_rlah_hint">Zakładając brak roamingu w UE</string>
+    <string name="title_advanced_usage_hint">Zwiększy to zużycie baterii, danych i przestrzeni dyskowej</string>
     <string name="title_advanced_tcp_keep_alive_hint">Włączenie tego może powodować problemy z połączeniem na niektórych urządzeniach</string>
     <string name="title_advanced_validate_hint">Może to skutkować brakiem synchronizacji wiadomości, na przykład podczas korzystania z VPN, ale również w innych sytuacjach</string>
     <string name="title_advanced_timeout_hint">Limit czasu odczytu/zapisu zostanie ustawiony na dwukrotność limitu czasu połączenia. Wyższe wartości spowodują większe zużycie baterii.</string>
@@ -577,6 +584,7 @@
     <string name="title_identity_email">Twój adres e-mail</string>
     <string name="title_identity_color_hint">Kolory tożsamości mają pierwszeństwo przed kolorami folderów i kont</string>
     <string name="title_advanced_sender">Zezwól na edycję adresu nadawcy</string>
+    <string name="title_advanced_sender_name">Użyj nazwy, gdy adres nadawcy został edytowany</string>
     <string name="title_advanced_sender_regex">Regex, aby dopasować nazwę użytkownika dla przychodzących adresów e-mail</string>
     <string name="title_identity_reply_to">Odpowiedz na adres</string>
     <string name="title_identity_unicode">Użyj transportu Unicode</string>
@@ -593,6 +601,7 @@
     <string name="title_account_interval_hint">Częstotliwość odświeżania połączenia dla wiadomości Push lub częstotliwość sprawdzania nowych wiadomości</string>
     <string name="title_account_partial_fetch_hint">Wyłącz to tylko w przypadku pustych wiadomości lub uszkodzonych załączników</string>
     <string name="title_color">Kolor</string>
+    <string name="title_transparent">Przeźroczysty</string>
     <string name="title_account_ondemand">Synchronizuj ręcznie</string>
     <string name="title_account_notify">Oddzielne powiadomienia</string>
     <string name="title_account_left">Przesuń w lewo</string>
@@ -631,7 +640,7 @@
     <string name="title_received_header">Użyj nagłówka \'Odbiorca\'</string>
     <string name="title_date_header">Użyj nagłówka \'Data\' (wysłany czas)</string>
     <string name="title_date_remark">Zmiany zostaną zastosowane tylko do nowych wiadomości</string>
-    <string name="title_related_identity">Dodaj powiązaną tożsamość</string>
+    <string name="title_related_identity">Dodaj powiązaną tożsamość (serwer SMTP)</string>
     <string name="title_check">Sprawdź</string>
     <string name="title_trust">Zaufaj certyfikatowi serwera za pomocą odcisku palca %1$s</string>
     <string name="title_no_name">Brak nazwy</string>
@@ -664,7 +673,9 @@
     <string name="title_backoff_until">Oczekiwanie po niepowodzeniu do: %1$s</string>
     <string name="title_storage_quota">Wykorzystane miejsce: %1$s/%2$s</string>
     <string name="title_pop_support">Protokół POP3 obsługuje tylko pobieranie i usuwanie wiadomości ze skrzynki odbiorczej. POP3 nie może oznaczać wiadomości jako przeczytanej, przenosić wiadomości itp. POP3 zużywa więcej energii baterii i danych niż IMAP. Dlatego rozważ użycie protokołu IMAP, gdy tylko jest to możliwe.</string>
+    <string name="title_pop_sent">Jeśli zgubisz swoje urządzenie lub zostanie skradzione, wysłane wiadomości mogą zostać utracone.</string>
     <string name="title_pop_warning">Jeśli serwer POP3 nie obsługuje polecenia UIDL, użycie danych może być wysokie. Dlatego odpowiednio dostosuj częstotliwość odpytywania poniżej.</string>
+    <string name="title_pop_folders">Protokół POP3 nie obsługuje tworzenia folderów</string>
     <string name="title_oauth_support">OAuth nie jest wspierane</string>
     <string name="title_review">Przejrzyj</string>
     <string name="title_hint_alias">Naciśnij i przytrzymaj tożsamość, aby wyświetlić opcje, np. kopiuj, aby utworzyć tożsamość aliasu</string>
@@ -687,6 +698,8 @@
     <string name="title_empty_spam">Opróżnij Spam</string>
     <string name="title_edit_properties">Edytuj właściwości</string>
     <string name="title_edit_rules">Edytuj reguły</string>
+    <string name="title_execute_rules">Wykonaj reguły</string>
+    <string name="title_export_messages">Eksportuj wiadomości</string>
     <string name="title_create_channel">Utwórz kanał powiadomień</string>
     <string name="title_edit_channel">Edytuj kanał powiadomień</string>
     <string name="title_delete_channel">Usuń kanał powiadomień</string>
@@ -770,6 +783,7 @@
     <string name="title_toggle_seen">Przeczytane/nieprzeczytane</string>
     <string name="title_hide">Ukryj</string>
     <string name="title_unhide">Pokaż</string>
+    <string name="title_toggle_hide">Ukryj</string>
     <string name="title_flag">Dodaj gwiazdkę</string>
     <string name="title_flag_color">Kolorowa gwiazdka &#8230;</string>
     <string name="title_unflag">Usuń gwiazdkę</string>
@@ -803,6 +817,7 @@
     <string name="title_raw_remaining">Surowe wiadomości (RAW) do pobrania: %1$d</string>
     <string name="title_ask_raw">Aby przesyłać wiadomości dalej, należy pobrać surowe (oryginalne) wiadomości z serwera. Wymaga to połączenia z Internetem.</string>
     <string name="title_buttons">Wybierz przyciski</string>
+    <string name="title_buttons_hint">Dostępne działania zależą od typu konta i konfiguracji</string>
     <string name="title_configure_buttons">Konfiguruj przyciski &#8230;</string>
     <string name="title_trash">Kosz</string>
     <string name="title_copy">Kopiuj &#8230;</string>
@@ -899,6 +914,7 @@
     <string name="title_via_identity">Przez:</string>
     <string name="title_sent">Wysłano:</string>
     <string name="title_received">Odebrano:</string>
+    <string name="title_date">Data:</string>
     <string name="title_stored">Przechowywane:</string>
     <string name="title_size">Rozmiar:</string>
     <string name="title_language">Język:</string>
@@ -1091,6 +1107,7 @@
     <string name="title_answer_group">Grupa szablonów (opcjonalnie)</string>
     <string name="title_answer_standard">Domyślna</string>
     <string name="title_answer_favorite">Ulubione</string>
+    <string name="title_answer_receipt" comment="title_answer_receipt&#10;Title for option to use template as read receipt text">Użyj jako potwierdzenia przeczytania</string>
     <string name="title_answer_hide">Ukryj z menu</string>
     <string name="title_answer_text">Tekst szablonu</string>
     <string name="title_answer_placeholder">Symbol zastępczy</string>

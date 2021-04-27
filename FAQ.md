@@ -89,6 +89,7 @@ Related questions:
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
 ## Planned features
 
@@ -783,7 +784,10 @@ Note that S/MIME signing with other algorithms than RSA is supported, but be aw
 S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time.
-You might need to enable the send options in the three dots menu again to be able to select the encryption method.
+You can long press on the send button to change the encryption method for an identity.
+If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity,
+so you can change the encryption method by selecting one of the two identities.
+You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.
 
 To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
@@ -1896,6 +1900,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)
 * Did you know that you can long press the send action to show the send dialog, even if it was disabled?
 * Did you know that you can long press the full screen icon to show the original message text only?
+* Did you know that you can long press the answer button to reply to the sender? (since version 1.1562)
 
 <br />
 
@@ -1985,10 +1990,10 @@ FairEmail shows all attachment types. To distinguish inline and regular attachme
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The one time price of the few pro features is too low, lower than the price of most similar apps,
-and there are [too many fees and taxes](#user-content-faq19),
-to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852).
-Note that Google promotes the Family libray, but lets developers pay for it.
+"*You can't share in-app purchases and free apps with your family members.*"
+
+See [here](https://support.google.com/googleone/answer/7007852)
+under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
 
 <br />
 
@@ -3391,6 +3396,9 @@ Note that breaking or losing your device, means losing your messages!
 Instead, the email provider/server is responsible for backups.
 
 If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
+
+Since version 1.1556 it is possible to export all messages of a POP3 folder in mbox format according to [RFC4155](https://www.ietf.org/rfc/rfc4155.txt),
+which might be useful to save sent messages if the email server doesn't.
 
 If you want to import an mbox file to an existing email account,
 you can use Thunderbird on a desktop computer and the [ImportExportTools](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) add-on.

@@ -11,6 +11,7 @@
     <string name="channel_service">Modtagelse</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">E-mail</string>
+    <string name="channel_progress">Status</string>
     <string name="channel_update">Opdateringer</string>
     <string name="channel_warning">Advarsler</string>
     <string name="channel_error">Fejl</string>
@@ -19,6 +20,7 @@
     <string name="channel_service_description">Synkronisering og overvågning af konti</string>
     <string name="channel_send_description">Afsendelse af beskeder</string>
     <string name="channel_notification_description">Ny besked-notifikationer</string>
+    <string name="channel_progress_description">Statusnotifikationer for længerevarende aktiviteter</string>
     <plurals name="page_conversation">
         <item quantity="one">Samtale</item>
         <item quantity="other">Samtaler</item>
@@ -119,7 +121,7 @@
     <string name="title_setup_help">Hjælp</string>
     <string name="title_setup_quick">Hurtig opsætning</string>
     <string name="title_setup_simple">Ingen grund til at ændre valgmuligheder</string>
-    <string name="title_setup_quick_accounts">Tilføj konti</string>
+    <string name="title_setup_quick_accounts">Tilføj eller skift konti</string>
     <string name="title_setup_quick_support">Visse udbydere besværliggør kontotilføjelse. Bebrejd venligst ikke FairEmail for dette, men anmod i stedet om support.</string>
     <string name="title_setup_quick_hint">Hurtig opsætningen vil hente opsætningsoplysninger fra autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-server til beskedmodtagelse</string>
@@ -281,6 +283,8 @@
     <string name="title_advanced_download">Download automatisk beskeder og vedhæftninger på forbrugsbaserede forbindelser</string>
     <string name="title_advanced_roaming">Download beskeder og vedhæftninger under roaming</string>
     <string name="title_advanced_rlah">Roam, som var du hjemme</string>
+    <string name="title_advanced_download_headers">Download alle brevoverskrifter</string>
+    <string name="title_advanced_download_eml">Download råformat beskedfiler</string>
     <string name="title_advanced_validated">Kræv en valideret (kontrolleret) forbindelse</string>
     <string name="title_advanced_timeout">Forbindelses-timeout (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Foretræk IPv4 frem for IPv6</string>
@@ -488,6 +492,7 @@
     <string name="title_advanced_metered_hint">Forbrugsbaserede forbindelser er typisk mobildataforbindelser eller betalte Wi-Fi hotspots</string>
     <string name="title_advanced_metered_warning">Deaktivering af denne indstilling vil ikke gøre det muligt at modtage og sende meddelelser på mobildataforbindelser</string>
     <string name="title_advanced_rlah_hint">Antager ingen roaming inden for EU</string>
+    <string name="title_advanced_usage_hint">Dette vil forøge batteri-, data- samt lagerpladsforbrug</string>
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering af dette kan på visse enheder forårsage forbindelsesproblemer</string>
     <string name="title_advanced_validate_hint">Dette kan betyde, at beskeder i visse situationer ikke synkes, bl.a. ved brug af VPN</string>
     <string name="title_advanced_timeout_hint">Læse-/skrive-timeout indstilles til det dobbelte af forbindelses-timeout. Højere værdier vil resultere i øget batteriforbrug.</string>
@@ -602,7 +607,7 @@
     <string name="title_received_header">Benyt \"Modtaget\"-overskrift</string>
     <string name="title_date_header">Benyt \'Dato\'-overskrift (afsendelsestid)</string>
     <string name="title_date_remark">Ændringer effektueres kun for nye beskeder</string>
-    <string name="title_related_identity">Tilføj relateret identitet</string>
+    <string name="title_related_identity">Tilføj relateret identitet (SMTP-server)</string>
     <string name="title_check">Tjek</string>
     <string name="title_trust">Gør servercertifikat betroet med fingeraftryk %1$s</string>
     <string name="title_no_name">Navn mangler</string>
@@ -660,6 +665,8 @@
     <string name="title_empty_spam">Tøm spam</string>
     <string name="title_edit_properties">Redigér egenskaber</string>
     <string name="title_edit_rules">Redigér regler</string>
+    <string name="title_execute_rules">Eksekvere regler</string>
+    <string name="title_export_messages">Eksportere beskeder</string>
     <string name="title_create_channel">Opret notifikationskanal</string>
     <string name="title_edit_channel">Redigér notifikationskanal</string>
     <string name="title_delete_channel">Slet notifikationskanal</string>
@@ -742,6 +749,7 @@
     <string name="title_toggle_seen">Slå læst til/fra</string>
     <string name="title_hide">Skjul</string>
     <string name="title_unhide">Vis</string>
+    <string name="title_toggle_hide">Skift mellem skjul/vis</string>
     <string name="title_flag">Tilføj stjerne</string>
     <string name="title_flag_color">Farvet stjerne &#8230;</string>
     <string name="title_unflag">Fjern stjerne</string>
@@ -869,6 +877,7 @@
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Sendt:</string>
     <string name="title_received">Modtaget:</string>
+    <string name="title_date">Dato:</string>
     <string name="title_stored">Gemt:</string>
     <string name="title_size">Størrelse:</string>
     <string name="title_language">Sprog:</string>
@@ -1057,6 +1066,7 @@
     <string name="title_answer_group">Skabelongruppe (valgfrit)</string>
     <string name="title_answer_standard">Standard</string>
     <string name="title_answer_favorite">Favorit</string>
+    <string name="title_answer_receipt" comment="title_answer_receipt&#10;Title for option to use template as read receipt text">Brug som læst-kvittering</string>
     <string name="title_answer_hide">Skjul fra menuer</string>
     <string name="title_answer_text">Skabelontekst</string>
     <string name="title_answer_placeholder">Variabel</string>

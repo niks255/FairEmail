@@ -68,8 +68,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -527,8 +529,10 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_synchronize_enabled, order++, R.string.title_synchronize_enabled)
                             .setCheckable(true).setChecked(folder.synchronize);
 
-                    if (!folder.read_only)
+                    if (!folder.read_only) {
                         popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_rules, order++, R.string.title_edit_rules);
+                        popupMenu.getMenu().add(Menu.NONE, R.string.title_execute_rules, order++, R.string.title_execute_rules);
+                    }
                 }
 
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_properties, order++, R.string.title_edit_properties);
@@ -548,8 +552,13 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 }
             }
 
-            if (EntityFolder.INBOX.equals(folder.type) && folder.accountProtocol == EntityAccount.TYPE_POP)
+            if (EntityFolder.INBOX.equals(folder.type) && folder.accountProtocol == EntityAccount.TYPE_POP) {
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_rules, order++, R.string.title_edit_rules);
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_execute_rules, order++, R.string.title_execute_rules);
+            }
+
+            if (folder.accountProtocol == EntityAccount.TYPE_POP || debug || BuildConfig.DEBUG)
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_export_messages, order++, R.string.title_export_messages);
 
             int childs = 0;
             if (folder.child_refs != null)
@@ -602,7 +611,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                         onActionSyncMore();
                         return true;
                     } else if (itemId == R.string.title_unified_folder || itemId == R.string.title_navigation_folder || itemId == R.string.title_notify_folder || itemId == R.string.title_synchronize_enabled) {
-                        onActionProperty(item.getItemId(), !item.isChecked());
+                        onActionProperty(itemId, !item.isChecked());
                         return true;
                     } else if (itemId == R.string.title_subscribe) {
                         onActionSubscribe();
@@ -624,6 +633,12 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                         return true;
                     } else if (itemId == R.string.title_edit_rules) {
                         onActionEditRules();
+                        return true;
+                    } else if (itemId == R.string.title_execute_rules) {
+                        onActionExecuteRules();
+                        return true;
+                    } else if (itemId == R.string.title_export_messages) {
+                        onActionExportMessages();
                         return true;
                     } else if (itemId == R.string.title_edit_properties) {
                         onActionEditProperties();
@@ -915,6 +930,41 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                                     .putExtra("type", folder.type));
                 }
 
+                private void onActionExecuteRules() {
+                    Bundle args = new Bundle();
+                    args.putString("question", context.getString(R.string.title_execute_rules));
+                    args.putLong("folder", folder.id);
+
+                    FragmentDialogAsk ask = new FragmentDialogAsk();
+                    ask.setArguments(args);
+                    ask.setTargetFragment(parentFragment, FragmentFolders.REQUEST_EXECUTE_RULES);
+                    ask.show(parentFragment.getParentFragmentManager(), "folder:execute");
+                }
+
+                private void onActionExportMessages() {
+                    String filename = Helper.sanitizeFilename(
+                            folder.accountName.replace(" ", "_") + "_" +
+                                    folder.getDisplayName(context).replace(" ", "_") + "_" +
+                                    new SimpleDateFormat("yyyyMMdd").format(new Date().getTime()) + ".mbox");
+
+                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_TITLE, filename);
+                    Helper.openAdvanced(intent);
+
+                    if (intent.resolveActivity(context.getPackageManager()) == null) { //  // system/GET_CONTENT whitelisted
+                        ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    parentFragment.getArguments().putLong("selected_folder", folder.id);
+
+                    parentFragment.startActivityForResult(
+                            Helper.getChooser(context, intent),
+                            FragmentFolders.REQUEST_EXPORT_MESSAGES);
+                }
+
                 private void onActionEditProperties() {
                     LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
                     lbm.sendBroadcast(
@@ -961,7 +1011,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 }
 
                 private void onActionPinFolder() {
-                    ShortcutInfoCompat.Builder builder = Shortcuts.getFolder(context, folder);
+                    ShortcutInfoCompat.Builder builder = Shortcuts.getShortcut(context, folder);
                     ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
                 }
 

@@ -37,6 +37,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -180,6 +181,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
@@ -304,6 +306,8 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_DISCARD = 13;
     private static final int REQUEST_SEND = 14;
     private static final int REQUEST_PERMISSION = 15;
+
+    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "encrypt");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -470,6 +474,15 @@ public class FragmentCompose extends FragmentBase {
         ibToAdd.setOnClickListener(onPick);
         ibCcAdd.setOnClickListener(onPick);
         ibBccAdd.setOnClickListener(onPick);
+
+        tvPlainTextOnly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putBoolean("force_dialog", true);
+                onAction(R.id.action_check, args, "force");
+            }
+        });
 
         setZoom();
 
@@ -2627,7 +2640,7 @@ public class FragmentCompose extends FragmentBase {
                                     Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                     intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
                                     intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE, true);
-                                    intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email);
+                                    intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email.toLowerCase());
                                     intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                                     intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
@@ -2647,7 +2660,7 @@ public class FragmentCompose extends FragmentBase {
                                 Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                 intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
                                 intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE, true);
-                                intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email);
+                                intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email.toLowerCase());
                                 intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                                 intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                 return intent;
@@ -2759,7 +2772,7 @@ public class FragmentCompose extends FragmentBase {
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
-        }.execute(this, args, "compose:pgp");
+        }.setExecutor(executor).execute(this, args, "compose:pgp");
     }
 
     private void onSmime(Bundle args, final int action, final Bundle extras) {
@@ -3119,7 +3132,7 @@ public class FragmentCompose extends FragmentBase {
                     Log.unexpectedError(getParentFragmentManager(), ex, !expected);
                 }
             }
-        }.execute(this, args, "compose:s/mime");
+        }.setExecutor(executor).execute(this, args, "compose:s/mime");
     }
 
     private void onContactGroupSelected(Bundle args) {
@@ -3873,8 +3886,17 @@ public class FragmentCompose extends FragmentBase {
                             String[] texts;
                             if (EntityMessage.DSN_HARD_BOUNCE.equals(dsn))
                                 texts = new String[]{context.getString(R.string.title_hard_bounce_text)};
-                            else
-                                texts = Helper.getStrings(context, ref.language, R.string.title_receipt_text);
+                            else {
+                                EntityAnswer receipt = db.answer().getReceiptAnswer();
+                                if (receipt == null)
+                                    texts = Helper.getStrings(context, ref.language, R.string.title_receipt_text);
+                                else {
+                                    texts = new String[0];
+                                    Document d = JsoupEx.parse(receipt.getText(null));
+                                    document.body().append(d.body().html());
+                                }
+                            }
+
                             for (int i = 0; i < texts.length; i++) {
                                 if (i > 0)
                                     document.body()
@@ -5135,7 +5157,10 @@ public class FragmentCompose extends FragmentBase {
                 showDraft(draft);
 
             } else if (action == R.id.action_save) {
-                // Do nothing
+                etBody.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null)
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
             } else if (action == R.id.action_check) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -5244,14 +5269,6 @@ public class FragmentCompose extends FragmentBase {
         state = (busy ? State.LOADING : State.LOADED);
         Helper.setViewsEnabled(view, !busy);
         getActivity().invalidateOptionsMenu();
-    }
-
-    private static String unprefix(String subject, String prefix) {
-        subject = subject.trim();
-        prefix = prefix.trim().toLowerCase();
-        while (subject.toLowerCase().startsWith(prefix))
-            subject = subject.substring(prefix.length()).trim();
-        return subject;
     }
 
     private static String collapsePrefixes(Context context, String language, String subject, boolean forward) {
@@ -5865,6 +5882,7 @@ public class FragmentCompose extends FragmentBase {
             final SwitchCompat swSendReminders = dview.findViewById(R.id.swSendReminders);
             final TextView tvSendRemindersHint = dview.findViewById(R.id.tvSendRemindersHint);
             final TextView tvTo = dview.findViewById(R.id.tvTo);
+            final TextView tvViaTitle = dview.findViewById(R.id.tvViaTitle);
             final TextView tvVia = dview.findViewById(R.id.tvVia);
             final CheckBox cbPlainOnly = dview.findViewById(R.id.cbPlainOnly);
             final TextView tvPlainHint = dview.findViewById(R.id.tvPlainHint);
@@ -6158,6 +6176,8 @@ public class FragmentCompose extends FragmentBase {
                                 MessageHelper.formatAddresses(tos, name_email, false), extra));
                     tvTo.setTextColor(Helper.resolveColor(context,
                             to + extra > RECIPIENTS_WARNING ? R.attr.colorWarning : android.R.attr.textColorPrimary));
+                    if (draft.identityColor != null && draft.identityColor != Color.TRANSPARENT)
+                        tvViaTitle.setTextColor(draft.identityColor);
                     tvVia.setText(draft.identityEmail);
 
                     cbPlainOnly.setChecked(draft.plain_only != null && draft.plain_only && !dsn);

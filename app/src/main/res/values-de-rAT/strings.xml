@@ -11,6 +11,7 @@
     <string name="channel_service">Empfangen</string>
     <string name="channel_send">Senden</string>
     <string name="channel_notification">Neue E-Mail</string>
+    <string name="channel_progress">Fortschritt</string>
     <string name="channel_update">Aktualisierungen</string>
     <string name="channel_warning">Warnungen</string>
     <string name="channel_error">Fehler</string>
@@ -19,6 +20,7 @@
     <string name="channel_service_description">Synchronisation und Überwachung von Konten</string>
     <string name="channel_send_description">Benachrichtigungen für den Versand</string>
     <string name="channel_notification_description">Benachrichtigungen für neue Nachrichten</string>
+    <string name="channel_progress_description">Fortschrittsbenachrichtigungen von länger laufenden Aktivitäten</string>
     <plurals name="page_conversation">
         <item quantity="one">Unterhaltung</item>
         <item quantity="other">Unterhaltungen</item>
@@ -121,7 +123,7 @@
     <string name="title_setup_quick">Schnelleinrichtung</string>
     <string name="title_setup_intro">Die Einrichtung eines Kontos ist mit nur drei Schritten erledigt und danach können Sie bereits E-Mails senden und empfangen</string>
     <string name="title_setup_simple">Es ist nicht notwendig, andere Optionen zu ändern</string>
-    <string name="title_setup_quick_accounts">Konten hinzufügen</string>
+    <string name="title_setup_quick_accounts">Konten hinzufügen oder ändern</string>
     <string name="title_setup_quick_support">Einige Anbieter erschweren das Hinzufügen eines Kontos. Bitte geben Sie nicht FairEmail dafür die Schuld, sondern bitten Sie stattdessen um Unterstützung.</string>
     <string name="title_setup_quick_hint">Die Schnelleinrichtung wird Konfigurationsinformationen von autoconfig.thunderbird.net laden</string>
     <string name="title_setup_quick_imap">IMAP-Server für das Empfangen von Nachrichten</string>
@@ -287,6 +289,8 @@
     <string name="title_advanced_download">Automatisches Herunterladen von E-Mails und Anhängen auf getakteten Verbindungen bis zu einer Größe von</string>
     <string name="title_advanced_roaming">Nachrichten und Anhänge bei Roaming herunterladen</string>
     <string name="title_advanced_rlah">Roaming wie zu Hause</string>
+    <string name="title_advanced_download_headers">Alle Kopfzeilen der Nachricht herunterladen</string>
+    <string name="title_advanced_download_eml">Rohnachrichtendateien herunterladen</string>
     <string name="title_advanced_validated">Erfordert eine validierte (geprüfte) Verbindung</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
@@ -355,6 +359,7 @@
     <string name="title_advanced_collapse_quotes">Zitierten Text ausblenden</string>
     <string name="title_advanced_image_placeholders">Platzhalter für Bilder anzeigen</string>
     <string name="title_advanced_images_inline">Eingebettete Grafiken automatisch anzeigen</string>
+    <string name="title_advanced_button_extra">Zusätzliche Schaltflächen am unteren Rand einer Nachricht anzeigen</string>
     <string name="title_advanced_seekbar">Relative Unterhaltungsposition mit einem Punkt kennzeichnen</string>
     <string name="title_advanced_actionbar">Aktionsleiste in Unterhaltung anzeigen</string>
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
@@ -382,11 +387,11 @@
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
     <string name="title_advanced_quick_scroll">Nicht aufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
     <string name="title_advanced_autoread">Nachrichten beim Verschieben automatisch als gelesen kennzeichnen</string>
-    <string name="title_advanced_star_snoozed">Bei schlummernden Meldungen automatisch eine Markierung hinzufügen</string>
+    <string name="title_advanced_star_snoozed">Zurückgestellte Nachrichten automatisch kennzeichnen</string>
     <string name="title_advanced_autounstar">Markierungen automatisch von Nachrichten entfernen, wenn sie verschoben werden</string>
     <string name="title_advanced_auto_important">Markierte Nachrichten automatisch wichtig machen</string>
     <string name="title_advanced_reset_importance">Wichtigkeit beim Verschieben von Nachrichten zurücksetzen</string>
-    <string name="title_advanced_default_snooze">Standard-Schlummer-Zeit</string>
+    <string name="title_advanced_default_snooze">Voreingestellte Zurückstellzeit</string>
     <string name="title_advanced_notifications">Benachrichtigungen verwalten</string>
     <string name="title_advanced_notifications_default">Standardkanal</string>
     <string name="title_advanced_notifications_service">Empfangskanal</string>
@@ -411,7 +416,7 @@
     <string name="title_advanced_notify_action_flag">Markieren</string>
     <string name="title_advanced_notify_action_seen">Gelesen</string>
     <string name="title_advanced_notify_action_hide">Ausblenden</string>
-    <string name="title_advanced_notify_action_snooze">Wiedervorlage</string>
+    <string name="title_advanced_notify_action_snooze">Zurückstellen</string>
     <string name="title_advanced_notify_remove">Benachrichtigung über neue Nachrichten durch Tippen auf die Benachrichtigung entfernen</string>
     <string name="title_advanced_notify_clear">Benachrichtigung über neue Nachrichten beim Anzeigen der Nachrichtenliste entfernen</string>
     <string name="title_advanced_wearable_preview">Nur Benachrichtigungen mit einer Nachrichtenvorschau an tragbare Gerätschaften senden</string>
@@ -496,6 +501,7 @@
     <string name="title_advanced_metered_hint">Getaktete Verbindungen sind in der Regel mobile Verbindungen oder bezahlte WLAN-Zugangspunkte</string>
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
+    <string name="title_advanced_usage_hint">Das erhöht die Akku-, Daten- und Speicherplatzauslastung</string>
     <string name="title_advanced_tcp_keep_alive_hint">Das Aktivieren dieser Funktion kann bei einigen Geräten zu Verbindungsproblemen führen</string>
     <string name="title_advanced_validate_hint">Dies kann dazu führen, dass Nachrichten nicht synchronisiert werden, zum Beispiel bei der Verwendung eines VPN, aber auch in anderen Situationen</string>
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
@@ -558,6 +564,7 @@
     <string name="title_identity_email">Ihre E-Mail-Adresse</string>
     <string name="title_identity_color_hint">Identitätsfarben haben Vorrang vor Ordner- und Kontofarben</string>
     <string name="title_advanced_sender">Bearbeitung der Absenderadresse erlauben</string>
+    <string name="title_advanced_sender_name">Name verwenden, wenn die Absenderadresse bearbeitet wurde</string>
     <string name="title_advanced_sender_regex">Regex zum Abgleichen des Benutzernamens von eingehenden E-Mail-Adressen</string>
     <string name="title_identity_reply_to">Antwortadresse</string>
     <string name="title_identity_unicode">Unicode-Transport verwenden</string>
@@ -574,7 +581,7 @@
     <string name="title_account_interval_hint">Häufigkeit der Aktualisierung der Verbindung für Push-Meldungen oder Häufigkeit der Überprüfung auf neue Nachrichten</string>
     <string name="title_account_partial_fetch_hint">Nur bei Nachrichten ohne Inhalt oder beschädigten Anhängen deaktivieren</string>
     <string name="title_color">Farbe</string>
-    <string name="title_transparent" comment="title_transparent&#10;Title for color dialog choice&#10;Needs to be short (one word)&#10;">Transparent</string>
+    <string name="title_transparent">Transparent</string>
     <string name="title_account_ondemand">Manuell synchronisieren</string>
     <string name="title_account_notify">Separate Benachrichtigungen</string>
     <string name="title_account_left">Nach links wischen</string>
@@ -613,7 +620,7 @@
     <string name="title_received_header">Received-Kopfzeile verwenden</string>
     <string name="title_date_header">Date-Kopfzeile verwenden (Sendezeit)</string>
     <string name="title_date_remark">Änderungen werden nur auf neue Nachrichten angewendet</string>
-    <string name="title_related_identity">Hierzu passende Identität hinzufügen</string>
+    <string name="title_related_identity">Zugehörige Identität hinzufügen (SMTP-Server)</string>
     <string name="title_check">Prüfen</string>
     <string name="title_trust">Serverzertifikat mit Fingerabdruck %1$s vertrauen</string>
     <string name="title_no_name">Name fehlt</string>
@@ -628,9 +635,9 @@
     <string name="title_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_no_drafts">Kein Entwürfe-Ordner festgelegt</string>
     <string name="title_no_junk_folder">Es ist kein Spam-Ordner für dieses Konto ausgewählt</string>
-    <string name="title_default_composable">Die Standard-E-Mail-Adresse wird durch die primäre Identität des Hauptkontos bestimmt</string>
+    <string name="title_default_composable">Die Standard-E-Mail-Adresse wird durch die Hauptidentität des Hauptkontos bestimmt</string>
     <string name="title_no_composable">Das Versenden von E-Mails erfordert die Konfiguration einer Identität und in den Kontoeinstellungen die Auswahl eines Ordners „Entwürfe”</string>
-    <string name="title_no_standard">Dieser Provider verwendet ein proprietäres E-Mail-Protokoll, so dass es nicht möglich ist, E-Mail-Clients von Drittanbietern zu nutzen</string>
+    <string name="title_no_standard">Dieser Anbieter verwendet ein proprietäres E-Mail-Protokoll, so dass es nicht möglich ist, E-Mail-Programme von Drittanbietern zu verwenden.</string>
     <string name="title_no_idle">Dieser Anbieter unterstützt keine Pushnachrichten. Dies verzögert den Empfang neuer E-Mails und erhöht den Akkuverbrauch.</string>
     <string name="title_no_utf8">Dieser Anbieter unterstützt UTF-8 nicht</string>
     <string name="title_no_sync">Synchronisationsfehler seit %1$s</string>
@@ -670,7 +677,9 @@
     <string name="title_empty_trash">Papierkorb leeren</string>
     <string name="title_empty_spam">Spamordner leeren</string>
     <string name="title_edit_properties">Eigenschaften bearbeiten</string>
-    <string name="title_edit_rules">Regel bearbeiten</string>
+    <string name="title_edit_rules">Regeln bearbeiten</string>
+    <string name="title_execute_rules">Regeln ausführen</string>
+    <string name="title_export_messages">Nachrichten exportieren</string>
     <string name="title_create_channel">Benachrichtigungskanal erstellen</string>
     <string name="title_edit_channel">Benachrichtigungskanal bearbeiten</string>
     <string name="title_delete_channel">Benachrichtigungskanal löschen</string>
@@ -753,6 +762,7 @@
     <string name="title_toggle_seen">Gelesen umschalten</string>
     <string name="title_hide">Ausblenden</string>
     <string name="title_unhide">Anzeigen</string>
+    <string name="title_toggle_hide">Aus-/Einblenden</string>
     <string name="title_flag">Stern hinzufügen</string>
     <string name="title_flag_color">Farbiger Stern &#8230;</string>
     <string name="title_unflag">Stern entfernen</string>
@@ -883,6 +893,7 @@
     <string name="title_via_identity">Über:</string>
     <string name="title_sent">Gesendet:</string>
     <string name="title_received">Empfangen:</string>
+    <string name="title_date">Datum:</string>
     <string name="title_stored">Gespeichert:</string>
     <string name="title_size">Größe:</string>
     <string name="title_language">Sprache:</string>
@@ -1073,6 +1084,7 @@
     <string name="title_answer_group">Vorlagengruppe (optional)</string>
     <string name="title_answer_standard">Standard</string>
     <string name="title_answer_favorite">Favorit</string>
+    <string name="title_answer_receipt" comment="title_answer_receipt&#10;Title for option to use template as read receipt text">Als Lesebestätigung verwenden</string>
     <string name="title_answer_hide">Aus Menüs ausblenden</string>
     <string name="title_answer_text">Vorlagentext</string>
     <string name="title_answer_placeholder">Platzhalter</string>
@@ -1153,18 +1165,18 @@
     <string name="title_legend_folder_connected">Ordner verbunden</string>
     <string name="title_legend_folder_disconnected">Ordner getrennt</string>
     <string name="title_legend_download_on">Nachrichteninhalt automatisch herunterladen</string>
-    <string name="title_legend_download_off">Nachrichteninhalt bei Bedarf herunterladen </string>
+    <string name="title_legend_download_off">Nachrichteninhalt bei Bedarf herunterladen</string>
     <string name="title_legend_synchronize_on">Synchronisierung an</string>
     <string name="title_legend_synchronize_off">Synchronisierung aus</string>
     <string name="title_legend_synchronize_poll">periodisch synchronisieren</string>
     <string name="title_legend_disconnected">nicht verbunden</string>
     <string name="title_legend_backoff">Warten nach einem Fehler</string>
-    <string name="title_legend_connecting">wird verbunden</string>
+    <string name="title_legend_connecting">Verbindungsvorgang</string>
     <string name="title_legend_connected">Verbunden</string>
     <string name="title_legend_executing">Vorgänge werden ausgeführt</string>
     <string name="title_legend_synchronizing">wird synchronisiert</string>
     <string name="title_legend_downloading">wird heruntergeladen</string>
-    <string name="title_legend_closing">Schließen</string>
+    <string name="title_legend_closing">wird geschlossen</string>
     <string name="title_legend_unified">Sammeleingang / Hauptkonto</string>
     <string name="title_legend_inbox">Posteingang</string>
     <string name="title_legend_drafts">Entwürfe</string>
@@ -1173,13 +1185,13 @@
     <string name="title_legend_trash">Papierkorb</string>
     <string name="title_legend_junk">Spam</string>
     <string name="title_legend_primary">Primär</string>
-    <string name="title_legend_subscribed">Abonniert zu</string>
+    <string name="title_legend_subscribed">Abonniert</string>
     <string name="title_legend_rule">Enthält Regeln</string>
     <string name="title_legend_similar">Ähnliche Nachrichten suchen</string>
     <string name="title_legend_notify">Eingangsbenachrichtigung</string>
-    <string name="title_legend_sync_keep">Anzahl der zu synchronisierenden Tage / aufzubewahrenden E-Mails</string>
-    <string name="title_legend_download_fetch">Anzahl der heruntergeladenen Nachrichten / abgerufenen Kopfzeilen</string>
-    <string name="title_legend_stop">Regelverarbeitung stoppen</string>
+    <string name="title_legend_sync_keep">Anzahl zu synchronisierender Tage / aufzubewahrender Nachrichten</string>
+    <string name="title_legend_download_fetch">Anzahl heruntergeladener Nachrichten / abgerufene Kopfzeilen</string>
+    <string name="title_legend_stop">Regelverarbeitung anhalten</string>
     <string name="title_legend_thread">Unterhaltung</string>
     <string name="title_legend_bookmark">Zuletzt geöffnete Unterhaltung</string>
     <string name="title_legend_zoom">Textgröße ändern</string>
@@ -1188,8 +1200,8 @@
     <string name="title_legend_priority_low">Hat niedrige Priorität</string>
     <string name="title_legend_importance">Wichtig</string>
     <string name="title_legend_importance_low">Nicht wichtig</string>
-    <string name="title_legend_signed">Ist signiert</string>
-    <string name="title_legend_encrypted">Ist verschlüsselt</string>
+    <string name="title_legend_signed">Signiert</string>
+    <string name="title_legend_encrypted">Verschlüsselt</string>
     <string name="title_legend_auth">Authentifizierung fehlgeschlagen</string>
     <string name="title_legend_found">Wurde gefunden</string>
     <string name="title_legend_classified">Wurde automatisch klassifiziert</string>
@@ -1201,7 +1213,7 @@
     <string name="title_legend_receipt">Bestätigung wurde angefordert</string>
     <string name="title_legend_auto_submitted">Wurde automatisch gesendet</string>
     <string name="title_legend_attachment">Anhang vorhanden</string>
-    <string name="title_legend_flagged">Ist Favorit</string>
+    <string name="title_legend_flagged">Favorit</string>
     <string name="title_legend_contacts">Kontakte verwalten</string>
     <string name="title_legend_search">Nach Absender suchen</string>
     <string name="title_legend_view">Inhalt anzeigen</string>
@@ -1314,7 +1326,7 @@
     <string name="title_hours">Stunden</string>
     <string name="title_minutes">Minuten</string>
     <string name="title_dismiss">Ausblenden</string>
-    <string name="title_snooze_now">Schlummern</string>
+    <string name="title_snooze_now">Zurückstellen</string>
     <string name="title_loading">wird geladen &#8230;</string>
     <string name="title_fetching_again">Nachricht wird erneut vom Server abgerufen</string>
     <string name="title_conversation_actions">Aktionen</string>
@@ -1393,7 +1405,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_accessibility_expand">Erweitern</string>
     <string name="title_accessibility_view_contact">Kontakt anzeigen</string>
     <string name="title_accessibility_show_authentication_result">Authentifizierungsergebnis anzeigen</string>
-    <string name="title_accessibility_show_snooze_time">Schlummerzeit anzeigen</string>
+    <string name="title_accessibility_show_snooze_time">Zurückstellzeit anzeigen</string>
     <string name="title_accessibility_view_help">Hilfe anzeigen</string>
     <string name="title_accessibility_selected">Ausgewählt</string>
     <string name="title_accessibility_answered">Beantwortet</string>

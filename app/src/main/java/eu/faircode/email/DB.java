@@ -65,7 +65,7 @@ import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 194,
+        version = 195,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -110,6 +110,8 @@ public abstract class DB extends RoomDatabase {
 
     public abstract DaoLog log();
 
+    private static Context sContext;
+    private static int sPid;
     private static DB sInstance;
 
     private static final String DB_NAME = "fairemail";
@@ -302,16 +304,27 @@ public abstract class DB extends RoomDatabase {
     }
 
     public static synchronized DB getInstance(Context context) {
-        if (sInstance == null) {
-            Log.i("Creating database instance");
-            Context acontext = context.getApplicationContext();
+        Context acontext = context.getApplicationContext();
+        if (sInstance != null &&
+                sContext != null && !sContext.equals(acontext))
+            try {
+                Log.e("Orphan database instance pid=" + android.os.Process.myPid() + "/" + sPid);
+                sInstance = null;
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+        sContext = acontext;
+        sPid = android.os.Process.myPid();
 
-            sInstance = migrate(acontext, getBuilder(acontext)).build();
+        if (sInstance == null) {
+            Log.i("Creating database instance pid=" + sPid);
+
+            sInstance = migrate(sContext, getBuilder(sContext)).build();
 
             sInstance.getQueryExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
-                    checkEmergencyBackup(acontext);
+                    checkEmergencyBackup(sContext);
                 }
             });
 
@@ -1987,6 +2000,12 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `sender_extra_name` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(194, 195) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `answer` ADD COLUMN `receipt` INTEGER NOT NULL DEFAULT 0");
                     }
                 });
     }

@@ -14,6 +14,7 @@
     <string name="channel_service">Receive</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">Email</string>
+    <string name="channel_progress">Progress</string>
     <string name="channel_update">Updates</string>
     <string name="channel_warning">Warnings</string>
     <string name="channel_error">Errors</string>
@@ -23,6 +24,7 @@
     <string name="channel_service_description">Synchronizing and monitoring of accounts</string>
     <string name="channel_send_description">Sending of messages</string>
     <string name="channel_notification_description">New message notifications</string>
+    <string name="channel_progress_description">Progress notifications of longer running activities</string>
 
     <plurals name="page_conversation">
         <item quantity="one">Conversation</item>
@@ -160,7 +162,7 @@
     <string name="title_setup_quick">Quick setup</string>
     <string name="title_setup_intro">Setting up an account is just three steps and after that you can send and receive emails</string>
     <string name="title_setup_simple">There is no need to change any other options</string>
-    <string name="title_setup_quick_accounts">Add accounts</string>
+    <string name="title_setup_quick_accounts">Add or change accounts</string>
     <string name="title_setup_quick_support">Some providers make it difficult to add an account. Please do not blame FairEmail for this, but ask for support instead.</string>
     <string name="title_setup_quick_hint">The quick setup will fetch configuration information from autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP server to receive messages</string>0
@@ -174,7 +176,7 @@
     <string name="title_setup_account_identity_hint">You can configure the name, color and swipe actions in the account settings, and configure a signature in the identity settings</string>
     <string name="title_setup_accounts">Accounts</string>
     <string name="title_setup_identities">Identities</string>
-    <string name="title_setup_gmail" translatable="false">Gmail</string>
+    <string name="title_setup_gmail" translatable="false">Gmail (OAuth)</string>
     <string name="title_setup_outlook" translatable="false">Outlook, Live, Hotmail</string>
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
     <string name="title_setup_oauth_permission">The email provider has approved OAuth only for official app versions</string>
@@ -347,6 +349,8 @@
     <string name="title_advanced_download">Automatically download messages and attachments on a metered connection up to</string>
     <string name="title_advanced_roaming">Download messages and attachments while roaming</string>
     <string name="title_advanced_rlah">Roam like at home</string>
+    <string name="title_advanced_download_headers">Download all message headers</string>
+    <string name="title_advanced_download_eml">Download raw message files</string>
     <string name="title_advanced_validated">Require a validated (checked) connection</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
@@ -419,6 +423,7 @@
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
     <string name="title_advanced_image_placeholders">Show image placeholders</string>
     <string name="title_advanced_images_inline">Automatically show inline images</string>
+    <string name="title_advanced_button_extra">Show extra buttons at the bottom of a message</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
     <string name="title_advanced_actionbar">Show conversation action bar</string>
     <string name="title_advanced_actionbar_color">Use account color as background color for conversation action bar</string>
@@ -592,6 +597,7 @@
     <string name="title_advanced_metered_hint">Metered connections are generally mobile connections or paid Wi-Fi hotspots</string>
     <string name="title_advanced_metered_warning">Disabling this option will disable receiving and sending messages on mobile internet connections</string>
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
+    <string name="title_advanced_usage_hint">This will increase battery, data and storage space usage</string>
     <string name="title_advanced_tcp_keep_alive_hint">Enabling this can cause connection problems on some devices</string>
     <string name="title_advanced_validate_hint">This can result in not synchronizing messages, for example when using a VPN, but also in other situations</string>
     <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
@@ -726,7 +732,7 @@
     <string name="title_received_header">Use \'Received\' header</string>
     <string name="title_date_header">Use \'Date\' header (sent time)</string>
     <string name="title_date_remark">Changes will be applied to new messages only</string>
-    <string name="title_related_identity">Add related identity</string>
+    <string name="title_related_identity">Add related identity (SMTP server)</string>
     <string name="title_check">Check</string>
     <string name="title_trust">Trust server certificate with fingerprint %1$s</string>
     <string name="title_no_name">Name missing</string>
@@ -787,6 +793,8 @@
     <string name="title_empty_spam">Empty spam</string>
     <string name="title_edit_properties">Edit properties</string>
     <string name="title_edit_rules">Edit rules</string>
+    <string name="title_execute_rules">Execute rules</string>
+    <string name="title_export_messages">Export messages</string>
     <string name="title_create_channel">Create notification channel</string>
     <string name="title_edit_channel">Edit notification channel</string>
     <string name="title_delete_channel">Delete notification channel</string>
@@ -877,6 +885,7 @@
     <string name="title_toggle_seen">Toggle read</string>
     <string name="title_hide">Hide</string>
     <string name="title_unhide">Show</string>
+    <string name="title_toggle_hide">Toggle hide</string>
     <string name="title_flag">Add star</string>
     <string name="title_flag_color">Colored star &#8230;</string>
     <string name="title_unflag">Remove star</string>
@@ -1019,6 +1028,7 @@
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Sent:</string>
     <string name="title_received">Received:</string>
+    <string name="title_date">Date:</string>
     <string name="title_stored">Stored:</string>
     <string name="title_size">Size:</string>
     <string name="title_language">Language:</string>
@@ -1229,6 +1239,7 @@
     <string name="title_answer_group">Template group (optional)</string>
     <string name="title_answer_standard">Default</string>
     <string name="title_answer_favorite">Favorite</string>
+    <string name="title_answer_receipt">Use as read receipt</string>
     <string name="title_answer_hide">Hide from menus</string>
     <string name="title_answer_text">Template text</string>
     <string name="title_answer_placeholder">Placeholder</string>

@@ -20,12 +20,15 @@ package eu.faircode.email;
 */
 
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -44,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -56,10 +60,27 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -93,6 +114,10 @@ public class FragmentFolders extends FragmentBase {
     static final int REQUEST_DELETE_LOCAL = 1;
     static final int REQUEST_EMPTY_FOLDER = 2;
     static final int REQUEST_DELETE_FOLDER = 3;
+    static final int REQUEST_EXECUTE_RULES = 4;
+    static final int REQUEST_EXPORT_MESSAGES = 5;
+
+    private static final long EXPORT_PROGRESS_INTERVAL = 5000L; // milliseconds
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -592,6 +617,14 @@ public class FragmentFolders extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onDeleteFolder(data.getBundleExtra("args"));
                     break;
+                case REQUEST_EXECUTE_RULES:
+                    if (resultCode == RESULT_OK && data != null)
+                        onExecuteRules(data.getBundleExtra("args"));
+                    break;
+                case REQUEST_EXPORT_MESSAGES:
+                    if (resultCode == RESULT_OK && data != null)
+                        onExportMessages(data.getData());
+                    break;
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -750,6 +783,228 @@ public class FragmentFolders extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "folder:delete");
+    }
+
+    private void onExecuteRules(Bundle args) {
+        new SimpleTask<Integer>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected Integer onExecute(Context context, Bundle args) throws JSONException, MessagingException, IOException {
+                long fid = args.getLong("id");
+
+                DB db = DB.getInstance(context);
+
+                List<EntityRule> rules = db.rule().getEnabledRules(fid);
+                if (rules == null)
+                    return 0;
+
+                for (EntityRule rule : rules) {
+                    JSONObject jcondition = new JSONObject(rule.condition);
+                    JSONObject jheader = jcondition.optJSONObject("header");
+                    if (jheader != null)
+                        throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
+                }
+
+                List<Long> ids = db.message().getMessageIdsByFolder(fid);
+                if (ids == null)
+                    return 0;
+
+                int applied = 0;
+                for (long mid : ids)
+                    try {
+                        db.beginTransaction();
+
+                        EntityMessage message = db.message().getMessage(mid);
+                        if (message == null)
+                            continue;
+
+                        for (EntityRule rule : rules)
+                            if (rule.matches(context, message, null)) {
+                                if (rule.execute(context, message))
+                                    applied++;
+                                if (rule.stop)
+                                    break;
+                            }
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                if (applied > 0)
+                    ServiceSynchronize.eval(context, "rules/manual");
+
+                return applied;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Integer applied) {
+                ToastEx.makeText(getContext(),
+                        getString(R.string.title_rule_applied, applied),
+                        Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex, false);
+            }
+        }.execute(this, args, "folder:rules");
+    }
+
+    private void onExportMessages(Uri uri) {
+        long id = getArguments().getLong("selected_folder", -1L);
+
+        Bundle args = new Bundle();
+        args.putLong("id", id);
+        args.putParcelable("uri", uri);
+
+        new SimpleTask<Void>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                long fid = args.getLong("id");
+                Uri uri = args.getParcelable("uri");
+
+                if (!"content".equals(uri.getScheme())) {
+                    Log.w("Export uri=" + uri);
+                    throw new IllegalArgumentException(context.getString(R.string.title_no_stream));
+                }
+
+                NotificationManager nm =
+                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(context, "progress")
+                                .setSmallIcon(R.drawable.baseline_get_app_white_24)
+                                .setContentTitle(getString(R.string.title_export_messages))
+                                .setAutoCancel(false)
+                                .setOngoing(true)
+                                .setShowWhen(false)
+                                .setLocalOnly(true)
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+                                .setVisibility(NotificationCompat.VISIBILITY_SECRET);
+
+                DB db = DB.getInstance(context);
+                List<Long> ids = db.message().getMessageIdsByFolder(fid);
+                if (ids == null)
+                    return null;
+
+                String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
+                SimpleDateFormat df = new SimpleDateFormat(PATTERN_ASCTIME, Locale.US);
+
+                Properties props = MessageHelper.getSessionProperties();
+                Session isession = Session.getInstance(props, null);
+
+                // https://www.ietf.org/rfc/rfc4155.txt (Appendix A)
+                // http://qmail.org./man/man5/mbox.html
+                long last = new Date().getTime();
+                ContentResolver resolver = context.getContentResolver();
+                try (OutputStream out = new BufferedOutputStream(resolver.openOutputStream(uri))) {
+                    for (int i = 0; i < ids.size(); i++)
+                        try {
+                            long now = new Date().getTime();
+                            if (now - last > EXPORT_PROGRESS_INTERVAL) {
+                                last = now;
+                                builder.setProgress(ids.size(), i, false);
+                                nm.notify("export", 1, builder.build());
+                            }
+
+                            long id = ids.get(i);
+                            EntityMessage message = db.message().getMessage(id);
+                            if (message == null)
+                                continue;
+
+                            String email = null;
+                            if (message.from != null && message.from.length > 0)
+                                email = ((InternetAddress) message.from[0]).getAddress();
+                            if (TextUtils.isEmpty(email))
+                                email = "MAILER-DAEMON";
+
+                            out.write(("From " + email + " " + df.format(message.received) + "\n").getBytes());
+
+                            Message imessage = MessageHelper.from(context, message, null, isession, false);
+                            imessage.writeTo(new FilterOutputStream(out) {
+                                private boolean cr = false;
+                                private ByteArrayOutputStream buffer = new ByteArrayOutputStream(998);
+
+                                @Override
+                                public void write(int b) throws IOException {
+                                    if (b == 13 /* CR */) {
+                                        if (cr) // another
+                                            line();
+                                        cr = true;
+                                    } else if (b == 10 /* LF */) {
+                                        line();
+                                    } else {
+                                        if (cr) // dangling
+                                            line();
+                                        buffer.write(b);
+                                    }
+                                }
+
+                                @Override
+                                public void flush() throws IOException {
+                                    if (buffer.size() > 0 || cr /* dangling */)
+                                        line();
+                                    out.write(10);
+                                    super.flush();
+                                }
+
+                                private void line() throws IOException {
+                                    byte[] b = buffer.toByteArray();
+
+                                    int i = 0;
+                                    for (; i < b.length; i++)
+                                        if (b[i] != '>')
+                                            break;
+
+                                    if (i + 4 < b.length &&
+                                            b[i + 0] == 'F' &&
+                                            b[i + 1] == 'r' &&
+                                            b[i + 2] == 'o' &&
+                                            b[i + 3] == 'm' &&
+                                            b[i + 4] == ' ')
+                                        out.write('>');
+
+                                    for (i = 0; i < b.length; i++)
+                                        out.write(b[i]);
+
+                                    out.write(10);
+
+                                    buffer.reset();
+                                    cr = false;
+                                }
+                            });
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                } finally {
+                    nm.cancel("export", 1);
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+
+
+        }.execute(this, args, "folder:export");
     }
 
     public static class FragmentDialogApply extends FragmentDialogBase {

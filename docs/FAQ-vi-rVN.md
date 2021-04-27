@@ -94,8 +94,8 @@ Câu hỏi liên quan:
 * ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
 * ~~Show messages matched by a rule~~
 * ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
-* ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
-* ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
+* ~~Tìm kiếm thư có/không có tệp đính kèm~~ (tính năng này không thể được thêm vì IMAP không hỗ trợ tìm kiếm tệp đính kèm)
+* ~~Tìm kiếm một thư mục~~ (việc lọc một danh sách thư mục có tính cấp bậc có rất nhiều vấn đề)
 * ~~Đề xuất tìm kiếm~~
 * ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
 * ~~Các thư mục hợp nhất chung chung~~
@@ -129,7 +129,7 @@ Thiết kế của ứng dụng được dựa trên nhiều cuộc thảo luậ
 * [(2) Tại sao lại có một thông báo vĩnh viễn được hiện?](#user-content-faq2)
 * [(3) Hoạt động là gì và tại sao chúng lại đang chờ?](#user-content-faq3)
 * [(4) Tôi có thể sử dụng một chứng chỉ bảo mật không hợp lệ / mật khẩu trống / kết nối văn bản thuần như thế nào?](#user-content-faq4)
-* [(5) How can I customize the message view?](#user-content-faq5)
+* [(5) Tôi có thể tuỳ biến mục hiển thị thư như thế nào?](#user-content-faq5)
 * [(6) Tôi có thể đăng nhập vào Gmail / G suite như thế nào?](#user-content-faq6)
 * [(7) Why are sent messages not appearing (directly) in the sent folder?](#user-content-faq7)
 * [(8) Can I use a Microsoft Exchange account?](#user-content-faq8)
@@ -303,13 +303,13 @@ Những quyền Android sau đây là cần thiết:
 * *dịch vụ ở trước* (FOREGROUND_SERVICE): để chạy một dịch vụ ở trước trên Android 9 hoặc mới hơn, đồng thời hãy xem câu hỏi tiếp theo
 * *ngăn chặn thiết bị ngủ* (WAKE_LOCK): để giữ cho thiết bị thức trong khi đang đồng bộ hoá thư
 * *thanh toán trong ứng dụng* (BILLING): để cho phép mua hàng trong ứng dụng
-* *schedule exact alarm* (SCHEDULE_EXACT_ALARM): to use exact alarm scheduling (Android 12 and later)
-* Optional: *read your contacts* (READ_CONTACTS): to auto complete addresses, to show contact photos and [to pick contacts](https://developer.android.com/guide/components/intents-common#PickContactDat)
-* Optional: *read the contents of your SD card* (READ_EXTERNAL_STORAGE): to accept files from other, outdated apps, see also [this FAQ](#user-content-faq49)
-* Optional: *use fingerprint hardware* (USE_FINGERPRINT) and use *biometric hardware* (USE_BIOMETRIC): to use biometric authentication
-* Optional: *find accounts on the device* (GET_ACCOUNTS): to select an account when using the Gmail quick setup
-* Android 5.1 Lollipop and before: *use accounts on the device* (USE_CREDENTIALS): to select an account when using the Gmail quick setup (not requested on later Android versions)
-* Android 5.1 Lollipop and before: *Read profile* (READ_PROFILE): to read your name when using the Gmail quick setup (not requested on later Android versions)
+* *đặt lịch báo thức chính xác* (SCHEDULE_EXACT_ALARM): để sử dụng tính năng đặt lịch báo thức chính xác (Android 12 và mới hơn)
+* Không bắt buộc: *đọc danh bạ* (READ_CONTACTS): để tự động điền các địa chỉ, để hiện ảnh liên hệ và [để chọn liên hệ](https://developer.android.com/guide/components/intents-common#PickContactDat)
+* Không bắt buộc: *đọc nội dung của thẻ SD* (READ_EXTERNAL_STORAGE): để chấp nhận các tệp từ các ứng dụng lỗi thời khác, đồng thời hãy xem [câu hỏi thường gặp này](#user-content-faq49)
+* Không bắt buộc: *sử dụng phần cứng vân tay* (USE_FINGERPRINT) và *sử dụng phần cứng sinh trắc học* (USE_BIOMETRIC): để sử dụng xác thực sinh trắc học
+* Không bắt buộc: *tìm tài khoản trên thiết bị* (GET_ACCOUNTS): để chọn một tài khoản khi sử dụng thiết lập nhanh cho Gmail
+* Android 5.1 Lollipop và cũ hơn: *sử dụng tài khoản trên thiết bị* (USE_CREDENTIALS): để chọn một tài khoản khi sử dụng thiết lập nhanh cho Gmail (không được yêu cầu trên các phiên bản Android mới hơn)
+* Android 5.1 Lollipop và cũ hơn: *Đọc hồ sơ* (READ_PROFILE): để đọc tên của bạn khi sử dụng thiết lập nhanh cho Gmail (không được yêu cầu trên các phiên bản Android mới hơn)
 
 [Các quyền không bắt buộc](https://developer.android.com/training/permissions/requesting) chỉ được hỗ trợ trên Android 6 Marshmallow và mới hơn. Trên các phiên bản Android cũ hơn, bạn sẽ được hỏi để cấp các quyền không bắt buộc khi cài đặt FairEmail.
 
@@ -681,7 +681,7 @@ Note that certificates can contains multiple keys for multiple purposes,  for ex
 
 Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
 
-The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You might need to enable the send options in the three dots menu again to be able to select the encryption method.
+The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.
 
 To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
 
@@ -1566,6 +1566,7 @@ For security reasons the files with the original message texts are not accessibl
 * Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)
 * Did you know that you can long press the send action to show the send dialog, even if it was disabled?
 * Did you know that you can long press the full screen icon to show the original message text only?
+* Did you know that you can long press the answer button to reply to the sender? (since version 1.1562)
 
 <br />
 
@@ -2789,6 +2790,8 @@ An email client is meant to read and write messages, not to backup and restore m
 Instead, the email provider/server is responsible for backups.
 
 If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
+
+Since version 1.1556 it is possible to export all messages of a POP3 folder in mbox format according to [RFC4155](https://www.ietf.org/rfc/rfc4155.txt), which might be useful to save sent messages if the email server doesn't.
 
 If you want to import an mbox file to an existing email account, you can use Thunderbird on a desktop computer and the [ImportExportTools](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) add-on.
 
