@@ -85,7 +85,6 @@
     <string name="title_notification_sending_failed">Sending til %1$s mislyktes</string>
     <string name="title_notification_redacted">Redigert: biometrisk eller PIN-autentisering aktivert</string>
     <string name="title_factor_minutes">%1$d minutter</string>
-    <string name="menu_exit">Avslutt</string>
     <string name="menu_answers">Maler</string>
     <string name="menu_operations">Aktiviteter</string>
     <string name="menu_contacts">Lokale kontakter</string>
@@ -120,15 +119,14 @@
     <string name="title_setup_quick_smtp">SMTP-tjener for sending av meldinger</string>
     <string name="title_setup_wizard">Veiviser</string>
     <string name="title_setup_wizard_new">Jeg trenger en ny e-postadresse</string>
-    <string name="title_setup_oauth_permission">E-postleverandøren har bare godkjent OAuth for offisielle versjoner av appen</string>
     <string name="title_setup_other">Annen leverandør</string>
     <string name="title_setup_pop3">POP3-konto</string>
+    <string name="title_setup_oauth_permission">E-postleverandøren har bare godkjent OAuth for offisielle versjoner av appen</string>
     <string name="title_setup_gmail_support">Å autorisere Google kontoer fungerer bare i offisielle versjoner fordi Android sjekker appens signatur</string>
     <string name="title_setup_gmail_rationale">Gi tillatelser til å velge en konto og lese navnet ditt</string>
     <string name="title_setup_gmail_permissions">Google vil be om tillatelser til å lese, komponere, sende og slette all e-postmeldingen din permanent. FairEmail vil aldri slette meldingene dine uten ditt eksplisitte samtykke.</string>
     <string name="title_setup_gmail_drafts">Hvis utkast mappen ikke er tilgjengelig med IMAP, kan du fikse dette i Gmail-etikettinnstillingene</string>
     <string name="title_setup_gmail_password">Jeg ønsker å godkjenne en konto med et passord</string>
-    <string name="title_setup_office_remark">Microsoft gir ikke denne typen autorisasjon for kontoer som Outlook, Live, Hotmail osv. </string>
     <string name="title_setup_office_auth">Feilen \'AUTHENTICATE failed\' kan skyldes at IMAP/SMTP er deaktivert av systemadministratoren</string>
     <string name="title_setup_oauth_rationale">Autoriser tilgang til din %1$s konto</string>
     <string name="title_setup_oauth_update">Autoriser eksisterende konto på nytt</string>
@@ -147,7 +145,6 @@
     <string name="title_setup_identity_what">Hva er en identitet?</string>
     <string name="title_setup_permissions">Gi tillatelser</string>
     <string name="title_setup_permissions_remark">Få tilgang til kontaktinformasjon (valgfritt)</string>
-    <string name="title_setup_doze_hint">Selv om dette kan lyde motstridende, vil det å slå av batterioptimaliseringer føre til mindre batteribruk</string>
     <string name="title_setup_doze_battery">Høy batteriforbruk?</string>
     <string name="title_setup_doze_stopped">Synkroniseringen stoppet?</string>
     <string name="title_setup_data">Datasparing er aktivert</string>
@@ -207,6 +204,7 @@
     <string name="title_advanced_section_misc">Diverse</string>
     <string name="title_advanced_receive">Motta meldinger for alle kontoer</string>
     <string name="title_advanced_when">Når</string>
+    <string name="title_advanced_optimize">Automatisk optimalisering</string>
     <string name="title_advanced_always">Motta alltid meldinger for disse kontoene</string>
     <string name="title_advanced_schedule">Tidsplan</string>
     <string name="title_advanced_advanced">Avansert</string>
@@ -411,18 +409,17 @@
     <string name="title_advanced_language">Språk</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_watchdog">Kontroller regelmessig om FairEmail fortsatt er aktiv</string>
-    <string name="title_advanced_optimize">Automatisk optimalisering</string>
     <string name="title_advanced_updates">Se etter oppdateringer</string>
     <string name="title_advanced_experiments">Prøv eksperimentelle funksjoner</string>
-    <string name="title_advanced_query_threads">Begrens parallell databasetilgang</string>
     <string name="title_advanced_crash_reports">Send feilrapporter</string>
-    <string name="title_advanced_protocol">Loggprotokoll</string>
-    <string name="title_advanced_debug">Feilsøkingsmodus</string>
     <string name="title_advanced_cleanup_attachments">Slett vedlegg for gamle meldinger</string>
     <string name="title_advanced_cleanup">Rydd opp</string>
     <string name="title_advanced_last_cleanup">Siste opprydding: %1$s</string>
     <string name="title_advanced_app">Innstillinger</string>
     <string name="title_advanced_more">Flere valg</string>
+    <string name="title_advanced_protocol">Loggprotokoll</string>
+    <string name="title_advanced_debug">Feilsøkingsmodus</string>
+    <string name="title_advanced_query_threads">Begrens parallell databasetilgang</string>
     <string name="title_advanced_manual_hint">Hvis synkronisering er deaktivert, kan du fremdeles oppdatere listen ved å sveipe ned fra toppen</string>
     <string name="title_advanced_poll_hint">Synkronisering med jevne mellomrom vil sammenligne lokale og eksterne meldinger hver gang, noe som er en dyr operasjon som muligens resulterer i ekstra batteribruk, spesielt når det er mange meldinger som skal synkroniseres. Alltid synkronisering vil unngå dette ved kontinuerlig sjekking for endringer.</string>
     <string name="title_advanced_optimize_hint">Dette kan forandre synkroniseringsfrekvensen for å spare batteribruk, avhengig av e-posttjenernes muligheter og oppførsel</string>
@@ -861,9 +858,9 @@
     <string name="title_send_receipt">Be om kvittering</string>
     <string name="title_send_receipt_remark">De fleste tilbydere og e-post klienter ignorerer kvitterings forespørsler</string>
     <string name="title_from_missing">Avsender mangler</string>
-    <string name="title_extra_missing">Brukernavn mangler</string>
-    <string name="title_to_missing">Mottaker mangler</string>
     <string name="title_pgp_reminder">PGP-nøkler tilgjengelig</string>
+    <string name="title_to_missing">Mottaker mangler</string>
+    <string name="title_extra_missing">Brukernavn mangler</string>
     <string name="title_subject_reminder">Emnet er tomt</string>
     <string name="title_text_reminder">Meldingen er tom</string>
     <string name="title_attachment_keywords">festet, feste, vedlegg, inkludert</string>
@@ -1423,5 +1420,7 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Fastbredde-skrift</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

@@ -48,6 +48,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
@@ -282,6 +283,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swBeige.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                getActivity().getIntent().putExtra("tab", "display");
                 prefs.edit().putBoolean("beige", checked).apply();
             }
         });
@@ -851,6 +853,14 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                 prefs.edit().putBoolean("authentication", checked).apply();
             }
         });
+
+        // Initialize
+        if (!Helper.isDarkTheme(getContext())) {
+            boolean beige = prefs.getBoolean("beige", true);
+            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
+                    ? R.color.lightColorBackground_cards_beige
+                    : R.color.lightColorBackground_cards));
+        }
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 

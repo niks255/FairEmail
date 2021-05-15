@@ -40,7 +40,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.AlarmManagerCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MediatorLiveData;
@@ -116,9 +115,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private static final long BACKUP_DELAY = 30 * 1000L; // milliseconds
     private static final long PURGE_DELAY = 30 * 1000L; // milliseconds
-    private static final int QUIT_DELAY = 5; // seconds
+    private static final int QUIT_DELAY = 7; // seconds
     private static final long STILL_THERE_THRESHOLD = 3 * 60 * 1000L; // milliseconds
-    static final int DEFAULT_POLL_INTERVAL = 0; // minutes
     private static final int OPTIMIZE_KEEP_ALIVE_INTERVAL = 12; // minutes
     private static final int OPTIMIZE_POLL_INTERVAL = 15; // minutes
     private static final int CONNECT_BACKOFF_START = 8; // seconds
@@ -150,7 +148,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "download_headers", "download_eml",
             "prefer_ip4", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl" // force reconnect
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", // force reconnect
+            "exact_alarms" // force schedule
     ));
 
     static final int PI_ALARM = 1;
@@ -160,6 +159,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     static final int PI_POLL = 5;
     static final int PI_WATCHDOG = 6;
     static final int PI_UNSNOOZE = 7;
+    static final int PI_EXISTS = 8;
 
     @Override
     public void onCreate() {
@@ -824,6 +824,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         onUnsnooze(intent);
                         break;
 
+                    case "exists":
+                        onExists(intent);
+                        break;
+
                     case "state":
                         onState(intent);
                         break;
@@ -929,6 +933,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 message.id = null;
                                 message.fts = false;
+                                message.stored = new Date().getTime();
                                 message.id = db.message().insertMessage(message);
 
                                 if (message.content) {
@@ -978,6 +983,39 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         ServiceSend.start(ServiceSynchronize.this);
                     else
                         ServiceSynchronize.eval(ServiceSynchronize.this, "unsnooze");
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
+    }
+
+    private void onExists(Intent intent) {
+        String action = intent.getAction();
+        long id = Long.parseLong(action.split(":")[1]);
+
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DB db = DB.getInstance(ServiceSynchronize.this);
+
+                    try {
+                        db.beginTransaction();
+
+                        // Message could have been deleted in the meantime
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message == null)
+                            return;
+
+                        EntityOperation.queue(ServiceSynchronize.this, message, EntityOperation.EXISTS, true);
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                    eval(ServiceSynchronize.this, "exists/delayed");
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
@@ -1428,7 +1466,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
                                                 ServiceSynchronize.this,
-                                                folder.name + " " + Log.formatThrowable(ex, false));
+                                                folder.name + " added " + Log.formatThrowable(ex, false));
                                         state.error(ex);
                                     } finally {
                                         wlMessage.release();
@@ -1459,7 +1497,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
                                                 ServiceSynchronize.this,
-                                                folder.name + " " + Log.formatThrowable(ex, false));
+                                                folder.name + " removed " + Log.formatThrowable(ex, false));
                                         state.error(ex);
                                     } finally {
                                         wlMessage.release();
@@ -1485,7 +1523,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
                                                 ServiceSynchronize.this,
-                                                folder.name + " " + Log.formatThrowable(ex, false));
+                                                folder.name + " changed " + Log.formatThrowable(ex, false));
                                         state.error(ex);
                                     } finally {
                                         wlMessage.release();
@@ -1508,7 +1546,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         Log.e(folder.name, ex);
                                         EntityLog.log(
                                                 ServiceSynchronize.this,
-                                                folder.name + " " + Log.formatThrowable(ex, false));
+                                                folder.name + " idle " + Log.formatThrowable(ex, false));
                                         state.error(new FolderClosedException(ifolder, "IDLE", new Exception(ex)));
                                     } finally {
                                         Log.i(folder.name + " end idle");
@@ -1752,7 +1790,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                             Log.e(folder.name, ex);
                                                             EntityLog.log(
                                                                     ServiceSynchronize.this,
-                                                                    folder.name + " " + Log.formatThrowable(ex, false));
+                                                                    folder.name + " process " + Log.formatThrowable(ex, false));
                                                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                                                             if (!(ex instanceof FolderNotFoundException))
                                                                 state.error(new OperationCanceledException("Process"));
@@ -1900,7 +1938,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             long trigger = System.currentTimeMillis() + duration;
                             EntityLog.log(this, "### " + account.name + " keep alive" +
                                     " wait=" + account.poll_interval + " until=" + new Date(trigger));
-                            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, trigger, pi);
+                            AlarmManagerCompatEx.setAndAllowWhileIdle(ServiceSynchronize.this, am, AlarmManager.RTC_WAKEUP, trigger, pi);
 
                             try {
                                 wlAccount.release();
@@ -1923,14 +1961,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     last_fail = ex;
                     Log.e(account.name, ex);
                     EntityLog.log(this,
-                            account.name + " " + Log.formatThrowable(ex, false));
+                            account.name + " connect " + Log.formatThrowable(ex, false));
                     db.account().setAccountError(account.id, Log.formatThrowable(ex));
 
                     // Report account connection error
                     if (account.last_connected != null && !ConnectionHelper.airplaneMode(this)) {
                         EntityLog.log(this, account.name + " last connected: " + new Date(account.last_connected));
 
-                        int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+                        int pollInterval = getPollInterval(this);
                         long now = new Date().getTime();
                         long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
                         long maxDelayed = (pollInterval > 0 && !account.poll_exempted
@@ -2108,7 +2146,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         try {
                             long trigger = System.currentTimeMillis() + backoff * 1000L;
                             EntityLog.log(this, "### " + account.name + " backoff until=" + new Date(trigger));
-                            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, trigger, pi);
+                            AlarmManagerCompatEx.setAndAllowWhileIdle(ServiceSynchronize.this, am, AlarmManager.RTC_WAKEUP, trigger, pi);
 
                             try {
                                 db.account().setAccountBackoff(account.id, trigger);
@@ -2174,7 +2212,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         DB db = DB.getInstance(this);
 
-        int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+        int pollInterval = getPollInterval(this);
         EntityLog.log(this, "Auto optimize account=" + account.name + " poll interval=" + pollInterval);
         if (pollInterval == 0) {
             try {
@@ -2188,7 +2226,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             prefs.edit().putInt("poll_interval", OPTIMIZE_POLL_INTERVAL).apply();
         } else if (pollInterval <= 60 && account.poll_exempted) {
             db.account().setAccountPollExempted(account.id, false);
-            ServiceSynchronize.eval(this, "Optimize=" + reason);
+            eval(this, "Optimize=" + reason);
         }
     }
 
@@ -2368,7 +2406,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
             boolean enabled = prefs.getBoolean("enabled", true);
-            int pollInterval = prefs.getInt("poll_interval", DEFAULT_POLL_INTERVAL);
+            int pollInterval = getPollInterval(ServiceSynchronize.this);
 
             long[] schedule = getSchedule(ServiceSynchronize.this);
             long now = new Date().getTime();
@@ -2451,7 +2489,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             Log.i("Schedule next=" + new Date(next));
             Log.i("Schedule poll=" + poll);
 
-            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, pi);
+            AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, pi);
 
             if (sync & poll) {
                 at = now + 30 * 1000L;
@@ -2474,7 +2512,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         if (at == null) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean enabled = prefs.getBoolean("enabled", true);
-            int pollInterval = prefs.getInt("poll_interval", ServiceSynchronize.DEFAULT_POLL_INTERVAL);
+            int pollInterval = getPollInterval(context);
             if (poll && enabled && pollInterval > 0) {
                 long now = new Date().getTime();
                 long interval = pollInterval * 60 * 1000L;
@@ -2484,10 +2522,21 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 EntityLog.log(context, "Poll next=" + new Date(next));
 
-                AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, piSync);
+                AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, piSync);
             }
         } else
-            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, at, piSync);
+            AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, at, piSync);
+    }
+
+    static int getPollInterval(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int poll_interval = prefs.getInt("poll_interval", 0); // minutes
+        //if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+        //    Boolean ignoring = Helper.isIgnoringOptimizations(context);
+        //    if (ignoring != null && !ignoring)
+        //        poll_interval = 15;
+        //}
+        return poll_interval;
     }
 
     static long[] getSchedule(Context context) {
@@ -2598,7 +2647,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             if (next < now + WATCHDOG_INTERVAL / 5)
                 next += WATCHDOG_INTERVAL;
             Log.i("Sync watchdog at " + new Date(next));
-            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, pi);
+            AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, pi);
         } else
             am.cancel(pi);
     }

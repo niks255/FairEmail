@@ -91,7 +91,6 @@
     <string name="title_notification_sending_failed">Det gick inte att skicka till %1$s</string>
     <string name="title_notification_redacted">Redigering: biometrisk autentisering eller PIN-kod aktiverad</string>
     <string name="title_factor_minutes">%1$d minuter</string>
-    <string name="menu_exit">Avsluta</string>
     <string name="menu_answers">Mallar</string>
     <string name="menu_operations">Åtgärder</string>
     <string name="menu_contacts">Lokala kontakter</string>
@@ -122,6 +121,7 @@
     <string name="title_setup_quick">Snabbinstallation</string>
     <string name="title_setup_intro">Att lägga till ett konto tar bara tre steg och efter det kan du skicka och ta emot e-post</string>
     <string name="title_setup_simple">Det finns ingen anledning att ändra några andra inställningar</string>
+    <string name="title_setup_quick_accounts">Lägg till eller byt konton</string>
     <string name="title_setup_quick_support">Vissa leverantörer gör det svårt att lägga till ett konto. Vänligen skyll inte på FairEmail för det, be om support istället.</string>
     <string name="title_setup_quick_hint">Snabbinställningen hämtar konfigurationsinformation från autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-server för att ta emot meddelanden</string>
@@ -135,15 +135,14 @@
     <string name="title_setup_account_identity_hint">Du kan konfigurera namn, färg och svepåtgärder i kontoinställningarna, samt konfigurera din signatur i identitetsinställningarna</string>
     <string name="title_setup_accounts">Konton</string>
     <string name="title_setup_identities">Identiteter</string>
-    <string name="title_setup_oauth_permission">E-postleverantören har godkänt OAuth endast för officiella appversioner</string>
     <string name="title_setup_other">Annan leverantör</string>
     <string name="title_setup_pop3">POP3-konto</string>
+    <string name="title_setup_oauth_permission">E-postleverantören har godkänt OAuth endast för officiella appversioner</string>
     <string name="title_setup_gmail_support">Godkännande av Google-konton fungerar endast i officiella versioner eftersom Android kontrollerar appens signatur</string>
     <string name="title_setup_gmail_rationale">Vänligen bevilja behörigheter för att välja ett konto och läsa ditt namn</string>
     <string name="title_setup_gmail_permissions">Google kommer att be om behörighet att läsa, komponera, skicka och permanent ta bort all din e-post. FairEmail kommer aldrig att ta bort dina meddelanden utan ditt uttryckliga medgivande.</string>
     <string name="title_setup_gmail_drafts">Om mappen för utkast inte är åtkomlig för IMAP kan detta lösas under inställningarna för Gmail-etiketten</string>
     <string name="title_setup_gmail_password">Jag vill auktorisera ett konto med ett lösenord</string>
-    <string name="title_setup_office_remark">Microsoft tillhandahåller inte denna typ av auktorisering för Outlook, Live, Hotmail, etc konton</string>
     <string name="title_setup_office_auth">Felet \"AUTHENTICATE failed\" kan orsakas av att IMAP/SMTP inaktiveras av systemadministratören</string>
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
     <string name="title_setup_oauth_update">Auktorisera befintligt konto igen</string>
@@ -168,7 +167,6 @@
     <string name="title_setup_permissions_remark">Få tillgång till kontaktinformation (valfritt)</string>
     <string name="title_setup_doze">Inaktivera batterioptimeringar</string>
     <string name="title_setup_doze_remark">Att på ett tillförlitligt sätt skicka och ta emot e-post</string>
-    <string name="title_setup_doze_hint">Även om detta kan låta motsägelsefullt, att stänga av batterioptimeringar kommer att resultera i mindre batterianvändning</string>
     <string name="title_setup_doze_instructions">I nästa Android-dialogruta byt ut \"Inte optimerad\" till \"Alla appar\", välj sedan denna app och välj \"Optimera inte\"</string>
     <string name="title_setup_doze_battery">Hög batterianvändning?</string>
     <string name="title_setup_doze_stopped">Slutade synkroniseringen?</string>
@@ -237,6 +235,7 @@
     <string name="title_advanced_default">Alla alternativ har standardvärden, som inte behöver ändras för att använda appen</string>
     <string name="title_advanced_receive">Ta emot meddelanden för alla konton</string>
     <string name="title_advanced_when">När</string>
+    <string name="title_advanced_optimize">Optimera automatiskt</string>
     <string name="title_advanced_always">Ta alltid emot meddelanden för dessa konton</string>
     <string name="title_advanced_schedule">Schema</string>
     <string name="title_advanced_advanced">Avancerat</string>
@@ -286,6 +285,8 @@
     <string name="title_advanced_download">Hämta automatiskt meddelanden och bilagor på en uppmätt anslutning upp till</string>
     <string name="title_advanced_roaming">Hämta meddelanden och bilagor vid roaming</string>
     <string name="title_advanced_rlah">Roaming som hemma</string>
+    <string name="title_advanced_download_headers">Ladda ner meddelande-huvuden</string>
+    <string name="title_advanced_download_eml">Ladda ner råa meddelande-filer</string>
     <string name="title_advanced_validated">Kräv en validerad (kontrollerad) anslutning</string>
     <string name="title_advanced_timeout">Timeout för anslutning (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Föredra IPv4 över IPv6</string>
@@ -363,6 +364,9 @@
     <string name="title_advanced_authentication">Visa en varning när den mottagande servern inte kunde autentisera meddelandet</string>
     <string name="title_advanced_sync_on_launch">Synkronisera vid start</string>
     <string name="title_advanced_double_back">Dubbel \"tillbaka\" för att avsluta</string>
+    <string name="title_advanced_conversation_actions">Föreslå åtgärder (Android 10+)</string>
+    <string name="title_advanced_conversation_actions_replies">Föreslå svarstexter (Android 10+)</string>
+    <string name="title_advanced_language_detection">Identifiera meddelandetextspråk</string>
     <string name="title_advanced_pull_refresh">Dra ner för att uppdatera</string>
     <string name="title_advanced_autoscroll">Bläddra till toppen vid mottagning av nya meddelanden</string>
     <string name="title_advanced_double_tap">Dubbeltryck för att markera meddelande läst/oläst</string>
@@ -450,9 +454,6 @@
     </string>
     <string name="title_advanced_external_search">Tillåt andra appar att söka i meddelanden</string>
     <string name="title_advanced_shortcuts">Visa ofta använda kontakter i Android dela-menyn</string>
-    <string name="title_advanced_conversation_actions">Föreslå åtgärder (Android 10+)</string>
-    <string name="title_advanced_conversation_actions_replies">Föreslå svarstexter (Android 10+)</string>
-    <string name="title_advanced_language_detection">Identifiera meddelandetextspråk</string>
     <string name="title_advanced_fts">Bygg sökindex</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d meddelanden indexerade (%3$s)</string>
     <string name="title_advanced_classification">Klassificera meddelanden</string>
@@ -461,20 +462,19 @@
     <string name="title_advanced_language">Språk</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
-    <string name="title_advanced_optimize">Optimera automatiskt</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
     <string name="title_advanced_check_weekly">Kolla veckovis istället för dagligen</string>
     <string name="title_advanced_experiments">Prova experimentella funktioner</string>
-    <string name="title_advanced_query_threads">Begränsa parallell åtkomst till databas</string>
     <string name="title_advanced_crash_reports">Skicka felrapporter</string>
-    <string name="title_advanced_protocol">Loggar för protokoll</string>
-    <string name="title_advanced_log_info">Debug Logging</string>
-    <string name="title_advanced_debug">Felsökningsläge</string>
     <string name="title_advanced_cleanup_attachments">Ta bort bilagor på gamla meddelanden</string>
     <string name="title_advanced_cleanup">Rensa</string>
     <string name="title_advanced_last_cleanup">Senaste rensning: %1$s</string>
     <string name="title_advanced_app">App-inställningar</string>
     <string name="title_advanced_more">Fler alternativ</string>
+    <string name="title_advanced_protocol">Loggar för protokoll</string>
+    <string name="title_advanced_log_info">Debug Logging</string>
+    <string name="title_advanced_debug">Felsökningsläge</string>
+    <string name="title_advanced_query_threads">Begränsa parallell åtkomst till databas</string>
     <string name="title_advanced_manual_hint">Om mottagande av meddelanden är inaktiverat är det fortfarande möjligt att manuellt ta emot meddelanden genom att dra ner meddelandelistan</string>
     <string name="title_advanced_poll_hint">Genom att regelbundet kontrollera efter nya meddelanden kommer att jämföra lokala- och fjärrmeddelanden varje gång, detta är en drastisk åtgärd som kan leda till extra batterianvändning, särskilt om det finns många meddelanden. Genom att alltid ta emot kommer att förhindra detta genom att kontinuerligt följa förändringar.</string>
     <string name="title_advanced_optimize_hint">Detta kan ändra synkroniseringsfrekvensen för att spara på batteriet, beroende på e-postservrarnas funktioner och beteende</string>
@@ -496,6 +496,7 @@
     <string name="title_advanced_metered_hint">Uppmätta anslutningar är generellt mobila anslutningar eller betalda Wi-Fi-hotspots</string>
     <string name="title_advanced_metered_warning">Inaktivering av det här alternativet inaktiverar mottagning och sändning av meddelanden på mobila internetanslutningar</string>
     <string name="title_advanced_rlah_hint">Förutsatt ingen roaming inom EU</string>
+    <string name="title_advanced_usage_hint">Det här kommer att öka användningen av batteri, data och lagringsutrymme</string>
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering av detta kan orsaka anslutningsproblem på vissa enheter</string>
     <string name="title_advanced_validate_hint">Detta kan resultera i att meddelanden inte synkroniseras, till exempel vid användning av VPN, men även i andra situationer</string>
     <string name="title_advanced_timeout_hint">Tidsgräns för läs/skriva kommer att ställas in på den dubbla av anslutningens tidsgräns. Högre värden kommer att resultera i mer batterianvändning.</string>
@@ -757,6 +758,7 @@
     <string name="title_toggle_seen">Växla lästa</string>
     <string name="title_hide">Dölj</string>
     <string name="title_unhide">Visa</string>
+    <string name="title_toggle_hide">Skifta till dölj</string>
     <string name="title_flag">Lägg till stjärna</string>
     <string name="title_flag_color">Färgad stjärna &#8230;</string>
     <string name="title_unflag">Ta bort stjärna</string>
@@ -791,6 +793,8 @@
     <string name="title_ask_raw">För att vidarebefordra meddelanden måste de råa (ursprungliga) meddelandena laddas ner från servern. Detta kräver en internetanslutning.</string>
     <string name="title_buttons">Välj knappar</string>
     <string name="title_buttons_hint">De faktiska åtgärder som är tillgängliga beror på kontotyp och konfiguration</string>
+    <string name="title_button_search">Sök i meddelanden</string>
+    <string name="title_button_search_text">Sök i meddelandetext</string>
     <string name="title_configure_buttons">Konfigurera knappar &#8230;</string>
     <string name="title_trash">Papperskorg</string>
     <string name="title_copy">Kopiera &#8230;</string>
@@ -887,6 +891,7 @@
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Skickat:</string>
     <string name="title_received">Mottaget:</string>
+    <string name="title_date">Datum:</string>
     <string name="title_stored">Lagrad:</string>
     <string name="title_size">Storlek:</string>
     <string name="title_language">Språk:</string>
@@ -961,10 +966,10 @@
     <string name="title_send_receipt">Begär läskvitto</string>
     <string name="title_send_receipt_remark">De flesta leverantörer och e-postklienter ignorerar kvittonförfrågningar</string>
     <string name="title_from_missing">Avsändaren saknas</string>
-    <string name="title_extra_missing">Användarnamn saknas</string>
-    <string name="title_to_missing">Mottagare saknas</string>
     <string name="title_pgp_reminder">PGP-nycklar tillgängliga</string>
     <string name="title_smime_reminder">S/MIME-nycklar tillgängliga</string>
+    <string name="title_to_missing">Mottagare saknas</string>
+    <string name="title_extra_missing">Användarnamn saknas</string>
     <string name="title_subject_reminder">Ämnet är tomt</string>
     <string name="title_text_reminder">Meddelandet är tomt</string>
     <string name="title_attachment_keywords">bifogad,bilaga,bilaga,inkluderat</string>
@@ -1079,6 +1084,7 @@
     <string name="title_answer_group">Mallgrupp (valfritt)</string>
     <string name="title_answer_standard">Standard</string>
     <string name="title_answer_favorite">Favorit</string>
+    <string name="title_answer_receipt">Använd som ett läskvitto</string>
     <string name="title_answer_hide">Dölj från menyer</string>
     <string name="title_answer_text">Malltext</string>
     <string name="title_answer_placeholder">Platshållare</string>
@@ -1542,5 +1548,7 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Monospace</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

@@ -2,31 +2,31 @@
 
 # FairEmail Destek
 
-If you have a question, please check the following frequently asked questions first. [At the bottom](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
+Sorunuzun olması halinde, öncelikle aşağıda yer alan sıkça sorulan soruları kontrol ediniz. [At the bottom](#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Dizin
 
-* [Hesap Yetkilendirme](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [Nasıl yapılır ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Bilinen hatalar](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planlanan Özellikler](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Sıkça talep edilen özellikler](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Sıkça Sorulan Sorular](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Yardım alın](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Hesap Yetkilendirme](#user-content-authorizing-accounts)
+* [Nasıl yapılır ...?](#user-content-howto)
+* [Bilinen hatalar](#user-content-known-problems)
+* [Planlanan Özellikler](#user-content-planned-features)
+* [Sıkça talep edilen özellikler](#user-content-frequently-requested-features)
+* [Sıkça Sorulan Sorular](#user-content-frequently-asked-questions)
+* [Yardım alın](#user-content-get-support)
 
-## Hesap Yetkilendirme
+<h2><a name="authorizing-accounts"></a>Hesap Yetkilendirme</h2>
 
-In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
+Çoğu durumda, hızlı kurulum sihirbazı doğru yapılandırmayı otomatik olarak tanımlayabilecektir.
 
-If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Hızlı kurulum sihirbazı başarısız olursa, manuel olarak bir hesap (e-posta almak için) ve bir kimlik (e-posta göndermek için) oluşturmanız gerekir. Bunun için, SSL / TLS veya STARTTLS'e ihtiyacınız olacak, IMAP ve SMTP sunucu adreslerine ve bağlantı noktası numaralarına ihtiyacınız olacak ve kullanıcı adınız (çoğunlukla, ancak her zaman değil, e-posta adresiniz) ve şifreniz.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+*IMAP* ve sağlayıcının adını aramak çoğunlukla doğru belgeleri bulmak için yeterlidir.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+Bazı durumlarda, hesabınıza harici erişimi etkinleştirmeniz ve / veya özel bir (uygulama) şifresi kullanmanız gerekebilir.
 
-For authorizing:
+Yetkilendirmek için:
 
 * Gmail / G Suite, [6. soru](#user-content-faq6)ya bakınız
 * Outlook / Live / Hotmail, [14. soru](#user-content-faq14)ya bakınız
@@ -36,9 +36,9 @@ For authorizing:
 * Apple iCloud, [148. soru](#user-content-faq148)ya bakınız
 * Free.fr, [157. soru](#user-content-faq157)ya bakınız
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+Yaygın hata mesajları ve çözümleri için lütfen [burayı](#user-content-faq22) kontrol ediniz.
 
-Related questions:
+İlgili sorular:
 
 * [OAuth destekleniyor mu?](#user-content-faq111)
 * [ActiveSync neden desteklenmiyor?](#user-content-faq133)
@@ -47,29 +47,29 @@ Related questions:
 
 ## Nasıl yapılır ...?
 
-* Change the account name: Settings, tap Manual setup, tap Accounts, tap account
+* Hesap adını değiştirme: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokunun, Hesaplar'a dokunun, hesaba dokunun
 * Sağa/sola kaydırma hareketlerini değiştirme: Ayarlar, Sayfa Davranışına dokun, Kaydırma hareketlerini ayarla
-* Change password: Settings, tap Manual setup, tap Accounts, tap account, change password
-* Set a signature: Settings, tap Manual setup, tap Identities, tap identity, Edit signature.
+* Şifre değiştir: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokun, Hesaplar'a dokun, hesaba dokun, şifre değiştir
+* Bir imza belirleyin: Ayarlar, Elle kurulum ve daha fazla seçeneğe dokun, Kimlikler'e dokun, İmzayı düzenle.
 * CC ve BCC adresleri ekleme: başlık kısmının sonundaki kişi ikonuna tıklayın
 * Arşiv/silinenlerdeki bir önceki/sonraki mesaja gitme: davranış ayarlarında *konuşmaları otomatik silmeyi* devre dışı bırakıp *bir görüşmeyi kapatırken* *bir sonraki/önceki konuşmaya giti* seçin
 * Birleşik gelen kutusuna klasör ekleme: klasör listesindeki klasöre basılı tutun ve *Birleşik gelen postayı göster*i işaretleyin
 * Dolaşım menüsüne dosya ekleme: klasör listesindeki klasöre basılı tutun ve *Navigasyon menüsünde göster*i işaretleyin
 * Daha fazla mesaj yükleme: klasör listesindeki klasöre basılı tutun ve *Daha fazla mesajı getir*i işaretleyin
-* Delete a message, skipping trash: long press the trash icon
-* Delete an account/identity: Settings, tap Manual setup, tap Accounts/Identities, tap the account/identity, trash icon top right
-* Delete a folder: long press the folder in the folder list, Edit properties, trash icon top right
-* Undo send: Outbox, swipe the message in the list left or right
+* Çöp kutusunu atlayarak bir mesajı silin: çöp simgesine uzun basın
+* Bir hesabı / kimliği silin: Ayarlar, Manuel kurulum'a dokunun, Hesaplar / Kimlikler'e dokunun, hesaba / kimliğe, sağ üstteki çöp kutusu simgesine dokunun
+* Bir klasörü silin: klasör listesindeki klasöre uzun basın, Özellikleri düzenle, çöp kutusu simgesi sağ üst
+* Göndermeyi geri al: Giden kutusu, listedeki mesajı sola veya sağa kaydırın
 * Gönderilen mesajları gelen kutusunda saklama: lütfen [SSS'ı inceleyin](#user-content-faq142)
-* Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
-* Export/import settings: Settings, navigation (left side) menu
+* Sistem klasörlerini değiştirme: Ayarlar, Manuel kurulum'a dokunun, Hesaplar'a dokunun, altta hesaba dokunun
+* Ayarları dışa / içe aktarma: Ayarlar, gezinme (sol taraf) menüsü
 
-## Bilinen Hatalar
+<h2><a name="known-problems"></a>Known problem</h2>
 
-* ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~
-* ~~A [bug in Google Drive](https://issuetracker.google.com/issues/126362828) causes files exported to Google Drive to be empty. Google has fixed this.~~
-* ~~A [bug in AndroidX](https://issuetracker.google.com/issues/78495471) causes FairEmail to occasionally crash on long pressing or swiping. Google has fixed this.~~
-* ~~A [bug in AndroidX ROOM](https://issuetracker.google.com/issues/138441698) causes sometimes a crash with "*... Exception while computing database live data ... Couldn't read row ...*". A workaround was added.~~
+* ~~ Android 5.1 ve 6'daki bir [ hata ](https://issuetracker.google.com/issues/37054851), uygulamaların bazen yanlış bir saat biçimi göstermesine neden oluyor. Android ayarını değiştirmek * 24 saatlik biçimi kullanın * sorunu geçici olarak çözebilir. Bir geçici çözüm eklendi. ~~
+* ~~ Google Drive'daki bir [ hata ](https://issuetracker.google.com/issues/126362828), Google Drive'a dışa aktarılan dosyaların boş olmasına neden oluyor. Google bunu düzeltti. ~~
+* ~~ AndroidX'teki bir [ hata ](https://issuetracker.google.com/issues/78495471), FairEmail'in bazen uzun basma veya kaydırma sırasında çökmesine neden oluyor. Google bunu düzeltti. ~~
+* ~~ AndroidX ROOM'daki bir [ hatası ](https://issuetracker.google.com/issues/138441698), bazen çökmeye sebep oluyor "*... Veritabanı canlı verilerini hesaplarken istisna ... Satır okunamadı ... * ". Bir geçici çözüm eklendi. ~~
 * A [bug in Android](https://issuetracker.google.com/issues/119872129) causes FairEmail to crash with "*... Bad notification posted ...*" on some devices once after updating FairEmail and tapping on a notification.
 * A [bug in Android](https://issuetracker.google.com/issues/62427912) sometimes causes a crash with "*... ActivityRecord not found for ...*" after updating FairEmail. Reinstalling ([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) might fix the problem.
 * A [bug in Android](https://issuetracker.google.com/issues/37018931) sometimes causes a crash with *... InputChannel is not initialized ...* on some devices.
@@ -83,50 +83,51 @@ Related questions:
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
-## Planlanan özellikler
+<h2><a name="planned-features"></a>Planlanan özellikler</h2>
 
 * ~~ Talep üzerine senkronize et (manuel) ~~
 * ~~Yarı-otomatik şifreleme~~
 * ~~ Mesajı kopyala ~~
 * ~~Renkli yıldızlar~~
 * ~~Her bir klasör için bildirim ayarı~~
-* ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
+* ~~ İmzalar için yerel resimler seçmek ~~ (bu eklenmeyecektir çünkü resim dosyası yönetimi gerektirmektedir ve resimler zaten çoğu e-posta istemcisinde varsayılan olarak gösterilmemektedir)
 * ~~ Bir kuralla eşleşen mesajları göster ~~
-* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
-* ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
-* ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
+* ~~[ ManageSieve ](https://tools.ietf.org/html/rfc5804) ~~ (uygun bir lisansa sahip ve bağımlılıkları olmayan korunan Java kitaplıkları yoktur ve bunun yanında, FairEmail'in kendi filtre kuralları vardır)
+* ~~ Ekli / eksiz mesajları ara ~~ (bu eklenemez çünkü IMAP ekleri aramayı desteklemiyor)
+* ~~ Bir klasör arayın ~~ (hiyerarşik bir klasör listesini filtrelemek sorun teşkil eder)
 * ~~ Arama önerileri ~~
-* ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
-* ~~Generic unified folders~~
-* ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
+* ~~[ Otomatik Şifreleme Kurulum Mesajı ](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (bölüm 4.4) ~~ (IMO, bir e-posta istemcisinin istisnai bir kullanım durumu için hassas şifreleme anahtarlarını işlemesine izin verirken, OpenKeychain de anahtarları dışa aktarabilir)
+* ~~ Genel birleşik klasörler ~~
+* ~~ Hesap başına yeni mesaj bildirim programları ~~ (kurallara bir zaman koşulu eklenerek uygulanır, böylece mesajlar seçilen dönemlerde ertelenebilir)
 * ~~ Hesapları ve kimlikleri kopyalayın ~~
-* ~~Pinch zoom~~ (not reliably possible in a scrolling list; the full message view can be zoomed instead)
-* ~~More compact folder view~~
-* ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
-* ~~Pinch zoom text size~~
+* ~~ Kıstırma yakınlaştırma ~~ (kayan bir listede güvenilir bir şekilde mümkün değildir; bunun yerine tam ileti görünümü yakınlaştırılabilir)
+* ~~ Daha kompakt klasör görünümü ~~
+* ~~ Listeler ve tablolar oluşturun ~~ (bu, zengin bir metin düzenleyici gerektirir, bkz. [ bu SSS ](#user-content-faq99))
+* ~~ Yakınlaştırma metin boyutunu sıkıştırma ~~
 * ~~ GIF'leri Görüntüle ~~
 * ~~ Temalar ~~ (Çoğu insan bu temayı istediği için gri, açık ve koyu bir tema eklendi.)
-* ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
+* ~~ Herhangi bir gün zamanı koşulu ~~ (herhangi bir gün, başlangıç ​​/ bitiş tarih / saat durumuna tam olarak uymaz)
 * ~~ Ek olarak gönder ~~
-* ~~Widget for selected account~~
-* ~~Remind to attach files~~
-* ~~Select domains to show images for~~ (this will be too complicated to use)
-* ~~Unified starred messages view~~ (there is already a special search for this)
-* ~~Move notification action~~
-* ~~S/MIME support~~
+* ~~ Seçilen hesap için Widget ~~
+* ~~ Dosyaları eklemeyi hatırlatma ~~
+* Resim göstermek için domain seçin (Bu kullanması çok kafa karıştırıcı olacaktır)
+* ~~ Birleşik yıldızlı mesajlar görünümü ~~ (bunun için zaten özel bir arama var)
+* ~~ Bildirim eylemini taşı ~~
+* ~~ S / MIME desteği ~~
 * ~~ Ayarları ara ~~
 
-Anything on this list is in random order and *might* be added in the near future.
+Bu listedeki her şey rastgele sıradadır ve yakın gelecekte * eklenebilir *.
 
-## Frequently requested features
+<h2><a name="frequently-requested-features"></a>Sıkça talep edilen özellikler</h2>
 
-The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
+Tasarım birçok tartışmaya dayanıyor ve isterseniz bunu [ bu forumda ](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) da tartışabilirsiniz. Tasarımın amacı minimalist olmak (gereksiz menüler, düğmeler vb. Yok) ve dikkat dağıtmamaktır (süslü renkler, animasyonlar vb.). Görüntülenen tüm şeyler şu veya bu şekilde yararlı olmalı ve kolay kullanım için dikkatlice yerleştirilmelidir. Yazı tipleri, boyutları, renkleri, vb. Mümkün olduğunca materyal tasarım olmalıdır.
 
-## Frequently Asked Questions
+<h2><a name="frequently-asked-questions"></a>Sıkça Sorulan Sorular</h2>
 
-* [(1) Which permissions are needed and why?](#user-content-faq1)
-* [(2) Why is there a permanent notification shown?](#user-content-faq2)
+* [(1) Hangi izinler gerekli ve neden?](#user-content-faq1)
+* [(2) Neden gösterilen kalıcı bir bildirim var?](#user-content-faq2)
 * [(3) What are operations and why are they pending?](#user-content-faq3)
 * [(4) How can I use an invalid security certificate / empty password / plain text connection?](#user-content-faq4)
 * [(5) How can I customize the message view?](#user-content-faq5)
@@ -144,7 +145,7 @@ The design is based on many discussions and if you like you can discuss about it
 * [~~(17) Why does manual synchronize not work?~~](#user-content-faq17)
 * [(18) Why is the message preview not always shown?](#user-content-faq18)
 * [(19) Why are the pro features so expensive?](#user-content-faq19)
-* [(20) Can I get a refund?](#user-content-faq20)
+* [(20) Geri ödeme alabilir miyim?](#user-content-faq20)
 * [(21) How do I enable the notification light?](#user-content-faq21)
 * [(22) What does account/folder error ... mean?](#user-content-faq22)
 * [(23) Why do I get alert .. ?](#user-content-faq23)
@@ -434,7 +435,7 @@ You can pin the certificate too, see above.
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Your username is likely easily guessed, so this is pretty insecure, unless the SMTP server is available via a restricted local network or a VPN only.
 
 *Plain text connection*
 
@@ -607,7 +608,7 @@ Communication with email servers is always encrypted, unless you explicitly turn
 
 <br />
 
-*General*
+*Genel*
 
 Please [see here](https://en.wikipedia.org/wiki/Public-key_cryptography) about how public/private key encryption works.
 
@@ -679,7 +680,7 @@ Private keys are stored by Android and can be imported via the Android advanced 
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
-Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.
 
@@ -1242,11 +1243,11 @@ Long version:
 <br />
 
 <a name="faq37"></a>
-**(37) How are passwords stored?**
+**(37) Parolalar nasıl saklanır?**
 
-All supported Android versions [encrypt all user data](https://source.android.com/security/encryption), so all data, including usernames, passwords, messages, etc, is stored encrypted.
+Desteklenen tüm Android sürümleri [tüm kullanıcı verilerini şifreler](https://source.android.com/security/encryption), bu nedenle kullanıcı adları, şifreler, mesajlar vb. dahil tüm veriler şifrelenmiş olarak saklanır.
 
-If the device is secured with a PIN, pattern or password, you can make the account and identity passwords visible. If this is a problem because you are sharing the device with other people, consider to use [user profiles](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/).
+Cihaz bir PIN, desen veya şifre ile güvenlik altına alınmışsa, hesap ve kimlik şifrelerini görünür hale getirebilirsiniz. Cihazı başkalarıyla paylaştığınız için sorun oluyorsa, [kullanıcı profilleri](https://www.howtogeek.com/333484/how-to-set-up-multiple-user-profiles-on-android/) kullanmayı düşünün.
 
 <br />
 
@@ -1636,7 +1637,9 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The one time price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
+"*You can't share in-app purchases and free apps with your family members.*"
+
+See [here](https://support.google.com/googleone/answer/7007852) under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
 
 <br />
 
@@ -1660,7 +1663,7 @@ Third party apps do not have access to the Gmail snoozed messages folder.
 <a name="faq68"></a>
 **~~(68) Why can Adobe Acrobat reader not open PDF attachments / Microsoft apps not open attached documents?~~**
 
-~~Adobe Acrobat reader and Microsoft apps still expects full access to all stored files,~~ ~~while apps should use the [Storage Access Framework](https://developer.android.com/guide/topics/providers/document-provider) since Android KitKat (2013)~~ ~~to have access to actively shared files only. This is for privacy and security reasons.~~
+~~Adobe Acrobat reader and Microsoft apps still expects full access to all stored files,~~ ~~while apps should use the [Storage Access Framework](https://developer.android.com/guide/topics/providers/document-provider) since Android KitKat (2013)~~ ~~to have access to actively shared files only. Bu gizlilik ve güvenlik sebepleri içindir
 
 ~~You can workaround this by saving the attachment and opening it from the Adobe Acrobat reader / Microsoft app,~~ ~~but you are advised to install an up-to-date and preferably open source PDF reader / document viewer,~~ ~~for example one listed [here](https://github.com/offa/android-foss#-document--pdf-viewer).~~
 
@@ -1711,7 +1714,7 @@ The following rule conditions are available:
 * Absolute time (received) between (since version 1.1540)
 * Relative time (received) between
 
-All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
+All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. If you want to match a domain name, you can use as a condition something like *@example.org*
 
 Note that email addresses are formatted like this:
 
@@ -1745,6 +1748,8 @@ You can select one of these actions to apply to matching messages:
 * Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
+
+An error in a rule condition can lead to a disaster, therefore irreversible actions are not supported.
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
@@ -2274,9 +2279,7 @@ Disabling *Partial fetch* will result in more memory usage.
 
 OAuth for Gmail is supported via the quick setup wizard. The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts. OAuth for non on-device accounts is not supported because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this. You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth for Yandex and Yahoo is supported via the quick setup wizard.
-
-OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
+OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
 <br />
 
@@ -2875,7 +2878,7 @@ Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/confi
 To take photos and to record audio a camera and an audio recorder app are needed. The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Audio Recorder sürüm 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([ F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
 To record voice notes, etc, the audio recorder needs to support [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION). Oddly, most audio recorders seem not to support this standard Android action.
 
@@ -2998,8 +3001,8 @@ Yes, Android Auto is supported, but only with the GitHub version, please [see he
 
 For notification (messaging) support you'll need to enable the following notification options:
 
-* *Use Android 'messaging style' notification format*
-* Notification actions: *Direct reply* and (mark as) *Read*
+* *Android 'mesajlaşma stili' bildirim biçimini kullanın*
+* Bildirim eylemleri: * Doğrudan yanıt * ve (şu şekilde işaretle) * Oku *
 
 You can enable other notification actions too, if you like, but they are not supported by Android Auto.
 
@@ -3020,9 +3023,9 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <br />
 
-## Get support
+<h2><a name="get-support"></a>Destek alın</h2>
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail is supported on Android smartphones and tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
 
@@ -3032,10 +3035,10 @@ There is no support on building and developing things by yourself.
 
 Requested features should:
 
-* be useful to most people
-* not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
-* comply with common standards (IMAP, SMTP, etc)
+* çoğu insan için faydalı olması
+* fairEmail kullanımını karmaşıklaştırmaması
+* fairEmail felsefesine uygun (gizlilik odaklı, güvenlik odaklı)
+* ortak standartlarla uyumlu (IMAP, SMTP, vb.)
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 

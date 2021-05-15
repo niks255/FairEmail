@@ -121,13 +121,16 @@
             android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ibFlow" />
+            app:layout_constraintTop_toBottomOf="@id/ibFlow">
+
+            <requestFocus />
+        </eu.faircode.email.TextViewAutoCompleteClearable>
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvSearch1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="middle"
+            android:ellipsize="end"
             android:padding="6dp"
             android:singleLine="true"
             android:text="search1"
@@ -144,7 +147,7 @@
             android:id="@+id/tvSearch2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="middle"
+            android:ellipsize="end"
             android:padding="6dp"
             android:singleLine="true"
             android:text="search2"
@@ -161,7 +164,7 @@
             android:id="@+id/tvSearch3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="middle"
+            android:ellipsize="end"
             android:padding="6dp"
             android:singleLine="true"
             android:text="search3"
@@ -333,6 +336,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSearchTextHint" />
 
+        <CheckBox
+            android:id="@+id/cbHeaders"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_search_in_headers"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbNotes" />
+
+        <CheckBox
+            android:id="@+id/cbHtml"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_search_in_html"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbHeaders" />
+
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvAnd"
             android:layout_width="wrap_content"
@@ -342,7 +369,7 @@
             android:text="@string/title_search_with"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbNotes" />
+            app:layout_constraintTop_toBottomOf="@id/cbHtml" />
 
         <CheckBox
             android:id="@+id/cbUnseen"

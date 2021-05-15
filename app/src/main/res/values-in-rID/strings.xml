@@ -78,7 +78,6 @@
     <string name="title_notification_sending_failed">Gagal mengirim ke %1$s</string>
     <string name="title_notification_redacted">Menyusun: otentikasi sidik jari atau PIN diaktifkan</string>
     <string name="title_factor_minutes">%1$d menit</string>
-    <string name="menu_exit">Keluar</string>
     <string name="menu_answers">Template</string>
     <string name="menu_operations">Operasi</string>
     <string name="menu_contacts">Kontak Lokal</string>
@@ -122,15 +121,14 @@
     <string name="title_setup_account_identity_hint">Anda dapat mengkonfigurasi nama, warna dan tindakan menggesek di pengaturan akun, dan mengkonfigurasi tanda tangan di pengaturan identitas</string>
     <string name="title_setup_accounts">Akun</string>
     <string name="title_setup_identities">Identitas</string>
-    <string name="title_setup_oauth_permission">Pengelola surel ini telah menerima OAuth hanya untuk versi aplikasi yang resmi saja</string>
     <string name="title_setup_other">Penyedia Lainnya</string>
     <string name="title_setup_pop3">Akun POP3</string>
+    <string name="title_setup_oauth_permission">Pengelola surel ini telah menerima OAuth hanya untuk versi aplikasi yang resmi saja</string>
     <string name="title_setup_gmail_support">Memberi otorisasi pada akun Google hanya akan berfungsi dalam versi resminya karena Android memeriksa tanda tangan aplikasi.</string>
     <string name="title_setup_gmail_rationale">Mohon berikan izin untuk memilih akun dan membaca nama Anda.</string>
     <string name="title_setup_gmail_permissions">Google akan meminta izin untuk membaca, menulis, mengirim dan menghapus semua email Anda secara permanen. FairEmail tidak akan pernah menghapus pesan tanpa persetujuan tegas dari Anda.</string>
     <string name="title_setup_gmail_drafts">Jika folder draf tidak dapat diakses oleh IMAP, hal ini dapat diperbaiki pada pengaturan label Gmail.</string>
     <string name="title_setup_gmail_password">Saya ingin mengotorisasi akun dengan kata sandi</string>
-    <string name="title_setup_office_remark">Microsoft tidak akan memberikan tipe otorisasi ini untuk akun Outlook, Live, Hotmail, dan lainnya</string>
     <string name="title_setup_office_auth">Kesalahan \'AUTHENTICATE Failed\' bisa disebabkan oleh IMAP/SMTP yang dinon-aktifkan oleh administrator sistem.</string>
     <string name="title_setup_oauth_rationale">Izinkan akses ke akun %1$s Anda</string>
     <string name="title_setup_oauth_update">Mengotorisasi akun yang sudah ada</string>
@@ -155,7 +153,6 @@
     <string name="title_setup_permissions_remark">Untuk mengakses informasi kontak (opsional)</string>
     <string name="title_setup_doze">Nonaktifkan pengoptimalan baterai</string>
     <string name="title_setup_doze_remark">Untuk mengirim dan menerima email secara handal</string>
-    <string name="title_setup_doze_hint">Meskipun ini mungkin terdengar kontradiktif, menonaktifkan pengoptimalan baterai akan mengurangi penggunaan baterai</string>
     <string name="title_setup_doze_instructions">Pada perubahan dialog Android berikutnya \"Tidak dioptimalkan\" menjadi \"Semua Aplikasi\", pilih aplikasi dan pilih \"Jangan Optimalkan\"</string>
     <string name="title_setup_doze_battery">Penggunaan boros baterai?</string>
     <string name="title_setup_doze_stopped">Sinkronisasi berhenti?</string>
@@ -225,6 +222,7 @@
     <string name="title_advanced_default">Semua opsi biasanya telah menggunakan nila standar, yang tidak perlu diubah untuk menggunakan aplikasi</string>
     <string name="title_advanced_receive">Terima pesan untuk semua akun</string>
     <string name="title_advanced_when">Kapan</string>
+    <string name="title_advanced_optimize">Optimalkan secara otomatis</string>
     <string name="title_advanced_always">Selalu terima pesan untuk akun ini</string>
     <string name="title_advanced_schedule">Penjadwalan</string>
     <string name="title_advanced_advanced">Tingkat Lanjut</string>
@@ -351,6 +349,9 @@
     <string name="title_advanced_authentication">Tampilkan peringatan ketika server penerima tidak bisa mengotentikasi pesan</string>
     <string name="title_advanced_sync_on_launch">Sinkronisasi pada saat memulai aplikasi</string>
     <string name="title_advanced_double_back">Ketuk dua kali untuk keluar</string>
+    <string name="title_advanced_conversation_actions">Sarankan Tindakan (Android 10+)</string>
+    <string name="title_advanced_conversation_actions_replies">Sarankan teks balasan (Android 10+)</string>
+    <string name="title_advanced_language_detection">Deteksi bahasa teks pesan</string>
     <string name="title_advanced_pull_refresh">Tarik ke bawah untuk memuat ulang</string>
     <string name="title_advanced_autoscroll">Gulir ke atas saat menerima pesan baru</string>
     <string name="title_advanced_double_tap">Ketuk dua kali untuk menandai pesan telah dibaca/belum dibaca</string>
@@ -436,9 +437,6 @@
     <string name="title_advanced_manage_keys_hint">Ini akan membuka pengaturan keamanan Android. Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kredensial.</string>
     <string name="title_advanced_external_search">Izinkan aplikasi lain untuk menelusuri pengolah pesan FairMail</string>
     <string name="title_advanced_shortcuts">Tampilkan kontak yang sering digunakan di menu berbagi pada Android</string>
-    <string name="title_advanced_conversation_actions">Sarankan Tindakan (Android 10+)</string>
-    <string name="title_advanced_conversation_actions_replies">Sarankan teks balasan (Android 10+)</string>
-    <string name="title_advanced_language_detection">Deteksi bahasa teks pesan</string>
     <string name="title_advanced_fts">Membangun indeks pencarian</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d pesan terindeks (%3$s)</string>
     <string name="title_advanced_classification">Klasifikasikan pesan</string>
@@ -447,19 +445,18 @@
     <string name="title_advanced_language">Bahasa</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_watchdog">Periksa secara berkala apakah FairEmail masih aktif</string>
-    <string name="title_advanced_optimize">Optimalkan secara otomatis</string>
     <string name="title_advanced_updates">Periksa pembaruan di GitHub</string>
     <string name="title_advanced_check_weekly">Periksa setiap minggu daripada setiap hari</string>
     <string name="title_advanced_experiments">Mencoba fitur eksperimen</string>
-    <string name="title_advanced_query_threads">Batasi akses database paralel</string>
     <string name="title_advanced_crash_reports">Kirim laporan kesalahan</string>
-    <string name="title_advanced_protocol">Aktifitas Protokol</string>
-    <string name="title_advanced_log_info">Pencatatan debug</string>
-    <string name="title_advanced_debug">Mode debug</string>
     <string name="title_advanced_cleanup_attachments">Buang lampiran pada pesan lama</string>
     <string name="title_advanced_cleanup">Membersihkan</string>
     <string name="title_advanced_app">Pengaturan aplikasi</string>
     <string name="title_advanced_more">Opsi lainnya</string>
+    <string name="title_advanced_protocol">Aktifitas Protokol</string>
+    <string name="title_advanced_log_info">Pencatatan debug</string>
+    <string name="title_advanced_debug">Mode debug</string>
+    <string name="title_advanced_query_threads">Batasi akses database paralel</string>
     <string name="title_advanced_manual_hint">Bila penerimaan pesan dinonaktifkan, masih mungkin untuk menerima pesan secara manual dengan cara menarik daftar pesan</string>
     <string name="title_advanced_poll_hint">Secara berkala memeriksa pesan baru yang akan membandingkan pesan lokal dan server setiap saat, operasi ini bisa memakai penggunaan baterai secara ekstra, terutama jika ada banyak pesan. Selalu menerima akan mencegah hal ini dengan terus mengikuti perubahan.</string>
     <string name="title_advanced_optimize_hint">Ini mungkin mengubah frekuensi sinkronisasi untuk menghemat penggunaan baterai tergantung pada kemampuan dan perilaku server email</string>
@@ -1344,5 +1341,7 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Monospace</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

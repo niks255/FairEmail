@@ -328,6 +328,7 @@ public interface DaoMessage {
             " OR (:keywords AND `keywords` LIKE :find COLLATE NOCASE)" + // no index
             " OR (:message AND `preview` LIKE :find COLLATE NOCASE)" + // no index
             " OR (:notes AND `notes` LIKE :find COLLATE NOCASE)" + // no index
+            " OR (:headers AND `headers` LIKE :find COLLATE NOCASE)" + // no index
             " OR (attachment.name LIKE :find COLLATE NOCASE)" + // no index
             " OR (attachment.type LIKE :find COLLATE NOCASE)) AS matched" + // no index
             " FROM message" +
@@ -350,7 +351,7 @@ public interface DaoMessage {
             " LIMIT :limit OFFSET :offset")
     List<TupleMatch> matchMessages(
             Long account, Long folder, String find,
-            boolean senders, boolean recipients, boolean subject, boolean keywords, boolean message, boolean notes,
+            boolean senders, boolean recipients, boolean subject, boolean keywords, boolean message, boolean notes, boolean headers,
             boolean unseen, boolean flagged, boolean hidden, boolean encrypted, boolean with_attachments, boolean with_notes,
             int type_count, String[] types,
             Integer size,
@@ -558,6 +559,13 @@ public interface DaoMessage {
             " AND (:received IS NULL OR received >= :received)" +
             " AND NOT uid IS NULL")
     List<Long> getUids(long folder, Long received);
+
+    @Query("SELECT uid FROM message" +
+            " WHERE folder = :folder" +
+            " AND NOT ui_busy IS NULL" +
+            " AND ui_busy > :time" +
+            " AND NOT uid IS NULL")
+    List<Long> getBusyUids(long folder, long time);
 
     @Query("SELECT id, uidl, msgid FROM message" +
             " WHERE folder = :folder")
@@ -820,6 +828,7 @@ public interface DaoMessage {
     @Query("DELETE FROM message" +
             " WHERE folder = :folder" +
             " AND uid IS NULL" +
+            " AND (ui_busy IS NULL OR ui_busy < :now)" +
             " AND NOT EXISTS" +
             "  (SELECT * FROM operation" +
             "  WHERE operation.message = message.id" +
@@ -830,7 +839,7 @@ public interface DaoMessage {
             "  WHERE o.account = message.account" +
             "  AND o.name = '" + EntityOperation.MOVE + "'" +
             "  AND m.msgid = message.msgid)")
-    int deleteOrphans(long folder);
+    int deleteOrphans(long folder, long now);
 
     @Query("SELECT * FROM message" +
             " WHERE folder = :folder" +

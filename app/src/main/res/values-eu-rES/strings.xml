@@ -73,7 +73,6 @@
     <string name="title_notification_failed">%1$s(e)k huts egin du</string>
     <string name="title_notification_alert">\'%1$s\' zerbitzariko alerta</string>
     <string name="title_factor_minutes">%1$d minutu</string>
-    <string name="menu_exit">Irten</string>
     <string name="menu_answers">Txantiloiak</string>
     <string name="menu_operations">Eragiketak</string>
     <string name="menu_contacts">Kontaktu lokalak</string>
@@ -182,6 +181,7 @@
     <string name="title_advanced_section_misc">Miszelanea</string>
     <string name="title_advanced_receive">Jaso kontu guztietako mezuak</string>
     <string name="title_advanced_when">Noiz</string>
+    <string name="title_advanced_optimize">Optimizatu automatikoki</string>
     <string name="title_advanced_always">Jaso beti kontu hauetako mezuak</string>
     <string name="title_advanced_schedule">Egitaraua</string>
     <string name="title_advanced_advanced">Aurreratua</string>
@@ -348,16 +348,15 @@
     <string name="title_advanced_fts_indexed">%1$d / %2$d mezu indexatuak (%3$s)</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_watchdog">Aldiro egiaztatu FairEmail aktibo dagoen</string>
-    <string name="title_advanced_optimize">Optimizatu automatikoki</string>
     <string name="title_advanced_updates">Egiaztatu GitHub-eko eguneratzeak</string>
     <string name="title_advanced_experiments">Probatu ezaugarri esperimentalak</string>
-    <string name="title_advanced_query_threads">Mugatu datu-baseak paraleloki atzitzea</string>
     <string name="title_advanced_crash_reports">Bidali errore txostenak</string>
-    <string name="title_advanced_debug">Arazketa modua</string>
     <string name="title_advanced_cleanup_attachments">Ezabatu mezu zaharren eranskinak</string>
     <string name="title_advanced_cleanup">Garbiketa</string>
     <string name="title_advanced_app">Aplikazioaren ezarpenak</string>
     <string name="title_advanced_more">Aukera gehiago</string>
+    <string name="title_advanced_debug">Arazketa modua</string>
+    <string name="title_advanced_query_threads">Mugatu datu-baseak paraleloki atzitzea</string>
     <string name="title_advanced_manual_hint">Mezuak jasotzea desgaituta badago, mezuak jaso daitezke oraindik ere mezuen zerrenda behera tiratuz</string>
     <string name="title_advanced_poll_hint">Aldiro mezu berriak bilatzean tokiko eta urruneko mezuak konparatuko ditu bakoitzean, hau eragiketa garestia da eta bateria kontsumituko du, bereziki mezu asko badaude. Beti jasok hau ekiditen du aldaketak etengabe jarraituz.</string>
     <string name="title_advanced_schedule_hint">Sakatu orduren batean ordua ezartzeko</string>
@@ -761,9 +760,9 @@
     <string name="title_send_receipt">Eskatu agiria</string>
     <string name="title_send_receipt_remark">Hornitzaile eta bezero gehienek ez dituzte jasotze agiri eskariak aintzat hartzen</string>
     <string name="title_from_missing">Igorlea falta da</string>
-    <string name="title_extra_missing">Erabiltzailearen izena falta da</string>
-    <string name="title_to_missing">Hartzailea falta da</string>
     <string name="title_pgp_reminder">PGP gakoak eskuragarri daude</string>
+    <string name="title_to_missing">Hartzailea falta da</string>
+    <string name="title_extra_missing">Erabiltzailearen izena falta da</string>
     <string name="title_subject_reminder">Mintzagaia hutsik dago</string>
     <string name="title_text_reminder">Mezua hutsik dago</string>
     <string name="title_attachment_keywords">erantsita,eranskina,eranskinak,txertatuta</string>
@@ -1311,5 +1310,7 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Monospace</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

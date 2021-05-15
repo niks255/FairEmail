@@ -335,12 +335,15 @@
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvInsecureRemark"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:drawableEnd="@drawable/twotone_info_24"
+            android:drawablePadding="6dp"
             android:text="@string/title_insecure_remark"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbInsecure" />
 
@@ -730,6 +733,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etBcc" />
 
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvInternal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_identity_internal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBccHint" />
+
+        <eu.faircode.email.EditTextPlain
+            android:id="@+id/etInternal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/title_optional"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInternal" />
+
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvInternalHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_advanced_internal_hint"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etInternal" />
+
         <CheckBox
             android:id="@+id/cbSignDefault"
             android:layout_width="wrap_content"
@@ -737,7 +772,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/title_advanced_sign_default"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvBccHint" />
+            app:layout_constraintTop_toBottomOf="@id/tvInternalHint" />
 
         <CheckBox
             android:id="@+id/cbEncryptDefault"
@@ -911,6 +946,7 @@
                 cbSynchronize,cbPrimary,cbSelf,tvSelfHint,
                 cbSenderExtra,cbSenderExtraName,tvSenderExtra,etSenderExtra,ibSenderExtra,tvSenderExtraHint,
                 tvReplyTo,etReplyTo,tvCc,etCc,tvCcHint,tvBcc,etBcc,tvBccHint,
+                tvInternal,etInternal,tvInternalHint,
                 cbSignDefault,cbEncryptDefault,
                 cbUnicode,tvUnicodeHint,tvMaxSize,etMaxSize" />
 

@@ -90,7 +90,6 @@
     <string name="title_notification_sending_failed">Küldés nem sikerül erre a címre: %1$s</string>
     <string name="title_notification_redacted">A Biometrikus vagy PIN authentikáció aktiválva van</string>
     <string name="title_factor_minutes">%1$d perc</string>
-    <string name="menu_exit">Kilépés</string>
     <string name="menu_answers">Sablonok</string>
     <string name="menu_operations">Műveletek</string>
     <string name="menu_contacts">Helyi névjegyzék</string>
@@ -134,15 +133,14 @@
     <string name="title_setup_account_identity_hint">Beállíthatod a nevet, színt és csúsztatási műveleteket a fiókbeállításokban, és konfigurálhatsz egy aláírást az identitási beállításokban</string>
     <string name="title_setup_accounts">Fiókok</string>
     <string name="title_setup_identities">Identitások</string>
-    <string name="title_setup_oauth_permission">Az email-szolgáltató az OAuth-ot csak hivatalos alkalmazásverziókhoz hagyta jóvá</string>
     <string name="title_setup_other">Egyéb szolgáltató</string>
     <string name="title_setup_pop3">POP3 fiók</string>
+    <string name="title_setup_oauth_permission">Az email-szolgáltató az OAuth-ot csak hivatalos alkalmazásverziókhoz hagyta jóvá</string>
     <string name="title_setup_gmail_support">Google fiókok hozzáadása csak a hivatalos verziókban működik, mivel az Android ellenőrzi az alkalmazás aláírását</string>
     <string name="title_setup_gmail_rationale">Kérem adja meg a szükséges engedélyeket hogy a kijelölhessen egy fiókot, illetve az alkalmazás hozzáférjen</string>
     <string name="title_setup_gmail_permissions">A Google engedélyeket fog kérni hogy olvashasson, írhasson, küldhessen és véglegesen törölhessen üzeneteket. A FairEmail sosem törli az üzeneteit az Ön beleegyezése nélkül.</string>
     <string name="title_setup_gmail_drafts">Ha a piszkozatok mappa nem elérhető IMAP-on keresztül, a hibát orvosolhatja a Gmail címkék beállításai között</string>
     <string name="title_setup_gmail_password">Szeretnék egy fiókot hitelesíteni jelszóval</string>
-    <string name="title_setup_office_remark">A Microsoft nem támogatja e típusú autentikációt Outlook, Live, Hotmail, stb fiókoknál</string>
     <string name="title_setup_office_auth">Az \'AUTHENTICATE failed\' hibának oka lehet hogy a rendszeradminisztrátor kikapcsolta az IMAP/SMTP-t</string>
     <string name="title_setup_oauth_rationale">Engedélyezze a hozzáférést a %1$s fiókjához</string>
     <string name="title_setup_oauth_update">Ismételt autorizáció meglévő fiókhoz</string>
@@ -167,7 +165,6 @@
     <string name="title_setup_permissions_remark">A névjegyzék adataihoz váló hozzáféréshez (opcionális)</string>
     <string name="title_setup_doze">Akkumulátor-optimalizálás kikapcsolása</string>
     <string name="title_setup_doze_remark">Megbízhatóan küldhet és fogadhat e-maileket</string>
-    <string name="title_setup_doze_hint">Lehet hogy ez érdekesnek hangozhat, de az akkumulátor optimalizációk kikapcsolása esetén kevesebb lesz az akkumulátor-használat</string>
     <string name="title_setup_doze_instructions">A következő Android párbeszédpanelen változtassa meg a „Nincs optimalizálva” értéket „Minden alkalmazás” értékre, válassza ki ezt az alkalmazást, és válassza a „Ne optimalizálja” lehetőséget</string>
     <string name="title_setup_doze_battery">Magas akkumulátorhasználat?</string>
     <string name="title_setup_doze_stopped">Már nem szinkronizál?</string>
@@ -237,6 +234,7 @@
     <string name="title_advanced_default">Az összes opció általánosan használt szabványos értékeket tartalmaz, amelyeket nem kell megváltoztatni az alkalmazás használatához</string>
     <string name="title_advanced_receive">Üzenetek fogadása minden fiókon</string>
     <string name="title_advanced_when">Mikor</string>
+    <string name="title_advanced_optimize">Automatikus optimizálás</string>
     <string name="title_advanced_always">Mindig fogadjon értesítéseket e fiókokhoz</string>
     <string name="title_advanced_schedule">Ütemezés</string>
     <string name="title_advanced_advanced">Haladó</string>
@@ -362,6 +360,9 @@
     <string name="title_advanced_authentication">Figyelmeztessen, ha a fogadó szerver nem tudta igazolni az üzenet hitelességét</string>
     <string name="title_advanced_sync_on_launch">Szinkronizálás az alkalmazás indításakor</string>
     <string name="title_advanced_double_back">Használja a \'vissza\'-t kétszer a kilépéshez</string>
+    <string name="title_advanced_conversation_actions">Műveletek felajánlása (Android 10+)</string>
+    <string name="title_advanced_conversation_actions_replies">Válasszövegek felajánlása (Android 10+)</string>
+    <string name="title_advanced_language_detection">Üzenetszöveg nyelvének észlelése</string>
     <string name="title_advanced_pull_refresh">Húzza le a frissítéshez</string>
     <string name="title_advanced_autoscroll">Új üzenet érkezésekor automatikus tetejére görgetés</string>
     <string name="title_advanced_double_tap">Olvasott/olvasatlannak jelölés dupla koppintásra</string>
@@ -449,9 +450,6 @@
     </string>
     <string name="title_advanced_external_search">Keresés engedélyezése az üzenetekben más alkalmazások számára</string>
     <string name="title_advanced_shortcuts">Gyakran használt névjegyek megjelenítése az Android megosztás menüjében</string>
-    <string name="title_advanced_conversation_actions">Műveletek felajánlása (Android 10+)</string>
-    <string name="title_advanced_conversation_actions_replies">Válasszövegek felajánlása (Android 10+)</string>
-    <string name="title_advanced_language_detection">Üzenetszöveg nyelvének észlelése</string>
     <string name="title_advanced_fts">Keresési index létrehozása</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d üzenet indexelve (%3$s)</string>
     <string name="title_advanced_classification">Üzenetek osztályozása</string>
@@ -460,19 +458,18 @@
     <string name="title_advanced_language">Nyelv</string>
     <string name="title_advanced_language_system">Rendszer</string>
     <string name="title_advanced_watchdog">A FairEmail futásának időszakos ellenőrzése</string>
-    <string name="title_advanced_optimize">Automatikus optimizálás</string>
     <string name="title_advanced_updates">GitHub-frissítések keresése</string>
     <string name="title_advanced_check_weekly">Hetente keressen, ne naponta</string>
     <string name="title_advanced_experiments">Kísérleti funkciók kipróbálása</string>
-    <string name="title_advanced_query_threads">Párhuzamos adatbázis hozzáférés korlátozása</string>
     <string name="title_advanced_crash_reports">Hibajelentések küldése</string>
-    <string name="title_advanced_protocol">Protokol naplózás</string>
-    <string name="title_advanced_log_info">Hibakeresési naplózás</string>
-    <string name="title_advanced_debug">Hibakeresési mód</string>
     <string name="title_advanced_cleanup_attachments">Régi üzenetek csatolmányainak törlése</string>
     <string name="title_advanced_cleanup">Takarítás</string>
     <string name="title_advanced_app">Alkalmazásbeállítások</string>
     <string name="title_advanced_more">Több opció</string>
+    <string name="title_advanced_protocol">Protokol naplózás</string>
+    <string name="title_advanced_log_info">Hibakeresési naplózás</string>
+    <string name="title_advanced_debug">Hibakeresési mód</string>
+    <string name="title_advanced_query_threads">Párhuzamos adatbázis hozzáférés korlátozása</string>
     <string name="title_advanced_manual_hint">Amennyiben az üzenetek folyamatos fogadása ki van kapcsolva, az üzenetlista a lehúzásávan manuálisan még mindíg frissíthető</string>
     <string name="title_advanced_poll_hint">A periodikus szinkronizálás minden egyes alkalommal összehasonlítja a helyileg tárolt üzeneteket a távoliakkal. Ez erőforrásigényes folyamat amely fokozott akkumulátorhasználathoz vezethet. A folyamatos szinkronizálás kiküszöböli ezt, mivel csak a változásokat figyeli és alkalmazza.</string>
     <string name="title_advanced_optimize_hint">A szinkronizálás sűrűségének az E-Mail kiszolgáló képességeihez való igazítása, az akumlátorhasználat csökkentse érdekében</string>
@@ -941,10 +938,10 @@
     <string name="title_send_receipt">Visszaigazolás kérése</string>
     <string name="title_send_receipt_remark">A legtöbb email szolgáltató és kliens figyelmen kívül hagyja a visszajelzés kéréseket</string>
     <string name="title_from_missing">A feladó hiányzik</string>
-    <string name="title_extra_missing">A felhasználónév hiányzik</string>
-    <string name="title_to_missing">A címzett hiányzik</string>
     <string name="title_pgp_reminder">PGP kulcsok elérhetők</string>
     <string name="title_smime_reminder">S/MIME kulcsok elérhetők</string>
+    <string name="title_to_missing">A címzett hiányzik</string>
+    <string name="title_extra_missing">A felhasználónév hiányzik</string>
     <string name="title_subject_reminder">A tárgy hiányzik</string>
     <string name="title_text_reminder">Az üzenet szövege üres</string>
     <string name="title_attachment_keywords">csatolva,melléklet,mellékletek,tartalmazza</string>
@@ -1516,5 +1513,7 @@
         <item>Talpas</item>
         <item>Talpatlan</item>
         <item>Fix szélességű szöveg</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

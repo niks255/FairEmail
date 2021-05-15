@@ -17,6 +17,8 @@
 package com.sun.mail.handlers;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 import javax.activation.*;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeUtility;
@@ -145,6 +147,9 @@ public class text_plain extends handler_base {
 	    if (charset == null)
 		// If the charset parameter is absent, use US-ASCII.
 		charset = "us-ascii";
+		if ("us-ascii".equals(charset) &&
+				"text/html".equalsIgnoreCase(ct.getBaseType()))
+			charset = StandardCharsets.UTF_8.name();
 	    return MimeUtility.javaCharset(charset);
 	} catch (Exception ex) {
 	    return null;

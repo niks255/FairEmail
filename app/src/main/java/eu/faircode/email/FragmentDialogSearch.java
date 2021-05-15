@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -99,6 +98,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final CheckBox cbKeywords = dview.findViewById(R.id.cbKeywords);
         final CheckBox cbMessage = dview.findViewById(R.id.cbMessage);
         final CheckBox cbNotes = dview.findViewById(R.id.cbNotes);
+        final CheckBox cbHeaders = dview.findViewById(R.id.cbHeaders);
+        final CheckBox cbHtml = dview.findViewById(R.id.cbHtml);
         final CheckBox cbUnseen = dview.findViewById(R.id.cbUnseen);
         final CheckBox cbFlagged = dview.findViewById(R.id.cbFlagged);
         final CheckBox cbHidden = dview.findViewById(R.id.cbHidden);
@@ -111,12 +112,10 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final TextView tvAfter = dview.findViewById(R.id.tvAfter);
         final Group grpMore = dview.findViewById(R.id.grpMore);
 
-        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         ibInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imm.hideSoftInputFromWindow(etQuery.getWindowToken(), 0);
+                Helper.hideKeyboard(etQuery);
                 Helper.viewFAQ(v.getContext(), 13);
             }
         });
@@ -193,14 +192,20 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         View.OnClickListener onMore = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imm.hideSoftInputFromWindow(etQuery.getWindowToken(), 0);
+                Helper.hideKeyboard(etQuery);
 
                 if (grpMore.getVisibility() == View.VISIBLE) {
                     ibMore.setImageLevel(1);
                     grpMore.setVisibility(View.GONE);
+                    cbHeaders.setVisibility(View.GONE);
+                    cbHtml.setVisibility(View.GONE);
                 } else {
                     ibMore.setImageLevel(0);
                     grpMore.setVisibility(View.VISIBLE);
+                    if (BuildConfig.DEBUG) {
+                        cbHeaders.setVisibility(View.VISIBLE);
+                        cbHtml.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
@@ -218,6 +223,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                 cbKeywords.setEnabled(!isChecked);
                 cbMessage.setEnabled(!isChecked);
                 cbNotes.setEnabled(!isChecked);
+                cbHeaders.setEnabled(!isChecked);
+                cbHtml.setEnabled(!isChecked);
                 cbUnseen.setEnabled(!isChecked);
                 cbFlagged.setEnabled(!isChecked);
                 cbHidden.setEnabled(!isChecked);
@@ -313,10 +320,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         tvBefore.setText(null);
 
         grpMore.setVisibility(View.GONE);
-
-        etQuery.requestFocus();
-        if (imm != null)
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        cbHeaders.setVisibility(View.GONE);
+        cbHtml.setVisibility(View.GONE);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(dview)
@@ -325,7 +330,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                     public void onClick(DialogInterface dialog, int which) {
                         BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
 
-                        criteria.query = etQuery.getText().toString();
+                        criteria.query = etQuery.getText().toString().trim();
 
                         if (!TextUtils.isEmpty(criteria.query)) {
                             List<String> searches = new ArrayList<>();
@@ -355,6 +360,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                             criteria.in_keywords = cbKeywords.isChecked();
                             criteria.in_message = cbMessage.isChecked();
                             criteria.in_notes = cbNotes.isChecked();
+                            criteria.in_headers = cbHeaders.isChecked();
+                            criteria.in_html = cbHtml.isChecked();
                             criteria.with_unseen = cbUnseen.isChecked();
                             criteria.with_flagged = cbFlagged.isChecked();
                             criteria.with_hidden = cbHidden.isChecked();
@@ -376,7 +383,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                         if (before != null)
                             criteria.before = ((Calendar) before).getTimeInMillis();
 
-                        imm.hideSoftInputFromWindow(etQuery.getWindowToken(), 0);
+                        Helper.hideKeyboard(etQuery);
 
                         if (criteria.query != null && criteria.query.startsWith("raw:"))
                             new SimpleTask<EntityFolder>() {
@@ -476,6 +483,12 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         });
 
         return dialog;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override

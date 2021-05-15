@@ -88,7 +88,6 @@
     <string name="title_notification_sending_failed">Falha ao enviar para %1$s</string>
     <string name="title_notification_redacted">Redacionado: autenticação biométrica ou por Pin ativada</string>
     <string name="title_factor_minutes">%1$d minutos</string>
-    <string name="menu_exit">Sair</string>
     <string name="menu_answers">Modelos</string>
     <string name="menu_operations">Operações</string>
     <string name="menu_contacts">Contactos locais</string>
@@ -132,15 +131,14 @@
     <string name="title_setup_account_identity_hint">Pode configurar o nome, cor e deslizar acções na configuração de conta, e configurar a assinatura na configuração de identidade</string>
     <string name="title_setup_accounts">Contas</string>
     <string name="title_setup_identities">Identidades</string>
-    <string name="title_setup_oauth_permission">O provedor de e-mail aprovou OAuth apenas para versões oficiais da aplicação</string>
     <string name="title_setup_other">Outro provedor</string>
     <string name="title_setup_pop3">Conta POP3</string>
+    <string name="title_setup_oauth_permission">O provedor de e-mail aprovou OAuth apenas para versões oficiais da aplicação</string>
     <string name="title_setup_gmail_support">Autorização de contas da Google funcionará apenas nas versões oficiais porque o Android verifica a assinatura da aplicação</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permissões para selecionar uma conta e ler o seu nome</string>
     <string name="title_setup_gmail_permissions">O Google pedirá permissões para ler, compor, enviar e excluir permanentemente todos os teus e-mails. O FairEmail nunca apagará as tuas mensagens sem o teu consentimento explícito.</string>
     <string name="title_setup_gmail_drafts">Se a pasta de rascunhos não estiver acessível pelo IMAP, isso poderá ser corrigido nas configurações de etiquetas do Gmail</string>
     <string name="title_setup_gmail_password">Quero autorizar uma conta com uma senha</string>
-    <string name="title_setup_office_remark">A Microsoft não fornece este tipo de autorização para contas do Outlook, Live, Hotmail, etc</string>
     <string name="title_setup_office_auth">O erro \'AUTHENTICATE falhou\' pode ser causado por IMAP/SMTP estar desativado pelo administrador do sistema</string>
     <string name="title_setup_oauth_rationale">Autorizar o acesso à sua conta %1$s</string>
     <string name="title_setup_oauth_update">Autorizar conta existente novamente</string>
@@ -165,7 +163,6 @@
     <string name="title_setup_permissions_remark">Para aceder a informações de contato (opcional)</string>
     <string name="title_setup_doze">Desactivar optimização de bateria</string>
     <string name="title_setup_doze_remark">Para enviar e receber e-mail corretamente</string>
-    <string name="title_setup_doze_hint">Apesar de parecer contraditório, desligar a optimização da bateria resultará num menor uso de bateria</string>
     <string name="title_setup_doze_instructions">Na próxima caixa de diálogo do Android altere \"Não otimizado\" para \"Todos os aplicativos\", selecione esta app e selecione \"Não otimizar\"</string>
     <string name="title_setup_doze_battery">Utilização elevada de bateria?</string>
     <string name="title_setup_doze_stopped">A sincronização parou?</string>
@@ -235,6 +232,7 @@
     <string name="title_advanced_default">Todas as opções têm valores padrão, que não precisam ser alterados para usar o aplicativo</string>
     <string name="title_advanced_receive">Receber mensagens de todas as contas</string>
     <string name="title_advanced_when">Quando</string>
+    <string name="title_advanced_optimize">Otimizar automaticamente</string>
     <string name="title_advanced_always">Receber sempre mensagens para estas contas</string>
     <string name="title_advanced_schedule">Agendar</string>
     <string name="title_advanced_advanced">Avançado</string>
@@ -431,16 +429,15 @@
     <string name="title_advanced_language">Idioma</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_watchdog">Verificar periodicamente se o FairEmail ainda está ativo</string>
-    <string name="title_advanced_optimize">Otimizar automaticamente</string>
     <string name="title_advanced_updates">Verificar atualizações do GitHub</string>
     <string name="title_advanced_experiments">Ativar funcionalidades experimentais</string>
-    <string name="title_advanced_query_threads">Limitar acesso paralelo à base de dados</string>
     <string name="title_advanced_crash_reports">Enviar relatórios de erro</string>
-    <string name="title_advanced_debug">Modo de Depuração</string>
     <string name="title_advanced_cleanup_attachments">Apagar anexos de mensagens antigas</string>
     <string name="title_advanced_cleanup">Limpeza</string>
     <string name="title_advanced_app">Definições da aplicação</string>
     <string name="title_advanced_more">Mais opções</string>
+    <string name="title_advanced_debug">Modo de Depuração</string>
+    <string name="title_advanced_query_threads">Limitar acesso paralelo à base de dados</string>
     <string name="title_advanced_schedule_hint">Toque num horário para o definir</string>
     <string name="title_advanced_no_date_hint">Alguns provedores armazenam mensagens com data desconhecida, inválida ou futura como mensagens sem data</string>
     <string name="title_advanced_unseen_hint">Alguns provedores não têm o suporte correto, o que pode causar a sincronização de nenhuma ou de todas as mensagens</string>
@@ -478,5 +475,7 @@
         <item>Serif</item>
         <item>Sans Serif</item>
         <item>Monospace</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

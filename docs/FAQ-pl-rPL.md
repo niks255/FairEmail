@@ -2,31 +2,31 @@
 
 # Wsparcie FairEmail
 
-W razie jakichkolwiek pytań, sprawdź najpierw poniższy FAQ. [Poniżej](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support) dowiesz się jak zadawać pytania innego typu, proponować nowe funkcje i zgłaszać blędy.
+W razie jakichkolwiek pytań, sprawdź najpierw poniższy FAQ. [At the bottom](#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Spis treści
 
-* [Autoryzacja kont](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [W jaki sposób...](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Znane problemy](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planowane funkcje](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Często żądane funkcje](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Najczęściej zadawane pytania (FAQ)](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Uzyskaj wsparcie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Autoryzacja kont](#user-content-authorizing-accounts)
+* [W jaki sposób...](#user-content-howto)
+* [Znane problemy](#user-content-known-problems)
+* [Planowane funkcje](#user-content-planned-features)
+* [Często żądane funkcje](#user-content-frequently-requested-features)
+* [Najczęściej zadawane pytania (FAQ)](#user-content-frequently-asked-questions)
+* [Uzyskaj wsparcie](#user-content-get-support)
 
-## Autoryzacja kont
+<h2><a name="authorizing-accounts"></a>Autoryzacja kont</h2>
 
 W większości przypadków, szybki kreator ustawień będzie w stanie automatycznie rozpoznać poprawną konfigurację.
 
-Jeśli szybki kreator konfiguracji nie powiedzie się, musisz ręcznie skonfigurować konto (aby otrzymywać e-mail) i tożsamość (aby wysłać e-mail). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Jeśli szybki kreator konfiguracji nie powiedzie się, musisz ręcznie skonfigurować konto (aby otrzymywać e-mail) i tożsamość (aby wysłać e-mail). W tym celu potrzebujesz adresów serwera i numerów portów IMAP i SMTP, niezależnie od tego, czy należy użyć SSL/TLS, czy STARTTLS oraz swoją nazwę użytkownika (głównie, ale nie zawsze adres e-mail) i hasło.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+Wyszukiwanie * IMAP * i nazwa dostawcy jest w większości wystarczające, aby znaleźć odpowiednią dokumentację.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+W niektórych przypadkach musisz włączyć zewnętrzny dostęp do swojego konta i/lub użyć specjalnego hasła (aplikacji), na przykład, gdy włączone jest uwierzytelnianie dwuskładnikowe.
 
-For authorizing:
+Autoryzacja:
 
 * Gmail / G suite, zob. [pytanie 6](#user-content-faq6)
 * Outlook / Live / Hotmail, zob. [pytanie 14](#user-content-faq14)
@@ -36,26 +36,26 @@ For authorizing:
 * Apple iCloud, zob. [pytanie 148](#user-content-faq148)
 * Free.fr, zob. [pytanie 157](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+[Tutaj](#user-content-faq22) znajdziesz opisy typowych komunikatów błędów i możliwych rozwiązań.
 
-Related questions:
+Powiązane pytania:
 
 * [Czy OAuth jest wspierany?](#user-content-faq111)
-* [Dlaczego ActiveSync nie jest obsługiwany?](#user-content-faq133)
+* [Dlaczego ActiveSync nie jest obsługiwany? ](#user-content-faq133)
 
 <a name="howto">
 
 ## W jaki sposób...?
 
-* Zmień nazwę konta: Ustawienia, dotknij Ręczna konfiguracja, dotknij Konta, dotknij konto
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
+* Zmienić nazwę konta: Ustawienia, dotknij Ręczna konfiguracja, dotknij Konta, dotknij konto
+* Zmiana akcji gestu przesunięcia w lewo/w prawo: Ustawienia, Zachowanie, Ustaw akcję przesuwania
 * Zmień hasło: Ustawienia, dotknij Ręczna konfiguracja, dotknij Konta, dotknij konto, zmień hasło
 * Ustaw podpis: Ustawienia, dotknij Ręcznej konfiguracji, dotknij Tożsamości, dotknij tożsamości, Edytuj podpis.
 * Dodanie adresów DW i UDW: dotknij ikony osób na końcu tematu
 * Przejście do następnej/poprzedniej wiadomości dotyczącej archiwizowania/usuwania: w ustawieniach zachowania wyłącz * Automatycznie zamykaj konwersacje * i wybierz * Przejdź do następnej/poprzedniej rozmowy * dla * Po zamknięciu rozmowy *
 * Dodanie folderu do wspólnej skrzynki odbiorczej: naciśnij długo folder na liście folderów i zaznacz * Pokaż we wspólnej skrzynce *
 * Dodanie folderu do menu nawigacji: naciśnij długo folder na liście folderów i zaznacz * Pokaż w menu nawigacji *
-* Load more messages: long press a folder in the folder list, select *Fetch more messages*
+* Załadować większą liczbę wiadomości: na liście folderów dotknij dłużej folder i wybierz *Pobierz więcej wiadomości*
 * Usuń wiadomość, pomijając kosz: przytrzymaj dłużej ikonę kosza
 * Usuń konto/tożsamość: Ustawienia, dotknij Ręczna konfiguracja, dotknij Konta/Tożsamości, dotknij konto/tożsamość, ikona kosza w prawym górnym rogu
 * Usuń folderu: długo naciśnij folder na liście folderów, Edytuj właściwości, ikona kosza w górnym prawym rogu
@@ -64,7 +64,7 @@ Related questions:
 * Zmień foldery systemowe: Ustawienia, dotknij Ręcznej konfiguracji, dotknij Konta, dotknij konto u dołu
 * Eksport/import ustawień: Ustawienia, menu nawigacyjne (lewa strona)
 
-## Znane problemy
+<h2><a name="known-problems"></a>Known problem</h2>
 
 * ~~A [błąd w Androidzie 5.1 i 6](https://issuetracker.google.com/issues/37054851) powoduje, że aplikacje czasami pokazują nieprawidłowy format czasu. Przełączenie ustawienia Androida *Użyj 24-godzinnego formatu* może tymczasowo rozwiązać problem. Dodano obejście. ~~
 * ~~A [błąd w Dysku Google](https://issuetracker.google.com/issues/126362828) powoduje, że pliki eksportowane do Dysku Google są puste. Google naprawił to.~~
@@ -83,8 +83,9 @@ Related questions:
 * [błąd w Android 6.0](https://issuetracker.google.com/issues/37068143) powoduje awarię z *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. Ten błąd został naprawiony w Androidzie 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). Jest to ograniczenie Androida, które nie może być naprawione.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
-## Planowane funkcje
+<h2><a name="planned-features"></a>Planowane funkcje</h2>
 
 * ~~Synchronizuj na żądanie (ręcznie)~~
 * ~~Szyfrowanie półautomatyczne~~
@@ -119,11 +120,11 @@ Related questions:
 
 Anything on this list is in random order and *might* be added in the near future.
 
-## Często żądane funkcje
+<h2><a name="frequently-requested-features"></a>Często żądane funkcje</h2>
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
 
-## Najczęściej zadawane pytania (FAQ)
+<h2><a name="frequently-asked-questions"></a>Najczęściej zadawane pytania (FAQ)</h2>
 
 * [(1) Jakie uprawnienia są potrzebne i dlaczego?](#user-content-faq1)
 * [(2) Dlaczego wyświetla się stałe powiadomienie?](#user-content-faq2)
@@ -434,7 +435,7 @@ You can pin the certificate too, see above.
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Your username is likely easily guessed, so this is pretty insecure, unless the SMTP server is available via a restricted local network or a VPN only.
 
 *Plain text connection*
 
@@ -679,7 +680,7 @@ Private keys are stored by Android and can be imported via the Android advanced 
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
-Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.
 
@@ -1636,7 +1637,9 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The one time price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
+"*You can't share in-app purchases and free apps with your family members.*"
+
+See [here](https://support.google.com/googleone/answer/7007852) under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
 
 <br />
 
@@ -1711,7 +1714,7 @@ The following rule conditions are available:
 * Absolute time (received) between (since version 1.1540)
 * Relative time (received) between
 
-All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
+All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. If you want to match a domain name, you can use as a condition something like *@example.org*
 
 Note that email addresses are formatted like this:
 
@@ -1745,6 +1748,8 @@ You can select one of these actions to apply to matching messages:
 * Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
+
+An error in a rule condition can lead to a disaster, therefore irreversible actions are not supported.
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
@@ -2274,9 +2279,7 @@ Disabling *Partial fetch* will result in more memory usage.
 
 OAuth for Gmail is supported via the quick setup wizard. The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts. OAuth for non on-device accounts is not supported because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this. You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth for Yandex and Yahoo is supported via the quick setup wizard.
-
-OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
+OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
 <br />
 
@@ -3020,9 +3023,9 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <br />
 
-## Wsparcie
+<h2><a name="get-support"></a>Wsparcie</h2>
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail is supported on Android smartphones and tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
 

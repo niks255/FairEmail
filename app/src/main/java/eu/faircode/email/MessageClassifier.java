@@ -25,6 +25,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.JsonReader;
 import android.util.JsonWriter;
+import android.util.MalformedJsonException;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -104,6 +105,7 @@ public class MessageClassifier {
             if (classified != null &&
                     !classified.equals(folder.name) &&
                     !TextUtils.isEmpty(message.msgid) &&
+                    !message.hasKeyword("$Classified") &&
                     !accountMsgIds.get(folder.account).contains(message.msgid) &&
                     !EntityFolder.JUNK.equals(folder.type)) {
                 boolean pro = ActivityBilling.isPro(context);
@@ -115,6 +117,7 @@ public class MessageClassifier {
                     EntityFolder dest = db.folder().getFolderByName(folder.account, classified);
                     if (dest != null && dest.auto_classify_target &&
                             (pro || EntityFolder.JUNK.equals(dest.type))) {
+                        EntityOperation.queue(context, message, EntityOperation.KEYWORD, "$Classified", true);
                         EntityOperation.queue(context, message, EntityOperation.MOVE, dest.id, false, true);
                         message.ui_hide = true;
                     }
@@ -388,6 +391,17 @@ public class MessageClassifier {
         long start = new Date().getTime();
 
         File file = getFile(context);
+        if (file.exists())
+            try {
+                File backup = getBackupFile(context);
+                Log.i("Classifier backup " + backup);
+                backup.delete();
+                file.renameTo(backup);
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+
+        Log.i("Classifier save " + file);
         try (JsonWriter writer = new JsonWriter(new BufferedWriter(new FileWriter(file)))) {
             writer.beginObject();
 
@@ -465,9 +479,31 @@ public class MessageClassifier {
             return;
 
         clear(context);
-
-        long start = new Date().getTime();
         File file = getFile(context);
+        try {
+            _load(file);
+        } catch (MalformedJsonException ex) {
+            Log.w(ex);
+            clear(context);
+            File backup = getBackupFile(context);
+            if (backup.exists())
+                try {
+                    _load(backup);
+                } catch (Throwable ex1) {
+                    Log.e(ex1);
+                    backup.delete();
+                    clear(context);
+                }
+        } catch (Throwable ex) {
+            Log.e(ex);
+            file.delete();
+            clear(context);
+        }
+    }
+
+    private static synchronized void _load(File file) throws IOException {
+        Log.i("Classifier read " + file);
+        long start = new Date().getTime();
         if (file.exists())
             try (JsonReader reader = new JsonReader(new BufferedReader(new FileReader(file)))) {
                 reader.beginObject();
@@ -597,10 +633,6 @@ public class MessageClassifier {
                             break;
                     }
                 reader.endObject();
-            } catch (Throwable ex) {
-                Log.e(ex);
-                file.delete();
-                clear(context);
             }
 
         loaded = true;
@@ -650,6 +682,10 @@ public class MessageClassifier {
 
     static File getFile(@NonNull Context context) {
         return new File(context.getFilesDir(), "classifier.json");
+    }
+
+    static File getBackupFile(@NonNull Context context) {
+        return new File(context.getFilesDir(), "classifier.backup");
     }
 
     private static class State {

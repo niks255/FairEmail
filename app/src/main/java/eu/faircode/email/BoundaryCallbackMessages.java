@@ -270,6 +270,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         criteria.in_keywords,
                         criteria.in_message,
                         criteria.in_notes,
+                        criteria.in_headers,
                         criteria.with_unseen,
                         criteria.with_flagged,
                         criteria.with_hidden,
@@ -304,15 +305,19 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 boolean matched = (match.matched != null && match.matched);
 
                 if (query != null) {
-                    if (!matched && criteria.in_message)
+                    if (!matched && (criteria.in_message || criteria.in_html))
                         try {
                             File file = EntityMessage.getFile(context, match.id);
                             if (file.exists()) {
                                 String html = Helper.readText(file);
                                 if (html.toLowerCase().contains(query)) {
-                                    String text = HtmlHelper.getFullText(html);
-                                    if (text != null && text.toLowerCase().contains(query))
+                                    if (criteria.in_html)
                                         matched = true;
+                                    else {
+                                        String text = HtmlHelper.getFullText(html);
+                                        if (text != null && text.toLowerCase().contains(query))
+                                            matched = true;
+                                    }
                                 }
                             }
                         } catch (IOException ex) {
@@ -497,6 +502,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     EntityMessage message = db.message().getMessageByUid(browsable.id, uid);
                     if (message == null)
                         add.add(m);
+                } catch (FolderClosedException ex) {
+                    throw ex;
                 } catch (Throwable ex) {
                     Log.w(ex);
                     add.add(m);
@@ -569,7 +576,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         SearchTerm terms = criteria.getTerms(utf8, state.ifolder.getPermanentFlags(), keywords);
         if (terms == null)
-            throw new ProtocolException("No search conditions");
+            return state.ifolder.getMessages();
 
         SearchSequence ss = new SearchSequence(protocol);
         Argument args = ss.generateSequence(terms, utf8 ? StandardCharsets.UTF_8.name() : null);
@@ -675,6 +682,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         boolean in_keywords = true;
         boolean in_message = true;
         boolean in_notes = true;
+        boolean in_headers = false;
+        boolean in_html = false;
         boolean with_unseen;
         boolean with_flagged;
         boolean with_hidden;
@@ -755,8 +764,13 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                             or.add(new SubjectTerm(search));
                         }
 
-                if (in_keywords && hasKeywords)
-                    or.add(new FlagTerm(new Flags(MessageHelper.sanitizeKeyword(search)), true));
+                if (in_keywords && hasKeywords) {
+                    String keyword = MessageHelper.sanitizeKeyword(search);
+                    if (TextUtils.isEmpty(keyword))
+                        Log.w("Keyword empty=" + search);
+                    else
+                        or.add(new FlagTerm(new Flags(keyword), true));
+                }
 
                 if (in_message)
                     if (plus.size() + minus.size() + opt.size() == 0)
@@ -868,6 +882,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         this.in_keywords == other.in_keywords &&
                         this.in_message == other.in_message &&
                         this.in_notes == other.in_notes &&
+                        this.in_headers == other.in_headers &&
+                        this.in_html == other.in_html &&
                         this.with_unseen == other.with_unseen &&
                         this.with_flagged == other.with_flagged &&
                         this.with_hidden == other.with_hidden &&
@@ -893,6 +909,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     " keywords=" + in_keywords +
                     " message=" + in_message +
                     " notes=" + in_notes +
+                    " headers=" + in_headers +
+                    " html=" + in_html +
                     " unseen=" + with_unseen +
                     " flagged=" + with_flagged +
                     " hidden=" + with_hidden +

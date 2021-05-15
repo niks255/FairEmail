@@ -40,7 +40,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.AlarmManagerCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.Person;
 import androidx.core.app.RemoteInput;
@@ -62,12 +61,11 @@ import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.FLAGS;
 import com.sun.mail.imap.protocol.FetchResponse;
 import com.sun.mail.imap.protocol.IMAPProtocol;
-import com.sun.mail.imap.protocol.MailboxInfo;
-import com.sun.mail.imap.protocol.MessageSet;
 import com.sun.mail.imap.protocol.UID;
 import com.sun.mail.pop3.POP3Folder;
 import com.sun.mail.pop3.POP3Message;
 import com.sun.mail.pop3.POP3Store;
+import com.sun.mail.util.MessageRemovedIOException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -186,6 +184,9 @@ class Core {
 
             DB db = DB.getInstance(context);
 
+            NotificationManager nm =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
             int retry = 0;
             boolean group = true;
             Log.i(folder.name + " executing operations=" + ops.size());
@@ -202,6 +203,10 @@ class Core {
                             " args=" + op.args +
                             " group=" + group +
                             " retry=" + retry);
+
+                    if (EntityOperation.HEADERS.equals(op.name) ||
+                            EntityOperation.RAW.equals(op.name))
+                        nm.cancel(op.name + ":" + op.message, 1);
 
                     if (!Objects.equals(folder.id, op.folder))
                         throw new IllegalArgumentException("Invalid folder=" + folder.id + "/" + op.folder);
@@ -488,6 +493,7 @@ class Core {
 
                             if (message != null &&
                                     !EntityOperation.FETCH.equals(op.name) &&
+                                    !EntityOperation.ATTACHMENT.equals(op.name) &&
                                     !(ex instanceof IllegalArgumentException))
                                 db.message().setMessageError(message.id, op.error);
 
@@ -511,8 +517,13 @@ class Core {
                                 ex instanceof SQLiteConstraintException ||
                                 (!ConnectionHelper.isIoError(ex) &&
                                         (ex.getCause() instanceof BadCommandException ||
-                                                ex.getCause() instanceof CommandFailedException /* NO */)) ||
+                                                ex.getCause() instanceof CommandFailedException /* NO */) &&
+                                        // https://sebastian.marsching.com/wiki/Network/Zimbra#Mailbox_Selected_READ-ONLY_Error_in_Thunderbird
+                                        (ex.getMessage() == null ||
+                                                !ex.getMessage().contains("mailbox selected READ-ONLY"))) ||
                                 MessageHelper.isRemoved(ex) ||
+                                EntityOperation.HEADERS.equals(op.name) ||
+                                EntityOperation.RAW.equals(op.name) ||
                                 EntityOperation.ATTACHMENT.equals(op.name) ||
                                 (EntityOperation.ADD.equals(op.name) &&
                                         EntityFolder.DRAFTS.equals(folder.type))) {
@@ -524,6 +535,7 @@ class Core {
                             //   javax.net.ssl.SSLException: Write error: ssl=0x8286cac0: I/O error during system call, Broken pipe
                             // Drafts: * BYE Jakarta Mail Exception: java.io.IOException: Connection dropped by server?
                             // Sync: BAD Could not parse command
+                            // Sync: SEARCH not allowed now
                             // Seen: NO mailbox selected READ-ONLY
                             // Fetch: BAD Error in IMAP command FETCH: Invalid messageset (n.nnn + n.nnn secs).
                             // Fetch: NO all of the requested messages have been expunged
@@ -533,10 +545,12 @@ class Core {
                             // Fetch: NO [SERVERBUG] UID FETCH Server error - Please try again later
                             // Fetch: NO Invalid message number (took 123 ms)
                             // Fetch: BAD Internal Server Error
+                            // Fetch: BAD Error in IMAP command FETCH: Invalid messageset (n.nnn + n .nnn secs).
                             // Fetch UID: NO Some messages could not be FETCHed (Failure)
                             // Fetch UID: NO [LIMIT] UID FETCH Rate limit hit.
                             // Fetch UID: NO Server Unavailable. 15
                             // Fetch UID: NO [UNAVAILABLE] Failed to open mailbox
+                            // Fetch UID: NO [TEMPFAIL] SELECT completed
                             // Move: NO Over quota
                             // Move: NO No matching messages
                             // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist
@@ -550,6 +564,8 @@ class Core {
                             // Move: NO mailbox selected READ-ONLY
                             // Move: NO System Error (Failure)
                             // Move: NO APPEND processing failed.
+                            // Move: NO Server Unavailable. 15
+                            // Move: NO [CANNOT] Operation is not supported on mailbox
                             // Copy: NO Client tried to access nonexistent namespace. (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
                             // Add: BAD Data length exceeds limit
                             // Add: NO [LIMIT] APPEND Command exceeds the maximum allowed size
@@ -591,7 +607,9 @@ class Core {
                                 db.operation().deleteOperation(op.id);
 
                                 // Cleanup messages
-                                if (message != null && MessageHelper.isRemoved(ex))
+                                if (message != null &&
+                                        MessageHelper.isRemoved(ex) &&
+                                        !EntityOperation.SEEN.equals(op.name))
                                     db.message().deleteMessage(message.id);
 
                                 db.setTransactionSuccessful();
@@ -600,6 +618,18 @@ class Core {
                             }
 
                             ops.remove(op);
+
+                            int resid = context.getResources().getIdentifier(
+                                    "title_op_title_" + op.name,
+                                    "string",
+                                    context.getPackageName());
+                            String title = (resid == 0 ? null : context.getString(resid));
+                            if (title != null) {
+                                NotificationCompat.Builder builder =
+                                        getNotificationError(context, "warning", title, ex);
+                                nm.notify(op.name + ":" + op.message, 1, builder.build());
+                            }
+
                         } else {
                             retry++;
                             if (retry < LOCAL_RETRY_MAX &&
@@ -1408,7 +1438,7 @@ class Core {
             } finally {
                 ((IMAPMessage) imessage).invalidateHeaders();
             }
-        } catch (MessageRemovedException ex) {
+        } catch (MessageRemovedException | MessageRemovedIOException ex) {
             Log.i(ex);
 
             if (account.isGmail() && EntityFolder.USER.equals(folder.type)) {
@@ -1744,13 +1774,13 @@ class Core {
         else if (imessages == null || imessages.length == 0) {
             long next = new Date().getTime() + EXISTS_RETRY_DELAY;
 
-            Intent intent = new Intent(context, ServiceSend.class);
+            Intent intent = new Intent(context, ServiceSynchronize.class);
             intent.setAction("exists:" + message.id);
             PendingIntent piExists = PendingIntentCompat.getForegroundService(
-                    context, ServiceSend.PI_EXISTS, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    context, ServiceSynchronize.PI_EXISTS, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, next, piExists);
+            AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, piExists);
             return;
         }
 
@@ -2129,23 +2159,25 @@ class Core {
     private static void onPurgeFolder(Context context, JSONArray jargs, EntityFolder folder, IMAPFolder ifolder) throws MessagingException {
         // Delete all messages from folder
         try {
-            Log.i(folder.name + " purge=" + ifolder.getMessageCount());
-            ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
-                @Override
-                public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
-                    MailboxInfo info = protocol.select(ifolder.getFullName());
-                    if (info.total > 0) {
-                        MessageSet[] sets = new MessageSet[]{new MessageSet(1, info.total)};
-                        EntityLog.log(context, folder.name + " purging=" + MessageSet.toString(sets));
-                        try {
-                            protocol.storeFlags(sets, new Flags(Flags.Flag.DELETED), true);
-                        } catch (ProtocolException ex) {
-                            throw new ProtocolException("Purge=" + MessageSet.toString(sets), ex);
-                        }
-                    }
-                    return null;
-                }
-            });
+            DB db = DB.getInstance(context);
+            List<Long> busy = db.message().getBusyUids(folder.id, new Date().getTime());
+
+            Message[] imessages = ifolder.getMessages();
+            Log.i(folder.name + " purge=" + imessages.length + " busy=" + busy.size());
+
+            FetchProfile fp = new FetchProfile();
+            fp.add(UIDFolder.FetchProfileItem.UID);
+            ifolder.fetch(imessages, fp);
+
+            List<Message> idelete = new ArrayList<>();
+            for (Message imessage : imessages) {
+                long uid = ifolder.getUID(imessage);
+                if (!busy.contains(uid))
+                    idelete.add(imessage);
+            }
+
+            EntityLog.log(context, folder.name + " purging=" + idelete.size() + "/" + imessages.length);
+            ifolder.setFlags(idelete.toArray(new Message[0]), new Flags(Flags.Flag.DELETED), true);
             Log.i(folder.name + " purge deleted");
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -2701,9 +2733,11 @@ class Core {
                             uids.remove(ifolder.getUID(imessages[i]));
                     } catch (MessageRemovedException ex) {
                         Log.w(folder.name, ex);
+                    } catch (FolderClosedException ex) {
+                        throw ex;
                     } catch (Throwable ex) {
                         Log.e(folder.name, ex);
-                        EntityLog.log(context, folder.name + " " + Log.formatThrowable(ex, false));
+                        EntityLog.log(context, folder.name + " expunge " + Log.formatThrowable(ex, false));
                         db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                     }
 
@@ -2949,7 +2983,7 @@ class Core {
 
             // Delete not synchronized messages without uid
             if (!EntityFolder.isOutgoing(folder.type)) {
-                int orphans = db.message().deleteOrphans(folder.id);
+                int orphans = db.message().deleteOrphans(folder.id, new Date().getTime());
                 Log.i(folder.name + " deleted orphans=" + orphans);
             }
 
@@ -3997,13 +4031,13 @@ class Core {
 
             if (notifications.size() == 0) {
                 String tag = "unseen." + group + "." + 0;
-                Log.i("Notify cancel tag=" + tag);
+                EntityLog.log(context, "Notify cancel tag=" + tag);
                 nm.cancel(tag, 1);
             }
 
             for (Long id : remove) {
                 String tag = "unseen." + group + "." + Math.abs(id);
-                Log.i("Notify cancel tag=" + tag + " id=" + id);
+                EntityLog.log(context, "Notify cancel tag=" + tag + " id=" + id);
                 nm.cancel(tag, 1);
 
                 data.groupNotifying.get(group).remove(id);

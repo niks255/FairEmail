@@ -391,7 +391,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
                 int id = view.getId();
                 if (id == R.id.ibExpander) {
-                    onCollapse(folder);
+                    onCollapse(folder, pos);
                 } else if (id == R.id.tvFlagged || id == R.id.ibFlagged) {
                     onFlagged(folder);
                 } else {
@@ -416,9 +416,10 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             }
         }
 
-        private void onCollapse(TupleFolderEx folder) {
+        private void onCollapse(TupleFolderEx folder, int pos) {
             if (listener != null) {
                 folder.collapsed = !folder.collapsed;
+                notifyItemChanged(pos); // Update expander
                 set(all);
                 return;
             }
@@ -454,6 +455,8 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             criteria.in_keywords = false;
             criteria.in_message = false;
             criteria.in_notes = false;
+            criteria.in_headers = false;
+            criteria.in_html = false;
             criteria.with_flagged = true;
             FragmentMessages.search(
                     context, owner, parentFragment.getParentFragmentManager(),

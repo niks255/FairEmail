@@ -2,21 +2,21 @@
 
 # Bantuan FairEmail
 
-Jika anda memiliki pertanyaan, silahkan terlebih dahulu periksa pertanyaan yang sering diajukan di bawah ini. %Pada bagian bawah%, anda bisa mencari tahu bagaimana menanyakan pertanyaannya lain, memintar fitur, dan melaporkan kesalahan.
+Jika anda memiliki pertanyaan, silahkan terlebih dahulu periksa pertanyaan yang sering diajukan di bawah ini. [At the bottom](#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Panduan
 
-* [Mengizinkan akun](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [Bagaimana cara untuk ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Kendala yang diketahui](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Fitur yang direncanakan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Fitur yang sering diminta](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Pertanyaan yang Sering Diajukan (FAQ)](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Dapatkan bantuan](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Mengizinkan akun](#user-content-authorizing-accounts)
+* [Bagaimana cara untuk ...?](#user-content-howto)
+* [Kendala yang diketahui](#user-content-known-problems)
+* [Fitur yang direncanakan](#user-content-planned-features)
+* [Fitur yang sering diminta](#user-content-frequently-requested-features)
+* [Pertanyaan yang Sering Diajukan (FAQ)](#user-content-frequently-asked-questions)
+* [Dapatkan bantuan](#user-content-get-support)
 
-## Mengizinkan akun
+<h2><a name="authorizing-accounts"></a>Mengizinkan akun</h2>
 
 In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
 
@@ -64,7 +64,7 @@ Related questions:
 * Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
 * Export/import settings: Settings, navigation (left side) menu
 
-## Kendala yang diketahui
+<h2><a name="known-problems"></a>Known problem</h2>
 
 * ~~ [Gangguan pada Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) yang menyebabkan aplikasi menampilkan format waktu yang salah beberapa kali. Mengubah pengaturan Android *Gunakan format waktu 24 jam* dapat menyelesaikan kendala saat ini. Solusi telah ditambahkan.~~
 * ~~ [Gangguan pada Google Drive](https://issuetracker.google.com/issues/126362828) menyebabkan berkas yang diekspor ke Google Drive kosong. Google telah memperbaikinya.~~
@@ -73,7 +73,7 @@ Related questions:
 * [Bug di Android](https://issuetracker.google.com/issues/119872129) menyebabkan FairEmail crash dengan "*... Notifikasi buruk diposkan ...*" dalam beberapa perangkat setelah memperbarui FairEmail dan mengklik notifikasi.
 * [Bug di Android](https://issuetracker.google.com/issues/62427912) beberapa kali menyebabkan crash dengan "*... RekamanAktivitas tidak ditemukan untuk ...*" setelah memperbarui FairEmail. Menginstal ulang ([sumber](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) dapat memperbaiki masalah.
 * [Bug di Android](https://issuetracker.google.com/issues/37018931) beberapa kali menyebabkan crash dengan *... InputChannel is not initialized ...* on some devices.
-* [Bug di LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) beberapa kali menyebabkan crash dengan *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
+* ~~[Bug di LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) beberapa kali menyebabkan crash dengan *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
 * Bug di Nova Launcher dalam Android 5.x menyebabkan FairEmail crash dengan *java.lang.StackOverflowError* ketika Nova Launcher mengakses servis aksesibilitas.
 * ~~Pemilih berkas beberpa kali menampilkan tidak ada berkas dengan alasan yang tidak diketahui. Masalah ini terlihat sudah diperbaiki.~~
 * ~~[Bug di AndroidX](https://issuetracker.google.com/issues/64729576) menyebabkan kesulitan untuk menekan scroll cepat. Solusi telah ditambahkan.~~
@@ -83,8 +83,9 @@ Related questions:
 * [Bug idi Android 6.0](https://issuetracker.google.com/issues/37068143) menyebabkan crash dengan *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. Bug ini telah diperbaiki dalam Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). Hal ini merupakan limitasi Android yang tidak dapat diperbaiki atau di buat bekerja.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
-## Fitur yang Direncanakan
+<h2><a name="planned-features"></a>Fitur yang Direncanakan</h2>
 
 * ~~Singkronisasi secara manual~~
 * ~~Enkripsi semi otomatis~~
@@ -119,11 +120,11 @@ Related questions:
 
 Anything on this list is in random order and *might* be added in the near future.
 
-## Fitur yang sering diajukan
+<h2><a name="frequently-requested-features"></a>Fitur yang sering diajukan</h2>
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
 
-## Pertanyaan yang Sering Diajukan (FAQ)
+<h2><a name="frequently-asked-questions"></a>Pertanyaan yang Sering Diajukan (FAQ)</h2>
 
 * [(1) Izin mana yang dibutuhkan dan mengapa?](#user-content-faq1)
 * [(2) Mengapa terlihat notifikasi permanen?](#user-content-faq2)
@@ -434,7 +435,7 @@ You can pin the certificate too, see above.
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Your username is likely easily guessed, so this is pretty insecure, unless the SMTP server is available via a restricted local network or a VPN only.
 
 *Plain text connection*
 
@@ -679,7 +680,7 @@ Private keys are stored by Android and can be imported via the Android advanced 
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
-Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.
 
@@ -1636,7 +1637,9 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The one time price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
+"*You can't share in-app purchases and free apps with your family members.*"
+
+See [here](https://support.google.com/googleone/answer/7007852) under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
 
 <br />
 
@@ -1711,7 +1714,7 @@ The following rule conditions are available:
 * Absolute time (received) between (since version 1.1540)
 * Relative time (received) between
 
-All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
+All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. If you want to match a domain name, you can use as a condition something like *@example.org*
 
 Note that email addresses are formatted like this:
 
@@ -1745,6 +1748,8 @@ You can select one of these actions to apply to matching messages:
 * Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
+
+An error in a rule condition can lead to a disaster, therefore irreversible actions are not supported.
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
@@ -2274,9 +2279,7 @@ Disabling *Partial fetch* will result in more memory usage.
 
 OAuth for Gmail is supported via the quick setup wizard. The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts. OAuth for non on-device accounts is not supported because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this. You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth for Yandex and Yahoo is supported via the quick setup wizard.
-
-OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
+OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
 <br />
 
@@ -3020,9 +3023,9 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <br />
 
-## Get support
+<h2><a name="get-support"></a>Get support</h2>
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail is supported on Android smartphones and tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
 

@@ -53,7 +53,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -118,6 +120,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAuthLogin;
     private SwitchCompat swAuthNtlm;
     private SwitchCompat swAuthSasl;
+    private SwitchCompat swExactAlarms;
     private TextView tvProcessors;
     private TextView tvMemoryClass;
     private TextView tvMemoryUsage;
@@ -129,7 +132,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Button btnFiles;
 
     private Group grpUpdates;
-    private Group grpDebug;
+    private CardView cardDebug;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
 
@@ -142,7 +145,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "experiments", "wal", "query_threads", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "log_level",
             "use_modseq", "perform_expunge",
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl"
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
+            "exact_alarms"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -222,6 +226,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthLogin = view.findViewById(R.id.swAuthLogin);
         swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
+        swExactAlarms = view.findViewById(R.id.swExactAlarms);
         tvProcessors = view.findViewById(R.id.tvProcessors);
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
         tvMemoryUsage = view.findViewById(R.id.tvMemoryUsage);
@@ -233,7 +238,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnFiles = view.findViewById(R.id.btnFiles);
 
         grpUpdates = view.findViewById(R.id.grpUpdates);
-        grpDebug = view.findViewById(R.id.grpDebug);
+        cardDebug = view.findViewById(R.id.cardDebug);
 
         setOptions();
 
@@ -505,7 +510,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("debug", checked).apply();
-                grpDebug.setVisibility(checked || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+                cardDebug.setVisibility(checked || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+                if (checked)
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.scrollTo(0, swDebug.getTop());
+                        }
+                    });
             }
         });
 
@@ -574,6 +586,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("auth_sasl", checked).apply();
+            }
+        });
+
+        swExactAlarms.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("exact_alarms", checked).apply();
             }
         });
 
@@ -759,6 +778,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 }.execute(FragmentOptionsMisc.this, new Bundle(), "setup:files");
             }
         });
+
+        // Initialize
+        if (!Helper.isDarkTheme(getContext())) {
+            boolean beige = prefs.getBoolean("beige", true);
+            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
+                    ? R.color.lightColorBackground_cards_beige
+                    : R.color.lightColorBackground_cards));
+        }
 
         tvFtsIndexed.setText(null);
 
@@ -946,6 +973,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthLogin.setChecked(prefs.getBoolean("auth_login", true));
         swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
+        swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", false));
 
         tvProcessors.setText(getString(R.string.title_advanced_processors, Runtime.getRuntime().availableProcessors()));
 
@@ -961,7 +989,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         tvFingerprint.setText(Helper.getFingerprint(getContext()));
 
-        grpDebug.setVisibility(swDebug.isChecked() || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+        cardDebug.setVisibility(swDebug.isChecked() || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
     }
 
     private void updateUsage() {

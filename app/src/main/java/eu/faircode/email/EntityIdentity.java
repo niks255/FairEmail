@@ -31,6 +31,7 @@ import androidx.room.PrimaryKey;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -101,6 +102,7 @@ public class EntityIdentity {
     public String replyto;
     public String cc;
     public String bcc;
+    public String internal;
     @NonNull
     public Boolean unicode = false;
     @NonNull
@@ -166,7 +168,7 @@ public class EntityIdentity {
             if (user.equalsIgnoreCase(cemail[0]))
                 return true;
         } else {
-            String input = (sender_extra_regex.contains("@") ? other.toLowerCase() : cother[0]);
+            String input = (sender_extra_regex.contains("@") ? other.toLowerCase(Locale.ROOT) : cother[0]);
             if (Pattern.matches(sender_extra_regex, input))
                 return true;
         }
@@ -179,11 +181,11 @@ public class EntityIdentity {
         json.put("id", id);
         json.put("name", name);
         json.put("email", email);
+        // not account
         json.put("display", display);
         if (color != null)
             json.put("color", color);
         json.put("signature", signature);
-        // not account
 
         json.put("host", host);
         json.put("encryption", encryption);
@@ -209,16 +211,24 @@ public class EntityIdentity {
         json.put("replyto", replyto);
         json.put("cc", cc);
         json.put("bcc", bcc);
+        json.put("internal", internal);
 
+        json.put("unicode", unicode);
         // not plain_only
+        json.put("sign_default", sign_default);
+        json.put("encrypt_default", encrypt_default);
         // not encrypt
+        // delivery_receipt
+        // read_receipt
         // not store_sent
         // not sent_folder
         // not sign_key
+        // sign_key_alias
         // not tbd
         // not state
         // not error
         // not last_connected
+        // not max_size
         return json;
     }
 
@@ -275,6 +285,16 @@ public class EntityIdentity {
             identity.cc = json.getString("cc");
         if (json.has("bcc") && !json.isNull("bcc"))
             identity.bcc = json.getString("bcc");
+        if (json.has("internal") && !json.isNull("internal"))
+            identity.internal = json.getString("internal");
+
+        if (json.has("unicode"))
+            identity.unicode = json.getBoolean("unicode");
+
+        if (json.has("sign_default"))
+            identity.sign_default = json.getBoolean("sign_default");
+        if (json.has("encrypt_default"))
+            identity.encrypt_default = json.getBoolean("encrypt_default");
 
         return identity;
     }
@@ -308,6 +328,7 @@ public class EntityIdentity {
                     Objects.equals(this.replyto, other.replyto) &&
                     Objects.equals(this.cc, other.cc) &&
                     Objects.equals(this.bcc, other.bcc) &&
+                    Objects.equals(this.internal, other.internal) &&
                     Objects.equals(this.sign_key, other.sign_key) &&
                     Objects.equals(this.sign_key_alias, other.sign_key_alias) &&
                     Objects.equals(this.state, other.state) &&

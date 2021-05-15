@@ -64,6 +64,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -142,6 +143,9 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 
 public class Helper {
+    private static Boolean hasPlayStore = null;
+    private static Boolean hasValidFingerprint = null;
+
     static final int NOTIFICATION_SYNCHRONIZE = 1;
     static final int NOTIFICATION_SEND = 2;
     static final int NOTIFICATION_EXTERNAL = 3;
@@ -155,7 +159,6 @@ public class Helper {
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
     static final String PGP_END_MESSAGE = "-----END PGP MESSAGE-----";
 
-    static final String FAQ_URI = "https://email.faircode.eu/faq/";
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
     static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport&version=" + BuildConfig.VERSION_NAME;
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
@@ -417,18 +420,24 @@ public class Helper {
     }
 
     static boolean canPrint(Context context) {
-        PackageManager pm = context.getPackageManager();
-        return pm.hasSystemFeature(PackageManager.FEATURE_PRINTING);
+        try {
+            PackageManager pm = context.getPackageManager();
+            return pm.hasSystemFeature(PackageManager.FEATURE_PRINTING);
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
     }
 
     static Boolean isIgnoringOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            if (pm == null)
-                return null;
-            return pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
-        }
-        return null;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return null;
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (pm == null)
+            return null;
+
+        return pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
     }
 
     static Integer getBatteryLevel(Context context) {
@@ -459,6 +468,22 @@ public class Helper {
 
     static boolean isPlayStoreInstall() {
         return BuildConfig.PLAY_STORE_RELEASE;
+    }
+
+    static boolean hasPlayStore(Context context) {
+        if (hasPlayStore == null)
+            try {
+                PackageManager pm = context.getPackageManager();
+                pm.getPackageInfo("com.android.vending", 0);
+                hasPlayStore = true;
+            } catch (PackageManager.NameNotFoundException ex) {
+                Log.i(ex);
+                hasPlayStore = false;
+            } catch (Throwable ex) {
+                Log.e(ex);
+                hasPlayStore = false;
+            }
+        return hasPlayStore;
     }
 
     static boolean isSecure(Context context) {
@@ -708,11 +733,39 @@ public class Helper {
         }
     }
 
+    static String getFAQLocale() {
+        switch (Locale.getDefault().getLanguage()) {
+            case "de":
+                return "de-rDE";
+            case "fr":
+                return "fr-rFR";
+            case "it":
+                return "it-rIT";
+            case "ro":
+                return "ro-rRO";
+            default:
+                return null;
+        }
+    }
+
     static void viewFAQ(Context context, int question) {
-        if (question == 0)
-            view(context, Uri.parse(FAQ_URI + "#top"), false);
+        // Redirection is done to prevent text editors from opening the link
+        // https://email.faircode.eu/faq -> https://github.com/M66B/FairEmail/blob/master/FAQ.md
+        // https://email.faircode.eu/docs -> https://github.com/M66B/FairEmail/tree/master/docs
+        // https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq1
+        // https://github.com/M66B/FairEmail/blob/master/docs/FAQ-de-rDE.md#user-content-faq1
+
+        String base;
+        String locale = getFAQLocale();
+        if (locale == null)
+            base = "https://email.faircode.eu/faq";
         else
-            view(context, Uri.parse(FAQ_URI + "#user-content-faq" + question), false);
+            base = "https://email.faircode.eu/docs/FAQ-" + locale + ".md";
+
+        if (question == 0)
+            view(context, Uri.parse(base + "#top"), false);
+        else
+            view(context, Uri.parse(base + "#user-content-faq" + question), false);
     }
 
     static String getOpenKeychainPackage(Context context) {
@@ -922,6 +975,15 @@ public class Helper {
         return color;
     }
 
+    static void hideKeyboard(final View view) {
+        InputMethodManager imm =
+                (InputMethodManager) view.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (imm == null)
+            return;
+
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     // Formatting
 
     private static final DecimalFormat df = new DecimalFormat("@@");
@@ -946,60 +1008,51 @@ public class Helper {
     }
     // https://issuetracker.google.com/issues/37054851
 
-    static boolean isRtl(String text) {
-        if (TextUtils.isEmpty(text))
-            return false;
-
-        int rtl = 0;
-        int ltr = 0;
-        for (int i = 0; i < text.length(); i++)
-            switch (Character.getDirectionality(text.charAt(i))) {
-                case java.lang.Character.DIRECTIONALITY_RIGHT_TO_LEFT:
-                case java.lang.Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC:
-                case java.lang.Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING:
-                case java.lang.Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE:
-                    rtl++;
-                    break;
-
-                case java.lang.Character.DIRECTIONALITY_LEFT_TO_RIGHT:
-                case java.lang.Character.DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING:
-                case java.lang.Character.DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE:
-                    ltr++;
-                    break;
-            }
-
-        return (rtl > ltr);
-    }
-
     static DateFormat getTimeInstance(Context context) {
-        return Helper.getTimeInstance(context, SimpleDateFormat.MEDIUM);
-    }
-
-    static DateFormat getDateInstance(Context context) {
-        return SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
+        return getTimeInstance(context, SimpleDateFormat.MEDIUM);
     }
 
     static DateFormat getTimeInstance(Context context, int style) {
         if (context != null &&
-                (style == SimpleDateFormat.SHORT || style == SimpleDateFormat.MEDIUM)) {
-            Locale locale = Locale.getDefault();
-            boolean is24Hour = android.text.format.DateFormat.is24HourFormat(context);
-            String skeleton = (is24Hour ? "Hm" : "hm");
-            if (style == SimpleDateFormat.MEDIUM)
-                skeleton += "s";
-            String pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton);
-            return new SimpleDateFormat(pattern, locale);
-        } else
+                (style == SimpleDateFormat.SHORT || style == SimpleDateFormat.MEDIUM))
+            return new SimpleDateFormat(getTimePattern(context, style));
+        else
             return SimpleDateFormat.getTimeInstance(style);
     }
 
+    static DateFormat getDateInstance(Context context) {
+        return getDateInstance(context, SimpleDateFormat.MEDIUM);
+    }
+
+    private static DateFormat getDateInstance(Context context, int style) {
+        return SimpleDateFormat.getDateInstance(style);
+    }
+
     static DateFormat getDateTimeInstance(Context context) {
-        return Helper.getDateTimeInstance(context, SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM);
+        return getDateTimeInstance(context, SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM);
     }
 
     static DateFormat getDateTimeInstance(Context context, int dateStyle, int timeStyle) {
-        // TODO fix time format
+        if (context != null &&
+                (timeStyle == SimpleDateFormat.SHORT || timeStyle == SimpleDateFormat.MEDIUM)) {
+            DateFormat dateFormat = getDateInstance(context, dateStyle);
+            if (dateFormat instanceof SimpleDateFormat) {
+                String datePattern = ((SimpleDateFormat) dateFormat).toPattern();
+                String timePattern = getTimePattern(context, timeStyle);
+                return new SimpleDateFormat(datePattern + " " + timePattern);
+            }
+        }
+
         return SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle);
+    }
+
+    private static String getTimePattern(Context context, int style) {
+        // https://issuetracker.google.com/issues/37054851
+        boolean is24Hour = android.text.format.DateFormat.is24HourFormat(context);
+        String skeleton = (is24Hour ? "Hm" : "hm");
+        if (style == SimpleDateFormat.MEDIUM)
+            skeleton += "s";
+        return android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
     }
 
     static CharSequence getRelativeTimeSpanString(Context context, long millis) {
@@ -1420,9 +1473,12 @@ public class Helper {
     }
 
     static boolean hasValidFingerprint(Context context) {
-/*      String signed = getFingerprint(context);
-        String expected = context.getString(R.string.fingerprint); */
-        return true;
+/*      if (hasValidFingerprint == null) {
+            String signed = getFingerprint(context);
+            String expected = context.getString(R.string.fingerprint);
+            hasValidFingerprint = Objects.equals(signed, expected);
+        }
+*/      return true;
     }
 
     static boolean canAuthenticate(Context context) {

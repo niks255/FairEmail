@@ -85,6 +85,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -136,6 +137,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -187,6 +189,8 @@ import biweekly.util.ICalDate;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF;
+import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
 
 public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHolder> {
     private Fragment parentFragment;
@@ -309,7 +313,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             "$sent".toLowerCase(Locale.ROOT), // Kmail
             "$attachment".toLowerCase(Locale.ROOT), // Kmail
             "$signed".toLowerCase(Locale.ROOT), // Kmail
-            "$encrypted".toLowerCase(Locale.ROOT) // Kmail
+            "$encrypted".toLowerCase(Locale.ROOT), // Kmail
+            "$Classified".toLowerCase(Locale.ROOT)
     ));
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
@@ -423,6 +428,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibPin;
         private ImageButton ibShare;
         private ImageButton ibEvent;
+        private ImageButton ibSearchText;
         private ImageButton ibSearch;
         private ImageButton ibHide;
         private ImageButton ibSeen;
@@ -653,6 +659,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibPin = vsBody.findViewById(R.id.ibPin);
             ibShare = vsBody.findViewById(R.id.ibShare);
             ibEvent = vsBody.findViewById(R.id.ibEvent);
+            ibSearchText = vsBody.findViewById(R.id.ibSearchText);
             ibSearch = vsBody.findViewById(R.id.ibSearch);
             ibHide = vsBody.findViewById(R.id.ibHide);
             ibSeen = vsBody.findViewById(R.id.ibSeen);
@@ -760,6 +767,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibPin.setOnClickListener(this);
                 ibShare.setOnClickListener(this);
                 ibEvent.setOnClickListener(this);
+                ibSearchText.setOnClickListener(this);
                 ibSearch.setOnClickListener(this);
                 ibHide.setOnClickListener(this);
                 ibSeen.setOnClickListener(this);
@@ -877,6 +885,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibPin.setOnClickListener(null);
                 ibShare.setOnClickListener(null);
                 ibEvent.setOnClickListener(null);
+                ibSearchText.setOnClickListener(null);
                 ibSearch.setOnClickListener(null);
                 ibHide.setOnClickListener(null);
                 ibSeen.setOnClickListener(null);
@@ -1081,7 +1090,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             ivFound.setVisibility(message.ui_found && found ? View.VISIBLE : View.GONE);
-            ivClassified.setVisibility(message.auto_classified ? View.VISIBLE : View.GONE);
+            ivClassified.setVisibility(message.auto_classified || message.hasKeyword("$Classified") ? View.VISIBLE : View.GONE);
 
             int snoozy = (message.ui_snoozed != null && message.ui_snoozed == Long.MAX_VALUE
                     ? R.drawable.twotone_visibility_off_24
@@ -1097,7 +1106,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ibSnoozed.setVisibility(message.ui_snoozed == null && !message.ui_unsnoozed ? View.GONE : View.VISIBLE);
             ivAnswered.setVisibility(message.ui_answered ? View.VISIBLE : View.GONE);
-            ivForwarded.setVisibility(message.isForwarded() ? View.VISIBLE : View.GONE);
+            ivForwarded.setVisibility(message.hasKeyword("$Forwarded") ? View.VISIBLE : View.GONE);
             ivAttachments.setVisibility(message.attachments > 0 ? View.VISIBLE : View.GONE);
 
             if (viewType == ViewType.FOLDER)
@@ -1344,6 +1353,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibPin.setVisibility(View.GONE);
             ibShare.setVisibility(View.GONE);
             ibEvent.setVisibility(View.GONE);
+            ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
             ibHide.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
@@ -1551,6 +1561,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibPin.setVisibility(View.GONE);
             ibShare.setVisibility(View.GONE);
             ibEvent.setVisibility(View.GONE);
+            ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
             ibHide.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
@@ -1630,6 +1641,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         bindBody(message, false);
 
                     bindAttachments(message, attachments, true);
+
+                    if (!scroll)
+                        properties.ready(message.id);
                 }
             });
 
@@ -1715,6 +1729,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     final boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
                             message.uid == null || message.accountProtocol == EntityAccount.TYPE_POP);
 
+                    boolean full = properties.getValue("full", message.id);
+
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     boolean expand_all = prefs.getBoolean("expand_all", false);
                     boolean expand_one = prefs.getBoolean("expand_one", true);
@@ -1729,6 +1745,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_seen = prefs.getBoolean("button_seen", false);
                     boolean button_hide = prefs.getBoolean("button_hide", false);
                     boolean button_search = prefs.getBoolean("button_search", false);
+                    boolean button_search_text = prefs.getBoolean("button_search_text", false);
                     boolean button_event = prefs.getBoolean("button_event", false);
                     boolean button_share = prefs.getBoolean("button_share", false);
                     boolean button_pin = prefs.getBoolean("button_pin", false);
@@ -1740,6 +1757,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibHide.setImageResource(message.ui_snoozed == null ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
                     ibSeen.setImageResource(message.ui_seen ? R.drawable.twotone_mail_24 : R.drawable.twotone_drafts_24);
                     ibTrash.setTag(delete);
+                    ibTrash.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
+                    ibTrashBottom.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
 
                     ibUndo.setVisibility(outbox ? View.VISIBLE : View.GONE);
                     ibRule.setVisibility(tools && button_rule && !outbox && !message.folderReadOnly ? View.VISIBLE : View.GONE);
@@ -1748,6 +1767,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibPin.setVisibility(tools && button_pin && pin ? View.VISIBLE : View.GONE);
                     ibShare.setVisibility(tools && button_share && message.content ? View.VISIBLE : View.GONE);
                     ibEvent.setVisibility(tools && button_event && message.content ? View.VISIBLE : View.GONE);
+                    ibSearchText.setVisibility(tools && button_search_text && message.content && !full ? View.VISIBLE : View.GONE);
                     ibSearch.setVisibility(tools && button_search && (froms > 0 || tos > 0) && !outbox ? View.VISIBLE : View.GONE);
                     ibHide.setVisibility(tools && button_hide && !outbox ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
@@ -1991,7 +2011,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             clearActions();
 
             ibSeenBottom.setImageResource(message.ui_seen
-                    ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
+                    ? R.drawable.twotone_mail_24 : R.drawable.twotone_drafts_24);
             ibSeenBottom.setVisibility(!(message.folderReadOnly || message.uid == null) ||
                     message.accountProtocol == EntityAccount.TYPE_POP
                     ? View.VISIBLE : View.GONE);
@@ -3097,6 +3117,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         onMenuShare(message, true);
                     else
                         context.startActivity(new Intent(context, ActivityBilling.class));
+                } else if (id == R.id.ibSearchText) {
+                    onSearchText(message);
                 } else if (id == R.id.ibSearch) {
                     onSearchContact(message);
                 } else if (id == R.id.ibAnswer) {
@@ -3928,6 +3950,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             properties.setHeight(message.id, null);
             properties.setPosition(message.id, null);
 
+            setupTools(message, false, false);
             bindBody(message, false);
         }
 
@@ -4150,38 +4173,48 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
             popupMenu.inflate(R.menu.popup_message_more);
 
-            popupMenu.getMenu().findItem(R.id.menu_unseen).setTitle(message.ui_seen ? R.string.title_unseen : R.string.title_seen);
-            popupMenu.getMenu().findItem(R.id.menu_unseen).setEnabled(
-                    (message.uid != null && !message.folderReadOnly) || message.accountProtocol != EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_unseen)
+                    .setTitle(message.ui_seen ? R.string.title_unseen : R.string.title_seen)
+                    .setIcon(message.ui_seen ? R.drawable.twotone_drafts_24 : R.drawable.twotone_mail_24)
+                    .setEnabled((message.uid != null && !message.folderReadOnly) ||
+                            message.accountProtocol != EntityAccount.TYPE_IMAP);
 
-            popupMenu.getMenu().findItem(R.id.menu_hide).setTitle(message.ui_snoozed == null ? R.string.title_hide : R.string.title_unhide);
+            popupMenu.getMenu().findItem(R.id.menu_hide)
+                    .setTitle(message.ui_snoozed == null ? R.string.title_hide : R.string.title_unhide)
+                    .setIcon(message.ui_snoozed == null ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
 
-            popupMenu.getMenu().findItem(R.id.menu_flag_color).setEnabled(
-                    (message.uid != null && !message.folderReadOnly) || message.accountProtocol != EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_flag_color)
+                    .setEnabled((message.uid != null && !message.folderReadOnly) ||
+                            message.accountProtocol != EntityAccount.TYPE_IMAP);
 
             int i = (message.importance == null ? EntityMessage.PRIORITIY_NORMAL : message.importance);
             popupMenu.getMenu().findItem(R.id.menu_set_importance_low).setEnabled(!EntityMessage.PRIORITIY_LOW.equals(i));
             popupMenu.getMenu().findItem(R.id.menu_set_importance_normal).setEnabled(!EntityMessage.PRIORITIY_NORMAL.equals(i));
             popupMenu.getMenu().findItem(R.id.menu_set_importance_high).setEnabled(!EntityMessage.PRIORITIY_HIGH.equals(i));
 
-            popupMenu.getMenu().findItem(R.id.menu_move_to).setEnabled(message.uid != null && !message.folderReadOnly);
-            popupMenu.getMenu().findItem(R.id.menu_move_to).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_move_to)
+                    .setEnabled(message.uid != null && !message.folderReadOnly)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
-            popupMenu.getMenu().findItem(R.id.menu_copy_to).setEnabled(message.uid != null && !message.folderReadOnly);
-            popupMenu.getMenu().findItem(R.id.menu_copy_to).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_copy_to)
+                    .setEnabled(message.uid != null && !message.folderReadOnly)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
-            popupMenu.getMenu().findItem(R.id.menu_delete).setEnabled(message.uid == null || !message.folderReadOnly);
-            popupMenu.getMenu().findItem(R.id.menu_delete).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_delete)
+                    .setEnabled(message.uid == null || !message.folderReadOnly)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+
+            popupMenu.getMenu().findItem(R.id.menu_resync)
+                    .setEnabled(message.uid != null)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
             popupMenu.getMenu().findItem(R.id.menu_search_in_text).setEnabled(message.content && !full);
 
-            popupMenu.getMenu().findItem(R.id.menu_resync).setEnabled(message.uid != null);
-            popupMenu.getMenu().findItem(R.id.menu_resync).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
-
             popupMenu.getMenu().findItem(R.id.menu_create_rule).setVisible(!message.folderReadOnly);
 
-            popupMenu.getMenu().findItem(R.id.menu_manage_keywords).setEnabled(message.uid != null && !message.folderReadOnly);
-            popupMenu.getMenu().findItem(R.id.menu_manage_keywords).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            popupMenu.getMenu().findItem(R.id.menu_manage_keywords)
+                    .setEnabled(message.uid != null && !message.folderReadOnly)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
             popupMenu.getMenu().findItem(R.id.menu_share).setEnabled(message.content);
             popupMenu.getMenu().findItem(R.id.menu_pin).setVisible(pin);
@@ -4198,6 +4231,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             popupMenu.getMenu().findItem(R.id.menu_raw_save).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
             popupMenu.getMenu().findItem(R.id.menu_raw_send).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+
+            popupMenu.insertIcons(context);
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -4245,7 +4280,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         onMenuNotes(message);
                         return true;
                     } else if (itemId == R.id.menu_search_in_text) {
-                        onMenuSearch(message);
+                        onSearchText(message);
                         return true;
                     } else if (itemId == R.id.menu_create_rule) {
                         onMenuCreateRule(message);
@@ -4665,7 +4700,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             fragment.show(parentFragment.getParentFragmentManager(), "edit:notes");
         }
 
-        private void onMenuSearch(TupleMessageEx message) {
+        private void onSearchText(TupleMessageEx message) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View dview = inflater.inflate(R.layout.popup_search_in_text, null, false);
             EditText etSearch = dview.findViewById(R.id.etSearch);
@@ -4712,10 +4747,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             });
             pw.showAtLocation(parentFragment.getView(), Gravity.TOP | Gravity.END, 0, 0);
 
-            etSearch.requestFocus();
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            final InputMethodManager imm =
+                    (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null)
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
         }
 
         private int find(String query, int result) {
@@ -6224,6 +6259,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         void scrollBy(int x, int y);
 
+        void ready(long id);
+
         void move(long id, String type);
 
         void reply(TupleMessageEx message, String selected, View anchor);
@@ -6456,7 +6493,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             final Context context = getContext();
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
             final Integer color = (TextUtils.isEmpty(notes)
                     ? prefs.getInt("note_color", Color.TRANSPARENT)
@@ -6470,15 +6506,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             btnColor.setColor(color);
 
             etNotes.selectAll();
-            etNotes.requestFocus();
-            if (imm != null)
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
             btnColor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (imm != null)
-                        imm.hideSoftInputFromWindow(etNotes.getWindowToken(), 0);
+                    Helper.hideKeyboard(etNotes);
 
                     Bundle args = new Bundle();
                     args.putInt("color", btnColor.getColor());
@@ -6552,6 +6584,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
         @Override
@@ -6636,15 +6674,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final long id = getArguments().getLong("id");
 
             final Context context = getContext();
-            final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
             View view = LayoutInflater.from(context).inflate(R.layout.dialog_keyword_add, null);
             final EditText etKeyword = view.findViewById(R.id.etKeyword);
             etKeyword.setText(null);
-
-            etKeyword.requestFocus();
-            if (imm != null)
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
             return new AlertDialog.Builder(context)
                     .setView(view)
@@ -6693,6 +6726,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
     }
 
@@ -6778,11 +6817,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean overview_mode = prefs.getBoolean("overview_mode", false);
             boolean safe_browsing = prefs.getBoolean("safe_browsing", false);
+            boolean confirm_html = prefs.getBoolean("confirm_html", true);
+            boolean html_dark = prefs.getBoolean("html_dark", confirm_html);
 
             View view = inflater.inflate(R.layout.fragment_open_full, container, false);
             WebView wv = view.findViewById(R.id.wv);
 
             WebSettings settings = wv.getSettings();
+            settings.setUserAgentString(WebViewEx.getUserAgent(getContext(), wv));
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(overview_mode);
 
@@ -6797,6 +6839,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 settings.setSafeBrowsingEnabled(safe_browsing);
+
+            if (html_dark &&
+                    WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK))
+                WebSettingsCompat.setForceDark(settings,
+                        Helper.isDarkTheme(getContext()) ? FORCE_DARK_ON : FORCE_DARK_OFF);
 
             settings.setLoadsImagesAutomatically(true);
             settings.setBlockNetworkLoads(false);
@@ -6879,6 +6926,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final CheckBox cbSeen = dview.findViewById(R.id.cbSeen);
             final CheckBox cbHide = dview.findViewById(R.id.cbHide);
             final CheckBox cbSearch = dview.findViewById(R.id.cbSearch);
+            final CheckBox cbSearchText = dview.findViewById(R.id.cbSearchText);
             final CheckBox cbEvent = dview.findViewById(R.id.cbEvent);
             final CheckBox cbShare = dview.findViewById(R.id.cbShare);
             final CheckBox cbPin = dview.findViewById(R.id.cbPin);
@@ -6898,6 +6946,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbSeen.setChecked(prefs.getBoolean("button_seen", false));
             cbHide.setChecked(prefs.getBoolean("button_hide", false));
             cbSearch.setChecked(prefs.getBoolean("button_search", false));
+            cbSearchText.setChecked(prefs.getBoolean("button_search_text", false));
             cbEvent.setChecked(prefs.getBoolean("button_event", false));
             cbShare.setChecked(prefs.getBoolean("button_share", false));
             cbPin.setChecked(prefs.getBoolean("button_pin", false));
@@ -6921,6 +6970,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             editor.putBoolean("button_seen", cbSeen.isChecked());
                             editor.putBoolean("button_hide", cbHide.isChecked());
                             editor.putBoolean("button_search", cbSearch.isChecked());
+                            editor.putBoolean("button_search_text", cbSearchText.isChecked());
                             editor.putBoolean("button_event", cbEvent.isChecked());
                             editor.putBoolean("button_share", cbShare.isChecked());
                             editor.putBoolean("button_pin", cbPin.isChecked());

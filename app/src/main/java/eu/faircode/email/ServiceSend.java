@@ -35,7 +35,6 @@ import android.os.PowerManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.AlarmManagerCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -79,7 +78,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     private static final int CONNECTIVITY_DELAY = 5000; // milliseconds
 
     static final int PI_SEND = 1;
-    static final int PI_EXISTS = 2;
 
     @Override
     public void onCreate() {
@@ -198,20 +196,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
         Log.i("Send intent=" + intent);
         Log.logExtras(intent);
-
-        if (intent == null)
-            return START_STICKY;
-
-        String action = intent.getAction();
-        if (action == null)
-            return START_STICKY;
-
-        String[] parts = action.split(":");
-        switch (parts[0]) {
-            case "exists":
-                onExists(intent);
-                break;
-        }
 
         return START_STICKY;
     }
@@ -610,6 +594,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                 message.seen = true;
                 message.ui_seen = true;
                 message.ui_hide = true;
+                message.ui_busy = Long.MAX_VALUE; // Needed to keep messages in user folders
                 message.error = null;
                 message.id = db.message().insertMessage(message);
 
@@ -742,8 +727,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             db.endTransaction();
         }
 
-        ServiceSynchronize.eval(this, "sent");
-
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancel("send:" + message.id, 1);
 
@@ -761,41 +744,9 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             } finally {
                 db.endTransaction();
             }
-
-            ServiceSynchronize.eval(this, "orphan");
         }
-    }
 
-    private void onExists(Intent intent) {
-        String action = intent.getAction();
-        long id = Long.parseLong(action.split(":")[1]);
-
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DB db = DB.getInstance(ServiceSend.this);
-
-                    try {
-                        db.beginTransaction();
-
-                        // Message could have been deleted in the meantime
-                        EntityMessage message = db.message().getMessage(id);
-                        if (message == null)
-                            return;
-
-                        EntityOperation.queue(ServiceSend.this, message, EntityOperation.EXISTS, true);
-
-                        db.setTransactionSuccessful();
-                    } finally {
-                        db.endTransaction();
-                    }
-
-                } catch (Throwable ex) {
-                    Log.e(ex);
-                }
-            }
-        });
+        ServiceSynchronize.eval(this, "sent");
     }
 
     static void boot(final Context context) {
@@ -840,7 +791,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         long trigger = System.currentTimeMillis() + delay;
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pi);
-        AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, trigger, pi);
+        AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, trigger, pi);
     }
 
     static void watchdog(Context context) {

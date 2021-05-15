@@ -45,13 +45,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -176,57 +176,85 @@ public class FragmentSetup extends FragmentBase {
         btnQuick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), btnQuick);
+                final Context context = getContext();
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), btnQuick);
+                Menu menu = popupMenu.getMenu();
 
                 int order = 1;
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_gmail, order++, R.string.title_setup_gmail);
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_outlook, order++, R.string.title_setup_outlook);
+                String gmail = getString(R.string.title_setup_oauth, getString(R.string.title_setup_gmail));
+                menu.add(Menu.NONE, R.string.title_setup_gmail, order++, gmail);
 
-                for (EmailProvider provider : EmailProvider.loadProfiles(getContext()))
+                for (EmailProvider provider : EmailProvider.loadProfiles(context))
                     if (provider.oauth != null &&
-                            (provider.oauth.enabled || BuildConfig.DEBUG))
-                        popupMenu.getMenu()
+                            (provider.oauth.enabled || BuildConfig.DEBUG)) {
+                        MenuItem item = menu
                                 .add(Menu.NONE, -1, order++, getString(R.string.title_setup_oauth, provider.name))
                                 .setIntent(new Intent(ActivitySetup.ACTION_QUICK_OAUTH)
                                         .putExtra("id", provider.id)
                                         .putExtra("name", provider.name)
                                         .putExtra("askAccount", provider.oauth.askAccount));
+                        int resid = context.getResources()
+                                .getIdentifier("provider_" + provider.id, "drawable", context.getPackageName());
+                        if (resid != 0)
+                            item.setIcon(resid);
+                    }
 
-                //popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_activesync, order++, R.string.title_setup_activesync);
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other);
+                menu.add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other)
+                        .setIcon(R.drawable.twotone_auto_fix_high_24);
 
                 SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
                 ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_pop3, order++, ss);
+                menu.add(Menu.NONE, R.string.title_setup_pop3, order++, ss);
+
+                popupMenu.insertIcons(context);
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+
                         int itemId = item.getItemId();
                         if (itemId == R.string.title_setup_gmail) {
-                        //  if (Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG)
-                        //      lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_GMAIL));
-                        //  else
-                                ToastEx.makeText(getContext(), R.string.title_setup_gmail_support, Toast.LENGTH_LONG).show();
+/*                          if (Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG)
+                                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_GMAIL));
+                            else
+*/                              new AlertDialog.Builder(getContext())
+                                        .setTitle(item.getTitle())
+                                        .setMessage(R.string.title_setup_gmail_support)
+                                        .setNeutralButton(R.string.title_info, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Helper.viewFAQ(getContext(), 6);
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .show();
                             return true;
-                        } else if (itemId == R.string.title_setup_activesync) {
-                            Helper.viewFAQ(getContext(), 133);
-                            return true;
-                        } else if (itemId == R.string.title_setup_outlook || itemId == R.string.title_setup_other) {
+                        } else if (itemId == R.string.title_setup_other) {
                             lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_SETUP));
                             return true;
                         } else if (itemId == R.string.title_setup_pop3) {
                             lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_POP3));
                             return true;
                         }
+
                         if (item.getIntent() == null)
                             return false;
                         else {
                             if (Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG)
                                 lbm.sendBroadcast(item.getIntent());
                             else
-                                ToastEx.makeText(getContext(), R.string.title_setup_oauth_permission, Toast.LENGTH_LONG).show();
+                                new AlertDialog.Builder(getContext())
+                                        .setTitle(item.getTitle())
+                                        .setMessage(R.string.title_setup_oauth_permission)
+                                        .setNeutralButton(R.string.title_info, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Helper.viewFAQ(getContext(), 147);
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .show();
                             return true;
                         }
                     }
@@ -308,9 +336,27 @@ public class FragmentSetup extends FragmentBase {
         btnPermissions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPermissions.setEnabled(false);
-                String permission = Manifest.permission.READ_CONTACTS;
-                requestPermissions(new String[]{permission}, ActivitySetup.REQUEST_PERMISSION);
+                try {
+                    btnPermissions.setEnabled(false);
+                    String permission = Manifest.permission.READ_CONTACTS;
+                    requestPermissions(new String[]{permission}, ActivitySetup.REQUEST_PERMISSION);
+                } catch (Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                    /*
+                        android.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.content.pm.action.REQUEST_PERMISSIONS pkg=com.google.android.packageinstaller (has extras) }
+                          at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1805)
+                          at android.app.Instrumentation.execStartActivity(Instrumentation.java:1634)
+                          at android.app.Activity.startActivityForResult(Activity.java:4583)
+                          at android.app.Activity.requestPermissions(Activity.java:3850)
+                          at androidx.core.app.ActivityCompat.requestPermissions(SourceFile:11)
+                          at androidx.activity.ComponentActivity$2.onLaunch(SourceFile:13)
+                          at androidx.activity.result.ActivityResultRegistry$3.launch(SourceFile:2)
+                          at androidx.activity.result.ActivityResultLauncher.launch(SourceFile:1)
+                          at androidx.fragment.app.FragmentManager.launchRequestPermissions(SourceFile:4)
+                          at androidx.fragment.app.Fragment.requestPermissions(SourceFile:2)
+                          at eu.faircode.email.FragmentSetup$11.onClick(SourceFile:2)
+                     */
+                }
             }
         });
 
@@ -375,6 +421,14 @@ public class FragmentSetup extends FragmentBase {
         });
 
         // Initialize
+        if (!Helper.isDarkTheme(getContext())) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean beige = prefs.getBoolean("beige", true);
+            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
+                    ? R.color.lightColorBackground_cards_beige
+                    : R.color.lightColorBackground_cards));
+        }
+
         btnIdentity.setEnabled(false);
         tvNoComposable.setVisibility(View.GONE);
 
@@ -464,26 +518,23 @@ public class FragmentSetup extends FragmentBase {
         super.onResume();
 
         // Doze
-        Boolean ignoring = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        Boolean ignoring = Helper.isIgnoringOptimizations(getContext());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            btnDoze.setEnabled(false);
+        else {
             Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
             PackageManager pm = getContext().getPackageManager();
-            if (intent.resolveActivity(pm) != null) { // system whitelisted
-                ignoring = Helper.isIgnoringOptimizations(getContext());
-                if (ignoring == null)
-                    ignoring = true;
-            }
+            if (intent.resolveActivity(pm) == null)
+                btnDoze.setEnabled(false);
+            else
+                btnDoze.setEnabled((ignoring != null && !ignoring) || BuildConfig.DEBUG);
         }
 
-        btnDoze.setEnabled(!ignoring);
-
-        // https://issuetracker.google.com/issues/37070074
-        //ignoring = (ignoring || Build.VERSION.SDK_INT != Build.VERSION_CODES.M);
-
-        tvDozeDone.setText(ignoring ? R.string.title_setup_done : R.string.title_setup_to_do);
-        tvDozeDone.setTextColor(ignoring ? textColorPrimary : colorWarning);
-        tvDozeDone.setTypeface(null, ignoring ? Typeface.NORMAL : Typeface.BOLD);
-        tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(ignoring ? check : null, null, null, null);
+        tvDozeDone.setText(ignoring == null || ignoring ? R.string.title_setup_done : R.string.title_setup_to_do);
+        tvDozeDone.setTextColor(ignoring == null || ignoring ? textColorPrimary : colorWarning);
+        tvDozeDone.setTypeface(null, ignoring == null || ignoring ? Typeface.NORMAL : Typeface.BOLD);
+        tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(ignoring == null || ignoring ? check : null, null, null, null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);

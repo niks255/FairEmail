@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.AlarmManagerCompat;
 import androidx.preference.PreferenceManager;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -41,7 +40,6 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -284,11 +282,15 @@ public class EntityMessage implements Serializable {
         return addresses.toArray(new Address[0]);
     }
 
-    boolean isForwarded() {
-        if (keywords != null)
-            for (String keyword : keywords)
-                if ("$Forwarded".equalsIgnoreCase(keyword))
-                    return true;
+    boolean hasKeyword(@NonNull String value) {
+        // https://tools.ietf.org/html/rfc5788
+        if (keywords == null)
+            return false;
+
+        for (String keyword : keywords)
+            if (value.equalsIgnoreCase(keyword))
+                return true;
+
         return false;
     }
 
@@ -325,12 +327,7 @@ public class EntityMessage implements Serializable {
         boolean language_detection = prefs.getBoolean("language_detection", false);
         String l = (language_detection ? language : null);
 
-        DateFormat DF;
-        if (l == null)
-            DF = Helper.getDateTimeInstance(context);
-        else
-            DF = SimpleDateFormat.getDateTimeInstance(
-                    SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM, new Locale(l));
+        DateFormat DF = Helper.getDateTimeInstance(context);
 
         Element p = document.createElement("p");
         if (extended) {
@@ -464,7 +461,7 @@ public class EntityMessage implements Serializable {
             am.cancel(pi);
         } else {
             Log.i("Set snooze id=" + id + " wakeup=" + new Date(wakeup));
-            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, wakeup, pi);
+            AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, wakeup, pi);
         }
     }
 

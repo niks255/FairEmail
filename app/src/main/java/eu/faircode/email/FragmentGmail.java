@@ -83,7 +83,7 @@ public class FragmentGmail extends FragmentBase {
     @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setSubtitle(R.string.title_setup_quick);
+        setSubtitle(R.string.title_setup_gmail);
         setHasOptionsMenu(true);
 
         view = (ViewGroup) inflater.inflate(R.layout.fragment_gmail, container, false);
@@ -109,7 +109,11 @@ public class FragmentGmail extends FragmentBase {
         btnGrant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPermissions(Helper.getOAuthPermissions(), ActivitySetup.REQUEST_CHOOSE_ACCOUNT);
+                try {
+                    requestPermissions(Helper.getOAuthPermissions(), ActivitySetup.REQUEST_CHOOSE_ACCOUNT);
+                } catch (Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
             }
         });
 
@@ -218,7 +222,7 @@ public class FragmentGmail extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onAccountSelected(data);
                     else
-                        onNoAccountSelected();
+                        onNoAccountSelected(resultCode, data);
                     break;
                 case ActivitySetup.REQUEST_DONE:
                     finish();
@@ -258,11 +262,11 @@ public class FragmentGmail extends FragmentBase {
         });
     }
 
-    private void onNoAccountSelected() {
+    private void onNoAccountSelected(int resultCode, Intent data) {
         AccountManager am = AccountManager.get(getContext());
         Account[] accounts = am.getAccountsByType(TYPE_GOOGLE);
         if (accounts.length == 0) {
-            Log.e("newChooseAccountIntent without result");
+            Log.e("newChooseAccountIntent without result=" + resultCode + " data=" + data);
             ToastEx.makeText(getContext(), R.string.title_no_account, Toast.LENGTH_LONG).show();
         }
     }
@@ -303,7 +307,7 @@ public class FragmentGmail extends FragmentBase {
 
                                     Log.e(ex);
 
-                                    tvError.setText(Log.formatThrowable(ex));
+                                    tvError.setText(Log.formatThrowable(ex, false));
                                     grpError.setVisibility(View.VISIBLE);
 
                                     getMainHandler().post(new Runnable() {
@@ -525,7 +529,7 @@ public class FragmentGmail extends FragmentBase {
                 if (ex instanceof IllegalArgumentException)
                     tvError.setText(ex.getMessage());
                 else
-                    tvError.setText(Log.formatThrowable(ex));
+                    tvError.setText(Log.formatThrowable(ex, false));
                 grpError.setVisibility(View.VISIBLE);
 
                 getMainHandler().post(new Runnable() {

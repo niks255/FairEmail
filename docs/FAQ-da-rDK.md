@@ -2,21 +2,21 @@
 
 # FairEmail-support
 
-Ved evt. spørgsmål, tjek først de ofte stillede spørgsmål nedenfor. [Allernederst](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support) findes info om, hvordan der stilles andre spørgsmål, anmodes om funktioner og indrapporteres fejl.
+Ved evt. spørgsmål, tjek først de ofte stillede spørgsmål nedenfor. [Allernederst](#user-content-get-support) findes info om, hvordan der stilles andre spørgsmål, anmodes om funktioner og indrapporteres fejl.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Indeks
 
-* [Godkendelse af konti](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [Hvordan kan man...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Kendte problemer](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planlagte funktioner](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Hyppigt anmodede funktioner](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Ofte stillede spørgsmål](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Få support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Godkendelse af konti](#user-content-authorizing-accounts)
+* [Hvordan kan man...?](#user-content-howto)
+* [Kendte problemer](#user-content-known-problems)
+* [Planlagte funktioner](#user-content-planned-features)
+* [Hyppigt anmodede funktioner](#user-content-frequently-requested-features)
+* [Ofte stillede spørgsmål](#user-content-frequently-asked-questions)
+* [Få support](#user-content-get-support)
 
-## Godkendelse af konti
+<h2><a name="authorizing-accounts"></a>Godkendelse af konti</h2>
 
 I de fleste tilfælde vil hurtigopsætningen automatisk kunne identificere den korrekte opsætning.
 
@@ -64,7 +64,7 @@ Relaterede spørgsmål:
 * Skift af systemmapper: Tryk på Indstillinger > Manuel opsætning > Konti > konto nederst
 * Eksport-/importindstillinger: Indstillinger &#062 (venstre) navigeringsmenu
 
-## Kendte problemer
+<h2><a name="known-problems"></a>Kendte problemer</h2>
 
 * ~~En [fejl i Android 5.1 og 6](https://issuetracker.google.com/issues/37054851) medfører, at apps sommetider viser et ukorrekt tidsformat. Skiftning af Android-indstillingen *Benyt 24-timers format* kan midlertidigt løse problemet. En løsning blev tilføjet.~~
 * ~~En [fejl i Google Drive](https://issuetracker.google.com/issues/126362828) medfører, at filer eksporteret til Google Drive kan være tomme. Google har løst problemet.~~
@@ -83,8 +83,9 @@ Relaterede spørgsmål:
 * En [fejl i Android](https://issuetracker.google.com/issues/37068143) medfører af og til et nedbrud med "*... Ugyldig forskydning... Gyldigt område er ...* når tekst er valgt og der trykkes uden for den valgte tekst. Denne fejl er rettet i Android 6.0.1.
 * Interne (anker-) links vil ikke fungere, da de oprindelige beskeder vises i et indlejret WebView i en rullevisning (samtalelisten). Dette er en Android-begrænsning, der ikke kan rettes eller omgås.
 * Sprogdetektering [fungerer ikke længere](https://issuetracker.google.com/issues/173337263) på Pixel-enheder med/ opgraderet til Android 11
+* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
-## Planlagte funktioner
+<h2><a name="planned-features"></a>Planlagte funktioner</h2>
 
 * ~~Synkronisere efter behov (manuelt)~~
 * ~~Semiautomatisk kryptering~~
@@ -93,7 +94,7 @@ Relaterede spørgsmål:
 * ~~Notifikationsindstillinger pr. mappe~~
 * ~~Vælg lokale billeder til underskrifter~~ (ingen af dem tilføjes, da dette kræver billedfilhåndtering, og da billedersom standard alligevel ikke vises i de fleste e-mail klienter)
 * ~~Vis beskeder matchet af en regel~~
-* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804) ~ ~ (der er ingen vedligeholdte Java-biblioteker med en passende licens og uden afhængigheder, og desuden har FairEmail sine egne filterregler)
+* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804) ~~ (der er ingen vedligeholdte Java-biblioteker med en passende licens og uden afhængigheder, og desuden har FairEmail sine egne filterregler)
 * ~~Søg efter beskeder med/uden vedhæftelser~~ (dette kan ikke tilføjes, da IMAP ikke understøtter søgning efter vedhæftninger)
 * ~~Søg efter en mappe~~ (filtrering af en hierarkisk mappeliste er problematisk)
 * ~~Søgeforslag~~
@@ -119,11 +120,11 @@ Relaterede spørgsmål:
 
 Alt listeindhold er tilfældigt ordnet og tilføjes *måske* i nærmeste fremtid.
 
-## Hyppigt anmodede funktioner
+<h2><a name="frequently-requested-features"></a>Hyppigt anmodede funktioner</h2>
 
 Designet baserer sig på mange debatter, så ønsks det debatteret yderligere, tjek [dette forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168). Designmålet er minimalisme (ingen unødvendige menuer, knapper mv.) og ikke-distraherende (ingen smarte farver, animationer mv.). Alle viste objekter skal have nytteværdi og bør placeres omhyggeligt for nem brug. Skrifttype/størrelser, farver mv. bør, når muligt, være materielt design.
 
-## Ofte stillede spørgsmål
+<h2><a name="frequently-asked-questions"></a>Ofte stillede spørgsmål</h2>
 
 * [(1) Hvilke tilladelser kræves, og hvorfor?](#user-content-faq1)
 * [(2) Hvorfor optræder der en permanent notifikation?](#user-content-faq2)
@@ -434,7 +435,7 @@ You can pin the certificate too, see above.
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Your username is likely easily guessed, so this is pretty insecure, unless the SMTP server is available via a restricted local network or a VPN only.
 
 *Plain text connection*
 
@@ -679,7 +680,7 @@ Private keys are stored by Android and can be imported via the Android advanced 
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
-Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. Langt tryk på Send-knappen for at ændre en identitets krypteringsmetode. Bruges både PGP- og S/MIME-kryptering for samme e-mailadresse, kan det være nyttigt at kopiere identiteten, så krypteringsmetoden kan ændres ved at vælge en af de to identiteter. Langt tryk på en identitet på identitetslisten (via manuel opsætning i hovedopsætningsskærmen) for at kopiere denne.
 
@@ -1636,7 +1637,9 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-Engangsprisen på de få Pro-funktioner er for lav, lavere end prisen på de fleste lignende apps, og der er [for mange gebyrer og skatter](#user-content-faq19), til at begrunde en tilgængeliggørelse af FairEmail i [Google Play Familie-biblioteket](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
+"*You can't share in-app purchases and free apps with your family members.*"
+
+See [here](https://support.google.com/googleone/answer/7007852) under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
 
 <br />
 
@@ -1711,7 +1714,7 @@ The following rule conditions are available:
 * Absolut tid (modtaget) mellem (siden version 1.1540)
 * Relativ tid (modtaget) mellem
 
-All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
+All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. Ønsker at et domænenavn matchet, kan en betingelse i stil med *@eksempel.dk* bruges
 
 Note that email addresses are formatted like this:
 
@@ -1745,6 +1748,8 @@ You can select one of these actions to apply to matching messages:
 * Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
+
+An error in a rule condition can lead to a disaster, therefore irreversible actions are not supported.
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
@@ -2274,9 +2279,7 @@ Disabling *Partial fetch* will result in more memory usage.
 
 OAuth for Gmail is supported via the quick setup wizard. The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts. OAuth for non on-device accounts is not supported because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this. You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth for Yandex and Yahoo is supported via the quick setup wizard.
-
-OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
+OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
 <br />
 
@@ -3020,9 +3023,9 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <br />
 
-## Get support
+<h2><a name="get-support"></a>Get support</h2>
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail is supported on Android smartphones and tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
 

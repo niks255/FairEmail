@@ -52,13 +52,16 @@ public class EntityAnswer implements Serializable {
     @NonNull
     public Boolean standard;
     @NonNull
-    public Boolean favorite;
-    @NonNull
     public Boolean receipt;
+    @NonNull
+    public Boolean favorite;
     @NonNull
     public Boolean hide;
     @NonNull
     public String text;
+    @NonNull
+    public Integer applied = 0;
+    public Long last_applied;
 
     String getText(Address[] address) {
         return replacePlaceholders(text, address);
@@ -124,10 +127,12 @@ public class EntityAnswer implements Serializable {
         json.put("name", name);
         json.put("group", group);
         json.put("standard", standard);
-        json.put("favorite", favorite);
         json.put("receipt", receipt);
+        json.put("favorite", favorite);
         json.put("hide", hide);
         json.put("text", text);
+        json.put("applied", applied);
+        json.put("last_applied", last_applied);
         return json;
     }
 
@@ -137,10 +142,13 @@ public class EntityAnswer implements Serializable {
         answer.name = json.getString("name");
         answer.group = json.optString("group");
         answer.standard = json.optBoolean("standard");
-        answer.favorite = json.optBoolean("favorite");
         answer.receipt = json.optBoolean("receipt");
+        answer.favorite = json.optBoolean("favorite");
         answer.hide = json.optBoolean("hide");
         answer.text = json.getString("text");
+        answer.applied = json.optInt("applied", 0);
+        if (json.has("last_applied") && !json.isNull("last_applied"))
+            answer.last_applied = json.getLong("last_applied");
         return answer;
     }
 
@@ -151,11 +159,12 @@ public class EntityAnswer implements Serializable {
             return (this.name.equals(other.name) &&
                     Objects.equals(this.group, other.group) &&
                     this.standard.equals(other.standard) &&
-                    this.favorite.equals(other.favorite) &&
                     this.receipt.equals(other.receipt) &&
+                    this.favorite.equals(other.favorite) &&
                     this.hide.equals(other.hide) &&
-                    this.text.equals(other.text)
-            );
+                    this.text.equals(other.text) &&
+                    this.applied.equals(other.applied) &&
+                    Objects.equals(this.last_applied, other.last_applied));
         }
         return false;
     }

@@ -1,22 +1,22 @@
 <a name="top"></a>
 
-# Supporto FairEmail
+# Supporto di FairEmail
 
-Se hai una domanda, sei pregato di controllare prima le seguenti domande frequenti. [In fondo](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support) puoi scoprire come porne altre, richiedere funzionalità e segnalare i bug.
+Se hai una domanda, sei pregato di controllare prima le seguenti domande frequenti. [In fondo](#user-content-get-support) puoi scoprire come porre altre domande, richiedere funzionalità e segnalare i bug.
 
-Se hai una domanda, sei pregato di controllare prima le seguenti domande frequenti (FAQ). [In fondo](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support) puoi scoprire come porne altre, richiedere funzionalità e segnalare i bug.
+Se hai una domanda, sei pregato di controllare prima le seguenti domande frequenti (FAQ). [In fondo](#user-content-get-support) puoi scoprire come porre altre domande, richiedere funzionalità e segnalare i bug.
 
 ## Indice
 
-* [Autorizzare profili](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [Come...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Problemi noti](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Funzionalità pianificate](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Funzionalità frequentemente richieste](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Domande Frequenti](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Richiedi supporto](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Autorizzare profili](#user-content-authorizing-accounts)
+* [Come...?](#user-content-howto)
+* [Problemi noti](#user-content-known-problems)
+* [Funzionalità pianificate](#user-content-planned-features)
+* [Funzionalità frequentemente richieste](#user-content-frequently-requested-features)
+* [Domande Frequenti](#user-content-frequently-asked-questions)
+* [Richiedi supporto](#user-content-get-support)
 
-## Autorizzare profili
+<h2><a name="authorizing-accounts"></a>Autorizzare profili</h2>
 
 In gran parte dei casi, la procedura guidata di configurazione rapida potrà identificare automaticamente la configurazione corretta.
 
@@ -64,12 +64,12 @@ Domande correlate:
 * Cambiare le cartelle di sistema: Impostazioni, tocca Configurazione manuale, tocca Profili, tocca il profilo, in basso
 * Impostazioni di esportazione/importazione: Impostazioni, menu di navigazione (lato sinistro)
 
-## Problemi noti
+<h2><a name="known-problems"></a>Problemi noti</h2>
 
 * ~~Un [bug in Android 5.1 e 6](https://issuetracker.google.com/issues/37054851) causa all'app di mostrare un formato orario errato. Attivare/disattivare l'impostazione di Android *Utilizza formato a 24 ore* potrebbe risolvere temporaneamente il problema. È stata aggiunta una soluzione.~~
 * ~~Un [bug di Google Drive](https://issuetracker.google.com/issues/126362828) causa che i file esportati su Google Drive siano vuoti. Google ha risolto questo problema.~~
 * ~~Un [bug di AndroidX](https://issuetracker.google.com/issues/78495471) causa l'arresto anomalo occasionale di FairEmail tenendo premuto o scorrendo. Google ha corretto questo problema.~~
-* Un [bug in AndroidX ROOM](https://issuetracker.google.com/issues/138441698) causa talvolta un arresto anomalo con "*... Eccezione calcolando i dati live del database ... Impossibile leggere la riga ...*". È stata aggiunta una soluzione.~~
+* ~~Un [bug in AndroidX ROOM](https://issuetracker.google.com/issues/138441698) causa talvolta un arresto anomalo con "*... Eccezione calcolando i dati live del database ... Impossibile leggere la riga ...*". È stata aggiunta una soluzione.~~
 * Un [bug di Android](https://issuetracker.google.com/issues/119872129) causa l'arresto anomalo di FairEmail con "*... Notifica errata pubblicata ...*" su alcuni dispositivi una volta aggiornato FairEmail e toccando su una notifica.
 * Un [bug di Android](https://issuetracker.google.com/issues/62427912) provoca talvolta un arresto anomalo con "*... ActivityRecord non trovato per ...*" dopo l'aggiornamento di FairEmail. La reinstallazione ([sorgente](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) potrebbe risolvere il problema.
 * Un [bug di Android](https://issuetracker.google.com/issues/37018931) causa talvolta un arresto anomalo con *... InputChannel non è inizializzato ...* su alcuni dispositivi.
@@ -83,8 +83,9 @@ Domande correlate:
 * Un [errore di Android 6.0](https://issuetracker.google.com/issues/37068143) causa un arresto anomalo con *... Scostamento non valido: ... L'intervallo valido è ...* quando il testo è selezionato, toccando al di fuori di esso. Questo bug è stato risolto in Android 6.0.1.
 * I collegamenti interni (ancoraggi) non funzioneranno perché i messaggi originali sono mostrati in una WebView incorporata in una vista di scorrimento (l'elenco delle conversazioni). Questa è una limitazione irrisolvibile o aggirabile di Android.
 * Il rilevamento della lingua [non funziona più](https://issuetracker.google.com/issues/173337263) sui dispositivi Pixel con (aggiornati a?) Android 11
+* Un [bug di OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causa firme PGP non valide usando un token hardware.
 
-## Funzionalità pianificate
+<h2><a name="planned-features"></a>Funzionalità pianificate</h2>
 
 * ~~Sincronizzazione su richiesta (manuale)~~
 * ~~Crittografia semiautomatica~~
@@ -119,11 +120,11 @@ Domande correlate:
 
 Ogni cosa in questo elenco è in ordine casuale e *potrebbe* esser aggiunta nel futuro prossimo.
 
-## Funzionalità frequentemente richieste
+<h2><a name="frequently-requested-features"></a>Funzionalità frequentemente richieste</h2>
 
 Il design si basa su molte discussioni e, se lo desideri, puoi discuterne anche tu [in questo forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168). Lo scopo del design è di essere minimalista (senza menu, pulsanti etc. inutili) e non distraente (niente colori stravaganti, animazioni, etc.). Tutte le cose mostrate dovrebbero esser utili in un modo o nell'altro e attentamente posizionate per un facile uso. Caratteri, dimensioni, colori, etc. dovrebbero essere di design materiale quando possibile.
 
-## Domande Frequenti
+<h2><a name="frequently-asked-questions"></a>Domande Frequenti</h2>
 
 * [(1) Quali autorizzazioni sono necessarie e perché?](#user-content-faq1)
 * [(2) Perché viene mostrata una notifica permanente?](#user-content-faq2)
@@ -142,85 +143,85 @@ Il design si basa su molte discussioni e, se lo desideri, puoi discuterne anche 
 * [(15) Perché il testo del messaggio continua a caricare?](#user-content-faq15)
 * [(16) Perché i messaggi non vengono sincronizzati?](#user-content-faq16)
 * [~~(17) Perché la sincronizzazione manuale non funziona?~~](#user-content-faq17)
-* [(18) Perché l'anteprima del messaggio non viene sempre mostrata?](#user-content-faq18)
+* [(18) Perché l'anteprima del messaggio non è sempre mostrata?](#user-content-faq18)
 * [(19) Perché le funzionalità pro sono così costose?](#user-content-faq19)
 * [(20) Posso ottenere un rimborso?](#user-content-faq20)
-* [(21) Come abilitare la luce delle notifiche?](#user-content-faq21)
-* [(22) Cosa significa errore dell' account/cartella ... ?](#user-content-faq22)
-* [(23) Perché mi arriva una segnalazione.. ?](#user-content-faq23)
-* [(24) Cos'è la navigazione dei messaggi sul server?](#user-content-faq24)
-* [(25) Perché non posso selezionare/aprire/salvare un'immagine, allegato o file?](#user-content-faq25)
-* [(26) Posso aiutarvi a tradurre FairEmail nella mia lingua?](#user-content-faq26)
-* [(27) Come posso distinguere le immagini integrate da quelle esterne?](#user-content-faq27)
+* [(21) Come abilito il LED di notifica?](#user-content-faq21)
+* [(22) Cosa significa errore del profilo/della cartella... ?](#user-content-faq22)
+* [(23) Perché ricevo l'avviso...? ?](#user-content-faq23)
+* [(24) Cos'è sfoglia i messaggi sul server?](#user-content-faq24)
+* [(25) Perché non posso selezionare/aprire/salvare un'immagine, un allegato o un file?](#user-content-faq25)
+* [(26) Posso aiutare a tradurre FairEmail nella mia lingua?](#user-content-faq26)
+* [(27) Come posso distinguere tra immagini incorporate ed esterne?](#user-content-faq27)
 * [(28) Come posso gestire le notifiche della barra di stato?](#user-content-faq28)
-* [(29) Come posso ricevere notifiche di messaggi per altre cartelle?](#user-content-faq29)
-* [(30) Come posso usare le impostazioni rapide previste?](#user-content-faq30)
-* [(31) Come posso usare i collegamenti rapidi previsti?](#user-content-faq31)
-* [(32) Come posso controllare se leggere un'email è davvero sicuro?](#user-content-faq32)
-* [(33) Perché gli indirizzi modificati dei mittenti non funzionano?](#user-content-faq33)
-* [(34) Come vengono abbinate le identità?](#user-content-faq34)
-* [(35) Perché dovrei fare attenzione alla visualizzazione di immagini, allegati, il messaggio originale e ad aprire collegamenti?](#user-content-faq35)
+* [(29) Come posso ricevere le notifiche dei nuovi messaggi per le altre cartelle?](#user-content-faq29)
+* [(30) Come posso usare le impostazioni rapide fornite?](#user-content-faq30)
+* [(31) Come posso usare le scorciatoie fornite?](#user-content-faq31)
+* [(32) Come posso verificare che leggere le email sia davvero sicuro?](#user-content-faq32)
+* [(33) Perché gli indirizzi modificati del mittente non funzionano?](#user-content-faq33)
+* [(34) Come sono abbinate le identità?](#user-content-faq34)
+* [(35) Perché dovrei esser attento a visualizzare immagini, allegati, il messaggio originale e ad aprire i collegamenti?](#user-content-faq35)
 * [(36) Come sono crittografati i file delle impostazioni?](#user-content-faq36)
-* [(37) Come vengono memorizzate le password?](#user-content-faq37)
+* [(37) Come sono memorizzate le password?](#user-content-faq37)
 * [(39) Come posso ridurre l'uso della batteria di FairEmail?](#user-content-faq39)
 * [(40) Come posso ridurre l'uso dei dati di FairEmail?](#user-content-faq40)
-* [(41) Come posso correggere l'errore 'Handshake non riuscito'?](#user-content-faq41)
-* [(42) È possibile aggiungere un nuovo provider all'elenco dei provider?](#user-content-faq42)
-* [(43) Riesci a mostrare l'originale ... ?](#user-content-faq43)
-* [(44) È possibile mostrare le foto dei contatti/ identicon nella cartella 'messaggi inviati'?](#user-content-faq44)
+* [(41) Come posso correggere l'errore 'Handshake fallito' ?](#user-content-faq41)
+* [(42) Puoi aggiungere un nuovo fornitore all'elenco dei fornitori?](#user-content-faq42)
+* [(43) Puoi mostrare l'originale di...?](#user-content-faq43)
+* [(44) Puoi mostrare foto / identicon nella cartella inviati?](#user-content-faq44)
 * [(45) Come posso risolvere 'Questa chiave non è disponibile. Per usarla, devi importarla come una delle tue!' ?](#user-content-faq45)
-* [(46) Perché la lista dei messaggi continua ad aggiornarsi?](#user-content-faq46)
-* [(47) Come risolvo l'errore 'Nessun account primario o nessuna cartella bozze'?](#user-content-faq47)
-* [~~(48) Come posso risolvere l'errore 'Nessun account primario o nessuna cartella di archivio' ?~~](#user-content-faq48)
-* [(49) Come faccio a risolvere 'Un'app obsoleta ha inviato un percorso di file invece di un flusso di file'?](#user-content-faq49)
-* [(50) È possibile aggiungere un'opzione per sincronizzare tutti i messaggi?](#user-content-faq50)
-* [(51) Come vengono ordinate le cartelle?](#user-content-faq51)
-* [(52) Perché ci vuole tempo per riconnettersi a un account?](#user-content-faq52)
-* [(53) Si può attaccare la barra d'azione del messaggio in alto/in basso?](#user-content-faq53)
+* [(46) Perché l'elenco dei messaggi continua a ricaricarsi?](#user-content-faq46)
+* [(47) Come risolvo l'errore 'Nessun profilo principale o cartella delle bozze' ?](#user-content-faq47)
+* [~~(48) Come risolvo l'errore 'Nessun profilo principale o cartella d'archivio' ?~~](#user-content-faq48)
+* [(49) Come risolvo 'Un'app obsoleta ha inviato un percorso del file invece di un flusso di file'?](#user-content-faq49)
+* [(50) Puoi aggiungere un'opzione per sincronizzare tutti i messaggi?](#user-content-faq50)
+* [(51) Come sono ordinate le cartelle?](#user-content-faq51)
+* [(52) Perché ci vuole del tempo per riconnettersi a un profilo?](#user-content-faq52)
+* [(53) Puoi attaccare la barra d'azione del messaggio in cima/in fondo?](#user-content-faq53)
 * [~~(54) Come uso un prefisso dello spazio del nome?~~](#user-content-faq54)
-* [(55) Come posso contrassegnare tutti i messaggi come letti / spostati o eliminare tutti i messaggi?](#user-content-faq55)
+* [(55) Come posso segnare tutti i messaggi come letti / spostarli o eliminarli?](#user-content-faq55)
 * [(56) Puoi aggiungere il supporto per JMAP?](#user-content-faq56)
 * [(57) Posso usare HTML nelle firme?](#user-content-faq57)
-* [(58) Cosa significa un'icona dell'email aperta/chiusa?](#user-content-faq58)
-* [(59) I messaggi originali possono essere aperti nel browser?](#user-content-faq59)
-* [(60) Lo sapevi ...?](#user-content-faq60)
+* [(58) Cosa significa l'icona di un'email aperta/chiusa?](#user-content-faq58)
+* [(59) I messaggi originali sono apribili nel browser?](#user-content-faq59)
+* [(60) Sapevi...?](#user-content-faq60)
 * [(61) Perché alcuni messaggi sono mostrati oscurati?](#user-content-faq61)
-* [(62) Quali metodi di autenticazione sono supportati?](#user-content-faq62)
-* [(63) Come sono ridimensionate le immagini per la visualizzazione su schermi?](#user-content-faq63)
-* [~~(64) Puoi aggiungere azioni personalizzate per lo scorrimento a sinistra/destra?~~](#user-content-faq64)
+* [(62) Che metodi di autenticazione sono supportati?](#user-content-faq62)
+* [(63) Come sono ridimensionate le immagini per la visualizzazione sugli schermi?](#user-content-faq63)
+* [~~(64) Puoi aggiungere azioni personalizzate per scorrere a sinistra/destra?~~](#user-content-faq64)
 * [(65) Perché alcuni allegati sono mostrati oscurati?](#user-content-faq65)
-* [(66) FairEmail è disponibile nella Libreria di Google Play Family?](#user-content-faq66)
+* [(66) FairEmail è disponibile nella Libreria di Famiglia di Google Play?](#user-content-faq66)
 * [(67) Come posso posticipare le conversazioni?](#user-content-faq67)
 * [~~(68) Perché Adobe Acrobat reader non apre gli allegati PDF / le app di Microsoft non aprono i documenti allegati?~~](#user-content-faq68)
-* [(69) Puoi aggiungere lo scorrimento in su su un messaggio nuovo?](#user-content-faq69)
+* [(69) Puoi aggiungere lo scorrimento automatico in su ai nuovi messaggi?](#user-content-faq69)
 * [(70) Quando saranno auto-espansi i messaggi?](#user-content-faq70)
 * [(71) Come uso le regole del filtro?](#user-content-faq71)
-* [(72) Cosa sono le identità/i profili principali?](#user-content-faq72)
-* [(73) È sicuro/efficiente spostare i messaggi attraverso i profili?](#user-content-faq73)
-* [(74) Perché vedo messaggi duplicati?](#user-content-faq74)
-* [(75) Puoi creare una versione iOS, Windows, Linux, etc?](#user-content-faq75)
-* [(76) Cosa fa 'Cancella messaggi locali'?](#user-content-faq76)
-* [(77) Perché a volte i messaggi sono mostrati con un piccolo ritardo?](#user-content-faq77)
-* [(78) Come uso i programmi?](#user-content-faq78)
+* [(72) Cosa sono i profili/le identità principali?](#user-content-faq72)
+* [(73) Spostare messaggi tra profili è sicuro/efficiente?](#user-content-faq73)
+* [(74) Perché vedo i messaggi duplicati?](#user-content-faq74)
+* [(75) Puoi fare una versione iOS, Windows, Linux, etc.?](#user-content-faq75)
+* [(76) Cosa fa 'Elimina messaggi locali'?](#user-content-faq76)
+* [(77) Perché a volte i messaggi sono mostrati con un lieve ritardo?](#user-content-faq77)
+* [(78) Come uso le pianificazioni?](#user-content-faq78)
 * [(79) Come uso la sincronizzazione su richiesta (manuale)?](#user-content-faq79)
 * [~~(80) Come risolvo l'errore 'Impossibile caricare BODYSTRUCTURE'?~~](#user-content-faq80)
 * [~~(81) Puoi rendere scuro lo sfondo del messaggio originale nel tema scuro?~~](#user-content-faq81)
-* [(82) Cos'è un'immagine di tracciamento?](#user-content-faq82)
-* [(84) A che servono i contatti locali?](#user-content-faq84)
+* [(82) Cos'è un'immagine di monitoraggio?](#user-content-faq82)
+* [(84) A cosa servono i contatti locali?](#user-content-faq84)
 * [(85) Perché un'identità non è disponibile?](#user-content-faq85)
-* [~~(86) Cosa sono le 'caratteristiche di privacy extra'?~~](#user-content-faq86)
+* [~~(86) Cosa sono le 'funzionalità extra della privacy''?~~](#user-content-faq86)
 * [(87) Cosa significa 'credenziali non valide'?](#user-content-faq87)
-* [(88) Come posso usare un account Yahoo, AOL o Sky?](#user-content-faq88)
-* [(89) Come invio messaggi di solo testo semplice?](#user-content-faq89)
-* [(90) Perché alcuni testi sono collegati senza essere un collegamento?](#user-content-faq90)
-* [~~(91) Puoi aggiungere la sincronizzazione periodica per risparmiare energia della batteria?~~](#user-content-faq91)
-* [(92) Puoi aggiungere il filtro dello spam, la verifica della firma DKIM e l'autorizzazione SPF?](#user-content-faq92)
-* [(93) Puoi consentire l'installazione/archiviazione dei dati su supporti di archiviazione esterna (sdcard)?](#user-content-faq93)
+* [(88) Come posso usare un profilo di Yahoo, AOL o Sky?](#user-content-faq88)
+* [(89) Come posso inviare messaggi di solo testo semplice?](#user-content-faq89)
+* [(90) Perché alcuni testi sono collegati senza essere link?](#user-content-faq90)
+* [~~(91) Puoi aggiungere la sincronizzazione periodica per risparmiare batteria?~~](#user-content-faq91)
+* [(92) Puoi aggiungere il filtraggio dello spam, la verifica della firma DKIM e l'autorizzazione SPF?](#user-content-faq92)
+* [(93) Puoi consentire l'installazione/archiviazione dei dati su multimedia di archiviazione esterna (scheda sd)?](#user-content-faq93)
 * [(94) Cosa significa la striscia rossa/arancione alla fine dell'intestazione?](#user-content-faq94)
-* [(95) Perché non tutte le app sono mostrate durante la selezione di un allegato o immagine?](#user-content-faq95)
-* [(96) Dove posso trovare le impostazioni IMAP e SMTP?](#user-content-faq96)
-* [(97) Cos'è 'pulizia'?](#user-content-faq97)
-* [(98) Perché posso ancora scegliere i contatti dopo aver revocato i permessi dei contatti?](#user-content-faq98)
+* [(95) Perché non sono mostrate tutte le app selezionando un allegato o un'immagine?](#user-content-faq95)
+* [(96) Dove posso trovare le impostazioni di IMAP e SMTP?](#user-content-faq96)
+* [(97) Cos'è la 'pulizia'?](#user-content-faq97)
+* [(98) Perché posso ancora selezionare i contatti dopo aver revocato i permessi della rubrica?](#user-content-faq98)
 * [(99) Puoi aggiungere un editor del rich text o di markdown?](#user-content-faq99)
 * [(100) Come posso sincronizzare le categorie di Gmail?](#user-content-faq100)
 * [(101) Cosa significa il puntino blu/arancione in fondo alle conversazioni?](#user-content-faq101)
@@ -434,7 +435,7 @@ Puoi anche fissare il certificato, vedi sopra.
 
 *Password vuota*
 
-Il tuo nome utente potrebbe esser facilmente indovinato, quindi non è sicuro.
+Il tuo nome utente è probabilmente facile da indovinare, quindi ciò è piuttosto insicuro, a meno che il server SMTP non sia disponibile tramite una rete locale limitata o solo tramite una VPN.
 
 *Connessione di testo semplice*
 
@@ -679,7 +680,7 @@ Le chiavi private sono conservate da Android e sono importabili tramite le impos
 
 Nota che i certificati possono contenere più chiavi per più scopi, ad esempio per l'autenticazione, la crittografia e la firma. Android importa solo la prima chiave, quindi per importarle tutte, il certificato dev'esser diviso. Non è molto banale e ti si consiglia di chiedere supporto al fornitore del certificato.
 
-Nota che la firma S/MIME con altri algoritmi oltre RSA è supportata, ma sappi che altri client email potrebbero non supportarla. La crittografia S/MIME è possibile solo con algoritmi simmetrici, il che significa in pratica usando RSA.
+Nota che la firma S/MIME con altri algoritmi oltre RSA è supportata, ma sappi che altri client email potrebbero non supportarla. La crittografia S/MIME è possibile solo con algoritmi asimmetrici, il che significa in pratica usando RSA.
 
 Il metodo di crittografia predefinito è PGP, ma l'ultimo metodo di crittografia usato sarà ricordato per l'identità selezionata per la volta successiva. Puoi premere a lungo il pulsante di invio per modificare il metodo di crittografia per un'identità. Se usi sia la crittografia PGP che S/MIME per lo stesso indirizzo email, potrebbe essere utile copiare l'identità, così da cambiare il metodo di crittografia selezionandone una delle due. Puoi premere a lungo su un'identità nell'elenco delle identità (tramite configurazione manuale nella schermata principale di configurazione) per copiare un'identità.
 
@@ -974,11 +975,11 @@ I server SMTP possono rifiutare i messaggi per [diversi motivi](https://en.wikip
 * Il limite della dimensione dell'allegato per Gmail [è 25 MB](https://support.google.com/mail/answer/6584)
 * Il limite delle dimensioni dell'allegato per Outlook e Office 365 [è 20 MB](https://support.microsoft.com/en-us/help/2813269/attachment-size-exceeds-the-allowable-limit-error-when-you-add-a-large)
 * Il limite della dimensione dell'allegato per Yahoo [è 25 MB](https://help.yahoo.com/kb/SLN5673.html)
-* *554 5.7.1 Servizio non disponibile; Host del client xxx.xxx.xxx.xxx bloccato*, sei pregato [di vedere qui](https://docs.gandi.net/en/gandimail/faq/error_types/554_5_7_1_service_unavailable.html)
-* *501 Errore di sintassi – linea troppo lunga* è spesso causata dall'utilizzo di una lunga intestazione Autocrypt
+* *554 5.7.1 Servizio non disponibile; host del client xxx.xxx.xxx.xxx bloccato*, sei pregato [di vedere qui](https://docs.gandi.net/en/gandimail/faq/error_types/554_5_7_1_service_unavailable.html)
+* *501 Errore di sintassi – riga troppo lunga* è spesso causata dall'uso di una lunga intestazione di Autocrypt
 * *503 5.5.0 Destinatario già specificato* significa principalmente che un indirizzo è in uso sia come indirizzo TO che CC
-* *554 5.7.1 ... non è consentito trasmettere* significa che il server di posta elettronica non riconosce il nome utente/indirizzo email. Si prega di controllare il nome host e il nome utente/indirizzo email nelle impostazioni di identità.
-* *550 Messaggio di spam rifiutato perché l'IP è elencato per ...* significa che il server dell'email ha rifiutato di inviare un messaggio dall'indirizzo di rete attuale (pubblico) perché usato erroneamente per inviare spam da qualcun altro (si spera) in precedenza. Sei pregato di provare ad abilitare la modalità aereo per 10 minuti per acquisire un nuovo indirizzo di rete.
+* *554 5.7.1 ... non è consentito trasmettere* significa che il server email non riconosce il nome utente/indirizzo email. Sei pregato di ricontrollare il nome dell'host e il nome utente/indirizzo email nelle impostazioni dell'identità.
+* *550 Messaggio di spam rifiutato perché l'IP è elencato da...* significa che il server email ha rifiutato di inviare un messaggio dall'indirizzo di rete corrente (pubblico) perché usato erroneamente per inviare spam da qualcun altro (si spera) in precedenza. Sei pregato di provare ad abilitare la modalità aereo per 10 minuti per acquisire un nuovo indirizzo di rete.
 * *550 Siamo spiacenti, impossibile inviare la tua email. La materia del soggetto, un collegamento o un allegato contiene potenzialmente spam, phishing o malware.* significa che il provider dell'email considera un messaggio in uscita come dannoso.
 * *571 5.7.1 Il messaggio contiene spam o virus o il mittente è bloccato ...* significa che il server email ha considerato un messaggio in uscita come spam. Questo probabilmente significa che i filtri antispam del server email sono troppo rigorosi. Dovrai contattare il provider email per supporto a riguardo.
 * *451 4.7.0 Errore temporaneo del server. Sei pregato di riprovare più tardi. PRX4 ...*: per favore [vedi qui](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) o [vedi qui](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
@@ -986,7 +987,7 @@ I server SMTP possono rifiutare i messaggi per [diversi motivi](https://en.wikip
 
 Se vuoi usare il server SMTP di Gmail per correggere un filtro anti-spam in uscita troppo rigido o migliorare la consegna dei messaggi:
 
-* Verifica il tuo indirizzo email [qui](https://mail.google.com/mail/u/0/#settings/accounts) (dovrai usare un browser desktop)
+* Verifica [qui](https://mail.google.com/mail/u/0/#settings/accounts) il tuo indirizzo email (dovrai usare un browser desktop per questo)
 * Cambia le impostazioni di identità come segue (Impostazioni, tocca Configurazione manuale, tocca Identità, tocca l'identità):
 
 &emsp;&emsp;Nome Utente: *il tuo indirizzo Gmail*<br /> &emsp;&emsp;Password: *[una password dell'app](#user-content-faq6)*<br /> &emsp;&emsp;Host: *smtp.gmail.com*<br /> &emsp;&emsp;Porta: *465*<br /> &emsp;&emsp;Crittografia: *SSL/TLS*<br /> &emsp;&emsp;Rispondi all'indirizzo: *il tuo indirizzo email* (impostazioni avanzate d'identità)<br />
@@ -1014,7 +1015,7 @@ Quando in dubbio, puoi richiedere [supporto](#user-content-support).
 <br />
 
 <a name="faq23"></a>
-**(23) Perché ricevo l'avviso ... ?**
+**(23) Perché ricevo l'avviso...?**
 
 *Generale*
 
@@ -1026,14 +1027,14 @@ Questo avviso sarà inviato quando ci sono troppe connessioni della cartella per
 
 Sono cause possibili:
 
-* Ci sono client email multipli connessi allo stesso profilo
+* Ci sono più client email connessi allo stesso profilo
 * Lo stesso client email è connesso diverse volte allo stesso profilo
-* Le connessioni precedenti sono state terminate bruscamente per esempio perdendo bruscamente la connettività internet
+* Le connessioni precedenti sono state terminate bruscamente, ad esempio, perdendo bruscamente la connettività a internet
 
 Prima prova ad attendere un po' di tempo per vedere se il problema si risolve da solo, altrimenti:
 
-* o passa alla verifica periodica dei messaggi nelle impostazioni di ricezione, che risulterà nell'apertura delle cartelle una per volta
-* o imposta alcune cartelle a sondaggio invece di sincronizzare (tenere premuto a lungo la cartella nell'elenco della cartella, modificare le proprietà)
+* passa periodicamente al controllo dei messaggi nelle impostazioni di ricezione, il che risulterà nell'apertura delle cartelle una per volta, o
+* imposta alcune cartelle per sondare invece che sincronizzare (tienile premute nell'elenco delle cartelle, modifica le proprietà)
 
 Un modo facile per configurare periodicamente la verifica dei messaggi per tutte le cartelle tranne la posta in arrivo è usare *Applica a tutti ...* nel menu a tre puntini dell'elenco delle cartelle e spuntare le ultime due caselle avanzate.
 
@@ -1053,7 +1054,7 @@ Sfogliare i messaggi sul server recupererà i messaggi dal server email in tempo
 <br />
 
 <a name="faq25"></a>
-**(25) Perché non posso selezionare/aprire/salvare un'immagine, allegato o un file?**
+**(25) Perché non posso selezionare/aprire/salvare un'immagine, un allegato o un file?**
 
 Quando l'elemento di un menu per selezionare/aprire/salvare un file è disabilitato (oscurato) o quando ricevi il messaggio *Framework di accesso all'archiviazione non disponibile*, il [framework di accesso all'archiviazione](https://developer.android.com/guide/topics/providers/document-provider), un componente standard di Android, probabilmente non è presente. Questo potrebbe essere perché la tua ROM personalizzata non lo include o perché è stato rimosso attivamente (sgonfiato).
 
@@ -1108,11 +1109,11 @@ Su Android 8.0 Oreo e successive puoi gestire le proprietà dei singoli canali d
 
 FairEmail ha i seguenti canali di notifica:
 
-* Servizio: usato per la notifica del servizio di sincronizzazione, vedi anche [questa FAQ](#user-content-faq2)
-* Invio: usato per le notifiche del servizio di invio
+* Servizio: usato per notificare il servizio di sincronizzazione, vedi anche [questa FAQ](#user-content-faq2)
+* Invio: usato per notificare del servizio di invio
 * Notifiche: usato per le notifiche dei nuovi messaggi
-* Avviso: usato per le notifiche di avviso
-* Errore: usato per le notifiche di errore
+* Avviso: usato per le notifiche d'avviso
+* Errore: usato per le notifiche d'errore
 
 Vedi [qui](https://developer.android.com/guide/topics/ui/notifiers/notifications#ManageChannels) i dettagli sui canali di notifica. In breve: tocca sul nome del canale di notifica per accedere alle impostazioni del canale.
 
@@ -1135,7 +1136,7 @@ Basta tenere premuta una cartella, selezionare *Modifica proprietà*, e abilitar
 Ci sono impostazioni rapide (pannelli delle impostazioni) disponibili per:
 
 * abilitare/disabilitare globalmente la sincronizzazione
-* mostrare il numero di nuovi messaggi e contrassegnarli come visti (non letti)
+* mostrare il numero di nuovi messaggi è segnarli come visti (non letti)
 
 Le impostazioni rapide richiedono Android 7.0 o successive. L'uso dei pannelli delle impostazioni è spiegato [qui](https://support.google.com/android/answer/9083864).
 
@@ -1236,7 +1237,7 @@ Versione breve: AES 256 bit
 
 Versione lunga:
 
-* La chiave di 256 bit è generata con *PBKDF2WithHmacSHA1* usando un salt casuale sicuro di 128 bit e 65536 iterazioni
+* La chiave di 256 bit è generata con *PBKDF2WithHmacSHA1* usando un salt casuale sicuro a 128 bit e 65536 iterazioni
 * La cifra è *AES/CBC/PKCS5Padding*
 
 <br />
@@ -1312,7 +1313,7 @@ Se la connessione al server email è persa, FairEmail risincronizzerà sempre i 
 
 Per ridurre l'uso dei dati, potresti cambiare queste impostazioni avanzate di ricezione:
 
-* Controlla che i messaggi vecchi siano stati rimossi dal server: disabilitato
+* Controlla se i vecchi messaggi sono stati rimossi dal server: disabilitato
 * Sincronizzazione (condivisa) dell'elenco delle cartelle: disabilitato
 
 Di default, FairEmail non scarica testi e allegati dei messaggi più grandi di 256 KiB quando sotto una connessione a internet misurata (mobile o Wi-Fi a pagamento). Puoi cambiare ciò nelle impostazioni di connessione.
@@ -1378,7 +1379,7 @@ Vedi sotto come contattarmi.
 <br />
 
 <a name="faq43"></a>
-**(43) Puoi mostrare l'originale di ... ?**
+**(43) Puoi mostrare l'originale di...?**
 
 Mostra l'originale, mostra il messaggio originale come inviato dal mittente, inclusi i font, colori, margini, etc. originali. Fair Email non altera e mai li altererà in alcun modo, tranne che per richiedere [TEXT_AUTOSIZING](https://developer.android.com/reference/android/webkit/WebSettings.LayoutAlgorithm), che *tenterà* di rendere più leggibili i piccoli testi.
 
@@ -1437,7 +1438,7 @@ Vedi anche la [domanda 25](#user-content-faq25) e [cosa scrive Google a riguardo
 <br />
 
 <a name="faq50"></a>
-**(50) Puoi aggiungere un'opzione per sincornizzare tutti i messaggi?**
+**(50) Puoi aggiungere un'opzione per sincronizzare tutti i messaggi?**
 
 Puoi sincronizzare più messaggi o persino tutti tenendo premuta una cartella (in arrivo) nell'elenco delle cartelle di un profilo (tocca sul nome del profilo nel menu di navigazione) e selezionando *Sincronizzazione di più* nel menu del popup.
 
@@ -1545,28 +1546,28 @@ Per motivi di sicurezza i file con i testi del messaggio originale non sono acce
 <br />
 
 <a name="faq60"></a>
-**(60) Sapevi ... ?**
+**(60) Sapevi...?**
 
-* Sapevi che i messaggi stellati possono sempre essere sincronizzati/mantenuti? (abilitabile nelle impostazioni di ricezione)
-* Sapevi che puoi premere a lungo l'icona 'scrivi messaggio' per andare alla cartella delle bozze?
-* Sapevi che esiste un'opzione avanzata per contrassegnare i messaggi come letti quando sono spostati? (anche archiviare e cestinare è spostare)
-* Sapevi che puoi selezionare il testo (o un indirizzo email) in ogni app sulle versioni recenti di Android e farle cercare a FairEmail?
-* Sapevi che FairEmail ha una modalità tablet? Ruota il tuo dispositivo in modalità orizzontale e le conversazioni saranno aperte in una seconda colonna in caso di abbastanza spazio su schermo.
-* Sapevi che puoi premere a lungo un modello di risposta per creare una bozza dal modello?
-* Sapevi che puoi tenere premuto mentre scorri per selezionare un intervallo di messaggi?
-* Sapevi che puoi provare a inviare i messaggi usando -scorri-il-dito-in-basso-per-aggironare nella casella della posta in uscita?
-* Sapevi che puoi scorrere a sinistra o destra una conversazione per andare alla successiva o precedente?
-* Sapevi che puoi toccare su un'immagine per vedere da dove verrà scaricata?
-* Sapevi che puoi tenere premuto a lungo l'icona della cartella nella barra di azione per selezionare un account?
-* Sapevi che puoi tenere premuto a lungo l'icona stella nel thread della conversazione per impostare una stella colorata?
+* Sapevi che i messaggi stellati possono sono sempre sincronizzabili/mantenibili? (abilitabile nelle impostazioni di ricezione)
+* Sapevi che puoi tenere premuta l'icona 'scrivi messaggio' per andare alla cartella delle bozze?
+* Sapevi che esiste un'opzione avanzata per contrassegnare i messaggi come letti quando sono spostati? (archiviare e cestinare sono anch'essi spostare)
+* Sapevi che puoi selezionare il testo (o un indirizzo email) in ogni app sulle versioni recenti di Android e farli cercare a FairEmail?
+* Sapevi che FairEmail ha una modalità tablet? Ruota il tuo dispositivo in orizzontale e le conversazioni saranno aperte in una seconda colonna se c'è abbastanza spazio su schermo.
+* Sapevi che puoi tenere premuto un modello di risposta per creare un messaggio di bozza dal modello?
+* Sapevi che puoi tenere premuto, trattenere e scorrere per selezionare un intervallo di messaggi?
+* Sapevi che puoi riprovare a inviare i messaggi usando lo scorrimento in giù per ricaricare nella posta in uscita?
+* Sapevi che puoi scorrere una conversazione a sinistra o destra per andare alla conversazione successiva o precedente?
+* Sapevi che puoi toccare su un'immagine per vedere da dove sarà scaricata?
+* Sapevi che puoi tener premuta l'icona della cartella nella barra d'azione per selezionare un profilo?
+* Sapevi che puoi tener premuta l'icona della stella in una conversazione per impostarne una colorata?
 * Sapevi che puoi aprire il pannello di navigazione scorrendo da sinistra, anche visualizzando una conversazione?
-* Sapevi che puoi tenere premuto a lungo l'icona della persona per mostrare/nascondere i campi CC/BCC e ricordare lo stato di visibilità per la prossima volta?
-* Sapevi che puoi inserire gli indirizzi email di un gruppo di contatti di Android tramite il menu a scorrimento a tre puntini?
-* Sapevi che se selezioni il testo e clicchi rispondi, solo il testo selezionato sarà citato?
-* Sapevi che puoi tenere premuto a lungo le icone del cestino (sia nella barra di azione in fondo che nel messaggio) per eliminare permanentemente un messaggio o una conversazione? (versione 1.1368+)
-* Sapevi che puoi tenere premuta l'azione di invio per mostrare la finestra di invio, anche se disabilitata?
-* Sapevi che puoi tenere premuta l'icona dello schermo intero per mostrare solo il testo del messaggio originale?
-* Did you know that you can long press the answer button to reply to the sender? (since version 1.1562)
+* Sapevi che puoi tenere premuta l'icona della persona per mostrare/nascondere i campi CC/CCN e ricordare lo stato di visibilità per la volta successiva?
+* Sapevi che puoi inserire gli indirizzi email di un gruppo di contatto di Android tramite il menu di trabocco a tre punti?
+* Sapevi che se selezioni il testo e tocchi rispondi, solo quello selezionato sarà citato?
+* Sapevi che puoi tenere premuto le icone del cestino (sia nella barra d'azione in basso che del messaggio) per eliminare permanentemente un messaggio o una conversazione? (versione 1.1368+)
+* Sapevi che puoi tener premuta l'azione di invio per mostrare la finestra di invio, anche se è disabilitata?
+* Sapevi che puoi tener premuta l'icona dello schermo intero per mostrare solo il testo del messaggio originale?
+* Sapevi che puoi tener premuto il pulsante di risposta per rispondere al mittente? (dalla versione 1.1562)
 
 <br />
 
@@ -1598,18 +1599,18 @@ I metodi di autenticazione SASL, oltre a CRAM-MD5, non sono supportati perché [
 
 Se il tuo provider richiede un metodo di autenticazione non supportato, potresti ottenere il messaggio *autenticazione fallita*.
 
-I [Certificati Gmail](https://en.wikipedia.org/wiki/Client_certificate) sono selezionabili nelle impostazioni del profilo e dell'identità.
+I [Certificati del client](https://en.wikipedia.org/wiki/Client_certificate) sono selezionabili nelle impostazioni del profilo e dell'identità.
 
-L'[Indicazione del Nome del Server](https://en.wikipedia.org/wiki/Server_Name_Indication) è supportata da [tutte le versioni Android supportate](https://developer.android.com/training/articles/security-ssl).
+L'[Indicazione del Nome del Server](https://en.wikipedia.org/wiki/Server_Name_Indication) è supportata da [tutte le versioni supportate di Android](https://developer.android.com/training/articles/security-ssl).
 
 <br />
 
 <a name="faq63"></a>
 **(63) Come sono ridimensionate le immagini per la visualizzazione sugli schermi?**
 
-Le immagini in linea o allegate grandi in [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) e [JPEG](https://en.wikipedia.org/wiki/JPEG) saranno ridimensionate automaticamente per la visualizzazione sugli schermi. Questo perché i messaggi email sono di dimensioni limitate, in base al provider, principalmente tra 10 e 50 MB. Le immagini saranno ridimensionate di default a una larghezza e altezza massima di circa 1440 pixel e salvate con un rapporto di compressione del 90%. Le immagini sono ridimensionate usando fattori interi per ridurre l'uso della memoria e mantenere la qualità dell'immagine. Il ridimensionamento automatico delle immagini in linea e/o allegate e la dimensione di destinazione massima dell'immagine sono configurabili nelle impostazioni di invio.
+Le grandi immagini in linea o allegate in [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) e [JPEG](https://en.wikipedia.org/wiki/JPEG) saranno ridimensionate automaticamente per la visualizzazione sugli schermi. Questo perché i messaggi email hanno dimensioni limitate, in base al provider, prevalentemente tra 10 e 50 MB. Le immagini saranno ridimensionate di default a una larghezza e altezza di circa 1440 pixel e salvate con un rapporto di compressione del 90%. Le immagini sono ridimensionate usando fattori interi per ridurre l'uso della memoria e mantenere la qualità dell'immagine. Il ridimensionamento automatico delle immagini in linea e/o allegate e la dimensione d'arrivo massima dell'immagine sono configurabili nelle impostazioni di invio.
 
-Se vuoi ridimensionare le immagini in base al caso, puoi usare [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) o un app simile.
+Se vuoi ridimensionare le immagini in base al caso, puoi usare [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) o app simili.
 
 <br />
 
@@ -1636,70 +1637,72 @@ Gli allegati in linea (immagine) sono mostrati oscurati. Gli [allegati in linea]
 <a name="faq66"></a>
 **(66) FairEmail è disponibile nella Libreria di Famiglia di Google Play?**
 
-Il prezzo una tantum di poche funzionalità pro è troppo basso, inferiore al prezzo di gran parte delle app simili e ci sono [troppe commissioni e tasse](#user-content-faq19) per giustificare la resa di FairEmail disponibile nella [Libreria di Famiglia di Google Play](https://support.google.com/googleone/answer/7007852). Nota che Google promuove la libreria di Famiglia, ma la fa pagare agli sviluppatori.
+"*Non puoi condividere gli acquisti in app e le app gratuite con i membri della tua famiglia.*"
+
+Vedi [qui](https://support.google.com/googleone/answer/7007852) sotto "*Vedi se il contenuto è idoneo all'aggiunta alla Libreria di Famiglia*", "*App e giochi*".
 
 <br />
 
 <a name="faq67"></a>
 **(67) Come posso posticipare le conversazioni?**
 
-Seleziona più di una conversazione (tieni premuto per avviare la selezione multipla), tocca il pulsante a tre puntini e seleziona *Posticipa ...*. In alternativa, nella vista del messaggio espanso usa *Posticipa ...* nel meno a tre puntini 'altro' del messaggio o l'azione del timelapse nella barra d'azione in fondo. Seleziona l'orario in cui le conversazioni dovrebbero posticiparsi e conferma toccando OK. Le conversazioni saranno nascoste per il tempo selezionato e mostrate di nuovo in seguito. Riceverai una notifica del nuovo messaggio come promemoria.
+Seleziona più di una conversazione (tieni premuto per avviare la selezione multipla), tocca il pulsante a tre punti e seleziona *Posticipa...*. Altrimenti, nella vista espansa del messaggio usa *Posticipa...* nel menu 'altro' a tre puntini o l'azione del timelapse nella barra d'azione in basso. Seleziona l'orario a cui dovrebbe esser posticipata la conversazione e conferma toccando OK. Le conversazioni saranno nascoste per il tempo selezionato e mostrate di nuovo in seguito. Riceverai la notifica di un nuovo messaggio come promemoria.
 
-Puoi anche posticipare i messaggi con [una regola](#user-content-faq71), che ti consentirà anche di spostare i messaggi da una cartella per posticiparli automaticamente.
+Puoi anche posticipare i messaggi con [una regola](#user-content-faq71), che inoltre ti consentirà di spostare i messaggi in una cartella per posticiparli in automatico.
 
-Puoi mostrare i messaggi posticipati deselezionando *Filtra* > *Nascosti* nel menu di trabocco a tre punti.
+Puoi mostrare i messaggi posticipati deselezionando *Filtra* > *Nascosti* nel menu di trabocco a tre puntini.
 
-Puoi toccare sulla piccola icona di posticipazione per vedere fin quando una conversazione è posticipata.
+Puoi toccare sulla piccola icona di posticipazione finché una conversazione non è posticipata.
 
-Selezionando una durata di zero della posticipazione, la annulli.
+Selezionando una durata di posticipazione di zero, puoi annullarla.
 
 Le app di terze parti non hanno accesso alla cartella dei messaggi posticipati di Gmail.
 
 <br />
 
 <a name="faq68"></a>
-**~~(68) Perché il lettore di Adobe Acrobat non può aprire allegati PDF / le app di Microsoft non possono aprire i documenti allegati?~~**
+**~~(68) Perché Adobe Acrobat reader non apre gli allegati PDF / le app di Microsoft non aprono i documenti allegati?~~**
 
-~~Adobe Acrobat reader e le app di Microsoft prevedono ancora completo accesso a tutti i file archiviati,~~ ~~mentre le app dovrebbero usare il [Framework di Accesso all'Archiviazione](https://developer.android.com/guide/topics/providers/document-provider) da Android KitKat (2013)~~ ~~per avere accesso solo ai file attivamente condivisi. Questo è per motivi di privacy e sicurezza.~~
+~~Adobe Acrobat Reader e le app di Microsoft prevedono ancora l'accesso completo a tutti i file archiviati,~~ ~~mentre le app dovrebbero usare il [Framework di Accesso all'Archiviazione](https://developer.android.com/guide/topics/providers/document-provider) da Android KitKat (2013)~~ ~~per avere accesso ai soli file condivisi attivamente. Questo è per motivi di sicurezza e privacy.~~
 
-~~Puoi risolvere ciò salvando l'allegato e aprendolo dal lettore di Adobe Acrobat / l'app di Microsoft,~~ ~~ma si consiglia di installare preferibilmente un lettore PDF / visualizzatore di documenti open source,~~ ~~per esempio una elencata [qui](https://github.com/offa/android-foss#-document--pdf-viewer).~~
+~~Puoi risolverlo salvando l'allegato e aprendolo dall'app di Adobe Acrobat Reader / Microsoft,~~ ~~ma si consiglia di installare un visualizzatore di documenti / PDF reader aggiornato e preferibilmente open-source,~~ ~~per esempio quelle elencate [qui](https://github.com/offa/android-foss#-document--pdf-viewer).~~
 
 <br />
 
 <a name="faq69"></a>
 **(69) Puoi aggiungere lo scorrimento automatico a un nuovo messaggio?**
 
-L'elenco dei messaggi scorre automaticamente in su navigando da una nuova notifica del messaggio o dopo un aggiornamento manuale. Scorrere sempre automaticamente in su all'arrivo di nuovi messaggi interferirà con il tuo scorrimento, ma se vuoi puoi abilitarlo nelle impostazioni.
+L'elenco dei messaggi viene scorso in su automaticamente navigando dalla notifica di un messaggio nuovo o dopo un aggiornamento manuale. Scorrere sempre in su automaticamente all'arrivo dei nuovi messaggi interferirebbe con il tuo scorrimento, ma se vuoi puoi abilitarlo nelle impostazioni.
 
 <br />
 
 <a name="faq70"></a>
 **(70) Quando saranno automaticamente espansi i messaggi?**
 
-In navigazione, il messaggio di una conversazione sarà espanso se:
+Quando la navigazione al messaggio di una conversazione sarà espansa se:
 
 * C'è solo un messaggio nella conversazione
 * C'è esattamente un messaggio non letto nella conversazione
 * C'è esattamente un messaggio stellato (preferito) nella conversazione (dalla versione 1.1508)
 
-Esiste un'eccezione: il messaggio non era ancora stato scaricato ed è troppo grande da scaricare automaticamente su una connessione misurata (mobile). Puoi impostare o disabilitare la dimensione massima del messaggio sulla scheda delle impostazioni di 'connessione'.
+Esiste un'eccezione: il messaggio non è ancora stato scaricato ed è troppo grande per il download automatico su una connessione misurata (mobile). Puoi impostare o disabilitare la dimensione massima del messaggio sulla scheda delle impostazioni di 'connessione'.
 
-I messaggi duplicati (archiviati), cestinati e le bozze non sono contati.
+I messaggi duplicati (archiviati), cestinati e le bozze non sono contate.
 
-I messaggi saranno automaticamente contrassegnati come letti all'espansione, a meno che non sia disabilitato nelle impostazioni individuali del profilo.
+I messaggi saranno automaticamente contrassegnati come letti all'espansione, a meno che non sia disabilitato nelle impostazioni del singolo profilo.
 
 <br />
 
 <a name="faq71"></a>
 **(71) Come uso le regole del filtro?**
 
-Puoi modificare le regole del filtro tenendo premuta una cartella nell'elenco della cartella di un profilo (tocca il nome del profilo nel menu di navigazione/laterale).
+Puoi modificare le regole del filtro premendo a lungo una cartella nell'elenco delle cartelle di un profilo (tocca il nome del profilo nel menu laterale/di navigazione).
 
-Le nuove regole saranno applicate ai nuovi messaggi ricevuti nella cartella, non ai messaggi esistenti. Puoi controllare la regola ed applicare la regola ai messaggi esistenti o, alternativamente, tenendo premuta la regola nell'elenco delle regole e selezionando *Esegui ora*.
+Le nuove regole saranno applicate ai nuovi messaggi ricevuti nella cartella, non ai messaggi esistenti. Puoi controllare la regole a applicarla ai messaggi esistenti, o in alternativa, premendo a lungo la regola nell'elenco della regola e selezionare *Esegui ora*.
 
-Dovrai dare un nome a una regola e definire l'ordine in cui questa dovrebbe esser eseguita relativamente alle altre regole.
+Dovrai dare un nome alla regola e dovrai definire l'ordine in cui una regola dovrebbe essere eseguita in relazione ad altre regole.
 
-Puoi disabilitare una regola e smettere di elaborare altre regole dopo averne eseguita una.
+Puoi disabilitare una regola e puoi interrompere l'elaborazione delle altre dopo l'esecuzione di una.
 
 Le seguenti condizioni della regola sono disponibili:
 
@@ -1711,23 +1714,23 @@ Le seguenti condizioni della regola sono disponibili:
 * Tempo assoluto (ricevuto) tra (dalla versione 1.1540)
 * Tempo relativo (ricevuto) tra
 
-Tutte le condizioni di una regola devono esser vere per l'azione della regola da eseguire. Tutte le condizioni sono opzionali, ma ci deve essere almeno una condizione, per prevenire l'abbinamento di tutti i messaggi. Se vuoi abbinare tutti i mittenti o tutti i destinatari, puoi semplicemente usare il carattere @ come condizione perché tutti gli indirizzi email conterranno questo carattere.
+Tutte le condizioni di una regola devono essere vere per l'esecuzione dell'azione della regola. Tutte le condizioni sono opzionali, ma ci deve essere almeno una condizione, per prevenire l'abbinamento di tutti i messaggi. Se vuoi abbinare tutti i mittenti o tutti i destinatari, puoi semplicemente usare il carattere @ come condizione perché tutti gli indirizzi email lo conterranno. Se vuoi abbinare un nome di dominio, puoi usare come una condizione qualcosa del tipo *@example.org*
 
-Nota che gli indirizzi email sono formattati in questo modo:
+Nota che gli indirizzi email sono formattati come segue:
 
 `
 "Qualcuno" <somebody@example.org>`
 
-Puoi usare più regole, possibilmente con un *interrompi elaborazione* per una condizione *o* o un *not*.
+Puoi usare più regole, possibilmente con *interrompi elaborazione*, per una condizione *o* o *non*.
 
-L'abbinamento non dipende dalle maiuscole, a meno che non usi [espressioni regolari](https://en.wikipedia.org/wiki/Regular_expression). Sei pregato di vedere [qui](https://developer.android.com/reference/java/util/regex/Pattern) la documentazione delle espressioni regolari di Java. Puoi testare [qui](https://regexr.com/) una regex.
+L'abbinamento non dipende dalle maiuscole, a meno che tu non usi le [espressioni regolari](https://en.wikipedia.org/wiki/Regular_expression). Sei pregato di vedere [qui](https://developer.android.com/reference/java/util/regex/Pattern) la documentazione delle espressioni regolari di Java. Puoi testare [qui](https://regexr.com/) una regex.
 
-Nota che un'espressione regolare supporti un operatore *or* (o), quindi se vuoi abbinare più mittenti, puoi fare questo:
+Nota che un'espressione regolare supporti un operatore *o*, quindi se vuoi abbinare più mittenti, puoi fare questo:
 
 `
 .*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*`
 
-Nota che la [Modalità dot all](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) è abilitata per poter abbinare le [intestazioni senza cartelle](https://tools.ietf.org/html/rfc2822#section-3.2.3).
+Nota che la [modalità dot all](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) è abilitata per poter abbinare le [intestazioni senza cartelle](https://tools.ietf.org/html/rfc2822#section-3.2.3).
 
 Puoi selezionare una di queste azioni da applicare ai messaggi corrispondenti:
 
@@ -1746,20 +1749,22 @@ Puoi selezionare una di queste azioni da applicare ai messaggi corrispondenti:
 * Sintesi vocale (mittente e oggetto)
 * Automazione (Tasker, etc.)
 
-Le regole sono direttamente applicabili dopo il recupero dell'intestazione del messaggio, ma prima che il testo del messaggio sia stato scaricato, quindi è impossibile applicare le condizioni al testo del messaggio. Nota che i testi dei grandi messaggi sono scaricati su richiesta su una connessione misurata per risparmiare l'uso dei dati.
+Un errore nella condizione di una regola può condurre a un disastro, dunque le azioni irreversibili non sono supportate.
 
-Se vuoi inoltrare un messaggio, considera di usare piuttosto l'azione di spostamento. Questo sarà più affidabile dell'inoltro, anche perché i messaggi inoltrati potrebbero esser considerati di spam.
+Le regole si applicano direttamente dopo il recupero dell'intestazione del messaggio, ma prima dello scaricamento del testo del messaggio, quindi è impossibile applicare le condizioni al testo del messaggio. Nota che i testi di messaggi grandi sono scaricati su richiesta su una connessione misurata per risparmiare sull'uso dei dati.
 
-Poiché le intestazioni del messaggio non sono scaricate e archiviate di default per risparmiare sull'uso di batteria e dati e per risparmiare lo spazio di archiviazione, è impossibile vedere in anteprima quali messaggi corrisponderebbero alla condizione della regola di un'intestazione.
+Se vuoi inoltrare un messaggio, considera invece di usare l'azione di spostamento. Questa sarà più affidabile dell'inoltro anche perché i messaggi inoltrati potrebbero essere considerati come spam.
 
-Alcune condizioni comuni dell'intestazione (regex):
+Poiché le intestazioni del messaggio non sono scaricate e archiviate di default per risparmiare sull'uso della batteria e dei dati e per risparmiare spazio di archiviazione, è impossibile vedere in anteprima quali messaggi corrisponderebbero alla condizione di una regola dell'intestazione.
+
+Alcune condizioni dell'intestazione comuni (regex):
 
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;Content-Type: multiparte/segnala.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
-Nel menu a tre puntini *altro* del messaggio esiste un elemento per creare una regola per un messaggio ricevuto con le condizioni più comuni compilate.
+Nel menu dei messaggi *altro* a tre puntini, c'è un elemento per creare una regola per un messaggio ricevuto con le condizioni più comuni compilate.
 
-Il protocollo POP3 non supporta l'impostazione delle parole chiave e lo spostamento o la copia dei messaggi.
+Il protocollo POP3 non supporta l'impostazione delle parole chiave e lo spostamento o copia dei messaggi.
 
 Usare le regole è una funzionalità pro.
 
@@ -1772,21 +1777,21 @@ Il profilo principale è usato quando il profilo è ambiguo, ad esempio avviando
 
 Similmente, l'identità principale di un profilo è usata quando l'identità è ambigua.
 
-Può esistere solo un profilo principale e solo un'identità principale per profilo.
+Può esistere solo un profilo principale e può esserci solo un'identità principale per profilo.
 
 <br />
 
 <a name="faq73"></a>
 **(73) Spostare messaggi tra profili è sicuro/efficiente?**
 
-Spostare i messaggi tra profili è sicuro perché i messaggi grezzi e originali saranno scaricati e spostati e perché i messaggi sorgente saranno eliminati solo dopo che i messaggi di destinazione sono stati aggiunti
+Spostare i messaggi tra profili è sicuro perché i messaggi originali e non elaborati saranno scaricati e spostati e perché i messaggi sorgente saranno eliminati solo dopo che i messaggi di destinazione sono stati aggiunti
 
-Lo spostamento del lotto di messaggi tra profili è efficiente se sia la cartella sorgente che di destinazione sono impostate per la sincronizzazione, altrimenti FairEmail deve connettersi alle cartelle per ogni messaggio.
+Lo spostamento della partita di messaggi tra i profili è efficiente se sia la cartella sorgente che di arrivo sono impostate per la sincronizzazione, altrimenti FairEmail deve connettersi alle cartelle per ogni messaggio.
 
 <br />
 
 <a name="faq74"></a>
-**(74) Perché vedo messaggi duplicati?**
+**(74) Perché vedo i messaggi duplicati?**
 
 Alcuni provider, in particolare Gmail, elencano tutti i messaggi in tutte le cartelle, tranne quelli cestinati, anche nella cartella dell'archivio (tutti i messaggi). FairEmail mostra tutti questi messaggi in un modo non invadente per indicare che questi sono difatti gli stessi.
 
@@ -1846,7 +1851,7 @@ Per un profilo specifico:
 (adb shell) am start-foreground-service -a eu.faircode.email.POLL --es account Gmail
 ```
 
-Puoi anche automatizzare l'attivazione e disattivazione della ricezione dei messaggi inviando questi comandi a FairEmail:
+Puoi anche automatizzare l'attivazione e disattivazione dei messaggi inviando questi comandi a FairEmail:
 
 ```
 (adb shell) am start-foreground-service -a eu.faircode.email.ENABLE
@@ -1860,7 +1865,7 @@ Per abilitare/disabilitare un profilo specifico:
 (adb shell) am start-foreground-service -a eu.faircode.email.DISABLE --es account Gmail
 ```
 
-Nota che disabilitare un profilo nasconderà il profilo e le cartelle e messaggi associati.
+Nota che disabilitare un profilo nasconderà il profilo e tutte le cartelle associate e i messaggi.
 
 Per impostare l'intervallo di sondaggio:
 
@@ -1868,13 +1873,13 @@ Per impostare l'intervallo di sondaggio:
 (adb shell) adb shell am start-foreground-service -a eu.faircode.email.INTERVAL --ei minutes nnn
 ```
 
-Dove *nnn* è uno tra 0, 15, 30, 60, 120, 240, 480, 1440. Un valore di 0 significa messaggi push.
+Dove *nnn* è tra 0, 15, 30, 60, 120, 240, 480, 1440. Un valore di 0 equivale ai messaggi push.
 
 Puoi inviare automaticamente i comandi con ad esempio [Tasker](https://tasker.joaoapps.com/userguide/en/intents.html):
 
 ```
 Nuova attività: Qualcosa di riconoscibile
-Categoria d'Azione: Intento Vario/Invio
+Categoria dell'Azione: Intento Vario/Invio
 Azione: eu.faircode.email.ENABLE
 Target: Servizio
 ```
@@ -1885,14 +1890,14 @@ Per abilitare/disabilitare un profilo con il nome *Gmail*:
 Extra: account:Gmail
 ```
 
-I nomi dei profili sono sensibili alle maiuscole.
+I nomi del profilo sono sensibili alle maiuscole.
 
 La pianificazione è una funzionalità pro.
 
 <br />
 
 <a name="faq79"></a>
-**(79) Come uso sincronizza su domanda (manuale)?**
+**(79) Come uso la sincronizzazione su richiesta (manuale)?**
 
 Normalmente, FairEmail mantiene una connessione ai server email configurati quando è possibile ricevere i messaggi in tempo reale. Se non vuoi, per esempio non vuoi esser disturbato o vuoi risparmiare sull'uso della batteria, basta disabilitare la ricezione nelle impostazioni di ricezione. Questo interromperà il servizio in background che si occupa della sincronizzazione automatica e rimuoverà la notifica della barra di stato associata.
 
@@ -1936,7 +1941,7 @@ Il riconoscimento automatico delle immagini di monitoraggio è disabilitabile ne
 <br />
 
 <a name="faq84"></a>
-**(84) A che servono i contatti locali?**
+**(84) A cosa servono i contatti locali?**
 
 Le informazioni locali di contatto si basano su nomi e indirizzi trovati nei messaggi in entrata e in uscita.
 
@@ -1953,13 +1958,13 @@ Di default solo i nomi e gli indirizzi cui invii i messaggi saranno registrati. 
 <a name="faq85"></a>
 **(85) Perché un'identità non è disponibile?**
 
-Un'identità è disponibile per inviare un nuovo messaggio o rispondere o inoltrarne uno esistente solo se:
+Un'identità è disponibile per inviare un nuovo messaggio o rispondere o inoltrare un messaggio esistente solo se:
 
 * l'identità è impostata per la sincronizzazione (invia messaggi)
 * il profilo associato è impostato per la sincronizzazione (ricevi messaggi)
 * il profilo associato ha una cartella delle bozze
 
-FairEmail proverà a selezionare l'identità migliore in base all'indirizzo *a* del messaggio risposto / inoltrato.
+FairEmail proverà a selezionare l'identità migliore in base all'indirizzo *a* del messaggio a cui si è risposto / inoltrato.
 
 <br />
 
@@ -1976,7 +1981,7 @@ FairEmail proverà a selezionare l'identità migliore in base all'indirizzo *a* 
 <a name="faq87"></a>
 **(87) Cosa significa 'credenziali non valide'?**
 
-Il messaggio d'errore *credenziali non valide* significa che il nome utente e/o la password sono errati, per esempio perché la password è stata cambiata o è scaduta o che l'autorizzazione del profilo è scaduta.
+Il messaggio d'errore delle *credenziali invalide* significa che il nome utente e/o la password sono errati, per esempio perché la password è stata modificata o è scaduta, o che l'autorizzazione del profilo è scaduta.
 
 Se la password è errata/scaduta, dovrai aggiornarla nelle impostazioni del profilo e/o dell'identità.
 
@@ -1995,7 +2000,7 @@ Per autorizzare un profilo di Yahoo, AOL o Sky dovrai creare una password dell'a
 * [per AOL](https://help.aol.com/articles/Create-and-manage-app-password)
 * [per Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (sotto *Altre app di email*)
 
-Sei pregato di vedere [questa FAQ](#user-content-faq111) sul supporto a OAuth.
+Sei pregato di vedere [questa FAQ](#user-content-faq111) sul supporto di OAuth.
 
 Nota che Yahoo, AOL e Sky non supportano i messaggi push standard. L'app email di Yahoo usa un protocollo proprietario non documentato per i messaggi push.
 
@@ -2004,7 +2009,7 @@ I messaggi push richiedono [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) 
 ```
 Y1 CAPABILITY
 * CAPABILITY IMAP4rev1 ID MOVE NAMESPACE XYMHIGHESTMODSEQ UIDPLUS LITERAL+ CHILDREN X-MSG-EXT UNSELECT OBJECTID
-Y1 OK CAPABILITY completed
+Y1 OK CAPABILITY completato
 ```
 
 <br />
@@ -2037,7 +2042,7 @@ Nota che i messaggi originali sono mostrati esattamente come sono, il che signif
 <br />
 
 <a name="faq92"></a>
-**(92) Puoi aggiungere il filtraggio dello spam, la verifica della firma DKIM e l'autoirzzazione SPF?**
+**(92) Puoi aggiungere il filtraggio dello spam, la verifica della firma DKIM e l'autorizzazione SPF?**
 
 Il filtraggio dello spam, la verifica della firma [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) e l'autorizzazione di [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) sono compiti dei server email, non di un client email. I server hanno generalmente più memoria e potenza di calcolo, quindi sono molto più adatti a quest'attività che i dispositivi alimentati a batteria. Inoltre, vorrai che lo spam sia filtrato per tutti i tuoi client email, possibilmente includendo l'email web, non solo uno dei client email. Peraltro, i server email hanno accesso a informazioni come l'indirizzo IP, etc. del server di connessione, a cui il client email non ha alcun accesso.
 
@@ -2055,7 +2060,7 @@ Se ricevi molti messaggi di spam nella tua posta in arrivo, il meglio che puoi f
 
 Inoltre, FairEmail può mostrare una piccola bandiera rossa di avviso quando l'autenticazione DKIM, SPF o [DMARC](https://en.wikipedia.org/wiki/DMARC) fallisce al server di ricezione. Puoi abilitare/disabilitare la [verifica dell'autenticazione](https://en.wikipedia.org/wiki/Email_authentication) nelle impostazioni di visualizzazione.
 
-FairEmail può anche mostrare una bandiera di avviso se il nome del dominio dell'indirizzo email (di risposta) del mittente non definisce un registro MX mirato a un server email. Questo si può abilitare nelle impostazioni di ricezione. Sappi che questo rallenterà la sincronizzazione dei messaggi significativamente.
+FairEmail può anche mostrare una bandiera di avviso se il nome del dominio dell'indirizzo email (di risposta) del mittente non definisce un registro MX mirato a un server email. Questo è abilitabile nelle impostazioni di ricezione. Sappi che questo rallenterà la sincronizzazione dei messaggi significativamente.
 
 Se il nome del dominio del mittente e dell'indirizzo di risposta differiscono, anche la bandiera d'avviso sarà mostrata perché questo è più spesso il caso con i messaggi di phishing. Se lo desideri, questo è disabilitabile nelle impostazioni di ricezione (dalla versione 1.1506).
 
@@ -2095,14 +2100,14 @@ Android Q renderà più difficile e forse persino impossibile accedere direttame
 <br />
 
 <a name="faq96"></a>
-**(96) Dove posso trovare le impostazioni IMAP e SMTP?**
+**(96) Dove posso trovare le impostazioni di IMAP e SMTP?**
 
 Le impostazioni IMAP sono parte delle impostazioni (personalizzate) del profilo e le impostazioni SMTP fanno parte delle impostazioni di identità.
 
 <br />
 
 <a name="faq97"></a>
-**(97) Cos'è 'pulizia'?**
+**(97) Cos'è la 'pulizia' ?**
 
 Circa ogni quattro ore, FairEmail esegue un lavoro di pulizia che:
 
@@ -2180,11 +2185,11 @@ Nota che solo le immagini [JPEG](https://en.wikipedia.org/wiki/JPEG) e [PNG](htt
 * La segnalazione degli errori aiuterà a migliorare FairEmail
 * La segnalazione degli errori è opzionale e su adesione
 * La segnalazione degli errori può esser abilitata/disabilitata nelle impostazioni, sezione varie
-* Le segnalazioni degli errori saranno inviate automaticamente e anonimamente a [Bugsnag](https://www.bugsnag.com/)
+* Le segnalazioni di errori saranno anonimamente inviate a [Bugsnag](https://www.bugsnag.com/)
 * Bugsnag per Android è [open-source](https://github.com/bugsnag/bugsnag-android)
-* Vedi [qui](https://docs.bugsnag.com/platforms/android/automatically-captured-data/) per sapere quali dati saranno inviati in caso di errori
-* Vedi [qui](https://docs.bugsnag.com/legal/privacy-policy/) per conoscere la politica della privacy di Bugsnag
-* Le segnalazioni di errori saranno inviate a *sessions.bugsnag.com:443* e *notify.bugsnag.com:443*
+* Vedi [qui](https://docs.bugsnag.com/platforms/android/automatically-captured-data/) su quali dati saranno inviati in caso di errori
+* Vedi [qui](https://docs.bugsnag.com/legal/privacy-policy/) per la politica sulla privacy di Bugsnag
+* Le segnalazioni d'errore saranno inviate a *sessions.bugsnag.com:443* e *notify.bugsnag.com:443*
 
 <br />
 
@@ -2200,7 +2205,7 @@ Quindi, non devi disabilitare quest'opzione se non hai una SIM UE o non sei conn
 <a name="faq106"></a>
 **(106) Quali launcher possono mostrare un distintivo di conteggio con il numero di messaggi non letti?**
 
-Sei pregato di [vedere qui](https://github.com/leolin310148/ShortcutBadger#supported-launchers) per un elenco di launcher che possono mostrare il numero di messaggi non letti.
+Sei pregato di [vedere qui](https://github.com/leolin310148/ShortcutBadger#supported-launchers) per un elenco di launcher che possano mostrare il numero di messaggi non letti.
 
 Nota che il Nova Launcher richiede Tesla Unread, che [non è più supportato](https://forum.xda-developers.com/android/general/bad-news-tesla-unread-devoloper-t3920415).
 
@@ -2212,7 +2217,7 @@ In base a ciò che vuoi, le impostazioni di notifica *Abbina il numero di nuovi 
 
 Questa funzionalità dipende dal supporto del tuo launcher. FairEmail 'trasmette' appena il numero di messaggi non letti usando la libreria ShortcutBadger. Se non funziona, non è risolvibile da modifiche in FairEmail.
 
-Alcuni launcher mostrano un puntino o un '1' per [la notifica di monitoraggio](#user-content-faq2) sebbene FairEmail richieda esplicitamente di non mostrare un *distintivo* per questa notifica. Questo potrebbe esser causato da un bug nell'app del launcher o nella tua versione di Android. Sei pregato di ricontrollare se il punto di notifica (distintivo) è disabilitato per il canale di notifica della ricezione (servizio). Puoi andare alle giuste impostazioni del canale di notifica tramite le impostazioni di notifica di FairEmail. Questo potrebbe non esser ovvio, ma puoi toccare sul nome del canale per altre impostazioni.
+Alcuni launcher mostrano un puntino o un '1' per [la notifica di monitoraggio](#user-content-faq2) sebbene FairEmail richieda esplicitamente di non mostrare un *distintivo* per questa notifica. Questo potrebbe esser causato da un bug nell'app del launcher o nella tua versione di Android. Sei pregato di ricontrollare se il punto di notifica (distintivo) è disabilitato per il canale di notifica della ricezione (servizio). Puoi andare alle impostazioni del giusto canale di notifica tramite le impostazioni di notifica di FairEmail. Questo potrebbe non esser ovvio, ma puoi toccare sul nome del canale per altre impostazioni.
 
 FairEmail invia anche un nuovo intento di conteggio dei nuovi messaggi:
 
@@ -2274,16 +2279,14 @@ Disabilitare il *Recupero parziale* risulterà in un maggiore uso della memoria.
 
 OAuth per Gmail è supportato tramite la procedura guidata di configurazione rapida. Il gestore del profilo Android sarà usato per recuperare e ricaricare i token OAuth per i profili selezionati sul dispositivo. OAuth per i profili non sul dispositivo non è supportato perché Google richiede un [controllo annuale della sicurezza](https://support.google.com/cloud/answer/9110914) (da $15.000 a $75.000) per questo. Puoi leggere di più a riguardo [qui](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth per Yandex e Yahoo è supportato tramite la procedura guidata di configurazione rapida.
-
-OAuth per i profili di Office 365 è supportato, ma Microsoft non offre (ancora?) OAuth per i profili di Outlook, Live e Hotmail.
+OAuth per Outlook/Office 365, Yahoo, Mail.ru e Yandex è supportato tramite la procedura guidata di configurazione rapida.
 
 <br />
 
 <a name="faq112"></a>
 **(112) Che provider email consigli?**
 
-FairEmail è solo un client email, quindi devi usare il tuo indirizzo email. Nota che è chiaramente menzionato nella descrizione dell'app.
+FairEmail è solo un client email, quindi necessiti del tuo indirizzo email. Nota che è chiaramente menzionato nella descrizione dell'app.
 
 Ci sono molti provider email tra cui scegliere. Quale è migliore per te dipende dai tuoi desideri/requisiti. Sei pregato di vedere questi siti web di [Ripristino della privacy](https://restoreprivacy.com/secure-email/) e [Strumenti di Privacy](https://www.privacytools.io/providers/email/) per un elenco di provider email orientati alla privacy con vantaggi e svantaggi.
 
@@ -2387,7 +2390,7 @@ A causa di limitazioni di Android è impossibile impostare dinamicamente l'opaci
 
 Le notifiche dei nuovi messaggi saranno rimosse facendo scorrere via le notifiche o contrassegnando i messaggi associati come letti. Aprire l'app non rimuoverà le notifiche dei nuovi messaggi. Questo ti da la scelta di lasciare le notifiche dei nuovi messaggi come promemoria che ci siano ancora messaggi non letti.
 
-Su Android 7 Nougat e successive le notifiche dei nuovi messaggi saranno [raggruppate](https://developer.android.com/training/notify-user/group). Toccare sulla notifica di riepilogo aprirà la casella unificata. La notifica di riepilogo è espandibile per vedere le singole notifiche dei nuovi messaggi. Toccare su una singola notifica del nuovo messaggio aprirà la conversazione di cui questo fa parte. Vedi [questa FAQ](#user-content-faq70) su quando i messaggi in una conversazione saranno espansi automaticamente e segnati come letti.
+Su Android 7 Nougat e successive le notifiche dei nuovi messaggi saranno [raggruppate](https://developer.android.com/training/notify-user/group). Toccare sulla notifica di riepilogo aprirà la casella unificata. La notifica di riepilogo è espandibile per vedere le singole notifiche dei nuovi messaggi. Toccare su una singola notifica del nuovo messaggio aprirà la conversazione di cui questo fa parte. Vedi [questa FAQ](#user-content-faq70) su quando i messaggi in una conversazione saranno automaticamente espansi e contrassegnati letti.
 
 <br />
 
@@ -2425,7 +2428,7 @@ Nota che l'invio non sarà riprovato in caso di problemi di autenticazione e qua
 <a name="faq124"></a>
 **(124) Perché ottengo 'Messaggio troppo grande o troppo complesso da mostrare'?**
 
-Il messaggio *Messaggio troppo grande o troppo complesso da mostrare* sarà mostrato se ci sono oltre 100.000 caratteri o oltre 500 link in un messaggio. Riformattare e mostrare tali messaggi impiegherebbe troppo tempo. Puoi invece provare a usare la vista del messaggio originale, alimentata dal browser.
+Il messaggio *Messaggio troppo grande o troppo complesso da mostrare* sarà mostrato se ci sono oltre 100.000 caratteri o oltre 500 link in un messaggio. Riformattare e mostrare tali messaggi impiegherà troppo tempo. Puoi piuttosto provare a usare la vista del messaggio originale, alimentata dal browser.
 
 <br />
 
@@ -2453,7 +2456,7 @@ Per un po' di background, leggi [questo articolo di Wikipedia](https://en.wikipe
 <a name="faq126"></a>
 **(126) Le anteprime dei messaggi sono inviabili al mio indossabile?**
 
-FairEmail recupera un messaggio in due fasi:
+FairEmail recupera un messaggio in due passaggi:
 
 1. Recupera intestazioni del messaggio
 1. Recupera testo e allegati del messaggio
@@ -2462,7 +2465,7 @@ Direttamente dopo la prima fase saranno notificati i nuovi messaggi. Tuttavia, s
 
 Poiché non esiste garanzia che il testo di un messaggio sia sempre recuperato direttamente dopo la sua intestazione, non è possibile garantire che una nuova notifica del messaggio con un testo in anteprima sarà sempre inviata a un indossabile.
 
-Se pensi basti, puoi abilitare l'opzione di notifica *Invia solo notifiche con l'anteprima di un messaggio agli indossabili* e se non funziona, puoi provare ad abilitare l'opzione *Mostra solo notifiche con un testo di anteprima*. Nota che questo si applica anche agli indossabili che non mostrano un testo di anteprima, anche quando l'app Android Wear dice che la notifica è stata inviata (collegata).
+Se pensi che sia abbastanza, puoi abilitare l'opzione di notifica *Invia solo le notifiche con un'anteprima di messaggio agli indossabile* e se non funziona, puoi provare ad abilitare l'opzione di notifica *Mostra solo le notifiche con un testo di anteprima*. Nota che questo si applica anche agli indossabili che non mostrano un testo di anteprima, anche quando l'app Android Wear dice che la notifica è stata inviata (collegata).
 
 Se vuoi che l'intero testo del messaggio sia inviato al tuo indossabile, puoi abilitare l'opzione di notifica *Anteprima del testo completo*. Nota che alcuni indossabili sono noti per arrestarsi anomalmente quando quest'opzione è abilitata.
 
@@ -2473,7 +2476,7 @@ Se usi un indossabile di Samsung con l'app Galaxy Wearable (Samsung Gear), potre
 <a name="faq127"></a>
 **(127) Come posso correggere 'Argomenti HELO sintatticamente non validi'?**
 
-L'errore *... Argomenti HELO sintatticamente non validi ...* significa che il server SMTP ha rifiutato l'indirizzo IP locale o il nome dell'host. Potresti risolvere questo errore abilitando o disabilitando l'opzione di identità avanzata *Usa indirizzo IP locale invece del nome dell'host*.
+L'errore*... Argomenti HELO sintatticamente non validi ...* significa che il server SMTP ha rifiutato l'indirizzo IP locale o il nome dell'host. Potresti risolvere questo errore abilitando o disabilitando l'opzione di identità avanzata *Usa indirizzo IP locale invece del nome dell'host*.
 
 <br />
 
@@ -2485,7 +2488,7 @@ Puoi ripristinare le domande fatte tramite il menu di trabocco a tre puntini nel
 <br />
 
 <a name="faq129"></a>
-**(129) ProtonMail e Tutanota sono supportati?**
+**(129) ProtonMail e Tutanota sono supportate?**
 
 ProtonMail usa un protocollo email proprietario e [non supporta direttamente IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), quindi non puoi usare FairEmail per accedervi.
 
@@ -2500,9 +2503,9 @@ Una serie di righe di testo arancioni o rosse con informazioni tecniche signific
 
 L'avviso *Nessun server trovato a ...* significa che non esisteva alcun server email registrato al nome di dominio indicato. Rispondere al messaggio potrebbe essere impossibile e risultare in un errore. Questo potrebbe indicare un indirizzo email falsificato e/o spam.
 
-L'errore *... ParseException ...* significa che c'è un problema con un messaggio ricevuto, probabilmente causato da un bug nel software di invio. FairEmail risolverà ciò in gran parte dei casi, quindi questo messaggio è principalmente considerabile come un avviso invece che un errore.
+L'errore*... ParseException...* significa che c'è un problema con un messaggio ricevuto, probabilmente causato da un bug nel software di invio. FairEmail risolverà ciò in gran parte dei casi, quindi questo messaggio è principalmente considerabile come un avviso invece che un errore.
 
-L'errore *...SendFailedException...* significa che si è verificato un problema inviando un messaggio. L'errore includerà quasi sempre un motivo. Motivi comuni sono che il messaggio era troppo grande o che uno o più indirizzi dei destinatari non erano validi.
+L'errore*...SendFailedException...* significa che si è verificato un problema inviando un messaggio. L'errore includerà quasi sempre un motivo. Motivi comuni sono che il messaggio era troppo grande o che uno o più indirizzi dei destinatari non erano validi.
 
 L'avviso *Messaggio troppo grande per la memoria disponibile* significa che il messaggio era più grande di 10 MiB. Anche se il tuo dispositivo ha molto spazio di archiviazione, Android fornisce memoria operativa limitata alle app, limitando la dimensione dei messaggi gestibili.
 
@@ -2524,7 +2527,7 @@ Tuttavia, esiste un'impostazione del comportamento per invertire la direzione di
 <a name="faq132"></a>
 **(132) Perché le notifiche dei nuovi messaggi sono silenziate?**
 
-Le notifiche sono silenziate di default su alcune versioni MIUI. Sei pregato di vedere [qui](http://en.miui.com/thread-3930694-1-1.html) come risolvere questa cosa.
+Le notifiche sono silenziate di default su alcune versioni MIUI. Sei pregato di vedere [qui](http://en.miui.com/thread-3930694-1-1.html) come puoi risolverlo.
 
 Esiste un bug in alcune versioni di Android che causa a [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean)) di silenziare le notifiche. Poiché FairEmail mostra le notifiche dei nuovi messaggi subito dopo averne recuperato le intestazioni, FairEmail deve aggiornare le notifiche dei nuovi messaggi dopo aver recuperato il testo del messaggio, questo non è risolvibile o aggirabile in FairEmail.
 
@@ -2583,7 +2586,7 @@ Nel menu di trabocco a tre puntini in alto a destra esiste un elemento per elimi
 <br />
 
 <a name="faq137"></a>
-**(137) Come posso ripristinare 'Non chiedere più'?**
+**(137) Come posso ripristinare 'Non chiedermelo più'?**
 
 Puoi ripristinare tutte le domande impostate per non esser più chieste nelle impostazioni varie.
 
@@ -2630,11 +2633,9 @@ Usando una casella condivisa, potresti voler abilitare l'opzione *Sincronizza el
 <br />
 
 <a name="faq140"></a>
-**(140) Perché il testo del massaggio contiene caratteri strani?**
+**(140) Perché il testo del messaggio contiene caratteri strani?**
 
-Mostrare caratteri strani è quasi sempre causato dalla specificazione di nessuna o un'invalida codifica del carattere, dal software di invio. FairEmail presumerà
-
-ISO 8859-1</=> quando non è impostato alcun carattere o quando [US-ASCII](https://en.wikipedia.org/wiki/ASCII) è stato specificato. Oltre al fatto che non c'è modo di determinare affidabilmente e automaticamente la codifica corretta del carattere, questo non è risolvibile da FairEmail. L'azione corretta è lamentarsi con il mittente.</p> 
+Mostrare caratteri strani è quasi sempre causato dalla specificazione di nessuna o un'invalida codifica del carattere, dal software di invio. FairEmail presumerà [ISO 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) quando non è impostato alcun carattere o quando [US-ASCII](https://en.wikipedia.org/wiki/ASCII) è stato specificato. Oltre al fatto che non c'è modo di determinare affidabilmente e automaticamente la codifica corretta del carattere, questo non è risolvibile da FairEmail. L'azione corretta è lamentarsi con il mittente.
 
 <br />
 
@@ -2822,12 +2823,9 @@ Un po' di background: Gmail sembra avere una vista aggiuntiva del messaggio per 
 
 Un'altra stranezza è che una stella (messaggio preferito) impostata tramite l'interfaccia web non è removibile con il comando IMAP
 
-
-
 ```
 STORE <message number> -FLAGS (\Flagged)
 ```
-
 
 D'altra parte, una stella impostata tramite IMAP è mostrata nell'interfaccia web ed è removibile tramite IMAP.
 
@@ -2852,7 +2850,7 @@ Puoi visualizzarlo ad esempio con l'app Android [Letter Opener](https://play.goo
 <br />
 
 <a name="faq156"></a>
-**(156) Come posso configurare un profilo di Office 365?**
+**(156) Come posso configurare un profilo Office 365?**
 
 Un profilo di Office 365 è configurabile tramite la procedura guidata di configurazione rapida e selezionando *Office 365 (OAuth)*.
 
@@ -2863,7 +2861,7 @@ Se hai abilitato i *predefiniti di sicurezza* nella tua organizzazione, potresti
 <br />
 
 <a name="faq157"></a>
-**(157) Come posso configurare un profilo di Free.fr?**
+**(157) Come posso configurare un profilo Free.fr?**
 
 Siete pregati di [vedere qui](https://free.fr/assistance/597.html) per le istruzioni.
 
@@ -2902,12 +2900,9 @@ Le immagini di monitoraggio non saranno riconosciute quando il dominio è classi
 
 Questo comando è inviabile a FairEmail da un'app di automazione per aggiornare gli elenchi di protezione:
 
-
-
 ```
 (adb shell) am start-foreground-service -a eu.faircode.email.DISCONNECT.ME
 ```
-
 
 Aggiornarli una volta a settimana sarà probabilmente sufficiente, sei pregato di vedere [qui](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) per le modifiche recenti agli elenchi.
 
@@ -3028,17 +3023,15 @@ Per prevenire questi problemi, la posticipazione è effettuata localmente sul di
 
 <br />
 
+<h2><a name="get-support"></a>Ricevi supporto</h2>
 
+FairEmail è supportata solo su smartphone e tablet Android e ChromeOS.
 
-## Ricevi supporto
+Sono supportate solo le ultime versioni del Play Store e di GitHub. La build di F-Droid è supportata solo se il numero della versione corrisponde a quello dell'ultima versione di GitHub. Questo significa anche che il downgrade non è supportato.
 
-FairEmail è supportato solo su smartphone, tablet e ChromeOS.
+Non c'è alcun supporto su cose non direttamente correlate a FairEmail.
 
-Solo l'ultima versione del Play Store e l'ultima release di GitHub sono supportate. La build di F-Droid è supportata solo se il numero della versione è lo stesso dell'ultima release di GitHub. Questo significa anche che il downgrade non è supportato.
-
-Non c'è supporto alcuno su cose non direttamente correlate a FairEmail.
-
-Non c'è supporto alcuno sulla creazione e lo sviluppo di cose per conto proprio.
+Non c'è alcun supporto sulle build e lo sviluppo di cose per conto proprio.
 
 Le funzionalità richieste dovrebbero:
 

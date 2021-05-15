@@ -91,7 +91,6 @@
     <string name="title_notification_sending_failed">Verzenden naar %1$s mislukt</string>
     <string name="title_notification_redacted">Redactie: biometrische of pincodeverificatie ingeschakeld</string>
     <string name="title_factor_minutes">%1$d minuten</string>
-    <string name="menu_exit">Afsluiten</string>
     <string name="menu_answers">Sjablonen</string>
     <string name="menu_operations">Bewerkingen</string>
     <string name="menu_contacts">Lokale contacten</string>
@@ -136,15 +135,14 @@
     <string name="title_setup_account_identity_hint">U kunt de naam, kleur en veegacties configureren in de accountinstellingen en een handtekening configureren in de identiteitsinstellingen</string>
     <string name="title_setup_accounts">Accounts</string>
     <string name="title_setup_identities">Identiteiten</string>
-    <string name="title_setup_oauth_permission">De e-mailprovider heeft OAuth alleen goedgekeurd voor officiële app versies</string>
     <string name="title_setup_other">Andere provider</string>
     <string name="title_setup_pop3">POP3 account</string>
+    <string name="title_setup_oauth_permission">De e-mailprovider heeft OAuth alleen goedgekeurd voor officiële app versies</string>
     <string name="title_setup_gmail_support">Het autoriseren van Google accounts werkt alleen in officiële versies omdat Android de app handtekening controleert</string>
     <string name="title_setup_gmail_rationale">Geef a.u.b. toestemming om een account te selecteren en uw naam te lezen</string>
     <string name="title_setup_gmail_permissions">Google zal machtigingen vragen om al uw e-mail te lezen, op te stellen, te verzenden en definitief te verwijderen. FairEmail zal uw berichten nooit verwijderen zonder uw expliciete toestemming.</string>
     <string name="title_setup_gmail_drafts">Als de conceptmap niet toegankelijk is voor IMAP, dan kan dit worden opgelost in de Gmail label instellingen</string>
     <string name="title_setup_gmail_password">Ik wil een account met een wachtwoord autoriseren</string>
-    <string name="title_setup_office_remark">Microsoft biedt dit type autorisatie niet aan voor Outlook, Live, Hotmail, etc accounts</string>
     <string name="title_setup_office_auth">De fout \'AUTHENTICATE failed\' kan worden veroorzaakt doordat IMAP/SMTP door de systeemadministrator is uitgeschakeld</string>
     <string name="title_setup_oauth_rationale">Autoriseer toegang tot uw %1$s account</string>
     <string name="title_setup_oauth_update">Autoriseer bestaande account opnieuw</string>
@@ -169,7 +167,7 @@
     <string name="title_setup_permissions_remark">Voor toegang tot contactinformatie (optioneel)</string>
     <string name="title_setup_doze">Batterij-optimalisaties uitschakelen</string>
     <string name="title_setup_doze_remark">Om betrouwbaar e-mail te verzenden en ontvangen</string>
-    <string name="title_setup_doze_hint">Hoewel dit tegenstrijdig kan klinken, zal het uitschakelen van accuoptimalisaties resulteren in minder batterijverbruik</string>
+    <string name="title_setup_doze_hint">Hoewel dit tegenstrijdig kan klinken, zal het uitschakelen van accuoptimalisaties voor deze app resulteren in minder batterijverbruik</string>
     <string name="title_setup_doze_instructions">In het volgende Android dialoogvenster wijzig \"Niet geoptimaliseerd\" naar \"Alle apps\", selecteer deze app en selecteer \"Niet optimaliseren\"</string>
     <string name="title_setup_doze_battery">Hoog accugebruik?</string>
     <string name="title_setup_doze_stopped">Sync gestopt?</string>
@@ -183,6 +181,7 @@
     <string name="title_setup_still">Nog te doen</string>
     <string name="title_setup_error">Fout</string>
     <string name="title_setup_configuring">Account configureren &#8230;</string>
+    <string name="title_setup_close">Sluit instellingen</string>
     <string name="title_setup_export">Exporteer instellingen</string>
     <string name="title_setup_import">Importeer instellingen</string>
     <string name="title_setup_export_do">Het wachtwoord wordt gebruikt om de instellingen te versleutelen en is vereist om de instellingen opnieuw te importeren</string>
@@ -236,9 +235,10 @@
     <string name="title_advanced_section_encryption">Versleuteling</string>
     <string name="title_advanced_section_notifications">Meldingen</string>
     <string name="title_advanced_section_misc">Diversen</string>
-    <string name="title_advanced_default">Alle opties hebben veelgebruikte standaardwaarden, die niet hoeven te worden gewijzigd om de app te gebruiken</string>
+    <string name="title_advanced_default">Alle opties hebben veelgebruikte standaardwaarden, die niet gewijzigd hoeven te worden om de app te gebruiken</string>
     <string name="title_advanced_receive">Ontvang berichten voor alle accounts</string>
     <string name="title_advanced_when">Wanneer</string>
+    <string name="title_advanced_optimize">Automatisch optimaliseren</string>
     <string name="title_advanced_always">Ontvang altijd berichten voor deze accounts</string>
     <string name="title_advanced_schedule">Schema</string>
     <string name="title_advanced_advanced">Geavanceerd</string>
@@ -367,6 +367,9 @@
     <string name="title_advanced_authentication">Toon een waarschuwing wanneer de ontvangende server het bericht niet kon verifiëren</string>
     <string name="title_advanced_sync_on_launch">Synchroniseren bij start</string>
     <string name="title_advanced_double_back">Dubbel \'terug\' om te sluiten</string>
+    <string name="title_advanced_conversation_actions">Acties voorstellen (Android 10+)</string>
+    <string name="title_advanced_conversation_actions_replies">Stel antwoordteksten voor (Android 10+)</string>
+    <string name="title_advanced_language_detection">Detecteer de taal van de berichttekst</string>
     <string name="title_advanced_pull_refresh">Omlaag schuiven om te verversen</string>
     <string name="title_advanced_autoscroll">Scroll naar boven bij het ontvangen van nieuwe berichten</string>
     <string name="title_advanced_double_tap">Dubbel tik om bericht gelezen/ongelezen te markeren</string>
@@ -434,6 +437,8 @@
     <string name="title_advanced_secure">Verbergen van recente apps scherm en voorkomen dat screenshots worden gemaakt</string>
     <string name="title_advanced_pin">Pincode</string>
     <string name="title_advanced_biometrics_timeout">Biometrische verificatie verloopt na</string>
+    <string name="title_advanced_generic_user_agent">Gebruik algemene browser user agent</string>
+    <string name="title_advanced_disconnect_auto_update">Werk lijsten wekelijks automatisch bij</string>
     <string name="title_advanced_disconnect_links">Gebruik lijsten om te waarschuwen voor tracking links</string>
     <string name="title_advanced_disconnect_images">Gebruik lijsten om tracking afbeeldingen te herkennen</string>
     <string name="title_advanced_sign_default">Standaard ondertekenen</string>
@@ -454,9 +459,6 @@
     </string>
     <string name="title_advanced_external_search">Andere apps mogen zoeken in berichten</string>
     <string name="title_advanced_shortcuts">Toon veelgebruikte contacten in het Android-deelmenu</string>
-    <string name="title_advanced_conversation_actions">Acties voorstellen (Android 10+)</string>
-    <string name="title_advanced_conversation_actions_replies">Stel antwoordteksten voor (Android 10+)</string>
-    <string name="title_advanced_language_detection">Detecteer de taal van de berichttekst</string>
     <string name="title_advanced_fts">Zoekindex opbouwen</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d berichten geïndexeerd (%3$s)</string>
     <string name="title_advanced_classification">Berichten classificeren</string>
@@ -465,20 +467,19 @@
     <string name="title_advanced_language">Taal</string>
     <string name="title_advanced_language_system">Systeem</string>
     <string name="title_advanced_watchdog">Periodiek controleren of FairEmail nog actief is</string>
-    <string name="title_advanced_optimize">Automatisch optimaliseren</string>
     <string name="title_advanced_updates">Controleren op GitHub updates</string>
     <string name="title_advanced_check_weekly">Controleer wekelijks in plaats van dagelijks</string>
     <string name="title_advanced_experiments">Probeer experimentele functies</string>
-    <string name="title_advanced_query_threads">Beperk parallelle database toegang</string>
     <string name="title_advanced_crash_reports">Foutrapporten verzenden</string>
-    <string name="title_advanced_protocol">Protocol logging</string>
-    <string name="title_advanced_log_info">Debug logging</string>
-    <string name="title_advanced_debug">Foutopsporing modus</string>
     <string name="title_advanced_cleanup_attachments">Bijlagen van oude berichten verwijderen</string>
     <string name="title_advanced_cleanup">Opruimen</string>
     <string name="title_advanced_last_cleanup">Laatste schoonmaak: %1$s</string>
     <string name="title_advanced_app">App instellingen</string>
     <string name="title_advanced_more">Meer opties</string>
+    <string name="title_advanced_protocol">Protocol logging</string>
+    <string name="title_advanced_log_info">Debug logging</string>
+    <string name="title_advanced_debug">Foutopsporing modus</string>
+    <string name="title_advanced_query_threads">Beperk parallelle database toegang</string>
     <string name="title_advanced_manual_hint">Als het ontvangen van berichten is uitgeschakeld, is het nog steeds mogelijk om handmatig berichten te ontvangen door de berichtenlijst omlaag te trekken</string>
     <string name="title_advanced_poll_hint">Periodiek controleren op nieuwe berichten zal elke keer lokale en externe berichten vergelijken, wat een dure operatie is die kan resulteren in extra batterijgebruik, vooral als er veel berichten zijn. Altijd ontvangen zal dit voorkomen door continu veranderingen te volgen.</string>
     <string name="title_advanced_optimize_hint">Dit kan de synchronisatie-frequentie wijzigen om op batterijgebruik te besparen, afhankelijk van de mogelijkheden en het gedrag van de e-mailservers</string>
@@ -530,9 +531,11 @@
     <string name="title_advanced_autoclose_hint">Gesprekken automatisch sluiten wanneer alle berichten zijn gearchiveerd, verzonden of verwijderd</string>
     <string name="title_advanced_sender_hint">De meeste providers staan gemodificeerde verzendadressen niet toe</string>
     <string name="title_advanced_bcc_hint">Het adres wordt niet weergegeven, maar wordt bij het verzenden toegevoegd</string>
+    <string name="title_advanced_internal_hint">Er wordt een waarschuwing gegeven bij het versturen naar een ander domein</string>
     <string name="title_advanced_display_harmful_hint">Het uitschakelen van deze optie kan schadelijk zijn voor uw privacy</string>
     <string name="title_advanced_display_hidden_hint">Dit kan leiden tot vreemd uitziende en dubbele teksten</string>
     <string name="title_advanced_display_pin_hint">Een PIN code gaat voor biometrische authenticatie</string>
+    <string name="title_advanced_safe_browsing_hint">De Google-server weet welke adressen worden opgezocht</string>
     <string name="title_advanced_badge_hint">Alleen beschikbaar op ondersteunde launchers</string>
     <string name="title_advanced_notify_action_hint">Er worden maximaal drie acties getoond</string>
     <string name="title_advanced_notify_remove_hint">Meldingen van nieuwe berichten worden altijd verwijderd als ze worden weggeveegd en als berichten worden gemarkeerd als gelezen</string>
@@ -566,6 +569,7 @@
     <string name="title_advanced_sender_name">Gebruik naam wanneer afzenderadres is bewerkt</string>
     <string name="title_advanced_sender_regex">Regex om gebruikersnaam deel van inkomende e-mailadressen te matchen</string>
     <string name="title_identity_reply_to">Antwoord op adres</string>
+    <string name="title_identity_internal">Interne domeinnamen (komma gescheiden)</string>
     <string name="title_identity_unicode">Gebruik Unicode transport</string>
     <string name="title_identity_unicode_remark">De meeste servers ondersteunen dit niet</string>
     <string name="title_identity_max_size">Maximale berichtgrootte (MB)</string>
@@ -700,6 +704,8 @@
     <string name="title_delete_contacts">Verwijder alle lokale contacten?</string>
     <string name="title_no_operations">Geen openstaande bewerkingen</string>
     <string name="title_hint_operations">Verwijderen van bewerkingen kan leiden tot het verdwijnen van berichten en synchronisatieproblemen</string>
+    <string name="title_op_title_headers">Headers downloaden</string>
+    <string name="title_op_title_raw">Ruw bericht downloaden</string>
     <string name="title_folder_name">Mapnaam</string>
     <string name="title_display_name">Weergavenaam</string>
     <string name="title_show_folders">Toon verborgen mappen</string>
@@ -797,6 +803,8 @@
     <string name="title_ask_raw">Om berichten door te sturen, moeten de ruwe (originele) berichten worden gedownload van de server. Dit vereist een internetverbinding.</string>
     <string name="title_buttons">Selecteer knoppen</string>
     <string name="title_buttons_hint">De daadwerkelijk beschikbare acties hangen af van het accounttype en de configuratie</string>
+    <string name="title_button_search">Zoeken in berichten</string>
+    <string name="title_button_search_text">Zoeken in berichttekst</string>
     <string name="title_configure_buttons">Configureer knoppen &#8230;</string>
     <string name="title_trash">Prullenbak</string>
     <string name="title_copy">Kopieer &#8230;</string>
@@ -816,6 +824,7 @@
     <string name="title_move_to_account">Verplaats naar %1$s &#8230;</string>
     <string name="title_report_spam">Behandel als spam</string>
     <string name="title_delete_permanently">Definitief verwijderen</string>
+    <string name="title_no_undo">Ik begrijp dat dit niet ongedaan kan worden gemaakt</string>
     <string name="title_snooze">Sluimeren &#8230;</string>
     <string name="title_archive">Archiveren</string>
     <string name="title_reply">Beantwoorden</string>
@@ -900,6 +909,7 @@
     <string name="title_subject">Onderwerp:</string>
     <string name="title_attachment">Bijlage:</string>
     <string name="title_body_hint">Uw bericht</string>
+    <string name="title_body_hint_style">U kunt tekst selecteren om deze op te maken</string>
     <string name="title_discard">Verwijderen</string>
     <string name="title_save">Bewaren</string>
     <string name="title_send">Verzenden</string>
@@ -927,6 +937,8 @@
     <string name="title_style_list">Lijst</string>
     <string name="title_style_list_bullets">Opsommingstekens</string>
     <string name="title_style_list_numbered">Nummers</string>
+    <string name="title_style_list_level_increase">Inspringing vergroten</string>
+    <string name="title_style_list_level_decrease">Inspringing verkleinen</string>
     <string name="title_style_font">Lettertype</string>
     <string name="title_style_font_default">Standaard</string>
     <string name="title_style_blockquote">Blokcitaat</string>
@@ -968,10 +980,11 @@
     <string name="title_send_receipt">Vraag bevestiging</string>
     <string name="title_send_receipt_remark">De meeste providers en e-mail clients negeren bevestigingsverzoeken</string>
     <string name="title_from_missing">Zender ontbreekt</string>
-    <string name="title_extra_missing">Gebruikersnaam ontbreekt</string>
-    <string name="title_to_missing">Ontvanger ontbreekt</string>
     <string name="title_pgp_reminder">PGP-sleutels beschikbaar</string>
     <string name="title_smime_reminder">S/MIME-sleutels beschikbaar</string>
+    <string name="title_to_missing">Ontvanger ontbreekt</string>
+    <string name="title_extra_missing">Gebruikersnaam ontbreekt</string>
+    <string name="title_external_reminder">Verzending naar een extern adres</string>
     <string name="title_subject_reminder">Onderwerp is leeg</string>
     <string name="title_text_reminder">Bericht is leeg</string>
     <string name="title_attachment_keywords">bijlage,bijlagen</string>
@@ -1086,7 +1099,7 @@
     <string name="title_answer_group">Sjabloongroep (optioneel)</string>
     <string name="title_answer_standard">Standaard</string>
     <string name="title_answer_favorite">Favoriet</string>
-    <string name="title_answer_receipt" comment="title_answer_receipt&#10;Title for option to use template as read receipt text">Als leesbevestiging gebruiken</string>
+    <string name="title_answer_receipt">Als leesbevestiging gebruiken</string>
     <string name="title_answer_hide">Verbergen in menu\'s</string>
     <string name="title_answer_text">Sjabloontekst</string>
     <string name="title_answer_placeholder">Plaatshouder</string>
@@ -1549,5 +1562,7 @@
         <item>Met schreef</item>
         <item>Schreefloos</item>
         <item>Vaste breedte</item>
+        <item>Fantasie</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

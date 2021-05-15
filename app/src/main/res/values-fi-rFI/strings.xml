@@ -90,7 +90,6 @@
     <string name="title_notification_sending_failed">Lähettäminen vastaanottajalle %1$s epäonnistui</string>
     <string name="title_notification_redacted">Muokattu: biometrinen tai PIN-tunnistautuminen on käytössä</string>
     <string name="title_factor_minutes">%1$d minuuttia</string>
-    <string name="menu_exit">Poistu</string>
     <string name="menu_answers">Viestipohjat</string>
     <string name="menu_operations">Toimenpiteet</string>
     <string name="menu_contacts">Paikalliset yhteystiedot</string>
@@ -121,6 +120,7 @@
     <string name="title_setup_quick">Pika-asennus</string>
     <string name="title_setup_intro">Tilin asettaminen sisältää vain kolme vaihetta, joiden jälkeen voit lähettää ja vastaanottaa sähköpostia</string>
     <string name="title_setup_simple">Muita valintoja ei tarvitse muuttaa</string>
+    <string name="title_setup_quick_accounts">Lisää tai muuta tilejä</string>
     <string name="title_setup_quick_support">Jotkin palveluntarjoajat tekevät tilin lisäämisestä vaikeaa. Älä syytä tästä FairEmailia, vaan kysy sen sijaan tukea.</string>
     <string name="title_setup_quick_hint">Pika-asennus hakee asetustiedot osoitteesta autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">IMAP-palvelin viestien vastaanottamiseen</string>
@@ -134,15 +134,14 @@
     <string name="title_setup_account_identity_hint">Voit määrittää nimen, värin ja pyyhkäisytoiminnot tilin asetuksissa ja allekirjoituksen identiteettiasetuksissa</string>
     <string name="title_setup_accounts">Tilit</string>
     <string name="title_setup_identities">Identiteetit</string>
-    <string name="title_setup_oauth_permission">Sähköpostipalveluntarjoaja on hyväksynyt OAuthin vain virallisille sovellusversioille</string>
     <string name="title_setup_other">Muu palveluntarjoaja</string>
     <string name="title_setup_pop3">POP3-tili</string>
+    <string name="title_setup_oauth_permission">Sähköpostipalveluntarjoaja on hyväksynyt OAuthin vain virallisille sovellusversioille</string>
     <string name="title_setup_gmail_support">Google-tilien valtuutus toimii vain virallisissa versioissa, koska Android tarkistaa sovelluksen allekirjoituksen</string>
     <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
     <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
     <string name="title_setup_gmail_drafts">Jos luonnokset-kansio ei ole IMAPin saatavilla, asia voidaan korjata Gmailin tunnisteiden asetuksissa</string>
     <string name="title_setup_gmail_password">Haluan käyttää salasanaa tilin valtuuttamiseen</string>
-    <string name="title_setup_office_remark">Microsoft ei tarjoa tällaista valtuutusta Outlook-, Live-, ja Hotmail-tileille (eikä muille vastaaville)</string>
     <string name="title_setup_office_auth">Virhe \'AUTHENTICATE failed\' voi aiheutua siitä, että järjestelmän ylläpitäjän on poistanut IMAP/SMTP-protokollat käytöstä</string>
     <string name="title_setup_oauth_rationale">Valtuuta pääsy tilillesi %1$s</string>
     <string name="title_setup_oauth_update">Valtuuta olemassa oleva tili uudelleen</string>
@@ -167,7 +166,7 @@
     <string name="title_setup_permissions_remark">Laitteen yhteystietoihin pääsemiseksi (valinnainen)</string>
     <string name="title_setup_doze">Ota akun käytön optimointi pois käytöstä</string>
     <string name="title_setup_doze_remark">Sähköpostien lähettämiseen ja vastaanottamiseen luotettavasti</string>
-    <string name="title_setup_doze_hint">Vaikka tämä saattaa kuulostaa ristiriitaiselta, akun käytön optimoinnin poistaminen käytöstä vähentää akun käyttöä</string>
+    <string name="title_setup_doze_hint">Vaikka tämä saattaa kuulostaa ristiriitaiselta, akun käytön optimoinnin poistaminen tältä sovellukselta vähentää akun käyttöä</string>
     <string name="title_setup_doze_instructions">Muuta seuraavassa Androidin ikkunassa valinta \"Ei-optimoidut sovellukset\" valintaan \"Kaikki sovellukset\", valitse tämä sovellus ja vaihtoehto \"Älä optimoi\"</string>
     <string name="title_setup_doze_battery">Suuri akun käyttö?</string>
     <string name="title_setup_doze_stopped">Keskeytyikö synkronointi?</string>
@@ -237,6 +236,7 @@
     <string name="title_advanced_default">Kaikilla valinnoilla on yleisesti käytetyt vakioarvot, joita ei tarvitse muuttaa</string>
     <string name="title_advanced_receive">Vastaanota viestit kaikille tileille</string>
     <string name="title_advanced_when">Milloin</string>
+    <string name="title_advanced_optimize">Optimoi automaattisesti</string>
     <string name="title_advanced_always">Vastaanota aina viestit näille tileille</string>
     <string name="title_advanced_schedule">Aikataulu</string>
     <string name="title_advanced_advanced">Lisäasetukset</string>
@@ -286,6 +286,8 @@
     <string name="title_advanced_download">Ladattavien viestien ja liitteiden maksimikoko käytön mukaan laskutettavaa yhteyttä käytettäessä</string>
     <string name="title_advanced_roaming">Lataa viestit ja liitteet verkkovierailun aikana</string>
     <string name="title_advanced_rlah">Kotimaanhintaiset verkkovierailut</string>
+    <string name="title_advanced_download_headers">Lataa viestien kaikki tunnistetiedot</string>
+    <string name="title_advanced_download_eml">Lataa viestien raakatiedostot</string>
     <string name="title_advanced_validated">Vaadi vahvistettu (tarkistettu) yhteys</string>
     <string name="title_advanced_timeout">Yhteyden aikakatkaisu (sekuntia)</string>
     <string name="title_advanced_prefer_ip4">Käytä IPv4:ää ensisijaisesti IPv6:n sijaan</string>
@@ -363,6 +365,9 @@
     <string name="title_advanced_authentication">Näytä varoitus, kun vastaanottava palvelin ei voinut todentaa viestiä</string>
     <string name="title_advanced_sync_on_launch">Synkronoi käynnistettäessä</string>
     <string name="title_advanced_double_back">\'Takaisin\' kaksi kertaa sulkee sovelluksen</string>
+    <string name="title_advanced_conversation_actions">Ehdota toimintoja (Android 10+)</string>
+    <string name="title_advanced_conversation_actions_replies">Ehdota vastaustekstejä (Android 10+)</string>
+    <string name="title_advanced_language_detection">Tunnista viestin tekstin kieli</string>
     <string name="title_advanced_pull_refresh">Vedä alas päivittääksesi</string>
     <string name="title_advanced_autoscroll">Vieritä ylös, kun uusi viesti saapuu</string>
     <string name="title_advanced_double_tap">Tuplanäpäytys merkitsee viestin luetuksi/lukemattomaksi</string>
@@ -430,6 +435,7 @@
     <string name="title_advanced_secure">Piilota viimeisimpien sovellusten listasta ja estä kuvankaappausten ottaminen</string>
     <string name="title_advanced_pin">PIN-koodi</string>
     <string name="title_advanced_biometrics_timeout">Biometrisen tunnistautumisen aikakatkaisu</string>
+    <string name="title_advanced_disconnect_auto_update">Päivitä listat viikoittain</string>
     <string name="title_advanced_disconnect_links">Käytä listoja seurantalinkeistä varoittamiseksi</string>
     <string name="title_advanced_disconnect_images">Käytä listoja seurantakuvien tunnistamiseksi</string>
     <string name="title_advanced_sign_default">Allekirjoita oletuksena</string>
@@ -449,9 +455,6 @@
         Avaimet ja sertifikaatit löytyvät yleensä edistyneistä asetuksista kohdasta Salaus ja kirjautumistiedot.    </string>
     <string name="title_advanced_external_search">Salli muiden sovellusten hakea viesteistä</string>
     <string name="title_advanced_shortcuts">Näytä usein käytetyt yhteystiedot Androidin jakamisvalikossa</string>
-    <string name="title_advanced_conversation_actions">Ehdota toimintoja (Android 10+)</string>
-    <string name="title_advanced_conversation_actions_replies">Ehdota vastaustekstejä (Android 10+)</string>
-    <string name="title_advanced_language_detection">Tunnista viestin tekstin kieli</string>
     <string name="title_advanced_fts">Rakenna haun indeksi</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d viestiä indeksoitu (%3$s)</string>
     <string name="title_advanced_classification">Luokittele viestit</string>
@@ -460,20 +463,19 @@
     <string name="title_advanced_language">Kieli</string>
     <string name="title_advanced_language_system">Järjestelmä</string>
     <string name="title_advanced_watchdog">Tarkista väliajoin, että FairEmail on edelleen aktiivinen</string>
-    <string name="title_advanced_optimize">Optimoi automaattisesti</string>
     <string name="title_advanced_updates">Tarkista GitHub-päivitykset</string>
     <string name="title_advanced_check_weekly">Tarkista viikoittain päivittäisen sijaan</string>
     <string name="title_advanced_experiments">Käytä kokeellisia ominaisuuksia</string>
-    <string name="title_advanced_query_threads">Rajoita rinnakkaisia tietokantayhteyksiä</string>
     <string name="title_advanced_crash_reports">Lähetä virheraportit</string>
-    <string name="title_advanced_protocol">Protokollan kirjaaminen lokiin</string>
-    <string name="title_advanced_log_info">Vianetsintätietojen kirjaaminen</string>
-    <string name="title_advanced_debug">Vianetsintätila</string>
     <string name="title_advanced_cleanup_attachments">Poista vanhojen viestien liitteet</string>
     <string name="title_advanced_cleanup">Siistiminen</string>
     <string name="title_advanced_last_cleanup">Viimeisin puhdistus: %1$s</string>
     <string name="title_advanced_app">Sovellusasetukset</string>
     <string name="title_advanced_more">Lisää asetuksia</string>
+    <string name="title_advanced_protocol">Protokollan kirjaaminen lokiin</string>
+    <string name="title_advanced_log_info">Vianetsintätietojen kirjaaminen</string>
+    <string name="title_advanced_debug">Vianetsintätila</string>
+    <string name="title_advanced_query_threads">Rajoita rinnakkaisia tietokantayhteyksiä</string>
     <string name="title_advanced_manual_hint">Jos viestien vastaanotto on pois käytöstä, voi viestejä silti vastaanottaa manuaalisesti vetämällä alaspäin viestilistassa</string>
     <string name="title_advanced_poll_hint">Väliajoin uusien viestien tarkistus vertaa paikallisia ja palvelimen viestejä joka kerta ja voi aiheuttaa ylimääräistä akun käyttöä varsinkin, kun viestejä on paljon. Jatkuva vastaanotto välttää tämän seuraamalla jatkuvasti muutoksia.</string>
     <string name="title_advanced_optimize_hint">Tämä saattaa muuttaa synkronoinnin aikaväliä akun säästämiseksi riippuen sähköpostipalvelinten ominaisuuksista ja käyttäytymisestä</string>
@@ -495,6 +497,7 @@
     <string name="title_advanced_metered_hint">Käytön mukaan laskutettavat yhteydet ovat yleensä mobiiliyhteyksiä tai maksullisia Wi-Fi-yhteyspisteitä</string>
     <string name="title_advanced_metered_warning">Tämän kytkeminen pois estää viestien vastaanoton ja lähetyksen mobiiliyhteyttä käytettessä</string>
     <string name="title_advanced_rlah_hint">Oletetaan, että EU:ssa on kotimaanhintaiset verkkovierailut</string>
+    <string name="title_advanced_usage_hint">Tämä lisää akun, datan ja tallennustilan käyttöä</string>
     <string name="title_advanced_tcp_keep_alive_hint">Tämän käyttöönotto voi aiheuttaa yhteysongelmia joissakin laitteissa</string>
     <string name="title_advanced_validate_hint">Tämä voi aiheuttaa sen, ettei viestejä synkronoida esimerkiksi VPN:ää käytettäessä tai joissakin muissakaan tilanteissa</string>
     <string name="title_advanced_timeout_hint">Luku-/kirjoitusaikakatkaisu asetetaan kaksi kertaa niin pitkäksi kuin yhteyden aikakatkaisu. Korkeat arvot aiheuttavat enemmän akun käyttöä.</string>
@@ -524,9 +527,11 @@
     <string name="title_advanced_autoclose_hint">Sulje keskustelut, kun kaikki viestit on arkistoitu, lähetetty tai siirretty roskakoriin</string>
     <string name="title_advanced_sender_hint">Useimmat palveluntarjoajat eivät salli muokattuja lähetysosotteita</string>
     <string name="title_advanced_bcc_hint">Osoitetta ei näytetä, mutta se lisätään lähetettäessä</string>
+    <string name="title_advanced_internal_hint">Toiseen verkkotunnukseen lähetettäessä tulee varoitus</string>
     <string name="title_advanced_display_harmful_hint">Tämän valinnan pois kytkeminen voi olla haitallista yksityisyydellesi</string>
     <string name="title_advanced_display_hidden_hint">Tämä voi näyttää omituiselta ja näyttää tekstejä kahteen kertaan</string>
     <string name="title_advanced_display_pin_hint">PIN on ensisijainen ennen biometristä tunnistautumista</string>
+    <string name="title_advanced_safe_browsing_hint">Google-palvelin tietää, mitä osoitteita haetaan</string>
     <string name="title_advanced_badge_hint">Käytössä vain tuetuissa käynnistinsovelluksissa</string>
     <string name="title_advanced_notify_action_hint">Enintään kolme toimintoa näytetään</string>
     <string name="title_advanced_notify_remove_hint">Ilmoitukset uusista viesteistä poistetaan aina pyyhkäisemällä tai merkitsemällä viestit luetuiksi</string>
@@ -560,10 +565,11 @@
     <string name="title_advanced_sender_name">Käytä nimeä, kun lähetysosoitetta on muokattu</string>
     <string name="title_advanced_sender_regex">Regex lähettäjän sähköpostiosoitteen käyttäjätunnuksen vastaavuuden määrittämiseen</string>
     <string name="title_identity_reply_to">Vastausosoite</string>
+    <string name="title_identity_internal">Sisäiset verkkotunnukset (pilkulla erotettu)</string>
     <string name="title_identity_unicode">Käytä Unicode-tiedonsiirtoa</string>
     <string name="title_identity_unicode_remark">Suurin osa palvelimista ei tue tätä</string>
     <string name="title_identity_max_size">Viestin suurin mahdollinen koko (Mt)</string>
-    <string name="title_identity_receipt">Pyydä toimitus-/lukukuittaus oletuksena</string>
+    <string name="title_identity_receipt">Pyydä toimitus-/vastaanottokuittaus oletuksena</string>
     <string name="title_identity_use_ip_hint">Jos saat virheilmoituksen \'invalid greeting\', \'requires valid address\' tai vastaava, yritä muuttaa tätä asetusta</string>
     <string name="title_identity_self_hint">Estää myös vastaamasta itsellesi</string>
     <string name="title_optional">Valinnainen</string>
@@ -694,6 +700,8 @@
     <string name="title_delete_contacts">Poistetaanko kaikki paikalliset yhteystiedot?</string>
     <string name="title_no_operations">Ei odottavia toimenpiteitä</string>
     <string name="title_hint_operations">Toimenpiteiden poisto voi aiheuttaa viestien katoamista ja synkronointiongelmia</string>
+    <string name="title_op_title_headers">Ladataan tunnistetietoja</string>
+    <string name="title_op_title_raw">Ladataan raakaviestiä</string>
     <string name="title_folder_name">Kansion nimi</string>
     <string name="title_display_name">Näyttönimi</string>
     <string name="title_show_folders">Näytä piilotetut kansiot</string>
@@ -750,11 +758,13 @@
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Vs: %1$s</string>
+    <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">Merkitse luetuksi</string>
     <string name="title_unseen">Merkitse lukemattomaksi</string>
     <string name="title_toggle_seen">Vaihda luettu</string>
     <string name="title_hide">Piilota</string>
     <string name="title_unhide">Näytä</string>
+    <string name="title_toggle_hide">Kytke piilottaminen</string>
     <string name="title_flag">Lisää tähti</string>
     <string name="title_flag_color">Lisää värillinen tähti &#8230;</string>
     <string name="title_unflag">Poista tähti</string>
@@ -789,6 +799,8 @@
     <string name="title_ask_raw">Viestien edelleenlähettämiseksi raakaviestit (alkuperäiset viestit) pitää ladata palvelimelta. Tämä edellyttää internetyhteyttä.</string>
     <string name="title_buttons">Valitse painikkeita</string>
     <string name="title_buttons_hint">Käytettävissä olevat toiminnot riippuvat tilin tyypistä ja asetuksista</string>
+    <string name="title_button_search">Hae viesteistä</string>
+    <string name="title_button_search_text">Etsi viestin tekstistä</string>
     <string name="title_configure_buttons">Määritä painikkeet &#8230;</string>
     <string name="title_trash">Siirrä roskakoriin</string>
     <string name="title_copy">Kopioi &#8230;</string>
@@ -892,6 +904,7 @@
     <string name="title_subject">Aihe:</string>
     <string name="title_attachment">Liite:</string>
     <string name="title_body_hint">Viestisi</string>
+    <string name="title_body_hint_style">Voit valita tekstin muotoillaksesi sen</string>
     <string name="title_discard">Hylkää</string>
     <string name="title_save">Tallenna</string>
     <string name="title_send">Lähetä</string>
@@ -919,6 +932,8 @@
     <string name="title_style_list">Lista</string>
     <string name="title_style_list_bullets">Luettelomerkit</string>
     <string name="title_style_list_numbered">Numeroitu</string>
+    <string name="title_style_list_level_increase">Lisää sisennystä</string>
+    <string name="title_style_list_level_decrease">Vähennä sisennystä</string>
     <string name="title_style_font">Kirjasin</string>
     <string name="title_style_font_default">Oletus</string>
     <string name="title_style_blockquote">Kappalelainaus</string>
@@ -960,10 +975,11 @@
     <string name="title_send_receipt">Pyydä kuittausta</string>
     <string name="title_send_receipt_remark">Useimmat palveluntarjoajat ja sähköpostisovellukset jättävät kuittauspyynnöt huomioimatta</string>
     <string name="title_from_missing">Lähettäjä puuttuu</string>
-    <string name="title_extra_missing">Käyttäjätunnus puuttuu</string>
-    <string name="title_to_missing">Vastaanottaja puuttuu</string>
     <string name="title_pgp_reminder">PGP-avaimet saatavilla</string>
     <string name="title_smime_reminder">S/MIME-avaimet saatavilla</string>
+    <string name="title_to_missing">Vastaanottaja puuttuu</string>
+    <string name="title_extra_missing">Käyttäjätunnus puuttuu</string>
+    <string name="title_external_reminder">Lähetetään ulkoiseen osoitteeseen</string>
     <string name="title_subject_reminder">Aihe puuttuu</string>
     <string name="title_text_reminder">Viesti on tyhjä</string>
     <string name="title_attachment_keywords">liite,liitteet,liitetty,liitetyt,sisällytetty,lisätty,liitin,sisällytin,lisäsin</string>
@@ -1078,6 +1094,7 @@
     <string name="title_answer_group">Viestipohjan ryhmä (valinnainen)</string>
     <string name="title_answer_standard">Oletus</string>
     <string name="title_answer_favorite">Suosikki</string>
+    <string name="title_answer_receipt">Käytä vastaanottokuittauksena</string>
     <string name="title_answer_hide">Piilota valikoista</string>
     <string name="title_answer_text">Viestipohjan teksti</string>
     <string name="title_answer_placeholder">Paikkamerkki</string>
@@ -1541,5 +1558,7 @@
         <item>Serif</item>
         <item>Sans Serif</item>
         <item>Tasavälinen</item>
+        <item>Fantasia</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

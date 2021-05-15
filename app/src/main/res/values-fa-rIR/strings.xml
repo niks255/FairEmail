@@ -75,7 +75,6 @@
     <string name="title_notification_sending_left">تلاش‌های باقی‌مانده: %1$d</string>
     <string name="title_notification_sending_failed">ارسال به %1$s ناموفق بود</string>
     <string name="title_factor_minutes">%1$d دقیقه</string>
-    <string name="menu_exit">خروج</string>
     <string name="menu_answers">الگوها</string>
     <string name="menu_operations">عملیات ها</string>
     <string name="menu_contacts">مخاطبین محلی</string>
@@ -183,6 +182,7 @@
     <string name="title_advanced_section_misc">متفرقه</string>
     <string name="title_advanced_receive">دریافت پیام‌ها برای همه حساب‌ها</string>
     <string name="title_advanced_when">هنگامی که</string>
+    <string name="title_advanced_optimize">خودکار بهینه‌سازی کن</string>
     <string name="title_advanced_always">همیشه پیام‌ها را برای این حساب‌ها دریافت کن</string>
     <string name="title_advanced_schedule">زمان بندی</string>
     <string name="title_advanced_advanced">پیشرفته</string>
@@ -329,15 +329,14 @@
     <string name="title_advanced_language">زبان</string>
     <string name="title_advanced_language_system">سیستم</string>
     <string name="title_advanced_watchdog">بطور دوره ای بررسی کن که آیا FairEmail هنوز فعال است یا خیر</string>
-    <string name="title_advanced_optimize">خودکار بهینه‌سازی کن</string>
     <string name="title_advanced_experiments">امتحان ویژگی‌های آزمایشی</string>
-    <string name="title_advanced_query_threads">دسترسی موازی پایگاه‌داده را محدود کن</string>
     <string name="title_advanced_crash_reports">ارسال گزارش‌های خطا</string>
-    <string name="title_advanced_debug">حالت عیب‌یابی</string>
     <string name="title_advanced_cleanup_attachments">پیوست‌های پیام‌های قدیمی را حذف کن</string>
     <string name="title_advanced_cleanup">پاک‌سازی</string>
     <string name="title_advanced_app">تنظیمات برنامه</string>
     <string name="title_advanced_more">گزینه‌های بیشتر</string>
+    <string name="title_advanced_debug">حالت عیب‌یابی</string>
+    <string name="title_advanced_query_threads">دسترسی موازی پایگاه‌داده را محدود کن</string>
     <string name="title_advanced_schedule_hint">برای تنظیم زمان روی زمان ضربه بزنید</string>
     <string name="title_advanced_lookup_mx_hint">این بررسی خواهد کرد که آیا سابقه DNS MX وجود دارد</string>
     <string name="title_advanced_sync_delay_hint">این سرعت همگام‌سازی پیام‌ها را کاهش خواهد داد</string>
@@ -662,9 +661,9 @@
     <string name="title_send_receipt">درخواست رسید دریافت</string>
     <string name="title_send_receipt_remark">بیشتر فراهم‌کنندگان و کارخواه‌ها، درخواست‌های رسید دریافت را نادیده می‌گیرند</string>
     <string name="title_from_missing">فرستنده وجود ندارد</string>
-    <string name="title_extra_missing">نام کاربری وجود ندارد</string>
-    <string name="title_to_missing">گیرنده وجود ندارد</string>
     <string name="title_pgp_reminder">کلیدهای PGP در دسترس هستند</string>
+    <string name="title_to_missing">گیرنده وجود ندارد</string>
+    <string name="title_extra_missing">نام کاربری وجود ندارد</string>
     <string name="title_subject_reminder">موضوع خالی است</string>
     <string name="title_text_reminder">پیام خالی است</string>
     <string name="title_attachment_reminder">آیا می‌خواستید که یک پیوست اضافه کنید؟</string>
@@ -1166,5 +1165,7 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Monospace</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

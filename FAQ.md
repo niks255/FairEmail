@@ -2,24 +2,24 @@
 # FairEmail support
 
 If you have a question, please check the following frequently asked questions first.
-[At the bottom](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support),
+[At the bottom](#user-content-get-support),
 you can find out how to ask other questions, request features, and report bugs.
 
 Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ).
-[Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support),
+[Ganz unten erfahren Sie](#user-content-get-support),
 wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Index
 
-* [Authorizing accounts](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [How to ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Known problems](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Planned features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Frequently requested features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Frequently Asked Questions](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Get support](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Authorizing accounts](#user-content-authorizing-accounts)
+* [How to ...?](#user-content-howto)
+* [Known problems](#user-content-known-problems)
+* [Planned features](#user-content-planned-features)
+* [Frequently requested features](#user-content-frequently-requested-features)
+* [Frequently Asked Questions](#user-content-frequently-asked-questions)
+* [Get support](#user-content-get-support)
 
-## Authorizing accounts
+<h2><a name="authorizing-accounts"></a>Authorizing accounts</h2>
 
 In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
 
@@ -70,7 +70,7 @@ Related questions:
 * Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
 * Export/import settings: Settings, navigation (left side) menu
 
-## Known problems
+<h2><a name="known-problems"></a>Known problem</h2>
 
 * ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~
 * ~~A [bug in Google Drive](https://issuetracker.google.com/issues/126362828) causes files exported to Google Drive to be empty. Google has fixed this.~~
@@ -91,7 +91,7 @@ Related questions:
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
-## Planned features
+<h2><a name="planned-features"></a>Planned features</h2>
 
 * ~~Synchronize on demand (manual)~~
 * ~~Semi-automatic encryption~~
@@ -126,14 +126,14 @@ Related questions:
 
 Anything on this list is in random order and *might* be added in the near future.
 
-## Frequently requested features
+<h2><a name="frequently-requested-features"></a>Frequently requested features</h2>
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too.
 The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc).
 All displayed things should be useful in one or another way and should be carefully positioned for easy usage.
 Fonts, sizes, colors, etc should be material design whenever possible.
 
-## Frequently Asked Questions
+<h2><a name="frequently-asked-questions"></a>Frequently Asked Questions</h2>
 
 * [(1) Which permissions are needed and why?](#user-content-faq1)
 * [(2) Why is there a permanent notification shown?](#user-content-faq2)
@@ -467,7 +467,7 @@ You can pin the certificate too, see above.
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Your username is likely easily guessed, so this is pretty insecure, unless the SMTP server is available via a restricted local network or a VPN only.
 
 *Plain text connection*
 
@@ -781,7 +781,7 @@ Android only imports the first key, so to import all the keys, the certificate m
 This is not very trivial and you are advised to ask the certificate supplier for support.
 
 Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this.
-S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time.
 You can long press on the send button to change the encryption method for an identity.
@@ -1135,6 +1135,8 @@ The warning *... Unsupported encoding ...* means that the character set of the m
 FairEmail will assume ISO-8859-1 (Latin1), which will in most cases result in showing the message correctly.
 
 The error *... Login Rate Limit Hit ...* means that there were too many login attempts with an incorrect password. Please double check your password or authenticate the account again with the quick setup wizard (OAuth only).
+
+The error *... NO mailbox selected READ-ONLY ...* indicates [this Zimbra problem](https://sebastian.marsching.com/wiki/Network/Zimbra#Mailbox_Selected_READ-ONLY_Error_in_Thunderbird).
 
 Please [see here](#user-content-faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
@@ -2085,6 +2087,7 @@ The following rule conditions are available:
 All the conditions of a rule need to be true for the rule action to be executed.
 All conditions are optional, but there needs to be at least one condition, to prevent matching all messages.
 If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
+If you want to match a domain name, you can use as a condition something like *@example.org*
 
 Note that email addresses are formatted like this:
 
@@ -2123,6 +2126,8 @@ You can select one of these actions to apply to matching messages:
 * Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
+
+An error in a rule condition can lead to a disaster, therefore irreversible actions are not supported.
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded,
 so it is not possible to apply conditions to the message text.
@@ -2764,9 +2769,7 @@ OAuth for non on-device accounts is not supported
 because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this.
 You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth for Yandex and Yahoo is supported via the quick setup wizard.
-
-OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
+OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
 <br />
 
@@ -3529,6 +3532,10 @@ please see [here](https://github.com/disconnectme/disconnect-tracking-protection
 Permanent deletion means that messages will *irreversibly* be lost, and to prevent this from happening accidentally, this always needs to be confirmed.
 Even with a confirmation, some very angry people who lost some of their messages through their own fault contacted me, which was a rather unpleasant experience :-(
 
+Note that the POP3 protocol can download messages from the inbox only.
+So, deleted messages cannot be uploaded to the inbox again.
+This means that messages can only be permanently deleted when using a POP3 account.
+
 Advanced: the IMAP delete flag in combination with the EXPUNGE command is not supportable
 because both email servers and not all people can handle this, risking unexpected loss of messages.
 A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
@@ -3671,9 +3678,9 @@ Unfortunately, it is not possible to hide messages on the email server too.
 
 <br />
 
-## Get support
+<h2><a name="get-support"></a>Get support</h2>
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail is supported on Android smartphones and tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported.
 The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release.

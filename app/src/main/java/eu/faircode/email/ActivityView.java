@@ -34,7 +34,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -46,7 +45,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
+import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -504,7 +503,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             }
         }));
 
-        menus.add(new NavMenuItem(R.drawable.twotone_reply_24, R.string.menu_answers, new Runnable() {
+        menus.add(new NavMenuItem(R.drawable.twotone_text_snippet_24, R.string.menu_answers, new Runnable() {
             @Override
             public void run() {
                 if (!drawerLayout.isLocked(drawerContainer))
@@ -923,7 +922,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     }
 
     private void checkUpdate(boolean always) {
-        if (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(this))
+        if (Helper.isPlayStoreInstall())
+            return;
+        if (!Helper.hasValidFingerprint(this) && !(always && BuildConfig.DEBUG))
             return;
 
         long now = new Date().getTime();
@@ -955,6 +956,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     urlConnection.setReadTimeout(UPDATE_TIMEOUT);
                     urlConnection.setConnectTimeout(UPDATE_TIMEOUT);
                     urlConnection.setDoOutput(false);
+                    urlConnection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
                     urlConnection.connect();
 
                     int status = urlConnection.getResponseCode();
@@ -1000,11 +1002,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                         if (jasset.has("name") && !jasset.isNull("name")) {
                             String name = jasset.getString("name");
                             if (name.endsWith(abi+"-release.apk")) {
+                                info.download_url = jasset.optString("browser_download_url");
                                 Log.i("Latest version=" + info.tag_name);
-                                if (BuildConfig.VERSION_NAME.equals(info.tag_name))
+                                if (BuildConfig.VERSION_NAME.equals(info.tag_name) && !BuildConfig.DEBUG)
                                     return null;
                                 else
-                                    info.html_url = jasset.getString("browser_download_url");
                                     return info;
                             }
                         }
@@ -1037,11 +1039,34 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                                 .setVisibility(NotificationCompat.VISIBILITY_SECRET);
 
-                Intent update = new Intent(Intent.ACTION_VIEW, Uri.parse(info.html_url));
-                update.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent update = new Intent(Intent.ACTION_VIEW, Uri.parse(info.html_url))
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent piUpdate = PendingIntentCompat.getActivity(
                         ActivityView.this, REQUEST_UPDATE, update, PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(piUpdate);
+
+                Intent manage = new Intent(ActivityView.this, ActivitySetup.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("tab", "misc");
+                PendingIntent piManage = PendingIntentCompat.getActivity(
+                        ActivityView.this, ActivitySetup.REQUEST_MANAGE, manage, PendingIntent.FLAG_UPDATE_CURRENT);
+                NotificationCompat.Action.Builder actionManage = new NotificationCompat.Action.Builder(
+                        R.drawable.twotone_settings_24,
+                        getString(R.string.title_setup_manage),
+                        piManage);
+                builder.addAction(actionManage.build());
+
+                if (!TextUtils.isEmpty(info.download_url)) {
+                    Intent download = new Intent(Intent.ACTION_VIEW, Uri.parse(info.download_url))
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    PendingIntent piDownload = PendingIntent.getActivity(
+                            ActivityView.this, 0, download, 0);
+                    NotificationCompat.Action.Builder actionDownload = new NotificationCompat.Action.Builder(
+                            R.drawable.twotone_cloud_download_24,
+                            getString(R.string.title_download),
+                            piDownload);
+                    builder.addAction(actionDownload.build());
+                }
 
                 try {
                     NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1089,7 +1114,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     Intent clear = new Intent(this, ServiceUI.class)
                             .setAction(action.replace("unified", "clear"));
                     startService(clear);
-                    intent.setAction("unified");
                 }
 
             } else if (action.startsWith("folders")) {
@@ -1115,7 +1139,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     Intent clear = new Intent(this, ServiceUI.class)
                             .setAction("clear:" + parts[2]);
                     startService(clear);
-                    intent.setAction("folder:" + folder);
                 }
 
             } else if ("why".equals(action)) {
@@ -1129,15 +1152,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     Helper.viewFAQ(this, 2);
                 }
 
-                intent.setAction(null);
-
             } else if ("alert".equals(action) || "error".equals(action)) {
                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                     getSupportFragmentManager().popBackStack("unified", 0);
 
                 Helper.viewFAQ(this, "alert".equals(action) ? 23 : 22);
-
-                intent.setAction(null);
 
             } else if ("outbox".equals(action)) {
                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
@@ -1172,6 +1191,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 }
                 onViewThread(intent);
             }
+
+            intent.setAction(null);
         }
 
         if (intent.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
@@ -1522,6 +1543,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private class UpdateInfo {
         String tag_name; // version
         String html_url;
+        String download_url;
     }
 
     public static class FragmentDialogFirst extends FragmentDialogBase {

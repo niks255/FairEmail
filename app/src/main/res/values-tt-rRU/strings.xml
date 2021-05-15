@@ -12,7 +12,6 @@
     </plurals>
     <string name="page_folders">Папкалар</string>
     <string name="shortcut_refresh">Яңарту</string>
-    <string name="menu_exit">Чыгу</string>
     <string name="menu_setup">Көйләүләр</string>
     <string name="menu_privacy">Хосусыйлык</string>
     <string name="menu_about">Хакында</string>
@@ -80,5 +79,7 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Monospace</item>
+        <item>Fantasy</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

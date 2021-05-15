@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,8 +45,10 @@ public class FragmentDialogAsk extends FragmentDialogBase {
         Bundle args = getArguments();
         String question = args.getString("question");
         String remark = args.getString("remark");
+        String confirm = args.getString("confirm");
         String notagain = args.getString("notagain");
         boolean warning = args.getBoolean("warning");
+        int faq = args.getInt("faq");
 
         final Context context = getContext();
         final int colorError = Helper.resolveColor(context, R.attr.colorError);
@@ -53,12 +56,17 @@ public class FragmentDialogAsk extends FragmentDialogBase {
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_ask_again, null);
         TextView tvMessage = dview.findViewById(R.id.tvMessage);
         TextView tvRemark = dview.findViewById(R.id.tvRemark);
+        CheckBox cbConfirm = dview.findViewById(R.id.cbConfirm);
         CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
+        ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
 
         tvMessage.setText(question);
         tvRemark.setText(remark);
         tvRemark.setVisibility(remark == null ? View.GONE : View.VISIBLE);
+        cbConfirm.setText(confirm);
+        cbConfirm.setVisibility(confirm == null ? View.GONE : View.VISIBLE);
         cbNotAgain.setVisibility(notagain == null ? View.GONE : View.VISIBLE);
+        ibInfo.setVisibility(faq == 0 ? View.GONE : View.VISIBLE);
 
         if (warning) {
             Drawable w = context.getDrawable(R.drawable.twotone_warning_24);
@@ -77,12 +85,23 @@ public class FragmentDialogAsk extends FragmentDialogBase {
                 }
             });
 
+        if (faq != 0)
+            ibInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(v.getContext(), faq);
+                }
+            });
+
         return new AlertDialog.Builder(getContext())
                 .setView(dview)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sendResult(Activity.RESULT_OK);
+                        if (confirm == null || cbConfirm.isChecked())
+                            sendResult(Activity.RESULT_OK);
+                        else
+                            sendResult(Activity.RESULT_CANCELED);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

@@ -22,6 +22,7 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.system.ErrnoException;
 import android.text.TextUtils;
 
 import androidx.core.net.MailTo;
@@ -106,6 +107,8 @@ import javax.mail.internet.ParseException;
 
 import biweekly.Biweekly;
 import biweekly.ICalendar;
+
+import static android.system.OsConstants.ENOSPC;
 
 public class MessageHelper {
     private boolean ensuredEnvelope = false;
@@ -866,7 +869,8 @@ public class MessageHelper {
     MessageHelper(MimeMessage message, Context context) throws IOException {
         long cake = Helper.getAvailableStorageSpace();
         if (cake < Helper.MIN_REQUIRED_SPACE)
-            throw new IOException(context.getString(R.string.app_cake));
+            throw new IOException(context.getString(R.string.app_cake),
+                    new ErrnoException(context.getPackageName(), ENOSPC));
         if (cacheDir == null)
             cacheDir = context.getCacheDir();
         this.imessage = message;
@@ -2822,9 +2826,9 @@ public class MessageHelper {
         String email1 = ((InternetAddress) a1).getAddress();
         String email2 = ((InternetAddress) a2).getAddress();
         if (email1 != null)
-            email1 = email1.toLowerCase();
+            email1 = email1.toLowerCase(Locale.ROOT);
         if (email2 != null)
-            email2 = email2.toLowerCase();
+            email2 = email2.toLowerCase(Locale.ROOT);
         return Objects.equals(email1, email2);
     }
 

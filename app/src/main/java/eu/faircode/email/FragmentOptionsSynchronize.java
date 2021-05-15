@@ -43,6 +43,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -331,6 +332,14 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             }
         });
 
+        // Initialize
+        if (!Helper.isDarkTheme(getContext())) {
+            boolean beige = prefs.getBoolean("beige", true);
+            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
+                    ? R.color.lightColorBackground_cards_beige
+                    : R.color.lightColorBackground_cards));
+        }
+
         DB db = DB.getInstance(getContext());
         db.account().liveSynchronizingAccounts().observe(getViewLifecycleOwner(), new Observer<List<EntityAccount>>() {
             @Override
@@ -380,7 +389,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swEnabled.setChecked(prefs.getBoolean("enabled", true));
         swOptimize.setChecked(prefs.getBoolean("auto_optimize", false));
 
-        int pollInterval = prefs.getInt("poll_interval", ServiceSynchronize.DEFAULT_POLL_INTERVAL);
+        int pollInterval = ServiceSynchronize.getPollInterval(getContext());
         int[] pollIntervalValues = getResources().getIntArray(R.array.pollIntervalValues);
         for (int pos = 0; pos < pollIntervalValues.length; pos++)
             if (pollIntervalValues[pos] == pollInterval) {

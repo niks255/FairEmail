@@ -274,6 +274,12 @@ public class Log {
         }
     }
 
+    static void breadcrumb(String name, String key, String value) {
+        Map<String, String> crumb = new HashMap<>();
+        crumb.put(key, value);
+        breadcrumb(name, crumb);
+    }
+
     static void breadcrumb(String name, Map<String, String> crumb) {
         try {
             Map<String, Object> ocrumb = new HashMap<>();
@@ -836,6 +842,26 @@ public class Log {
                   at androidx.room.InvalidationTracker$1.checkUpdatedTable(SourceFile:417)
                   at androidx.room.InvalidationTracker$1.run(SourceFile:388)
                   at androidx.work.impl.utils.SerialExecutor$Task.run(SourceFile:91)
+             */
+            return false;
+
+        if (ex instanceof RuntimeException &&
+                ex.getCause() instanceof CursorWindowAllocationException)
+            /*
+                java.lang.RuntimeException: Exception while computing database live data.
+                  at androidx.room.RoomTrackingLiveData$1.run(SourceFile:10)
+                  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+                  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+                  at java.lang.Thread.run(Thread.java:764)
+                Caused by: io.requery.android.database.CursorWindowAllocationException: Cursor window allocation of 2048 kb failed.
+                  at io.requery.android.database.CursorWindow.<init>(SourceFile:7)
+                  at io.requery.android.database.CursorWindow.<init>(SourceFile:1)
+                  at io.requery.android.database.AbstractWindowedCursor.clearOrCreateWindow(SourceFile:2)
+                  at io.requery.android.database.sqlite.SQLiteCursor.fillWindow(SourceFile:1)
+                  at io.requery.android.database.sqlite.SQLiteCursor.getCount(SourceFile:2)
+                  at eu.faircode.email.DaoAttachment_Impl$14.call(SourceFile:16)
+                  at eu.faircode.email.DaoAttachment_Impl$14.call(SourceFile:1)
+                  at androidx.room.RoomTrackingLiveData$1.run(SourceFile:7)
              */
             return false;
 
@@ -1501,13 +1527,14 @@ public class Log {
 
         // Get version info
         String installer = context.getPackageManager().getInstallerPackageName(BuildConfig.APPLICATION_ID);
-        sb.append(String.format("%s: %s/%s %s/%s%s%s%s\r\n",
+        sb.append(String.format("%s: %s/%s %s/%s%s%s%s%s\r\n",
                 context.getString(R.string.app_name),
                 BuildConfig.APPLICATION_ID,
                 installer,
                 BuildConfig.VERSION_NAME,
                 Helper.hasValidFingerprint(context) ? "1" : "3",
                 BuildConfig.PLAY_STORE_RELEASE ? "p" : "",
+                Helper.hasPlayStore(context) ? "s" : "",
                 BuildConfig.DEBUG ? "d" : "",
                 ActivityBilling.isPro(context) ? "+" : ""));
         sb.append(String.format("Android: %s (SDK %d)\r\n", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
@@ -1679,7 +1706,13 @@ public class Log {
         File file = attachment.getFile(context);
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
             List<EntityAccount> accounts = db.account().getAccounts();
-            size += write(os, "accounts=" + accounts.size() + "\r\n\r\n");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean enabled = prefs.getBoolean("enabled", true);
+            int pollInterval = ServiceSynchronize.getPollInterval(context);
+
+            size += write(os, "accounts=" + accounts.size() +
+                    " enabled=" + enabled +
+                    " interval=" + pollInterval + "\r\n\r\n");
 
             for (EntityAccount account : accounts) {
                 if (account.synchronize) {

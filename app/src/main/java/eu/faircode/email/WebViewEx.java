@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -34,6 +35,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
@@ -45,6 +47,8 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     private int height;
     private IWebView intf;
     private Runnable onPageLoaded;
+
+    private static String userAgent = null;
 
     private static final long PAGE_LOADED_FALLBACK_DELAY = 1500L; // milliseconds
 
@@ -65,6 +69,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         setOnLongClickListener(this);
 
         WebSettings settings = getSettings();
+        settings.setUserAgentString(getUserAgent(context, this));
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(overview_mode);
 
@@ -97,6 +102,26 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
             setScrollX(position.first);
             setScrollY(position.second);
         }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean compact = prefs.getBoolean("compact", false);
+        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int message_zoom = prefs.getInt("message_zoom", 100);
+        boolean monospaced = prefs.getBoolean("monospaced", false);
+
+        WebSettings settings = getSettings();
+
+        float fontSize = 16f /* Default */ * message_zoom / 100f;
+        if (zoom == 0 /* small */)
+            fontSize *= HtmlHelper.FONT_SMALL;
+        else if (zoom == 2 /* large */)
+            fontSize *= HtmlHelper.FONT_LARGE;
+
+        settings.setDefaultFontSize(Math.round(fontSize));
+        settings.setDefaultFixedFontSize(Math.round(fontSize));
+
+        if (monospaced)
+            settings.setStandardFontFamily("monospace");
 
         this.intf = intf;
 
@@ -328,6 +353,36 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
             Log.w(ex);
             return false;
         }
+    }
+
+    @NonNull
+    static String getUserAgent(Context context) {
+        return getUserAgent(context, null);
+    }
+
+    @NonNull
+    static String getUserAgent(Context context, WebView webView) {
+        // https://developer.chrome.com/docs/multidevice/user-agent/#chrome-for-android
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean generic_ua = prefs.getBoolean("generic_ua", true);
+        if (generic_ua)
+            return getGenericUserAgent(context);
+
+        try {
+            if (userAgent == null)
+                userAgent = WebSettings.getDefaultUserAgent(context);
+            return userAgent;
+        } catch (Throwable ex) {
+            Log.w(ex);
+            return getGenericUserAgent(context);
+        }
+    }
+
+    @NonNull
+    private static String getGenericUserAgent(Context context) {
+        boolean large = context.getResources().getConfiguration()
+                .isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (large ? "Mozilla/5.0" : "Mozilla/5.0 (Mobile)");
     }
 
     interface IWebView {

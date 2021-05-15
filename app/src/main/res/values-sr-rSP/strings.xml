@@ -73,7 +73,6 @@
     <string name="title_notification_waiting">Чекам на погодну конекцију</string>
     <string name="title_notification_failed">%1$s неуспело</string>
     <string name="title_notification_alert">Упозорење са сервера %1$s</string>
-    <string name="menu_exit">Изађи</string>
     <string name="menu_answers">Шаблони</string>
     <string name="menu_operations">Операције</string>
     <string name="menu_contacts">Локални контакти</string>
@@ -274,10 +273,10 @@
     <string name="title_advanced_watchdog">Периодично проверавај да ли је FairEmail и даље активан</string>
     <string name="title_advanced_experiments">Испробај експерименталне функционалности</string>
     <string name="title_advanced_crash_reports">Шаљи извештаје о грешкама</string>
-    <string name="title_advanced_debug">Режим отклањања грешака</string>
     <string name="title_advanced_cleanup">Чишћење</string>
     <string name="title_advanced_app">Подешавања апликације</string>
     <string name="title_advanced_more">Више опција</string>
+    <string name="title_advanced_debug">Режим отклањања грешака</string>
     <string name="title_advanced_schedule_hint">Кликните на време да га поставите</string>
     <string name="title_advanced_unseen_hint">Неки провајдери не подржавају ово најбоље, што може да доведе да синхронизујете или све или ниједну поруку</string>
     <string name="title_advanced_sync_kept_hint">Ово ће пренети више података и потрошити више батерије, нарочито ако на уређају има јако много порука</string>
@@ -573,8 +572,8 @@
     <string name="title_send_plain_text">Само обични текст</string>
     <string name="title_send_receipt_remark">Већина провајдера и е-мејл клијената игноришу потврде о пријему</string>
     <string name="title_from_missing">Недостаје пошиљалац</string>
-    <string name="title_extra_missing">Недостаје корисничко име</string>
     <string name="title_to_missing">Недостаје прималац</string>
+    <string name="title_extra_missing">Недостаје корисничко име</string>
     <string name="title_subject_reminder">Наслов је празан</string>
     <string name="title_text_reminder">Порука је празна</string>
     <string name="title_attachment_keywords">attached,attachment,attachments,included;прилог;додатак;прилогу;додатку;приложени;атачмент;prilog;dodatak;prilogu;dodatku;priloženi;atačment</string>
@@ -1002,4 +1001,5 @@
         <item>S/MIME само потпис</item>
         <item>S/MIME потпис+шифровање</item>
     </string-array>
+    <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

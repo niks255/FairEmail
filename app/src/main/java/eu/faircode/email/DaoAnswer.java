@@ -56,14 +56,18 @@ public interface DaoAnswer {
     LiveData<List<EntityAnswer>> liveAnswers();
 
     @Query("SELECT COUNT(*) FROM answer" +
-            " WHERE NOT hide")
-    Integer getAnswerCount();
+            " WHERE NOT hide" +
+            " AND (:favorite OR NOT favorite)")
+    Integer getAnswerCount(boolean favorite);
 
     @Insert
     long insertAnswer(EntityAnswer answer);
 
     @Update
     int updateAnswer(EntityAnswer answer);
+
+    @Query("UPDATE answer SET favorite = :favorite WHERE id = :id AND NOT (favorite IS :favorite)")
+    int setAnswerFavorite(long id, boolean favorite);
 
     @Query("UPDATE answer SET hide = :hide WHERE id = :id AND NOT (hide IS :hide)")
     int setAnswerHidden(long id, boolean hide);
@@ -73,6 +77,16 @@ public interface DaoAnswer {
 
     @Query("UPDATE answer SET receipt = 0 WHERE NOT (receipt IS 0)")
     void resetReceipt();
+
+    @Query("UPDATE answer" +
+            " SET applied = applied + 1, last_applied = :time" +
+            " WHERE id = :id")
+    int applyAnswer(long id, long time);
+
+    @Query("UPDATE answer" +
+            " SET applied = 0, last_applied = NULL" +
+            " WHERE id = :id AND NOT (applied IS 0)")
+    int resetAnswer(long id);
 
     @Query("DELETE FROM answer WHERE id = :id")
     void deleteAnswer(long id);

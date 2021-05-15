@@ -2,21 +2,21 @@
 
 # Suporte do FairEmail
 
-Se você tem uma pergunta, verifique primeiro as perguntas mais frequentes. [No final da página](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), você pode descobrir como fazer outras perguntas, solicitar recursos, e relatar bugs.
+Se você tem uma pergunta, verifique primeiro as perguntas mais frequentes. [No final da página](#user-content-get-support), você pode descobrir como fazer outras perguntas, solicitar recursos, e relatar bugs.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
 ## Índice
 
-* [Autorizando contas](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-authorizing-accounts)
-* [Como ...?](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-howto)
-* [Problemas conhecidos](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-known-problems)
-* [Funcionalidades planejadas](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-planned-features)
-* [Funcionalidades solicitadas frequentemente](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-requested-features)
-* [Perguntas Frequentes (FAQ)](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-frequently-asked-questions)
-* [Suporte](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-get-support)
+* [Autorizando contas](#user-content-authorizing-accounts)
+* [Como ...?](#user-content-howto)
+* [Problemas conhecidos](#user-content-known-problems)
+* [Funcionalidades planejadas](#user-content-planned-features)
+* [Funcionalidades solicitadas frequentemente](#user-content-frequently-requested-features)
+* [Perguntas Frequentes (FAQ)](#user-content-frequently-asked-questions)
+* [Suporte](#user-content-get-support)
 
-## Autorizando contas
+<h2><a name="authorizing-accounts"></a>Autorizando contas</h2>
 
 Na maior parte dos casos, a configuração rápida conseguirá identificar automaticamente a configuração correta.
 
@@ -64,7 +64,7 @@ Perguntas relacionadas:
 * Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
 * Export/import settings: Settings, navigation (left side) menu
 
-## Problemas conhecidos
+<h2><a name="known-problems"></a>Known problem</h2>
 
 * ~~Um [problema nos Androids 5.1 e 6](https://issuetracker.google.com/issues/37054851) faz com que o aplicativo mostre um formato de hora errado. Habilitar a configuração do Android *Usar formato de 24 horas* pode resolver esse problema temporariamente. Uma solução alternativa foi adicionada.~~
 * ~~Um [problema no Google Drive](https://issuetracker.google.com/issues/126362828) faz com os arquivos exportados para o Google Drive fiquem vazios. O Google consertou isso.~~
@@ -83,8 +83,9 @@ Perguntas relacionadas:
 * Um [problema no Android 6.0](https://issuetracker.google.com/issues/37068143) às vezes causa um travamento com a mensagem *... Invalid offset: ... Valid range is ...* ao selecionar o texto e depois tocar fora do texto selecionado. Esse erro foi corrigido no Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
+* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 
-## Funcionalidades planejadas
+<h2><a name="planned-features"></a>Funcionalidades planejadas</h2>
 
 * ~~Sincronização sob demanda (manual)~~
 * ~~Criptografia semi-automática~~
@@ -99,7 +100,7 @@ Perguntas relacionadas:
 * ~~Sugestões de Pesquisa~~
 * ~~[Configuração de Mensagens do Autocrypt](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (seção 4.4)~~ (na minha opinião, não é uma boa ideia permitir que um cliente de e-mail lide com chaves criptografadas sensíveis para o caso de um uso excepcional, já que o OpenKeychain pode exportar chaves também)
 * ~~Pastas unificadas genéricas~~
-* Nova programação de notificação de mensagens por conta~~ (implementado adicionando uma condição de tempo às regras, para que as mensagens possam ser adiadas durante períodos selecionados)
+* ~~Nova programação de notificação de mensagens por conta~~ (implementado adicionando uma condição de tempo às regras, para que as mensagens possam ser adiadas durante períodos selecionados)
 * ~~Copiar contas e identidades~~
 * ~~Zoom ao aproximar dois dedos~~ (não é possível com segurança em uma lista de rolagem; em vez disso, a visualização de mensagem completa pode ser ampliada)
 * ~~Visualização de pastas mais compacta~~
@@ -119,11 +120,11 @@ Perguntas relacionadas:
 
 Anything on this list is in random order and *might* be added in the near future.
 
-## Funcionalidades solicitadas frequentemente
+<h2><a name="frequently-requested-features"></a>Funcionalidades solicitadas frequentemente</h2>
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
 
-## Perguntas Frequentes (FAQ)
+<h2><a name="frequently-asked-questions"></a>Perguntas Frequentes (FAQ)</h2>
 
 * [(1) Quais permissões são necessárias e por quê?](#user-content-faq1)
 * [(2) Porque a notificação é mostrada de forma permanente?](#user-content-faq2)
@@ -434,7 +435,7 @@ You can pin the certificate too, see above.
 
 *Empty password*
 
-Your username is likely easily guessed, so this is insecure.
+Your username is likely easily guessed, so this is pretty insecure, unless the SMTP server is available via a restricted local network or a VPN only.
 
 *Plain text connection*
 
@@ -679,7 +680,7 @@ Private keys are stored by Android and can be imported via the Android advanced 
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing. Android only imports the first key, so to import all the keys, the certificate must first be split. This is not very trivial and you are advised to ask the certificate supplier for support.
 
-Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with symmetric algorithms only, which means in practice using RSA.
+Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
 
 The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.
 
@@ -1636,7 +1637,9 @@ Inline (image) attachments are shown dimmed. [Inline attachments](https://tools.
 <a name="faq66"></a>
 **(66) Is FairEmail available in the Google Play Family Library?**
 
-The one time price of the few pro features is too low, lower than the price of most similar apps, and there are [too many fees and taxes](#user-content-faq19), to justify making FairEmail available in the [Google Play Family Library](https://support.google.com/googleone/answer/7007852). Note that Google promotes the Family libray, but lets developers pay for it.
+"*You can't share in-app purchases and free apps with your family members.*"
+
+See [here](https://support.google.com/googleone/answer/7007852) under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
 
 <br />
 
@@ -1711,7 +1714,7 @@ The following rule conditions are available:
 * Absolute time (received) between (since version 1.1540)
 * Relative time (received) between
 
-All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
+All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. If you want to match a domain name, you can use as a condition something like *@example.org*
 
 Note that email addresses are formatted like this:
 
@@ -1745,6 +1748,8 @@ You can select one of these actions to apply to matching messages:
 * Answer/forward (with template)
 * Text-to-speech (sender and subject)
 * Automation (Tasker, etc)
+
+An error in a rule condition can lead to a disaster, therefore irreversible actions are not supported.
 
 Rules are applied directly after the message header has been fetched, but before the message text has been downloaded, so it is not possible to apply conditions to the message text. Note that large message texts are downloaded on demand on a metered connection to save on data usage.
 
@@ -2274,9 +2279,7 @@ Disabling *Partial fetch* will result in more memory usage.
 
 OAuth for Gmail is supported via the quick setup wizard. The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts. OAuth for non on-device accounts is not supported because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this. You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
-OAuth for Yandex and Yahoo is supported via the quick setup wizard.
-
-OAuth for Office 365 accounts is supported, but Microsoft does not offer OAuth for Outlook, Live and Hotmail accounts (yet?).
+OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
 <br />
 
@@ -3020,9 +3023,9 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <br />
 
-## Get support
+<h2><a name="get-support"></a>Get support</h2>
 
-FairEmail is supported on smartphones, tablets and ChromeOS only.
+FairEmail is supported on Android smartphones and tablets and ChromeOS only.
 
 Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
 
