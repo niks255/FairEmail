@@ -309,6 +309,7 @@
     <string name="title_advanced_cards_beige">Usa lo sfondo beige usando lo stile della carta</string>
     <string name="title_advanced_cards_shadow">Usa l\'ombreggiatura per i messaggi non letti usando lo stile della carta</string>
     <string name="title_advanced_date_header">Raggruppa per data</string>
+    <string name="title_advanced_date_bold">Mostra la data in grassetto</string>
     <string name="title_advanced_threading">Thread della conversazione</string>
     <string name="title_advanced_threading_unread">Mostra il numero di messaggi non letti nelle conversazioni</string>
     <string name="title_advanced_indentation">Messaggi ricevuti/inviati con rientro a sinistra/destra nelle conversazioni</string>
@@ -965,6 +966,9 @@
     <string name="title_insert_contact_group">Inserisci gruppo di contatto</string>
     <string name="title_insert_template">Inserisci modello</string>
     <string name="title_create_template">Crea modello</string>
+    <string name="title_translate">Traduci</string>
+    <string name="title_translate_key">Inserisci tasto</string>
+    <string name="title_translating">Traducendo&#8230;</string>
     <string name="title_edit_plain_text">Modifica come testo semplice</string>
     <string name="title_edit_formatted_text">Modifica come testo riformattato</string>
     <string name="title_select_certificate">Seleziona chiave pubblica</string>
@@ -1185,9 +1189,10 @@
     <string name="title_legend_synchronize_off">Sincronizzazione disattivata</string>
     <string name="title_legend_synchronize_poll">Sincronizza periodicamente</string>
     <string name="title_legend_disconnected">Disconnesso</string>
-    <string name="title_legend_backoff">Attendi dopo il fallimento</string>
     <string name="title_legend_connecting">Connessione</string>
     <string name="title_legend_connected">Connesso</string>
+    <string name="title_legend_backoff">Attendi dopo il fallimento</string>
+    <string name="title_legend_quota">Casella email quasi piena</string>
     <string name="title_legend_executing">Esecuzione operazioni</string>
     <string name="title_legend_synchronizing">Sincronizzazione</string>
     <string name="title_legend_downloading">Scaricando</string>

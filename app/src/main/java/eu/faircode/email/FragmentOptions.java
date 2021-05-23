@@ -61,8 +61,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.jetbrains.annotations.NotNull;
-
 public class FragmentOptions extends FragmentBase {
     private ViewPager pager;
     private PagerAdapter adapter;
@@ -86,7 +84,7 @@ public class FragmentOptions extends FragmentBase {
             "subscriptions",
             "send_pending",
             "portrait2", "landscape", "landscape3", "startup", "cards", "beige", "shadow_unread",
-            "indentation", "date", "threading", "threading_unread",
+            "indentation", "date", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
             "name_email", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients", "authentication",
@@ -408,7 +406,7 @@ public class FragmentOptions extends FragmentBase {
             return 10;
         }
 
-        @NotNull
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -448,7 +446,7 @@ public class FragmentOptions extends FragmentBase {
             return ssb;
         }
 
-        @NotNull
+        @NonNull
         private CharSequence getTitle(int position) {
             switch (position) {
                 case 0:

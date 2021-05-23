@@ -858,10 +858,11 @@
             starttls="false" />
     </provider>
     <provider
-        name="Arcor.de/Vodafone.de"
+        name="Vodafone.de/Arcor"
         appPassword="true"
-        domain="arcor\\.de,vodafone\\.de,vodafonemail\\.de"
-        link="https://www.vodafone.de/hilfe/email/abrufen-senden.html#wie-lauten-die-server-einstellungen-fuer-vodafone-e-mail">
+        domain="arcor\\.de,vodafone\\.de,vodafonemail\\.de,nexgo\\.de"
+        link="https://www.vodafone.de/hilfe/email/abrufen-senden.html#wie-lauten-die-server-einstellungen-fuer-vodafone-e-mail"
+        partial="true">
         <imap
             host="imap.vodafonemail.de"
             port="993"

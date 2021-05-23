@@ -373,6 +373,7 @@
     <string name="title_advanced_cards_beige">Use beige background when using card style</string>
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
     <string name="title_advanced_date_header">Group by date</string>
+    <string name="title_advanced_date_bold">Show date in bold</string>
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_threading_unread">Show number of unread messages in conversations</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
@@ -1106,6 +1107,12 @@
     <string name="title_insert_contact_group">Insert contact group</string>
     <string name="title_insert_template">Insert template</string>
     <string name="title_create_template">Create template</string>
+    <string name="title_translate">Translate</string>
+    <string name="title_translate_configure">Configure &#8230;</string>
+    <string name="title_translate_key">Enter key</string>
+    <string name="title_translating">Translating &#8230;</string>
+    <string name="title_translate_small">Use a small font for the source text</string>
+    <string name="title_translate_usage">Usage: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Edit as plain text</string>
     <string name="title_edit_formatted_text">Edit as reformatted text</string>
     <string name="title_select_certificate">Select public key</string>
@@ -1349,9 +1356,10 @@
     <string name="title_legend_synchronize_off">Synchronize off</string>
     <string name="title_legend_synchronize_poll">Synchronize periodically</string>
     <string name="title_legend_disconnected">Disconnected</string>
-    <string name="title_legend_backoff">Waiting after failure</string>
     <string name="title_legend_connecting">Connecting</string>
     <string name="title_legend_connected">Connected</string>
+    <string name="title_legend_backoff">Waiting after failure</string>
+    <string name="title_legend_quota">Mailbox almost full</string>
     <string name="title_legend_executing">Executing operations</string>
     <string name="title_legend_synchronizing">Synchronizing</string>
     <string name="title_legend_downloading">Downloading</string>

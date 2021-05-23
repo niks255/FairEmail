@@ -309,6 +309,7 @@
     <string name="title_advanced_cards_beige">Utiliser un arrière-plan beige pour le style carte</string>
     <string name="title_advanced_cards_shadow">Utiliser une ombre autour des messages non lus pour le style carte</string>
     <string name="title_advanced_date_header">Grouper par date</string>
+    <string name="title_advanced_date_bold">Afficher la date en gras</string>
     <string name="title_advanced_threading">Afficher en mode conversation</string>
     <string name="title_advanced_threading_unread">Afficher le nombre de messages non lus dans les conversations</string>
     <string name="title_advanced_indentation">Retrait gauche/droite des messages reçus/envoyés dans les conversations</string>
@@ -965,6 +966,12 @@
     <string name="title_insert_contact_group">Insérer un groupe de contacts</string>
     <string name="title_insert_template">Insérer un modèle</string>
     <string name="title_create_template">Créer un modèle</string>
+    <string name="title_translate">Traduire</string>
+    <string name="title_translate_configure">Configurer&#8230;</string>
+    <string name="title_translate_key">Saisir la clé</string>
+    <string name="title_translating">Traduction&#8230;</string>
+    <string name="title_translate_small">Utiliser une petite police de caractères pour le texte source</string>
+    <string name="title_translate_usage" comment="title_translate_usage&#10;&#10;&lt;character count&gt; / &lt;character limit&gt; (percentage)">Utilisation : %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Modifier comme texte brut</string>
     <string name="title_edit_formatted_text">Modifier comme texte reformaté</string>
     <string name="title_select_certificate">Sélectionner la clé publique</string>
@@ -1185,9 +1192,10 @@
     <string name="title_legend_synchronize_off">Synchronisation désactivée</string>
     <string name="title_legend_synchronize_poll">Synchroniser périodiquement</string>
     <string name="title_legend_disconnected">Déconnecté</string>
-    <string name="title_legend_backoff">Attente après l\'échec</string>
     <string name="title_legend_connecting">Connexion en cours</string>
     <string name="title_legend_connected">Connecté</string>
+    <string name="title_legend_backoff">Attente après l\'échec</string>
+    <string name="title_legend_quota">Boîte aux lettres presque pleine</string>
     <string name="title_legend_executing">Opérations en cours d’exécution</string>
     <string name="title_legend_synchronizing">Synchronisation en cours</string>
     <string name="title_legend_downloading">Téléchargement en cours</string>

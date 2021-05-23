@@ -290,6 +290,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private boolean cards;
     private boolean beige;
     private boolean date;
+    private boolean date_bold;
     private boolean threading;
     private boolean swipenav;
     private boolean seekbar;
@@ -408,6 +409,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         cards = prefs.getBoolean("cards", true);
         beige = prefs.getBoolean("beige", true);
         date = prefs.getBoolean("date", true);
+        date_bold = prefs.getBoolean("date_bold", false);
         threading = prefs.getBoolean("threading", true);
         seekbar = prefs.getBoolean("seekbar", false);
         actionbar = prefs.getBoolean("actionbar", true);
@@ -693,6 +695,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_date, parent, false);
                 TextView tvDate = header.findViewById(R.id.tvDate);
                 tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, Helper.getTextSize(parent.getContext(), adapter.getZoom()));
+                if (date_bold)
+                    tvDate.setTypeface(Typeface.DEFAULT_BOLD);
 
                 if (cards) {
                     View vSeparatorDate = header.findViewById(R.id.vSeparatorDate);
@@ -2348,6 +2352,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             args.putString("question", getString(R.string.title_ask_delete));
             args.putString("remark", message.getRemark());
             args.putLong("id", message.id);
+            args.putInt("faq", 160);
             args.putBoolean("warning", true);
 
             FragmentDialogAsk ask = new FragmentDialogAsk();
@@ -2677,14 +2682,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                     for (EntityAnswer answer : answers) {
                         order++;
+
+                        String name = answer.name;
+                        if (BuildConfig.DEBUG && answer.applied > 0)
+                            name += " ★";
+
+                        MenuItem item;
                         if (answer.group == null)
-                            main.add(Menu.NONE, order, order++, answer.toString())
-                                    .setIntent(new Intent().putExtra("id", answer.id));
+                            item = main.add(Menu.NONE, order, order++, name);
                         else {
                             SubMenu smenu = map.get(answer.group);
-                            smenu.add(Menu.NONE, smenu.size(), smenu.size() + 1, answer.toString())
-                                    .setIntent(new Intent().putExtra("id", answer.id));
+                            item = smenu.add(Menu.NONE, smenu.size(), smenu.size() + 1, name);
                         }
+                        item.setIntent(new Intent().putExtra("id", answer.id));
                     }
 
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -3351,8 +3361,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Bundle aargs = new Bundle();
                 aargs.putString("question", getResources()
                         .getQuantityString(R.plurals.title_deleting_messages, ids.size(), ids.size()));
-                if (!pop && !EntityFolder.TRASH.equals(type) && !EntityFolder.JUNK.equals(type))
-                    aargs.putString("confirm", getString(R.string.title_no_undo));
+                boolean remark = (pop ||
+                        EntityFolder.TRASH.equals(type) ||
+                        EntityFolder.JUNK.equals(type));
+                aargs.putString(remark ? "remark" : "confirm", getString(R.string.title_no_undo));
                 aargs.putInt("faq", 160);
                 aargs.putLongArray("ids", Helper.toLongArray(ids));
                 aargs.putBoolean("warning", true);
@@ -4992,7 +5004,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             int count = 0;
             int unseen = 0;
             int flagged = 0;
-            int found = 0;
+            int finds = 0;
             TupleMessageEx singleMessage = null;
             TupleMessageEx unseenMessage = null;
             TupleMessageEx flaggedMessage = null;
@@ -5025,8 +5037,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         (message.id.equals(id) || Objects.equals(message.msgid, msgid)))
                     pinnedMessage = message;
 
-                if (!message.duplicate && message.ui_found) {
-                    found++;
+                if (found && !message.duplicate && message.ui_found) {
+                    finds++;
                     if (foundMessage == null)
                         foundMessage = message;
                 }
@@ -5042,8 +5054,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             // - sole message
             if (autoexpand) {
                 TupleMessageEx expand = null;
-                if (found > 0) {
-                    if (found == 1)
+                if (finds > 0) {
+                    if (finds == 1)
                         expand = foundMessage;
                 } else if (pinnedMessage != null)
                     expand = pinnedMessage;
@@ -7759,6 +7771,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     connection.connect();
 
                                     try {
+                                        int status = connection.getResponseCode();
+                                        if (status != HttpURLConnection.HTTP_OK)
+                                            throw new FileNotFoundException("Error " + status + ":" + connection.getResponseMessage());
+
                                         Helper.copy(connection.getInputStream(), os);
                                     } finally {
                                         connection.disconnect();

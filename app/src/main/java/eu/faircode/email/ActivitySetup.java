@@ -126,7 +126,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     static final int REQUEST_IMPORT_CERTIFICATE = 7;
     static final int REQUEST_OAUTH = 8;
     static final int REQUEST_STILL = 9;
-    static final int REQUEST_MANAGE = 10;
+
+    static final int PI_MISC = 1;
 
     static final String ACTION_QUICK_GMAIL = BuildConfig.APPLICATION_ID + ".ACTION_QUICK_GMAIL";
     static final String ACTION_QUICK_OAUTH = BuildConfig.APPLICATION_ID + ".ACTION_QUICK_OAUTH";
@@ -264,7 +265,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
         }).setExternal(true));
 
-        menus.add(new NavMenuItem(R.drawable.twotone_account_box_24, R.string.menu_privacy, new Runnable() {
+        menus.add(new NavMenuItem(R.drawable.twotone_account_circle_24, R.string.menu_privacy, new Runnable() {
             @Override
             public void run() {
                 drawerLayout.closeDrawer(drawerContainer);

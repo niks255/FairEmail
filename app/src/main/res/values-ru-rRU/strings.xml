@@ -331,6 +331,7 @@
     <string name="title_advanced_cards_beige">Использовать бежевый фон для карточного стиля</string>
     <string name="title_advanced_cards_shadow">Использовать тень для непрочитанных сообщений для карточного стиля</string>
     <string name="title_advanced_date_header">Группировать по дате</string>
+    <string name="title_advanced_date_bold">Показывать дату жирным шрифтом</string>
     <string name="title_advanced_threading">Связанные диалоги</string>
     <string name="title_advanced_threading_unread">Показывать количество непрочитанных сообщений в диалогах</string>
     <string name="title_advanced_indentation">Левый/правый отступ для полученных/отправленных сообщений в диалогах</string>
@@ -512,7 +513,7 @@
     <string name="title_advanced_sync_kept_hint">Это приведёт к большему потреблению трафика и заряда батареи, особенно если на устройстве хранится много сообщений</string>
     <string name="title_advanced_gmail_thread_hint">Это относится только к вновь полученным сообщениям и может нарушить существующие группы</string>
     <string name="title_advanced_sync_folders_hint">Отключение этой функции уменьшит потребление трафика и заряда батареи, но также отключит обновление списка папок</string>
-    <string name="title_advanced_check_reply_hint">Проверяет, совпадает ли доменное имя отправителя и адреса для ответа</string>
+    <string name="title_advanced_check_reply_hint">Проверка совпадения доменного имени отправителя и адреса для ответа</string>
     <string name="title_advanced_lookup_mx_hint">Проверка наличия записей DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Замедлится синхронизация сообщений</string>
     <string name="title_advanced_suggest_names_hint">Если отключено, при выборе контактов будут использоваться только адреса электронной почты</string>
@@ -987,6 +988,12 @@
     <string name="title_insert_contact_group">Добавить группу контактов</string>
     <string name="title_insert_template">Вставить шаблон</string>
     <string name="title_create_template">Создать шаблон</string>
+    <string name="title_translate">Перевод</string>
+    <string name="title_translate_configure">Настроить&#8230;</string>
+    <string name="title_translate_key">Введите ключ</string>
+    <string name="title_translating">Перевод&#8230;</string>
+    <string name="title_translate_small">Использовать мелкий шрифт для исходного текста</string>
+    <string name="title_translate_usage" comment="title_translate_usage&#10;&#10;&lt;character count&gt; / &lt;character limit&gt; (percentage)">Использование: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Редактировать как простой текст</string>
     <string name="title_edit_formatted_text">Редактировать как исходный текст</string>
     <string name="title_select_certificate">Выбор публичного ключа</string>
@@ -1207,9 +1214,10 @@
     <string name="title_legend_synchronize_off">Синхронизация отключена</string>
     <string name="title_legend_synchronize_poll">Периодическая синхронизация</string>
     <string name="title_legend_disconnected">Отключено</string>
-    <string name="title_legend_backoff">Ожидание после ошибки</string>
     <string name="title_legend_connecting">Подключение</string>
     <string name="title_legend_connected">Подключено</string>
+    <string name="title_legend_backoff">Ожидание после ошибки</string>
+    <string name="title_legend_quota">Почтовый ящик почти заполнен</string>
     <string name="title_legend_executing">Выполнение операций</string>
     <string name="title_legend_synchronizing">Синхронизация</string>
     <string name="title_legend_downloading">Загрузка</string>

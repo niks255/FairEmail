@@ -319,6 +319,7 @@
     <string name="title_advanced_cards_beige">Використовувати бежевий фон при використанні стилю картки</string>
     <string name="title_advanced_cards_shadow">Використовувати тінь для непрочитаних повідомлень під час використання стилю картки</string>
     <string name="title_advanced_date_header">Групувати за датою</string>
+    <string name="title_advanced_date_bold">Показувати дату в жирному шрифті</string>
     <string name="title_advanced_threading">Пов\'язанні розмови</string>
     <string name="title_advanced_threading_unread">Показувати кількість непрочитаних повідомлень у розмовах</string>
     <string name="title_advanced_indentation">Відступати ліворуч чи праворуч для отриманих або надісланих повідомлень у розмовах</string>
@@ -974,6 +975,8 @@
     <string name="title_insert_contact_group">Вставити групу контактів</string>
     <string name="title_insert_template">Вставити шаблон</string>
     <string name="title_create_template">Створити шаблон</string>
+    <string name="title_translate_configure">Налаштувати &#8230;</string>
+    <string name="title_translate_small">Використовувати малий шрифт для початкового тексту</string>
     <string name="title_edit_plain_text">Редагувати як звичайний текст</string>
     <string name="title_edit_formatted_text">Редагувати як переформатований текст</string>
     <string name="title_select_certificate">Виберіть відкритий ключ</string>
@@ -1194,9 +1197,9 @@
     <string name="title_legend_synchronize_off">Синхронізацію вимкнено</string>
     <string name="title_legend_synchronize_poll">Періодична синхронізація</string>
     <string name="title_legend_disconnected">Роз\'єднано</string>
-    <string name="title_legend_backoff">Очікування після збою</string>
     <string name="title_legend_connecting">З’єднання</string>
     <string name="title_legend_connected">Підключено</string>
+    <string name="title_legend_backoff">Очікування після збою</string>
     <string name="title_legend_executing">Виконання операцій</string>
     <string name="title_legend_synchronizing">Синхронізація</string>
     <string name="title_legend_downloading">Завантажується</string>

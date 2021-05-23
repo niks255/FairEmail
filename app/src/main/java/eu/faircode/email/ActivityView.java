@@ -580,7 +580,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 }
             }).setExternal(true));
 
-        extra.add(new NavMenuItem(R.drawable.twotone_account_box_24, R.string.menu_privacy, new Runnable() {
+        extra.add(new NavMenuItem(R.drawable.twotone_account_circle_24, R.string.menu_privacy, new Runnable() {
             @Override
             public void run() {
                 if (!drawerLayout.isLocked(drawerContainer))
@@ -1046,10 +1046,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 builder.setContentIntent(piUpdate);
 
                 Intent manage = new Intent(ActivityView.this, ActivitySetup.class)
+                        .setAction("misc")
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         .putExtra("tab", "misc");
                 PendingIntent piManage = PendingIntentCompat.getActivity(
-                        ActivityView.this, ActivitySetup.REQUEST_MANAGE, manage, PendingIntent.FLAG_UPDATE_CURRENT);
+                        ActivityView.this, ActivitySetup.PI_MISC, manage, PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Action.Builder actionManage = new NotificationCompat.Action.Builder(
                         R.drawable.twotone_settings_24,
                         getString(R.string.title_setup_manage),
@@ -1552,17 +1553,17 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View dview = inflater.inflate(R.layout.dialog_first, null);
-            Button btnBatteryInfo = dview.findViewById(R.id.btnBatteryInfo);
-            Button btnReformatInfo = dview.findViewById(R.id.btnReformatInfo);
+            ImageButton ibBatteryInfo = dview.findViewById(R.id.ibBatteryInfo);
+            ImageButton ibReformatInfo = dview.findViewById(R.id.ibReformatInfo);
 
-            btnBatteryInfo.setOnClickListener(new View.OnClickListener() {
+            ibBatteryInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Helper.viewFAQ(v.getContext(), 39);
                 }
             });
 
-            btnReformatInfo.setOnClickListener(new View.OnClickListener() {
+            ibReformatInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Helper.viewFAQ(v.getContext(), 35);

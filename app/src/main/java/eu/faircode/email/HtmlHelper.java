@@ -1041,19 +1041,25 @@ public class HtmlHelper {
                 int width = 0;
                 int height = 0;
 
-                String awidth = img.attr("width");
+                // Relative sizes (%) = use image size
+
+                String awidth = img.attr("width").replace(" ", "");
                 for (int i = 0; i < awidth.length(); i++)
                     if (Character.isDigit(awidth.charAt(i)))
                         width = width * 10 + (byte) awidth.charAt(i) - (byte) '0';
-                    else
+                    else {
+                        width = 0;
                         break;
+                    }
 
-                String aheight = img.attr("height");
+                String aheight = img.attr("height").replace(" ", "");
                 for (int i = 0; i < aheight.length(); i++)
                     if (Character.isDigit(aheight.charAt(i)))
                         height = height * 10 + (byte) aheight.charAt(i) - (byte) '0';
-                    else
+                    else {
+                        height = 0;
                         break;
+                    }
 
                 if (width != 0 || height != 0) {
                     ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(

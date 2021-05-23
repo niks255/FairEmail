@@ -34,10 +34,9 @@ import android.os.strictmode.Violation;
 import android.util.Printer;
 import android.webkit.CookieManager;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.work.WorkManager;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -132,7 +131,7 @@ public class ApplicationEx extends Application
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException(@NotNull Thread thread, @NotNull Throwable ex) {
+            public void uncaughtException(@NonNull Thread thread, @NonNull Throwable ex) {
                 if (!crash_reports && Log.isOwnFault(ex)) {
                     Log.e(ex);
 
@@ -475,6 +474,11 @@ public class ApplicationEx extends Application
         } else if (version < 1558) {
             if (!prefs.contains("button_extra"))
                 editor.putBoolean("button_extra", true);
+        } else if (version < 1598) {
+            if (prefs.contains("deepl")) {
+                String key = prefs.getString("deepl", null);
+                editor.putString("deepl_key", key).remove("deepl");
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

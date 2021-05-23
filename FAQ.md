@@ -36,7 +36,7 @@ For authorizing:
 
 * Gmail / G suite, see [question 6](#user-content-faq6)
 * Outlook / Live / Hotmail, see [question 14](#user-content-faq14)
-* Office 365, see [question 14](#user-content-faq156)
+* Office 365, see [question 156](#user-content-faq156)
 * Microsoft Exchange, see [question 8](#user-content-faq8)
 * Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
 * Apple iCloud, see [question 148](#user-content-faq148)
@@ -539,6 +539,9 @@ This Google security check is triggered more often with *less secure apps* enabl
 Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
 Note that an app specific password is required when two factor authentication is enabled.
+After enabling two factor authentication there will be this error message:
+
+*[ALERT] Application-specific password required: https://support.google.com/mail/accounts/answer/185833 (Failure)*
 
 <br />
 
@@ -1218,6 +1221,8 @@ In case the permissions were revoked, you can start the Gmail quick setup wizard
 The eror *... ServiceDisabled ...* might be caused by enrolling in the [Advanced Protection Program](https://landing.google.com/advancedprotection/):
 "*To read your email, you can (must) use Gmail - You won’t be able to use your Google Account with some (all) apps & services that require access to sensitive data like your emails*",
 see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=9264881).
+
+The error *... 334 ... OAUTH2 asked for more ...* probably means that the account needs to be authorized again, which you can do with the quick setup wizard in the settings.
 
 When in doubt, you can ask for [support](#user-content-support).
 
@@ -2137,7 +2142,8 @@ If you want to forward a message, consider to use the move action instead.
 This will be more reliable than forwarding as well because forwarded messages might be considered as spam.
 
 Since message headers are not downloaded and stored by default to save on battery and data usage and to save storage space
-it is not possible to preview which messages would match a header rule condition.
+it is by default not possible to preview which messages would match a header rule condition.
+You can enable downloading message headers in the connection settings and check headers conditions anyway (since version 1.1599).
 
 Some common header conditions (regex):
 
@@ -2668,6 +2674,7 @@ So, you don't have to disable this option if you don't have an EU SIM or are not
 
 Please [see here](https://github.com/leolin310148/ShortcutBadger#supported-launchers)
 for a list of launchers which can show the number of unread messages.
+Standard Android [does not support this](https://developer.android.com/training/notify-user/badges).
 
 Note that Nova Launcher requires Tesla Unread, which is [not supported anymore](https://forum.xda-developers.com/android/general/bad-news-tesla-unread-devoloper-t3920415).
 
@@ -3675,6 +3682,19 @@ This is problematic because a message can be snoozed only after moving the messa
 
 To prevent these issues, snoozing is done locally on the device by hiding the message while it is snoozing.
 Unfortunately, it is not possible to hide messages on the email server too.
+
+<br />
+
+<a name="faq167"></a>
+**(167) How can I use DeepL?**
+
+1. [Subscribe to](https://www.deepl.com/pro#developer) the DeepL API Free or Pro plan (credit card required)
+1. [Copy](https://www.deepl.com/pro-account/plan) the authentication key
+1. In the message composer, enter some text, and in the overflow menu select *Translate*, *Configure* and paste the key
+
+You might want to read the [privacy policy](https://www.deepl.com/privacy/) of DeepL.
+
+This feature requires an internet connection and is not available in the Play store version.
 
 <br />
 

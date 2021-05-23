@@ -309,6 +309,7 @@
     <string name="title_advanced_cards_beige">Χρήση μπεζ φόντου όταν χρησιμοποιείται το στιλ κάρτας</string>
     <string name="title_advanced_cards_shadow">Σκίαση μη αναγνωσμένων μηνυμάτων κατά τη χρήση στιλ κάρτας</string>
     <string name="title_advanced_date_header">Ομαδοποίηση κατά ημερομηνία</string>
+    <string name="title_advanced_date_bold">Προβολή ημερομηνίας με έντονους χαρακτήρες</string>
     <string name="title_advanced_threading">Ομαδοποίηση συζητήσεων σε νήματα</string>
     <string name="title_advanced_threading_unread">Προβολή αριθμού μη αναγνωσμένων μηνυμάτων στις συζητήσεις</string>
     <string name="title_advanced_indentation">Αριστερή/δεξιά εσοχή ειλημμένων/απεσταλμένων μηνυμάτων στις συζητήσεις</string>
@@ -962,6 +963,11 @@
     <string name="title_insert_contact_group">Εισαγωγή ομάδας επαφών</string>
     <string name="title_insert_template">Εισαγωγή προτύπου</string>
     <string name="title_create_template">Δημιουργία προτύπου</string>
+    <string name="title_translate">Μετάφραση</string>
+    <string name="title_translate_configure">Ρύθμιση &#8230;</string>
+    <string name="title_translate_key">Εισαγωγή κλειδιού</string>
+    <string name="title_translating">Μεταφράζεται &#8230;</string>
+    <string name="title_translate_small">Χρήση μιας μικρής γραμματοσειράς για το πηγαίο κείμενο</string>
     <string name="title_edit_plain_text">Επεξεργασία ως απλό κείμενο</string>
     <string name="title_edit_formatted_text">Επεξεργασία ως αναμορφοποιημένο κείμενο</string>
     <string name="title_select_certificate">Επιλογή δημοσίου κλειδιού</string>
@@ -1182,9 +1188,10 @@
     <string name="title_legend_synchronize_off">Συγχρονισμός ανενεργός</string>
     <string name="title_legend_synchronize_poll">Περιοδικός συγχρονισμός</string>
     <string name="title_legend_disconnected">Αποσυνδέθηκε</string>
-    <string name="title_legend_backoff">Αναμονή μετά από μία αποτυχία σύνδεσης</string>
     <string name="title_legend_connecting">Γίνεται σύνδεση</string>
     <string name="title_legend_connected">Συνδέθηκε</string>
+    <string name="title_legend_backoff">Αναμονή μετά από μία αποτυχία σύνδεσης</string>
+    <string name="title_legend_quota">Γραμματοκιβώτιο σχεδόν γεμάτο</string>
     <string name="title_legend_executing">Δραστηριότητες σε εξέλιξη</string>
     <string name="title_legend_synchronizing">Γίνεται συγχρονισμός</string>
     <string name="title_legend_downloading">Κατεβαίνει/-ουν</string>

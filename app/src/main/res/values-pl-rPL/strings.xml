@@ -202,6 +202,7 @@
     <string name="title_setup_still">Nadal do wykonania</string>
     <string name="title_setup_error">Błąd</string>
     <string name="title_setup_configuring">Konfigurowanie konta &#8230;</string>
+    <string name="title_setup_close">Zamknij ustawienia</string>
     <string name="title_setup_export">Eksport ustawień</string>
     <string name="title_setup_import">Import ustawień</string>
     <string name="title_setup_export_do">Hasło służy do szyfrowania ustawień i jest wymagane do ponownego zaimportowania ustawień</string>
@@ -329,6 +330,7 @@
     <string name="title_advanced_cards_beige">Użyj beżowego tła, jeśli używasz stylu karty</string>
     <string name="title_advanced_cards_shadow">Użyj cienia do nieprzeczytanych wiadomości, jeśli używasz stylu karty</string>
     <string name="title_advanced_date_header">Grupuj według daty</string>
+    <string name="title_advanced_date_bold">Pokaż datę pogrubioną</string>
     <string name="title_advanced_threading">Konwersacje w wątkach</string>
     <string name="title_advanced_threading_unread">Pokaż liczbę nieprzeczytanych wiadomości w wątkach</string>
     <string name="title_advanced_indentation">Otrzymane/wysłane wiadomości z lewej/prawej strony wątków</string>
@@ -457,6 +459,7 @@
     <string name="title_advanced_secure">Ukryj z ekranu ostatnich aplikacji i zapobiegaj wykonywaniu zrzutów ekranu</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Limit czasu uwierzytelniania biometrycznego</string>
+    <string name="title_advanced_generic_user_agent">Użyj agenta użytkownika ogólnego przeglądarki</string>
     <string name="title_advanced_disconnect_auto_update">Automatycznie aktualizuj listy co tydzień</string>
     <string name="title_advanced_disconnect_links">Użyj list do rozpoznawania linków śledzących</string>
     <string name="title_advanced_disconnect_images">Użyj list do rozpoznawania obrazów śledzących</string>
@@ -843,6 +846,7 @@
     <string name="title_move_to_account">Przenieś do %1$s &#8230;</string>
     <string name="title_report_spam">Traktuj jako spam</string>
     <string name="title_delete_permanently">Usuń trwale</string>
+    <string name="title_no_undo">Rozumiem, że tego nie można cofnąć</string>
     <string name="title_snooze">Odłóż &#8230;</string>
     <string name="title_archive">Archiwum</string>
     <string name="title_reply">Odpowiedz</string>
@@ -983,6 +987,8 @@
     <string name="title_insert_contact_group">Wstaw grupę kontaktów</string>
     <string name="title_insert_template">Wstaw szablon</string>
     <string name="title_create_template">Utwórz szablon</string>
+    <string name="title_translate">Przetłumacz</string>
+    <string name="title_translate_key">Wprowadź klucz</string>
     <string name="title_edit_plain_text">Edytuj jako zwykły tekst</string>
     <string name="title_edit_formatted_text">Edytuj jako sformatowany tekst</string>
     <string name="title_select_certificate">Wybierz klucz publiczny</string>
@@ -1203,9 +1209,10 @@
     <string name="title_legend_synchronize_off">Synchronizacja wyłączona</string>
     <string name="title_legend_synchronize_poll">Synchronizuj okresowo</string>
     <string name="title_legend_disconnected">Rozłączony</string>
-    <string name="title_legend_backoff">Oczekiwanie po niepowodzeniu</string>
     <string name="title_legend_connecting">‎Łączenie</string>
     <string name="title_legend_connected">Połączony</string>
+    <string name="title_legend_backoff">Oczekiwanie po niepowodzeniu</string>
+    <string name="title_legend_quota">Skrzynka pocztowa jest prawie pełna</string>
     <string name="title_legend_executing">Wykonywanie operacji</string>
     <string name="title_legend_synchronizing">Synchronizowanie</string>
     <string name="title_legend_downloading">Pobieranie</string>

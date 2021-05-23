@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<eu.faircode.email.ScrollViewEx xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:scrollbarStyle="outsideOverlay">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvDeepL"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/etKey"
+            android:text="DeepL"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toStartOf="@id/ibInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ibInfo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/title_info"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:tint="?attr/colorAccent"
+            android:tooltipText="@string/title_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvDeepL"
+            app:srcCompat="@drawable/twotone_info_24" />
+
+        <eu.faircode.email.EditTextPlain
+            android:id="@+id/etDomain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="api-free.deepl.com"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDeepL">
+
+            <requestFocus />
+        </eu.faircode.email.EditTextPlain>
+
+        <eu.faircode.email.EditTextPlain
+            android:id="@+id/etKey"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/title_translate_key"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etDomain">
+
+            <requestFocus />
+        </eu.faircode.email.EditTextPlain>
+
+        <CheckBox
+            android:id="@+id/cbSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_translate_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etKey" />
+
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvUsage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Usage"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbSmall" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</eu.faircode.email.ScrollViewEx>

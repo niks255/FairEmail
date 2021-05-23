@@ -310,6 +310,7 @@
     <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund bei Kartendarstellung verwenden</string>
     <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
+    <string name="title_advanced_date_bold">Datum fett anzeigen</string>
     <string name="title_advanced_threading">Themenbaum</string>
     <string name="title_advanced_threading_unread">Anzahl ungelesener Nachrichten in Unterhaltungen anzeigen</string>
     <string name="title_advanced_indentation">Empfangene/gesendete Nachrichten im Themenbaum links/rechts einrücken</string>
@@ -824,7 +825,7 @@
     <string name="title_move_to_account">Verschieben nach %1$s &#8230;</string>
     <string name="title_report_spam">Als Spam behandeln</string>
     <string name="title_delete_permanently">Dauerhaft löschen</string>
-    <string name="title_no_undo">Ich verstehe, dass dies nicht rückgängig gemacht werden kann</string>
+    <string name="title_no_undo">Ich verstehe, dass dies nicht widerrufen werden kann</string>
     <string name="title_snooze">Zurückstellen &#8230;</string>
     <string name="title_archive">Archivieren</string>
     <string name="title_reply">Antworten</string>
@@ -965,6 +966,12 @@
     <string name="title_insert_contact_group">Kontaktgruppe einfügen</string>
     <string name="title_insert_template">Vorlage einfügen</string>
     <string name="title_create_template">Vorlage erstellen</string>
+    <string name="title_translate">Übersetzen</string>
+    <string name="title_translate_configure">Konfigurieren &#8230;</string>
+    <string name="title_translate_key">Schlüssel einfügen</string>
+    <string name="title_translating">Wird übersetzt &#8230;</string>
+    <string name="title_translate_small">Eine kleine Schriftart für den Quelltext verwenden</string>
+    <string name="title_translate_usage" comment="title_translate_usage&#10;&#10;&lt;character count&gt; / &lt;character limit&gt; (percentage)">Verwendung: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Als einfachen Text bearbeiten</string>
     <string name="title_edit_formatted_text">Als umformatierten Text bearbeiten</string>
     <string name="title_select_certificate">Öffentlichen Schlüssel auswählen</string>
@@ -1183,9 +1190,10 @@
     <string name="title_legend_synchronize_off">Synchronisierung aus</string>
     <string name="title_legend_synchronize_poll">periodisch synchronisieren</string>
     <string name="title_legend_disconnected">nicht verbunden</string>
-    <string name="title_legend_backoff">Warten nach einem Fehler</string>
     <string name="title_legend_connecting">Verbindungsvorgang</string>
     <string name="title_legend_connected">Verbunden</string>
+    <string name="title_legend_backoff">Warten nach einem Fehler</string>
+    <string name="title_legend_quota">Postfach fast voll</string>
     <string name="title_legend_executing">Vorgänge werden ausgeführt</string>
     <string name="title_legend_synchronizing">wird synchronisiert</string>
     <string name="title_legend_downloading">wird heruntergeladen</string>
