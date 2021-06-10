@@ -24,9 +24,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -52,6 +54,7 @@ import androidx.preference.PreferenceManager;
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AuthorizationManagementActivity;
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
 import net.openid.appauth.AuthorizationService;
@@ -75,6 +78,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -241,7 +245,44 @@ public class FragmentOAuth extends FragmentBase {
             pbOAuth.setVisibility(View.VISIBLE);
             hideError();
 
-            EmailProvider provider = EmailProvider.getProvider(getContext(), id);
+            final Context context = getContext();
+            PackageManager pm = context.getPackageManager();
+            EmailProvider provider = EmailProvider.getProvider(context, id);
+
+            int flags = PackageManager.GET_RESOLVED_FILTER;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                flags |= PackageManager.MATCH_ALL;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+            List<ResolveInfo> ris = pm.queryIntentActivities(intent, flags);
+            EntityLog.log(context, "Browsers=" + (ris == null ? null : ris.size()));
+            if (ris != null)
+                for (ResolveInfo ri : ris) {
+                    Intent serviceIntent = new Intent();
+                    serviceIntent.setAction("android.support.customtabs.action.CustomTabsService");
+                    serviceIntent.setPackage(ri.activityInfo.packageName);
+                    boolean tabs = (pm.resolveService(serviceIntent, 0) != null);
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Browser=").append(ri.activityInfo.packageName);
+                    sb.append(" tabs=").append(tabs);
+                    sb.append(" view=").append(ri.filter.hasAction(Intent.ACTION_VIEW));
+                    sb.append(" browsable=").append(ri.filter.hasCategory(Intent.CATEGORY_BROWSABLE));
+                    sb.append(" authorities=").append(ri.filter.authoritiesIterator() != null);
+                    sb.append(" schemes=");
+
+                    boolean first = true;
+                    Iterator<String> schemeIter = ri.filter.schemesIterator();
+                    while (schemeIter.hasNext()) {
+                        String scheme = schemeIter.next();
+                        if (first)
+                            first = false;
+                        else
+                            sb.append(',');
+                        sb.append(scheme);
+                    }
+
+                    EntityLog.log(context, sb.toString());
+                }
 
             AppAuthConfiguration appAuthConfig = new AppAuthConfiguration.Builder()
                     .setBrowserMatcher(new BrowserMatcher() {
@@ -252,20 +293,27 @@ public class FragmentOAuth extends FragmentBase {
                                     Browsers.SBrowser.SIGNATURE_SET,
                                     true,
                                     VersionRange.atMost("5.3"));
-                            return (!sbrowser.matches(descriptor) &&
+                            boolean accept = (!sbrowser.matches(descriptor) &&
                                     (!"gmail".equals(provider.id) || !descriptor.useCustomTab));
+                            EntityLog.log(context,
+                                    "Browser=" + descriptor.packageName +
+                                            ":" + descriptor.version +
+                                            ":" + descriptor.useCustomTab + "" +
+                                            " accept=" + accept +
+                                            " provider=" + provider.id);
+                            return accept;
                         }
                     })
                     .build();
 
-            AuthorizationService authService = new AuthorizationService(getContext(), appAuthConfig);
+            AuthorizationService authService = new AuthorizationService(context, appAuthConfig);
 
             AuthorizationServiceConfiguration serviceConfig = new AuthorizationServiceConfiguration(
                     Uri.parse(provider.oauth.authorizationEndpoint),
                     Uri.parse(provider.oauth.tokenEndpoint));
 
             AuthState authState = new AuthState(serviceConfig);
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             prefs.edit().putString("oauth." + provider.id, authState.jsonSerializeString()).apply();
 
             Map<String, String> params = new HashMap<>();
@@ -306,18 +354,19 @@ public class FragmentOAuth extends FragmentBase {
 
             AuthorizationRequest authRequest = authRequestBuilder.build();
 
-            Log.i("OAuth request provider=" + provider.id + " uri=" + authRequest.toUri());
-            Intent authIntent = null;
+            EntityLog.log(context, "OAuth request provider=" + provider.id + " uri=" + authRequest.toUri());
+            Intent authIntent;
             try {
                 authIntent = authService.getAuthorizationRequestIntent(authRequest);
             } catch (ActivityNotFoundException ex) {
-                throw new ActivityNotFoundException("Browser not found");
+                Log.w(ex);
+                authIntent =
+                        AuthorizationManagementActivity.createStartForResultIntent(
+                                context, authRequest,
+                                new Intent(Intent.ACTION_VIEW, authRequest.toUri()));
             }
-            PackageManager pm = getContext().getPackageManager();
-            if (authIntent.resolveActivity(pm) == null) // action whitelisted
-                throw new ActivityNotFoundException(authIntent.toString());
-            else
-                startActivityForResult(authIntent, ActivitySetup.REQUEST_OAUTH);
+
+            startActivityForResult(authIntent, ActivitySetup.REQUEST_OAUTH);
         } catch (Throwable ex) {
             showError(ex);
         }
@@ -425,31 +474,30 @@ public class FragmentOAuth extends FragmentBase {
 
                 String username = address;
 
-                if (accessToken != null) {
+                List<String> usernames = new ArrayList<>();
+
+                if (token != null) {
                     // https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens
-                    String[] segments = accessToken.split("\\.");
+                    String[] segments = token.split("\\.");
                     if (segments.length > 1)
                         try {
                             String payload = new String(Base64.decode(segments[1], Base64.DEFAULT));
                             EntityLog.log(context, "token payload=" + payload);
                             JSONObject jpayload = new JSONObject(payload);
+                            if (jpayload.has("preferred_username")) {
+                                String u = jpayload.getString("preferred_username");
+                                if (!usernames.contains(u))
+                                    usernames.add(u);
+                            }
                             if (jpayload.has("unique_name")) {
-                                String unique_name = jpayload.getString("unique_name");
-                                if (!TextUtils.isEmpty(unique_name) && !unique_name.equals(address)) {
-                                    try (EmailService iservice = new EmailService(
-                                            context, aprotocol, null, aencryption, false,
-                                            EmailService.PURPOSE_CHECK, true)) {
-                                        iservice.connect(
-                                                provider.imap.host, provider.imap.port,
-                                                AUTH_TYPE_OAUTH, provider.id,
-                                                unique_name, state,
-                                                null, null);
-                                        username = unique_name;
-                                        Log.i("token unique_name=" + unique_name);
-                                    } catch (Throwable ex) {
-                                        Log.w(ex);
-                                    }
-                                }
+                                String u = jpayload.getString("unique_name");
+                                if (!usernames.contains(u))
+                                    usernames.add(u);
+                            }
+                            if (jpayload.has("upn")) {
+                                String u = jpayload.getString("upn");
+                                if (!usernames.contains(u))
+                                    usernames.add(u);
                             }
                         } catch (Throwable ex) {
                             Log.w(ex);
@@ -464,9 +512,42 @@ public class FragmentOAuth extends FragmentBase {
                             // https://jwt.ms/
                             String payload = new String(Base64.decode(segments[1], Base64.DEFAULT));
                             EntityLog.log(context, "jwt payload=" + payload);
+                            JSONObject jpayload = new JSONObject(payload);
+                            if (jpayload.has("preferred_username")) {
+                                String u = jpayload.getString("preferred_username");
+                                if (!usernames.contains(u))
+                                    usernames.add(u);
+                            }
+                            if (jpayload.has("email")) {
+                                String u = jpayload.getString("email");
+                                if (!usernames.contains(u))
+                                    usernames.add(u);
+                            }
+                            if (jpayload.has("unique_name")) {
+                                String u = jpayload.getString("unique_name");
+                                if (!usernames.contains(u))
+                                    usernames.add(u);
+                            }
                         } catch (Throwable ex) {
                             Log.e(ex);
                         }
+                }
+
+                for (String alt : usernames) {
+                    if (TextUtils.isEmpty(alt) || alt.equals(username))
+                        continue;
+                    EntityLog.log(context, "Trying username=" + alt);
+                    try (EmailService iservice = new EmailService(
+                            context, aprotocol, null, aencryption, false,
+                            EmailService.PURPOSE_CHECK, true)) {
+                        iservice.connect(
+                                provider.imap.host, provider.imap.port,
+                                AUTH_TYPE_OAUTH, provider.id,
+                                alt, state,
+                                null, null);
+                        EntityLog.log(context, "Using username=" + alt);
+                        username = alt;
+                    }
                 }
 
                 List<Pair<String, String>> identities = new ArrayList<>();

@@ -41,7 +41,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -120,14 +119,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private int lastBackStackCount = 0;
     private Snackbar lastSnackbar = null;
 
-    static final int REQUEST_UNIFIED = 1;
-    static final int REQUEST_WHY = 2;
-    static final int REQUEST_ALERT = 3;
-    static final int REQUEST_THREAD = 4;
-    static final int REQUEST_OUTBOX = 5;
-    static final int REQUEST_ERROR = 6;
-    static final int REQUEST_UPDATE = 7;
-    static final int REQUEST_WIDGET = 8;
+    static final int PI_UNIFIED = 1;
+    static final int PI_WHY = 2;
+    static final int PI_ALERT = 3;
+    static final int PI_THREAD = 4;
+    static final int PI_OUTBOX = 5;
+    static final int PI_ERROR = 6;
+    static final int PI_UPDATE = 7;
+    static final int PI_WIDGET = 8;
+    static final int PI_POWER = 9;
 
     static final String ACTION_VIEW_FOLDERS = BuildConfig.APPLICATION_ID + ".VIEW_FOLDERS";
     static final String ACTION_VIEW_MESSAGES = BuildConfig.APPLICATION_ID + ".VIEW_MESSAGES";
@@ -931,7 +931,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean updates = prefs.getBoolean("updates", true);
-        boolean weekly = prefs.getBoolean("weekly", false);
+        boolean weekly = prefs.getBoolean("weekly", Helper.hasPlayStore(this));
         long last_update_check = prefs.getLong("last_update_check", 0);
 
         if (!always && !updates)
@@ -1004,10 +1004,21 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                             if (name.endsWith(abi+"-release.apk")) {
                                 info.download_url = jasset.optString("browser_download_url");
                                 Log.i("Latest version=" + info.tag_name);
-                                if (BuildConfig.VERSION_NAME.equals(info.tag_name) && !BuildConfig.DEBUG)
-                                    return null;
-                                else
+                                if (BuildConfig.DEBUG)
                                     return info;
+                                try {
+                                    if (Double.parseDouble(info.tag_name) <=
+                                            Double.parseDouble(BuildConfig.VERSION_NAME))
+                                        return null;
+                                    else
+                                        return info;
+                                } catch (Throwable ex) {
+                                    Log.e(ex);
+                                    if (BuildConfig.VERSION_NAME.equals(info.tag_name))
+                                        return null;
+                                    else
+                                        return info;
+                                }
                             }
                         }
                     }
@@ -1042,7 +1053,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 Intent update = new Intent(Intent.ACTION_VIEW, Uri.parse(info.html_url))
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent piUpdate = PendingIntentCompat.getActivity(
-                        ActivityView.this, REQUEST_UPDATE, update, PendingIntent.FLAG_UPDATE_CURRENT);
+                        ActivityView.this, PI_UPDATE, update, PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(piUpdate);
 
                 Intent manage = new Intent(ActivityView.this, ActivitySetup.class)

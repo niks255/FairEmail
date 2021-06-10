@@ -55,10 +55,6 @@
         <item quantity="one">%1$d új</item>
         <item quantity="other">%1$d új</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d beszélgetés kiválasztva</item>
-        <item quantity="other">%1$d beszélgetés kiválasztva</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Áthelyezed a(z) %1$d üzenetet?</item>
         <item quantity="other">Áthelyezed a(z) %1$d üzeneteket?</item>
@@ -506,7 +502,6 @@
     <string name="title_advanced_threading_hint">Egymáshoz kapcsolódó üzenetek csoportosítása</string>
     <string name="title_advanced_highlight_hint">A téma kiemelőszíne a kiemeléshez lesz használva</string>
     <string name="title_advanced_gravatars_hint">Adatvédelmi szempontból aggályos a használata</string>
-    <string name="title_advanced_name_email_hint">Ha ki van kapcsolva csak nevek fognak megjelenni, ha elérhető</string>
     <string name="title_advanced_preview_hint">Csak az üzenetek szövegének letöltése után elérhető</string>
     <string name="title_advanced_preview_lines_hint">Legfeljebb %s karakter összesen</string>
     <string name="title_advanced_preview_issue">A görgetés bizonyos Android verziók hibája miatt lassú lehet, egynél több sor esetén</string>
@@ -1305,7 +1300,6 @@
     <string name="title_pro_feature">Ez egy pro funkció</string>
     <string name="title_pro_list">Pro szolgáltatások listája</string>
     <string name="title_pro_purchase">Vásárlás</string>
-    <string name="title_pro_once">Csak egyszer</string>
     <string name="title_pro_info">        A FairEmail készítése több ezer órát vett igénybe annak ellenére hogy a legtöbb funkció ingyenes.
         A FairEmail komolyan veszi a titoktartást, így nem mutat reklámokat, nem használ követési vagy analítikai technológiát pénzszerzési célra.
         Hogy a FairEmailt fenntartható maradjon hosszútávon, néhány kényelem és haladó beállítások nem ingyenesek.
@@ -1514,6 +1508,7 @@
         <item>Talpatlan</item>
         <item>Fix szélességű szöveg</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

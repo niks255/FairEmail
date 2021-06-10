@@ -88,7 +88,8 @@ public class FragmentOperations extends FragmentBase {
         super.onActivityCreated(savedInstanceState);
 
         // Observe folders
-        DB.getInstance(getContext()).operation().liveOperations().observe(getViewLifecycleOwner(), new Observer<List<TupleOperationEx>>() {
+        DB db = DB.getInstance(getContext());
+        db.operation().liveOperations().observe(getViewLifecycleOwner(), new Observer<List<TupleOperationEx>>() {
             @Override
             public void onChanged(@Nullable List<TupleOperationEx> operations) {
                 if (operations == null)
@@ -104,7 +105,7 @@ public class FragmentOperations extends FragmentBase {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_operations, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -112,8 +113,8 @@ public class FragmentOperations extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_help) {
-            onMenuHelp();
+        if (itemId == R.id.menu_info) {
+            onMenuInfo();
             return true;
         } else if (itemId == R.id.menu_delete) {
             new FragmentDialogDelete().show(getParentFragmentManager(), "operations:delete");
@@ -122,7 +123,7 @@ public class FragmentOperations extends FragmentBase {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onMenuHelp() {
+    private void onMenuInfo() {
         Helper.viewFAQ(getContext(), 3);
     }
 
@@ -153,7 +154,7 @@ public class FragmentOperations extends FragmentBase {
                             new SimpleTask<Integer>() {
                                 @Override
                                 protected void onPostExecute(Bundle args) {
-                                    ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+                                    ToastEx.makeText(context, R.string.title_executing, Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override

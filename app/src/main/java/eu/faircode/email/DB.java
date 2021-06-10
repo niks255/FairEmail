@@ -65,7 +65,7 @@ import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 197,
+        version = 199,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -431,16 +431,16 @@ public abstract class DB extends RoomDatabase {
                 " BEGIN" +
                 "  UPDATE message SET attachments = attachments + 1" +
                 "  WHERE message.id = NEW.message" +
-                "  AND (NEW.encryption IS NULL" +
-                "  AND NOT ((NEW.disposition = 'inline' OR NEW.cid IS NOT NULL) AND NEW.type IN (" + images + ")));" +
+                "  AND NEW.encryption IS NULL" +
+                "  AND NOT ((NEW.disposition = 'inline' OR NEW.cid IS NOT NULL) AND NEW.type IN (" + images + "));" +
                 " END");
         db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_delete" +
                 " AFTER DELETE ON attachment" +
                 " BEGIN" +
                 "  UPDATE message SET attachments = attachments - 1" +
                 "  WHERE message.id = OLD.message" +
-                "  AND (OLD.encryption IS NULL" +
-                "  AND NOT ((OLD.disposition = 'inline' OR OLD.cid IS NOT NULL) AND OLD.type IN (" + images + ")));" +
+                "  AND OLD.encryption IS NULL" +
+                "  AND NOT ((OLD.disposition = 'inline' OR OLD.cid IS NOT NULL) AND OLD.type IN (" + images + "));" +
                 " END");
     }
 
@@ -2021,6 +2021,20 @@ public abstract class DB extends RoomDatabase {
                         db.execSQL("ALTER TABLE `answer` ADD COLUMN `last_applied` INTEGER");
                     }
                 }).addMigrations(new Migration(197, 198) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `show_images` INTEGER NOT NULL DEFAULT 0");
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `show_full` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(198, 199) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `capability_idle` INTEGER");
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `capability_utf8` INTEGER");
+                    }
+                }).addMigrations(new Migration(199, 200) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);

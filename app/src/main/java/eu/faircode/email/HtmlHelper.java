@@ -54,7 +54,6 @@ import android.util.Patterns;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
@@ -682,8 +681,7 @@ public class HtmlHelper {
                             if (element.parent() != null && !display_hidden) {
                                 Float s = getFontSize(value, 1.0f);
                                 if (s != null && s == 0) {
-                                    if (!"table".equals(element.tagName()) ||
-                                            !"fixed".equals(kv.get("table-layout"))) {
+                                    if (!"table".equals(element.tagName())) {
                                         Log.i("Removing no height/width " + element.tagName());
                                         element.remove();
                                     }
@@ -1026,10 +1024,22 @@ public class HtmlHelper {
             if (alt.length() > MAX_ALT)
                 alt = alt.substring(0, MAX_ALT) + "…";
 
-            if (!show_images && !(inline_images && isInline) && !TextUtils.isEmpty(alt))
-                if (TextUtils.isEmpty(tracking))
-                    img.appendText("[" + alt + "]");
-                else {
+            if (!show_images && !(inline_images && isInline))
+                if (TextUtils.isEmpty(tracking)) {
+                    if (TextUtils.isEmpty(alt)) {
+                        boolean linked = false;
+                        Element p = img.parent();
+                        while (p != null && !linked)
+                            if ("a".equals(p.tagName()))
+                                linked = true;
+                            else
+                                p = p.parent();
+                        if (linked)
+                            alt = context.getString(R.string.title_image_link);
+                    }
+                    if (!TextUtils.isEmpty(alt))
+                        img.appendText("[" + alt + "]");
+                } else if (!TextUtils.isEmpty(alt)) {
                     Element a = document.createElement("a");
                     a.attr("href", tracking);
                     a.text("[" + alt + "]");
@@ -1571,7 +1581,7 @@ public class HtmlHelper {
         return formatPre(text, true);
     }
 
-    static String formatPre(String text, boolean quote) {
+    static String formatPre(String text, boolean view) {
         int level = 0;
         StringBuilder sb = new StringBuilder();
         String[] lines = text.split("\\r?\\n");
@@ -1581,7 +1591,7 @@ public class HtmlHelper {
 
             // Opening quotes
             // https://tools.ietf.org/html/rfc3676#section-4.5
-            if (quote) {
+            if (view) {
                 int tlevel = 0;
                 while (line.startsWith(">")) {
                     tlevel++;
@@ -1621,7 +1631,10 @@ public class HtmlHelper {
             line = Html.escapeHtml(line);
 
             sb.append(line);
-            sb.append("<br>");
+            if (view ||
+                    l + 1 < lines.length ||
+                    text.endsWith("\n"))
+                sb.append("<br>");
         }
 
         // Closing quotes
@@ -1976,6 +1989,20 @@ public class HtmlHelper {
         }
     }
 
+    static void quoteLimit(Document d, int maxLevel) {
+        for (Element bq : d.select("blockquote")) {
+            int level = 1;
+            Element parent = bq.parent();
+            while (parent != null) {
+                if ("blockquote".equals(parent.tagName()))
+                    level++;
+                parent = parent.parent();
+            }
+            if (level >= maxLevel)
+                bq.html("&#8230;");
+        }
+    }
+
     static boolean truncate(Document d, int max) {
         final int[] length = new int[1];
 
@@ -2242,11 +2269,7 @@ public class HtmlHelper {
                                         }
                                     break;
                                 case "font-family":
-                                    String face = value.toLowerCase(Locale.ROOT);
-                                    if ("fairemail".equals(face)) {
-                                        Typeface typeface = ResourcesCompat.getFont(context, R.font.fantasy);
-                                        setSpan(ssb, new CustomTypefaceSpan(face, typeface), start, ssb.length());
-                                    } else if ("wingdings".equals(face)) {
+                                    if ("wingdings".equalsIgnoreCase(value)) {
                                         for (int i = start; i < ssb.length(); i++) {
                                             int kar = ssb.charAt(i);
                                             if (kar >= 0x20 && kar < 0x20 + WINGDING_TO_UNICODE.length) {
@@ -2257,7 +2280,7 @@ public class HtmlHelper {
                                             }
                                         }
                                     } else
-                                        setSpan(ssb, new TypefaceSpan(face), start, ssb.length());
+                                        setSpan(ssb, StyleHelper.getTypefaceSpan(value, context), start, ssb.length());
                                     break;
                                 case "text-decoration":
                                     if ("line-through".equals(value))
@@ -2352,7 +2375,7 @@ public class HtmlHelper {
                                 setSpan(ssb, new StyleSpan(Typeface.BOLD), start, ssb.length());
                                 break;
                             case "hr":
-                                // Suppress succesive lines
+                                // Suppress successive lines
                                 LineSpan[] lines = ssb.getSpans(0, ssb.length(), LineSpan.class);
                                 int last = -1;
                                 if (lines != null)
@@ -2494,7 +2517,7 @@ public class HtmlHelper {
                                 setSpan(ssb, new UnderlineSpan(), start, ssb.length());
                                 break;
                             default:
-                                Log.e("Unknown tag=" + element.tagName());
+                                Log.w("Unknown tag=" + element.tagName());
                         }
 
                         if (monospaced_pre &&

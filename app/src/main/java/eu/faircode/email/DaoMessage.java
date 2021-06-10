@@ -593,8 +593,8 @@ public interface DaoMessage {
             " GROUP BY sender" +
 
             " ORDER BY sender, subject" +
-            " LIMIT 5")
-    Cursor getSuggestions(Long account, Long folder, String query);
+            " LIMIT :limit")
+    Cursor getSuggestions(Long account, Long folder, String query, int limit);
 
     @Query("SELECT language FROM message" +
             " WHERE (:account IS NULL OR message.account = :account)" +
@@ -790,6 +790,12 @@ public interface DaoMessage {
     @Query("UPDATE message SET ui_unsnoozed = :unsnoozed WHERE id = :id AND NOT (ui_unsnoozed IS :unsnoozed)")
     int setMessageUnsnoozed(long id, boolean unsnoozed);
 
+    @Query("UPDATE message SET show_images = :show_images WHERE id = :id AND NOT (show_images IS :show_images)")
+    int setMessageShowImages(long id, boolean show_images);
+
+    @Query("UPDATE message SET show_full = :show_full WHERE id = :id AND NOT (show_full IS :show_full)")
+    int setMessageShowFull(long id, boolean show_full);
+
     @Query("UPDATE message SET notifying = 0 WHERE NOT (notifying IS 0)")
     int clearNotifyingMessages();
 
@@ -862,11 +868,11 @@ public interface DaoMessage {
 
     @Query("DELETE FROM message" +
             " WHERE folder = :folder" +
-            " AND received < :before" +
+            " AND received < :keep_time" +
             " AND NOT uid IS NULL" +
             " AND (ui_seen OR :unseen)" +
             " AND NOT ui_flagged" +
-            " AND stored < :before" + // moved, browsed
+            " AND stored < :sync_time" + // moved, browsed
             " AND ui_snoozed IS NULL")
-    int deleteMessagesBefore(long folder, long before, boolean unseen);
+    int deleteMessagesBefore(long folder, long sync_time, long keep_time, boolean unseen);
 }

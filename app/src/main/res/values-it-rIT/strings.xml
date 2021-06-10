@@ -56,10 +56,6 @@
         <item quantity="one">%1$d nuovo</item>
         <item quantity="other">%1$d nuovi</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d conversazione selezionata</item>
-        <item quantity="other">%1$d conversazioni selezionate</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Spostare %1$d messaggio?</item>
         <item quantity="other">Spostare %1$d messaggi?</item>
@@ -165,8 +161,10 @@
     <string name="title_setup_free">Quest\'app è gratuita?</string>
     <string name="title_setup_permissions">Concedi autorizzazioni</string>
     <string name="title_setup_permissions_remark">Per accedere alle informazioni di contatto (opzionale)</string>
+    <string name="title_setup_permissions_explanation">Le autorizzazioni di contatto sono necessarie per cercare informazioni di contatto e suggerire contatti</string>
     <string name="title_setup_doze">Disabilita le ottimizzazioni della batteria</string>
     <string name="title_setup_doze_remark">Per inviare e ricevere email in modo affidabile</string>
+    <string name="title_setup_doze_explanation">Le ottimizzazioni della batteria dovrebbero esser disabilitate per l\'app, per assicurare un\'affidabile invio e ricezione dei messaggi in background</string>
     <string name="title_setup_doze_hint">Sebbene questo possa sembrare contraddittorio, disattivare le ottimizzazioni della batteria per quest\'app risulterà in un minore uso della batteria</string>
     <string name="title_setup_doze_instructions">Nella prossima finestra di Android cambia \"Non ottimizzata\" a \"Tutte le app\", seleziona quest\'app e seleziona \"Non ottimizzare\"</string>
     <string name="title_setup_doze_battery">Alto consumo della batteria?</string>
@@ -422,6 +420,7 @@
     <string name="title_advanced_notify_action_snooze">Posticipa</string>
     <string name="title_advanced_notify_remove">Rimuovi la notifica del nuovo messaggio al tocco di una notifica</string>
     <string name="title_advanced_notify_clear">Rimuovi le notifiche dei nuovi messaggi alla visualizzazione dell\'elenco dei messaggi</string>
+    <string name="title_advanced_notify_subtext">Mostra il nome del profilo o della cartella come sotto-testo</string>
     <string name="title_advanced_wearable_preview">Invia solo le notifiche con un\'anteprima del messaggio agli indossabili</string>
     <string name="title_advanced_notify_messaging">Usa il formato di notifica \'stile di messagistica\' di Android</string>
     <string name="title_advanced_biometrics_notify">Mostra il contenuto della notifica usando l\'autenticazione biometrica</string>
@@ -458,6 +457,7 @@
     <string name="title_advanced_manage_keys_hint">        Questo passerà alle impostazioni di sicurezza di Android.
         Chiavi e certificati si possono generalmente trovare sotto Avanzate - Crittografia e credenziali.
     </string>
+    <string name="title_advanced_power_menu">Aggiungi azioni al menù di spegnimento Android</string>
     <string name="title_advanced_external_search">Consenti alle altre app di cercare tra i messaggi</string>
     <string name="title_advanced_shortcuts">Mostra i contatti usati frequentemente nel menu di condivisione di Android</string>
     <string name="title_advanced_fts">Crea indice di ricerca</string>
@@ -518,7 +518,7 @@
     <string name="title_advanced_threading_hint">Raggruppa i messaggi correlati</string>
     <string name="title_advanced_highlight_hint">Il colore secondario del tema sarà usato per l\'evidenziazione</string>
     <string name="title_advanced_gravatars_hint">Potrebbe esistere un rischio per la privacy</string>
-    <string name="title_advanced_name_email_hint">Quando disabilitato solo i nomi saranno mostrati quando disponibili</string>
+    <string name="title_advanced_name_email_hint">I nomi saranno mostrati solo quando disponibili</string>
     <string name="title_advanced_preview_hint">Disponibile solo quando il testo del messaggio è stato scaricato</string>
     <string name="title_advanced_preview_lines_hint">%s caratteri massimi in totale</string>
     <string name="title_advanced_preview_issue">Lo scorrimento può esser lento per un bug in alcune versioni di Android quando il numero di righe è maggiore di uno</string>
@@ -791,6 +791,7 @@
     <string name="title_print_images">Stampa le immagini</string>
     <string name="title_print_images_remark">Scaricare le immagini potrebbe richiedere un po\' di tempo</string>
     <string name="title_show_headers">Mostra le intestazioni</string>
+    <string name="title_share_as_html">Condividi come HTML</string>
     <string name="title_raw_save">Salva il messaggio non elaborato</string>
     <string name="title_raw_send">Invia come allegato</string>
     <string name="title_manage_keywords">Gestisci le parole chiave</string>
@@ -865,6 +866,7 @@
     <string name="title_attachments_incomplete">Impossibile scaricare e aggiungere alcuni allegati o immagini</string>
     <string name="title_ask_save">Salvare le modifiche?</string>
     <string name="title_ask_delete">Eliminare permanentemente il messaggio?</string>
+    <string name="title_ask_delete_accept">Comprendo che l\'eliminazione permanente dei messaggi è irriversibile</string>
     <string name="title_ask_delete_answer">Eliminare permanentemente il modello di risposta?</string>
     <string name="title_ask_delete_rule">Eliminare permanentemente la regola?</string>
     <string name="title_ask_discard">Scartare la bozza?</string>
@@ -967,8 +969,11 @@
     <string name="title_insert_template">Inserisci modello</string>
     <string name="title_create_template">Crea modello</string>
     <string name="title_translate">Traduci</string>
+    <string name="title_translate_configure">Configura &#8230;</string>
     <string name="title_translate_key">Inserisci tasto</string>
     <string name="title_translating">Traducendo&#8230;</string>
+    <string name="title_translate_small">Usa caratteri piccoli per il testo sorgente</string>
+    <string name="title_translate_usage">Uso: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Modifica come testo semplice</string>
     <string name="title_edit_formatted_text">Modifica come testo riformattato</string>
     <string name="title_select_certificate">Seleziona chiave pubblica</string>
@@ -1239,6 +1244,8 @@
     <string name="title_legend_view">Mostra il contenuto</string>
     <string name="title_legend_hide">Nascondi il contenuto</string>
     <string name="title_legend_download">Scarica il contenuto</string>
+    <string name="title_legend_original">Visualizza il messaggio originale</string>
+    <string name="title_legend_reformatted">Visualizza messaggio riformattato</string>
     <string name="title_legend_external_image">Segnaposto immagine esterna</string>
     <string name="title_legend_embedded_image">Segnaposto immagine incorporata</string>
     <string name="title_legend_tracking_pixel">Immagine di monitoraggio</string>
@@ -1300,6 +1307,7 @@
     <string name="title_hint_contact_actions">Tieni premuto per le opzioni</string>
     <string name="title_hint_eml">Questo è un riepilogo del contenuto del file di un messaggio non elaborato. Salva il messaggio non elaborato con l\'icona di salvataggio nella barra d\'azione per vedere tutto il contenuto.</string>
     <string name="title_open_link">Apri link</string>
+    <string name="title_image_link">Link dell\'immagine</string>
     <string name="title_different_link">Il titolo e l\'indirizzo del link sono diversi</string>
     <string name="title_tracking_link">Questo sito web potrebbe monitorarti</string>
     <string name="title_suspicious_link">Questo è un link sospetto</string>
@@ -1326,6 +1334,8 @@
     <string name="title_fix">Correggi</string>
     <string name="title_enable">Abilita</string>
     <string name="title_enabled">Abilitato</string>
+    <string name="title_disable">Disabilita</string>
+    <string name="title_keep_current">Mantieni corrente</string>
     <string name="title_executing">In esecuzione</string>
     <string name="title_completed">Completato</string>
     <string name="title_default_changed">Predefinito modificato</string>
@@ -1359,7 +1369,8 @@
     <string name="title_pro_feature">Questa è una funzionalità pro</string>
     <string name="title_pro_list">Elenco di funzionalità pro</string>
     <string name="title_pro_purchase">Acquista</string>
-    <string name="title_pro_once">Solo una volta</string>
+    <string name="title_pro_one_time">%1$s (acquisto una tantum)</string>
+    <string name="title_pro_no_play">Play Store non trovato</string>
     <string name="title_pro_info">        Sviluppare FairEmail ha letteralmente impiegato migliaio di ore e, nonostante ciò, gran parte delle funzionalità sono gratuite.
         FairEmail prende sul serio la tua privacy e non mostra annunci né usa il monitoraggio o le analisi per guadagnare denaro.
         Per mantenere e supportare FairEmail a lungo termine, alcune funzionalità convenzionali e avanzate non sono gratuite.
@@ -1395,6 +1406,10 @@
     <string name="title_widget_title_count">Conteggio nuovi messaggi</string>
     <string name="title_widget_title_list">Elenco dei messaggi</string>
     <string name="title_widget_title_sync">Sincro on/off</string>
+    <string name="title_power_menu_sync">Sincronizzazione</string>
+    <string name="title_power_menu_on">On</string>
+    <string name="title_power_menu_off">Off</string>
+    <string name="title_power_menu_on_off">On/Off</string>
     <string name="title_widget_account">Profilo</string>
     <string name="title_widget_account_all">Tutti</string>
     <string name="title_widget_folder">Cartella</string>
@@ -1569,6 +1584,12 @@
         <item>Sans-serif</item>
         <item>Monospaziato</item>
         <item>Fantasia</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <string-array name="addressFormatNames">
+        <item>Solo nome</item>
+        <item>Solo email</item>
+        <item>Nome ed email</item>
+    </string-array>
 </resources>

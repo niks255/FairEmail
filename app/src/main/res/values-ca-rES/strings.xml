@@ -51,10 +51,6 @@
         <item quantity="one">%1$d nou</item>
         <item quantity="other">%1$d noves</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">S\'han seleccionat %1$d conversa</item>
-        <item quantity="other">S\'han seleccionat %1$d converses</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Esborrar el missatge %1$d per sempre?</item>
         <item quantity="other">Esborrar els missatges %1$d per sempre?</item>
@@ -415,7 +411,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_navbar_colorize_hint">Si això funciona depèn de la versió i la versió d\'Android</string>
     <string name="title_advanced_threading_hint">Agrupa missatges relacionats entre ells</string>
     <string name="title_advanced_gravatars_hint">Pot haver-hi un risc de privadesa</string>
-    <string name="title_advanced_name_email_hint">Quan estigui desactivat només es mostraran noms quan estiguin disponibles</string>
     <string name="title_advanced_preview_hint">Només disponible quan s\'ha descarregat el text del missatge</string>
     <string name="title_advanced_preview_issue">El desplaçament pot ser lent a causa d\'un error en algunes versions d\'Android quan el nombre de línies és superior a una</string>
     <string name="title_advanced_inline_hint">Les imatges en línia són imatges incloses al missatge</string>
@@ -1089,7 +1084,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_pro_feature">Això es una característica Pro</string>
     <string name="title_pro_list">Llista de característiques Pro</string>
     <string name="title_pro_purchase">Comprar</string>
-    <string name="title_pro_once">Només un cop</string>
     <string name="title_pro_hint">Comprar característiques Pro et permet utilitzar tota la funcionalitat Pro actual i futura i mantindrà el desenvolupament de l\'aplicació</string>
     <string name="title_pro_pending">Compra pendent</string>
     <string name="title_pro_activated">Totes les característiques Pro estan activades</string>
@@ -1267,6 +1261,7 @@ La creació i l\'ús de regles és una característica professional.    </string
         <item>Sans-serif</item>
         <item>Monospace</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

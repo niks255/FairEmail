@@ -2,69 +2,69 @@
 
 # Bantuan FairEmail
 
-Jika anda memiliki pertanyaan, silahkan terlebih dahulu periksa pertanyaan yang sering diajukan di bawah ini. [Pada bagian bawah](#user-content-get-support), Anda dapat mengetahui bagaimana cara menanyakan pertanyaan lain, meminta fitur baru, dan melaporkan bug.
+Jika ada pertanyaan, periksa pertanyaan yang sering diajukan di bawah ini. Di bagian bawah </a> Anda dapat mengetahui cara mengajukan pertanyaan, meminta fitur, dan melaporkan bug
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Jika Anda memiliki pertanyaan, silakan periksa Pertanyaan yang Sering Diajukan (FAQ) di bawah ini terlebih dahulu. [ Di bagian bawah Anda akan menemukan ](#user-content-get-support), bagaimana Anda dapat mengajukan pertanyaan lebih lanjut, meminta fungsi, dan melaporkan kesalahan.
 
-## Panduan
+## Cara, panduan, isi
 
-* [Mengizinkan akun](#user-content-authorizing-accounts)
-* [Bagaimana cara untuk ...?](#user-content-howto)
-* [Kendala yang diketahui](#user-content-known-problems)
-* [Fitur yang direncanakan](#user-content-planned-features)
-* [Fitur yang sering diminta](#user-content-frequently-requested-features)
-* [Pertanyaan yang Sering Diajukan (FAQ)](#user-content-frequently-asked-questions)
-* [Dapatkan bantuan](#user-content-get-support)
+* [Memberi izin akun](#user-content-authorizing-accounts)
+* [Caranya ...?](#user-content-howto)
+* [Permasalahan diketahui](#user-content-known-problems)
+* [Perencanaan fitur](#user-content-planned-features)
+* [Fitur yang selalu diminta](#user-content-frequently-requested-features)
+* [Pertanyaan yang Sering Diajukan Faq](#user-content-frequently-asked-questions)
+* [Ambil bantuan](#user-content-get-support)
 
-<h2><a name="authorizing-accounts"></a>Mengizinkan akun</h2>
+<h2><a name="authorizing-accounts"></a>Memberi izin akun</h2>
 
-In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
+Dalam kebanyakan kasus, wizard pengaturan cepat akan dapat secara otomatis mengidentifikasi pengaturan yang benar.
 
-If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Jika pengaturan wizard cepat gagal, Anda harus mengatur akun secara manual untuk menerima email dan identitas untuk mengirim email. Untuk ini, Anda memerlukan alamat server dan nomor port IMAP dan SMTP, apakah SSL/TLS atau STARTTLS harus digunakan dan nama pengguna Anda (kebanyakan, tetapi tidak selalu, alamat email Anda) dan kata sandi Anda.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+Menelusuri * IMAP * dan nama penyedia sebagian besar sudah cukup untuk menemukan dokumentasi yang tepat.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+Dalam beberapa kasus, Anda harus mengaktifkan akses eksternal ke akun Anda dan/atau menggunakan kata sandi (aplikasi) khusus, misalnya ketika otentikasi dua faktor diaktifkan.
 
-For authorizing:
+Untuk otorisasi:
 
-* Gmail / G suite, lihat [pertanyaan 6](#user-content-faq6)
-* Outlook / Live / Hotmail, lihat [pertanyaan 14](#user-content-faq14)
-* Office 365, lihat [pertanyaan 14](#user-content-faq156)
-* Microsoft Exchange, lihat [pertanyaan 8](#user-content-faq8)
-* Yahoo, AOL dan Sky, lihat [pertanyaan 88](#user-content-faq88)
-* Apple iCloud, lihat [pertanyaan 148](#user-content-faq148)
-* Free.fr, lihat [pertanyaan 157](#user-content-faq157)
+* Gmail / G suite, lihat [ pertanyaan 6](#user-content-faq6)
+* Outlook / Live / Hotmail, lihat [ pertanyaan 14](#user-content-faq14)
+* Office 365, lihat [ pertanyaan 14](#user-content-faq156)
+* Microsoft Exchange, lihat [ pertanyaan 8](#user-content-faq8)
+* Yahoo, AOL dan Sky, lihat [ pertanyaan 88 ](#user-content-faq88)
+* Apple iCloud, lihat [ pertanyaan 148](#user-content-faq148)
+* Free.fr, lihat [ pertanyaan 157 ](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+Silakan lihat [ di sini ](#user-content-faq22) untuk pesan kesalahan umum dan solusinya.
 
-Related questions:
+Pertanyaan-pertanyaan Terkait:
 
-* [Apakah OAuth didukung?](#user-content-faq111)
-* [Mengapa ActiveSync tidak didukung?](#user-content-faq133)
+* [Apakah didukung OAuth?](#user-content-faq111)
+* [Mengapa ActiveSync tidak didukung ?](#user-content-faq133)
 
 <a name="howto">
 
-## Bagaimana cara untuk ...?
+## Caranya ...?
 
-* Change the account name: Settings, tap Manual setup, tap Accounts, tap account
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
-* Change password: Settings, tap Manual setup, tap Accounts, tap account, change password
-* Set a signature: Settings, tap Manual setup, tap Identities, tap identity, Edit signature.
-* Menambahkan alamat CC dan BCC: klik ikon orang pada akhir subjek
-* Melihat pesan selanjutnya/sebelumnya dalam arsip/sampah: dalam pengaturan perilaku, nonaktifkan *Tutup percakapan secara otomatis* dan pilih *Kunjungi percakapan selanjutnya/sebelumnya* pada *Ketika menutup percakapan*
-* Menambahkan folder ke pesan masuk terpadu: tekan lama folder di daftar folder dan centang *Tampilkan di pesan masuk terpadu*
-* Menambahkan folder di menu navigasi: tekan lama folder di daftar folder dan centang *Tampilkan di menu navigasi*
-* Load more messages: long press a folder in the folder list, select *Fetch more messages*
-* Delete a message, skipping trash: long press the trash icon
-* Delete an account/identity: Settings, tap Manual setup, tap Accounts/Identities, tap the account/identity, trash icon top right
-* Delete a folder: long press the folder in the folder list, Edit properties, trash icon top right
-* Undo send: Outbox, swipe the message in the list left or right
+* Ubah nama akun: Pengaturan, klik Pengaturan manual, klik Akun, klik akun
+* Ubah target geser ke kiri / kanan: Pengaturan, tab Perilaku halaman, Atur tindakan geser
+* Ubah kata sandi: Pengaturan, klik Pengaturan manual, klik Akun, klik akun, ubah kata sandi
+* Mengatur tanda tangan: Pengaturan, klik Penyiapan manual, klik Identitas, klik identitas, Edit tanda tangan.
+* Tambahkan alamat CC dan BCC: ketuk ikon orang di akhir subjek
+* Buka pesan berikutnya/sebelumnya pada arsip/hapus: dalam pengaturan perilaku, nonaktifkan * Tutup percakapan secara otomatis * dan pilih * Pergi ke percakapan berikutnya/sebelumnya * untuk * Saat menutup percakapan *
+* Menambahkan folder ke pesan masuk terpadu: tekan lama folder di daftar folder dan centang * Tampilkan di pesan masuk terpadu *
+* Menambahkan folder di menu navigasi: tekan lama folder di daftar folder dan centang * Tampilkan di menu navigasi *
+* Muat lebih banyak pesan: tekan lama sebuah folder dalam daftar folder, pilih * Ambil lebih banyak pesan *
+* Hapus pesan, lewati sampah: tekan lama ikon tempat sampah
+* Hapus akun / identitas: Pengaturan, ketuk Pengaturan manual, ketuk Akun / Identitas, ketuk akun / identitas, ikon tempat sampah di kanan atas
+* Hapus folder: tekan lama folder di daftar folder, Edit properti, ikon tempat sampah di kanan atas
+* Membatalkan pengiriman: di Kotak Keluar, geser pesan ke kiri atau kanan
 * Menyimpan pesan terkirim di kotak masuk: mohon [baca FAQ berikut](#user-content-faq142)
-* Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
-* Export/import settings: Settings, navigation (left side) menu
+* Mengganti folder sistem: Pengaturan, pilih Pengaturan manual, pilih Akun, pilih akun, di bawah
+* Ekspor/impor pengaturan: Pengaturan, menu navigasi (sisi kiri)
 
-<h2><a name="known-problems"></a>Known problem</h2>
+<h2><a name="known-problems"></a>Masalah yang sudah diketahui</h2>
 
 * ~~ [Gangguan pada Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) yang menyebabkan aplikasi menampilkan format waktu yang salah beberapa kali. Mengubah pengaturan Android *Gunakan format waktu 24 jam* dapat menyelesaikan kendala saat ini. Solusi telah ditambahkan.~~
 * ~~ [Gangguan pada Google Drive](https://issuetracker.google.com/issues/126362828) menyebabkan berkas yang diekspor ke Google Drive kosong. Google telah memperbaikinya.~~
@@ -72,7 +72,7 @@ Related questions:
 * ~~[Bug di AndroidX ROOM](https://issuetracker.google.com/issues/138441698) menyebabkan crash dengan "*... Pengecualian saat meghitung database data langsung ... Tidak dapat membaca barisan ...*". Solusi telah ditambahkan.~~
 * [Bug di Android](https://issuetracker.google.com/issues/119872129) menyebabkan FairEmail crash dengan "*... Notifikasi buruk diposkan ...*" dalam beberapa perangkat setelah memperbarui FairEmail dan mengklik notifikasi.
 * [Bug di Android](https://issuetracker.google.com/issues/62427912) beberapa kali menyebabkan crash dengan "*... RekamanAktivitas tidak ditemukan untuk ...*" setelah memperbarui FairEmail. Menginstal ulang ([sumber](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) dapat memperbaiki masalah.
-* [Bug di Android](https://issuetracker.google.com/issues/37018931) beberapa kali menyebabkan crash dengan *... InputChannel is not initialized ...* on some devices.
+* [Bug di Android](https://issuetracker.google.com/issues/37018931) beberapa kali menyebabkan crash dengan *... InputChannel is not initialized ...* di beberapa perangkat.
 * ~~[Bug di LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) beberapa kali menyebabkan crash dengan *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
 * Bug di Nova Launcher dalam Android 5.x menyebabkan FairEmail crash dengan *java.lang.StackOverflowError* ketika Nova Launcher mengakses servis aksesibilitas.
 * ~~Pemilih berkas beberpa kali menampilkan tidak ada berkas dengan alasan yang tidak diketahui. Masalah ini terlihat sudah diperbaiki.~~

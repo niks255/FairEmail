@@ -143,8 +143,6 @@ import org.bouncycastle.operator.OutputEncryptor;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.bouncycastle.util.Store;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -241,6 +239,7 @@ public class FragmentCompose extends FragmentBase {
     private TextView tvDsn;
     private TextView tvPlainTextOnly;
     private EditTextCompose etBody;
+    private ImageButton ibTranslate;
     private TextView tvNoInternet;
     private TextView tvSignature;
     private CheckBox cbSignature;
@@ -353,6 +352,7 @@ public class FragmentCompose extends FragmentBase {
         tvDsn = view.findViewById(R.id.tvDsn);
         tvPlainTextOnly = view.findViewById(R.id.tvPlainTextOnly);
         etBody = view.findViewById(R.id.etBody);
+        ibTranslate = view.findViewById(R.id.ibTranslate);
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         tvSignature = view.findViewById(R.id.tvSignature);
         cbSignature = view.findViewById(R.id.cbSignature);
@@ -698,6 +698,115 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        ibTranslate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<DeepL.Language> languages = DeepL.getTargetLanguages(getContext());
+                if (languages == null)
+                    return;
+
+                boolean canTranslate =
+                        (DeepL.canTranslate(getContext()) &&
+                                DeepL.getParagraph(etBody) != null);
+
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), v);
+
+                popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.title_translate_configure);
+
+                for (int i = 0; i < languages.size(); i++) {
+                    DeepL.Language lang = languages.get(i);
+                    MenuItem item = popupMenu.getMenu().add(Menu.NONE, i + 2, i + 2, lang.name)
+                            .setIntent(new Intent().putExtra("target", lang.target));
+                    if (lang.icon != null)
+                        item.setIcon(lang.icon);
+                    item.setEnabled(canTranslate);
+                }
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == 1) {
+                            DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
+                            fragment.show(getParentFragmentManager(), "deepl:configure");
+                        } else {
+                            String target = item.getIntent().getStringExtra("target");
+                            onMenuTranslate(target);
+                        }
+                        return true;
+                    }
+                });
+
+                popupMenu.showWithIcons(getContext(), v);
+            }
+
+            private void onMenuTranslate(String target) {
+                final Pair<Integer, Integer> paragraph = DeepL.getParagraph(etBody);
+                if (paragraph == null)
+                    return;
+
+                Editable edit = etBody.getText();
+                String text = edit.subSequence(paragraph.first, paragraph.second).toString();
+
+                Bundle args = new Bundle();
+                args.putString("target", target);
+                args.putString("text", text);
+
+                new SimpleTask<String>() {
+                    @Override
+                    protected void onPreExecute(Bundle args) {
+                        ToastEx.makeText(getContext(), R.string.title_translating, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected String onExecute(Context context, Bundle args) throws Throwable {
+                        String target = args.getString("target");
+                        String text = args.getString("text");
+                        return DeepL.translate(text, target, context);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, String translated) {
+                        if (paragraph.second > edit.length())
+                            return;
+
+                        FragmentActivity activity = getActivity();
+                        if (activity == null)
+                            return;
+
+                        Context context = getContext();
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+                        // Insert translated text
+                        edit.insert(paragraph.second, "\n\n" + translated);
+                        etBody.setSelection(paragraph.second + 2 + translated.length());
+
+                        boolean small = prefs.getBoolean("deepl_small", false);
+                        if (small) {
+                            RelativeSizeSpan[] spans = edit.getSpans(
+                                    paragraph.first, paragraph.second, RelativeSizeSpan.class);
+                            for (RelativeSizeSpan span : spans)
+                                edit.removeSpan(span);
+                            edit.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
+                                    paragraph.first, paragraph.second,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+
+                        // Updated frequency
+                        String key = "translated_" + args.getString("target");
+                        int count = prefs.getInt(key, 0);
+                        prefs.edit().putInt(key, count + 1).apply();
+
+                        activity.invalidateOptionsMenu();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex, false);
+                    }
+                }.execute(FragmentCompose.this, args, "compose:translate");
+            }
+        });
+
         tvSignature.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
 
         cbSignature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -758,7 +867,7 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
-        etBody.setTypeface(Typeface.create(compose_font, Typeface.NORMAL));
+        etBody.setTypeface(StyleHelper.getTypeface(compose_font, getContext()));
         tvReference.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
 
         tvReference.setMovementMethod(new ArrowKeyMovementMethod() {
@@ -881,6 +990,8 @@ public class FragmentCompose extends FragmentBase {
         grpAttachments.setVisibility(View.GONE);
         tvNoInternet.setVisibility(View.GONE);
         grpBody.setVisibility(View.GONE);
+        ibTranslate.setVisibility(
+                DeepL.isAvailable(getContext()) ? View.VISIBLE : View.GONE);
         grpSignature.setVisibility(View.GONE);
         grpReferenceHint.setVisibility(View.GONE);
         ibReferenceEdit.setVisibility(View.GONE);
@@ -1442,62 +1553,6 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
-        try (InputStream is = getContext().getAssets().open("deepl.json")) {
-            String json = Helper.readStream(is);
-            JSONArray jarray = new JSONArray(json);
-
-            String pkg = getContext().getPackageName();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-            List<Pair<String, String>> languages = new ArrayList<>();
-            Map<String, Integer> frequencies = new HashMap<>();
-            for (int i = 0; i < jarray.length(); i++) {
-                JSONObject jlanguage = jarray.getJSONObject(i);
-                String name = jlanguage.getString("name");
-                String target = jlanguage.getString("language");
-
-                Locale locale = Locale.forLanguageTag(target);
-                if (locale != null)
-                    name = locale.getDisplayName();
-
-                int frequency = prefs.getInt("translated_" + target, 0);
-                if (frequency > 0)
-                    name += " ★";
-
-                languages.add(new Pair<>(name, target));
-                frequencies.put(target, frequency);
-            }
-
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-            Collections.sort(languages, new Comparator<Pair<String, String>>() {
-                @Override
-                public int compare(Pair<String, String> l1, Pair<String, String> l2) {
-                    int freq1 = frequencies.get(l1.second);
-                    int freq2 = frequencies.get(l2.second);
-
-                    if (freq1 == freq2)
-                        return collator.compare(l1.first, l2.first);
-                    else
-                        return -Integer.compare(freq1, freq2);
-                }
-            });
-
-            for (int i = 0; i < languages.size(); i++) {
-                Pair<String, String> lang = languages.get(i);
-                SubMenu smenu = menu.findItem(R.id.menu_translate).getSubMenu();
-                MenuItem item = smenu.add(R.id.group_translate, i + 1, i + 1, lang.first)
-                        .setIntent(new Intent().putExtra("target", lang.second));
-
-                String resname = "language_" + lang.second.toLowerCase().replace('-', '_');
-                int resid = getResources().getIdentifier(resname, "drawable", pkg);
-                if (resid > 0)
-                    item.setIcon(resid);
-            }
-        } catch (Throwable ex) {
-            Log.e(ex);
-        }
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -1513,8 +1568,6 @@ public class FragmentCompose extends FragmentBase {
                 state == State.LOADED && hasPermission(Manifest.permission.READ_CONTACTS));
         menu.findItem(R.id.menu_answer_insert).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_answer_create).setEnabled(state == State.LOADED);
-        menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
-        menu.findItem(R.id.menu_translate).setVisible(getParagraph() != null && !BuildConfig.PLAY_STORE_RELEASE);
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
 
         int colorEncrypt = Helper.resolveColor(getContext(), R.attr.colorEncrypt);
@@ -1544,16 +1597,12 @@ public class FragmentCompose extends FragmentBase {
         boolean save_drafts = prefs.getBoolean("save_drafts", true);
         boolean send_dialog = prefs.getBoolean("send_dialog", true);
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
-        String deepl_key = prefs.getString("deepl_key", null);
 
         menu.findItem(R.id.menu_save_drafts).setChecked(save_drafts);
         menu.findItem(R.id.menu_send_dialog).setChecked(send_dialog);
         menu.findItem(R.id.menu_image_dialog).setChecked(image_dialog);
         menu.findItem(R.id.menu_media).setChecked(media);
         menu.findItem(R.id.menu_compact).setChecked(compact);
-        SubMenu smenu = menu.findItem(R.id.menu_translate).getSubMenu();
-        for (int i = 1; i < smenu.size(); i++)
-            smenu.getItem(i).setEnabled(deepl_key != null);
 
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) ||
                 EntityMessage.SMIME_SIGNONLY.equals(encrypt))
@@ -1607,12 +1656,6 @@ public class FragmentCompose extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_answer_create) {
             onMenuAnswerCreate();
-            return true;
-        } else if (itemId == R.id.menu_translate_configure) {
-            onMenuTranslateConfigure();
-            return true;
-        } else if (item.getGroupId() == R.id.group_translate) {
-            onMenuTranslate(item.getIntent().getStringExtra("target"));
             return true;
         } else if (itemId == R.id.menu_clear) {
             StyleHelper.apply(R.id.menu_clear, getViewLifecycleOwner(), null, etBody);
@@ -1981,121 +2024,6 @@ public class FragmentCompose extends FragmentBase {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("compose:answer");
         fragmentTransaction.commit();
-    }
-
-    private void onMenuTranslateConfigure() {
-        FragmentDialogDeepL fragment = new FragmentDialogDeepL();
-        fragment.show(getParentFragmentManager(), "deepl:configure");
-    }
-
-    private Pair<Integer, Integer> getParagraph() {
-        int start = etBody.getSelectionStart();
-        int end = etBody.getSelectionEnd();
-        Editable edit = etBody.getText();
-
-        if (start < 0 || end < 0)
-            return null;
-
-        if (start > end) {
-            int tmp = start;
-            start = end;
-            end = tmp;
-        }
-
-        // Expand selection at start
-        while (start > 0 && edit.charAt(start - 1) != '\n')
-            start--;
-
-        if (start == end && end < edit.length())
-            end++;
-
-        // Expand selection at end
-        while (end > 0 && end < edit.length() && edit.charAt(end - 1) != '\n')
-            end++;
-
-        // Trim start
-        while (start < edit.length() - 1 && edit.charAt(start) == '\n')
-            start++;
-
-        // Trim end
-        while (end > 1 && edit.charAt(end - 2) == '\n')
-            end--;
-
-        if (start < end)
-            return new Pair(start, end);
-
-        return null;
-    }
-
-    private void onMenuTranslate(String target) {
-        final Pair<Integer, Integer> paragraph = getParagraph();
-        if (paragraph == null)
-            return;
-
-        Editable edit = etBody.getText();
-        String text = edit.subSequence(paragraph.first, paragraph.second).toString();
-
-        Bundle args = new Bundle();
-        args.putString("target", target);
-        args.putString("text", text);
-
-        new SimpleTask<String>() {
-            @Override
-            protected void onPreExecute(Bundle args) {
-                ToastEx.makeText(getContext(), R.string.title_translating, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected String onExecute(Context context, Bundle args) throws Throwable {
-                String target = args.getString("target");
-                String text = args.getString("text");
-                return DeepL.translate(text, target, context);
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, String translated) {
-                if (paragraph.second > edit.length())
-                    return;
-
-                FragmentActivity activity = getActivity();
-                if (activity == null)
-                    return;
-
-                Context context = getContext();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-                // Insert translated text
-                StringBuilder sb = new StringBuilder("\n");
-                if (paragraph.second == edit.length() ||
-                        edit.charAt(paragraph.second) != '\n')
-                    sb.append('\n');
-                edit.insert(paragraph.second, sb + translated);
-                etBody.setSelection(paragraph.second + sb.length() + translated.length());
-
-                boolean small = prefs.getBoolean("deepl_small", false);
-                if (small) {
-                    RelativeSizeSpan[] spans = edit.getSpans(
-                            paragraph.first, paragraph.second, RelativeSizeSpan.class);
-                    for (RelativeSizeSpan span : spans)
-                        edit.removeSpan(span);
-                    edit.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
-                            paragraph.first, paragraph.second,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-
-                // Updated frequency
-                String key = "translated_" + args.getString("target");
-                int count = prefs.getInt(key, 0);
-                prefs.edit().putInt(key, count + 1).apply();
-
-                activity.invalidateOptionsMenu();
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex, false);
-            }
-        }.execute(this, args, "compose:translate");
     }
 
     private boolean onActionStyle(int action, View anchor) {
@@ -3731,7 +3659,7 @@ public class FragmentCompose extends FragmentBase {
 
             if (privacy && resize == 0)
                 try {
-                    ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+                    ExifInterface exif = new ExifInterface(file);
 
                     exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, null);
                     exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, null);
@@ -3790,6 +3718,14 @@ public class FragmentCompose extends FragmentBase {
         File file = attachment.getFile(context);
         if (file.exists() /* upload cancelled */ &&
                 ("image/jpeg".equals(attachment.type) || "image/png".equals(attachment.type))) {
+            ExifInterface exifSaved;
+            try {
+                exifSaved = new ExifInterface(file);
+            } catch (Throwable ex) {
+                Log.w(ex);
+                exifSaved = null;
+            }
+
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(file.getAbsolutePath(), options);
@@ -3831,6 +3767,33 @@ public class FragmentCompose extends FragmentBase {
 
                     DB db = DB.getInstance(context);
                     db.attachment().setDownloaded(attachment.id, file.length());
+
+                    if (exifSaved != null)
+                        try {
+                            ExifInterface exif = new ExifInterface(file);
+
+                            // Preserve time
+                            if (exifSaved.hasAttribute(ExifInterface.TAG_DATETIME_ORIGINAL))
+                                exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL,
+                                        exifSaved.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL));
+                            if (exifSaved.hasAttribute(ExifInterface.TAG_GPS_DATESTAMP))
+                                exif.setAttribute(ExifInterface.TAG_GPS_DATESTAMP,
+                                        exifSaved.getAttribute(ExifInterface.TAG_GPS_DATESTAMP));
+
+                            // Preserve location
+                            double[] latlong = exifSaved.getLatLong();
+                            if (latlong != null)
+                                exif.setLatLong(latlong[0], latlong[1]);
+
+                            // Preserve altitude
+                            if (exifSaved.hasAttribute(ExifInterface.TAG_GPS_ALTITUDE) &&
+                                    exifSaved.hasAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF))
+                                exif.setAltitude(exifSaved.getAltitude(0));
+
+                            exif.saveAttributes();
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
                 }
             }
         }
@@ -4334,17 +4297,7 @@ public class FragmentCompose extends FragmentBase {
                                     // Limit number of nested block quotes
                                     boolean quote_limit = prefs.getBoolean("quote_limit", true);
                                     if (quote_limit)
-                                        for (Element bq : d.select("blockquote")) {
-                                            int level = 1;
-                                            Element parent = bq.parent();
-                                            while (parent != null) {
-                                                if ("blockquote".equals(parent.tagName()))
-                                                    level++;
-                                                parent = parent.parent();
-                                            }
-                                            if (level >= MAX_QUOTE_LEVEL)
-                                                bq.html("&#8230;");
-                                        }
+                                        HtmlHelper.quoteLimit(d, MAX_QUOTE_LEVEL);
                                 }
                             } else {
                                 // Selected text
@@ -5854,8 +5807,15 @@ public class FragmentCompose extends FragmentBase {
             @Override
             public void run() {
                 try {
-                    if (target instanceof EditText && s >= 0)
-                        ((EditText) target).setSelection(s, e < 0 ? s : e);
+                    if (target instanceof EditText) {
+                        EditText et = (EditText) target;
+                        int len = et.length();
+                        if (s >= 0 && s <= len && e <= len)
+                            if (e < 0)
+                                et.setSelection(s);
+                            else
+                                et.setSelection(s, e);
+                    }
 
                     target.requestFocus();
 
@@ -6272,7 +6232,7 @@ public class FragmentCompose extends FragmentBase {
             final int send_delayed = prefs.getInt("send_delayed", 0);
             final boolean send_dialog = prefs.getBoolean("send_dialog", true);
             final boolean send_archive = prefs.getBoolean("send_archive", false);
-            final boolean name_email = prefs.getBoolean("name_email", false);
+            final MessageHelper.AddressFormat email_format = MessageHelper.getAddressFormat(getContext());
 
             final int[] encryptValues = getResources().getIntArray(R.array.encryptValues);
             final int[] sendDelayedValues = getResources().getIntArray(R.array.sendDelayedValues);
@@ -6582,10 +6542,10 @@ public class FragmentCompose extends FragmentBase {
                     Address[] tos = t.toArray(new Address[0]);
 
                     if (extra == 0)
-                        tvTo.setText(MessageHelper.formatAddresses(tos, name_email, false));
+                        tvTo.setText(MessageHelper.formatAddresses(tos, email_format, false));
                     else
                         tvTo.setText(getString(R.string.title_name_plus,
-                                MessageHelper.formatAddresses(tos, name_email, false), extra));
+                                MessageHelper.formatAddresses(tos, email_format, false), extra));
                     tvTo.setTextColor(Helper.resolveColor(context,
                             to + extra > RECIPIENTS_WARNING ? R.attr.colorWarning : android.R.attr.textColorPrimary));
                     if (draft.identityColor != null && draft.identityColor != Color.TRANSPARENT)
@@ -6750,92 +6710,6 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }.execute(this, args, "compose:snooze");
             }
-        }
-    }
-
-    public static class FragmentDialogDeepL extends FragmentDialogBase {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            final Context context = getContext();
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            String domain = prefs.getString("deepl_domain", null);
-            String key = prefs.getString("deepl_key", null);
-            boolean small = prefs.getBoolean("deepl_small", false);
-
-            View view = LayoutInflater.from(context).inflate(R.layout.dialog_deepl, null);
-            final ImageButton ibInfo = view.findViewById(R.id.ibInfo);
-            final EditText etDomain = view.findViewById(R.id.etDomain);
-            final EditText etKey = view.findViewById(R.id.etKey);
-            final CheckBox cbSmall = view.findViewById(R.id.cbSmall);
-            final TextView tvUsage = view.findViewById(R.id.tvUsage);
-
-            ibInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Helper.viewFAQ(v.getContext(), 167, true);
-                }
-            });
-
-            etDomain.setText(domain);
-            etKey.setText(key);
-            cbSmall.setChecked(small);
-
-            tvUsage.setVisibility(View.GONE);
-
-            if (!TextUtils.isEmpty(key) &&
-                    (domain == null || domain.equals("api-free.deepl.com"))) {
-                Bundle args = new Bundle();
-                args.putString("key", key);
-
-                new SimpleTask<Integer[]>() {
-                    @Override
-                    protected Integer[] onExecute(Context context, Bundle args) throws Throwable {
-                        return DeepL.getUsage(context);
-                    }
-
-                    @Override
-                    protected void onExecuted(Bundle args, Integer[] usage) {
-                        tvUsage.setText(getString(R.string.title_translate_usage,
-                                Helper.humanReadableByteCount(usage[0]),
-                                Helper.humanReadableByteCount(usage[1]),
-                                Math.round(100f * usage[0] / usage[1])));
-                        tvUsage.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        if (BuildConfig.DEBUG)
-                            Log.unexpectedError(getParentFragmentManager(), ex);
-                    }
-                }.execute(this, new Bundle(), "deepl:usage");
-            }
-
-            return new AlertDialog.Builder(context)
-                    .setView(view)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String domain = etDomain.getText().toString().trim();
-                            String key = etKey.getText().toString().trim();
-                            SharedPreferences.Editor editor = prefs.edit();
-                            if (TextUtils.isEmpty(key))
-                                editor
-                                        .remove("deepl_key")
-                                        .remove("deepl_domain");
-                            else {
-                                editor.putString("deepl_key", key);
-                                if (TextUtils.isEmpty(domain))
-                                    editor.remove("deepl_domain");
-                                else
-                                    editor.putString("deepl_domain", domain);
-                            }
-                            editor.putBoolean("deepl_small", cbSmall.isChecked());
-                            editor.apply();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
         }
     }
 

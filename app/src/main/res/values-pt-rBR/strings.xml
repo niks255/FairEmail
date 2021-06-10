@@ -55,10 +55,6 @@
         <item quantity="one">%1$d nova</item>
         <item quantity="other">%1$d novas</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d conversa selecionada</item>
-        <item quantity="other">%1$d conversas selecionadas</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Mover %1$d mensagem?</item>
         <item quantity="other">Mover %1$d mensagens?</item>
@@ -508,7 +504,6 @@
     <string name="title_advanced_threading_hint">Agrupe as mensagens relacionadas entre si</string>
     <string name="title_advanced_highlight_hint">A cor de destaque do tema será usada para destacar</string>
     <string name="title_advanced_gravatars_hint">Pode haver um risco na privacidade</string>
-    <string name="title_advanced_name_email_hint">Quando desativado apenas os nomes serão exibidos quando disponíveis</string>
     <string name="title_advanced_preview_hint">Somente disponível quando o texto da mensagem for baixado</string>
     <string name="title_advanced_preview_lines_hint">Máximo de %s caracteres no total</string>
     <string name="title_advanced_preview_issue">Rolagem pode ser lenta devido a um bug em algumas versões do Android quando o número de linhas é mais de uma</string>
@@ -1288,6 +1283,8 @@
     <string name="title_fix">Corrigir</string>
     <string name="title_enable">Habilitar</string>
     <string name="title_enabled">Habilitado</string>
+    <string name="title_disable">Desabilitar</string>
+    <string name="title_keep_current">Manter o atual</string>
     <string name="title_executing">Executando</string>
     <string name="title_completed">Concluído</string>
     <string name="title_default_changed">Padrão alterado</string>
@@ -1321,7 +1318,6 @@
     <string name="title_pro_feature">Esta é uma funcionalidade Pro</string>
     <string name="title_pro_list">Lista de recursos Pro</string>
     <string name="title_pro_purchase">Comprar</string>
-    <string name="title_pro_once">Apenas uma vez</string>
     <string name="title_pro_info">        O desenvolvimento do FairEmail levou literalmente milhares de horas e, apesar disso, a maioria dos recursos é gratuita.
         O FairEmail leva sua privacidade a sério e não mostra propagandas nem usa rastreadores ou análises para ganhar dinheiro.
         Para tornar o FairEmail sustentável a longo prazo, algumas conveniências e recursos avançados não são gratuitos.
@@ -1531,6 +1527,7 @@
         <item>Sans-serif</item>
         <item>Monoespaçado</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

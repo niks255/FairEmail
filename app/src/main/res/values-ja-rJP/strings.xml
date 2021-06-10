@@ -49,9 +49,6 @@
     <plurals name="title_tile_unseen">
         <item quantity="other">%1$d 新しい</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="other">会話 %1$d を選択</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="other">%1$d 件のメッセージを移動しますか？</item>
     </plurals>
@@ -153,8 +150,10 @@
     <string name="title_setup_free">このアプリは無料で使用できますか？</string>
     <string name="title_setup_permissions">アクセス許可を付与</string>
     <string name="title_setup_permissions_remark">連絡先情報にアクセスします(オプション)</string>
+    <string name="title_setup_permissions_explanation">連絡先情報を検索し、連絡先を提案するには連絡先の権限が必要です</string>
     <string name="title_setup_doze">バッテリーの最適化を無効にする</string>
     <string name="title_setup_doze_remark">確実にメールを送受信するために必要です</string>
+    <string name="title_setup_doze_explanation">バックグラウンドでのメッセージの送受信を確実に行うには、アプリのバッテリー最適化を無効にする必要があります</string>
     <string name="title_setup_doze_hint">矛盾していると思われるかもしれませんが、このアプリのバッテリー最適化をオフにするとバッテリー使用量が少なくなります</string>
     <string name="title_setup_doze_instructions">次のAndroidダイアログで「最適化されていないアプリ」を「すべてのアプリ」に変更し、このアプリを選択して「最適化しない」を選択します。</string>
     <string name="title_setup_doze_battery">電池消費量が多いですか？</string>
@@ -410,6 +409,7 @@
     <string name="title_advanced_notify_action_snooze">スヌーズ</string>
     <string name="title_advanced_notify_remove">通知をタップすると新着メッセージ通知を削除</string>
     <string name="title_advanced_notify_clear">メッセージリスト表示時に新着メッセージ通知を削除</string>
+    <string name="title_advanced_notify_subtext">アカウントまたはフォルダ名を隠して表示</string>
     <string name="title_advanced_wearable_preview">プレビュー付き通知のみウェアラブルに送信</string>
     <string name="title_advanced_notify_messaging">Androidの「メッセージ形式」の通知形式を使用する</string>
     <string name="title_advanced_biometrics_notify">生体認証を使用時、通知コンテンツを表示</string>
@@ -446,6 +446,7 @@
     <string name="title_advanced_manage_keys_hint">        これは、Android のセキュリティ設定で開かれます。
         キーと証明書は通常、詳細設定-暗号化と認証情報にあります。
     </string>
+    <string name="title_advanced_power_menu">Androidの電源メニューにアクションを追加</string>
     <string name="title_advanced_external_search">他のアプリにメッセージの検索を許可</string>
     <string name="title_advanced_shortcuts">頻繁に使用される連絡先をAndroid共有メニューに表示</string>
     <string name="title_advanced_fts">検索インデックスを作成</string>
@@ -505,7 +506,7 @@
     <string name="title_advanced_threading_hint">互いに関連するグループメッセージ</string>
     <string name="title_advanced_highlight_hint">テーマのアクセントカラーに強調表示を使用します</string>
     <string name="title_advanced_gravatars_hint">プライバシーリスクが有るかもしれません</string>
-    <string name="title_advanced_name_email_hint">無効にすると利用可能な場合にのみ名前が表示されます</string>
+    <string name="title_advanced_name_email_hint">名前は利用可能な場合にのみ表示されます</string>
     <string name="title_advanced_preview_hint">メッセージテキストがダウンロードされた場合にのみ使用可能</string>
     <string name="title_advanced_preview_lines_hint">合計 %s 文字</string>
     <string name="title_advanced_preview_issue">行数が複数の場合、一部のAndroidバージョンバグの為スクロールが遅くなる可能性が有ります</string>
@@ -778,6 +779,7 @@
     <string name="title_print_images">画像を印刷</string>
     <string name="title_print_images_remark">画像のダウンロードに時間がかかる場合があります</string>
     <string name="title_show_headers">ヘッダーを表示</string>
+    <string name="title_share_as_html">HTMLで共有</string>
     <string name="title_raw_save">素のメッセージを保存</string>
     <string name="title_raw_send">添付ファイルとして送信</string>
     <string name="title_manage_keywords">キーワードを管理</string>
@@ -852,6 +854,7 @@
     <string name="title_attachments_incomplete">一部の添付ファイル又は画像がダウンロードされず、追加出来ませんでした</string>
     <string name="title_ask_save">変更内容を保存しますか？</string>
     <string name="title_ask_delete">メッセージを完全に削除しますか？</string>
+    <string name="title_ask_delete_accept">メッセージを完全に削除すると元に戻せないことを理解しています</string>
     <string name="title_ask_delete_answer">返信テンプレートを完全に削除しますか？</string>
     <string name="title_ask_delete_rule">ルールを完全に削除しますか？</string>
     <string name="title_ask_discard">下書きを破棄しますか？</string>
@@ -958,6 +961,7 @@
     <string name="title_translate_key">キーを入力</string>
     <string name="title_translating">翻訳中 &#8230;</string>
     <string name="title_translate_small">ソーステキストに小さなフォントを使用する</string>
+    <string name="title_translate_usage">使用方法: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">プレーンテキストとして編集</string>
     <string name="title_edit_formatted_text">再フォーマットされたテキストとして編集</string>
     <string name="title_select_certificate">公開鍵を選択</string>
@@ -1228,6 +1232,8 @@
     <string name="title_legend_view">コンテンツを見る</string>
     <string name="title_legend_hide">コンテンツを隠す</string>
     <string name="title_legend_download">コンテンツをダウンロードする</string>
+    <string name="title_legend_original">元のメッセージを表示</string>
+    <string name="title_legend_reformatted">再フォーマットされたメッセージを表示</string>
     <string name="title_legend_external_image">外部画像プレースホルダー</string>
     <string name="title_legend_embedded_image">埋め込み画像プレースホルダー</string>
     <string name="title_legend_tracking_pixel">アナティリスク追跡画像</string>
@@ -1289,6 +1295,7 @@
     <string name="title_hint_contact_actions">長押しでオプションへ</string>
     <string name="title_hint_eml">これは素のメッセージファイルの内容の要約です。全てのコンテンツを表示するにはアクションバーの保存アイコンで素のメッセージを保存します</string>
     <string name="title_open_link">リンクを開く</string>
+    <string name="title_image_link">画像のリンク</string>
     <string name="title_different_link">タイトルとリンクアドレスが異なります</string>
     <string name="title_tracking_link">このウェブサイトはあなたを追跡するかもしれません</string>
     <string name="title_suspicious_link">これは不審なリンクです</string>
@@ -1315,6 +1322,8 @@
     <string name="title_fix">修正する</string>
     <string name="title_enable">有効にする</string>
     <string name="title_enabled">有効化</string>
+    <string name="title_disable">無効</string>
+    <string name="title_keep_current">今の状態を維持</string>
     <string name="title_executing">実行中</string>
     <string name="title_completed">完成しました</string>
     <string name="title_default_changed">デフォルトの変更</string>
@@ -1348,7 +1357,8 @@
     <string name="title_pro_feature">これはプロ機能です</string>
     <string name="title_pro_list">プロ機能のリスト</string>
     <string name="title_pro_purchase">購入</string>
-    <string name="title_pro_once">一度だけです</string>
+    <string name="title_pro_one_time">%1$s (一回限りの支払い)</string>
+    <string name="title_pro_no_play">Playストアが見つかりませんでした</string>
     <string name="title_pro_info">FairEmailの開発には文字通り数千時間かかりましたが、それにもかかわらず、ほとんどの機能は無料で使用できます。
          FairEmailはあなたのプライバシーを真剣に受け止め、広告を表示せず、お金を稼ぐために追跡や分析を使用しません。
          FairEmailを長期的に維持およびサポートするために、いくつかの便利で高度な機能を無料で使用することはできません。
@@ -1384,6 +1394,10 @@
     <string name="title_widget_title_count">新しいメッセージ数</string>
     <string name="title_widget_title_list">メッセージリスト</string>
     <string name="title_widget_title_sync">同期 オン/オフ</string>
+    <string name="title_power_menu_sync">同期</string>
+    <string name="title_power_menu_on">On</string>
+    <string name="title_power_menu_off">Off</string>
+    <string name="title_power_menu_on_off">On/Off</string>
     <string name="title_widget_account">アカウント</string>
     <string name="title_widget_account_all">全て</string>
     <string name="title_widget_folder">フォルダー</string>
@@ -1557,6 +1571,12 @@
         <item>サンセリフ</item>
         <item>等幅フォント</item>
         <item>ファンタジー</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <string-array name="addressFormatNames">
+        <item>名前のみ</item>
+        <item>メールのみ</item>
+        <item>名前とメール</item>
+    </string-array>
 </resources>

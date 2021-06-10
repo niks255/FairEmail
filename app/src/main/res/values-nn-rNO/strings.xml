@@ -52,10 +52,6 @@
         <item quantity="one">%1$d ny</item>
         <item quantity="other">%1$d ny</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Valgt %1$d samtale</item>
-        <item quantity="other">Valgte %1$d samtaler</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Flyt %1$d melding?</item>
         <item quantity="other">Flyt %1$d meldingar?</item>
@@ -451,7 +447,6 @@
     <string name="title_advanced_threading_hint">Gruppemeldinger knyttet til hverandre</string>
     <string name="title_advanced_highlight_hint">Farge på temaet vil bli brukt for å framheve</string>
     <string name="title_advanced_gravatars_hint">Det kan være en personvernrisiko</string>
-    <string name="title_advanced_name_email_hint">Når deaktivert, vil bare navn bli vist når det er tilgjengelig</string>
     <string name="title_advanced_preview_hint">Kun tilgjengelig når meldingstekst ble lastet ned</string>
     <string name="title_advanced_preview_issue">Rullingen kan gå tregt på grunn av en feil i noen Android-versjoner når antall linjer er mer enn én</string>
     <string name="title_advanced_overview_mode_hint">Dette kan resultere i veldig liten skrift</string>
@@ -1214,7 +1209,6 @@
     <string name="title_pro_feature">Dette er en Pro-funksjon</string>
     <string name="title_pro_list">Liste over Pro funksjoner</string>
     <string name="title_pro_purchase">Kjøp</string>
-    <string name="title_pro_once">Bare en gang</string>
     <string name="title_pro_info">        Utviklingen av FairEmail tok, bokstavelig talt, tusenvis av timer, men til tross for dette er de fleste funksjonene gratis.
         FairEmail tar personvernet ditt alvorlig og viser hverken reklamer, eller bruker sporing og analytikk for å tjene penger.
         For å opprettholde og vedlikeholde FairEmail i det lange løp, er enkelte avanserte- og bekvemmelighetsfunksjoner ikke gratis.
@@ -1421,6 +1415,7 @@
         <item>Sans-serif</item>
         <item>Fastbredde-skrift</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

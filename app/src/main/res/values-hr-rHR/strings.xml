@@ -59,11 +59,6 @@
         <item quantity="few">%1$d nove</item>
         <item quantity="other">%1$d novih</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Odabran %1$d razgovor</item>
-        <item quantity="few">Odabrana %1$d razgovora</item>
-        <item quantity="other">Odabrano %1$d razgovora</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Želite li trajno izbrisati %1$d poruku?</item>
         <item quantity="few">Želite li trajno izbrisati %1$d poruke?</item>
@@ -368,7 +363,6 @@
     <string name="title_advanced_navbar_colorize_hint">Hoće li ovo raditi ovisi o verziji i varijante Androida</string>
     <string name="title_advanced_threading_hint">Grupiranje međusobno povezane poruke</string>
     <string name="title_advanced_gravatars_hint">Može postojati rizik za privatnost</string>
-    <string name="title_advanced_name_email_hint">Kada onemogućeno, samo će imena biti prikazana ako su dostupna</string>
     <string name="title_advanced_preview_hint">Dostupno samo kada je preuzet tekst poruke</string>
     <string name="title_advanced_preview_issue">Pomicanje može biti sporo zbog pogreške u nekim verzijama Androida kada je broj linija veći od jedan</string>
     <string name="title_advanced_inline_hint">Inline slike su slike uključene u poruku</string>
@@ -933,7 +927,6 @@
     <string name="title_pro_feature">Ovo je pro funkcija</string>
     <string name="title_pro_list">Popis pro funkcija</string>
     <string name="title_pro_purchase">Kupi</string>
-    <string name="title_pro_once">Samo jednom</string>
     <string name="title_pro_hint">Kupnja pro funkcija će vam omogućiti da koristite sve trenutne i buduće mogućnosti aplikacije i zadržat će ovu aplikaciju održavanu i podržanu</string>
     <string name="title_pro_pending">Kupnja na čekanju</string>
     <string name="title_pro_activated">Sve pro funkcije su aktivirane</string>

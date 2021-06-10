@@ -49,9 +49,6 @@
     <plurals name="title_tile_unseen">
         <item quantity="other">%1$d mới</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="other">Đã chọn %1$d cuộc hội thoại</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="other">Di chuyển %1$d thư?</item>
     </plurals>
@@ -154,8 +151,10 @@
     <string name="title_setup_free">Ứng dụng này có miễn phí để sử dụng không?</string>
     <string name="title_setup_permissions">Cấp quyền</string>
     <string name="title_setup_permissions_remark">Để truy cập thông tin liên hệ (không bắt buộc)</string>
+    <string name="title_setup_permissions_explanation">Quyền danh bạ được yêu cầu để tra cứu thông tin liên hệ và để đề xuất các liên hệ</string>
     <string name="title_setup_doze">Tắt tối ưu hoá pin</string>
     <string name="title_setup_doze_remark">Để gửi và nhận email một cách đáng tin cậy</string>
+    <string name="title_setup_doze_explanation">Tối ưu hoá pin nên được tắt cho ứng dụng này để đảm bảo việc gửi và nhận thư trong nền được đáng tin cậy</string>
     <string name="title_setup_doze_hint">Điều này có thể nghe mâu thuẫn, nhưng việc tắt tối ưu hoá pin cho ứng dụng này sẽ gây ra sử dụng pin ít hơn</string>
     <string name="title_setup_doze_instructions">Trong hộp thoại Android tiếp theo, chuyển \"Không được tối ưu hoá\" thành \"Tất cả ứng dụng\", chọn ứng dụng này và chọn \"Không tối ưu hoá\"</string>
     <string name="title_setup_doze_battery">Sử dụng pin nhiều?</string>
@@ -411,6 +410,7 @@
     <string name="title_advanced_notify_action_snooze">Báo lại</string>
     <string name="title_advanced_notify_remove">Xoá thông báo thư mới khi nhấn vào thông báo</string>
     <string name="title_advanced_notify_clear">Xoá các thông báo thư mới khi xem danh sách thư</string>
+    <string name="title_advanced_notify_subtext">Hiện tên tài khoản hoặc thư mục làm văn bản phụ</string>
     <string name="title_advanced_wearable_preview">Chỉ gửi thông báo có phần xem trước thư đến thiết bị đeo</string>
     <string name="title_advanced_notify_messaging">Sử dụng định dạng thông báo \'kiểu tin nhắn\' của Android</string>
     <string name="title_advanced_biometrics_notify">Hiện nội dung thông báo khi sử dụng xác thực sinh trắc học</string>
@@ -447,6 +447,7 @@
     <string name="title_advanced_manage_keys_hint">        Cái này sẽ mở cài đặt bảo mật của Android.
         Các mã khóa và chứng chỉ có thể nói chung được tìm thấy ở Nâng cao - Mã hóa và thông tin xác thực.
     </string>
+    <string name="title_advanced_power_menu">Thêm các hành động vào menu nguồn của Android</string>
     <string name="title_advanced_external_search">Cho phép các ứng dụng khác tìm kiếm trong thư</string>
     <string name="title_advanced_shortcuts">Hiện các liên hệ hay sử dụng trong menu chia sẻ của Android</string>
     <string name="title_advanced_fts">Xây dựng mục lục tìm kiếm</string>
@@ -506,7 +507,7 @@
     <string name="title_advanced_threading_hint">Nhóm các thư liên quan đến nhau</string>
     <string name="title_advanced_highlight_hint">Màu nổi bật của chủ đề sẽ được sử dụng để đánh dấu</string>
     <string name="title_advanced_gravatars_hint">Có thể có rủi ro về sự riêng tư</string>
-    <string name="title_advanced_name_email_hint">Khi được tắt, chỉ có tên sẽ được hiện khi có</string>
+    <string name="title_advanced_name_email_hint">Tên sẽ chỉ được hiện khi có sẵn</string>
     <string name="title_advanced_preview_hint">Chỉ có khi văn bản thư đã được tải xuống</string>
     <string name="title_advanced_preview_lines_hint">Tổng cộng tối đa %s kí tự</string>
     <string name="title_advanced_preview_issue">Việc cuộn có thể chậm do một lỗi trong một số phiên bản Android khi số dòng nhiều hơn một</string>
@@ -779,6 +780,7 @@
     <string name="title_print_images">In các hình ảnh</string>
     <string name="title_print_images_remark">Việc tải xuống các hình ảnh có thể mất một ít thời gian</string>
     <string name="title_show_headers">Hiện tiêu đề</string>
+    <string name="title_share_as_html">Chia sẻ dưới dạng HTML</string>
     <string name="title_raw_save">Lưu thư thô</string>
     <string name="title_raw_send">Gửi làm tệp đính kèm</string>
     <string name="title_manage_keywords">Quản lý các từ khóa</string>
@@ -853,6 +855,7 @@
     <string name="title_attachments_incomplete">Một số tệp đính kèm hoặc hình ảnh đã không được tải xuống và không thể được thêm</string>
     <string name="title_ask_save">Lưu các thay đổi?</string>
     <string name="title_ask_delete">Xoá thư vĩnh viễn?</string>
+    <string name="title_ask_delete_accept">Tôi hiểu rằng việc xoá thư vĩnh viễn không thể được hoàn tác</string>
     <string name="title_ask_delete_answer">Xoá mẫu trả lời vĩnh viễn?</string>
     <string name="title_ask_delete_rule">Xóa quy tắc vĩnh viễn?</string>
     <string name="title_ask_discard">Bỏ thư nháp?</string>
@@ -959,7 +962,7 @@
     <string name="title_translate_key">Nhập mã khóa</string>
     <string name="title_translating">Đang dịch &#8230;</string>
     <string name="title_translate_small">Sử dụng phông chữ nhỏ cho văn bản nguồn</string>
-    <string name="title_translate_usage" comment="title_translate_usage&#10;&#10;&lt;character count&gt; / &lt;character limit&gt; (percentage)">Sử dụng: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_usage">Sử dụng: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Chỉnh sửa dưới dạng văn bản thường</string>
     <string name="title_edit_formatted_text">Chỉnh sửa dưới dạng văn bản được định dạng lại</string>
     <string name="title_select_certificate">Chọn mã khoá công khai</string>
@@ -1230,6 +1233,8 @@
     <string name="title_legend_view">Xem nội dung</string>
     <string name="title_legend_hide">Ẩn nội dung</string>
     <string name="title_legend_download">Tải xuống nội dung</string>
+    <string name="title_legend_original">Xem thư gốc</string>
+    <string name="title_legend_reformatted">Xem thư đã định dạng lại</string>
     <string name="title_legend_external_image">Giữ chỗ cho hình ảnh ngoài</string>
     <string name="title_legend_embedded_image">Giữ chỗ cho hình ảnh được gắn vào</string>
     <string name="title_legend_tracking_pixel">Hình ảnh theo dõi</string>
@@ -1291,6 +1296,7 @@
     <string name="title_hint_contact_actions">Nhấn giữ để xem các tuỳ chọn</string>
     <string name="title_hint_eml">Đây là tóm tắt của nội dung của một tập tin thư thô. Lưu thư thô bằng biểu tượng lưu trong thanh hành động để xem tất cả nội dung.</string>
     <string name="title_open_link">Mở liên kết</string>
+    <string name="title_image_link">Liên kết hình ảnh</string>
     <string name="title_different_link">Tiêu đề và địa chỉ liên kết khác nhau</string>
     <string name="title_tracking_link">Trang web này có thể sẽ theo dõi bạn</string>
     <string name="title_suspicious_link">Đây là một liên kết đáng nghi</string>
@@ -1317,6 +1323,8 @@
     <string name="title_fix">Sửa</string>
     <string name="title_enable">Bật</string>
     <string name="title_enabled">Đã bật</string>
+    <string name="title_disable">Tắt</string>
+    <string name="title_keep_current">Giữ hiện tại</string>
     <string name="title_executing">Đang thực thi</string>
     <string name="title_completed">Đã hoàn thành</string>
     <string name="title_default_changed">Mặc định đã thay đổi</string>
@@ -1350,7 +1358,8 @@
     <string name="title_pro_feature">Đây là một tính năng pro</string>
     <string name="title_pro_list">Danh sách tính năng pro</string>
     <string name="title_pro_purchase">Mua</string>
-    <string name="title_pro_once">Chỉ một lần</string>
+    <string name="title_pro_one_time">%1$s (thanh toán một lần)</string>
+    <string name="title_pro_no_play">Không tìm thấy CH Play</string>
     <string name="title_pro_info">        Việc phát triển FairEmail tốn hàng nghìn tiếng và, mặc dù thế, đa số tính năng đều miễn phí để sử dụng.
         FairEmail coi trọng sự riêng tư của bạn và không hiện quảng cáo và không sử dụng việc theo dõi hoặc phân tích để kiếm tiền.
         Để duy trì và hỗ trợ FairEmail trong dài hạn, một số tính năng tiện nghi và nâng cao không miễn phí để sử dụng.
@@ -1386,6 +1395,10 @@
     <string name="title_widget_title_count">Số thư mới</string>
     <string name="title_widget_title_list">Danh sách thư</string>
     <string name="title_widget_title_sync">Bật/tắt đồng bộ</string>
+    <string name="title_power_menu_sync">Đồng bộ hóa</string>
+    <string name="title_power_menu_on">Bật</string>
+    <string name="title_power_menu_off">Tắt</string>
+    <string name="title_power_menu_on_off">Bật/Tắt</string>
     <string name="title_widget_account">Tài khoản</string>
     <string name="title_widget_account_all">Tất cả</string>
     <string name="title_widget_folder">Thư mục</string>
@@ -1552,6 +1565,12 @@
         <item>Sans-serif</item>
         <item>Đơn cách</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <string-array name="addressFormatNames">
+        <item>Chỉ tên</item>
+        <item>Chỉ email</item>
+        <item>Tên và email</item>
+    </string-array>
 </resources>

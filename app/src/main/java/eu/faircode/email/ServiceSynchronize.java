@@ -1097,7 +1097,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         why.setAction("why");
         why.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent piWhy = PendingIntentCompat.getActivity(
-                this, ActivityView.REQUEST_WHY, why, PendingIntent.FLAG_UPDATE_CURRENT);
+                this, ActivityView.PI_WHY, why, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build notification
         NotificationCompat.Builder builder =
@@ -1134,7 +1134,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         alert.setAction("alert");
         alert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent piAlert = PendingIntentCompat.getActivity(
-                this, ActivityView.REQUEST_ALERT, alert, PendingIntent.FLAG_UPDATE_CURRENT);
+                this, ActivityView.PI_ALERT, alert, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build notification
         NotificationCompat.Builder builder =
@@ -1282,6 +1282,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     // https://tools.ietf.org/html/rfc2177
                     final boolean capIdle = iservice.hasCapability("IDLE");
+                    final boolean capUtf8 =
+                            iservice.hasCapability("UTF8=ACCEPT") ||
+                                    iservice.hasCapability("UTF8=ONLY");
                     Log.i(account.name + " idle=" + capIdle);
                     if (!capIdle || account.poll_interval < OPTIMIZE_KEEP_ALIVE_INTERVAL)
                         optimizeAccount(account, "IDLE");
@@ -1289,6 +1292,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     final boolean capNotify = iservice.hasCapability("NOTIFY");
 
                     db.account().setAccountState(account.id, "connected");
+                    db.account().setAccountCapabilities(account.id, capIdle, capUtf8);
                     db.account().setAccountError(account.id, null);
                     db.account().setAccountWarning(account.id, null);
 
@@ -2020,7 +2024,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             db.folder().setFolderState(folder.id, "closing");
                             try {
                                 if (iservice.getStore().isConnected())
-                                    mapFolders.get(folder).close();
+                                    mapFolders.get(folder).forceClose();
                             } catch (Throwable ex) {
                                 Log.w(ex);
                             }

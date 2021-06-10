@@ -56,10 +56,6 @@
         <item quantity="one">%1$d nij</item>
         <item quantity="other">%1$d nij</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d petear is selekteare</item>
-        <item quantity="other">%1$d petearen selekteare</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Berjocht %1$d ferpleatse?</item>
         <item quantity="other">Berjochten %1$d ferpleatse?</item>
@@ -516,7 +512,6 @@
     <string name="title_advanced_threading_hint">Groepberjochten relatearre oan elkoar</string>
     <string name="title_advanced_highlight_hint">Berjochten wurde allinich op datum groepeare as se binne op tiid binne sorteare</string>
     <string name="title_advanced_gravatars_hint">D\'r kin in privacy risiko wêze</string>
-    <string name="title_advanced_name_email_hint">As útskeakele sille allinich nammen werjûn wurde as se beskikber binne</string>
     <string name="title_advanced_preview_hint">Allinich beskikber as berjochttekst is ynladen</string>
     <string name="title_advanced_preview_lines_hint">Maksimum %s karakters yn totaal</string>
     <string name="title_advanced_preview_issue">Scrollen kin stadich wêze fanwegen in flater yn guon Android-ferzjes as it oantal rigels mear dan ien is</string>
@@ -1358,7 +1353,6 @@
     <string name="title_pro_feature">Dit is in pro-funksje</string>
     <string name="title_pro_list">List fan pro-funksjes</string>
     <string name="title_pro_purchase">Keapje</string>
-    <string name="title_pro_once">Allinne ien kear</string>
     <string name="title_pro_info">        It ûntwikkeljen fan FairEmail hat letterlik tûzenen oeren duorre en, nettsjinsteande dat, binne de measte funksjes fergees te brûken.
         FairEmail nimt jo privacy serieus en lit gjin advertinsjes sjen en brûkt tracking of analytics net om jild te fertsjinjen.
         Om FairEmail op \'e lange termyn te behâlden en te stypjen, binne wat gemak en avansearre funksjes net fergees te brûken.
@@ -1568,6 +1562,7 @@
         <item>Sans-serif</item>
         <item>Monospace</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

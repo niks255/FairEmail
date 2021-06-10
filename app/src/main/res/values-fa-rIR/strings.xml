@@ -47,10 +47,6 @@
         <item quantity="one">%1$d جدید</item>
         <item quantity="other">%1$d جدید</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d گفتگوی انتخاب شده</item>
-        <item quantity="other">%1$d گفتگوی انتخاب شده</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">حذف همیشگی %1$d پیام؟</item>
         <item quantity="other">حذف همیشگی %1$d پیام؟</item>
@@ -971,7 +967,6 @@
     <string name="title_pro_feature">این یکی از ویژگی‌های نسخه حرفه‌ای است</string>
     <string name="title_pro_list">لیست ویژگی‌های نسخه حرفه‌ای</string>
     <string name="title_pro_purchase">خرید</string>
-    <string name="title_pro_once">تنها یک بار</string>
     <string name="title_pro_info">        توسعه FairEmail به معنای واقعی کلمه هزاران ساعت طول کشیده و با وجود این، بیشتر ویژگی‌ها برای استفاده رایگان هستند.
         FairEmail حریم خصوصی شما را جدی می گیرد، آگهی نشان نمی دهد و از ردیابی یا تجزیه و تحلیل برای کسب درآمد استفاده نمی کند.
         برای حفظ و پشتیبانی FairEmail در طولانی مدت، برخی از امکانات و ویژگی‌های پیشرفته برای استفاده رایگان نیستند.
@@ -1166,6 +1161,7 @@
         <item>Sans-serif</item>
         <item>Monospace</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

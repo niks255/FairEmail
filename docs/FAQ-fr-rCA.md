@@ -827,27 +827,27 @@ S'il y a des messages d'erreur, veuillez consulter [cette FAQ](#user-content-faq
 
 Sur certains appareils, où il y a beaucoup d'applications en concurrence pour la mémoire, Android peut arrêter le service de synchronisation en dernier recours.
 
-Some Android versions stop apps and services too aggressively. See [this dedicated website](https://dontkillmyapp.com/) and [this Android issue](https://issuetracker.google.com/issues/122098785) for more information.
+Certaines versions d'Android arrêtes les applications et services trop brutalement. Voir [ ce site](https://dontkillmyapp.com/) et [ce ticket Android](https://issuetracker.google.com/issues/122098785) pour plus d'informations.
 
-Disabling battery optimizations (setup step 3) reduces the chance Android will stop the synchronization service.
+Désactiver l'optimisation de la batterie (mis en place à l'étape 3) réduit les chances qu'Android stoppe le service de synchronisation.
 
-In case of successive connection errors, FairEmail will hold off increasingly longer to not drain the battery of your device. This is described in [this FAQ](#user-content-faq123).
+Dans le cas d'erreurs de connexion successives, FairEmail attendra de plus en plus longtemps entre pour réduire l'usage de batterie. Voir [cette FAQ](#user-content-faq123).
 
 <br />
 
 <a name="faq17"></a>
-**~~(17) Why does manual synchronize not work?~~**
+**~~(17) Pourquoi la synchronisation manuelle ne fonctionne-t-elle pas ?~~**
 
-~~If the *Synchronize now* menu is dimmed, there is no connection to the account.~~
+~~Si le menu *Synchroniser maintenant* est grisé, il n'y a pas de connexion au compte.~~
 
-~~See the previous question for more information.~~
+~~Voir la question précédente pour plus de renseignements.~~
 
 <br />
 
 <a name="faq18"></a>
-**(18) Why is the message preview not always shown?**
+**(18) Pourquoi la prévisualisation du message n'est-elle pas toujours affichée ?**
 
-The preview of the message text cannot be shown if the message body has not been downloaded yet. See also [this FAQ](#user-content-faq15).
+La prévisualisation du texte du message ne peut être affichée si le corps du message n'a pas encore été téléchargé. Voir aussi [cette FAQ](#user-content-faq15).
 
 <br />
 
@@ -878,9 +878,9 @@ I have been working on FairEmail almost every day for more than two years, so I 
 <br />
 
 <a name="faq20"></a>
-**(20) Can I get a refund?**
+**(20) Puis-je obtenir un remboursement ?**
 
-If a purchased pro feature doesn't work as intended and this isn't caused by a problem in the free features and I cannot fix the problem in a timely manner, you can get a refund. In all other cases there is no refund possible. En aucun cas il n'y a de remboursement possible pour tout problème lié aux fonctionnalités gratuites, étant donné que rien a été payé pour les obtenir et parce qu'elles peuvent être évaluées sans aucune limitation. I take my responsibility as seller to deliver what has been promised and I expect that you take responsibility for informing yourself of what you are buying.
+Si une fonctionnalité pro ne marche pas comme prévu et que ce n'est pas causé par un problème dans les fonctionnalités gratuites et que je ne peux résoudre ce problème rapidement, vous pouvez obtenir un remboursement. Autrement, il n'y a pas de possibilité de remboursement. En aucun cas il n'y a de remboursement possible pour tout problème lié aux fonctionnalités gratuites, étant donné que rien a été payé pour les obtenir et parce qu'elles peuvent être évaluées sans aucune limitation. Je prends ma responsabilité en tant que vendeur de délivrer ce qui a été promis et je pars du principe que vous prenez la responsabilité de vous informer de ce que vous achetez.
 
 <a name="faq21"></a>
 **(21) How do I enable the notification light?**
@@ -906,14 +906,14 @@ FairEmail will automatically try to connect again after a delay. This delay will
 
 There are general errors and errors specific to Gmail accounts (see below).
 
-**General errors**
+**Erreurs générales**
 
 <a name="authfailed"></a>
-The error *... **Authentication failed** ...* or *... AUTHENTICATE failed ...* likely means that your username or password was incorrect. Some providers expect as username just *username* and others your full email address *username@example.com*. When copying/pasting to enter a username or password, invisible characters might be copied, which could cause this problem as well. Some password managers are known to do this incorrectly too. The username might be case sensitive, so try lowercase characters only. The password is almost always case sensitive. Some providers require using an app password instead of the account password, so please check the documentation of the provider. Sometimes it is necessary to enable external access (IMAP/SMTP) on the website of the provider first. Other possible causes are that the account is blocked or that logging in has been administratively restricted in some way, for example by allowing to login from certain networks / IP addresses only.
+L'erreur *... **L'authentification a échoué** ...* ou *... AUTHENTICATE failed ...* likely means that your username or password was incorrect. Some providers expect as username just *username* and others your full email address *username@example.com*. When copying/pasting to enter a username or password, invisible characters might be copied, which could cause this problem as well. Some password managers are known to do this incorrectly too. The username might be case sensitive, so try lowercase characters only. The password is almost always case sensitive. Some providers require using an app password instead of the account password, so please check the documentation of the provider. Sometimes it is necessary to enable external access (IMAP/SMTP) on the website of the provider first. Other possible causes are that the account is blocked or that logging in has been administratively restricted in some way, for example by allowing to login from certain networks / IP addresses only.
 
 Si nécessaire, vous pouvez mettre à jour un mot de passe dans les paramètres du compte : menu de navigation (menu latéral), appuyez sur *Paramètres*, appuyez sur *Configuration manuelle*, appuyez sur *Comptes* et appuyez sur le compte. Changing the account password will in most cases automatically change the password of related identities too. If the account was authorized with OAuth via the quick setup wizard instead of with a password, you can run the quick setup wizard again and tick *Authorize existing account again* to authenticate the account again. Note that this requires a recent version of the app.
 
-The error *... Too many bad auth attempts ...* likely means that you are using a Yahoo account password instead of an app password. Please see [this FAQ](#user-content-faq88) about how to set up a Yahoo account.
+L'erreur *... Too many bad auth attempts ...* likely means that you are using a Yahoo account password instead of an app password. Please see [this FAQ](#user-content-faq88) about how to set up a Yahoo account.
 
 The message *... +OK ...* likely means that a POP3 port (usually port number 995) is being used for an IMAP account (usually port number 993).
 
@@ -1606,11 +1606,11 @@ If your provider requires an unsupported authentication method, you'll likely ge
 <br />
 
 <a name="faq63"></a>
-**(63) How are images resized for displaying on screens?**
+**(63) Comment les images sont-elles redimensionnées pour l'affichage sur les écrans ?**
 
-Large inline or attached [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) and [JPEG](https://en.wikipedia.org/wiki/JPEG) images will automatically be resized for displaying on screens. This is because email messages are limited in size, depending on the provider mostly between 10 and 50 MB. Images will by default be resized to a maximum width and height of about 1440 pixels and saved with a compression ratio of 90 %. Images are scaled down using whole number factors to reduce memory usage and to retain image quality. Automatically resizing of inline and/or attached images and the maximum target image size can be configured in the send settings.
+Les images de grande taille, en liens ou en pièces jointes et au format [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) et [JPEG](https://en.wikipedia.org/wiki/JPEG) seront automatiquement redimensionnées pour être affichées sur les écrans. This is because email messages are limited in size, depending on the provider mostly between 10 and 50 MB. Images will by default be resized to a maximum width and height of about 1440 pixels and saved with a compression ratio of 90 %. Images are scaled down using whole number factors to reduce memory usage and to retain image quality. Automatically resizing of inline and/or attached images and the maximum target image size can be configured in the send settings.
 
-If you want to resize images on a case-by-case basis, you can use [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) or a similar app.
+Si vous voulez redimensionner les images au cas par cas, vous pouvez utiliser [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) ou une application similaire.
 
 <br />
 

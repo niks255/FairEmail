@@ -53,11 +53,6 @@
         <item quantity="few">%1$d нове</item>
         <item quantity="other">%1$d нових</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Означен %1$d разговор</item>
-        <item quantity="few">Означена %1$d разговора</item>
-        <item quantity="other">Означено %1$d разговора</item>
-    </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">Заувек обрисати %1$d поруку?</item>
         <item quantity="few">Заувек обрисати %1$d поруке?</item>
@@ -292,7 +287,6 @@
     <string name="title_advanced_layout_hint">Пребацивање на компактнији приказ и промена величина текста поруке може да се уради из горње акционе траке у порукама</string>
     <string name="title_advanced_date_hint">Поруке су груписане по датуму само ако су сортиране по времену</string>
     <string name="title_advanced_threading_hint">Групиши међусобно повезане поруке</string>
-    <string name="title_advanced_name_email_hint">Када је искључено, биће приказана само имена ако су доступна</string>
     <string name="title_advanced_preview_hint">Доступно само када се преузме текст поруке</string>
     <string name="title_advanced_inline_hint">Уметнуте слике су слике укључене у поруку</string>
     <string name="title_advanced_autoexpand_hint">Аутоматски отвори поруку када има само једна порука или само једна непрочитана порука у разговору</string>
@@ -851,7 +845,6 @@
     <string name="title_pro_feature">Ово је премијум функционалност</string>
     <string name="title_pro_list">Списак премијум функционалности</string>
     <string name="title_pro_purchase">Купи</string>
-    <string name="title_pro_once">Само једном</string>
     <string name="title_pro_hint">Куповина премијум функционалности ће Вам дозволити да користите све тренутне и будуће премијум функције, и бринуће се да се апликација одржава и да буде подржана.</string>
     <string name="title_pro_pending">Куповина на чекању</string>
     <string name="title_pro_activated">Све премијум функционалности су активиране</string>

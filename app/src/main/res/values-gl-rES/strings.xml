@@ -56,10 +56,6 @@
         <item quantity="one">%1$d nova</item>
         <item quantity="other">%1$d novas</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Seleccionada %1$d conversa</item>
-        <item quantity="other">Seleccionadas %1$d conversas</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Mover %1$d mensaxe?</item>
         <item quantity="other">Mover %1$d mensaxes?</item>
@@ -515,7 +511,6 @@
     <string name="title_advanced_threading_hint">Agrupar mensaxes relacionadas</string>
     <string name="title_advanced_highlight_hint">A cor de resalto do tema será empregada para salientar</string>
     <string name="title_advanced_gravatars_hint">Podería haber un risco de privacidade</string>
-    <string name="title_advanced_name_email_hint">Cando estea desactivado, só se mostrarán os nomes cando estean dispoñibles</string>
     <string name="title_advanced_preview_hint">Soamente estará dispoñible cando o texto da mensaxe estea baixado</string>
     <string name="title_advanced_preview_lines_hint">Maximo de %s caracteres en total</string>
     <string name="title_advanced_preview_issue">O desprazamento pode ser lento por un fallo en algunhas versións de Android cando o número de liñas é máis de un</string>
@@ -1352,7 +1347,6 @@
     <string name="title_pro_feature">Ista é unha funcionalidade Pro</string>
     <string name="title_pro_list">Lista de características Pro</string>
     <string name="title_pro_purchase">Mercar</string>
-    <string name="title_pro_once">Só unha vez</string>
     <string name="title_pro_info">        Programar FairEmail levou miles de horas, e aínda así, a maioría das características son gratuitas.
         FairEmail tómase a súa privacidade en serio e non amosa anuncios nen usa rastrexos ou analíticas para gañar cartos.
         Para manter e soportar FairEmail ao longo prazo, algunhas funcións de comodidade e avanzadas non son gratuitas.
@@ -1562,6 +1556,7 @@
         <item>Sans Serif</item>
         <item>Ancho fixo</item>
         <item>Fantasía</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

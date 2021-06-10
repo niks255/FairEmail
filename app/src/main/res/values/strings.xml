@@ -72,11 +72,6 @@
         <item quantity="other">%1$d new</item>
     </plurals>
 
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Selected %1$d conversation</item>
-        <item quantity="other">Selected %1$d conversations</item>
-    </plurals>
-
     <plurals name="title_moving_messages">
         <item quantity="one">Move %1$d message?</item>
         <item quantity="other">Move %1$d messages?</item>
@@ -207,8 +202,10 @@
     <string name="title_setup_free">Is this app free to use?</string>
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
+    <string name="title_setup_permissions_explanation">Contact permissions are required to look up contact info and to suggest contacts</string>
     <string name="title_setup_doze">Disable battery optimizations</string>
     <string name="title_setup_doze_remark">To reliably send and receive email</string>
+    <string name="title_setup_doze_explanation">Battery optimizations should be disabled for the app to ensure reliable sending and receiving of messages in the background</string>
     <string name="title_setup_doze_hint">Although this may sound contradictory, turning off battery optimizations for this app will result in less battery usage</string>
     <string name="title_setup_doze_instructions">In the next Android dialog change "Not optimized" to "All apps", select this app and select "Don\'t optimize"</string>
     <string name="title_setup_doze_battery">High battery usage?</string>
@@ -489,6 +486,7 @@
     <string name="title_advanced_notify_action_snooze">Snooze</string>
     <string name="title_advanced_notify_remove">Remove new message notification on tapping on notification</string>
     <string name="title_advanced_notify_clear">Remove new message notifications on viewing message list</string>
+    <string name="title_advanced_notify_subtext">Show account or folder name as subtext</string>
     <string name="title_advanced_wearable_preview">Only send notifications with a message preview to wearables</string>
     <string name="title_advanced_notify_messaging">Use Android \'messaging style\' notification format</string>
     <string name="title_advanced_biometrics_notify">Show notification content when using biometric authentication</string>
@@ -536,6 +534,7 @@
     </string>
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$d</string>
 
+    <string name="title_advanced_power_menu">Add actions to the Android power menu</string>
     <string name="title_advanced_external_search">Allow other apps to search in messages</string>
     <string name="title_advanced_shortcuts">Show frequently used contacts in Android share menu</string>
     <string name="title_advanced_fts">Build search index</string>
@@ -567,6 +566,7 @@
     <string name="title_advanced_auth_ntlm" translatable="false">NTLM</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
+    <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
     <string name="title_advanced_processors" translatable="false">Processors: %1$d</string>
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
     <string name="title_advanced_memory_usage" translatable="false">Memory usage: %1$s/%2$s Native: %3$s</string>
@@ -617,7 +617,7 @@
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
     <string name="title_advanced_highlight_hint">The accent color of the theme will be used for highlighting</string>
     <string name="title_advanced_gravatars_hint">There might be a privacy risk</string>
-    <string name="title_advanced_name_email_hint">When disabled only names will be shown when available</string>
+    <string name="title_advanced_name_email_hint">Names will only be shown when available</string>
     <string name="title_advanced_preview_hint">Only available when message text has been downloaded</string>
     <string name="title_advanced_preview_lines_hint">Maximum %s characters in total</string>
     <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
@@ -914,6 +914,7 @@
     <string name="title_print_images">Print images</string>
     <string name="title_print_images_remark">Downloading images might take some time</string>
     <string name="title_show_headers">Show headers</string>
+    <string name="title_share_as_html">Share as HTML</string>
     <string name="title_raw_save">Save raw message</string>
     <string name="title_raw_send">Send as attachment</string>
     <string name="title_manage_keywords">Manage keywords</string>
@@ -995,6 +996,7 @@
     <string name="title_attachments_incomplete">Some attachments or images were not downloaded and could not be added</string>
     <string name="title_ask_save">Save changes?</string>
     <string name="title_ask_delete">Delete message permanently?</string>
+    <string name="title_ask_delete_accept">I understand that permanently deleting messages is irreversible</string>
     <string name="title_ask_delete_answer">Delete reply template permanently?</string>
     <string name="title_ask_delete_rule">Delete rule permanently?</string>
     <string name="title_ask_discard">Discard draft?</string>
@@ -1408,6 +1410,8 @@
     <string name="title_legend_view">View content</string>
     <string name="title_legend_hide">Hide content</string>
     <string name="title_legend_download">Download content</string>
+    <string name="title_legend_original">View original message</string>
+    <string name="title_legend_reformatted">View reformatted message</string>
     <string name="title_legend_external_image">External image placeholder</string>
     <string name="title_legend_embedded_image">Embedded image placeholder</string>
     <string name="title_legend_tracking_pixel">Tracking image</string>
@@ -1475,6 +1479,7 @@
     <string name="title_hint_eml">This is a summary of the content of a raw message file. Save the raw message with the save icon in the action bar to view all content.</string>
 
     <string name="title_open_link">Open link</string>
+    <string name="title_image_link">Image link</string>
     <string name="title_different_link">The title and the link address are different</string>
     <string name="title_tracking_link">This website might track you</string>
     <string name="title_suspicious_link">This is a suspicious link</string>
@@ -1501,6 +1506,8 @@
     <string name="title_fix">Fix</string>
     <string name="title_enable">Enable</string>
     <string name="title_enabled">Enabled</string>
+    <string name="title_disable">Disable</string>
+    <string name="title_keep_current">Keep current</string>
     <string name="title_executing">Executing</string>
     <string name="title_completed">Completed</string>
     <string name="title_default_changed">Default changed</string>
@@ -1537,7 +1544,8 @@
     <string name="title_pro_feature">This is a pro feature</string>
     <string name="title_pro_list">List of pro features</string>
     <string name="title_pro_purchase">Buy</string>
-    <string name="title_pro_once">Only once</string>
+    <string name="title_pro_one_time">%1$s (one-time purchase)</string>
+    <string name="title_pro_no_play">Play Store was not found</string>
     <string name="title_pro_info">
         Developing FairEmail took literally thousands of hours and, despite that, most of the features are free to use.
         FairEmail takes your privacy seriously and doesn\'t show ads and doesn\'t use tracking or analytics to earn money.
@@ -1579,6 +1587,11 @@
     <string name="title_widget_title_count">New message count</string>
     <string name="title_widget_title_list">Message list</string>
     <string name="title_widget_title_sync">Sync on/off</string>
+
+    <string name="title_power_menu_sync">Synchronization</string>
+    <string name="title_power_menu_on">On</string>
+    <string name="title_power_menu_off">Off</string>
+    <string name="title_power_menu_on_off">On/Off</string>
 
     <string name="title_widget_account">Account</string>
     <string name="title_widget_account_all">All</string>
@@ -1881,7 +1894,8 @@
         <item>Serif</item>
         <item>Sans-serif</item>
         <item>Monospace</item>
-        <item>Fantasy</item>
+        <item>Fantasy</item>-
+        <item>OpenDyslexic</item>
     </string-array>
 
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
@@ -1891,6 +1905,13 @@
         <item>sans-serif</item>
         <item>monospace</item>
         <item>fantasy</item>
+        <item>comic sans</item>
+    </string-array>
+
+    <string-array name="addressFormatNames">
+        <item>Name only</item>
+        <item>Email only</item>
+        <item>Name and email</item>
     </string-array>
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>

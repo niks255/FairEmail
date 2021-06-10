@@ -56,10 +56,6 @@
         <item quantity="one">%1$d neue</item>
         <item quantity="other">%1$d neue</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d Unterhaltung ausgewählt</item>
-        <item quantity="other">%1$d Unterhaltungen ausgewählt</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">%1$d Nachricht verschieben?</item>
         <item quantity="other">%1$d Nachrichten verschieben?</item>
@@ -166,8 +162,10 @@
     <string name="title_setup_free">Kann diese App kostenlos genutzt werden?</string>
     <string name="title_setup_permissions">Berechtigungen erteilen</string>
     <string name="title_setup_permissions_remark">Um auf Kontaktinformationen zuzugreifen (optional)</string>
+    <string name="title_setup_permissions_explanation">Der Zugriff auf Kontakte ist erforderlich, um Kontaktinformationen nachzuschlagen und Kontakte vorzuschlagen</string>
     <string name="title_setup_doze">Akkuoptimierung deaktivieren</string>
     <string name="title_setup_doze_remark">Um Nachrichten zuverlässig zu senden und zu empfangen</string>
+    <string name="title_setup_doze_explanation">Batterieoptimierungen sollten für die App deaktiviert werden, um ein zuverlässiges Senden und Empfangen von Nachrichten im Hintergrund zu gewährleisten</string>
     <string name="title_setup_doze_hint">Obwohl dies widersprüchlich klingen mag, führt das Deaktivieren der Akku-Optimierungen für diese App zu einem geringeren Akkuverbrauch</string>
     <string name="title_setup_doze_instructions">Im nächsten Android-Dialog bitte »Nicht optimiert« in »Alle Apps« ändern und bei FairEmail »Nicht optimieren« auswählen</string>
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
@@ -423,6 +421,7 @@
     <string name="title_advanced_notify_action_snooze">Zurückstellen</string>
     <string name="title_advanced_notify_remove">Benachrichtigung über neue Nachrichten durch Tippen auf die Benachrichtigung entfernen</string>
     <string name="title_advanced_notify_clear">Benachrichtigung über neue Nachrichten beim Anzeigen der Nachrichtenliste entfernen</string>
+    <string name="title_advanced_notify_subtext">Konten- oder Ordnername als Untertitel anzeigen</string>
     <string name="title_advanced_wearable_preview">Nur Benachrichtigungen mit einer Nachrichtenvorschau an tragbare Gerätschaften senden</string>
     <string name="title_advanced_notify_messaging">Androids Benachrichtigungsformat »messaging style« verwenden</string>
     <string name="title_advanced_biometrics_notify">Benachrichtigungsinhalt bei Nutzung der biometrischen Authentifizierung anzeigen</string>
@@ -459,6 +458,7 @@
     <string name="title_advanced_manage_keys_hint">        Hiermit öffnen Sie die Android-Sicherheitseinstellungen.
         Schlüssel und Zertifikate sind in der Regel unter »Sicherheit &amp; Standort« ➜ »Verschlüsselung und Anmeldedaten« zu finden.
     </string>
+    <string name="title_advanced_power_menu">Aktionen zum Android-Ein/Aus-Menü hinzufügen</string>
     <string name="title_advanced_external_search">Anderen Apps erlauben in Nachrichten zu suchen</string>
     <string name="title_advanced_shortcuts">Häufig verwendete Kontakte im Android-Teilen-Menü anzeigen</string>
     <string name="title_advanced_fts">Suchindex erstellen</string>
@@ -519,7 +519,7 @@
     <string name="title_advanced_threading_hint">Zusammengehörige Nachrichten gruppieren</string>
     <string name="title_advanced_highlight_hint">Die Akzentfarbe des Designs wird zur Hervorhebung verwendet</string>
     <string name="title_advanced_gravatars_hint">Es könnte ein Datenschutzrisiko geben</string>
-    <string name="title_advanced_name_email_hint">Wenn deaktiviert, werden nur Namen angezeigt, sofern verfügbar</string>
+    <string name="title_advanced_name_email_hint">Namen werden nur angezeigt, wenn sie verfügbar sind</string>
     <string name="title_advanced_preview_hint">Nur verfügbar, wenn der E-Mail-Text heruntergeladen wurde</string>
     <string name="title_advanced_preview_lines_hint">Maximal %s Zeichen</string>
     <string name="title_advanced_preview_issue">Scrollen kann aufgrund eines Fehlers in einigen Android-Versionen langsam sein, wenn die Anzahl der Zeilen mehr als eine ist</string>
@@ -791,6 +791,7 @@
     <string name="title_print_images">Bilder drucken</string>
     <string name="title_print_images_remark">Das Herunterladen von Bildern kann einige Zeit dauern</string>
     <string name="title_show_headers">Kopfzeilen anzeigen</string>
+    <string name="title_share_as_html">Als HTML weiterleiten</string>
     <string name="title_raw_save">Rohdaten speichern</string>
     <string name="title_raw_send">Als Anhang senden</string>
     <string name="title_manage_keywords">Stichwörter verwalten</string>
@@ -865,6 +866,7 @@
     <string name="title_attachments_incomplete">Einige Anhänge oder Bilder wurden nicht heruntergeladen und konnten nicht hinzugefügt werden</string>
     <string name="title_ask_save">Änderungen speichern?</string>
     <string name="title_ask_delete">Nachricht dauerhaft löschen?</string>
+    <string name="title_ask_delete_accept">Ich verstehe, dass das Löschen von Nachrichten unwiderruflich ist</string>
     <string name="title_ask_delete_answer">Antwortvorlage dauerhaft löschen?</string>
     <string name="title_ask_delete_rule">Regel dauerhaft löschen?</string>
     <string name="title_ask_discard">Entwurf löschen?</string>
@@ -970,8 +972,8 @@
     <string name="title_translate_configure">Konfigurieren &#8230;</string>
     <string name="title_translate_key">Schlüssel einfügen</string>
     <string name="title_translating">Wird übersetzt &#8230;</string>
-    <string name="title_translate_small">Eine kleine Schriftart für den Quelltext verwenden</string>
-    <string name="title_translate_usage" comment="title_translate_usage&#10;&#10;&lt;character count&gt; / &lt;character limit&gt; (percentage)">Verwendung: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_small">Kleine Schrift für den Quelltext verwenden</string>
+    <string name="title_translate_usage">Verwendung: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Als einfachen Text bearbeiten</string>
     <string name="title_edit_formatted_text">Als umformatierten Text bearbeiten</string>
     <string name="title_select_certificate">Öffentlichen Schlüssel auswählen</string>
@@ -1240,6 +1242,8 @@
     <string name="title_legend_view">Inhalt anzeigen</string>
     <string name="title_legend_hide">Inhalt ausblenden</string>
     <string name="title_legend_download">Inhalt herunterladen</string>
+    <string name="title_legend_original">Originalnachricht anzeigen</string>
+    <string name="title_legend_reformatted">Umformatierte Nachricht anzeigen</string>
     <string name="title_legend_external_image">Platzhalter für externe Bilder</string>
     <string name="title_legend_embedded_image">Platzhalter für eingebettete Bilder</string>
     <string name="title_legend_tracking_pixel">Verfolgungsbild</string>
@@ -1301,6 +1305,7 @@
     <string name="title_hint_contact_actions">Gedrückt halten für weitere Optionen</string>
     <string name="title_hint_eml">Das ist eine Zusammenfassung des Inhalts einer Rohnachrichtendatei. Speichern Sie die Rohnachricht mit dem Speichernsymbol in der Aktionsleiste, um alle Inhalte anzuzeigen.</string>
     <string name="title_open_link">Link öffnen</string>
+    <string name="title_image_link">Bild-Link</string>
     <string name="title_different_link">Titel und Link-Ziel sind unterschiedlich</string>
     <string name="title_tracking_link">Diese Website könnte Sie verfolgen</string>
     <string name="title_suspicious_link">Dies ist ein verdächtiger Link</string>
@@ -1327,6 +1332,8 @@
     <string name="title_fix">Problem beheben</string>
     <string name="title_enable">Aktivieren</string>
     <string name="title_enabled">Aktiviert</string>
+    <string name="title_disable">Deaktivieren</string>
+    <string name="title_keep_current">Aktuelles behalten</string>
     <string name="title_executing">Wird ausgeführt</string>
     <string name="title_completed">Fertig</string>
     <string name="title_default_changed">Standard geändert</string>
@@ -1360,7 +1367,8 @@
     <string name="title_pro_feature">Das ist eine Pro-Funktion</string>
     <string name="title_pro_list">Liste der Pro-Funktionen</string>
     <string name="title_pro_purchase">Kaufen</string>
-    <string name="title_pro_once">Nur einmal</string>
+    <string name="title_pro_one_time">%1$s (einmaliger Kauf)</string>
+    <string name="title_pro_no_play">Play Store konnte nicht aufgerufen werden</string>
     <string name="title_pro_info">Die Entwicklung von FairEmail hat buchstäblich tausende Stunden gedauert und trotzdem sind die meisten Funktionen kostenlos nutzbar.
 FairEmail nimmt Ihre Privatsphäre ernst, zeigt keine Werbung an und verwendet keine Nachverfolgungs- oder Analysefunktionen, um damit Geld zu verdienen.
 Um FairEmail auf lange Sicht zu erhalten und zu unterstützen, sind einige Komfort- und erweiterte Funktionen nicht kostenlos nutzbar.
@@ -1396,6 +1404,10 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_widget_title_count">Anzahl neuer Nachrichten</string>
     <string name="title_widget_title_list">Nachrichtenliste</string>
     <string name="title_widget_title_sync">Sync ein/aus</string>
+    <string name="title_power_menu_sync">Synchronisation</string>
+    <string name="title_power_menu_on">Ein</string>
+    <string name="title_power_menu_off">Aus</string>
+    <string name="title_power_menu_on_off">Ein/Aus</string>
     <string name="title_widget_account">Konto</string>
     <string name="title_widget_account_all">Alle</string>
     <string name="title_widget_folder">Ordner</string>
@@ -1570,6 +1582,12 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Serifenlos</item>
         <item>Festbreitenschrift</item>
         <item>Fantasie</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <string-array name="addressFormatNames">
+        <item>Nur Name</item>
+        <item>Nur E-Mail-Adresse</item>
+        <item>Name und E-Mail-Adresse</item>
+    </string-array>
 </resources>

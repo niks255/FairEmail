@@ -146,6 +146,8 @@ public class EntityAccount extends EntityOrder implements Serializable {
     public Long last_connected;
     public Long backoff_until;
     public Long max_size;
+    public Boolean capability_idle;
+    public Boolean capability_utf8;
 
     boolean isGmail() {
         return "imap.gmail.com".equalsIgnoreCase(host);
@@ -378,7 +380,9 @@ public class EntityAccount extends EntityOrder implements Serializable {
                     Objects.equals(this.error, other.error) &&
                     Objects.equals(this.last_connected, other.last_connected) &&
                     Objects.equals(this.backoff_until, other.backoff_until) &&
-                    Objects.equals(this.max_size, other.max_size));
+                    Objects.equals(this.max_size, other.max_size) &&
+                    Objects.equals(this.capability_idle, other.capability_idle) &&
+                    Objects.equals(this.capability_utf8, other.capability_utf8));
         } else
             return false;
     }

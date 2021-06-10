@@ -33,7 +33,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp">
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="12dp">
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/welcome"
@@ -87,7 +88,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp">
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="12dp">
 
                 <ImageView
                     android:id="@+id/one"
@@ -109,6 +111,22 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/one"
                     app:layout_constraintTop_toTopOf="@id/one" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvNoInternet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_warning_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorWarning"
+                    android:text="@string/title_no_internet"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?attr/colorWarning"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title1" />
 
                 <ImageButton
                     android:id="@+id/ibHelp"
@@ -139,7 +157,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/title1" />
+                    app:layout_constraintTop_toBottomOf="@id/tvNoInternet" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvQuickRemarkMultiple"
@@ -431,7 +449,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp">
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="12dp">
 
                 <ImageView
                     android:id="@+id/two"
@@ -504,7 +523,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp">
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="12dp">
 
                 <ImageView
                     android:id="@+id/three"

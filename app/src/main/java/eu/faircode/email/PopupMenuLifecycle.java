@@ -20,11 +20,16 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
+import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -33,11 +38,15 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
+
+import java.lang.ref.WeakReference;
 
 public class PopupMenuLifecycle extends PopupMenu implements LifecycleObserver {
 
@@ -60,6 +69,13 @@ public class PopupMenuLifecycle extends PopupMenu implements LifecycleObserver {
         } catch (Throwable ex) {
             Log.e(ex);
         }
+    }
+
+    public void showWithIcons(Context context, View anchor) {
+        MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) getMenu(), anchor);
+        menuHelper.setForceShowIcon(true);
+        menuHelper.setGravity(Gravity.END);
+        menuHelper.show();
     }
 
     @Override
@@ -122,12 +138,54 @@ public class PopupMenuLifecycle extends PopupMenu implements LifecycleObserver {
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.menu_item_icon_size);
         icon.setBounds(0, 0, iconSize, iconSize);
-        ImageSpan imageSpan = new ImageSpan(icon);
+        ImageSpan imageSpan = new CenteredImageSpan(icon);
 
         SpannableStringBuilder ssb = new SpannableStringBuilder(menuItem.getTitle());
-        ssb.insert(0, "\uFFFC\u2003");
+        ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
         ssb.setSpan(imageSpan, 0, 1, 0);
         menuItem.setTitle(ssb);
         menuItem.setIcon(null);
+    }
+
+    private static class CenteredImageSpan extends ImageSpan {
+        public CenteredImageSpan(final Drawable drawable) {
+            this(drawable, DynamicDrawableSpan.ALIGN_BOTTOM);
+        }
+
+        public CenteredImageSpan(final Drawable drawable, final int verticalAlignment) {
+            super(drawable, verticalAlignment);
+        }
+
+        @Override
+        public void draw(@NonNull Canvas canvas, CharSequence text,
+                         int start, int end, float x,
+                         int top, int y, int bottom, @NonNull Paint paint) {
+            getDrawable().draw(canvas);
+        }
+
+        @Override
+        public int getSize(@NonNull Paint paint, CharSequence text,
+                           int start, int end,
+                           @Nullable Paint.FontMetricsInt fm) {
+            Drawable d = getDrawable();
+            Rect rect = d.getBounds();
+
+            if (fm != null) {
+                int descent = 0;
+                int padding = 0;
+                if (rect.bottom - (fm.descent - fm.ascent) >= 0) {
+                    descent = fm.descent;
+                    padding = rect.bottom - (fm.descent - fm.ascent);
+                }
+
+                fm.descent = padding / 2 + descent;
+                fm.bottom = fm.descent;
+
+                fm.ascent = -rect.bottom + fm.descent;
+                fm.top = fm.ascent;
+            }
+
+            return rect.right;
+        }
     }
 }

@@ -49,6 +49,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.PreferenceManager;
 
@@ -57,8 +58,10 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class StyleHelper {
     static boolean apply(int action, LifecycleOwner owner, View anchor, EditText etBody, Object... args) {
@@ -153,7 +156,7 @@ public class StyleHelper {
                 SubMenu smenu = popupMenu.getMenu().findItem(R.id.menu_style_font).getSubMenu();
                 for (int i = 0; i < fontNameNames.length; i++) {
                     SpannableStringBuilder ssb = new SpannableStringBuilder(fontNameNames[i]);
-                    ssb.setSpan(new TypefaceSpan(fontNameValues[i]), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ssb.setSpan(getTypefaceSpan(fontNameValues[i], context), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     smenu.add(R.id.group_style_font, i, 0, ssb);
                 }
                 smenu.add(R.id.group_style_font, fontNameNames.length, 0, R.string.title_style_font_default);
@@ -410,11 +413,12 @@ public class StyleHelper {
                             int f = edit.getSpanFlags(span);
                             edit.removeSpan(span);
                             splitSpan(edit, start, end, s, e, f, false,
-                                    new TypefaceSpan(span.getFamily()), new TypefaceSpan(span.getFamily()));
+                                    getTypefaceSpan(span.getFamily(), context),
+                                    getTypefaceSpan(span.getFamily(), context));
                         }
 
                         if (face != null)
-                            edit.setSpan(new TypefaceSpan(face), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            edit.setSpan(getTypefaceSpan(face, context), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                         etBody.setText(edit);
                         etBody.setSelection(start, end);
@@ -533,10 +537,15 @@ public class StyleHelper {
 
                 String url = (String) args[0];
 
-                List<Object> spans = new ArrayList<>();
-                for (Object span : edit.getSpans(start, end, Object.class)) {
-                    if (!(span instanceof URLSpan))
+                List<CharacterStyle> spans = new ArrayList<>();
+                Map<CharacterStyle, Pair<Integer, Integer>> ranges = new HashMap<>();
+                Map<CharacterStyle, Integer> flags = new HashMap<>();
+                for (CharacterStyle span : edit.getSpans(start, end, CharacterStyle.class)) {
+                    if (!(span instanceof URLSpan)) {
                         spans.add(span);
+                        ranges.put(span, new Pair<>(edit.getSpanStart(span), edit.getSpanEnd(span)));
+                        flags.put(span, edit.getSpanFlags(span));
+                    }
                     edit.removeSpan(span);
                 }
 
@@ -551,8 +560,11 @@ public class StyleHelper {
                 }
 
                 // Restore other spans
-                for (Object span : spans)
-                    edit.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                for (CharacterStyle span : spans)
+                    edit.setSpan(span,
+                            ranges.get(span).first,
+                            ranges.get(span).second,
+                            flags.get(span));
 
                 etBody.setText(edit);
                 etBody.setSelection(end, end);
@@ -610,10 +622,12 @@ public class StyleHelper {
             // overlap all
             if (extend)
                 edit.setSpan(span1, start, end, f);
-        } else if (start > s && end < e) {
+        } else if (start >= s && end <= e) {
             // overlap inner
-            edit.setSpan(span1, s, start, f);
-            edit.setSpan(span2, end, e, f);
+            if (s < start)
+                edit.setSpan(span1, s, start, f);
+            if (end < e)
+                edit.setSpan(span2, end, e, f);
         }
     }
 
@@ -749,6 +763,31 @@ public class StyleHelper {
                 }
             }
         }
+    }
+
+    static TypefaceSpan getTypefaceSpan(String family, Context context) {
+        String faces = family.toLowerCase(Locale.ROOT);
+        if (faces.contains("comic sans"))
+            family = "comic sans ms, sans-serif";
+        return new CustomTypefaceSpan(family, getTypeface(family, context));
+    }
+
+    static Typeface getTypeface(String family, Context context) {
+        String faces = family.toLowerCase(Locale.ROOT);
+
+        if (faces.equals("fairemail"))
+            return ResourcesCompat.getFont(context, R.font.fantasy);
+
+        if (faces.contains("comic sans"))
+            return ResourcesCompat.getFont(context, R.font.opendyslexic);
+
+        for (String face : faces.split(",")) {
+            face = face.trim().replace("\"", "");
+            Typeface tf = Typeface.create(face, Typeface.NORMAL);
+            if (!tf.equals(Typeface.DEFAULT))
+                return tf;
+        }
+        return Typeface.DEFAULT;
     }
 
     //TextUtils.dumpSpans(text, new LogPrinter(android.util.Log.INFO, "FairEmail"), "afterTextChanged ");

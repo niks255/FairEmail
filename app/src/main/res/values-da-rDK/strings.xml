@@ -56,10 +56,6 @@
         <item quantity="one">%1$d ny</item>
         <item quantity="other">%1$d nye</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">%1$d konversation valgt</item>
-        <item quantity="other">%1$d konversationer valgt</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Flyt %1$d besked?</item>
         <item quantity="other">Flyt %1$d beskeder?</item>
@@ -162,8 +158,10 @@
     <string name="title_setup_identity_what">Hvad er en identitet?</string>
     <string name="title_setup_permissions">Giv tilladelser</string>
     <string name="title_setup_permissions_remark">For at få tilgå kontaktoplysninger (valgfrit)</string>
+    <string name="title_setup_permissions_explanation">Kontakttilladelser kræves for at slå kontaktoplysninger op og foreslå kontaktpersoner</string>
     <string name="title_setup_doze">Deaktivér batterioptimering</string>
     <string name="title_setup_doze_remark">For at sende og modtage e-mail pålideligt</string>
+    <string name="title_setup_doze_explanation">Batterioptimeringer bør deaktiveres for appen for at sikre pålidelig baggrundsbeskedafsendelse og -modtagelse</string>
     <string name="title_setup_doze_hint">Selvom dette kan lyde selvmodsigende, vil deaktivering af batterioptimering for denne app resultere i lavere strømforbrug</string>
     <string name="title_setup_doze_instructions">Ændr i næste Android-dialog \"Ikke optimeret\" til \"Alle apps\", vælg denne app og \"Optimér ikke\"</string>
     <string name="title_setup_doze_battery">Højt strømforbrug?</string>
@@ -415,6 +413,7 @@
     <string name="title_advanced_notify_action_snooze">Udsæt</string>
     <string name="title_advanced_notify_remove">Fjern nye beskednotifikationer ved tryk på notifikationen</string>
     <string name="title_advanced_notify_clear">Fjern nye beskednotifikationer ved visning af beskedliste</string>
+    <string name="title_advanced_notify_subtext">Vis konto- eller mappenavn som undertekst</string>
     <string name="title_advanced_wearable_preview">Send kun notifikationer med en beskedforhåndsvisning til wearables</string>
     <string name="title_advanced_notify_messaging">Benyt Android \'beskedstil\' notifikationsformat</string>
     <string name="title_advanced_biometrics_notify">Vis notifikationsindhold ved brug af biometrisk godkendelse</string>
@@ -450,6 +449,7 @@
     <string name="title_advanced_manage_keys_hint">        Dette vil åbne Android-sikkerhedsindstillingerne.
          Nøgler og certifikater kan generelt findes under Avanceret - Kryptering og akkreditiver.
     </string>
+    <string name="title_advanced_power_menu">Føj handlinger til Androids Tænd/Sluk menu</string>
     <string name="title_advanced_external_search">Tillad andre apps at søge i beskeder</string>
     <string name="title_advanced_shortcuts">Vis ofte anvendte kontakter i Android-delingsmenuen</string>
     <string name="title_advanced_fts">Opbyg søgeindeks</string>
@@ -508,7 +508,7 @@
     <string name="title_advanced_threading_hint">Gruppér beskeder relateret til hinanden</string>
     <string name="title_advanced_highlight_hint">Temaets accentfarve benyttes til fremhævning</string>
     <string name="title_advanced_gravatars_hint">Der kan være en fortrolighedsrisiko</string>
-    <string name="title_advanced_name_email_hint">Når deaktiveret, vises kun navne, når de er tilgængelige</string>
+    <string name="title_advanced_name_email_hint">Navne vises kun, hvis tilgængelige</string>
     <string name="title_advanced_preview_hint">Kun tilgængelig, når beskedtekst er downloadet</string>
     <string name="title_advanced_preview_lines_hint">Maks. %s tegn i alt</string>
     <string name="title_advanced_preview_issue">Rulning kan, grundet en fejl i visse Android-versioner, være langsom, når antallet af linjer er flere end én</string>
@@ -776,6 +776,7 @@
     <string name="title_print_header">Udskriv header</string>
     <string name="title_print_images_remark">Download af billeder kan tage lidt tid</string>
     <string name="title_show_headers">Vis overskrifter</string>
+    <string name="title_share_as_html">Del som HTML</string>
     <string name="title_raw_save">Gem besked i råformat</string>
     <string name="title_raw_send">Send som vedhæftning</string>
     <string name="title_manage_keywords">Håndtér stikord</string>
@@ -846,6 +847,7 @@
     <string name="title_attachments_incomplete">Visse vedhæftninger eller billeder blev ikke downloadet og kunne ikke tilføjes</string>
     <string name="title_ask_save">Gem ændringer?</string>
     <string name="title_ask_delete">Slet besked permanent?</string>
+    <string name="title_ask_delete_accept">Det er forstået, at permanent beskedsletning er irreversibel</string>
     <string name="title_ask_delete_answer">Slet svarskabelon permanent?</string>
     <string name="title_ask_delete_rule">Slet regel permanent?</string>
     <string name="title_ask_discard">Kassér kladde?</string>
@@ -949,6 +951,7 @@
     <string name="title_translate_key">Angiv nøgle</string>
     <string name="title_translating">Oversætter&#8230;</string>
     <string name="title_translate_small">Benyt lille kildetekstskrifttype</string>
+    <string name="title_translate_usage">Forbrug: %1$s/%2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Redigér som almindelig tekst</string>
     <string name="title_edit_formatted_text">Redigér som omformateret tekst</string>
     <string name="title_select_certificate">Vælg offentlig nøgle</string>
@@ -1217,6 +1220,8 @@
     <string name="title_legend_view">Vis indhold</string>
     <string name="title_legend_hide">Skjul indhold</string>
     <string name="title_legend_download">Download indhold</string>
+    <string name="title_legend_original">Vis originalbesked</string>
+    <string name="title_legend_reformatted">Vis omformateret besked</string>
     <string name="title_legend_external_image">Pladsholder til eksternt billede</string>
     <string name="title_legend_embedded_image">Pladsholder til indlejret billede</string>
     <string name="title_legend_tracking_pixel">Sporingsbillede</string>
@@ -1278,6 +1283,7 @@
     <string name="title_hint_contact_actions">Langt tryk for valgmuligheder</string>
     <string name="title_hint_eml">Dette er en oversigt over indholdet af en råformatsbeskedfil. Gem den rå besked med Gem-ikonet i handlingsbjælken for at se alt indhold.</string>
     <string name="title_open_link">Åbn link</string>
+    <string name="title_image_link">Billed-link</string>
     <string name="title_different_link">Titlen og linkadressen er forskellige</string>
     <string name="title_tracking_link">Dette websted sporer dig muligvis</string>
     <string name="title_suspicious_link">Dette er et mistænkeligt link</string>
@@ -1304,6 +1310,8 @@
     <string name="title_fix">Ret</string>
     <string name="title_enable">Aktivér</string>
     <string name="title_enabled">Aktiveret</string>
+    <string name="title_disable">Deaktivér</string>
+    <string name="title_keep_current">Behold aktuelle</string>
     <string name="title_executing">Eksekverer</string>
     <string name="title_completed">Fuldført</string>
     <string name="title_default_changed">Standard ændret</string>
@@ -1337,7 +1345,8 @@
     <string name="title_pro_feature">Dette er en Pro-funktion</string>
     <string name="title_pro_list">Liste over Pro-funktioner</string>
     <string name="title_pro_purchase">Køb</string>
-    <string name="title_pro_once">Kun én gang</string>
+    <string name="title_pro_one_time">%1$s (engangskøb)</string>
+    <string name="title_pro_no_play">Play Butik blev ikke fundet</string>
     <string name="title_pro_info">        Udviklingen af FairEmail tog bogstaveligt talt tusindvis af timer, og på trods heraf, er de fleste af funktionerne gratis at benytte.
          FairEmail tager din datafortrolighed seriøst og viser ikke annoncer og anvender ikke tracking eller analyse mhp. profitformål.
          For at vedligeholde og supportere FairEmail i det lange løb er visse avancerede og bekvemmelighedsfunktioner ikke gratis at benytte.
@@ -1373,6 +1382,10 @@
     <string name="title_widget_title_count">Ny besked-tæller</string>
     <string name="title_widget_title_list">Beskedliste</string>
     <string name="title_widget_title_sync">Synk til/fra</string>
+    <string name="title_power_menu_sync">Synk</string>
+    <string name="title_power_menu_on">Til</string>
+    <string name="title_power_menu_off">Fra</string>
+    <string name="title_power_menu_on_off">Til/Fra</string>
     <string name="title_widget_account">Konto</string>
     <string name="title_widget_account_all">Alle</string>
     <string name="title_widget_folder">Mappe</string>
@@ -1547,6 +1560,12 @@
         <item>Sans-serif</item>
         <item>Monospatieret</item>
         <item>Fantasi</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <string-array name="addressFormatNames">
+        <item>Kun navn</item>
+        <item>Kun e-mail</item>
+        <item>Navn eller e-mail</item>
+    </string-array>
 </resources>

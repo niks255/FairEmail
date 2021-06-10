@@ -56,10 +56,6 @@
         <item quantity="one">%1$d nytt</item>
         <item quantity="other">%1$d nya</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Vald %1$d konversation</item>
-        <item quantity="other">Valda %1$d konversationer</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Flytta %1$d meddelande?</item>
         <item quantity="other">Flytta %1$d meddelanden?</item>
@@ -512,7 +508,6 @@
     <string name="title_advanced_threading_hint">Gruppera meddelanden relaterade till varandra</string>
     <string name="title_advanced_highlight_hint">Accentfärgen på temat kommer att användas för markering</string>
     <string name="title_advanced_gravatars_hint">Det kan finnas en integritetsrisk</string>
-    <string name="title_advanced_name_email_hint">När inaktiverad visas endast namn när det är tillgängligt</string>
     <string name="title_advanced_preview_hint">Endast tillgängligt när meddelandetexten hämtades</string>
     <string name="title_advanced_preview_lines_hint">Max %s tecken totalt</string>
     <string name="title_advanced_preview_issue">Scrollningen kan vara långsam på grund av en bugg i vissa Android-versioner när antalet rader är mer än en</string>
@@ -1339,7 +1334,6 @@
     <string name="title_pro_feature">Detta är en pro-funktion</string>
     <string name="title_pro_list">Lista över pro-funktioner</string>
     <string name="title_pro_purchase">Köp</string>
-    <string name="title_pro_once">Endast en gång</string>
     <string name="title_pro_info">        Att utveckla FairEmail tog bokstavligen tusentals timmar, trots att de flesta funktioner är fria att använda.
         FairEmail tar din integritet på allvar och visar inte annonser och använder inte spårning eller analys för att tjäna pengar.
         Att underhålla och stödja FairEmail i det långa loppet, vissa bekvämlighets- och avancerade funktioner är inte gratis att använda.
@@ -1549,6 +1543,7 @@
         <item>Sans-serif</item>
         <item>Monospace</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

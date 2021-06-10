@@ -222,16 +222,18 @@ public class MessageHelper {
             String email = ((InternetAddress) message.from[0]).getAddress();
             String name = ((InternetAddress) message.from[0]).getPersonal();
             if (identity != null && identity.sender_extra &&
-                    identity.email.contains("@") &&
-                    email != null &&
-                    email.contains("@") &&
-                    message.extra != null &&
-                    !message.extra.equals(identity.email.split("@")[0])) {
+                    email != null && message.extra != null) {
                 int at = email.indexOf('@');
-                email = message.extra + email.substring(at);
-                if (!identity.sender_extra_name)
-                    name = null;
-                Log.i("extra=" + email);
+                String username = identity.email.split("@")[0];
+                if (at > 0 && !message.extra.equals(username)) {
+                    if (message.extra.length() > 1 && message.extra.startsWith("+"))
+                        email = email.substring(0, at) + message.extra + email.substring(at);
+                    else
+                        email = message.extra + email.substring(at);
+                    if (!identity.sender_extra_name)
+                        name = null;
+                    Log.i("extra=" + email);
+                }
             }
             imessage.setFrom(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
         }
@@ -1201,28 +1203,6 @@ public class MessageHelper {
         return result;
     }
 
-    String getReceivedFromHost() throws MessagingException {
-        ensureHeaders();
-
-        String[] received = imessage.getHeader("Received");
-        if (received == null || received.length == 0)
-            return null;
-
-        String origin = MimeUtility.unfold(received[received.length - 1]);
-
-        String[] h = origin.split("\\s+");
-        if (h.length > 1 && h[0].equalsIgnoreCase("from")) {
-            String host = h[1];
-            int s = origin.indexOf('[');
-            int e = origin.indexOf(']');
-            if (s > 0 && e > s + 1)
-                host = origin.substring(s + 1, e);
-            return host;
-        }
-
-        return null;
-    }
-
     private String fixEncoding(String name, String header) {
         if (header.trim().startsWith("=?"))
             return header;
@@ -1304,7 +1284,10 @@ public class MessageHelper {
     }
 
     Address[] getSender() throws MessagingException {
-        return getAddressHeader("Sender");
+        Address[] sender = getAddressHeader("X-Google-Original-From");
+        if (sender == null)
+            sender = getAddressHeader("Sender");
+        return sender;
     }
 
     Address[] getFrom() throws MessagingException {
@@ -1516,6 +1499,20 @@ public class MessageHelper {
         }
     }
 
+    enum AddressFormat {NAME_ONLY, EMAIL_ONLY, NAME_EMAIL}
+
+    static AddressFormat getAddressFormat(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean name_email = prefs.getBoolean("name_email", false);
+        int email_format = prefs.getInt("email_format", name_email
+                ? MessageHelper.AddressFormat.NAME_EMAIL.ordinal()
+                : MessageHelper.AddressFormat.NAME_ONLY.ordinal());
+        if (email_format < MessageHelper.AddressFormat.values().length)
+            return MessageHelper.AddressFormat.values()[email_format];
+        else
+            return MessageHelper.AddressFormat.NAME_ONLY;
+    }
+
     static String formatAddresses(Address[] addresses) {
         return formatAddresses(addresses, true, false);
     }
@@ -1532,6 +1529,10 @@ public class MessageHelper {
     }
 
     static String formatAddresses(Address[] addresses, boolean full, boolean compose) {
+        return formatAddresses(addresses, full ? AddressFormat.NAME_EMAIL : AddressFormat.NAME_ONLY, compose);
+    }
+
+    static String formatAddresses(Address[] addresses, AddressFormat format, boolean compose) {
         if (addresses == null || addresses.length == 0)
             return "";
 
@@ -1551,7 +1552,7 @@ public class MessageHelper {
                 String email = address.getAddress();
                 String personal = address.getPersonal();
 
-                if (TextUtils.isEmpty(personal))
+                if (TextUtils.isEmpty(personal) || format == AddressFormat.EMAIL_ONLY)
                     formatted.add(email);
                 else {
                     if (compose) {
@@ -1567,7 +1568,7 @@ public class MessageHelper {
                             personal = "\"" + personal + "\"";
                     }
 
-                    if (full)
+                    if (format == AddressFormat.NAME_EMAIL)
                         formatted.add(personal + " <" + email + ">");
                     else
                         formatted.add(personal);
@@ -2365,131 +2366,149 @@ public class MessageHelper {
     MessageParts getMessageParts() throws IOException, MessagingException {
         MessageParts parts = new MessageParts();
 
-        ensureStructure();
-
         try {
-            MimePart part = imessage;
+            ensureStructure();
 
-            if (part.isMimeType("multipart/mixed")) {
-                Object content = part.getContent();
-                if (content instanceof Multipart) {
-                    Multipart mp = (Multipart) content;
-                    for (int i = 0; i < mp.getCount(); i++) {
-                        BodyPart bp = mp.getBodyPart(i);
-                        if (bp.isMimeType("multipart/signed") || bp.isMimeType("multipart/encrypted")) {
-                            part = (MimePart) bp;
-                            break;
-                        }
-                    }
-                } else {
-                    String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
-                    Log.e(msg);
-                    throw new MessagingException(msg);
-                }
-            }
+            try {
+                MimePart part = imessage;
 
-            if (part.isMimeType("multipart/signed")) {
-                ContentType ct = new ContentType(part.getContentType());
-                String protocol = ct.getParameter("protocol");
-                if ("application/pgp-signature".equals(protocol) ||
-                        "application/pkcs7-signature".equals(protocol) ||
-                        "application/x-pkcs7-signature".equals(protocol)) {
+                if (part.isMimeType("multipart/mixed")) {
                     Object content = part.getContent();
                     if (content instanceof Multipart) {
-                        Multipart multipart = (Multipart) content;
-                        if (multipart.getCount() == 2) {
-                            getMessageParts(multipart.getBodyPart(0), parts, null);
-                            getMessageParts(multipart.getBodyPart(1), parts,
-                                    "application/pgp-signature".equals(protocol)
-                                            ? EntityAttachment.PGP_SIGNATURE
-                                            : EntityAttachment.SMIME_SIGNATURE);
-
-                            AttachmentPart apart = new AttachmentPart();
-                            apart.disposition = Part.INLINE;
-                            apart.filename = "content.asc";
-                            apart.encrypt = "application/pgp-signature".equals(protocol)
-                                    ? EntityAttachment.PGP_CONTENT
-                                    : EntityAttachment.SMIME_CONTENT;
-                            apart.part = part;
-
-                            apart.attachment = new EntityAttachment();
-                            apart.attachment.disposition = apart.disposition;
-                            apart.attachment.name = apart.filename;
-                            apart.attachment.type = "text/plain";
-                            apart.attachment.size = getSize();
-                            apart.attachment.encryption = apart.encrypt;
-
-                            parts.attachments.add(apart);
-
-                            return parts;
-                        } else {
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(ct);
-                            for (int i = 0; i < multipart.getCount(); i++)
-                                sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
-                            Log.e(sb.toString());
+                        Multipart mp = (Multipart) content;
+                        for (int i = 0; i < mp.getCount(); i++) {
+                            BodyPart bp = mp.getBodyPart(i);
+                            if (bp.isMimeType("multipart/signed") || bp.isMimeType("multipart/encrypted")) {
+                                part = (MimePart) bp;
+                                break;
+                            }
                         }
                     } else {
                         String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
                         Log.e(msg);
                         throw new MessagingException(msg);
                     }
-                } else
-                    Log.e(ct.toString());
-            } else if (part.isMimeType("multipart/encrypted")) {
-                ContentType ct = new ContentType(part.getContentType());
-                String protocol = ct.getParameter("protocol");
-                if ("application/pgp-encrypted".equals(protocol) || protocol == null) {
-                    Object content = part.getContent();
-                    if (content instanceof Multipart) {
-                        Multipart multipart = (Multipart) content;
-                        if (multipart.getCount() == 2) {
-                            // Ignore header
-                            getMessageParts(multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
-                            return parts;
-                        } else {
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(ct);
-                            for (int i = 0; i < multipart.getCount(); i++)
-                                sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
-                            Log.e(sb.toString());
-                        }
-                    } else {
-                        String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
-                        Log.e(msg);
-                        throw new MessagingException(msg);
-                    }
-                } else
-                    Log.e(ct.toString());
-            } else if (part.isMimeType("application/pkcs7-mime") ||
-                    part.isMimeType("application/x-pkcs7-mime")) {
-                ContentType ct = new ContentType(part.getContentType());
-                String smimeType = ct.getParameter("smime-type");
-                if ("enveloped-data".equalsIgnoreCase(smimeType)) {
-                    getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
-                    return parts;
-                } else if ("signed-data".equalsIgnoreCase(smimeType)) {
-                    getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
-                    return parts;
-                } else {
-                    if (TextUtils.isEmpty(smimeType)) {
-                        String name = ct.getParameter("name");
-                        if ("smime.p7m".equalsIgnoreCase(name)) {
-                            getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
-                            return parts;
-                        } else if ("smime.p7s".equalsIgnoreCase(name)) {
-                            getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
-                            return parts;
-                        }
-                    }
-                    Log.e(ct.toString());
                 }
+
+                if (part.isMimeType("multipart/signed")) {
+                    ContentType ct = new ContentType(part.getContentType());
+                    String protocol = ct.getParameter("protocol");
+                    if ("application/pgp-signature".equals(protocol) ||
+                            "application/pkcs7-signature".equals(protocol) ||
+                            "application/x-pkcs7-signature".equals(protocol)) {
+                        Object content = part.getContent();
+                        if (content instanceof Multipart) {
+                            Multipart multipart = (Multipart) content;
+                            if (multipart.getCount() == 2) {
+                                getMessageParts(multipart.getBodyPart(0), parts, null);
+                                getMessageParts(multipart.getBodyPart(1), parts,
+                                        "application/pgp-signature".equals(protocol)
+                                                ? EntityAttachment.PGP_SIGNATURE
+                                                : EntityAttachment.SMIME_SIGNATURE);
+
+                                AttachmentPart apart = new AttachmentPart();
+                                apart.disposition = Part.INLINE;
+                                apart.filename = "content.asc";
+                                apart.encrypt = "application/pgp-signature".equals(protocol)
+                                        ? EntityAttachment.PGP_CONTENT
+                                        : EntityAttachment.SMIME_CONTENT;
+                                apart.part = part;
+
+                                apart.attachment = new EntityAttachment();
+                                apart.attachment.disposition = apart.disposition;
+                                apart.attachment.name = apart.filename;
+                                apart.attachment.type = "text/plain";
+                                apart.attachment.size = getSize();
+                                apart.attachment.encryption = apart.encrypt;
+
+                                parts.attachments.add(apart);
+
+                                return parts;
+                            } else {
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(ct);
+                                for (int i = 0; i < multipart.getCount(); i++)
+                                    sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
+                                Log.e(sb.toString());
+                            }
+                        } else {
+                            String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
+                            Log.e(msg);
+                            throw new MessagingException(msg);
+                        }
+                    } else
+                        Log.e(ct.toString());
+                } else if (part.isMimeType("multipart/encrypted")) {
+                    ContentType ct = new ContentType(part.getContentType());
+                    String protocol = ct.getParameter("protocol");
+                    if ("application/pgp-encrypted".equals(protocol) || protocol == null) {
+                        Object content = part.getContent();
+                        if (content instanceof Multipart) {
+                            Multipart multipart = (Multipart) content;
+                            if (multipart.getCount() == 2) {
+                                // Ignore header
+                                getMessageParts(multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
+                                return parts;
+                            } else {
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(ct);
+                                for (int i = 0; i < multipart.getCount(); i++)
+                                    sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
+                                Log.e(sb.toString());
+                            }
+                        } else {
+                            String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
+                            Log.e(msg);
+                            throw new MessagingException(msg);
+                        }
+                    } else
+                        Log.e(ct.toString());
+                } else if (part.isMimeType("application/pkcs7-mime") ||
+                        part.isMimeType("application/x-pkcs7-mime")) {
+                    ContentType ct = new ContentType(part.getContentType());
+                    String smimeType = ct.getParameter("smime-type");
+                    if ("enveloped-data".equalsIgnoreCase(smimeType)) {
+                        getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
+                        return parts;
+                    } else if ("signed-data".equalsIgnoreCase(smimeType)) {
+                        getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
+                        return parts;
+                    } else {
+                        if (TextUtils.isEmpty(smimeType)) {
+                            String name = ct.getParameter("name");
+                            if ("smime.p7m".equalsIgnoreCase(name)) {
+                                getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
+                                return parts;
+                            } else if ("smime.p7s".equalsIgnoreCase(name)) {
+                                getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
+                                return parts;
+                            }
+                        }
+                        Log.e(ct.toString());
+                    }
+                }
+            } catch (ParseException ex) {
+                Log.w(ex);
             }
-        } catch (ParseException ex) {
-            Log.w(ex);
+
+            getMessageParts(imessage, parts, null);
+        } catch (OutOfMemoryError ex) {
+            Log.e(ex);
+            parts.warnings.add(Log.formatThrowable(ex, false));
+            /*
+                java.lang.OutOfMemoryError: Failed to allocate a xxx byte allocation with yyy free bytes and zzMB until OOM
+                        at java.io.ByteArrayOutputStream.expand(ByteArrayOutputStream.java:91)
+                        at java.io.ByteArrayOutputStream.write(ByteArrayOutputStream.java:201)
+                        at com.sun.mail.util.ASCIIUtility.getBytes(ASCIIUtility:279)
+                        at javax.mail.internet.MimeMessage.parse(MimeMessage:336)
+                        at javax.mail.internet.MimeMessage.<init>(MimeMessage:199)
+                        at eu.faircode.email.MimeMessageEx.<init>(MimeMessageEx:44)
+                        at eu.faircode.email.MessageHelper._ensureMessage(MessageHelper:2732)
+                        at eu.faircode.email.MessageHelper.ensureStructure(MessageHelper:2685)
+                        at eu.faircode.email.MessageHelper.getMessageParts(MessageHelper:2368)
+             */
         }
 
-        getMessageParts(imessage, parts, null);
         return parts;
     }
 

@@ -58,12 +58,6 @@
         <item quantity="many">%1$d нових</item>
         <item quantity="other">%1$d нові</item>
     </plurals>
-    <plurals name="title_selected_conversations">
-        <item quantity="one">Вибрана %1$d розмова</item>
-        <item quantity="few">Вибрано %1$d розмов</item>
-        <item quantity="many">Вибрано %1$d розмов</item>
-        <item quantity="other">Обрано %1$d розмов</item>
-    </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">Перемістити %1$d повідомлення?</item>
         <item quantity="few">Перемістити %1$d повідомлень?</item>
@@ -175,8 +169,10 @@
     <string name="title_setup_free">Цей додаток може використовуватися безкоштовно?</string>
     <string name="title_setup_permissions">Надати дозволи</string>
     <string name="title_setup_permissions_remark">Доступ до контактної інформації (необов\'язково)</string>
+    <string name="title_setup_permissions_explanation">Щоб переглянути контактні дані й запропонувати контакти</string>
     <string name="title_setup_doze">Вимкнути оптимізацію використання батареї</string>
     <string name="title_setup_doze_remark">Для надійного отримання та надсилання електронної пошти</string>
+    <string name="title_setup_doze_explanation">Оптимізація живлення повинна бути вимкнена для додатку, щоб забезпечити надійне надсилання та отримання повідомлень у фоновому режимі</string>
     <string name="title_setup_doze_hint">Хоча це може звучати суперечливо, вимкнення оптимізації заряду акумулятора призведе до меншого використання батареї</string>
     <string name="title_setup_doze_instructions">В наступному діалозі Android змініть в меню \"Додатки без оптимізації\" на \"Усі додатки\", виберіть додаток FairEmail і далі \"Не оптимізувати\"</string>
     <string name="title_setup_doze_battery">Високе споживання заряду акумулятора?</string>
@@ -468,6 +464,7 @@
     <string name="title_advanced_manage_keys_hint">        Це дозволить відкрити налаштування безпеки Android.
         Ключі та сертифікати зазвичай можна знайти в розділі Безпека та місцезнаходження - Додатково - Шифрування й облікові дані.
     </string>
+    <string name="title_advanced_power_menu">Додати дії до меню живлення в Android</string>
     <string name="title_advanced_external_search">Дозволити іншим програмам пошук в повідомленнях</string>
     <string name="title_advanced_shortcuts">Показувати, в меню швидкого доступу до Android, найчастіше використовувані контакти</string>
     <string name="title_advanced_fts">Побудувати індекс для пошуку</string>
@@ -527,7 +524,6 @@
     <string name="title_advanced_threading_hint">Групові повідомлення, пов\'язані один з одним</string>
     <string name="title_advanced_highlight_hint">Акцентований колір теми буде використаний для виділення</string>
     <string name="title_advanced_gravatars_hint">Там може бути ризик приватності</string>
-    <string name="title_advanced_name_email_hint">При вимкненні будуть показанні лише імена, якщо вони будуть доступні</string>
     <string name="title_advanced_preview_hint">Доступно тільки коли повідомлення буде завантажено</string>
     <string name="title_advanced_preview_lines_hint">Максимум: %s символів</string>
     <string name="title_advanced_preview_issue">Прокручування може бути повільним через помилку у деяких версіях Android, коли кількість рядків більше одного</string>
@@ -874,6 +870,7 @@
     <string name="title_attachments_incomplete">Деякі вкладення або зображення не були завантажені і не можуть бути додані</string>
     <string name="title_ask_save">Зберегти зміни?</string>
     <string name="title_ask_delete">Видалити повідомлення остаточно?</string>
+    <string name="title_ask_delete_accept">Я розумію, що назавжди видалені повідомлення не можуть бути відновленні</string>
     <string name="title_ask_delete_answer">Видалити шаблон відповіді остаточно?</string>
     <string name="title_ask_delete_rule">Видалити правило остаточно?</string>
     <string name="title_ask_discard">Відхилити чернетку?</string>
@@ -975,8 +972,12 @@
     <string name="title_insert_contact_group">Вставити групу контактів</string>
     <string name="title_insert_template">Вставити шаблон</string>
     <string name="title_create_template">Створити шаблон</string>
+    <string name="title_translate">Переклад</string>
     <string name="title_translate_configure">Налаштувати &#8230;</string>
+    <string name="title_translate_key">Введіть ключ</string>
+    <string name="title_translating">Переклад &#8230;</string>
     <string name="title_translate_small">Використовувати малий шрифт для початкового тексту</string>
+    <string name="title_translate_usage">Використання: %1$s / %2$s (%3$d %%)</string>
     <string name="title_edit_plain_text">Редагувати як звичайний текст</string>
     <string name="title_edit_formatted_text">Редагувати як переформатований текст</string>
     <string name="title_select_certificate">Виберіть відкритий ключ</string>
@@ -1200,6 +1201,7 @@
     <string name="title_legend_connecting">З’єднання</string>
     <string name="title_legend_connected">Підключено</string>
     <string name="title_legend_backoff">Очікування після збою</string>
+    <string name="title_legend_quota">Поштова скринька майже заповнена</string>
     <string name="title_legend_executing">Виконання операцій</string>
     <string name="title_legend_synchronizing">Синхронізація</string>
     <string name="title_legend_downloading">Завантажується</string>
@@ -1246,6 +1248,8 @@
     <string name="title_legend_view">Переглянути вміст</string>
     <string name="title_legend_hide">Приховати вміст</string>
     <string name="title_legend_download">Завантажити вміст</string>
+    <string name="title_legend_original">Переглянути оригінал повідомлення</string>
+    <string name="title_legend_reformatted">Перегляд переформатованого повідомлення</string>
     <string name="title_legend_external_image">Зовнішній заповнювач зображень</string>
     <string name="title_legend_embedded_image">Вбудований заповнювач зображень</string>
     <string name="title_legend_tracking_pixel">Зображення для відстеження</string>
@@ -1307,6 +1311,7 @@
     <string name="title_hint_contact_actions">Довге натискання для параметрів</string>
     <string name="title_hint_eml">Це короткий виклад вмісту raw повідомлення. Збережіть raw повідомлення зі значком збереження на панелі дій для перегляду всього вмісту.</string>
     <string name="title_open_link">Відкрити посилання</string>
+    <string name="title_image_link">Посилання на зображення</string>
     <string name="title_different_link">Назва та адреса посилання відрізняються</string>
     <string name="title_tracking_link">Цей сайт може відстежувати Вас</string>
     <string name="title_suspicious_link">Це підозріле посилання</string>
@@ -1333,6 +1338,8 @@
     <string name="title_fix">Виправлення</string>
     <string name="title_enable">Увімкнути</string>
     <string name="title_enabled">Увімкнено</string>
+    <string name="title_disable">Вимкнути</string>
+    <string name="title_keep_current">Залишити поточне</string>
     <string name="title_executing">Виконання</string>
     <string name="title_completed">Завершено</string>
     <string name="title_default_changed">За замовчуванням змінено</string>
@@ -1366,7 +1373,8 @@
     <string name="title_pro_feature">Це функція професійної версії</string>
     <string name="title_pro_list">Перелік функцій Pro</string>
     <string name="title_pro_purchase">Придбати</string>
-    <string name="title_pro_once">Лише один раз</string>
+    <string name="title_pro_one_time">%1$s (одноразове придбання)</string>
+    <string name="title_pro_no_play">Play Store не знайдено</string>
     <string name="title_pro_info">        Розробка FairEmail зайняла тисячі годин і незважаючи на це, більшість функцій можуть вільно використовуватися.
         FairEmail серйозно охороняє Вашу конфіденційність і не показує рекламу, не використовує відстеження або аналітику, щоб заробити гроші.
         Щоб зберегти і підтримати FairEmail в довгостроковій перспективі, деякі зручності та розширені функції обмеженні.
@@ -1402,6 +1410,10 @@
     <string name="title_widget_title_count">Кількість нових повідомлень</string>
     <string name="title_widget_title_list">Список повідомлень</string>
     <string name="title_widget_title_sync">Синхронізацію увімк/вимк</string>
+    <string name="title_power_menu_sync">Синхронізація</string>
+    <string name="title_power_menu_on">Увімкнено</string>
+    <string name="title_power_menu_off">Вимкнено</string>
+    <string name="title_power_menu_on_off">Увімк./Вимк.</string>
     <string name="title_widget_account">Обліковий запис</string>
     <string name="title_widget_account_all">Усі</string>
     <string name="title_widget_folder">Тека</string>
@@ -1572,6 +1584,7 @@
         <item>Без зарубок</item>
         <item>Моноширинний шрифт</item>
         <item>Fantasy</item>
+        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
 </resources>

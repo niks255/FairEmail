@@ -51,6 +51,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -185,6 +186,7 @@ import biweekly.parameter.ParticipationStatus;
 import biweekly.property.Attendee;
 import biweekly.property.Method;
 import biweekly.property.Organizer;
+import biweekly.property.RawProperty;
 import biweekly.util.ICalDate;
 
 import static android.app.Activity.RESULT_OK;
@@ -243,7 +245,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean indentation;
     private boolean avatars;
     private boolean color_stripe;
-    private boolean name_email;
+    private MessageHelper.AddressFormat email_format;
     private boolean prefer_contact;
     private boolean only_contact;
     private boolean distinguish_contacts;
@@ -282,6 +284,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private Map<Integer, Long> positionKey = new HashMap<>();
     private SelectionTracker<Long> selectionTracker = null;
 
+    private RecyclerView rv = null;
+    private Parcelable savedState = null;
+
     enum ViewType {UNIFIED, FOLDER, THREAD, SEARCH}
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -293,6 +298,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     private static final int MAX_RECIPIENTS_COMPACT = 3;
     private static final int MAX_RECIPIENTS_NORMAL = 7;
+    private static final int MAX_QUOTE_LEVEL = 3;
 
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     private static final List<String> IMAP_KEYWORDS_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
@@ -314,7 +320,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             "$attachment".toLowerCase(Locale.ROOT), // Kmail
             "$signed".toLowerCase(Locale.ROOT), // Kmail
             "$encrypted".toLowerCase(Locale.ROOT), // Kmail
-            "$Classified".toLowerCase(Locale.ROOT)
+            "$Classified".toLowerCase(Locale.ROOT),
+            "$HasNoAttachment".toLowerCase(Locale.ROOT)
     ));
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
@@ -1043,14 +1050,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             else
                 ivSigned.clearColorFilter();
             ivEncrypted.setVisibility(message.encrypted > 0 ? View.VISIBLE : View.GONE);
-            if (show_recipients && recipients != null && recipients.length > 0)
+
+            MessageHelper.AddressFormat format = email_format;
+            if (junk)
+                format = MessageHelper.AddressFormat.NAME_EMAIL;
+
+            if (show_recipients && recipients != null && recipients.length > 0) {
                 tvFrom.setText(context.getString(outgoing && viewType != ViewType.THREAD && compact
                                 ? R.string.title_to_from
                                 : R.string.title_from_to,
-                        MessageHelper.formatAddresses(senders, name_email || junk, false),
-                        MessageHelper.formatAddresses(recipients, name_email || junk, false)));
-            else
-                tvFrom.setText(MessageHelper.formatAddresses(senders, name_email || junk, false));
+                        MessageHelper.formatAddresses(senders, format, false),
+                        MessageHelper.formatAddresses(recipients, format, false)));
+            } else
+                tvFrom.setText(MessageHelper.formatAddresses(senders, format, false));
+
             tvFrom.setPaintFlags(tvFrom.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
             tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize));
             tvSize.setVisibility(
@@ -1090,7 +1103,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             ivFound.setVisibility(message.ui_found && found ? View.VISIBLE : View.GONE);
-            ivClassified.setVisibility(message.auto_classified || message.hasKeyword("$Classified") ? View.VISIBLE : View.GONE);
+            ivClassified.setVisibility(message.auto_classified ? View.VISIBLE : View.GONE);
 
             int snoozy = (message.ui_snoozed != null && message.ui_snoozed == Long.MAX_VALUE
                     ? R.drawable.twotone_visibility_off_24
@@ -1848,7 +1861,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void bindAddresses(TupleMessageEx message) {
             boolean show_addresses = properties.getValue("addresses", message.id);
-            boolean full = (show_addresses || name_email || EntityFolder.JUNK.equals(message.folderType));
+            boolean full = (show_addresses ||
+                    email_format == MessageHelper.AddressFormat.NAME_EMAIL ||
+                    EntityFolder.JUNK.equals(message.folderType));
 
             int froms = (message.from == null ? 0 : message.from.length);
             int tos = (message.to == null ? 0 : message.to.length);
@@ -2029,12 +2044,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         continue;
                     int at = from.indexOf('@');
                     String domain = (at < 0 ? from : from.substring(at));
-                    if (prefs.getBoolean(from + ".show_full", false) ||
+                    if (message.show_full ||
+                            prefs.getBoolean(from + ".show_full", false) ||
                             prefs.getBoolean(domain + ".show_full", false)) {
                         properties.setValue("full", message.id, true);
                         properties.setValue("full_asked", message.id, true);
                     }
-                    if (prefs.getBoolean(from + ".show_images", false) ||
+                    if (message.show_images ||
+                            prefs.getBoolean(from + ".show_images", false) ||
                             prefs.getBoolean(domain + ".show_images", false)) {
                         properties.setValue("images", message.id, true);
                         properties.setValue("images_asked", message.id, true);
@@ -2731,6 +2748,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String description = (event.getDescription() == null ? null : event.getDescription().getValue());
                     String location = (event.getLocation() == null ? null : event.getLocation().getValue());
 
+                    if (false) {
+                        RawProperty xAltDesc = event.getExperimentalProperty("X-ALT-DESC");
+                        if (xAltDesc != null &&
+                                xAltDesc.getValue() != null &&
+                                "text/html".equals(xAltDesc.getParameter("FMTTYPE")))
+                            description = xAltDesc.getValue();
+                    }
+
                     ICalDate start = (event.getDateStart() == null ? null : event.getDateStart().getValue());
                     ICalDate end = (event.getDateEnd() == null ? null : event.getDateEnd().getValue());
 
@@ -2763,7 +2788,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvCalendarSummary.setText(summary);
                     tvCalendarSummary.setVisibility(TextUtils.isEmpty(summary) ? View.GONE : View.VISIBLE);
 
-                    tvCalendarDescription.setText(description);
+                    if (description == null)
+                        tvCalendarDescription.setText(description);
+                    else
+                        try {
+                            tvCalendarDescription.setText(HtmlHelper.fromHtml(description, context));
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                            tvCalendarDescription.setText(description);
+                        }
                     tvCalendarDescription.setVisibility(TextUtils.isEmpty(description) ? View.GONE : View.VISIBLE);
 
                     tvCalendarLocation.setText(location);
@@ -3809,10 +3842,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
 
                 properties.setValue(full ? "full" : "images", message.id, !current);
-                if (full)
-                    onShowFullConfirmed(message);
-                else
-                    onShowImagesConfirmed(message);
+                onShowConfirmed(message, full, !current);
+
                 return;
             }
 
@@ -3917,10 +3948,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 }
                             editor.apply();
 
-                            if (full)
-                                onShowFullConfirmed(message);
-                            else
-                                onShowImagesConfirmed(message);
+                            onShowConfirmed(message, full, true);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
@@ -3947,17 +3975,48 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             });
         }
 
-        private void onShowFullConfirmed(final TupleMessageEx message) {
-            properties.setSize(message.id, null);
-            properties.setHeight(message.id, null);
-            properties.setPosition(message.id, null);
+        private void onShowConfirmed(final TupleMessageEx message, boolean full, boolean value) {
+            if (full)
+                message.show_full = value;
+            else
+                message.show_images = value;
 
-            setupTools(message, false, false);
-            bindBody(message, false);
-        }
+            if (full) {
+                properties.setSize(message.id, null);
+                properties.setHeight(message.id, null);
+                properties.setPosition(message.id, null);
 
-        private void onShowImagesConfirmed(TupleMessageEx message) {
+                setupTools(message, false, false);
+            }
+
             bindBody(message, false);
+
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            args.putBoolean("full", full);
+            args.putBoolean("value", value);
+
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+                    boolean full = args.getBoolean("full");
+                    boolean value = args.getBoolean("value");
+
+                    DB db = DB.getInstance(context);
+                    if (full)
+                        db.message().setMessageShowFull(id, value);
+                    else
+                        db.message().setMessageShowImages(id, value);
+
+                    return null;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:full");
         }
 
         private void onActionOpenFull(final TupleMessageEx message) {
@@ -4127,7 +4186,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             aargs.putString("remark", message.getRemark());
             aargs.putLong("id", message.id);
             aargs.putInt("faq", 160);
+            aargs.putString("notagain", "delete_asked");
+            aargs.putString("accept", context.getString(R.string.title_ask_delete_accept));
             aargs.putBoolean("warning", true);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean delete_asked = prefs.getBoolean("delete_asked", false);
+            if (delete_asked) {
+                Intent data = new Intent();
+                data.putExtra("args", aargs);
+                parentFragment.onActivityResult(FragmentMessages.REQUEST_MESSAGE_DELETE, RESULT_OK, data);
+                return;
+            }
 
             FragmentDialogAsk ask = new FragmentDialogAsk();
             ask.setArguments(aargs);
@@ -4229,6 +4299,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_show_headers).setEnabled(message.uid != null ||
                     (message.accountProtocol == EntityAccount.TYPE_POP && message.headers != null));
 
+            popupMenu.getMenu().findItem(R.id.menu_share_as_html).setEnabled(message.content && BuildConfig.DEBUG);
+
             popupMenu.getMenu().findItem(R.id.menu_raw_save).setEnabled(message.uid != null);
             popupMenu.getMenu().findItem(R.id.menu_raw_send).setEnabled(message.uid != null);
 
@@ -4308,6 +4380,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_show_headers) {
                         onMenuShowHeaders(message);
+                        return true;
+                    } else if (itemId == R.id.menu_share_as_html) {
+                        onMenuShareHtml(message);
                         return true;
                     } else if (itemId == R.id.menu_raw_save) {
                         onMenuRawSave(message);
@@ -4868,6 +4943,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String link = "message://" + BuildConfig.APPLICATION_ID + "/" + message.id;
 
                     Document document = JsoupEx.parse(file);
+                    HtmlHelper.quoteLimit(document, MAX_QUOTE_LEVEL);
 
                     Element a = document.createElement("a");
                     a.text(context.getString(R.string.app_name));
@@ -5049,6 +5125,36 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 }.execute(context, owner, args, "message:headers");
             }
+        }
+
+        private void onMenuShareHtml(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<String>() {
+                @Override
+                protected String onExecute(Context context, Bundle args) throws IOException {
+                    Long id = args.getLong("id");
+
+                    File file = EntityMessage.getFile(context, id);
+                    Document d = JsoupEx.parse(file);
+
+                    return d.html();
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, String html) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, html);
+                    context.startActivity(intent);
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:headers");
         }
 
         private void onMenuRawSave(TupleMessageEx message) {
@@ -5336,7 +5442,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 boolean junk = EntityFolder.JUNK.equals(message.folderType);
                 Address[] addresses = (EntityFolder.isOutgoing(message.folderType) &&
                         (viewType != ViewType.THREAD || !threading) ? message.to : message.senders);
-                String from = MessageHelper.formatAddresses(addresses, name_email || junk, false);
+                MessageHelper.AddressFormat format = email_format;
+                if (junk)
+                    format = MessageHelper.AddressFormat.NAME_EMAIL;
+                String from = MessageHelper.formatAddresses(addresses, format, false);
+
                 // For a11y purpose subject is reported first when: user wishes so or this is a single outgoing message
                 if (subject_top || (outgoing && message.visible == 1)) {
                     result.add(message.subject); // Don't want to ellipsize for a11y
@@ -5466,7 +5576,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         this.avatars = (contacts && avatars) || (gravatars || favicons || generated);
         this.color_stripe = prefs.getBoolean("color_stripe", true);
-        this.name_email = prefs.getBoolean("name_email", false);
+        this.email_format = MessageHelper.getAddressFormat(context);
         this.prefer_contact = prefs.getBoolean("prefer_contact", false);
         this.only_contact = prefs.getBoolean("only_contact", false);
         this.distinguish_contacts = prefs.getBoolean("distinguish_contacts", false);
@@ -5756,6 +5866,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("ui_unsnoozed changed", next.id);
                 }
+                // show_images
+                // show_full
                 if (!Objects.equals(prev.color, next.color)) {
                     same = false;
                     log("color changed", next.id);
@@ -5886,6 +5998,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.differ.addPagedListListener(new AsyncPagedListDiffer.PagedListListener<TupleMessageEx>() {
             @Override
             public void onCurrentListChanged(@Nullable PagedList<TupleMessageEx> previousList, @Nullable PagedList<TupleMessageEx> currentList) {
+                // https://issuetracker.google.com/issues/70149059
+                if (rv != null && savedState != null)
+                    rv.getLayoutManager().onRestoreInstanceState(savedState);
+                savedState = null;
+
                 if (gotoTop && previousList != null) {
                     if (ascending) {
                         if (currentList != null && currentList.size() > 0) {
@@ -6008,6 +6125,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 message.resolveKeywordColors(context);
             }
         }
+
+        if (rv != null)
+            savedState = rv.getLayoutManager().onSaveInstanceState();
 
         differ.submitList(list);
     }
@@ -6188,6 +6308,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             holder.tvBody.setText(null);
         if (holder.wvBody instanceof WebView)
             ((WebView) holder.wvBody).loadDataWithBaseURL(null, "", "text/html", StandardCharsets.UTF_8.name(), null);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        rv = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        rv = null;
     }
 
     void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
