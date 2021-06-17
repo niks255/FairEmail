@@ -169,6 +169,8 @@
     <string name="title_setup_doze_instructions">Στο επόμενο παράθυρο διαλόγου του Android αλλάζετε το \"Μη βελτιστοποιημένες\" σε \"Όλες οι εφαρμογές\", επιλέγετε αυτήν την εφαρμογή και επιλέγετε \"Να μην γίνεται βελτιστοποίηση\"</string>
     <string name="title_setup_doze_battery">Η μπαταρία χρησιμοποιείται παραπάνω από το κανονικό;</string>
     <string name="title_setup_doze_stopped">Σταμάτησε ο συγχρονισμός;</string>
+    <string name="title_setup_doze_device">Αυτό πιθανόν απαιτείται για αυτήν τη συσκευή</string>
+    <string name="title_setup_doze_android">Αυτό απαιτείται για αυτήν την έκδοση Android</string>
     <string name="title_setup_background">Οι περιορισμοί παρασκηνίου είναι ενεργοποιημένοι</string>
     <string name="title_setup_data">Η εξοικονόμηση δεδομένων είναι ενεργή</string>
     <string name="title_setup_advanced_options">Εμφάνιση προηγμένων επιλογών</string>
@@ -249,6 +251,7 @@
     <string name="title_advanced_sync_folders">Συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_shared_folders">Συγχρονισμός της λίστας κοινών φακέλων</string>
     <string name="title_advanced_subscriptions">Διαχείριση συνδρομών σε φακέλους</string>
+    <string name="title_advanced_check_authentication">Έλεγχος ταυτοποίησης μηνύματος</string>
     <string name="title_advanced_check_reply_domain">Να ελέγχεται η διεύθυνση απάντησης κατά τον συγχρονισμό των μηνυμάτων</string>
     <string name="title_advanced_check_mx">Έλεγχος διευθύνσεων των αποστολέων κατά τον συγχρονισμό μηνυμάτων</string>
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
@@ -432,6 +435,7 @@
     <string name="title_advanced_confirm_html">Προβολή αναμορφοποιημένων μηνυμάτων από προεπιλογή</string>
     <string name="title_advanced_tracking">Να γίνεται απόπειρα αναγνώρισης και απενεργοποίησης εικόνων ιχνηλάτησης</string>
     <string name="title_advanced_hide_timezone">Αποστολή μηνυμάτων χωρίς πληροφορίες για τη ζώνη ώρας</string>
+    <string name="title_advanced_client_id">Αποστολή ονόματος και έκδοσης εφαρμογής στον διακομιστή ηλ. ταχυδρομείου</string>
     <string name="title_advanced_display_hidden">Προβολή κρυμμένων κειμένων στα μηνύματα</string>
     <string name="title_advanced_incognito_keyboard">Χρήση πληκτρολογίου ανώνυμης λειτουργίας (Android 8+)</string>
     <string name="title_advanced_secure">Απόκρυψη του FairEmail από τη λίστα των πρόσφατων εφαρμογών και παρεμπόδιση λήψης στιγμιοτύπου οθόνης</string>
@@ -488,6 +492,7 @@
     <string name="title_advanced_sync_kept_hint">Μεταφέρει πρόσθετα δεδομένα και καταναλώνει επιπλέον μπαταρία, ιδίως αν είναι αποθηκευμένα στη συσκευή πολλά μηνύματα</string>
     <string name="title_advanced_gmail_thread_hint">Αυτό εφαρμόζεται μόνον σε μηνύματα που λήφθηκαν πρόσφατα και μπορεί να διαλύσει υπάρχουσες ομάδες</string>
     <string name="title_advanced_sync_folders_hint">Αν απενεργοποιηθεί, θα μειωθεί κάπως η χρήση δεδομένων και μπαταρίας, αλλά θα απενεργοποιηθεί και ο συγχρονισμός της λίστας των φακέλων επίσης</string>
+    <string name="title_advanced_check_authentication_hint">Αυτό θα ελέγξει τα αποτελέσματα της ταυτοποίησης DKIM, SPF και DMARC, όπως εκτελείται από τον διακομιστή ηλ. ταχυδρομείου</string>
     <string name="title_advanced_check_reply_hint">Ελέγχει αν το το όνομα τομέα του αποστολέα και η διεύθυνση απάντησης είναι ίδια</string>
     <string name="title_advanced_lookup_mx_hint">Ελέγχει αν υπάρχουν καταγραφές DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Η επιλογή αυτή θα επιβραδύνει τον συγχρονισμό των μηνυμάτων</string>
@@ -1055,6 +1060,8 @@
     <string name="title_search_with_encrypted">Κρυπτογραφημένα (μόνο στη συσκευή)</string>
     <string name="title_search_with_attachments">Με συνημμένα (μόνο στη συσκευή)</string>
     <string name="title_search_with_size">Μέγεθος μηνύματος μεγαλύτερο από</string>
+    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">Στον κάδο απορριμμάτων</string>
+    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">Στα ανεπιθύμητα</string>
     <string name="title_search_with_before">Πριν από</string>
     <string name="title_search_with_after">Μετά από</string>
     <string name="title_search_flag_unseen">μη αναγνωσμένα</string>

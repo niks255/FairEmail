@@ -115,6 +115,8 @@
     <string name="title_setup_doze">배터리 최적화 비활성화</string>
     <string name="title_setup_doze_explanation">앱이 백그라운드에서도 안정적으로 메일을 수신 및 발신하려면 이 앱에 대한 배터리 최적화 기능을 꺼야 합니다</string>
     <string name="title_setup_doze_stopped">동기화가 중단되었습니까?</string>
+    <string name="title_setup_doze_device">이 기기에 필요한 작업으로 예상됩니다</string>
+    <string name="title_setup_doze_android">이 안드로이드 버전에 필요한 작업입니다</string>
     <string name="title_setup_inbox">받은편지함으로 이동</string>
     <string name="title_setup_go">시작</string>
     <string name="title_setup_to_do">할 일</string>
@@ -174,6 +176,7 @@
     <string name="title_advanced_flagged">모든 즐겨찾기 메시지</string>
     <string name="title_advanced_sync_folders">동기화 폴더 목록</string>
     <string name="title_advanced_sync_shared_folders">동기화 공유 폴더 목록</string>
+    <string name="title_advanced_check_authentication">메시지 인증 확인하기</string>
     <string name="title_advanced_send_reminders">리마인더 표시</string>
     <string name="title_advanced_send_delayed">메일 전송 지연</string>
     <string name="title_advanced_compose_font">기본 글꼴</string>
@@ -241,6 +244,7 @@
     <string name="title_advanced_notify_action_hide">숨김</string>
     <string name="title_advanced_notify_action_snooze">미루기</string>
     <string name="title_advanced_notify_subtext">부가 텍스트로 계정이나 폴더명 보기</string>
+    <string name="title_advanced_client_id">앱 이름 및 버전을 이메일 서버로 전송</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_openpgp">OpenPGP 제공업체</string>
     <string name="title_advanced_autocrypt">Autocrypt 사용</string>

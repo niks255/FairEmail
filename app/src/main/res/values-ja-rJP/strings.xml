@@ -158,6 +158,8 @@
     <string name="title_setup_doze_instructions">次のAndroidダイアログで「最適化されていないアプリ」を「すべてのアプリ」に変更し、このアプリを選択して「最適化しない」を選択します。</string>
     <string name="title_setup_doze_battery">電池消費量が多いですか？</string>
     <string name="title_setup_doze_stopped">同期が停止しましたか？</string>
+    <string name="title_setup_doze_device">これはおそらくこのデバイスに必要です</string>
+    <string name="title_setup_doze_android">このAndroidバージョンには必須です</string>
     <string name="title_setup_background">バックグラウンドの制限は有効です</string>
     <string name="title_setup_data">データセーバーが有効になっています</string>
     <string name="title_setup_advanced_options">上級者向けオプションを表示</string>
@@ -238,6 +240,7 @@
     <string name="title_advanced_sync_folders">フォルダーリストの同期</string>
     <string name="title_advanced_sync_shared_folders">共有フォルダリストを同期</string>
     <string name="title_advanced_subscriptions">購読したフォルダーの管理</string>
+    <string name="title_advanced_check_authentication">メッセージ認証を確認</string>
     <string name="title_advanced_check_reply_domain">メッセージの同期時に返信アドレスを確認</string>
     <string name="title_advanced_check_mx">メッセージの同期時に送信者のメールアドレスを確認</string>
     <string name="title_advanced_tune_keep_alive">キープアライブ間隔を自動的に調整します</string>
@@ -421,6 +424,7 @@
     <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示</string>
     <string name="title_advanced_tracking">トラッキング画像の認識と無効化を試みます</string>
     <string name="title_advanced_hide_timezone">タイムゾーンデータ無しでメッセージを送信</string>
+    <string name="title_advanced_client_id">アプリ名とバージョンをメールサーバーに送信</string>
     <string name="title_advanced_display_hidden">非表示のメッセージテキストを表示</string>
     <string name="title_advanced_incognito_keyboard">シークレットキーボードを使用 (Android 8+)</string>
     <string name="title_advanced_secure">最近使ったアプリから非表示にしスクリーンショット撮影から守る</string>
@@ -479,6 +483,7 @@
     <string name="title_advanced_sync_kept_hint">特に大量のメッセージがデバイスに保存されている場合、多くのデータが転送され電池消費が増えます</string>
     <string name="title_advanced_gmail_thread_hint">これは新しく受信したメッセージにのみ適用され、既存のグループを壊す可能性があります</string>
     <string name="title_advanced_sync_folders_hint">これを無効にするとデータと電池の使用量が多少減りますが、フォルダーのリストの更新も無効になります</string>
+    <string name="title_advanced_check_authentication_hint">メールサーバーで実行されたDKIM、SPF、DMARC認証の結果を確認します</string>
     <string name="title_advanced_check_reply_hint">送信者のドメイン名と返信先のアドレスが同じかどうかを確認します</string>
     <string name="title_advanced_lookup_mx_hint">DNS MXレコードが存在するかどうか確認</string>
     <string name="title_advanced_sync_delay_hint">メッセージの同期が遅くなります</string>
@@ -1046,6 +1051,8 @@
     <string name="title_search_with_encrypted">暗号化(デバイスのみ)</string>
     <string name="title_search_with_attachments">添付ファイル付き(デバイスのみ)</string>
     <string name="title_search_with_size">メッセージサイズより大きい</string>
+    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">ごみ箱内</string>
+    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">迷惑メール内</string>
     <string name="title_search_with_before">前へ</string>
     <string name="title_search_with_after">後で</string>
     <string name="title_search_flag_unseen">未読</string>

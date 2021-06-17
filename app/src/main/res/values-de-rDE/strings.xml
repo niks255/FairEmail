@@ -170,6 +170,8 @@
     <string name="title_setup_doze_instructions">Im nächsten Android-Dialog bitte »Nicht optimiert« in »Alle Apps« ändern und bei FairEmail »Nicht optimieren« auswählen</string>
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
+    <string name="title_setup_doze_device">Dies ist möglicherweise für dieses Gerät erforderlich</string>
+    <string name="title_setup_doze_android">Dies ist für diese Android-Version erforderlich</string>
     <string name="title_setup_background">Hintergrundbeschränkungen sind aktiviert</string>
     <string name="title_setup_data">Datensparmodus aktiviert</string>
     <string name="title_setup_advanced_options">Erweiterte Optionen anzeigen</string>
@@ -250,6 +252,7 @@
     <string name="title_advanced_sync_folders">Ordnerliste synchronisieren</string>
     <string name="title_advanced_sync_shared_folders">Listen der freigegebenen Ordner synchronisieren</string>
     <string name="title_advanced_subscriptions">Abonnierte Ordner verwalten</string>
+    <string name="title_advanced_check_authentication">Nachrichtenauthentifizierung prüfen</string>
     <string name="title_advanced_check_reply_domain">Überprüft die Antwort-An-E-Mail-Adressen beim Synchronisieren von Nachrichten</string>
     <string name="title_advanced_check_mx">Überprüft die Absender-E-Mail-Adressen beim Synchronisieren von Nachrichten per DNS MX</string>
     <string name="title_advanced_tune_keep_alive">Aktivitätsintervall automatisch anpassen</string>
@@ -433,6 +436,7 @@
     <string name="title_advanced_confirm_html">Standardmäßig umformatierte Nachrichten anzeigen</string>
     <string name="title_advanced_tracking">Versuchen, Verfolgungsbilder zu erkennen und zu deaktivieren</string>
     <string name="title_advanced_hide_timezone">Nachrichten ohne Zeitzoneninformationen senden</string>
+    <string name="title_advanced_client_id">App-Name und -Version an E-Mail-Server senden</string>
     <string name="title_advanced_display_hidden">Verborgene Nachrichtentexte anzeigen</string>
     <string name="title_advanced_incognito_keyboard">Inkognito-Tastatur verwenden (Android 8+)</string>
     <string name="title_advanced_secure">Im Anwendungsverlauf verbergen und das Aufnehmen von Bildschirmfotos verhindern</string>
@@ -492,6 +496,7 @@
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
     <string name="title_advanced_gmail_thread_hint">Dies gilt nur für neu empfangene Nachrichten und kann bestehende Gruppen zerbrechen</string>
     <string name="title_advanced_sync_folders_hint">Die Deaktivierung dieser Funktion verringert den Daten- und Akkuverbrauch etwas, deaktiviert aber auch die Aktualisierung der Ordnerliste.</string>
+    <string name="title_advanced_check_authentication_hint">Damit werden die Ergebnisse der DKIM-, SPF- und DMARC-Authentifizierung geprüft, wie sie vom E-Mail-Server durchgeführt werden</string>
     <string name="title_advanced_check_reply_hint">Überprüft, ob die Domain des Absenders und der Antwort-An-Adresse gleich sind</string>
     <string name="title_advanced_lookup_mx_hint">Überprüft, ob DNS-MX-Einträge vorhanden sind</string>
     <string name="title_advanced_sync_delay_hint">Dies verzögert die Synchronisierung von Nachrichten</string>
@@ -1056,6 +1061,8 @@
     <string name="title_search_with_encrypted">Verschlüsselt (nur auf dem Gerät)</string>
     <string name="title_search_with_attachments">Mit Anhängen (nur auf dem Gerät)</string>
     <string name="title_search_with_size">Nachrichtengröße größer als</string>
+    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">Im Papierkorb</string>
+    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">Im Spam-Ordner</string>
     <string name="title_search_with_before">Vor</string>
     <string name="title_search_with_after">Nach</string>
     <string name="title_search_flag_unseen">Ungelesen</string>
@@ -1377,7 +1384,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_pro_hide">Kleinen Hinweis für %1$d Wochen ausblenden</string>
     <string name="title_pro_hint">Der Erwerb der Pro-Funktionen erlaubt es Ihnen alle momentan und zukünftig verfügbaren Pro-Funktionen zu nutzen und ermöglicht die Weiterentwicklung und Pflege der App.</string>
     <string name="title_pro_price">Warum sind die Pro-Funktionen so teuer?</string>
-    <string name="title_pro_family">Kann ich die Google-Play-Familienbibliothek verwenden?</string>
+    <string name="title_pro_family">Kann ich die Google-Play-Familienmediathek verwenden?</string>
     <string name="title_pro_restore">Wie kann ich einen Kauf wiederherstellen?</string>
     <string name="title_pro_pending">Kauf ausstehend</string>
     <string name="title_pro_activated">Alle Pro-Funktionen sind aktiviert</string>

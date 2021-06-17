@@ -245,6 +245,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean indentation;
     private boolean avatars;
     private boolean color_stripe;
+    private boolean check_authentication;
+    private boolean check_reply_domain;
+
     private MessageHelper.AddressFormat email_format;
     private boolean prefer_contact;
     private boolean only_contact;
@@ -431,6 +434,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibUndo;
         private ImageButton ibRule;
         private ImageButton ibUnsubscribe;
+        private ImageButton ibHeaders;
         private ImageButton ibPrint;
         private ImageButton ibPin;
         private ImageButton ibShare;
@@ -662,6 +666,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibUndo = vsBody.findViewById(R.id.ibUndo);
             ibRule = vsBody.findViewById(R.id.ibRule);
             ibUnsubscribe = vsBody.findViewById(R.id.ibUnsubscribe);
+            ibHeaders = vsBody.findViewById(R.id.ibHeaders);
             ibPrint = vsBody.findViewById(R.id.ibPrint);
             ibPin = vsBody.findViewById(R.id.ibPin);
             ibShare = vsBody.findViewById(R.id.ibShare);
@@ -770,6 +775,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibUndo.setOnClickListener(this);
                 ibRule.setOnClickListener(this);
                 ibUnsubscribe.setOnClickListener(this);
+                ibHeaders.setOnClickListener(this);
                 ibPrint.setOnClickListener(this);
                 ibPin.setOnClickListener(this);
                 ibShare.setOnClickListener(this);
@@ -888,6 +894,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibUndo.setOnClickListener(null);
                 ibRule.setOnClickListener(null);
                 ibUnsubscribe.setOnClickListener(null);
+                ibHeaders.setOnClickListener(null);
                 ibPrint.setOnClickListener(null);
                 ibPin.setOnClickListener(null);
                 ibShare.setOnClickListener(null);
@@ -948,11 +955,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Address[] recipients = ContactInfo.fillIn(
                     reverse && !show_recipients ? message.from : message.recipients, prefer_contact, only_contact);
             boolean authenticated =
-                    !(Boolean.FALSE.equals(message.dkim) ||
-                            Boolean.FALSE.equals(message.spf) ||
-                            Boolean.FALSE.equals(message.dmarc) ||
+                    !((Boolean.FALSE.equals(message.dkim) && check_authentication) ||
+                            (Boolean.FALSE.equals(message.spf) && check_authentication) ||
+                            (Boolean.FALSE.equals(message.dmarc) && check_authentication) ||
                             Boolean.FALSE.equals(message.mx) ||
-                            Boolean.FALSE.equals(message.reply_domain));
+                            (Boolean.FALSE.equals(message.reply_domain) && check_reply_domain));
             boolean expanded = (viewType == ViewType.THREAD && properties.getValue("expanded", message.id));
 
             // Text size
@@ -1202,6 +1209,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         " unseen=" + message.unseen +
                         " ignored=" + message.ui_ignored +
                         " found=" + message.ui_found +
+                        "\nbusy=" + (message.ui_busy == null ? null : new Date(message.ui_busy)) +
                         "\nhash=" + message.hash +
                         "\nmsgid=" + message.msgid + "/" + message.uidl +
                         "\nthread=" + message.thread +
@@ -1362,6 +1370,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibUndo.setVisibility(View.GONE);
             ibRule.setVisibility(View.GONE);
             ibUnsubscribe.setVisibility(View.GONE);
+            ibHeaders.setVisibility(View.GONE);
             ibPrint.setVisibility(View.GONE);
             ibPin.setVisibility(View.GONE);
             ibShare.setVisibility(View.GONE);
@@ -1570,6 +1579,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibUndo.setVisibility(View.GONE);
             ibRule.setVisibility(View.GONE);
             ibUnsubscribe.setVisibility(View.GONE);
+            ibHeaders.setVisibility(View.GONE);
             ibPrint.setVisibility(View.GONE);
             ibPin.setVisibility(View.GONE);
             ibShare.setVisibility(View.GONE);
@@ -1739,8 +1749,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     int froms = (message.from == null ? 0 : message.from.length);
                     int tos = (message.to == null ? 0 : message.to.length);
 
-                    final boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
+                    boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
                             message.uid == null || message.accountProtocol == EntityAccount.TYPE_POP);
+
+                    boolean headers = (message.uid != null ||
+                            (message.accountProtocol == EntityAccount.TYPE_POP && message.headers != null));
 
                     boolean full = properties.getValue("full", message.id);
 
@@ -1763,6 +1776,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_share = prefs.getBoolean("button_share", false);
                     boolean button_pin = prefs.getBoolean("button_pin", false);
                     boolean button_print = prefs.getBoolean("button_print", false);
+                    boolean button_headers = prefs.getBoolean("button_headers", false);
                     boolean button_unsubscribe = prefs.getBoolean("button_unsubscribe", true);
                     boolean button_rule = prefs.getBoolean("button_rule", false);
                     boolean button_extra = prefs.getBoolean("button_extra", false);
@@ -1776,6 +1790,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibUndo.setVisibility(outbox ? View.VISIBLE : View.GONE);
                     ibRule.setVisibility(tools && button_rule && !outbox && !message.folderReadOnly ? View.VISIBLE : View.GONE);
                     ibUnsubscribe.setVisibility(tools && button_unsubscribe && message.unsubscribe != null ? View.VISIBLE : View.GONE);
+                    ibHeaders.setVisibility(tools && button_headers && headers ? View.VISIBLE : View.GONE);
                     ibPrint.setVisibility(tools && button_print && hasWebView && message.content && Helper.canPrint(context) ? View.VISIBLE : View.GONE);
                     ibPin.setVisibility(tools && button_pin && pin ? View.VISIBLE : View.GONE);
                     ibShare.setVisibility(tools && button_share && message.content ? View.VISIBLE : View.GONE);
@@ -2665,7 +2680,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         "text/calendar".equals(attachment.getMimeType()))
                     calendar = attachment;
             }
-            adapterAttachment.set(a);
+
+            rvAttachment.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        adapterAttachment.set(a);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                }
+            });
 
             if (calendar != null && bind_extras)
                 bindCalendar(message, calendar);
@@ -3141,6 +3166,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onMenuCreateRule(message);
                 } else if (id == R.id.ibUnsubscribe) {
                     onActionUnsubscribe(message);
+                } else if (id == R.id.ibHeaders) {
+                    onMenuShowHeaders(message);
                 } else if (id == R.id.ibPrint) {
                     onMenuPrint(message);
                 } else if (id == R.id.ibPin) {
@@ -4687,6 +4714,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putLong("id", message.id);
             args.putInt("color", message.color == null ? Color.TRANSPARENT : message.color);
             args.putString("title", context.getString(R.string.title_flag_color));
+            args.putBoolean("reset", true);
 
             FragmentDialogColor fragment = new FragmentDialogColor();
             fragment.setArguments(args);
@@ -5576,6 +5604,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         this.avatars = (contacts && avatars) || (gravatars || favicons || generated);
         this.color_stripe = prefs.getBoolean("color_stripe", true);
+        this.check_authentication = prefs.getBoolean("check_authentication", true);
+        this.check_reply_domain = prefs.getBoolean("check_reply_domain", true);
+
         this.email_format = MessageHelper.getAddressFormat(context);
         this.prefer_contact = prefs.getBoolean("prefer_contact", false);
         this.only_contact = prefs.getBoolean("only_contact", false);
@@ -6659,7 +6690,54 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
 
-            return new AlertDialog.Builder(context)
+            final SimpleTask<Void> task = new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+                    String notes = args.getString("notes");
+                    Integer color = args.getInt("color");
+
+                    if ("".equals(notes.trim()))
+                        notes = null;
+
+                    if (color == Color.TRANSPARENT)
+                        color = null;
+
+                    DB db = DB.getInstance(context);
+                    try {
+                        db.beginTransaction();
+
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message == null)
+                            return null;
+
+                        db.message().setMessageNotes(message.id, notes, color);
+
+                        if (TextUtils.isEmpty(message.msgid))
+                            return null;
+
+                        List<EntityMessage> messages = db.message().getMessagesByMsgId(message.account, message.msgid);
+                        if (messages == null)
+                            return null;
+
+                        for (EntityMessage m : messages)
+                            db.message().setMessageNotes(m.id, notes, color);
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
@@ -6669,56 +6747,25 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             args.putString("notes", etNotes.getText().toString());
                             args.putInt("color", btnColor.getColor());
 
-                            new SimpleTask<Void>() {
-                                @Override
-                                protected Void onExecute(Context context, Bundle args) {
-                                    long id = args.getLong("id");
-                                    String notes = args.getString("notes");
-                                    Integer color = args.getInt("color");
-
-                                    if ("".equals(notes.trim()))
-                                        notes = null;
-
-                                    if (color == Color.TRANSPARENT)
-                                        color = null;
-
-                                    DB db = DB.getInstance(context);
-                                    try {
-                                        db.beginTransaction();
-
-                                        EntityMessage message = db.message().getMessage(id);
-                                        if (message == null)
-                                            return null;
-
-                                        db.message().setMessageNotes(message.id, notes, color);
-
-                                        if (TextUtils.isEmpty(message.msgid))
-                                            return null;
-
-                                        List<EntityMessage> messages = db.message().getMessagesByMsgId(message.account, message.msgid);
-                                        if (messages == null)
-                                            return null;
-
-                                        for (EntityMessage m : messages)
-                                            db.message().setMessageNotes(m.id, notes, color);
-
-                                        db.setTransactionSuccessful();
-                                    } finally {
-                                        db.endTransaction();
-                                    }
-
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onException(Bundle args, Throwable ex) {
-                                    Log.unexpectedError(getParentFragmentManager(), ex);
-                                }
-                            }.execute(getContext(), getActivity(), args, "message:note");
+                            task.execute(getContext(), getActivity(), args, "message:note");
                         }
                     })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
+                    .setNegativeButton(android.R.string.cancel, null);
+
+            if (!TextUtils.isEmpty(notes))
+                builder.setNeutralButton(R.string.title_reset, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Bundle args = new Bundle();
+                        args.putLong("id", id);
+                        args.putString("notes", "");
+                        args.putInt("color", Color.TRANSPARENT);
+
+                        task.execute(getContext(), getActivity(), args, "message:note");
+                    }
+                });
+
+            return builder.create();
         }
 
         @Override
@@ -7066,6 +7113,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final CheckBox cbShare = dview.findViewById(R.id.cbShare);
             final CheckBox cbPin = dview.findViewById(R.id.cbPin);
             final CheckBox cbPrint = dview.findViewById(R.id.cbPrint);
+            final CheckBox cbHeaders = dview.findViewById(R.id.cbHeaders);
             final CheckBox cbUnsubscribe = dview.findViewById(R.id.cbUnsubscribe);
             final CheckBox cbRule = dview.findViewById(R.id.cbRule);
 
@@ -7086,6 +7134,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbShare.setChecked(prefs.getBoolean("button_share", false));
             cbPin.setChecked(prefs.getBoolean("button_pin", false));
             cbPrint.setChecked(prefs.getBoolean("button_print", false));
+            cbHeaders.setChecked(prefs.getBoolean("button_headers", false));
             cbUnsubscribe.setChecked(prefs.getBoolean("button_unsubscribe", true));
             cbRule.setChecked(prefs.getBoolean("button_rule", false));
 
@@ -7110,6 +7159,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             editor.putBoolean("button_share", cbShare.isChecked());
                             editor.putBoolean("button_pin", cbPin.isChecked());
                             editor.putBoolean("button_print", cbPrint.isChecked());
+                            editor.putBoolean("button_headers", cbHeaders.isChecked());
                             editor.putBoolean("button_unsubscribe", cbUnsubscribe.isChecked());
                             editor.putBoolean("button_rule", cbRule.isChecked());
                             editor.apply();

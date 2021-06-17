@@ -828,7 +828,6 @@ The use of expired keys, inline encrypted/signed messages and hardware security 
 If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options.
 Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219)
 if you want to request an S/MIME Actalis certificate.
-If you are looking for a cheap S/MIME certificate, I had a good experience with [Certum](https://www.certum.eu/en/smime-certificates/).
 
 How to extract a public key from a S/MIME certificate:
 
@@ -920,6 +919,8 @@ Search expressions can be used for searching on the device via the search index 
 but not for searching on the device without search index for performance reasons.
 
 Searching on the device is a free feature, using the search index and searching on the server is a pro feature.
+Note that you can download as many messages to your device as you like.
+The easiest way is to use the menu item *Fetch more messages* in the three-dots menu of the start screen.
 
 <br />
 
@@ -1478,7 +1479,7 @@ this is even less secure because Google is involved too without providing much b
 
 You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
 
-If you want to reset the default *Open with* apps, please [see here](https://www.androidauthority.com/how-to-set-default-apps-android-clear-621269/).
+If you want to reset the default *Open with* apps, please [see here](https://support.google.com/pixelphone/answer/6271667).
 
 <br />
 
@@ -1563,7 +1564,7 @@ Since folders are mostly not created, renamed and deleted very often, you can sa
 FairEmail will by default check if old messages were deleted from the server on each connection.
 If you don't mind that old messages that were delete from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings.
 
-Some providers don't follow the IMAP standard and don't keep connections open long enough, forcing FairEmail to reconnect often, causing extra battery usage.
+Some providers don't follow the IMAP standard and [don't keep connections open](https://datatracker.ietf.org/doc/html/rfc3501#section-5.4) long enough, forcing FairEmail to reconnect often, causing extra battery usage.
 You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc).
 You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes.
 Note that battery optimizations need to be disabled in setup step 3 to reliably keep connections alive.
@@ -2779,6 +2780,10 @@ because Google requires a [yearly security audit](https://support.google.com/clo
 You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
 OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
+
+The OAuth [jump page](https://oauth.faircode.eu/) exists
+for when [Android App Links](https://developer.android.com/training/app-links/verify-site-associations)
+are not available, for example when using a non Play store version of the app, or do not work for some reason.
 
 <br />
 

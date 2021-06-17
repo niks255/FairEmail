@@ -1207,13 +1207,17 @@ public class MessageHelper {
         if (header.trim().startsWith("=?"))
             return header;
 
-        if (CharsetHelper.isUTF8(header)) {
-            Log.i("Converting " + name + " to UTF-8");
-            return new String(header.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-        } else {
-            Log.i("Converting " + name + " to ISO8859-1");
-            return new String(header.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
-        }
+        Charset detected = CharsetHelper.detect(header);
+        if (detected == null && CharsetHelper.isUTF8(header))
+            detected = StandardCharsets.UTF_8;
+        if (detected == null ||
+                CHARSET16.contains(detected) ||
+                StandardCharsets.US_ASCII.equals(detected) ||
+                StandardCharsets.ISO_8859_1.equals(detected))
+            return header;
+
+        Log.i("Converting " + name + " to " + detected);
+        return new String(header.getBytes(StandardCharsets.ISO_8859_1), detected);
     }
 
     private Address[] getAddressHeader(String name) throws MessagingException {
@@ -1485,7 +1489,7 @@ public class MessageHelper {
         Enumeration<Header> headers = imessage.getAllHeaders();
         while (headers.hasMoreElements()) {
             Header header = headers.nextElement();
-            sb.append(header.getName()).append(": ").append(header.getValue()).append("\n");
+            sb.append(header.getName()).append(": ").append(header.getValue()).append('\n');
         }
         return sb.toString();
     }

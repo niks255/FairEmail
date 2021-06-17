@@ -210,6 +210,8 @@
     <string name="title_setup_doze_instructions">In the next Android dialog change "Not optimized" to "All apps", select this app and select "Don\'t optimize"</string>
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
+    <string name="title_setup_doze_device">This is probably required for this device</string>
+    <string name="title_setup_doze_android">This is required for this Android version</string>
     <string name="title_setup_background">Background restrictions are enabled</string>
     <string name="title_setup_data">Data saver is enabled</string>
     <string name="title_setup_advanced_options">Show advanced options</string>
@@ -303,6 +305,7 @@
     <string name="title_advanced_sync_folders">Synchronize folder list</string>
     <string name="title_advanced_sync_shared_folders">Synchronize shared folder lists</string>
     <string name="title_advanced_subscriptions">Manage folder subscriptions</string>
+    <string name="title_advanced_check_authentication">Check message authentication</string>
     <string name="title_advanced_check_reply_domain">Check reply address on synchronizing messages</string>
     <string name="title_advanced_check_mx">Check sender email addresses on synchronizing messages</string>
     <string name="title_advanced_tune_keep_alive">Automatically tune the keep-alive interval</string>
@@ -473,6 +476,7 @@
     <string name="title_advanced_notify_preview">Show message preview in notifications</string>
     <string name="title_advanced_notify_preview_all">Preview all text</string>
     <string name="title_advanced_notify_preview_only">Show notifications with a preview text only</string>
+    <string name="title_advanced_notify_transliterate" translatable="false">Transliterate</string>
     <string name="title_advanced_notify_actions">Notification actions</string>
     <string name="title_advanced_notify_action_trash">Trash</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
@@ -503,6 +507,7 @@
     <string name="title_advanced_confirm_html">Show reformatted messages by default</string>
     <string name="title_advanced_tracking">Attempt to recognize and disable tracking images</string>
     <string name="title_advanced_hide_timezone">Send messages without timezone data</string>
+    <string name="title_advanced_client_id">Send app name and version to email server</string>
     <string name="title_advanced_display_hidden">Display hidden message texts</string>
     <string name="title_advanced_incognito_keyboard">Use incognito keyboard (Android 8+)</string>
     <string name="title_advanced_secure">Hide from recent apps screen and prevent taking screenshots</string>
@@ -586,6 +591,7 @@
     <string name="title_advanced_sync_kept_hint">This will transfer extra data and consume extra battery power, especially if a lot of messages are stored on the device</string>
     <string name="title_advanced_gmail_thread_hint">This only applies to newly received messages and can break existing groups</string>
     <string name="title_advanced_sync_folders_hint">Disabling this will reduce data and battery usage somewhat, but will disable updating the list of folders too</string>
+    <string name="title_advanced_check_authentication_hint">This will check the results of DKIM, SPF and DMARC authentication as performed by the email server</string>
     <string name="title_advanced_check_reply_hint">This will check if the domain name of the sender and the reply address are the same</string>
     <string name="title_advanced_lookup_mx_hint">This will check if DNS MX records exist</string>
     <string name="title_advanced_sync_delay_hint">This will slow down synchronizing messages</string>
@@ -1206,6 +1212,8 @@
     <string name="title_search_with_encrypted">Encrypted (on device only)</string>
     <string name="title_search_with_attachments">With attachments (on device only)</string>
     <string name="title_search_with_size">Message size larger than</string>
+    <string name="title_search_in_trash">In trash</string>
+    <string name="title_search_in_junk">In spam</string>
     <string name="title_search_with_before">Before</string>
     <string name="title_search_with_after">After</string>
     <string name="title_search_flag_unseen">unread</string>

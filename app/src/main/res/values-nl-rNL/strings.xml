@@ -169,6 +169,8 @@
     <string name="title_setup_doze_instructions">In het volgende Android dialoogvenster wijzig \"Niet geoptimaliseerd\" naar \"Alle apps\", selecteer deze app en selecteer \"Niet optimaliseren\"</string>
     <string name="title_setup_doze_battery">Hoog accugebruik?</string>
     <string name="title_setup_doze_stopped">Sync gestopt?</string>
+    <string name="title_setup_doze_device">Dit is waarschijnlijk nodig voor dit apparaat</string>
+    <string name="title_setup_doze_android">Dit is vereist voor deze Android-versie</string>
     <string name="title_setup_background">Achtergrondbeperkingen zijn ingeschakeld</string>
     <string name="title_setup_data">Gegevensbesparing is ingeschakeld</string>
     <string name="title_setup_advanced_options">Toon geavanceerde opties</string>
@@ -249,6 +251,7 @@
     <string name="title_advanced_sync_folders">Lijst met mappen synchroniseren</string>
     <string name="title_advanced_sync_shared_folders">Lijst met gedeelde mappen synchroniseren</string>
     <string name="title_advanced_subscriptions">Beheer map abonnementen</string>
+    <string name="title_advanced_check_authentication">Controleer authenticatie bericht</string>
     <string name="title_advanced_check_reply_domain">Controleer het antwoordadres bij het synchroniseren van berichten</string>
     <string name="title_advanced_check_mx">Controleer e-mailadressen van de afzenders bij het synchroniseren van berichten</string>
     <string name="title_advanced_tune_keep_alive">De keep-alive interval automatisch aanpassen</string>
@@ -432,6 +435,7 @@
     <string name="title_advanced_confirm_html">Toon standaard opnieuw opgemaakte berichten</string>
     <string name="title_advanced_tracking">Probeer om tracking afbeeldingen te herkennen en uit te schakelen</string>
     <string name="title_advanced_hide_timezone">Berichten verzenden zonder tijdzone data</string>
+    <string name="title_advanced_client_id">App-naam en -versie verzenden naar mailserver</string>
     <string name="title_advanced_display_hidden">Verborgen berichtteksten weergeven</string>
     <string name="title_advanced_incognito_keyboard">Gebruik incognito toetsenbord (Android 8+)</string>
     <string name="title_advanced_secure">Verbergen van recente apps scherm en voorkomen dat screenshots worden gemaakt</string>
@@ -491,6 +495,7 @@
     <string name="title_advanced_sync_kept_hint">Dit zal extra gegevens en extra batterijvermogen gebruiken, vooral als er veel berichten op het apparaat zijn opgeslagen</string>
     <string name="title_advanced_gmail_thread_hint">Dit geldt alleen voor nieuw ontvangen berichten en kan bestaande groepen verbreken</string>
     <string name="title_advanced_sync_folders_hint">Dit uitschakelen zal het gebruik van gegevens en batterij enigszins verminderen, maar zal ook het bijwerken van de lijst met mappen uitschakelen</string>
+    <string name="title_advanced_check_authentication_hint">Dit controleert de resultaten van DKIM, SPF en DMARC authenticatie zoals uitgevoerd door de e-mailserver</string>
     <string name="title_advanced_check_reply_hint">Hiermee wordt gecontroleerd of de domeinnaam van de afzender en het antwoordadres hetzelfde zijn</string>
     <string name="title_advanced_lookup_mx_hint">Dit zal controleren of DNS MX records bestaan</string>
     <string name="title_advanced_sync_delay_hint">Dit zal de synchronisatie van berichten vertragen</string>
@@ -1058,6 +1063,8 @@
     <string name="title_search_with_encrypted">Versleuteld (alleen op apparaat)</string>
     <string name="title_search_with_attachments">Met bijlagen (alleen op apparaat)</string>
     <string name="title_search_with_size">Berichtgrootte groter dan</string>
+    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">In prullenbak</string>
+    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">In spam</string>
     <string name="title_search_with_before">Voor</string>
     <string name="title_search_with_after">Na</string>
     <string name="title_search_flag_unseen">ongelezen</string>

@@ -3315,20 +3315,17 @@ class Core {
             if (message.avatar == null && notify_known && pro)
                 message.ui_ignored = true;
 
-            boolean check_reply_domain = prefs.getBoolean("check_reply_domain", true);
-            if (check_reply_domain) {
-                // For contact forms
-                boolean self = false;
-                if (identity != null && message.from != null)
-                    for (Address from : message.from)
-                        if (identity.sameAddress(from) || identity.similarAddress(from)) {
-                            self = true;
-                            break;
-                        }
-                if (!self) {
-                    String warning = message.checkReplyDomain(context);
-                    message.reply_domain = (warning == null);
-                }
+            // For contact forms
+            boolean self = false;
+            if (identity != null && message.from != null)
+                for (Address from : message.from)
+                    if (identity.sameAddress(from) || identity.similarAddress(from)) {
+                        self = true;
+                        break;
+                    }
+            if (!self) {
+                String warning = message.checkReplyDomain(context);
+                message.reply_domain = (warning == null);
             }
 
             boolean check_mx = prefs.getBoolean("check_mx", false);
@@ -3893,6 +3890,7 @@ class Core {
                 if (channelId != null) {
                     NotificationChannel channel = nm.getNotificationChannel(channelId);
                     if (channel != null && channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                        db.message().setMessageUiIgnored(message.id, true);
                         Log.i("Notify disabled=" + message.id + " channel=" + channelId);
                         continue;
                     }
@@ -4584,12 +4582,11 @@ class Core {
                 // Wearables
                 StringBuilder sb = new StringBuilder();
                 if (!TextUtils.isEmpty(message.subject))
-                    sb.append(message.subject);
-                if (wearable_preview) {
-                    if (sb.length() != 0)
+                    sb.append(TextHelper.transliterate(context, message.subject));
+                if (wearable_preview && !TextUtils.isEmpty(preview)) {
+                    if (sb.length() > 0)
                         sb.append(" - ");
-                    if (!TextUtils.isEmpty(preview))
-                        sb.append(preview);
+                    sb.append(TextHelper.transliterate(context, preview));
                 }
                 if (sb.length() > 0)
                     mbuilder.setContentText(sb.toString());
@@ -4614,7 +4611,7 @@ class Core {
                 }
             } else {
                 if (!TextUtils.isEmpty(message.subject))
-                    mbuilder.setContentText(message.subject);
+                    mbuilder.setContentText(TextHelper.transliterate(context, message.subject));
             }
 
             if (info[0].hasPhoto())
@@ -5032,7 +5029,7 @@ class Core {
                                 groupNotifying.put(group, new ArrayList<>());
 
                             if (id > 0) {
-                                Log.i("Notify restore " + tag + " id=" + id);
+                                EntityLog.log(context, "Notify restore " + tag + " id=" + id);
                                 groupNotifying.get(group).add(id);
                             }
                         }

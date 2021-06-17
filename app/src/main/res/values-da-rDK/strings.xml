@@ -245,6 +245,7 @@
     <string name="title_advanced_sync_folders">Synkronisér mappeliste</string>
     <string name="title_advanced_sync_shared_folders">Synkronisér delte mappelister</string>
     <string name="title_advanced_subscriptions">Håndér mappeabonnementer</string>
+    <string name="title_advanced_check_authentication">Tjek beskedgodkendelse</string>
     <string name="title_advanced_check_mx">Tjek afsenderadresser ved beskedsynkroniseringer</string>
     <string name="title_advanced_tune_keep_alive">Justér automatisk hold i live intervallet</string>
     <string name="title_advanced_keyboard">Vis tastatur som standard</string>
@@ -425,6 +426,7 @@
     <string name="title_advanced_confirm_html">Vis som standard omformaterede beskeder</string>
     <string name="title_advanced_tracking">Forsøg på at genkend og deaktivere sporingsbilleder</string>
     <string name="title_advanced_hide_timezone">Send beskeder uden tidszonedata</string>
+    <string name="title_advanced_client_id">Send app-navn og -version til e-mailserver</string>
     <string name="title_advanced_display_hidden">Vis skjulte beskedtekster</string>
     <string name="title_advanced_incognito_keyboard">Benyt inkognitotastatur (Android 8+)</string>
     <string name="title_advanced_secure">Skjul fra seneste apps-skærm og forhindr skærmfotofunktion</string>
@@ -483,6 +485,7 @@
     <string name="title_advanced_sync_kept_hint">Dette vil overføre ekstra data og forbruge ekstra strøm, især hvis der er mange beskeder lagret på enheden</string>
     <string name="title_advanced_gmail_thread_hint">Dette gælder kun for nyligt modtagne beskeder og kan ødelægge eksisterende grupper</string>
     <string name="title_advanced_sync_folders_hint">Deaktivering af dette reducerer data- og strømforbruget noget, men deaktiverer også mappelisteopdatering</string>
+    <string name="title_advanced_check_authentication_hint">Dette vil tjekke resultaterne af DKIM-, SPF- og DMARC-godkendelser udført af e-mailserveren</string>
     <string name="title_advanced_lookup_mx_hint">Dette tjekker, om der findes DNS MX-poster</string>
     <string name="title_advanced_sync_delay_hint">Dette vil forøge beskedsynkroniseringstiden</string>
     <string name="title_advanced_suggest_names_hint">Hvis deaktiveret, bruges kun e-mailadresser ved valg af kontakter</string>
@@ -1034,6 +1037,8 @@
     <string name="title_search_with_encrypted">Krypteret (kun på enheden)</string>
     <string name="title_search_with_attachments">Med vedhæftninger (kun på enheden)</string>
     <string name="title_search_with_size">Beskedstørrelse over</string>
+    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">I papirkurven</string>
+    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">I Spam</string>
     <string name="title_search_with_before">Før</string>
     <string name="title_search_with_after">Efter</string>
     <string name="title_search_flag_unseen">ulæst</string>

@@ -1692,6 +1692,10 @@ public class Log {
                 .append(" yes=").append((uiMode & Configuration.UI_MODE_NIGHT_YES) != 0)
                 .append("\r\n");
 
+        sb.append("Transliterate: ")
+                .append(TextHelper.canTransliterate())
+                .append("\r\n");
+
         try {
             int maxKeySize = javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
             sb.append(context.getString(R.string.title_advanced_aes_key_size, maxKeySize)).append("\r\n");

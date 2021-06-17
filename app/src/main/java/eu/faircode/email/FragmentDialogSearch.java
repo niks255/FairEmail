@@ -56,6 +56,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.requery.android.database.sqlite.SQLiteDatabase;
+
 public class FragmentDialogSearch extends FragmentDialogBase {
     private static final int MAX_SUGGESTIONS = 3;
 
@@ -76,6 +78,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         boolean last_search_keywords = prefs.getBoolean("last_search_keywords", false);
         boolean last_search_message = prefs.getBoolean("last_search_message", true);
         boolean last_search_notes = prefs.getBoolean("last_search_notes", true);
+        boolean last_search_trash = prefs.getBoolean("last_search_trash", true);
+        boolean last_search_junk = prefs.getBoolean("last_search_junk", true);
 
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_search, null);
 
@@ -108,6 +112,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final CheckBox cbEncrypted = dview.findViewById(R.id.cbEncrypted);
         final CheckBox cbAttachments = dview.findViewById(R.id.cbAttachments);
         final Spinner spMessageSize = dview.findViewById(R.id.spMessageSize);
+        final CheckBox cbSearchTrash = dview.findViewById(R.id.cbSearchTrash);
+        final CheckBox cbSearchJunk = dview.findViewById(R.id.cbSearchJunk);
         final Button btnBefore = dview.findViewById(R.id.btnBefore);
         final Button btnAfter = dview.findViewById(R.id.btnAfter);
         final TextView tvBefore = dview.findViewById(R.id.tvBefore);
@@ -138,12 +144,22 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                 if (TextUtils.isEmpty(typed))
                     return cursor;
 
-                String query = "%" + typed + "%";
+                if (cbSearchIndex.isEnabled() && cbSearchIndex.isChecked()) {
+                    SQLiteDatabase db = FtsDbHelper.getInstance(context);
+                    List<String> suggestions = FtsDbHelper.getSuggestions(
+                            db,
+                            typed + "%",
+                            MAX_SUGGESTIONS);
+                    for (int i = 0; i < suggestions.size(); i++)
+                        cursor.addRow(new Object[]{i + 1, suggestions.get(i)});
+                    return cursor;
+                }
+
                 DB db = DB.getInstance(context);
                 return db.message().getSuggestions(
                         account < 0 ? null : account,
                         folder < 0 ? null : folder,
-                        "%" + query + "%",
+                        "%" + typed + "%",
                         MAX_SUGGESTIONS);
             }
         });
@@ -202,12 +218,18 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                     grpMore.setVisibility(View.GONE);
                     cbHeaders.setVisibility(View.GONE);
                     cbHtml.setVisibility(View.GONE);
+                    cbSearchTrash.setVisibility(View.GONE);
+                    cbSearchJunk.setVisibility(View.GONE);
                 } else {
                     ibMore.setImageLevel(0);
                     grpMore.setVisibility(View.VISIBLE);
                     if (BuildConfig.DEBUG) {
                         cbHeaders.setVisibility(View.VISIBLE);
                         cbHtml.setVisibility(View.VISIBLE);
+                    }
+                    if (account < 0) {
+                        cbSearchTrash.setVisibility(View.VISIBLE);
+                        cbSearchJunk.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -296,6 +318,20 @@ public class FragmentDialogSearch extends FragmentDialogBase {
             }
         });
 
+        cbSearchTrash.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("last_search_trash", isChecked).apply();
+            }
+        });
+
+        cbSearchJunk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("last_search_junk", isChecked).apply();
+            }
+        });
+
         btnAfter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,10 +357,14 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         cbNotes.setChecked(last_search_notes);
         tvAfter.setText(null);
         tvBefore.setText(null);
+        cbSearchTrash.setChecked(last_search_trash);
+        cbSearchJunk.setChecked(last_search_junk);
 
         grpMore.setVisibility(View.GONE);
         cbHeaders.setVisibility(View.GONE);
         cbHtml.setVisibility(View.GONE);
+        cbSearchTrash.setVisibility(View.GONE);
+        cbSearchJunk.setVisibility(View.GONE);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(dview)
@@ -377,6 +417,9 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                                 criteria.with_size = sizes[pos];
                             }
                         }
+
+                        criteria.in_trash = cbSearchTrash.isChecked();
+                        criteria.in_junk = cbSearchJunk.isChecked();
 
                         Object after = tvAfter.getTag();
                         Object before = tvBefore.getTag();

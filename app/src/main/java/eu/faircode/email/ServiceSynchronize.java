@@ -1053,8 +1053,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     long now = new Date().getTime();
                     long[] schedule = ServiceSynchronize.getSchedule(ServiceSynchronize.this);
-                    boolean poll = (schedule == null || (now >= schedule[0] && now < schedule[1]));
-                    schedule(ServiceSynchronize.this, poll, null);
+                    boolean scheduled = (schedule == null || (now >= schedule[0] && now < schedule[1]));
+                    schedule(ServiceSynchronize.this, scheduled, true, null);
 
                     // Prevent service stop
                     eval(ServiceSynchronize.this, "poll");
@@ -2059,7 +2059,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     long poll_interval = Math.min(account.poll_interval, CONNECT_BACKOFF_ALARM_START);
                     long fail_threshold = poll_interval * 60 * 1000L * FAST_FAIL_THRESHOLD / 100;
                     long was_connected = (account.last_connected == null ? 0 : now - account.last_connected);
-                    if (was_connected < fail_threshold && !Helper.isCharging(this)) {
+                    if (was_connected < fail_threshold) {
                         if (state.getBackoff() == CONNECT_BACKOFF_START) {
                             fast_fails++;
                             if (fast_fails == 1)
@@ -2110,10 +2110,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     if (backoff < CONNECT_BACKOFF_MAX)
                         state.setBackoff(backoff * 2);
                     else if (backoff == CONNECT_BACKOFF_MAX)
-                        if (Helper.isCharging(this))
-                            EntityLog.log(this, "Device is charging");
-                        else
-                            state.setBackoff(CONNECT_BACKOFF_ALARM_START * 60);
+                        state.setBackoff(CONNECT_BACKOFF_ALARM_START * 60);
                     else if (backoff < CONNECT_BACKOFF_ALARM_MAX * 60)
                         state.setBackoff(backoff * 2);
 
@@ -2469,7 +2466,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         });
     }
 
-    private static void schedule(Context context, boolean sync) {
+    private static void schedule(Context context, boolean polled) {
         Intent intent = new Intent(context, ServiceSynchronize.class);
         intent.setAction("alarm");
         PendingIntent pi = PendingIntentCompat.getForegroundService(
@@ -2478,34 +2475,34 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pi);
 
-        boolean poll;
+        boolean scheduled;
         Long at = null;
         long[] schedule = getSchedule(context);
         if (schedule == null)
-            poll = true;
+            scheduled = true;
         else {
             long now = new Date().getTime();
             long next = (now < schedule[0] ? schedule[0] : schedule[1]);
-            poll = (now >= schedule[0] && now < schedule[1]);
+            scheduled = (now >= schedule[0] && now < schedule[1]);
 
             Log.i("Schedule now=" + new Date(now));
             Log.i("Schedule start=" + new Date(schedule[0]));
             Log.i("Schedule end=" + new Date(schedule[1]));
             Log.i("Schedule next=" + new Date(next));
-            Log.i("Schedule poll=" + poll);
+            Log.i("Schedule scheduled=" + scheduled);
 
             AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, pi);
 
-            if (sync & poll) {
+            if (scheduled && polled) {
                 at = now + 30 * 1000L;
                 Log.i("Sync at schedule start=" + new Date(at));
             }
         }
 
-        schedule(context, poll, at);
+        schedule(context, scheduled, polled, at);
     }
 
-    private static void schedule(Context context, boolean poll, Long at) {
+    private static void schedule(Context context, boolean scheduled, boolean polled, Long at) {
         Intent intent = new Intent(context, ServiceSynchronize.class);
         intent.setAction("poll");
         PendingIntent piSync = PendingIntentCompat.getForegroundService(
@@ -2518,14 +2515,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean enabled = prefs.getBoolean("enabled", true);
             int pollInterval = getPollInterval(context);
-            if (poll && enabled && pollInterval > 0) {
+            if (scheduled && enabled && pollInterval > 0) {
                 long now = new Date().getTime();
                 long interval = pollInterval * 60 * 1000L;
-                long next = now - now % interval + interval + 30 * 1000L;
-                if (next < now + interval / 5)
+                long next = now - now % interval + 30 * 1000L;
+                if (polled || next < now)
+                    next += interval;
+                if (polled && next < now + interval / 5)
                     next += interval;
 
-                EntityLog.log(context, "Poll next=" + new Date(next));
+                EntityLog.log(context, "Poll next=" + new Date(next) + " polled=" + polled);
 
                 AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, piSync);
             }
@@ -2648,10 +2647,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         boolean enabled = prefs.getBoolean("enabled", true);
         if (watchdog && enabled) {
             long now = new Date().getTime();
-            long next = now - now % WATCHDOG_INTERVAL + WATCHDOG_INTERVAL;
+            long next = now - now % WATCHDOG_INTERVAL + WATCHDOG_INTERVAL + WATCHDOG_INTERVAL / 4;
             if (next < now + WATCHDOG_INTERVAL / 5)
                 next += WATCHDOG_INTERVAL;
-            Log.i("Sync watchdog at " + new Date(next));
+            EntityLog.log(context, "Watchdog next=" + new Date(next));
             AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, pi);
         } else
             am.cancel(pi);

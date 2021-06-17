@@ -224,12 +224,30 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 " index=" + state.index +
                 " matches=" + (state.matches == null ? null : state.matches.size()));
 
+        long[] exclude = new long[0];
+        if (account == null) {
+            List<Long> folders = new ArrayList<>();
+            if (!criteria.in_trash) {
+                List<EntityFolder> trash = db.folder().getFoldersByType(EntityFolder.TRASH);
+                if (trash != null)
+                    for (EntityFolder folder : trash)
+                        folders.add(folder.id);
+            }
+            if (!criteria.in_junk) {
+                List<EntityFolder> junk = db.folder().getFoldersByType(EntityFolder.JUNK);
+                if (junk != null)
+                    for (EntityFolder folder : junk)
+                        folders.add(folder.id);
+            }
+            exclude = Helper.toLongArray(folders);
+        }
+
         int found = 0;
 
         if (criteria.fts && criteria.query != null) {
             if (state.ids == null) {
                 SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
-                state.ids = FtsDbHelper.match(sdb, account, folder, criteria);
+                state.ids = FtsDbHelper.match(sdb, account, folder, exclude, criteria);
                 EntityLog.log(context, "Boundary FTS " +
                         " account=" + account +
                         " folder=" + folder +
@@ -241,8 +259,9 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 db.beginTransaction();
 
                 for (; state.index < state.ids.size() && found < pageSize && !state.destroyed; state.index++) {
-                    found++;
-                    db.message().setMessageFound(state.ids.get(state.index));
+                    long id = state.ids.get(state.index);
+                    found += db.message().setMessageFound(id);
+                    Log.i("Boundary matched=" + id + " found=" + found);
                 }
                 db.setTransactionSuccessful();
 
@@ -257,7 +276,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             if (state.matches == null ||
                     (state.matches.size() > 0 && state.index >= state.matches.size())) {
                 state.matches = db.message().matchMessages(
-                        account, folder,
+                        account, folder, exclude,
                         criteria.query == null ? null : "%" + criteria.query + "%",
                         criteria.in_senders,
                         criteria.in_recipients,
@@ -321,9 +340,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 }
 
                 if (matched) {
-                    found++;
-                    Log.i("Boundary matched=" + match.id);
-                    db.message().setMessageFound(match.id);
+                    found += db.message().setMessageFound(match.id);
+                    Log.i("Boundary matched=" + match.id + " found=" + found);
                 }
             }
         }
@@ -537,9 +555,12 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                                 (IMAPStore) state.iservice.getStore(), state.ifolder, (MimeMessage) isub[j],
                                 true, true,
                                 rules, astate, null);
-                    found++;
-                    if (message != null && criteria != null /* browsed */)
-                        db.message().setMessageFound(message.id);
+                    if (message != null) // SQLiteConstraintException
+                        if (criteria == null)
+                            found++; // browsed
+                        else
+                            found += db.message().setMessageFound(message.id);
+                    Log.i("Boundary matched=" + (message == null ? null : message.id) + " found=" + found);
                 } catch (MessageRemovedException ex) {
                     Log.w(browsable.name + " boundary server", ex);
                 } catch (FolderClosedException ex) {
@@ -689,6 +710,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         boolean with_notes;
         String[] with_types;
         Integer with_size = null;
+        boolean in_trash = true;
+        boolean in_junk = true;
         Long after = null;
         Long before = null;
 

@@ -39,7 +39,7 @@ public class FtsDbHelper extends SQLiteOpenHelper {
 
     private static FtsDbHelper instance = null;
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "fts.db";
 
     private FtsDbHelper(Context context) {
@@ -68,12 +68,18 @@ public class FtsDbHelper extends SQLiteOpenHelper {
                 ", `notes`" +
                 ", tokenize = \"unicode61 remove_diacritics 2\")");
         // https://www.sqlite.org/fts5.html#unicode61_tokenizer
+
+        // https://www.sqlite.org/fts5.html#the_fts5vocab_virtual_table_module
+        db.execSQL("CREATE VIRTUAL TABLE message_terms USING fts5vocab('message', 'row');");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i("FTS upgrade from " + oldVersion + " to " + newVersion);
-        db.execSQL("DROP TABLE `message`");
+
+        db.execSQL("DROP TABLE IF EXISTS `message`");
+        db.execSQL("DROP TABLE IF EXISTS `message_terms`");
+
         onCreate(db);
 
         DB.getInstance(context).message().resetFts();
@@ -114,9 +120,24 @@ public class FtsDbHelper extends SQLiteOpenHelper {
         db.delete("message", "rowid = ?", new Object[]{id});
     }
 
+    static List<String> getSuggestions(SQLiteDatabase db, String query, int max) {
+        List<String> result = new ArrayList<>();
+
+        Cursor cursor = db.query(
+                "SELECT term FROM message_terms" +
+                        " WHERE term LIKE ?" +
+                        " ORDER BY cnt" +
+                        " LIMIT " + max,
+                new Object[]{query});
+        while (cursor != null && cursor.moveToNext())
+            result.add(cursor.getString(0));
+
+        return result;
+    }
+
     static List<Long> match(
             SQLiteDatabase db,
-            Long account, Long folder,
+            Long account, Long folder, long[] exclude,
             BoundaryCallbackMessages.SearchCriteria criteria) {
 
         List<String> word = new ArrayList<>();
@@ -179,6 +200,15 @@ public class FtsDbHelper extends SQLiteOpenHelper {
             select += "account = " + account + " AND ";
         if (folder != null)
             select += "folder = " + folder + " AND ";
+        if (exclude.length > 0) {
+            select += "NOT folder IN (";
+            for (int i = 0; i < exclude.length; i++) {
+                if (i > 0)
+                    select += ", ";
+                select += exclude[i];
+            }
+            select += ") AND ";
+        }
         if (criteria.after != null)
             select += "time > " + criteria.after + " AND ";
         if (criteria.before != null)

@@ -21,12 +21,16 @@ package eu.faircode.email;
 
 import android.app.Person;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.icu.text.Transliterator;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.textclassifier.ConversationAction;
 import android.view.textclassifier.ConversationActions;
 import android.view.textclassifier.TextClassificationManager;
 import android.view.textclassifier.TextClassifier;
+
+import androidx.preference.PreferenceManager;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -42,6 +46,7 @@ import java.util.Set;
 public class TextHelper {
     private static final int MAX_SAMPLE_SIZE = 8192;
     private static final float MIN_PROBABILITY = 0.80f;
+    private static final String TRANSLITERATOR = "Any-Latin; Latin-ASCII";
 
     static {
         System.loadLibrary("fairemail");
@@ -80,6 +85,40 @@ public class TextHelper {
             Log.w(ex);
             return null;
         }
+    }
+
+    static boolean canTransliterate() {
+        if (!BuildConfig.DEBUG)
+            return false;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+            return false;
+
+        try {
+            Transliterator.getInstance(TRANSLITERATOR);
+            return true;
+        } catch (Throwable ex) {
+            return false;
+        }
+    }
+
+    static String transliterate(Context context, String text) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+            return text;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notify_transliterate = prefs.getBoolean("notify_transliterate", false);
+        if (!notify_transliterate)
+            return text;
+
+        try {
+            // http://userguide.icu-project.org/transforms/general
+            return Transliterator.getInstance(TRANSLITERATOR).transliterate(text);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+
+        return text;
     }
 
     static ConversationActions getConversationActions(

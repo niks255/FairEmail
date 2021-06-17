@@ -169,6 +169,8 @@
     <string name="title_setup_doze_instructions">En el siguiente cuadro de diálogo de Android cambiar \"Sin optimizar\" a \"Todas las aplicaciones\", seleccione esta aplicación y seleccione \"No optimizar\"</string>
     <string name="title_setup_doze_battery">¿Consumo de batería elevado?</string>
     <string name="title_setup_doze_stopped">¿Sincronización detenida?</string>
+    <string name="title_setup_doze_device">Esto probablemente sea necesario para este dispositivo</string>
+    <string name="title_setup_doze_android">Esto es necesario para esta versión de Android</string>
     <string name="title_setup_background">Restricciones en segundo plano habilitadas</string>
     <string name="title_setup_data">El ahorro de datos está activado</string>
     <string name="title_setup_advanced_options">Mostrar opciones avanzadas</string>
@@ -249,6 +251,7 @@
     <string name="title_advanced_sync_folders">Sincronizar lista de carpetas</string>
     <string name="title_advanced_sync_shared_folders">Sincronizar listas de carpetas compartidas</string>
     <string name="title_advanced_subscriptions">Administrar suscripciones de carpeta</string>
+    <string name="title_advanced_check_authentication">Comprobar autenticación de mensaje</string>
     <string name="title_advanced_check_reply_domain">Comprobar direcciones de respuesta al sincronizar mensajes</string>
     <string name="title_advanced_check_mx">Compruebe las direcciones de correo electrónico de remitentes al sincronizar mensajes</string>
     <string name="title_advanced_tune_keep_alive">Ajustar automáticamente el intervalo de keep-alive</string>
@@ -432,6 +435,7 @@
     <string name="title_advanced_confirm_html">Mostrar mensajes reformateados por defecto</string>
     <string name="title_advanced_tracking">Intentar reconocer y deshabilitar imágenes de rastreo</string>
     <string name="title_advanced_hide_timezone">Enviar mensajes sin datos de zona horaria</string>
+    <string name="title_advanced_client_id">Enviar nombre y versión de la aplicación al servidor de correo electrónico</string>
     <string name="title_advanced_display_hidden">Mostrar textos de mensajes ocultos</string>
     <string name="title_advanced_incognito_keyboard">Usar teclado incógnito (Android 8+)</string>
     <string name="title_advanced_secure">Ocultar de la pantalla de aplicaciones recientes e impedir capturas de pantallas</string>
@@ -491,6 +495,7 @@
     <string name="title_advanced_sync_kept_hint">Esto transferirá datos adicionales y consumirá energía adicional de batería, especialmente si hay muchos mensajes almacenados en el dispositivo</string>
     <string name="title_advanced_gmail_thread_hint">Esto sólo se aplica a los mensajes recibidos recientemente y puede romper los grupos existentes</string>
     <string name="title_advanced_sync_folders_hint">Desactivar esto reducirá el uso de datos y batería, pero también desactivará la actualización de la lista de carpetas</string>
+    <string name="title_advanced_check_authentication_hint">Esto comprobará los resultados de autenticación DKIM, SPF y DMARC tal como se realiza por el servidor de correo</string>
     <string name="title_advanced_check_reply_hint">Esto comprobará si el nombre de dominio del remitente y la dirección de respuesta son los mismos</string>
     <string name="title_advanced_lookup_mx_hint">Esto comprobará si existen registros DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Esto ralentizará la sincronización de mensajes</string>
@@ -1058,6 +1063,8 @@
     <string name="title_search_with_encrypted">Cifrado (en el dispositivo solamente)</string>
     <string name="title_search_with_attachments">Con archivos adjuntos (sólo en el dispositivo)</string>
     <string name="title_search_with_size">Tamaño del mensaje mayor que</string>
+    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">En la papelera</string>
+    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">En spam</string>
     <string name="title_search_with_before">Antes de</string>
     <string name="title_search_with_after">Después de</string>
     <string name="title_search_flag_unseen">no leído</string>
