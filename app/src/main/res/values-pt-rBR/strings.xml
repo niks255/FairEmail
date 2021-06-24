@@ -917,7 +917,6 @@
     <string name="title_style_size_small">Pequeno</string>
     <string name="title_style_size_medium">Médio</string>
     <string name="title_style_size_large">Grande</string>
-    <string name="title_style_color">Cor &#8230;</string>
     <string name="title_style_align">Alinhar</string>
     <string name="title_style_align_start">Início</string>
     <string name="title_style_align_center">Meio</string>
@@ -1010,10 +1009,6 @@
     <string name="title_signature_store">Loja</string>
     <string name="title_search">Pesquisar</string>
     <string name="title_search_for_hint">Digite o texto</string>
-    <string name="title_search_hint">        A pesquisa procurará inicialmente as mensagens salvas no seu dispositivo.
-        Para pesquisar também no servidor, clique no botão \'buscar novamente\'.
-    </string>
-    <string name="title_search_index_hint">Pesquisar no indexador de pesquisa é mais rápido, mas só serão encontradas palavras inteiras</string>
     <string name="title_search_text_hint">Pesquisar por textos em mensagens, quando há um grande número delas, pode não funcionar em alguns servidores</string>
     <string name="title_search_size_hint">Pesquisar por mensagens pelo tamanho, quando há um grande número delas, pode não funcionar em alguns servidores</string>
     <string name="title_search_more">Mais opções</string>
@@ -1277,6 +1272,7 @@
     <string name="title_hint_contact_actions">Mantenha pressionado para mais opções</string>
     <string name="title_hint_eml">Este é um resumo do conteúdo de um arquivo de mensagem crua. Salve a mensagem bruta com o ícone de salvar na barra de ação para ver todo o conteúdo.</string>
     <string name="title_open_link">Abrir link</string>
+    <string name="title_image_link">Link da imagem</string>
     <string name="title_different_link">O título e o endereço do link são diferentes</string>
     <string name="title_tracking_link">Este site pode rastrear você</string>
     <string name="title_suspicious_link">Esse link é suspeito</string>
@@ -1373,6 +1369,7 @@
     <string name="title_widget_title_count">Nova contagem de mensagens</string>
     <string name="title_widget_title_list">Lista de mensagem</string>
     <string name="title_widget_title_sync">Sinc. lig./desl.</string>
+    <string name="title_power_menu_off">Desl.</string>
     <string name="title_widget_account">Conta</string>
     <string name="title_widget_account_all">Todos</string>
     <string name="title_widget_folder">Pasta</string>

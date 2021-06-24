@@ -98,6 +98,7 @@
     </string>
     <string name="title_junk_filter">Použít lokální filtr nevyžádané pošty</string>
     <string name="title_junk_filter_hint">Může zvýšit využití baterie a nesprávně označovat zprávy jako nevyžádané</string>
+    <string name="title_junk_blocklist">Použít seznam blokovaných adres</string>
     <string name="title_notification_sending">Odesílání zpráv</string>
     <string name="title_notification_waiting">Čekám na vhodné připojení</string>
     <string name="title_notification_idle">Nečinný</string>
@@ -862,6 +863,7 @@
     <string name="title_move_undo">Přesouvání do %1$s (%2$d)</string>
     <string name="title_open_with">Otevřít v aplikaci</string>
     <string name="title_authentication_failed">%1$s ověření se nezdařilo</string>
+    <string name="title_on_blocklist">Na seznamu blokovaných adres</string>
     <string name="title_receipt_subject">Potvrzení o přečtení: %1$s</string>
     <string name="title_receipt_text">Potvrzení o přečtení potvrzuje pouze zobrazení zprávy. Nelze zaručit, že si příjemce přečetl obsah zprávy.</string>
     <string name="title_no_answers">Nebyly definovány žádné šablony odpovědi</string>
@@ -954,7 +956,6 @@
     <string name="title_style_size_small">Malý</string>
     <string name="title_style_size_medium">Střední</string>
     <string name="title_style_size_large">Velký</string>
-    <string name="title_style_color">Barva &#8230;</string>
     <string name="title_style_align">Zarovnání</string>
     <string name="title_style_align_start">Na začátek</string>
     <string name="title_style_align_center">Na střed</string>
@@ -1059,10 +1060,6 @@
     <string name="title_signature_store">Uložit</string>
     <string name="title_search">Hledat</string>
     <string name="title_search_for_hint">Zadejte text</string>
-    <string name="title_search_hint">        Hledání se zpočátku zaměří na zprávy uložené ve vašem zařízení.
-        Pro hledání i na serveru, stiskněte tlačítko „Hledat znovu“.
-    </string>
-    <string name="title_search_index_hint">Hledání s pomocí indexu vyhledávání je rychlé, ale najde pouze celá slova</string>
     <string name="title_search_text_hint">Hledání textu ve zprávách, při velkém počtu zpráv, nemusí fungovat na některých serverech</string>
     <string name="title_search_size_hint">Vyhledávání zpráv podle velikosti, při velkém počtu zpráv, nemusí fungovat na některých serverech</string>
     <string name="title_search_more">Více možností</string>
@@ -1080,6 +1077,8 @@
     <string name="title_search_with_encrypted">Šifrováno (pouze v zařízení)</string>
     <string name="title_search_with_attachments">S přílohami (pouze v zařízení)</string>
     <string name="title_search_with_size">Velikost zprávy větší než</string>
+    <string name="title_search_in_trash">V koši</string>
+    <string name="title_search_in_junk">V nevyžádaných</string>
     <string name="title_search_with_before">Před</string>
     <string name="title_search_with_after">Po</string>
     <string name="title_search_flag_unseen">nepřečteno</string>

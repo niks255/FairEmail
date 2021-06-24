@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.OperationCanceledException;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.service.notification.StatusBarNotification;
 import android.text.Html;
@@ -137,6 +138,7 @@ import static javax.mail.Folder.READ_WRITE;
 class Core {
     private static final int MAX_NOTIFICATION_DISPLAY = 10; // per group
     private static final int MAX_NOTIFICATION_COUNT = 100; // per group
+    private static final long SCREEN_ON_DURATION = 3000L; // milliseconds
     private static final int SYNC_CHUNCK_SIZE = 200;
     private static final int SYNC_BATCH_SIZE = 20;
     private static final int DOWNLOAD_BATCH_SIZE = 20;
@@ -393,11 +395,11 @@ class Core {
                                     List<EntityMessage> messages = new ArrayList<>();
                                     messages.add(message);
                                     messages.addAll(similar.values());
-                                    onMove(context, jargs, false, folder, messages, (IMAPStore) istore, (IMAPFolder) ifolder, state);
+                                    onMove(context, jargs, false, account, folder, messages, (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
                                 case EntityOperation.COPY:
-                                    onMove(context, jargs, true, folder, Arrays.asList(message), (IMAPStore) istore, (IMAPFolder) ifolder, state);
+                                    onMove(context, jargs, true, account, folder, Arrays.asList(message), (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
                                 case EntityOperation.FETCH:
@@ -1160,7 +1162,7 @@ class Core {
         }
     }
 
-    private static void onMove(Context context, JSONArray jargs, boolean copy, EntityFolder folder, List<EntityMessage> messages, IMAPStore istore, IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
+    private static void onMove(Context context, JSONArray jargs, boolean copy, EntityAccount account, EntityFolder folder, List<EntityMessage> messages, IMAPStore istore, IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
         // Move message
         DB db = DB.getInstance(context);
 
@@ -1181,13 +1183,15 @@ class Core {
             throw new IllegalArgumentException("not selectable type=" + target.type);
 
         // De-classify
-        for (EntityMessage message : messages)
-            MessageClassifier.classify(message, folder, target, context);
+        if (!copy)
+            for (EntityMessage message : messages)
+                MessageClassifier.classify(message, folder, target, context);
 
         IMAPFolder itarget = (IMAPFolder) istore.getFolder(target.name);
 
         // Get source messages
         Map<Message, EntityMessage> map = new HashMap<>();
+        Map<EntityMessage, String> msgids = new HashMap<>();
         for (EntityMessage message : messages)
             try {
                 if (message.uid == null)
@@ -1206,7 +1210,8 @@ class Core {
 
         // Some providers do not support the COPY operation for drafts
         boolean draft = (EntityFolder.DRAFTS.equals(folder.type) || EntityFolder.DRAFTS.equals(target.type));
-        if (draft) {
+        boolean duplicate = (copy && !account.isGmail());
+        if (draft || duplicate) {
             Log.i(folder.name + " move from " + folder.type + " to " + target.type);
 
             List<Message> icopies = new ArrayList<>();
@@ -1223,7 +1228,13 @@ class Core {
 
                 Message icopy;
                 try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
-                    icopy = new MimeMessage(isession, is);
+                    if (duplicate) {
+                        String msgid = EntityMessage.generateMessageId();
+                        msgids.put(message, msgid);
+                        icopy = new MimeMessageEx(isession, is, msgid);
+                        icopy.saveChanges();
+                    } else
+                        icopy = new MimeMessage(isession, is);
                 }
 
                 file.delete();
@@ -1285,10 +1296,14 @@ class Core {
                 boolean sync = false;
                 for (EntityMessage message : map.values())
                     try {
-                        if (TextUtils.isEmpty(message.msgid))
+                        String msgid = msgids.get(message);
+                        if (msgid == null)
+                            msgid = message.msgid;
+
+                        if (TextUtils.isEmpty(msgid))
                             throw new IllegalArgumentException("move: msgid missing");
 
-                        Long uid = findUid(context, itarget, message.msgid, false);
+                        Long uid = findUid(context, itarget, msgid, false);
                         if (uid == null)
                             throw new IllegalArgumentException("move: uid not found");
 
@@ -1397,58 +1412,48 @@ class Core {
                 throw new MessageRemovedException("removed uid=" + uid);
             }
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
-
             MimeMessage imessage = (MimeMessage) ifolder.getMessageByUID(uid);
             if (imessage == null)
                 throw new MessageRemovedException(folder.name + " fetch not found uid=" + uid);
-            if (imessage.isExpunged())
-                throw new MessageRemovedException(folder.name + " fetch expunged uid=" + uid);
-            if (perform_expunge && imessage.isSet(Flags.Flag.DELETED))
-                throw new MessageRemovedException(folder.name + " fetch deleted uid=" + uid);
+            // synchronizeMessage will check expunged/deleted
 
             SyncStats stats = new SyncStats();
             boolean download = db.folder().getFolderDownload(folder.id);
             List<EntityRule> rules = db.rule().getEnabledRules(folder.id);
 
-            try {
-                FetchProfile fp = new FetchProfile();
-                fp.add(FetchProfile.Item.ENVELOPE);
-                fp.add(FetchProfile.Item.FLAGS);
-                fp.add(FetchProfile.Item.CONTENT_INFO); // body structure
-                //fp.add(UIDFolder.FetchProfileItem.UID);
-                fp.add(IMAPFolder.FetchProfileItem.HEADERS);
-                //fp.add(IMAPFolder.FetchProfileItem.MESSAGE);
-                fp.add(FetchProfile.Item.SIZE);
-                fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
-                if (account.isGmail()) {
-                    fp.add(GmailFolder.FetchProfileItem.THRID);
-                    fp.add(GmailFolder.FetchProfileItem.LABELS);
-                }
-                ifolder.fetch(new Message[]{imessage}, fp);
-
-                EntityMessage message = synchronizeMessage(context, account, folder, istore, ifolder, imessage, false, download, rules, state, stats);
-                if (message != null) {
-                    if (account.isGmail() && EntityFolder.USER.equals(folder.type))
-                        try {
-                            JSONArray jlabel = new JSONArray();
-                            jlabel.put(0, folder.name);
-                            jlabel.put(1, true);
-                            onLabel(context, jlabel, folder, message, istore, ifolder, state);
-                        } catch (Throwable ex1) {
-                            Log.e(ex1);
-                        }
-
-                    if (download)
-                        downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, stats);
-                }
-
-                if (!stats.isEmpty())
-                    EntityLog.log(context, account.name + "/" + folder.name + " fetch stats " + stats);
-            } finally {
-                ((IMAPMessage) imessage).invalidateHeaders();
+            FetchProfile fp = new FetchProfile();
+            fp.add(FetchProfile.Item.ENVELOPE);
+            fp.add(FetchProfile.Item.FLAGS);
+            fp.add(FetchProfile.Item.CONTENT_INFO); // body structure
+            //fp.add(UIDFolder.FetchProfileItem.UID);
+            fp.add(IMAPFolder.FetchProfileItem.HEADERS);
+            //fp.add(IMAPFolder.FetchProfileItem.MESSAGE);
+            fp.add(FetchProfile.Item.SIZE);
+            fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
+            if (account.isGmail()) {
+                fp.add(GmailFolder.FetchProfileItem.THRID);
+                fp.add(GmailFolder.FetchProfileItem.LABELS);
             }
+            ifolder.fetch(new Message[]{imessage}, fp);
+
+            EntityMessage message = synchronizeMessage(context, account, folder, istore, ifolder, imessage, false, download, rules, state, stats);
+            if (message != null) {
+                if (account.isGmail() && EntityFolder.USER.equals(folder.type))
+                    try {
+                        JSONArray jlabel = new JSONArray();
+                        jlabel.put(0, folder.name);
+                        jlabel.put(1, true);
+                        onLabel(context, jlabel, folder, message, istore, ifolder, state);
+                    } catch (Throwable ex1) {
+                        Log.e(ex1);
+                    }
+
+                if (download)
+                    downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, stats);
+            }
+
+            if (!stats.isEmpty())
+                EntityLog.log(context, account.name + "/" + folder.name + " fetch stats " + stats);
         } catch (MessageRemovedException | MessageRemovedIOException ex) {
             Log.i(ex);
 
@@ -2264,16 +2269,18 @@ class Core {
             EntityLog.log(context, folder.name + " POP capabilities= " + caps.keySet());
 
             Message[] imessages = ifolder.getMessages();
-            EntityLog.log(context, folder.name + " POP messages=" + imessages.length);
-
-            if (account.max_messages != null && imessages.length > account.max_messages)
-                imessages = Arrays.copyOfRange(imessages,
-                        imessages.length - account.max_messages, imessages.length);
+            int max;
+            if (account.max_messages == null)
+                max = imessages.length;
+            else
+                max = Math.min(imessages.length, Math.max(account.max_messages * 2, 100));
+            EntityLog.log(context, folder.name + " POP messages=" + imessages.length +
+                    " max=" + max + "/" + account.max_messages);
 
             boolean hasUidl = caps.containsKey("UIDL");
             if (hasUidl) {
                 FetchProfile ifetch = new FetchProfile();
-                ifetch.add(UIDFolder.FetchProfileItem.UID);
+                ifetch.add(UIDFolder.FetchProfileItem.UID); // This will fetch all UIDs
                 ifolder.fetch(imessages, ifetch);
             }
 
@@ -2311,7 +2318,8 @@ class Core {
                         if (id.msgid != null)
                             known.put(id.msgid, id);
 
-                    for (Message imessage : imessages) {
+                    for (int i = imessages.length - max; i < imessages.length; i++) {
+                        Message imessage = imessages[i];
                         MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
                         String msgid = helper.getMessageID(); // expensive!
                         if (!TextUtils.isEmpty(msgid))
@@ -2325,7 +2333,8 @@ class Core {
                 }
             }
 
-            for (Message imessage : imessages)
+            for (int i = imessages.length - max; i < imessages.length; i++) {
+                Message imessage = imessages[i];
                 try {
                     if (!state.isRunning())
                         return;
@@ -2514,6 +2523,7 @@ class Core {
                 } finally {
                     ((POP3Message) imessage).invalidate(true);
                 }
+            }
 
             db.folder().setFolderLastSync(folder.id, new Date().getTime());
             EntityLog.log(context, folder.name + " POP done");
@@ -2987,7 +2997,7 @@ class Core {
                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                         } finally {
                             // Free memory
-                            ((IMAPMessage) isub[j]).invalidateHeaders();
+                            isub[j] = null;
                         }
                 }
             }
@@ -3057,7 +3067,6 @@ class Core {
                         } finally {
                             // Free memory
                             isub[j] = null;
-                            //((IMAPMessage) isub[j]).invalidateHeaders();
                         }
                 }
             }
@@ -3343,6 +3352,24 @@ class Core {
                     message.warning = Log.formatThrowable(ex, false);
                 }
 
+            boolean check_blocklist = prefs.getBoolean("check_blocklist", false);
+            if (check_blocklist) {
+                List<Address> senders = new ArrayList<>();
+                if (message.from != null)
+                    senders.addAll(Arrays.asList(message.from));
+                if (message.reply != null)
+                    senders.addAll(Arrays.asList(message.reply));
+                boolean blocklist = false;
+                for (Address sender : senders) {
+                    String email = ((InternetAddress) sender).getAddress();
+                    if (DnsBlockList.isJunk(email)) {
+                        blocklist = true;
+                        break;
+                    }
+                }
+                message.blocklist = blocklist;
+            }
+
             try {
                 db.beginTransaction();
 
@@ -3360,6 +3387,23 @@ class Core {
                 }
 
                 runRules(context, imessage, account, folder, message, rules);
+
+                if (message.blocklist != null && message.blocklist) {
+                    boolean use_blocklist = prefs.getBoolean("use_blocklist", false);
+                    if (use_blocklist) {
+                        EntityLog.log(context, "Block list" +
+                                " folder=" + folder.name +
+                                " message=" + message.id +
+                                "@" + new Date(message.received) +
+                                ":" + message.subject);
+                        EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
+                        if (junk != null) {
+                            EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id, false);
+                            message.ui_hide = true;
+                        }
+                    }
+                }
+
                 if (download && !message.ui_hide &&
                         MessageClassifier.isEnabled(context) && folder.auto_classify_source)
                     db.message().setMessageUiHide(message.id, true); // keep local value
@@ -3857,6 +3901,7 @@ class Core {
         boolean notify_summary = prefs.getBoolean("notify_summary", false);
         boolean notify_preview = prefs.getBoolean("notify_preview", true);
         boolean notify_preview_only = prefs.getBoolean("notify_preview_only", false);
+        boolean notify_screen_on = prefs.getBoolean("notify_screen_on", false);
         boolean wearable_preview = prefs.getBoolean("wearable_preview", false);
         boolean biometrics = prefs.getBoolean("biometrics", false);
         String pin = prefs.getString("pin", null);
@@ -3915,7 +3960,11 @@ class Core {
             if (!groupMessages.containsKey(group))
                 groupMessages.put(group, new ArrayList<>());
 
-            if (message.notifying != 0) {
+            if (message.notifying == 0) {
+                // Handle clear notifying on boot/update
+                data.groupNotifying.get(group).remove(message.id);
+                data.groupNotifying.get(group).remove(-message.id);
+            } else {
                 long id = message.id * message.notifying;
                 if (!data.groupNotifying.get(group).contains(id) &&
                         !data.groupNotifying.get(group).contains(-id)) {
@@ -3937,6 +3986,7 @@ class Core {
         }
 
         // Difference
+        boolean flash = false;
         for (long group : groupMessages.keySet()) {
             List<Long> add = new ArrayList<>();
             List<Long> update = new ArrayList<>();
@@ -3965,8 +4015,10 @@ class Core {
                             update.add(id);
                         }
                         remove.remove(-id);
-                    } else
+                    } else {
+                        flash = true;
                         add.add(id);
+                    }
                     Log.i("Notify adding=" + id + " existing=" + existing);
                 }
             }
@@ -4047,6 +4099,15 @@ class Core {
                     }
                 }
             }
+        }
+
+        if (notify_screen_on && flash) {
+            Log.i("Notify screen on");
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock wakeLock = pm.newWakeLock(
+                    PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                    BuildConfig.APPLICATION_ID + ":notification");
+            wakeLock.acquire(SCREEN_ON_DURATION);
         }
     }
 

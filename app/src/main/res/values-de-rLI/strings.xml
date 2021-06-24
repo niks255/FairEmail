@@ -79,6 +79,7 @@
     </string>
     <string name="title_junk_filter">Lokalen Spam-Filter verwenden</string>
     <string name="title_junk_filter_hint">Das kann den Akkuverbrauch erhöhen und Nachrichten fälschlicherweise als Spam kennzeichnen</string>
+    <string name="title_junk_blocklist">Spam-Sperrlisten verwenden</string>
     <string name="title_notification_sending">Nachrichten werden gesendet</string>
     <string name="title_notification_waiting">Auf eine geeignete Verbindung wird gewartet</string>
     <string name="title_notification_idle">Leerlauf</string>
@@ -154,6 +155,7 @@
     <string name="title_setup_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_setup_advanced_protection">Wenn Sie sich in das erweiterte Schutzprogramm eingeschrieben haben, ist es nicht möglich, eine andere E-Mail-Anwendung von Dritten zu verwenden. Dies ist eine von Google auferlegte Einschränkung.</string>
     <string name="title_setup_quick_success">Ein Konto wurde erfolgreich hinzugefügt</string>
+    <string name="title_setup_quick_configure">Um den Namen, die Farbe, die Wisch-Aktionen usw. zu bearbeiten</string>
     <string name="title_setup_manage">Verwalten</string>
     <string name="title_setup_grant">Zulassen</string>
     <string name="title_setup_grant_again">Benötigte Rechte erteilen</string>
@@ -177,7 +179,7 @@
     <string name="title_setup_advanced_options">Erweiterte Optionen anzeigen</string>
     <string name="title_setup_inbox">Zum Posteingang</string>
     <string name="title_setup_go">Los</string>
-    <string name="title_setup_to_do">Nicht erledigt</string>
+    <string name="title_setup_to_do">Offene Punkte</string>
     <string name="title_setup_done">Fertig</string>
     <string name="title_setup_still">Noch zu tun</string>
     <string name="title_setup_error">Fehler</string>
@@ -255,6 +257,7 @@
     <string name="title_advanced_check_authentication">Nachrichtenauthentifizierung prüfen</string>
     <string name="title_advanced_check_reply_domain">Überprüft die Antwort-An-E-Mail-Adressen beim Synchronisieren von Nachrichten</string>
     <string name="title_advanced_check_mx">Überprüft die Absender-E-Mail-Adressen beim Synchronisieren von Nachrichten per DNS MX</string>
+    <string name="title_advanced_check_blocklist">Prüfen, ob die Domain des Absenders auf einer Spam-Sperrliste enthalten ist</string>
     <string name="title_advanced_tune_keep_alive">Aktivitätsintervall automatisch anpassen</string>
     <string name="title_advanced_keyboard">Tastatur standardmäßig anzeigen</string>
     <string name="title_advanced_keyboard_no_fullscreen">Vollbild-Tastatur verhindern</string>
@@ -412,8 +415,8 @@
     <string name="title_advanced_notify_preview_all">Vorschau des ganzen Textes</string>
     <string name="title_advanced_notify_preview_only">Nur Benachrichtigungen mit Vorschautext anzeigen</string>
     <string name="title_advanced_notify_actions">Benachrichtigungsaktionen</string>
-    <string name="title_advanced_notify_action_trash">Löschen</string>
-    <string name="title_advanced_notify_action_junk">Spam</string>
+    <string name="title_advanced_notify_action_trash">Papierkorb</string>
+    <string name="title_advanced_notify_action_junk">Spam-Ordner</string>
     <string name="title_advanced_notify_action_archive">Archivieren</string>
     <string name="title_advanced_notify_action_move">Verschieben</string>
     <string name="title_advanced_notify_action_reply">Antworten</string>
@@ -426,7 +429,7 @@
     <string name="title_advanced_notify_clear">Benachrichtigung über neue Nachrichten beim Anzeigen der Nachrichtenliste entfernen</string>
     <string name="title_advanced_notify_subtext">Konten- oder Ordnername als Untertitel anzeigen</string>
     <string name="title_advanced_wearable_preview">Nur Benachrichtigungen mit einer Nachrichtenvorschau an tragbare Gerätschaften senden</string>
-    <string name="title_advanced_notify_messaging">Androids Benachrichtigungsformat »messaging style« verwenden</string>
+    <string name="title_advanced_notify_messaging">Benachrichtigungsformat im Android-Nachrichtenstil verwenden</string>
     <string name="title_advanced_biometrics_notify">Benachrichtigungsinhalt bei Nutzung der biometrischen Authentifizierung anzeigen</string>
     <string name="title_advanced_light">Benachrichtigungslicht verwenden</string>
     <string name="title_advanced_sound">Benachrichtigungston auswählen</string>
@@ -514,7 +517,7 @@
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
     <string name="title_advanced_ssl_harden_hint">Wenn dies eingeschaltet ist, werden schwache SSL-Protokolle und Chiffren deaktiviert, was zu Verbindungsproblemen führen kann</string>
     <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgerufen. Sie können die Roaming-Einstellung des Gerätes verwenden, um das Internet während des Roamings zu deaktivieren.</string>
-    <string name="title_advanced_browse_hint">Durch Herunterscrollen weitere E-Mails laden</string>
+    <string name="title_advanced_browse_hint">Durch Herunterziehen weitere Nachrichten abholen</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einer kompakteren Darstellung und Ändern der Nachrichtentextgröße kann im oberen Aktionsleistenmenü in der Nachrichtenansicht vorgenommen werden.</string>
     <string name="title_advanced_startup_hint">Einen beliebigen Ordner in der Ordnerliste lange gedrückt halten, um ihn der Liste der Sammelordner hinzuzufügen oder ihn daraus zu entfernen</string>
     <string name="title_advanced_beige_hint">Nur helle Designs</string>
@@ -605,7 +608,7 @@
     <string name="title_custom">Benutzerdefiniert</string>
     <string name="title_host">Hostname</string>
     <string name="title_encryption">Verschlüsselung</string>
-    <string name="title_encryption_none">Keine</string>
+    <string name="title_encryption_none">Keine Verschlüsselung</string>
     <string name="title_allow_insecure">Unsichere Verbindungen zulassen</string>
     <string name="title_insecure_remark">Unsichere Verbindungen sollten nur in vertrauenswürdigen Netzwerken und niemals in öffentlichen Netzwerken erlaubt werden</string>
     <string name="title_port">Portnummer</string>
@@ -701,7 +704,7 @@
     <string name="title_empty_trash_all_ask">Alle in den Papierkorb verschobenen Nachrichten aller Konten endgültig löschen?</string>
     <string name="title_empty_spam_all_ask">Alle Spam-Nachrichten aller Konten endgültig löschen?</string>
     <string name="title_empty_all">Dies löscht alle Nachrichten sowohl vom Gerät als auch vom Server</string>
-    <string name="title_delete_operation_title">Vorgänge löschen</string>
+    <string name="title_delete_operation_title">Lösch-Vorgänge</string>
     <string name="title_delete_operation_error">Mit einer Fehlermeldung</string>
     <string name="title_delete_operation_fetch">Abruf-Vorgänge</string>
     <string name="title_delete_operation_move">Verschiebe-Vorgänge</string>
@@ -750,9 +753,9 @@
     <string name="title_folder_unified">Sammeleingang</string>
     <string name="title_folder_inbox">Posteingang</string>
     <string name="title_folder_outbox">Postausgang</string>
-    <string name="title_folder_all">Archiv</string>
+    <string name="title_folder_all">Archivieren</string>
     <string name="title_folder_drafts">Entwürfe</string>
-    <string name="title_folder_trash">Papierkorb</string>
+    <string name="title_folder_trash">Löschen</string>
     <string name="title_folder_junk">Spam-Ordner</string>
     <string name="title_folder_sent">Gesendet</string>
     <string name="title_folder_system">System</string>
@@ -765,11 +768,11 @@
     <string name="title_no_messages">Keine Nachrichten</string>
     <string name="title_filters_active">Ein oder mehrere Filter aktiv</string>
     <string name="title_duplicate_in">Doppelte Nachricht in %1$s</string>
-    <string name="title_subject_reply">Re: %1$s</string>
-    <string name="title_subject_forward">Fwd: %1$s</string>
+    <string name="title_subject_reply">AW: %1$s</string>
+    <string name="title_subject_forward">Wg: %1$s</string>
     <string name="title_subject_reply_alt">AW: %1$s</string>
     <string name="title_subject_forward_alt">Wg: %1$s</string>
-    <string name="title_seen">Gelesen</string>
+    <string name="title_seen">Gelesen kennzeichnen</string>
     <string name="title_unseen">Als ungelesen kennzeichnen</string>
     <string name="title_toggle_seen">Gelesen/Ungelesen</string>
     <string name="title_hide">Ausblenden</string>
@@ -813,13 +816,13 @@
     <string name="title_button_search">In Nachrichten suchen</string>
     <string name="title_button_search_text">Im Nachrichtentext suchen</string>
     <string name="title_configure_buttons">Schaltflächen konfigurieren &#8230;</string>
-    <string name="title_trash">Löschen</string>
+    <string name="title_trash">Papierkorb</string>
     <string name="title_copy">Kopieren &#8230;</string>
     <string name="title_copy_to">Kopieren nach &#8230;</string>
     <string name="title_subscribe">Abonnieren</string>
     <string name="title_delete">Löschen</string>
     <string name="title_more">Mehr</string>
-    <string name="title_spam">Spam</string>
+    <string name="title_spam">Spam-Ordner</string>
     <string name="title_move">Verschieben</string>
     <string name="title_copy_btn">Kopieren</string>
     <string name="title_keywords_btn">Stichwörter</string>
@@ -833,7 +836,7 @@
     <string name="title_delete_permanently">Dauerhaft löschen</string>
     <string name="title_no_undo">Ich verstehe, dass dies nicht widerrufen werden kann</string>
     <string name="title_snooze">Zurückstellen &#8230;</string>
-    <string name="title_archive">Archivieren</string>
+    <string name="title_archive">Archiv</string>
     <string name="title_reply">Antworten</string>
     <string name="title_reply_to_sender">Dem Absender antworten</string>
     <string name="title_reply_to_all">Allen antworten</string>
@@ -844,6 +847,7 @@
     <string name="title_move_undo">Wird nach »%1$s« verschoben (%2$d)</string>
     <string name="title_open_with">Öffnen mit</string>
     <string name="title_authentication_failed">%1$s-Authentifizierung fehlgeschlagen</string>
+    <string name="title_on_blocklist">In Spam-Sperrliste enthalten</string>
     <string name="title_receipt_subject">Lesebestätigung: %1$s</string>
     <string name="title_receipt_text">Diese Lesebestätigung bestätigt nur, dass die Nachricht angezeigt wurde. Es gibt keine Garantie, dass der Empfänger den Nachrichteninhalt gelesen hat.</string>
     <string name="title_no_answers">Keine Antwortvorlagen definiert</string>
@@ -937,7 +941,6 @@
     <string name="title_style_size_small">Klein</string>
     <string name="title_style_size_medium">Mittel</string>
     <string name="title_style_size_large">Groß</string>
-    <string name="title_style_color">Farbe &#8230;</string>
     <string name="title_style_align">Ausrichtung</string>
     <string name="title_style_align_start">Anfang</string>
     <string name="title_style_align_center">Zentriert</string>
@@ -952,7 +955,7 @@
     <string name="title_style_blockquote">Zitatblock</string>
     <string name="title_style_strikethrough">Durchgestrichen</string>
     <string name="title_style_clear">Formatierung entfernen</string>
-    <string name="title_style_link">Link einfügen</string>
+    <string name="title_style_link">Link hinzufügen</string>
     <string name="title_add_image">Bild hinzufügen</string>
     <string name="title_add_image_inline">Einfügen</string>
     <string name="title_add_image_attach">Anhängen</string>
@@ -1042,8 +1045,10 @@
     <string name="title_signature_store">Speichern</string>
     <string name="title_search">Suche</string>
     <string name="title_search_for_hint">Text eingeben</string>
-    <string name="title_search_hint">Bei der Suche werden zunächst die auf Ihrem Gerät gespeicherten Nachrichten durchsucht. Um auch die Nachrichten auf dem Server zu durchsuchen, tippen Sie auf die Schaltfläche „Erneut suchen“.    </string>
-    <string name="title_search_index_hint">Die Suche über den Suchindex ist schnell, wird aber nur für ganze Wörter durchgeführt</string>
+    <string name="title_search_hint">Zuerst wird Ihr Gerät durchsucht.
+Um auch auf dem Server zu suchen, tippen Sie auf die Schaltfläche „Erneut suchen”.    </string>
+    <string name="title_search_index_hint">Das Suchen über den Suchindex ist schnell, findet aber nur ganze Wörter.
+Mit den folgenden Einstellungen können Sie die Suche auf dem E-Mail-Server fortsetzen.    </string>
     <string name="title_search_text_hint">Das Suchen nach Text in Nachrichten funktioniert bei einer großen Anzahl von Nachrichten auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_size_hint">Die Nachrichtensuche nach Größe funktioniert, bei einer großen Anzahl von Nachrichten, auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_more">Weitere Optionen</string>
@@ -1061,8 +1066,8 @@
     <string name="title_search_with_encrypted">Verschlüsselt (nur auf dem Gerät)</string>
     <string name="title_search_with_attachments">Mit Anhängen (nur auf dem Gerät)</string>
     <string name="title_search_with_size">Nachrichtengröße größer als</string>
-    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">Im Papierkorb</string>
-    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">Im Spam-Ordner</string>
+    <string name="title_search_in_trash">Im Papierkorb</string>
+    <string name="title_search_in_junk">Im Spam-Ordner</string>
     <string name="title_search_with_before">Vor</string>
     <string name="title_search_with_after">Nach</string>
     <string name="title_search_flag_unseen">Ungelesen</string>
@@ -1102,8 +1107,8 @@
     <string name="title_force_sync">Synchronisation erzwingen</string>
     <string name="title_force_send">Senden erzwingen</string>
     <string name="title_language_all">Alle</string>
-    <string name="title_previous">Vorherige</string>
-    <string name="title_next">Nächste</string>
+    <string name="title_previous">Zurück</string>
+    <string name="title_next">Weiter</string>
     <string name="title_edit_signature">Signatur bearbeiten</string>
     <string name="title_edit_signature_text">Signaturtext</string>
     <string name="title_edit_signature_image">Bild einfügen</string>
@@ -1122,14 +1127,14 @@
     <string name="title_answer_placeholder_firstname">Vorname des Absenders</string>
     <string name="title_answer_placeholder_lastname">Nachname des Absenders</string>
     <string name="title_rule_noop">Keine Aktion</string>
-    <string name="title_rule_seen">Gelesen kennzeichnen</string>
+    <string name="title_rule_seen">Gelesen</string>
     <string name="title_rule_unseen">Als ungelesen kennzeichnen</string>
     <string name="title_rule_hide">Ausblenden</string>
-    <string name="title_rule_ignore">Benachrichtigungen unterdrücken</string>
+    <string name="title_rule_ignore">Benachrichtigung unterdrücken</string>
     <string name="title_rule_snooze">Zurückstellen</string>
     <string name="title_rule_flag">Stern hinzufügen</string>
     <string name="title_rule_importance">Wichtigkeit festlegen</string>
-    <string name="title_rule_keyword">Schlagwort hinzufügen</string>
+    <string name="title_rule_keyword">Stichwort hinzufügen</string>
     <string name="title_rule_move">Verschieben</string>
     <string name="title_rule_copy">Kopieren (Label)</string>
     <string name="title_rule_answer">Antworten/Weiterleiten</string>
@@ -1211,9 +1216,9 @@
     <string name="title_legend_inbox">Posteingang</string>
     <string name="title_legend_drafts">Entwürfe</string>
     <string name="title_legend_sent">Gesendet</string>
-    <string name="title_legend_archive">Archiv</string>
+    <string name="title_legend_archive">Archivieren</string>
     <string name="title_legend_trash">Papierkorb</string>
-    <string name="title_legend_junk">Spam</string>
+    <string name="title_legend_junk">Spam-Ordner</string>
     <string name="title_legend_primary">Primär</string>
     <string name="title_legend_subscribed">Abonniert</string>
     <string name="title_legend_rule">Enthält Regeln</string>
@@ -1254,10 +1259,10 @@
     <string name="title_legend_external_image">Platzhalter für externe Bilder</string>
     <string name="title_legend_embedded_image">Platzhalter für eingebettete Bilder</string>
     <string name="title_legend_tracking_pixel">Verfolgungsbild</string>
-    <string name="title_legend_broken_image">Defekte Bilddatei</string>
+    <string name="title_legend_broken_image">Defektes Bild</string>
     <string name="title_legend_pick">Kontakt auswählen</string>
     <string name="title_legend_cc">Kopie/Blindkopie anzeigen</string>
-    <string name="title_legend_link">Link hinzufügen</string>
+    <string name="title_legend_link">Link einfügen</string>
     <string name="title_legend_file">Anhang hinzufügen</string>
     <string name="title_legend_picture">Bild hinzufügen</string>
     <string name="title_legend_photo">Foto aufnehmen</string>
@@ -1292,8 +1297,8 @@
     <string name="title_legend_c">Verfassen</string>
     <string name="title_legend_d">Papierkorb (löschen)</string>
     <string name="title_legend_m">Menü (Mehrfachauswahl)</string>
-    <string name="title_legend_n">Weiter</string>
-    <string name="title_legend_p">Zurück</string>
+    <string name="title_legend_n">Nächste</string>
+    <string name="title_legend_p">Vorherige</string>
     <string name="title_legend_r">Antworten</string>
     <string name="title_legend_s">Aus-/Abwählen</string>
     <string name="title_legend_t">Text fokussieren</string>
@@ -1437,7 +1442,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_keyword_label1">Wichtig</string>
     <string name="title_keyword_label2">Arbeit</string>
     <string name="title_keyword_label3">Persönlich</string>
-    <string name="title_keyword_label4">Offene Punkte</string>
+    <string name="title_keyword_label4">Nicht erledigt</string>
     <string name="title_keyword_label5">Später</string>
     <string name="title_accessibility_flagged">Markiert</string>
     <string name="title_accessibility_unflagged">Nicht markiert</string>
@@ -1559,7 +1564,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Ganz unten</item>
     </string-array>
     <string-array name="encryptNames">
-        <item>Keine Verschlüsselung</item>
+        <item>Keine</item>
         <item>PGP nur signieren</item>
         <item>PGP signieren + verschlüsseln</item>
         <item>S/MIME nur signieren</item>

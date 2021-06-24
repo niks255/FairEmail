@@ -32,6 +32,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -50,9 +51,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public class EmailProvider {
+public class EmailProvider implements Serializable {
     public String id;
     public String name;
+    public String description;
     public boolean enabled;
     public List<String> domain;
     public int order;
@@ -131,6 +133,9 @@ public class EmailProvider {
                         provider = new EmailProvider();
                         provider.id = xml.getAttributeValue(null, "id");
                         provider.name = xml.getAttributeValue(null, "name");
+                        provider.description = xml.getAttributeValue(null, "description");
+                        if (provider.description == null)
+                            provider.description = provider.name;
                         provider.enabled = xml.getAttributeBooleanValue(null, "enabled", true);
                         String domain = xml.getAttributeValue(null, "domain");
                         if (domain != null)
@@ -719,7 +724,7 @@ public class EmailProvider {
         @NonNull
         @Override
         public String toString() {
-            return host + ":" + port;
+            return host + ":" + port + (starttls ? " starttls" : " ssl/tls");
         }
     }
 

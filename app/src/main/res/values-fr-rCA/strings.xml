@@ -78,6 +78,7 @@
     </string>
     <string name="title_junk_filter">Utiliser le filtre de pourriel local</string>
     <string name="title_junk_filter_hint">Ceci peut augmenter l\'utilisation de la pile et marquer par erreur des messages comme indésirables</string>
+    <string name="title_junk_blocklist">Utiliser des listes de blocage de courrier indésirable</string>
     <string name="title_notification_sending">Envoi des messages en cours</string>
     <string name="title_notification_waiting">En attente d\'une connexion appropriée</string>
     <string name="title_notification_idle">Inactif</string>
@@ -153,6 +154,7 @@
     <string name="title_setup_no_inbox">Boîte de réception introuvable</string>
     <string name="title_setup_advanced_protection">Quand on est inscrit au programme de protection avancée, il n\'est pas possible d\'utiliser une application de messagerie tierce. Il s\'agit d\'une restriction imposée par Google.</string>
     <string name="title_setup_quick_success">Un compte a été ajouté avec succès</string>
+    <string name="title_setup_quick_configure">Pour modifier le nom, la couleur, les actions de balayage, etc.</string>
     <string name="title_setup_manage">Gérer</string>
     <string name="title_setup_grant">Autoriser</string>
     <string name="title_setup_grant_again">Accorder les autorisations requises</string>
@@ -254,6 +256,7 @@
     <string name="title_advanced_check_authentication">Contrôler l\'authentification des messages</string>
     <string name="title_advanced_check_reply_domain">Vérifier l\'adresse de réponse lors de la synchronisation des messages</string>
     <string name="title_advanced_check_mx">Vérifier l’adresse courriel de l’expéditeur lors de la synchronisation des messages</string>
+    <string name="title_advanced_check_blocklist">Vérifier si le nom de domaine de l\'expéditeur est sur une liste de blocage de courrier indésirable</string>
     <string name="title_advanced_tune_keep_alive">Ajuster automatiquement l\'intervalle de connexion</string>
     <string name="title_advanced_keyboard">Afficher le clavier par défaut</string>
     <string name="title_advanced_keyboard_no_fullscreen">Ne pas afficher le clavier en plein écran</string>
@@ -844,6 +847,7 @@
     <string name="title_move_undo">Déplacement vers %1$s (%2$d)</string>
     <string name="title_open_with">Ouvrir avec</string>
     <string name="title_authentication_failed">L\'authentification %1$s a échoué</string>
+    <string name="title_on_blocklist">Sur la liste de blocage des indésirables</string>
     <string name="title_receipt_subject">Confirmation de lecture : %1$s</string>
     <string name="title_receipt_text">Cette confirmation atteste seulement que le message a été affiché. Il n’y a aucune garantie que le destinataire ait lu le contenu du message.</string>
     <string name="title_no_answers">Aucun modèle de réponse défini</string>
@@ -937,7 +941,6 @@
     <string name="title_style_size_small">Petit</string>
     <string name="title_style_size_medium">Moyen</string>
     <string name="title_style_size_large">Grand</string>
-    <string name="title_style_color">Couleur&#8230;</string>
     <string name="title_style_align">Aligner</string>
     <string name="title_style_align_start">A gauche</string>
     <string name="title_style_align_center">Centré</string>
@@ -1045,7 +1048,9 @@
     <string name="title_search_hint">        La recherche affichera initialement les messages stockés sur votre appareil.
         Pour rechercher également sur le serveur, appuyez sur le bouton « Rechercher de nouveau ».
     </string>
-    <string name="title_search_index_hint">La recherche via l’index de recherche est rapide mais elle ne trouvera que des mots entiers</string>
+    <string name="title_search_index_hint">        La recherche via l\'index de recherche est rapide mais ne trouve que des mots entiers.
+        Les options ci-dessous permettent de continuer à rechercher sur le serveur de messagerie.
+    </string>
     <string name="title_search_text_hint">La recherche de texte dans les messages peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
     <string name="title_search_size_hint">La recherche de messages par taille peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
     <string name="title_search_more">Plus d’options</string>
@@ -1063,8 +1068,8 @@
     <string name="title_search_with_encrypted">Chiffrés (uniquement sur l’appareil)</string>
     <string name="title_search_with_attachments">Avec des pièces jointes (uniquement sur l’appareil)</string>
     <string name="title_search_with_size">Taille de message supérieure à</string>
-    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">Dans la corbeille</string>
-    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">Dans les indésirables</string>
+    <string name="title_search_in_trash">Dans la corbeille</string>
+    <string name="title_search_in_junk">Dans les indésirables</string>
     <string name="title_search_with_before">Avant</string>
     <string name="title_search_with_after">Après</string>
     <string name="title_search_flag_unseen">non lus</string>

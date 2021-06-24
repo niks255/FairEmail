@@ -24,6 +24,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,6 +85,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private SwitchCompat swCheckAuthentication;
     private SwitchCompat swCheckReply;
     private SwitchCompat swCheckMx;
+    private SwitchCompat swCheckBlocklist;
+    private TextView tvCheckBlocklistHint;
+    private SwitchCompat swUseBlocklist;
     private SwitchCompat swTuneKeepAlive;
     private Group grpExempted;
 
@@ -93,7 +97,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             "enabled", "poll_interval", "auto_optimize", "schedule", "schedule_start", "schedule_end",
             "sync_nodate", "sync_unseen", "sync_flagged", "delete_unseen", "sync_kept", "gmail_thread_id",
             "sync_folders", "sync_shared_folders", "subscriptions",
-            "check_authentication", "check_reply_domain", "check_mx", "tune_keep_alive"
+            "check_authentication", "check_reply_domain", "check_mx", "check_blocklist", "use_blocklist", "tune_keep_alive"
     };
 
     @Override
@@ -139,6 +143,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swCheckAuthentication = view.findViewById(R.id.swCheckAuthentication);
         swCheckReply = view.findViewById(R.id.swCheckReply);
         swCheckMx = view.findViewById(R.id.swCheckMx);
+        swCheckBlocklist = view.findViewById(R.id.swCheckBlocklist);
+        tvCheckBlocklistHint = view.findViewById(R.id.tvCheckBlocklistHint);
+        swUseBlocklist = view.findViewById(R.id.swUseBlocklist);
         swTuneKeepAlive = view.findViewById(R.id.swTuneKeepAlive);
         grpExempted = view.findViewById(R.id.grpExempted);
 
@@ -334,6 +341,21 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             }
         });
 
+        swCheckBlocklist.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("check_blocklist", checked).apply();
+                swUseBlocklist.setEnabled(checked);
+            }
+        });
+
+        swUseBlocklist.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("use_blocklist", checked).apply();
+            }
+        });
+
         swTuneKeepAlive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -358,6 +380,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
                 adapter.set(accounts);
             }
         });
+
+        tvCheckBlocklistHint.setText(TextUtils.join(", ", DnsBlockList.getNames()));
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -429,6 +453,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swCheckAuthentication.setChecked(prefs.getBoolean("check_authentication", true));
         swCheckReply.setChecked(prefs.getBoolean("check_reply_domain", true));
         swCheckMx.setChecked(prefs.getBoolean("check_mx", false));
+        swCheckBlocklist.setChecked(prefs.getBoolean("check_blocklist", false));
+        swUseBlocklist.setChecked(prefs.getBoolean("use_blocklist", false));
+        swUseBlocklist.setEnabled(swCheckBlocklist.isChecked());
         swTuneKeepAlive.setChecked(prefs.getBoolean("tune_keep_alive", true));
     }
 

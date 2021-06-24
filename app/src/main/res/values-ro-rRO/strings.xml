@@ -88,6 +88,7 @@
     </string>
     <string name="title_junk_filter">Utilizați filtrul de spam local</string>
     <string name="title_junk_filter_hint">Acest lucru poate crește utilizarea bateriei și marchează incorect mesajele ca spam</string>
+    <string name="title_junk_blocklist">Utilizați listele de blocare a spam-ului</string>
     <string name="title_notification_sending">Se trimit mesaje</string>
     <string name="title_notification_waiting">Se așteaptă o conexiune adecvată</string>
     <string name="title_notification_idle">Inactiv</string>
@@ -163,6 +164,7 @@
     <string name="title_setup_no_inbox">Dosarul Primite nu a fost găsit</string>
     <string name="title_setup_advanced_protection">Când sunteți înscris în programul avansat de protecție, nu este posibilă utilizarea unei aplicații de e-mail a unei terțe părți. Aceasta este o restricție impusă de Google.</string>
     <string name="title_setup_quick_success">Un cont a fost adăugat cu succes</string>
+    <string name="title_setup_quick_configure">Pentru a edita numele, culoarea, acțiunile de glisare, etc</string>
     <string name="title_setup_manage">Gestionează</string>
     <string name="title_setup_grant">Acordă</string>
     <string name="title_setup_grant_again">Acordați permisiunile necesare</string>
@@ -264,6 +266,7 @@
     <string name="title_advanced_check_authentication">Verificarea autentificării mesajelor</string>
     <string name="title_advanced_check_reply_domain">Verifică adresa de răspuns la sincronizarea mesajelor</string>
     <string name="title_advanced_check_mx">Verifică adresa expeditorului la sincronizarea mesajelor</string>
+    <string name="title_advanced_check_blocklist">Verificați dacă numele de domeniu al expeditorului se află pe o listă de blocare a spam-ului</string>
     <string name="title_advanced_tune_keep_alive">Reglaţi automat intervalul de păstrare al conexiunii</string>
     <string name="title_advanced_keyboard">Afișare implicită a tastaturii</string>
     <string name="title_advanced_keyboard_no_fullscreen">Dezactivare tastatură pe tot ecranul</string>
@@ -853,6 +856,7 @@
     <string name="title_move_undo">Se mută la %1$s (%2$d)</string>
     <string name="title_open_with">Deschide cu</string>
     <string name="title_authentication_failed">Autentificare %1$s eșuată</string>
+    <string name="title_on_blocklist">Pe lista de blocare spam</string>
     <string name="title_receipt_subject">Confirmare de citire: %1$s</string>
     <string name="title_receipt_text">Confirmarea de citire doar arată că mesajul a fost afișat. Nu există garanția că destinatarul a citit conținutul mesajului.</string>
     <string name="title_no_answers">Nici un șablon de răspuns definit</string>
@@ -946,7 +950,6 @@
     <string name="title_style_size_small">Mic</string>
     <string name="title_style_size_medium">Mediu</string>
     <string name="title_style_size_large">Mare</string>
-    <string name="title_style_color">Culoare &#8230;</string>
     <string name="title_style_align">Aliniere</string>
     <string name="title_style_align_start">Start</string>
     <string name="title_style_align_center">Centru</string>
@@ -1051,10 +1054,6 @@
     <string name="title_signature_store">Stocare</string>
     <string name="title_search">Caută</string>
     <string name="title_search_for_hint">Introduceți textul</string>
-    <string name="title_search_hint">        Căutarea se va face inițial în mesajele stocate pe dispozitivul dumneavoastră.
-        Pentru a căuta și pe server apăsați butonul \'căutare din nou\'.
-    </string>
-    <string name="title_search_index_hint">Căutarea prin indexul de căutare este rapidă, dar va găsi doar cuvinte întregi</string>
     <string name="title_search_text_hint">Se caută text în mesaje, atunci când există un număr mare de mesaje, s-ar putea să nu funcționeze pe unele servere</string>
     <string name="title_search_size_hint">Căutarea mesajelor după mărime, când există un număr mare de mesaje, s-ar putea să nu funcționeze pe unele servere</string>
     <string name="title_search_more">Mai multe opțiuni</string>
@@ -1072,6 +1071,8 @@
     <string name="title_search_with_encrypted">Criptat (doar pe dispozitiv)</string>
     <string name="title_search_with_attachments">Cu atașamente (doar pe dispozitiv)</string>
     <string name="title_search_with_size">Dimensiune mesaj mai mare decât</string>
+    <string name="title_search_in_trash">În coșul de gunoi</string>
+    <string name="title_search_in_junk">În spam</string>
     <string name="title_search_with_before">Înainte de</string>
     <string name="title_search_with_after">După</string>
     <string name="title_search_flag_unseen">necitit</string>

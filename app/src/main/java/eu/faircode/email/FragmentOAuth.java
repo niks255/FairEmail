@@ -71,6 +71,7 @@ import net.openid.appauth.browser.Browsers;
 import net.openid.appauth.browser.VersionRange;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
@@ -471,10 +472,13 @@ public class FragmentOAuth extends FragmentBase {
                 EmailProvider provider = EmailProvider.getProvider(context, id);
                 String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
                 int aencryption = (provider.imap.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
+                String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
+                int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
 
                 String username = address;
 
                 List<String> usernames = new ArrayList<>();
+                usernames.add(address);
 
                 if (token != null) {
                     // https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens
@@ -484,19 +488,22 @@ public class FragmentOAuth extends FragmentBase {
                             String payload = new String(Base64.decode(segments[1], Base64.DEFAULT));
                             EntityLog.log(context, "token payload=" + payload);
                             JSONObject jpayload = new JSONObject(payload);
+
                             if (jpayload.has("preferred_username")) {
                                 String u = jpayload.getString("preferred_username");
-                                if (!usernames.contains(u))
+                                if (!TextUtils.isEmpty(u) && !usernames.contains(u))
                                     usernames.add(u);
                             }
+
                             if (jpayload.has("unique_name")) {
                                 String u = jpayload.getString("unique_name");
-                                if (!usernames.contains(u))
+                                if (!TextUtils.isEmpty(u) && !usernames.contains(u))
                                     usernames.add(u);
                             }
+
                             if (jpayload.has("upn")) {
                                 String u = jpayload.getString("upn");
-                                if (!usernames.contains(u))
+                                if (!TextUtils.isEmpty(u) && !usernames.contains(u))
                                     usernames.add(u);
                             }
                         } catch (Throwable ex) {
@@ -513,42 +520,78 @@ public class FragmentOAuth extends FragmentBase {
                             String payload = new String(Base64.decode(segments[1], Base64.DEFAULT));
                             EntityLog.log(context, "jwt payload=" + payload);
                             JSONObject jpayload = new JSONObject(payload);
+
                             if (jpayload.has("preferred_username")) {
                                 String u = jpayload.getString("preferred_username");
-                                if (!usernames.contains(u))
+                                if (!TextUtils.isEmpty(u) && !usernames.contains(u))
                                     usernames.add(u);
                             }
+
                             if (jpayload.has("email")) {
                                 String u = jpayload.getString("email");
-                                if (!usernames.contains(u))
+                                if (!TextUtils.isEmpty(u) && !usernames.contains(u))
                                     usernames.add(u);
                             }
+
                             if (jpayload.has("unique_name")) {
                                 String u = jpayload.getString("unique_name");
-                                if (!usernames.contains(u))
+                                if (!TextUtils.isEmpty(u) && !usernames.contains(u))
                                     usernames.add(u);
+                            }
+
+                            if (jpayload.has("verified_primary_email")) {
+                                JSONArray jsecondary =
+                                        jpayload.getJSONArray("verified_primary_email");
+                                for (int i = 0; i < jsecondary.length(); i++) {
+                                    String u = jsecondary.getString(i);
+                                    if (!TextUtils.isEmpty(u) && !usernames.contains(u))
+                                        usernames.add(u);
+                                }
+                            }
+
+                            if (jpayload.has("verified_secondary_email")) {
+                                JSONArray jsecondary =
+                                        jpayload.getJSONArray("verified_secondary_email");
+                                for (int i = 0; i < jsecondary.length(); i++) {
+                                    String u = jsecondary.getString(i);
+                                    if (!TextUtils.isEmpty(u) && !usernames.contains(u))
+                                        usernames.add(u);
+                                }
                             }
                         } catch (Throwable ex) {
                             Log.e(ex);
                         }
                 }
 
-                for (String alt : usernames) {
-                    if (TextUtils.isEmpty(alt) || alt.equals(username))
-                        continue;
-                    EntityLog.log(context, "Trying username=" + alt);
-                    try (EmailService iservice = new EmailService(
-                            context, aprotocol, null, aencryption, false,
-                            EmailService.PURPOSE_CHECK, true)) {
-                        iservice.connect(
-                                provider.imap.host, provider.imap.port,
-                                AUTH_TYPE_OAUTH, provider.id,
-                                alt, state,
-                                null, null);
-                        EntityLog.log(context, "Using username=" + alt);
-                        username = alt;
+                if (usernames.size() > 1)
+                    for (String alt : usernames) {
+                        EntityLog.log(context, "Trying username=" + alt);
+                        try {
+                            try (EmailService aservice = new EmailService(
+                                    context, aprotocol, null, aencryption, false,
+                                    EmailService.PURPOSE_CHECK, true)) {
+                                aservice.connect(
+                                        provider.imap.host, provider.imap.port,
+                                        AUTH_TYPE_OAUTH, provider.id,
+                                        alt, state,
+                                        null, null);
+                            }
+                            try (EmailService iservice = new EmailService(
+                                    context, iprotocol, null, iencryption, false,
+                                    EmailService.PURPOSE_CHECK, true)) {
+                                iservice.connect(
+                                        provider.smtp.host, provider.smtp.port,
+                                        AUTH_TYPE_OAUTH, provider.id,
+                                        alt, state,
+                                        null, null);
+                            }
+                            EntityLog.log(context, "Using username=" + alt);
+                            username = alt;
+                            break;
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
                     }
-                }
 
                 List<Pair<String, String>> identities = new ArrayList<>();
 
@@ -595,22 +638,20 @@ public class FragmentOAuth extends FragmentBase {
                 List<EntityFolder> folders;
 
                 Log.i("OAuth checking IMAP provider=" + provider.id);
-                try (EmailService iservice = new EmailService(
+                try (EmailService aservice = new EmailService(
                         context, aprotocol, null, aencryption, false,
                         EmailService.PURPOSE_CHECK, true)) {
-                    iservice.connect(
+                    aservice.connect(
                             provider.imap.host, provider.imap.port,
                             AUTH_TYPE_OAUTH, provider.id,
                             username, state,
                             null, null);
 
-                    folders = iservice.getFolders();
+                    folders = aservice.getFolders();
                 }
 
                 Log.i("OAuth checking SMTP provider=" + provider.id);
                 Long max_size;
-                String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
-                int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
 
                 try (EmailService iservice = new EmailService(
                         context, iprotocol, null, iencryption, false,
@@ -734,7 +775,7 @@ public class FragmentOAuth extends FragmentBase {
                     finish();
                     ToastEx.makeText(getContext(), R.string.title_setup_oauth_updated, Toast.LENGTH_LONG).show();
                 } else {
-                    FragmentReview fragment = new FragmentReview();
+                    FragmentDialogAccount fragment = new FragmentDialogAccount();
                     fragment.setArguments(args);
                     fragment.setTargetFragment(FragmentOAuth.this, ActivitySetup.REQUEST_DONE);
                     fragment.show(getParentFragmentManager(), "oauth:review");

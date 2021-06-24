@@ -79,6 +79,7 @@
     </string>
     <string name="title_junk_filter">Lokalen Spam-Filter verwenden</string>
     <string name="title_junk_filter_hint">Das kann den Akkuverbrauch erhöhen und Nachrichten fälschlicherweise als Spam kennzeichnen</string>
+    <string name="title_junk_blocklist">Spam-Sperrlisten verwenden</string>
     <string name="title_notification_sending">Nachrichten werden gesendet</string>
     <string name="title_notification_waiting">Auf eine geeignete Verbindung wird gewartet</string>
     <string name="title_notification_idle">Leerlauf</string>
@@ -154,6 +155,7 @@
     <string name="title_setup_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_setup_advanced_protection">Wenn Sie sich in das erweiterte Schutzprogramm eingeschrieben haben, ist es nicht möglich, eine andere E-Mail-Anwendung von Dritten zu verwenden. Dies ist eine von Google auferlegte Einschränkung.</string>
     <string name="title_setup_quick_success">Ein Konto wurde erfolgreich hinzugefügt</string>
+    <string name="title_setup_quick_configure">Um den Namen, die Farbe, die Wisch-Aktionen usw. zu bearbeiten</string>
     <string name="title_setup_manage">Verwalten</string>
     <string name="title_setup_grant">Zulassen</string>
     <string name="title_setup_grant_again">Benötigte Rechte erteilen</string>
@@ -255,6 +257,7 @@
     <string name="title_advanced_check_authentication">Nachrichtenauthentifizierung prüfen</string>
     <string name="title_advanced_check_reply_domain">Überprüft die Antwort-An-E-Mail-Adressen beim Synchronisieren von Nachrichten</string>
     <string name="title_advanced_check_mx">Überprüft die Absender-E-Mail-Adressen beim Synchronisieren von Nachrichten per DNS MX</string>
+    <string name="title_advanced_check_blocklist">Prüfen, ob die Domain des Absenders auf einer Spam-Sperrliste enthalten ist</string>
     <string name="title_advanced_tune_keep_alive">Aktivitätsintervall automatisch anpassen</string>
     <string name="title_advanced_keyboard">Tastatur standardmäßig anzeigen</string>
     <string name="title_advanced_keyboard_no_fullscreen">Vollbild-Tastatur verhindern</string>
@@ -514,7 +517,7 @@
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
     <string name="title_advanced_ssl_harden_hint">Wenn dies eingeschaltet ist, werden schwache SSL-Protokolle und Chiffren deaktiviert, was zu Verbindungsproblemen führen kann</string>
     <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgerufen. Sie können die Roaming-Einstellung des Gerätes verwenden, um das Internet während des Roamings zu deaktivieren.</string>
-    <string name="title_advanced_browse_hint">Durch Herunterscrollen weitere E-Mails laden</string>
+    <string name="title_advanced_browse_hint">Durch Herunterziehen weitere Nachrichten abholen</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einer kompakteren Darstellung und Ändern der Nachrichtentextgröße kann im oberen Aktionsleistenmenü in der Nachrichtenansicht vorgenommen werden.</string>
     <string name="title_advanced_startup_hint">Einen beliebigen Ordner in der Ordnerliste lange gedrückt halten, um ihn der Liste der Sammelordner hinzuzufügen oder ihn daraus zu entfernen</string>
     <string name="title_advanced_beige_hint">Nur helle Designs</string>
@@ -844,6 +847,7 @@
     <string name="title_move_undo">Wird nach »%1$s« verschoben (%2$d)</string>
     <string name="title_open_with">Öffnen mit</string>
     <string name="title_authentication_failed">%1$s-Authentifizierung fehlgeschlagen</string>
+    <string name="title_on_blocklist">In Spam-Sperrliste enthalten</string>
     <string name="title_receipt_subject">Lesebestätigung: %1$s</string>
     <string name="title_receipt_text">Diese Lesebestätigung bestätigt nur, dass die Nachricht angezeigt wurde. Es gibt keine Garantie, dass der Empfänger den Nachrichteninhalt gelesen hat.</string>
     <string name="title_no_answers">Keine Antwortvorlagen definiert</string>
@@ -937,7 +941,6 @@
     <string name="title_style_size_small">Klein</string>
     <string name="title_style_size_medium">Mittel</string>
     <string name="title_style_size_large">Groß</string>
-    <string name="title_style_color">Farbe &#8230;</string>
     <string name="title_style_align">Ausrichtung</string>
     <string name="title_style_align_start">Anfang</string>
     <string name="title_style_align_center">Zentriert</string>
@@ -1042,8 +1045,13 @@
     <string name="title_signature_store">Speichern</string>
     <string name="title_search">Suche</string>
     <string name="title_search_for_hint">Text eingeben</string>
-    <string name="title_search_hint">Bei der Suche werden zunächst die auf Ihrem Gerät gespeicherten Nachrichten durchsucht. Um auch die Nachrichten auf dem Server zu durchsuchen, tippen Sie auf die Schaltfläche „Erneut suchen“.    </string>
-    <string name="title_search_index_hint">Die Suche über den Suchindex ist schnell, wird aber nur für ganze Wörter durchgeführt</string>
+    <string name="title_search_hint">        Zuerst wird das Gerät durchsucht.
+        Um auch auf dem Server zu suchen,
+        tippen Sie auf »Erneut suchen«.
+    </string>
+    <string name="title_search_index_hint">        Das Suchen über den Suchindex ist schnell, findet aber nur ganze Wörter.
+        Mit den folgenden Einstellungen können Sie die Suche auf dem E-Mail-Server fortsetzen.
+    </string>
     <string name="title_search_text_hint">Das Suchen nach Text in Nachrichten funktioniert bei einer großen Anzahl von Nachrichten auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_size_hint">Die Nachrichtensuche nach Größe funktioniert, bei einer großen Anzahl von Nachrichten, auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_more">Weitere Optionen</string>
@@ -1061,8 +1069,8 @@
     <string name="title_search_with_encrypted">Verschlüsselt (nur auf dem Gerät)</string>
     <string name="title_search_with_attachments">Mit Anhängen (nur auf dem Gerät)</string>
     <string name="title_search_with_size">Nachrichtengröße größer als</string>
-    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">Im Papierkorb</string>
-    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">Im Spam-Ordner</string>
+    <string name="title_search_in_trash">Im Papierkorb</string>
+    <string name="title_search_in_junk">Im Spam-Ordner</string>
     <string name="title_search_with_before">Vor</string>
     <string name="title_search_with_after">Nach</string>
     <string name="title_search_flag_unseen">Ungelesen</string>

@@ -31,9 +31,12 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -142,6 +145,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         final TextView tvHost = dview.findViewById(R.id.tvHost);
         final TextView tvOwner = dview.findViewById(R.id.tvOwner);
         final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
+        final Button btnMore = dview.findViewById(R.id.btnMore);
         final Group grpDifferent = dview.findViewById(R.id.grpDifferent);
         final Group grpOwner = dview.findViewById(R.id.grpOwner);
 
@@ -155,7 +159,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         ibDifferent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etLink.setText(uriTitle.toString());
+                etLink.setText(format(uriTitle, context));
             }
         });
 
@@ -238,7 +242,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                     return;
 
                 Uri uri = Uri.parse(etLink.getText().toString());
-                etLink.setText(secure(uri, checked).toString());
+                etLink.setText(format(secure(uri, checked), context));
             }
         });
 
@@ -247,7 +251,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         cbSanitize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                etLink.setText(secure(checked ? sanitized : uri, cbSecure.isChecked()).toString());
+                etLink.setText(format(secure(checked ? sanitized : uri, cbSecure.isChecked()), context));
             }
         });
 
@@ -255,6 +259,17 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 prefs.edit().putBoolean(uri.getHost() + ".confirm_link", !isChecked).apply();
+            }
+        });
+
+        btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent privacy = new Intent(v.getContext(), ActivitySetup.class)
+                        .setAction("privacy")
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("tab", "privacy");
+                v.getContext().startActivity(privacy);
             }
         });
 
@@ -330,11 +345,11 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         }
 
         if (host != null && !host.equals(puny)) {
-            etLink.setText(uri.buildUpon().encodedAuthority(puny).build().toString());
+            etLink.setText(format(uri.buildUpon().encodedAuthority(puny).build(), context));
             tvLink.setText(uri.toString());
             tvSuspicious.setVisibility(View.VISIBLE);
         } else {
-            etLink.setText(uri.toString());
+            etLink.setText(format(uri, context));
             tvLink.setText(null);
             tvSuspicious.setVisibility(Helper.isSingleScript(host) ? View.GONE : View.VISIBLE);
         }
@@ -478,5 +493,17 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             return builder.build();
         } else
             return uri;
+    }
+
+    private Spanned format(Uri uri, Context context) {
+        String text = uri.toString();
+        SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+        String host = uri.getHost();
+        if (host != null) {
+            int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
+            int index = text.indexOf(host);
+            ssb.setSpan(new ForegroundColorSpan(textColorLink), index, index + host.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
     }
 }

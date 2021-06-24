@@ -1,10 +1,10 @@
 <a name="top"></a>
 # FairEmail support
 
-[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_de.png" /> Deutsch](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-de-rDE.md)<br />
-[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_fr.png" /> Français](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-fr-rFR.md)<br />
-[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_es.png" /> Español](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-es-rES.md)<br />
-[<img src="https://github.com/M66B/FairEmail/raw/master/images/outline_translate_black_24dp.png" /> Other languages](https://github.com/M66B/FairEmail/blob/master/docs/)
+[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_de.png" width="18" height="18" /> Deutsch](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-de-rDE.md)<br />
+[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_fr.png" width="18" height="18" /> Français](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-fr-rFR.md)<br />
+[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_es.png" width="18" height="18" /> Español](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-es-rES.md)<br />
+[<img src="https://github.com/M66B/FairEmail/raw/master/images/outline_translate_black_24dp.png" width="18" height="18" /> Other languages](https://github.com/M66B/FairEmail/blob/master/docs/)
 
 If you have a question, please check the following frequently asked questions first.
 [At the bottom](#user-content-get-support),
@@ -300,6 +300,8 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(164) Can you add customizable themes?](#user-content-faq164)
 * [(165) Is Android Auto supported?](#user-content-faq165)
 * [(166) Can I snooze a message across multiple devices?](#user-content-faq166)
+* [(167) How can I use DeepL?](#user-content-faq168)
+* [(168) What is a spam block list?](#user-content-faq167)
 
 [I have another question.](#user-content-support)
 
@@ -3711,6 +3713,35 @@ Unfortunately, it is not possible to hide messages on the email server too.
 You might want to read the [privacy policy](https://www.deepl.com/privacy/) of DeepL.
 
 This feature requires an internet connection and is not available in the Play store version.
+
+<br />
+
+<a name="faq168"></a>
+**(168) What is a spam block list?**
+
+A spam block list is basically a list of domain names which have been used to send spam or to spread malware.
+
+A spam block list is checked by resolving the domain name of an email address into an IP address
+and looking up the IP address with a DNS request:
+
+```
+example@gmail.com ->
+	gmail.com
+gmail.com ->
+	172.217.168.229
+DNS lookup 229.168.217.172.zen.spamhaus.org ->
+	127.0.0.2: spam
+	NXDOMAIN: not spam
+```
+
+NXDOMAIN = no such domain
+
+For more information, please see [this article](https://en.wikipedia.org/wiki/Domain_Name_System-based_blackhole_list).
+
+FairEmail currently uses the following block lists:
+
+* [Spamhaus zen](https://www.spamhaus.org/zen/) - [Terms of Use](https://www.spamhaus.org/organization/dnsblusage/) - [Privacy policy](https://www.spamhaus.org/organization/privacy/)
+* [Spamcop](https://www.spamcop.net/) - [Legal info](https://www.spamcop.net/fom-serve/cache/297.html) - [Privacy policy](https://www.spamcop.net/fom-serve/cache/168.html)
 
 <br />
 

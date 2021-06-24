@@ -922,7 +922,6 @@
     <string name="title_style_size_small">Lyts</string>
     <string name="title_style_size_medium">Medium</string>
     <string name="title_style_size_large">Grutte</string>
-    <string name="title_style_color">Kleur &#8230;</string>
     <string name="title_style_align">Rjochtsje</string>
     <string name="title_style_align_start">Start</string>
     <string name="title_style_align_center">Sintrum</string>
@@ -1026,10 +1025,6 @@
     <string name="title_signature_store">Bewarje</string>
     <string name="title_search">Sykje</string>
     <string name="title_search_for_hint">Tekst ynfiere</string>
-    <string name="title_search_hint">        Sykje sil earst sjen nei berjochten dy\'t op jo apparaat binne opslein.
-        Om de server ek te sykjen, tikje op \'e knop\' opnij sykje \'.
-    </string>
-    <string name="title_search_index_hint">Sykje fia de sykindeks is fluch, mar sil allinich hiele wurden fine</string>
     <string name="title_search_text_hint">Sykje nei tekst yn berjochten, as d\'r in grut oantal berjochten binne, wurket miskien net op guon servers</string>
     <string name="title_search_size_hint">Sykje nei berjochten op grutte, as d\'r in grut oantal berjochten binne, wurket miskien net op guon servers</string>
     <string name="title_search_more">Mear opsjes</string>
@@ -1320,6 +1315,7 @@
     <string name="title_fix">Meitsje</string>
     <string name="title_enable">Ynskeakele</string>
     <string name="title_enabled">Ynskeakele</string>
+    <string name="title_disable">Utskeakele</string>
     <string name="title_executing">Eksekutearje</string>
     <string name="title_completed">Klear</string>
     <string name="title_default_changed">Standert feroare</string>
@@ -1388,6 +1384,7 @@
     <string name="title_widget_title_count">Nije berjochten tellen</string>
     <string name="title_widget_title_list">Berjochtlist</string>
     <string name="title_widget_title_sync">Sync oan/út</string>
+    <string name="title_power_menu_off">Út</string>
     <string name="title_widget_account">Akkount</string>
     <string name="title_widget_account_all">Alle</string>
     <string name="title_widget_folder">Map</string>

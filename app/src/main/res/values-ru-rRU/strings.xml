@@ -98,6 +98,7 @@
     </string>
     <string name="title_junk_filter">Использовать локальный фильтр спама</string>
     <string name="title_junk_filter_hint">Может увеличить расход заряда батареи и неправильно помечать сообщения как спам</string>
+    <string name="title_junk_blocklist">Использовать списки блокировки спама</string>
     <string name="title_notification_sending">Отправка сообщений</string>
     <string name="title_notification_waiting">Ожидание подходящего подключения</string>
     <string name="title_notification_idle">Низкий</string>
@@ -190,7 +191,7 @@
     <string name="title_setup_doze_battery">Высокий расход заряда батареи?</string>
     <string name="title_setup_doze_stopped">Синхронизация останавливается?</string>
     <string name="title_setup_doze_device">Вероятно, это необходимо для вашего устройства</string>
-    <string name="title_setup_doze_android">Это необходимо для этой версии Android</string>
+    <string name="title_setup_doze_android">Необходимо для этой версии Android</string>
     <string name="title_setup_background">Фоновые ограничения включены</string>
     <string name="title_setup_data">Сохранение данных включено</string>
     <string name="title_setup_advanced_options">Дополнительно</string>
@@ -274,6 +275,7 @@
     <string name="title_advanced_check_authentication">Проверять подлинность сообщения</string>
     <string name="title_advanced_check_reply_domain">Проверять адрес для ответа при синхронизации сообщений</string>
     <string name="title_advanced_check_mx">Проверять адреса электронной почты отправителя при синхронизации сообщений</string>
+    <string name="title_advanced_check_blocklist">Проверять наличие домена отправителя в списке распространителей спама</string>
     <string name="title_advanced_tune_keep_alive">Автоматически настраивать интервал keep-alive</string>
     <string name="title_advanced_keyboard">Показывать клавиатуру по умолчанию</string>
     <string name="title_advanced_keyboard_no_fullscreen">Не показывать клавиатуру в полноэкранном режиме</string>
@@ -864,6 +866,7 @@
     <string name="title_move_undo">Перемещение в %1$s (%2$d)</string>
     <string name="title_open_with">Открыть с помощью</string>
     <string name="title_authentication_failed">Ошибка аутентификации %1$s</string>
+    <string name="title_on_blocklist">По списку блокировки спама</string>
     <string name="title_receipt_subject">Отчёты о прочтении: %1$s</string>
     <string name="title_receipt_text">Это уведомление о прочтении подтверждает только тот факт, что сообщение было открыто. Нет гарантии, что получатель прочёл содержимое сообщения.</string>
     <string name="title_no_answers">Шаблоны ответов не определены</string>
@@ -957,7 +960,6 @@
     <string name="title_style_size_small">Маленький</string>
     <string name="title_style_size_medium">Средний</string>
     <string name="title_style_size_large">Большой</string>
-    <string name="title_style_color">Цвет&#8230;</string>
     <string name="title_style_align">Выравнивание</string>
     <string name="title_style_align_start">Слева</string>
     <string name="title_style_align_center">По центру</string>
@@ -1065,7 +1067,9 @@
     <string name="title_search_hint">        Поиск изначально ищет сообщения, хранящиеся на вашем устройстве.
         Чтобы также выполнить поиск на сервере, нажмите кнопку \"Новый поиск\".
     </string>
-    <string name="title_search_index_hint">Индексированный поиск быстрый, но ищет только целые слова</string>
+    <string name="title_search_index_hint">        Поиск по индексу быстрый, но находит только целые слова.
+        Параметры ниже для продолжения поиска по серверу электронной почты.
+    </string>
     <string name="title_search_text_hint">Поиск содержащих определённый текст сообщений при большом их количестве может не работать на некоторых серверах</string>
     <string name="title_search_size_hint">Поиск сообщений по размеру при большом их количестве может не работать на некоторых серверах</string>
     <string name="title_search_more">Дополнительные параметры</string>
@@ -1083,8 +1087,8 @@
     <string name="title_search_with_encrypted">Зашифровано (только на устройстве)</string>
     <string name="title_search_with_attachments">С вложениями (только на устройстве)</string>
     <string name="title_search_with_size">Размер сообщения больше</string>
-    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">В Корзине</string>
-    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">В Спаме</string>
+    <string name="title_search_in_trash">В корзине</string>
+    <string name="title_search_in_junk">В спаме</string>
     <string name="title_search_with_before">Перед</string>
     <string name="title_search_with_after">После</string>
     <string name="title_search_flag_unseen">не прочитано</string>

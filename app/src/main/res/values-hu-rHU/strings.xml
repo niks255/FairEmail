@@ -884,7 +884,6 @@
     <string name="title_style_size_small">Kicsi</string>
     <string name="title_style_size_medium">Közepes</string>
     <string name="title_style_size_large">Nagy</string>
-    <string name="title_style_color">Szín &#8230;</string>
     <string name="title_style_align">Igazítás</string>
     <string name="title_style_align_start">Kezdet</string>
     <string name="title_style_align_center">Középre</string>
@@ -980,10 +979,6 @@
     <string name="title_signature_store">Áruház</string>
     <string name="title_search">Keresés</string>
     <string name="title_search_for_hint">Írjon be szöveget</string>
-    <string name="title_search_hint">        A keresés alapból csak az eszközön lévő üzeneteket keres.
-        Ahhoz hogy a szervert is keresse, koppintson a \'keresés újra\' gombra.
-    </string>
-    <string name="title_search_index_hint">Keresés a keresési indexen keresztül gyors, de csak teljes szavakat fog találni</string>
     <string name="title_search_text_hint">Magas üzenetszám esetén lehetséges, hogy néhány szerveren az üzenetekben való szövegkeresés nem működik megfelelően</string>
     <string name="title_search_size_hint">Magas üzenetszám esetén lehetséges, hogy néhány szerveren az üzenetek sorba rakása méret szerint nem működik</string>
     <string name="title_search_more">Több opció</string>
@@ -1267,6 +1262,7 @@
     <string name="title_fix">Javítás</string>
     <string name="title_enable">Bekapcsolás</string>
     <string name="title_enabled">Bekapcsolva</string>
+    <string name="title_disable">Letiltás</string>
     <string name="title_executing">Végrehajtás</string>
     <string name="title_completed">Befejezve</string>
     <string name="title_default_changed">Alapértelmezett megváltozott</string>
@@ -1334,6 +1330,7 @@
     <string name="title_widget_title_count">Új üzenetek számláló</string>
     <string name="title_widget_title_list">Üzenet lista</string>
     <string name="title_widget_title_sync">Szink. be/ki</string>
+    <string name="title_power_menu_off">Ki</string>
     <string name="title_widget_account">Fiók</string>
     <string name="title_widget_account_all">Mind</string>
     <string name="title_widget_folder">Mappa</string>

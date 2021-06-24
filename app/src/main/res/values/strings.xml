@@ -99,6 +99,7 @@
 
     <string name="title_junk_filter">Use local spam filter</string>
     <string name="title_junk_filter_hint">This can increase battery usage and incorrectly mark messages as spam</string>
+    <string name="title_junk_blocklist">Use spam block lists</string>
 
     <string name="title_notification_sending">Sending messages</string>
     <string name="title_notification_waiting">Waiting for suitable connection</string>
@@ -194,6 +195,7 @@
     <string name="title_setup_no_inbox">Inbox not found</string>
     <string name="title_setup_advanced_protection">When enrolled in the advanced protection program it is not possible to use a third party email app. This is a restriction imposed by Google.</string>
     <string name="title_setup_quick_success">An account has successfully been added</string>
+    <string name="title_setup_quick_configure">To edit the name, color, swipe actions, etc</string>
     <string name="title_setup_manage">Manage</string>
     <string name="title_setup_grant">Grant</string>
     <string name="title_setup_grant_again">Grant required permissions</string>
@@ -308,6 +310,7 @@
     <string name="title_advanced_check_authentication">Check message authentication</string>
     <string name="title_advanced_check_reply_domain">Check reply address on synchronizing messages</string>
     <string name="title_advanced_check_mx">Check sender email addresses on synchronizing messages</string>
+    <string name="title_advanced_check_blocklist">Check if the sender\'s domain name is on a spam block list</string>
     <string name="title_advanced_tune_keep_alive">Automatically tune the keep-alive interval</string>
 
     <string name="title_advanced_keyboard">Show keyboard by default</string>
@@ -496,6 +499,7 @@
     <string name="title_advanced_biometrics_notify">Show notification content when using biometric authentication</string>
     <string name="title_advanced_light">Use notification light</string>
     <string name="title_advanced_sound">Select notification sound</string>
+    <string name="title_advanced_notify_screen_on">Briefly turn on the screen for new message notifications</string>
     <string name="title_advanced_alert_once" translatable="false">MIUI notification sound workaround</string>
 
     <string name="title_advanced_caption_pgp" translatable="false">PGP</string>
@@ -970,6 +974,7 @@
     <string name="title_move_undo">Moving to %1$s (%2$d)</string>
     <string name="title_open_with">Open with</string>
     <string name="title_authentication_failed">%1$s authentication failed</string>
+    <string name="title_on_blocklist">On spam block list</string>
 
     <string name="title_receipt_subject">Read receipt: %1$s</string>
     <string name="title_receipt_text">This read receipt only acknowledges that the message was displayed. There is no guarantee that the recipient has read the message contents.</string>
@@ -1077,7 +1082,6 @@
     <string name="title_style_size_small">Small</string>
     <string name="title_style_size_medium">Medium</string>
     <string name="title_style_size_large">Large</string>
-    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_align">Align</string>
     <string name="title_style_align_start">Start</string>
     <string name="title_style_align_center">Center</string>
@@ -1189,10 +1193,13 @@
     <string name="title_search">Search</string>
     <string name="title_search_for_hint">Enter text</string>
     <string name="title_search_hint">
-        Searching will initially look at messages stored on your device.
-        To search the server too, tap on the \'search again\' button.
+        Initially, the search is performed on the device.
+        To search the server too, tap the \'search again\' button.
     </string>
-    <string name="title_search_index_hint">Searching via the search index is fast, but will only find whole words</string>
+    <string name="title_search_index_hint">
+        Searching via the search index is fast, but only finds whole words.
+        The options below are to continue searching the email server.
+    </string>
     <string name="title_search_text_hint">Searching for text in messages, when there are a large number of messages, might not work on some servers</string>
     <string name="title_search_size_hint">Searching for messages by size, when there are a large number of messages, might not work on some servers</string>
     <string name="title_search_more">More options</string>

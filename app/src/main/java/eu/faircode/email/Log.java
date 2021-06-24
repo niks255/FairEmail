@@ -90,15 +90,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.CertPathValidatorException;
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1535,11 +1540,12 @@ public class Log {
             attachNetworkInfo(context, draft.id, 3);
             attachLog(context, draft.id, 4);
             attachOperations(context, draft.id, 5);
-            attachLogcat(context, draft.id, 6);
+            attachTasks(context, draft.id, 6);
+            attachLogcat(context, draft.id, 7);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                attachNotificationInfo(context, draft.id, 7);
+                attachNotificationInfo(context, draft.id, 8);
             //if (MessageClassifier.isEnabled(context))
-            //    attachClassifierData(context, draft.id, 8);
+            //    attachClassifierData(context, draft.id, 9);
 
             EntityOperation.queue(context, draft, EntityOperation.ADD);
 
@@ -1828,10 +1834,28 @@ public class Log {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean enabled = prefs.getBoolean("enabled", true);
             int pollInterval = ServiceSynchronize.getPollInterval(context);
+            boolean schedule = prefs.getBoolean("schedule", false);
 
             size += write(os, "accounts=" + accounts.size() +
                     " enabled=" + enabled +
                     " interval=" + pollInterval + "\r\n\r\n");
+
+            if (schedule) {
+                int minuteStart = prefs.getInt("schedule_start", 0);
+                int minuteEnd = prefs.getInt("schedule_end", 0);
+
+                size += write(os, "schedule " +
+                        (minuteStart / 60) + ":" + (minuteStart % 60) + "..." +
+                        (minuteEnd / 60) + ":" + (minuteEnd % 60) + "\r\n");
+
+                String[] daynames = new DateFormatSymbols().getWeekdays();
+                for (int i = 0; i < 7; i++) {
+                    boolean day = prefs.getBoolean("schedule_day" + i, true);
+                    size += write(os, "schedule " + daynames[i + 1] + "=" + day + "\r\n");
+                }
+
+                size += write(os, "\r\n");
+            }
 
             for (EntityAccount account : accounts) {
                 if (account.synchronize) {
@@ -1961,6 +1985,26 @@ public class Log {
                 size += write(os, "\r\n");
             }
 
+            try {
+                Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                while (interfaces != null && interfaces.hasMoreElements()) {
+                    NetworkInterface ni = interfaces.nextElement();
+                    size += write(os, "Interface=" + ni + "\r\n");
+                    for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
+                        InetAddress addr = iaddr.getAddress();
+                        size += write(os, " addr=" + addr +
+                                (addr.isLoopbackAddress() ? " loopback" : "") +
+                                (addr.isSiteLocalAddress() ? " site local (LAN)" : "") +
+                                (addr.isLinkLocalAddress() ? " link local (device)" : "") +
+                                (addr.isAnyLocalAddress() ? " any local" : "") +
+                                (addr.isMulticastAddress() ? " multicast" : "") + "\r\n");
+                    }
+                    size += write(os, "\r\n");
+                }
+            } catch (Throwable ex) {
+                size += write(os, ex.getMessage() + "\r\n");
+            }
+
             size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n\r\n");
 
             ConnectionHelper.NetworkState state = ConnectionHelper.getNetworkState(context);
@@ -2031,6 +2075,30 @@ public class Log {
                         op.args,
                         op.state,
                         op.error));
+            }
+        }
+
+        db.attachment().setDownloaded(attachment.id, size);
+    }
+
+    private static void attachTasks(Context context, long id, int sequence) throws IOException {
+        DB db = DB.getInstance(context);
+
+        EntityAttachment attachment = new EntityAttachment();
+        attachment.message = id;
+        attachment.sequence = sequence;
+        attachment.name = "tasks.txt";
+        attachment.type = "text/plain";
+        attachment.disposition = Part.ATTACHMENT;
+        attachment.size = null;
+        attachment.progress = 0;
+        attachment.id = db.attachment().insertAttachment(attachment);
+
+        long size = 0;
+        File file = attachment.getFile(context);
+        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+            for (SimpleTask task : SimpleTask.getList()) {
+                size += write(os, String.format("%s\r\n", task.toString()));
             }
         }
 

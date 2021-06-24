@@ -111,9 +111,24 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         this.pageSize = pageSize;
     }
 
-    void setCallback(IBoundaryCallbackMessages intf) {
+    State setCallback(IBoundaryCallbackMessages intf) {
+        Log.i("Boundary callback=" + intf);
+        if (Objects.equals(intf, this.intf))
+            return this.state;
+
         this.intf = intf;
         this.state = new State();
+
+        if (criteria != null)
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("Boundary reset search");
+                    DB.getInstance(context).message().resetSearch();
+                }
+            });
+
+        return this.state;
     }
 
     @Override
@@ -160,8 +175,14 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                 int found = 0;
                 try {
-                    if (state.destroyed || state.error)
+                    if (state.destroyed || state.error) {
+                        Log.i("Boundary was destroyed");
                         return;
+                    }
+                    if (!Objects.equals(state, BoundaryCallbackMessages.this.state)) {
+                        Log.i("Boundary changed state");
+                        return;
+                    }
 
                     if (intf != null)
                         ApplicationEx.getMainHandler().post(new Runnable() {
@@ -225,7 +246,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 " matches=" + (state.matches == null ? null : state.matches.size()));
 
         long[] exclude = new long[0];
-        if (account == null) {
+        if (folder == null) {
             List<Long> folders = new ArrayList<>();
             if (!criteria.in_trash) {
                 List<EntityFolder> trash = db.folder().getFoldersByType(EntityFolder.TRASH);
@@ -353,7 +374,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         return found;
     }
 
-    private int load_server(final State state) throws MessagingException, IOException {
+    private int load_server(final State state) throws MessagingException, ProtocolException, IOException {
         DB db = DB.getInstance(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -418,73 +439,81 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     else
                         state.imessages = state.ifolder.search(new AndTerm(and.toArray(new SearchTerm[0])));
                     EntityLog.log(context, "Boundary filter messages=" + state.imessages.length);
-                } else {
-                    Object result = state.ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
-                        @Override
-                        public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
-                            try {
-                                // https://tools.ietf.org/html/rfc3501#section-6.4.4
-                                if (criteria.query != null &&
-                                        criteria.query.startsWith("raw:") &&
-                                        protocol.hasCapability("X-GM-EXT-1") &&
-                                        EntityFolder.ARCHIVE.equals(browsable.type)) {
-                                    // https://support.google.com/mail/answer/7190
-                                    // https://developers.google.com/gmail/imap/imap-extensions#extension_of_the_search_command_x-gm-raw
-                                    Log.i("Boundary raw search=" + criteria.query);
+                } else
+                    try {
+                        Object result = state.ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+                            @Override
+                            public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                try {
+                                    // https://tools.ietf.org/html/rfc3501#section-6.4.4
+                                    if (criteria.query != null &&
+                                            criteria.query.startsWith("raw:") &&
+                                            protocol.hasCapability("X-GM-EXT-1") &&
+                                            EntityFolder.ARCHIVE.equals(browsable.type)) {
+                                        // https://support.google.com/mail/answer/7190
+                                        // https://developers.google.com/gmail/imap/imap-extensions#extension_of_the_search_command_x-gm-raw
+                                        Log.i("Boundary raw search=" + criteria.query);
 
-                                    Argument arg = new Argument();
-                                    arg.writeAtom("X-GM-RAW");
-                                    arg.writeString(criteria.query.substring(4));
+                                        Argument arg = new Argument();
+                                        arg.writeAtom("X-GM-RAW");
+                                        arg.writeString(criteria.query.substring(4));
 
-                                    Response[] responses = protocol.command("SEARCH", arg);
-                                    if (responses.length == 0)
-                                        throw new ProtocolException("No response");
-                                    if (!responses[responses.length - 1].isOK())
-                                        throw new ProtocolException(
-                                                context.getString(R.string.title_service_auth, responses[responses.length - 1]));
+                                        Response[] responses = protocol.command("SEARCH", arg);
+                                        if (responses.length == 0)
+                                            throw new ProtocolException("No response");
+                                        if (!responses[responses.length - 1].isOK())
+                                            throw new ProtocolException(
+                                                    context.getString(R.string.title_service_auth, responses[responses.length - 1]));
 
-                                    List<Integer> msgnums = new ArrayList<>();
-                                    for (Response response : responses)
-                                        if (((IMAPResponse) response).keyEquals("SEARCH")) {
-                                            int msgnum;
-                                            while ((msgnum = response.readNumber()) != -1)
-                                                msgnums.add(msgnum);
+                                        List<Integer> msgnums = new ArrayList<>();
+                                        for (Response response : responses)
+                                            if (((IMAPResponse) response).keyEquals("SEARCH")) {
+                                                int msgnum;
+                                                while ((msgnum = response.readNumber()) != -1)
+                                                    msgnums.add(msgnum);
+                                            }
+
+                                        Message[] imessages = new Message[msgnums.size()];
+                                        for (int i = 0; i < msgnums.size(); i++)
+                                            imessages[i] = state.ifolder.getMessage(msgnums.get(i));
+
+                                        return imessages;
+                                    } else {
+                                        EntityLog.log(context, "Boundary server" +
+                                                " account=" + account +
+                                                " folder=" + folder +
+                                                " search=" + criteria);
+
+                                        try {
+                                            return search(true, browsable.keywords, protocol, state);
+                                        } catch (Throwable ex) {
+                                            EntityLog.log(context, ex.toString());
                                         }
 
-                                    Message[] imessages = new Message[msgnums.size()];
-                                    for (int i = 0; i < msgnums.size(); i++)
-                                        imessages[i] = state.ifolder.getMessage(msgnums.get(i));
-
-                                    return imessages;
-                                } else {
-                                    EntityLog.log(context, "Boundary server" +
-                                            " account=" + account +
-                                            " folder=" + folder +
-                                            " search=" + criteria);
-
-                                    try {
-                                        return search(true, browsable.keywords, protocol, state);
-                                    } catch (Throwable ex) {
-                                        EntityLog.log(context, ex.toString());
+                                        return search(false, browsable.keywords, protocol, state);
                                     }
-
-                                    return search(false, browsable.keywords, protocol, state);
+                                } catch (Throwable ex) {
+                                    ProtocolException pex;
+                                    if (ex instanceof ProtocolException)
+                                        pex = new ProtocolException(
+                                                context.getString(R.string.title_service_auth,
+                                                        account.host + ": " + ex.getMessage()),
+                                                ex.getCause());
+                                    else
+                                        pex = new ProtocolException("Search " + account.host, ex);
+                                    Log.e(pex);
+                                    throw pex;
                                 }
-                            } catch (Throwable ex) {
-                                String msg;
-                                if (ex instanceof ProtocolException)
-                                    msg = context.getString(R.string.title_service_auth, account.host + ": " + ex.getMessage());
-                                else
-                                    msg = "Search " + account.host;
-                                ProtocolException pex = new ProtocolException(msg, ex);
-                                Log.e(pex);
-                                throw pex;
                             }
-                        }
-                    });
+                        });
 
-                    state.imessages = (Message[]) result;
-                }
+                        state.imessages = (Message[]) result;
+                    } catch (MessagingException ex) {
+                        if (ex.getCause() instanceof ProtocolException)
+                            throw (ProtocolException) ex.getCause();
+                        else
+                            throw ex;
+                    }
                 EntityLog.log(context, "Boundary found messages=" + state.imessages.length);
 
                 state.index = state.imessages.length - 1;
@@ -576,7 +605,6 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     db.folder().setFolderError(browsable.id, Log.formatThrowable(ex));
                 } finally {
                     isub[j] = null;
-                    //((IMAPMessage) isub[j]).invalidateHeaders();
                 }
         }
 
@@ -626,16 +654,18 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         return imessages;
     }
 
-    void destroy() {
-        final State old = this.state;
-        old.destroyed = true;
+    State getState() {
+        return this.state;
+    }
 
-        this.state = new State();
+    void destroy(State state) {
+        state.destroyed = true;
+        Log.i("Boundary destroy");
 
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                close(old, true);
+                close(state, true);
             }
         });
     }
@@ -661,7 +691,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             state.reset();
     }
 
-    private static class State {
+    static class State {
         int queued = 0;
         boolean destroyed = false;
         boolean error = false;
@@ -913,6 +943,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         this.with_notes == other.with_notes &&
                         Arrays.equals(this.with_types, other.with_types) &&
                         Objects.equals(this.with_size, other.with_size) &&
+                        this.in_trash == other.in_trash &&
+                        this.in_junk == other.in_junk &&
                         Objects.equals(this.after, other.after) &&
                         Objects.equals(this.before, other.before));
             } else
@@ -940,6 +972,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     " w/notes=" + with_notes +
                     " type=" + (with_types == null ? null : TextUtils.join(",", with_types)) +
                     " size=" + with_size +
+                    " trash=" + in_trash +
+                    " junk=" + in_junk +
                     " after=" + (after == null ? "" : new Date(after)) +
                     " before=" + (before == null ? "" : new Date(before));
         }

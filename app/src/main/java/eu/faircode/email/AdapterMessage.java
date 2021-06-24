@@ -246,6 +246,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean avatars;
     private boolean color_stripe;
     private boolean check_authentication;
+    private boolean check_mx;
+    private boolean check_blocklist;
     private boolean check_reply_domain;
 
     private MessageHelper.AddressFormat email_format;
@@ -958,7 +960,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     !((Boolean.FALSE.equals(message.dkim) && check_authentication) ||
                             (Boolean.FALSE.equals(message.spf) && check_authentication) ||
                             (Boolean.FALSE.equals(message.dmarc) && check_authentication) ||
-                            Boolean.FALSE.equals(message.mx) ||
+                            (Boolean.FALSE.equals(message.mx) && check_mx) ||
+                            (Boolean.TRUE.equals(message.blocklist) && check_blocklist) ||
                             (Boolean.FALSE.equals(message.reply_domain) && check_reply_domain));
             boolean expanded = (viewType == ViewType.THREAD && properties.getValue("expanded", message.id));
 
@@ -1546,7 +1549,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvExpand.setVisibility(View.GONE);
             else {
                 tvExpand.setText(context.getString(R.string.title_expand_warning,
-                        message.size == null ? "?" : Helper.humanReadableByteCount(message.size)));
+                        message.size == null ? "? kB" : Helper.humanReadableByteCount(message.size)));
                 tvExpand.setVisibility(View.VISIBLE);
             }
         }
@@ -1738,7 +1741,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean archive = (move && (hasArchive && !inArchive && !inSent && !inTrash && !inJunk));
                     boolean trash = (move || outbox || debug ||
                             message.accountProtocol == EntityAccount.TYPE_POP);
-                    boolean junk = (move && hasJunk && hasInbox);
                     boolean inbox = (move && hasInbox && (inArchive || inTrash || inJunk));
                     boolean keywords = (!message.folderReadOnly && message.uid != null &&
                             message.accountProtocol == EntityAccount.TYPE_IMAP);
@@ -1807,7 +1809,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibMove.setVisibility(tools && button_move && move ? View.VISIBLE : View.GONE);
                     ibArchive.setVisibility(tools && button_archive && archive ? View.VISIBLE : View.GONE);
                     ibTrash.setVisibility(outbox || (tools && button_trash && trash) ? View.VISIBLE : View.GONE);
-                    ibJunk.setVisibility(tools && button_junk && junk ? View.VISIBLE : View.GONE);
+                    ibJunk.setVisibility(tools && button_junk && move ? View.VISIBLE : View.GONE);
                     ibInbox.setVisibility(tools && inbox ? View.VISIBLE : View.GONE);
                     ibMore.setVisibility(tools && !outbox ? View.VISIBLE : View.GONE);
                     ibTools.setImageLevel(tools ? 0 : 1);
@@ -1847,7 +1849,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String personal = address.getPersonal();
 
                     if (TextUtils.isEmpty(personal)) {
-                        if (email != null) {
+                        if (!TextUtils.isEmpty(email)) {
                             int start = ssb.length();
                             ssb.append(email);
                             ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
@@ -1855,7 +1857,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     } else {
                         if (full) {
                             ssb.append(personal).append(" <");
-                            if (email != null) {
+                            if (!TextUtils.isEmpty(email)) {
                                 int start = ssb.length();
                                 ssb.append(email);
                                 ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
@@ -3360,6 +3362,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (message == null)
                 return false;
 
+            if (event.isCtrlPressed() || event.isAltPressed())
+                return false;
+
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_ENTER:
                 case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -3435,6 +3440,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (result.size() > 0)
                 sb.append(context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)));
+
+            if (Boolean.TRUE.equals(message.blocklist)) {
+                if (sb.length() > 0)
+                    sb.append('\n');
+                sb.append(context.getString(R.string.title_on_blocklist));
+            }
 
             if (Boolean.FALSE.equals(message.reply_domain)) {
                 if (sb.length() > 0)
@@ -3878,6 +3889,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     full ? R.layout.dialog_show_full : R.layout.dialog_show_images, null);
             CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             CheckBox cbNotAgainDomain = dview.findViewById(R.id.cbNotAgainDomain);
+            Button btnMore = dview.findViewById(R.id.btnMore);
 
             if (message.from == null || message.from.length == 0) {
                 cbNotAgain.setVisibility(View.GONE);
@@ -3903,6 +3915,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     cbNotAgainDomain.setEnabled(isChecked);
+                }
+            });
+
+            btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent privacy = new Intent(v.getContext(), ActivitySetup.class)
+                            .setAction("privacy")
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .putExtra("tab", "privacy");
+                    v.getContext().startActivity(privacy);
                 }
             });
 
@@ -5605,6 +5628,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.avatars = (contacts && avatars) || (gravatars || favicons || generated);
         this.color_stripe = prefs.getBoolean("color_stripe", true);
         this.check_authentication = prefs.getBoolean("check_authentication", true);
+        this.check_mx = prefs.getBoolean("check_mx", false);
+        this.check_blocklist = prefs.getBoolean("check_blocklist", false);
         this.check_reply_domain = prefs.getBoolean("check_reply_domain", true);
 
         this.email_format = MessageHelper.getAddressFormat(context);
@@ -5726,6 +5751,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!Objects.equals(prev.mx, next.mx)) {
                     same = false;
                     log("mx changed", next.id);
+                }
+                if (!Objects.equals(prev.blocklist, next.blocklist)) {
+                    same = false;
+                    log("blocklist changed", next.id);
                 }
                 if (!Objects.equals(prev.reply_domain, next.reply_domain)) {
                     same = false;
@@ -6436,215 +6465,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void refresh();
 
         void finish();
-    }
-
-    public static class FragmentDialogJunk extends FragmentDialogBase {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            final Bundle args = getArguments();
-            final long account = args.getLong("account");
-            final int protocol = args.getInt("protocol");
-            final long folder = args.getLong("folder");
-            final String type = args.getString("type");
-            final String from = args.getString("from");
-            final boolean inJunk = args.getBoolean("inJunk");
-            final boolean canBlock = args.getBoolean("canBlock");
-
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_junk, null);
-            final TextView tvMessage = view.findViewById(R.id.tvMessage);
-            final ImageButton ibInfoProvider = view.findViewById(R.id.ibInfoProvider);
-            final CheckBox cbBlockSender = view.findViewById(R.id.cbBlockSender);
-            final CheckBox cbBlockDomain = view.findViewById(R.id.cbBlockDomain);
-            final Button btnEditRules = view.findViewById(R.id.btnEditRules);
-            final CheckBox cbJunkFilter = view.findViewById(R.id.cbJunkFilter);
-            final ImageButton ibInfoFilter = view.findViewById(R.id.ibInfoFilter);
-            final Group grpInJunk = view.findViewById(R.id.grpInJunk);
-
-            tvMessage.setText(getString(R.string.title_ask_spam_who, from));
-
-            ibInfoProvider.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Helper.viewFAQ(v.getContext(), 92);
-                }
-            });
-
-            cbBlockSender.setEnabled(canBlock && ActivityBilling.isPro(getContext()));
-            cbBlockDomain.setEnabled(false);
-
-            cbBlockSender.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    cbBlockDomain.setEnabled(isChecked);
-                }
-            });
-
-            btnEditRules.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (inJunk) {
-                        new SimpleTask<EntityFolder>() {
-                            @Override
-                            protected EntityFolder onExecute(Context context, Bundle args) throws Throwable {
-                                long account = args.getLong("account");
-
-                                DB db = DB.getInstance(context);
-                                EntityFolder inbox = db.folder().getFolderByType(account, EntityFolder.INBOX);
-
-                                if (inbox == null)
-                                    throw new IllegalArgumentException(context.getString(R.string.title_no_inbox));
-
-                                return inbox;
-                            }
-
-                            @Override
-                            protected void onExecuted(Bundle args, EntityFolder inbox) {
-                                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                                lbm.sendBroadcast(
-                                        new Intent(ActivityView.ACTION_EDIT_RULES)
-                                                .putExtra("account", account)
-                                                .putExtra("protocol", protocol)
-                                                .putExtra("folder", inbox.id)
-                                                .putExtra("type", inbox.type));
-                                dismiss();
-                            }
-
-                            @Override
-                            protected void onException(Bundle args, Throwable ex) {
-                                Log.unexpectedError(getParentFragmentManager(), ex);
-                            }
-                        }.execute(FragmentDialogJunk.this, args, "junk:rules");
-                    } else {
-                        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                        lbm.sendBroadcast(
-                                new Intent(ActivityView.ACTION_EDIT_RULES)
-                                        .putExtra("account", account)
-                                        .putExtra("protocol", protocol)
-                                        .putExtra("folder", folder)
-                                        .putExtra("type", type));
-                        dismiss();
-                    }
-                }
-            });
-
-            cbJunkFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    args.putBoolean("filter", isChecked);
-
-                    new SimpleTask<Void>() {
-                        @Override
-                        protected Void onExecute(Context context, Bundle args) throws Throwable {
-                            long account = args.getLong("account");
-                            boolean filter = args.getBoolean("filter");
-
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-                            DB db = DB.getInstance(context);
-
-                            EntityFolder inbox = db.folder().getFolderByType(account, EntityFolder.INBOX);
-                            if (inbox == null)
-                                return null;
-
-                            EntityFolder junk = db.folder().getFolderByType(account, EntityFolder.JUNK);
-                            if (junk == null)
-                                return null;
-
-                            try {
-                                db.beginTransaction();
-
-                                db.folder().setFolderDownload(
-                                        inbox.id, inbox.download || filter);
-                                db.folder().setFolderAutoClassify(
-                                        inbox.id, inbox.auto_classify_source || filter, inbox.auto_classify_target);
-
-                                db.folder().setFolderDownload(
-                                        junk.id, junk.download || filter);
-                                db.folder().setFolderAutoClassify(
-                                        junk.id, junk.auto_classify_source || filter, filter);
-
-                                db.setTransactionSuccessful();
-                            } finally {
-                                db.endTransaction();
-                            }
-
-                            prefs.edit().putBoolean("classification", true).apply();
-
-                            return null;
-                        }
-
-                        @Override
-                        protected void onException(Bundle args, Throwable ex) {
-                            Log.unexpectedError(getParentFragmentManager(), ex);
-                        }
-                    }.execute(FragmentDialogJunk.this, args, "junk:filter");
-                }
-            });
-
-            ibInfoFilter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Helper.viewFAQ(v.getContext(), 163);
-                }
-            });
-
-            grpInJunk.setVisibility(inJunk ? View.GONE : View.VISIBLE);
-
-            new SimpleTask<Boolean>() {
-                @Override
-                protected void onPreExecute(Bundle args) {
-                    cbJunkFilter.setEnabled(false);
-                }
-
-                @Override
-                protected Boolean onExecute(Context context, Bundle args) throws Throwable {
-                    long account = args.getLong("account");
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean classification = prefs.getBoolean("classification", false);
-
-                    DB db = DB.getInstance(context);
-                    EntityFolder inbox = db.folder().getFolderByType(account, EntityFolder.INBOX);
-                    if (inbox == null)
-                        return false;
-
-                    EntityFolder junk = db.folder().getFolderByType(account, EntityFolder.JUNK);
-                    if (junk == null)
-                        return false;
-
-                    return (classification &&
-                            inbox.download && inbox.auto_classify_source &&
-                            junk.download && junk.auto_classify_source && junk.auto_classify_target);
-                }
-
-                @Override
-                protected void onExecuted(Bundle args, Boolean filter) {
-                    if (filter != null) {
-                        cbJunkFilter.setChecked(filter);
-                        cbJunkFilter.setEnabled(true);
-                    }
-                }
-
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getParentFragmentManager(), ex);
-                }
-            }.execute(FragmentDialogJunk.this, args, "junk:filter");
-
-            return new AlertDialog.Builder(getContext())
-                    .setView(view)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getArguments().putBoolean("block_sender", cbBlockSender.isChecked());
-                            getArguments().putBoolean("block_domain", cbBlockDomain.isChecked());
-                            sendResult(RESULT_OK);
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
-        }
     }
 
     public static class FragmentDialogNotes extends FragmentDialogBase {

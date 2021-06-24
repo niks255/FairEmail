@@ -922,7 +922,6 @@
     <string name="title_style_size_small">Pequeno</string>
     <string name="title_style_size_medium">Mediano</string>
     <string name="title_style_size_large">Grande</string>
-    <string name="title_style_color">Color &#8230;</string>
     <string name="title_style_align">Aliñar</string>
     <string name="title_style_align_start">Inicio</string>
     <string name="title_style_align_center">Centro</string>
@@ -1021,10 +1020,6 @@
     <string name="title_signature_store">Almacén</string>
     <string name="title_search">Procurar</string>
     <string name="title_search_for_hint">Inserir texto</string>
-    <string name="title_search_hint">        A procura mirará primeiro ás mensaxes almacenadas no seu dispositivo.
-        Para ampliar tamén ao servidor, toque no botón \'procurar de novo\'.
-    </string>
-    <string name="title_search_index_hint">A procura polo índice de busca é rápida, pero só atopará palabras completas</string>
     <string name="title_search_text_hint">Procurar texto nas mensaxes, cando hai un grande número deles, podería non funcionar nalgúns servidores</string>
     <string name="title_search_size_hint">Procurar as mensaxes por tamaño, cando hai un grande número deles, podería non funcionar nalgúns servidores</string>
     <string name="title_search_more">Máis opcións</string>
@@ -1314,6 +1309,7 @@
     <string name="title_fix">Reparar</string>
     <string name="title_enable">Activar</string>
     <string name="title_enabled">Activado</string>
+    <string name="title_disable">Desactivar</string>
     <string name="title_executing">Executando</string>
     <string name="title_completed">Finalizado</string>
     <string name="title_default_changed">Cambiados axustes por omisión</string>
@@ -1382,6 +1378,7 @@
     <string name="title_widget_title_count">Número de novas mensaxes</string>
     <string name="title_widget_title_list">Lista de mensaxes</string>
     <string name="title_widget_title_sync">Act./Des. sincr.</string>
+    <string name="title_power_menu_off">Apagado</string>
     <string name="title_widget_account">Conta</string>
     <string name="title_widget_account_all">Todo</string>
     <string name="title_widget_folder">Cartafol</string>

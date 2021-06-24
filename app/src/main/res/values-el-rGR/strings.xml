@@ -78,6 +78,7 @@
     </string>
     <string name="title_junk_filter">Χρήση τοπικού φίλτρου ανεπιθ. αλληλογραφίας</string>
     <string name="title_junk_filter_hint">Αυτό μπορεί να αυξήσει τη χρήση της μπαταρίας και να σημάνει εσφαλμένα μηνύματα ως spam</string>
+    <string name="title_junk_blocklist">Χρήση λιστών αποκλεισμού σπαμ</string>
     <string name="title_notification_sending">Αποστολή μηνυμάτων</string>
     <string name="title_notification_waiting">Αναμονή για κατάλληλη σύνδεση</string>
     <string name="title_notification_idle">Σε αδράνεια</string>
@@ -153,6 +154,7 @@
     <string name="title_setup_no_inbox">Δεν βρέθηκαν εισερχόμενα</string>
     <string name="title_setup_advanced_protection">Δεν επιτρέπεται η χρήση ανεξάρτητων εφαρμογών ηλεκτρονικού ταχυδρομείου σε χρήστες εγγεγραμμένους/-ες σε πρόγραμμα αυξημένης ασφάλειας. Ο περιορισμός αυτός έχει επιβληθεί από την Google.</string>
     <string name="title_setup_quick_success">Ένας λογαριασμός έχει προστεθεί με επιτυχία</string>
+    <string name="title_setup_quick_configure">Για να επεξεργαστείτε το όνομα, το χρώμα, τις ενέργειες σάρωσης κλπ</string>
     <string name="title_setup_manage">Διαχείριση</string>
     <string name="title_setup_grant">Παραχώρηση δικαιώματος</string>
     <string name="title_setup_grant_again">Παραχώρηση απαιτούμενων δικαιωμάτων</string>
@@ -254,6 +256,7 @@
     <string name="title_advanced_check_authentication">Έλεγχος ταυτοποίησης μηνύματος</string>
     <string name="title_advanced_check_reply_domain">Να ελέγχεται η διεύθυνση απάντησης κατά τον συγχρονισμό των μηνυμάτων</string>
     <string name="title_advanced_check_mx">Έλεγχος διευθύνσεων των αποστολέων κατά τον συγχρονισμό μηνυμάτων</string>
+    <string name="title_advanced_check_blocklist">Έλεγχος αν το όνομα τομέα του αποστολέα περιλαμβάνεται σε λίστα αποκλεισμού σπαμ</string>
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
     <string name="title_advanced_keyboard">Εμφάνιση του πληκτρολογίου από προεπιλογή</string>
     <string name="title_advanced_keyboard_no_fullscreen">Να μην προβάλλεται το πληκτρολόγιο σε πλήρη οθόνη</string>
@@ -841,6 +844,7 @@
     <string name="title_move_undo">Μετακίνηση προς %1$s (%2$d)</string>
     <string name="title_open_with">Άνοιγμα με</string>
     <string name="title_authentication_failed">Η ταυτοποίηση %1$s απέτυχε</string>
+    <string name="title_on_blocklist">Σε λίστα αποκλεισμού σπαμ</string>
     <string name="title_receipt_subject">Αποδεικτικό ανάγνωσης: %1$s</string>
     <string name="title_receipt_text">Αυτό το αποδεικτικό ανάγνωσης πιστοποιεί μόνον ότι το μήνυμα έχει προβληθεί. Δεν υπάρχει εγγύηση ότι ο αποδέκτης έχει διαβάσει το περιεχόμενο του μηνύματος.</string>
     <string name="title_no_answers">Δεν έχουν οριστεί πρότυπα</string>
@@ -934,7 +938,6 @@
     <string name="title_style_size_small">Μικρά</string>
     <string name="title_style_size_medium">Μεσαία</string>
     <string name="title_style_size_large">Μεγάλα</string>
-    <string name="title_style_color">Χρώμα &#8230;</string>
     <string name="title_style_align">Στοίχιση</string>
     <string name="title_style_align_start">Αρχή</string>
     <string name="title_style_align_center">Κέντρο</string>
@@ -1039,10 +1042,12 @@
     <string name="title_signature_store">Αποθήκευση</string>
     <string name="title_search">Αναζήτηση</string>
     <string name="title_search_for_hint">Εισαγωγή κειμένου</string>
-    <string name="title_search_hint">        Η αναζήτηση αρχικά θα ψάξει μηνύματα που είναι αποθηκευμένα στη συσκευή.
-        Για να ψάξετε και μηνύματα στο διακομιστή, πατήστε το κουμπί \'επανάληψη αναζήτησης\'.
+    <string name="title_search_hint">        Αρχικά, η αναζήτηση εκτελείται στα αποθηκευμένα στη συσκευή μηνύματα.
+        Για αναζήτηση και στον διακομιστή, πατήστε το κουμπί \"αναζήτηση ξανά\".
     </string>
-    <string name="title_search_index_hint">Η αναζήτηση μέσω του ευρετηρίου είναι γρήγορη, αλλά θα βρει μόνον ολόκληρες λέξεις</string>
+    <string name="title_search_index_hint">        Η αναζήτηση μέσω του ευρετηρίου αναζήτησης είναι γρήγορη, αλλά εντοπίζει μόνον ολόκληρες λέξεις.
+        Οι παρακάτω επιλογές επιτρέπουν περαιτέρω αναζήτηση στον διακομιστή ηλ. ταχυδρομείου.
+    </string>
     <string name="title_search_text_hint">Η αναζήτηση κειμένου μέσα σε μηνύματα μπορεί να μη λειτουργήσει σε κάποιους διακομιστές όταν υπάρχει μεγάλος αριθμός μηνυμάτων</string>
     <string name="title_search_size_hint">Η αναζήτηση μηνυμάτων με βάση το μέγεθος μπορεί να μη λειτουργήσει σε κάποιους διακομιστές όταν υπάρχει μεγάλος αριθμός μηνυμάτων</string>
     <string name="title_search_more">Περισσότερες επιλογές</string>
@@ -1060,8 +1065,8 @@
     <string name="title_search_with_encrypted">Κρυπτογραφημένα (μόνο στη συσκευή)</string>
     <string name="title_search_with_attachments">Με συνημμένα (μόνο στη συσκευή)</string>
     <string name="title_search_with_size">Μέγεθος μηνύματος μεγαλύτερο από</string>
-    <string name="title_search_in_trash" comment="title_search_in_trash&#10;Title for option to enable/disable searching in the trash folder&#10;">Στον κάδο απορριμμάτων</string>
-    <string name="title_search_in_junk" comment="title_search_in_junk&#10;Title for option to enable/disable searching in the spam folder&#10;">Στα ανεπιθύμητα</string>
+    <string name="title_search_in_trash">Στον κάδο απορριμμάτων</string>
+    <string name="title_search_in_junk">Στα ανεπιθύμητα</string>
     <string name="title_search_with_before">Πριν από</string>
     <string name="title_search_with_after">Μετά από</string>
     <string name="title_search_flag_unseen">μη αναγνωσμένα</string>
