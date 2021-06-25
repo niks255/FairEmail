@@ -2265,33 +2265,35 @@ class Core {
         try {
             db.folder().setFolderSyncState(folder.id, "syncing");
 
+            // Get capabilities
             Map<String, String> caps = istore.capabilities();
+            boolean hasUidl = caps.containsKey("UIDL");
             EntityLog.log(context, folder.name + " POP capabilities= " + caps.keySet());
 
+            // Get messages
             Message[] imessages = ifolder.getMessages();
-            int max;
-            if (account.max_messages == null)
-                max = imessages.length;
-            else
-                max = Math.min(imessages.length, Math.max(account.max_messages * 2, 100));
-            EntityLog.log(context, folder.name + " POP messages=" + imessages.length +
-                    " max=" + max + "/" + account.max_messages);
+            List<TupleUidl> ids = db.message().getUidls(folder.id);
+            int max = (account.max_messages == null ? imessages.length : account.max_messages);
 
-            boolean hasUidl = caps.containsKey("UIDL");
+            EntityLog.log(context, folder.name + " POP" +
+                    " device=" + ids.size() +
+                    " server=" + imessages.length +
+                    " max=" + max + "/" + account.max_messages +
+                    " uidl=" + hasUidl);
+
+            // Index IDs
+            Map<String, String> uidlMsgId = new HashMap<>();
+            for (TupleUidl id : ids) {
+                if (id.uidl != null && id.msgid != null)
+                    uidlMsgId.put(id.uidl, id.msgid);
+            }
+
+            // Fetch UIDLs
             if (hasUidl) {
                 FetchProfile ifetch = new FetchProfile();
                 ifetch.add(UIDFolder.FetchProfileItem.UID); // This will fetch all UIDs
                 ifolder.fetch(imessages, ifetch);
             }
-
-            List<TupleUidl> ids = db.message().getUidls(folder.id);
-            EntityLog.log(context, folder.name + " POP existing=" + ids.size() + " uidl=" + hasUidl);
-
-            // Index UIDLs
-            Map<String, String> uidlMsgId = new HashMap<>();
-            for (TupleUidl id : ids)
-                if (id.uidl != null && id.msgid != null)
-                    uidlMsgId.put(id.uidl, id.msgid);
 
             if (!account.leave_on_device) {
                 if (hasUidl) {
@@ -2333,7 +2335,8 @@ class Core {
                 }
             }
 
-            for (int i = imessages.length - max; i < imessages.length; i++) {
+            boolean _new = true;
+            for (int i = imessages.length - 1; i >= imessages.length - max; i--) {
                 Message imessage = imessages[i];
                 try {
                     if (!state.isRunning())
@@ -2356,6 +2359,7 @@ class Core {
                             if (TextUtils.isEmpty(msgid))
                                 msgid = uidl;
                         } else {
+                            _new = false;
                             Log.i(folder.name + " POP having uidl=" + uidl);
                             continue;
                         }
@@ -2372,6 +2376,7 @@ class Core {
                         }
 
                         if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
+                            _new = false;
                             Log.i(folder.name + " POP having msgid=" + msgid);
                             continue;
                         }
@@ -2383,8 +2388,6 @@ class Core {
                     }
 
                     try {
-                        Log.i(folder.name + " POP sync=" + uidl + "/" + msgid);
-
                         Long sent = helper.getSent();
                         Long received = helper.getReceivedHeader();
                         if (received == null)
@@ -2392,7 +2395,9 @@ class Core {
                         if (received == null)
                             received = 0L;
 
-                        boolean seen = (received <= account.created);
+                        boolean seen = (!_new || received <= account.created);
+                        Log.i(folder.name + " POP sync=" + uidl + "/" + msgid +
+                                " new=" + _new + " seen=" + seen);
 
                         String[] authentication = helper.getAuthentication();
                         MessageHelper.MessageParts parts = helper.getMessageParts();

@@ -1118,6 +1118,20 @@ public class FragmentCompose extends FragmentBase {
                     String wildcard = "%" + typed + "%";
                     Map<String, EntityContact> map = new HashMap<>();
 
+                    String glob = "*" +
+                            typed.toString().toLowerCase()
+                                    .replaceAll("[aáàäâãåæ]", "\\[aáàäâãåæ\\]")
+                                    .replaceAll("[bß]", "\\[bß\\]")
+                                    .replaceAll("[cç]", "\\[cç\\]")
+                                    .replaceAll("[eéèëê]", "\\[eéèëê\\]")
+                                    .replaceAll("[iíìïî]", "\\[iíìïî\\]")
+                                    .replaceAll("[nñ]", "\\[nñ\\]")
+                                    .replaceAll("[oóòöôõøœ]", "\\[oóòöôõøœ\\]")
+                                    .replaceAll("[uúùüû]", "\\[uúùüû\\]")
+                                    .replace("*", "[*]")
+                                    .replace("?", "[?]") +
+                            "*";
+
                     boolean contacts = Helper.hasPermission(getContext(), Manifest.permission.READ_CONTACTS);
                     if (contacts) {
                         Cursor cursor = resolver.query(
@@ -1130,8 +1144,9 @@ public class FragmentCompose extends FragmentBase {
                                 },
                                 ContactsContract.CommonDataKinds.Email.DATA + " <> ''" +
                                         " AND (" + ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?" +
+                                        " OR LOWER(" + ContactsContract.Contacts.DISPLAY_NAME + ") GLOB ?" +
                                         " OR " + ContactsContract.CommonDataKinds.Email.DATA + " LIKE ?)",
-                                new String[]{wildcard, wildcard},
+                                new String[]{wildcard, glob, wildcard},
                                 null);
 
                         while (cursor != null && cursor.moveToNext()) {
