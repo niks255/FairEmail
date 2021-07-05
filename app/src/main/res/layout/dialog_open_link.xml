@@ -28,11 +28,11 @@
             android:contentDescription="@string/title_info"
             android:padding="6dp"
             android:scaleType="fitCenter"
-            android:tint="?attr/colorAccent"
             android:tooltipText="@string/title_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/twotone_info_24" />
+            app:srcCompat="@drawable/twotone_info_24"
+            app:tint="?attr/colorAccent" />
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvTitle"
@@ -157,6 +157,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:drawableEnd="@drawable/twotone_http_24"
+            android:drawablePadding="6dp"
             android:text="@string/title_link_http"
             android:textColor="?attr/colorWarning"
             android:textStyle="bold"
@@ -172,15 +174,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbSecure" />
 
+        <CheckBox
+            android:id="@+id/cbNotAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_no_ask_for_again"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbSanitize" />
+
+        <ImageButton
+            android:id="@+id/ibMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbNotAgain"
+            app:srcCompat="@drawable/expander" />
+
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvMore"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:paddingStart="6dp"
+            android:text="@string/title_search_more"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintBottom_toBottomOf="@+id/ibMore"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ibMore"
+            app:layout_constraintTop_toTopOf="@+id/ibMore" />
+
         <Button
             android:id="@+id/btnOwner"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:drawableEnd="@drawable/twotone_person_24"
+            android:drawablePadding="6dp"
             android:text="@string/title_check_owner"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbSanitize" />
+            app:layout_constraintTop_toBottomOf="@id/ibMore" />
 
         <eu.faircode.email.ContentLoadingProgressBar
             android:id="@+id/pbWait"
@@ -220,6 +258,7 @@
             android:text="example.org"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="?android:textColorPrimary"
+            android:textIsSelectable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvOwnerTitle" />
 
@@ -230,28 +269,21 @@
             android:text="Cloudflare"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="?android:textColorPrimary"
+            android:textIsSelectable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvHost" />
 
-        <CheckBox
-            android:id="@+id/cbNotAgain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/title_no_ask_for_again"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvOwner" />
-
         <Button
-            android:id="@+id/btnMore"
+            android:id="@+id/btnSettings"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/title_advanced_more"
+            android:drawableEnd="@drawable/twotone_settings_24"
+            android:drawablePadding="6dp"
+            android:text="@string/title_setup"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbNotAgain" />
+            app:layout_constraintTop_toBottomOf="@id/tvOwner" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grpDifferent"

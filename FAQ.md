@@ -300,8 +300,9 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(164) Can you add customizable themes?](#user-content-faq164)
 * [(165) Is Android Auto supported?](#user-content-faq165)
 * [(166) Can I snooze a message across multiple devices?](#user-content-faq166)
-* [(167) How can I use DeepL?](#user-content-faq168)
-* [(168) What is a spam block list?](#user-content-faq167)
+* [(167) How can I use DeepL?](#user-content-faq167)
+* [(168) What is a spam block list?](#user-content-faq168)
+* [(169) Why does the app not start automatically?](#user-content-faq169)
 
 [I have another question.](#user-content-support)
 
@@ -1862,6 +1863,15 @@ If you want to use preformatted text, like [ASCII art](https://en.wikipedia.org/
  /  O  \
  </pre>
 ```
+
+If you want to resize an image, you could do it like this:
+
+```
+<img src="..." width="..." height="...">
+```
+
+The recipient of your message might not like large images in messages,
+so it is better to resize images with an image editor first.
 
 <br />
 
@@ -3667,6 +3677,8 @@ For example themes with a yellow accent color use a darker link color for enough
 
 The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 
+The *Solarized* theme is described in [this article](https://en.wikipedia.org/wiki/Solarized_(color_scheme)).
+
 <br />
 
 <a name="faq165"></a>
@@ -3705,14 +3717,13 @@ Unfortunately, it is not possible to hide messages on the email server too.
 <a name="faq167"></a>
 **(167) How can I use DeepL?**
 
-1. Enable [experimental features](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq125) in the miscellaneous settings
+1. Check if [DeepL](https://www.deepl.com/) supports your language
+1. Enable DeepL support in the miscellaneous settings
 1. [Subscribe to](https://www.deepl.com/pro#developer) the DeepL API Free or Pro plan (credit card required)
 1. [Copy](https://www.deepl.com/pro-account/plan) the authentication key
 1. In the message composer tap on the faint translate button (文A), select *Configure* and paste the key
 
-You might want to read the [privacy policy](https://www.deepl.com/privacy/) of DeepL.
-
-This feature requires an internet connection and is not available in the Play store version.
+This feature requires an internet connection.
 
 <br />
 
@@ -3721,15 +3732,15 @@ This feature requires an internet connection and is not available in the Play st
 
 A spam block list is basically a list of domain names which have been used to send spam or to spread malware.
 
-A spam block list is checked by resolving the domain name of an email address into an IP address
+A spam block list is checked by resolving the server name from the last *Received* header into an IP address
 and looking up the IP address with a DNS request:
 
 ```
-example@gmail.com ->
-	gmail.com
-gmail.com ->
-	172.217.168.229
-DNS lookup 229.168.217.172.zen.spamhaus.org ->
+Received:
+	... from smtp.gmail.com ...
+smtp.gmail.com ->
+	142.250.27.108
+DNS lookup 108.27.250.142.zen.spamhaus.org ->
 	127.0.0.2: spam
 	NXDOMAIN: not spam
 ```
@@ -3738,10 +3749,28 @@ NXDOMAIN = no such domain
 
 For more information, please see [this article](https://en.wikipedia.org/wiki/Domain_Name_System-based_blackhole_list).
 
+You can check common block lists for example [here](https://mxtoolbox.com/blacklists.aspx).
+
 FairEmail currently uses the following block lists:
 
-* [Spamhaus zen](https://www.spamhaus.org/zen/) - [Terms of Use](https://www.spamhaus.org/organization/dnsblusage/) - [Privacy policy](https://www.spamhaus.org/organization/privacy/)
-* [Spamcop](https://www.spamcop.net/) - [Legal info](https://www.spamcop.net/fom-serve/cache/297.html) - [Privacy policy](https://www.spamcop.net/fom-serve/cache/168.html)
+* [Spamhaus](https://www.spamhaus.org/) &#8211; [Terms of Use](https://www.spamhaus.org/organization/dnsblusage/) &#8212; [Privacy policy](https://www.spamhaus.org/organization/privacy/)
+* [Spamcop](https://www.spamcop.net/) &#8211; [Legal info](https://www.spamcop.net/fom-serve/cache/297.html) &#8212; [Privacy policy](https://www.spamcop.net/fom-serve/cache/168.html)
+* [Barracuda](https://www.barracudacentral.org/rbl/how-to-use) &#8211; [Request Access](https://www.barracudacentral.org/account/register) &#8211; [Privacy policy](https://www.barracuda.com/company/legal/trust-center/data-privacy/privacy-policy)
+
+From version 1.1627 it is possible to enable/disable individual blocklists in the receive settings of the app.
+
+<br />
+
+<a name="faq169"></a>
+**(169) Why does the app not start automatically?**
+
+FairEmail requests Android to start the app when the device starts up.
+Obviously, this depends on Android as the app cannot start itself.
+
+Some Android versions, such as EMUI, have settings to enable or disable auto starting apps.
+So, if the app isn't started automatically, please check the Android settings.
+
+For example for Huawei/EMUI, please [see here](https://dontkillmyapp.com/huawei) for a guide.
 
 <br />
 

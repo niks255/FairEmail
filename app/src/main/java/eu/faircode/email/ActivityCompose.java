@@ -48,6 +48,8 @@ public class ActivityCompose extends ActivityBase implements FragmentManager.OnB
         setContentView(R.layout.activity_compose);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
@@ -110,10 +112,10 @@ public class ActivityCompose extends ActivityBase implements FragmentManager.OnB
                 Map<String, String> headers = mailto.getHeaders();
                 if (headers != null)
                     for (String key : headers.keySet())
-                        if ("in-reply-to".equalsIgnoreCase(key)) {
+                        if ("bcc".equalsIgnoreCase(key))
+                            args.putString("bcc", headers.get(key));
+                        else if ("in-reply-to".equalsIgnoreCase(key))
                             args.putString("inreplyto", headers.get(key));
-                            break;
-                        }
 
                 String body = mailto.getBody();
                 if (body != null) {

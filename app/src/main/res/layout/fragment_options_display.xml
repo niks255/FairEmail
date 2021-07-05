@@ -81,6 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_palette_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_theme"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLayoutHint" />
@@ -136,6 +138,7 @@
                     android:id="@+id/swBeige"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:checked="true"
                     android:text="@string/title_advanced_cards_beige"
@@ -144,28 +147,29 @@
                     app:layout_constraintTop_toBottomOf="@id/swCards"
                     app:switchPadding="12dp" />
 
-                <eu.faircode.email.FixedTextView
-                    android:id="@+id/tvBeigeHint"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swTabularCardBackground"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="48dp"
-                    android:text="@string/title_advanced_beige_hint"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textStyle="italic"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_tabular_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swBeige" />
+                    app:layout_constraintTop_toBottomOf="@id/swBeige"
+                    app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swShadow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:checked="true"
                     android:text="@string/title_advanced_cards_shadow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvBeigeHint"
+                    app:layout_constraintTop_toBottomOf="@id/swTabularCardBackground"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -196,6 +200,7 @@
                     android:id="@+id/swDateBold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_date_bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -345,6 +350,7 @@
                     android:id="@+id/swThreadingUnread"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_threading_unread"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -356,6 +362,7 @@
                     android:id="@+id/swIndentation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:checked="true"
                     android:text="@string/title_advanced_indentation"
@@ -391,6 +398,7 @@
                     android:id="@+id/swActionbarColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_actionbar_color"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -491,11 +499,11 @@
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvGravatarsHint"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/twotone_open_in_new_12"
                     android:drawablePadding="6dp"
-                    android:drawableTint="?android:attr/textColorLink"
+                    android:drawableTint="?attr/colorWarning"
                     android:text="@string/title_advanced_gravatars_hint"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?attr/colorWarning"
@@ -515,13 +523,14 @@
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvFaviconsHint"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="48dp"
+                    android:drawableEnd="@drawable/twotone_open_in_new_12"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorWarning"
                     android:text="@string/title_advanced_gravatars_hint"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?attr/colorWarning"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swFavicons" />
 
@@ -541,6 +550,7 @@
                     android:id="@+id/swIdenticons"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_identicons"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -921,6 +931,7 @@
                     android:id="@+id/swPreviewItalic"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:checked="true"
                     android:text="@string/title_advanced_preview_italic"
@@ -933,6 +944,7 @@
                     android:id="@+id/tvPreviewLines"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_preview_lines"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -945,6 +957,7 @@
                     android:id="@+id/spPreviewLines"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:entries="@array/linesNames"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1117,6 +1130,18 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swBackgroundColor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:enabled="true"
+                    android:text="@string/title_advanced_background_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swMonospacedPre"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swTextColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1125,7 +1150,7 @@
                     android:text="@string/title_advanced_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swMonospacedPre"
+                    app:layout_constraintTop_toBottomOf="@id/swBackgroundColor"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1328,11 +1353,11 @@
                     android:layout_width="21dp"
                     android:layout_height="21dp"
                     android:contentDescription="@string/title_legend_auth"
-                    android:tint="?attr/colorWarning"
                     app:layout_constraintBottom_toBottomOf="@+id/swAuthentication"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/swAuthentication"
-                    app:srcCompat="@drawable/twotone_flag_24" />
+                    app:srcCompat="@drawable/twotone_flag_24"
+                    app:tint="?attr/colorWarning" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swAuthentication"

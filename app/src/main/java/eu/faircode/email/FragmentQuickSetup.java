@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -31,9 +32,6 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -45,6 +43,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -60,6 +59,7 @@ public class FragmentQuickSetup extends FragmentBase {
     private ViewGroup view;
     private ScrollView scroll;
 
+    private TextView tvPrivacy;
     private EditText etName;
     private EditText etEmail;
     private TextInputLayout tilPassword;
@@ -83,6 +83,8 @@ public class FragmentQuickSetup extends FragmentBase {
     private Group grpSetup;
     private Group grpError;
 
+    private static final String PRIVACY_URI = "https://www.mozilla.org/privacy/";
+
     @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class FragmentQuickSetup extends FragmentBase {
         scroll = view.findViewById(R.id.scroll);
 
         // Get controls
+        tvPrivacy = view.findViewById(R.id.tvPrivacy);
         etName = view.findViewById(R.id.etName);
         etEmail = view.findViewById(R.id.etEmail);
         tilPassword = view.findViewById(R.id.tilPassword);
@@ -117,6 +120,14 @@ public class FragmentQuickSetup extends FragmentBase {
         grpError = view.findViewById(R.id.grpError);
 
         // Wire controls
+
+        tvPrivacy.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(PRIVACY_URI), false);
+            }
+        });
 
         tilPassword.setHintEnabled(false);
 
@@ -198,30 +209,6 @@ public class FragmentQuickSetup extends FragmentBase {
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_quick_setup, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_help) {
-            onMenuHelp();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuHelp() {
-        Bundle args = new Bundle();
-        args.putString("name", "SETUP.md");
-
-        FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
-        fragment.setArguments(args);
-        fragment.show(getChildFragmentManager(), "help");
-    }
-
     private void onSave(boolean check) {
         Bundle args = new Bundle();
         args.putString("name", etName.getText().toString().trim());
@@ -281,7 +268,7 @@ public class FragmentQuickSetup extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_no_internet));
 
                 EmailProvider provider = EmailProvider.fromEmail(context, email, EmailProvider.Discover.ALL);
-                args.putSerializable("provider", provider);
+                args.putParcelable("provider", provider);
 
                 int at = email.indexOf('@');
                 String username = email.substring(0, at);
@@ -454,6 +441,8 @@ public class FragmentQuickSetup extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, EmailProvider result) {
+                setManual(false);
+
                 boolean check = args.getBoolean("check");
                 if (check) {
                     tvImap.setText(result == null ? null : result.imap.toString());
@@ -473,7 +462,8 @@ public class FragmentQuickSetup extends FragmentBase {
             @Override
             protected void onException(final Bundle args, Throwable ex) {
                 Log.e(ex);
-                EmailProvider provider = (EmailProvider) args.getSerializable("provider");
+                setManual(true);
+                EmailProvider provider = args.getParcelable("provider");
 
                 if (ex instanceof AuthenticationFailedException) {
                     String message = getString(R.string.title_setup_no_auth_hint);
@@ -527,6 +517,18 @@ public class FragmentQuickSetup extends FragmentBase {
                         }
                     });
                 }
+            }
+
+            private void setManual(boolean manual) {
+                FragmentActivity activity = getActivity();
+                if (activity == null)
+                    return;
+
+                Intent intent = activity.getIntent();
+                if (intent == null)
+                    return;
+
+                intent.putExtra("manual", manual);
             }
         }.execute(this, args, "setup:quick");
     }

@@ -59,9 +59,15 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainException;
+import android.text.Editable;
+import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -81,6 +87,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -98,7 +106,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuItemCompat;
@@ -255,6 +262,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private ImageButton ibSeen;
     private ImageButton ibUnflagged;
     private ImageButton ibSnoozed;
+    private TextViewAutoCompleteAction etSearch;
     private BottomNavigationView bottom_navigation;
     private ContentLoadingProgressBar pbWait;
     private Group grpSupport;
@@ -283,12 +291,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private BoundaryCallbackMessages.SearchCriteria criteria = null;
     private boolean pane;
 
+    private int searchIndex = 0;
+    private TextView searchView = null;
+
     private WebView printWebView = null;
 
     private OpenPgpServiceConnection pgpService;
 
     private boolean cards;
-    private boolean beige;
     private boolean date;
     private boolean date_bold;
     private boolean threading;
@@ -304,6 +314,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private int colorPrimary;
     private int colorAccent;
+    private int colorSeparator;
+    private int colorWarning;
 
     private long primary;
     private boolean connected;
@@ -407,7 +419,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         swipenav = prefs.getBoolean("swipenav", true);
         cards = prefs.getBoolean("cards", true);
-        beige = prefs.getBoolean("beige", true);
         date = prefs.getBoolean("date", true);
         date_bold = prefs.getBoolean("date_bold", false);
         threading = prefs.getBoolean("threading", true);
@@ -422,6 +433,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         colorPrimary = Helper.resolveColor(getContext(), R.attr.colorPrimary);
         colorAccent = Helper.resolveColor(getContext(), R.attr.colorAccent);
+        colorSeparator = Helper.resolveColor(getContext(), R.attr.colorSeparator);
+        colorWarning = Helper.resolveColor(getContext(), R.attr.colorWarning);
 
         if (criteria == null)
             if (thread == null) {
@@ -476,6 +489,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         ibSeen = view.findViewById(R.id.ibSeen);
         ibUnflagged = view.findViewById(R.id.ibUnflagged);
         ibSnoozed = view.findViewById(R.id.ibSnoozed);
+        etSearch = view.findViewById(R.id.etSearch);
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
 
         pbWait = view.findViewById(R.id.pbWait);
@@ -826,6 +840,50 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
+
+        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    endSearch();
+            }
+        });
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    endSearch();
+                    return true;
+                } else
+                    return false;
+            }
+        });
+
+        etSearch.setActionRunnable(new Runnable() {
+            @Override
+            public void run() {
+                performSearch(true);
+            }
+        });
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                performSearch(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
+
         //bottom_navigation.findViewById(R.id.action_delete).setOnLongClickListener(new View.OnLongClickListener() {
         //    @Override
         //    public boolean onLongClick(View v) {
@@ -915,7 +973,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                     @Override
                     protected void onExecuted(Bundle args, ArrayList<MessageTarget> result) {
-                        moveAsk(result, false, !autoclose && onclose == null);
+                        moveAsk(result, false);
                     }
 
                     @Override
@@ -1146,14 +1204,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         addKeyPressedListener(onBackPressedListener);
 
         // Initialize
-
-        if (cards && !Helper.isDarkTheme(getContext()))
-            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
-                    ? R.color.lightColorBackground_cards_beige
-                    : R.color.lightColorBackground_cards));
-
+        FragmentDialogTheme.setBackground(getContext(), view, false);
         tvNoEmail.setVisibility(View.GONE);
         tvNoEmailHint.setVisibility(View.GONE);
+        etSearch.setVisibility(View.GONE);
         sbThread.setVisibility(View.GONE);
         ibDown.setVisibility(View.GONE);
         ibUp.setVisibility(View.GONE);
@@ -1849,7 +1903,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 @Override
                 protected void onExecuted(Bundle args, ArrayList<MessageTarget> result) {
-                    moveAsk(result, false, !autoclose && onclose == null);
+                    moveAsk(result, false);
                 }
 
                 @Override
@@ -1862,6 +1916,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         @Override
         public void reply(TupleMessageEx message, String selected, View anchor) {
             onReply(message, selected, anchor);
+        }
+
+        public void startSearch(TextView view) {
+            FragmentMessages.this.startSearch(view);
+        }
+
+        public void endSearch() {
+            FragmentMessages.this.endSearch();
         }
 
         @Override
@@ -2982,7 +3044,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     SpannableString ss = new SpannableString(title);
                     if (account.name != null && account.color != null) {
                         int i = title.indexOf(account.name);
-                        ss.setSpan(new ForegroundColorSpan(account.color), i, i + 1, 0);
+                        int first = title.codePointAt(i);
+                        int count = Character.charCount(first);
+                        ss.setSpan(new ForegroundColorSpan(account.color), i, i + count, 0);
                     }
                     MenuItem item = popupMenu.getMenu().add(Menu.NONE, R.string.title_move_to_account, order++, ss)
                             .setIcon(R.drawable.twotone_drive_file_move_24);
@@ -3464,7 +3528,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (EntityFolder.JUNK.equals(type))
                     moveAskConfirmed(result);
                 else
-                    moveAsk(result, true, true);
+                    moveAsk(result, true);
             }
 
             @Override
@@ -3648,7 +3712,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (copy)
                     moveAskConfirmed(result);
                 else
-                    moveAsk(result, true, true);
+                    moveAsk(result, true);
             }
 
             @Override
@@ -3938,16 +4002,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 break;
         }
 
-        if (send_pending &&
-                (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER))
-            db.message().liveOutboxPending().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        if (!EntityFolder.OUTBOX.equals(type) &&
+                (viewType == AdapterMessage.ViewType.UNIFIED ||
+                        viewType == AdapterMessage.ViewType.FOLDER))
+            db.message().liveOutboxPending().observe(getViewLifecycleOwner(), new Observer<TupleOutboxStats>() {
                 @Override
-                public void onChanged(Integer pending) {
-                    if (pending != null && pending > 10)
+                public void onChanged(TupleOutboxStats stats) {
+                    int pending = (stats == null || stats.pending == null ? 0 : stats.pending);
+                    int errors = (stats == null || stats.errors == null ? 0 : stats.errors);
+
+                    int count = (send_pending ? pending : errors);
+                    if (count > 10)
                         tvOutboxCount.setText("+");
                     else
-                        tvOutboxCount.setText(pending == null || pending == 0 ? null : NF.format(pending));
-                    grpOutbox.setVisibility(pending == null || pending == 0 ? View.GONE : View.VISIBLE);
+                        tvOutboxCount.setText(count == 0 ? null : NF.format(count));
+
+                    int color = (errors == 0 ? colorSeparator : colorWarning);
+                    ibOutbox.setImageTintList(ColorStateList.valueOf(color));
+                    tvOutboxCount.setTextColor(color);
+
+                    grpOutbox.setVisibility(count == 0 ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -4213,6 +4287,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         boolean filter_snoozed = prefs.getBoolean(getFilter("snoozed", type), true);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
         boolean language_detection = prefs.getBoolean("language_detection", false);
+        String filter_language = prefs.getString("filter_language", null);
         boolean compact = prefs.getBoolean("compact", false);
         boolean quick_filter = prefs.getBoolean("quick_filter", false);
 
@@ -4224,7 +4299,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 (viewType == AdapterMessage.ViewType.UNIFIED ||
                         (viewType == AdapterMessage.ViewType.FOLDER && !outbox));
 
-        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown);
+        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown ||
+                (language_detection && !TextUtils.isEmpty(filter_language)));
         MenuItem menuFilter = menu.findItem(R.id.menu_filter);
         menuFilter.setShowAsAction(folder && filter_active
                 ? MenuItem.SHOW_AS_ACTION_ALWAYS
@@ -4291,12 +4367,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_filter_unflagged).setChecked(filter_unflagged);
         menu.findItem(R.id.menu_filter_unknown).setChecked(filter_unknown);
         menu.findItem(R.id.menu_filter_snoozed).setChecked(filter_snoozed);
+        menu.findItem(R.id.menu_filter_language).setVisible(language_detection && folder);
         menu.findItem(R.id.menu_filter_duplicates).setChecked(filter_duplicates);
 
         menu.findItem(R.id.menu_compact).setChecked(compact);
         menu.findItem(R.id.menu_theme).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
 
-        menu.findItem(R.id.menu_select_language).setVisible(language_detection && folder);
         menu.findItem(R.id.menu_select_all).setVisible(folder);
         menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
         menu.findItem(R.id.menu_mark_all_read).setVisible(folder);
@@ -4382,6 +4458,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         } else if (itemId == R.id.menu_filter_snoozed) {
             onMenuFilter(getFilter("snoozed", type), !item.isChecked());
             return true;
+        } else if (itemId == R.id.menu_filter_language) {
+            onMenuFilterLanguage();
+            return true;
         } else if (itemId == R.id.menu_filter_duplicates) {
             onMenuFilterDuplicates(!item.isChecked());
             return true;
@@ -4393,9 +4472,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return true;
         } else if (itemId == R.id.menu_theme) {
             onMenuTheme();
-            return true;
-        } else if (itemId == R.id.menu_select_language) {
-            onMenuSelectLanguage();
             return true;
         } else if (itemId == R.id.menu_select_all || itemId == R.id.menu_select_found) {
             onMenuSelectAll();
@@ -4490,6 +4566,99 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         loadMessages(true);
     }
 
+    private void onMenuFilterLanguage() {
+        Bundle args = new Bundle();
+        args.putLong("account", account);
+        args.putLong("folder", folder);
+
+        new SimpleTask<List<Locale>>() {
+            @Override
+            protected List<Locale> onExecute(Context context, Bundle args) {
+                long account = args.getLong("account");
+                long folder = args.getLong("folder");
+
+                DB db = DB.getInstance(context);
+                List<String> languages = db.message().getLanguages(
+                        account < 0 ? null : account,
+                        folder < 0 ? null : folder);
+
+                List<Locale> locales = new ArrayList<>();
+                for (String language : languages)
+                    locales.add(new Locale(language));
+
+                final Collator collator = Collator.getInstance(Locale.getDefault());
+                collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
+
+                Collections.sort(locales, new Comparator<Locale>() {
+                    @Override
+                    public int compare(Locale l1, Locale l2) {
+                        return collator.compare(l1.getDisplayLanguage(), l2.getDisplayLanguage());
+                    }
+                });
+
+                return locales;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<Locale> locales) {
+                final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                String current = prefs.getString("filter_language", null);
+
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
+
+                SpannableStringBuilder all = new SpannableStringBuilder(getString(R.string.title_language_all));
+                if (current == null) {
+                    all.setSpan(new StyleSpan(Typeface.BOLD), 0, all.length(), 0);
+                    all.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, all.length(), 0);
+                }
+
+                popupMenu.getMenu().add(Menu.NONE, 0, 0, all);
+
+                for (int i = 0; i < locales.size(); i++) {
+                    Locale locale = locales.get(i);
+                    String language = locale.getLanguage();
+                    SpannableStringBuilder title = new SpannableStringBuilder(locale.getDisplayLanguage());
+                    if (language.equals(current)) {
+                        title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
+                        title.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, title.length(), 0);
+                    }
+                    popupMenu.getMenu()
+                            .add(Menu.NONE, i + 1, i + 1, title)
+                            .setIntent(new Intent().putExtra("locale", locale));
+                }
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == 0) // all
+                            prefs.edit().remove("filter_language").apply();
+                        else {
+                            Locale locale = (Locale) item.getIntent().getSerializableExtra("locale");
+                            prefs.edit().putString("filter_language", locale.getLanguage()).apply();
+                        }
+
+                        FragmentActivity activity = getActivity();
+                        if (activity != null)
+                            activity.invalidateOptionsMenu();
+
+                        if (selectionTracker != null)
+                            selectionTracker.clearSelection();
+
+                        loadMessages(true);
+
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "menu:language");
+    }
+
     private void onMenuFilterDuplicates(boolean filter) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.edit().putBoolean("filter_duplicates", filter).apply();
@@ -4529,69 +4698,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         sizes.clear();
         heights.clear();
         positions.clear();
-    }
-
-    private void onMenuSelectLanguage() {
-        Bundle args = new Bundle();
-        args.putLong("account", account);
-        args.putLong("folder", folder);
-
-        new SimpleTask<List<String>>() {
-            @Override
-            protected List<String> onExecute(Context context, Bundle args) {
-                long account = args.getLong("account");
-                long folder = args.getLong("folder");
-
-                DB db = DB.getInstance(context);
-                return db.message().getLanguages(account < 0 ? null : account, folder < 0 ? null : folder);
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, List<String> languages) {
-                final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                String current = prefs.getString("filter_language", null);
-
-                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
-
-                String all = getString(R.string.title_language_all) + (current == null ? " ★" : "");
-                popupMenu.getMenu().add(Menu.NONE, 0, 0, all);
-
-                for (int i = 0; i < languages.size(); i++) {
-                    String language = languages.get(i);
-                    Locale locale = new Locale(language);
-                    String title = locale.getDisplayLanguage() + (language.equals(current) ? " ★" : "");
-                    popupMenu.getMenu()
-                            .add(Menu.NONE, i + 1, i + 1, title)
-                            .setIntent(new Intent().putExtra("locale", locale));
-                }
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == 0) // all
-                            prefs.edit().remove("filter_language").apply();
-                        else {
-                            Locale locale = (Locale) item.getIntent().getSerializableExtra("locale");
-                            prefs.edit().putString("filter_language", locale.getLanguage()).apply();
-                        }
-
-                        FragmentActivity activity = getActivity();
-                        if (activity != null)
-                            activity.invalidateOptionsMenu();
-
-                        loadMessages(true);
-
-                        return true;
-                    }
-                });
-                popupMenu.show();
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
-            }
-        }.execute(this, args, "menu:language");
     }
 
     private void onMenuSelectAll() {
@@ -4740,9 +4846,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         // Get name
         String name;
         if (viewType == AdapterMessage.ViewType.UNIFIED)
-            if (type == null)
-                name = getString(R.string.title_folder_unified);
-            else
+            if (type == null) {
+                name = (folders.size() == 1 ? folders.get(0).accountName : null);
+                if (name == null)
+                    name = getString(R.string.title_folder_unified);
+            } else
                 name = EntityFolder.localizeType(getContext(), type);
         else {
             name = (folders.size() > 0 ? folders.get(0).getDisplayName(getContext()) : "");
@@ -5445,11 +5553,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }.execute(this, args, "messages:navigate");
     }
 
-    private void moveAsk(final ArrayList<MessageTarget> result, boolean undo, boolean canUndo) {
+    private void moveAsk(final ArrayList<MessageTarget> result, boolean undo) {
         if (result.size() == 0)
             return;
-
-        canUndo = true;
 
         if (undo) {
             moveUndo(result);
@@ -5460,10 +5566,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         if (prefs.getBoolean(key, false)) {
-            if (canUndo)
-                moveUndo(result);
-            else
-                moveAskConfirmed(result);
+            moveUndo(result);
             return;
         }
 
@@ -5760,6 +5863,104 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
     }
 
+    private void startSearch(TextView view) {
+        searchView = view;
+
+        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                // Do nothing
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                v.removeOnAttachStateChangeListener(this);
+                endSearch();
+            }
+        });
+
+        etSearch.setText(null);
+        etSearch.setVisibility(View.VISIBLE);
+        etSearch.requestFocus();
+
+        InputMethodManager imm =
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null)
+            imm.showSoftInput(etSearch, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    private void endSearch() {
+        Helper.hideKeyboard(etSearch);
+        etSearch.setVisibility(View.GONE);
+        clearSearch();
+        searchView = null;
+    }
+
+    private void performSearch(boolean next) {
+        clearSearch();
+
+        if (searchView == null)
+            return;
+
+        searchIndex = (next ? searchIndex + 1 : 1);
+        String query = etSearch.getText().toString().toLowerCase();
+        String text = searchView.getText().toString().toLowerCase();
+
+        int pos = -1;
+        for (int i = 0; i < searchIndex; i++)
+            pos = (pos < 0 ? text.indexOf(query) : text.indexOf(query, pos + 1));
+
+        // Wrap around
+        if (pos < 0 && searchIndex > 1) {
+            searchIndex = 1;
+            pos = text.indexOf(query);
+        }
+
+        // Scroll to found text
+        if (pos >= 0) {
+            int color = Helper.resolveColor(searchView.getContext(), R.attr.colorHighlight);
+            SpannableString ss = new SpannableString(searchView.getText());
+            ss.setSpan(new BackgroundColorSpan(color),
+                    pos, pos + query.length(), Spannable.SPAN_COMPOSING);
+            ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE),
+                    pos, pos + query.length(), Spannable.SPAN_COMPOSING);
+            searchView.setText(ss);
+
+            Layout layout = searchView.getLayout();
+            if (layout != null) {
+                int line = layout.getLineForOffset(pos);
+                int y = layout.getLineTop(line);
+                int dy = searchView.getContext().getResources()
+                        .getDimensionPixelSize(R.dimen.search_in_text_margin);
+
+                View itemView = rvMessage.findContainingItemView(searchView);
+                if (itemView != null) {
+                    Rect rect = new Rect();
+                    searchView.getDrawingRect(rect);
+
+                    RecyclerView.ViewHolder holder = rvMessage.getChildViewHolder(itemView);
+                    ((ViewGroup) itemView).offsetDescendantRectToMyCoords(searchView, rect);
+
+                    iProperties.scrollTo(holder.getAdapterPosition(), rect.top + y - dy);
+                }
+            }
+        }
+
+        boolean hasNext = (pos >= 0 &&
+                (text.indexOf(query) != pos ||
+                        text.indexOf(query, pos + 1) >= 0));
+        etSearch.setActionEnabled(hasNext);
+    }
+
+    private boolean isSearching() {
+        return (searchView != null);
+    }
+
+    private void clearSearch() {
+        if (searchView != null)
+            searchView.clearComposingText();
+    }
+
     private ActivityBase.IKeyPressedListener onBackPressedListener = new ActivityBase.IKeyPressedListener() {
         @Override
         public boolean onKeyPressed(KeyEvent event) {
@@ -5835,6 +6036,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         @Override
         public boolean onBackPressed() {
+            if (isSearching()) {
+                endSearch();
+                return true;
+            }
+
             if (selectionTracker != null && selectionTracker.hasSelection()) {
                 selectionTracker.clearSelection();
                 return true;
@@ -6881,7 +7087,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             break;
                     }
 
-                    if (result == null)
+                    if (result == null && !args.containsKey("reason"))
                         args.putString("reason", matching
                                 ? "Signature could not be verified"
                                 : "Certificates and signatures do not match");
@@ -7238,7 +7444,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
 
                     String[] xpep = imessage.getHeader("X-pEp-Wrapped-Message-Info");
-                    if (xpep == null || xpep.length == 0 && !"INNER".equalsIgnoreCase(xpep[0]))
+                    if (xpep == null || xpep.length == 0 || !"INNER".equalsIgnoreCase(xpep[0]))
                         continue;
 
                     MessageHelper helper = new MessageHelper(imessage, context);
@@ -7729,7 +7935,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (copy)
                     ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
                 else
-                    moveAsk(result, false, !autoclose && onclose == null);
+                    moveAsk(result, true);
             }
 
             @Override
@@ -8162,6 +8368,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return this;
         }
 
+        boolean isAccross() {
+            return (sourceAccount.id != targetAccount.id);
+        }
+
         protected MessageTarget(Parcel in) {
             id = in.readLong();
             sourceAccount = (Account) in.readSerializable();
@@ -8179,10 +8389,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             dest.writeSerializable(targetAccount);
             dest.writeSerializable(targetFolder);
             dest.writeInt(copy ? 1 : 0);
-        }
-
-        boolean isAccross() {
-            return (sourceAccount.id != targetAccount.id);
         }
 
         @Override

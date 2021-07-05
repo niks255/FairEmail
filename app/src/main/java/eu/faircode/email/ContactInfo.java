@@ -38,6 +38,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -151,6 +153,10 @@ public class ContactInfo {
 
     private boolean isExpired() {
         return (new Date().getTime() - time > CACHE_CONTACT_DURATION);
+    }
+
+    static boolean canGravatars() {
+        return !BuildConfig.PLAY_STORE_RELEASE;
     }
 
     static void cleanup(Context context) {
@@ -287,7 +293,7 @@ public class ContactInfo {
         }
 
         // Gravatar
-        if (info.bitmap == null && gravatars && !BuildConfig.PLAY_STORE_RELEASE) {
+        if (info.bitmap == null && gravatars && canGravatars()) {
             if (!TextUtils.isEmpty(info.email)) {
                 String gkey = info.email.toLowerCase(Locale.ROOT);
                 boolean lookup;
@@ -343,8 +349,10 @@ public class ContactInfo {
             String domain = (at < 0 ? null : info.email.substring(at + 1).toLowerCase(Locale.ROOT));
 
             if (domain != null) {
-                if ("gmail.com".equals(domain) || "googlemail.com".equals(domain))
-                    domain = "google.com";
+                if ("google.com".equals(domain) ||
+                        "gmail.com".equals(domain) ||
+                        "googlemail.com".equals(domain))
+                    domain = "support.google.com";
 
                 File dir = new File(context.getCacheDir(), "favicons");
                 if (!dir.exists())
@@ -385,14 +393,14 @@ public class ContactInfo {
                             futures.add(executorFavicon.submit(new Callable<Bitmap>() {
                                 @Override
                                 public Bitmap call() throws Exception {
-                                    return getFavicon(new URL(base, "favicon.ico"), scaleToPixels, context);
+                                    return getFavicon(new URL(base, "favicon.ico"), null, scaleToPixels, context);
                                 }
                             }));
 
                             futures.add(executorFavicon.submit(new Callable<Bitmap>() {
                                 @Override
                                 public Bitmap call() throws Exception {
-                                    return getFavicon(new URL(www, "favicon.ico"), scaleToPixels, context);
+                                    return getFavicon(new URL(www, "favicon.ico"), null, scaleToPixels, context);
                                 }
                             }));
 
@@ -523,6 +531,55 @@ public class ContactInfo {
         imgs.addAll(doc.head().select("link[href~=.+\\.(ico|png|gif|svg)]"));
         imgs.addAll(doc.head().select("meta[itemprop=image]"));
 
+        // https://developer.mozilla.org/en-US/docs/Web/Manifest/icons
+        if (imgs.size() == 0 || BuildConfig.DEBUG)
+            for (Element manifest : doc.head().select("link[rel=manifest]"))
+                try {
+                    String href = manifest.attr("href");
+                    if (TextUtils.isEmpty(href))
+                        continue;
+
+                    URL url = new URL(base, href);
+                    Log.i("GET favicon manifest " + url);
+
+                    HttpsURLConnection m = (HttpsURLConnection) url.openConnection();
+                    m.setRequestMethod("GET");
+                    m.setReadTimeout(FAVICON_READ_TIMEOUT);
+                    m.setConnectTimeout(FAVICON_CONNECT_TIMEOUT);
+                    m.setInstanceFollowRedirects(true);
+                    m.setHostnameVerifier(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String hostname, SSLSession session) {
+                            return true;
+                        }
+                    });
+                    m.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+                    m.connect();
+
+                    try {
+                        String json = Helper.readStream(m.getInputStream());
+                        JSONObject jroot = new JSONObject(json);
+                        JSONArray jicons = jroot.getJSONArray("icons");
+                        for (int i = 0; i < jicons.length(); i++) {
+                            JSONObject jicon = jicons.getJSONObject(i);
+                            String src = jicon.getString("src");
+                            String sizes = jicon.optString("sizes", "");
+                            String type = jicon.optString("type", "");
+                            if (!TextUtils.isEmpty(src)) {
+                                Element img = doc.createElement("link")
+                                        .attr("href", src)
+                                        .attr("sizes", sizes)
+                                        .attr("type", type);
+                                imgs.add(img);
+                            }
+                        }
+                    } finally {
+                        m.disconnect();
+                    }
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
+
         Collections.sort(imgs, new Comparator<Element>() {
             @Override
             public int compare(Element img1, Element img2) {
@@ -546,15 +603,11 @@ public class ContactInfo {
                 if (t != 0)
                     return t;
 
-                String[] s1 = img1.attr("sizes").split("[x|X]");
-                String[] s2 = img2.attr("sizes").split("[x|X]");
-                Integer w1 = Helper.parseInt(s1.length == 2 ? s1[0] : null);
-                Integer h1 = Helper.parseInt(s1.length == 2 ? s1[1] : null);
-                Integer w2 = Helper.parseInt(s2.length == 2 ? s2[0] : null);
-                Integer h2 = Helper.parseInt(s2.length == 2 ? s2[1] : null);
+                int s1 = getSize(img1.attr("sizes"));
+                int s2 = getSize(img2.attr("sizes"));
                 return Integer.compare(
-                        Math.abs(Math.min(w1 == null ? 0 : w1, h1 == null ? 0 : h1) - scaleToPixels),
-                        Math.abs(Math.min(w2 == null ? 0 : w2, h2 == null ? 0 : h2) - scaleToPixels));
+                        Math.abs(s1 - scaleToPixels),
+                        Math.abs(s2 - scaleToPixels));
             }
         });
 
@@ -577,7 +630,7 @@ public class ContactInfo {
             futures.add(executorFavicon.submit(new Callable<Bitmap>() {
                 @Override
                 public Bitmap call() throws Exception {
-                    return getFavicon(url, scaleToPixels, context);
+                    return getFavicon(url, img.attr("type"), scaleToPixels, context);
                 }
             }));
         }
@@ -596,8 +649,30 @@ public class ContactInfo {
         return null;
     }
 
+    private static int getSize(String sizes) {
+        int max = 0;
+        for (String size : sizes.split(" ")) {
+            int min = Integer.MAX_VALUE;
+            for (String p : size.trim().split("[x|X]")) {
+                if (TextUtils.isEmpty(p))
+                    continue;
+                try {
+                    int x = Integer.parseInt(p);
+                    if (x < min)
+                        min = x;
+                } catch (NumberFormatException ex) {
+                    Log.w(ex);
+                }
+            }
+            if (min != Integer.MAX_VALUE && min > max)
+                max = min;
+        }
+
+        return max;
+    }
+
     @NonNull
-    private static Bitmap getFavicon(URL url, int scaleToPixels, Context context) throws IOException {
+    private static Bitmap getFavicon(URL url, String type, int scaleToPixels, Context context) throws IOException {
         Log.i("GET favicon " + url);
 
         if (!"https".equals(url.getProtocol()))
@@ -621,6 +696,9 @@ public class ContactInfo {
             int status = connection.getResponseCode();
             if (status != HttpURLConnection.HTTP_OK)
                 throw new FileNotFoundException("Error " + status + ":" + connection.getResponseMessage());
+
+            if ("image/svg+xml".equals(type) || url.getPath().endsWith(".svg"))
+                ; // Android does not support SVG
 
             Bitmap bitmap = ImageHelper.getScaledBitmap(connection.getInputStream(), url.toString(), scaleToPixels);
             if (bitmap == null)

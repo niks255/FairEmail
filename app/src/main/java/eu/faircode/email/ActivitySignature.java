@@ -63,6 +63,7 @@ public class ActivitySignature extends ActivityBase {
     private BottomNavigationView style_bar;
     private BottomNavigationView bottom_navigation;
 
+    private boolean loaded = false;
     private boolean dirty = false;
 
     private static final int REQUEST_IMAGE = 1;
@@ -101,7 +102,7 @@ public class ActivitySignature extends ActivityBase {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count != s.length())
+                if (loaded)
                     dirty = true;
             }
 
@@ -173,26 +174,29 @@ public class ActivitySignature extends ActivityBase {
             }
         }, this);
 
-        if (savedInstanceState != null)
-            etText.setRaw(savedInstanceState.getBoolean("fair:raw"));
-
         style_bar.setVisibility(View.GONE);
 
         setResult(RESULT_CANCELED, new Intent());
 
-        load();
+        if (savedInstanceState == null) {
+            load(getIntent().getStringExtra("html"));
+            dirty = false;
+        } else
+            dirty = savedInstanceState.getBoolean("fair:dirty");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        load();
+
+        load(getIntent().getStringExtra("html"));
+        dirty = false;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("fair:raw", etText.isRaw());
+        outState.putBoolean("fair:dirty", dirty);
         super.onSaveInstanceState(outState);
     }
 
@@ -205,12 +209,20 @@ public class ActivitySignature extends ActivityBase {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_edit_html) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_help) {
+            onMenuHelp();
+            return true;
+        } else if (itemId == R.id.menu_edit_html) {
             item.setChecked(!item.isChecked());
             html(item.isChecked());
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onMenuHelp() {
+        Helper.viewFAQ(this, 57);
     }
 
     @Override
@@ -229,8 +241,8 @@ public class ActivitySignature extends ActivityBase {
         }
     }
 
-    private void load() {
-        String html = getIntent().getStringExtra("html");
+    private void load(String html) {
+        loaded = false;
         if (html == null)
             etText.setText(null);
         else if (etText.isRaw())
@@ -244,7 +256,7 @@ public class ActivitySignature extends ActivityBase {
                     return ImageHelper.decodeImage(ActivitySignature.this, -1, source, true, 0, 1.0f, etText);
                 }
             }, null, this));
-        dirty = false;
+        loaded = true;
     }
 
     private void delete() {
@@ -262,16 +274,15 @@ public class ActivitySignature extends ActivityBase {
     }
 
     private void html(boolean raw) {
-        String html = getHtml();
+        String html = (dirty
+                ? getHtml()
+                : getIntent().getStringExtra("html"));
         etText.setRaw(raw);
-
-        if (!raw || dirty)
-            getIntent().putExtra("html", html);
+        etText.setTypeface(raw ? Typeface.MONOSPACE : Typeface.DEFAULT);
+        load(html);
 
         if (raw)
             style_bar.setVisibility(View.GONE);
-
-        load();
     }
 
     private String getHtml() {

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Pair;
@@ -36,6 +37,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
@@ -58,8 +60,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean overview_mode = prefs.getBoolean("overview_mode", false);
         boolean safe_browsing = prefs.getBoolean("safe_browsing", false);
-        boolean confirm_html = prefs.getBoolean("confirm_html", true);
-        boolean html_dark = prefs.getBoolean("html_dark", confirm_html);
 
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
@@ -84,11 +84,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
         if (WebViewEx.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
-
-        if (html_dark &&
-                WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK))
-            WebSettingsCompat.setForceDark(settings,
-                    Helper.isDarkTheme(context) ? FORCE_DARK_ON : FORCE_DARK_OFF);
     }
 
     void init(int height, float size, Pair<Integer, Integer> position, IWebView intf) {
@@ -103,13 +98,28 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
             setScrollY(position.second);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
         int message_zoom = prefs.getInt("message_zoom", 100);
         boolean monospaced = prefs.getBoolean("monospaced", false);
+        boolean confirm_html = prefs.getBoolean("confirm_html", true);
+        boolean html_dark = prefs.getBoolean("html_dark", confirm_html);
 
         WebSettings settings = getSettings();
+
+        boolean forced = false;
+        boolean dark = Helper.isDarkTheme(context);
+        if (html_dark &&
+                WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(settings, dark ? FORCE_DARK_ON : FORCE_DARK_OFF);
+            forced = true;
+        }
+
+        setBackgroundColor(dark && !forced
+                ? Color.WHITE
+                : ColorUtils.setAlphaComponent(Color.WHITE, 127));
 
         float fontSize = 16f /* Default */ * message_zoom / 100f;
         if (zoom == 0 /* small */)

@@ -122,6 +122,7 @@ public class MessageHelper {
     static final int DEFAULT_DOWNLOAD_SIZE = 4 * 1024 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
 
+    private static final int MAX_HEADER_LENGTH = 998;
     private static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
     private static final long ATTACHMENT_PROGRESS_UPDATE = 1500L; // milliseconds
     private static final int MAX_META_EXCERPT = 1024; // characters
@@ -131,6 +132,35 @@ public class MessageHelper {
             StandardCharsets.UTF_16,
             StandardCharsets.UTF_16BE,
             StandardCharsets.UTF_16LE
+    ));
+
+    static final String FLAG_FORWARDED = "$Forwarded";
+    static final String FLAG_NOT_JUNK = "$NotJunk";
+
+    // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
+    // Not black listed: Gmail $Phishing
+    private static final List<String> FLAG_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
+            MessageHelper.FLAG_FORWARDED,
+            MessageHelper.FLAG_NOT_JUNK,
+            "$MDNSent", // https://tools.ietf.org/html/rfc3503
+            "$SubmitPending",
+            "$Submitted",
+            "$Junk",
+            "Junk",
+            "NonJunk",
+            "$recent",
+            "DTAG_document",
+            "DTAG_image",
+            "$X-Me-Annot-1",
+            "$X-Me-Annot-2",
+            "\\Unseen", // Mail.ru
+            "$sent", // Kmail
+            "$attachment", // Kmail
+            "$signed", // Kmail
+            "$encrypted", // Kmail
+            "$HasAttachment", // Dovecot
+            "$HasNoAttachment", // Dovecot
+            "$Classified" // FairEmail
     ));
 
     // https://tools.ietf.org/html/rfc4021
@@ -202,11 +232,11 @@ public class MessageHelper {
         // References
         if (message.references != null) {
             // https://tools.ietf.org/html/rfc5322#section-2.1.1
-            // Each line of characters MUST be no more than 998 characters
+            // Each line of characters MUST be no more than 998 characters ... , excluding the CRLF.
             String references = message.references;
-            int hlen = "References: ".length();
+            int maxlen = MAX_HEADER_LENGTH - "References: ".length();
             int sp = references.indexOf(' ');
-            while (references.length() > 998 - hlen && sp > 0) {
+            while (references.length() > maxlen && sp > 0) {
                 Log.i("Dropping reference=" + references.substring(0, sp));
                 references = references.substring(sp);
                 sp = references.indexOf(' ');
@@ -247,8 +277,12 @@ public class MessageHelper {
         if (message.bcc != null && message.bcc.length > 0)
             imessage.setRecipients(Message.RecipientType.BCC, convertAddress(message.bcc, identity));
 
-        if (message.subject != null)
+        if (message.subject != null) {
+            int maxlen = MAX_HEADER_LENGTH - "Subject: ".length();
+            if (message.subject.length() > maxlen)
+                message.subject = message.subject.substring(0, maxlen - 4) + " ...";
             imessage.setSubject(message.subject);
+        }
 
         // Send message
         if (identity != null) {
@@ -907,6 +941,18 @@ public class MessageHelper {
         List<String> keywords = Arrays.asList(imessage.getFlags().getUserFlags());
         Collections.sort(keywords);
         return keywords.toArray(new String[0]);
+    }
+
+    static boolean showKeyword(String keyword) {
+        if (BuildConfig.DEBUG)
+            return true;
+
+        int len = FLAG_BLACKLIST.size();
+        for (int i = 0; i < len; i++)
+            if (FLAG_BLACKLIST.get(i).equalsIgnoreCase(keyword))
+                return false;
+
+        return true;
     }
 
     String getMessageID() throws MessagingException {
@@ -2145,7 +2191,7 @@ public class MessageHelper {
 
                 String c = parts[1]
                         .replaceAll(" +$", "") // trim trailing spaces
-                        .replace("\\r?\\n", "\\r\\n"); // normalize new lines
+                        .replaceAll("\\r?\\n", "\r\n"); // normalize new lines
                 try (OutputStream os = new FileOutputStream(file)) {
                     os.write(c.getBytes());
                 }
@@ -2836,6 +2882,23 @@ public class MessageHelper {
             }
 
         return email;
+    }
+
+    static InternetAddress[] parseAddresses(Context context, String text) throws AddressException {
+        if (TextUtils.isEmpty(text))
+            return null;
+
+        InternetAddress[] addresses = InternetAddress.parseHeader(text, false);
+        if (addresses.length == 0)
+            return null;
+
+        for (InternetAddress address : addresses) {
+            String email = address.getAddress();
+            if (email != null)
+                address.setAddress(email.replace(" ", ""));
+        }
+
+        return addresses;
     }
 
     static boolean isRemoved(Throwable ex) {

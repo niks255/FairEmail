@@ -178,6 +178,15 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                     setTheme(R.style.AppThemeGreySteelBlueDark);
                     break;
 
+                // Solarized
+                case "solarized_light":
+                    setTheme(R.style.AppThemeSolarizedLight);
+                    break;
+                case "solarized":
+                case "solarized_dark":
+                    setTheme(R.style.AppThemeSolarizedDark);
+                    break;
+
                 // Black
                 case "black":
                     setTheme(R.style.AppThemeBlack);
@@ -240,6 +249,10 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                 case "grey_system":
                     setTheme(night
                             ? R.style.AppThemeGreySteelBlueDark : R.style.AppThemeGreySteelBlueLight);
+                    break;
+                case "solarized_system":
+                    setTheme(night
+                            ? R.style.AppThemeSolarizedDark : R.style.AppThemeSolarizedLight);
                     break;
             }
 

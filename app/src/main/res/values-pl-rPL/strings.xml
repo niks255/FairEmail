@@ -104,6 +104,7 @@
     <string name="title_notification_failed">%1$s nie powiodło się</string>
     <string name="title_notification_alert">Alert serwera \'%1$s\'</string>
     <string name="title_notification_sending_left">Pozostało prób: %1$d</string>
+    <string name="title_notification_sending_retry">Wysyłanie zostanie ponowione po zmianie połączenia internetowego lub pociągnięciu w dół skrzynki nadawczej</string>
     <string name="title_notification_sending_failed">Wysyłanie do %1$s nie powiodło się</string>
     <string name="title_notification_redacted">Włączono uwierzytelnianie biometryczne lub PIN</string>
     <string name="title_factor_minutes">%1$d minut</string>
@@ -127,6 +128,7 @@
     <string name="title_agree">Zgadzam się</string>
     <string name="title_disagree">Nie zgadzam się</string>
     <string name="title_version">Wersja %1$s</string>
+    <string name="title_privacy_policy">Polityka prywatności</string>
     <string name="title_list_accounts">Konta</string>
     <string name="title_list_identities">Tożsamości</string>
     <string name="title_edit_account">Edytuj konto</string>
@@ -329,7 +331,8 @@
     <string name="title_advanced_landscape3">Domyślnie pokaż menu nawigacji w trybie poziomym</string>
     <string name="title_advanced_startup">Pokaż na ekranie początkowym</string>
     <string name="title_advanced_cards">Użyj stylu karty zamiast stylu tabelarycznego</string>
-    <string name="title_advanced_cards_beige">Użyj beżowego tła, jeśli używasz stylu karty</string>
+    <string name="title_advanced_cards_beige">Użyj beżowego tła podczas używania stylu karty (tylko jasne motywy)</string>
+    <string name="title_advanced_tabular_background">Użyj koloru karty jako koloru tła podczas korzystania ze stylu tabelarycznego</string>
     <string name="title_advanced_cards_shadow">Użyj cienia do nieprzeczytanych wiadomości, jeśli używasz stylu karty</string>
     <string name="title_advanced_date_header">Grupuj według daty</string>
     <string name="title_advanced_date_bold">Pokaż datę pogrubioną</string>
@@ -494,6 +497,7 @@
     <string name="title_advanced_class_min_difference">Minimalna różnica klasy: %1$s %%</string>
     <string name="title_advanced_language">Język</string>
     <string name="title_advanced_language_system">Systemowy</string>
+    <string name="title_advanced_deepl">Integracja z DeepL</string>
     <string name="title_advanced_watchdog">Okresowo sprawdzaj, czy FairEmail jest nadal aktywny</string>
     <string name="title_advanced_updates">Sprawdź aktualizacje GitHub</string>
     <string name="title_advanced_check_weekly">Sprawdzaj co tydzień zamiast codziennie</string>
@@ -539,7 +543,6 @@
     <string name="title_advanced_browse_hint">Pobierz więcej wiadomości podczas przewijania w dół</string>
     <string name="title_advanced_layout_hint">Przełączanie do bardziej zwartego układu i zmianę rozmiaru tekstu wiadomości można wykonać w menu górnego paska działań w widoku wiadomości</string>
     <string name="title_advanced_startup_hint">Naciśnij długo dowolny folder na liście folderów, aby dodać lub usunąć go z listy wspólnych folderów</string>
-    <string name="title_advanced_beige_hint">Tylko jasne motywy</string>
     <string name="title_advanced_date_hint">Wiadomości są pogrupowane według daty, tylko jeśli są posortowane według czasu</string>
     <string name="title_advanced_navbar_colorize_hint">Czy to zadziała zależy od wersji i wariantu Androida</string>
     <string name="title_advanced_split_hint">Spowoduje to podzielenie ekranu na części</string>
@@ -1002,6 +1005,7 @@
     <string name="title_translating">Tłumaczenie &#8230;</string>
     <string name="title_translate_small">Użyj małej czcionki dla tekstu źródłowego</string>
     <string name="title_translate_usage">Składnia: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Dotknij tekstu, aby przetłumaczyć</string>
     <string name="title_edit_plain_text">Edytuj jako zwykły tekst</string>
     <string name="title_edit_formatted_text">Edytuj jako sformatowany tekst</string>
     <string name="title_select_certificate">Wybierz klucz publiczny</string>

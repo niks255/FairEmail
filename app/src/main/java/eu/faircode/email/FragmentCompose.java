@@ -755,21 +755,21 @@ public class FragmentCompose extends FragmentBase {
                 args.putString("target", target);
                 args.putString("text", text);
 
-                new SimpleTask<String>() {
+                new SimpleTask<DeepL.Translation>() {
                     @Override
                     protected void onPreExecute(Bundle args) {
                         ToastEx.makeText(getContext(), R.string.title_translating, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    protected String onExecute(Context context, Bundle args) throws Throwable {
+                    protected DeepL.Translation onExecute(Context context, Bundle args) throws Throwable {
                         String target = args.getString("target");
                         String text = args.getString("text");
                         return DeepL.translate(text, target, context);
                     }
 
                     @Override
-                    protected void onExecuted(Bundle args, String translated) {
+                    protected void onExecuted(Bundle args, DeepL.Translation translation) {
                         if (paragraph.second > edit.length())
                             return;
 
@@ -781,8 +781,8 @@ public class FragmentCompose extends FragmentBase {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
                         // Insert translated text
-                        edit.insert(paragraph.second, "\n\n" + translated);
-                        etBody.setSelection(paragraph.second + 2 + translated.length());
+                        edit.insert(paragraph.second, "\n\n" + translation.translated_text);
+                        etBody.setSelection(paragraph.second + 2 + translation.translated_text.length());
 
                         boolean small = prefs.getBoolean("deepl_small", false);
                         if (small) {
@@ -965,17 +965,9 @@ public class FragmentCompose extends FragmentBase {
 
         // Initialize
         setHasOptionsMenu(true);
+        FragmentDialogTheme.setBackground(getContext(), view, true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-        boolean cards = prefs.getBoolean("cards", true);
-        if (cards && !Helper.isDarkTheme(getContext()))
-            view.setBackgroundColor(Helper.resolveColor(getContext(), R.attr.colorCardBackground));
-
-        //boolean beige = prefs.getBoolean("beige", true);
-        //if (beige && !Helper.isDarkTheme(getContext()))
-        //    view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.lightColorBackground_cards_beige));
-
         boolean keyboard_no_fullscreen = prefs.getBoolean("keyboard_no_fullscreen", false);
         if (keyboard_no_fullscreen) {
             // https://developer.android.com/reference/android/view/inputmethod/EditorInfo#IME_FLAG_NO_FULLSCREEN
@@ -1295,6 +1287,8 @@ public class FragmentCompose extends FragmentBase {
             }
 
             private void convertRef(boolean plain) {
+                etBody.clearComposingText();
+
                 Bundle args = new Bundle();
                 args.putLong("id", working);
                 args.putBoolean("plain", plain);
@@ -1379,6 +1373,8 @@ public class FragmentCompose extends FragmentBase {
             }
 
             private void deleteRef() {
+                etBody.clearComposingText();
+
                 Bundle extras = new Bundle();
                 extras.putString("html", HtmlHelper.toHtml(etBody.getText(), getContext()));
                 extras.putBoolean("show", true);
@@ -1978,7 +1974,7 @@ public class FragmentCompose extends FragmentBase {
 
                                 InternetAddress[] to = null;
                                 try {
-                                    to = InternetAddress.parseHeader(etTo.getText().toString(), false);
+                                    to = MessageHelper.parseAddresses(getContext(), etTo.getText().toString());
                                 } catch (AddressException ignored) {
                                 }
 
@@ -2039,6 +2035,8 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onMenuAnswerCreate() {
+        etBody.clearComposingText();
+
         Bundle args = new Bundle();
         args.putString("subject", etSubject.getText().toString());
         args.putString("html", HtmlHelper.toHtml(etBody.getText(), getContext()));
@@ -2553,6 +2551,8 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onAddAttachment(List<Uri> uris, boolean image, int resize, boolean privacy) {
+        etBody.clearComposingText();
+
         Bundle args = new Bundle();
         args.putLong("id", working);
         args.putParcelableArrayList("uris", new ArrayList<>(uris));
@@ -3994,21 +3994,21 @@ public class FragmentCompose extends FragmentBase {
 
                         try {
                             String to = args.getString("to");
-                            data.draft.to = (TextUtils.isEmpty(to) ? null : InternetAddress.parseHeader(to, false));
+                            data.draft.to = MessageHelper.parseAddresses(context, to);
                         } catch (AddressException ex) {
                             Log.w(ex);
                         }
 
                         try {
                             String cc = args.getString("cc");
-                            data.draft.cc = (TextUtils.isEmpty(cc) ? null : InternetAddress.parseHeader(cc, false));
+                            data.draft.cc = MessageHelper.parseAddresses(context, cc);
                         } catch (AddressException ex) {
                             Log.w(ex);
                         }
 
                         try {
                             String bcc = args.getString("bcc");
-                            data.draft.bcc = (TextUtils.isEmpty(bcc) ? null : InternetAddress.parseHeader(bcc, false));
+                            data.draft.bcc = MessageHelper.parseAddresses(context, bcc);
                         } catch (AddressException ex) {
                             Log.w(ex);
                         }
@@ -4112,7 +4112,7 @@ public class FragmentCompose extends FragmentBase {
                                     }
                                     if (preferred != null) {
                                         String from = ((InternetAddress) preferred).getAddress();
-                                        data.draft.extra = from.substring(0, from.indexOf("@"));
+                                        data.draft.extra = UriHelper.getEmailUser(from);
                                     }
                                 }
                             }
@@ -4894,7 +4894,7 @@ public class FragmentCompose extends FragmentBase {
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
                     else {
                         EntityOperation.queue(context, draft, EntityOperation.ADD);
-                        EntityOperation.queue(context, draft, EntityOperation.MOVE, trash.id, true);
+                        EntityOperation.queue(context, draft, EntityOperation.MOVE, trash.id);
                     }
 
                     getMainHandler().post(new Runnable() {
@@ -4953,9 +4953,9 @@ public class FragmentCompose extends FragmentBase {
 
                     // Get data
                     InternetAddress[] afrom = (identity == null ? null : new InternetAddress[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())});
-                    InternetAddress[] ato = (TextUtils.isEmpty(to) ? null : InternetAddress.parseHeader(to, false));
-                    InternetAddress[] acc = (TextUtils.isEmpty(cc) ? null : InternetAddress.parseHeader(cc, false));
-                    InternetAddress[] abcc = (TextUtils.isEmpty(bcc) ? null : InternetAddress.parseHeader(bcc, false));
+                    InternetAddress[] ato = MessageHelper.parseAddresses(context, to);
+                    InternetAddress[] acc = MessageHelper.parseAddresses(context, cc);
+                    InternetAddress[] abcc = MessageHelper.parseAddresses(context, bcc);
 
                     // Safe guard
                     if (action == R.id.action_send) {
@@ -5229,14 +5229,8 @@ public class FragmentCompose extends FragmentBase {
                                 String[] internals = identity.internal.split(",");
                                 for (Address recipient : recipients) {
                                     String email = ((InternetAddress) recipient).getAddress();
-                                    if (TextUtils.isEmpty(email))
-                                        continue;
-
-                                    int at = email.lastIndexOf('@');
-                                    if (at < 0)
-                                        continue;
-                                    String domain = email.substring(at + 1).trim();
-                                    if (TextUtils.isEmpty(domain))
+                                    String domain = UriHelper.getEmailDomain(email);
+                                    if (domain == null)
                                         continue;
 
                                     boolean found = false;
@@ -5599,7 +5593,7 @@ public class FragmentCompose extends FragmentBase {
                     address.validate();
                 } catch (AddressException ex) {
                     throw new AddressException(context.getString(R.string.title_address_parse_error,
-                            MessageHelper.formatAddressesCompose(addresses), ex.getMessage()));
+                            MessageHelper.formatAddressesCompose(new Address[]{address}), ex.getMessage()));
                 }
         }
 

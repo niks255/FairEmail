@@ -32,13 +32,11 @@ import android.database.Cursor;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -66,6 +64,8 @@ public class FragmentGmail extends FragmentBase {
     private ViewGroup view;
     private ScrollView scroll;
 
+    private TextView tvTitle;
+    private TextView tvPrivacy;
     private Button btnGrant;
     private TextView tvGranted;
     private EditText etName;
@@ -80,6 +80,8 @@ public class FragmentGmail extends FragmentBase {
 
     private Group grpError;
 
+    private static final String PRIVACY_URI = "https://policies.google.com/privacy";
+
     @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class FragmentGmail extends FragmentBase {
         scroll = view.findViewById(R.id.scroll);
 
         // Get controls
+        tvTitle = view.findViewById(R.id.tvTitle);
+        tvPrivacy = view.findViewById(R.id.tvPrivacy);
         btnGrant = view.findViewById(R.id.btnGrant);
         tvGranted = view.findViewById(R.id.tvGranted);
         etName = view.findViewById(R.id.etName);
@@ -105,6 +109,14 @@ public class FragmentGmail extends FragmentBase {
         grpError = view.findViewById(R.id.grpError);
 
         // Wire controls
+
+        tvPrivacy.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(PRIVACY_URI), false);
+            }
+        });
 
         btnGrant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +182,7 @@ public class FragmentGmail extends FragmentBase {
 
         // Initialize
         Helper.setViewsEnabled(view, false);
+        tvTitle.setText(getString(R.string.title_setup_oauth_rationale, "Gmail"));
         pbSelect.setVisibility(View.GONE);
         grpError.setVisibility(View.GONE);
 
@@ -177,30 +190,6 @@ public class FragmentGmail extends FragmentBase {
         setGranted(granted);
 
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_quick_setup, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_help) {
-            onMenuHelp();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuHelp() {
-        Bundle args = new Bundle();
-        args.putString("name", "SETUP.md");
-
-        FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
-        fragment.setArguments(args);
-        fragment.show(getChildFragmentManager(), "help");
     }
 
     @Override

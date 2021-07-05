@@ -93,6 +93,7 @@
     <string name="title_notification_failed">\'%1$s\' не вдалося</string>
     <string name="title_notification_alert">\'%1$s\' Попередження від сервера</string>
     <string name="title_notification_sending_left">Залишилось спроб: %1$d</string>
+    <string name="title_notification_sending_retry">Буде повторна спроба відправлення при зміні підключення до Інтернету або при перевірці пошти</string>
     <string name="title_notification_sending_failed">Відправлення до %1$s не вдалося</string>
     <string name="title_notification_redacted">Змінено: біометрична або автентифікація за допомогою PIN-коду ввімкнена</string>
     <string name="title_factor_minutes">%1$d хвилин</string>
@@ -116,6 +117,7 @@
     <string name="title_agree">Я погоджуюся</string>
     <string name="title_disagree">Не погоджуюся</string>
     <string name="title_version">Версія: %1$s</string>
+    <string name="title_privacy_policy">Політика конфіденційності</string>
     <string name="title_list_accounts">Облікові записи</string>
     <string name="title_list_identities">Особисті дані</string>
     <string name="title_edit_account">Редагувати обліковий запис</string>
@@ -318,7 +320,8 @@
     <string name="title_advanced_landscape3">Показувати меню навігації в ландшафтному режимі за замовчуванням</string>
     <string name="title_advanced_startup">Показувати на стартовому екрані</string>
     <string name="title_advanced_cards">Використовувати стиль картки замість табличного стилю</string>
-    <string name="title_advanced_cards_beige">Використовувати бежевий фон при використанні стилю картки</string>
+    <string name="title_advanced_cards_beige">Використовувати бежевий фон під час використання стилю карт (тільки для світлої теми)</string>
+    <string name="title_advanced_tabular_background">Використовувати колір картки як тло під час використання табличного стилю</string>
     <string name="title_advanced_cards_shadow">Використовувати тінь для непрочитаних повідомлень під час використання стилю картки</string>
     <string name="title_advanced_date_header">Групувати за датою</string>
     <string name="title_advanced_date_bold">Показувати дату в жирному шрифті</string>
@@ -483,6 +486,7 @@
     <string name="title_advanced_class_min_difference">Мінімальна різниця у класі: %1$s %%</string>
     <string name="title_advanced_language">Мова</string>
     <string name="title_advanced_language_system">Системи</string>
+    <string name="title_advanced_deepl">Інтеграція з DeepL</string>
     <string name="title_advanced_watchdog">Періодично перевіряти, чи ще активнний додатк FairEmail</string>
     <string name="title_advanced_updates">Перевірити наявність оновлень з GitHub</string>
     <string name="title_advanced_check_weekly">Щотижнева перевірка замість щоденної</string>
@@ -527,7 +531,6 @@
     <string name="title_advanced_browse_hint">Завантажувати більше повідомлень при прокручуванні вниз</string>
     <string name="title_advanced_layout_hint">Перемикання на більш компактний макет і зміну розміру тексту повідомлень можна зробити у верхньому меню панелі повідомлень</string>
     <string name="title_advanced_startup_hint">Довго натисніть будь-яку теку в списку тек щоб додати або видалити її зі списку об\'єднаних тек</string>
-    <string name="title_advanced_beige_hint">Лише світлі теми</string>
     <string name="title_advanced_date_hint">Повідомлення групуються тільки за датою при сортуванні їх за часом</string>
     <string name="title_advanced_navbar_colorize_hint">В цілому робота залежить від версії Android та її модифікації</string>
     <string name="title_advanced_split_hint">Це розділить екран на частини</string>
@@ -990,6 +993,7 @@
     <string name="title_translating">Переклад &#8230;</string>
     <string name="title_translate_small">Використовувати малий шрифт для початкового тексту</string>
     <string name="title_translate_usage">Використання: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Торкніться тексту для перекладу</string>
     <string name="title_edit_plain_text">Редагувати як звичайний текст</string>
     <string name="title_edit_formatted_text">Редагувати як переформатований текст</string>
     <string name="title_select_certificate">Виберіть відкритий ключ</string>

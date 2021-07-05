@@ -4,10 +4,10 @@
     <string name="app_changelog">更新日志</string>
     <string name="app_welcome">FairEmail 是一款专注于隐私与安全的开源电子邮件应用。所以，某些功能的工作方式可能与您的习惯不同。</string>
     <string name="app_limitations">例如，默认情况下，消息将被重新格式化以移除不安全的元素并提高可读性；另外，为确保安全，打开链接前需要得到确认。当然如有需要，这两个选项都可以禁用</string>
-    <string name="app_crash">FairEmail不支持该设备，因为 android 中的bug会导致崩溃</string>
+    <string name="app_crash">FairEmail 不支持该设备，Android 中的 bug 会导致其崩溃</string>
     <string name="app_exit">再按一次返回键退出</string>
     <string name="app_cake">剩余存储空间不足</string>
-    <string name="app_updated">上次更新: %1$s</string>
+    <string name="app_updated">上次更新：%1$s</string>
     <string name="channel_service">接收</string>
     <string name="channel_send">发送</string>
     <string name="channel_notification">电子邮件</string>
@@ -17,10 +17,10 @@
     <string name="channel_error">错误</string>
     <string name="channel_alert">服务器警告</string>
     <string name="channel_group_contacts">联系人</string>
-    <string name="channel_service_description">账户的同步与监测</string>
+    <string name="channel_service_description">账户的同步与监控</string>
     <string name="channel_send_description">消息的发送</string>
     <string name="channel_notification_description">新消息通知</string>
-    <string name="channel_progress_description">较长时间运行活动的进度通知</string>
+    <string name="channel_progress_description">长时间操作的进度通知</string>
     <plurals name="page_conversation">
         <item quantity="other">会话</item>
     </plurals>
@@ -38,45 +38,46 @@
         <item quantity="other">正在监控 %1$d 个账户</item>
     </plurals>
     <plurals name="title_notification_operations">
-        <item quantity="other">%1$d个待执行操作</item>
+        <item quantity="other">%1$d 个待执行的操作</item>
     </plurals>
     <plurals name="title_notification_unseen">
         <item quantity="other">%1$d条新消息</item>
     </plurals>
     <plurals name="title_notification_unsent">
-        <item quantity="other">%1$d条待发送消息</item>
+        <item quantity="other">%1$d 封待发送邮件</item>
     </plurals>
     <plurals name="title_tile_unseen">
-        <item quantity="other">%1$d则新邮件</item>
+        <item quantity="other">%1$d 封新邮件</item>
     </plurals>
     <plurals name="title_moving_messages">
         <item quantity="other">移动 %1$d 条消息吗？</item>
     </plurals>
     <plurals name="title_deleting_messages">
-        <item quantity="other">永久删除这%1$d则邮件？</item>
+        <item quantity="other">永久删除 %1$d 则邮件？</item>
     </plurals>
     <plurals name="title_ask_spam">
         <item quantity="other">将这%1$d则邮件标为垃圾邮件？</item>
     </plurals>
     <string name="title_ask_spam_who">将来自%1$s的消息标为垃圾邮件？</string>
-    <string name="title_junk_hint">垃圾邮件是由电子邮件提供商负责过滤，而邮件客户端无法自行做到这一点</string>
+    <string name="title_junk_hint">您的电子邮件提供商负责过滤垃圾邮件。电子邮件应用程序没有可靠地执行此操作所需的所有数据。</string>
     <string name="title_block">屏蔽 %1$s</string>
     <string name="title_block_sender">屏蔽发件人</string>
     <string name="title_block_domain">屏蔽发件人域名</string>
     <string name="title_block_sender_hint">        拉黑某发件人将创建一条规则来自动将未来消息移动至垃圾邮件文件夹
         创建和使用规则属于专业版功能</string>
     <string name="title_junk_filter">使用本地垃圾邮件过滤器</string>
-    <string name="title_junk_filter_hint">这可能会增加耗电量并误标为垃圾邮件</string>
+    <string name="title_junk_filter_hint">这可能会增加耗电量和将邮件误标为垃圾邮件</string>
     <string name="title_junk_blocklist">使用垃圾邮件拦截列表</string>
     <string name="title_notification_sending">正在发送消息</string>
-    <string name="title_notification_waiting">等待网络连接</string>
+    <string name="title_notification_waiting">等待适合的网络连接</string>
     <string name="title_notification_idle">空闲</string>
     <string name="title_notification_failed">\'%1$s\' 失败</string>
     <string name="title_notification_alert">\'%1$s\' 服务器警告</string>
     <string name="title_notification_sending_left">剩余尝试次数: %1$d</string>
+    <string name="title_notification_sending_retry">发送将在网络连接更改时或在下拉发件箱时重试</string>
     <string name="title_notification_sending_failed">发送至 %1$s 失败</string>
     <string name="title_notification_redacted">已编辑：启用了生物识别或PIN身份验证</string>
-    <string name="title_factor_minutes">%1$d分钟</string>
+    <string name="title_factor_minutes">%1$d 分钟</string>
     <string name="menu_answers">模板</string>
     <string name="menu_operations">操作</string>
     <string name="menu_contacts">本地联系人</string>
@@ -97,6 +98,7 @@
     <string name="title_agree">同意</string>
     <string name="title_disagree">拒绝</string>
     <string name="title_version">版本 %1$s</string>
+    <string name="title_privacy_policy">隐私政策</string>
     <string name="title_list_accounts">账户</string>
     <string name="title_list_identities">身份</string>
     <string name="title_edit_account">编辑账户</string>
@@ -109,7 +111,7 @@
     <string name="title_setup_simple">无需更改任何其他选项</string>
     <string name="title_setup_quick_accounts">添加或更改账户</string>
     <string name="title_setup_quick_support">有些邮件服务提供商很难添加账户，对此请不要怪责于 FairEmail, 而应向提供商寻求支持</string>
-    <string name="title_setup_quick_hint">快速设置将从autoconfig.thunderbird.net 获取配置信息</string>
+    <string name="title_setup_quick_hint">快速设置将从 autoconfig.thunderbird.net 获取配置信息</string>
     <string name="title_setup_quick_imap">接收邮件的IMAP服务器</string>
     <string name="title_setup_quick_smtp">发送邮件的SMTP服务器</string>
     <string name="title_setup_wizard">向导</string>
@@ -163,7 +165,7 @@
     <string name="title_setup_doze_device">对此设备来说，这可能是必需的</string>
     <string name="title_setup_doze_android">这是此 Android 版本所需的</string>
     <string name="title_setup_background">已启用后台限制</string>
-    <string name="title_setup_data">已启用数据节省</string>
+    <string name="title_setup_data">省流量模式已启用</string>
     <string name="title_setup_advanced_options">显示高级选项</string>
     <string name="title_setup_inbox">转到收件箱</string>
     <string name="title_setup_go">前往</string>
@@ -244,7 +246,7 @@
     <string name="title_advanced_subscriptions">管理文件夹订阅</string>
     <string name="title_advanced_check_authentication">检查消息认证</string>
     <string name="title_advanced_check_reply_domain">同步消息时检查回复地址</string>
-    <string name="title_advanced_check_mx">同步消息时检查发送者电子邮件地址</string>
+    <string name="title_advanced_check_mx">同步消息时检查发件人电子邮件地址</string>
     <string name="title_advanced_check_blocklist">检查发送者的域名是否在垃圾邮件拦截列表中</string>
     <string name="title_advanced_tune_keep_alive">自动调整保持活动时间间隔</string>
     <string name="title_advanced_keyboard">默认显示键盘</string>
@@ -299,11 +301,12 @@
     <string name="title_advanced_landscape3">默认在横屏模式下显示导航菜单</string>
     <string name="title_advanced_startup">在启动屏幕上显示</string>
     <string name="title_advanced_cards">使用卡片样式而非表单样式 (即主页会话间有间隔)</string>
-    <string name="title_advanced_cards_beige">开启卡片样式 (上面的选项) 时，使用米色背景</string>
+    <string name="title_advanced_cards_beige">使用卡牌风格时使用米色背景(仅适用于浅色主题)</string>
+    <string name="title_advanced_tabular_background">使用表格样式时，使用卡片颜色作为背景色</string>
     <string name="title_advanced_cards_shadow">使用卡片样式时对未读消息显示阴影</string>
     <string name="title_advanced_date_header">按日期分组</string>
     <string name="title_advanced_date_bold">以粗体显示日期</string>
-    <string name="title_advanced_threading">会话线程</string>
+    <string name="title_advanced_threading">邮件会话</string>
     <string name="title_advanced_threading_unread">在对话中显示未读消息的数量</string>
     <string name="title_advanced_indentation">左/右缩进接收/发送的消息</string>
     <string name="title_advanced_highlight_unread">高亮未读消息</string>
@@ -345,6 +348,7 @@
     <string name="title_advanced_monospaced">消息文本默认使用等宽字体</string>
     <string name="title_advanced_monospaced_pre">对预格式化的文本使用等宽字体</string>
     <string name="title_advanced_text_color">使用文本颜色</string>
+    <string name="title_advanced_background_color">使用背景颜色</string>
     <string name="title_advanced_text_size">使用文本大小</string>
     <string name="title_advanced_text_font">使用字体</string>
     <string name="title_advanced_text_align">使用文本对齐</string>
@@ -464,6 +468,7 @@
     <string name="title_advanced_class_min_difference">不同分类的最小差异：%1$s %%</string>
     <string name="title_advanced_language">语言</string>
     <string name="title_advanced_language_system">系统</string>
+    <string name="title_advanced_deepl">DeepL 集成</string>
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
     <string name="title_advanced_updates">检查 GitHub 更新</string>
     <string name="title_advanced_check_weekly">每周而不是每天检查</string>
@@ -509,7 +514,6 @@
     <string name="title_advanced_browse_hint">向下滚动时拉取更多邮件</string>
     <string name="title_advanced_layout_hint">切换到更为紧凑的布局，改变消息文本大小可以在邮件视图中的顶部动作栏菜单中完成</string>
     <string name="title_advanced_startup_hint">长按文件夹列表中的任何文件夹，可将其从添加到或移除出聚合文件夹列表</string>
-    <string name="title_advanced_beige_hint">仅限浅色主题</string>
     <string name="title_advanced_date_hint">若按时间对消息排序，将仅按日期对消息分组</string>
     <string name="title_advanced_navbar_colorize_hint">这是否正常工作取决于Android版本和变体</string>
     <string name="title_advanced_split_hint">这将把屏幕分割成几部分</string>
@@ -527,7 +531,7 @@
     <string name="title_advanced_language_detection_hint">是否支持语言检测取决于设备制造商</string>
     <string name="title_advanced_autoexpand_hint">当对话中只有一条消息或只是一条未读消息时，自动打开该消息</string>
     <string name="title_advanced_autoseen_hint">在每个帐户的高级帐户设置中可以禁用展开消息时自动将其标记为已读</string>
-    <string name="title_advanced_autoclose_hint">在所有邮件存档、发送或丢弃时自动关闭对话线程</string>
+    <string name="title_advanced_autoclose_hint">所有邮件已存档、发送或删除时自动关闭邮件会话</string>
     <string name="title_advanced_sender_hint">大多数提供商不允许修改发件人地址</string>
     <string name="title_advanced_bcc_hint">地址不会显示，但会在发送时添加</string>
     <string name="title_advanced_internal_hint">发送到另一个域时会有警告</string>
@@ -876,9 +880,9 @@
     <string name="title_ask_show_image">显示图像可能会泄露隐私敏感信息</string>
     <string name="title_ask_show_image_hint">不会显示被识别为跟踪图像的图片</string>
     <string name="title_ask_delete_local">删除本地消息？消息将保留在远程服务器上</string>
-    <string name="title_ask_help">帮助改进FairEmail</string>
+    <string name="title_ask_help">帮助改进 FairEmail</string>
     <string name="title_ask_reporting">发送错误报告?</string>
-    <string name="title_reporting_why">错误报告将有助于改进FairEmail</string>
+    <string name="title_reporting_why">错误报告将有助于改进 FairEmail</string>
     <string name="title_ask_review">请给FairEmail评分</string>
     <string name="title_ask_review_rationale">        您使用 FairEmail 已经有一段时间了
         如果您能在 Play Store 中为 FairEmail 评分, 我将不胜感激
@@ -972,6 +976,7 @@
     <string name="title_translating">正在翻译 &#8230;</string>
     <string name="title_translate_small">对源文本使用一个小字体</string>
     <string name="title_translate_usage">用量： %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">点击要翻译的文本</string>
     <string name="title_edit_plain_text">以纯文本形式编辑</string>
     <string name="title_edit_formatted_text">编辑为重新格式化的文本</string>
     <string name="title_select_certificate">选择公钥</string>
@@ -1287,7 +1292,7 @@
     <string name="title_legend_enter">打开</string>
     <string name="title_legend_a">存档</string>
     <string name="title_legend_c">撰写</string>
-    <string name="title_legend_d">回收站(删除)</string>
+    <string name="title_legend_d">回收站 (删除)</string>
     <string name="title_legend_m">菜单 (多选)</string>
     <string name="title_legend_n">下一封</string>
     <string name="title_legend_p">上一封</string>
@@ -1302,7 +1307,7 @@
     <string name="title_hint_important">重要</string>
     <string name="title_hint_sync">下载邮件可能需要一些时间, 具体取决于提供商的速度、网络连接、设备以及邮件数量。在下载邮件时, 应用的响应速度可能会变慢。</string>
     <string name="title_hint_sync_note">默认情况下，本应用不会下载所有的消息，以减少存储空间、电量和流量的使用。当然，您可以通过长按文件夹列表中的相应文件夹，并选择弹出菜单的 \"同步更多\" 来改变这一点</string>
-    <string name="title_hint_battery">由于FairEmail默认总是接受消息，安卓系统会报告FE始终处于活动状态。 因此，FE看起来好像总在耗电，但事实上情况并非如此。</string>
+    <string name="title_hint_battery">由于 FairEmail 默认总是接受消息，安卓系统会报告它始终处于活动状态。 因此，这看起来好像总在耗电，但事实上情况并非如此。</string>
     <string name="title_hint_reformat">默认情况下，FairEmail 会基于隐私和安全原因重新格式化消息。要查看原始消息，请点击消息文本上方的“全屏”图标</string>
     <string name="title_hint_design">FE 的设计理念旨在不让用户分散注意力，重在实用性。而且设置中已经有很多自定义外观的选项，请谅解，我很难同时让所有人都满意</string>
     <string name="title_hint_junk">过滤垃圾邮件属于邮件服务器的工作，单凭客户端设备根本无力胜任</string>
@@ -1344,7 +1349,7 @@
     <string name="title_clipboard_copy">复制到剪切板</string>
     <string name="title_clipboard_copied">已复制到剪切板</string>
     <string name="title_ask_what">询问做什么</string>
-    <string name="title_no_ask_again">别再询问</string>
+    <string name="title_no_ask_again">不再询问</string>
     <string name="title_no_ask_for_again">不要再询问 %1$s</string>
     <string name="title_no_body">没有找到消息文本</string>
     <string name="title_no_charset">不支持的编码: %1$s</string>

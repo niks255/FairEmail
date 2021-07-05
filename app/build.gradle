@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 
-def getVersionCode = { -> return 1625 }
-def getReleaseName = { -> return "\"Rahiolisaurus\"" }
+def getVersionCode = { -> return 1638 }
+def getReleaseName = { -> return "\"Sciurumimus\"" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -136,6 +136,7 @@ android {
             dimension "all"
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
+            buildConfigField "boolean", "AMAZON_RELEASE", "false"
             buildConfigField "String", "PRO_FEATURES_URI", "\"https://email.faircode.eu/donate/\""
             buildConfigField "String", "CHANGELOG", "\"https://github.com/M66B/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/niks255/fairemail/releases/latest\""
@@ -146,6 +147,7 @@ android {
             dimension "all"
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
+            buildConfigField "boolean", "AMAZON_RELEASE", "false"
             buildConfigField "String", "PRO_FEATURES_URI", "\"https://email.faircode.eu/donate/\""
             buildConfigField "String", "CHANGELOG", "\"https://github.com/M66B/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/M66B/FairEmail/releases/latest\""
@@ -157,6 +159,19 @@ android {
             //minSdkVersion 23
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "true"
+            buildConfigField "boolean", "AMAZON_RELEASE", "false"
+            buildConfigField "String", "PRO_FEATURES_URI", "\"https://email.faircode.eu/#pro\""
+            buildConfigField "String", "CHANGELOG", "\"\""
+            buildConfigField "String", "GITHUB_LATEST_API", "\"\""
+            buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
+            buildConfigField "String", "GRAVATAR_URI", "\"\""
+        }
+        amazon {
+            dimension "all"
+            //minSdkVersion 23
+            buildConfigField "boolean", "BETA_RELEASE", "true"
+            buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
+            buildConfigField "boolean", "AMAZON_RELEASE", "true"
             buildConfigField "String", "PRO_FEATURES_URI", "\"https://email.faircode.eu/#pro\""
             buildConfigField "String", "CHANGELOG", "\"\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
@@ -170,14 +185,19 @@ android {
         // Builds: release, debug
         // Flavors: github, fdroid, play
         if (variant.buildType.name == "debug" &&
-                (flavors.contains("fdroid") || flavors.contains("play"))) {
+                (flavors.contains("fdroid") || flavors.contains("play") || flavors.contains("_amazon"))) {
             setIgnore(true)
         }
     }
 
     // https://stackoverflow.com/questions/28948538/
-    // $JAVA_HOME/bin/java -jar ~/Android/Sdk/tools/proguard/lib/retrace.jar ~/email/app/schemas/mapping/FairEmail-v1.nnn-github-release-mapping.txt
     applicationVariants.all { variant ->
+        if (variant.buildType.name == "debug")
+            variant.buildConfigField "String", "MXTOOLBOX_URI", "\"https://mxtoolbox.com\""
+        else
+            variant.buildConfigField "String", "MXTOOLBOX_URI", "\"\""
+
+        // $JAVA_HOME/bin/java -jar ~/Android/Sdk/tools/proguard/lib/retrace.jar ~/email/app/schemas/mapping/FairEmail-v1.nnn-github-release-mapping.txt
         if (variant.getBuildType().isMinifyEnabled())
             variant.assembleProvider.get().doLast {
                 for (file in variant.getMappingFileProvider().get().files)
@@ -213,7 +233,6 @@ task copyMarkdown(type: Copy) {
     from "${rootDir}"
     into "src/main/assets"
     include "SETUP.md"
-    include "PRIVACY.md"
     include "ATTRIBUTION.md"
 }
 preBuild.dependsOn copyMarkdown
@@ -240,11 +259,11 @@ configurations.all {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def startup_version = "1.1.0-beta01"
     def annotation_version = "1.1.0"
-    def core_version = "1.5.0"
+    def core_version = "1.6.0"
     def appcompat_version = "1.3.0"
     def activity_version = "1.2.3"
     def fragment_version = "1.3.5"
@@ -261,7 +280,7 @@ dependencies {
     def lifecycle_extensions_version = "2.2.0"
     def room_version = "2.3.0" // 2.4.0-alpha03
     def sqlite_version = "2.1.0" // 2.2.0-alpha01
-    def requery_version = "3.35.5"
+    def requery_version = "3.36.0"
     def paging_version = "2.1.2" // 3.0.0
     def preference_version = "1.1.1"
     def work_version = "2.6.0-beta01"
@@ -384,6 +403,9 @@ dependencies {
     githubImplementation "com.android.billingclient:billing:$billingclient_version"
     playImplementation "com.android.billingclient:billing:$billingclient_version"
 
+    // https://developer.amazon.com/docs/in-app-purchasing/iap-get-started.html
+    amazonImplementation files('lib/in-app-purchasing-2.0.76.jar')
+
     // https://javaee.github.io/javamail/
     // https://projects.eclipse.org/projects/ee4j.javamail
     // https://mvnrepository.com/artifact/com.sun.mail
@@ -436,6 +458,7 @@ dependencies {
     // https://github.com/noties/Markwon
     // https://mvnrepository.com/artifact/io.noties.markwon/core
     implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:html:$markwon_version"
 
     // // https://github.com/QuadFlask/colorpicker
     implementation "com.github.QuadFlask:colorpicker:$colorpicker_version"

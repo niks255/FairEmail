@@ -59,6 +59,7 @@ import androidx.preference.PreferenceManager;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -313,7 +314,9 @@ class ImageHelper {
             // Data URI
             if (data && (show || inline || a.tracking))
                 try {
-                    Bitmap bm = getDataBitmap(a.source);
+                    int scaleToPixels = res.getDisplayMetrics().widthPixels;
+                    ByteArrayInputStream bis = getDataUriStream(a.source);
+                    Bitmap bm = getScaledBitmap(bis, "data:" + getDataUriType(a.source), scaleToPixels);
                     if (bm == null)
                         throw new IllegalArgumentException("decode byte array failed");
 
@@ -324,7 +327,7 @@ class ImageHelper {
                         fitDrawable(d, a, scale, view);
                     return d;
                 } catch (IllegalArgumentException ex) {
-                    Log.w(ex);
+                    Log.i(ex);
                     Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
                     d.setBounds(0, 0, px, px);
                     return d;
@@ -335,27 +338,10 @@ class ImageHelper {
                     Uri uri = Uri.parse(a.source);
                     Log.i("Loading image source=" + uri);
 
-                    BitmapFactory.Options options;
-                    try (InputStream is = context.getContentResolver().openInputStream(uri)) {
-                        options = new BitmapFactory.Options();
-                        options.inJustDecodeBounds = true;
-                        BitmapFactory.decodeStream(is, null, options);
-                    }
-
-                    int scaleToPixels = res.getDisplayMetrics().widthPixels;
-                    int factor = 1;
-                    while (options.outWidth / factor > scaleToPixels)
-                        factor *= 2;
-
                     Bitmap bm;
+                    int scaleToPixels = res.getDisplayMetrics().widthPixels;
                     try (InputStream is = context.getContentResolver().openInputStream(uri)) {
-                        if (factor > 1) {
-                            options.inJustDecodeBounds = false;
-                            options.inSampleSize = factor;
-                            bm = BitmapFactory.decodeStream(is, null, options);
-                        } else
-                            bm = BitmapFactory.decodeStream(is);
-
+                        bm = getScaledBitmap(is, a.source, scaleToPixels);
                         if (bm == null)
                             throw new FileNotFoundException(a.source);
                     }
@@ -544,20 +530,36 @@ class ImageHelper {
         }
     }
 
-    static Bitmap getDataBitmap(String source) {
+    static String getDataUriType(String source) {
+        int colon = source.indexOf(':');
+        if (colon < 0)
+            return null;
+        int semi = source.indexOf(';');
+        if (semi < 0)
+            return null;
+
+        return source.substring(colon + 1, semi);
+    }
+
+    static ByteArrayInputStream getDataUriStream(String source) {
         // "<img src=\"data:image/png;base64,iVBORw0KGgoAAA" +
         // "ANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4" +
         // "//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU" +
         // "5ErkJggg==\" alt=\"Red dot\" />";
 
-        int comma = source.indexOf(',');
-        if (comma < 0)
-            return null;
+        // https://en.wikipedia.org/wiki/Data_URI_scheme
+        try {
+            int comma = source.indexOf(',');
+            if (comma < 0)
+                throw new IllegalArgumentException("Comma missing");
 
-        String base64 = source.substring(comma + 1);
-        byte[] bytes = Base64.decode(base64.getBytes(), 0);
-
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            String base64 = source.substring(comma + 1);
+            byte[] bytes = Base64.decode(base64.getBytes(), 0);
+            return new ByteArrayInputStream(bytes);
+        } catch (IllegalArgumentException ex) {
+            String excerpt = source.substring(0, Math.min(100, source.length()));
+            throw new IllegalArgumentException(excerpt, ex);
+        }
     }
 
     private static Drawable getCachedImage(Context context, long id, String source) {
@@ -709,7 +711,10 @@ class ImageHelper {
                         at android.graphics.ImageDecoder.decodeDrawableImpl(ImageDecoder.java:1758)
                         at android.graphics.ImageDecoder.decodeDrawable(ImageDecoder.java:1751)
              */
-            d = new BitmapDrawable(context.getResources(), file.getAbsolutePath());
+            Bitmap bm = _decodeImage(file, scaleToPixels);
+            if (bm == null)
+                throw new FileNotFoundException(file.getAbsolutePath());
+            d = new BitmapDrawable(context.getResources(), bm);
         }
 
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
@@ -874,6 +879,10 @@ class ImageHelper {
 
         public String getSource() {
             return this.source;
+        }
+
+        public boolean isTracking() {
+            return this.tracking;
         }
 
         String getAnnotated() {

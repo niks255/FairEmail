@@ -85,6 +85,7 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="12dp"
                     android:background="@null"
+                    android:dropDownVerticalOffset="0dp"
                     android:hint="@string/title_to"
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
@@ -125,6 +126,7 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="12dp"
                     android:background="@null"
+                    android:dropDownVerticalOffset="0dp"
                     android:hint="@string/title_cc"
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
@@ -165,6 +167,7 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="12dp"
                     android:background="@null"
+                    android:dropDownVerticalOffset="0dp"
                     android:hint="@string/title_bcc"
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
@@ -306,10 +309,10 @@
                     android:layout_marginEnd="6dp"
                     android:background="?attr/selectableItemBackground"
                     android:padding="3dp"
-                    android:tint="?attr/colorSeparator"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etBody"
-                    app:srcCompat="@drawable/outline_translate_24" />
+                    app:srcCompat="@drawable/outline_translate_24"
+                    app:tint="?attr/colorSeparator" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvNoInternet"

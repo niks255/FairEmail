@@ -26,16 +26,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.DynamicDrawableSpan;
-import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -84,11 +84,38 @@ public class FragmentOptions extends FragmentBase {
             R.layout.fragment_options_misc
     };
 
+    private static final int[] PAGE_TITLES = {
+            R.string.title_advanced_section_main,
+            R.string.title_advanced_section_synchronize,
+            R.string.title_advanced_section_send,
+            R.string.title_advanced_section_connection,
+            R.string.title_advanced_section_display,
+            R.string.title_advanced_section_behavior,
+            R.string.title_advanced_section_privacy,
+            R.string.title_advanced_section_encryption,
+            R.string.title_advanced_section_notifications,
+            R.string.title_advanced_section_misc
+    };
+
+    private static final int[] PAGE_ICONS = {
+            R.drawable.twotone_home_24,
+            R.drawable.twotone_sync_24,
+            R.drawable.twotone_send_24,
+            R.drawable.twotone_cloud_24,
+            R.drawable.twotone_monitor_24,
+            R.drawable.twotone_psychology_24,
+            R.drawable.twotone_account_circle_24,
+            R.drawable.twotone_lock_24,
+            R.drawable.twotone_notifications_24,
+            R.drawable.twotone_more_24
+    };
+
     static String[] OPTIONS_RESTART = new String[]{
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "subscriptions", "check_authentication", "check_reply_domain",
             "send_pending",
-            "portrait2", "landscape", "landscape3", "startup", "cards", "beige", "shadow_unread",
+            "portrait2", "landscape", "landscape3", "startup",
+            "cards", "beige", "tabular_card_bg", "shadow_unread",
             "indentation", "date", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
@@ -97,7 +124,7 @@ public class FragmentOptions extends FragmentBase {
             "keywords_header", "labels_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines",
             "message_zoom", "overview_mode", "addresses", "button_extra", "attachments_alt", "thumbnails",
             "contrast", "monospaced", "monospaced_pre",
-            "text_color", "text_size", "text_font", "text_align", "text_separators",
+            "background_color", "text_color", "text_size", "text_font", "text_align", "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images",
             "seekbar", "actionbar", "actionbar_color", "navbar_colorize",
             "autoscroll", "swipenav", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
@@ -175,6 +202,19 @@ public class FragmentOptions extends FragmentBase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
+
+        Resources res = getResources();
+        int colorAccent = Helper.resolveColor(getContext(), R.attr.colorAccent);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            Drawable d = res.getDrawable(PAGE_ICONS[i]);
+            d.setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
+            SpannableStringBuilder title = new SpannableStringBuilder(getString(PAGE_TITLES[i]));
+            if (i > 0)
+                title.setSpan(new RelativeSizeSpan(0.85f), 0, title.length(), 0);
+            tabLayout.getTabAt(i)
+                    .setIcon(d)
+                    .setText(title);
+        }
 
         String tab = getActivity().getIntent().getStringExtra("tab");
         if ("connection".equals(tab))
@@ -262,7 +302,7 @@ public class FragmentOptions extends FragmentBase {
                         views = new View[TAB_PAGES.length];
                         LayoutInflater inflater = LayoutInflater.from(searchView.getContext());
                         for (int tab = 0; tab < TAB_PAGES.length; tab++) {
-                            titles[tab] = adapter.getPageTitle(tab).toString();
+                            titles[tab] = getString(PAGE_TITLES[tab]);
                             views[tab] = inflater.inflate(TAB_PAGES[tab], null);
                         }
                     }
@@ -348,7 +388,7 @@ public class FragmentOptions extends FragmentBase {
         }
     }
 
-    static void reset(Context context, String[] options) {
+    static void reset(Context context, String[] options, Runnable confirmed) {
         new AlertDialog.Builder(context)
                 .setTitle(R.string.title_setup_defaults)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -359,6 +399,9 @@ public class FragmentOptions extends FragmentBase {
                         for (String option : options)
                             editor.remove(option);
                         editor.apply();
+
+                        if (confirmed != null)
+                            confirmed.run();
 
                         ToastEx.makeText(context, R.string.title_setup_done, Toast.LENGTH_LONG).show();
                     }
@@ -460,56 +503,6 @@ public class FragmentOptions extends FragmentBase {
                 default:
                     throw new IllegalArgumentException();
             }
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getTitle(R.string.title_advanced_section_main, R.drawable.twotone_home_24, position);
-                case 1:
-                    return getTitle(R.string.title_advanced_section_synchronize, R.drawable.twotone_sync_24, position);
-                case 2:
-                    return getTitle(R.string.title_advanced_section_send, R.drawable.twotone_send_24, position);
-                case 3:
-                    return getTitle(R.string.title_advanced_section_connection, R.drawable.twotone_cloud_24, position);
-                case 4:
-                    return getTitle(R.string.title_advanced_section_display, R.drawable.twotone_monitor_24, position);
-                case 5:
-                    return getTitle(R.string.title_advanced_section_behavior, R.drawable.twotone_psychology_24, position);
-                case 6:
-                    return getTitle(R.string.title_advanced_section_privacy, R.drawable.twotone_account_circle_24, position);
-                case 7:
-                    return getTitle(R.string.title_advanced_section_encryption, R.drawable.twotone_lock_24, position);
-                case 8:
-                    return getTitle(R.string.title_advanced_section_notifications, R.drawable.twotone_notifications_24, position);
-                case 9:
-                    return getTitle(R.string.title_advanced_section_misc, R.drawable.twotone_more_24, position);
-                default:
-                    throw new IllegalArgumentException();
-            }
-        }
-
-        private CharSequence getTitle(int titleid, int iconid, int position) {
-            Drawable icon = getResources().getDrawable(iconid);
-
-            int iconSize = getResources().getDimensionPixelSize(R.dimen.menu_item_icon_size);
-            if (position > 0)
-                iconSize = Math.round(iconSize * 0.85f);
-            icon.setBounds(0, 0, iconSize, iconSize);
-
-            int color = Helper.resolveColor(getContext(), R.attr.colorAccent);
-            icon.setTint(color);
-
-            ImageSpan imageSpan = new ImageSpan(icon, DynamicDrawableSpan.ALIGN_BOTTOM);
-
-            SpannableStringBuilder ssb = new SpannableStringBuilder(getString(titleid));
-            if (position > 0)
-                ssb.setSpan(new RelativeSizeSpan(0.85f), 0, ssb.length(), 0);
-            ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
-            ssb.setSpan(imageSpan, 0, 1, 0);
-
-            return ssb;
         }
 
         @Override

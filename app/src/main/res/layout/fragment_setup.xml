@@ -69,6 +69,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/intro" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvPrivacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:drawableEnd="@drawable/twotone_open_in_new_12"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?android:attr/textColorLink"
+                    android:text="@string/title_privacy_policy"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorLink"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/simple" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -136,12 +150,12 @@
                     android:contentDescription="@string/title_setup_help"
                     android:padding="6dp"
                     android:scaleType="fitCenter"
-                    android:tint="?attr/colorAccent"
                     android:tooltipText="@string/title_setup_help"
                     app:layout_constraintBottom_toBottomOf="@id/btnQuick"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/btnQuick"
-                    app:srcCompat="@drawable/twotone_help_24" />
+                    app:srcCompat="@drawable/twotone_help_24"
+                    app:tint="?attr/colorAccent" />
 
                 <Button
                     android:id="@+id/btnQuick"
@@ -197,10 +211,10 @@
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/title_legend_expander"
                     android:scaleType="centerCrop"
-                    android:tint="?attr/colorAccent"
                     app:layout_constraintStart_toStartOf="@+id/tvManual"
                     app:layout_constraintTop_toBottomOf="@id/tvQuickNew"
-                    app:srcCompat="@drawable/dropdown" />
+                    app:srcCompat="@drawable/dropdown"
+                    app:tint="?attr/colorAccent" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvManual"
@@ -242,6 +256,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_account_circle_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_accounts"
                     app:layout_constraintEnd_toStartOf="@+id/guideline_center"
                     app:layout_constraintStart_toStartOf="parent"
@@ -289,6 +305,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_person_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_identities"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/guideline_center"
@@ -403,6 +421,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_inbox_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_inbox"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -504,6 +524,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_check_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_grant"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPermissions" />
@@ -578,6 +600,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_settings_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_manage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDoze" />
@@ -609,6 +633,8 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/twotone_settings_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_manage"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBackgroundRestricted" />
@@ -630,6 +656,8 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/twotone_settings_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_setup_manage"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDataSaver" />

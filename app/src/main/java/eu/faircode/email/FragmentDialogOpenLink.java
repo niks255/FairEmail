@@ -54,19 +54,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
 
 import java.net.IDN;
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FragmentDialogOpenLink extends FragmentDialogBase {
     // https://github.com/newhouse/url-tracking-stripper
     private static final List<String> PARANOID_QUERY = Collections.unmodifiableList(Arrays.asList(
             // https://en.wikipedia.org/wiki/UTM_parameters
+            "awt_a", // AWeber
+            "awt_l", // AWeber
+            "awt_m", // AWeber
+
             "icid", // Adobe
             "gclid", // Google
             "gclsrc", // Google ads
@@ -91,6 +99,16 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
     private static final List<String> FACEBOOK_WHITELIST_QUERY = Collections.unmodifiableList(Arrays.asList(
             "story_fbid", "fbid", "id", "comment_id"
     ));
+
+    private ImageButton ibMore;
+    private TextView tvMore;
+    private Button btnOwner;
+    private ContentLoadingProgressBar pbWait;
+    private TextView tvOwnerRemark;
+    private TextView tvHost;
+    private TextView tvOwner;
+    private Group grpOwner;
+    private Button btnSettings;
 
     @NonNull
     @Override
@@ -139,15 +157,21 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         final ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
         final CheckBox cbSecure = dview.findViewById(R.id.cbSecure);
         final CheckBox cbSanitize = dview.findViewById(R.id.cbSanitize);
-        final Button btnOwner = dview.findViewById(R.id.btnOwner);
-        final TextView tvOwnerRemark = dview.findViewById(R.id.tvOwnerRemark);
-        final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
-        final TextView tvHost = dview.findViewById(R.id.tvHost);
-        final TextView tvOwner = dview.findViewById(R.id.tvOwner);
         final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
-        final Button btnMore = dview.findViewById(R.id.btnMore);
+
+        ibMore = dview.findViewById(R.id.ibMore);
+        tvMore = dview.findViewById(R.id.tvMore);
+        btnOwner = dview.findViewById(R.id.btnOwner);
+        pbWait = dview.findViewById(R.id.pbWait);
+        tvOwnerRemark = dview.findViewById(R.id.tvOwnerRemark);
+        tvHost = dview.findViewById(R.id.tvHost);
+        tvOwner = dview.findViewById(R.id.tvOwner);
+        grpOwner = dview.findViewById(R.id.grpOwner);
+        btnSettings = dview.findViewById(R.id.btnSettings);
+
         final Group grpDifferent = dview.findViewById(R.id.grpDifferent);
-        final Group grpOwner = dview.findViewById(R.id.grpOwner);
+
+        // Wire
 
         ibInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +210,8 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
 
                 cbSecure.setText(
                         secure ? R.string.title_link_https : R.string.title_link_http);
+                cbSecure.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        0, 0, secure ? 0 : R.drawable.twotone_http_24, 0);
                 cbSecure.setTextColor(Helper.resolveColor(context,
                         secure ? android.R.attr.textColorSecondary : R.attr.colorWarning));
                 cbSecure.setTypeface(
@@ -262,24 +288,15 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             }
         });
 
-        btnMore.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onMore = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent privacy = new Intent(v.getContext(), ActivitySetup.class)
-                        .setAction("privacy")
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("tab", "privacy");
-                v.getContext().startActivity(privacy);
+                setMore(btnOwner.getVisibility() == View.GONE);
             }
-        });
+        };
 
-        tvOwnerRemark.setMovementMethod(LinkMovementMethod.getInstance());
-        cbNotAgain.setText(context.getString(R.string.title_no_ask_for_again, uri.getHost()));
-        cbNotAgain.setVisibility(
-                "https".equals(uri.getScheme()) && !TextUtils.isEmpty(uri.getHost())
-                        ? View.VISIBLE : View.GONE);
-        pbWait.setVisibility(View.GONE);
-        grpOwner.setVisibility(View.GONE);
+        ibMore.setOnClickListener(onMore);
+        tvMore.setOnClickListener(onMore);
 
         btnOwner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,9 +304,11 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                 Bundle args = new Bundle();
                 args.putParcelable("uri", uri);
 
-                new SimpleTask<Pair<String, IPInfo.Organization>>() {
+                new SimpleTask<Pair<InetAddress, IPInfo.Organization>>() {
                     @Override
                     protected void onPreExecute(Bundle args) {
+                        ibMore.setEnabled(false);
+                        tvMore.setEnabled(false);
                         btnOwner.setEnabled(false);
                         pbWait.setVisibility(View.VISIBLE);
                         grpOwner.setVisibility(View.GONE);
@@ -297,20 +316,22 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
 
                     @Override
                     protected void onPostExecute(Bundle args) {
+                        ibMore.setEnabled(true);
+                        tvMore.setEnabled(true);
                         btnOwner.setEnabled(true);
                         pbWait.setVisibility(View.GONE);
                         grpOwner.setVisibility(View.VISIBLE);
                     }
 
                     @Override
-                    protected Pair<String, IPInfo.Organization> onExecute(Context context, Bundle args) throws Throwable {
+                    protected Pair<InetAddress, IPInfo.Organization> onExecute(Context context, Bundle args) throws Throwable {
                         Uri uri = args.getParcelable("uri");
                         return IPInfo.getOrganization(uri, context);
                     }
 
                     @Override
-                    protected void onExecuted(Bundle args, Pair<String, IPInfo.Organization> data) {
-                        tvHost.setText(data.first);
+                    protected void onExecuted(Bundle args, Pair<InetAddress, IPInfo.Organization> data) {
+                        tvHost.setText(data.first.toString());
                         tvOwner.setText(data.second.name == null ? "?" : data.second.name);
                         ApplicationEx.getMainHandler().post(new Runnable() {
                             @Override
@@ -328,6 +349,21 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                 }.execute(FragmentDialogOpenLink.this, args, "link:owner");
             }
         });
+
+        tvOwnerRemark.setMovementMethod(LinkMovementMethod.getInstance());
+
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent privacy = new Intent(v.getContext(), ActivitySetup.class)
+                        .setAction("privacy")
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("tab", "privacy");
+                v.getContext().startActivity(privacy);
+            }
+        });
+
+        // Initialize
 
         tvTitle.setText(title);
         tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
@@ -364,8 +400,17 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             categories = DisconnectBlacklist.getCategories(uri.getHost());
         if (categories != null)
             tvDisconnectCategories.setText(TextUtils.join(", ", categories));
-        tvDisconnect.setVisibility(categories == null ? View.GONE : View.VISIBLE);
-        tvDisconnectCategories.setVisibility(categories == null ? View.GONE : View.VISIBLE);
+        tvDisconnect.setVisibility(
+                categories == null ? View.GONE : View.VISIBLE);
+        tvDisconnectCategories.setVisibility(
+                categories == null || !BuildConfig.DEBUG ? View.GONE : View.VISIBLE);
+
+        cbNotAgain.setText(context.getString(R.string.title_no_ask_for_again, uri.getHost()));
+        cbNotAgain.setVisibility(
+                "https".equals(uri.getScheme()) && !TextUtils.isEmpty(uri.getHost())
+                        ? View.VISIBLE : View.GONE);
+
+        setMore(false);
 
         return new AlertDialog.Builder(context)
                 .setView(dview)
@@ -393,6 +438,15 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
+    }
+
+    private void setMore(boolean show) {
+        ibMore.setImageLevel(show ? 0 : 1);
+        btnOwner.setVisibility(show ? View.VISIBLE : View.GONE);
+        pbWait.setVisibility(View.GONE);
+        tvOwnerRemark.setVisibility(show ? View.VISIBLE : View.GONE);
+        grpOwner.setVisibility(View.GONE);
+        btnSettings.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private static Uri sanitize(Uri uri) {
@@ -496,14 +550,44 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
     }
 
     private Spanned format(Uri uri, Context context) {
+        String scheme = uri.getScheme();
+        String host = uri.getHost();
         String text = uri.toString();
         SpannableStringBuilder ssb = new SpannableStringBuilder(text);
-        String host = uri.getHost();
-        if (host != null) {
+
+        try {
             int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
-            int index = text.indexOf(host);
-            ssb.setSpan(new ForegroundColorSpan(textColorLink), index, index + host.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if ("tel".equals(scheme)) {
+                // tel://+123%2045%20678%123456
+                host = Uri.decode(host);
+                text = "tel://" + host;
+            } else if ("mailto".equals(scheme)) {
+                if (host != null) {
+                    MailTo email = MailTo.parse(uri.toString());
+                    host = UriHelper.getEmailDomain(email.getTo());
+                }
+            }
+
+            if (host != null) {
+                int index = text.indexOf(host);
+                if (index >= 0)
+                    ssb.setSpan(new ForegroundColorSpan(textColorLink),
+                            index, index + host.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            for (String name : uri.getQueryParameterNames()) {
+                Pattern pattern = Pattern.compile("[?&]" + Pattern.quote(name) + "=");
+                Matcher matcher = pattern.matcher(text);
+                while (matcher.find()) {
+                    ssb.setSpan(new ForegroundColorSpan(textColorLink),
+                            matcher.start() + 1, matcher.end() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
+
         return ssb;
     }
 }

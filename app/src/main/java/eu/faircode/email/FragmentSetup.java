@@ -52,7 +52,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -62,6 +61,8 @@ import java.util.List;
 
 public class FragmentSetup extends FragmentBase {
     private ViewGroup view;
+
+    private TextView tvPrivacy;
 
     private TextView tvNoInternet;
     private ImageButton ibHelp;
@@ -108,17 +109,7 @@ public class FragmentSetup extends FragmentBase {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setSubtitle(R.string.title_setup);
 
-        if (savedInstanceState == null) {
-            FragmentActivity activity = getActivity();
-            if (activity != null) {
-                Intent intent = activity.getIntent();
-                if (intent.hasExtra("manual")) {
-                    manual = intent.getBooleanExtra("manual", false);
-                    intent.removeExtra("manual");
-                    activity.setIntent(intent);
-                }
-            }
-        } else
+        if (savedInstanceState != null)
             manual = savedInstanceState.getBoolean("fair:manual");
 
         textColorPrimary = Helper.resolveColor(getContext(), android.R.attr.textColorPrimary);
@@ -128,6 +119,8 @@ public class FragmentSetup extends FragmentBase {
         view = (ViewGroup) inflater.inflate(R.layout.fragment_setup, container, false);
 
         // Get controls
+
+        tvPrivacy = view.findViewById(R.id.tvPrivacy);
 
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         ibHelp = view.findViewById(R.id.ibHelp);
@@ -165,6 +158,14 @@ public class FragmentSetup extends FragmentBase {
 
         // Wire controls
 
+        tvPrivacy.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.PRIVACY_URI), false);
+            }
+        });
+
         ibHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -195,6 +196,7 @@ public class FragmentSetup extends FragmentBase {
                                 .setIntent(new Intent(ActivitySetup.ACTION_QUICK_OAUTH)
                                         .putExtra("id", provider.id)
                                         .putExtra("name", provider.description)
+                                        .putExtra("privacy", provider.oauth.privacy)
                                         .putExtra("askAccount", provider.oauth.askAccount));
                         int resid = context.getResources()
                                 .getIdentifier("provider_" + provider.id, "drawable", context.getPackageName());
@@ -286,8 +288,7 @@ public class FragmentSetup extends FragmentBase {
             @Override
             public void onClick(View v) {
                 manual = !manual;
-                ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
-                grpManual.setVisibility(manual ? View.VISIBLE : View.GONE);
+                updateManual();
             }
         });
 
@@ -300,8 +301,7 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
-        ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
-        grpManual.setVisibility(manual ? View.VISIBLE : View.GONE);
+        updateManual();
 
         btnAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -431,13 +431,7 @@ public class FragmentSetup extends FragmentBase {
         });
 
         // Initialize
-        if (!Helper.isDarkTheme(getContext())) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            boolean beige = prefs.getBoolean("beige", true);
-            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
-                    ? R.color.lightColorBackground_cards_beige
-                    : R.color.lightColorBackground_cards));
-        }
+        FragmentDialogTheme.setBackground(getContext(), view, false);
 
         tvNoInternet.setVisibility(View.GONE);
         btnIdentity.setEnabled(false);
@@ -528,6 +522,8 @@ public class FragmentSetup extends FragmentBase {
     public void onResume() {
         super.onResume();
 
+        updateManual();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             cm.registerDefaultNetworkCallback(networkCallback);
@@ -553,20 +549,14 @@ public class FragmentSetup extends FragmentBase {
         tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(ignoring == null || ignoring ? check : null, null, null, null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-            grpBackgroundRestricted.setVisibility(am.isBackgroundRestricted() ? View.VISIBLE : View.GONE);
+            ActivityManager am =
+                    (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+            grpBackgroundRestricted.setVisibility(am.isBackgroundRestricted()
+                    ? View.VISIBLE : View.GONE);
         }
 
-        // https://developer.android.com/training/basics/network-ops/data-saver.html
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (cm != null) {
-                int status = cm.getRestrictBackgroundStatus();
-                grpDataSaver.setVisibility(
-                        status == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED
-                                ? View.VISIBLE : View.GONE);
-            }
-        }
+        grpDataSaver.setVisibility(ConnectionHelper.isDataSaving(getContext())
+                ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -577,6 +567,21 @@ public class FragmentSetup extends FragmentBase {
             ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             cm.unregisterNetworkCallback(networkCallback);
         }
+    }
+
+    private void updateManual() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            Intent intent = activity.getIntent();
+            if (intent.hasExtra("manual")) {
+                manual = intent.getBooleanExtra("manual", false);
+                intent.removeExtra("manual");
+                activity.setIntent(intent);
+            }
+        }
+
+        ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
+        grpManual.setVisibility(manual ? View.VISIBLE : View.GONE);
     }
 
     @Override

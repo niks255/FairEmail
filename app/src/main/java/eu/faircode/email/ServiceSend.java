@@ -245,8 +245,13 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             builder.setContentText(Log.formatThrowable(ex, false))
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(Log.formatThrowable(ex, "\n", false)));
-        } else
-            builder.setContentText(getString(R.string.title_notification_sending_left, tries_left));
+        } else {
+            String msg = getString(R.string.title_notification_sending_left, tries_left);
+            builder.setContentText(msg)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(msg + "\n" + getString(R.string.title_notification_sending_retry)));
+        }
+
         return builder;
     }
 
@@ -714,7 +719,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             if (message.wasforwardedfrom != null) {
                 List<EntityMessage> forwardeds = db.message().getMessagesByMsgId(message.account, message.wasforwardedfrom);
                 for (EntityMessage forwarded : forwardeds)
-                    EntityOperation.queue(this, forwarded, EntityOperation.KEYWORD, "$Forwarded", true);
+                    EntityOperation.queue(this, forwarded,
+                            EntityOperation.KEYWORD, MessageHelper.FLAG_FORWARDED, true);
             }
 
             // Update identity

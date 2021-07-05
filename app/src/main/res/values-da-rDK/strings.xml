@@ -85,6 +85,7 @@
     <string name="title_notification_failed">\'%1$s\' mislykkedes</string>
     <string name="title_notification_alert">\'%1$s\'-serveradvarsel</string>
     <string name="title_notification_sending_left">Forsøg resterer: %1$d</string>
+    <string name="title_notification_sending_retry">Afsendelse gentages ved Internetforbindelsesændringer eller et træk nedad på udbakken</string>
     <string name="title_notification_sending_failed">Afsendelse til %1$s mislykkedes</string>
     <string name="title_notification_redacted">Redigeret: Biometrisk eller PIN-godkendelse aktiveret</string>
     <string name="title_factor_minutes">%1$d minutter</string>
@@ -108,6 +109,7 @@
     <string name="title_agree">Jeg accepterer</string>
     <string name="title_disagree">Jeg accepterer ikke</string>
     <string name="title_version">Version %1$s</string>
+    <string name="title_privacy_policy">Fortrolighedspolitik</string>
     <string name="title_list_accounts">Konti</string>
     <string name="title_list_identities">Identiteter</string>
     <string name="title_edit_account">Redigér konto</string>
@@ -303,7 +305,8 @@
     <string name="title_advanced_landscape3">Vis som standard navigeringsmenu i liggende tilstand</string>
     <string name="title_advanced_startup">Vis på startskærmen</string>
     <string name="title_advanced_cards">Brug kortstil i stedet for tabelform</string>
-    <string name="title_advanced_cards_beige">Benyt beige baggrund, når du bruger kortstil</string>
+    <string name="title_advanced_cards_beige">Brug beige baggrund ifm. kortstil (kun lyse temaer)</string>
+    <string name="title_advanced_tabular_background">Brug kortfarve som baggrundsfarve ifm. tabelform</string>
     <string name="title_advanced_date_header">Gruppér efter dato</string>
     <string name="title_advanced_date_bold">Vis dato med fed</string>
     <string name="title_advanced_threading">Samtaler i tråde</string>
@@ -465,6 +468,7 @@
     <string name="title_advanced_class_min_difference">Minimumsklassedifferens: %1$s %%</string>
     <string name="title_advanced_language">Sprog</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_deepl">DeepL-integration</string>
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_updates">Tjek for GitHub-opdateringer</string>
     <string name="title_advanced_check_weekly">Tjek ugentligt i stedet for dagligt</string>
@@ -509,7 +513,6 @@
     <string name="title_advanced_browse_hint">Hent flere beskeder, når du ruller nedad</string>
     <string name="title_advanced_layout_hint">Skift til et mere kompakt layout og ændring af beskedtekststørrelse kan ske via den øverste handlingsbjælkemenu fra beskedvisning</string>
     <string name="title_advanced_startup_hint">Langt tryk på en vilkårlig mappe på mappelisten for at tilføje/fjerne den fra listen over samlede mapper</string>
-    <string name="title_advanced_beige_hint">Kun lyse temaer</string>
     <string name="title_advanced_date_hint">Beskeder grupperes kun efter dato, hvis de er sorteret efter tid</string>
     <string name="title_advanced_navbar_colorize_hint">Hvorvidt dette fungerer afhænger af Android-version og -variant</string>
     <string name="title_advanced_threading_hint">Gruppér beskeder relateret til hinanden</string>
@@ -959,6 +962,7 @@
     <string name="title_translating">Oversætter&#8230;</string>
     <string name="title_translate_small">Benyt lille kildetekstskrifttype</string>
     <string name="title_translate_usage">Forbrug: %1$s/%2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Tryk på teksten, der skal oversættes</string>
     <string name="title_edit_plain_text">Redigér som almindelig tekst</string>
     <string name="title_edit_formatted_text">Redigér som omformateret tekst</string>
     <string name="title_select_certificate">Vælg offentlig nøgle</string>

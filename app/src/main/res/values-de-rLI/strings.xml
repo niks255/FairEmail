@@ -86,6 +86,7 @@
     <string name="title_notification_failed">\'%1$s\' fehlgeschlagen</string>
     <string name="title_notification_alert">Server-Warnung von \'%1$s\'</string>
     <string name="title_notification_sending_left">Verbleibende Versuche: %1$d</string>
+    <string name="title_notification_sending_retry">Das Senden wird erneut versucht, wenn sich die Internetverbindung ändert oder der Ausgangskorb heruntergezogen wird</string>
     <string name="title_notification_sending_failed">Senden an %1$s fehlgeschlagen</string>
     <string name="title_notification_redacted">Geschwärzt: biometrische oder PIN-Authentifizierung aktiviert</string>
     <string name="title_factor_minutes">%1$d Minuten</string>
@@ -109,6 +110,7 @@
     <string name="title_agree">Ich stimme zu</string>
     <string name="title_disagree">Ich stimme nicht zu</string>
     <string name="title_version">Version %1$s</string>
+    <string name="title_privacy_policy">Datenschutzerklärung</string>
     <string name="title_list_accounts">Konten</string>
     <string name="title_list_identities">Identitäten</string>
     <string name="title_edit_account">Konto bearbeiten</string>
@@ -155,7 +157,7 @@
     <string name="title_setup_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_setup_advanced_protection">Wenn Sie sich in das erweiterte Schutzprogramm eingeschrieben haben, ist es nicht möglich, eine andere E-Mail-Anwendung von Dritten zu verwenden. Dies ist eine von Google auferlegte Einschränkung.</string>
     <string name="title_setup_quick_success">Ein Konto wurde erfolgreich hinzugefügt</string>
-    <string name="title_setup_quick_configure">Um den Namen, die Farbe, die Wisch-Aktionen usw. zu bearbeiten</string>
+    <string name="title_setup_quick_configure">Zum Bearbeiten des Namens, der Farbe, der Wischaktionen usw.</string>
     <string name="title_setup_manage">Verwalten</string>
     <string name="title_setup_grant">Zulassen</string>
     <string name="title_setup_grant_again">Benötigte Rechte erteilen</string>
@@ -311,7 +313,8 @@
     <string name="title_advanced_landscape3">Navigationsmenü standardmäßig im Querformat anzeigen</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
     <string name="title_advanced_cards">Ordner und Unterhaltungen mit Rahmen (breit) statt in Tabellendesign (schmal) zeigen</string>
-    <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund bei Kartendarstellung verwenden</string>
+    <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund verwenden, wenn Kartenstil genutzt wird (nur bei hellen Farbschemen)</string>
+    <string name="title_advanced_tabular_background">Kartenfarbe als Hintergrundfarbe verwenden, wenn Tabellenstil genutzt wird</string>
     <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
     <string name="title_advanced_date_bold">Datum fett anzeigen</string>
@@ -357,6 +360,7 @@
     <string name="title_advanced_monospaced">Festbreitenschriftarten standardmäßig für den Nachrichtentext verwenden</string>
     <string name="title_advanced_monospaced_pre">Festbreitenschriftart für vorformatierten Text verwenden</string>
     <string name="title_advanced_text_color">Textfarben verwenden</string>
+    <string name="title_advanced_background_color">Hintergrundfarben verwenden</string>
     <string name="title_advanced_text_size">Textgrößen verwenden</string>
     <string name="title_advanced_text_font">Schriftarten verwenden</string>
     <string name="title_advanced_text_align">Textausrichtung verwenden</string>
@@ -433,7 +437,7 @@
     <string name="title_advanced_biometrics_notify">Benachrichtigungsinhalt bei Nutzung der biometrischen Authentifizierung anzeigen</string>
     <string name="title_advanced_light">Benachrichtigungslicht verwenden</string>
     <string name="title_advanced_sound">Benachrichtigungston auswählen</string>
-    <string name="title_advanced_notify_screen_on">Bildschirm kurz einschalten, für Benachrichtigungen über neue Nachrichten</string>
+    <string name="title_advanced_notify_screen_on">Kurzes Einschalten des Bildschirms für Benachrichtigungen über neue Nachrichten</string>
     <string name="title_advanced_confirm_links">Hyperlinks beim Öffnen bestätigen</string>
     <string name="title_advanced_browse_links">Hyperlinks an Android übertragen</string>
     <string name="title_advanced_confirm_images">Bilder anzeigen bestätigen</string>
@@ -476,6 +480,7 @@
     <string name="title_advanced_class_min_difference">Minimaler Unterschied zur nächsten Klasse: %1$s %%</string>
     <string name="title_advanced_language">Sprache</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_deepl">DeepL-Einbindung</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_updates">Auf GitHub nach Aktualisierungen suchen</string>
     <string name="title_advanced_check_weekly">Wöchentlich statt täglich prüfen</string>
@@ -521,7 +526,6 @@
     <string name="title_advanced_browse_hint">Durch Herunterziehen weitere Nachrichten abholen</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einer kompakteren Darstellung und Ändern der Nachrichtentextgröße kann im oberen Aktionsleistenmenü in der Nachrichtenansicht vorgenommen werden.</string>
     <string name="title_advanced_startup_hint">Einen beliebigen Ordner in der Ordnerliste lange gedrückt halten, um ihn der Liste der Sammelordner hinzuzufügen oder ihn daraus zu entfernen</string>
-    <string name="title_advanced_beige_hint">Nur helle Designs</string>
     <string name="title_advanced_date_hint">Nachrichten werden nur nach Datum gruppiert, wenn sie nach Zeit sortiert sind</string>
     <string name="title_advanced_navbar_colorize_hint">Ob das funktioniert, hängt von der Android-Version und -Variante ab</string>
     <string name="title_advanced_split_hint">Dadurch wird der Bildschirm in Teile aufgeteilt</string>
@@ -983,6 +987,7 @@
     <string name="title_translating">Wird übersetzt &#8230;</string>
     <string name="title_translate_small">Kleine Schrift für den Quelltext verwenden</string>
     <string name="title_translate_usage">Verwendung: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Tippen Sie auf den zu übersetzenden Text</string>
     <string name="title_edit_plain_text">Als einfachen Text bearbeiten</string>
     <string name="title_edit_formatted_text">Als umformatierten Text bearbeiten</string>
     <string name="title_select_certificate">Öffentlichen Schlüssel auswählen</string>

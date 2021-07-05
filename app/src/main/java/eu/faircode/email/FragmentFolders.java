@@ -49,7 +49,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
@@ -100,7 +99,6 @@ public class FragmentFolders extends FragmentBase {
     private FloatingActionButton fabError;
 
     private boolean cards;
-    private boolean beige;
     private boolean compact;
 
     private long account;
@@ -131,7 +129,6 @@ public class FragmentFolders extends FragmentBase {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         cards = prefs.getBoolean("cards", true);
-        beige = prefs.getBoolean("beige", true);
         compact = prefs.getBoolean("compact_folders", false);
         show_hidden = false; // prefs.getBoolean("hidden_folders", false);
         show_flagged = prefs.getBoolean("flagged_folders", false);
@@ -271,12 +268,7 @@ public class FragmentFolders extends FragmentBase {
         });
 
         // Initialize
-
-        if (cards && !Helper.isDarkTheme(getContext()))
-            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
-                    ? R.color.lightColorBackground_cards_beige
-                    : R.color.lightColorBackground_cards));
-
+        FragmentDialogTheme.setBackground(getContext(), view, false);
         grpReady.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);
         fabAdd.hide();
@@ -311,12 +303,16 @@ public class FragmentFolders extends FragmentBase {
                 public void onChanged(@Nullable EntityAccount account) {
                     imap = (account != null && account.protocol == EntityAccount.TYPE_IMAP);
 
-                    if (account != null && account.quota_usage != null && account.quota_limit != null) {
-                        int percent = Math.round(account.quota_usage * 100f / account.quota_limit);
-                        setSubtitle(getString(R.string.title_name_count,
-                                account.name, NF.format(percent) + "%"));
-                    } else
-                        setSubtitle(account == null ? null : account.name);
+                    if (account == null)
+                        setSubtitle(null);
+                    else {
+                        Integer percent = account.getQuotaPercentage();
+                        if (percent == null)
+                            setSubtitle(account.name);
+                        else
+                            setSubtitle(getString(R.string.title_name_count,
+                                    account.name, NF.format(percent) + "%"));
+                    }
 
                     if (account != null && account.error != null)
                         fabError.show();
@@ -1003,9 +999,7 @@ public class FragmentFolders extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
-
-
-        }.setInterruptable(false).execute(this, args, "folder:export");
+        }.execute(this, args, "folder:export");
     }
 
     public static class FragmentDialogApply extends FragmentDialogBase {

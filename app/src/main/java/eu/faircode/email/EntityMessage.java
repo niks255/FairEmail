@@ -300,6 +300,10 @@ public class EntityMessage implements Serializable {
         return false;
     }
 
+    boolean isForwarded() {
+        return hasKeyword(MessageHelper.FLAG_FORWARDED);
+    }
+
     String checkReplyDomain(Context context) {
         if (from == null || from.length == 0)
             return null;
@@ -311,14 +315,14 @@ public class EntityMessage implements Serializable {
             int rat = (r == null ? -1 : r.indexOf('@'));
             if (rat < 0)
                 continue;
-            String rdomain = DnsHelper.getParentDomain(r.substring(rat + 1));
+            String rdomain = UriHelper.getParentDomain(r.substring(rat + 1));
 
             for (Address _from : from) {
                 String f = ((InternetAddress) _from).getAddress();
                 int fat = (f == null ? -1 : f.indexOf('@'));
                 if (fat < 0)
                     continue;
-                String fdomain = DnsHelper.getParentDomain(f.substring(fat + 1));
+                String fdomain = UriHelper.getParentDomain(f.substring(fat + 1));
 
                 if (!rdomain.equalsIgnoreCase(fdomain))
                     return context.getString(R.string.title_reply_domain, fdomain, rdomain);
@@ -500,23 +504,6 @@ public class EntityMessage implements Serializable {
         } else {
             Log.i("Set snooze id=" + id + " wakeup=" + new Date(wakeup));
             AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, wakeup, pi);
-        }
-    }
-
-    static String getKeywordAlias(Context context, String keyword) {
-        switch (keyword) {
-            case "$label1": // Important
-                return context.getString(R.string.title_keyword_label1);
-            case "$label2": // Work
-                return context.getString(R.string.title_keyword_label2);
-            case "$label3": // Personal
-                return context.getString(R.string.title_keyword_label3);
-            case "$label4": // To do
-                return context.getString(R.string.title_keyword_label4);
-            case "$label5": // Later
-                return context.getString(R.string.title_keyword_label5);
-            default:
-                return keyword;
         }
     }
 

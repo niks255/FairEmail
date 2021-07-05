@@ -24,7 +24,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,7 +43,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.Group;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -86,8 +84,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private SwitchCompat swCheckReply;
     private SwitchCompat swCheckMx;
     private SwitchCompat swCheckBlocklist;
-    private TextView tvCheckBlocklistHint;
     private SwitchCompat swUseBlocklist;
+    private RecyclerView rvBlocklist;
     private SwitchCompat swTuneKeepAlive;
     private Group grpExempted;
 
@@ -144,8 +142,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swCheckReply = view.findViewById(R.id.swCheckReply);
         swCheckMx = view.findViewById(R.id.swCheckMx);
         swCheckBlocklist = view.findViewById(R.id.swCheckBlocklist);
-        tvCheckBlocklistHint = view.findViewById(R.id.tvCheckBlocklistHint);
         swUseBlocklist = view.findViewById(R.id.swUseBlocklist);
+        rvBlocklist = view.findViewById(R.id.rvBlocklist);
         swTuneKeepAlive = view.findViewById(R.id.swTuneKeepAlive);
         grpExempted = view.findViewById(R.id.grpExempted);
 
@@ -356,6 +354,11 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             }
         });
 
+        rvBlocklist.setHasFixedSize(false);
+        rvBlocklist.setLayoutManager(new LinearLayoutManager(getContext()));
+        AdapterBlocklist badapter = new AdapterBlocklist(getContext(), DnsBlockList.getListsAvailable());
+        rvBlocklist.setAdapter(badapter);
+
         swTuneKeepAlive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -364,12 +367,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         });
 
         // Initialize
-        if (!Helper.isDarkTheme(getContext())) {
-            boolean beige = prefs.getBoolean("beige", true);
-            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
-                    ? R.color.lightColorBackground_cards_beige
-                    : R.color.lightColorBackground_cards));
-        }
+        FragmentDialogTheme.setBackground(getContext(), view, false);
 
         DB db = DB.getInstance(getContext());
         db.account().liveSynchronizingAccounts().observe(getViewLifecycleOwner(), new Observer<List<EntityAccount>>() {
@@ -380,8 +378,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
                 adapter.set(accounts);
             }
         });
-
-        tvCheckBlocklistHint.setText(TextUtils.join(", ", DnsBlockList.getNames()));
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -409,7 +405,13 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_default) {
-            FragmentOptions.reset(getContext(), RESET_OPTIONS);
+            FragmentOptions.reset(getContext(), RESET_OPTIONS, new Runnable() {
+                @Override
+                public void run() {
+                    DnsBlockList.reset(getContext());
+                    rvBlocklist.getAdapter().notifyDataSetChanged();
+                }
+            });
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -502,7 +504,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         }
     }
 
-    public class AdapterAccountExempted extends RecyclerView.Adapter<AdapterAccountExempted.ViewHolder> {
+    public static class AdapterAccountExempted extends RecyclerView.Adapter<AdapterAccountExempted.ViewHolder> {
         private Context context;
         private LifecycleOwner owner;
         private LayoutInflater inflater;
@@ -638,6 +640,77 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             holder.unwire();
             EntityAccount account = items.get(position);
             holder.bindTo(account);
+            holder.wire();
+        }
+    }
+
+    public static class AdapterBlocklist extends RecyclerView.Adapter<AdapterBlocklist.ViewHolder> {
+        private Context context;
+        private LayoutInflater inflater;
+
+        private List<DnsBlockList.BlockList> items;
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener {
+            private CheckBox cbEnabled;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                cbEnabled = itemView.findViewById(R.id.cbEnabled);
+            }
+
+            private void wire() {
+                cbEnabled.setOnCheckedChangeListener(this);
+            }
+
+            private void unwire() {
+                cbEnabled.setOnCheckedChangeListener(null);
+            }
+
+            private void bindTo(DnsBlockList.BlockList blocklist) {
+                cbEnabled.setText(blocklist.name);
+                cbEnabled.setChecked(DnsBlockList.isEnabled(context, blocklist));
+            }
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int pos = getAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION)
+                    return;
+
+                DnsBlockList.BlockList blocklist = items.get(pos);
+                DnsBlockList.setEnabled(context, blocklist, isChecked);
+            }
+        }
+
+        AdapterBlocklist(Context context, List<DnsBlockList.BlockList> items) {
+            this.context = context;
+            this.inflater = LayoutInflater.from(context);
+
+            setHasStableIds(true);
+            this.items = items;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return items.get(position).id;
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        @Override
+        @NonNull
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder(inflater.inflate(R.layout.item_blocklist_enabled, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.unwire();
+            DnsBlockList.BlockList blocklist = items.get(position);
+            holder.bindTo(blocklist);
             holder.wire();
         }
     }

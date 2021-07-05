@@ -610,7 +610,7 @@ public class EntityRule {
         } else {
             reply.wasforwardedfrom = message.msgid;
             reply.thread = reply.msgid; // new thread
-            reply.to = InternetAddress.parseHeader(to, false);
+            reply.to = MessageHelper.parseAddresses(context, to);
         }
 
         reply.from = from;
@@ -860,7 +860,7 @@ public class EntityRule {
             int at = sender.indexOf('@');
             if (at > 0) {
                 boolean whitelisted = false;
-                String domain = DnsHelper.getParentDomain(sender.substring(at + 1));
+                String domain = UriHelper.getParentDomain(sender.substring(at + 1));
                 for (String d : whitelist)
                     if (domain.matches(d)) {
                         whitelisted = true;

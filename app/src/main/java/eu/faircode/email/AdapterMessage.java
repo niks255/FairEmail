@@ -39,8 +39,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -55,25 +55,22 @@ import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.text.method.ArrowKeyMovementMethod;
-import android.text.style.BackgroundColorSpan;
+import android.text.method.LinkMovementMethod;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.QuoteSpan;
+import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.util.Pair;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -91,18 +88,19 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.view.textclassifier.ConversationAction;
 import android.view.textclassifier.ConversationActions;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -148,6 +146,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -190,7 +189,7 @@ import biweekly.property.RawProperty;
 import biweekly.util.ICalDate;
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF;
 import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
 
@@ -283,7 +282,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean gotoTop = false;
     private Integer gotoPos = null;
     private boolean firstClick = false;
-    private int searchResult = 0;
     private AsyncPagedListDiffer<TupleMessageEx> differ;
     private Map<Long, Integer> keyPosition = new HashMap<>();
     private Map<Integer, Long> positionKey = new HashMap<>();
@@ -304,30 +302,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private static final int MAX_RECIPIENTS_COMPACT = 3;
     private static final int MAX_RECIPIENTS_NORMAL = 7;
     private static final int MAX_QUOTE_LEVEL = 3;
-
-    // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
-    private static final List<String> IMAP_KEYWORDS_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
-            "$MDNSent".toLowerCase(Locale.ROOT), // https://tools.ietf.org/html/rfc3503
-            "$Forwarded".toLowerCase(Locale.ROOT),
-            "$SubmitPending".toLowerCase(Locale.ROOT),
-            "$Submitted".toLowerCase(Locale.ROOT),
-            "$Junk".toLowerCase(Locale.ROOT),
-            "$NotJunk".toLowerCase(Locale.ROOT),
-            "Junk".toLowerCase(Locale.ROOT),
-            "NonJunk".toLowerCase(Locale.ROOT),
-            "$recent".toLowerCase(Locale.ROOT),
-            "DTAG_document".toLowerCase(Locale.ROOT),
-            "DTAG_image".toLowerCase(Locale.ROOT),
-            "$X-Me-Annot-1".toLowerCase(Locale.ROOT),
-            "$X-Me-Annot-2".toLowerCase(Locale.ROOT),
-            "\\Unseen".toLowerCase(Locale.ROOT), // Mail.ru
-            "$sent".toLowerCase(Locale.ROOT), // Kmail
-            "$attachment".toLowerCase(Locale.ROOT), // Kmail
-            "$signed".toLowerCase(Locale.ROOT), // Kmail
-            "$encrypted".toLowerCase(Locale.ROOT), // Kmail
-            "$Classified".toLowerCase(Locale.ROOT),
-            "$HasNoAttachment".toLowerCase(Locale.ROOT)
-    ));
+    private static final int MAX_TRANSLATABLE_TEXT_SIZE = 50 * 1024;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
@@ -343,8 +318,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageView ibFlagged;
         private ImageButton ibAvatar;
         private ImageButton ibAuth;
-        private ImageView ivPriorityHigh;
-        private ImageView ivPriorityLow;
+        private ImageButton ibPriority;
         private ImageView ivImportance;
         private ImageView ivSigned;
         private ImageView ivEncrypted;
@@ -443,6 +417,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibEvent;
         private ImageButton ibSearchText;
         private ImageButton ibSearch;
+        private ImageButton ibTranslate;
         private ImageButton ibHide;
         private ImageButton ibSeen;
         private ImageButton ibAnswer;
@@ -515,8 +490,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibFlagged = itemView.findViewById(R.id.ibFlagged);
             ibAvatar = itemView.findViewById(R.id.ibAvatar);
             ibAuth = itemView.findViewById(R.id.ibAuth);
-            ivPriorityHigh = itemView.findViewById(R.id.ivPriorityHigh);
-            ivPriorityLow = itemView.findViewById(R.id.ivPriorityLow);
+            ibPriority = itemView.findViewById(R.id.ibPriority);
             ivImportance = itemView.findViewById(R.id.ivImportance);
             ivSigned = itemView.findViewById(R.id.ivSigned);
             ivEncrypted = itemView.findViewById(R.id.ivEncrypted);
@@ -629,6 +603,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvKeywordsEx = vsBody.findViewById(R.id.tvKeywordsEx);
 
             tvHeaders = vsBody.findViewById(R.id.tvHeaders);
+            tvHeaders.setMovementMethod(LinkMovementMethod.getInstance());
             ibCopyHeaders = vsBody.findViewById(R.id.ibCopyHeaders);
             ibCloseHeaders = vsBody.findViewById(R.id.ibCloseHeaders);
             pbHeaders = vsBody.findViewById(R.id.pbHeaders);
@@ -675,6 +650,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibEvent = vsBody.findViewById(R.id.ibEvent);
             ibSearchText = vsBody.findViewById(R.id.ibSearchText);
             ibSearch = vsBody.findViewById(R.id.ibSearch);
+            ibTranslate = vsBody.findViewById(R.id.ibTranslate);
             ibHide = vsBody.findViewById(R.id.ibHide);
             ibSeen = vsBody.findViewById(R.id.ibSeen);
             ibAnswer = vsBody.findViewById(R.id.ibAnswer);
@@ -749,6 +725,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ibAvatar.setOnClickListener(this);
             ibAuth.setOnClickListener(this);
+            ibPriority.setOnClickListener(this);
             ibSnoozed.setOnClickListener(this);
             ibFlagged.setOnClickListener(this);
             if (viewType == ViewType.THREAD)
@@ -784,6 +761,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibEvent.setOnClickListener(this);
                 ibSearchText.setOnClickListener(this);
                 ibSearch.setOnClickListener(this);
+                ibTranslate.setOnClickListener(this);
+                ibTranslate.setOnLongClickListener(this);
                 ibHide.setOnClickListener(this);
                 ibSeen.setOnClickListener(this);
                 ibAnswer.setOnClickListener(this);
@@ -870,6 +849,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ibAvatar.setOnClickListener(null);
             ibAuth.setOnClickListener(null);
+            ibPriority.setOnClickListener(null);
             ibSnoozed.setOnClickListener(null);
             ibFlagged.setOnClickListener(null);
             if (viewType == ViewType.THREAD)
@@ -905,6 +885,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibEvent.setOnClickListener(null);
                 ibSearchText.setOnClickListener(null);
                 ibSearch.setOnClickListener(null);
+                ibTranslate.setOnClickListener(null);
+                ibTranslate.setOnLongClickListener(null);
                 ibHide.setOnClickListener(null);
                 ibSeen.setOnClickListener(null);
                 ibAnswer.setOnClickListener(null);
@@ -991,8 +973,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibFlagged.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ibAvatar.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ibAuth.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
-                ivPriorityHigh.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
-                ivPriorityLow.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
+                ibPriority.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivImportance.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivSigned.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
                 ivEncrypted.setAlpha(dim ? Helper.LOW_LIGHT : 1.0f);
@@ -1044,18 +1025,25 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             // Line 1
             ibAuth.setVisibility(authentication && !authenticated ? View.VISIBLE : View.GONE);
-            ivPriorityHigh.setVisibility(
-                    EntityMessage.PRIORITIY_HIGH.equals(message.ui_priority)
-                            ? View.VISIBLE : View.GONE);
-            ivPriorityLow.setVisibility(
-                    EntityMessage.PRIORITIY_LOW.equals(message.ui_priority)
-                            ? View.VISIBLE : View.GONE);
-            ivImportance.setImageLevel(
-                    EntityMessage.PRIORITIY_HIGH.equals(message.ui_importance) ? 0 : 1);
-            ivImportance.setVisibility(
-                    EntityMessage.PRIORITIY_LOW.equals(message.ui_importance) ||
-                            EntityMessage.PRIORITIY_HIGH.equals(message.ui_importance)
-                            ? View.VISIBLE : View.GONE);
+
+            if (EntityMessage.PRIORITIY_HIGH.equals(message.ui_priority)) {
+                ibPriority.setImageLevel(0);
+                ibPriority.setVisibility(View.VISIBLE);
+            } else if (EntityMessage.PRIORITIY_LOW.equals(message.ui_priority)) {
+                ibPriority.setImageLevel(1);
+                ibPriority.setVisibility(View.VISIBLE);
+            } else
+                ibPriority.setVisibility(View.GONE);
+
+            if (EntityMessage.PRIORITIY_HIGH.equals(message.ui_importance)) {
+                ivImportance.setImageLevel(0);
+                ivImportance.setVisibility(View.VISIBLE);
+            } else if (EntityMessage.PRIORITIY_LOW.equals(message.ui_importance)) {
+                ivImportance.setImageLevel(1);
+                ivImportance.setVisibility(View.VISIBLE);
+            } else
+                ivImportance.setVisibility(View.GONE);
+
             ivSigned.setVisibility(message.signed > 0 ? View.VISIBLE : View.GONE);
             if (message.verified)
                 ivSigned.setColorFilter(colorEncrypt);
@@ -1131,7 +1119,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ibSnoozed.setVisibility(message.ui_snoozed == null && !message.ui_unsnoozed ? View.GONE : View.VISIBLE);
             ivAnswered.setVisibility(message.ui_answered ? View.VISIBLE : View.GONE);
-            ivForwarded.setVisibility(message.hasKeyword("$Forwarded") ? View.VISIBLE : View.GONE);
+            ivForwarded.setVisibility(message.isForwarded() ? View.VISIBLE : View.GONE);
             ivAttachments.setVisibility(message.attachments > 0 ? View.VISIBLE : View.GONE);
 
             if (viewType == ViewType.FOLDER)
@@ -1382,6 +1370,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibEvent.setVisibility(View.GONE);
             ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
+            ibTranslate.setVisibility(View.GONE);
             ibHide.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
@@ -1591,6 +1580,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibEvent.setVisibility(View.GONE);
             ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
+            ibTranslate.setVisibility(View.GONE);
             ibHide.setVisibility(View.GONE);
             ibSeen.setVisibility(View.GONE);
             ibAnswer.setVisibility(View.GONE);
@@ -1774,6 +1764,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_notes = prefs.getBoolean("button_notes", false);
                     boolean button_seen = prefs.getBoolean("button_seen", false);
                     boolean button_hide = prefs.getBoolean("button_hide", false);
+                    boolean button_translate = prefs.getBoolean("button_translate", false);
                     boolean button_search = prefs.getBoolean("button_search", false);
                     boolean button_search_text = prefs.getBoolean("button_search_text", false);
                     boolean button_event = prefs.getBoolean("button_event", false);
@@ -1801,6 +1792,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibEvent.setVisibility(tools && button_event && message.content ? View.VISIBLE : View.GONE);
                     ibSearchText.setVisibility(tools && button_search_text && message.content && !full ? View.VISIBLE : View.GONE);
                     ibSearch.setVisibility(tools && button_search && (froms > 0 || tos > 0) && !outbox ? View.VISIBLE : View.GONE);
+                    ibTranslate.setVisibility(tools && button_translate && DeepL.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
                     ibHide.setVisibility(tools && button_hide && !outbox ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
                     ibAnswer.setVisibility(!tools || outbox || (!expand_all && expand_one) ? View.GONE : View.VISIBLE);
@@ -2015,7 +2007,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             if (show_headers && message.headers != null) {
-                tvHeaders.setText(HtmlHelper.highlightHeaders(context, message.headers));
+                tvHeaders.setText(HtmlHelper.highlightHeaders(context,
+                        message.headers, message.blocklist != null && message.blocklist));
                 ibCopyHeaders.setVisibility(View.VISIBLE);
             } else {
                 tvHeaders.setText(null);
@@ -2042,6 +2035,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvBody.setTag(message.id);
                 tvBody.setText(null);
             }
+            properties.endSearch();
             clearActions();
 
             ibSeenBottom.setImageResource(message.ui_seen
@@ -3118,6 +3112,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 onViewContact(message);
             else if (view.getId() == R.id.ibAuth)
                 onShowAuth(message);
+            else if (view.getId() == R.id.ibPriority)
+                onShowPriority(message);
             else if (view.getId() == R.id.ibSnoozed)
                 onShowSnoozed(message);
             else if (view.getId() == R.id.ibFlagged)
@@ -3187,6 +3183,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onSearchText(message);
                 } else if (id == R.id.ibSearch) {
                     onSearchContact(message);
+                } else if (id == R.id.ibTranslate) {
+                    if (DeepL.canTranslate(context))
+                        onActionTranslate(message);
+                    else {
+                        DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
+                        fragment.show(parentFragment.getParentFragmentManager(), "deepl:configure");
+                    }
                 } else if (id == R.id.ibAnswer) {
                     onActionAnswer(message, ibAnswer);
                 } else if (id == R.id.ibNotes) {
@@ -3344,6 +3347,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             } else if (id == R.id.ibNotes) {
                 onActionCopyNote(message);
                 return true;
+            } else if (id == R.id.ibTranslate) {
+                DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
+                fragment.show(parentFragment.getParentFragmentManager(), "deepl:configure");
+                return true;
             } else if (id == R.id.ibFull) {
                 onActionOpenFull(message);
                 return true;
@@ -3456,6 +3463,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             ToastEx.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        private void onShowPriority(TupleMessageEx message) {
+            if (EntityMessage.PRIORITIY_HIGH.equals(message.ui_priority))
+                ToastEx.makeText(context, R.string.title_legend_priority, Toast.LENGTH_LONG).show();
+            else
+                ToastEx.makeText(context, R.string.title_legend_priority_low, Toast.LENGTH_LONG).show();
         }
 
         private void onShowSnoozed(TupleMessageEx message) {
@@ -3891,7 +3905,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     full ? R.layout.dialog_show_full : R.layout.dialog_show_images, null);
             CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             CheckBox cbNotAgainDomain = dview.findViewById(R.id.cbNotAgainDomain);
-            Button btnMore = dview.findViewById(R.id.btnMore);
 
             if (message.from == null || message.from.length == 0) {
                 cbNotAgain.setVisibility(View.GONE);
@@ -3917,17 +3930,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     cbNotAgainDomain.setEnabled(isChecked);
-                }
-            });
-
-            btnMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent privacy = new Intent(v.getContext(), ActivitySetup.class)
-                            .setAction("privacy")
-                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("tab", "privacy");
-                    v.getContext().startActivity(privacy);
                 }
             });
 
@@ -4004,6 +4006,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.title_setup, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent privacy = new Intent(context, ActivitySetup.class)
+                                    .setAction("privacy")
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .putExtra("tab", "privacy");
+                            context.startActivity(privacy);
+                        }
+                    })
                     .create();
 
             owner.getLifecycle().addObserver(new LifecycleObserver() {
@@ -4493,9 +4505,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
                     if (image.length > 0) {
-                        String source = image[0].getSource();
+                        ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(image[0].getSource());
+                        String source = a.getSource();
                         if (!TextUtils.isEmpty(source)) {
-                            onOpenImage(message.id, source);
+                            if (!a.isTracking())
+                                onOpenImage(message.id, source);
                             return true;
                         }
                     }
@@ -4603,13 +4617,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         long id = args.getLong("id");
                         String source = args.getString("source");
 
-                        Bitmap bm = ImageHelper.getDataBitmap(source);
-                        if (bm == null)
-                            return null;
+                        String type = ImageHelper.getDataUriType(source);
+                        args.putString("type", type == null ? "application/octet-stream" : type);
 
-                        File file = ImageHelper.getCacheFile(context, id, source, ".png");
+                        String extention = Helper.guessExtension(type);
+                        extention = "." + (extention == null ? "" : extention);
+
+                        ByteArrayInputStream bis = ImageHelper.getDataUriStream(source);
+                        File file = ImageHelper.getCacheFile(context, id, source, extention);
                         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
-                            bm.compress(Bitmap.CompressFormat.PNG, 90, os);
+                            Helper.copy(bis, os);
                         }
 
                         return file;
@@ -4617,8 +4634,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     @Override
                     protected void onExecuted(Bundle args, File file) {
-                        if (file != null)
-                            Helper.share(context, file, "image/png", file.getName());
+                        if (file == null)
+                            return;
+                        String type = args.getString("type");
+                        Helper.share(context, file, type, file.getName());
                     }
 
                     @Override
@@ -4831,109 +4850,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             fragment.show(parentFragment.getParentFragmentManager(), "edit:notes");
         }
 
-        private void onSearchText(TupleMessageEx message) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View dview = inflater.inflate(R.layout.popup_search_in_text, null, false);
-            EditText etSearch = dview.findViewById(R.id.etSearch);
-            ImageButton ibNext = dview.findViewById(R.id.ibNext);
+        private void onActionTranslate(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
 
-            etSearch.setText(null);
-            ibNext.setEnabled(false);
-
-            etSearch.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // Do nothing
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    searchResult = find(s.toString(), 1);
-                    ibNext.setEnabled(searchResult > 0);
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    // Do nothing
-                }
-            });
-
-            ibNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    searchResult = find(etSearch.getText().toString(), ++searchResult);
-                }
-            });
-
-            PopupWindow pw = new PopupWindow(dview, WRAP_CONTENT, WRAP_CONTENT);
-            pw.setFocusable(true);
-            pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    SpannableString ss = new SpannableString(tvBody.getText());
-                    for (BackgroundColorSpan span : ss.getSpans(0, ss.length(), BackgroundColorSpan.class))
-                        ss.removeSpan(span);
-                    tvBody.setText(ss);
-                }
-            });
-            pw.showAtLocation(parentFragment.getView(), Gravity.TOP | Gravity.END, 0, 0);
-
-            final InputMethodManager imm =
-                    (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null)
-                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+            FragmentDialogTranslate fragment = new FragmentDialogTranslate();
+            fragment.setArguments(args);
+            fragment.show(parentFragment.getParentFragmentManager(), "message:translate");
         }
 
-        private int find(String query, int result) {
-            query = query.toLowerCase();
-
-            SpannableString ss = new SpannableString(tvBody.getText());
-            for (BackgroundColorSpan span : ss.getSpans(0, ss.length(), BackgroundColorSpan.class))
-                ss.removeSpan(span);
-
-            int p = -1;
-            String text = tvBody.getText().toString().toLowerCase();
-            for (int i = 0; i < result; i++)
-                p = (p < 0 ? text.indexOf(query) : text.indexOf(query, p + 1));
-
-            if (p < 0 && result > 1) {
-                result = 1;
-                p = text.indexOf(query);
-            }
-            if (p < 0)
-                result = 0;
-
-            final int pos = p;
-            if (pos > 0) {
-                int color = Helper.resolveColor(context, R.attr.colorHighlight);
-                ss.setSpan(new BackgroundColorSpan(color), pos, pos + query.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                tvBody.setText(ss);
-
-                final int apos = getAdapterPosition();
-
-                tvBody.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            int line = tvBody.getLayout().getLineForOffset(pos);
-                            int y = tvBody.getLayout().getLineTop(line);
-
-                            int dy = Helper.dp2pixels(context, 48);
-
-                            Rect rect = new Rect();
-                            tvBody.getDrawingRect(rect);
-                            ((ViewGroup) itemView).offsetDescendantRectToMyCoords(tvBody, rect);
-
-                            properties.scrollTo(apos, rect.top + y - dy);
-                        } catch (Throwable ex) {
-                            Log.e(ex);
-                        }
-                    }
-                });
-            } else
-                tvBody.setText(ss, TextView.BufferType.SPANNABLE);
-
-            return result;
+        private void onSearchText(TupleMessageEx message) {
+            properties.startSearch(tvBody);
         }
 
         private void onMenuCreateRule(TupleMessageEx message) {
@@ -5289,28 +5216,31 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private SpannableStringBuilder getKeywords(TupleMessageEx message) {
-            SpannableStringBuilder keywords = new SpannableStringBuilder();
+            SpannableStringBuilder ssb = new SpannableStringBuilder();
+
+            if (message.keyword_titles == null || message.keyword_colors == null) {
+                ssb.append("Keywords missing!");
+                return ssb;
+            }
+
             for (int i = 0; i < message.keywords.length; i++) {
-                String k = message.keywords[i].toLowerCase(Locale.ROOT);
-                if (!IMAP_KEYWORDS_BLACKLIST.contains(k)) {
-                    if (keywords.length() > 0)
-                        keywords.append(" ");
+                if (MessageHelper.showKeyword(message.keywords[i])) {
+                    if (ssb.length() > 0)
+                        ssb.append(' ');
 
-                    // Thunderbird
-                    String keyword = EntityMessage.getKeywordAlias(context, message.keywords[i]);
-                    keywords.append(keyword);
+                    String keyword = message.keyword_titles[i];
+                    ssb.append(keyword);
 
-                    if (message.keyword_colors != null &&
-                            message.keyword_colors[i] != null) {
-                        int len = keywords.length();
-                        keywords.setSpan(
+                    if (message.keyword_colors[i] != null) {
+                        int len = ssb.length();
+                        ssb.setSpan(
                                 new ForegroundColorSpan(message.keyword_colors[i]),
                                 len - keyword.length(), len,
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                 }
             }
-            return keywords;
+            return ssb;
         }
 
         ItemDetailsLookup.ItemDetails<Long> getItemDetails(@NonNull MotionEvent motionEvent) {
@@ -6462,6 +6392,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         void reply(TupleMessageEx message, String selected, View anchor);
 
+        void startSearch(TextView view);
+
+        void endSearch();
+
         void lock(long id);
 
         void refresh();
@@ -6618,6 +6552,203 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
     }
 
+    public static class FragmentDialogTranslate extends FragmentDialogBase {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            final Context context = getContext();
+            final View view = LayoutInflater.from(context).inflate(R.layout.dialog_translate, null);
+            final Spinner spLanguage = view.findViewById(R.id.spLanguage);
+            final TextView tvText = view.findViewById(R.id.tvText);
+            final ContentLoadingProgressBar pbWait = view.findViewById(R.id.pbWait);
+
+            List<DeepL.Language> languages = DeepL.getTargetLanguages(context);
+            ArrayAdapter<DeepL.Language> adapter = new ArrayAdapter<DeepL.Language>(context, android.R.layout.simple_spinner_item, android.R.id.text1, languages) {
+                @NonNull
+                @Override
+                public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                    return _getView(position, super.getView(position, convertView, parent));
+                }
+
+                @Override
+                public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                    return _getView(position, super.getDropDownView(position, convertView, parent));
+                }
+
+                private View _getView(int position, View view) {
+                    DeepL.Language language = getItem(position);
+                    if (language != null) {
+                        TextView tv = view.findViewById(android.R.id.text1);
+
+                        Resources res = context.getResources();
+                        Drawable icon = res.getDrawable(language.icon);
+                        int iconSize = res.getDimensionPixelSize(R.dimen.menu_item_icon_size);
+                        icon.setBounds(0, 0, iconSize, iconSize);
+                        ImageSpan imageSpan = new CenteredImageSpan(icon);
+
+                        SpannableStringBuilder ssb = new SpannableStringBuilder(language.name);
+                        ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
+                        ssb.setSpan(imageSpan, 0, 1, 0);
+
+                        tv.setText(ssb);
+                    }
+
+                    return view;
+                }
+            };
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spLanguage.setAdapter(adapter);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String current = prefs.getString("deepl_target", null);
+
+            for (int pos = 0; pos < languages.size(); pos++)
+                if (languages.get(pos).target.equals(current)) {
+                    spLanguage.setSelection(pos);
+                    break;
+                }
+
+            spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    prefs.edit().putString("deepl_target", languages.get(position).target).apply();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    prefs.edit().remove("deepl_target").apply();
+                }
+            });
+
+            tvText.setText(null);
+
+            new SimpleTask<String>() {
+                @Override
+                protected void onPreExecute(Bundle args) {
+                    pbWait.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onPostExecute(Bundle args) {
+                    pbWait.setVisibility(View.GONE);
+                }
+
+                @Override
+                protected String onExecute(Context context, Bundle args) throws Throwable {
+                    long id = args.getLong("id");
+
+                    File file = EntityMessage.getFile(context, id);
+                    String html = Helper.readText(file);
+                    Document d = HtmlHelper.sanitizeCompose(context, html, false);
+                    d.select("blockquote").remove();
+                    HtmlHelper.truncate(d, MAX_TRANSLATABLE_TEXT_SIZE);
+                    SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, d, null, null);
+                    return ssb.toString()
+                            .replace("\uFFFC", "") // Object replacement character
+                            .replaceAll("\n\\s+\n", "\n")
+                            .replaceAll("\n+", "\n\n");
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, String text) {
+                    tvText.setText(text);
+
+                    tvText.setMovementMethod(new ArrowKeyMovementMethod() {
+                        @Override
+                        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_UP)
+                                translate(widget, buffer, event);
+                            return super.onTouchEvent(widget, buffer, event);
+                        }
+
+                        private void translate(TextView widget, Spannable buffer, MotionEvent event) {
+                            int off = Helper.getOffset(widget, buffer, event);
+
+                            int start = off;
+                            while (start > 0 && buffer.charAt(start - 1) != '\n')
+                                start--;
+
+                            int end = off;
+                            while (end < buffer.length() && buffer.charAt(end - 1) != '\n')
+                                end++;
+
+                            if (end <= start)
+                                return;
+
+                            StyleSpan[] spans = buffer.getSpans(start, end, StyleSpan.class);
+                            if (spans != null && spans.length > 0)
+                                return;
+
+                            final StyleSpan mark = new StyleSpan(Typeface.ITALIC);
+                            buffer.setSpan(mark, start, end, 0);
+
+                            DeepL.Language language = (DeepL.Language) spLanguage.getSelectedItem();
+                            if (language == null)
+                                return;
+
+                            Bundle args = new Bundle();
+                            args.putString("target", language.target);
+                            args.putString("text", buffer.subSequence(start, end).toString());
+
+                            new SimpleTask<DeepL.Translation>() {
+                                @Override
+                                protected void onPreExecute(Bundle args) {
+                                    pbWait.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                protected void onPostExecute(Bundle args) {
+                                    pbWait.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                protected DeepL.Translation onExecute(Context context, Bundle args) throws Throwable {
+                                    String text = args.getString("text");
+                                    String target = args.getString("target");
+                                    return DeepL.translate(text, target, context);
+                                }
+
+                                @Override
+                                protected void onExecuted(Bundle args, DeepL.Translation translation) {
+                                    SpannableStringBuilder ssb = new SpannableStringBuilder(tvText.getText());
+                                    int start = ssb.getSpanStart(mark);
+                                    int end = ssb.getSpanEnd(mark);
+                                    int textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
+
+                                    ssb.removeSpan(mark);
+
+                                    ssb = ssb.replace(start, end, translation.translated_text);
+                                    end = start + translation.translated_text.length();
+
+                                    ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, end, 0);
+                                    ssb.setSpan(new ForegroundColorSpan(textColorPrimary), start, end, 0);
+
+                                    tvText.setText(ssb);
+                                }
+
+                                @Override
+                                protected void onException(Bundle args, Throwable ex) {
+                                    tvText.setText(ex.toString());
+                                }
+                            }.execute(FragmentDialogTranslate.this, args, "paragraph:translate");
+                        }
+                    });
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    tvText.setText(ex.toString());
+                }
+            }.execute(this, getArguments(), "message:translate");
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                    .setView(view)
+                    .setPositiveButton(android.R.string.cancel, null);
+
+            return builder.create();
+        }
+    }
+
     public static class FragmentDialogKeywordManage extends FragmentDialogBase {
         @NonNull
         @Override
@@ -6668,6 +6799,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     .setView(dview)
                     .setPositiveButton(android.R.string.ok, null)
                     .create();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            Dialog dialog = getDialog();
+            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            //dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
     }
 
@@ -6809,9 +6948,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             super.onStart();
             Dialog dialog = getDialog();
             if (dialog != null)
-                dialog.getWindow().setLayout(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT);
+                dialog.getWindow().setLayout(MATCH_PARENT, MATCH_PARENT);
         }
 
         @Override
@@ -6931,6 +7068,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final CheckBox cbHide = dview.findViewById(R.id.cbHide);
             final CheckBox cbSearch = dview.findViewById(R.id.cbSearch);
             final CheckBox cbSearchText = dview.findViewById(R.id.cbSearchText);
+            final CheckBox cbTranslate = dview.findViewById(R.id.cbTranslate);
             final CheckBox cbEvent = dview.findViewById(R.id.cbEvent);
             final CheckBox cbShare = dview.findViewById(R.id.cbShare);
             final CheckBox cbPin = dview.findViewById(R.id.cbPin);
@@ -6939,6 +7077,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final CheckBox cbUnsubscribe = dview.findViewById(R.id.cbUnsubscribe);
             final CheckBox cbRule = dview.findViewById(R.id.cbRule);
 
+            cbTranslate.setVisibility(DeepL.isAvailable(context) ? View.VISIBLE : View.GONE);
             cbPin.setVisibility(Shortcuts.can(context) ? View.VISIBLE : View.GONE);
 
             cbJunk.setChecked(prefs.getBoolean("button_junk", true));
@@ -6952,6 +7091,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbHide.setChecked(prefs.getBoolean("button_hide", false));
             cbSearch.setChecked(prefs.getBoolean("button_search", false));
             cbSearchText.setChecked(prefs.getBoolean("button_search_text", false));
+            cbTranslate.setChecked(prefs.getBoolean("button_translate", false));
             cbEvent.setChecked(prefs.getBoolean("button_event", false));
             cbShare.setChecked(prefs.getBoolean("button_share", false));
             cbPin.setChecked(prefs.getBoolean("button_pin", false));
@@ -6977,6 +7117,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             editor.putBoolean("button_hide", cbHide.isChecked());
                             editor.putBoolean("button_search", cbSearch.isChecked());
                             editor.putBoolean("button_search_text", cbSearchText.isChecked());
+                            editor.putBoolean("button_translate", cbTranslate.isChecked());
                             editor.putBoolean("button_event", cbEvent.isChecked());
                             editor.putBoolean("button_share", cbShare.isChecked());
                             editor.putBoolean("button_pin", cbPin.isChecked());

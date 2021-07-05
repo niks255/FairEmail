@@ -19,7 +19,12 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.text.TextUtils;
+
+import androidx.preference.PreferenceManager;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -31,136 +36,245 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.internet.MimeUtility;
+
 public class DnsBlockList {
-    private static final List<BlockList> BLOCKLISTS = Collections.unmodifiableList(Arrays.asList(
-            new BlockList("Spamhaus/zen", "zen.spamhaus.org", new String[]{
-                    //https://www.spamhaus.org/faq/section/DNSBL%20Usage#200
+    private static final List<BlockList> BLOCK_LISTS = Collections.unmodifiableList(Arrays.asList(
+            // https://www.spamhaus.org/zen/
+            new BlockList(true, "Spamhaus/zen", "zen.spamhaus.org", true, new String[]{
+                    // https://www.spamhaus.org/faq/section/DNSBL%20Usage#200
                     "127.0.0.2", // SBL Spamhaus SBL Data
                     "127.0.0.3", // SBL Spamhaus SBL CSS Data
                     "127.0.0.4", // XBL CBL Data
-                    "127.0.0.9" // SBL Spamhaus DROP/EDROP Data
+                    "127.0.0.9", // SBL Spamhaus DROP/EDROP Data
                     //127.0.0.10 PBL ISP Maintained
                     //127.0.0.11 PBL Spamhaus Maintained
             }),
-            new BlockList("Spamcop", "bl.spamcop.net", new String[]{
+
+            // https://www.spamhaus.org/dbl/
+            new BlockList(null, "Spamhaus/DBL", "dbl.spamhaus.org", false, new String[]{
+                    // https://www.spamhaus.org/faq/section/Spamhaus%20DBL#291
+                    "127.0.1.2", // spam domain
+                    "127.0.1.4", // phish domain
+                    "127.0.1.5", // malware domain
+                    "127.0.1.6", // botnet C&C domain
+                    "127.0.1.102", // abused legit spam
+                    "127.0.1.103", // abused spammed redirector domain
+                    "127.0.1.104", // abused legit phish
+                    "127.0.1.105", // abused legit malware
+                    "127.0.1.106", // abused legit botnet C&C
+            }),
+
+            new BlockList(true, "Spamcop", "bl.spamcop.net", true, new String[]{
                     // https://www.spamcop.net/fom-serve/cache/291.html
-                    "127.0.0.2"
+                    "127.0.0.2",
+            }),
+
+            new BlockList(false, "Barracuda", "b.barracudacentral.org", true, new String[]{
+                    // https://www.barracudacentral.org/rbl/how-to-use
+                    "127.0.0.2",
             })
-            //new BlockList("b.barracudacentral.org", new String[]{
-            //        // https://www.barracudacentral.org/rbl/how-to-use
-            //})
     ));
 
     private static final long CACHE_EXPIRY_AFTER = 3600 * 1000L; // milliseconds
     private static final Map<String, CacheEntry> cache = new Hashtable<>();
 
-    static List<String> getNames() {
+    static void clearCache() {
+        Log.i("isJunk clear cache");
+        synchronized (cache) {
+            cache.clear();
+        }
+    }
+
+    static void setEnabled(Context context, BlockList blocklist, boolean enabled) {
+        Log.i("isJunk " + blocklist.name + "=" + enabled);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (blocklist.enabled == null || blocklist.enabled == enabled)
+            prefs.edit().remove("blocklist." + blocklist.name).apply();
+        else
+            prefs.edit().putBoolean("blocklist." + blocklist.name, enabled).apply();
+        clearCache();
+    }
+
+    static boolean isEnabled(Context context, BlockList blocklist) {
+        if (blocklist.enabled == null)
+            return false;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("blocklist." + blocklist.name, blocklist.enabled);
+    }
+
+    static void reset(Context context) {
+        Log.i("isJunk reset");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        for (BlockList blocklist : BLOCK_LISTS)
+            editor.remove("blocklist." + blocklist.name);
+        editor.apply();
+        clearCache();
+    }
+
+    static List<BlockList> getListsAvailable() {
+        List<BlockList> result = new ArrayList<>();
+        for (BlockList blockList : BLOCK_LISTS)
+            if (blockList.enabled != null)
+                result.add(blockList);
+        return result;
+    }
+
+    static List<String> getNamesEnabled(Context context) {
         List<String> names = new ArrayList<>();
-        for (BlockList blocklist : BLOCKLISTS)
-            names.add(blocklist.name);
+        for (BlockList blocklist : BLOCK_LISTS)
+            if (isEnabled(context, blocklist))
+                names.add(blocklist.name);
         return names;
     }
 
-    static boolean isJunk(String email) {
-        if (TextUtils.isEmpty(email))
-            return false;
+    static Boolean isJunk(Context context, String[] received) {
+        if (received == null || received.length == 0)
+            return null;
 
-        int at = email.indexOf('@');
-        if (at < 0)
-            return false;
-
-        return isJunk(email.substring(at + 1), BLOCKLISTS);
+        String host = getFromHost(MimeUtility.unfold(received[received.length - 1]));
+        return (host == null ? null : isJunk(context, host, BLOCK_LISTS));
     }
 
-    private static boolean isJunk(String domain, List<BlockList> blocklists) {
+    private static boolean isJunk(Context context, String host, List<BlockList> blocklists) {
         synchronized (cache) {
-            CacheEntry entry = cache.get(domain);
+            CacheEntry entry = cache.get(host);
             if (entry != null && !entry.isExpired())
                 return entry.isJunk();
         }
 
         boolean blocked = false;
         for (BlockList blocklist : blocklists)
-            if (isJunk(domain, blocklist)) {
+            if (isEnabled(context, blocklist) && isJunk(host, blocklist)) {
                 blocked = true;
                 break;
             }
 
         synchronized (cache) {
-            cache.put(domain, new CacheEntry(blocked));
+            cache.put(host, new CacheEntry(blocked));
         }
 
         return blocked;
     }
 
-    private static boolean isJunk(String domain, BlockList blocklist) {
+    private static boolean isJunk(String host, BlockList blocklist) {
+        boolean numeric = host.startsWith("[") && host.endsWith("]");
+        if (numeric)
+            host = host.substring(1, host.length() - 1);
         try {
-            long start = new Date().getTime();
-            InetAddress[] addresses = InetAddress.getAllByName(domain);
-            long elapsed = new Date().getTime() - start;
-            Log.i("isJunk resolved=" + domain + " elapse=" + elapsed + " ms");
-            for (InetAddress addr : addresses)
-                try {
-                    StringBuilder lookup = new StringBuilder();
-                    if (addr instanceof Inet4Address) {
-                        byte[] a = addr.getAddress();
-                        for (int i = 3; i >= 0; i--)
-                            lookup.append(a[i] & 0xff).append('.');
-                    } else if (addr instanceof Inet6Address) {
-                        byte[] a = addr.getAddress();
-                        for (int i = 15; i >= 0; i--) {
-                            int b = a[i] & 0xff;
-                            lookup.append(String.format("%01x", b & 0xf)).append('.');
-                            lookup.append(String.format("%01x", b >> 4)).append('.');
-                        }
+            if (blocklist.numeric) {
+                long start = new Date().getTime();
+                InetAddress[] addresses = InetAddress.getAllByName(host);
+                long elapsed = new Date().getTime() - start;
+                Log.i("isJunk resolved=" + host + " elapse=" + elapsed + " ms");
+                for (InetAddress addr : addresses) {
+                    if (addr.isLoopbackAddress() ||
+                            addr.isLinkLocalAddress() ||
+                            addr.isSiteLocalAddress() ||
+                            addr.isMulticastAddress()) {
+                        Log.i("isJunk local=" + addr);
+                        continue;
                     }
-
-                    lookup.append(blocklist.address);
-
-                    start = new Date().getTime();
-                    InetAddress result;
                     try {
-                        // Possibly blocked
-                        result = InetAddress.getByName(lookup.toString());
-                    } catch (UnknownHostException ignored) {
-                        // Not blocked
-                        result = null;
-                    }
-                    elapsed = new Date().getTime() - start;
-
-                    if (result != null && blocklist.responses.length > 0) {
-                        boolean blocked = false;
-                        for (InetAddress response : blocklist.responses)
-                            if (response.equals(result)) {
-                                blocked = true;
-                                break;
+                        StringBuilder lookup = new StringBuilder();
+                        if (addr instanceof Inet4Address) {
+                            byte[] a = addr.getAddress();
+                            for (int i = 3; i >= 0; i--)
+                                lookup.append(a[i] & 0xff).append('.');
+                        } else if (addr instanceof Inet6Address) {
+                            byte[] a = addr.getAddress();
+                            for (int i = 15; i >= 0; i--) {
+                                int b = a[i] & 0xff;
+                                lookup.append(String.format("%01x", b & 0xf)).append('.');
+                                lookup.append(String.format("%01x", b >> 4)).append('.');
                             }
-                        if (!blocked) {
-                            Log.w("isJunk" +
-                                    " addr=" + addr +
-                                    " lookup=" + lookup +
-                                    " result=" + result +
-                                    " elapsed=" + elapsed);
-                            result = null;
                         }
+
+                        lookup.append(blocklist.address);
+
+                        if (isJunk(lookup.toString(), blocklist.responses))
+                            return true;
+                    } catch (Throwable ex) {
+                        Log.w(ex);
                     }
-
-                    Log.i("isJunk " + addr +
-                            " " + lookup + "=" + (result == null ? "false" : result) +
-                            " elapsed=" + elapsed);
-
-                    if (result != null)
-                        return true;
-                } catch (Throwable ex) {
-                    Log.w(ex);
                 }
+            } else if (!numeric) {
+                long start = new Date().getTime();
+                String lookup = host + "." + blocklist.address;
+                boolean junk = isJunk(lookup, blocklist.responses);
+                long elapsed = new Date().getTime() - start;
+                Log.i("isJunk" + " " + lookup + "=" + junk + " elapsed=" + elapsed);
+                return junk;
+            }
         } catch (Throwable ex) {
             Log.w(ex);
         }
 
         return false;
+    }
+
+    private static boolean isJunk(String lookup, InetAddress[] responses) {
+        long start = new Date().getTime();
+        InetAddress result;
+        try {
+            // Possibly blocked
+            result = InetAddress.getByName(lookup);
+        } catch (UnknownHostException ignored) {
+            // Not blocked
+            result = null;
+        }
+        long elapsed = new Date().getTime() - start;
+
+        boolean blocked = false;
+        if (result != null && responses.length > 0) {
+            for (InetAddress response : responses)
+                if (response.equals(result)) {
+                    blocked = true;
+                    break;
+                }
+            if (!blocked)
+                result = null;
+        }
+
+        Log.w("isJunk" +
+                " lookup=" + lookup +
+                " result=" + (result == null ? null : result.getHostAddress()) +
+                " blocked=" + blocked +
+                " elapsed=" + elapsed);
+
+        return blocked;
+    }
+
+    private static String getFromHost(String received) {
+        String[] words = received.split("\\s+");
+        for (int i = 0; i < words.length - 1; i++)
+            if ("from".equalsIgnoreCase(words[i])) {
+                String host = words[i + 1].toLowerCase(Locale.ROOT);
+                if (!TextUtils.isEmpty(host))
+                    return host;
+            }
+        return null;
+    }
+
+    static void show(Context context, String received) {
+        String host = DnsBlockList.getFromHost(MimeUtility.unfold(received));
+        if (host == null)
+            return;
+
+        if (host.startsWith("[") && host.endsWith("]"))
+            host = host.substring(1, host.length() - 1);
+
+        Uri uri = Uri.parse(BuildConfig.MXTOOLBOX_URI)
+                .buildUpon()
+                .appendPath("/SuperTool.aspx")
+                .appendQueryParameter("action", "blacklist:" + host)
+                .appendQueryParameter("run", "toolpage")
+                .build();
+        Helper.view(context, uri, true);
     }
 
     private static class CacheEntry {
@@ -182,13 +296,21 @@ public class DnsBlockList {
     }
 
     static class BlockList {
+        int id;
+        Boolean enabled;
         String name;
         String address;
+        boolean numeric;
         InetAddress[] responses;
 
-        BlockList(String name, String address, String[] responses) {
+        private static int nextid = 1;
+
+        BlockList(Boolean enabled, String name, String address, boolean numeric, String[] responses) {
+            this.id = nextid++;
+            this.enabled = enabled;
             this.name = name;
             this.address = address;
+            this.numeric = numeric;
             List<InetAddress> r = new ArrayList<>();
             for (String response : responses)
                 try {

@@ -21,6 +21,8 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -32,7 +34,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -51,7 +52,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public class EmailProvider implements Serializable {
+public class EmailProvider implements Parcelable {
     public String id;
     public String name;
     public String description;
@@ -171,6 +172,7 @@ public class EmailProvider implements Serializable {
                         provider.oauth.authorizationEndpoint = xml.getAttributeValue(null, "authorizationEndpoint");
                         provider.oauth.tokenEndpoint = xml.getAttributeValue(null, "tokenEndpoint");
                         provider.oauth.redirectUri = xml.getAttributeValue(null, "redirectUri");
+                        provider.oauth.privacy = xml.getAttributeValue(null, "privacy");
                     } else
                         throw new IllegalAccessException(name);
                 } else if (eventType == XmlPullParser.END_TAG) {
@@ -217,7 +219,7 @@ public class EmailProvider implements Serializable {
 
     @NonNull
     static EmailProvider fromEmail(Context context, String email, Discover discover) throws IOException {
-        int at = email.indexOf("@");
+        int at = email.indexOf('@');
         String domain = (at < 0 ? email : email.substring(at + 1));
         if (at < 0)
             email = "someone@" + domain;
@@ -676,6 +678,69 @@ public class EmailProvider implements Serializable {
         EntityLog.log(context, "smtp=" + smtp.host + ":" + smtp.port + ":" + smtp.starttls);
     }
 
+    protected EmailProvider(Parcel in) {
+        if (in.readInt() == 0)
+            imap = null;
+        else {
+            imap = new Server();
+            imap.host = in.readString();
+            imap.port = in.readInt();
+            imap.starttls = (in.readInt() != 0);
+        }
+
+        if (in.readInt() == 0)
+            smtp = null;
+        else {
+            smtp = new Server();
+            smtp.host = in.readString();
+            smtp.port = in.readInt();
+            smtp.starttls = (in.readInt() != 0);
+        }
+
+        appPassword = (in.readInt() != 0);
+        link = in.readString();
+        String doc = in.readString();
+        documentation = (doc == null ? null : new StringBuilder(doc));
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(imap == null ? 0 : 1);
+        if (imap != null) {
+            dest.writeString(imap.host);
+            dest.writeInt(imap.port);
+            dest.writeInt(imap.starttls ? 1 : 0);
+        }
+
+        dest.writeInt(smtp == null ? 0 : 1);
+        if (smtp != null) {
+            dest.writeString(smtp.host);
+            dest.writeInt(smtp.port);
+            dest.writeInt(smtp.starttls ? 1 : 0);
+        }
+
+        dest.writeInt(appPassword ? 1 : 0);
+        dest.writeString(link);
+        dest.writeString(documentation == null ? null : documentation.toString());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<EmailProvider> CREATOR = new Creator<EmailProvider>() {
+        @Override
+        public EmailProvider createFromParcel(Parcel in) {
+            return new EmailProvider(in);
+        }
+
+        @Override
+        public EmailProvider[] newArray(int size) {
+            return new EmailProvider[size];
+        }
+    };
+
     @NonNull
     @Override
     public String toString() {
@@ -738,5 +803,6 @@ public class EmailProvider implements Serializable {
         String authorizationEndpoint;
         String tokenEndpoint;
         String redirectUri;
+        String privacy;
     }
 }

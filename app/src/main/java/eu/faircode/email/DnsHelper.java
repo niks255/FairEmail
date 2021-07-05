@@ -62,14 +62,9 @@ public class DnsHelper {
 
         for (Address address : addresses) {
             String email = ((InternetAddress) address).getAddress();
-            if (email == null)
+            String domain = UriHelper.getEmailDomain(email);
+            if (domain == null)
                 continue;
-
-            int d = email.lastIndexOf("@");
-            if (d < 0)
-                continue;
-
-            String domain = email.substring(d + 1);
 
             boolean found = true;
             try {
@@ -225,15 +220,6 @@ public class DnsHelper {
         } catch (TextParseException ex) {
             throw new UnknownHostException(ex.getMessage());
         }
-    }
-
-    static String getParentDomain(String host) {
-        if (host != null) {
-            String[] h = host.split("\\.");
-            if (h.length >= 2)
-                return h[h.length - 2] + "." + h[h.length - 1];
-        }
-        return host;
     }
 
     private static String getDnsServer(Context context) {

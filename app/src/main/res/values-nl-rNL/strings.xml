@@ -85,6 +85,7 @@
     <string name="title_notification_failed">\'%1$s\' is mislukt</string>
     <string name="title_notification_alert">\'%1$s\' servermelding</string>
     <string name="title_notification_sending_left">Resterende pogingen: %1$d</string>
+    <string name="title_notification_sending_retry">Verzenden zal opnieuw worden geprobeerd bij wijzigingen in de internetverbinding of het naar beneden trekken van de outbox</string>
     <string name="title_notification_sending_failed">Verzenden naar %1$s mislukt</string>
     <string name="title_notification_redacted">Redactie: biometrische of pincodeverificatie ingeschakeld</string>
     <string name="title_factor_minutes">%1$d minuten</string>
@@ -108,6 +109,7 @@
     <string name="title_agree">Ik ga akkoord</string>
     <string name="title_disagree">Ik ga niet akkoord</string>
     <string name="title_version">Versie %1$s</string>
+    <string name="title_privacy_policy">Privacybeleid</string>
     <string name="title_list_accounts">Accounts</string>
     <string name="title_list_identities">Identiteiten</string>
     <string name="title_edit_account">Bewerk account</string>
@@ -310,7 +312,8 @@
     <string name="title_advanced_landscape3">Navigatiemenu standaard in liggende modus weergeven</string>
     <string name="title_advanced_startup">Toon op het startscherm</string>
     <string name="title_advanced_cards">Gebruik kaart-stijl in plaats van tabulaire stijl</string>
-    <string name="title_advanced_cards_beige">Gebruik beige achtergrond bij gebruik van kaartstijl</string>
+    <string name="title_advanced_cards_beige">Gebruik een beige achtergrond bij het gebruik van de kaartstijl (alleen lichte thema\'s)</string>
+    <string name="title_advanced_tabular_background">Gebruik kaart kleur als achtergrondkleur bij gebruik van tabulaire stijl</string>
     <string name="title_advanced_cards_shadow">Gebruik schaduw voor ongelezen berichten bij gebruik van kaartstijl</string>
     <string name="title_advanced_date_header">Op datum groeperen</string>
     <string name="title_advanced_date_bold">Datum vet weergeven</string>
@@ -356,6 +359,7 @@
     <string name="title_advanced_monospaced">Gebruik standaard vaste breedte lettertype voor berichttekst</string>
     <string name="title_advanced_monospaced_pre">Gebruik vaste breedte lettertype voor vooraf opgemaakte tekst</string>
     <string name="title_advanced_text_color">Gebruik tekstkleuren</string>
+    <string name="title_advanced_background_color">Gebruik achtergrond kleuren</string>
     <string name="title_advanced_text_size">Gebruik tekstgrootte</string>
     <string name="title_advanced_text_font">Gebruik lettertypen</string>
     <string name="title_advanced_text_align">Gebruik tekst uitlijning</string>
@@ -475,6 +479,7 @@
     <string name="title_advanced_class_min_difference">Minimale klasse verschil: %1$s %%</string>
     <string name="title_advanced_language">Taal</string>
     <string name="title_advanced_language_system">Systeem</string>
+    <string name="title_advanced_deepl">DeepL integratie</string>
     <string name="title_advanced_watchdog">Periodiek controleren of FairEmail nog actief is</string>
     <string name="title_advanced_updates">Controleren op GitHub updates</string>
     <string name="title_advanced_check_weekly">Controleer wekelijks in plaats van dagelijks</string>
@@ -520,7 +525,6 @@
     <string name="title_advanced_browse_hint">Meer berichten ophalen bij het naar beneden scrollen</string>
     <string name="title_advanced_layout_hint">Overschakelen naar een compactere layout en het wijzigen van de berichttekst grootte kan worden gedaan in het menu van de top actiebalk in het berichtweergave</string>
     <string name="title_advanced_startup_hint">Druk lang op een map in de mappenlijst om deze toe te voegen of te verwijderen uit de lijst van gecombineerde mappen</string>
-    <string name="title_advanced_beige_hint">Alleen lichte thema\'s</string>
     <string name="title_advanced_date_hint">Berichten worden alleen op datum gegroepeerd als ze op tijd zijn gesorteerd</string>
     <string name="title_advanced_navbar_colorize_hint">Of dit werkt hangt af van de Android-versie en -variant</string>
     <string name="title_advanced_split_hint">Dit zal het scherm opsplitsen in delen</string>
@@ -983,6 +987,7 @@
     <string name="title_translating">Vertalen &#8230;</string>
     <string name="title_translate_small">Gebruik een klein lettertype voor de brontekst</string>
     <string name="title_translate_usage">Gebruik: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Tik op de te vertalen tekst</string>
     <string name="title_edit_plain_text">Bewerk als platte tekst</string>
     <string name="title_edit_formatted_text">Bewerk als opnieuw opgemaakte tekst</string>
     <string name="title_select_certificate">Selecteer publieke sleutel</string>

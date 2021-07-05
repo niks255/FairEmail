@@ -159,10 +159,12 @@ public class Helper {
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
     static final String PGP_END_MESSAGE = "-----END PGP MESSAGE-----";
 
+    static final String PRIVACY_URI = "https://email.faircode.eu/privacy/";
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
     static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport&version=" + BuildConfig.VERSION_NAME;
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
-    static final String GRAVATAR_PRIVACY_URI = "https://meta.stackexchange.com/questions/44717/is-gravatar-a-privacy-risk";
+    static final String FAVICON_PRIVACY_URI = "https://en.wikipedia.org/wiki/Favicon";
+    static final String GRAVATAR_PRIVACY_URI = "https://en.wikipedia.org/wiki/Gravatar";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
     static final String DONTKILL_URI = "https://dontkillmyapp.com/";
 
@@ -471,6 +473,10 @@ public class Helper {
         return BuildConfig.PLAY_STORE_RELEASE;
     }
 
+    static boolean isAmazonInstall() {
+        return BuildConfig.AMAZON_RELEASE;
+    }
+
     static boolean hasPlayStore(Context context) {
         if (hasPlayStore == null)
             try {
@@ -574,7 +580,7 @@ public class Helper {
     static void _share(Context context, File file, String type, String name) {
         // https://developer.android.com/reference/android/support/v4/content/FileProvider
         Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
-        Log.i("uri=" + uri);
+        Log.i("uri=" + uri + " type=" + type);
 
         // Build intent
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -1571,12 +1577,16 @@ public class Helper {
     }
 
     static String getFingerprint(Context context) {
+        return getFingerprint(context, "SHA1");
+    }
+
+    static String getFingerprint(Context context, String hash) {
         try {
             PackageManager pm = context.getPackageManager();
             String pkg = context.getPackageName();
             PackageInfo info = pm.getPackageInfo(pkg, PackageManager.GET_SIGNATURES);
             byte[] cert = info.signatures[0].toByteArray();
-            MessageDigest digest = MessageDigest.getInstance("SHA1");
+            MessageDigest digest = MessageDigest.getInstance(hash);
             byte[] bytes = digest.digest(cert);
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes)
@@ -1590,9 +1600,19 @@ public class Helper {
 
     static boolean hasValidFingerprint(Context context) {
 /*      if (hasValidFingerprint == null) {
+            hasValidFingerprint = false;
+
             String signed = getFingerprint(context);
-            String expected = context.getString(R.string.fingerprint);
-            hasValidFingerprint = Objects.equals(signed, expected);
+            String[] fingerprints = new String[]{
+                    context.getString(R.string.fingerprint),
+                    context.getString(R.string.fingerprint_amazon)
+            };
+
+            for (String fingerprint : fingerprints)
+                if (Objects.equals(signed, fingerprint)) {
+                    hasValidFingerprint = true;
+                    break;
+                }
         }
 */      return true;
     }

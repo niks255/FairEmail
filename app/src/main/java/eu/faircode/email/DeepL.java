@@ -23,6 +23,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -62,16 +65,18 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class DeepL {
     // https://www.deepl.com/docs-api/
+    private static JSONArray jlanguages = null;
+
     private static final int DEEPL_TIMEOUT = 20; // seconds
+    private static final String PRIVACY_URI = "https://www.deepl.com/privacy/";
 
     // curl https://api-free.deepl.com/v2/languages \
-    //	-d auth_key=42c191db-21ba-9b96-2464-47a9a5e81b4a:fx \
+    //	-d auth_key=... \
     //	-d type=target
 
     public static boolean isAvailable(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean experiments = prefs.getBoolean("experiments", false);
-        return (experiments && !BuildConfig.PLAY_STORE_RELEASE);
+        return prefs.getBoolean("deepl_enabled", false);
     }
 
     public static boolean canTranslate(Context context) {
@@ -81,17 +86,17 @@ public class DeepL {
     }
 
     public static List<Language> getTargetLanguages(Context context) {
-        try (InputStream is = context.getAssets().open("deepl.json")) {
-            String json = Helper.readStream(is);
-            JSONArray jarray = new JSONArray(json);
+        try {
+            ensureLanguages(context);
 
             String pkg = context.getPackageName();
+            Resources res = context.getResources();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             List<Language> languages = new ArrayList<>();
             Map<String, Integer> frequencies = new HashMap<>();
-            for (int i = 0; i < jarray.length(); i++) {
-                JSONObject jlanguage = jarray.getJSONObject(i);
+            for (int i = 0; i < jlanguages.length(); i++) {
+                JSONObject jlanguage = jlanguages.getJSONObject(i);
                 String name = jlanguage.getString("name");
                 String target = jlanguage.getString("language");
 
@@ -104,7 +109,7 @@ public class DeepL {
                     name += " ★";
 
                 String resname = "language_" + target.toLowerCase().replace('-', '_');
-                int resid = context.getResources().getIdentifier(resname, "drawable", pkg);
+                int resid = res.getIdentifier(resname, "drawable", pkg);
 
                 languages.add(new Language(name, target, resid == 0 ? null : resid));
                 frequencies.put(target, frequency);
@@ -118,7 +123,7 @@ public class DeepL {
                     int freq1 = frequencies.get(l1.target);
                     int freq2 = frequencies.get(l2.target);
 
-                    if (freq1 == freq2)
+                    if (freq1 == freq2 || !BuildConfig.DEBUG)
                         return collator.compare(l1.name, l2.name);
                     else
                         return -Integer.compare(freq1, freq2);
@@ -129,6 +134,16 @@ public class DeepL {
         } catch (Throwable ex) {
             Log.e(ex);
             return null;
+        }
+    }
+
+    private static void ensureLanguages(Context context) throws IOException, JSONException {
+        if (jlanguages != null)
+            return;
+
+        try (InputStream is = context.getAssets().open("deepl.json")) {
+            String json = Helper.readStream(is);
+            jlanguages = new JSONArray(json);
         }
     }
 
@@ -171,7 +186,7 @@ public class DeepL {
         return null;
     }
 
-    public static String translate(String text, String target, Context context) throws IOException, JSONException {
+    public static Translation translate(String text, String target, Context context) throws IOException, JSONException {
         String request =
                 "text=" + URLEncoder.encode(text, StandardCharsets.UTF_8.name()) +
                         "&target_lang=" + URLEncoder.encode(target, StandardCharsets.UTF_8.name());
@@ -212,9 +227,12 @@ public class DeepL {
             if (jtranslations.length() == 0)
                 throw new FileNotFoundException();
             JSONObject jtranslation = (JSONObject) jtranslations.get(0);
-            String detected = jtranslation.getString("detected_source_language");
-            String translated = jtranslation.getString("text");
-            return translated;
+
+            Translation result = new Translation();
+            result.target_language = target;
+            result.detected_language = jtranslation.getString("detected_source_language");
+            result.translated_text = jtranslation.getString("text");
+            return result;
         } finally {
             connection.disconnect();
         }
@@ -271,6 +289,17 @@ public class DeepL {
             this.target = target;
             this.icon = icon;
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    public static class Translation {
+        public String detected_language;
+        public String target_language;
+        public String translated_text;
     }
 
     public static class FragmentDialogDeepL extends FragmentDialogBase {
@@ -289,11 +318,20 @@ public class DeepL {
             final CheckBox cbPro = view.findViewById(R.id.cbPro);
             final CheckBox cbSmall = view.findViewById(R.id.cbSmall);
             final TextView tvUsage = view.findViewById(R.id.tvUsage);
+            final TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
 
             ibInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Helper.viewFAQ(v.getContext(), 167, true);
+                }
+            });
+
+            tvPrivacy.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            tvPrivacy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.view(v.getContext(), Uri.parse(PRIVACY_URI), false);
                 }
             });
 
@@ -324,8 +362,8 @@ public class DeepL {
 
                     @Override
                     protected void onException(Bundle args, Throwable ex) {
-                        if (BuildConfig.DEBUG)
-                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        tvUsage.setText(Log.formatThrowable(ex, false));
+                        tvUsage.setVisibility(View.VISIBLE);
                     }
                 }.execute(this, new Bundle(), "deepl:usage");
             }

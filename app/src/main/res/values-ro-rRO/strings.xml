@@ -95,6 +95,7 @@
     <string name="title_notification_failed">\'%1$s\' a eșuat</string>
     <string name="title_notification_alert">Alertă server %1$s</string>
     <string name="title_notification_sending_left">Încercări rămase: %1$d</string>
+    <string name="title_notification_sending_retry">Trimiterea va fi reîncercată la modificările conexiunii la internet sau la tragerea în jos în mesaje de trimis</string>
     <string name="title_notification_sending_failed">Trimiterea către %1$s a eșuat</string>
     <string name="title_notification_redacted">Cenzurat: autentificare biometrică sau PIN activată</string>
     <string name="title_factor_minutes">%1$d minute</string>
@@ -118,6 +119,7 @@
     <string name="title_agree">Sunt de acord</string>
     <string name="title_disagree">Nu sunt de acord</string>
     <string name="title_version">Versiunea %1$s</string>
+    <string name="title_privacy_policy">Politica de confidențialitate</string>
     <string name="title_list_accounts">Conturi</string>
     <string name="title_list_identities">Identități</string>
     <string name="title_edit_account">Editare cont</string>
@@ -277,7 +279,7 @@
     <string name="title_advanced_suggest_frequently">Sortați adresele sugerate în funcție de frecvența de utilizare</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
-    <string name="title_advanced_send_pending">Arată pictograma non-obtrusive de trimitere întârziată</string>
+    <string name="title_advanced_send_pending">Arată pictograma neobstructivă de trimitere întârziată</string>
     <string name="title_advanced_compose_font">Font prestabilit</string>
     <string name="title_advanced_prefix_once">Adaugă prefix la subiect o singură dată pentru răspuns sau redirecționare</string>
     <string name="title_advanced_separate_reply">Introduceți o linie orizontală înaintea unui antet răspuns/forward</string>
@@ -320,7 +322,8 @@
     <string name="title_advanced_landscape3">Afișează implicit meniul de navigare în modul peisaj</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
     <string name="title_advanced_cards">Folosește stilul carduri în loc de cel tabular</string>
-    <string name="title_advanced_cards_beige">Folosește fundalul bej când folosești stilul carduri</string>
+    <string name="title_advanced_cards_beige">Utilizați un fundal bej atunci când folosiți stilul de card (numai pentru teme luminoase)</string>
+    <string name="title_advanced_tabular_background">Utilizați culoarea cardului ca și culoare de fundal atunci când folosiți stilul tabular</string>
     <string name="title_advanced_cards_shadow">Utilizează umbra pentru mesajele necitite când se folosește stilul card</string>
     <string name="title_advanced_date_header">Grupare după dată</string>
     <string name="title_advanced_date_bold">Afișați data marcată cu bold</string>
@@ -366,6 +369,7 @@
     <string name="title_advanced_monospaced">Folosește implicit fontul proporțional pentru textul mesajului</string>
     <string name="title_advanced_monospaced_pre">Folosește fontul proporțional pentru textul preformatat</string>
     <string name="title_advanced_text_color">Folosește culori text</string>
+    <string name="title_advanced_background_color">Utilizați culori de fundal</string>
     <string name="title_advanced_text_size">Folosește mărimi text</string>
     <string name="title_advanced_text_font">Folosește fonturi</string>
     <string name="title_advanced_text_align">Folosește alinierea textului</string>
@@ -449,6 +453,7 @@
     <string name="title_advanced_confirm_html">Arată implicit mesajele reformatate</string>
     <string name="title_advanced_tracking">Încearcă să detectezi și dezactivezi în mod automat imaginile folosite la urmărire</string>
     <string name="title_advanced_hide_timezone">Trimite mesajele fără date despre fusul orar</string>
+    <string name="title_advanced_client_id">Trimite numele aplicației și versiunea la serverul de e-mail</string>
     <string name="title_advanced_display_hidden">Arată textul ascuns din mesaj</string>
     <string name="title_advanced_incognito_keyboard">Utilizați tastatura incognito (Android 8+)</string>
     <string name="title_advanced_secure">Ascunde din lista de aplicații recente și previne capturarea ecranului</string>
@@ -484,6 +489,7 @@
     <string name="title_advanced_class_min_difference">Diferenţa minimă a clasei: %1$s %%</string>
     <string name="title_advanced_language">Limba</string>
     <string name="title_advanced_language_system">Sistem</string>
+    <string name="title_advanced_deepl">Integrare DeepL</string>
     <string name="title_advanced_watchdog">Verifică periodic dacă FairEmail este încă activ</string>
     <string name="title_advanced_updates">Verificați dacă există actualizări pe Github</string>
     <string name="title_advanced_check_weekly">Verifică săptămânal în loc de zilnic</string>
@@ -529,7 +535,6 @@
     <string name="title_advanced_browse_hint">Descarcă mai multe mesaje când se derulează în jos</string>
     <string name="title_advanced_layout_hint">Selectarea unui aspect mai compact și mărimea textului se poate face din meniul paginii de mesaje</string>
     <string name="title_advanced_startup_hint">Apăsați lung pe orice dosar dis listă pentru a-l adăuga sau elimina din lista de dosare unificate</string>
-    <string name="title_advanced_beige_hint">Doar temele luminoase</string>
     <string name="title_advanced_date_hint">Mesajele sunt grupate după dată doar dacă sunt sortate așa</string>
     <string name="title_advanced_navbar_colorize_hint">Depinde de versiunea de Android și de variantă dacă va funcționa</string>
     <string name="title_advanced_split_hint">Aceasta va împărţi ecranul în mai multe părți</string>
@@ -992,6 +997,7 @@
     <string name="title_translating">Traducere &#8230;</string>
     <string name="title_translate_small">Utilizați un font mic pentru textul sursă</string>
     <string name="title_translate_usage">Utilizare: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Atingeți ușor textul care urmează să fie tradus</string>
     <string name="title_edit_plain_text">Editați ca text simplu</string>
     <string name="title_edit_formatted_text">Editați ca text reformatat</string>
     <string name="title_select_certificate">Selectare cheie publică</string>
@@ -1055,6 +1061,12 @@
     <string name="title_signature_store">Stocare</string>
     <string name="title_search">Caută</string>
     <string name="title_search_for_hint">Introduceți textul</string>
+    <string name="title_search_hint">        Inițial, căutarea se efectuează pe dispozitiv.
+        Pentru a căuta și pe server apăsați butonul \'căutare din nou\'.
+    </string>
+    <string name="title_search_index_hint">        Căutarea pe indexul de căutare este rapidă, dar găsește doar cuvinte întregi.
+        Opțiunile de mai jos sunt pentru continuarea căutării pe serverul de e-mail.
+    </string>
     <string name="title_search_text_hint">Se caută text în mesaje, atunci când există un număr mare de mesaje, s-ar putea să nu funcționeze pe unele servere</string>
     <string name="title_search_size_hint">Căutarea mesajelor după mărime, când există un număr mare de mesaje, s-ar putea să nu funcționeze pe unele servere</string>
     <string name="title_search_more">Mai multe opțiuni</string>

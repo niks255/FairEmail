@@ -107,6 +107,7 @@
     <string name="title_notification_failed">\'%1$s\' failed</string>
     <string name="title_notification_alert">\'%1$s\' server alert</string>
     <string name="title_notification_sending_left">Attempts left: %1$d</string>
+    <string name="title_notification_sending_retry">Sending will be retried on internet connection changes or pulling down on the outbox</string>
     <string name="title_notification_sending_failed">Sending to %1$s failed</string>
 
     <string name="title_notification_redacted">Redacted: biometric or PIN authentication enabled</string>
@@ -144,6 +145,7 @@
     <string name="title_disagree">I disagree</string>
 
     <string name="title_version">Version %1$s</string>
+    <string name="title_privacy_policy">Privacy policy</string>
 
     <string name="title_list_accounts">Accounts</string>
     <string name="title_list_identities">Identities</string>
@@ -257,6 +259,7 @@
     <string name="title_setup_theme_grey">Grey</string>
     <string name="title_setup_theme_black">Black</string>
     <string name="title_setup_theme_black_and_white">Black and white</string>
+    <string name="title_setup_theme_solarized" translatable="false">Solarized</string>
 
     <string name="title_setup_theme_reverse">Swap colors</string>
     <string name="title_setup_theme_light">Light</string>
@@ -373,7 +376,8 @@
     <string name="title_advanced_landscape3">Show navigation menu in landscape mode by default</string>
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
-    <string name="title_advanced_cards_beige">Use beige background when using card style</string>
+    <string name="title_advanced_cards_beige">Use beige background when using card style (light themes only)</string>
+    <string name="title_advanced_tabular_background">Use card color as background color when using tabular style</string>
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_date_bold">Show date in bold</string>
@@ -418,6 +422,7 @@
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text by default</string>
     <string name="title_advanced_monospaced_pre">Use monospaced font for preformatted text</string>
+    <string name="title_advanced_background_color">Use background colors</string>
     <string name="title_advanced_text_color">Use text colors</string>
     <string name="title_advanced_text_size">Use text sizes</string>
     <string name="title_advanced_text_font">Use fonts</string>
@@ -553,6 +558,7 @@
     <string name="title_advanced_class_min_difference">Minimum class difference: %1$s %%</string>
     <string name="title_advanced_language">Language</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_deepl">DeepL integration</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
     <string name="title_advanced_check_weekly">Check weekly instead of daily</string>
@@ -620,7 +626,6 @@
 
     <string name="title_advanced_layout_hint">Switching to a more compact layout and changing the message text size can be done in the top action bar menu in the message view</string>
     <string name="title_advanced_startup_hint">Long press any folder in the folder list to add or remove it from the list of unified folders</string>
-    <string name="title_advanced_beige_hint">Light themes only</string>
     <string name="title_advanced_date_hint">Messages are only grouped by date if they are sorted by time</string>
     <string name="title_advanced_navbar_colorize_hint">Whether this works depends on the Android version and variant</string>
     <string name="title_advanced_split_hint">This will split the screen into parts</string>
@@ -701,6 +706,7 @@
     <string name="title_account_interval_hint">Frequency of refreshing the connection for push messages or frequency of checking for new messages</string>
     <string name="title_account_partial_fetch_hint">Disable this only in case of empty messages or corrupt attachments</string>
     <string name="title_color">Color</string>
+    <string name="title_background">Background</string>
     <string name="title_transparent">Transparent</string>
     <string name="title_account_ondemand">Synchronize manually</string>
     <string name="title_account_notify">Separate notifications</string>
@@ -1125,6 +1131,7 @@
     <string name="title_translating">Translating &#8230;</string>
     <string name="title_translate_small">Use a small font for the source text</string>
     <string name="title_translate_usage">Usage: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Tap the text to be translated</string>
     <string name="title_edit_plain_text">Edit as plain text</string>
     <string name="title_edit_formatted_text">Edit as reformatted text</string>
     <string name="title_select_certificate">Select public key</string>
@@ -1930,5 +1937,6 @@
     </string-array>
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>
+    <string name="fingerprint_amazon" translatable="false">20DAA43A8ADBC7BB823723C1553F4753CA7D2</string>
     <string name="public_key" translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtFbxEbzL8u5accPGgBw/XdyiSS5BBE6ZQ9ELpKyJ/OQN+kdYniCAOw3lsQ/GuJScy4Y2HobqbBgLL8GLHG+Yu2EHC9dLjA3v2Mc25vvnfn86BsrpQvz1poN2n+roTBdq09FWbtebJ8m0hDBVmtfRi7RhTKIL4No3kodLhksdnucKjcFheubebWKgpmvbmw7NwuELhaZmyhw8WTtnQ4rZPMhjY1JJZgzwNExXgD7zzg4pJPkuQlfkuRkkvBpHpi3C7VDnYjrBlLHngI4wv3wxQBVwJqlvAT9PmX8dOVnTsWWdJdLQBZVWphuqVY54kjBIovN+o8w03WjsV9QiOQq+XwIDAQAB</string>
 </resources>

@@ -48,7 +48,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -80,6 +79,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private SwitchCompat swExpandOne;
     private SwitchCompat swAutoClose;
     private TextView tvAutoSeenHint;
+    private TextView tvOnClose;
     private Spinner spOnClose;
     private Spinner spUndoTimeout;
     private SwitchCompat swCollapseMultiple;
@@ -133,6 +133,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swCollapseMultiple = view.findViewById(R.id.swCollapseMultiple);
         tvAutoSeenHint = view.findViewById(R.id.tvAutoSeenHint);
         swAutoClose = view.findViewById(R.id.swAutoClose);
+        tvOnClose = view.findViewById(R.id.tvOnClose);
         spOnClose = view.findViewById(R.id.spOnClose);
         spUndoTimeout = view.findViewById(R.id.spUndoTimeout);
         swAutoRead = view.findViewById(R.id.swAutoRead);
@@ -338,6 +339,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("autoclose", checked).apply();
+                tvOnClose.setEnabled(!checked);
                 spOnClose.setEnabled(!checked);
             }
         });
@@ -409,12 +411,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         });
 
         // Initialize
-        if (!Helper.isDarkTheme(getContext())) {
-            boolean beige = prefs.getBoolean("beige", true);
-            view.setBackgroundColor(ContextCompat.getColor(getContext(), beige
-                    ? R.color.lightColorBackground_cards_beige
-                    : R.color.lightColorBackground_cards));
-        }
+        FragmentDialogTheme.setBackground(getContext(), view, false);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -445,7 +442,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_default) {
-            FragmentOptions.reset(getContext(), RESET_OPTIONS);
+            FragmentOptions.reset(getContext(), RESET_OPTIONS, null);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -496,6 +493,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
                 break;
             }
 
+        tvOnClose.setEnabled(!swAutoClose.isChecked());
         spOnClose.setEnabled(!swAutoClose.isChecked());
 
         int undo_timeout = prefs.getInt("undo_timeout", 5000);

@@ -12,8 +12,8 @@
     <!-- White 87%  primary_text_default_material_dark -->
     <color name="colorUnreadDark">#ffffffff</color>
 
-    <color name="colorHighlightLight">#a0ffe000</color>
-    <color name="colorHighlightDark">#a0ffff00</color>
+    <color name="colorHighlightLight">#7fffe000</color>
+    <color name="colorHighlightDark">#7fffe000</color>
 
     <color name="colorEncryptLight">#ff00ff00</color>
     <color name="colorEncryptDark">#ff00e000</color>
@@ -132,6 +132,14 @@
     <color name="greyAccent">#90a4ae</color>
     <color name="greyAccentDark">#62757f</color>
     <color name="greyAccentLight">#c1d5e0</color>
+
+    <!-- https://github.com/altercation/solarized -->
+    <color name="darkSolarizedPrimary">#073642</color><!-- Base02 -->
+    <color name="darkSolarizedPrimaryDark">#002b36</color><!-- Base03 -->
+    <color name="darkSolarizedAccent">#268bd2</color>
+    <color name="darkSolarizedActionBackground">#444</color><!-- Base01 is too light -->
+    <color name="lightSolarizedPaper">#fdf6e3</color><!-- Base3 -->
+    <color name="lightSolarizedActionBackground">#93a1a1</color><!-- Base1 -->
 
     <!-- default: #323232 -->
     <color name="design_snackbar_background_color" tools:override="true">#222</color>

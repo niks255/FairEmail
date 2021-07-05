@@ -85,6 +85,7 @@
     <string name="title_notification_failed">\'%1$s\' απέτυχε</string>
     <string name="title_notification_alert">\'%1$s\' ειδοποίηση διακομιστή</string>
     <string name="title_notification_sending_left">Προσπάθειες που απομένουν: %1$d</string>
+    <string name="title_notification_sending_retry">Η αποστολή θα επιχειρηθεί εκ νέου όταν μεταβληθεί η σύνδεση στο διαδίκτυο ή όταν τραβήξετε προς τα κάτω στα εξερχόμενα</string>
     <string name="title_notification_sending_failed">Η αποστολή σε %1$s απέτυχε</string>
     <string name="title_notification_redacted">Αφαιρέθηκε: Ενεργοποίηση ταυτοποίησης με PIN ή βιομετρικά στοιχεια</string>
     <string name="title_factor_minutes">%1$d λεπτά</string>
@@ -108,6 +109,7 @@
     <string name="title_agree">Συμφωνώ</string>
     <string name="title_disagree">Διαφωνώ</string>
     <string name="title_version">Έκδοση %1$s</string>
+    <string name="title_privacy_policy">Πολιτική απορρήτου</string>
     <string name="title_list_accounts">Λογαριασμοί</string>
     <string name="title_list_identities">Ταυτότητες</string>
     <string name="title_edit_account">Επεξεργασία λογαριασμού</string>
@@ -310,7 +312,8 @@
     <string name="title_advanced_landscape3">Προβολή μενού πλοήγησης κατά τον οριζόντιο προσανατολισμό από προεπιλογή</string>
     <string name="title_advanced_startup">Εμφάνιση στην οθόνη έναρξης</string>
     <string name="title_advanced_cards">Προβολή σε στιλ κάρτας αντί σε στιλ πίνακα</string>
-    <string name="title_advanced_cards_beige">Χρήση μπεζ φόντου όταν χρησιμοποιείται το στιλ κάρτας</string>
+    <string name="title_advanced_cards_beige">Μπεζ φόντο κατά τη χρήση του στιλ κάρτας (ανοιχτόχρωμα θέματα μόνο)</string>
+    <string name="title_advanced_tabular_background">Να χρησιμοποιείται το χρώμα της κάρτας ως χρώμα φόντου κατά τη χρήση του στιλ πίνακα</string>
     <string name="title_advanced_cards_shadow">Σκίαση μη αναγνωσμένων μηνυμάτων κατά τη χρήση στιλ κάρτας</string>
     <string name="title_advanced_date_header">Ομαδοποίηση κατά ημερομηνία</string>
     <string name="title_advanced_date_bold">Προβολή ημερομηνίας με έντονους χαρακτήρες</string>
@@ -473,6 +476,7 @@
     <string name="title_advanced_class_min_difference">Ελάχιστη διαφορά για την επόμενη τάξη: %1$s%%</string>
     <string name="title_advanced_language">Γλώσσα</string>
     <string name="title_advanced_language_system">Σύστημα</string>
+    <string name="title_advanced_deepl">Ενσωμάτωση DeepL</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
     <string name="title_advanced_check_weekly">Εβδομαδιαίος έλεγχος αντί για καθημερινός</string>
@@ -517,7 +521,6 @@
     <string name="title_advanced_browse_hint">Λήψη περισσοτέρων μηνυμάτων με την κύλιση προς τα κάτω</string>
     <string name="title_advanced_layout_hint">Εναλλαγή σε πιο συμπαγή διάταξη καθώς και αλλαγές στο μέγεθος του κειμένου του μηνύματος, μπορούν να γίνουν από την πάνω γραμμή ενεργειών στην οθόνη προβολής του μηνύματος</string>
     <string name="title_advanced_startup_hint">Πατήστε παρατεταμένα σε οποιονδήποτε φάκελο της λίστας φακέλων για να τον προσθέσετε ή να τον αφαιρέσετε από τη λίστα των ενοποιημένων φακέλων</string>
-    <string name="title_advanced_beige_hint">Φωτεινά θέματα μόνο</string>
     <string name="title_advanced_date_hint">Τα μηνύματα ομαδοποιούνται μόνον κατά ημερομηνία όταν ταξινομούνται σε χρονολογική σειρά</string>
     <string name="title_advanced_navbar_colorize_hint">Το αν αυτό λειτουργεί ή όχι, εξαρτάται από την έκδοση και εκδοχή του Android</string>
     <string name="title_advanced_split_hint">Θα χωρίσει την οθόνη σε μέρη</string>
@@ -980,6 +983,7 @@
     <string name="title_translating">Μεταφράζεται &#8230;</string>
     <string name="title_translate_small">Χρήση μιας μικρής γραμματοσειράς για το πηγαίο κείμενο</string>
     <string name="title_translate_usage">Χρήση: %1$s / %2$s (%3$d %%)</string>
+    <string name="title_translate_tap">Πατήστε στο κείμενο για να μεταφραστεί</string>
     <string name="title_edit_plain_text">Επεξεργασία ως απλό κείμενο</string>
     <string name="title_edit_formatted_text">Επεξεργασία ως αναμορφοποιημένο κείμενο</string>
     <string name="title_select_certificate">Επιλογή δημοσίου κλειδιού</string>

@@ -112,7 +112,8 @@ public class ApplicationEx extends Application
                             for (StackTraceElement ste : stack) {
                                 String clazz = ste.getClassName();
                                 if (clazz != null &&
-                                        (clazz.startsWith("com.android.webview.chromium") ||
+                                        (clazz.startsWith("org.chromium") ||
+                                                clazz.startsWith("com.android.webview.chromium") ||
                                                 clazz.startsWith("androidx.appcompat.widget")))
                                     return;
                             }
@@ -211,6 +212,10 @@ public class ApplicationEx extends Application
             case "schedule_day5":
             case "schedule_day6":
                 ServiceSynchronize.reschedule(this);
+                break;
+            case "check_blocklist":
+            case "use_blocklist":
+                DnsBlockList.clearCache();
                 break;
             case "watchdog":
                 ServiceSynchronize.scheduleWatchdog(this);
@@ -479,6 +484,10 @@ public class ApplicationEx extends Application
                 String key = prefs.getString("deepl", null);
                 editor.putString("deepl_key", key).remove("deepl");
             }
+        } else if (version < 1630) {
+            boolean experiments = prefs.getBoolean("experiments", false);
+            if (experiments)
+                editor.putBoolean("deepl_enabled", true);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

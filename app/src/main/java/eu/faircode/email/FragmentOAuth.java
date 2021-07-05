@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -34,9 +35,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -92,12 +90,14 @@ import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_OAUTH;
 public class FragmentOAuth extends FragmentBase {
     private String id;
     private String name;
+    private String privacy;
     private boolean askAccount;
 
     private ViewGroup view;
     private ScrollView scroll;
 
-    private TextView tvGrantHint;
+    private TextView tvTitle;
+    private TextView tvPrivacy;
     private EditText etName;
     private EditText etEmail;
     private CheckBox cbUpdate;
@@ -122,6 +122,7 @@ public class FragmentOAuth extends FragmentBase {
         Bundle args = getArguments();
         id = args.getString("id");
         name = args.getString("name");
+        privacy = args.getString("privacy");
         askAccount = args.getBoolean("askAccount", false);
     }
 
@@ -135,7 +136,8 @@ public class FragmentOAuth extends FragmentBase {
         scroll = view.findViewById(R.id.scroll);
 
         // Get controls
-        tvGrantHint = view.findViewById(R.id.tvGrantHint);
+        tvTitle = view.findViewById(R.id.tvTitle);
+        tvPrivacy = view.findViewById(R.id.tvPrivacy);
         etName = view.findViewById(R.id.etName);
         etEmail = view.findViewById(R.id.etEmail);
         cbUpdate = view.findViewById(R.id.cbUpdate);
@@ -153,6 +155,15 @@ public class FragmentOAuth extends FragmentBase {
 
         // Wire controls
 
+        tvPrivacy.setVisibility(TextUtils.isEmpty(privacy) ? View.GONE : View.VISIBLE);
+        tvPrivacy.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(privacy), false);
+            }
+        });
+
         btnOAuth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,7 +179,7 @@ public class FragmentOAuth extends FragmentBase {
         });
 
         // Initialize
-        tvGrantHint.setText(getString(R.string.title_setup_oauth_rationale, name));
+        tvTitle.setText(getString(R.string.title_setup_oauth_rationale, name));
         etName.setVisibility(askAccount ? View.VISIBLE : View.GONE);
         etEmail.setVisibility(askAccount ? View.VISIBLE : View.GONE);
         pbOAuth.setVisibility(View.GONE);
@@ -177,30 +188,6 @@ public class FragmentOAuth extends FragmentBase {
         hideError();
 
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_quick_setup, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_help) {
-            onMenuHelp();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuHelp() {
-        Bundle args = new Bundle();
-        args.putString("name", "SETUP.md");
-
-        FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
-        fragment.setArguments(args);
-        fragment.show(getChildFragmentManager(), "help");
     }
 
     @Override
@@ -287,19 +274,20 @@ public class FragmentOAuth extends FragmentBase {
 
             AppAuthConfiguration appAuthConfig = new AppAuthConfiguration.Builder()
                     .setBrowserMatcher(new BrowserMatcher() {
+                        final BrowserMatcher SBROWSER = new VersionedBrowserMatcher(
+                                Browsers.SBrowser.PACKAGE_NAME,
+                                Browsers.SBrowser.SIGNATURE_SET,
+                                true,
+                                VersionRange.atMost("5.3"));
+
                         @Override
                         public boolean matches(@NonNull BrowserDescriptor descriptor) {
-                            BrowserMatcher sbrowser = new VersionedBrowserMatcher(
-                                    Browsers.SBrowser.PACKAGE_NAME,
-                                    Browsers.SBrowser.SIGNATURE_SET,
-                                    true,
-                                    VersionRange.atMost("5.3"));
-                            boolean accept = (!sbrowser.matches(descriptor) &&
-                                    (!"gmail".equals(provider.id) || !descriptor.useCustomTab));
+                            boolean accept =
+                                    (!SBROWSER.matches(descriptor) && !descriptor.useCustomTab);
                             EntityLog.log(context,
                                     "Browser=" + descriptor.packageName +
                                             ":" + descriptor.version +
-                                            ":" + descriptor.useCustomTab + "" +
+                                            " tabs=" + descriptor.useCustomTab + "" +
                                             " accept=" + accept +
                                             " provider=" + provider.id);
                             return accept;
