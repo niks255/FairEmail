@@ -42,6 +42,7 @@ For authorizing:
 * Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
 * Apple iCloud, see [question 148](#user-content-faq148)
 * Free.fr, see [question 157](#user-content-faq157)
+* Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) isn't enabled
 
 Please see [here](#user-content-faq22) for common error messages and solutions.
 
@@ -771,6 +772,7 @@ Common errors:
 * *No key*: there is no PGP key available for one of the listed email addresses
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 * *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
+* *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure all email addresses are lowercase. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
 
 <br />
 
@@ -1087,6 +1089,12 @@ Some providers require using an app password instead of the account password, so
 Sometimes it is necessary to enable external access (IMAP/SMTP) on the website of the provider first.
 Other possible causes are that the account is blocked or that logging in has been administratively restricted in some way,
 for example by allowing to login from certain networks / IP addresses only.
+
+* **Free.fr**: please see [this FAQ](#user-content-faq157)
+* **Gmail / G suite**: please see [this FAQ](#user-content-faq6)
+* **iCloud**: please see [this FAQ](#user-content-faq148)
+* **Posteo**: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) isn't enabled.
+* **Yahoo, AOL and Sky**: please see [this FAQ](#user-content-faq88)
 
 If needed, you can update a password in the account settings:
 navigation menu (left side menu), tap *Settings*, tap *Manual setup*, tap *Accounts* and tap on the account.
@@ -1440,6 +1448,7 @@ It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expr
 to match **the username** of an email address (the part before the @ sign).
 
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
+Since version 1.1640 it is possible to match the full email address with a regex, which can be useful for matching alias domain names.
 
 If you like to match a catch-all email address, this regex is mostly okay:
 
@@ -2893,6 +2902,7 @@ Restarting the device might be necessary to let the Play store recognize the pur
 Note that:
 
 * If you get *ITEM_ALREADY_OWNED*, the Play store app probably needs to be updated, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
+* If you get *BILLING_UNAVAILABLE Google Play In-app Billing API version is less than 3*, the Play store app might not be logged into the account used to install the app
 * Purchases are stored in the Google cloud and cannot get lost
 * There is no time limit on purchases, so they cannot expire
 * Google does not expose details (name, e-mail, etc) about buyers to developers
@@ -3218,6 +3228,7 @@ The error *User is authenticated but not connected* might occur if:
 * The account password was changed: changing it in FairEmail too should fix the problem
 * An alias email address is being used as username instead of the primary email address
 * An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
+* IMAP was administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) how an administrator can enable it again
 
 The shared mailbox alias will mostly be the email address of the shared account, like this:
 
@@ -3276,7 +3287,7 @@ by long pressing the sent folder in the folder list and enabling *Show in unifie
 This way all messages can stay where they belong, while allowing to see both incoming and outgoing messages at one place.
 
 If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox
-or set a default CC/BCC address in the advanced identity settings to send yourself a copy.
+or set a default CC/BCC address in the advanced identity settings (via the manual setup in the main setup screen) to send yourself a copy.
 
 <br />
 

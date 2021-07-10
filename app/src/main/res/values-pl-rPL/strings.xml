@@ -142,12 +142,15 @@
     <string name="title_setup_quick_accounts">Dodaj lub zmień konta</string>
     <string name="title_setup_quick_support">Niektórzy dostawcy utrudniają dodanie konta. To nie jest wina FairEmail. W razie problemów poproś o pomoc.</string>
     <string name="title_setup_quick_hint">Szybka konfiguracja pobierze informacje o ustawieniach z autoconfig.thunderbird.net</string>
+    <string name="title_setup_quick_patience">Proszę o cierpliwość &#8230;</string>
     <string name="title_setup_quick_imap">Serwer IMAP do odbierania wiadomości</string>
     <string name="title_setup_quick_smtp">Serwer SMTP do wysyłania wiadomości</string>
     <string name="title_setup_wizard">Kreator</string>
     <string name="title_setup_wizard_multiple">Kreator może być używany wielokrotnie, aby skonfigurować wiele kont</string>
     <string name="title_setup_wizard_new">Potrzebujesz nowego adresu e-mail?</string>
     <string name="title_setup_manual">Ręczna konfiguracja i opcje konta</string>
+    <string name="title_setup_classic">Konfiguracja klasyczna</string>
+    <string name="title_setup_documentation">Sprawdź dokumentację dostawcy poczty e-mail w celu uzyskania poprawnej konfiguracji serwera e-mail</string>
     <string name="title_setup_account_remark">Odbieranie wiadomości e-mail</string>
     <string name="title_setup_identity_remark">Wysyłanie wiadomości e-mail</string>
     <string name="title_setup_account_identity_hint">Możesz skonfigurować nazwę, kolor i akcje przesuwania w ustawieniach konta oraz skonfigurować podpis w ustawieniach tożsamości</string>
@@ -207,7 +210,6 @@
     <string name="title_setup_close">Zamknij ustawienia</string>
     <string name="title_setup_export">Eksport ustawień</string>
     <string name="title_setup_import">Import ustawień</string>
-    <string name="title_setup_export_do">Hasło służy do szyfrowania ustawień i jest wymagane do ponownego zaimportowania ustawień</string>
     <string name="title_setup_import_do">Zaimportowane konta zostaną dodane bez nadpisywania istniejących</string>
     <string name="title_setup_password">Hasło</string>
     <string name="title_setup_password_chars">Hasło zawiera znaki kontrolne lub znaki spacji</string>
@@ -377,6 +379,7 @@
     <string name="title_advanced_contrast">Użyj wysokiego kontrastu dla tekstu wiadomości</string>
     <string name="title_advanced_monospaced">Użyj czcionki o stałej szerokości dla tekstu wiadomości</string>
     <string name="title_advanced_monospaced_pre">Użyj czcionki o stałej szerokości dla tekstu sformatowanego</string>
+    <string name="title_advanced_background_color">Użyj kolorów tła</string>
     <string name="title_advanced_text_color">Użyj kolorów tekstu</string>
     <string name="title_advanced_text_size">Użyj rozmiarów tekstu</string>
     <string name="title_advanced_text_font">Użyj czcionek</string>
@@ -616,6 +619,7 @@
     <string name="title_account_interval_hint">Częstotliwość odświeżania połączenia dla wiadomości Push lub częstotliwość sprawdzania nowych wiadomości</string>
     <string name="title_account_partial_fetch_hint">Wyłącz to tylko w przypadku pustych wiadomości lub uszkodzonych załączników</string>
     <string name="title_color">Kolor</string>
+    <string name="title_background">Tło</string>
     <string name="title_transparent">Przeźroczysty</string>
     <string name="title_account_ondemand">Synchronizuj ręcznie</string>
     <string name="title_account_notify">Oddzielne powiadomienia</string>
@@ -976,6 +980,7 @@
     <string name="title_style_font">Czcionka</string>
     <string name="title_style_font_default">Domyślny</string>
     <string name="title_style_blockquote">Zablokuj cytat</string>
+    <string name="title_style_indentation">Wcięcie</string>
     <string name="title_style_strikethrough">Przekreślenie</string>
     <string name="title_style_clear">Wyczyść formatowanie</string>
     <string name="title_style_link">Wstaw link</string>

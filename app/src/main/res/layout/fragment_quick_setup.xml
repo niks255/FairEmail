@@ -132,6 +132,18 @@
             app:layout_constraintTop_toTopOf="@id/btnCheck" />
 
         <eu.faircode.email.FixedTextView
+            android:id="@+id/tvPatience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_setup_quick_patience"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnCheck" />
+
+        <eu.faircode.email.FixedTextView
             android:id="@+id/tvErrorTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -140,7 +152,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnCheck" />
+            app:layout_constraintTop_toBottomOf="@id/tvPatience" />
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvError"
@@ -179,6 +191,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvErrorHint" />
 
+        <eu.faircode.email.FixedTextView
+            android:id="@+id/tvInstructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="provider instructions"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvErrorRemark" />
+
         <Button
             android:id="@+id/btnSupport"
             android:layout_width="wrap_content"
@@ -192,7 +215,7 @@
             android:textColor="?attr/colorInfoForeground"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvErrorRemark" />
+            app:layout_constraintTop_toBottomOf="@id/tvInstructions" />
 
         <Button
             android:id="@+id/btnHelp"
@@ -207,28 +230,17 @@
             android:textColor="?attr/colorInfoForeground"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvErrorRemark" />
-
-        <eu.faircode.email.FixedTextView
-            android:id="@+id/tvInstructions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="provider instructions"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSupport" />
+            app:layout_constraintTop_toBottomOf="@id/tvInstructions" />
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvImapTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:text="@string/title_setup_quick_imap"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvInstructions" />
+            app:layout_constraintTop_toBottomOf="@id/btnSupport" />
 
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvImap"

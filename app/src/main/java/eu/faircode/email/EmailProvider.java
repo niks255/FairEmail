@@ -23,23 +23,31 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.system.ErrnoException;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+
+import com.sun.mail.util.LineInputStream;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +59,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import static android.system.OsConstants.ECONNREFUSED;
 
 public class EmailProvider implements Parcelable {
     public String id;
@@ -147,6 +161,9 @@ public class EmailProvider implements Parcelable {
                         provider.useip = xml.getAttributeBooleanValue(null, "useip", true);
                         provider.appPassword = xml.getAttributeBooleanValue(null, "appPassword", false);
                         provider.link = xml.getAttributeValue(null, "link");
+                        String documentation = xml.getAttributeValue(null, "documentation");
+                        if (documentation != null)
+                            provider.documentation = new StringBuilder(documentation);
                         provider.type = xml.getAttributeValue(null, "type");
                         String user = xml.getAttributeValue(null, "user");
                         if ("local".equals(user))
@@ -229,6 +246,16 @@ public class EmailProvider implements Parcelable {
 
         if (PROPRIETARY.contains(domain))
             throw new IllegalArgumentException(context.getString(R.string.title_no_standard));
+
+        if (BuildConfig.DEBUG && false)
+            try {
+                // Scan ports
+                Log.i("Provider from template domain=" + domain);
+                return fromTemplate(context, domain, discover);
+            } catch (Throwable ex) {
+                Log.w(ex);
+                throw new UnknownHostException(context.getString(R.string.title_setup_no_settings, domain));
+            }
 
         List<EmailProvider> providers = loadProfiles(context);
         for (EmailProvider provider : providers)
@@ -599,22 +626,31 @@ public class EmailProvider implements Parcelable {
         if (discover == Discover.ALL || discover == Discover.IMAP) {
             List<Server> imaps = new ArrayList<>();
             // SSL
-            imaps.add(new Server(context, domain, "imap", 993));
-            imaps.add(new Server(context, domain, "imaps", 993));
-            imaps.add(new Server(context, domain, "mail", 993));
-            imaps.add(new Server(context, domain, "mx", 993));
-            imaps.add(new Server(context, domain, null, 993));
+            imaps.add(new Server(context, domain, "imap", 993, false));
+            imaps.add(new Server(context, domain, "imaps", 993, false));
+            imaps.add(new Server(context, domain, "mail", 993, false));
+            imaps.add(new Server(context, domain, "mx", 993, false));
+            imaps.add(new Server(context, domain, null, 993, false));
             // STARTTLS
-            imaps.add(new Server(context, domain, "imap", 143));
-            imaps.add(new Server(context, domain, "mail", 143));
-            imaps.add(new Server(context, domain, "mx", 143));
-            imaps.add(new Server(context, domain, null, 143));
+            imaps.add(new Server(context, domain, "imap", 143, true));
+            imaps.add(new Server(context, domain, "mail", 143, true));
+            imaps.add(new Server(context, domain, "mx", 143, true));
+            imaps.add(new Server(context, domain, null, 143, true));
 
-            for (Server server : imaps)
-                if (server.reachable.get()) {
+            Server untrusted = null;
+            for (Server server : imaps) {
+                Boolean result = server.isReachable.get();
+                if (result == null) {
+                    if (untrusted == null)
+                        untrusted = server;
+                } else if (result) {
                     imap = server;
                     break;
                 }
+            }
+
+            if (imap == null)
+                imap = untrusted;
 
             if (imap == null)
                 throw new UnknownHostException(domain + " template");
@@ -623,22 +659,31 @@ public class EmailProvider implements Parcelable {
         if (discover == Discover.ALL || discover == Discover.SMTP) {
             List<Server> smtps = new ArrayList<>();
             // STARTTLS
-            smtps.add(new Server(context, domain, "smtp", 587));
-            smtps.add(new Server(context, domain, "mail", 587));
-            smtps.add(new Server(context, domain, "mx", 587));
-            smtps.add(new Server(context, domain, null, 587));
+            smtps.add(new Server(context, domain, "smtp", 587, true));
+            smtps.add(new Server(context, domain, "mail", 587, true));
+            smtps.add(new Server(context, domain, "mx", 587, true));
+            smtps.add(new Server(context, domain, null, 587, true));
             // SSL
-            smtps.add(new Server(context, domain, "smtp", 465));
-            smtps.add(new Server(context, domain, "smtps", 465));
-            smtps.add(new Server(context, domain, "mail", 465));
-            smtps.add(new Server(context, domain, "mx", 465));
-            smtps.add(new Server(context, domain, null, 465));
+            smtps.add(new Server(context, domain, "smtp", 465, false));
+            smtps.add(new Server(context, domain, "smtps", 465, false));
+            smtps.add(new Server(context, domain, "mail", 465, false));
+            smtps.add(new Server(context, domain, "mx", 465, false));
+            smtps.add(new Server(context, domain, null, 465, false));
 
-            for (Server server : smtps)
-                if (server.reachable.get()) {
+            Server untrusted = null;
+            for (Server server : smtps) {
+                Boolean result = server.isReachable.get();
+                if (result == null) {
+                    if (untrusted == null)
+                        untrusted = server;
+                } else if (result) {
                     smtp = server;
                     break;
                 }
+            }
+
+            if (smtp == null)
+                smtp = untrusted;
 
             if (smtp == null)
                 throw new UnknownHostException(domain + " template");
@@ -648,17 +693,11 @@ public class EmailProvider implements Parcelable {
         EmailProvider provider = new EmailProvider();
         provider.name = domain;
 
-        if (imap != null) {
-            provider.imap.host = imap.host;
-            provider.imap.port = imap.port;
-            provider.imap.starttls = (imap.port == 143);
-        }
+        if (imap != null)
+            provider.imap = imap;
 
-        if (smtp != null) {
-            provider.smtp.host = smtp.host;
-            provider.smtp.port = smtp.port;
-            provider.smtp.starttls = (smtp.port == 587);
-        }
+        if (smtp != null)
+            provider.smtp = smtp;
 
         provider.log(context);
         return provider;
@@ -674,8 +713,8 @@ public class EmailProvider implements Parcelable {
     }
 
     private void log(Context context) {
-        EntityLog.log(context, "imap=" + imap.host + ":" + imap.port + ":" + imap.starttls);
-        EntityLog.log(context, "smtp=" + smtp.host + ":" + smtp.port + ":" + smtp.starttls);
+        EntityLog.log(context, "imap=" + imap);
+        EntityLog.log(context, "smtp=" + smtp);
     }
 
     protected EmailProvider(Parcel in) {
@@ -752,38 +791,167 @@ public class EmailProvider implements Parcelable {
         public int port;
         public boolean starttls;
 
-        private Future<Boolean> reachable;
+        private Future<Boolean> isReachable;
 
         private Server() {
         }
 
-        private Server(Context context, String domain, String prefix, int port) {
+        private Server(Context context, String domain, String prefix, int port, boolean starttls) {
             this.host = (prefix == null ? "" : prefix + ".") + domain;
             this.port = port;
+            this.starttls = starttls;
 
-            Log.i("Scanning " + host + ":" + port);
-            this.reachable = executor.submit(new Callable<Boolean>() {
+            Log.i("Scanning " + this);
+            this.isReachable = executor.submit(new Callable<Boolean>() {
+                // Returns:
+                //   false: closed
+                //   true: listening
+                //   null: untrusted
                 @Override
                 public Boolean call() {
                     try {
                         for (InetAddress iaddr : InetAddress.getAllByName(host)) {
                             InetSocketAddress address = new InetSocketAddress(iaddr, Server.this.port);
-                            try (Socket socket = new Socket()) {
-                                Log.i("Connecting to " + address);
+
+                            SocketFactory factory = (starttls
+                                    ? SocketFactory.getDefault()
+                                    : SSLSocketFactory.getDefault());
+                            try (Socket socket = factory.createSocket()) {
+                                EntityLog.log(context, "Connecting to " + address);
                                 socket.connect(address, SCAN_TIMEOUT);
+                                EntityLog.log(context, "Connected " + address);
+
+                                socket.setSoTimeout(SCAN_TIMEOUT);
+
+                                SSLSocket sslSocket = null;
+                                try {
+                                    if (starttls)
+                                        sslSocket = starttls(socket, context);
+                                    else
+                                        sslSocket = (SSLSocket) socket;
+
+                                    sslSocket.startHandshake();
+
+                                    Certificate[] certs = sslSocket.getSession().getPeerCertificates();
+                                    for (Certificate cert : certs)
+                                        if (cert instanceof X509Certificate) {
+                                            List<String> names = ConnectionHelper.getDnsNames((X509Certificate) cert);
+                                            EntityLog.log(context, "Certificate " + address +
+                                                    " " + TextUtils.join(",", names));
+                                            if (ConnectionHelper.matches(host, names)) {
+                                                EntityLog.log(context, "Trusted " + address);
+                                                return true;
+                                            }
+                                        }
+
+                                    EntityLog.log(context, "Untrusted " + address);
+                                    return null;
+                                } catch (Throwable ex) {
+                                    // Typical:
+                                    //   javax.net.ssl.SSLException: Unable to parse TLS packet header
+                                    EntityLog.log(context, "Handshake " + address + ": " + Log.formatThrowable(ex));
+                                } finally {
+                                    try {
+                                        if (sslSocket != null)
+                                            sslSocket.close();
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
+                                }
+
                                 EntityLog.log(context, "Reachable " + address);
                                 return true;
                             } catch (Throwable ex) {
-                                Log.i("Unreachable " + address + ": " + Log.formatThrowable(ex));
+                                // Typical:
+                                //   java.net.ConnectException: failed to connect to ...
+                                //     android.system.ErrnoException: isConnected failed: ECONNREFUSED (Connection refused)
+                                EntityLog.log(context, "Unreachable " + address + ": " + Log.formatThrowable(ex));
+
+                                // Skip other addresses
+                                if (ex instanceof ConnectException &&
+                                        ex.getCause() instanceof ErrnoException &&
+                                        ((ErrnoException) ex.getCause()).errno == ECONNREFUSED)
+                                    return false;
                             }
                         }
                         return false;
                     } catch (Throwable ex) {
-                        Log.w(ex);
+                        // Typical:
+                        //   java.net.UnknownHostException: Unable to resolve host
+                        //     android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No address associated with hostname)
+                        EntityLog.log(context, "Error " + this + ": " + Log.formatThrowable(ex));
                         return false;
                     }
                 }
             });
+        }
+
+        private SSLSocket starttls(Socket socket, Context context) throws IOException {
+            String response;
+            String command;
+            boolean has = false;
+
+            LineInputStream lis =
+                    new LineInputStream(
+                            new BufferedInputStream(
+                                    socket.getInputStream()));
+
+            if (port == 587) {
+                do {
+                    response = lis.readLine();
+                    if (response != null)
+                        EntityLog.log(context, socket.getRemoteSocketAddress() + " <" + response);
+                } while (response != null && !response.startsWith("220 "));
+
+                command = "EHLO " + EmailService.getDefaultEhlo() + "\n";
+                EntityLog.log(context, socket.getRemoteSocketAddress() + " >" + command);
+                socket.getOutputStream().write(command.getBytes());
+
+                do {
+                    response = lis.readLine();
+                    if (response != null) {
+                        EntityLog.log(context, socket.getRemoteSocketAddress() + " <" + response);
+                        if (response.contains("STARTTLS"))
+                            has = true;
+                    }
+                } while (response != null &&
+                        response.length() >= 4 && response.charAt(3) == '-');
+
+                if (has) {
+                    command = "STARTTLS\n";
+                    EntityLog.log(context, socket.getRemoteSocketAddress() + " >" + command);
+                    socket.getOutputStream().write(command.getBytes());
+                }
+            } else if (port == 143) {
+                do {
+                    response = lis.readLine();
+                    if (response != null) {
+                        EntityLog.log(context, socket.getRemoteSocketAddress() + " <" + response);
+                        if (response.contains("STARTTLS"))
+                            has = true;
+                    }
+                } while (response != null &&
+                        !response.startsWith("* OK"));
+
+                if (has) {
+                    command = "A001 STARTTLS\n";
+                    EntityLog.log(context, socket.getRemoteSocketAddress() + " >" + command);
+                    socket.getOutputStream().write(command.getBytes());
+                }
+            }
+
+            if (has) {
+                do {
+                    response = lis.readLine();
+                    if (response != null)
+                        EntityLog.log(context, socket.getRemoteSocketAddress() + " <" + response);
+                } while (response != null &&
+                        !(response.startsWith("A001 OK") || response.startsWith("220 ")));
+
+                SSLSocketFactory sslFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+                return (SSLSocket) sslFactory.createSocket(socket, host, port, false);
+            } else
+                throw new SocketException("No STARTTLS");
         }
 
         @NonNull

@@ -648,6 +648,18 @@ public class FragmentCompose extends FragmentBase {
                             etBody.setSelection(added);
                         }
 
+                        // Escape indent at end
+                        IndentSpan[] indents = text.getSpans(added + 1, added + 1, IndentSpan.class);
+                        for (IndentSpan indent : indents) {
+                            int s = text.getSpanStart(indent);
+                            int e = text.getSpanEnd(indent);
+                            int f = text.getSpanFlags(indent);
+                            if (e - 1 > s && added + 1 == e) {
+                                text.removeSpan(indent);
+                                text.setSpan(new IndentSpan(indent.getLeadingMargin(true)), s, e - 1, f);
+                            }
+                        }
+
                         boolean renum = false;
                         BulletSpan[] bullets = text.getSpans(added + 1, added + 1, BulletSpan.class);
                         for (BulletSpan span : bullets) {
@@ -2967,6 +2979,9 @@ public class FragmentCompose extends FragmentBase {
                             input.delete();
                             db.identity().setIdentitySignKey(identity.id, null);
                             OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
+                            if (error != null &&
+                                    error.getErrorId() == 0 && error.getMessage() == null)
+                                error.setMessage("General error");
                             throw new IllegalArgumentException(
                                     "OpenPgp" +
                                             " error " + (error == null ? "?" : error.getErrorId()) +
@@ -4360,7 +4375,12 @@ public class FragmentCompose extends FragmentBase {
                             boolean quote = (quote_reply &&
                                     ("reply".equals(action) || "reply_all".equals(action) || "list".equals(action)));
 
-                            e.tagName(quote ? "blockquote" : "p");
+                            if (quote) {
+                                String style = e.attr("style");
+                                style = HtmlHelper.mergeStyles(style, HtmlHelper.getQuoteStyle(e));
+                                e.tagName("blockquote").attr("style", style);
+                            } else
+                                e.tagName("p");
                             reply.appendChild(e);
 
                             if (write_below)
@@ -5702,6 +5722,7 @@ public class FragmentCompose extends FragmentBase {
                 final boolean show_images = args.getBoolean("show_images", false);
 
                 int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
+                final int colorBlockquote = Helper.resolveColor(context, R.attr.colorBlockquote, colorPrimary);
                 int quoteGap = context.getResources().getDimensionPixelSize(R.dimen.quote_gap_size);
                 int quoteStripe = context.getResources().getDimensionPixelSize(R.dimen.quote_stripe_width);
 
@@ -5727,9 +5748,9 @@ public class FragmentCompose extends FragmentBase {
                 for (QuoteSpan quoteSpan : bodySpans) {
                     QuoteSpan q;
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
-                        q = new QuoteSpan(colorPrimary);
+                        q = new QuoteSpan(colorBlockquote);
                     else
-                        q = new QuoteSpan(colorPrimary, quoteStripe, quoteGap);
+                        q = new QuoteSpan(colorBlockquote, quoteStripe, quoteGap);
                     bodyBuilder.setSpan(q,
                             bodyBuilder.getSpanStart(quoteSpan),
                             bodyBuilder.getSpanEnd(quoteSpan),

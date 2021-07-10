@@ -39,7 +39,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -1792,7 +1791,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibEvent.setVisibility(tools && button_event && message.content ? View.VISIBLE : View.GONE);
                     ibSearchText.setVisibility(tools && button_search_text && message.content && !full ? View.VISIBLE : View.GONE);
                     ibSearch.setVisibility(tools && button_search && (froms > 0 || tos > 0) && !outbox ? View.VISIBLE : View.GONE);
-                    ibTranslate.setVisibility(tools && button_translate && DeepL.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
+                    ibTranslate.setVisibility(tools && !outbox && button_translate && DeepL.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
                     ibHide.setVisibility(tools && button_hide && !outbox ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
                     ibAnswer.setVisibility(!tools || outbox || (!expand_all && expand_one) ? View.GONE : View.VISIBLE);
@@ -2377,18 +2376,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             args.putParcelable("actions", getConversationActions(message, document, context));
 
                         // Collapse quotes
-                        if (!show_quotes) {
-                            List<Element> succesive = new ArrayList<>();
-                            for (Element quote : document.select("blockquote")) {
-                                Element next = quote.nextElementSibling();
-                                if (next != null && "blockquote".equals(next.tagName()))
-                                    succesive.add(quote);
-                                else
-                                    quote.html("&#8230;");
-                            }
-                            for (Element quote : succesive)
-                                quote.remove();
-                        }
+                        if (!show_quotes)
+                            HtmlHelper.collapseQuotes(document);
 
                         // Draw images
                         SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, document, new Html.ImageGetter() {
@@ -4529,7 +4518,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Log.i("Opening uri=" + uri + " title=" + title);
             uri = Uri.parse(uri.toString().replaceAll("\\s+", ""));
 
-            if ("email.faircode.eu".equals(uri.getHost()) && "/activate/".equals(uri.getPath())) {
+            try {
+                String url = uri.getQueryParameter("url");
+                if (!TextUtils.isEmpty(url)) {
+                    Uri alt = Uri.parse(url);
+                    if (isActivate(alt))
+                        uri = alt;
+                }
+            } catch (Throwable ignored) {
+            }
+
+            if (isActivate(uri)) {
                 try {
                     if (ActivityBilling.activatePro(context, uri))
                         ToastEx.makeText(context, R.string.title_pro_valid, Toast.LENGTH_LONG).show();
@@ -4569,6 +4568,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             return true;
+        }
+
+        private boolean isActivate(Uri uri) {
+            return ("email.faircode.eu".equals(uri.getHost()) &&
+                    "/activate/".equals(uri.getPath()));
         }
 
         private void onOpenImage(long id, @NonNull String source) {
@@ -6580,9 +6584,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (language != null) {
                         TextView tv = view.findViewById(android.R.id.text1);
 
-                        Resources res = context.getResources();
-                        Drawable icon = res.getDrawable(language.icon);
-                        int iconSize = res.getDimensionPixelSize(R.dimen.menu_item_icon_size);
+                        Drawable icon = context.getDrawable(language.icon);
+                        int iconSize = context.getResources()
+                                .getDimensionPixelSize(R.dimen.menu_item_icon_size);
                         icon.setBounds(0, 0, iconSize, iconSize);
                         ImageSpan imageSpan = new CenteredImageSpan(icon);
 

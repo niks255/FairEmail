@@ -131,12 +131,15 @@
     <string name="title_setup_quick_accounts">Додавання/зміна облікових записів</string>
     <string name="title_setup_quick_support">Деякі провайдери ускладнюють додавання рахунку. Будь ласка, не звинувачуйте у цьому Fairemail, а попросіть допомогу у Вашій службі підтримки.</string>
     <string name="title_setup_quick_hint">Швидке налаштування дасть інформацію про конфігурацію з autoconfig.thunderbird.net</string>
+    <string name="title_setup_quick_patience">Будь ласка, будьте терплячі &#8230;</string>
     <string name="title_setup_quick_imap">Сервер IMAP для отримання повідомлень</string>
     <string name="title_setup_quick_smtp">Сервер SMTP для надсилання повідомлень</string>
     <string name="title_setup_wizard">Майстер встановлення</string>
     <string name="title_setup_wizard_multiple">Майстер можна використати кілька разів, щоб налаштувати кілька облікових записів</string>
     <string name="title_setup_wizard_new">Вкажіть нову електронну адресу</string>
     <string name="title_setup_manual">Налаштування вручну та параметри облікового запису</string>
+    <string name="title_setup_classic">Класична конфігурація</string>
+    <string name="title_setup_documentation">Перегляньте документацію свого постачальника пошти для правильної конфігурації сервера електронної пошти</string>
     <string name="title_setup_account_remark">Отримання email</string>
     <string name="title_setup_identity_remark">Надсилання email</string>
     <string name="title_setup_account_identity_hint">Ви можете налаштувати ім\'я, колір і свайп дії в налаштуваннях облікового запису та налаштувати підпис в налаштуваннях ідентифікації</string>
@@ -196,7 +199,6 @@
     <string name="title_setup_close">Закрити налаштування</string>
     <string name="title_setup_export">Експорт налаштувань</string>
     <string name="title_setup_import">Імпорт налаштувань</string>
-    <string name="title_setup_export_do">Пароль використовується для шифрування налаштувань і він потрібен для повторного імпорту налаштувань</string>
     <string name="title_setup_import_do">Імпортовані облікові записи будуть додані без перезапису будь-яких записів що існують</string>
     <string name="title_setup_password">Пароль</string>
     <string name="title_setup_password_chars">Пароль містить елементи керування або пробіли</string>
@@ -366,6 +368,7 @@
     <string name="title_advanced_contrast">Використовувати високо-контрастний текст для повідомленнь</string>
     <string name="title_advanced_monospaced">Використовувати моноширинний шрифт для тексту повідомлень за замовчуванням</string>
     <string name="title_advanced_monospaced_pre">Використовувати моноширинний шрифт для попередньо форматуванного тексту</string>
+    <string name="title_advanced_background_color">Колір тла</string>
     <string name="title_advanced_text_color">Використовувати кольори для тексту</string>
     <string name="title_advanced_text_size">Використовувати розмір тексту</string>
     <string name="title_advanced_text_font">Використовувати шрифти</string>
@@ -604,6 +607,7 @@
     <string name="title_account_interval_hint">Частота оновлення з\'єднання для push-повідомлень або частота перевірки на нові повідомлення</string>
     <string name="title_account_partial_fetch_hint">Вимкнути це лише у випадку пустих повідомлень або пошкоджених вкладень</string>
     <string name="title_color">Колір</string>
+    <string name="title_background">Тло</string>
     <string name="title_transparent">Прозорість</string>
     <string name="title_account_ondemand">Синхронізувати вручну</string>
     <string name="title_account_notify">Окремі сповіщення</string>
@@ -964,6 +968,7 @@
     <string name="title_style_font">Шрифт</string>
     <string name="title_style_font_default">За замовчанням</string>
     <string name="title_style_blockquote">Цитата</string>
+    <string name="title_style_indentation">Відступ</string>
     <string name="title_style_strikethrough">Закреслений</string>
     <string name="title_style_clear">Очистити форматування</string>
     <string name="title_style_link">Вставити посилання</string>

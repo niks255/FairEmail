@@ -460,6 +460,12 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             changed = true;
             url = Uri.parse(uri.getQueryParameter("url"));
         } else if ("https".equals(uri.getScheme()) &&
+                "smex-ctp.trendmicro.com".equals(uri.getHost()) &&
+                "/wis/clicktime/v1/query".equals(uri.getPath()) &&
+                !TextUtils.isEmpty(uri.getQueryParameter("url"))) {
+            changed = true;
+            url = Uri.parse(uri.getQueryParameter("url"));
+        } else if ("https".equals(uri.getScheme()) &&
                 "www.google.com".equals(uri.getHost()) &&
                 uri.getPath() != null &&
                 uri.getPath().startsWith("/amp/")) {
@@ -563,7 +569,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                 host = Uri.decode(host);
                 text = "tel://" + host;
             } else if ("mailto".equals(scheme)) {
-                if (host != null) {
+                if (host == null) {
                     MailTo email = MailTo.parse(uri.toString());
                     host = UriHelper.getEmailDomain(email.getTo());
                 }
@@ -576,14 +582,15 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                             index, index + host.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for (String name : uri.getQueryParameterNames()) {
-                Pattern pattern = Pattern.compile("[?&]" + Pattern.quote(name) + "=");
-                Matcher matcher = pattern.matcher(text);
-                while (matcher.find()) {
-                    ssb.setSpan(new ForegroundColorSpan(textColorLink),
-                            matcher.start() + 1, matcher.end() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (uri.isHierarchical())
+                for (String name : uri.getQueryParameterNames()) {
+                    Pattern pattern = Pattern.compile("[?&]" + Pattern.quote(name) + "=");
+                    Matcher matcher = pattern.matcher(text);
+                    while (matcher.find()) {
+                        ssb.setSpan(new ForegroundColorSpan(textColorLink),
+                                matcher.start() + 1, matcher.end() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
-            }
         } catch (Throwable ex) {
             Log.e(ex);
         }

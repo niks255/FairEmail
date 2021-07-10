@@ -169,8 +169,12 @@ public class StyleHelper {
                         level = ((NumberSpan) span).getLevel();
                     else if (span instanceof BulletSpanEx)
                         level = ((BulletSpanEx) span).getLevel();
+
                 popupMenu.getMenu().findItem(R.id.menu_style_list_increase).setVisible(level >= 0);
                 popupMenu.getMenu().findItem(R.id.menu_style_list_decrease).setVisible(level > 0);
+
+                IndentSpan[] indents = edit.getSpans(start, end, IndentSpan.class);
+                popupMenu.getMenu().findItem(R.id.menu_style_indentation_decrease).setEnabled(indents.length > 0);
 
                 popupMenu.insertIcons(context);
 
@@ -198,6 +202,8 @@ public class StyleHelper {
                                     return setList(item);
                             } else if (groupId == R.id.group_style_blockquote) {
                                 return setBlockQuote(item);
+                            } else if (groupId == R.id.group_style_indentation) {
+                                return setIndentation(item);
                             } else if (groupId == R.id.group_style_strikethrough) {
                                 return setStrikeThrough(item);
                             } else if (groupId == R.id.group_style_clear) {
@@ -254,7 +260,7 @@ public class StyleHelper {
                                 .setColorEditTextColor(editTextColor)
                                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                                 .density(6)
-                                .lightnessSliderOnly()
+                                //.lightnessSliderOnly()
                                 .setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
@@ -307,7 +313,7 @@ public class StyleHelper {
                                 .setColorEditTextColor(editTextColor)
                                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                                 .density(6)
-                                .lightnessSliderOnly()
+                                //.lightnessSliderOnly()
                                 .setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
@@ -351,6 +357,9 @@ public class StyleHelper {
                         Log.breadcrumb("style", "action", "alignment");
 
                         Pair<Integer, Integer> paragraph = ensureParagraph(edit, start, end);
+                        if (paragraph == null)
+                            return false;
+
                         int s = paragraph.first;
                         int e = paragraph.second;
 
@@ -421,6 +430,9 @@ public class StyleHelper {
                         float textSize = Helper.getTextSize(context, 0) * message_zoom / 100f;
 
                         Pair<Integer, Integer> paragraph = ensureParagraph(edit, start, end);
+                        if (paragraph == null)
+                            return false;
+
                         int s = paragraph.first;
                         int e = paragraph.second;
 
@@ -489,42 +501,69 @@ public class StyleHelper {
                         Context context = etBody.getContext();
 
                         int colorPrimary = Helper.resolveColor(context, R.attr.colorPrimary);
+                        final int colorBlockquote = Helper.resolveColor(context, R.attr.colorBlockquote, colorPrimary);
                         int quoteGap = context.getResources().getDimensionPixelSize(R.dimen.quote_gap_size);
                         int quoteStripe = context.getResources().getDimensionPixelSize(R.dimen.quote_stripe_width);
 
                         Pair<Integer, Integer> paragraph = ensureParagraph(edit, start, end);
+                        if (paragraph == null)
+                            return false;
 
-                        boolean has = false;
-                        QuoteSpan[] spans = edit.getSpans(paragraph.first, paragraph.second, QuoteSpan.class);
-                        for (QuoteSpan span : spans) {
-                            int s = edit.getSpanStart(span);
-                            int e = edit.getSpanEnd(span);
-                            int f = edit.getSpanFlags(span);
-                            edit.removeSpan(span);
+                        QuoteSpan[] quotes = edit.getSpans(paragraph.first, paragraph.second, QuoteSpan.class);
+                        for (QuoteSpan quote : quotes)
+                            edit.removeSpan(quote);
 
-                            QuoteSpan q1;
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
-                                q1 = new QuoteSpan(span.getColor());
-                            else
-                                q1 = new QuoteSpan(span.getColor(), span.getStripeWidth(), span.getGapWidth());
+                        if (quotes.length == 1)
+                            return true;
 
-                            QuoteSpan q2;
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
-                                q2 = new QuoteSpan(span.getColor());
-                            else
-                                q2 = new QuoteSpan(span.getColor(), span.getStripeWidth(), span.getGapWidth());
+                        IndentSpan[] indents = edit.getSpans(start, end, IndentSpan.class);
+                        for (IndentSpan indent : indents)
+                            edit.removeSpan(indent);
 
-                            if (splitSpan(edit, paragraph.first, paragraph.second, s, e, f, false, q1, q2))
-                                has = true;
-                        }
+                        QuoteSpan q;
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                            q = new QuoteSpan(colorBlockquote);
+                        else
+                            q = new QuoteSpan(colorBlockquote, quoteStripe, quoteGap);
+                        edit.setSpan(q, paragraph.first, paragraph.second, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-                        if (!has) {
-                            QuoteSpan q;
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
-                                q = new QuoteSpan(colorPrimary);
-                            else
-                                q = new QuoteSpan(colorPrimary, quoteStripe, quoteGap);
-                            edit.setSpan(q, paragraph.first, paragraph.second, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                        etBody.setText(edit);
+                        etBody.setSelection(paragraph.first, paragraph.second);
+
+                        return true;
+                    }
+
+                    private boolean setIndentation(MenuItem item) {
+                        Log.breadcrumb("style", "action", "indent");
+
+                        Pair<Integer, Integer> paragraph = ensureParagraph(edit, start, end);
+                        if (paragraph == null)
+                            return false;
+
+                        Context context = etBody.getContext();
+                        int intentSize = context.getResources().getDimensionPixelSize(R.dimen.indent_size);
+
+                        QuoteSpan[] quotes = edit.getSpans(start, end, QuoteSpan.class);
+                        for (QuoteSpan quote : quotes)
+                            edit.removeSpan(quote);
+
+                        int prev = paragraph.first;
+                        int next = paragraph.first;
+                        while (next < paragraph.second) {
+                            while (next < paragraph.second && edit.charAt(next) != '\n')
+                                next++;
+
+                            if (item.getItemId() == R.id.menu_style_indentation_decrease) {
+                                IndentSpan[] indents = edit.getSpans(prev, prev, IndentSpan.class);
+                                if (indents.length > 0)
+                                    edit.removeSpan(indents[0]);
+                            } else {
+                                IndentSpan is = new IndentSpan(intentSize);
+                                edit.setSpan(is, prev, next, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                            }
+
+                            next++;
+                            prev = next;
                         }
 
                         etBody.setText(edit);
@@ -705,6 +744,8 @@ public class StyleHelper {
         else if (span instanceof QuoteSpan) {
             ParagraphStyle ps = (ParagraphStyle) span;
             Pair<Integer, Integer> p = ensureParagraph(edit, start, end);
+            if (p == null)
+                return;
             edit.setSpan(clone(span, ps.getClass(), context), p.first, p.second, flags);
         }
     }

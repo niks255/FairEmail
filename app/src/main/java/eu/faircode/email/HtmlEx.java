@@ -29,6 +29,7 @@ import android.text.style.BulletSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.LeadingMarginSpan;
 import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
@@ -136,16 +137,27 @@ public class HtmlEx {
                                   int option) {
         int next;
         for (int i = start; i < end; i = next) {
-            next = text.nextSpanTransition(i, end, QuoteSpan.class);
-            QuoteSpan[] quotes = text.getSpans(i, next, QuoteSpan.class);
+            int n1 = text.nextSpanTransition(i, end, QuoteSpan.class);
+            int n2 = text.nextSpanTransition(i, end, eu.faircode.email.IndentSpan.class);
+            next = Math.min(n1, n2);
+            List<Object> spans = new ArrayList<>();
+            for (Object span : text.getSpans(i, next, LeadingMarginSpan.class))
+                if (span instanceof QuoteSpan ||
+                        span instanceof eu.faircode.email.IndentSpan)
+                    spans.add(span);
 
-            for (QuoteSpan quote : quotes) {
-                out.append("<blockquote>");
+            for (Object span : spans) {
+                if (span instanceof QuoteSpan)
+                    out.append("<blockquote style=\"")
+                            .append(eu.faircode.email.HtmlHelper.getQuoteStyle(text, next, end))
+                            .append("\">");
+                else if (span instanceof eu.faircode.email.IndentSpan)
+                    out.append("<blockquote>");
             }
 
             withinBlockquote(out, text, i, next, option);
 
-            for (QuoteSpan quote : quotes) {
+            for (Object span : spans) {
                 out.append("</blockquote>\n");
             }
         }
@@ -399,12 +411,16 @@ public class HtmlEx {
                 }
                 if (style[j] instanceof ForegroundColorSpan) {
                     int color = ((ForegroundColorSpan) style[j]).getForegroundColor();
-                    out.append(String.format("<span style=\"color:#%06X;\">", 0xFFFFFF & color));
+                    //out.append(String.format("<span style=\"color:#%06X;\">", 0xFFFFFF & color));
+                    out.append(String.format("<span style=\"color:%s;\">",
+                            eu.faircode.email.HtmlHelper.encodeWebColor(color)));
                 }
                 if (style[j] instanceof BackgroundColorSpan) {
                     int color = ((BackgroundColorSpan) style[j]).getBackgroundColor();
-                    out.append(String.format("<span style=\"background-color:#%06X;\">",
-                            0xFFFFFF & color));
+                    //out.append(String.format("<span style=\"background-color:#%06X;\">",
+                    //        0xFFFFFF & color));
+                    out.append(String.format("<span style=\"background-color:%s;\">",
+                            eu.faircode.email.HtmlHelper.encodeWebColor(color)));
                 }
             }
 

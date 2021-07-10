@@ -36,7 +36,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -88,7 +87,6 @@ import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -1035,9 +1033,13 @@ public class Helper {
     }
 
     static int resolveColor(Context context, int attr) {
+        return resolveColor(context, attr, 0xFF0000);
+    }
+
+    static int resolveColor(Context context, int attr, int def) {
         int[] attrs = new int[]{attr};
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs);
-        int color = a.getColor(0, 0xFF0000);
+        int color = a.getColor(0, def);
         a.recycle();
         return color;
     }
@@ -1086,15 +1088,6 @@ public class Helper {
         TypedValue tv = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.themeName, tv, true);
         return (tv.string != null && !"light".contentEquals(tv.string));
-    }
-
-    static int adjustLuminance(int color, boolean dark, float min) {
-        float lum = (float) ColorUtils.calculateLuminance(color);
-        if (dark ? lum < min : lum > 1 - min)
-            return ColorUtils.blendARGB(color,
-                    dark ? Color.WHITE : Color.BLACK,
-                    dark ? min - lum : lum - (1 - min));
-        return color;
     }
 
     static void hideKeyboard(final View view) {

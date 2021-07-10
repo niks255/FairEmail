@@ -162,12 +162,15 @@
     <string name="title_setup_quick_accounts">Add or change accounts</string>
     <string name="title_setup_quick_support">Some providers make it difficult to add an account. Please do not blame FairEmail for this, but ask for support instead.</string>
     <string name="title_setup_quick_hint">The quick setup will fetch configuration information from autoconfig.thunderbird.net</string>
+    <string name="title_setup_quick_patience">Please be patient &#8230;</string>
     <string name="title_setup_quick_imap">IMAP server to receive messages</string>0
     <string name="title_setup_quick_smtp">SMTP server to send messages</string>0
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">The wizard can be used multiple times to set up multiple accounts</string>
     <string name="title_setup_wizard_new">I need a new email address</string>
     <string name="title_setup_manual">Manual setup and account options</string>
+    <string name="title_setup_classic">Classic configuration</string>
+    <string name="title_setup_documentation">Please see your email provider\'s documentation for the correct email server configuration</string>
     <string name="title_setup_account_remark">Receive email</string>
     <string name="title_setup_identity_remark">Send email</string>
     <string name="title_setup_account_identity_hint">You can configure the name, color and swipe actions in the account settings, and configure a signature in the identity settings</string>
@@ -230,7 +233,10 @@
     <string name="title_setup_close">Close settings</string>
     <string name="title_setup_export">Export settings</string>
     <string name="title_setup_import">Import settings</string>
-    <string name="title_setup_export_do">The password is used to encrypt the settings and is required to import the settings again</string>
+    <string name="title_setup_export_remark">
+        Since the settings file contains all settings and account information, it is encrypted with a password.
+        The password is required to import the settings again, so please don\'t forget it!
+    </string>
     <string name="title_setup_import_do">Imported accounts will be added without overwriting any existing ones</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
@@ -1100,6 +1106,7 @@
     <string name="title_style_font">Font</string>
     <string name="title_style_font_default">Default</string>
     <string name="title_style_blockquote">Block quote</string>
+    <string name="title_style_indentation">Indentation</string>
     <string name="title_style_strikethrough">Strikethrough</string>
     <string name="title_style_clear">Clear formatting</string>
     <string name="title_style_link">Insert link</string>

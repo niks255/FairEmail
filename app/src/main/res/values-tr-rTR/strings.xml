@@ -122,6 +122,7 @@
     <string name="title_setup_quick_accounts">Hesap ekle veya değiştir</string>
     <string name="title_setup_quick_support">Bazı sağlayıcılar hesap eklemeyi zorlaştırır. Lütfen bunun için FairEmail\'i suçlamayın, bunun yerine destek isteyin.</string>
     <string name="title_setup_quick_hint">Hızlı kurulum, yapılandırma bilgilerini autoconfig.thunderbird.net adresinden alır</string>
+    <string name="title_setup_quick_patience">Lütfen sabırlı olun &#8230;</string>
     <string name="title_setup_quick_imap">İleti almak için IMAP sunucusu</string>
     <string name="title_setup_quick_smtp">İleti göndermek için SMTP sunucusu</string>
     <string name="title_setup_wizard">Yardımcı</string>
@@ -187,7 +188,6 @@
     <string name="title_setup_close">Ayarları kapat</string>
     <string name="title_setup_export">Ayarları dışa aktar</string>
     <string name="title_setup_import">Ayarları içe aktar</string>
-    <string name="title_setup_export_do">Parola, ayarları şifrelemek için kullanılır ve ayarları yeniden içe aktarmak için gereklidir</string>
     <string name="title_setup_import_do">İçe aktarılan hesaplar varolan hesapların üzerine yazılmadan eklenecek</string>
     <string name="title_setup_password">Parola</string>
     <string name="title_setup_password_chars">Parola, kontrol veya boşluk karakterleri içeriyor</string>
@@ -595,6 +595,7 @@
     <string name="title_account_interval_hint">Anlık mesajlar için bağlantı yenileme frekansı ya da yeni mesajlar için kontrol etme frekansı</string>
     <string name="title_account_partial_fetch_hint">Bunu yalnızca boş iletiler veya bozuk ekler olması durumunda devre dışı bırakın</string>
     <string name="title_color">Renk</string>
+    <string name="title_background">Arka Plan</string>
     <string name="title_transparent">Şeffaf</string>
     <string name="title_account_ondemand">Manuel olarak senkronize et</string>
     <string name="title_account_notify">Ayrı bildirimler</string>
