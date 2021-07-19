@@ -487,6 +487,70 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swBimi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_bimi"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAvatars"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvBimiHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:drawableEnd="@drawable/twotone_open_in_new_12"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorWarning"
+                    android:text="@string/title_advanced_gravatars_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?attr/colorWarning"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swBimi" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvBimiUnverified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:drawableStart="@drawable/twotone_check_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorSeparator"
+                    android:text="@string/title_advanced_bimi_unverified"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvBimiHint" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvBimiVerified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:drawableStart="@drawable/twotone_done_all_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorAccent"
+                    android:text="@string/title_advanced_bimi_verified"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvBimiUnverified" />
+
+                <ImageButton
+                    android:id="@+id/ibBimi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvBimiVerified"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swGravatars"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -494,13 +558,14 @@
                     android:text="@string/title_advanced_gravatars"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swAvatars"
+                    app:layout_constraintTop_toBottomOf="@id/ibBimi"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvGravatarsHint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:drawableEnd="@drawable/twotone_open_in_new_12"
                     android:drawablePadding="6dp"
                     android:drawableTint="?attr/colorWarning"
@@ -525,6 +590,7 @@
                     android:id="@+id/tvFaviconsHint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:drawableEnd="@drawable/twotone_open_in_new_12"
                     android:drawablePadding="6dp"
                     android:drawableTint="?attr/colorWarning"
@@ -1348,29 +1414,89 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swParseClasses" />
 
-                <ImageView
-                    android:id="@+id/ivAuth"
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:contentDescription="@string/title_legend_auth"
-                    app:layout_constraintBottom_toBottomOf="@+id/swAuthentication"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/swAuthentication"
-                    app:srcCompat="@drawable/twotone_flag_24"
-                    app:tint="?attr/colorWarning" />
-
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swAuthentication"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:layout_marginTop="12dp"
                     android:checked="true"
+                    android:drawableStart="@drawable/twotone_flag_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorWarning"
                     android:text="@string/title_advanced_authentication"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ivAuth"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvParseClassesHint"
                     app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAuthenticationHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_authentication_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAuthentication" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swAuthenticationIndicator"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_authentication_indicator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAuthenticationHint"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAuthNone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:drawableStart="@drawable/twotone_shield_cross_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorSeparator"
+                    android:text="@string/title_advanced_authentication_none"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAuthenticationIndicator" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAuthSome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:drawableStart="@drawable/twotone_shield_warning_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorSeparator"
+                    android:text="@string/title_advanced_authentication_some"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAuthNone" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAutheAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:drawableStart="@drawable/twotone_shield_check_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorControlNormal"
+                    android:text="@string/title_advanced_authentication_all"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAuthSome" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

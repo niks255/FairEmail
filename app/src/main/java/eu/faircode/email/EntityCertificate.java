@@ -167,6 +167,21 @@ public class EntityCertificate {
         return result;
     }
 
+    static List<String> getDnsNames(X509Certificate certificate) throws CertificateParsingException {
+        List<String> result = new ArrayList<>();
+
+        Collection<List<?>> altNames = certificate.getSubjectAlternativeNames();
+        if (altNames == null)
+            return result;
+
+        for (List altName : altNames)
+            if (altName.get(0).equals(GeneralName.dNSName))
+                result.add((String) altName.get(1));
+
+        return result;
+    }
+
+
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id", id);

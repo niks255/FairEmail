@@ -123,6 +123,7 @@ public class FragmentAccount extends FragmentBase {
     private ArrayAdapter<EntityFolder> adapter;
     private Spinner spDrafts;
     private Spinner spSent;
+    private TextView tvSentWarning;
     private Spinner spArchive;
     private Spinner spTrash;
     private Spinner spJunk;
@@ -228,6 +229,7 @@ public class FragmentAccount extends FragmentBase {
 
         spDrafts = view.findViewById(R.id.spDrafts);
         spSent = view.findViewById(R.id.spSent);
+        tvSentWarning = view.findViewById(R.id.tvSentWarning);
         spArchive = view.findViewById(R.id.spArchive);
         spTrash = view.findViewById(R.id.spTrash);
         spJunk = view.findViewById(R.id.spJunk);
@@ -481,6 +483,19 @@ public class FragmentAccount extends FragmentBase {
         spArchive.setAdapter(adapter);
         spTrash.setAdapter(adapter);
         spJunk.setAdapter(adapter);
+
+        tvSentWarning.setVisibility(View.GONE);
+        spSent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tvSentWarning.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                tvSentWarning.setVisibility(View.VISIBLE);
+            }
+        });
 
         adapterSwipe = new ArrayAdapter<EntityFolder>(getContext(), R.layout.spinner_item1, android.R.id.text1, new ArrayList<EntityFolder>()) {
             @NonNull
@@ -1251,8 +1266,8 @@ public class FragmentAccount extends FragmentBase {
 
                 if (!synchronize) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.cancel("receive:" + account.id, 1);
-                    nm.cancel("alert:" + account.id, 1);
+                    nm.cancel("receive:" + account.id, NotificationHelper.NOTIFICATION_TAGGED);
+                    nm.cancel("alert:" + account.id, NotificationHelper.NOTIFICATION_TAGGED);
                 }
 
                 args.putBoolean("saved", true);

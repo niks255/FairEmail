@@ -304,8 +304,9 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(167) How can I use DeepL?](#user-content-faq167)
 * [(168) What is a spam block list?](#user-content-faq168)
 * [(169) Why does the app not start automatically?](#user-content-faq169)
+* [(170) Why can't folders be created with POP3?](#user-content-faq170)
 
-[I have another question.](#user-content-support)
+[I have another question.](#user-content-get-support)
 
 <a name="faq1"></a>
 **(1) Which permissions are needed and why?**
@@ -347,6 +348,7 @@ The following permissions are needed to show the count of unread messages as a b
 * *com.oppo.launcher.permission.WRITE_SETTINGS*
 * *me.everything.badger.permission.BADGE_COUNT_READ*
 * *me.everything.badger.permission.BADGE_COUNT_WRITE*
+* *com.vivo.notification.permission.BADGE_ICON*
 
 FairEmail will keep a list of addresses you receive messages from and send messages to
 and will use this list for contact suggestions when no contacts permissions is granted to FairEmail.
@@ -1237,7 +1239,7 @@ see [here](https://support.google.com/accounts/answer/7519408?hl=en&ref_topic=92
 
 The error *... 334 ... OAUTH2 asked for more ...* probably means that the account needs to be authorized again, which you can do with the quick setup wizard in the settings.
 
-When in doubt, you can ask for [support](#user-content-support).
+When in doubt, you can ask for [support](#user-content-get-support).
 
 <br />
 
@@ -2577,6 +2579,8 @@ If the app is not listed, you might need to ask the developer of the app to add 
 Android Q will make it harder and maybe even impossible to directly access files,
 see [here](https://developer.android.com/preview/privacy/scoped-storage) and [here](https://www.xda-developers.com/android-q-storage-access-framework-scoped-storage/) for more details.
 
+If you use MIUI, please make sure [MIUI optimization](https://android.stackexchange.com/questions/191228/what-is-miui-optimization) is enabled in the developer settings.
+
 <br />
 
 <a name="faq96"></a>
@@ -3782,6 +3786,23 @@ Some Android versions, such as EMUI, have settings to enable or disable auto sta
 So, if the app isn't started automatically, please check the Android settings.
 
 For example for Huawei/EMUI, please [see here](https://dontkillmyapp.com/huawei) for a guide.
+
+<br>
+
+<a name="faq170"></a>
+**(170) Why can't folders be created with POP3?**
+
+The POP3 protocol has commands to download and delete messages from the inbox only.
+There are no commands to access any other folder.
+
+Creating a local folder only and storing messages on your device only is a bad idea
+because losing or breaking your device would mean losing your messages.
+Therefore this isn't supportable.
+
+Please note that FairEmail doesn't store a copy of your messages in the cloud for privacy reasons.
+
+If you want to store messages in folders, please use IMAP,
+so that there is always a copy of the messages on the email server.
 
 <br />
 

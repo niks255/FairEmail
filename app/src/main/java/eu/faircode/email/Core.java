@@ -207,7 +207,7 @@ class Core {
 
                     if (EntityOperation.HEADERS.equals(op.name) ||
                             EntityOperation.RAW.equals(op.name))
-                        nm.cancel(op.name + ":" + op.message, 1);
+                        nm.cancel(op.name + ":" + op.message, NotificationHelper.NOTIFICATION_TAGGED);
 
                     if (!Objects.equals(folder.id, op.folder))
                         throw new IllegalArgumentException("Invalid folder=" + folder.id + "/" + op.folder);
@@ -620,15 +620,19 @@ class Core {
 
                             ops.remove(op);
 
-                            int resid = context.getResources().getIdentifier(
-                                    "title_op_title_" + op.name,
-                                    "string",
-                                    context.getPackageName());
-                            String title = (resid == 0 ? null : context.getString(resid));
-                            if (title != null) {
-                                NotificationCompat.Builder builder =
-                                        getNotificationError(context, "warning", title, ex);
-                                nm.notify(op.name + ":" + op.message, 1, builder.build());
+                            if (!MessageHelper.isRemoved(ex)) {
+                                int resid = context.getResources().getIdentifier(
+                                        "title_op_title_" + op.name,
+                                        "string",
+                                        context.getPackageName());
+                                String title = (resid == 0 ? null : context.getString(resid));
+                                if (title != null) {
+                                    NotificationCompat.Builder builder =
+                                            getNotificationError(context, "warning", title, ex);
+                                    nm.notify(op.name + ":" + op.message,
+                                            NotificationHelper.NOTIFICATION_TAGGED,
+                                            builder.build());
+                                }
                             }
 
                         } else {
@@ -2271,7 +2275,7 @@ class Core {
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean pro = ActivityBilling.isPro(context);
 
-        EntityLog.log(context, folder.name + " POP sync type=" + folder.type + " connected=" + (ifolder != null));
+        EntityLog.log(context, account.name + " POP sync type=" + folder.type + " connected=" + (ifolder != null));
 
         if (!EntityFolder.INBOX.equals(folder.type)) {
             db.folder().setFolderSyncState(folder.id, null);
@@ -2286,7 +2290,7 @@ class Core {
             // Get capabilities
             Map<String, String> caps = istore.capabilities();
             boolean hasUidl = caps.containsKey("UIDL");
-            EntityLog.log(context, folder.name + " POP capabilities= " + caps.keySet());
+            EntityLog.log(context, account.name + " POP capabilities= " + caps.keySet());
 
             // Get messages
             Message[] imessages = ifolder.getMessages();
@@ -2295,7 +2299,7 @@ class Core {
                     ? imessages.length
                     : Math.min(imessages.length, account.max_messages));
 
-            EntityLog.log(context, folder.name + " POP" +
+            EntityLog.log(context, account.name + " POP" +
                     " device=" + ids.size() +
                     " server=" + imessages.length +
                     " max=" + max + "/" + account.max_messages +
@@ -2331,7 +2335,7 @@ class Core {
                     }
 
                     for (TupleUidl uidl : known.values()) {
-                        EntityLog.log(context, folder.name + " POP purging uidl=" + uidl.uidl);
+                        EntityLog.log(context, account.name + " POP purging uidl=" + uidl.uidl);
                         db.message().deleteMessage(uidl.id);
                     }
                 } else {
@@ -2349,7 +2353,7 @@ class Core {
                     }
 
                     for (TupleUidl uidl : known.values()) {
-                        EntityLog.log(context, folder.name + " POP purging msgid=" + uidl.msgid);
+                        EntityLog.log(context, account.name + " POP purging msgid=" + uidl.msgid);
                         db.message().deleteMessage(uidl.id);
                     }
                 }
@@ -2369,7 +2373,7 @@ class Core {
                     if (hasUidl) {
                         uidl = ifolder.getUID(imessage);
                         if (TextUtils.isEmpty(uidl)) {
-                            EntityLog.log(context, folder.name + " POP no uidl");
+                            EntityLog.log(context, account.name + " POP no uidl");
                             continue;
                         }
 
@@ -2378,10 +2382,6 @@ class Core {
                             msgid = helper.getMessageID();
                             if (TextUtils.isEmpty(msgid))
                                 msgid = uidl;
-                        } else {
-                            _new = false;
-                            Log.i(folder.name + " POP having uidl=" + uidl);
-                            continue;
                         }
                     } else {
                         uidl = null;
@@ -2394,16 +2394,16 @@ class Core {
                             if (time != null)
                                 msgid = Long.toString(time);
                         }
-
-                        if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
-                            _new = false;
-                            Log.i(folder.name + " POP having msgid=" + msgid);
-                            continue;
-                        }
                     }
 
                     if (TextUtils.isEmpty(msgid)) {
-                        EntityLog.log(context, folder.name + " POP no msgid");
+                        EntityLog.log(context, account.name + " POP no msgid uidl=" + uidl);
+                        continue;
+                    }
+
+                    if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
+                        _new = false;
+                        Log.i(account.name + " POP having " + msgid + "/" + uidl);
                         continue;
                     }
 
@@ -2416,7 +2416,7 @@ class Core {
                             received = 0L;
 
                         boolean seen = (received <= account.created);
-                        Log.i(folder.name + " POP sync=" + uidl + "/" + msgid +
+                        EntityLog.log(context, account.name + " POP sync=" + uidl + "/" + msgid +
                                 " new=" + _new + " seen=" + seen);
 
                         String[] authentication = helper.getAuthentication();
@@ -2437,6 +2437,7 @@ class Core {
                         message.auto_submitted = helper.getAutoSubmitted();
                         message.receipt_request = helper.getReceiptRequested();
                         message.receipt_to = helper.getReceiptTo();
+                        message.bimi_selector = helper.getBimiSelector();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
                         message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
@@ -2501,12 +2502,12 @@ class Core {
                             db.beginTransaction();
 
                             message.id = db.message().insertMessage(message);
-                            Log.i(folder.name + " added id=" + message.id +
+                            EntityLog.log(context, account.name + " POP added id=" + message.id +
                                     " uidl/msgid=" + message.uidl + "/" + message.msgid);
 
                             int sequence = 1;
                             for (EntityAttachment attachment : parts.getAttachments()) {
-                                Log.i(folder.name + " attachment seq=" + sequence +
+                                Log.i(account.name + " POP attachment seq=" + sequence +
                                         " name=" + attachment.name + " type=" + attachment.type +
                                         " cid=" + attachment.cid + " pgp=" + attachment.encryption +
                                         " size=" + attachment.size);
@@ -2551,7 +2552,7 @@ class Core {
             }
 
             db.folder().setFolderLastSync(folder.id, new Date().getTime());
-            EntityLog.log(context, folder.name + " POP done");
+            EntityLog.log(context, account.name + " POP done");
         } finally {
             db.folder().setFolderSyncState(folder.id, null);
         }
@@ -3278,6 +3279,7 @@ class Core {
             message.auto_submitted = helper.getAutoSubmitted();
             message.receipt_request = helper.getReceiptRequested();
             message.receipt_to = helper.getReceiptTo();
+            message.bimi_selector = helper.getBimiSelector();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
             message.spf = MessageHelper.getAuthentication("spf", authentication);
             message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
@@ -3392,8 +3394,17 @@ class Core {
                     !EntityFolder.JUNK.equals(folder.type) &&
                     !Arrays.asList(message.keywords).contains(MessageHelper.FLAG_NOT_JUNK))
                 try {
-                    message.blocklist = DnsBlockList.isJunk(
-                            context, imessage.getHeader("Received"));
+                    message.blocklist = DnsBlockList.isJunk(context,
+                            imessage.getHeader("Received"));
+
+                    if (message.blocklist == null || !message.blocklist) {
+                        List<Address> senders = new ArrayList<>();
+                        if (message.reply != null)
+                            senders.addAll(Arrays.asList(message.reply));
+                        if (message.from != null)
+                            senders.addAll(Arrays.asList(message.from));
+                        message.blocklist = DnsBlockList.isJunk(context, senders);
+                    }
                 } catch (Throwable ex) {
                     Log.w(folder.name, ex);
                 }
@@ -4076,19 +4087,19 @@ class Core {
                     " update=" + update.size() +
                     " remove=" + remove.size());
 
-            if (notifications.size() == 0) {
-                String tag = "unseen." + group + "." + 0;
-                EntityLog.log(context, "Notify cancel tag=" + tag);
-                nm.cancel(tag, 1);
-            }
-
             for (Long id : remove) {
                 String tag = "unseen." + group + "." + Math.abs(id);
                 EntityLog.log(context, "Notify cancel tag=" + tag + " id=" + id);
-                nm.cancel(tag, 1);
+                nm.cancel(tag, NotificationHelper.NOTIFICATION_TAGGED);
 
                 data.groupNotifying.get(group).remove(id);
                 db.message().setMessageNotifying(Math.abs(id), 0);
+            }
+
+            if (notifications.size() == 0) {
+                String tag = "unseen." + group + "." + 0;
+                EntityLog.log(context, "Notify cancel tag=" + tag);
+                nm.cancel(tag, NotificationHelper.NOTIFICATION_TAGGED);
             }
 
             for (Long id : add) {
@@ -4118,7 +4129,7 @@ class Core {
                                     : " channel=" + notification.getChannelId()) +
                             " sort=" + notification.getSortKey());
                     try {
-                        nm.notify(tag, 1, notification);
+                        nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
                         // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
                         if (id == 0 && badge && Helper.isXiaomi())
                             ShortcutBadger.applyNotification(context, notification, current);
@@ -4190,7 +4201,9 @@ class Core {
         Map<Long, ContactInfo[]> messageInfo = new HashMap<>();
         for (int m = 0; m < messages.size() && m < MAX_NOTIFICATION_DISPLAY; m++) {
             TupleMessageEx message = messages.get(m);
-            ContactInfo[] info = ContactInfo.get(context, message.account, message.folderType, message.from);
+            ContactInfo[] info = ContactInfo.get(context,
+                    message.account, message.folderType,
+                    message.bimi_selector, message.from);
 
             Address[] modified = (message.from == null
                     ? new InternetAddress[0]
@@ -4275,21 +4288,28 @@ class Core {
                     builder.setSound(null);
             }
 
-            if (group != 0 && messages.size() > 0) {
-                TupleMessageEx amessage = messages.get(0);
-                Integer color = getColor(amessage);
-                if (pro && color != null) {
+            if (pro) {
+                Integer color = null;
+                for (TupleMessageEx message : messages) {
+                    Integer mcolor = getColor(message);
+                    if (mcolor == null) {
+                        color = null;
+                        break;
+                    } else if (color == null)
+                        color = mcolor;
+                    else if (!color.equals(mcolor)) {
+                        color = null;
+                        break;
+                    }
+                }
+
+                if (color != null) {
                     builder.setColor(color);
                     builder.setColorized(true);
                 }
-
-                // Disabled to show number of new messages
-                if (notify_subtext && false)
-                    if (group < 0) // folder
-                        builder.setSubText(amessage.accountName + " - " + amessage.getFolderName(context));
-                    else if (group > 0) // account
-                        builder.setSubText(amessage.accountName);
             }
+
+            // Subtext should not be set, to show number of new messages
 
             Notification pub = builder.build();
             builder
@@ -4338,24 +4358,16 @@ class Core {
             args.putLong("id", id);
 
             // Build pending intents
-            PendingIntent piContent;
-            if (notify_remove) {
-                Intent thread = new Intent(context, ServiceUI.class);
-                thread.setAction("ignore:" + message.id);
-                thread.putExtra("view", true);
-                piContent = PendingIntentCompat.getService(
-                        context, ServiceUI.PI_THREAD, thread, PendingIntent.FLAG_UPDATE_CURRENT);
-            } else {
-                Intent thread = new Intent(context, ActivityView.class);
-                thread.setAction("thread:" + message.id);
-                thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                thread.putExtra("account", message.account);
-                thread.putExtra("folder", message.folder);
-                thread.putExtra("thread", message.thread);
-                thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(message.folderType));
-                piContent = PendingIntentCompat.getActivity(
-                        context, ActivityView.PI_THREAD, thread, PendingIntent.FLAG_UPDATE_CURRENT);
-            }
+            Intent thread = new Intent(context, ActivityView.class);
+            thread.setAction("thread:" + message.id);
+            thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            thread.putExtra("account", message.account);
+            thread.putExtra("folder", message.folder);
+            thread.putExtra("thread", message.thread);
+            thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(message.folderType));
+            thread.putExtra("ignore", notify_remove);
+            PendingIntent piContent = PendingIntentCompat.getActivity(
+                    context, ActivityView.PI_THREAD, thread, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent ignore = new Intent(context, ServiceUI.class).setAction("ignore:" + message.id);
             PendingIntent piIgnore = PendingIntentCompat.getService(
@@ -4716,10 +4728,12 @@ class Core {
                 mbuilder.addPerson(you.build());
             }
 
-            Integer color = getColor(message);
-            if (pro && color != null) {
-                mbuilder.setColor(color);
-                mbuilder.setColorized(true);
+            if (pro) {
+                Integer color = getColor(message);
+                if (color != null) {
+                    mbuilder.setColor(color);
+                    mbuilder.setColorized(true);
+                }
             }
 
             // https://developer.android.com/training/wearables/notifications

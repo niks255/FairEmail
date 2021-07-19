@@ -64,13 +64,24 @@ public class ApplicationEx extends Application
                         .commit(); // apply won't work here
         }
 
-        String language = prefs.getString("language", null);
-        if (language != null) {
-            Locale locale = Locale.forLanguageTag(language);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration(context.getResources().getConfiguration());
-            config.setLocale(locale);
-            return context.createConfigurationContext(config);
+        try {
+            String language = prefs.getString("language", null);
+            if (language != null) {
+                if ("de-AT".equals(language) || "de-LI".equals(language))
+                    language = "de-DE";
+                Locale locale = Locale.forLanguageTag(language);
+                Log.i("Set language=" + language + " locale=" + locale);
+                Locale.setDefault(locale);
+                Configuration config;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                    config = new Configuration(context.getResources().getConfiguration());
+                else
+                    config = new Configuration();
+                config.setLocale(locale);
+                return context.createConfigurationContext(config);
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
 
         return context;

@@ -85,6 +85,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -817,7 +818,8 @@ public class FragmentCompose extends FragmentBase {
 
                     @Override
                     protected void onException(Bundle args, Throwable ex) {
-                        Log.unexpectedError(getParentFragmentManager(), ex, false);
+                        Throwable exex = new Throwable("DeepL", ex);
+                        Log.unexpectedError(getParentFragmentManager(), exex, false);
                     }
                 }.execute(FragmentCompose.this, args, "compose:translate");
             }
@@ -3904,8 +3906,8 @@ public class FragmentCompose extends FragmentBase {
                     if (iid >= 0)
                         for (EntityIdentity identity : data.identities)
                             if (identity.id.equals(iid)) {
-                                Log.i("Selected requested identity=" + iid);
                                 selected = identity;
+                                EntityLog.log(context, "Selected requested identity=" + iid);
                                 break;
                             }
 
@@ -3918,7 +3920,7 @@ public class FragmentCompose extends FragmentBase {
                                     if (identity.account.equals(aid) &&
                                             identity.sameAddress(sender)) {
                                         selected = identity;
-                                        Log.i("Selected same account/identity");
+                                        EntityLog.log(context, "Selected same account/identity");
                                         break;
                                     }
 
@@ -3928,7 +3930,7 @@ public class FragmentCompose extends FragmentBase {
                                     if (identity.account.equals(aid) &&
                                             identity.similarAddress(sender)) {
                                         selected = identity;
-                                        Log.i("Selected similar account/identity");
+                                        EntityLog.log(context, "Selected similar account/identity");
                                         break;
                                     }
 
@@ -3937,7 +3939,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (EntityIdentity identity : data.identities)
                                     if (identity.sameAddress(sender)) {
                                         selected = identity;
-                                        Log.i("Selected same */identity");
+                                        EntityLog.log(context, "Selected same */identity");
                                         break;
                                     }
 
@@ -3946,7 +3948,7 @@ public class FragmentCompose extends FragmentBase {
                                 for (EntityIdentity identity : data.identities)
                                     if (identity.similarAddress(sender)) {
                                         selected = identity;
-                                        Log.i("Selected similer */identity");
+                                        EntityLog.log(context, "Selected similer */identity");
                                         break;
                                     }
                     }
@@ -3955,7 +3957,7 @@ public class FragmentCompose extends FragmentBase {
                         for (EntityIdentity identity : data.identities)
                             if (identity.account.equals(aid) && identity.primary) {
                                 selected = identity;
-                                Log.i("Selected primary account/identity");
+                                EntityLog.log(context, "Selected primary account/identity");
                                 break;
                             }
 
@@ -3963,27 +3965,29 @@ public class FragmentCompose extends FragmentBase {
                         for (EntityIdentity identity : data.identities)
                             if (identity.account.equals(aid)) {
                                 selected = identity;
-                                Log.i("Selected account/identity");
+                                EntityLog.log(context, "Selected account/identity");
                                 break;
                             }
 
                     if (selected == null)
                         for (EntityIdentity identity : data.identities)
                             if (identity.primary) {
-                                Log.i("Selected primary */identity");
                                 selected = identity;
+                                EntityLog.log(context, "Selected primary */identity");
                                 break;
                             }
 
                     if (selected == null)
                         for (EntityIdentity identity : data.identities) {
-                            Log.i("Selected */identity");
                             selected = identity;
+                            EntityLog.log(context, "Selected */identity");
                             break;
                         }
 
                     if (selected == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_composable));
+
+                    EntityLog.log(context, "Selected=" + selected.email);
 
                     if (plain_only)
                         data.draft.plain_only = true;
@@ -4089,6 +4093,9 @@ public class FragmentCompose extends FragmentBase {
                             } else {
                                 // Prevent replying to self
                                 if (ref.replySelf(data.identities, ref.account)) {
+                                    EntityLog.log(context, "Reply self ref" +
+                                            " from=" + MessageHelper.formatAddresses(ref.from) +
+                                            " to=" + MessageHelper.formatAddresses(ref.to));
                                     data.draft.from = ref.from;
                                     data.draft.to = ref.to;
                                 } else {
@@ -4100,6 +4107,8 @@ public class FragmentCompose extends FragmentBase {
                                     Address preferred = null;
                                     if (ref.identity != null) {
                                         EntityIdentity recognized = db.identity().getIdentity(ref.identity);
+                                        EntityLog.log(context, "Recognized=" + (recognized == null ? null : recognized.email));
+
                                         if (recognized != null) {
                                             Address same = null;
                                             Address similar = null;
@@ -4111,24 +4120,33 @@ public class FragmentCompose extends FragmentBase {
                                                     similar = from;
                                             }
 
-                                            if (ref.deliveredto != null)
-                                                try {
-                                                    Address deliveredto = new InternetAddress(ref.deliveredto);
-                                                    if (same == null && recognized.sameAddress(deliveredto))
-                                                        same = deliveredto;
-                                                    if (similar == null && recognized.similarAddress(deliveredto))
-                                                        similar = deliveredto;
-                                                } catch (AddressException ex) {
-                                                    Log.w(ex);
-                                                }
+                                            //if (ref.deliveredto != null)
+                                            //    try {
+                                            //        Address deliveredto = new InternetAddress(ref.deliveredto);
+                                            //        if (same == null && recognized.sameAddress(deliveredto))
+                                            //            same = deliveredto;
+                                            //        if (similar == null && recognized.similarAddress(deliveredto))
+                                            //            similar = deliveredto;
+                                            //    } catch (AddressException ex) {
+                                            //        Log.w(ex);
+                                            //    }
+
+                                            EntityLog.log(context, "From=" + MessageHelper.formatAddresses(data.draft.from) +
+                                                    " delivered-to=" + ref.deliveredto +
+                                                    " same=" + (same == null ? null : ((InternetAddress) same).getAddress()) +
+                                                    " similar=" + (similar == null ? null : ((InternetAddress) similar).getAddress()));
 
                                             preferred = (same == null ? similar : same);
                                         }
-                                    }
+                                    } else
+                                        EntityLog.log(context, "Recognized=null");
+
                                     if (preferred != null) {
                                         String from = ((InternetAddress) preferred).getAddress();
+                                        EntityLog.log(context, "Preferred=" + from);
                                         data.draft.extra = UriHelper.getEmailUser(from);
-                                    }
+                                    } else
+                                        EntityLog.log(context, "Preferred=null");
                                 }
                             }
 
@@ -5187,6 +5205,13 @@ public class FragmentCompose extends FragmentBase {
                             if (draft.identity == null)
                                 throw new IllegalArgumentException(context.getString(R.string.title_from_missing));
 
+                            if (false) {
+                                EntityAccount account = db.account().getAccount(draft.account);
+                                EntityFolder sent = db.folder().getFolderByType(draft.account, EntityFolder.SENT);
+                                if (account != null && account.protocol == EntityAccount.TYPE_IMAP && sent == null)
+                                    args.putBoolean("sent_missing", true);
+                            }
+
                             try {
                                 checkAddress(ato, context);
                                 checkAddress(acc, context);
@@ -5551,6 +5576,7 @@ public class FragmentCompose extends FragmentBase {
                 boolean send_reminders = prefs.getBoolean("send_reminders", true);
 
                 boolean force_dialog = extras.getBoolean("force_dialog", false);
+                boolean sent_missing = args.getBoolean("sent_missing", false);
                 String address_error = args.getString("address_error");
                 String mx_error = args.getString("mx_error");
                 boolean remind_dsn = args.getBoolean("remind_dsn", false);
@@ -5569,7 +5595,7 @@ public class FragmentCompose extends FragmentBase {
                         (draft.cc == null ? 0 : draft.cc.length) +
                         (draft.bcc == null ? 0 : draft.bcc.length);
                 if (send_dialog || force_dialog ||
-                        address_error != null || mx_error != null ||
+                        sent_missing || address_error != null || mx_error != null ||
                         remind_dsn || remind_size || remind_pgp || remind_smime || remind_to || remind_external ||
                         recipients > RECIPIENTS_WARNING ||
                         (formatted && (draft.plain_only != null && draft.plain_only)) ||
@@ -6248,8 +6274,9 @@ public class FragmentCompose extends FragmentBase {
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             Bundle args = getArguments();
             long id = args.getLong("id");
-            String address_error = args.getString("address_error");
-            String mx_error = args.getString("mx_error");
+            final boolean sent_missing = args.getBoolean("sent_missing", false);
+            final String address_error = args.getString("address_error");
+            final String mx_error = args.getString("mx_error");
             final boolean remind_dsn = args.getBoolean("remind_dsn", false);
             final boolean remind_size = args.getBoolean("remind_size", false);
             final boolean remind_pgp = args.getBoolean("remind_pgp", false);
@@ -6278,6 +6305,7 @@ public class FragmentCompose extends FragmentBase {
             final String[] sendDelayedNames = getResources().getStringArray(R.array.sendDelayedNames);
 
             final ViewGroup dview = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.dialog_send, null);
+            final Button btnFixSent = dview.findViewById(R.id.btnFixSent);
             final TextView tvAddressError = dview.findViewById(R.id.tvAddressError);
             final TextView tvRemindDsn = dview.findViewById(R.id.tvRemindDsn);
             final TextView tvRemindSize = dview.findViewById(R.id.tvRemindSize);
@@ -6306,7 +6334,18 @@ public class FragmentCompose extends FragmentBase {
             final CheckBox cbArchive = dview.findViewById(R.id.cbArchive);
             final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
             final TextView tvNotAgain = dview.findViewById(R.id.tvNotAgain);
+            final Group grpSentMissing = dview.findViewById(R.id.grpSentMissing);
             final Group grpDsn = dview.findViewById(R.id.grpDsn);
+
+            btnFixSent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(), ActivitySetup.class)
+                            .putExtra("target", "accounts"));
+                }
+            });
+
+            grpSentMissing.setVisibility(sent_missing ? View.VISIBLE : View.GONE);
 
             tvAddressError.setText(address_error == null ? mx_error : address_error);
             tvAddressError.setVisibility(address_error == null && mx_error == null ? View.GONE : View.VISIBLE);

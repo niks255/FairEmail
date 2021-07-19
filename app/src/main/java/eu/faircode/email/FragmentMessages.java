@@ -219,6 +219,7 @@ import java.util.concurrent.Future;
 import javax.mail.Address;
 import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
+import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -1540,10 +1541,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private void onSwipeRefresh() {
         swipeRefresh.onRefresh();
+        refresh(false);
+    }
 
+    private void refresh(boolean force) {
         Bundle args = new Bundle();
         args.putLong("folder", folder);
         args.putString("type", type);
+        args.putBoolean("force", force);
 
         new SimpleTask<Void>() {
             @Override
@@ -1555,7 +1560,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     throw new IllegalStateException(context.getString(R.string.title_no_internet));
 
                 boolean now = true;
-                boolean force = false;
+                boolean force = args.getBoolean("force");
 
                 DB db = DB.getInstance(context);
                 try {
@@ -1602,7 +1607,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 else
                     ServiceSynchronize.eval(context, "refresh");
 
-                if (!now)
+                if (!now && !args.getBoolean("force"))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_connection));
 
                 return null;
@@ -2701,6 +2706,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void onMenuNew(TupleMessageEx message, Address[] to) {
         Intent reply = new Intent(getContext(), ActivityCompose.class)
                 .putExtra("action", "new")
+                .putExtra("identity", message.identity == null ? -1 : message.identity)
                 .putExtra("to", MessageHelper.formatAddressesCompose(to));
         startActivity(reply);
     }
@@ -4024,10 +4030,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     grpOutbox.setVisibility(count == 0 ? View.GONE : View.VISIBLE);
                 }
             });
-
-        if (!checkReporting())
-            if (!checkReview())
-                checkFingerprint();
     }
 
     @Override
@@ -4057,6 +4059,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         // Restart spinner
         swipeRefresh.resetRefreshing();
+
+        if (!checkDoze())
+            if (!checkReporting())
+                if (!checkReview())
+                    checkFingerprint();
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "pro");
@@ -4140,6 +4147,31 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             });
         }
     };
+
+    private boolean checkDoze() {
+        if (viewType != AdapterMessage.ViewType.UNIFIED)
+            return false;
+
+        if (!Helper.isDozeRequired())
+            return false;
+
+        final Context context = getContext();
+        Boolean isIgnoring = Helper.isIgnoringOptimizations(context);
+        if (isIgnoring == null || isIgnoring)
+            return false;
+
+        final Snackbar snackbar = Snackbar.make(view, R.string.title_setup_doze, Snackbar.LENGTH_INDEFINITE)
+                .setGestureInsetBottomIgnored(true);
+        snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, ActivitySetup.class));
+            }
+        });
+        snackbar.show();
+
+        return true;
+    }
 
     private boolean checkReporting() {
         if (viewType != AdapterMessage.ViewType.UNIFIED)
@@ -4823,7 +4855,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onMenuForceSync() {
-        ServiceSynchronize.reload(getContext(), null, true, "force sync");
+        refresh(true);
         ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
     }
 
@@ -6618,24 +6650,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         byte[] keydata = null;
 
                         // https://autocrypt.org/level1.html#the-autocrypt-header
-                        String[] param = message.autocrypt.split(";");
-                        for (int i = 0; i < param.length; i++) {
-                            int e = param[i].indexOf("=");
-                            if (e > 0) {
-                                String key = param[i].substring(0, e).trim().toLowerCase(Locale.ROOT);
-                                String value = param[i].substring(e + 1);
-                                Log.i("Autocrypt " + key + "=" + value);
-                                switch (key) {
-                                    case "addr":
-                                        addr = value;
-                                        break;
-                                    case "prefer-encrypt":
-                                        mutual = value.trim().toLowerCase(Locale.ROOT).equals("mutual");
-                                        break;
-                                    case "keydata":
-                                        keydata = Base64.decode(value, Base64.DEFAULT);
-                                        break;
-                                }
+                        Map<String, String> kv = MessageHelper.getKeyValues(message.autocrypt);
+                        for (String key : kv.keySet()) {
+                            String value = kv.get(key);
+                            Log.i("Autocrypt " + key + "=" + value);
+                            if (value == null)
+                                continue;
+                            switch (key) {
+                                case "addr":
+                                    addr = value.toLowerCase(Locale.ROOT);
+                                    break;
+                                case "prefer-encrypt":
+                                    mutual = value.trim().toLowerCase(Locale.ROOT).equals("mutual");
+                                    break;
+                                case "keydata":
+                                    keydata = Base64.decode(value, Base64.DEFAULT);
+                                    break;
                             }
                         }
 
@@ -6741,6 +6771,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             } catch (Throwable ex) {
                                                 Log.e(ex);
                                             }
+                                        }
+
+                                        boolean debug = prefs.getBoolean("debug", false);
+                                        if (debug) {
+                                            EntityAttachment eml = new EntityAttachment();
+                                            eml.message = id;
+                                            eml.sequence = remotes.size() + 1;
+                                            eml.name = "body.eml";
+                                            eml.type = "message/rfc822";
+                                            eml.disposition = Part.ATTACHMENT;
+                                            eml.size = null;
+                                            eml.progress = 0;
+                                            eml.id = db.attachment().insertAttachment(eml);
+                                            File file = eml.getFile(context);
+                                            Helper.copy(plain, file);
+                                            db.attachment().setDownloaded(eml.id, file.length());
                                         }
 
                                         checkPep(message, remotes, context);
@@ -7527,8 +7573,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 ServiceSynchronize.eval(context, "delete");
 
-                NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                nm.cancel("send:" + id, 1);
+                NotificationManager nm =
+                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                nm.cancel("send:" + id, NotificationHelper.NOTIFICATION_TAGGED);
 
                 return null;
             }
@@ -8019,7 +8066,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     try {
                                         int status = connection.getResponseCode();
                                         if (status != HttpURLConnection.HTTP_OK)
-                                            throw new FileNotFoundException("Error " + status + ":" + connection.getResponseMessage());
+                                            throw new FileNotFoundException("Error " + status + ": " + connection.getResponseMessage());
 
                                         Helper.copy(connection.getInputStream(), os);
                                     } finally {

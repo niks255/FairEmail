@@ -212,7 +212,8 @@ public class FragmentFolders extends FragmentBase {
             public void onClick(View v) {
                 Boolean pop = (Boolean) v.getTag();
                 if (pop != null && pop) {
-                    ToastEx.makeText(v.getContext(), R.string.title_pop_folders, Toast.LENGTH_LONG).show();
+                    Helper.viewFAQ(v.getContext(), 170, true);
+                    //ToastEx.makeText(v.getContext(), R.string.title_pop_folders, Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -346,9 +347,14 @@ public class FragmentFolders extends FragmentBase {
     }
 
     private void onSwipeRefresh() {
+        refresh(false);
+    }
+
+    private void refresh(boolean force) {
         Bundle args = new Bundle();
         args.putLong("account", account);
         args.putBoolean("primary", primary);
+        args.putBoolean("force", force);
 
         new SimpleTask<Void>() {
             @Override
@@ -365,7 +371,7 @@ public class FragmentFolders extends FragmentBase {
                     throw new IllegalStateException(context.getString(R.string.title_no_internet));
 
                 boolean now = true;
-                boolean force = false;
+                boolean force = args.getBoolean("force");
                 boolean outbox = false;
 
                 DB db = DB.getInstance(context);
@@ -415,7 +421,7 @@ public class FragmentFolders extends FragmentBase {
                 if (outbox)
                     ServiceSend.start(context);
 
-                if (!now)
+                if (!now && !args.getBoolean("force"))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_connection));
 
                 return null;
@@ -592,7 +598,7 @@ public class FragmentFolders extends FragmentBase {
     }
 
     private void onMenuForceSync() {
-        ServiceSynchronize.reload(getContext(), null, true, "force sync");
+        refresh(true);
         ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
     }
 
@@ -770,7 +776,7 @@ public class FragmentFolders extends FragmentBase {
                     db.endTransaction();
                 }
 
-                ServiceSynchronize.reload(context, folder.account, false, "delete folder");
+                ServiceSynchronize.reload(context, folder.account, true, "delete folder");
 
                 return null;
             }
@@ -916,7 +922,7 @@ public class FragmentFolders extends FragmentBase {
                             if (now - last > EXPORT_PROGRESS_INTERVAL) {
                                 last = now;
                                 builder.setProgress(ids.size(), i, false);
-                                nm.notify("export", 1, builder.build());
+                                nm.notify("export", NotificationHelper.NOTIFICATION_TAGGED, builder.build());
                             }
 
                             long id = ids.get(i);
@@ -989,7 +995,7 @@ public class FragmentFolders extends FragmentBase {
                             Log.e(ex);
                         }
                 } finally {
-                    nm.cancel("export", 1);
+                    nm.cancel("export", NotificationHelper.NOTIFICATION_TAGGED);
                 }
 
                 return null;

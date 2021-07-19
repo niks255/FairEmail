@@ -391,7 +391,7 @@ public class EmailProvider implements Parcelable {
 
             int status = request.getResponseCode();
             if (status != HttpURLConnection.HTTP_OK)
-                throw new FileNotFoundException("Error " + status + ":" + request.getResponseMessage());
+                throw new FileNotFoundException("Error " + status + ": " + request.getResponseMessage());
 
             // https://developer.android.com/reference/org/xmlpull/v1/XmlPullParser
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -835,7 +835,7 @@ public class EmailProvider implements Parcelable {
                                     Certificate[] certs = sslSocket.getSession().getPeerCertificates();
                                     for (Certificate cert : certs)
                                         if (cert instanceof X509Certificate) {
-                                            List<String> names = ConnectionHelper.getDnsNames((X509Certificate) cert);
+                                            List<String> names = EntityCertificate.getDnsNames((X509Certificate) cert);
                                             EntityLog.log(context, "Certificate " + address +
                                                     " " + TextUtils.join(",", names));
                                             if (ConnectionHelper.matches(host, names)) {

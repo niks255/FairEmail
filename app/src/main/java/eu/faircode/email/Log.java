@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -1630,8 +1631,18 @@ public class Log {
     private static StringBuilder getAppInfo(Context context) {
         StringBuilder sb = new StringBuilder();
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        PackageManager pm = context.getPackageManager();
+        String installer = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID);
+        int targetSdk = -1;
+        try {
+            ApplicationInfo ai = pm.getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            targetSdk = ai.targetSdkVersion;
+        } catch (PackageManager.NameNotFoundException ignore) {
+        }
+
         // Get version info
-        String installer = context.getPackageManager().getInstallerPackageName(BuildConfig.APPLICATION_ID);
         sb.append(String.format("%s: %s/%s %s/%s%s%s%s%s\r\n",
                 context.getString(R.string.app_name),
                 BuildConfig.APPLICATION_ID,
@@ -1642,7 +1653,8 @@ public class Log {
                 Helper.hasPlayStore(context) ? "s" : "",
                 BuildConfig.DEBUG ? "d" : "",
                 ActivityBilling.isPro(context) ? "+" : ""));
-        sb.append(String.format("Android: %s (SDK %d)\r\n", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        sb.append(String.format("Android: %s (SDK %d/%d)\r\n",
+                Build.VERSION.RELEASE, Build.VERSION.SDK_INT, targetSdk));
         sb.append("\r\n");
 
         // Get device info
@@ -1658,7 +1670,9 @@ public class Log {
         sb.append("\r\n");
 
         Locale slocale = Resources.getSystem().getConfiguration().locale;
-        sb.append(String.format("Locale: %s/%s\r\n", Locale.getDefault(), slocale));
+        String language = prefs.getString("language", null);
+        sb.append(String.format("Locale: def=%s sys=%s lang=%s\r\n",
+                Locale.getDefault(), slocale, language));
 
         sb.append(String.format("Processors: %d\r\n", Runtime.getRuntime().availableProcessors()));
 
@@ -1695,9 +1709,11 @@ public class Log {
         int uiMode = context.getResources().getConfiguration().uiMode;
         sb.append(String.format("UI mode: 0x"))
                 .append(Integer.toHexString(uiMode))
-                .append(" night")
-                .append(" no=").append((uiMode & Configuration.UI_MODE_NIGHT_NO) != 0)
-                .append(" yes=").append((uiMode & Configuration.UI_MODE_NIGHT_YES) != 0)
+                .append(" night=").append(Helper.isNight(context))
+                .append("\r\n");
+
+        sb.append("canScheduleExactAlarms=")
+                .append(AlarmManagerCompatEx.canScheduleExactAlarms(context))
                 .append("\r\n");
 
         sb.append("Transliterate: ")
@@ -1711,10 +1727,10 @@ public class Log {
             sb.append(ex.toString()).append("\r\n");
         }
 
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         boolean ignoring = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            ignoring = pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
+            ignoring = power.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
         sb.append(String.format("Battery optimizations: %b\r\n", !ignoring));
         sb.append(String.format("Charging: %b\r\n", Helper.isCharging(context)));
 
@@ -1733,7 +1749,6 @@ public class Log {
         String charset = MimeUtility.getDefaultJavaCharset();
         sb.append(String.format("Default charset: %s/%s\r\n", charset, MimeUtility.mimeCharset(charset)));
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean reporting = prefs.getBoolean("crash_reports", false);
         if (reporting) {
             String uuid = prefs.getString("uuid", null);

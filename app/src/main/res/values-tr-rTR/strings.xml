@@ -83,7 +83,6 @@
     <string name="title_notification_waiting">Uygun bağlantı bekleniyor</string>
     <string name="title_notification_idle">Dışarıda</string>
     <string name="title_notification_failed">\'%1$s\' başarısız oldu</string>
-    <string name="title_notification_alert">\'%1$s\' sunucu uyarısı</string>
     <string name="title_notification_sending_left">%1$d deneme kaldı</string>
     <string name="title_notification_sending_failed">%1$s adresine gönderim başarısız oldu</string>
     <string name="title_notification_redacted">Düzeltildi: biyometrik veya PIN kimlik doğrulaması etkin</string>
@@ -371,7 +370,6 @@
     <string name="title_advanced_actionbar_color">Hesap rengini konuşma eylem çubuğu için arka plan rengi olarak kullan</string>
     <string name="title_advanced_navbar_colorize">Android gezinme çubuğunu renklendirin</string>
     <string name="title_advanced_parse_classes">CSS\'i çözümle</string>
-    <string name="title_advanced_authentication">Alıcı sunucu iletinin kimliğini doğrulayamadığında bir uyarı göster</string>
     <string name="title_advanced_sync_on_launch">Uygulama açıldığında eşitle</string>
     <string name="title_advanced_double_back">Çıkmak için geri tuşuna 2 defa basın</string>
     <string name="title_advanced_conversation_actions">Eylem öner (Android 10+)</string>

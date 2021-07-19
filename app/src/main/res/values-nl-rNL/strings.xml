@@ -83,7 +83,7 @@
     <string name="title_notification_waiting">Wachten op een geschikte verbinding</string>
     <string name="title_notification_idle">Inactief</string>
     <string name="title_notification_failed">\'%1$s\' is mislukt</string>
-    <string name="title_notification_alert">\'%1$s\' servermelding</string>
+    <string name="title_notification_alert">Serverwaarschuwing: \'%1$s\'</string>
     <string name="title_notification_sending_left">Resterende pogingen: %1$d</string>
     <string name="title_notification_sending_retry">Verzenden zal opnieuw worden geprobeerd bij wijzigingen in de internetverbinding of het naar beneden trekken van de outbox</string>
     <string name="title_notification_sending_failed">Verzenden naar %1$s mislukt</string>
@@ -159,6 +159,7 @@
     <string name="title_setup_no_inbox">Postvak in niet gevonden</string>
     <string name="title_setup_advanced_protection">Wanneer u bent ingeschreven voor het geavanceerde beveiligingsprogramma, is het niet mogelijk om een e-mailapp van derden te gebruiken. Dit is een door Google opgelegde beperking.</string>
     <string name="title_setup_quick_success">Een account is succesvol toegevoegd</string>
+    <string name="title_setup_quick_no_sent">Er is geen map voor verzonden berichten geselecteerd. Verzonden berichten worden mogelijk niet opgeslagen.</string>
     <string name="title_setup_quick_configure">Om de naam, kleur, veeg acties, etc te bewerken</string>
     <string name="title_setup_manage">Beheer</string>
     <string name="title_setup_grant">Verlenen</string>
@@ -178,6 +179,7 @@
     <string name="title_setup_doze_stopped">Sync gestopt?</string>
     <string name="title_setup_doze_device">Dit is waarschijnlijk nodig voor dit apparaat</string>
     <string name="title_setup_doze_android">Dit is vereist voor deze Android-versie</string>
+    <string name="title_setup_inexact">Alarmen &amp; herinneringen zijn uitgeschakeld</string>
     <string name="title_setup_background">Achtergrondbeperkingen zijn ingeschakeld</string>
     <string name="title_setup_data">Gegevensbesparing is ingeschakeld</string>
     <string name="title_setup_advanced_options">Toon geavanceerde opties</string>
@@ -264,6 +266,7 @@
     <string name="title_advanced_check_reply_domain">Controleer het antwoordadres bij het synchroniseren van berichten</string>
     <string name="title_advanced_check_mx">Controleer e-mailadressen van de afzenders bij het synchroniseren van berichten</string>
     <string name="title_advanced_check_blocklist">Controleer of de domeinnaam van de afzender op een spamblokkeerlijst staat</string>
+    <string name="title_advanced_use_blocklist">Verplaats berichten van domeinen op een blokkeerlijst naar de spammap</string>
     <string name="title_advanced_tune_keep_alive">De keep-alive interval automatisch aanpassen</string>
     <string name="title_advanced_keyboard">Toon standaard het toetsenbord</string>
     <string name="title_advanced_keyboard_no_fullscreen">Toetsenbord in volledige scherm voorkomen</string>
@@ -307,6 +310,7 @@
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
     <string name="title_advanced_manage_connectivity">Beheer connectiviteit</string>
     <string name="title_advanced_caption_general">Algemeen</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Controles</string>
     <string name="title_advanced_caption_list">Lijst</string>
     <string name="title_advanced_caption_conversation">Gesprek</string>
     <string name="title_advanced_caption_message">Bericht</string>
@@ -330,6 +334,8 @@
     <string name="title_advanced_color_stripe">Toon kleurenstreep</string>
     <string name="title_advanced_avatars">Toon foto\'s contacten</string>
     <string name="title_advanced_gravatars">Gravatars weergeven</string>
+    <string name="title_advanced_bimi_unverified">Niet-geverifieerde afzender</string>
+    <string name="title_advanced_bimi_verified">Geverifieerde afzender</string>
     <string name="title_advanced_favicons">Toon favicons</string>
     <string name="title_advanced_generated_icons">Toon gegenereerde iconen</string>
     <string name="title_advanced_identicons">Toon identicons</string>
@@ -378,7 +384,9 @@
     <string name="title_advanced_actionbar_color">Gebruik de accountkleur als achtergrond voor de gespreksactiebalk</string>
     <string name="title_advanced_navbar_colorize">Kleur de Android-navigatiebalk in</string>
     <string name="title_advanced_parse_classes">Stijlbladen parsen</string>
-    <string name="title_advanced_authentication">Toon een waarschuwing wanneer de ontvangende server het bericht niet kon verifiëren</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Toon authenticatiewaarschuwingen</string>
+    <string name="title_advanced_authentication_hint">De onderliggende controles kunnen worden geconfigureerd in de ontvangstinstellingen</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Toon authenticatie statusindicator</string>
     <string name="title_advanced_sync_on_launch">Synchroniseren bij start</string>
     <string name="title_advanced_double_back">Dubbel \'terug\' om te sluiten</string>
     <string name="title_advanced_conversation_actions">Acties voorstellen (Android 10+)</string>

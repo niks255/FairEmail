@@ -93,7 +93,7 @@
     <string name="title_notification_waiting">Se așteaptă o conexiune adecvată</string>
     <string name="title_notification_idle">Inactiv</string>
     <string name="title_notification_failed">\'%1$s\' a eșuat</string>
-    <string name="title_notification_alert">Alertă server %1$s</string>
+    <string name="title_notification_alert">Alertă server: \'%1$s\'</string>
     <string name="title_notification_sending_left">Încercări rămase: %1$d</string>
     <string name="title_notification_sending_retry">Trimiterea va fi reîncercată la modificările conexiunii la internet sau la tragerea în jos în mesaje de trimis</string>
     <string name="title_notification_sending_failed">Trimiterea către %1$s a eșuat</string>
@@ -169,6 +169,7 @@
     <string name="title_setup_no_inbox">Dosarul Primite nu a fost găsit</string>
     <string name="title_setup_advanced_protection">Când sunteți înscris în programul avansat de protecție, nu este posibilă utilizarea unei aplicații de e-mail a unei terțe părți. Aceasta este o restricție impusă de Google.</string>
     <string name="title_setup_quick_success">Un cont a fost adăugat cu succes</string>
+    <string name="title_setup_quick_no_sent">Nu a fost selectat niciun dosar pentru mesajele trimise. Mesajele trimise s-ar putea să nu fie stocate.</string>
     <string name="title_setup_quick_configure">Pentru a edita numele, culoarea, acțiunile de glisare, etc</string>
     <string name="title_setup_manage">Gestionează</string>
     <string name="title_setup_grant">Acordă</string>
@@ -188,6 +189,7 @@
     <string name="title_setup_doze_stopped">Sincronizarea e oprită?</string>
     <string name="title_setup_doze_device">Acest lucru este probabil necesar pentru acest dispozitiv</string>
     <string name="title_setup_doze_android">Acest lucru este necesar pentru această versiune Android</string>
+    <string name="title_setup_inexact">Alarme &amp; memento-urile sunt dezactivate</string>
     <string name="title_setup_background">Restricțiile de fundal sunt activate</string>
     <string name="title_setup_data">Economizorul de date este activat</string>
     <string name="title_setup_advanced_options">Arată opțiuni avansate</string>
@@ -201,6 +203,9 @@
     <string name="title_setup_close">Închideți setările</string>
     <string name="title_setup_export">Exportă setări</string>
     <string name="title_setup_import">Importă setări</string>
+    <string name="title_setup_export_remark">        Deoarece fișierul de setări conține toate setările și informațiile despre cont, acesta este criptat cu o parolă.
+        Parola este necesară pentru a importa din nou setările, așa că vă rugăm să nu o uitați!
+    </string>
     <string name="title_setup_import_do">Conturile importate vor fi adăugate fără a suprascrie pe cele existente</string>
     <string name="title_setup_password">Parolă</string>
     <string name="title_setup_password_chars">Parola conține caractere nule sau de control</string>
@@ -271,6 +276,7 @@
     <string name="title_advanced_check_reply_domain">Verifică adresa de răspuns la sincronizarea mesajelor</string>
     <string name="title_advanced_check_mx">Verifică adresa expeditorului la sincronizarea mesajelor</string>
     <string name="title_advanced_check_blocklist">Verificați dacă numele de domeniu al expeditorului se află pe o listă de blocare a spam-ului</string>
+    <string name="title_advanced_use_blocklist">Mutarea mesajelor de la domeniile de pe o listă de blocare în dosarul de spam</string>
     <string name="title_advanced_tune_keep_alive">Reglaţi automat intervalul de păstrare al conexiunii</string>
     <string name="title_advanced_keyboard">Afișare implicită a tastaturii</string>
     <string name="title_advanced_keyboard_no_fullscreen">Dezactivare tastatură pe tot ecranul</string>
@@ -314,6 +320,7 @@
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
     <string name="title_advanced_manage_connectivity">Gestionare conexiuni</string>
     <string name="title_advanced_caption_general">Generale</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Verificări</string>
     <string name="title_advanced_caption_list">Listă</string>
     <string name="title_advanced_caption_conversation">Conversație</string>
     <string name="title_advanced_caption_message">Mesaj</string>
@@ -337,6 +344,8 @@
     <string name="title_advanced_color_stripe">Arată banda de culori</string>
     <string name="title_advanced_avatars">Arată pozele contactelor</string>
     <string name="title_advanced_gravatars">Arată iconițe de pe Gravatar</string>
+    <string name="title_advanced_bimi_unverified">Expeditor neverificat</string>
+    <string name="title_advanced_bimi_verified">Expeditor verificat</string>
     <string name="title_advanced_favicons">Arată iconițe siteuri</string>
     <string name="title_advanced_generated_icons">Arată pictograme cu literă</string>
     <string name="title_advanced_identicons">Arată pictograme generate pe baza identității</string>
@@ -385,7 +394,9 @@
     <string name="title_advanced_actionbar_color">Folosește culoarea contului pentru culoarea de fundal a barei de acțiuni a conversației</string>
     <string name="title_advanced_navbar_colorize">Colorează bara de navigație Android</string>
     <string name="title_advanced_parse_classes">Utilizează foile de stil</string>
-    <string name="title_advanced_authentication">Arată o avertizare atunci când serverul destinatar nu a putut autentifica mesajul</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Afișați avertismentele de autentificare</string>
+    <string name="title_advanced_authentication_hint">Verificările subiacente pot fi configurate în setările de recepție</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Afișați indicatorul de stare de autentificare</string>
     <string name="title_advanced_sync_on_launch">Sincronizare la pornire</string>
     <string name="title_advanced_double_back">Apăsați de două ori \'înapoi\' pentru a ieși</string>
     <string name="title_advanced_conversation_actions">Sugerare acțiuni (Android 10+)</string>

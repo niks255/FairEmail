@@ -103,7 +103,7 @@
     <string name="title_notification_waiting">Ожидание подходящего подключения</string>
     <string name="title_notification_idle">Низкий</string>
     <string name="title_notification_failed">\"%1$s\" не выполнено</string>
-    <string name="title_notification_alert">Предупреждение сервера \"%1$s\"</string>
+    <string name="title_notification_alert">Предупреждение сервера: \"%1$s\"</string>
     <string name="title_notification_sending_left">Оставшиеся попытки: %1$d</string>
     <string name="title_notification_sending_retry">Повторная отправка будет произведена при изменении интернет-подключения или жесте «потянуть вниз» в исходящей папке</string>
     <string name="title_notification_sending_failed">Отправка для %1$s не выполнена</string>
@@ -150,8 +150,8 @@
     <string name="title_setup_wizard_multiple">Мастер может быть использован неоднократно для настройки разных учётных записей</string>
     <string name="title_setup_wizard_new">Мне нужен новый адрес электронной почты</string>
     <string name="title_setup_manual">Ручная настройка и параметры учётной записи</string>
-    <string name="title_setup_classic">Классическая конфигурация</string>
-    <string name="title_setup_documentation">Ознакомьтесь с документацией провайдера электронной почты для правильной конфигурации сервера</string>
+    <string name="title_setup_classic">Классическая настройка</string>
+    <string name="title_setup_documentation">Ознакомьтесь с документацией почтового провайдера для правильной настройки сервера</string>
     <string name="title_setup_account_remark">Получение почты</string>
     <string name="title_setup_identity_remark">Отправка почты</string>
     <string name="title_setup_account_identity_hint">Вы можете настроить имя, цвет и жесты в настройках учётной записи, а также настроить подпись в настройках идентификатора</string>
@@ -179,6 +179,7 @@
     <string name="title_setup_no_inbox">Папка \"Входящие\" не найдена</string>
     <string name="title_setup_advanced_protection">При регистрации в программе расширенной защиты невозможно использовать стороннее приложение электронной почты. Это ограничение, налагаемое Google.</string>
     <string name="title_setup_quick_success">Учётная запись успешно добавлена</string>
+    <string name="title_setup_quick_no_sent">Не выбрана папка для отправленных сообщений. Отправленные сообщения могут не сохраниться.</string>
     <string name="title_setup_quick_configure">Изменение имени, цвета, действия жестов и т.д.</string>
     <string name="title_setup_manage">Редактировать</string>
     <string name="title_setup_grant">Предоставить</string>
@@ -198,6 +199,7 @@
     <string name="title_setup_doze_stopped">Синхронизация останавливается?</string>
     <string name="title_setup_doze_device">Вероятно, это необходимо для вашего устройства</string>
     <string name="title_setup_doze_android">Необходимо для этой версии Android</string>
+    <string name="title_setup_inexact">Будильники и напоминания отключены</string>
     <string name="title_setup_background">Фоновые ограничения включены</string>
     <string name="title_setup_data">Сохранение данных включено</string>
     <string name="title_setup_advanced_options">Дополнительно</string>
@@ -211,6 +213,9 @@
     <string name="title_setup_close">Выйти из настроек</string>
     <string name="title_setup_export">Экспорт настроек</string>
     <string name="title_setup_import">Импорт настроек</string>
+    <string name="title_setup_export_remark">        Поскольку файл резервной копии содержит все настройки и информацию об учётной записи, он шифруется и защищается паролем.
+        Пароль потребуется при импорте настроек, поэтому не забудьте его!
+    </string>
     <string name="title_setup_import_do">Импортированные учётные записи будут добавлены без перезаписи существующих</string>
     <string name="title_setup_password">Пароль</string>
     <string name="title_setup_password_chars">Пароль содержит управляющие символы или пробелы</string>
@@ -277,10 +282,11 @@
     <string name="title_advanced_sync_folders">Синхронизировать список папок</string>
     <string name="title_advanced_sync_shared_folders">Синхронизировать списки общих папок</string>
     <string name="title_advanced_subscriptions">Управление подпиской на папки</string>
-    <string name="title_advanced_check_authentication">Проверять подлинность сообщения</string>
+    <string name="title_advanced_check_authentication">Проверять аутентификацию сообщения</string>
     <string name="title_advanced_check_reply_domain">Проверять адрес для ответа при синхронизации сообщений</string>
     <string name="title_advanced_check_mx">Проверять адреса электронной почты отправителя при синхронизации сообщений</string>
     <string name="title_advanced_check_blocklist">Проверять наличие домена отправителя в списке распространителей спама</string>
+    <string name="title_advanced_use_blocklist">Перемещать сообщения с доменов из списка блокировки в \"Спам\"</string>
     <string name="title_advanced_tune_keep_alive">Автоматически настраивать интервал keep-alive</string>
     <string name="title_advanced_keyboard">Показывать клавиатуру по умолчанию</string>
     <string name="title_advanced_keyboard_no_fullscreen">Не показывать клавиатуру в полноэкранном режиме</string>
@@ -324,6 +330,7 @@
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Проверки</string>
     <string name="title_advanced_caption_list">Список</string>
     <string name="title_advanced_caption_conversation">Диалог</string>
     <string name="title_advanced_caption_message">Сообщение</string>
@@ -347,6 +354,8 @@
     <string name="title_advanced_color_stripe">Показывать цветовую полосу</string>
     <string name="title_advanced_avatars">Показывать фотографии контакта</string>
     <string name="title_advanced_gravatars">Показывать Граватары</string>
+    <string name="title_advanced_bimi_unverified">Непроверенный отправитель</string>
+    <string name="title_advanced_bimi_verified">Проверенный отправитель</string>
     <string name="title_advanced_favicons">Показывать значки сайтов</string>
     <string name="title_advanced_generated_icons">Показывать сгенерированные значки</string>
     <string name="title_advanced_identicons">Показывать идентификаторы</string>
@@ -395,7 +404,9 @@
     <string name="title_advanced_actionbar_color">Использовать цвет учётной записи в качестве фонового для панели действий в диалоге</string>
     <string name="title_advanced_navbar_colorize">Раскрашивать панель навигации Android</string>
     <string name="title_advanced_parse_classes">Анализировать таблицы стилей</string>
-    <string name="title_advanced_authentication">Показывать предупреждение, когда сервер не может аутентифицировать сообщение</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Показывать предупреждения аутентификации</string>
+    <string name="title_advanced_authentication_hint">Соответствующие проверки могут быть настроены в параметрах получения</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Показывать индикатор состояния аутенфикации</string>
     <string name="title_advanced_sync_on_launch">Синхронизация при запуске</string>
     <string name="title_advanced_double_back">Двойное нажатие \"Назад\" для выхода</string>
     <string name="title_advanced_conversation_actions">Предлагать действия (Android 10+)</string>
@@ -1483,7 +1494,7 @@
     <string name="title_accessibility_collapse">Свернуть</string>
     <string name="title_accessibility_expand">Развернуть</string>
     <string name="title_accessibility_view_contact">Просмотр контакта</string>
-    <string name="title_accessibility_show_authentication_result">Показать результат аутентификации</string>
+    <string name="title_accessibility_show_authentication_result">Показывать результат аутентификации</string>
     <string name="title_accessibility_show_snooze_time">Показывать время повтора</string>
     <string name="title_accessibility_view_help">Посмотреть справку</string>
     <string name="title_accessibility_selected">Выбранные</string>

@@ -72,7 +72,7 @@
     <string name="title_notification_waiting">接続を待機中</string>
     <string name="title_notification_idle">待機</string>
     <string name="title_notification_failed">\'%1$s\' 失敗</string>
-    <string name="title_notification_alert">%1$s サーバアラート</string>
+    <string name="title_notification_alert">サーバーアラート: \'%1$s\'</string>
     <string name="title_notification_sending_left">残りの試行回数: %1$d</string>
     <string name="title_notification_sending_retry">送信はインターネット接続の変更または送信トレイをプルダウンすると再試行されます</string>
     <string name="title_notification_sending_failed">%1$s への送信に失敗</string>
@@ -148,6 +148,7 @@
     <string name="title_setup_no_inbox">受信トレイが見つかりません</string>
     <string name="title_setup_advanced_protection">強度な保護機能を利用している場合、サードパーティのメールクライアントを使用することはできません。これはGoogleによって課せられている制限です。</string>
     <string name="title_setup_quick_success">アカウントが追加されました</string>
+    <string name="title_setup_quick_no_sent">送信済メッセージフォルダが選択されていません。送信済メッセージは保存されない可能性があります。</string>
     <string name="title_setup_quick_configure">名前、色、スワイプアクションなどを編集する</string>
     <string name="title_setup_manage">管理する</string>
     <string name="title_setup_grant">付与</string>
@@ -167,6 +168,7 @@
     <string name="title_setup_doze_stopped">同期が停止しましたか？</string>
     <string name="title_setup_doze_device">これはおそらくこのデバイスに必要です</string>
     <string name="title_setup_doze_android">このAndroidバージョンには必須です</string>
+    <string name="title_setup_inexact">アラーム &amp; リマインダーは無効です</string>
     <string name="title_setup_background">バックグラウンドの制限は有効です</string>
     <string name="title_setup_data">データセーバーが有効になっています</string>
     <string name="title_setup_advanced_options">上級者向けオプションを表示</string>
@@ -180,6 +182,9 @@
     <string name="title_setup_close">設定を閉じる</string>
     <string name="title_setup_export">設定をエクスポート</string>
     <string name="title_setup_import">設定をインポート</string>
+    <string name="title_setup_export_remark">        設定ファイルにはすべての設定とアカウント情報が含まれているためパスワードで暗号化されています。
+        設定を再度インポートするにはパスワードが必要ですので忘れないでください！
+    </string>
     <string name="title_setup_import_do">インポートされたアカウントは既存のアカウントを上書きせずに追加されます</string>
     <string name="title_setup_password">パスワード</string>
     <string name="title_setup_password_chars">パスワードに制御文字又は空白が含まれています</string>
@@ -316,6 +321,8 @@
     <string name="title_advanced_color_stripe">カラーストライプを表示</string>
     <string name="title_advanced_avatars">連絡先の写真を表示</string>
     <string name="title_advanced_gravatars">Gravatar(アバター)を表示</string>
+    <string name="title_advanced_bimi_unverified">未確認の送信者</string>
+    <string name="title_advanced_bimi_verified">確認済みの送信者</string>
     <string name="title_advanced_favicons">Faviconsを表示</string>
     <string name="title_advanced_generated_icons">生成されたアイコンを表示</string>
     <string name="title_advanced_identicons">識別アイコンを表示</string>
@@ -364,7 +371,6 @@
     <string name="title_advanced_actionbar_color">会話アクションバーの背景色としてアカウントの色を使用</string>
     <string name="title_advanced_navbar_colorize">Androidナビゲーションバーの色付け</string>
     <string name="title_advanced_parse_classes">スタイルシートの解析</string>
-    <string name="title_advanced_authentication">受信サーバがメッセージを認証出来なかった時に警告を表示</string>
     <string name="title_advanced_sync_on_launch">起動時に同期</string>
     <string name="title_advanced_double_back">\"戻る\"をダブルタップして終了</string>
     <string name="title_advanced_conversation_actions">アクションを提案 (Android 10以上)</string>

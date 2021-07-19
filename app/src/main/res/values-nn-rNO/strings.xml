@@ -76,7 +76,6 @@
     <string name="title_notification_waiting">Venter på passende tilkobling</string>
     <string name="title_notification_idle">Inaktiv</string>
     <string name="title_notification_failed">\'%1$s\' mislyktes</string>
-    <string name="title_notification_alert">\'%1$s\' servervarsling</string>
     <string name="title_notification_sending_left">Forsøk igjen: %1$d</string>
     <string name="title_notification_sending_failed">Sending til %1$s mislyktes</string>
     <string name="title_notification_redacted">Redigert: biometrisk eller PIN-autentisering aktivert</string>
@@ -314,7 +313,6 @@
     <string name="title_advanced_actionbar_color">Bruke kontofarge som bakgrunnsfarge for samtalelinjen</string>
     <string name="title_advanced_navbar_colorize">Fargelegg Android-navigasjonslinjen</string>
     <string name="title_advanced_parse_classes">Analyser stilark</string>
-    <string name="title_advanced_authentication">Vis en advarsel når mottakeren ikke kunne godkjenne meldingen</string>
     <string name="title_advanced_sync_on_launch">Synkroniser ved start</string>
     <string name="title_advanced_double_back">Dobbel \'tilbake\' for å avslutte</string>
     <string name="title_advanced_language_detection">Oppdag meldings tekstspråk</string>

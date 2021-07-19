@@ -144,11 +144,6 @@ public class Helper {
     private static Boolean hasPlayStore = null;
     private static Boolean hasValidFingerprint = null;
 
-    static final int NOTIFICATION_SYNCHRONIZE = 1;
-    static final int NOTIFICATION_SEND = 2;
-    static final int NOTIFICATION_EXTERNAL = 3;
-    static final int NOTIFICATION_UPDATE = 4;
-
     static final float LOW_LIGHT = 0.6f;
 
     static final int BUFFER_SIZE = 8192; // Same as in Files class
@@ -161,6 +156,7 @@ public class Helper {
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
     static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport&version=" + BuildConfig.VERSION_NAME;
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
+    static final String BIMI_PRIVACY_URI = "https://datatracker.ietf.org/doc/html/draft-brotman-ietf-bimi-guidance-03#section-7.4";
     static final String FAVICON_PRIVACY_URI = "https://en.wikipedia.org/wiki/Favicon";
     static final String GRAVATAR_PRIVACY_URI = "https://en.wikipedia.org/wiki/Gravatar";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
@@ -576,7 +572,7 @@ public class Helper {
     }
 
     static void _share(Context context, File file, String type, String name) {
-        // https://developer.android.com/reference/android/support/v4/content/FileProvider
+        // https://developer.android.com/reference/androidx/core/content/FileProvider
         Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
         Log.i("uri=" + uri + " type=" + type);
 
@@ -942,7 +938,7 @@ public class Helper {
     }
 
     static boolean isDozeRequired() {
-        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.R);
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.R && false);
     }
 
     static void reportNoViewer(Context context, Uri uri) {
@@ -1081,7 +1077,7 @@ public class Helper {
         // https://developer.android.com/guide/topics/ui/look-and-feel/darktheme#configuration_changes
         int uiMode = context.getResources().getConfiguration().uiMode;
         Log.i("UI mode=0x" + Integer.toHexString(uiMode));
-        return ((uiMode & Configuration.UI_MODE_NIGHT_YES) != 0);
+        return ((uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES);
     }
 
     static boolean isDarkTheme(Context context) {
@@ -1583,7 +1579,7 @@ public class Helper {
             byte[] bytes = digest.digest(cert);
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes)
-                sb.append(Integer.toString(b & 0xff, 16).toUpperCase(Locale.ROOT));
+                sb.append(String.format("%02X", b));
             return sb.toString();
         } catch (Throwable ex) {
             Log.e(ex);

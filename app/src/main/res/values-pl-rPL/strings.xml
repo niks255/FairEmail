@@ -102,7 +102,7 @@
     <string name="title_notification_waiting">Oczekiwanie na odpowiednie połączenie</string>
     <string name="title_notification_idle">Bezczynny</string>
     <string name="title_notification_failed">%1$s nie powiodło się</string>
-    <string name="title_notification_alert">Alert serwera \'%1$s\'</string>
+    <string name="title_notification_alert">Alert serwera: \'%1$s\'</string>
     <string name="title_notification_sending_left">Pozostało prób: %1$d</string>
     <string name="title_notification_sending_retry">Wysyłanie zostanie ponowione po zmianie połączenia internetowego lub pociągnięciu w dół skrzynki nadawczej</string>
     <string name="title_notification_sending_failed">Wysyłanie do %1$s nie powiodło się</string>
@@ -178,6 +178,7 @@
     <string name="title_setup_no_inbox">Nie znaleziono skrzynki odbiorczej</string>
     <string name="title_setup_advanced_protection">Po zarejestrowaniu się w programie ochrony zaawansowanej nie można korzystać z aplikacji poczty e-mail innej firmy. Jest to ograniczenie nałożone przez Google.</string>
     <string name="title_setup_quick_success">Konto zostało pomyślnie dodane</string>
+    <string name="title_setup_quick_no_sent">Nie wybrano folderu wysłanych wiadomości. Może wystąpić problem z ich przechowywaniem.</string>
     <string name="title_setup_quick_configure">Aby edytować nazwę, kolor, akcje przesuwania itp</string>
     <string name="title_setup_manage">Zarządzaj</string>
     <string name="title_setup_grant">Zezwól</string>
@@ -197,6 +198,7 @@
     <string name="title_setup_doze_stopped">Synchronizacja zatrzymana?</string>
     <string name="title_setup_doze_device">Prawdopodobnie jest to wymagane dla tego urządzenia</string>
     <string name="title_setup_doze_android">To jest wymagane dla tej wersji Androida</string>
+    <string name="title_setup_inexact">Alarmy &amp; przypomnienia są wyłączone</string>
     <string name="title_setup_background">Ograniczenia w tle są włączone</string>
     <string name="title_setup_data">Oszczędzanie danych jest włączone</string>
     <string name="title_setup_advanced_options">Pokaż opcje zaawansowane</string>
@@ -210,6 +212,9 @@
     <string name="title_setup_close">Zamknij ustawienia</string>
     <string name="title_setup_export">Eksport ustawień</string>
     <string name="title_setup_import">Import ustawień</string>
+    <string name="title_setup_export_remark">        Ponieważ plik ustawień zawiera wszystkie ustawienia i informacje o koncie, jest zaszyfrowany hasłem.
+         Hasło jest wymagane do ponownego zaimportowania ustawień, więc nie zapomnij go!
+    </string>
     <string name="title_setup_import_do">Zaimportowane konta zostaną dodane bez nadpisywania istniejących</string>
     <string name="title_setup_password">Hasło</string>
     <string name="title_setup_password_chars">Hasło zawiera znaki kontrolne lub znaki spacji</string>
@@ -280,6 +285,7 @@
     <string name="title_advanced_check_reply_domain">Sprawdź adres odpowiedzi podczas synchronizacji wiadomości</string>
     <string name="title_advanced_check_mx">Sprawdź adresy e-mail nadawcy przy synchronizowaniu wiadomości</string>
     <string name="title_advanced_check_blocklist">Sprawdź, czy nazwa domeny nadawcy znajduje się na liście spamu</string>
+    <string name="title_advanced_use_blocklist">Przenieś wiadomości z listy domen zablokowanych do folderu spam</string>
     <string name="title_advanced_tune_keep_alive">Automatycznie dostosuj interwał zachowania aktywności</string>
     <string name="title_advanced_keyboard">Domyślnie pokaż klawiaturę</string>
     <string name="title_advanced_keyboard_no_fullscreen">Blokuj klawiaturę pełnoekranową</string>
@@ -323,6 +329,7 @@
     <string name="title_advanced_ssl_harden">Wzmocnij połączenia SSL</string>
     <string name="title_advanced_manage_connectivity">Zarządzaj połączeniami</string>
     <string name="title_advanced_caption_general">Ogólne</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Kontrole</string>
     <string name="title_advanced_caption_list">Lista</string>
     <string name="title_advanced_caption_conversation">Wątek</string>
     <string name="title_advanced_caption_message">Wiadomość</string>
@@ -346,6 +353,8 @@
     <string name="title_advanced_color_stripe">Pokaż kolorowy pasek</string>
     <string name="title_advanced_avatars">Pokaż zdjęcia kontaktu</string>
     <string name="title_advanced_gravatars">Pokaż Gravatary</string>
+    <string name="title_advanced_bimi_unverified">Niezweryfikowany nadawca</string>
+    <string name="title_advanced_bimi_verified">Zweryfikowany nadawca</string>
     <string name="title_advanced_favicons">Pokaż favikony</string>
     <string name="title_advanced_generated_icons">Pokaż wygenerowane ikony</string>
     <string name="title_advanced_identicons">Pokaż ikony kontaktów</string>
@@ -394,7 +403,9 @@
     <string name="title_advanced_actionbar_color">Użyj koloru konta jako koloru tła dla paska akcji rozmowy</string>
     <string name="title_advanced_navbar_colorize">Koloruj pasek nawigacji Androida</string>
     <string name="title_advanced_parse_classes">Parsowanie arkuszy stylów</string>
-    <string name="title_advanced_authentication">Pokaż ostrzeżenie, gdy serwer odbierający nie może uwierzytelnić wiadomości</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Pokaż ostrzeżenia o uwierzytelnieniu</string>
+    <string name="title_advanced_authentication_hint">Podstawowe kontrole można skonfigurować w ustawieniach odbioru</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Pokaż wskaźnik statusu uwierzytelniania</string>
     <string name="title_advanced_sync_on_launch">Synchronizuj podczas włączania aplikacji</string>
     <string name="title_advanced_double_back">Podwójne \'wstecz\', aby wyjść</string>
     <string name="title_advanced_conversation_actions">Sugeruj akcje (Android 10+)</string>

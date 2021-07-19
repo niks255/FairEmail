@@ -83,7 +83,7 @@
     <string name="title_notification_waiting">In attesa di una connessione adatta</string>
     <string name="title_notification_idle">Inattivo</string>
     <string name="title_notification_failed">\'%1$s\' fallito</string>
-    <string name="title_notification_alert">\'%1$s\' avvisi sul server</string>
+    <string name="title_notification_alert">Avviso server: \'%1$s\'</string>
     <string name="title_notification_sending_left">Tentativi rimasti: %1$d</string>
     <string name="title_notification_sending_retry">L\'invio sarà riprovato in caso di modifiche alla connessione Internet o aggiornando la posta in uscita</string>
     <string name="title_notification_sending_failed">Invio a %1$s fallito</string>
@@ -159,6 +159,7 @@
     <string name="title_setup_no_inbox">Posta in arrivo non trovata</string>
     <string name="title_setup_advanced_protection">Quando iscritto al programma di protezione avanzata è impossibile usare un\'app email di terze parti. Questa è una restrizione imposta da Google.</string>
     <string name="title_setup_quick_success">Un profilo è stato aggiunto correttamente</string>
+    <string name="title_setup_quick_no_sent">Non è stata selezionata nessuna cartella di messaggi inviati. I messaggi inviati potrebbero non essere memorizzati.</string>
     <string name="title_setup_quick_configure">Per modificare il nome, il colore, le azioni di scorrimento, ecc.</string>
     <string name="title_setup_manage">Gestisci</string>
     <string name="title_setup_grant">Concedi</string>
@@ -178,6 +179,7 @@
     <string name="title_setup_doze_stopped">Sincronizzazione interrotta?</string>
     <string name="title_setup_doze_device">Questo è probabilmente necessario per questo dispositivo</string>
     <string name="title_setup_doze_android">Questo è necessario per questa versione di Android</string>
+    <string name="title_setup_inexact">Allarmi e promemoria disabilitati</string>
     <string name="title_setup_background">Restrizioni di background abilitate</string>
     <string name="title_setup_data">Risparmio dati abilitato</string>
     <string name="title_setup_advanced_options">Mostra le opzioni avanzate</string>
@@ -191,6 +193,9 @@
     <string name="title_setup_close">Chiudi le impostazioni</string>
     <string name="title_setup_export">Impostazioni di esportazione</string>
     <string name="title_setup_import">Importa impostazioni</string>
+    <string name="title_setup_export_remark">        Poiché il file delle impostazioni contiene tutte le impostazioni e informazioni del profilo, è crittografato con una password.
+        La password è necessaria per importare di nuovo le impostazioni, sei quindi pregato di non dimenticarla!
+    </string>
     <string name="title_setup_import_do">I profili importati saranno aggiunti senza sovrascriverne alcuno esistente</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">La password contiene caratteri di controllo o spazi vuoti</string>
@@ -327,6 +332,8 @@
     <string name="title_advanced_color_stripe">Mostra striscia di colore</string>
     <string name="title_advanced_avatars">Mostra le foto di contatto</string>
     <string name="title_advanced_gravatars">Mostra Gravatar</string>
+    <string name="title_advanced_bimi_unverified">Mittente non verificato</string>
+    <string name="title_advanced_bimi_verified">Mittente verificato</string>
     <string name="title_advanced_favicons">Mostra favicon</string>
     <string name="title_advanced_generated_icons">Mostra le icone generate</string>
     <string name="title_advanced_identicons">Mostra identicon</string>
@@ -375,7 +382,6 @@
     <string name="title_advanced_actionbar_color">Usa il colore del profilo come colore di sfondo per la barra d\'azione della conversazione</string>
     <string name="title_advanced_navbar_colorize">Colora la barra di navigazione di Android</string>
     <string name="title_advanced_parse_classes">Analizza fogli di stile</string>
-    <string name="title_advanced_authentication">Mostra un avviso quando il server di ricezione non è riuscito ad autenticare il messaggio</string>
     <string name="title_advanced_sync_on_launch">Sincronizza all\'avvio</string>
     <string name="title_advanced_double_back">Doppio \'indietro\' per uscire</string>
     <string name="title_advanced_conversation_actions">Suggerisci azioni (Android 10+)</string>

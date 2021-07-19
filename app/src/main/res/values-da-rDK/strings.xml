@@ -83,7 +83,7 @@
     <string name="title_notification_waiting">Afventer en passende forbindelse</string>
     <string name="title_notification_idle">Inaktiv</string>
     <string name="title_notification_failed">\'%1$s\' mislykkedes</string>
-    <string name="title_notification_alert">\'%1$s\'-serveradvarsel</string>
+    <string name="title_notification_alert">Serveradvarsel: \'%1$s\'</string>
     <string name="title_notification_sending_left">Forsøg resterer: %1$d</string>
     <string name="title_notification_sending_retry">Afsendelse gentages ved Internetforbindelsesændringer eller et træk nedad på udbakken</string>
     <string name="title_notification_sending_failed">Afsendelse til %1$s mislykkedes</string>
@@ -158,6 +158,7 @@
     <string name="title_setup_no_inbox">Indbakke ikke fundet</string>
     <string name="title_setup_advanced_protection">Når du er tilmeldt det avancerede beskyttelsesprogram, er det ikke muligt at benytte en tredjeparts e-mail app. Dette er en begrænsning pålagt af Google.</string>
     <string name="title_setup_quick_success">En konto er blevet tilføjet</string>
+    <string name="title_setup_quick_no_sent">Ingen Sendt-beskedmappe er valgt. Afsendte breve lagres muligvis ikke.</string>
     <string name="title_setup_quick_configure">For at redigere navn, farve, strygehandlinger mv.</string>
     <string name="title_setup_manage">Administrér</string>
     <string name="title_setup_grant">Tillad</string>
@@ -173,6 +174,7 @@
     <string name="title_setup_doze_instructions">Ændr i næste Android-dialog \"Ikke optimeret\" til \"Alle apps\", vælg denne app og \"Optimér ikke\"</string>
     <string name="title_setup_doze_battery">Højt strømforbrug?</string>
     <string name="title_setup_doze_stopped">Synk stoppet?</string>
+    <string name="title_setup_inexact">Alarmer og påmindelser er deaktiveret</string>
     <string name="title_setup_background">Baggrundsbegrænsninger er aktive</string>
     <string name="title_setup_data">Datasparer er aktiveret</string>
     <string name="title_setup_advanced_options">Vis avancerede indstillinger</string>
@@ -186,6 +188,9 @@
     <string name="title_setup_close">Luk indstillinger</string>
     <string name="title_setup_export">Eksportindstillinger</string>
     <string name="title_setup_import">Importindstillinger</string>
+    <string name="title_setup_export_remark">        Da indstillingsfilen indeholder alle indstillinger og kontooplysninger, krypteres den vha. en adgangskode.
+        Adgangskoden kræves for at importere indstillingerne igen, så glem den ikke!
+    </string>
     <string name="title_setup_import_do">Importerede konti tilføjes uden at overskrive eksisterende ditto</string>
     <string name="title_setup_password">Adgangskode</string>
     <string name="title_setup_password_chars">Adgangskode indeholder kontrol- eller mellemrumstegn</string>
@@ -254,6 +259,7 @@
     <string name="title_advanced_check_authentication">Tjek beskedgodkendelse</string>
     <string name="title_advanced_check_mx">Tjek afsenderadresser ved beskedsynkroniseringer</string>
     <string name="title_advanced_check_blocklist">Tjek om afsenders domænenavn er på en spamblokeringsliste</string>
+    <string name="title_advanced_use_blocklist">Flyt beskeder fra blokeringslistedomæner til Spammappen</string>
     <string name="title_advanced_tune_keep_alive">Justér automatisk hold i live intervallet</string>
     <string name="title_advanced_keyboard">Vis tastatur som standard</string>
     <string name="title_advanced_keyboard_no_fullscreen">Forhindr fuldskærmstastatur</string>
@@ -297,6 +303,7 @@
     <string name="title_advanced_ssl_harden">Hærd SSL-forbindelser</string>
     <string name="title_advanced_manage_connectivity">Håndtér konnektivitet</string>
     <string name="title_advanced_caption_general">Generelt</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Tjek</string>
     <string name="title_advanced_caption_list">Liste</string>
     <string name="title_advanced_caption_conversation">Samtale</string>
     <string name="title_advanced_caption_message">Besked</string>
@@ -319,6 +326,8 @@
     <string name="title_advanced_color_stripe">Vis farvestripe</string>
     <string name="title_advanced_avatars">Vis kontaktfotos</string>
     <string name="title_advanced_gravatars">Vis Gravatarer</string>
+    <string name="title_advanced_bimi_unverified">Ubekræftet afsender</string>
+    <string name="title_advanced_bimi_verified">Bekræftet afsender</string>
     <string name="title_advanced_favicons">Vis favoritkoner</string>
     <string name="title_advanced_generated_icons">Vis genererede ikoner</string>
     <string name="title_advanced_identicons">Vis identikoner</string>
@@ -365,7 +374,9 @@
     <string name="title_advanced_actionbar_color">Benyt kontofarve som baggrundsfarve til samtalens handlingsbjælke</string>
     <string name="title_advanced_navbar_colorize">Farvelæg Android-navigeringsbjælken</string>
     <string name="title_advanced_parse_classes">CSS-fortolkning</string>
-    <string name="title_advanced_authentication">Vis en advarsel, når indgående server ikke kunne bekræfte beskeden</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Vis godkendelsesadvarsler</string>
+    <string name="title_advanced_authentication_hint">De underliggende tjek kan opsættes i modtagelsesindstillingerne</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Vis indikator for godkendelsesstatus</string>
     <string name="title_advanced_sync_on_launch">Synkronisér ved opstart</string>
     <string name="title_advanced_double_back">Dobbelttryk \"Tilbage\"/stryg for at lukke</string>
     <string name="title_advanced_conversation_actions">Foreslå handlinger (Android 10+)</string>

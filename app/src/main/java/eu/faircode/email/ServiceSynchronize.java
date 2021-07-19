@@ -171,7 +171,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         if (isBackgroundService(this))
             stopForeground(true);
         else
-            startForeground(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(null, null).build());
+            startForeground(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
+                    getNotificationService(null, null).build());
 
         // Listen for network changes
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -262,14 +263,17 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         boolean sync = current.command.getBoolean("sync", false);
                         boolean force = current.command.getBoolean("force", false);
-                        if (force)
+                        if (force) {
                             sync = true;
+                            current.accountState.operations++;
+                        }
 
                         int index = accountStates.indexOf(current);
                         if (index < 0) {
-                            if (current.canRun(force)) {
+                            if (current.canRun()) {
                                 EntityLog.log(ServiceSynchronize.this, "### new " + current +
-                                        " start=" + current.canRun(force) +
+                                        " force=" + force +
+                                        " start=" + current.canRun() +
                                         " sync=" + current.accountState.isEnabled(current.enabled) +
                                         " enabled=" + current.accountState.synchronize +
                                         " ondemand=" + current.accountState.ondemand +
@@ -299,14 +303,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             // Some networks disallow email server connections:
                             // - reload on network type change when disconnected
                             if (reload ||
-                                    prev.canRun(force) != current.canRun(force) ||
+                                    prev.canRun() != current.canRun() ||
                                     !prev.accountState.equals(current.accountState)) {
-                                if (prev.canRun(force) || current.canRun(force))
+                                if (prev.canRun() || current.canRun())
                                     EntityLog.log(ServiceSynchronize.this, "### changed " + current +
                                             " reload=" + reload +
                                             " force=" + force +
-                                            " stop=" + prev.canRun(force) +
-                                            " start=" + current.canRun(force) +
+                                            " stop=" + prev.canRun() +
+                                            " start=" + current.canRun() +
                                             " sync=" + sync +
                                             " enabled=" + current.accountState.isEnabled(current.enabled) +
                                             " should=" + current.accountState.shouldRun(current.enabled) +
@@ -318,11 +322,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             " tbd=" + current.accountState.tbd +
                                             " state=" + current.accountState.state +
                                             " active=" + prev.networkState.getActive() + "/" + current.networkState.getActive());
-                                if (prev.canRun(force)) {
+                                if (prev.canRun()) {
                                     event = true;
                                     stop(prev);
                                 }
-                                if (current.canRun(force)) {
+                                if (current.canRun()) {
                                     event = true;
                                     start(current, current.accountState.isEnabled(current.enabled) || sync, force);
                                 }
@@ -367,8 +371,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         if (!isBackgroundService(ServiceSynchronize.this))
                             try {
-                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+                                NotificationManager nm =
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
+                                        getNotificationService(lastAccounts, lastOperations).build());
                             } catch (Throwable ex) {
 /*
                             java.lang.NullPointerException: Attempt to invoke interface method 'java.util.Iterator java.lang.Iterable.iterator()' on a null object reference
@@ -774,8 +780,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 */
         }
 
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(Helper.NOTIFICATION_SYNCHRONIZE);
+        NotificationManager nm =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancel(NotificationHelper.NOTIFICATION_SYNCHRONIZE);
 
         super.onDestroy();
     }
@@ -799,7 +806,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         if (isBackgroundService(this))
             stopForeground(true);
         else
-            startForeground(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(null, null).build());
+            startForeground(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
+                    getNotificationService(null, null).build());
 
         if (action != null)
             try {
@@ -1240,7 +1248,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 if (!ConnectionHelper.isMaxConnections(message))
                                     try {
                                         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                        nm.notify("alert:" + account.id, 1,
+                                        nm.notify("alert:" + account.id,
+                                                NotificationHelper.NOTIFICATION_TAGGED,
                                                 getNotificationAlert(account.name, message).build());
                                     } catch (Throwable ex) {
                                         Log.w(ex);
@@ -1272,7 +1281,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 try {
                                     state.setBackoff(2 * CONNECT_BACKOFF_ALARM_MAX * 60);
                                     NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                    nm.notify("receive:" + account.id, 1,
+                                    nm.notify("receive:" + account.id,
+                                            NotificationHelper.NOTIFICATION_TAGGED,
                                             Core.getNotificationError(this, "error", account.name, ex)
                                                     .build());
                                 } catch (Throwable ex1) {
@@ -1340,7 +1350,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 int count = db.folder().renameFolder(account.id, old, name);
                                 Log.i("Renamed to " + name + " count=" + count);
-                                if (count == 0)
+                                if (count != 0)
                                     reload(ServiceSynchronize.this, account.id, false, "folder renamed");
                             } finally {
                                 wlFolder.release();
@@ -1932,9 +1942,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         db.account().setAccountConnected(account.id, account.last_connected);
                         db.account().setAccountWarning(account.id, capIdle ? null : getString(R.string.title_no_idle));
 
-                        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        nm.cancel("receive:" + account.id, 1);
-                        nm.cancel("alert:" + account.id, 1);
+                        NotificationManager nm =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        nm.cancel("receive:" + account.id, NotificationHelper.NOTIFICATION_TAGGED);
+                        nm.cancel("alert:" + account.id, NotificationHelper.NOTIFICATION_TAGGED);
 
                         // Schedule keep alive alarm
                         Intent intent = new Intent(this, ServiceSynchronize.class);
@@ -1992,7 +2003,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                     .format(account.last_connected)), ex);
                             try {
                                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                nm.notify("receive:" + account.id, 1,
+                                nm.notify("receive:" + account.id,
+                                        NotificationHelper.NOTIFICATION_TAGGED,
                                         Core.getNotificationError(this, "warning", account.name, warning)
                                                 .build());
                             } catch (Throwable ex1) {
@@ -2351,8 +2363,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         if (!isBackgroundService(ServiceSynchronize.this))
                             try {
-                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                nm.notify(Helper.NOTIFICATION_SYNCHRONIZE, getNotificationService(lastAccounts, lastOperations).build());
+                                NotificationManager nm =
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
+                                        getNotificationService(lastAccounts, lastOperations).build());
                             } catch (Throwable ex) {
                                 Log.w(ex);
                             }
@@ -2699,8 +2713,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         .setAction("watchdog"));
     }
 
-    static void restart(Context context) {
+    static void stop(Context context) {
         context.stopService(new Intent(context, ServiceSynchronize.class));
+    }
+
+    static void restart(Context context) {
+        stop(context);
         eval(context, "restart");
     }
 

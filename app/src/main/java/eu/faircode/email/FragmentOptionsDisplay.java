@@ -40,6 +40,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -84,8 +85,11 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private ViewButtonColor btnHighlightColor;
     private SwitchCompat swColorStripe;
     private SwitchCompat swAvatars;
-    private TextView tvGravatarsHint;
+    private ImageButton ibBimi;
+    private TextView tvBimiHint;
+    private SwitchCompat swBimi;
     private SwitchCompat swGravatars;
+    private TextView tvGravatarsHint;
     private SwitchCompat swFavicons;
     private TextView tvFaviconsHint;
     private SwitchCompat swGeneratedIcons;
@@ -142,6 +146,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
 
     private SwitchCompat swParseClasses;
     private SwitchCompat swAuthentication;
+    private SwitchCompat swAuthenticationIndicator;
 
     private Group grpGravatars;
 
@@ -152,7 +157,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "date", "date_bold", "navbar_colorize", "portrait2", "landscape", "landscape3",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe",
-            "avatars", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
+            "avatars", "bimi", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
             "email_format", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients",
             "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
             "keywords_header", "labels_header", "flags", "flags_background",
@@ -161,7 +166,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "message_zoom", "overview_mode", "contrast", "monospaced", "monospaced_pre",
             "background_color", "text_color", "text_size", "text_font", "text_align", "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images", "button_extra", "attachments_alt", "thumbnails",
-            "parse_classes", "authentication"
+            "parse_classes",
+            "authentication", "authentication_indicator"
     };
 
     @Override
@@ -198,6 +204,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         btnHighlightColor = view.findViewById(R.id.btnHighlightColor);
         swColorStripe = view.findViewById(R.id.swColorStripe);
         swAvatars = view.findViewById(R.id.swAvatars);
+        swBimi = view.findViewById(R.id.swBimi);
+        tvBimiHint = view.findViewById(R.id.tvBimiHint);
+        ibBimi = view.findViewById(R.id.ibBimi);
         swGravatars = view.findViewById(R.id.swGravatars);
         tvGravatarsHint = view.findViewById(R.id.tvGravatarsHint);
         swFavicons = view.findViewById(R.id.swFavicons);
@@ -253,6 +262,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swThumbnails = view.findViewById(R.id.swThumbnails);
         swParseClasses = view.findViewById(R.id.swParseClasses);
         swAuthentication = view.findViewById(R.id.swAuthentication);
+        swAuthenticationIndicator = view.findViewById(R.id.swAuthenticationIndicator);
 
         grpGravatars = view.findViewById(R.id.grpGravatars);
 
@@ -460,6 +470,29 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("avatars", checked).apply();
                 ContactInfo.clearCache(getContext());
+            }
+        });
+
+        swBimi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("bimi", checked).apply();
+                ContactInfo.clearCache(getContext());
+            }
+        });
+
+        tvBimiHint.getPaint().setUnderlineText(true);
+        tvBimiHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.BIMI_PRIVACY_URI), true);
+            }
+        });
+
+        ibBimi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse("https://bimigroup.org/"), true);
             }
         });
 
@@ -901,6 +934,14 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("authentication", checked).apply();
+                swAuthenticationIndicator.setEnabled(checked);
+            }
+        });
+
+        swAuthenticationIndicator.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("authentication_indicator", checked).apply();
             }
         });
 
@@ -996,6 +1037,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
 
         swColorStripe.setChecked(prefs.getBoolean("color_stripe", true));
         swAvatars.setChecked(prefs.getBoolean("avatars", true));
+        swBimi.setChecked(prefs.getBoolean("bimi", false));
         swGravatars.setChecked(prefs.getBoolean("gravatars", false));
         swFavicons.setChecked(prefs.getBoolean("favicons", false));
         swGeneratedIcons.setChecked(prefs.getBoolean("generated_icons", true));
@@ -1087,6 +1129,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
 
         swParseClasses.setChecked(prefs.getBoolean("parse_classes", true));
         swAuthentication.setChecked(prefs.getBoolean("authentication", true));
+        swAuthenticationIndicator.setChecked(prefs.getBoolean("authentication_indicator", false));
+        swAuthenticationIndicator.setEnabled(swAuthentication.isChecked());
 
         updateColor();
     }

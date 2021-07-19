@@ -57,10 +57,13 @@ import androidx.core.graphics.ColorUtils;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.preference.PreferenceManager;
 
+import com.caverock.androidsvg.SVG;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -242,6 +245,27 @@ class ImageHelper {
         return round;
     }
 
+    @NonNull
+    static Bitmap renderSvg(InputStream is, int fillColor, int scaleToPixels) throws IOException {
+        try {
+            SVG svg = SVG.getFromInputStream(is);
+            float w = svg.getDocumentWidth();
+            float h = svg.getDocumentHeight();
+            if (w < 0 || h < 0) {
+                w = scaleToPixels;
+                h = scaleToPixels;
+            }
+
+            Bitmap bm = Bitmap.createBitmap((int) w, (int) h, Bitmap.Config.ARGB_8888);
+            bm.eraseColor(fillColor);
+            Canvas canvas = new Canvas(bm);
+            svg.renderToCanvas(canvas);
+            return bm;
+        } catch (Throwable ex) {
+            throw new IOException("SVG, ex");
+        }
+    }
+
     static Drawable decodeImage(final Context context, final long id, String source, boolean show, int zoom, final float scale, final TextView view) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean inline = prefs.getBoolean("inline_images", false);
@@ -283,7 +307,10 @@ class ImageHelper {
                     int scaleToPixels = res.getDisplayMetrics().widthPixels;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         try {
-                            Drawable d = getScaledDrawable(context, attachment.getFile(context), scaleToPixels);
+                            Drawable d = getScaledDrawable(context,
+                                    attachment.getFile(context),
+                                    attachment.getMimeType(),
+                                    scaleToPixels);
                             if (view != null)
                                 fitDrawable(d, a, scale, view);
                             return d;
@@ -294,7 +321,10 @@ class ImageHelper {
                             return d;
                         }
                     } else {
-                        Bitmap bm = decodeImage(attachment.getFile(context), scaleToPixels);
+                        Bitmap bm = decodeImage(
+                                attachment.getFile(context),
+                                attachment.getMimeType(),
+                                scaleToPixels);
                         if (bm == null) {
                             Log.i("Image not decodable CID=" + cid);
                             Drawable d = context.getDrawable(R.drawable.twotone_broken_image_24);
@@ -315,8 +345,9 @@ class ImageHelper {
             if (data && (show || inline || a.tracking))
                 try {
                     int scaleToPixels = res.getDisplayMetrics().widthPixels;
+                    String mimeType = getDataUriType(a.source);
                     ByteArrayInputStream bis = getDataUriStream(a.source);
-                    Bitmap bm = getScaledBitmap(bis, "data:" + getDataUriType(a.source), scaleToPixels);
+                    Bitmap bm = getScaledBitmap(bis, "data:" + mimeType, mimeType, scaleToPixels);
                     if (bm == null)
                         throw new IllegalArgumentException("decode byte array failed");
 
@@ -341,7 +372,7 @@ class ImageHelper {
                     Bitmap bm;
                     int scaleToPixels = res.getDisplayMetrics().widthPixels;
                     try (InputStream is = context.getContentResolver().openInputStream(uri)) {
-                        bm = getScaledBitmap(is, a.source, scaleToPixels);
+                        bm = getScaledBitmap(is, a.source, null, scaleToPixels);
                         if (bm == null)
                             throw new FileNotFoundException(a.source);
                     }
@@ -426,7 +457,7 @@ class ImageHelper {
                         }
 
                         // Download image
-                        Drawable d = downloadImage(context, id, a.source);
+                        Drawable d = downloadImage(context, id, a.source, null);
                         fitDrawable(d, a, scale, view);
                         post(d, a.source);
                     } catch (Throwable ex) {
@@ -576,7 +607,7 @@ class ImageHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 try {
-                    return getScaledDrawable(context, file, dm.widthPixels);
+                    return getScaledDrawable(context, file, null, dm.widthPixels);
                 } catch (IOException ex) {
                     Log.i(ex);
                     return null;
@@ -594,7 +625,7 @@ class ImageHelper {
     }
 
     @NonNull
-    private static Drawable downloadImage(Context context, long id, String source) throws IOException {
+    private static Drawable downloadImage(Context context, long id, String source, String mimeType) throws IOException {
         Resources res = context.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
 
@@ -616,30 +647,35 @@ class ImageHelper {
                 urlConnection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
                 urlConnection.connect();
 
-                int status = urlConnection.getResponseCode();
+                try {
+                    int status = urlConnection.getResponseCode();
 
-                if (status == HttpURLConnection.HTTP_MOVED_PERM ||
-                        status == HttpURLConnection.HTTP_MOVED_TEMP ||
-                        status == HttpURLConnection.HTTP_SEE_OTHER ||
-                        status == 307 /* Temporary redirect */ ||
-                        status == 308 /* Permanent redirect */) {
-                    if (++redirects > MAX_REDIRECTS)
-                        throw new IOException("Too many redirects");
+                    if (status == HttpURLConnection.HTTP_MOVED_PERM ||
+                            status == HttpURLConnection.HTTP_MOVED_TEMP ||
+                            status == HttpURLConnection.HTTP_SEE_OTHER ||
+                            status == 307 /* Temporary redirect */ ||
+                            status == 308 /* Permanent redirect */) {
+                        if (++redirects > MAX_REDIRECTS)
+                            throw new IOException("Too many redirects");
 
-                    String header = urlConnection.getHeaderField("Location");
-                    if (header == null)
-                        throw new IOException("Location header missing");
+                        String header = urlConnection.getHeaderField("Location");
+                        if (header == null)
+                            throw new IOException("Location header missing");
 
-                    String location = URLDecoder.decode(header, StandardCharsets.UTF_8.name());
-                    url = new URL(url, location);
-                    Log.i("Redirect #" + redirects + " to " + url);
+                        String location = URLDecoder.decode(header, StandardCharsets.UTF_8.name());
+                        url = new URL(url, location);
+                        Log.i("Redirect #" + redirects + " to " + url);
 
+                        urlConnection.disconnect();
+                        continue;
+                    }
+
+                    if (status != HttpURLConnection.HTTP_OK)
+                        throw new IOException("Error " + status + ": " + urlConnection.getResponseMessage());
+                } catch (IOException ex) {
                     urlConnection.disconnect();
-                    continue;
+                    throw ex;
                 }
-
-                if (status != HttpURLConnection.HTTP_OK)
-                    throw new IOException("HTTP status=" + status);
 
                 break;
             }
@@ -649,12 +685,12 @@ class ImageHelper {
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     Helper.copy(urlConnection.getInputStream(), fos);
                 }
-                return getScaledDrawable(context, file, dm.widthPixels);
+                return getScaledDrawable(context, file, null, dm.widthPixels);
             }
 
             bm = getScaledBitmap(
                     urlConnection.getInputStream(),
-                    source,
+                    source, mimeType,
                     Math.max(dm.widthPixels, dm.heightPixels));
         } finally {
             if (urlConnection != null)
@@ -679,7 +715,7 @@ class ImageHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    static Drawable getScaledDrawable(Context context, File file, int scaleToPixels) throws IOException {
+    static Drawable getScaledDrawable(Context context, File file, String mimeType, int scaleToPixels) throws IOException {
         Drawable d;
 
         try {
@@ -711,7 +747,7 @@ class ImageHelper {
                         at android.graphics.ImageDecoder.decodeDrawableImpl(ImageDecoder.java:1758)
                         at android.graphics.ImageDecoder.decodeDrawable(ImageDecoder.java:1751)
              */
-            Bitmap bm = _decodeImage(file, scaleToPixels);
+            Bitmap bm = _decodeImage(file, mimeType, scaleToPixels);
             if (bm == null)
                 throw new FileNotFoundException(file.getAbsolutePath());
             d = new BitmapDrawable(context.getResources(), bm);
@@ -721,7 +757,12 @@ class ImageHelper {
         return d;
     }
 
-    static Bitmap getScaledBitmap(InputStream is, String source, int scaleToPixels) throws IOException {
+    static Bitmap getScaledBitmap(InputStream is, String source, String mimeType, int scaleToPixels) throws IOException {
+        if (TextUtils.isEmpty(mimeType))
+            mimeType = Helper.guessMimeType(source);
+        if ("image/svg+xml".equals(mimeType))
+            return ImageHelper.renderSvg(is, Color.WHITE, scaleToPixels);
+
         BufferedInputStream bis = new BufferedInputStream(is);
 
         Log.i("Probe " + source);
@@ -752,16 +793,23 @@ class ImageHelper {
         return new File(dir, id + "_" + Math.abs(source.hashCode()) + extension);
     }
 
-    static Bitmap decodeImage(File file, int scaleToPixels) {
+    static Bitmap decodeImage(File file, String mimeType, int scaleToPixels) {
         try {
-            return _decodeImage(file, scaleToPixels);
-        } catch (OutOfMemoryError ex) {
+            return _decodeImage(file, mimeType, scaleToPixels);
+        } catch (IOException | OutOfMemoryError ex) {
             Log.e(ex);
             return null;
         }
     }
 
-    private static Bitmap _decodeImage(File file, int scaleToPixels) {
+    private static Bitmap _decodeImage(File file, String mimeType, int scaleToPixels) throws IOException {
+        if (mimeType == null)
+            mimeType = Helper.guessMimeType(file.getName());
+        if ("image/svg+xml".equals(mimeType))
+            try (FileInputStream fis = new FileInputStream(file)) {
+                return ImageHelper.renderSvg(fis, Color.WHITE, scaleToPixels);
+            }
+
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(file.getAbsolutePath(), options);

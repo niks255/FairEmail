@@ -83,7 +83,7 @@
     <string name="title_notification_waiting">Αναμονή για κατάλληλη σύνδεση</string>
     <string name="title_notification_idle">Σε αδράνεια</string>
     <string name="title_notification_failed">\'%1$s\' απέτυχε</string>
-    <string name="title_notification_alert">\'%1$s\' ειδοποίηση διακομιστή</string>
+    <string name="title_notification_alert">Ειδοποίηση διακομιστή: \'%1$s\'</string>
     <string name="title_notification_sending_left">Προσπάθειες που απομένουν: %1$d</string>
     <string name="title_notification_sending_retry">Η αποστολή θα επιχειρηθεί εκ νέου όταν μεταβληθεί η σύνδεση στο διαδίκτυο ή όταν τραβήξετε προς τα κάτω στα εξερχόμενα</string>
     <string name="title_notification_sending_failed">Η αποστολή σε %1$s απέτυχε</string>
@@ -159,6 +159,7 @@
     <string name="title_setup_no_inbox">Δεν βρέθηκαν εισερχόμενα</string>
     <string name="title_setup_advanced_protection">Δεν επιτρέπεται η χρήση ανεξάρτητων εφαρμογών ηλεκτρονικού ταχυδρομείου σε χρήστες εγγεγραμμένους/-ες σε πρόγραμμα αυξημένης ασφάλειας. Ο περιορισμός αυτός έχει επιβληθεί από την Google.</string>
     <string name="title_setup_quick_success">Ένας λογαριασμός έχει προστεθεί με επιτυχία</string>
+    <string name="title_setup_quick_no_sent">Δεν έχει επιλεγεί φάκελος απεσταλμένων μηνυμάτων. Τα απεσταλμένα μήνυμα ενδέχεται να μην αποθηκεύονται.</string>
     <string name="title_setup_quick_configure">Για να επεξεργαστείτε το όνομα, το χρώμα, τις ενέργειες σάρωσης κλπ</string>
     <string name="title_setup_manage">Διαχείριση</string>
     <string name="title_setup_grant">Παραχώρηση δικαιώματος</string>
@@ -178,6 +179,7 @@
     <string name="title_setup_doze_stopped">Σταμάτησε ο συγχρονισμός;</string>
     <string name="title_setup_doze_device">Αυτό πιθανόν απαιτείται για αυτήν τη συσκευή</string>
     <string name="title_setup_doze_android">Αυτό απαιτείται για αυτήν την έκδοση Android</string>
+    <string name="title_setup_inexact">Ειδοποιήσεις &amp; υπενθυμίσεις απενεργοποιημένες</string>
     <string name="title_setup_background">Οι περιορισμοί παρασκηνίου είναι ενεργοποιημένοι</string>
     <string name="title_setup_data">Η εξοικονόμηση δεδομένων είναι ενεργή</string>
     <string name="title_setup_advanced_options">Εμφάνιση προηγμένων επιλογών</string>
@@ -191,6 +193,9 @@
     <string name="title_setup_close">Κλείσιμο ρυθμίσεων</string>
     <string name="title_setup_export">Εξαγωγή ρυθμίσεων</string>
     <string name="title_setup_import">Εισαγωγή ρυθμίσεων</string>
+    <string name="title_setup_export_remark">        Δεδομένου ότι το αρχείο ρυθμίσεων περιέχει όλες τις ρυθμίσεις και πληροφορίες λογαριασμού, είναι κρυπτογραφημένο με κωδικό πρόσβασης.
+        Ο κωδικός πρόσβασης απαιτείται για να εισαγάγετε ξανά τις ρυθμίσεις, οπότε, παρακαλούμε, μην τον ξεχάσετε!
+    </string>
     <string name="title_setup_import_do">Οι εισαγόμενοι λογαριασμοί θα προστεθούν χωρίς να αντικατασταθεί κάποιος από τους ήδη υπάρχοντες</string>
     <string name="title_setup_password">Κωδικός πρόσβασης</string>
     <string name="title_setup_password_chars">Ο κωδικός πρόσβασης περιέχει χαρακτήρες ελέγχου ή διαστήματα</string>
@@ -261,6 +266,7 @@
     <string name="title_advanced_check_reply_domain">Να ελέγχεται η διεύθυνση απάντησης κατά τον συγχρονισμό των μηνυμάτων</string>
     <string name="title_advanced_check_mx">Έλεγχος διευθύνσεων των αποστολέων κατά τον συγχρονισμό μηνυμάτων</string>
     <string name="title_advanced_check_blocklist">Έλεγχος αν το όνομα τομέα του αποστολέα περιλαμβάνεται σε λίστα αποκλεισμού σπαμ</string>
+    <string name="title_advanced_use_blocklist">Μετακίνηση μηνυμάτων από τομείς σε μια λίστα αποκλεισμού, προς τον φάκελο σπαμ</string>
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
     <string name="title_advanced_keyboard">Εμφάνιση του πληκτρολογίου από προεπιλογή</string>
     <string name="title_advanced_keyboard_no_fullscreen">Να μην προβάλλεται το πληκτρολόγιο σε πλήρη οθόνη</string>
@@ -304,6 +310,7 @@
     <string name="title_advanced_ssl_harden">Θωράκιση συνδέσεων SSL</string>
     <string name="title_advanced_manage_connectivity">Διαχείριση συνδεσιμότητας</string>
     <string name="title_advanced_caption_general">Γενικά</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Έλεγχοι</string>
     <string name="title_advanced_caption_list">Λίστα</string>
     <string name="title_advanced_caption_conversation">Συζήτηση</string>
     <string name="title_advanced_caption_message">Μήνυμα</string>
@@ -327,6 +334,8 @@
     <string name="title_advanced_color_stripe">Προβολή χρωματιστής λωρίδας</string>
     <string name="title_advanced_avatars">Προβολή φωτογραφιών επαφών</string>
     <string name="title_advanced_gravatars">Προβολή Gravatar</string>
+    <string name="title_advanced_bimi_unverified">Μη επαληθευμένος αποστολέας</string>
+    <string name="title_advanced_bimi_verified">Επαληθευμένος αποστολέας</string>
     <string name="title_advanced_favicons">Προβολή favicon</string>
     <string name="title_advanced_generated_icons">Να προβάλλονται εικονίδια που δημιουργούνται αυτόματα</string>
     <string name="title_advanced_identicons">Προβολή identicon</string>
@@ -375,7 +384,9 @@
     <string name="title_advanced_actionbar_color">Χρήση του χρώματος του λογαριασμού ως χρωματικό υπόβαθρο για τη γραμμή ενεργειών της συζήτησης</string>
     <string name="title_advanced_navbar_colorize">Να χρωματίζεται η γραμμή πλοήγησης του Android</string>
     <string name="title_advanced_parse_classes">Χρήση φύλλων στιλ</string>
-    <string name="title_advanced_authentication">Προβολή ειδοποίησης αν ο διακομιστής λήψης δεν μπόρεσε να πιστοποιήσει το μήνυμα</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Να προβάλλονται προειδοποιήσεις ταυτοποίησης</string>
+    <string name="title_advanced_authentication_hint">Οι υποκείμενοι έλεγχοι μπορούν να ρυθμιστούν στις ρυθμίσεις λήψης</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Να προβάλλεται ένδειξη για την κατάσταση του ελέγχου ταυτοποίησης</string>
     <string name="title_advanced_sync_on_launch">Συγχρονισμός κατά την εκκίνηση της εφαρμογής</string>
     <string name="title_advanced_double_back">Δύο φορές \"πίσω\" για έξοδο</string>
     <string name="title_advanced_conversation_actions">Να προτείνονται ενέργειες (Android 10+)</string>
@@ -451,6 +462,7 @@
     <string name="title_advanced_secure">Απόκρυψη του FairEmail από τη λίστα των πρόσφατων εφαρμογών και παρεμπόδιση λήψης στιγμιοτύπου οθόνης</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Χρονικό περιθώριο για τη βιομετρική ταυτοποίηση</string>
+    <string name="title_advanced_generic_user_agent">Χρήση του γενικού πράκτορα χρήστη του περιηγητή</string>
     <string name="title_advanced_disconnect_auto_update">Αυτόματη εβδομαδιαία ενημέρωση των λιστών</string>
     <string name="title_advanced_disconnect_links">Χρήση προειδοποιητικών λιστών για συνδέσμους ιχνηλάτησης</string>
     <string name="title_advanced_disconnect_images">Χρήση λιστών για ταυτοποίηση των εικόνων ιχνηλάτησης</string>

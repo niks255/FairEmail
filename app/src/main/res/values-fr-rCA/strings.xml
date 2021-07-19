@@ -83,7 +83,7 @@
     <string name="title_notification_waiting">En attente d\'une connexion appropriée</string>
     <string name="title_notification_idle">Inactif</string>
     <string name="title_notification_failed">\'%1$s\' a échoué</string>
-    <string name="title_notification_alert">Alerte serveur \'%1$s\'</string>
+    <string name="title_notification_alert">Alerte serveur : \'%1$s\'</string>
     <string name="title_notification_sending_left">Tentatives restantes : %1$d</string>
     <string name="title_notification_sending_retry">Une nouvelle tentative d\'envoi sera effectuée suite à un changement de connexion internet ou à un rafraîchissement de la boîte d\'envoi</string>
     <string name="title_notification_sending_failed">L\'envoi à %1$s a échoué</string>
@@ -159,6 +159,7 @@
     <string name="title_setup_no_inbox">Boîte de réception introuvable</string>
     <string name="title_setup_advanced_protection">Quand on est inscrit au programme de protection avancée, il n\'est pas possible d\'utiliser une application de messagerie tierce. Il s\'agit d\'une restriction imposée par Google.</string>
     <string name="title_setup_quick_success">Un compte a été ajouté avec succès</string>
+    <string name="title_setup_quick_no_sent">Aucun dossier de messages envoyés n\'a été sélectionné. Les messages envoyés peuvent ne pas être stockés.</string>
     <string name="title_setup_quick_configure">Pour modifier le nom, la couleur, les actions de balayage, etc.</string>
     <string name="title_setup_manage">Gérer</string>
     <string name="title_setup_grant">Autoriser</string>
@@ -178,6 +179,7 @@
     <string name="title_setup_doze_stopped">Synchronisation arrêtée?</string>
     <string name="title_setup_doze_device">Ceci est probablement nécessaire pour cet appareil</string>
     <string name="title_setup_doze_android">Ceci est nécessaire pour cette version d\'Android</string>
+    <string name="title_setup_inexact">Alarmes &amp; rappels désactivés</string>
     <string name="title_setup_background">Les restrictions d\'arrière-plan sont activées</string>
     <string name="title_setup_data">L\'économiseur de données est activé</string>
     <string name="title_setup_advanced_options">Afficher les options avancées</string>
@@ -264,6 +266,7 @@
     <string name="title_advanced_check_reply_domain">Vérifier l\'adresse de réponse lors de la synchronisation des messages</string>
     <string name="title_advanced_check_mx">Vérifier l’adresse courriel de l’expéditeur lors de la synchronisation des messages</string>
     <string name="title_advanced_check_blocklist">Vérifier si le nom de domaine de l\'expéditeur est sur une liste de blocage de courrier indésirable</string>
+    <string name="title_advanced_use_blocklist">Déplacer des messages depuis des domaines d\'une liste de blocage vers le dossier des indésirables</string>
     <string name="title_advanced_tune_keep_alive">Ajuster automatiquement l\'intervalle de connexion</string>
     <string name="title_advanced_keyboard">Afficher le clavier par défaut</string>
     <string name="title_advanced_keyboard_no_fullscreen">Ne pas afficher le clavier en plein écran</string>
@@ -307,6 +310,7 @@
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
     <string name="title_advanced_manage_connectivity">Gérer la connectivité</string>
     <string name="title_advanced_caption_general">Général</string>
+    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Vérifications</string>
     <string name="title_advanced_caption_list">Liste</string>
     <string name="title_advanced_caption_conversation">Conversation</string>
     <string name="title_advanced_caption_message">Message</string>
@@ -330,6 +334,8 @@
     <string name="title_advanced_color_stripe">Afficher la bande de couleur</string>
     <string name="title_advanced_avatars">Afficher la photo des contacts</string>
     <string name="title_advanced_gravatars">Afficher les Gravatars</string>
+    <string name="title_advanced_bimi_unverified">Expéditeur non vérifié</string>
+    <string name="title_advanced_bimi_verified">Expéditeur vérifié</string>
     <string name="title_advanced_favicons">Afficher l\'icône des sites web</string>
     <string name="title_advanced_generated_icons">Afficher les icônes générées</string>
     <string name="title_advanced_identicons">Afficher les identicônes</string>
@@ -363,7 +369,7 @@
     <string name="title_advanced_contrast">Utiliser un contraste élevé pour le texte du message</string>
     <string name="title_advanced_monospaced">Utiliser une police à espacement fixe pour le texte du message</string>
     <string name="title_advanced_monospaced_pre">Utiliser une police à espacement fixe pour le texte préformaté</string>
-    <string name="title_advanced_background_color">Utiliser les couleurs d\'arrière-plan</string>
+    <string name="title_advanced_background_color">Afficher les couleurs d\'arrière-plan</string>
     <string name="title_advanced_text_color">Afficher les couleurs du texte</string>
     <string name="title_advanced_text_size">Utiliser la taille du texte</string>
     <string name="title_advanced_text_font">Utiliser les polices de caractères</string>
@@ -378,7 +384,9 @@
     <string name="title_advanced_actionbar_color">Utiliser la couleur du compte comme couleur de fond de la barre d’action de conversation</string>
     <string name="title_advanced_navbar_colorize">Coloriser la barre de navigation d’Android</string>
     <string name="title_advanced_parse_classes">Utiliser les feuilles de style</string>
-    <string name="title_advanced_authentication">Afficher un avertissement lorsque le serveur de réception n’a pas pu authentifier le message</string>
+    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Afficher les avertissements d\'authentification</string>
+    <string name="title_advanced_authentication_hint">Les contrôles sous-jacents peuvent être configurés dans les paramètres de réception</string>
+    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Afficher l\'indicateur de statut d\'authentification</string>
     <string name="title_advanced_sync_on_launch">Synchroniser au lancement de l\'application</string>
     <string name="title_advanced_double_back">Faire deux fois « Retour » pour quitter</string>
     <string name="title_advanced_conversation_actions">Suggérer des actions (Android 10+)</string>

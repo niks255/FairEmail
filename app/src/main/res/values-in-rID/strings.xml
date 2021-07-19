@@ -70,7 +70,6 @@
     <string name="title_notification_waiting">Menunggu koneksi yang sesuai</string>
     <string name="title_notification_idle">Siaga</string>
     <string name="title_notification_failed">Gagal \'%1$s\'</string>
-    <string name="title_notification_alert">Peringatan server \'%1$s\'</string>
     <string name="title_notification_sending_left">Percobaan tersisa: %1$d</string>
     <string name="title_notification_sending_failed">Gagal mengirim ke %1$s</string>
     <string name="title_notification_redacted">Menyusun: otentikasi sidik jari atau PIN diaktifkan</string>
@@ -350,7 +349,6 @@
     <string name="title_advanced_actionbar_color">Gunakan warna akun sebagai latar belakang percakapan pada status bar</string>
     <string name="title_advanced_navbar_colorize">Warnai Navigasi Bar Android</string>
     <string name="title_advanced_parse_classes">Urai Kode Gaya \"Style Sheets\"</string>
-    <string name="title_advanced_authentication">Tampilkan peringatan ketika server penerima tidak bisa mengotentikasi pesan</string>
     <string name="title_advanced_sync_on_launch">Sinkronisasi pada saat memulai aplikasi</string>
     <string name="title_advanced_double_back">Ketuk dua kali untuk keluar</string>
     <string name="title_advanced_conversation_actions">Sarankan Tindakan (Android 10+)</string>

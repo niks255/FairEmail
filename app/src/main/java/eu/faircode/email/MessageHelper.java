@@ -41,6 +41,7 @@ import com.sun.mail.util.MessageRemovedIOException;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -698,6 +699,11 @@ public class MessageHelper {
             document.select("div[fairemail=signature]").removeAttr("fairemail");
             document.select("div[fairemail=reference]").removeAttr("fairemail");
 
+            Elements reply = document.select("div[fairemail=reply]");
+            if (message.plain_only != null && message.plain_only)
+                reply.select("strong").tagName("span");
+            reply.removeAttr("fairemail");
+
             DB db = DB.getInstance(context);
             try {
                 db.beginTransaction();
@@ -966,6 +972,7 @@ public class MessageHelper {
         ensureEnvelope();
 
         // Outlook outbox -> sent
+        //   x-microsoft-original-message-id
         String header = imessage.getHeader(HEADER_CORRELATION_ID, null);
         if (header == null)
             header = imessage.getHeader("Message-ID", null);
@@ -1216,6 +1223,32 @@ public class MessageHelper {
         return getAddressHeader("Disposition-Notification-To");
     }
 
+    String getBimiSelector() throws MessagingException {
+        ensureHeaders();
+
+        // BIMI-Selector: v=BIMI1; s=selector;
+        String header = imessage.getHeader("BIMI-Selector", null);
+        if (header == null)
+            return null;
+
+        header = header.toLowerCase(Locale.ROOT);
+
+        int s = header.indexOf("s=");
+        if (s < 0)
+            return null;
+
+        int e = header.indexOf(';', s + 2);
+        if (e < 0)
+            e = header.length();
+
+        String selector = header.substring(s + 2, e);
+        if (TextUtils.isEmpty(selector))
+            return null;
+
+        Log.i("BIMI selector=" + selector);
+        return selector;
+    }
+
     String[] getAuthentication() throws MessagingException {
         ensureHeaders();
 
@@ -1236,20 +1269,16 @@ public class MessageHelper {
         // https://tools.ietf.org/html/rfc7601
         Boolean result = null;
         for (String header : headers) {
-            String[] part = header.split(";");
-            for (int i = 1; i < part.length; i++) {
-                String[] kv = part[i].split("=");
-                if (kv.length > 1) {
-                    String key = kv[0].trim();
-                    String[] val = kv[1].trim().split(" ");
-                    if (val.length > 0 && type.equals(key)) {
-                        if ("fail".equals(val[0]))
-                            result = false;
-                        else if ("pass".equals(val[0]))
-                            if (result == null)
-                                result = true;
-                    }
-                }
+            String v = getKeyValues(header).get(type);
+            if (v == null)
+                continue;
+            String[] val = v.split("\\s+");
+            if (val.length > 0) {
+                if ("fail".equals(val[0]))
+                    result = false;
+                else if ("pass".equals(val[0]))
+                    if (result == null)
+                        result = true;
             }
         }
 
@@ -1956,6 +1985,19 @@ public class MessageHelper {
 
                     if ("flowed".equalsIgnoreCase(h.contentType.getParameter("format")))
                         result = HtmlHelper.flow(result);
+
+                    // https://www.w3.org/QA/2002/04/valid-dtd-list.html
+                    final String DOCTYPE = "<!DOCTYPE";
+                    if (result.length() > DOCTYPE.length()) {
+                        String doctype = result.substring(0, DOCTYPE.length()).toUpperCase(Locale.ROOT);
+                        if (doctype.startsWith(DOCTYPE)) {
+                            String[] words = result.split("\\s+");
+                            if (words.length > 1 &&
+                                    "HTML".equals(words[1].toUpperCase(Locale.ROOT)))
+                                return result;
+                        }
+                    }
+
                     result = "<div x-plain=\"true\">" + HtmlHelper.formatPre(result) + "</div>";
                 } else if (h.isHtml()) {
                     // Conditionally upgrade to UTF8
@@ -2960,5 +3002,27 @@ public class MessageHelper {
                 return false;
 
         return true;
+    }
+
+    static Map<String, String> getKeyValues(String value) {
+        Map<String, String> values = new HashMap<>();
+        if (TextUtils.isEmpty(value))
+            return values;
+
+        String[] params = value.split(";");
+        for (String param : params) {
+            String k, v;
+            int eq = param.indexOf('=');
+            if (eq < 0) {
+                k = param.trim().toLowerCase(Locale.ROOT);
+                v = "";
+            } else {
+                k = param.substring(0, eq).trim().toLowerCase(Locale.ROOT);
+                v = param.substring(eq + 1).trim();
+            }
+            values.put(k, v);
+        }
+
+        return values;
     }
 }
