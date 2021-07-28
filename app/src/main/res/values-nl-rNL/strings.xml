@@ -196,13 +196,22 @@
     <string name="title_setup_export_remark">        Omdat het instellingenbestand alle instellingen en accountinformatie bevat, is het versleuteld met een wachtwoord.
         Het wachtwoord is vereist om de instellingen opnieuw te importeren, dus vergeet het niet!
     </string>
+    <string name="title_setup_export_do">Het exportbestand zal alle instellingen en gegevens bevatten, maar geen berichten en geen afbeeldingen waarnaar verwezen wordt in handtekeningen</string>
     <string name="title_setup_import_do">Geïmporteerde accounts worden toegevoegd zonder de bestaande te overschrijven</string>
+    <string name="title_setup_import_gmail">        Sinds Android 8. Oreo, kunnen Gmail accounts niet meer worden geïmporteerd, omdat elk account moet worden geselecteerd om toegang tot het account te verlenen.
+        U kunt Gmail-accounts eenvoudig opnieuw configureren met de snelle configuratie wizard.
+    </string>
     <string name="title_setup_password">Wachtwoord</string>
     <string name="title_setup_password_chars">Wachtwoord bevat controle of witruimte tekens</string>
     <string name="title_setup_password_repeat">Herhaal wachtwoord</string>
     <string name="title_setup_password_missing">Wachtwoord ontbreekt</string>
     <string name="title_setup_password_different">De wachtwoorden komen niet overeen</string>
     <string name="title_setup_password_invalid">Wachtwoord ongeldig</string>
+    <string name="title_setup_import_accounts">Importeer accounts en identiteiten</string>
+    <string name="title_setup_import_rules">Importeer filterregels</string>
+    <string name="title_setup_import_contacts">Importeer lokale contacten</string>
+    <string name="title_setup_import_answers">Importeer antwoordsjablonen</string>
+    <string name="title_setup_import_settings">Importeer opties</string>
     <string name="title_setup_exported">Instellingen geëxporteerd</string>
     <string name="title_setup_imported">Instellingen geïmporteerd</string>
     <string name="title_setup_import_invalid">Ongeldig instellingenbestand</string>
@@ -310,7 +319,7 @@
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
     <string name="title_advanced_manage_connectivity">Beheer connectiviteit</string>
     <string name="title_advanced_caption_general">Algemeen</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Controles</string>
+    <string name="title_advanced_caption_checks">Controles</string>
     <string name="title_advanced_caption_list">Lijst</string>
     <string name="title_advanced_caption_conversation">Gesprek</string>
     <string name="title_advanced_caption_message">Bericht</string>
@@ -319,6 +328,7 @@
     <string name="title_advanced_portrait2">Gebruik twee rijen in portretmodus</string>
     <string name="title_advanced_landscape">Twee kolommen gebruiken in liggende modus</string>
     <string name="title_advanced_landscape3">Navigatiemenu standaard in liggende modus weergeven</string>
+    <string name="title_advanced_nav_message_count">Toon aantal lokaal opgeslagen berichten in het navigatiemenu</string>
     <string name="title_advanced_startup">Toon op het startscherm</string>
     <string name="title_advanced_cards">Gebruik kaart-stijl in plaats van tabulaire stijl</string>
     <string name="title_advanced_cards_beige">Gebruik een beige achtergrond bij het gebruik van de kaartstijl (alleen lichte thema\'s)</string>
@@ -384,9 +394,12 @@
     <string name="title_advanced_actionbar_color">Gebruik de accountkleur als achtergrond voor de gespreksactiebalk</string>
     <string name="title_advanced_navbar_colorize">Kleur de Android-navigatiebalk in</string>
     <string name="title_advanced_parse_classes">Stijlbladen parsen</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Toon authenticatiewaarschuwingen</string>
+    <string name="title_advanced_authentication">Toon authenticatiewaarschuwingen</string>
     <string name="title_advanced_authentication_hint">De onderliggende controles kunnen worden geconfigureerd in de ontvangstinstellingen</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Toon authenticatie statusindicator</string>
+    <string name="title_advanced_authentication_indicator">Toon authenticatie statusindicator</string>
+    <string name="title_advanced_authentication_none">Geen authenticatie</string>
+    <string name="title_advanced_authentication_some">Gedeeltelijke authenticatie</string>
+    <string name="title_advanced_authentication_all">Volledige authenticatie</string>
     <string name="title_advanced_sync_on_launch">Synchroniseren bij start</string>
     <string name="title_advanced_double_back">Dubbel \'terug\' om te sluiten</string>
     <string name="title_advanced_conversation_actions">Acties voorstellen (Android 10+)</string>
@@ -588,6 +601,7 @@
     <string name="title_advanced_edit_name">Naam wijzigen</string>
     <string name="title_advanced_swipe_actions">Stel veegacties in</string>
     <string name="title_advanced_swipe_actions_hint">Dit stelt de veeg naar links en rechts actie voor alle IMAP accounts in</string>
+    <string name="title_advanced_swipe_sensitivity">Links/rechts veeggevoeligheid</string>
     <string name="title_select">Selecteer &#8230;</string>
     <string name="title_identity_name">Uw naam</string>
     <string name="title_identity_email">Uw e-mailadres</string>
@@ -646,7 +660,8 @@
     <string name="title_leave_deleted">Laat verwijderde berichten achter op de server</string>
     <string name="title_leave_on_device">Laat berichten achter op apparaat</string>
     <string name="title_max_messages">Maximum aantal berichten om te downloaden (leeg voor allen)</string>
-    <string name="title_keep_alive_interval">Keep-alive/periodieke controle interval (minuten)</string>
+    <string name="title_keep_poll_interval">Poll interval (minuten)</string>
+    <string name="title_keep_alive_interval">Keep-alive interval (minuten)</string>
     <string name="title_server_time">Gebruik ontvangsttijd (server)</string>
     <string name="title_received_header">Gebruik de kop \'Received\'</string>
     <string name="title_date_header">Gebruik de kop \'Date\' (verzonden tijd)</string>

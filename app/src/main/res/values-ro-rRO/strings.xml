@@ -206,13 +206,22 @@
     <string name="title_setup_export_remark">        Deoarece fișierul de setări conține toate setările și informațiile despre cont, acesta este criptat cu o parolă.
         Parola este necesară pentru a importa din nou setările, așa că vă rugăm să nu o uitați!
     </string>
+    <string name="title_setup_export_do">Fișierul de export va conține toate setările și datele, dar nu și mesajele și nici imaginile la care se face referire în semnături</string>
     <string name="title_setup_import_do">Conturile importate vor fi adăugate fără a suprascrie pe cele existente</string>
+    <string name="title_setup_import_gmail">        Începând cu Android 8.0 Oreo, conturile Gmail nu mai pot fi importate, deoarece fiecare cont trebuie să fie selectat pentru a acorda acces la contul respectiv.
+        Puteți reconfigura cu ușurință conturile Gmail cu ajutorul asistentului de configurare rapidă.
+    </string>
     <string name="title_setup_password">Parolă</string>
     <string name="title_setup_password_chars">Parola conține caractere nule sau de control</string>
     <string name="title_setup_password_repeat">Repetă parola</string>
     <string name="title_setup_password_missing">Lipsește parola</string>
     <string name="title_setup_password_different">Parolele nu corespund</string>
     <string name="title_setup_password_invalid">Parolă incorectă</string>
+    <string name="title_setup_import_accounts">Importați conturi și identități</string>
+    <string name="title_setup_import_rules">Importarea regulilor de filtrare</string>
+    <string name="title_setup_import_contacts">Importați contacte locale</string>
+    <string name="title_setup_import_answers">Importați șabloane de răspuns</string>
+    <string name="title_setup_import_settings">Opțiuni de import</string>
     <string name="title_setup_exported">Setări exportate</string>
     <string name="title_setup_imported">Setări importate</string>
     <string name="title_setup_import_invalid">Fișier de setări invalid</string>
@@ -320,7 +329,7 @@
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
     <string name="title_advanced_manage_connectivity">Gestionare conexiuni</string>
     <string name="title_advanced_caption_general">Generale</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Verificări</string>
+    <string name="title_advanced_caption_checks">Verificări</string>
     <string name="title_advanced_caption_list">Listă</string>
     <string name="title_advanced_caption_conversation">Conversație</string>
     <string name="title_advanced_caption_message">Mesaj</string>
@@ -329,6 +338,7 @@
     <string name="title_advanced_portrait2">Utilizați două rânduri în modul portret</string>
     <string name="title_advanced_landscape">Folosește două coloane în modul portret</string>
     <string name="title_advanced_landscape3">Afișează implicit meniul de navigare în modul peisaj</string>
+    <string name="title_advanced_nav_message_count">Afișarea numărului de mesaje stocate local în meniul de navigare</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
     <string name="title_advanced_cards">Folosește stilul carduri în loc de cel tabular</string>
     <string name="title_advanced_cards_beige">Utilizați un fundal bej atunci când folosiți stilul de card (numai pentru teme luminoase)</string>
@@ -394,9 +404,12 @@
     <string name="title_advanced_actionbar_color">Folosește culoarea contului pentru culoarea de fundal a barei de acțiuni a conversației</string>
     <string name="title_advanced_navbar_colorize">Colorează bara de navigație Android</string>
     <string name="title_advanced_parse_classes">Utilizează foile de stil</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Afișați avertismentele de autentificare</string>
+    <string name="title_advanced_authentication">Afișați avertismentele de autentificare</string>
     <string name="title_advanced_authentication_hint">Verificările subiacente pot fi configurate în setările de recepție</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Afișați indicatorul de stare de autentificare</string>
+    <string name="title_advanced_authentication_indicator">Afișați indicatorul de stare de autentificare</string>
+    <string name="title_advanced_authentication_none">Fără autentificare</string>
+    <string name="title_advanced_authentication_some">Autentificare parțială</string>
+    <string name="title_advanced_authentication_all">Autentificare completă</string>
     <string name="title_advanced_sync_on_launch">Sincronizare la pornire</string>
     <string name="title_advanced_double_back">Apăsați de două ori \'înapoi\' pentru a ieși</string>
     <string name="title_advanced_conversation_actions">Sugerare acțiuni (Android 10+)</string>
@@ -598,6 +611,7 @@
     <string name="title_advanced_edit_name">Editare nume</string>
     <string name="title_advanced_swipe_actions">Setare acțiuni glisare</string>
     <string name="title_advanced_swipe_actions_hint">Acesta va seta acțiunea glisare la stânga și la dreapta pentru toate conturile IMAP</string>
+    <string name="title_advanced_swipe_sensitivity">Sensibilitatea de glisare stânga/dreapta</string>
     <string name="title_select">Selectaţi &#8230;</string>
     <string name="title_identity_name">Numele dumneavoastră</string>
     <string name="title_identity_email">Adresa dvs. de e-mail</string>
@@ -656,7 +670,8 @@
     <string name="title_leave_deleted">Păstrează pe server mesajele șterse</string>
     <string name="title_leave_on_device">Păstrează mesajele pe dispozitiv</string>
     <string name="title_max_messages">Numărul maxim de mesaje de descărcat (liber pentru toate)</string>
-    <string name="title_keep_alive_interval">Interval menținere conexiune/verificare periodică (minute)</string>
+    <string name="title_keep_poll_interval">Interval verificare (minute)</string>
+    <string name="title_keep_alive_interval">Interval menținere conexiune (minute)</string>
     <string name="title_server_time">Utilizează ora primită (server)</string>
     <string name="title_received_header">Folosește antetul \"Primit\"</string>
     <string name="title_date_header">Folosește antetul \'Dată\' (ora trimisă)</string>

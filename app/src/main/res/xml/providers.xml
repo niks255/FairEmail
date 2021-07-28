@@ -23,7 +23,8 @@
         domain="outlook\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         order="2"
-        partial="false">
+        partial="false"
+        useip="false">
         <imap
             host="outlook.office365.com"
             port="993"
@@ -38,7 +39,8 @@
         domain="live\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         order="3"
-        partial="false">
+        partial="false"
+        useip="false">
         <imap
             host="outlook.office365.com"
             port="993"
@@ -53,7 +55,8 @@
         domain="hotmail\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         order="4"
-        partial="false">
+        partial="false"
+        useip="false">
         <imap
             host="outlook.office365.com"
             port="993"
@@ -82,7 +85,8 @@
         id="office365"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         order="5"
-        partial="false">
+        partial="false"
+        useip="false">
         <imap
             host="outlook.office365.com"
             port="993"
@@ -638,7 +642,7 @@
         name="Bluewin.ch"
         appPassword="true"
         domain="bluewin\\.ch"
-        link="https://emailsetup.swisscom.ch/guide/?accountType=imap&amp;customer=residential&amp;device=mobile&amp;lang=en&amp;manual=setup&amp;step=emailSettingsMobileAppSelection">
+        link="https://emailsetup.swisscom.ch/guide/#step=emailSettingsMobileAppSelection">
         <imap
             host="imaps.bluewin.ch"
             port="993"
@@ -647,6 +651,19 @@
             host="smtpauths.bluewin.ch"
             port="465"
             starttls="false" />
+    </provider>
+    <provider
+        name="Bluewin.ch/own domain"
+        appPassword="true"
+        link="https://emailsetup.swisscom.ch/guide/#step=emailSettingsMobileAppSelection">
+        <imap
+            host="mail.hostcenter.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.hostcenter.com"
+            port="587"
+            starttls="true" />
     </provider>
     <provider
         name="DomainFactory"

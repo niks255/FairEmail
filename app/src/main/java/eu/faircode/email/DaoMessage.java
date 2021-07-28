@@ -489,7 +489,10 @@ public interface DaoMessage {
             " JOIN folder_view AS folder ON folder.id = message.folder" +
             " WHERE account.`synchronize`" +
             " AND folder.notify" +
-            " AND (account.created IS NULL OR message.received > account.created OR message.sent > account.created)" +
+            " AND (account.created IS NULL" +
+            "  OR message.received > account.created" +
+            "  OR message.sent > account.created" +
+            "  OR message.ui_unsnoozed)" +
             " AND message.notifying <> " + EntityMessage.NOTIFYING_IGNORE +
             " AND (message.notifying <> 0 OR NOT (message.ui_seen OR message.ui_ignored OR message.ui_hide))" +
             " ORDER BY message.received DESC")
@@ -781,7 +784,7 @@ public interface DaoMessage {
             "   OR (:account IS NULL AND NOT account.notify))" +
             " AND folder IN (" +
             "  SELECT id FROM folder" +
-            "  WHERE :folder IS NULL OR id = :folder)")
+            "  WHERE (:folder IS NULL AND folder.unified) OR id = :folder)")
     int ignoreAll(Long account, Long folder);
 
     @Query("UPDATE message SET ui_found = 1 WHERE id = :id AND NOT (ui_found IS 1)")

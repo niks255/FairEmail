@@ -85,11 +85,13 @@ public class Bimi {
 
         if (TextUtils.isEmpty(selector))
             selector = "default";
+        String parent = UriHelper.getParentDomain(context, domain);
+        Log.i("BIMI domain=" + domain + " parent=" + parent);
 
         // Get DNS record
         DnsHelper.DnsRecord[] records;
         try {
-            String txt = selector + "._bimi." + domain;
+            String txt = selector + "._bimi." + parent;
             Log.i("BIMI fetch TXT " + txt);
             records = DnsHelper.lookup(context, txt, "txt");
             if (records.length == 0)
@@ -209,8 +211,10 @@ public class Bimi {
                             throw new IllegalArgumentException("Invalid certificate type");
 
                         // Check subject
-                        if (!EntityCertificate.getDnsNames(cert).contains(domain))
-                            throw new IllegalArgumentException("Invalid certificate domain");
+                        List<String> names = EntityCertificate.getDnsNames(cert);
+                        if (!names.contains(parent))
+                            throw new IllegalArgumentException("Invalid certificate domain" +
+                                    " names=" + TextUtils.join(", ", names));
 
                         // https://datatracker.ietf.org/doc/html/rfc3709#page-6
                         // LogotypeExtn ::= SEQUENCE {
@@ -299,10 +303,10 @@ public class Bimi {
                         CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
                         cpv.validate(path.getCertPath(), pparams);
 
-                        Log.i("BIMI valid domain=" + domain);
+                        Log.i("BIMI valid domain=" + parent);
 
                         // Get DMARC record
-                        String txt = "_dmarc." + domain;
+                        String txt = "_dmarc." + parent;
                         Log.i("BIMI fetch TXT " + txt);
                         records = DnsHelper.lookup(context, txt, "txt");
                         if (records.length == 0)
@@ -319,7 +323,7 @@ public class Bimi {
                     } catch (MalformedURLException ex) {
                         Log.i(ex);
                     } catch (Throwable ex) {
-                        Log.w(new Throwable("BIMI " + domain, ex));
+                        Log.w(new Throwable("BIMI " + parent, ex));
                     }
 
                     break;

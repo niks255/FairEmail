@@ -68,6 +68,7 @@ public class DeepL {
     private static JSONArray jlanguages = null;
 
     private static final int DEEPL_TIMEOUT = 20; // seconds
+    private static final String PLAN_URI = "https://www.deepl.com/pro-account/plan";
     private static final String PRIVACY_URI = "https://www.deepl.com/privacy/";
 
     // curl https://api-free.deepl.com/v2/languages \
@@ -187,6 +188,7 @@ public class DeepL {
     }
 
     public static Translation translate(String text, String target, Context context) throws IOException, JSONException {
+        // https://www.deepl.com/docs-api/translating-text/request/
         String request =
                 "text=" + URLEncoder.encode(text, StandardCharsets.UTF_8.name()) +
                         "&target_lang=" + URLEncoder.encode(target, StandardCharsets.UTF_8.name());
@@ -242,6 +244,7 @@ public class DeepL {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String key = prefs.getString("deepl_key", null);
 
+        // https://www.deepl.com/docs-api/other-functions/monitoring-usage/
         URL url = new URL(getBaseUri(context) + "usage?auth_key=" + key);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setReadTimeout(DEEPL_TIMEOUT * 1000);
@@ -324,6 +327,13 @@ public class DeepL {
                 @Override
                 public void onClick(View v) {
                     Helper.viewFAQ(v.getContext(), 167, true);
+                }
+            });
+
+            tvUsage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Helper.view(view.getContext(), Uri.parse(PLAN_URI), true);
                 }
             });
 

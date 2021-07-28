@@ -185,13 +185,22 @@
     <string name="title_setup_export_remark">        設定ファイルにはすべての設定とアカウント情報が含まれているためパスワードで暗号化されています。
         設定を再度インポートするにはパスワードが必要ですので忘れないでください！
     </string>
+    <string name="title_setup_export_do">エクスポートファイルにはすべての設定とデータが含まれますが、署名で参照されるメッセージや画像は含まれません</string>
     <string name="title_setup_import_do">インポートされたアカウントは既存のアカウントを上書きせずに追加されます</string>
+    <string name="title_setup_import_gmail">        Android 8.0 Oreo以降、アカウントへのアクセスを許可するには各アカウントを選択する必要があるため、Gmailアカウントをインポートできなくなりました。
+        クイックセットアップウィザードを使用して、Gmailアカウントを簡単に再構成できます。
+    </string>
     <string name="title_setup_password">パスワード</string>
     <string name="title_setup_password_chars">パスワードに制御文字又は空白が含まれています</string>
     <string name="title_setup_password_repeat">パスワードの再入力</string>
     <string name="title_setup_password_missing">パスワードを入力して下さい</string>
     <string name="title_setup_password_different">パスワードが間違っています</string>
     <string name="title_setup_password_invalid">無効なパスワードです</string>
+    <string name="title_setup_import_accounts">アカウントとIDをインポート</string>
+    <string name="title_setup_import_rules">フィルタールールをインポート</string>
+    <string name="title_setup_import_contacts">ローカルの連絡先をインポート</string>
+    <string name="title_setup_import_answers">返信テンプレートをインポート</string>
+    <string name="title_setup_import_settings">インポートオプション</string>
     <string name="title_setup_exported">エクスポートされた設定</string>
     <string name="title_setup_imported">インポートされた設定</string>
     <string name="title_setup_import_invalid">無効な設定ファイル</string>
@@ -255,6 +264,7 @@
     <string name="title_advanced_check_reply_domain">メッセージの同期時に返信アドレスを確認</string>
     <string name="title_advanced_check_mx">メッセージの同期時に送信者のメールアドレスを確認</string>
     <string name="title_advanced_check_blocklist">送信者のドメイン名が迷惑メールブロックリストにあるかどうかを確認します</string>
+    <string name="title_advanced_use_blocklist">ブロックリスト上のドメインからスパムフォルダにメッセージを移動します</string>
     <string name="title_advanced_tune_keep_alive">キープアライブ間隔を自動的に調整します</string>
     <string name="title_advanced_keyboard">デフォルトでキーボードを表示</string>
     <string name="title_advanced_keyboard_no_fullscreen">全画面キーボードを無効にする</string>
@@ -298,6 +308,7 @@
     <string name="title_advanced_ssl_harden">SSL接続を有効</string>
     <string name="title_advanced_manage_connectivity">接続の管理</string>
     <string name="title_advanced_caption_general">全般</string>
+    <string name="title_advanced_caption_checks">確認</string>
     <string name="title_advanced_caption_list">リスト</string>
     <string name="title_advanced_caption_conversation">会話</string>
     <string name="title_advanced_caption_message">メッセージ</string>
@@ -306,6 +317,7 @@
     <string name="title_advanced_portrait2">ポートレートモードで2つの行を使用</string>
     <string name="title_advanced_landscape">横向きモードで2列を使用</string>
     <string name="title_advanced_landscape3">デフォルトでランドスケープモードでナビゲーションメニューを表示する</string>
+    <string name="title_advanced_nav_message_count">ローカルに保存されたメッセージの数をナビゲーションメニューに表示する</string>
     <string name="title_advanced_startup">スタート画面に表示</string>
     <string name="title_advanced_cards">表形式では無くカード形式を使用</string>
     <string name="title_advanced_cards_beige">カードスタイルを使用するときはベージュの背景を使用します（ライトテーマのみ）</string>
@@ -371,6 +383,12 @@
     <string name="title_advanced_actionbar_color">会話アクションバーの背景色としてアカウントの色を使用</string>
     <string name="title_advanced_navbar_colorize">Androidナビゲーションバーの色付け</string>
     <string name="title_advanced_parse_classes">スタイルシートの解析</string>
+    <string name="title_advanced_authentication">認証警告を表示</string>
+    <string name="title_advanced_authentication_hint">受信設定で基礎となるチェックを構成することができます</string>
+    <string name="title_advanced_authentication_indicator">認証ステータスインジケーターを表示</string>
+    <string name="title_advanced_authentication_none">認証なし</string>
+    <string name="title_advanced_authentication_some">部分認証</string>
+    <string name="title_advanced_authentication_all">認証を完了</string>
     <string name="title_advanced_sync_on_launch">起動時に同期</string>
     <string name="title_advanced_double_back">\"戻る\"をダブルタップして終了</string>
     <string name="title_advanced_conversation_actions">アクションを提案 (Android 10以上)</string>
@@ -571,6 +589,7 @@
     <string name="title_advanced_edit_name">名前を編集</string>
     <string name="title_advanced_swipe_actions">スワイプの動作</string>
     <string name="title_advanced_swipe_actions_hint">全てのIMAPアカウントの左右のスワイプ操作を設定</string>
+    <string name="title_advanced_swipe_sensitivity">左/右スワイプ感度</string>
     <string name="title_select">選択 &#8230;</string>
     <string name="title_identity_name">名前</string>
     <string name="title_identity_email">メールアドレス</string>
@@ -629,7 +648,8 @@
     <string name="title_leave_deleted">削除したメッセージをサーバーに残す</string>
     <string name="title_leave_on_device">デバイスにメッセージを残す</string>
     <string name="title_max_messages">ダウンロードするメッセージの最大数(空白を含め全て)</string>
-    <string name="title_keep_alive_interval">Keep-alive/poll 間隔(分)</string>
+    <string name="title_keep_poll_interval">接続間隔(分)</string>
+    <string name="title_keep_alive_interval">キープアライブ感覚(分)</string>
     <string name="title_server_time">受信時間（サーバー）を使用</string>
     <string name="title_received_header">\'受信済み\' ヘッダーを使用</string>
     <string name="title_date_header">\'日付\' ヘッダーを使用 (送信時刻)</string>

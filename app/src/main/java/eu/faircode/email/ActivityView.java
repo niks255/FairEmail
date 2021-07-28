@@ -612,7 +612,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     drawerLayout.closeDrawer(drawerContainer);
                 startActivity(new Intent(ActivityView.this, ActivityBilling.class));
             }
-        }));
+        }).setExtraIcon(ActivityBilling.isPro(this) ? R.drawable.twotone_check_24 : 0));
 
         if ((Helper.isPlayStoreInstall() || BuildConfig.DEBUG))
             extra.add(new NavMenuItem(R.drawable.twotone_star_24, R.string.menu_rate, new Runnable() {
@@ -1332,7 +1332,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     }
 
     private void onMenuPrivacy() {
-        Helper.view(this, Uri.parse(Helper.PRIVACY_URI), false);
+        Helper.view(this, Helper.getPrivacyUri(this), false);
     }
 
     private void onMenuAbout() {
@@ -1498,6 +1498,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         args.putLong("folder", intent.getLongExtra("folder", -1));
         args.putString("thread", intent.getStringExtra("thread"));
         args.putLong("id", intent.getLongExtra("id", -1));
+        args.putInt("lpos", intent.getIntExtra("lpos", -1));
         args.putBoolean("filter_archive", intent.getBooleanExtra("filter_archive", true));
         args.putBoolean("found", found);
         args.putBoolean("pinned", intent.getBooleanExtra("pinned", false));

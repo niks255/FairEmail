@@ -239,13 +239,23 @@
         Since the settings file contains all settings and account information, it is encrypted with a password.
         The password is required to import the settings again, so please don\'t forget it!
     </string>
+    <string name="title_setup_export_do">The export file will contain all settings and data, but no messages and no images referenced in signatures</string>
     <string name="title_setup_import_do">Imported accounts will be added without overwriting any existing ones</string>
+    <string name="title_setup_import_gmail">
+        Since Android 8.0 Oreo, Gmail accounts can no longer be imported, as each account must be selected to grant access to the account.
+        You can easily reconfigure Gmail accounts with the quick setup wizard.
+    </string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
     <string name="title_setup_password_repeat">Repeat password</string>
     <string name="title_setup_password_missing">Password missing</string>
     <string name="title_setup_password_different">Passwords don\'t match</string>
     <string name="title_setup_password_invalid">Password invalid</string>
+    <string name="title_setup_import_accounts">Import accounts and identities</string>
+    <string name="title_setup_import_rules">Import filter rules</string>
+    <string name="title_setup_import_contacts">Import local contacts</string>
+    <string name="title_setup_import_answers">Import reply templates</string>
+    <string name="title_setup_import_settings">Import options</string>
     <string name="title_setup_exported">Settings exported</string>
     <string name="title_setup_imported">Settings imported</string>
     <string name="title_setup_import_invalid">Invalid settings file</string>
@@ -332,6 +342,7 @@
     <string name="title_advanced_suggest_sent">Suggest addresses found in sent messages</string>
     <string name="title_advanced_suggest_received">Suggest addresses found in received messages</string>
     <string name="title_advanced_suggest_frequently">Sort suggested addresses on frequency of use</string>
+    <string name="title_advanced_alt_re_fwd">Alternative reply/forward prefix</string>
     <string name="title_advanced_send_reminders">Show reminders</string>
     <string name="title_advanced_send_delayed">Delay sending messages</string>
     <string name="title_advanced_send_pending">Show non-obtrusive send delayed icon</string>
@@ -384,6 +395,7 @@
     <string name="title_advanced_portrait2">Use two rows in portrait mode</string>
     <string name="title_advanced_landscape">Use two columns in landscape mode</string>
     <string name="title_advanced_landscape3">Show navigation menu in landscape mode by default</string>
+    <string name="title_advanced_nav_message_count">Show number of locally stored messages in the navigation menu</string>
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_cards_beige">Use beige background when using card style (light themes only)</string>
@@ -700,6 +712,7 @@
 
     <string name="title_advanced_swipe_actions">Set swipe actions</string>
     <string name="title_advanced_swipe_actions_hint">This will set the swipe left and right action for all IMAP accounts</string>
+    <string name="title_advanced_swipe_sensitivity">Left/right swipe sensitivity</string>
 
     <string name="title_select">Select &#8230;</string>
     <string name="title_identity_name">Your name</string>
@@ -764,7 +777,8 @@
     <string name="title_leave_deleted">Leave deleted messages on server</string>
     <string name="title_leave_on_device">Leave messages on device</string>
     <string name="title_max_messages">Maximum number of messages to download (blank for all)</string>
-    <string name="title_keep_alive_interval">Keep-alive/poll interval (minutes)</string>
+    <string name="title_keep_poll_interval">Poll interval (minutes)</string>
+    <string name="title_keep_alive_interval">Keep-alive interval (minutes)</string>
     <string name="title_partial_fetch" translatable="false">Partial fetch</string>
     <string name="title_ignore_size" translatable="false">Ignore bodystructure size</string>
     <string name="title_server_time">Use received time (server)</string>
@@ -1120,6 +1134,7 @@
     <string name="title_style_blockquote">Block quote</string>
     <string name="title_style_indentation">Indentation</string>
     <string name="title_style_strikethrough">Strikethrough</string>
+    <string name="title_style_code" translatable="false">Code</string>
     <string name="title_style_clear">Clear formatting</string>
     <string name="title_style_link">Insert link</string>
 

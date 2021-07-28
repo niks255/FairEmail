@@ -215,13 +215,22 @@
     <string name="title_setup_export_remark">        Ponieważ plik ustawień zawiera wszystkie ustawienia i informacje o koncie, jest zaszyfrowany hasłem.
          Hasło jest wymagane do ponownego zaimportowania ustawień, więc nie zapomnij go!
     </string>
+    <string name="title_setup_export_do">Plik będzie zawierał wszystkie ustawienia i dane, bez żadnych komunikatów i obrazów w odniesieniu do podpisów</string>
     <string name="title_setup_import_do">Zaimportowane konta zostaną dodane bez nadpisywania istniejących</string>
+    <string name="title_setup_import_gmail">        Od Androida 8. Oreo, konta Gmail nie mogą być już zaimportowane, ponieważ każde konto musi być wybrane w celu udzielenia dostępu do konta.
+        Możesz z łatwością skonfigurować konta Gmail z szybkim kreatorem konfiguracji.
+    </string>
     <string name="title_setup_password">Hasło</string>
     <string name="title_setup_password_chars">Hasło zawiera znaki kontrolne lub znaki spacji</string>
     <string name="title_setup_password_repeat">Powtórz hasło</string>
     <string name="title_setup_password_missing">Brak hasła</string>
     <string name="title_setup_password_different">Hasła nie są identyczne</string>
     <string name="title_setup_password_invalid">Nieprawidłowe hasło</string>
+    <string name="title_setup_import_accounts">Importuj konta i tożsamości</string>
+    <string name="title_setup_import_rules">Importuj reguły filtrowania</string>
+    <string name="title_setup_import_contacts">Importuj kontakty lokalne</string>
+    <string name="title_setup_import_answers">Importuj szablony odpowiedzi</string>
+    <string name="title_setup_import_settings">Opcje importowania</string>
     <string name="title_setup_exported">Ustawienia wyeksportowane</string>
     <string name="title_setup_imported">Ustawienia zaimportowane</string>
     <string name="title_setup_import_invalid">Nieprawidłowy plik ustawień</string>
@@ -329,7 +338,7 @@
     <string name="title_advanced_ssl_harden">Wzmocnij połączenia SSL</string>
     <string name="title_advanced_manage_connectivity">Zarządzaj połączeniami</string>
     <string name="title_advanced_caption_general">Ogólne</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Kontrole</string>
+    <string name="title_advanced_caption_checks">Kontrole</string>
     <string name="title_advanced_caption_list">Lista</string>
     <string name="title_advanced_caption_conversation">Wątek</string>
     <string name="title_advanced_caption_message">Wiadomość</string>
@@ -403,9 +412,12 @@
     <string name="title_advanced_actionbar_color">Użyj koloru konta jako koloru tła dla paska akcji rozmowy</string>
     <string name="title_advanced_navbar_colorize">Koloruj pasek nawigacji Androida</string>
     <string name="title_advanced_parse_classes">Parsowanie arkuszy stylów</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Pokaż ostrzeżenia o uwierzytelnieniu</string>
+    <string name="title_advanced_authentication">Pokaż ostrzeżenia o uwierzytelnieniu</string>
     <string name="title_advanced_authentication_hint">Podstawowe kontrole można skonfigurować w ustawieniach odbioru</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Pokaż wskaźnik statusu uwierzytelniania</string>
+    <string name="title_advanced_authentication_indicator">Pokaż wskaźnik statusu uwierzytelniania</string>
+    <string name="title_advanced_authentication_none">Brak uwierzytelnienia</string>
+    <string name="title_advanced_authentication_some">Uwierzytelnianie częściowe</string>
+    <string name="title_advanced_authentication_all">Pełne uwierzytelnienie</string>
     <string name="title_advanced_sync_on_launch">Synchronizuj podczas włączania aplikacji</string>
     <string name="title_advanced_double_back">Podwójne \'wstecz\', aby wyjść</string>
     <string name="title_advanced_conversation_actions">Sugeruj akcje (Android 10+)</string>
@@ -607,6 +619,7 @@
     <string name="title_advanced_edit_name">Zmień nazwę</string>
     <string name="title_advanced_swipe_actions">Ustaw akcje przesuwania</string>
     <string name="title_advanced_swipe_actions_hint">Spowoduje to ustawienie akcji przesuwania w lewo i w prawo dla wszystkich kont IMAP</string>
+    <string name="title_advanced_swipe_sensitivity">Czułość przesunięcia w lewo/prawo</string>
     <string name="title_select">Wybierz &#8230;</string>
     <string name="title_identity_name">Twoje imię</string>
     <string name="title_identity_email">Twój adres e-mail</string>
@@ -665,7 +678,8 @@
     <string name="title_leave_deleted">Pozostaw usunięte wiadomości na serwerze</string>
     <string name="title_leave_on_device">Pozostaw wiadomości na urządzeniu</string>
     <string name="title_max_messages">Maksymalna liczba wiadomości do pobrania (puste dla wszystkich)</string>
-    <string name="title_keep_alive_interval">Interwał utrzymywania aktywności/odpytywania (minuty)</string>
+    <string name="title_keep_poll_interval">Interwał sprawdzania (minuty)</string>
+    <string name="title_keep_alive_interval">Interwał utrzymywania aktywności (minuty)</string>
     <string name="title_server_time">Użyj czasu otrzymanego (serwer)</string>
     <string name="title_received_header">Użyj nagłówka \'Odbiorca\'</string>
     <string name="title_date_header">Użyj nagłówka \'Data\' (wysłany czas)</string>

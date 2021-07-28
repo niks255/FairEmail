@@ -121,6 +121,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.bouncycastle.cert.jcajce.JcaCertStore;
@@ -186,6 +187,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.regex.Pattern;
 
@@ -240,7 +242,6 @@ public class FragmentCompose extends FragmentBase {
     private TextView tvDsn;
     private TextView tvPlainTextOnly;
     private EditTextCompose etBody;
-    private ImageButton ibTranslate;
     private TextView tvNoInternet;
     private TextView tvSignature;
     private CheckBox cbSignature;
@@ -249,6 +250,7 @@ public class FragmentCompose extends FragmentBase {
     private ImageButton ibCloseRefHint;
     private ImageButton ibReferenceEdit;
     private ImageButton ibReferenceImages;
+    private FloatingActionButton fabTranslate;
     private BottomNavigationView style_bar;
     private BottomNavigationView media_bar;
     private BottomNavigationView bottom_navigation;
@@ -357,7 +359,6 @@ public class FragmentCompose extends FragmentBase {
         tvDsn = view.findViewById(R.id.tvDsn);
         tvPlainTextOnly = view.findViewById(R.id.tvPlainTextOnly);
         etBody = view.findViewById(R.id.etBody);
-        ibTranslate = view.findViewById(R.id.ibTranslate);
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         tvSignature = view.findViewById(R.id.tvSignature);
         cbSignature = view.findViewById(R.id.cbSignature);
@@ -366,6 +367,7 @@ public class FragmentCompose extends FragmentBase {
         ibCloseRefHint = view.findViewById(R.id.ibCloseRefHint);
         ibReferenceEdit = view.findViewById(R.id.ibReferenceEdit);
         ibReferenceImages = view.findViewById(R.id.ibReferenceImages);
+        fabTranslate = view.findViewById(R.id.fabTranslate);
         style_bar = view.findViewById(R.id.style_bar);
         media_bar = view.findViewById(R.id.media_bar);
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
@@ -715,116 +717,6 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
-        ibTranslate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<DeepL.Language> languages = DeepL.getTargetLanguages(getContext());
-                if (languages == null)
-                    return;
-
-                boolean canTranslate =
-                        (DeepL.canTranslate(getContext()) &&
-                                DeepL.getParagraph(etBody) != null);
-
-                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), v);
-
-                popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.title_translate_configure);
-
-                for (int i = 0; i < languages.size(); i++) {
-                    DeepL.Language lang = languages.get(i);
-                    MenuItem item = popupMenu.getMenu().add(Menu.NONE, i + 2, i + 2, lang.name)
-                            .setIntent(new Intent().putExtra("target", lang.target));
-                    if (lang.icon != null)
-                        item.setIcon(lang.icon);
-                    item.setEnabled(canTranslate);
-                }
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == 1) {
-                            DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
-                            fragment.show(getParentFragmentManager(), "deepl:configure");
-                        } else {
-                            String target = item.getIntent().getStringExtra("target");
-                            onMenuTranslate(target);
-                        }
-                        return true;
-                    }
-                });
-
-                popupMenu.showWithIcons(getContext(), v);
-            }
-
-            private void onMenuTranslate(String target) {
-                final Pair<Integer, Integer> paragraph = DeepL.getParagraph(etBody);
-                if (paragraph == null)
-                    return;
-
-                Editable edit = etBody.getText();
-                String text = edit.subSequence(paragraph.first, paragraph.second).toString();
-
-                Bundle args = new Bundle();
-                args.putString("target", target);
-                args.putString("text", text);
-
-                new SimpleTask<DeepL.Translation>() {
-                    @Override
-                    protected void onPreExecute(Bundle args) {
-                        ToastEx.makeText(getContext(), R.string.title_translating, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    protected DeepL.Translation onExecute(Context context, Bundle args) throws Throwable {
-                        String target = args.getString("target");
-                        String text = args.getString("text");
-                        return DeepL.translate(text, target, context);
-                    }
-
-                    @Override
-                    protected void onExecuted(Bundle args, DeepL.Translation translation) {
-                        if (paragraph.second > edit.length())
-                            return;
-
-                        FragmentActivity activity = getActivity();
-                        if (activity == null)
-                            return;
-
-                        Context context = getContext();
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-                        // Insert translated text
-                        edit.insert(paragraph.second, "\n\n" + translation.translated_text);
-                        etBody.setSelection(paragraph.second + 2 + translation.translated_text.length());
-
-                        boolean small = prefs.getBoolean("deepl_small", false);
-                        if (small) {
-                            RelativeSizeSpan[] spans = edit.getSpans(
-                                    paragraph.first, paragraph.second, RelativeSizeSpan.class);
-                            for (RelativeSizeSpan span : spans)
-                                edit.removeSpan(span);
-                            edit.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
-                                    paragraph.first, paragraph.second,
-                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-
-                        // Updated frequency
-                        String key = "translated_" + args.getString("target");
-                        int count = prefs.getInt(key, 0);
-                        prefs.edit().putInt(key, count + 1).apply();
-
-                        activity.invalidateOptionsMenu();
-                    }
-
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        Throwable exex = new Throwable("DeepL", ex);
-                        Log.unexpectedError(getParentFragmentManager(), exex, false);
-                    }
-                }.execute(FragmentCompose.this, args, "compose:translate");
-            }
-        });
-
         tvSignature.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
 
         cbSignature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -923,6 +815,13 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        fabTranslate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTranslate(v);
+            }
+        });
+
         style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -1005,13 +904,13 @@ public class FragmentCompose extends FragmentBase {
         grpAttachments.setVisibility(View.GONE);
         tvNoInternet.setVisibility(View.GONE);
         grpBody.setVisibility(View.GONE);
-        ibTranslate.setVisibility(
-                DeepL.isAvailable(getContext()) ? View.VISIBLE : View.GONE);
         grpSignature.setVisibility(View.GONE);
         grpReferenceHint.setVisibility(View.GONE);
         ibReferenceEdit.setVisibility(View.GONE);
         ibReferenceImages.setVisibility(View.GONE);
         tvReference.setVisibility(View.GONE);
+        fabTranslate.setVisibility(
+                DeepL.isAvailable(getContext()) ? View.VISIBLE : View.GONE);
         style_bar.setVisibility(View.GONE);
         media_bar.setVisibility(View.GONE);
         bottom_navigation.setVisibility(View.GONE);
@@ -1865,6 +1764,8 @@ public class FragmentCompose extends FragmentBase {
 
         args.putInt("focussed", focussed);
 
+        Helper.hideKeyboard(view);
+
         FragmentDialogContactGroup fragment = new FragmentDialogContactGroup();
         fragment.setArguments(args);
         fragment.setTargetFragment(this, REQUEST_CONTACT_GROUP);
@@ -2062,6 +1963,113 @@ public class FragmentCompose extends FragmentBase {
         fragmentTransaction.commit();
     }
 
+    private void onTranslate(View anchor) {
+        final Context context = anchor.getContext();
+
+        List<DeepL.Language> languages = DeepL.getTargetLanguages(context);
+        if (languages == null)
+            languages = new ArrayList<>();
+
+        Pair<Integer, Integer> paragraph = DeepL.getParagraph(etBody);
+        boolean canTranslate = (DeepL.canTranslate(context) && paragraph != null);
+
+        PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), anchor);
+
+        popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.title_translate_configure);
+
+        for (int i = 0; i < languages.size(); i++) {
+            DeepL.Language lang = languages.get(i);
+            MenuItem item = popupMenu.getMenu().add(Menu.NONE, i + 2, i + 2, lang.name)
+                    .setIntent(new Intent().putExtra("target", lang.target));
+            if (lang.icon != null)
+                item.setIcon(lang.icon);
+            item.setEnabled(canTranslate);
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == 1) {
+                    DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
+                    fragment.show(getParentFragmentManager(), "deepl:configure");
+                } else {
+                    String target = item.getIntent().getStringExtra("target");
+                    onMenuTranslate(target);
+                }
+                return true;
+            }
+
+            private void onMenuTranslate(String target) {
+                final Pair<Integer, Integer> paragraph = DeepL.getParagraph(etBody);
+                if (paragraph == null)
+                    return;
+
+                Editable edit = etBody.getText();
+                String text = edit.subSequence(paragraph.first, paragraph.second).toString();
+
+                Bundle args = new Bundle();
+                args.putString("target", target);
+                args.putString("text", text);
+
+                new SimpleTask<DeepL.Translation>() {
+                    @Override
+                    protected void onPreExecute(Bundle args) {
+                        ToastEx.makeText(context, R.string.title_translating, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected DeepL.Translation onExecute(Context context, Bundle args) throws Throwable {
+                        String target = args.getString("target");
+                        String text = args.getString("text");
+                        return DeepL.translate(text, target, context);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, DeepL.Translation translation) {
+                        if (paragraph.second > edit.length())
+                            return;
+
+                        FragmentActivity activity = getActivity();
+                        if (activity == null)
+                            return;
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+                        // Insert translated text
+                        edit.insert(paragraph.second, "\n\n" + translation.translated_text);
+                        etBody.setSelection(paragraph.second + 2 + translation.translated_text.length());
+
+                        boolean small = prefs.getBoolean("deepl_small", false);
+                        if (small) {
+                            RelativeSizeSpan[] spans = edit.getSpans(
+                                    paragraph.first, paragraph.second, RelativeSizeSpan.class);
+                            for (RelativeSizeSpan span : spans)
+                                edit.removeSpan(span);
+                            edit.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
+                                    paragraph.first, paragraph.second,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+
+                        // Updated frequency
+                        String key = "translated_" + args.getString("target");
+                        int count = prefs.getInt(key, 0);
+                        prefs.edit().putInt(key, count + 1).apply();
+
+                        activity.invalidateOptionsMenu();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Throwable exex = new Throwable("DeepL", ex);
+                        Log.unexpectedError(getParentFragmentManager(), exex, false);
+                    }
+                }.execute(FragmentCompose.this, args, "compose:translate");
+            }
+        });
+
+        popupMenu.showWithIcons(context, anchor);
+    }
+
     private boolean onActionStyle(int action, View anchor) {
         Log.i("Style action=" + action);
         return StyleHelper.apply(action, getViewLifecycleOwner(), anchor, etBody);
@@ -2094,10 +2102,13 @@ public class FragmentCompose extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
         if (image_dialog) {
+            Helper.hideKeyboard(view);
+
             Bundle args = new Bundle();
             args.putInt("title", photo
                     ? R.string.title_attachment_photo
                     : R.string.title_add_image_select);
+
             FragmentDialogAddImage fragment = new FragmentDialogAddImage();
             fragment.setArguments(args);
             fragment.setTargetFragment(this, REQUEST_IMAGE);
@@ -2276,7 +2287,7 @@ public class FragmentCompose extends FragmentBase {
                     List<String> emails = new ArrayList<>();
                     for (int i = 0; i < recipients.size(); i++) {
                         InternetAddress recipient = (InternetAddress) recipients.get(i);
-                        String email = recipient.getAddress().toLowerCase(Locale.ROOT);
+                        String email = recipient.getAddress();
                         if (!emails.contains(email))
                             emails.add(email);
                     }
@@ -2293,6 +2304,7 @@ public class FragmentCompose extends FragmentBase {
 
                     Bundle largs = new Bundle();
                     largs.putLong("id", working);
+                    largs.putString("session", UUID.randomUUID().toString());
                     largs.putInt("action", action);
                     largs.putBundle("extras", extras);
                     largs.putBoolean("interactive", interactive);
@@ -2705,6 +2717,7 @@ public class FragmentCompose extends FragmentBase {
                 Intent data = args.getParcelable("data");
                 Bundle largs = data.getBundleExtra(BuildConfig.APPLICATION_ID);
                 long id = largs.getLong("id", -1);
+                String session = largs.getString("session");
 
                 DB db = DB.getInstance(context);
 
@@ -2722,8 +2735,8 @@ public class FragmentCompose extends FragmentBase {
                 File tmp = new File(context.getFilesDir(), "encryption");
                 if (!tmp.exists())
                     tmp.mkdir();
-                File input = new File(tmp, draft.id + ".pgp_input");
-                File output = new File(tmp, draft.id + ".pgp_output");
+                File input = new File(tmp, draft.id + "_" + session + ".pgp_input");
+                File output = new File(tmp, draft.id + "_" + session + ".pgp_output");
 
                 // Serializing messages is NOT reproducible
                 if ((EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt) &&
@@ -2902,7 +2915,7 @@ public class FragmentCompose extends FragmentBase {
                                     Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                     intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
                                     intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE, true);
-                                    intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email.toLowerCase(Locale.ROOT));
+                                    intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email);
                                     intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                                     intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                     return intent;
@@ -2922,7 +2935,7 @@ public class FragmentCompose extends FragmentBase {
                                 Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY);
                                 intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, pgpSignKeyId);
                                 intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE, true);
-                                intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email.toLowerCase(Locale.ROOT));
+                                intent.putExtra(OpenPgpApi.EXTRA_MINIMIZE_USER_ID, identity.email);
                                 intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                                 intent.putExtra(BuildConfig.APPLICATION_ID, largs);
                                 return intent;
@@ -3370,6 +3383,8 @@ public class FragmentCompose extends FragmentBase {
                                     public boolean onMenuItemClick(MenuItem item) {
                                         int itemId = item.getItemId();
                                         if (itemId == R.string.title_send_dialog) {
+                                            Helper.hideKeyboard(view);
+
                                             FragmentDialogSend fragment = new FragmentDialogSend();
                                             fragment.setArguments(args);
                                             fragment.setTargetFragment(FragmentCompose.this, REQUEST_SEND);
@@ -4816,6 +4831,8 @@ public class FragmentCompose extends FragmentBase {
                 ArrayList<Uri> images = args.getParcelableArrayList("images");
                 boolean image_dialog = prefs.getBoolean("image_dialog", true);
                 if (image_dialog) {
+                    Helper.hideKeyboard(view);
+
                     Bundle aargs = new Bundle();
                     aargs.putInt("title", android.R.string.ok);
                     aargs.putParcelableArrayList("images", images);
@@ -5299,7 +5316,7 @@ public class FragmentCompose extends FragmentBase {
                                         String[] userIds = new String[recipients.size()];
                                         for (int i = 0; i < recipients.size(); i++) {
                                             InternetAddress recipient = (InternetAddress) recipients.get(i);
-                                            userIds[i] = recipient.getAddress().toLowerCase(Locale.ROOT);
+                                            userIds[i] = recipient.getAddress();
                                         }
 
                                         Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
@@ -5602,6 +5619,8 @@ public class FragmentCompose extends FragmentBase {
                         (send_reminders &&
                                 (remind_extra || remind_subject || remind_text || remind_attachment))) {
                     setBusy(false);
+
+                    Helper.hideKeyboard(view);
 
                     FragmentDialogSend fragment = new FragmentDialogSend();
                     fragment.setArguments(args);

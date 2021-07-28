@@ -191,13 +191,22 @@
     <string name="title_setup_export_remark">        Da indstillingsfilen indeholder alle indstillinger og kontooplysninger, krypteres den vha. en adgangskode.
         Adgangskoden kræves for at importere indstillingerne igen, så glem den ikke!
     </string>
+    <string name="title_setup_export_do">Eksportfilen vil indeholde alle indstillinger og data, men hverken meddelelser eller signaturrefererede billeder</string>
     <string name="title_setup_import_do">Importerede konti tilføjes uden at overskrive eksisterende ditto</string>
+    <string name="title_setup_import_gmail">        Fra og med Android 8. Oreo kan Gmail-konti ikke længere importeres, da hver konto skal vælges for at give adgang til den.
+        Opsætningen af Gmail-konti kan let ændres vis guiden hurtig opsætning.
+    </string>
     <string name="title_setup_password">Adgangskode</string>
     <string name="title_setup_password_chars">Adgangskode indeholder kontrol- eller mellemrumstegn</string>
     <string name="title_setup_password_repeat">Gentag adgangskode</string>
     <string name="title_setup_password_missing">Adgangskode mangler</string>
     <string name="title_setup_password_different">Adgangskoder matcher ikke</string>
     <string name="title_setup_password_invalid">Ugyldig adgangskode</string>
+    <string name="title_setup_import_accounts">Import af konti og identiteter</string>
+    <string name="title_setup_import_rules">Import af filterregler</string>
+    <string name="title_setup_import_contacts">Import af lokale kontakter</string>
+    <string name="title_setup_import_answers">Importér svarskabeloner</string>
+    <string name="title_setup_import_settings">Importindstillinger</string>
     <string name="title_setup_exported">Indstillinger eksporteret</string>
     <string name="title_setup_imported">Indstillinger importeret</string>
     <string name="title_setup_import_invalid">Ugyldig indstillingsfil</string>
@@ -303,7 +312,7 @@
     <string name="title_advanced_ssl_harden">Hærd SSL-forbindelser</string>
     <string name="title_advanced_manage_connectivity">Håndtér konnektivitet</string>
     <string name="title_advanced_caption_general">Generelt</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Tjek</string>
+    <string name="title_advanced_caption_checks">Tjek</string>
     <string name="title_advanced_caption_list">Liste</string>
     <string name="title_advanced_caption_conversation">Samtale</string>
     <string name="title_advanced_caption_message">Besked</string>
@@ -312,6 +321,7 @@
     <string name="title_advanced_portrait2">Benyt to rækker i stående tilstand</string>
     <string name="title_advanced_landscape">Benyt to kolonner i liggende tilstand</string>
     <string name="title_advanced_landscape3">Vis som standard navigeringsmenu i liggende tilstand</string>
+    <string name="title_advanced_nav_message_count">Vis antal lokalt gemte beskeder i navigationsmenuen</string>
     <string name="title_advanced_startup">Vis på startskærmen</string>
     <string name="title_advanced_cards">Brug kortstil i stedet for tabelform</string>
     <string name="title_advanced_cards_beige">Brug beige baggrund ifm. kortstil (kun lyse temaer)</string>
@@ -374,9 +384,12 @@
     <string name="title_advanced_actionbar_color">Benyt kontofarve som baggrundsfarve til samtalens handlingsbjælke</string>
     <string name="title_advanced_navbar_colorize">Farvelæg Android-navigeringsbjælken</string>
     <string name="title_advanced_parse_classes">CSS-fortolkning</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Vis godkendelsesadvarsler</string>
+    <string name="title_advanced_authentication">Vis godkendelsesadvarsler</string>
     <string name="title_advanced_authentication_hint">De underliggende tjek kan opsættes i modtagelsesindstillingerne</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Vis indikator for godkendelsesstatus</string>
+    <string name="title_advanced_authentication_indicator">Vis indikator for godkendelsesstatus</string>
+    <string name="title_advanced_authentication_none">Ingen godkendelse</string>
+    <string name="title_advanced_authentication_some">Delvis godkendelse</string>
+    <string name="title_advanced_authentication_all">Komplet godkendelse</string>
     <string name="title_advanced_sync_on_launch">Synkronisér ved opstart</string>
     <string name="title_advanced_double_back">Dobbelttryk \"Tilbage\"/stryg for at lukke</string>
     <string name="title_advanced_conversation_actions">Foreslå handlinger (Android 10+)</string>
@@ -575,6 +588,7 @@
     <string name="title_advanced_edit_name">Redigér navn</string>
     <string name="title_advanced_swipe_actions">Indstil strygehandlinger</string>
     <string name="title_advanced_swipe_actions_hint">Dette opsætter handlinger for venstre- og højrestrygning for alle IMAP-konti</string>
+    <string name="title_advanced_swipe_sensitivity">Venstre/højre strygefølsomhed</string>
     <string name="title_select">Vælg &#8230;</string>
     <string name="title_identity_name">Dit navn</string>
     <string name="title_identity_email">Din e-mailadresse</string>
@@ -630,7 +644,8 @@
     <string name="title_leave_deleted">Lad slettede beskeder forblive på serveren</string>
     <string name="title_leave_on_device">Lad beskeder forblive på enhed</string>
     <string name="title_max_messages">Maks. antal beskeder at downloade (tomt for samtlige)</string>
-    <string name="title_keep_alive_interval">Hold i live/hentningsinterval (minutter)</string>
+    <string name="title_keep_poll_interval">Polling-interval (minutter)</string>
+    <string name="title_keep_alive_interval">Hold i live-interval (minutter)</string>
     <string name="title_server_time">Benyt modtagelsestid (server)</string>
     <string name="title_received_header">Benyt \"Modtaget\"-overskrift</string>
     <string name="title_date_header">Benyt \'Dato\'-overskrift (afsendelsestid)</string>

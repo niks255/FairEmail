@@ -197,13 +197,23 @@
     <string name="title_setup_export_remark">        Da die Einstellungsdatei alle Einstellungen und Kontoinformationen enthält, wird sie mit einem Passwort verschlüsselt.
         Das Passwort wird benötigt, um die Einstellungen erneut zu importieren. Bitte vergessen Sie es daher nicht!
     </string>
+    <string name="title_setup_export_do">Die Exportdatei enthält alle Einstellungen und Daten, aber keine Nachrichten und keine in Signaturen eingebettete Grafiken.</string>
     <string name="title_setup_import_do">Importierte Konten werden hinzugefügt, ohne vorhandene zu überschreiben</string>
+    <string name="title_setup_import_gmail">        Seit Android 8.0 (Oreo) können Gmail-Konten nicht mehr importiert werden,
+        da jedes Konto ausgewählt werden muss, um Zugriff auf das Konto zu gewähren.
+        Sie können jedoch Gmail-Konten ganz einfach mit dem Schnelleinrichtungsassistenten neu konfigurieren.
+    </string>
     <string name="title_setup_password">Passwort</string>
     <string name="title_setup_password_chars">Passwort enthält Steuer- oder Leerzeichen</string>
     <string name="title_setup_password_repeat">Passwort erneut eingeben</string>
     <string name="title_setup_password_missing">Passwort fehlt</string>
     <string name="title_setup_password_different">Passwörter stimmen nicht überein</string>
     <string name="title_setup_password_invalid">Passwort ungültig</string>
+    <string name="title_setup_import_accounts">Konten und Identitäten importieren</string>
+    <string name="title_setup_import_rules">Filterregeln importieren</string>
+    <string name="title_setup_import_contacts">Lokale Kontakte importieren</string>
+    <string name="title_setup_import_answers">Antwortvorlagen importieren</string>
+    <string name="title_setup_import_settings">Importoptionen</string>
     <string name="title_setup_exported">Einstellungen exportiert</string>
     <string name="title_setup_imported">Einstellungen importiert</string>
     <string name="title_setup_import_invalid">Ungültige Einstellungsdatei</string>
@@ -311,7 +321,7 @@
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
     <string name="title_advanced_manage_connectivity">Konnektivität verwalten</string>
     <string name="title_advanced_caption_general">Allgemein</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Prüfen</string>
+    <string name="title_advanced_caption_checks">Prüfen</string>
     <string name="title_advanced_caption_list">Liste</string>
     <string name="title_advanced_caption_conversation">Unterhaltung</string>
     <string name="title_advanced_caption_message">Nachricht</string>
@@ -320,6 +330,7 @@
     <string name="title_advanced_portrait2">Zwei-Fenster-Darstellung im Hochformat verwenden</string>
     <string name="title_advanced_landscape">Zwei Spalten im Querformat verwenden</string>
     <string name="title_advanced_landscape3">Navigationsmenü standardmäßig im Querformat anzeigen</string>
+    <string name="title_advanced_nav_message_count">Anzahl der lokal gespeicherten Nachrichten im Navigationsmenü anzeigen</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
     <string name="title_advanced_cards">Ordner und Unterhaltungen mit Rahmen (breit) statt in Tabellendesign (schmal) zeigen</string>
     <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund verwenden, wenn Kartenstil genutzt wird (nur bei hellen Farbschemen)</string>
@@ -385,9 +396,12 @@
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
     <string name="title_advanced_navbar_colorize">Android-Navigationsleiste farbig darstellen</string>
     <string name="title_advanced_parse_classes">Stylesheets analysieren</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Authentifizierungswarnhinweise anzeigen</string>
+    <string name="title_advanced_authentication">Authentifizierungswarnhinweise anzeigen</string>
     <string name="title_advanced_authentication_hint">Die zugrunde liegenden Prüfungen können in den Empfangseinstellungen konfiguriert werden</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Statusmeldung der Authentifizierung anzeigen</string>
+    <string name="title_advanced_authentication_indicator">Statusmeldung der Authentifizierung anzeigen</string>
+    <string name="title_advanced_authentication_none">Keine Authentifizierung</string>
+    <string name="title_advanced_authentication_some">Teilweise Authentifizierung</string>
+    <string name="title_advanced_authentication_all">Vollständige Authentifizierung</string>
     <string name="title_advanced_sync_on_launch">Beim Start synchronisieren</string>
     <string name="title_advanced_double_back">Zweifaches „Zurück” zum Beenden</string>
     <string name="title_advanced_conversation_actions">Aktionen vorschlagen (Android 10+)</string>
@@ -589,6 +603,7 @@
     <string name="title_advanced_edit_name">Namen bearbeiten</string>
     <string name="title_advanced_swipe_actions">Wischgesten festlegen</string>
     <string name="title_advanced_swipe_actions_hint">Das wird die Aktion fürs Links- und Rechtswischen aller IMAP-Konten festlegen</string>
+    <string name="title_advanced_swipe_sensitivity">Empfindlichkeit für das Links-/Rechts-Wischen</string>
     <string name="title_select">Auswählen &#8230;</string>
     <string name="title_identity_name">Ihr Name</string>
     <string name="title_identity_email">Ihre E-Mail-Adresse</string>
@@ -647,7 +662,8 @@
     <string name="title_leave_deleted">Gelöschte Nachrichten auf Server belassen</string>
     <string name="title_leave_on_device">Nachrichten auf Gerät belassen</string>
     <string name="title_max_messages">Maximale Anzahl der Nachrichten zum Herunterladen (leer für alle)</string>
-    <string name="title_keep_alive_interval">Verbindung halten / Abfrageintervall (Minuten)</string>
+    <string name="title_keep_poll_interval">Abrufintervall (Minuten)</string>
+    <string name="title_keep_alive_interval">Aktivitätsintervall (Minuten)</string>
     <string name="title_server_time">Empfangzeit verwenden (Server)</string>
     <string name="title_received_header">Received-Kopfzeile verwenden</string>
     <string name="title_date_header">Date-Kopfzeile verwenden (Sendezeit)</string>

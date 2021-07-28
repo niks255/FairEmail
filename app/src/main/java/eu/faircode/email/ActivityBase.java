@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -49,6 +50,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -88,6 +91,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         if (intent != null)
             EntityLog.log(this, intent +
                     " extras=" + TextUtils.join(", ", Log.getExtras(intent.getExtras())));
+
+        getSupportFragmentManager().registerFragmentLifecycleCallbacks(lifecycleCallbacks, true);
 
         this.contacts = hasPermission(Manifest.permission.READ_CONTACTS);
 
@@ -134,6 +139,51 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             Window window = getWindow();
             if (window != null)
                 window.setNavigationBarColor(colorPrimaryDark);
+        }
+
+        Fragment bfragment = getSupportFragmentManager()
+                .findFragmentByTag("androidx.biometric.BiometricFragment");
+        if (bfragment != null) {
+            Log.e("Orphan BiometricFragment");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(bfragment)
+                    .commitNowAllowingStateLoss();
+            /*
+                java.lang.RuntimeException: Unable to start activity ComponentInfo{eu.faircode.email/eu.faircode.email.ActivitySetup}: androidx.fragment.app.Fragment$InstantiationException: Unable to instantiate fragment androidx.biometric.FingerprintDialogFragment: could not find Fragment constructor
+                  at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2957)
+                  at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3032)
+                  at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:4921)
+                  at android.app.ActivityThread.-wrap19(Unknown Source:0)
+                  at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1702)
+                  at android.os.Handler.dispatchMessage(Handler.java:105)
+                  at android.os.Looper.loop(Looper.java:164)
+                  at android.app.ActivityThread.main(ActivityThread.java:6944)
+                  at java.lang.reflect.Method.invoke(Native Method)
+                  at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:327)
+                  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1374)
+                Caused by: androidx.fragment.app.Fragment$InstantiationException: Unable to instantiate fragment androidx.biometric.FingerprintDialogFragment: could not find Fragment constructor
+                  at androidx.fragment.app.Fragment.instantiate(SourceFile:8)
+                  at androidx.fragment.app.FragmentContainer.instantiate(SourceFile:1)
+                  at androidx.fragment.app.FragmentManager$3.instantiate(SourceFile:1)
+                  at androidx.fragment.app.FragmentStateManager.<init>(SourceFile:12)
+                  at androidx.fragment.app.FragmentManager.restoreSaveState(SourceFile:11)
+                  at androidx.fragment.app.FragmentController.restoreSaveState(SourceFile:2)
+                  at androidx.fragment.app.FragmentActivity$2.onContextAvailable(SourceFile:5)
+                  at androidx.activity.contextaware.ContextAwareHelper.dispatchOnContextAvailable(SourceFile:3)
+                  at androidx.activity.ComponentActivity.onCreate(SourceFile:2)
+                  at androidx.fragment.app.FragmentActivity.onCreate(SourceFile:1)
+                  at eu.faircode.email.ActivityBase.onCreate(SourceFile:37)
+                  at eu.faircode.email.ActivitySetup.onCreate(SourceFile:1)
+                  at android.app.Activity.performCreate(Activity.java:7183)
+                  at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1220)
+                  at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2910)
+                  ... 10 more
+                Caused by: java.lang.NoSuchMethodException: <init> []
+                  at java.lang.Class.getConstructor0(Class.java:2320)
+                  at java.lang.Class.getConstructor(Class.java:1725)
+                  at androidx.fragment.app.Fragment.instantiate(SourceFile:4)
+             */
         }
 
         checkAuthentication();
@@ -638,6 +688,87 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     Handler getMainHandler() {
         return ApplicationEx.getMainHandler();
     }
+
+    private final FragmentManager.FragmentLifecycleCallbacks lifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
+        private long last = 0;
+
+        @Override
+        public void onFragmentPreAttached(@NonNull FragmentManager fm, @NonNull Fragment f, @NonNull Context context) {
+            log(fm, f, "onFragmentPreAttached");
+        }
+
+        @Override
+        public void onFragmentAttached(@NonNull FragmentManager fm, @NonNull Fragment f, @NonNull Context context) {
+            log(fm, f, "onFragmentAttached");
+        }
+
+        @Override
+        public void onFragmentPreCreated(@NonNull FragmentManager fm, @NonNull Fragment f, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+            log(fm, f, "onFragmentPreCreated");
+        }
+
+        @Override
+        public void onFragmentCreated(@NonNull FragmentManager fm, @NonNull Fragment f, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+            log(fm, f, "onFragmentCreated");
+        }
+
+        @Override
+        public void onFragmentActivityCreated(@NonNull FragmentManager fm, @NonNull Fragment f, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+            log(fm, f, "onFragmentActivityCreated");
+        }
+
+        @Override
+        public void onFragmentViewCreated(@NonNull FragmentManager fm, @NonNull Fragment f, @NonNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+            log(fm, f, "onFragmentViewCreated");
+        }
+
+        @Override
+        public void onFragmentStarted(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentStarted");
+        }
+
+        @Override
+        public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentResumed");
+        }
+
+        @Override
+        public void onFragmentPaused(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentPaused");
+        }
+
+        @Override
+        public void onFragmentStopped(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentStopped");
+        }
+
+        @Override
+        public void onFragmentSaveInstanceState(@NonNull FragmentManager fm, @NonNull Fragment f, @NonNull Bundle outState) {
+            log(fm, f, "onFragmentSaveInstanceState");
+        }
+
+        @Override
+        public void onFragmentViewDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentViewDestroyed");
+        }
+
+        @Override
+        public void onFragmentDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentDestroyed");
+        }
+
+        @Override
+        public void onFragmentDetached(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentDetached");
+        }
+
+        private void log(@NonNull FragmentManager fm, @NonNull Fragment f, @NonNull String what) {
+            long start = last;
+            last = SystemClock.elapsedRealtime();
+            long elapsed = (start == 0 ? 0 : last - start);
+            Log.i(f.getClass().getSimpleName() + " " + what + " " + elapsed + " ms");
+        }
+    };
 
     public interface IKeyPressedListener {
         boolean onKeyPressed(KeyEvent event);

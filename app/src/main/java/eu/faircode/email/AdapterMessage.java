@@ -66,6 +66,7 @@ import android.text.style.DynamicDrawableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.QuoteSpan;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.util.Pair;
@@ -225,6 +226,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int colorUnread;
     private int colorRead;
     private int colorSubject;
+    private int colorVerified;
     private int colorEncrypt;
     private int colorSeparator;
     private int colorWarning;
@@ -1046,10 +1048,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibAuth.setImageLevel(0);
                 ibAuth.setImageTintList(ColorStateList.valueOf(colorWarning));
                 ibAuth.setVisibility(View.VISIBLE);
-            } else if (authentication_indicator) {
+            } else if (authentication_indicator &&
+                    !EntityFolder.DRAFTS.equals(message.folderType) &&
+                    !EntityFolder.OUTBOX.equals(message.folderType)) {
                 ibAuth.setImageLevel(auths + 1);
                 ibAuth.setImageTintList(ColorStateList.valueOf(
-                        auths < 3 ? colorSeparator : colorControlNormal));
+                        auths < 3 ? colorControlNormal : colorVerified));
                 ibAuth.setVisibility(View.VISIBLE);
             } else
                 ibAuth.setVisibility(View.GONE);
@@ -1566,14 +1570,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         Boolean.TRUE.equals(message.dmarc)) {
                     ibVerified.setImageLevel(main.isVerified() ? 1 : 0);
                     ibVerified.setImageTintList(ColorStateList.valueOf(main.isVerified()
-                            ? colorAccent : colorControlNormal));
+                            ? colorVerified : colorControlNormal));
                     ibVerified.setContentDescription(context.getString(main.isVerified()
                             ? R.string.title_advanced_bimi_verified
                             : R.string.title_advanced_bimi_unverified));
-                    ibVerified.setVisibility(View.VISIBLE);
+                    if (main.isVerified() || BuildConfig.DEBUG) {
+                        ibVerified.setVisibility(View.VISIBLE);
 
-                    if (authentication_indicator)
-                        ibAuth.setVisibility(View.GONE);
+                        if (authentication_indicator)
+                            ibAuth.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -3020,7 +3026,29 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (to == null)
                                 to = (InternetAddress) message.to[0];
 
-                            Attendee attendee = new Attendee(to.getPersonal(), to.getAddress());
+                            String email = to.getAddress();
+                            String name = to.getPersonal();
+
+                            /*
+                                java.lang.IllegalArgumentException:
+                                Property "ATTENDEE" has a parameter named "CN" whose value contains one or more invalid characters.
+                                The following characters are not permitted: [ \n \r " ]
+                                  at b.b.a.a.f.h.k(SourceFile:17)
+                                  at b.b.a.a.f.h.o(SourceFile:1)
+                                  at biweekly.io.text.ICalWriter.writeProperty(SourceFile:9)
+                                  at biweekly.io.text.ICalWriter.writeComponent(SourceFile:13)
+                                  at biweekly.io.text.ICalWriter.writeComponent(SourceFile:21)
+                                  at biweekly.io.text.ICalWriter._write(SourceFile:1)
+                                  at biweekly.io.StreamWriter.write(SourceFile:9)
+                                  at biweekly.io.chain.ChainingTextWriter.go(SourceFile:18)
+                                  at biweekly.io.chain.ChainingTextWriter.go(SourceFile:3)
+                                  at biweekly.io.chain.ChainingTextWriter.go(SourceFile:1)
+                                  at biweekly.ICalendar.write(SourceFile:2)
+                             */
+                            if (!TextUtils.isEmpty(name))
+                                name = name.replaceAll("\\r?\\n", " ");
+
+                            Attendee attendee = new Attendee(name, email);
 
                             if (action == R.id.btnCalendarAccept) {
                                 attendee.setParticipationStatus(ParticipationStatus.ACCEPTED);
@@ -3307,6 +3335,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             .putExtra("folder", message.folder)
                             .putExtra("thread", message.thread)
                             .putExtra("id", message.id)
+                            .putExtra("lpos", getAdapterPosition())
                             .putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(message.folderType))
                             .putExtra("found", viewType == ViewType.SEARCH);
 
@@ -3531,9 +3560,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             if (message.from != null && message.from.length > 0) {
-                sb.insert(0, '\n');
-                sb.insert(0, MessageHelper.formatAddresses(
-                        message.from, MessageHelper.AddressFormat.EMAIL_ONLY, false));
+                String email = ((InternetAddress) message.from[0]).getAddress();
+                String domain = UriHelper.getEmailDomain(email);
+                if (!TextUtils.isEmpty(domain))
+                    sb.insert(0, '\n').insert(0, domain);
             }
 
             ToastEx.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
@@ -5625,6 +5655,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorUnread = (highlight_unread ? colorHighlight : Helper.resolveColor(context, R.attr.colorUnread));
         this.colorRead = Helper.resolveColor(context, R.attr.colorRead);
         this.colorSubject = Helper.resolveColor(context, highlight_subject ? R.attr.colorUnreadHighlight : R.attr.colorRead);
+        this.colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
         this.colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         this.colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);
         this.colorError = Helper.resolveColor(context, R.attr.colorError);
@@ -6818,8 +6849,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     ssb = ssb.replace(start, end, translation.translated_text);
                                     end = start + translation.translated_text.length();
 
-                                    ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, end, 0);
-                                    ssb.setSpan(new ForegroundColorSpan(textColorPrimary), start, end, 0);
+                                    ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    ssb.setSpan(new ForegroundColorSpan(textColorPrimary), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                    Locale source = Locale.forLanguageTag(translation.detected_language);
+                                    Locale target = Locale.forLanguageTag(args.getString("target"));
+
+                                    String lang = "[" + source.getDisplayLanguage(target) + "] ";
+                                    ssb.insert(start, lang);
+
+                                    ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, start + lang.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), start, start + lang.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                                     tvText.setText(ssb);
                                 }

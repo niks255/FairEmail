@@ -196,13 +196,22 @@
     <string name="title_setup_export_remark">        Comme le fichier de paramètres contient tous les réglages et les informations des comptes, il est chiffré avec un mot de passe.
         Le mot de passe est requis pour importer les paramètres à nouveau donc s\'il vous plaît, ne l\'oubliez pas !
     </string>
+    <string name="title_setup_export_do">Le fichier d\'exportation contiendra tous les paramètres et données mais pas de messages ni d\'images référencées dans les signatures</string>
     <string name="title_setup_import_do">Les comptes importés seront ajoutés sans remplacer les comptes existants</string>
+    <string name="title_setup_import_gmail">        Depuis Android 8.0 Oreo, les comptes Gmail ne peuvent plus être importés car chaque compte doit être sélectionné pour donner accès au compte.
+        Vous pouvez facilement reconfigurer les comptes Gmail avec l\'assistant d\'installation rapide.
+    </string>
     <string name="title_setup_password">Mot de passe</string>
     <string name="title_setup_password_chars">Le mot de passe contient des caractères de contrôle ou des espaces</string>
     <string name="title_setup_password_repeat">Confirmer le mot de passe</string>
     <string name="title_setup_password_missing">Mot de passe manquant</string>
     <string name="title_setup_password_different">Les mots de passe ne correspondent pas</string>
     <string name="title_setup_password_invalid">Mot de passe non valide</string>
+    <string name="title_setup_import_accounts">Importer les comptes et identités</string>
+    <string name="title_setup_import_rules">Importer les règles de filtrage</string>
+    <string name="title_setup_import_contacts">Importer les contacts locaux</string>
+    <string name="title_setup_import_answers">Importer les modèles de réponse</string>
+    <string name="title_setup_import_settings">Importer les paramètres</string>
     <string name="title_setup_exported">Paramètres exportés</string>
     <string name="title_setup_imported">Paramètres importés</string>
     <string name="title_setup_import_invalid">Fichier de paramètres non valide</string>
@@ -310,7 +319,7 @@
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
     <string name="title_advanced_manage_connectivity">Gérer la connectivité</string>
     <string name="title_advanced_caption_general">Général</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Vérifications</string>
+    <string name="title_advanced_caption_checks">Contrôles</string>
     <string name="title_advanced_caption_list">Liste</string>
     <string name="title_advanced_caption_conversation">Conversation</string>
     <string name="title_advanced_caption_message">Message</string>
@@ -319,6 +328,7 @@
     <string name="title_advanced_portrait2">Utiliser deux lignes en mode portrait</string>
     <string name="title_advanced_landscape">Utiliser deux colonnes en mode paysage</string>
     <string name="title_advanced_landscape3">Afficher le menu de navigation en mode paysage par défaut</string>
+    <string name="title_advanced_nav_message_count">Afficher le nombre de messages stockés localement dans le menu de navigation</string>
     <string name="title_advanced_startup">Afficher sur l\'écran de démarrage</string>
     <string name="title_advanced_cards">Utiliser le style carte au lieu du style tableau</string>
     <string name="title_advanced_cards_beige">Afficher un arrière-plan beige lors de l\'utilisation du style carte (thèmes clairs seulement)</string>
@@ -384,9 +394,12 @@
     <string name="title_advanced_actionbar_color">Utiliser la couleur du compte comme couleur de fond de la barre d’action de conversation</string>
     <string name="title_advanced_navbar_colorize">Coloriser la barre de navigation d’Android</string>
     <string name="title_advanced_parse_classes">Utiliser les feuilles de style</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Afficher les avertissements d\'authentification</string>
+    <string name="title_advanced_authentication">Afficher les avertissements d\'authentification</string>
     <string name="title_advanced_authentication_hint">Les contrôles sous-jacents peuvent être configurés dans les paramètres de réception</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Afficher l\'indicateur de statut d\'authentification</string>
+    <string name="title_advanced_authentication_indicator">Afficher l\'indicateur de statut d\'authentification</string>
+    <string name="title_advanced_authentication_none">Pas d\'authentification</string>
+    <string name="title_advanced_authentication_some">Authentification partielle</string>
+    <string name="title_advanced_authentication_all">Authentification complète</string>
     <string name="title_advanced_sync_on_launch">Synchroniser au lancement de l\'application</string>
     <string name="title_advanced_double_back">Faire deux fois « Retour » pour quitter</string>
     <string name="title_advanced_conversation_actions">Suggérer des actions (Android 10+)</string>
@@ -518,7 +531,7 @@
     <string name="title_advanced_gmail_thread_hint">Ceci s\'applique uniquement aux messages nouvellement reçus et peut corrompre les groupes existants</string>
     <string name="title_advanced_sync_folders_hint">Désactiver ceci réduira quelque peu l\'utilisation des données et de la batterie mais désactivera également la mise à jour de la liste des dossiers</string>
     <string name="title_advanced_check_authentication_hint">Ceci contrôlera les résultats de l\'authentification DKIM, SPF et DMARC effectuée par le serveur de messagerie</string>
-    <string name="title_advanced_check_reply_hint">Ceci vérifiera si le nom de domaine de l\'expéditeur et l\'adresse de réponse sont les mêmes</string>
+    <string name="title_advanced_check_reply_hint">Ceci vérifiera si le nom de domaine de l\'expéditeur et celui de l\'adresse de réponse sont les mêmes</string>
     <string name="title_advanced_lookup_mx_hint">Ceci vérifiera l’existence d’enregistrements DNS mail exchanger (MX)</string>
     <string name="title_advanced_sync_delay_hint">Ceci ralentira la synchronisation des messages</string>
     <string name="title_advanced_suggest_names_hint">Si désactivé, seules les adresses e-mail seront utilisées lors de la sélection des contacts</string>
@@ -588,6 +601,7 @@
     <string name="title_advanced_edit_name">Modifier le nom</string>
     <string name="title_advanced_swipe_actions">Définir les actions de balayage</string>
     <string name="title_advanced_swipe_actions_hint">Ceci définira les actions de balayage vers la gauche et la droite pour tous les comptes IMAP</string>
+    <string name="title_advanced_swipe_sensitivity">Sensibilité de glissement vers la gauche/droite</string>
     <string name="title_select">Sélectionner&#8230;</string>
     <string name="title_identity_name">Votre nom</string>
     <string name="title_identity_email">Votre adresse e-mail</string>
@@ -646,6 +660,7 @@
     <string name="title_leave_deleted">Laisser les messages supprimés sur le serveur</string>
     <string name="title_leave_on_device">Laisser les messages sur l\'appareil</string>
     <string name="title_max_messages">Nombre maximum de messages à télécharger (laisser vide pour tous)</string>
+    <string name="title_keep_poll_interval">Intervalle de synchronisation (minutes)</string>
     <string name="title_keep_alive_interval">Intervalle de maintien de connexion (minutes)</string>
     <string name="title_server_time">Utiliser l\'heure de réception (serveur)</string>
     <string name="title_received_header">Utiliser l\'en-tête « Reçu »</string>

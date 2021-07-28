@@ -250,8 +250,8 @@ public class ViewModelMessages extends ViewModel {
             models.remove(viewType);
     }
 
-    void observePrevNext(Context context, LifecycleOwner owner, final long id, final IPrevNext intf) {
-        Log.i("Observe prev/next model=" + last);
+    void observePrevNext(Context context, LifecycleOwner owner, final long id, int lpos, final IPrevNext intf) {
+        Log.i("Observe prev/next model=" + last + " id=" + id + " lpos=" + lpos);
 
         final Model model = models.get(last);
         if (model == null) {
@@ -263,53 +263,67 @@ public class ViewModelMessages extends ViewModel {
         }
 
         Log.i("Observe previous/next id=" + id);
+        //model.list.getValue().loadAround(lpos);
         model.list.observe(owner, new Observer<PagedList<TupleMessageEx>>() {
-            private boolean fallback = false;
+            private final Pair<Long, Integer>[] lastState = new Pair[3];
 
             @Override
             public void onChanged(PagedList<TupleMessageEx> messages) {
-                Log.d("Observe previous/next id=" + id + " messages=" + messages.size());
+                Log.i("Observe previous/next id=" + id +
+                        " lpos=" + lpos +
+                        " messages=" + messages.size());
 
+                Pair<Long, Integer>[] curState = new Pair[3];
                 for (int pos = 0; pos < messages.size(); pos++) {
                     TupleMessageEx item = messages.get(pos);
                     if (item != null && id == item.id) {
-                        fallback = true;
+                        curState[1] = new Pair<>(id, pos);
                         Log.i("Observe previous/next found id=" + id + " pos=" + pos);
 
                         if (pos - 1 >= 0) {
                             TupleMessageEx next = messages.get(pos - 1);
-                            Log.i("Observe previous/next found id=" + id + " next=" + (next == null ? null : next.id));
-                            intf.onNext(true, next == null ? null : next.id);
-                        } else
-                            intf.onNext(false, null);
+                            curState[2] = new Pair<>(next == null ? null : next.id, pos - 1);
+                        }
 
                         if (pos + 1 < messages.size()) {
                             TupleMessageEx prev = messages.get(pos + 1);
-                            Log.i("Observe previous/next found id=" + id + " prev=" + (prev == null ? null : prev.id));
-                            intf.onPrevious(true, prev == null ? null : prev.id);
-                        } else
-                            intf.onPrevious(false, null);
+                            curState[0] = new Pair<>(prev == null ? null : prev.id, pos + 1);
+                        }
 
-                        intf.onFound(pos, messages.size());
-
-                        return;
+                        break;
                     }
                 }
 
-                Log.w("Observe previous/next gone id=" + id + " fallback=" + fallback);
-
-                if (fallback)
+                if (Objects.equals(lastState[0], curState[0]) &&
+                        Objects.equals(lastState[1], curState[1]) &&
+                        Objects.equals(lastState[2], curState[2])) {
+                    Log.i("Observe previous/next unchanged");
                     return;
+                }
 
-                fallback = true;
+                lastState[0] = curState[0];
+                lastState[1] = curState[1];
+                lastState[2] = curState[2];
+
+                if (curState[1] != null)
+                    intf.onFound(curState[1].second, messages.size());
+                intf.onPrevious(curState[0] != null, curState[0] == null ? null : curState[0].first);
+                intf.onNext(curState[2] != null, curState[2] == null ? null : curState[2].first);
+
+                if (curState[1] != null &&
+                        (curState[0] == null || curState[0].first != null) &&
+                        (curState[2] == null || curState[2].first != null))
+                    return;
 
                 Bundle args = new Bundle();
                 args.putLong("id", id);
+                args.putInt("lpos", lpos);
 
                 new SimpleTask<Pair<Long, Long>>() {
                     @Override
                     protected Pair<Long, Long> onExecute(Context context, Bundle args) {
                         long id = args.getLong("id");
+                        int lpos = args.getInt("lpos");
 
                         PagedList<TupleMessageEx> plist = model.list.getValue();
                         if (plist == null)
@@ -317,35 +331,53 @@ public class ViewModelMessages extends ViewModel {
 
                         LimitOffsetDataSource<TupleMessageEx> ds = (LimitOffsetDataSource<TupleMessageEx>) plist.getDataSource();
                         int count = ds.countItems();
+
+                        if (lpos >= 0) {
+                            int from = Math.max(0, lpos - 10);
+                            int load = Math.min(20, count - from);
+                            Log.i("Observe previous/next load lpos=" + lpos +
+                                    " range=" + from + "/#" + load);
+                            List<TupleMessageEx> messages = ds.loadRange(from, load);
+                            for (int j = 0; j < messages.size(); j++)
+                                if (messages.get(j).id == id)
+                                    return getPair(plist, ds, count, from + j);
+                        }
+
                         for (int i = 0; i < count; i += 100) {
+                            Log.i("Observe previous/next load" +
+                                    " range=" + i + "/#" + count);
                             List<TupleMessageEx> messages = ds.loadRange(i, Math.min(100, count - i));
                             for (int j = 0; j < messages.size(); j++)
-                                if (messages.get(j).id == id) {
-                                    int pos = i + j;
-
-                                    if (pos < plist.size())
-                                        plist.loadAround(pos);
-
-                                    List<TupleMessageEx> lprev = null;
-                                    if (pos - 1 >= 0)
-                                        lprev = ds.loadRange(pos - 1, 1);
-
-                                    List<TupleMessageEx> lnext = null;
-                                    if (pos + 1 < count)
-                                        lnext = ds.loadRange(pos + 1, 1);
-
-                                    TupleMessageEx prev = (lprev != null && lprev.size() > 0 ? lprev.get(0) : null);
-                                    TupleMessageEx next = (lnext != null && lnext.size() > 0 ? lnext.get(0) : null);
-
-                                    Pair<Long, Long> result = new Pair<>(
-                                            prev == null ? null : prev.id,
-                                            next == null ? null : next.id);
-                                    Log.i("Observe previous/next fallback=" + result);
-                                    return result;
-                                }
+                                if (messages.get(j).id == id)
+                                    return getPair(plist, ds, count, i + j);
                         }
 
                         return null;
+                    }
+
+                    private Pair<Long, Long> getPair(
+                            PagedList<TupleMessageEx> plist,
+                            LimitOffsetDataSource<TupleMessageEx> ds,
+                            int count, int pos) {
+                        if (pos < plist.size())
+                            plist.loadAround(pos);
+
+                        List<TupleMessageEx> lprev = null;
+                        if (pos - 1 >= 0)
+                            lprev = ds.loadRange(pos - 1, 1);
+
+                        List<TupleMessageEx> lnext = null;
+                        if (pos + 1 < count)
+                            lnext = ds.loadRange(pos + 1, 1);
+
+                        TupleMessageEx prev = (lprev != null && lprev.size() > 0 ? lprev.get(0) : null);
+                        TupleMessageEx next = (lnext != null && lnext.size() > 0 ? lnext.get(0) : null);
+
+                        Pair<Long, Long> result = new Pair<>(
+                                prev == null ? null : prev.id,
+                                next == null ? null : next.id);
+                        Log.i("Observe previous/next fallback=" + result);
+                        return result;
                     }
 
                     @Override

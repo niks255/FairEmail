@@ -47,6 +47,7 @@ import android.os.Bundle;
 import android.os.DeadObjectException;
 import android.os.DeadSystemException;
 import android.os.Debug;
+import android.os.OperationCanceledException;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.TransactionTooLargeException;
@@ -280,17 +281,24 @@ public class Log {
         }
     }
 
-    static void breadcrumb(String name, String key, String value) {
+    public static void breadcrumb(String name, String key, String value) {
         Map<String, String> crumb = new HashMap<>();
         crumb.put(key, value);
         breadcrumb(name, crumb);
     }
 
-    static void breadcrumb(String name, Map<String, String> crumb) {
+    public static void breadcrumb(String name, Map<String, String> crumb) {
         try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Breadcrumb ").append(name);
             Map<String, Object> ocrumb = new HashMap<>();
-            for (String key : crumb.keySet())
-                ocrumb.put(key, crumb.get(key));
+            for (String key : crumb.keySet()) {
+                String val = crumb.get(key);
+                sb.append(' ').append(key).append('=').append(val);
+                ocrumb.put(key, val);
+            }
+            if (BuildConfig.DEBUG)
+                Log.i(sb.toString());
             Bugsnag.leaveBreadcrumb(name, ocrumb, BreadcrumbType.LOG);
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -1457,7 +1465,9 @@ public class Log {
                 return null;
 
             if (ex instanceof StoreClosedException ||
-                    ex instanceof FolderClosedException || ex instanceof FolderClosedIOException)
+                    ex instanceof FolderClosedException ||
+                    ex instanceof FolderClosedIOException ||
+                    ex instanceof OperationCanceledException)
                 return null;
 
             if (ex instanceof IllegalStateException &&

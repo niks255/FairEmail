@@ -68,6 +68,7 @@ Related questions:
 * Delete an account/identity: Settings, tap Manual setup, tap Accounts/Identities, tap the account/identity, trash icon top right
 * Delete a folder: long press the folder in the folder list, Edit properties, trash icon top right
 * Undo send: Outbox, swipe the message in the list left or right
+* Delete a contact: please [see this FAQ](#user-content-faq171)
 * Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
 * Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
 * Export/import settings: Settings, navigation (left side) menu
@@ -305,6 +306,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(168) What is a spam block list?](#user-content-faq168)
 * [(169) Why does the app not start automatically?](#user-content-faq169)
 * [(170) Why can't folders be created with POP3?](#user-content-faq170)
+* [(171) How can I delete a contact?](#user-content-faq171)
 
 [I have another question.](#user-content-get-support)
 
@@ -774,7 +776,7 @@ Common errors:
 * *No key*: there is no PGP key available for one of the listed email addresses
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 * *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
-* *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure all email addresses are lowercase. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
+* *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure the email address exactly matches the key, including lower/upper case. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
 
 <br />
 
@@ -871,6 +873,7 @@ searching in the folder list will search in the associated account only
 and searching in a folder will search in that folder only.
 
 Messages will be searched for on the device first.
+You can download more messages on the device via the three-dots overflow menu in the start screen.
 There will be an action button with a search again icon at the bottom to continue searching on the server.
 You can select in which folder to continue the search.
 
@@ -3803,6 +3806,23 @@ Please note that FairEmail doesn't store a copy of your messages in the cloud fo
 
 If you want to store messages in folders, please use IMAP,
 so that there is always a copy of the messages on the email server.
+
+<br />
+
+<a name="faq171"></a>
+**(171) How can I delete a contact?**
+
+A contact can be stored in the Android address book or in the local contact database.
+
+When a contact is stored in the Android address book, you can use the Android contacts app to delete the contact.
+
+When a contact is store in the local contact database, you can delete it like this:
+
+* Go to the settings via the navigation menu (left side menu)
+* Go to the send settings tab page
+* Tap on the *Manage* button under *Suggest locally stored contacts*
+* Locate the contact (you can use the magnifier glass in the top action bar)
+* Long press the contact and select to delete it
 
 <br />
 

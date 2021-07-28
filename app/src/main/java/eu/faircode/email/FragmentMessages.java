@@ -285,6 +285,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private boolean server;
     private String thread;
     private long id;
+    private int lpos;
     private boolean filter_archive;
     private boolean found;
     private boolean pinned;
@@ -404,6 +405,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         server = args.getBoolean("server", false);
         thread = args.getString("thread");
         id = args.getLong("id", -1);
+        lpos = args.getInt("lpos", RecyclerView.NO_POSITION);
         filter_archive = args.getBoolean("filter_archive", true);
         found = args.getBoolean("found", false);
         pinned = args.getBoolean("pinned", false);
@@ -911,10 +913,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     onActionMove(EntityFolder.ARCHIVE);
                     return true;
                 } else if (itemId == R.id.action_prev) {
-                    navigate(prev, true);
+                    navigate(prev, true, false);
                     return true;
                 } else if (itemId == R.id.action_next) {
-                    navigate(next, false);
+                    navigate(next, false, true);
                     return true;
                 }
                 return false;
@@ -1247,7 +1249,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         if (viewType == AdapterMessage.ViewType.THREAD) {
             ViewModelMessages model = new ViewModelProvider(getActivity()).get(ViewModelMessages.class);
-            model.observePrevNext(getContext(), getViewLifecycleOwner(), id, new ViewModelMessages.IPrevNext() {
+            model.observePrevNext(getContext(), getViewLifecycleOwner(), id, lpos, new ViewModelMessages.IPrevNext() {
                 @Override
                 public void onPrevious(boolean exists, Long id) {
                     boolean reversed = prefs.getBoolean("reversed", false);
@@ -1294,7 +1296,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             Animation bounce = AnimationUtils.loadAnimation(getContext(), R.anim.bounce_right);
                             view.startAnimation(bounce);
                         } else
-                            navigate(prev, true);
+                            navigate(prev, true, false);
 
                         return (prev != null);
                     }
@@ -1305,7 +1307,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             Animation bounce = AnimationUtils.loadAnimation(getContext(), R.anim.bounce_left);
                             view.startAnimation(bounce);
                         } else
-                            navigate(next, false);
+                            navigate(next, false, true);
 
                         return (next != null);
                     }
@@ -1979,6 +1981,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     selectionPredicate.setEnabled(true);
             }
         };
+
+        @Override
+        public float getSwipeEscapeVelocity(float defaultValue) {
+            int swipe_sensitivity = FragmentOptionsBehavior.DEFAULT_SWIPE_SENSITIVITY;
+            Context context = getContext();
+            if (context != null) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                swipe_sensitivity = prefs.getInt("swipe_sensitivity", swipe_sensitivity);
+            }
+            return super.getSwipeEscapeVelocity(defaultValue) *
+                    (FragmentOptionsBehavior.MAX_SWIPE_SENSITIVITY - swipe_sensitivity + 1);
+        }
 
         @Override
         public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
@@ -4933,7 +4947,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void loadMessages(final boolean top) {
         if (viewType == AdapterMessage.ViewType.THREAD && onclose != null) {
             ViewModelMessages model = new ViewModelProvider(getActivity()).get(ViewModelMessages.class);
-            model.observePrevNext(getContext(), getViewLifecycleOwner(), id, new ViewModelMessages.IPrevNext() {
+            model.observePrevNext(getContext(), getViewLifecycleOwner(), id, lpos, new ViewModelMessages.IPrevNext() {
                 boolean once = false;
 
                 @Override
@@ -5479,7 +5493,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean reversed = prefs.getBoolean("reversed", false);
-                navigate(closeId, "previous".equals(onclose) ^ reversed);
+                navigate(closeId, "previous".equals(onclose) ^ reversed, null);
             }
         }
     }
@@ -5523,12 +5537,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
     }
 
-    private void navigate(long id, final boolean left) {
+    private void navigate(long id, final boolean left, final Boolean forward) {
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
         if (navigating)
             return;
         navigating = true;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final boolean reversed = prefs.getBoolean("reversed", false);
 
         Bundle result = new Bundle();
         result.putLong("id", id);
@@ -5561,6 +5578,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 nargs.putLong("folder", message.folder);
                 nargs.putString("thread", message.thread);
                 nargs.putLong("id", message.id);
+                if (lpos != NO_POSITION)
+                    if (forward == null)
+                        nargs.putInt("lpos", lpos);
+                    else
+                        nargs.putInt("lpos", forward ^ reversed ? lpos + 1 : lpos - 1);
                 nargs.putBoolean("found", found);
                 nargs.putBoolean("pane", pane);
                 nargs.putLong("primary", primary);
@@ -6115,7 +6137,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Animation bounce = AnimationUtils.loadAnimation(context, R.anim.bounce_left);
                 view.startAnimation(bounce);
             } else
-                navigate(next, false);
+                navigate(next, false, true);
             return true;
         }
 
@@ -6124,7 +6146,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Animation bounce = AnimationUtils.loadAnimation(context, R.anim.bounce_right);
                 view.startAnimation(bounce);
             } else
-                navigate(prev, true);
+                navigate(prev, true, false);
             return true;
         }
 
@@ -6174,8 +6196,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         private boolean onScroll(Context context, boolean up) {
-            rvMessage.scrollBy(0, (up ? -1 : 1) *
-                    context.getResources().getDisplayMetrics().heightPixels / 2);
+            int h = context.getResources().getDisplayMetrics().heightPixels;
+            h = h / (viewType == AdapterMessage.ViewType.THREAD ? 8 : 2);
+            rvMessage.scrollBy(0, (up ? -1 : 1) * h);
             return true;
         }
     };
@@ -6658,7 +6681,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 continue;
                             switch (key) {
                                 case "addr":
-                                    addr = value.toLowerCase(Locale.ROOT);
+                                    addr = value;
                                     break;
                                 case "prefer-encrypt":
                                     mutual = value.trim().toLowerCase(Locale.ROOT).equals("mutual");

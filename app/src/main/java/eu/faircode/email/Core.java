@@ -2299,255 +2299,276 @@ class Core {
                     ? imessages.length
                     : Math.min(imessages.length, account.max_messages));
 
-            EntityLog.log(context, account.name + " POP" +
-                    " device=" + ids.size() +
-                    " server=" + imessages.length +
-                    " max=" + max + "/" + account.max_messages +
-                    " uidl=" + hasUidl);
-
-            // Index IDs
-            Map<String, String> uidlMsgId = new HashMap<>();
-            for (TupleUidl id : ids) {
-                if (id.uidl != null && id.msgid != null)
-                    uidlMsgId.put(id.uidl, id.msgid);
-            }
-
-            // Fetch UIDLs
-            if (hasUidl) {
-                FetchProfile ifetch = new FetchProfile();
-                ifetch.add(UIDFolder.FetchProfileItem.UID); // This will fetch all UIDs
-                ifolder.fetch(imessages, ifetch);
-            }
-
-            if (!account.leave_on_device) {
-                if (hasUidl) {
-                    Map<String, TupleUidl> known = new HashMap<>();
-                    for (TupleUidl id : ids)
-                        if (id.uidl != null)
-                            known.put(id.uidl, id);
-
-                    for (Message imessage : imessages) {
-                        String uidl = ifolder.getUID(imessage);
-                        if (TextUtils.isEmpty(uidl))
-                            known.clear(); // better safe than sorry
-                        else
-                            known.remove(uidl);
-                    }
-
-                    for (TupleUidl uidl : known.values()) {
-                        EntityLog.log(context, account.name + " POP purging uidl=" + uidl.uidl);
-                        db.message().deleteMessage(uidl.id);
-                    }
-                } else {
-                    Map<String, TupleUidl> known = new HashMap<>();
-                    for (TupleUidl id : ids)
-                        if (id.msgid != null)
-                            known.put(id.msgid, id);
-
-                    for (int i = imessages.length - max; i < imessages.length; i++) {
-                        Message imessage = imessages[i];
-                        MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
-                        String msgid = helper.getMessageID(); // expensive!
-                        if (!TextUtils.isEmpty(msgid))
-                            known.remove(msgid);
-                    }
-
-                    for (TupleUidl uidl : known.values()) {
-                        EntityLog.log(context, account.name + " POP purging msgid=" + uidl.msgid);
-                        db.message().deleteMessage(uidl.id);
+            boolean sync = true;
+            if (imessages.length > 0 && folder.last_sync_count != null &&
+                    imessages.length == folder.last_sync_count) {
+                // Check if last message known as new messages indicator
+                MessageHelper helper = new MessageHelper((MimeMessage) imessages[imessages.length - 1], context);
+                String msgid = helper.getMessageID();
+                if (msgid != null) {
+                    int count = db.message().countMessageByMsgId(folder.id, msgid);
+                    if (count == 1) {
+                        Log.i(account.name + " POP having last msgid=" + msgid);
+                        sync = false;
                     }
                 }
             }
 
-            boolean _new = true;
-            for (int i = imessages.length - 1; i >= imessages.length - max; i--) {
-                Message imessage = imessages[i];
-                try {
-                    if (!state.isRunning())
-                        return;
+            EntityLog.log(context, account.name + " POP" +
+                    " device=" + ids.size() +
+                    " server=" + imessages.length +
+                    " max=" + max + "/" + account.max_messages +
+                    " last=" + folder.last_sync_count +
+                    " sync=" + sync +
+                    " uidl=" + hasUidl);
 
-                    MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
+            folder.last_sync_count = imessages.length;
+            db.folder().setFolderLastSyncCount(folder.id, folder.last_sync_count);
 
-                    String uidl;
-                    String msgid;
+            if (sync) {
+                // Index IDs
+                Map<String, String> uidlMsgId = new HashMap<>();
+                for (TupleUidl id : ids) {
+                    if (id.uidl != null && id.msgid != null)
+                        uidlMsgId.put(id.uidl, id.msgid);
+                }
+
+                // Fetch UIDLs
+                if (hasUidl) {
+                    FetchProfile ifetch = new FetchProfile();
+                    ifetch.add(UIDFolder.FetchProfileItem.UID); // This will fetch all UIDs
+                    ifolder.fetch(imessages, ifetch);
+                }
+
+                if (!account.leave_on_device) {
                     if (hasUidl) {
-                        uidl = ifolder.getUID(imessage);
-                        if (TextUtils.isEmpty(uidl)) {
-                            EntityLog.log(context, account.name + " POP no uidl");
+                        Map<String, TupleUidl> known = new HashMap<>();
+                        for (TupleUidl id : ids)
+                            if (id.uidl != null)
+                                known.put(id.uidl, id);
+
+                        for (Message imessage : imessages) {
+                            String uidl = ifolder.getUID(imessage);
+                            if (TextUtils.isEmpty(uidl))
+                                known.clear(); // better safe than sorry
+                            else
+                                known.remove(uidl);
+                        }
+
+                        for (TupleUidl uidl : known.values()) {
+                            EntityLog.log(context, account.name + " POP purging uidl=" + uidl.uidl);
+                            db.message().deleteMessage(uidl.id);
+                        }
+                    } else {
+                        Map<String, TupleUidl> known = new HashMap<>();
+                        for (TupleUidl id : ids)
+                            if (id.msgid != null)
+                                known.put(id.msgid, id);
+
+                        for (int i = imessages.length - max; i < imessages.length; i++) {
+                            Message imessage = imessages[i];
+                            MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
+                            String msgid = helper.getMessageID(); // expensive!
+                            if (!TextUtils.isEmpty(msgid))
+                                known.remove(msgid);
+                        }
+
+                        for (TupleUidl uidl : known.values()) {
+                            EntityLog.log(context, account.name + " POP purging msgid=" + uidl.msgid);
+                            db.message().deleteMessage(uidl.id);
+                        }
+                    }
+                }
+
+                boolean _new = true;
+                for (int i = imessages.length - 1; i >= imessages.length - max; i--) {
+                    state.ensureRunning("Sync/POP3");
+
+                    Message imessage = imessages[i];
+                    try {
+                        MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
+
+                        String uidl;
+                        String msgid;
+                        if (hasUidl) {
+                            uidl = ifolder.getUID(imessage);
+                            if (TextUtils.isEmpty(uidl)) {
+                                EntityLog.log(context, account.name + " POP no uidl");
+                                continue;
+                            }
+
+                            msgid = uidlMsgId.get(uidl);
+                            if (msgid == null) {
+                                msgid = helper.getMessageID();
+                                if (TextUtils.isEmpty(msgid))
+                                    msgid = uidl;
+                            }
+                        } else {
+                            uidl = null;
+                            msgid = helper.getMessageID();
+
+                            if (TextUtils.isEmpty(msgid)) {
+                                Long time = helper.getReceived();
+                                if (time == null)
+                                    time = helper.getSent();
+                                if (time != null)
+                                    msgid = Long.toString(time);
+                            }
+                        }
+
+                        if (TextUtils.isEmpty(msgid)) {
+                            EntityLog.log(context, account.name + " POP no msgid uidl=" + uidl);
                             continue;
                         }
 
-                        msgid = uidlMsgId.get(uidl);
-                        if (msgid == null) {
-                            msgid = helper.getMessageID();
-                            if (TextUtils.isEmpty(msgid))
-                                msgid = uidl;
+                        if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
+                            _new = false;
+                            Log.i(account.name + " POP having " + msgid + "/" + uidl);
+                            continue;
                         }
-                    } else {
-                        uidl = null;
-                        msgid = helper.getMessageID();
-
-                        if (TextUtils.isEmpty(msgid)) {
-                            Long time = helper.getReceived();
-                            if (time == null)
-                                time = helper.getSent();
-                            if (time != null)
-                                msgid = Long.toString(time);
-                        }
-                    }
-
-                    if (TextUtils.isEmpty(msgid)) {
-                        EntityLog.log(context, account.name + " POP no msgid uidl=" + uidl);
-                        continue;
-                    }
-
-                    if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
-                        _new = false;
-                        Log.i(account.name + " POP having " + msgid + "/" + uidl);
-                        continue;
-                    }
-
-                    try {
-                        Long sent = helper.getSent();
-                        Long received = helper.getReceivedHeader();
-                        if (received == null)
-                            received = sent;
-                        if (received == null)
-                            received = 0L;
-
-                        boolean seen = (received <= account.created);
-                        EntityLog.log(context, account.name + " POP sync=" + uidl + "/" + msgid +
-                                " new=" + _new + " seen=" + seen);
-
-                        String[] authentication = helper.getAuthentication();
-                        MessageHelper.MessageParts parts = helper.getMessageParts();
-
-                        EntityMessage message = new EntityMessage();
-                        message.account = folder.account;
-                        message.folder = folder.id;
-                        message.uid = null;
-                        message.uidl = uidl;
-                        message.msgid = msgid;
-                        message.hash = helper.getHash();
-                        message.references = TextUtils.join(" ", helper.getReferences());
-                        message.inreplyto = helper.getInReplyTo();
-                        message.deliveredto = helper.getDeliveredTo();
-                        message.thread = helper.getThreadId(context, account.id, 0);
-                        message.priority = helper.getPriority();
-                        message.auto_submitted = helper.getAutoSubmitted();
-                        message.receipt_request = helper.getReceiptRequested();
-                        message.receipt_to = helper.getReceiptTo();
-                        message.bimi_selector = helper.getBimiSelector();
-                        message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-                        message.spf = MessageHelper.getAuthentication("spf", authentication);
-                        message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
-                        message.return_path = helper.getReturnPath();
-                        message.submitter = helper.getSender();
-                        message.from = helper.getFrom();
-                        message.to = helper.getTo();
-                        message.cc = helper.getCc();
-                        message.bcc = helper.getBcc();
-                        message.reply = helper.getReply();
-                        message.list_post = helper.getListPost();
-                        message.unsubscribe = helper.getListUnsubscribe();
-                        message.headers = helper.getHeaders();
-                        message.subject = helper.getSubject();
-                        message.size = parts.getBodySize();
-                        message.total = helper.getSize();
-                        message.content = false;
-                        message.encrypt = parts.getEncryption();
-                        message.ui_encrypt = message.encrypt;
-                        message.received = received;
-                        message.sent = sent;
-                        message.seen = seen;
-                        message.answered = false;
-                        message.flagged = false;
-                        message.flags = null;
-                        message.keywords = new String[0];
-                        message.ui_seen = seen;
-                        message.ui_answered = false;
-                        message.ui_flagged = false;
-                        message.ui_hide = false;
-                        message.ui_found = false;
-                        message.ui_ignored = !_new;
-                        message.ui_browsed = false;
-
-                        if (message.deliveredto != null)
-                            try {
-                                Address deliveredto = new InternetAddress(message.deliveredto);
-                                if (MessageHelper.equalEmail(new Address[]{deliveredto}, message.to))
-                                    message.deliveredto = null;
-                            } catch (AddressException ex) {
-                                Log.w(ex);
-                            }
-
-                        if (MessageHelper.equalEmail(message.submitter, message.from))
-                            message.submitter = null;
-
-                        if (message.size == null && message.total != null)
-                            message.size = message.total;
-
-                        EntityIdentity identity = matchIdentity(context, folder, message);
-                        message.identity = (identity == null ? null : identity.id);
-
-                        message.sender = MessageHelper.getSortKey(message.from);
-                        Uri lookupUri = ContactInfo.getLookupUri(message.from);
-                        message.avatar = (lookupUri == null ? null : lookupUri.toString());
-                        if (message.avatar == null && notify_known && pro)
-                            message.ui_ignored = true;
-
-                        // No MX check
 
                         try {
-                            db.beginTransaction();
+                            Long sent = helper.getSent();
+                            Long received = helper.getReceivedHeader();
+                            if (received == null)
+                                received = sent;
+                            if (received == null)
+                                received = 0L;
 
-                            message.id = db.message().insertMessage(message);
-                            EntityLog.log(context, account.name + " POP added id=" + message.id +
-                                    " uidl/msgid=" + message.uidl + "/" + message.msgid);
+                            boolean seen = (received <= account.created);
+                            EntityLog.log(context, account.name + " POP sync=" + uidl + "/" + msgid +
+                                    " new=" + _new + " seen=" + seen);
 
-                            int sequence = 1;
-                            for (EntityAttachment attachment : parts.getAttachments()) {
-                                Log.i(account.name + " POP attachment seq=" + sequence +
-                                        " name=" + attachment.name + " type=" + attachment.type +
-                                        " cid=" + attachment.cid + " pgp=" + attachment.encryption +
-                                        " size=" + attachment.size);
-                                attachment.message = message.id;
-                                attachment.sequence = sequence++;
-                                attachment.id = db.attachment().insertAttachment(attachment);
+                            String[] authentication = helper.getAuthentication();
+                            MessageHelper.MessageParts parts = helper.getMessageParts();
+
+                            EntityMessage message = new EntityMessage();
+                            message.account = folder.account;
+                            message.folder = folder.id;
+                            message.uid = null;
+                            message.uidl = uidl;
+                            message.msgid = msgid;
+                            message.hash = helper.getHash();
+                            message.references = TextUtils.join(" ", helper.getReferences());
+                            message.inreplyto = helper.getInReplyTo();
+                            message.deliveredto = helper.getDeliveredTo();
+                            message.thread = helper.getThreadId(context, account.id, 0);
+                            message.priority = helper.getPriority();
+                            message.auto_submitted = helper.getAutoSubmitted();
+                            message.receipt_request = helper.getReceiptRequested();
+                            message.receipt_to = helper.getReceiptTo();
+                            message.bimi_selector = helper.getBimiSelector();
+                            message.dkim = MessageHelper.getAuthentication("dkim", authentication);
+                            message.spf = MessageHelper.getAuthentication("spf", authentication);
+                            message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
+                            message.return_path = helper.getReturnPath();
+                            message.submitter = helper.getSender();
+                            message.from = helper.getFrom();
+                            message.to = helper.getTo();
+                            message.cc = helper.getCc();
+                            message.bcc = helper.getBcc();
+                            message.reply = helper.getReply();
+                            message.list_post = helper.getListPost();
+                            message.unsubscribe = helper.getListUnsubscribe();
+                            message.headers = helper.getHeaders();
+                            message.subject = helper.getSubject();
+                            message.size = parts.getBodySize();
+                            message.total = helper.getSize();
+                            message.content = false;
+                            message.encrypt = parts.getEncryption();
+                            message.ui_encrypt = message.encrypt;
+                            message.received = received;
+                            message.sent = sent;
+                            message.seen = seen;
+                            message.answered = false;
+                            message.flagged = false;
+                            message.flags = null;
+                            message.keywords = new String[0];
+                            message.ui_seen = seen;
+                            message.ui_answered = false;
+                            message.ui_flagged = false;
+                            message.ui_hide = false;
+                            message.ui_found = false;
+                            message.ui_ignored = !_new;
+                            message.ui_browsed = false;
+
+                            if (message.deliveredto != null)
+                                try {
+                                    Address deliveredto = new InternetAddress(message.deliveredto);
+                                    if (MessageHelper.equalEmail(new Address[]{deliveredto}, message.to))
+                                        message.deliveredto = null;
+                                } catch (AddressException ex) {
+                                    Log.w(ex);
+                                }
+
+                            if (MessageHelper.equalEmail(message.submitter, message.from))
+                                message.submitter = null;
+
+                            if (message.size == null && message.total != null)
+                                message.size = message.total;
+
+                            EntityIdentity identity = matchIdentity(context, folder, message);
+                            message.identity = (identity == null ? null : identity.id);
+
+                            message.sender = MessageHelper.getSortKey(message.from);
+                            Uri lookupUri = ContactInfo.getLookupUri(message.from);
+                            message.avatar = (lookupUri == null ? null : lookupUri.toString());
+                            if (message.avatar == null && notify_known && pro)
+                                message.ui_ignored = true;
+
+                            // No MX check
+
+                            try {
+                                db.beginTransaction();
+
+                                message.id = db.message().insertMessage(message);
+                                EntityLog.log(context, account.name + " POP added id=" + message.id +
+                                        " uidl/msgid=" + message.uidl + "/" + message.msgid);
+
+                                int sequence = 1;
+                                for (EntityAttachment attachment : parts.getAttachments()) {
+                                    Log.i(account.name + " POP attachment seq=" + sequence +
+                                            " name=" + attachment.name + " type=" + attachment.type +
+                                            " cid=" + attachment.cid + " pgp=" + attachment.encryption +
+                                            " size=" + attachment.size);
+                                    attachment.message = message.id;
+                                    attachment.sequence = sequence++;
+                                    attachment.id = db.attachment().insertAttachment(attachment);
+                                }
+
+                                runRules(context, imessage, account, folder, message, rules);
+                                reportNewMessage(context, account, folder, message);
+
+                                db.setTransactionSuccessful();
+                            } finally {
+                                db.endTransaction();
                             }
 
-                            runRules(context, imessage, account, folder, message, rules);
-                            reportNewMessage(context, account, folder, message);
+                            String body = parts.getHtml(context);
+                            File file = message.getFile(context);
+                            Helper.writeText(file, body);
+                            String text = HtmlHelper.getFullText(body);
+                            message.preview = HtmlHelper.getPreview(text);
+                            message.language = HtmlHelper.getLanguage(context, message.subject, text);
+                            db.message().setMessageContent(message.id,
+                                    true,
+                                    message.language,
+                                    parts.isPlainOnly(),
+                                    message.preview,
+                                    parts.getWarnings(message.warning));
 
-                            db.setTransactionSuccessful();
-                        } finally {
-                            db.endTransaction();
+                            for (EntityAttachment attachment : parts.getAttachments())
+                                if (attachment.subsequence == null)
+                                    parts.downloadAttachment(context, attachment);
+
+
+                            ContactInfo.update(context, account, folder, message);
+                        } catch (Throwable ex) {
+                            db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                         }
-
-                        String body = parts.getHtml(context);
-                        File file = message.getFile(context);
-                        Helper.writeText(file, body);
-                        String text = HtmlHelper.getFullText(body);
-                        message.preview = HtmlHelper.getPreview(text);
-                        message.language = HtmlHelper.getLanguage(context, message.subject, text);
-                        db.message().setMessageContent(message.id,
-                                true,
-                                message.language,
-                                parts.isPlainOnly(),
-                                message.preview,
-                                parts.getWarnings(message.warning));
-
-                        for (EntityAttachment attachment : parts.getAttachments())
-                            if (attachment.subsequence == null)
-                                parts.downloadAttachment(context, attachment);
-
-
-                        ContactInfo.update(context, account, folder, message);
-                    } catch (Throwable ex) {
-                        db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
+                    } finally {
+                        ((POP3Message) imessage).invalidate(true);
                     }
-                } finally {
-                    ((POP3Message) imessage).invalidate(true);
                 }
             }
 
@@ -2719,7 +2740,9 @@ class Core {
                 Log.i(folder.name + " remote fetched=" + stats.flags_ms + " ms");
 
                 try {
-                    for (int i = 0; i < imessages.length && state.isRunning() && state.isRecoverable(); i++) {
+                    for (int i = 0; i < imessages.length; i++) {
+                        state.ensureRunning("Sync/IMAP");
+
                         long uid = ifolder.getUID(imessages[i]);
                         EntityMessage message = db.message().getMessageByUid(folder.id, uid);
                         ids[i] = (message == null ? null : message.id);
@@ -2772,7 +2795,9 @@ class Core {
                 });
 
                 int expunge = 0;
-                for (int i = 0; i < imessages.length && state.isRunning() && state.isRecoverable(); i++)
+                for (int i = 0; i < imessages.length; i++) {
+                    state.ensureRunning("Sync/IMAP");
+
                     try {
                         if (perform_expunge && imessages[i].isSet(Flags.Flag.DELETED))
                             expunge++;
@@ -2787,6 +2812,7 @@ class Core {
                         EntityLog.log(context, folder.name + " expunge " + Log.formatThrowable(ex, false));
                         db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                     }
+                }
 
                 if (expunge > 0)
                     try {
@@ -2943,7 +2969,9 @@ class Core {
                 // Add/update local messages
                 int synced = 0;
                 Log.i(folder.name + " add=" + imessages.length);
-                for (int i = imessages.length - 1; i >= 0 && state.isRunning() && state.isRecoverable(); i -= SYNC_BATCH_SIZE) {
+                for (int i = imessages.length - 1; i >= 0; i -= SYNC_BATCH_SIZE) {
+                    state.ensureRunning("Sync/IMAP");
+
                     int from = Math.max(0, i - SYNC_BATCH_SIZE + 1);
                     Message[] isub = Arrays.copyOfRange(imessages, from, i + 1);
 
@@ -2974,7 +3002,9 @@ class Core {
                     Log.breadcrumb("sync", crumb);
                     Log.i("Sync " + from + ".." + i + " free=" + free);
 
-                    for (int j = isub.length - 1; j >= 0 && state.isRunning() && state.isRecoverable(); j--)
+                    for (int j = isub.length - 1; j >= 0; j--) {
+                        state.ensureRunning("Sync/IMAP");
+
                         try {
                             // Some providers erroneously return old messages
                             if (full.contains(isub[j]))
@@ -3025,6 +3055,7 @@ class Core {
                             // Free memory
                             isub[j] = null;
                         }
+                    }
                 }
             }
 
@@ -3050,9 +3081,10 @@ class Core {
                 // Download messages/attachments
                 int downloaded = 0;
                 Log.i(folder.name + " download=" + imessages.length);
-                for (int i = imessages.length - 1; i >= 0 && state.isRunning() && state.isRecoverable(); i -= DOWNLOAD_BATCH_SIZE) {
-                    int from = Math.max(0, i - DOWNLOAD_BATCH_SIZE + 1);
+                for (int i = imessages.length - 1; i >= 0; i -= DOWNLOAD_BATCH_SIZE) {
+                    state.ensureRunning("Sync/IMAP");
 
+                    int from = Math.max(0, i - DOWNLOAD_BATCH_SIZE + 1);
                     Message[] isub = Arrays.copyOfRange(imessages, from, i + 1);
                     Arrays.fill(imessages, from, i + 1, null);
                     // Fetch on demand
@@ -3068,7 +3100,9 @@ class Core {
                     Log.breadcrumb("download", crumb);
                     Log.i("Download " + from + ".." + i + " free=" + free);
 
-                    for (int j = isub.length - 1; j >= 0 && state.isRunning() && state.isRecoverable(); j--)
+                    for (int j = isub.length - 1; j >= 0; j--) {
+                        state.ensureRunning("Sync/IMAP");
+
                         try {
                             if (ids[from + j] != null) {
                                 boolean fetched = downloadMessage(
@@ -3094,6 +3128,7 @@ class Core {
                             // Free memory
                             isub[j] = null;
                         }
+                    }
                 }
             }
 
@@ -4954,6 +4989,13 @@ class Core {
             join(thread);
         }
 
+        void ensureRunning(String reason) {
+            if (!recoverable && unrecoverable != null)
+                throw new OperationCanceledExceptionEx(reason, unrecoverable);
+            if (!running)
+                throw new OperationCanceledException(reason);
+        }
+
         boolean isRunning() {
             return running;
         }
@@ -5077,6 +5119,21 @@ class Core {
                 } else
                     return false;
             }
+        }
+    }
+
+    static class OperationCanceledExceptionEx extends OperationCanceledException {
+        private Throwable cause;
+
+        OperationCanceledExceptionEx(String message, Throwable cause) {
+            super(message);
+            this.cause = cause;
+        }
+
+        @Nullable
+        @Override
+        public Throwable getCause() {
+            return this.cause;
         }
     }
 

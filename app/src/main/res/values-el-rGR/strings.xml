@@ -196,13 +196,22 @@
     <string name="title_setup_export_remark">        Δεδομένου ότι το αρχείο ρυθμίσεων περιέχει όλες τις ρυθμίσεις και πληροφορίες λογαριασμού, είναι κρυπτογραφημένο με κωδικό πρόσβασης.
         Ο κωδικός πρόσβασης απαιτείται για να εισαγάγετε ξανά τις ρυθμίσεις, οπότε, παρακαλούμε, μην τον ξεχάσετε!
     </string>
+    <string name="title_setup_export_do">Το αρχείο εξαγωγής θα περιέχει όλες τις ρυθμίσεις και τα δεδομένα, αλλά όχι μηνύματα, ούτε και εικόνες ενσωματωμένες σε υπογραφές</string>
     <string name="title_setup_import_do">Οι εισαγόμενοι λογαριασμοί θα προστεθούν χωρίς να αντικατασταθεί κάποιος από τους ήδη υπάρχοντες</string>
+    <string name="title_setup_import_gmail">        Από το Android 8.0 Oreo και εξής, οι λογαριασμοί Gmail δεν μπορούν πλέον να εισαχθούν, καθώς κάθε λογαριασμός πρέπει να επιλεγεί, για να χορηγηθεί πρόσβαση στον λογαριασμό.
+        Μπορείτε εύκολα να επαναρρυθμίσετε τους λογαριασμούς Gmail με τον οδηγό γρήγορης ρύθμισης.
+    </string>
     <string name="title_setup_password">Κωδικός πρόσβασης</string>
     <string name="title_setup_password_chars">Ο κωδικός πρόσβασης περιέχει χαρακτήρες ελέγχου ή διαστήματα</string>
     <string name="title_setup_password_repeat">Επανάληψη κωδικού πρόσβασης</string>
     <string name="title_setup_password_missing">Λείπει ο κωδικός πρόσβασης</string>
     <string name="title_setup_password_different">Οι κωδικοί πρόσβασης δεν ταιριάζουν</string>
     <string name="title_setup_password_invalid">Μη έγκυρος κωδικός πρόσβασης</string>
+    <string name="title_setup_import_accounts">Εισαγωγή λογαριασμών και ταυτοτήτων</string>
+    <string name="title_setup_import_rules">Εισαγωγή κανόνων φίλτρων</string>
+    <string name="title_setup_import_contacts">Εισαγωγή τοπικών επαφών</string>
+    <string name="title_setup_import_answers">Εισαγωγή προτύπων απάντησης</string>
+    <string name="title_setup_import_settings">Εισαγωγή επιλογών</string>
     <string name="title_setup_exported">Επιτυχής εξαγωγή ρυθμίσεων</string>
     <string name="title_setup_imported">Επιτυχής εισαγωγή ρυθμίσεων</string>
     <string name="title_setup_import_invalid">Λάθος αρχείο ρυθμίσεων</string>
@@ -310,7 +319,7 @@
     <string name="title_advanced_ssl_harden">Θωράκιση συνδέσεων SSL</string>
     <string name="title_advanced_manage_connectivity">Διαχείριση συνδεσιμότητας</string>
     <string name="title_advanced_caption_general">Γενικά</string>
-    <string name="title_advanced_caption_checks" comment="title_advanced_caption_checks&#10;Title for card with options for checking received messages">Έλεγχοι</string>
+    <string name="title_advanced_caption_checks">Έλεγχοι</string>
     <string name="title_advanced_caption_list">Λίστα</string>
     <string name="title_advanced_caption_conversation">Συζήτηση</string>
     <string name="title_advanced_caption_message">Μήνυμα</string>
@@ -319,6 +328,7 @@
     <string name="title_advanced_portrait2">Χρήση δύο σειρών στον κάθετο προσανατολισμό</string>
     <string name="title_advanced_landscape">Χρήση δύο στηλών στον οριζόντιο προσανατολισμό</string>
     <string name="title_advanced_landscape3">Προβολή μενού πλοήγησης κατά τον οριζόντιο προσανατολισμό από προεπιλογή</string>
+    <string name="title_advanced_nav_message_count">Να εμφανίζεται ο αριθμός των τοπικά αποθηκευμένων μηνυμάτων στο μενού πλοήγησης</string>
     <string name="title_advanced_startup">Εμφάνιση στην οθόνη έναρξης</string>
     <string name="title_advanced_cards">Προβολή σε στιλ κάρτας αντί σε στιλ πίνακα</string>
     <string name="title_advanced_cards_beige">Μπεζ φόντο κατά τη χρήση του στιλ κάρτας (ανοιχτόχρωμα θέματα μόνο)</string>
@@ -384,9 +394,12 @@
     <string name="title_advanced_actionbar_color">Χρήση του χρώματος του λογαριασμού ως χρωματικό υπόβαθρο για τη γραμμή ενεργειών της συζήτησης</string>
     <string name="title_advanced_navbar_colorize">Να χρωματίζεται η γραμμή πλοήγησης του Android</string>
     <string name="title_advanced_parse_classes">Χρήση φύλλων στιλ</string>
-    <string name="title_advanced_authentication" comment="title_advanced_authentication&#10;Title for switch to enable/disable all authentication warnings.">Να προβάλλονται προειδοποιήσεις ταυτοποίησης</string>
+    <string name="title_advanced_authentication">Να προβάλλονται προειδοποιήσεις ταυτοποίησης</string>
     <string name="title_advanced_authentication_hint">Οι υποκείμενοι έλεγχοι μπορούν να ρυθμιστούν στις ρυθμίσεις λήψης</string>
-    <string name="title_advanced_authentication_indicator" comment="title_advanced_authentication_indicator&#10;Title for switch to show DKIM, SPF, DMARC authentication results with an icon">Να προβάλλεται ένδειξη για την κατάσταση του ελέγχου ταυτοποίησης</string>
+    <string name="title_advanced_authentication_indicator">Να προβάλλεται ένδειξη για την κατάσταση του ελέγχου ταυτοποίησης</string>
+    <string name="title_advanced_authentication_none">Χωρίς ταυτοποίηση</string>
+    <string name="title_advanced_authentication_some">Μερική ταυτοποίηση</string>
+    <string name="title_advanced_authentication_all">Πλήρης ταυτοποίηση</string>
     <string name="title_advanced_sync_on_launch">Συγχρονισμός κατά την εκκίνηση της εφαρμογής</string>
     <string name="title_advanced_double_back">Δύο φορές \"πίσω\" για έξοδο</string>
     <string name="title_advanced_conversation_actions">Να προτείνονται ενέργειες (Android 10+)</string>
@@ -586,6 +599,7 @@
     <string name="title_advanced_edit_name">Επεξεργασία ονόματος</string>
     <string name="title_advanced_swipe_actions">Ορίστε τις ενέργειες σάρωσης</string>
     <string name="title_advanced_swipe_actions_hint">Θα ορίσει τις ενέργειες σάρωσης αριστερά και δεξιά για όλους τους λογαριασμούς IMAP</string>
+    <string name="title_advanced_swipe_sensitivity">Ευαισθησία σάρωσης προς αριστερά/δεξιά</string>
     <string name="title_select">Επιλέξτε &#8230;</string>
     <string name="title_identity_name">Το όνομα σας</string>
     <string name="title_identity_email">Η διεύθυνση ηλεκτρονικού ταχυδρομείου σας</string>
@@ -644,7 +658,8 @@
     <string name="title_leave_deleted">Να παραμένουν τα διεγραμμένα μηνύματα στον εξυπηρετητή</string>
     <string name="title_leave_on_device">Να παραμένουν τα μηνύματα στη συσκευή</string>
     <string name="title_max_messages">Μέγιστος αριθμός μηνυμάτων για κατέβασμα (κενό για όλα)</string>
-    <string name="title_keep_alive_interval">Μεσοδιάστημα διατήρησης της σύνδεσης (λεπτά)</string>
+    <string name="title_keep_poll_interval">Χρονικό διάστημα μεταξύ συγχρονισμών (λεπτά)</string>
+    <string name="title_keep_alive_interval">Μεσοδιάστημα διατήρησης ενεργούς σύνδεσης (λεπτά)</string>
     <string name="title_server_time">Χρήση της ώρας λήψης (διακομιστής)</string>
     <string name="title_received_header">Χρήση της κεφαλίδας \"Λήφθηκε\"</string>
     <string name="title_date_header">Χρήση κεφαλίδας \"Ημερομηνία\" (ώρα αποστολής)</string>
