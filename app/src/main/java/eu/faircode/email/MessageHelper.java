@@ -19,12 +19,15 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static android.system.OsConstants.ENOSPC;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.system.ErrnoException;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
 import androidx.core.net.MailTo;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
@@ -109,8 +112,6 @@ import javax.mail.internet.ParseException;
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 
-import static android.system.OsConstants.ENOSPC;
-
 public class MessageHelper {
     private boolean ensuredEnvelope = false;
     private boolean ensuredHeaders = false;
@@ -129,6 +130,10 @@ public class MessageHelper {
     private static final int MAX_META_EXCERPT = 1024; // characters
     private static final int FORMAT_FLOWED_LINE_LENGTH = 72;
 
+    private static final String DOCTYPE = "<!DOCTYPE";
+    private static final String HTML_START = "<html>";
+    private static final String HTML_END = "</html>";
+
     private static final List<Charset> CHARSET16 = Collections.unmodifiableList(Arrays.asList(
             StandardCharsets.UTF_16,
             StandardCharsets.UTF_16BE,
@@ -137,12 +142,16 @@ public class MessageHelper {
 
     static final String FLAG_FORWARDED = "$Forwarded";
     static final String FLAG_NOT_JUNK = "$NotJunk";
+    static final String FLAG_CLASSIFIED = "$Classified";
+    static final String FLAG_FILTERED = "$Filtered";
 
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     // Not black listed: Gmail $Phishing
     private static final List<String> FLAG_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
             MessageHelper.FLAG_FORWARDED,
             MessageHelper.FLAG_NOT_JUNK,
+            MessageHelper.FLAG_CLASSIFIED, // FairEmail
+            MessageHelper.FLAG_FILTERED, // FairEmail
             "$MDNSent", // https://tools.ietf.org/html/rfc3503
             "$SubmitPending",
             "$Submitted",
@@ -160,8 +169,7 @@ public class MessageHelper {
             "$signed", // Kmail
             "$encrypted", // Kmail
             "$HasAttachment", // Dovecot
-            "$HasNoAttachment", // Dovecot
-            "$Classified" // FairEmail
+            "$HasNoAttachment" // Dovecot
     ));
 
     // https://tools.ietf.org/html/rfc4021
@@ -1987,7 +1995,6 @@ public class MessageHelper {
                         result = HtmlHelper.flow(result);
 
                     // https://www.w3.org/QA/2002/04/valid-dtd-list.html
-                    final String DOCTYPE = "<!DOCTYPE";
                     if (result.length() > DOCTYPE.length()) {
                         String doctype = result.substring(0, DOCTYPE.length()).toUpperCase(Locale.ROOT);
                         if (doctype.startsWith(DOCTYPE)) {
@@ -1997,6 +2004,17 @@ public class MessageHelper {
                                 return result;
                         }
                     }
+
+                    int s = 0;
+                    while (s < result.length() && Character.isWhitespace(result.charAt(s)))
+                        s++;
+                    int e = result.length();
+                    while (e > 0 && Character.isWhitespace(result.charAt(e - 1)))
+                        e--;
+                    if (s + HTML_START.length() < result.length() && e - HTML_END.length() >= 0 &&
+                            result.substring(s, s + HTML_START.length()).equalsIgnoreCase(HTML_START) &&
+                            result.substring(e - HTML_END.length(), e).equalsIgnoreCase(HTML_END))
+                        return result;
 
                     result = "<div x-plain=\"true\">" + HtmlHelper.formatPre(result) + "</div>";
                 } else if (h.isHtml()) {
@@ -2492,11 +2510,8 @@ public class MessageHelper {
                                 break;
                             }
                         }
-                    } else {
-                        String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
-                        Log.e(msg);
-                        throw new MessagingException(msg);
-                    }
+                    } else
+                        throw new MessagingStructureException(content);
                 }
 
                 if (part.isMimeType("multipart/signed")) {
@@ -2540,11 +2555,8 @@ public class MessageHelper {
                                     sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
                                 Log.e(sb.toString());
                             }
-                        } else {
-                            String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
-                            Log.e(msg);
-                            throw new MessagingException(msg);
-                        }
+                        } else
+                            throw new MessagingStructureException(content);
                     } else
                         Log.e(ct.toString());
                 } else if (part.isMimeType("multipart/encrypted")) {
@@ -2565,11 +2577,8 @@ public class MessageHelper {
                                     sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
                                 Log.e(sb.toString());
                             }
-                        } else {
-                            String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
-                            Log.e(msg);
-                            throw new MessagingException(msg);
-                        }
+                        } else
+                            throw new MessagingStructureException(content);
                     } else
                         Log.e(ct.toString());
                 } else if (part.isMimeType("application/pkcs7-mime") ||
@@ -2644,11 +2653,8 @@ public class MessageHelper {
                 Object content = part.getContent(); // Should always be Multipart
                 if (content instanceof Multipart)
                     multipart = (Multipart) part.getContent();
-                else {
-                    String msg = "Multipart=" + (content == null ? null : content.getClass().getName());
-                    Log.e(msg);
-                    throw new MessagingException(msg);
-                }
+                else
+                    throw new MessagingStructureException(content);
 
                 boolean other = false;
                 List<Part> plain = new ArrayList<>();
@@ -3031,5 +3037,21 @@ public class MessageHelper {
         }
 
         return values;
+    }
+
+    static class MessagingStructureException extends MessagingException {
+        private String className;
+
+        MessagingStructureException(Object content) {
+            super();
+            if (content != null)
+                this.className = content.getClass().getName();
+        }
+
+        @Nullable
+        @Override
+        public String getMessage() {
+            return className;
+        }
     }
 }

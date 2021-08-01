@@ -286,6 +286,7 @@
     <string name="title_advanced_suggest_sent">Adressen aus gesendeten Nachrichten vorschlagen</string>
     <string name="title_advanced_suggest_received">Adressen aus empfangenen Nachrichten vorschlagen</string>
     <string name="title_advanced_suggest_frequently">Vorgeschlagene Adressen nach Nutzungshäufigkeit sortieren</string>
+    <string name="title_advanced_alt_re_fwd">Alternative Präfixe für „Antworten” bzw. „Weiterleiten”</string>
     <string name="title_advanced_send_reminders">Erinnerungen anzeigen</string>
     <string name="title_advanced_send_delayed">Senden von Nachrichten verzögern</string>
     <string name="title_advanced_send_pending">Nicht aufdringliches Symbol für verzögertes Senden anzeigen</string>
@@ -422,6 +423,7 @@
     <string name="title_advanced_collapse_multiple">Nachrichten, in einer Unterhaltung mit mehreren Nachrichten, bei »Zurück« zusammenfassen</string>
     <string name="title_advanced_autoclose">Unterhaltungen automatisch schließen</string>
     <string name="title_advanced_onclose">Beim Schließen einer Unterhaltung</string>
+    <string name="title_advanced_autoclose_unread">Themen schließen, wenn Nachrichten als ungelesen gekennzeichnet werden</string>
     <string name="title_advanced_undo">Anzeigedauer von »Rückgängig«</string>
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
     <string name="title_advanced_quick_scroll">Nicht aufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
@@ -720,6 +722,8 @@
     <string name="title_synchronize_enabled">Synchronisieren</string>
     <string name="title_synchronize_batch_enable">Synchronisation aktivieren</string>
     <string name="title_synchronize_batch_disable">Synchronisierung deaktivieren</string>
+    <string name="title_notify_batch_enable">Benachrichtigung über neue Nachrichten aktivieren</string>
+    <string name="title_notify_batch_disable">Benachrichtigung über neue Nachrichten deaktivieren</string>
     <string name="title_delete_local">Lokale Nachrichten löschen</string>
     <string name="title_delete_browsed">Durchsuchte Nachrichten löschen</string>
     <string name="title_empty_trash">Papierkorb leeren</string>
@@ -1368,6 +1372,7 @@
     <string name="title_check_owner">Eigentümer prüfen</string>
     <string name="title_remark_owner">Informationen werden abgerufen von <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">IP-Adresse des Eigentümers</string>
+    <string name="title_reset_open">Standardanwendungen festlegen oder löschen</string>
     <string name="title_select_app">App auswählen</string>
     <string name="title_updated">Es ist eine Aktualisierung auf Version %1$s verfügbar</string>
     <string name="title_issue">Haben Sie eine Frage oder ein Problem?</string>

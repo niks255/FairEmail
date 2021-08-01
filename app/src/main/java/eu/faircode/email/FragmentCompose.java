@@ -19,6 +19,13 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_FIRST_USER;
+import static android.app.Activity.RESULT_OK;
+import static android.system.OsConstants.ENOSPC;
+import static android.view.inputmethod.EditorInfo.IME_FLAG_NO_FULLSCREEN;
+import static android.widget.AdapterView.INVALID_POSITION;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -69,6 +76,7 @@ import android.text.style.ImageSpan;
 import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.util.LogPrinter;
 import android.util.Pair;
@@ -215,17 +223,11 @@ import biweekly.ICalendar;
 import biweekly.component.VEvent;
 import biweekly.property.Organizer;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_FIRST_USER;
-import static android.app.Activity.RESULT_OK;
-import static android.system.OsConstants.ENOSPC;
-import static android.view.inputmethod.EditorInfo.IME_FLAG_NO_FULLSCREEN;
-import static android.widget.AdapterView.INVALID_POSITION;
-
 public class FragmentCompose extends FragmentBase {
     private enum State {NONE, LOADING, LOADED}
 
     private ViewGroup view;
+    private View vwAnchorMenu;
     private Spinner spIdentity;
     private EditText etExtra;
     private TextView tvDomain;
@@ -250,7 +252,7 @@ public class FragmentCompose extends FragmentBase {
     private ImageButton ibCloseRefHint;
     private ImageButton ibReferenceEdit;
     private ImageButton ibReferenceImages;
-    private FloatingActionButton fabTranslate;
+    private View vwAnchor;
     private BottomNavigationView style_bar;
     private BottomNavigationView media_bar;
     private BottomNavigationView bottom_navigation;
@@ -343,6 +345,7 @@ public class FragmentCompose extends FragmentBase {
         view = (ViewGroup) inflater.inflate(R.layout.fragment_compose, container, false);
 
         // Get controls
+        vwAnchorMenu = view.findViewById(R.id.vwAnchorMenu);
         spIdentity = view.findViewById(R.id.spIdentity);
         etExtra = view.findViewById(R.id.etExtra);
         tvDomain = view.findViewById(R.id.tvDomain);
@@ -367,7 +370,7 @@ public class FragmentCompose extends FragmentBase {
         ibCloseRefHint = view.findViewById(R.id.ibCloseRefHint);
         ibReferenceEdit = view.findViewById(R.id.ibReferenceEdit);
         ibReferenceImages = view.findViewById(R.id.ibReferenceImages);
-        fabTranslate = view.findViewById(R.id.fabTranslate);
+        vwAnchor = view.findViewById(R.id.vwAnchor);
         style_bar = view.findViewById(R.id.style_bar);
         media_bar = view.findViewById(R.id.media_bar);
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
@@ -815,13 +818,6 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
-        fabTranslate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTranslate(v);
-            }
-        });
-
         style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -909,8 +905,6 @@ public class FragmentCompose extends FragmentBase {
         ibReferenceEdit.setVisibility(View.GONE);
         ibReferenceImages.setVisibility(View.GONE);
         tvReference.setVisibility(View.GONE);
-        fabTranslate.setVisibility(
-                DeepL.isAvailable(getContext()) ? View.VISIBLE : View.GONE);
         style_bar.setVisibility(View.GONE);
         media_bar.setVisibility(View.GONE);
         bottom_navigation.setVisibility(View.GONE);
@@ -1486,6 +1480,26 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        menu.findItem(R.id.menu_translate).setActionView(R.layout.action_button);
+        ImageButton ibTranslate = (ImageButton)menu.findItem(R.id.menu_translate).getActionView();
+        ibTranslate.setImageResource(R.drawable.twotone_translate_24);
+        ibTranslate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTranslate(vwAnchorMenu);
+            }
+        });
+
+        menu.findItem(R.id.menu_zoom).setActionView(R.layout.action_button);
+        ImageButton ibZoom = (ImageButton)menu.findItem(R.id.menu_zoom).getActionView();
+        ibZoom.setImageResource(R.drawable.twotone_format_size_24);
+        ibZoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMenuZoom();
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -1494,6 +1508,8 @@ public class FragmentCompose extends FragmentBase {
         super.onPrepareOptionsMenu(menu);
 
         menu.findItem(R.id.menu_encrypt).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(getContext()));
         menu.findItem(R.id.menu_zoom).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_compact).setEnabled(state == State.LOADED);
@@ -1562,6 +1578,9 @@ public class FragmentCompose extends FragmentBase {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_encrypt) {
             onMenuEncrypt();
+            return true;
+        } else if (itemId == R.id.menu_translate) {
+            onTranslate(vwAnchorMenu);
             return true;
         } else if (itemId == R.id.menu_zoom) {
             onMenuZoom();
@@ -1787,7 +1806,6 @@ public class FragmentCompose extends FragmentBase {
                     return;
                 }
 
-                View vwAnchorMenu = view.findViewById(R.id.vwAnchorMenu);
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchorMenu);
                 Menu main = popupMenu.getMenu();
 
@@ -1849,6 +1867,64 @@ public class FragmentCompose extends FragmentBase {
                     main.add(Menu.NONE, order, order++, answer.toString())
                             .setIntent(new Intent().putExtra("id", answer.id));
 
+                if (BuildConfig.DEBUG) {
+                    SubMenu profiles = main.addSubMenu(Menu.NONE, order, order++, "Profiles");
+                    for (EmailProvider p : EmailProvider.loadProfiles(getContext())) {
+                        SpannableStringBuilder ssb = new SpannableStringBuilder();
+                        int start;
+                        ssb.append("IMAP (account, receive)");
+
+                        ssb.append(" host ");
+                        start = ssb.length();
+                        ssb.append(p.imap.host);
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        ssb.append(" port ");
+                        start = ssb.length();
+                        ssb.append(Integer.toString(p.imap.port));
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        ssb.append(" encryption ");
+                        start = ssb.length();
+                        ssb.append(p.imap.starttls ? "STARTTLS" : "SSL/TLS");
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        ssb.append("\n\n");
+
+                        ssb.append("SMTP (identity, send)");
+
+                        ssb.append(" host ");
+                        start = ssb.length();
+                        ssb.append(p.smtp.host);
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        ssb.append(" port ");
+                        start = ssb.length();
+                        ssb.append(Integer.toString(p.smtp.port));
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        ssb.append(" encryption ");
+                        start = ssb.length();
+                        ssb.append(p.smtp.starttls ? "STARTTLS" : "SSL/TLS");
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        ssb.append("\n\n");
+
+                        if (!TextUtils.isEmpty(p.link))
+                            ssb.append(p.link).append("\n\n");
+
+                        profiles.add(999, order, order++, p.name +
+                                (p.appPassword ? "+" : ""))
+                                .setIntent(new Intent().putExtra("config", ssb));
+                    }
+                }
+
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem target) {
@@ -1858,6 +1934,13 @@ public class FragmentCompose extends FragmentBase {
 
                         if (!ActivityBilling.isPro(getContext())) {
                             startActivity(new Intent(getContext(), ActivityBilling.class));
+                            return true;
+                        }
+
+                        if (target.getGroupId() == 999) {
+                            CharSequence config = intent.getCharSequenceExtra("config");
+                            int start = etBody.getSelectionStart();
+                            etBody.getText().insert(start, config);
                             return true;
                         }
 
@@ -1916,12 +1999,10 @@ public class FragmentCompose extends FragmentBase {
                                     etBody.getText().replace(start, end, spanned);
                                 else {
                                     if (start < 0) {
-                                        start = etBody.length() - 1;
-                                        if (start < 0)
-                                            start = 0;
-                                    }
-
-                                    etBody.getText().insert(start, spanned);
+                                        start = etBody.length();
+                                        etBody.getText().append(spanned);
+                                    } else
+                                        etBody.getText().insert(start, spanned);
 
                                     int pos = getAutoPos(start, spanned.length());
                                     if (pos >= 0)
@@ -3373,7 +3454,6 @@ public class FragmentCompose extends FragmentBase {
                                         new Intent(getContext(), ActivitySetup.class)
                                                 .putExtra("tab", "encryption"));
                             else {
-                                View vwAnchor = view.findViewById(R.id.vwAnchor);
                                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
                                 popupMenu.getMenu().add(Menu.NONE, R.string.title_send_dialog, 1, R.string.title_send_dialog);
                                 popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_manage_certificates, 2, R.string.title_advanced_manage_certificates);

@@ -1099,7 +1099,8 @@
         <smtp
             host="mobile.charter.net"
             port="587"
-            starttls="true" />
+            starttls="false" />
+        <!-- Unusual, but no STARTTLS at port 587 -->
     </provider>
     <provider
         name="Tin.it"
@@ -1174,6 +1175,32 @@
             starttls="false" />
         <smtp
             host="smtp.ewe.net"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="Xfinity/Comcast"
+        domain="comcast\\.net"
+        link="https://www.xfinity.com/support/articles/email-client-programs-with-xfinity-email">
+        <imap
+            host="imap.comcast.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.comcast.net"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="TalkTalk"
+        domain="dial\\.pipex\\.co\\.uk,pipex\\.com,dial\\.pipex\\.com,screaming\\.net,dial\\.pipex\\.net,solo\\.pipex\\.com,dsl\\.pipex\\.co\\.uk,talktalk\\.net,dsl\\.pipex\\.com,telco4u\\.net,homecall\\.co\\.uk,tinyonline\\.co\\.uk,homechoice\\.co\\.uk,tinyworld\\.co\\.uk,lineone\\.net,tiscali\\.co\\.uk,onetel\\.com,toucansurf\\.com,onetel\\.net,ukgateway\\.net,onetel\\.net\\.uk,worldonline\\.co\\.uk,oneteldsl\\.net"
+        link="https://community.talktalk.co.uk/t5/Articles/Email-settings-IMAP-amp-POP3/ta-p/2204399">
+        <imap
+            host="mail.talktalk.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.talktalk.net"
             port="587"
             starttls="true" />
     </provider>

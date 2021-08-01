@@ -19,6 +19,11 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
+import static androidx.core.app.NotificationCompat.DEFAULT_LIGHTS;
+import static androidx.core.app.NotificationCompat.DEFAULT_SOUND;
+import static javax.mail.Folder.READ_WRITE;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -129,11 +134,6 @@ import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
-
-import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
-import static androidx.core.app.NotificationCompat.DEFAULT_LIGHTS;
-import static androidx.core.app.NotificationCompat.DEFAULT_SOUND;
-import static javax.mail.Folder.READ_WRITE;
 
 class Core {
     private static final int MAX_NOTIFICATION_DISPLAY = 10; // per group
@@ -478,7 +478,11 @@ class Core {
                         for (TupleOperationEx s : similar.keySet())
                             ops.remove(s);
                     } catch (Throwable ex) {
-                        Log.e(folder.name, ex);
+                        if (ex instanceof OperationCanceledException)
+                            Log.i(folder.name, ex);
+                        else
+                            Log.e(folder.name, ex);
+
                         EntityLog.log(context, folder.name +
                                 " op=" + op.name +
                                 " try=" + op.tries +
@@ -628,7 +632,7 @@ class Core {
                                 String title = (resid == 0 ? null : context.getString(resid));
                                 if (title != null) {
                                     NotificationCompat.Builder builder =
-                                            getNotificationError(context, "warning", title, ex);
+                                            getNotificationError(context, "warning", account, message.id, new Throwable(title, ex));
                                     nm.notify(op.name + ":" + op.message,
                                             NotificationHelper.NOTIFICATION_TAGGED,
                                             builder.build());
@@ -2275,7 +2279,11 @@ class Core {
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean pro = ActivityBilling.isPro(context);
 
-        EntityLog.log(context, account.name + " POP sync type=" + folder.type + " connected=" + (ifolder != null));
+        boolean force = jargs.optBoolean(5, false);
+
+        EntityLog.log(context, account.name + " POP sync type=" + folder.type +
+                " force=" + force +
+                " connected=" + (ifolder != null));
 
         if (!EntityFolder.INBOX.equals(folder.type)) {
             db.folder().setFolderSyncState(folder.id, null);
@@ -2300,7 +2308,8 @@ class Core {
                     : Math.min(imessages.length, account.max_messages));
 
             boolean sync = true;
-            if (imessages.length > 0 && folder.last_sync_count != null &&
+            if (!force &&
+                    imessages.length > 0 && folder.last_sync_count != null &&
                     imessages.length == folder.last_sync_count) {
                 // Check if last message known as new messages indicator
                 MessageHelper helper = new MessageHelper((MimeMessage) imessages[imessages.length - 1], context);
@@ -2562,7 +2571,7 @@ class Core {
                                     parts.downloadAttachment(context, attachment);
 
 
-                            ContactInfo.update(context, account, folder, message);
+                            EntityContact.update(context, account, folder, message);
                         } catch (Throwable ex) {
                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                         }
@@ -2741,7 +2750,7 @@ class Core {
 
                 try {
                     for (int i = 0; i < imessages.length; i++) {
-                        state.ensureRunning("Sync/IMAP");
+                        state.ensureRunning("Sync/IMAP/check");
 
                         long uid = ifolder.getUID(imessages[i]);
                         EntityMessage message = db.message().getMessageByUid(folder.id, uid);
@@ -2754,7 +2763,10 @@ class Core {
                             uids.remove(uid);
                     }
                 } catch (Throwable ex) {
-                    Log.w(ex);
+                    if (ex instanceof OperationCanceledException)
+                        Log.i(ex);
+                    else
+                        Log.w(ex);
                     modified = true;
                     db.folder().setFolderModSeq(folder.id, null);
                 }
@@ -2796,7 +2808,7 @@ class Core {
 
                 int expunge = 0;
                 for (int i = 0; i < imessages.length; i++) {
-                    state.ensureRunning("Sync/IMAP");
+                    state.ensureRunning("Sync/IMAP/delete");
 
                     try {
                         if (perform_expunge && imessages[i].isSet(Flags.Flag.DELETED))
@@ -2970,7 +2982,7 @@ class Core {
                 int synced = 0;
                 Log.i(folder.name + " add=" + imessages.length);
                 for (int i = imessages.length - 1; i >= 0; i -= SYNC_BATCH_SIZE) {
-                    state.ensureRunning("Sync/IMAP");
+                    state.ensureRunning("Sync/IMAP/sync/fetch");
 
                     int from = Math.max(0, i - SYNC_BATCH_SIZE + 1);
                     Message[] isub = Arrays.copyOfRange(imessages, from, i + 1);
@@ -3003,7 +3015,7 @@ class Core {
                     Log.i("Sync " + from + ".." + i + " free=" + free);
 
                     for (int j = isub.length - 1; j >= 0; j--) {
-                        state.ensureRunning("Sync/IMAP");
+                        state.ensureRunning("Sync/IMAP/sync");
 
                         try {
                             // Some providers erroneously return old messages
@@ -3082,7 +3094,7 @@ class Core {
                 int downloaded = 0;
                 Log.i(folder.name + " download=" + imessages.length);
                 for (int i = imessages.length - 1; i >= 0; i -= DOWNLOAD_BATCH_SIZE) {
-                    state.ensureRunning("Sync/IMAP");
+                    state.ensureRunning("Sync/IMAP/download/fetch");
 
                     int from = Math.max(0, i - DOWNLOAD_BATCH_SIZE + 1);
                     Message[] isub = Arrays.copyOfRange(imessages, from, i + 1);
@@ -3101,7 +3113,7 @@ class Core {
                     Log.i("Download " + from + ".." + i + " free=" + free);
 
                     for (int j = isub.length - 1; j >= 0; j--) {
-                        state.ensureRunning("Sync/IMAP");
+                        state.ensureRunning("Sync/IMAP/download");
 
                         try {
                             if (ids[from + j] != null) {
@@ -3163,6 +3175,24 @@ class Core {
     }
 
     static EntityMessage synchronizeMessage(
+            Context context,
+            EntityAccount account, EntityFolder folder,
+            IMAPStore istore, IMAPFolder ifolder, MimeMessage imessage,
+            boolean browsed, boolean download,
+            List<EntityRule> rules, State state, SyncStats stats) throws MessagingException, IOException {
+        try {
+            return _synchronizeMessage(context, account, folder,
+                    istore, ifolder, imessage,
+                    browsed, download, rules, state, stats);
+        } catch (MessageHelper.MessagingStructureException ex) {
+            Log.e(ex);
+            long uid = ifolder.getUID(imessage);
+            EntityOperation.queue(context, folder, EntityOperation.FETCH, uid);
+            return null;
+        }
+    }
+
+    private static EntityMessage _synchronizeMessage(
             Context context,
             EntityAccount account, EntityFolder folder,
             IMAPStore istore, IMAPFolder ifolder, MimeMessage imessage,
@@ -3498,7 +3528,7 @@ class Core {
             }
 
             try {
-                ContactInfo.update(context, account, folder, message);
+                EntityContact.update(context, account, folder, message);
 
                 // Download small messages inline
                 if (download && !message.ui_hide) {
@@ -3673,7 +3703,7 @@ class Core {
                 }
 
             if (process) {
-                ContactInfo.update(context, account, folder, message);
+                EntityContact.update(context, account, folder, message);
                 MessageClassifier.classify(message, folder, null, context);
             } else
                 Log.d(folder.name + " unchanged uid=" + uid);
@@ -3777,27 +3807,20 @@ class Core {
 
         DB db = DB.getInstance(context);
         try {
+            boolean executed = false;
             for (EntityRule rule : rules)
                 if (rule.matches(context, message, imessage)) {
                     rule.execute(context, message);
+                    executed = true;
                     if (rule.stop)
                         break;
                 }
+            if (executed &&
+                    !message.hasKeyword(MessageHelper.FLAG_FILTERED))
+                EntityOperation.queue(context, message, EntityOperation.KEYWORD, MessageHelper.FLAG_FILTERED, true);
         } catch (Throwable ex) {
             Log.e(ex);
             db.message().setMessageError(message.id, Log.formatThrowable(ex));
-        }
-
-        if (BuildConfig.DEBUG &&
-                message.sender != null && EntityFolder.INBOX.equals(folder.type)) {
-            EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
-            if (junk != null) {
-                int senders = db.message().countSender(junk.id, message.sender);
-                if (senders > 0) {
-                    EntityLog.log(context, "JUNK sender=" + message.sender + " count=" + senders);
-                    EntityOperation.queue(context, message, EntityOperation.KEYWORD, "$MoreJunk", true);
-                }
-            }
         }
     }
 
@@ -4829,19 +4852,26 @@ class Core {
     // MailConnectException
     // - on connectivity problems when connecting to store
 
-    static NotificationCompat.Builder getNotificationError(Context context, String channel, String title, Throwable ex) {
+    static NotificationCompat.Builder getNotificationError(Context context, String channel, EntityAccount account, long id, Throwable ex) {
+        String title = context.getString(R.string.title_notification_failed, account.name);
+        String message = Log.formatThrowable(ex, "\n", false);
+
         // Build pending intent
-        Intent intent = new Intent(context, ActivityView.class);
-        intent.setAction("error");
+        Intent intent = new Intent(context, ActivityError.class);
+        intent.setAction(channel + ":" + account.id + ":" + id);
+        intent.putExtra("type", channel);
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        intent.putExtra("faq", 22);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntentCompat.getActivity(
-                context, ActivityView.PI_ERROR, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, ActivityError.PI_ERROR, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build notification
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, channel)
                         .setSmallIcon(R.drawable.baseline_warning_white_24)
-                        .setContentTitle(context.getString(R.string.title_notification_failed, title))
+                        .setContentTitle(title)
                         .setContentText(Log.formatThrowable(ex, false))
                         .setContentIntent(pi)
                         .setAutoCancel(false)
@@ -4850,8 +4880,7 @@ class Core {
                         .setOnlyAlertOnce(true)
                         .setCategory(NotificationCompat.CATEGORY_ERROR)
                         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(Log.formatThrowable(ex, "\n", false)));
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
 
         return builder;
     }

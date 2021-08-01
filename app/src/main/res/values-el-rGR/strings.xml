@@ -284,6 +284,7 @@
     <string name="title_advanced_suggest_sent">Προτείνονται διευθύνσεις που βρέθηκαν σε απεσταλμένα μηνύματα</string>
     <string name="title_advanced_suggest_received">Προτείνονται διευθύνσεις που βρέθηκαν σε μηνύματα που έχουν ληφθεί</string>
     <string name="title_advanced_suggest_frequently">Ταξινόμηση των προτεινόμενων διευθύνσεων με βάση τη συχνότητα που χρησιμοποιούνται</string>
+    <string name="title_advanced_alt_re_fwd">Εναλλακτικό πρόθεμα απάντησης/προώθησης</string>
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
     <string name="title_advanced_send_delayed">Καθυστέρηση στην αποστολή μηνυμάτων</string>
     <string name="title_advanced_send_pending">Προβολή διακριτικού εικονιδίου για απεσταλμένα με χρονοκαθυστέρηση</string>
@@ -420,6 +421,7 @@
     <string name="title_advanced_collapse_multiple">Σύμπτυξη των μηνυμάτων σε μια συζήτηση με πολλαπλά μηνύματα, πατώντας \"πίσω\"</string>
     <string name="title_advanced_autoclose">Αυτόματη κλείσιμο των συζητήσεων</string>
     <string name="title_advanced_onclose">Κατά το κλείσιμο μιας συζήτησης</string>
+    <string name="title_advanced_autoclose_unread">Να κλείνουν οι συζητήσεις όταν τα μηνύματα επισημαίνονται ως μη αναγνωσμένα</string>
     <string name="title_advanced_undo">Χρονικό περιθώριο για αναίρεση</string>
     <string name="title_advanced_quick_filter">Διακριτικά εικονίδια για γρήγορο φιλτράρισμα</string>
     <string name="title_advanced_quick_scroll">Διακριτικά εικονίδια για ταχεία κύλιση προς τα πάνω/κάτω</string>
@@ -716,6 +718,8 @@
     <string name="title_synchronize_enabled">Συγχρονισμός</string>
     <string name="title_synchronize_batch_enable">Ενεργοποίηση συγχρονισμού</string>
     <string name="title_synchronize_batch_disable">Απενεργοποίηση συγχρονισμού</string>
+    <string name="title_notify_batch_enable">Ενεργοποίηση ειδοποιήσεων για νέα μηνύματα</string>
+    <string name="title_notify_batch_disable">Απενεργοποίηση ειδοποιήσεων για νέα μηνύματα</string>
     <string name="title_delete_local">Διαγραφή τοπικών μηνυμάτων</string>
     <string name="title_delete_browsed">Διαγραφή των φυλλομετρημένων/αναζητημένων μηνυμάτων</string>
     <string name="title_empty_trash">Άδειασμα κάδου απορριμμάτων</string>
@@ -1364,6 +1368,7 @@
     <string name="title_check_owner">Επαλήθευση κατόχου</string>
     <string name="title_remark_owner">Θα ανακτηθούν πληροφορίες από <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Διεύθυνση IP κατόχου</string>
+    <string name="title_reset_open">Ορισμός ή εκκαθάριση προεπιλεγμένων εφαρμογών</string>
     <string name="title_select_app">Επιλογή εφαρμογής</string>
     <string name="title_updated">Υπάρχει διαθέσιμη μια ενημέρωση για την έκδοση %1$s</string>
     <string name="title_issue">Έχετε μία ερώτηση ή κάποιο πρόβλημα;</string>

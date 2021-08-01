@@ -1,6 +1,6 @@
 ## Privacy policy
 
-[<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Google_Translate_logo.svg/240px-Google_Translate_logo.svg.png" width="18" height="18" /> Google Translate](https://translate.google.com/translate?hl=&sl=en&u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FPRIVACY.md)
+<sub>[&#x1F30E; Google Translate](https://translate.google.com/translate?hl=&sl=en&u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FPRIVACY.md)</sub>
 
 <br />
 
@@ -17,7 +17,7 @@ FairEmail **does** follow the recommendations of [this EFF article](https://www.
 
 FairEmail is 100 % **open source**, see [the license](https://github.com/M66B/FairEmail/blob/master/LICENSE).
 
-Error reporting is **opt-in**, see [here](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq104) for more information.
+Error reporting **is opt-in**, see [here](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq104) for more information.
 
 FairEmail **will not** transfer information to other apps and services
 and therefore adheres to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes),

@@ -207,10 +207,13 @@ public class Log {
     public static int w(Throwable ex) {
         if (BuildConfig.BETA_RELEASE)
             try {
+                final StackTraceElement[] ste = new Throwable().getStackTrace();
                 Bugsnag.notify(ex, new OnErrorCallback() {
                     @Override
                     public boolean onError(@NonNull Event event) {
                         event.setSeverity(Severity.INFO);
+                        if (ste.length > 1)
+                            event.addMetadata("extra", "caller", ste[1].toString());
                         return true;
                     }
                 });
@@ -223,10 +226,13 @@ public class Log {
     public static int e(Throwable ex) {
         if (BuildConfig.BETA_RELEASE)
             try {
+                final StackTraceElement[] ste = new Throwable().getStackTrace();
                 Bugsnag.notify(ex, new OnErrorCallback() {
                     @Override
                     public boolean onError(@NonNull Event event) {
                         event.setSeverity(Severity.WARNING);
+                        if (ste.length > 1)
+                            event.addMetadata("extra", "caller", ste[1].toString());
                         return true;
                     }
                 });
@@ -1923,7 +1929,6 @@ public class Log {
                     jaccount.put("keep_alive_failed", account.keep_alive_failed);
                     jaccount.put("keep_alive_succeeded", account.keep_alive_succeeded);
 
-                    jaccount.remove("user");
                     jaccount.remove("password");
 
                     size += write(os, "==========\r\n");
@@ -1940,12 +1945,15 @@ public class Log {
                         jfolder.put("subscribed", folder.subscribed);
                         jfolder.put("state", folder.state == null ? "null" : folder.state);
                         jfolder.put("sync_state", folder.sync_state == null ? "null" : folder.sync_state);
+                        jfolder.put("poll_count", folder.poll_count);
                         jfolder.put("read_only", folder.read_only);
                         jfolder.put("selectable", folder.selectable);
                         jfolder.put("inferiors", folder.inferiors);
                         jfolder.put("error", folder.error);
                         if (folder.last_sync != null)
                             jfolder.put("last_sync", new Date(folder.last_sync).toString());
+                        if (folder.last_sync_count != null)
+                            jfolder.put("last_sync_count", folder.last_sync_count);
                         size += write(os, jfolder.toString(2) + "\r\n");
                     }
 
@@ -1953,7 +1961,6 @@ public class Log {
                     for (EntityIdentity identity : identities)
                         try {
                             JSONObject jidentity = identity.toJSON();
-                            jidentity.remove("user");
                             jidentity.remove("password");
                             jidentity.remove("signature");
                             size += write(os, "----------\r\n");

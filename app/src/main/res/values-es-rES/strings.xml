@@ -284,6 +284,7 @@
     <string name="title_advanced_suggest_sent">Sugerir direcciones encontradas en mensajes enviados</string>
     <string name="title_advanced_suggest_received">Sugerir direcciones encontradas en mensajes recibidos</string>
     <string name="title_advanced_suggest_frequently">Ordenar direcciones sugeridas por frecuencia de uso</string>
+    <string name="title_advanced_alt_re_fwd">Prefijo alternativo de respuesta/reenvío</string>
     <string name="title_advanced_send_reminders">Mostrar recordatorios</string>
     <string name="title_advanced_send_delayed">Diferir envío de mensajes</string>
     <string name="title_advanced_send_pending">Mostrar icono de envío diferido no obtrusivo</string>
@@ -420,6 +421,7 @@
     <string name="title_advanced_collapse_multiple">Colapsar mensajes en una conversación con varios mensajes al ir \'atrás\'</string>
     <string name="title_advanced_autoclose">Cerrar conversaciones automáticamente</string>
     <string name="title_advanced_onclose">Al cerrar una conversación</string>
+    <string name="title_advanced_autoclose_unread">Cerrar conversaciones al marcar mensajes como no leídos</string>
     <string name="title_advanced_undo">Tiempo de espera para deshacer</string>
     <string name="title_advanced_quick_filter">Mostrar iconos de filtro rápido no intrusivos</string>
     <string name="title_advanced_quick_scroll">Mostrar iconos rápidos de arriba/abajo no intrusivos</string>
@@ -718,6 +720,8 @@
     <string name="title_synchronize_enabled">Sincronizar</string>
     <string name="title_synchronize_batch_enable">Activar sincronización</string>
     <string name="title_synchronize_batch_disable">Desactivar sincronización</string>
+    <string name="title_notify_batch_enable">Activar notificaciones de mensajes nuevos</string>
+    <string name="title_notify_batch_disable">Desactivar notificaciones de mensajes nuevos</string>
     <string name="title_delete_local">Eliminar mensajes locales</string>
     <string name="title_delete_browsed">Eliminar mensajes explorados/buscados</string>
     <string name="title_empty_trash">Vaciar papelera</string>
@@ -1366,6 +1370,7 @@
     <string name="title_check_owner">Comprobar propietario</string>
     <string name="title_remark_owner">La información se obtendrá de <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Dirección IP del propietario</string>
+    <string name="title_reset_open">Establecer o limpiar aplicaciones por defecto</string>
     <string name="title_select_app">Seleccionar app</string>
     <string name="title_updated">Hay una actualización a la version %1$s disponible</string>
     <string name="title_issue">¿Tiene una pregunta o problema?</string>

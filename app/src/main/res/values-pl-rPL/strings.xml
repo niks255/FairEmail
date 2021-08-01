@@ -303,6 +303,7 @@
     <string name="title_advanced_suggest_sent">Proponuj adresy znalezione w wysłanych wiadomościach</string>
     <string name="title_advanced_suggest_received">Proponuj adresy znalezione w otrzymanych wiadomościach</string>
     <string name="title_advanced_suggest_frequently">Sortuj sugerowane adresy według częstotliwości używania</string>
+    <string name="title_advanced_alt_re_fwd">Alternatywny prefiks odpowiedzi/przekazywania</string>
     <string name="title_advanced_send_reminders">Pokaż przypomnienia</string>
     <string name="title_advanced_send_delayed">Opóźnienie wysyłania wiadomości</string>
     <string name="title_advanced_send_pending">Pokaż nieprzeszkadzającą ikonę wysłania z opóźnieniem</string>
@@ -347,6 +348,7 @@
     <string name="title_advanced_portrait2">Użyj dwóch rzędów w trybie pionowym</string>
     <string name="title_advanced_landscape">Użyj dwóch kolumn w trybie poziomym</string>
     <string name="title_advanced_landscape3">Domyślnie pokaż menu nawigacji w trybie poziomym</string>
+    <string name="title_advanced_nav_message_count">Pokaż liczbę lokalnie przechowywanych wiadomości w menu nawigacji</string>
     <string name="title_advanced_startup">Pokaż na ekranie początkowym</string>
     <string name="title_advanced_cards">Użyj stylu karty zamiast stylu tabelarycznego</string>
     <string name="title_advanced_cards_beige">Użyj beżowego tła podczas używania stylu karty (tylko jasne motywy)</string>
@@ -438,6 +440,7 @@
     <string name="title_advanced_collapse_multiple">Zwiń wiadomości w rozmowie z wieloma wiadomościami przy \'wstecz\'</string>
     <string name="title_advanced_autoclose">Automatycznie zamykaj konwersacje</string>
     <string name="title_advanced_onclose">Przy zamykaniu wiadomości</string>
+    <string name="title_advanced_autoclose_unread">Zamknij rozmowy przy oznaczaniu wiadomości jako nieprzeczytane</string>
     <string name="title_advanced_undo">Ustaw limit czasu dla \"Cofnij\"</string>
     <string name="title_advanced_quick_filter">Pokaż nienatarczywe ikony szybkiego filtrowania</string>
     <string name="title_advanced_quick_scroll">Pokaż nienatarczywe ikony szybkiego przewijania w górę/w dół</string>
@@ -736,6 +739,8 @@
     <string name="title_synchronize_enabled">Synchronizuj</string>
     <string name="title_synchronize_batch_enable">Włącz synchronizację</string>
     <string name="title_synchronize_batch_disable">Wyłącz synchronizację</string>
+    <string name="title_notify_batch_enable">Włącz powiadomienia o nowej wiadomości</string>
+    <string name="title_notify_batch_disable">Wyłącz powiadomienia o nowej wiadomości</string>
     <string name="title_delete_local">Usuń wiadomości lokalne</string>
     <string name="title_delete_browsed">Usuń przejrzane/przeszukane wiadomości</string>
     <string name="title_empty_trash">Opróżnij kosz</string>
@@ -1384,6 +1389,7 @@
     <string name="title_check_owner">Sprawdź właściciela</string>
     <string name="title_remark_owner">Informacje będą pobierane z <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Adres IP właściciela</string>
+    <string name="title_reset_open">Ustaw lub wyczyść domyślne aplikacje</string>
     <string name="title_select_app">Wybierz aplikację</string>
     <string name="title_updated">Jest dostępna aktualizacja do wersji %1$s</string>
     <string name="title_issue">Masz pytanie lub problem?</string>

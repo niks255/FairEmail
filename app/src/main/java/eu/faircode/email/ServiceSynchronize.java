@@ -19,6 +19,8 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
+
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -94,8 +96,6 @@ import javax.mail.event.StoreEvent;
 import javax.mail.event.StoreListener;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
-
-import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
 public class ServiceSynchronize extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Network lastActive = null;
@@ -1075,7 +1075,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             if (folders.size() > 0)
                                 Collections.sort(folders, folders.get(0).getComparator(ServiceSynchronize.this));
                             for (EntityFolder folder : folders)
-                                EntityOperation.sync(ServiceSynchronize.this, folder.id, false);
+                                EntityOperation.poll(ServiceSynchronize.this, folder.id);
                         }
 
                         db.setTransactionSuccessful();
@@ -1160,19 +1160,25 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         return builder;
     }
 
-    private NotificationCompat.Builder getNotificationAlert(String account, String message) {
+    private NotificationCompat.Builder getNotificationAlert(EntityAccount account, String message) {
+        String title = getString(R.string.title_notification_alert, account.name);
+
         // Build pending intent
-        Intent alert = new Intent(this, ActivityView.class);
-        alert.setAction("alert");
-        alert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(this, ActivityError.class);
+        intent.setAction("alert:" + account.id);
+        intent.putExtra("type", "alert");
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        intent.putExtra("faq", 23);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent piAlert = PendingIntentCompat.getActivity(
-                this, ActivityView.PI_ALERT, alert, PendingIntent.FLAG_UPDATE_CURRENT);
+                this, ActivityError.PI_ALERT, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build notification
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "alerts")
                         .setSmallIcon(R.drawable.baseline_warning_white_24)
-                        .setContentTitle(getString(R.string.title_notification_alert, account))
+                        .setContentTitle(title)
                         .setContentText(message)
                         .setContentIntent(piAlert)
                         .setAutoCancel(false)
@@ -1241,7 +1247,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 if (account.protocol != EntityAccount.TYPE_IMAP)
                     iservice.setLeaveOnServer(account.leave_on_server);
 
-                final long start = new Date().getTime();
+                final Date lastStillHere = new Date(0);
 
                 iservice.setListener(new StoreListener() {
                     @Override
@@ -1255,8 +1261,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             if ("Still here".equals(message) &&
                                     !account.isTransient(ServiceSynchronize.this)) {
                                 long now = new Date().getTime();
-                                if (now - start < STILL_THERE_THRESHOLD)
-                                    optimizeAccount(account, message);
+                                long last = lastStillHere.getTime();
+                                if (last > 0) {
+                                    long elapsed = now - last;
+                                    if (elapsed < STILL_THERE_THRESHOLD)
+                                        optimizeAccount(account, "'" + message + "'" +
+                                                " elapsed=" + elapsed + " ms");
+                                }
+                                lastStillHere.setTime(now);
                             }
                         } else
                             try {
@@ -1269,7 +1281,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                         nm.notify("alert:" + account.id,
                                                 NotificationHelper.NOTIFICATION_TAGGED,
-                                                getNotificationAlert(account.name, message).build());
+                                                getNotificationAlert(account, message).build());
                                     } catch (Throwable ex) {
                                         Log.w(ex);
                                     }
@@ -1289,6 +1301,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     try {
                         iservice.connect(account);
+                        lastStillHere.setTime(0);
                     } catch (Throwable ex) {
                         // Immediately report auth errors
                         if (ex instanceof AuthenticationFailedException) {
@@ -1302,7 +1315,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                     NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                     nm.notify("receive:" + account.id,
                                             NotificationHelper.NOTIFICATION_TAGGED,
-                                            Core.getNotificationError(this, "error", account.name, ex)
+                                            Core.getNotificationError(this, "error", account, 0, ex)
                                                     .build());
                                 } catch (Throwable ex1) {
                                     Log.w(ex1);
@@ -1871,11 +1884,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                     " Tune interval=" + account.poll_interval +
                                     " idle=" + idleTime + "/" + tune);
                         try {
-                            if (!state.isRecoverable())
-                                throw new StoreClosedException(
-                                        iservice.getStore(),
-                                        "Unrecoverable",
-                                        new Exception(state.getUnrecoverable()));
+                            if (!state.isRecoverable()) {
+                                Throwable unrecoverable = state.getUnrecoverable();
+                                Exception cause =
+                                        (unrecoverable instanceof Exception
+                                                ? (Exception) unrecoverable
+                                                : new Exception(unrecoverable));
+                                throw new StoreClosedException(iservice.getStore(), "Unrecoverable", cause);
+                            }
 
                             // Sends store NOOP
                             if (EmailService.SEPARATE_STORE_CONNECTION) {
@@ -1903,13 +1919,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                 throw new StoreClosedException(iservice.getStore(), "NOOP " + folder.name);
                                         } else {
                                             if (folder.poll_count == 0) {
-                                                // Cancel pending sync, for example when the folder is not set to poll
-                                                db.operation().deleteOperation(folder.id, EntityOperation.SYNC);
-                                                EntityOperation.sync(this, folder.id, false);
+                                                EntityLog.log(this, folder.name + " queue sync poll");
+                                                EntityOperation.poll(this, folder.id);
                                             }
                                             folder.poll_count = (folder.poll_count + 1) % folder.poll_factor;
                                             db.folder().setFolderPollCount(folder.id, folder.poll_count);
-                                            Log.i(folder.name + " poll count=" + folder.poll_count);
+                                            EntityLog.log(this, folder.name +
+                                                    " poll count=" + folder.poll_count +
+                                                    " factor=" + folder.poll_factor);
                                         }
                             }
                         } catch (Throwable ex) {
@@ -2024,7 +2041,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                 nm.notify("receive:" + account.id,
                                         NotificationHelper.NOTIFICATION_TAGGED,
-                                        Core.getNotificationError(this, "warning", account.name, warning)
+                                        Core.getNotificationError(this, "warning", account, 0, warning)
                                                 .build());
                             } catch (Throwable ex1) {
                                 Log.w(ex1);
@@ -2054,24 +2071,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     state.resetBatches();
                     ((ThreadPoolExecutor) executor).getQueue().clear();
 
-                    // Close folders
-                    for (EntityFolder folder : mapFolders.keySet()) {
-                        if (folder.selectable && folder.synchronize && !folder.poll && mapFolders.get(folder) != null) {
-                            db.folder().setFolderState(folder.id, "closing");
-                            try {
-                                if (iservice.getStore().isConnected())
-                                    mapFolders.get(folder).forceClose();
-                            } catch (Throwable ex) {
-                                Log.w(ex);
-                            }
-                        }
-
-                        db.folder().setFolderState(folder.id, null);
-                    }
-
                     // Close store
                     try {
                         db.account().setAccountState(account.id, "closing");
+                        for (EntityFolder folder : mapFolders.keySet())
+                            if (folder.selectable && folder.synchronize && !folder.poll && mapFolders.get(folder) != null)
+                                db.folder().setFolderState(folder.id, "closing");
                         EntityLog.log(this, account.name + " store closing");
                         iservice.close();
                         EntityLog.log(this, account.name + " store closed");
@@ -2080,6 +2085,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     } finally {
                         EntityLog.log(this, account.name + " closed");
                         db.account().setAccountState(account.id, null);
+                        for (EntityFolder folder : mapFolders.keySet())
+                            db.folder().setFolderState(folder.id, null);
                     }
 
                     // Stop idlers
@@ -2141,7 +2148,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     int backoff = state.getBackoff();
                     int recently = (lastLost + LOST_RECENTLY < now ? 1 : 2);
-                    EntityLog.log(this, account.name + " backoff=" + backoff + " recently=" + recently);
+                    EntityLog.log(this, account.name + " backoff=" + backoff + " recently=" + recently + "x");
 
                     if (backoff < CONNECT_BACKOFF_MAX)
                         state.setBackoff(backoff * 2);
@@ -2254,7 +2261,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         DB db = DB.getInstance(this);
 
         int pollInterval = getPollInterval(this);
-        EntityLog.log(this, "Auto optimize account=" + account.name + " poll interval=" + pollInterval);
+        EntityLog.log(this, account.name + " auto optimize" +
+                " reason=" + reason +
+                " poll interval=" + pollInterval);
         if (pollInterval == 0) {
             try {
                 db.beginTransaction();

@@ -279,6 +279,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean authentication;
     private boolean authentication_indicator;
 
+    private boolean autoclose_unseen;
+
     private boolean language_detection;
     private List<String> languages;
     private static boolean debug;
@@ -1048,13 +1050,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibAuth.setImageLevel(0);
                 ibAuth.setImageTintList(ColorStateList.valueOf(colorWarning));
                 ibAuth.setVisibility(View.VISIBLE);
-            } else if (authentication_indicator &&
-                    !EntityFolder.DRAFTS.equals(message.folderType) &&
-                    !EntityFolder.OUTBOX.equals(message.folderType)) {
+            } else if (authentication_indicator) {
                 ibAuth.setImageLevel(auths + 1);
                 ibAuth.setImageTintList(ColorStateList.valueOf(
                         auths < 3 ? colorControlNormal : colorVerified));
-                ibAuth.setVisibility(View.VISIBLE);
+                ibAuth.setVisibility(auths > 0 ? View.VISIBLE : View.GONE);
             } else
                 ibAuth.setVisibility(View.GONE);
 
@@ -1298,8 +1298,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (viewType == ViewType.THREAD)
                 if (expanded)
                     bindExpanded(message, scroll);
-                else
+                else {
                     clearExpanded(message);
+                    if (scroll)
+                        properties.scrollTo(getAdapterPosition(), 0);
+                }
 
             if (properties.getValue("raw_save", message.id)) {
                 properties.setValue("raw_save", message.id, false);
@@ -4809,7 +4812,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     message.ui_seen = args.getBoolean("seen");
                     message.unseen = (message.ui_seen ? 0 : message.count);
-                    properties.setExpanded(message, false, false);
+                    if (!message.ui_seen &&
+                            (autoclose_unseen || getItemCount() == 1))
+                        properties.finish();
+                    else
+                        properties.setExpanded(message, false, true);
                 }
 
                 @Override
@@ -5723,6 +5730,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.authentication_indicator = (this.authentication &&
                 prefs.getBoolean("authentication_indicator", false));
         this.language_detection = prefs.getBoolean("language_detection", false);
+        this.autoclose_unseen = prefs.getBoolean("autoclose_unseen", false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             languages = new ArrayList<>();

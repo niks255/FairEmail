@@ -489,6 +489,7 @@
     <string name="title_advanced_collapse_multiple">Collapse messages in a conversation with multiple messages on \'back\'</string>
     <string name="title_advanced_autoclose">Automatically close conversations</string>
     <string name="title_advanced_onclose">On closing a conversation</string>
+    <string name="title_advanced_autoclose_unread">Close conversations on marking messages as unread</string>
     <string name="title_advanced_undo">Undo timeout</string>
     <string name="title_advanced_quick_filter">Show non-obtrusive quick filter icons</string>
     <string name="title_advanced_quick_scroll">Show non-obtrusive quick scroll up/down icons</string>
@@ -840,6 +841,8 @@
     <string name="title_synchronize_enabled">Synchronize</string>
     <string name="title_synchronize_batch_enable">Enable synchronization</string>
     <string name="title_synchronize_batch_disable">Disable synchronization</string>
+    <string name="title_notify_batch_enable">Enable new message notifications</string>
+    <string name="title_notify_batch_disable">Disable new message notifications</string>
     <string name="title_delete_local">Delete local messages</string>
     <string name="title_delete_browsed">Delete browsed/searched messages</string>
     <string name="title_empty_trash">Empty trash</string>
@@ -1546,6 +1549,7 @@
     <string name="title_check_owner">Check owner</string>
     <string name="title_remark_owner">Information will be retrieved from <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Owner IP address</string>
+    <string name="title_reset_open">Set or clear default apps</string>
     <string name="title_select_app">Select app</string>
     <string name="title_updated">There is an update to version %1$s available</string>
     <string name="title_issue">Do you have a question or problem?</string>
