@@ -52,9 +52,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.mail.internet.InternetAddress;
+
+// https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts
+// https://developer.android.com/guide/topics/ui/shortcuts/managing-shortcuts
 
 class Shortcuts {
     private static final int MAX_SHORTCUTS = 4;
@@ -109,8 +113,50 @@ class Shortcuts {
             @Override
             @TargetApi(Build.VERSION_CODES.N_MR1)
             protected void onExecuted(Bundle args, List<ShortcutInfoCompat> shortcuts) {
-                ShortcutManagerCompat.removeAllDynamicShortcuts(context);
-                ShortcutManagerCompat.addDynamicShortcuts(context, shortcuts);
+                List<ShortcutInfoCompat> add = new ArrayList<>();
+                List<String> remove = new ArrayList<>();
+
+                if (BuildConfig.DEBUG && false)
+                    ShortcutManagerCompat.removeAllDynamicShortcuts(context);
+
+                List<ShortcutInfoCompat> existing = ShortcutManagerCompat.getDynamicShortcuts(context);
+
+                for (ShortcutInfoCompat shortcut : shortcuts) {
+                    boolean exists = false;
+                    for (ShortcutInfoCompat current : existing)
+                        if (Objects.equals(shortcut.getId(), current.getId())) {
+                            Log.i("Found shortcut=" + current.getId());
+                            exists = true;
+                            break;
+                        }
+                    if (!exists)
+                        add.add(shortcut);
+                }
+
+                for (ShortcutInfoCompat current : existing) {
+                    boolean found = false;
+                    for (ShortcutInfoCompat shortcut : shortcuts)
+                        if (Objects.equals(shortcut.getId(), current.getId())) {
+                            found = true;
+                            break;
+                        }
+                    if (!found) {
+                        Log.i("Not found shortcut=" + current.getId());
+                        remove.add(current.getId());
+                    }
+                }
+
+                Log.i("Shortcuts count=" + shortcuts.size() +
+                        " add=" + add.size() +
+                        " remove=" + remove.size());
+
+                if (remove.size() > 0)
+                    ShortcutManagerCompat.removeDynamicShortcuts(context, remove);
+
+                for (ShortcutInfoCompat shortcut : add) {
+                    Log.i("Push shortcut id=" + shortcut.getId());
+                    ShortcutManagerCompat.pushDynamicShortcut(context, shortcut);
+                }
             }
 
             @Override
@@ -201,8 +247,8 @@ class Shortcuts {
                 circular && !identicon ? null : Helper.dp2pixels(context, 3));
 
         IconCompat icon = IconCompat.createWithBitmap(bitmap);
-        String id = (name == null ? email : "\"" + name + "\" <" + email + ">");
-        Set<String> categories = new HashSet<>(Arrays.asList("eu.faircode.email.TEXT_SHARE_TARGET"));
+        String id = Integer.toHexString(Objects.hash(name, email));
+        Set<String> categories = new HashSet<>(Arrays.asList(BuildConfig.APPLICATION_ID + ".TEXT_SHARE_TARGET"));
         ShortcutInfoCompat.Builder builder = new ShortcutInfoCompat.Builder(context, id)
                 .setIcon(icon)
                 .setShortLabel(name == null ? email : name)

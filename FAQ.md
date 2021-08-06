@@ -223,7 +223,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(85) Why is an identity not available?](#user-content-faq85)
 * [~~(86) What are 'extra privacy features'?~~](#user-content-faq86)
 * [(87) What does 'invalid credentials' mean?](#user-content-faq87)
-* [(88) How can I use a Yahoo, AOL or Sky account?](#user-content-faq88)
+* [(88) How can I use a Yahoo/AT&T, AOL or Sky account?](#user-content-faq88)
 * [(89) How can I send plain text only messages?](#user-content-faq89)
 * [(90) Why are some texts linked while not being a link?](#user-content-faq90)
 * [~~(91) Can you add periodical synchronization to save battery power?~~](#user-content-faq91)
@@ -1182,6 +1182,8 @@ Sometimes you can workaround this by using another SMTP port. See the documentat
 
 If you are using a [VPN](https://en.wikipedia.org/wiki/Virtual_private_network),
 the VPN provider might block the connection because it is too aggressively trying to prevent spam.
+Similarly, the email server might block connections via a VPN because it was misused for sending spam.
+Some VPN providers have "cleaner" IP addresses than others, so switching to another VPN provider might be useful.
 Note that [Google Fi](https://fi.google.com/) is using a VPN too.
 
 **Send errors**
@@ -2438,15 +2440,15 @@ You will likely need to save the associated identity again as well.
 <br />
 
 <a name="faq88"></a>
-**(88) How can I use a Yahoo, AOL or Sky account?**
+**(88) How can I use a Yahoo/AT&T, AOL or Sky account?**
 
 The preferred way to set up a Yahoo account is by using the quick setup wizard,
 which will use OAuth instead of a password and is therefore safer (and easier as well).
 
-To authorize a Yahoo, AOL, or Sky account you will need to create an app password.
-For instructions, please see here:
+To authorize a Yahoo/AT&T, AOL, or Sky account you need to use an app password instead of your normal account password.
+For instructions about how to create an app password, please see here:
 
-* [for Yahoo](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
+* [for Yahoo/AT&T](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
 * [for AOL](https://help.aol.com/articles/Create-and-manage-app-password)
 * [for Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Other email apps*)
 

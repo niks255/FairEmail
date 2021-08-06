@@ -262,6 +262,7 @@
     <string name="title_advanced_always">Ricevi sempre i messaggi per questi profili</string>
     <string name="title_advanced_schedule">Pianificazione</string>
     <string name="title_advanced_advanced">Avanzate</string>
+    <string name="title_advanced_quick_sync">Sincronizzazione rapida</string>
     <string name="title_advanced_no_date">Messaggi senza data</string>
     <string name="title_advanced_unseen">Tutti i messaggi non letti</string>
     <string name="title_advanced_flagged">Tutti i messaggi stellati</string>
@@ -526,6 +527,7 @@
     <string name="title_advanced_poll_hint">Cercare periodicamente i nuovi messaggi confronterà i messaggi locali e remoti ogni volta, che è un\'operazione costosa che potrebbe risultare in un uso extra della batteria, specialmente se ci sono molti messaggi. Ricevere sempre lo impedirà seguendo continuamento le modifiche.</string>
     <string name="title_advanced_optimize_hint">Questo potrebbe cambiare la frequenza di sincronizzazione per risparmiare sull\'uso della batteria in base alle capacità e il comportamento dei server email</string>
     <string name="title_advanced_schedule_hint">Tocca sull\'orario per impostarlo</string>
+    <string name="title_advanced_quick_sync_hint">Riduce l\'utilizzo dei dati, ma i nuovi messaggi potrebbero essere persi se il server di posta elettronica non segue gli standard</string>
     <string name="title_advanced_no_date_hint">Alcuni provider memorizzano i messaggi con una data sconosciuta, non valida o futura come messaggi senza data</string>
     <string name="title_advanced_unseen_hint">Alcuni provider non lo supportano propriamente, il che potrebbe causare la sincronizzazione di tutti o nessun messaggio</string>
     <string name="title_advanced_deleted_unseen">Quando disabilitato, i messaggi non letti sono mantenuti per sempre sul dispositivo</string>
@@ -574,6 +576,7 @@
     <string name="title_advanced_sender_hint">Gran parte dei provider non consentono gli indirizzi modificati del mittente</string>
     <string name="title_advanced_bcc_hint">L\'indirizzo non sarà mostrato, ma aggiunto all\'invio</string>
     <string name="title_advanced_internal_hint">Ci sarà un avviso inviando a un altro dominio</string>
+    <string name="title_advanced_e2e_encryption">Opzioni per la crittografia end-to-end</string>
     <string name="title_advanced_display_harmful_hint">Disabilitare quest\'opzione potrebbe esser dannoso per la tua privacy</string>
     <string name="title_advanced_display_hidden_hint">Questo può risultare in testi strani e doppi</string>
     <string name="title_advanced_display_pin_hint">Un PIN ha la precedenza sull\'autenticazione biometrica</string>
@@ -1147,6 +1150,7 @@
     <string name="title_select_found">Seleziona trovati</string>
     <string name="title_mark_all_read">Segna tutto come letto</string>
     <string name="title_force_sync">Forza sincronizzazione</string>
+    <string name="title_force_reload">Forza il riavvio</string>
     <string name="title_force_send">Forza invio</string>
     <string name="title_language_all">Tutte</string>
     <string name="title_previous">Precedente</string>
@@ -1596,6 +1600,7 @@
         <item>Medio</item>
         <item>Grande</item>
     </string-array>
+    <string name="title_size_tiny">Molto piccolo</string>
     <string-array name="receiptNames">
         <item>Solo conferma di lettura</item>
         <item>Solo conferma di consegna</item>

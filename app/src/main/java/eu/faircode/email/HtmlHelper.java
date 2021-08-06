@@ -24,6 +24,7 @@ import static org.w3c.css.sac.Condition.SAC_CLASS_CONDITION;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -38,6 +39,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.BulletSpan;
@@ -379,6 +381,16 @@ public class HtmlHelper {
         int textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
         int textColorPrimaryInverse = Helper.resolveColor(context, android.R.attr.textColorPrimaryInverse);
 
+        int textSizeSmall;
+        TypedArray ta = context.obtainStyledAttributes(
+                R.style.TextAppearance_AppCompat_Small, new int[]{android.R.attr.textSize});
+        if (ta == null)
+            textSizeSmall = Helper.dp2pixels(context, 6);
+        else {
+            textSizeSmall = ta.getDimensionPixelSize(0, 0);
+            ta.recycle();
+        }
+
         // https://chromium.googlesource.com/chromium/blink/+/master/Source/core/css/html.css
 
         // <!--[if ...]><!--> ... <!--<![endif]-->
@@ -598,41 +610,46 @@ public class HtmlHelper {
                             Integer color = parseColor(value);
 
                             if ("color".equals(key)) {
-                                boolean bg = false;
+                                Integer bg = null;
                                 if (background_color) {
                                     Element e = element;
-                                    while (e != null && !bg)
+                                    while (e != null && bg == null)
                                         if (e.hasAttr("x-background"))
-                                            bg = true;
+                                            bg = parseWebColor(e.attr("x-background"));
                                         else
                                             e = e.parent();
                                 }
 
-                                // Background color set:
-                                //   keep text color as-is
-                                if (!bg) {
+                                if (bg == null) {
                                     // Special case:
                                     //   external draft / dark background / dark font
                                     if (color != null && !view && dark) {
-                                        float lum = (float) ColorUtils.calculateLuminance(color);
-                                        if (lum < 0.1f)
+                                        double lum = ColorUtils.calculateLuminance(color);
+                                        if (lum < 0.1)
                                             color = null;
                                     }
 
                                     if (color != null && view)
                                         color = adjustColor(dark, textColorPrimary, color);
+                                } else if (bg == Color.TRANSPARENT) {
+                                    // Background color was suppressed because "no color"
+                                    if (color != null) {
+                                        double lum = ColorUtils.calculateLuminance(color);
+                                        if (dark ? lum < MIN_LUMINANCE : lum > 1 - MIN_LUMINANCE)
+                                            color = textColorPrimary;
+                                    }
                                 }
 
                                 if (color != null)
                                     element.attr("x-color", "true");
                             } else /* background */ {
                                 if (color != null && !hasColor(color))
-                                    continue;
+                                    color = Color.TRANSPARENT;
 
                                 if (color != null)
-                                    element.attr("x-background", "true");
+                                    element.attr("x-background", encodeWebColor(color));
 
-                                if (dark) {
+                                if (color != null && dark) {
                                     boolean fg = false;
                                     if (text_color) {
                                         fg = (parseColor(kv.get("color")) != null);
@@ -645,12 +662,15 @@ public class HtmlHelper {
                                     }
 
                                     // Dark theme, background color with no text color:
-                                    //   force text color
-                                    if (!fg)
+                                    //   force (inverse) text color
+                                    if (!fg) {
+                                        double lum = (color == Color.TRANSPARENT ? 0 : ColorUtils.calculateLuminance(color));
+                                        int c = (lum < 0.5 ? textColorPrimary : textColorPrimaryInverse);
                                         sb.append("color")
                                                 .append(':')
-                                                .append(encodeWebColor(textColorPrimaryInverse))
+                                                .append(encodeWebColor(c))
                                                 .append(";");
+                                    }
                                 }
                             }
 
@@ -1112,6 +1132,12 @@ public class HtmlHelper {
                 Log.i("Removing small image");
                 Integer width = Helper.parseInt(img.attr("width").trim());
                 Integer height = Helper.parseInt(img.attr("height").trim());
+                if (width != null && height != null) {
+                    if (width == 0 && height != 0)
+                        width = height;
+                    if (width != 0 && height == 0)
+                        height = width;
+                }
                 if ((width != null && width <= SMALL_IMAGE_SIZE) ||
                         (height != null && height <= SMALL_IMAGE_SIZE)) {
                     img.remove();
@@ -1132,18 +1158,25 @@ public class HtmlHelper {
                                 String href = p.attr("href");
                                 if (TextUtils.isEmpty(href) || href.equals("#"))
                                     break;
+                                if (!TextUtils.isEmpty(p.text()))
+                                    break;
                                 linked = true;
                             } else
                                 p = p.parent();
                         if (linked)
                             alt = context.getString(R.string.title_image_link);
                     }
-                    if (!TextUtils.isEmpty(alt))
-                        img.appendText("[" + alt + "]");
+                    if (!TextUtils.isEmpty(alt)) {
+                        Element span = document.createElement("span")
+                                .text("[" + alt + "]")
+                                .attr("x-font-size-abs", Integer.toString(textSizeSmall));
+                        img.appendChild(span);
+                    }
                 } else if (!TextUtils.isEmpty(alt)) {
-                    Element a = document.createElement("a");
-                    a.attr("href", tracking);
-                    a.text("[" + alt + "]");
+                    Element a = document.createElement("a")
+                            .attr("href", tracking)
+                            .text("[" + alt + "]")
+                            .attr("x-font-size-abs", Integer.toString(textSizeSmall));
                     img.appendChild(a);
                 }
 
@@ -1870,7 +1903,13 @@ public class HtmlHelper {
             return false;
 
         try {
-            return (Integer.parseInt(width) * Integer.parseInt(height) <= TRACKING_PIXEL_SURFACE);
+            int w = Integer.parseInt(width);
+            int h = Integer.parseInt(height);
+            if (w == 0 && h != 0)
+                w = h;
+            if (w != 0 && h == 0)
+                h = w;
+            return (w * h <= TRACKING_PIXEL_SURFACE);
         } catch (NumberFormatException ignored) {
             return false;
         }
@@ -2034,7 +2073,7 @@ public class HtmlHelper {
             if (TextDirectionHeuristics.FIRSTSTRONG_LTR.isRtl(quoted, start, end))
                 return "border-right:3px solid #ccc; padding-left:3px;";
         } catch (Throwable ex) {
-            Log.e(ex);
+            Log.e(new Throwable("getQuoteStyle", ex));
         }
 
         return "border-left:3px solid #ccc; padding-left:3px;";
@@ -2657,11 +2696,17 @@ public class HtmlHelper {
                     }
 
                     // Apply calculated font size
-                    String xFontSize = element.attr("x-font-size-rel");
-                    if (!TextUtils.isEmpty(xFontSize)) {
-                        Float fsize = Float.parseFloat(xFontSize);
-                        if (fsize != 1.0f)
-                            setSpan(ssb, new RelativeSizeSpan(fsize), start, ssb.length());
+                    String xFontSizeAbs = element.attr("x-font-size-abs");
+                    if (TextUtils.isEmpty(xFontSizeAbs)) {
+                        String xFontSizeRel = element.attr("x-font-size-rel");
+                        if (!TextUtils.isEmpty(xFontSizeRel)) {
+                            float fsize = Float.parseFloat(xFontSizeRel);
+                            if (fsize != 1.0f)
+                                setSpan(ssb, new RelativeSizeSpan(fsize), start, ssb.length());
+                        }
+                    } else {
+                        int px = Integer.parseInt(xFontSizeAbs);
+                        setSpan(ssb, new AbsoluteSizeSpan(px), start, ssb.length());
                     }
 
                     // Apply element
@@ -2694,7 +2739,7 @@ public class HtmlHelper {
                                     else
                                         setSpan(ssb, new QuoteSpan(colorBlockquote, quoteStripe, quoteGap), start, ssb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                                 } else
-                                    setSpan(ssb, new IndentSpan(intentSize), start, ssb.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                    setSpan(ssb, new IndentSpan(intentSize), start, ssb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                                 break;
                             case "br":
                                 ssb.append('\n');
@@ -2978,6 +3023,7 @@ public class HtmlHelper {
                 .removeAttr("x-paragraph")
                 .removeAttr("x-font-size")
                 .removeAttr("x-font-size-rel")
+                .removeAttr("x-font-size-abs")
                 .removeAttr("x-line-before")
                 .removeAttr("x-line-after")
                 .removeAttr("x-align")

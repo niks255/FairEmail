@@ -129,7 +129,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.bouncycastle.cert.jcajce.JcaCertStore;
@@ -1481,7 +1480,7 @@ public class FragmentCompose extends FragmentBase {
         });
 
         menu.findItem(R.id.menu_translate).setActionView(R.layout.action_button);
-        ImageButton ibTranslate = (ImageButton)menu.findItem(R.id.menu_translate).getActionView();
+        ImageButton ibTranslate = (ImageButton) menu.findItem(R.id.menu_translate).getActionView();
         ibTranslate.setImageResource(R.drawable.twotone_translate_24);
         ibTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1491,7 +1490,7 @@ public class FragmentCompose extends FragmentBase {
         });
 
         menu.findItem(R.id.menu_zoom).setActionView(R.layout.action_button);
-        ImageButton ibZoom = (ImageButton)menu.findItem(R.id.menu_zoom).getActionView();
+        ImageButton ibZoom = (ImageButton) menu.findItem(R.id.menu_zoom).getActionView();
         ibZoom.setImageResource(R.drawable.twotone_format_size_24);
         ibZoom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2525,42 +2524,44 @@ public class FragmentCompose extends FragmentBase {
                     if (cursor != null && cursor.moveToFirst()) {
                         int colEmail = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
                         int colName = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                        String email = MessageHelper.sanitizeEmail(cursor.getString(colEmail));
-                        String name = cursor.getString(colName);
+                        if (colEmail >= 0 && colName >= 0) {
+                            String email = MessageHelper.sanitizeEmail(cursor.getString(colEmail));
+                            String name = cursor.getString(colName);
 
-                        try {
-                            db.beginTransaction();
+                            try {
+                                db.beginTransaction();
 
-                            draft = db.message().getMessage(id);
-                            if (draft == null)
-                                return null;
+                                draft = db.message().getMessage(id);
+                                if (draft == null)
+                                    return null;
 
-                            Address[] address = null;
-                            if (requestCode == REQUEST_CONTACT_TO)
-                                address = draft.to;
-                            else if (requestCode == REQUEST_CONTACT_CC)
-                                address = draft.cc;
-                            else if (requestCode == REQUEST_CONTACT_BCC)
-                                address = draft.bcc;
+                                Address[] address = null;
+                                if (requestCode == REQUEST_CONTACT_TO)
+                                    address = draft.to;
+                                else if (requestCode == REQUEST_CONTACT_CC)
+                                    address = draft.cc;
+                                else if (requestCode == REQUEST_CONTACT_BCC)
+                                    address = draft.bcc;
 
-                            List<Address> list = new ArrayList<>();
-                            if (address != null)
-                                list.addAll(Arrays.asList(address));
+                                List<Address> list = new ArrayList<>();
+                                if (address != null)
+                                    list.addAll(Arrays.asList(address));
 
-                            list.add(new InternetAddress(email, suggest_names ? name : null, StandardCharsets.UTF_8.name()));
+                                list.add(new InternetAddress(email, suggest_names ? name : null, StandardCharsets.UTF_8.name()));
 
-                            if (requestCode == REQUEST_CONTACT_TO)
-                                draft.to = list.toArray(new Address[0]);
-                            else if (requestCode == REQUEST_CONTACT_CC)
-                                draft.cc = list.toArray(new Address[0]);
-                            else if (requestCode == REQUEST_CONTACT_BCC)
-                                draft.bcc = list.toArray(new Address[0]);
+                                if (requestCode == REQUEST_CONTACT_TO)
+                                    draft.to = list.toArray(new Address[0]);
+                                else if (requestCode == REQUEST_CONTACT_CC)
+                                    draft.cc = list.toArray(new Address[0]);
+                                else if (requestCode == REQUEST_CONTACT_BCC)
+                                    draft.bcc = list.toArray(new Address[0]);
 
-                            db.message().updateMessage(draft);
+                                db.message().updateMessage(draft);
 
-                            db.setTransactionSuccessful();
-                        } finally {
-                            db.endTransaction();
+                                db.setTransactionSuccessful();
+                            } finally {
+                                db.endTransaction();
+                            }
                         }
                     }
                 }
@@ -4148,7 +4149,7 @@ public class FragmentCompose extends FragmentBase {
                         if (a != null) {
                             db.answer().applyAnswer(a.id, new Date().getTime());
                             data.draft.subject = a.name;
-                            Document d = JsoupEx.parse(a.getText(null));
+                            Document d = JsoupEx.parse(a.getHtml(null));
                             document.body().append(d.body().html());
                         }
 
@@ -4327,7 +4328,7 @@ public class FragmentCompose extends FragmentBase {
                                 else {
                                     db.answer().applyAnswer(receipt.id, new Date().getTime());
                                     texts = new String[0];
-                                    Document d = JsoupEx.parse(receipt.getText(null));
+                                    Document d = JsoupEx.parse(receipt.getHtml(null));
                                     document.body().append(d.body().html());
                                 }
                             }
@@ -4372,7 +4373,7 @@ public class FragmentCompose extends FragmentBase {
 
                         if (a != null) {
                             db.answer().applyAnswer(a.id, new Date().getTime());
-                            Document d = JsoupEx.parse(a.getText(data.draft.to));
+                            Document d = JsoupEx.parse(a.getHtml(data.draft.to));
                             document.body().append(d.body().html());
                         }
 

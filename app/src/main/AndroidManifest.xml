@@ -130,9 +130,6 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-            <meta-data
-                android:name="android.service.chooser.chooser_target_service"
-                android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -227,10 +224,30 @@
         </activity>
 
         <activity
+            android:name=".ActivityAnswer"
+            android:enabled="false"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@drawable/twotone_reply_24"
+            android:label="@string/app_answer"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ActivityCompose"
             android:exported="true"
             android:launchMode="singleTask"
             android:parentActivityName=".ActivityView">
+            <meta-data
+                android:name="android.service.chooser.chooser_target_service"
+                android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

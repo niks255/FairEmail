@@ -212,6 +212,10 @@ public class FragmentSetup extends FragmentBase {
                 menu.add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other)
                         .setIcon(R.drawable.twotone_auto_fix_high_24);
 
+                menu.add(Menu.NONE, R.string.title_setup_classic, order++, R.string.title_setup_classic)
+                        .setIcon(R.drawable.twotone_settings_24)
+                        .setVisible(BuildConfig.DEBUG);
+
                 SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
                 ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
                 menu.add(Menu.NONE, R.string.title_setup_pop3, order++, ss);
@@ -246,6 +250,22 @@ public class FragmentSetup extends FragmentBase {
                             return true;
                         } else if (itemId == R.string.title_setup_other) {
                             lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_SETUP));
+                            return true;
+                        } else if (itemId == R.string.title_setup_classic) {
+                            ibManual.setPressed(true);
+                            ibManual.setPressed(false);
+                            manual = true;
+                            updateManual();
+                            view.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        scrollTo(R.id.ibManual, 0);
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
+                                }
+                            });
                             return true;
                         } else if (itemId == R.string.title_setup_pop3) {
                             lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_POP3));
@@ -524,6 +544,7 @@ public class FragmentSetup extends FragmentBase {
 
                 btnIdentity.setEnabled(done);
                 btnInbox.setEnabled(done);
+                btnInbox.setTypeface(done ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
 
                 prefs.edit().putBoolean("has_accounts", done).apply();
             }
@@ -532,8 +553,27 @@ public class FragmentSetup extends FragmentBase {
         db.identity().liveComposableIdentities().observe(getViewLifecycleOwner(), new Observer<List<TupleIdentityEx>>() {
             @Override
             public void onChanged(@Nullable List<TupleIdentityEx> identities) {
-                boolean done = (identities != null && identities.size() > 0);
-                tvNoComposable.setVisibility(done ? View.GONE : View.VISIBLE);
+                Bundle args = new Bundle();
+
+                new SimpleTask<List<EntityAccount>>() {
+                    @Override
+                    protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
+                        DB db = DB.getInstance(context);
+                        return db.account().getSynchronizingAccounts();
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                        boolean done = ((accounts == null || accounts.size() == 0) ||
+                                (identities != null && identities.size() > 0));
+                        tvNoComposable.setVisibility(done ? View.GONE : View.VISIBLE);
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        // Ignored
+                    }
+                }.execute(FragmentSetup.this, args, "setup:accounts");
             }
         });
     }

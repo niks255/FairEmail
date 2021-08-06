@@ -2411,372 +2411,372 @@ First of all, a purchase will be available on all devices logged into the same G
 
 Google manages all purchases, so as a developer I have little control over purchases. So, basically the only thing I can do, is give some advice:
 
-* Make sure you have an active, working internet connection
-* Make sure you are logged in with the right Google account and that there is nothing wrong with your Google account
-* Make sure you installed FairEmail via the right Google account if you configured multiple Google accounts on your device
-* Make sure the Play store app is up to date, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
-* Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers
-* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it help to tap the *buy* button
+* Aktiv və işləyən bir internet bağlantınızın olduğuna əmin olun
+* Doğru Google hesabı ilə giriş etdiyinizə və bu Google hesabınızla bağlı heç bir problem olmadığına əmin olun
+* Cihazınızda bir neçə Google hesabı konfiqurasiya etmisinizsə, FairEmail-i doğru Google hesabı ilə quraşdırdığınıza əmin olun
+* Play Store tətbiqinin son versiyaya yeniləndiyinə əmin olun, zəhmət olmasa [bura baxın](https://support.google.com/googleplay/answer/1050566?hl=en)
+* Play Store tətbiqini açın və Google serverləri ilə eyniləşdirilməsi üçün bir dəqiqə gözləyin
+* FairEmail-in satın almaları yoxlamasına icazə vermək üçün, FairEmail-i açıb Pro özəlliklər ekranına gedin; bəzən *satın al* düyməsinə toxunmaq da kömək edir
 
-You can also try to clear the cache of the Play store app via the Android apps settings. Restarting the device might be necessary to let the Play store recognize the purchase correctly.
+Həmçinin Android tənzimləmələri üzərindən Play Store tətbiqinin keş yaddaşını da təmizləyə bilərsiniz. Play Store-un satın almaları doğru şəkildə tanıması üçün cihazı yenidən başlatmaq lazım ola bilər.
 
-Note that:
+Bunu unutmayın:
 
-* If you get *ITEM_ALREADY_OWNED*, the Play store app probably needs to be updated, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
-* Purchases are stored in the Google cloud and cannot get lost
-* There is no time limit on purchases, so they cannot expire
-* Google does not expose details (name, e-mail, etc) about buyers to developers
-* An app like FairEmail cannot select which Google account to use
-* It may take a while until the Play store app has synchronized a purchase to another device
-* Play Store purchases cannot be used without the Play Store, which is also not allowed by Play Store rules
+* *ITEM_ALREADY_OWNED* alsanız, Play Store tətbiqi yəqin ki, yenilənməlidir, zəhmət olmasa [bura baxın](https://support.google.com/googleplay/answer/1050566?hl=en)
+* Satın almalar, Google buludunda saxlanılır və itmir
+* Satın alma əməliyyatlarında heç bir vaxt limiti yoxdur, ona görə də vaxtı bitmir
+* Google, alıcılar haqqındakı təfsilatları (ad, e-poçt və s.) tərtibatçılara bildirmir
+* FairEmail kimi bir tətbiq, hansı Google hesabını istifadə etdiyini seçə bilmir
+* Play Store tətbiqinin bir satın almanı digər bir cihazda eyniləşdirməsi bir az çəkə bilər
+* Play Store satın alma əməliyyatları, Play Store qaydaları tərəfindən də icazə verilməyən Play Store olmadan istifadə edilə bilməz
 
-If you cannot solve the problem with the purchase, you will have to contact Google about it.
+Satın alma ilə əlaqəli problemləri həll edə bilməsəniz, bu barədə Google ilə əlaqə saxlamalı olacaqsınız.
 
 <br />
 
 <a name="faq118"></a>
-**(118) What does 'Remove tracking parameters' exactly?**
+**(118) "İzləmə parametrlərini çıxart" tam olaraq nə deməkdir?**
 
-Checking *Remove tracking parameters* will remove all [UTM parameters](https://en.wikipedia.org/wiki/UTM_parameters) from a link.
+*İzləmə parametrlərini çıxart* seçsəniz, bir bağlantıdan bütün [UTM parametrləri](https://en.wikipedia.org/wiki/UTM_parameters) çıxarılacaq.
 
 <br />
 
 <a name="faq119"></a>
-**~~(119) Can you add colors to the unified inbox widget?~~**
+**~~(119) Birləşmiş gələn qutusunun vicetinə rənglər əlavə edə bilərsiniz?~~**
 
-~~The widget is designed to look good on most home/launcher screens by making it monochrome and by using a half transparent background.~~ ~~This way the widget will nicely blend in, while still being properly readable.~~
+~~Vicet, monoxrom və yarışəffaf arxaplan istifadə edərək, əksər əsas/başladıcı ekranında yaxşı görünəcək formada dizayn edilib.~~ ~~Bu formada, vicet düzgün oxuna biləcək, gözəl uyğunlaşacaq.~~
 
-~~Adding colors will cause problems with some backgrounds and will cause readability problems, which is why this won't be added.~~
+~~Rəng əlavə etmək, bəzi arxaplanlarda oxuna bilmə və digər problemləri yaradacaq, məhz bu səbəbdən əlavə etmirəm.~~
 
-Due to Android limitations it is not possible to dynamically set the opacity of the background and to have rounded corners at the same time.
+Android məhdudlaşdırmalarına görə, arxaplanın tutqunluğunu (qeyri-şəffaflığını) dinamik olaraq tənzimləmək və eyni vaxtda küncləri yuvarlaq etmək mümkün deyil.
 
 <br />
 
 <a name="faq120"></a>
-**(120) Why are new message notifications not removed on opening the app?**
+**(120) Tətbiqi açanda nəyə görə yeni mesaj bildirişləri silinmir?**
 
-New message notifications will be removed on swiping notifications away or on marking the associated messages read. Opening the app will not remove new message notifications. This gives you a choice to leave new message notifications as a reminder that there are still unread messages.
+Yeni mesaj bildirişləri, bildirişləri sürüşdürəndə və əlaqəli mesajlar oxundu olaraq işarələnəndə silinəcək. Tətbiqi açmaq, yeni mesaj bildirişlərini silmir. Bu sizə, hələ də oxunmamış mesajların olduğunu xatırlatmaq üçün yeni mesaj bildirişlərini buraxmaq seçimi verir.
 
-On Android 7 Nougat and later new message notifications will be [grouped](https://developer.android.com/training/notify-user/group). Tapping on the summary notification will open the unified inbox. The summary notification can be expanded to view individual new message notifications. Tapping on an individual new message notification will open the conversation the message it is part of. See [this FAQ](#user-content-faq70) about when messages in a conversation will be auto expanded and marked read.
+Android 7 Nougat və daha sonrakı versiyalarda, yeni mesaj bildirişləri [qruplaşdırılacaq](https://developer.android.com/training/notify-user/group). İcmal bildirişinə toxunanda, birləşmiş gələn qutusu açılacaq. İcmal bildirişi, yeni mesaj bildirişlərinə fərdi baxmaq üçün genişləndirilə bilər. Sadəcə bir yeni mesaj bildirişinə toxunanda, hissəsi olduğu mesajın danışığını açılacaq. Bir danışıqdakı mesajların nə vaxt avto-genişləndiriləcəyi və oxundu olaraq işarələnəcəyi barədə [bu TSS](#user-content-faq70)-a baxın.
 
 <br />
 
 <a name="faq121"></a>
-**(121) How are messages grouped into a conversation?**
+**(121) Mesajlar bir danışıqda necə qruplaşdırılır?**
 
-By default FairEmail groups messages in conversations. This can be turned of in the display settings.
+İlkin olaraq FairEmail, danışıqdakı mesajları qruplaşdırır. Bu, "Görüntü" tənzimləmələrində söndürülə bilər.
 
-FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and *References* headers. FairEmail does not group on other criteria, like the subject, because this could result in grouping unrelated messages and would be at the expense of increased battery usage.
+FairEmail, mesajları standart *Message-ID*, *In-Reply-To* və *References* başlıqlarına görə qruplaşdırır. FairEmail, mövzu kimi digər kriteriyalara görə qruplaşdırmır, çünki bu, əlaqəli olmayan mesajların qruplaşdırılması və batareya istifadəsinin artması ilə nəticələnə bilər.
 
 <br />
 
 <a name="faq122"></a>
-**~~(122) Why is the recipient name/email address show with a warning color?~~**
+**~~Alıcı adı/e-poçt ünvanı niyə bir xəbərdarlıq rəngi ilə göstərilir?~~**
 
-~~The recipient name and/or email address in the addresses section will be shown in a warning color~~ ~~when the sender domain name and the domain name of the *to* address do not match.~~ ~~Mostly this indicates that the message was received *via* an account with another email address.~~
+~~Göndərən domen adı ilə məktubun *gedən* ünvanı arasında uyğunluq olmayanda~~ ~~ünvanlar bölməsindəki alıcı adı və/və ya e-poçt ünvanı bir xəbərdarlıq rəngi ilə göstəriləcək.~~ ~~Əksər hallarda bu, mesajın başqa bir e-poçt ünvanına sahib bir hesab *üzərindən* alındığını göstərir.~~
 
 <br />
 
 <a name="faq123"></a>
-**(123) What will happen when FairEmail cannot connect to an email server?**
+**(123) FairEmail, bir e-poçt serveri ilə bağlantı qura bilməyəndə nə baş verir?**
 
-If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+FairEmail, mesajları eyniləşdirmək üçün bir e-poçt serveri ilə bağlantı qura bilməsə, məsələn internet bağlantısı zəifdirsə, bir güvənlik divarı və ya bir VPN bağlantını əngəlləyirsə, FairEmail, cihazı oyanıq saxlayarkən (=batareya enerjisini istifadə edərkən) 8 saniyə gözlədikdən sonra bir də yenidən cəhd edəcək. Əgər bu da uğursuz olsa, FairEmail, 15, 30 və sonda hər 60 dəqiqədən bir yenidən cəhd edəcək bir proqram quracaq və cihazın yuxuya getməsinə (=batareyanı istifadə etməməsinə) icazə verəcək.
 
-Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
+Unutmayın ki, [Android yuxu rejimi](https://developer.android.com/training/monitoring-device-state/doze-standby), cihazı 15 dəqiqədən tez oyandırmağa icazə vermir.
 
-*Force sync* in the three-dots menu of the unified inbox can be used to let FairEmail attempt to reconnect without waiting.
+Birləşmiş gələn qutusunun üç-nöqtə menyusundakı *Məcburi eyniləşdir*mə, FairEmail-in, gözləmədən yenidən bağlantı qurması üçün cəhd etməsinə icazə vermək üçün istifadə oluna bilər.
 
-Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
+E-poçt serveri tərəfindən bağlantının birdəfəlik əngəlləməsinin qarşısını almaq üçün mesajların göndərilməsinə, yalnız bağlantı dəyişikliklərində (eyni şəbəkə ilə yenidən bağlantı qurmaq və ya başqa şəbəkə ilə bağlantı qurmaq) yenidən cəhd ediləcək. Əllə yenidən sınamaq üçün gedən qutusunu aşağı çəkə bilərsiniz.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
+Unutmayın ki, kimlik təsdiqləmə problemlərinin olduğu və serverin mesajı rədd etdiyi hallarda göndərməyə yenidən cəhd edilməyəcək. Bu hallarda, yenidən sınamaq üçün gedən qutusunu aşağı çəkə bilərsiniz.
 
 <br />
 
 <a name="faq124"></a>
-**(124) Why do I get 'Message too large or too complex to display'?**
+**(124) Niyə "Mesaj görüntülənməyəcək qədər çox böyük və ya çox qarışıqdır" bildirişini alıram?**
 
-The message *Message too large or too complex to display* will be shown if there are more than 100,000 characters or more than 500 links in a message. Reformatting and displaying such messages will take too long. You can try to use the original message view, powered by the browser, instead.
+Bir mesajda 100,000-dən çox simvol və ya 500-dən çox bağlantı varsa, bu bildirişi alacaqsınız. Belə mesajların yenidən formatlanması və görüntülənməsi çox uzun çəkir. Bunun əvəzinə səyyah tərəfindən təmin edilmiş orijinal mesaj görünüşünü sınaya bilərsiniz.
 
 <br />
 
 <a name="faq125"></a>
-**(125) What are the current experimental features?**
+**(125) Hazırkı təcrübi özəlliklər nələrdir?**
 
-*Message classification (version 1.1438+)*
+*Mesajın sinifləşdirilməsi (1.1438+ versiya)*
 
-Please see [this FAQ](#user-content-faq163) for details.
+Təfsilatlar üçün zəhmət olmasa [bu TSS](#user-content-faq163)-a baxın.
 
-Since this is an experimental feature, my advice is to start with just one folder.
+Bu bir təcrübi özəllik olduğu üçün, sadəcə bir qovluqla başlamağınızı məsləhət görürəm.
 
 <br />
 
-*Send hard bounce (version 1.1477+)*
+*Sərt sıçrayış göndər (1.1477+ versiyası)*
 
-Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=hard bounce) via the reply/answer menu.
+Cavablama menyusu vasitəsilə bir [Çatdırılma Status Bildirişi](https://tools.ietf.org/html/rfc3464) (=sərt sıçrayış) göndərin.
 
-Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
+Sərt sıçrayışlar, e-poçt təchizatçısının nüfuzuna təsir etdiyi üçün əksər hallarda avtomatik olaraq emal olunur. Sıçrama ünvanı (=*Return-Path* başlığı) əksər hallarda çox xüsusi olur, beləcə e-poçt serveri göndərmə hesabını müəyyənləşdirə bilər.
 
-For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
+Bəzi arxaplan üçün, [bu Vikipediya məqaləsinə](https://en.wikipedia.org/wiki/Bounce_message) baxın.
 
 <br />
 
 <a name="faq126"></a>
-**(126) Can message previews be sent to my wearable?**
+**(126) Geyinilə bilən cihazlarıma mesaj önbaxışlarını göndərə bilərəm?**
 
-FairEmail fetches a message in two steps:
+FairEmail bir mesajı iki addımda gətirir:
 
-1. Fetch message headers
-1. Fetch message text and attachments
+1. Mesaj başlıqlarını gətirir
+1. Mesaj mətnini və qoşmalarını gətirir
 
-Directly after the first step new messages will be notified. However, only until after the second step the message text will be available. FairEmail updates exiting notifications with a preview of the message text, but unfortunately wearable notifications cannot be updated.
+İlk addımdan dərhal sonra yeni mesajlar bildiriləcək. Ancaq, yalnız ikinci addımdan sonra mesaj mətni əlçatan olacaq. FairEmail, mövcud bildirişləri, mesaj mətninin bir önbaxışı ilə yeniləyir, ancaq təəssüf ki, geyinilə bilən cihaz bildirişləri yenilənə bilmir.
 
-Since there is no guarantee that a message text will always be fetched directly after a message header, it is not possible to guarantee that a new message notification with a preview text will always be sent to a wearable.
+Bir mesaj mətninin həmişə bir mesaj başlığından dərhal sonra gətiriləcəyinin zəmanəti olmadığı kimi, bir önbaxış mətni ehtiva edən yeni mesaj bildirişinin geyinilə bilən cihaza həmişə göndəriləcəyinin də zəmanəti yoxdur.
 
-If you think this is good enough, you can enable the notification option *Only send notifications with a message preview to wearables* and if this does not work, you can try to enable the notification option *Show notifications with a preview text only*. Note that this applies to wearables not showing a preview text too, even when the Android Wear app says the notification has been sent (bridged).
+Bunun yetəri qədər yaxşı olduğunu düşünürsünüzsə, *Geyinilə bilən cihazlara yalnız mesaj önbaxışı olan bildirişlər göndər* bildiriş seçimini fəallaşdıra bilərsiniz, əgər bu işləməsə, *Yalnız önbaxış mətni olan bildirişləri göstər* bildiriş seçimini fəallaşdırmağa çalışa bilərsiniz. Unutmayın ki, hətta Android Wear tətbiqi, bildirişin göndərildiyini (bridged) desə belə, bu, önbaxış mətnini göstərməyən geyinilə bilən cihazlara da tətbiq olunur.
 
-If you want to have the full message text sent to your wearable, you can enable the notification option *Preview all text*. Note that some wearables are known to crash with this option enabled.
+Geyinilə bilən cihazlara tam mesaj mətninin göndərilməsini istəyirsinizsə, *Bütün mətnə önbaxış* bildiriş seçimini fəallaşdıra bilərsiniz. Unutmayın, bəzi geyinilə bilən cihazlarda bu özəllik fəallaşdırılanda çökmə baş verir.
 
-If you use a Samsung wearable with the Galaxy Wearable (Samsung Gear) app, you might need to enable notifications for FairEmail when the setting *Notifications*, *Apps installed in the future* is turned off in this app.
+Galaxy Wearable (Samsung Gear) tətbiqi ilə bir Samsung geyinilə bilən cihaz istifadə edirsinizsə, *Bildirişlər* tənzimlənəndə FairEmail üçün bildirişləri fəallaşdırmalısınız, bu tətbiqdə *Gələcəkdə quraşdırılan tətbiqlər* seçimi sönülü olmalıdır.
 
 <br />
 
 <a name="faq127"></a>
-**(127) How can I fix 'Syntactically invalid HELO argument(s)'?**
+**(127) "Sintaktik olaraq etibarsız arqument(lər)i"ni necə düzəldə bilərəm?**
 
-The error *... Syntactically invalid HELO argument(s) ...* means that the SMTP server rejected the local IP address or host name. You can likely fix this error by enabling or disabling the advanced indentity option *Use local IP address instead of host name*.
+* Sintaktik olaraq etibarsız HELO arqument(lər)i* xətası, SMTP serverinin yerli IP ünvanı və ya host adını rədd etdiyi mənasını verir. Böyük ehtimalla bu xətanı qabaqcıl kimlik seçimi olan *Host adı əvəzinə yerli IP ünvanını istifadə et* seçimini fəallaşdıraraq/sıradan çıxardaraq düzəldə bilərsiniz.
 
 <br />
 
 <a name="faq128"></a>
-**(128) How can I reset asked questions, for example to show images?**
+**(128) Məsələn təsvirləri göstərmək üçün, soruşulan sualları necə sıfırlaya bilərəm?**
 
-You can reset asked questions via the three dots overflow menu in the miscellaneous settings.
+Qarışıq tənzimləmələrindəki üç-nöqtə daşma menyusu vasitəsilə soruşulan sualları sıfırlaya bilərsiniz.
 
 <br />
 
 <a name="faq129"></a>
-**(129) Are ProtonMail, Tutanota supported?**
+**(129) ProtonMail, Tutanota dəstəklənir?**
 
-ProtonMail uses a proprietary email protocol and [does not directly support IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), so you cannot use FairEmail to access ProtonMail.
+ProtonMail, xüsusiyyətçi bir e-poçt protokolu istifadə edir və [IMAP-ı birbaşa dəstəkləmir](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), ona görə də ProtonMail-ə müraciət etmək üçün FairEmail-i istifadə edə bilməzsiniz.
 
-Tutanota uses a proprietary email protocol and [does not support IMAP](https://tutanota.com/faq/#imap), so you cannot use FairEmail to access Tutanota.
+Tutanota, xüsusiyyətçi bir e-poçt protokolu istifadə edir və [IMAP-ı birbaşa dəstəkləmir](https://tutanota.com/faq/#imap), ona görə də Tutanota-ya müraciət etmək üçün FairEmail-i istifadə edə bilməzsiniz.
 
 <br />
 
 <a name="faq130"></a>
-**(130) What does message error ... mean?**
+**(130) Mesaj xətasının mənası nədir...?**
 
-A series of lines with orangish or red texts with technical information means that debug mode was enabled in the miscellaneous settings.
+Texniki məlumat ilə birgə qırmızı və narıncı mətn ehtiva edən bir xətt seriyası, Qarışıq tənzimləmələrdə sazlama rejiminin fəallaşdırıldığı mənasını verir.
 
-The warning *No server found at ...* means that there was no email server registered at the indicated domain name. Replying to the message might not be possible and might result in an error. This could indicate a falsified email address and/or spam.
+*... ünvanında heç bir server tapılmadı* xətası, göstərilən domen adında heç bir qeydiyyatlı e-poçt serverinin olmadığını bildirir. Mesajı cavablamaq mümkün olmaya bilər və bir xəta ilə nəticələnə bilər. Bu, saxta bir e-poçt ünvanı və/və ya spam olduğunu göstərə bilər.
 
-The error *... ParseException ...* means that there is a problem with a received message, likely caused by a bug in the sending software. FairEmail will workaround this is in most cases, so this message can mostly be considered as a warning instead of an error.
+*ParseException ...* xətası, alınan bir mesajda, böyük ehtimalla göndərənin proqram təminatında bir xətanın səbəb olduğu bir problem olduğu mənasını verir. FairEmail, belə hallarda müvəqqəti həll yolu olacaqdır. Ona görə də, bu mesaj, əksər hallarda bir xəta əvəzinə bir xəbərdarlıq kimi düşünülə bilər.
 
-The error *...SendFailedException...* means that there was a problem while sending a message. The error will almost always include a reason. Common reasons are that the message was too big or that one or more recipient addresses were invalid.
+*...SendFailedException...* xətası, mesaj göndərilərkən bir problem olduğu mənasını verir. Xəta, demək olar ki, hər zaman bir səbəb ehtiva edir. Ortaq səbəblər, mesajın çox böyük olması, alıcı ünvanlarından biri və ya bir neçəsinin etibarsız olması ola bilər.
 
-The warning *Message too large to fit into the available memory* means that the message was larger than 10 MiB. Even if your device has plenty of storage space Android provides limited working memory to apps, which limits the size of messages that can be handled.
+*Mesaj, mövcud yaddaşa sığmayacaq qədər böyükdür* xəbərdarlığı, mesajın 10 MiB-dən böyük olduğu mənasını verir. Cihazınızda istifadə üçün yetərincə boş yer olsa belə, Android, tətbiqlərə məhdud işləmə yaddaşı verir və bu da, emal oluna biləcək mesajların həcmini məhdudlaşdırır.
 
-Please see [here](#user-content-faq22) for other error messages in the outbox.
+Gedən qutusundakı digər xəta mesajları üçün zəhmət olmasa [bura](#user-content-faq22) baxın.
 
 <br />
 
 <a name="faq131"></a>
-**(131) Can you change the direction for swiping to previous/next message?**
+**(131) Əvvəlki/sonrakı mesaja sürüşdürmə istiqamətini dəyişdirə bilərsiniz?**
 
-If you read from left to right, swiping to the left will show the next message. Similarly, if you read from right to left, swiping to the right will show the next message.
+Soldan sağa oxuyursunuzsa, sola sürüşdürmə, növbəti mesajı göstərəcək. Oxşar qaydada, sağdan sola oxuyursunuzsa, sağa sürüşdürmə, növbəti mesajı göstərəcək.
 
-This behavior seems quite natural to me, also because it is similar to turning pages.
+Bu davranış mənə olduqca normal görünür, çünki səhifələrin çevrilməsinə də oxşayır.
 
-Anyway, there is a behavior setting to reverse the swipe direction.
+Yenə də, sürüşdürmə istiqamətini tərsinə çevirmək üçün bir davranış tənzimləməsi var.
 
 <br />
 
 <a name="faq132"></a>
-**(132) Why are new message notifications silent?**
+**(132) Yeni mesajların bildirişləri niyə səssizdədir?**
 
-Notifications are silent by default on some MIUI versions. Please see [here](http://en.miui.com/thread-3930694-1-1.html) how you can fix this.
+Bildirişlər bəzi MIUI versiyalarında ilkin olaraq səssizdədir. Bunun necə düzəldiləcəyinə baxmaq üçün zəhmət olmasa [bura](http://en.miui.com/thread-3930694-1-1.html) baxın.
 
-There is a bug in some Android versions causing [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean)) to mute notifications. Since FairEmail shows new message notifications right after fetching the message headers and FairEmail needs to update new message notifications after fetching the message text later, this cannot be fixed or worked around by FairEmail.
+Bəzi Android versiyalarında [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean))-ın bildirişləri səssizə almasına səbəb olan bir xəta var. FairEmail, mesaj başlıqlarını aldıqdan dərhal sonra yeni mesaj bildirişlərini göstərir və FairEmail-in, mesaj mətnini aldıqdan sonra yeni mesaj bildirişlərini yeniləməsinə ehtiyac var. Bu, FairEmail tərəfindən düzəldilə və ya həll edilə bilməz.
 
-Android might rate limit the notification sound, which can cause some new message notifications to be silent.
+Android, bildiriş səsinin sürətini məhdudlaşdıra bilər, bu da bəzi yeni mesaj bildirişlərinin səssizdə qalmasına səbəb ola bilər.
 
 <br />
 
 <a name="faq133"></a>
-**(133) Why is ActiveSync not supported?**
+**(133) Niyə ActiveSync dəstəklənmir?**
 
-The Microsoft Exchange ActiveSync protocol [is patented](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) and can therefore not be supported. For this reason you won't find many, if any, other email clients supporting ActiveSync.
+Microsoft Exchange ActiveSync protokolu [patentləşdirilib](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) və buna görə də dəstəklənmir. Buna görə də ActiveSync-i dəstəkləyən başqa bir e-poçt müştərisi tapa bilməzsiniz.
 
-Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
+Unutmayın ki, FairEmail-in açıqlaması belə başlayır: Microsoft Exchange Veb Xidmətləri və Microsoft ActiveSync kimi standart olmayan protokollar dəstəklənmir.
 
 <br />
 
 <a name="faq134"></a>
-**(134) Can you add deleting local messages?**
+**(134) Yerli (yaddaşdakı) mesajları silməyi əlavə edə bilərsiniz?**
 
 *POP3*
 
-In the account settings (Settings, tap Manual setup, tap Accounts, tap account) you can enable *Leave deleted messages on server*.
+Hesab tənzimləmələrində (Tənzimləmələr > Əllə quraşdırma > Hesablar > Hesab) *Silinən mesajları serverdə burax* seçimini fəallaşdıra bilərsiniz.
 
 *IMAP*
 
-Since the IMAP protocol is meant to synchronize two ways, deleting a message from the device would result in fetching the message again when synchronizing again.
+IMAP protokolu iki formada eyniləşdirməyi nəzərdə tutduğu üçün cihazdan bir mesajın silinməsi, təkrar eyniləşdirmə zamanı mesajın yenidən alınmasına səbəb olacaq.
 
-However, FairEmail supports hiding messages, either via the three-dots menu in the action bar just above the message text or by multiple selecting messages in the message list. Basically this is the same as "leave on server" of the POP3 protocol with the advantage that you can show the messages again when needed.
+Ancaq FairEmail, mesaj mətninin üzərindəki hərəkət sətrindəki üç-nöqtə menyusu vasitəsilə və ya mesaj siyahısında bir neçə mesajı seçərək mesajların gizlədilməsini dəstəkləyir. Əsasən bu, POP3 protokolunun "serverdə burax" tənzimləməsi ilə eynidir və ehtiyac olanda mesajları yenidən göstərə bilmə üstünlüyünə sahibdir.
 
-Note that it is possible to set the swipe left or right action to hide a message.
+Unutmayın ki, bir mesajı gizlətmək üçün sola və ya sağa sürüşdürmə əməliyyatını tənzimləmək mümkündür.
 
 <br />
 
 <a name="faq135"></a>
-**(135) Why are trashed messages and drafts shown in conversations?**
+**(135) Tullantı və qaralamalar qovluğundakı mesajlar niyə danışıqlarda göstərilir?**
 
-Individual messages will rarely be trashed and mostly this happens by accident. Showing trashed messages in conversations makes it easier to find them back.
+Fərdi mesajlar nadir hallarda tullantı qovluğuna atılır və əksər hallarda bu təsadüfən baş verir. Danışıqlarda tullantı qovluğuna atılan mesajların göstərilməsi, onların tapılmasını asanlaşdırır.
 
-You can permanently delete a message using the message three-dots *delete* menu, which will remove the message from the conversation. Note that this irreversible.
+Mesajı birdəfəlik silmək üçün üç-nöqtəli *sil* menyusunu istifadə edə bilərsiniz, bu da, mesajı danışıqdan siləcək. Unutmayın ki, bunun geri dönüşü yoxdur.
 
-Similarly, drafts are shown in conversations to find them back in the context where they belong. It is easy to read through the received messages before continuing to write the draft later.
+Eynilə, qaralamalar, aid olduğu konteksdə tapılması üçün danışıqlarda göstərilir. Qaralamanı daha sonra yazmağa davam etməzdən əvvəl alınan mesajları oxumaq asandır.
 
 <br />
 
 <a name="faq136"></a>
-**(136) How can I delete an account/identity/folder?**
+**(136) Bir hesabı/kimliyi/qovluğu necə silə bilərəm?**
 
-Deleting an account/identity/folder is a little bit hidden to prevent accidents.
+İstəmədən və səhvən silmənin qarşısını almaq üçün bir hesabın/kimliyin/qovluğun silinməsi bir az gizlədilmişdir.
 
-* Account: Settings > Manual setup > Accounts > tap account
-* Identity: Settings > Manual setup > Identities > tap identity
-* Folder: Long press the folder in the folder list > Edit properties
+* Hesab: Tənzimləmələr > Əllə quraşdırma > Hesablar > Hesab
+* Kimlik: Tənzimləmələr > Əllə quraşdırma > Kimliklər > Kimlik
+* Qovluq: Qovluq siyahısında qovluğa uzun basın > Xüsusiyyətlərə düzəliş et
 
-In the three-dots overflow menu at the top right there is an item to delete the account/identity/folder.
+Sağ üstdəki üç-nöqtəli daşma menyusunda hesabı/kimliyi/qovluğu silmək üçün bir element var.
 
 <br />
 
 <a name="faq137"></a>
-**(137) How can I reset 'Don't ask again'?**
+**(137) "Bir də soruşma"nı necə sıfırlaya bilərəm?**
 
-You can reset all questions set to be not asked again in the miscellaneous settings.
+Yenidən soruşmayacaq şəkildə tənzimlənmiş bütün sualları Qarışıq tənzimləmələrində sıfırlaya bilərsiniz.
 
 <br />
 
 <a name="faq138"></a>
-**(138) Can you add calendar/contact/tasks/notes management?**
+**(138) Təqvim/əlaqə/tapşırıq/qeyd idarəetməsi əlavə edə bilərsiniz?**
 
-Calendar, contact, task and note management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
+Təqvim, əlaqə, tapşırıq və qeyd idarəetməsi ayrı, xüsusi bir tətbiqlə daha yaxşı edilə bilər. Unutmayın ki, FairEmail, bir ofis paketi deyil, xüsusi bir e-poçt tətbiqidir.
 
-Also, I prefer to do a few things very well, instead of many things only half. Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.
+Həmçinin, bir çox şeyi yarımçıq saxlamaq əvəzinə bir neçə şeyi yaxşı etməyi üstün tuturam. Həmçinin təhlükəsizlik baxımından, bir tətbiqə bir neçə icazə vermək heç də yaxşı bir fikir deyil.
 
-You are advised to use the excellent, open source [DAVx⁵](https://f-droid.org/packages/at.bitfire.davdroid/) app to synchronize/manage your calendars/contacts.
+Təqvimlərinizi/əlaqələrinizi eyniləşdirmək/idarə etmək üçün mükəmməl, açıq mənbəli [DAVx⁵](https://f-droid.org/packages/at.bitfire.davdroid/) tətbiqini istifadə etməyi məsləhət görürəm.
 
-Most providers support exporting your contacts. Please [see here](https://support.google.com/contacts/answer/1069522) about how you can import contacts if synchronizing is not possible.
+Əksər təchizatçılar əlaqələri ixrac etməyi dəstəkləyir. Əgər eyniləşdirmə mümkün deyilsə, əlaqələri necə idxal edə biləyiniz barəsində zəhmət olmasa [bura baxın](https://support.google.com/contacts/answer/1069522).
 
-Note that FairEmail does support replying to calendar invites (a pro feature) and adding calendar invites to your personal calendar.
+Unutmayın ki, FairEmail təqvim dəvətlərini cavablamağı (pro özəllik) və şəxsi təqviminizə təqvim dəvətlərini əlavə etməyi dəstəkləyir.
 
 <br />
 
 <a name="faq83"></a>
 <a name="faq139"></a>
-**(139) How do I fix 'User is authenticated but not connected'?**
+**(139) "İstifadəçinin kimliyi təsdiqləndi, ancaq bağlantı qurulmadı" problemini necə düzəldə bilərəm?**
 
-In fact this Microsoft Exchange specific error is an incorrect error message caused by a bug in older Exchange server software.
+Əslində bu, "Microsoft Exchange"ə xas olan bir xətadır, köhnə Exchange serverinin proqram təminatındakı bir xətaya görə yaranmış yanlış xəta mesajıdır.
 
-The error *User is authenticated but not connected* might occur if:
+*İstifadəçinin kimliyi təsdiqləndi, ancaq bağlantı qurulmadı* xətası, bu hallarda yarana bilər:
 
-* Push messages are enabled for too many folders: see [this FAQ](#user-content-faq23) for more information and a workaround
-* The account password was changed: changing it in FairEmail too should fix the problem
-* An alias email address is being used as username instead of the primary email address
-* An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
+* Ani mesajlar çox qovluq üçün fəallaşdırıldı: daha çox məlumat və müvəqqəti həll yolu üçün [bu TSS](#user-content-faq23)-a baxın
+* Hesab şifrəsi dəyişdirildi: şifrəni FairEmail-də də dəyişdirmək, problemi həll edəcək
+* İstifadəçi adı kimi əsas e-poçt ünvanı əvəzinə ləqəb e-poçt ünvanı istifadə edilir
+* Paylaşılan bir poçt qutusu üçün yanlış giriş sxemi istifadə olunur, doğru sxem belədir: *username@domain\SharedMailboxAlias*
 
-The shared mailbox alias will mostly be the email address of the shared account, like this:
+Paylaşılan poçt qutusu ləqəbi, əksər hallarda paylaşılan hesabın e-poçt ünvanı olacaq, məsələn belə:
 
 
 
 ```
-you@example.com\shared@example.com
+siz@nümune.com\paylaşılan@nümune.com
 ```
 
 
-Note that it should be a backslash and not a forward slash.
+Diqqət edin ki, burada "/" deyil, onun tərsi, yəni "\" olmalıdır.
 
-When using a shared mailbox, you'll likely want to enable the option *Synchronize shared folder lists* in the receive settings.
+Paylaşılan bir poçt qutusu istifadə edərkən, böyük ehtimalla alma tənzimləmələrində *Paylaşılan qovluq siyahılarını eyniləşdir* seçimini fəallaşdırmaq istəyəcəksiniz.
 
 <br />
 
 <a name="faq140"></a>
-**(140) Why does the message text contain strange characters?**
+**(140) Mesaj mətnində niyə qəribə simvollar var?**
 
-Displaying strange characters is almost always caused by specifying no or an invalid character encoding by the sending software. FairEmail will assume [ISO 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) when no character set or when [US-ASCII](https://en.wikipedia.org/wiki/ASCII) was specified. Other than that there is no way to reliably determine the correct character encoding automatically, so this cannot be fixed by FairEmail. The right action is to complain to the sender.
+Qəribə simvolların görüntülənməsi, demək olar ki, həmişə göndərənin proqram təminatı ya heç bir simvolu, ya da etibarsız simvolların kodlaşdırılmasını göstərdiyi üçün baş verir. Heç bir simvol tənzimlənməyəndə ya da, [US-ASCII](https://en.wikipedia.org/wiki/ASCII) göstəriləndə FairEmail, [ISO 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) qəbul edəcək. Bundan başqa doğru simvol kodlaşdırmasını güvənli şəkildə avtomatik müəyyənləşdirməyin heç bir yolu yoxdur, buna görə də, bu, FairEmail tərəfindən düzəldilə bilməz. Doğru əməliyyat, göndərənə şikayət göndərir.
 
 <br />
 
 <a name="faq141"></a>
-**(141) How can I fix 'A drafts folder is required to send messages'?**
+**(141) "Mesaj göndərmək üçün bir qaralama qovluğu tələb olunur" problemini necə düzəldə bilərəm?**
 
-To store draft messages a drafts folder is required. In most cases FairEmail will automatically select the drafts folders on adding an account based on [the attributes](https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml) the email server sends. However, some email servers are not configured properly and do not send these attributes. In this case FairEmail tries to identify the drafts folder by name, but this might fail if the drafts folder has an unusual name or is not present at all.
+Qaralama mesajları saxlamaq üçün qaralama qovluğu tələb olunur. Bir çox hallarda FairEmail, e-poçt serverinin göndərdiyi [atributlara](https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml) əsaslanaraq bir hesab əlavə edəndə qaralamalar qovluğunu avtomatik seçəcək. Yenə də, bəzi e-poçt serverləri düzgün konfiqurasiya edilməyib və bu atributları göndərmir. Bu halda FairEmail, qaralamalar qovluğunu ada görə müəyyənləşdirməyə çalışır, əgər qaralamalar qovluğunun qeyri-adi bir adı varsa və ya ümumiyyətlə heç yoxdursa bu proses uğursuz ola bilər.
 
-You can fix this problem by manually selecting the drafts folder in the account settings (Settings, tap Manual setup, tap Accounts, tap account, at the bottom). If there is no drafts folder at all, you can create a drafts folder by tapping on the '+' button in the folder list of the account (tap on the account name in the navigation menu).
+Hesablar tənzimləmələrində qaralamalar qovluğunu əllə seçərək bu problemi həll edə bilərsiniz (Tənzimləmələr > Əllə quraşdırma > Hesablar > ən altdakı hesaba toxunun). Heç bir qaralama qovluğu yoxdursa, hesabın qovluq siyahısındakı "+" düyməsinə toxunaraq qaralamalar qovluğunu yarada bilərsiniz (naviqasiya menyusundakı hesab adına toxunun).
 
-Some providers, like Gmail, allow enabling/disabling IMAP for individual folders. So, if a folder is not visible, you might need to enable IMAP for the folder.
+Gmail kimi bəzi təchizatçılar, fərdi qovluqlar üçün IMAP-ın fəallaşdırılmasına/sıradan çıxarılmasına icazə verir. Ona görə də, əgər bir qovluq görünmürsə, qovluq üçün IMAP-ı fəallaşdırmalısınız.
 
-Quick link for Gmail (will work on a desktop computer only): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
+Gmail üçün cəld bağlantı (yalnız masaüstü kompüterdə işləyəcək): [https://mail.google.com/mail/u/0/#settings/labels](https://mail.google.com/mail/u/0/#settings/labels)
 
 <br />
 
 <a name="faq142"></a>
-**(142) How can I store sent messages in the inbox?**
+**(142) Gələn qutusunda göndərilən mesajları necə saxlaya bilərəm?**
 
-Generally, it is not a good idea to store sent messages in the inbox because this is hard to undo and could be incompatible with other email clients.
+Ümumiyyətlə, geri alınması çətin olduğu və digər e-poçt müştəriləri ilə uyğunsuz ola biləcəyi üçün gələn qutusunda göndərilən mesajları saxlamaq heç də yaxşı fikir deyil.
 
-That said, FairEmail is able to properly handle sent messages in the inbox. FairEmail will mark outgoing messages with a sent messages icon for example.
+Əlavə olaraq FairEmail, göndərilən mesajları gələn qutusunda düzgün formada emal edə bilər. FairEmail, misal üçün gedən mesajları göndərilmiş mesajlar nişanı ilə işarələyəcək.
 
-The best solution would be to enable showing the sent folder in the unified inbox by long pressing the sent folder in the folder list and enabling *Show in unified inbox*. This way all messages can stay where they belong, while allowing to see both incoming and outgoing messages at one place.
+Ən yaxşı həll yolu, qovluq siyahısındakı göndərilənlər qovluğuna uzun basaraq və *Birləşmiş gələn qutusunda göstər* seçimini fəallaşdıraraq, birləşmiş gələn qutusundakı göndərilənlər qovluğunun göstərilməsini fəallaşdırmaqdır. Beləcə bütün mesajlar aid olduğu yerdə qala bilər, həmçinin həm gələn, həm də gedən mesajlara tək bir yerdə baxmağınıza şərait yaradır.
 
-If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox or set a default CC/BCC address in the advanced identity settings to send yourself a copy.
+Bu bir seçim deyilsə, mesajların avtomatik olaraq gələn qutusuna köçürülməsi üçün [bir qayda yarada](#user-content-faq71) və ya özünüzə bir kopyasını göndərmək üçün qabaqcıl kimlik tənzimləmələrində ilkin bir CC/BCC ünvanı tənzimləyə bilərsiniz.
 
 <br />
 
 <a name="faq143"></a>
-**~~(143) Can you add a trash folder for POP3 accounts?~~**
+**~~(143) POP3 hesabları üçün bir tullantı qovluğu əlavə edə bilərsiniz?~~**
 
-[POP3](https://en.wikipedia.org/wiki/Post_Office_Protocol) is a very limited protocol. Basically only messages can be downloaded and deleted from the inbox. It is not even possible to mark a message read.
+[POP3](https://en.wikipedia.org/wiki/Post_Office_Protocol) həddindən artıq limitli protokoldur. Əsasən mesajlar yalnız gələn qutusundan endirilə və silinə bilər. Bir mesajı oxundu kimi işarələmək belə mümkün deyil.
 
-Since POP3 does not allow access to the trash folder at all, there is no way to restore trashed messages.
+POP3, tullantı qovluğuna müraciətə heç bir halda icazə vermədiyi üçün, tullantı qovluğundakı mesajları bərpa etməyin heç bir yolu yoxdur.
 
-Note that you can hide messages and search for hidden messages, which is similar to a local trash folder, without suggesting that trashed messages can be restored, while this is actually not possible.
+Yerli bir tullantı qovluğundakı kimi mesajların bərpa edilə biləcəyini təklif etməzdən əvvəl, mesajları gizlədə və gizli mesajları axtara biləcəyinizi unutmayın. Ancaq bu əslində mümkün deyil.
 
-Version 1.1082 added a local trash folder. Note that trashing a message will permanently remove it from the server and that trashed messages cannot be restored to the server anymore.
+1.1082 versiyasında yerli bir tullantı qovluğu əlavə edilib. Unutmayın ki, bir mesajı tullantı qovluğuna atanda, həmin mesaj serverdən birdəfəlik silinir və tullantıya atılmış mesajlar heç bir halda serverdə bərpa edilə bilmir.
 
 <br />
 
 <a name="faq144"></a>
-**(144) How can I record voice notes?**
+**(144) Səsli qeydləri necə yaza bilərəm?**
 
-To record voice notes you can press this icon in the bottom action bar of the message composer:
+Səsli qeydləri yazmaq üçün mesaj yaradıcının alt hərəkət sətrindəki bu nişana basa bilərsiniz:
 
 ![Xarici təsvir](https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png)
 
-This requires a compatible audio recorder app to be installed. In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION) needs to be supported.
+Bunun üçün uyğun bir səsyazan tətbiq quraşdırılmalıdır. Xüsusilə də [bu ortaq məqsədin](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION) dəstəklənməsi lazımdır.
 
-For example [this audio recorder](https://f-droid.org/app/com.github.axet.audiorecorder) is compatible.
+Misal üçün [bu səsyazan](https://f-droid.org/app/com.github.axet.audiorecorder) uyğundur.
 
-Voice notes will automatically be attached.
+Səsli qeydlər avtomatik olaraq əlavə edilir.
 
 <br />
 
 <a name="faq145"></a>
-**(145) How can I set a notification sound for an account, folder or sender?**
+**(145) Bir hesab, qovluq və ya göndərən üçün bildiriş səsini necə tənzimləyə bilərəm?**
 
-Account:
+Hesab:
 
-* Enable *Separate notifications* in the advanced account settings (Settings, tap Manual setup, tap Accounts, tap account, tap Advanced)
-* Long press the account in the account list (Settings, tap Manual setup, tap Accounts) and select *Edit notification channel* to change the notification sound
+* Qabaqcıl hesab tənzimləmələrində *Ayrı bildirişlər* seçimini fəallaşdırın (Tənzimləmələr > Əllə quraşdırma > Hesablar > Hesab > Qabaqcıl)
+* Hesab siyahısındakı hesaba uzun basın (Tənzimləmələr > Əllə quraşdırma > Hesablar) və bildiriş səsini dəyişdirmək üçün *Bildiriş kanalına düzəliş et* seçimini seçin
 
-Folder:
+Qovluq:
 
-* Long press the folder in the folder list and select *Create notification channel*
-* Long press the folder in the folder list and select *Edit notification channel* to change the notification sound
+* Qovluq siyahısındakı bir qovluğa uzun basın və *Bildiriş kanalı yarat* seçimini seçin
+* Qovluq siyahısındakı bir qovluğa uzun basın və bildiriş səsini dəyişdirmək üçün *Bildiriş kanalına düzəliş et* seçimini seçin
 
-Sender:
+Göndərən:
 
 * Göndərəndən bir mesajı açın və genişləndirin
 * Aşağı oxa toxunaraq ünvanlar bölməsini genişləndirin
@@ -2784,7 +2784,7 @@ Sender:
 
 Üstünlük sırası: göndərən səsi, qovluq səsi, hesab səsi və ilkin səs.
 
-Bir hesab, qovluq və ya göndərən üçün bildiriş səsini tənzimləmək, Android 8 Oreo və ya yuxarı versiyanı tələb edir və bu Pro özəllikdir.
+Bir hesab, qovluq və ya göndərən üçün bildiriş səsini tənzimləmək, Android 8 Oreo və ya daha yuxarı versiyanı tələb edir və bu Pro özəllikdir.
 
 <br />
 
@@ -2797,7 +2797,7 @@ Bəzən serverin alınan tarix/vaxtı yanlış olur, əksər hallarda mesajlar b
 
 Belə nadir hallarda, "FairEmail"in ya *Tarix* başlığından (göndərilən vaxt), ya da *Alındı* başlığından tarix/vaxtı müvəqqəti həll yolu kimi istifadə etməsinə icazə vermək mümkündür. Bu, qabaqcıl hesab tənzimləmələrində dəyişdirilə bilər: Tənzimləmələr > Əllə quraşdırma > Hesablar > Hesab > Qabaqcıl.
 
-Bu, əvvəlcədən eyniləşdirilmiş mesajların vaxtını dəyişdirmir. Bunu həll etmək üçün qovluq siyahısında qovluq(lar)a uzun basın və *Yerli mesajları sil*i və *İndi eyniləşdir*i seçin.
+Bu, əvvəlcədən eyniləşdirilmiş mesajların vaxtını dəyişdirmir. Bunu həll etmək üçün qovluq siyahısında qovluq(lar)a uzun basın və *Yerli mesajları sil* və *İndi eyniləşdir* seçimlərini seçin.
 
 <br />
 
@@ -2866,7 +2866,7 @@ Bunun əvəzində, mesajların nüsxələnməsi üçün məsuliyyəti e-poçt t�
 
 1.1556 versiyasından etibarən, bir POP3 qovluğunun bütün mesajlarını [RFC4155-ə](https://www.ietf.org/rfc/rfc4155.txt) görə mbox formatında ixrac edilməsi mümkündür, bu, e-poçt serveri bunu etmədiyi halda, göndərilən mesajların saxlanılması üçün faydalı olacaq.
 
-Bir mbox faylını mövcud bir e-poçt hesabına idxal etmək istəyirsinizsə, "Thunderbird"i masaüstü kompüterdə və [ImportExportTools-u](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) əlavədə istifadə edə bilərsiniz.
+Bir mbox faylını mövcud bir e-poçt hesabına idxal etmək istəyirsinizsə, "Thunderbird"i masaüstü kompüterdə və [ImportExportTools-u](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) səyyah əlavəsində istifadə edə bilərsiniz.
 
 <br />
 

@@ -459,7 +459,10 @@ public class ContactInfo {
                             }
 
                         if (info.bitmap == null)
-                            throw ex;
+                            if (ex == null)
+                                throw new FileNotFoundException();
+                            else
+                                throw ex;
 
                         // Add to cache
                         File output = new File(dir,
@@ -476,7 +479,8 @@ public class ContactInfo {
                         Log.i(ex);
                     else {
                         if (ex instanceof FileNotFoundException ||
-                                ex instanceof CertPathValidatorException)
+                                ex instanceof CertPathValidatorException ||
+                                ex.getCause() instanceof CertPathValidatorException)
                             Log.i(ex);
                         else
                             Log.e(ex);
