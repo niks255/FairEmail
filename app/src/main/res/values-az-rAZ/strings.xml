@@ -120,12 +120,14 @@
     <string name="title_setup_quick">Cəld quraşdırma</string>
     <string name="title_setup_intro">Bir hesabın hazırlanması üç addımdan ibarətdir və bundan sonra e-poçtları göndərə və ala bilərsiniz</string>
     <string name="title_setup_simple">Başqa hər hansısa bir seçimi dəyişdirməyə ehtiyac yoxdur</string>
+    <string name="title_setup_issue">FairEmail, gizliliyinizi qorumağa kömək etməsi üçün təkmilləşdirildi və sözün əsl mənasında minlərlə saatlıq çalışmanı təmsil edir. Əgər tətbiqlə bağlı hər hansısa probleminiz varsa, pis bir rəy bildirməzdən əvvəl zəhmət olmasa dəstək üçün mənimlə əlaqə saxlayın. Məmnuniyyətlə kömək edərəm!</string>
     <string name="title_setup_quick_accounts">Hesab əlavə et və ya dəyişdir</string>
     <string name="title_setup_quick_support">Bəzi təchizatçılar hesab əlavə etməyi çətinləşdirir. Xahiş edirik buna görə \"FairEmail\"i günahlandırmayın, əvəzində dəstək istəyin.</string>
     <string name="title_setup_quick_hint">Cəld quraşdırma, konfiqurasiya məlumatlarını autoconfig.thunderbird.net ünvanından alır</string>
     <string name="title_setup_quick_patience">Zəhmət olmasa səbrli olun &#8230;</string>
     <string name="title_setup_quick_imap">Mesaj almaq üçün IMAP serveri</string>
     <string name="title_setup_quick_smtp">Mesaj göndərmək üçün SMTP serveri</string>
+    <string name="title_setup_quick_certificates">Server sertifikatları</string>
     <string name="title_setup_wizard">Sehrbaz</string>
     <string name="title_setup_wizard_multiple">Sehrbaz, çoxlu hesabı tənzimləmək üçün bir neçə dəfə istifadə edilə bilər</string>
     <string name="title_setup_wizard_new">Yeni bir e-poçt ünvanına ehtiyacım var</string>
@@ -170,6 +172,7 @@
     <string name="title_setup_permissions">Verilən icazələr</string>
     <string name="title_setup_permissions_remark">Əlaqə məlumatlarına müraciət (məcburi deyil)</string>
     <string name="title_setup_permissions_explanation">Əlaqə icazələri, əlaqə məlumatlarının axtarışı və əlaqə təklifi üçün tələb olunur</string>
+    <string name="title_setup_permission_import_contacts">Əlaqələri necə idxal edə bilərəm?</string>
     <string name="title_setup_doze">Batareya optimallaşdırmasını sıradan çıxart</string>
     <string name="title_setup_doze_remark">E-poçtların güvənlə göndərilməsi və alınması üçün</string>
     <string name="title_setup_doze_explanation">Arxaplanda mesajların güvənlə göndərilməsi və alınmasını təmin etmək üçün tətbiqin batareya optimallaşdırması sıradan çıxarılmalıdır</string>
@@ -245,6 +248,7 @@
     <string name="title_advanced_hint_message">        Daha qabaqcıl seçimlərə gedirsiniz.
         Bütün seçimlər, fərqli bir tərcihiniz olmadığı müddətcə dəyişdirməyinizə ehtiyac olmayan və geniş istifadə olunan standart dəyərlərə sahibdir.
     </string>
+    <string name="title_advanced_hint_setup">Əsas konfiqurasiya ekranındakı sehrbaz düyməsinə toxunaraq bir hesabı konfiqurasiya edə bilərsiniz.</string>
     <string name="title_advanced_section_main">Əsas</string>
     <string name="title_advanced_section_synchronize">Gələn</string>
     <string name="title_advanced_section_send">Göndər</string>
@@ -262,6 +266,7 @@
     <string name="title_advanced_always">Bu hesablar üçün mesajları həmişə al</string>
     <string name="title_advanced_schedule">Cədvəl</string>
     <string name="title_advanced_advanced">Qabaqcıl</string>
+    <string name="title_advanced_quick_sync">Cəld eyniləşdirmə</string>
     <string name="title_advanced_no_date">Tarixsiz mesajlar</string>
     <string name="title_advanced_unseen">Bütün oxunmamış mesajlar</string>
     <string name="title_advanced_flagged">Bütün ulduzlu mesajlar</string>
@@ -297,6 +302,7 @@
     <string name="title_advanced_limit_reply">Gətirilən sitatların sayını məhdudlaşdır</string>
     <string name="title_advanced_resize_reply">Cavablanan mətndəki təsvirləri təkrar ölçüləndir</string>
     <string name="title_advanced_signature_location">İmza mövqeyi</string>
+    <string name="title_advanced_signature_new">Yeni mesajlar üçün imza istifadə edin</string>
     <string name="title_advanced_signature_reply">Cavablayanda imza istifadə et</string>
     <string name="title_advanced_signature_forward">Yönləndirəndə imza istifadə et</string>
     <string name="title_advanced_discard_delete">Qaralamanı ləğv edəndə, onu birdəfəlik sil</string>
@@ -326,9 +332,14 @@
     <string name="title_advanced_caption_message">Mesaj</string>
     <string name="title_advanced_caption_message_header">Mesaj başlığı</string>
     <string name="title_advanced_caption_message_body">Mesaj gövdəsi</string>
-    <string name="title_advanced_portrait2">Şaquli rejimdə iki sətir istifadə et</string>
-    <string name="title_advanced_landscape">Üfüqi rejimdə iki sütun istifadə et</string>
-    <string name="title_advanced_landscape3">Üfüqi rejimdə ilkin olaraq naviqasiya menyusu göstər</string>
+    <string name="title_advanced_portrait">Şaquli rejim</string>
+    <string name="title_advanced_landscape">Üfüqi rejim</string>
+    <string name="title_advanced_two_row">İki sətir istifadə et</string>
+    <string name="title_advanced_two_col">İki sütun istifadə et</string>
+    <string name="title_advanced_nav_options">Naviqasiya menyu seçimlərini göstər</string>
+    <string name="title_advanced_nav_pin">Naviqasiya menyusunu sancaqla</string>
+    <string name="title_advanced_nav_hide_title">Naviqasiya menyu seçimləri gizlədilsin?</string>
+    <string name="title_advanced_nav_hide_message">Görüntü tənzimləmələrində bu seçimi təkrar fəallaşdıra bilərsiniz</string>
     <string name="title_advanced_nav_message_count">Naviqasiya menyusunda yerli yaddaşda saxlanılmış mesaj sayını göstər</string>
     <string name="title_advanced_startup">Başlanğıc ekranında göstər</string>
     <string name="title_advanced_cards">Cədvəl stili əvəzinə kart stilini istifadə et</string>
@@ -375,7 +386,7 @@
     <string name="title_advanced_addresses">Ünvan təfsilatlarını ilkin olaraq göstər</string>
     <string name="title_advanced_attachments_alt">Mesaj mətnindən sonra qoşmaları göstər</string>
     <string name="title_advanced_thumbnails">Mesaj mətnindən sonra təsvir eskizlərini göstər</string>
-    <string name="title_advanced_message_text_zoom">İlkin mesaj mətnini yaxınlaşdır</string>
+    <string name="title_advanced_message_text_zoom2">İlkin mesajın mətn yaxınlaşdırması: %1$s %%</string>
     <string name="title_advanced_overview_mode">Orijinal mesajı tam ekrana qədər yaxınlaşdır</string>
     <string name="title_advanced_contrast">Mesaj mətni üçün yüksək ziddiyyət istifadə et</string>
     <string name="title_advanced_monospaced">Mesaj mətni üçün ilkin olaraq tək boşluqlu şrift istifadə et</string>
@@ -466,6 +477,7 @@
     <string name="title_advanced_sound">Bildiriş səsini seç</string>
     <string name="title_advanced_notify_screen_on">Yeni mesaj bildirişləri üçün ekranı qısa aç</string>
     <string name="title_advanced_confirm_links">Bağlantıların açılmasını təsdiqlə</string>
+    <string name="title_advanced_check_links_dbl">Şübhəli bağlantılar üçün domen əngəlləmə siyahılarını yoxlayın</string>
     <string name="title_advanced_browse_links">Android-ə bağlantıları açma səlahiyyəti ver</string>
     <string name="title_advanced_confirm_images">Təsvirlərin göstərilməsini təsdiqlə</string>
     <string name="title_advanced_confirm_html">İlkin olaraq yenidən format edilmiş mesajları göstər</string>
@@ -525,6 +537,7 @@
     <string name="title_advanced_poll_hint">Yeni mesajların vaxtaşırı yoxlanılması, hər dəfəsində yerli və uzaq mesajları müqayisə edəcək; bu, xüsusilə də həddən çox mesaj olanda əlavə batareya istifadəsinə səbəb olacaq bahalı bir əməliyyatdır. \"Həmişə al\", dəyişiklikləri davamlı izləyərək bunun qarşısını alacaq.</string>
     <string name="title_advanced_optimize_hint">Bu, e-poçt serverlərinin imkan və davranışlarından asılı olaraq batareya istifadəsinə qənaət etmək üçün eyniləşdirmə tezliyini dəyişdirə bilər</string>
     <string name="title_advanced_schedule_hint">Bir vaxt təyin etmək üçün vaxta toxun</string>
+    <string name="title_advanced_quick_sync_hint">Bu, verilənlər istifadəsini azaldır, ancaq e-poçt serveri standartlara uyğun olmasa yeni mesajlar buraxıla bilər</string>
     <string name="title_advanced_no_date_hint">Bəzi təchizatçılar bilinməyən, etibarsız və ya irəli tarixli mesajları tarixsiz mesajlar kimi saxlayır</string>
     <string name="title_advanced_unseen_hint">Bəzi təchizatçılar bunu doğru formada dəstəkləmir, bu da ya heç bir mesajın eyniləşdirilməməsinə, ya da bütün mesajların eyniləşdirilməsinə səbəb ola bilər</string>
     <string name="title_advanced_deleted_unseen">Sıradan çıxarılanda, oxunmamış mesajlar həmişəlik cihazda qalacaq</string>
@@ -584,6 +597,7 @@
     <string name="title_advanced_notify_manage_hint">Kanal xüsusiyyətlərini tənzimləmək üçün kanal adına toxunun</string>
     <string name="title_advanced_notify_manage_default_hint">İlkin səsi tənzimləmək üçün və s.</string>
     <string name="title_advanced_notify_manage_service_hint">\"Müşahidə\" bildirişini sıradan çıxartmaq üçün</string>
+    <string name="title_advanced_notify_separate_hint">Hesablar, qovluqlar və göndərənlər üçün bildirişləri necə konfiqurasiya edə bilərəm?</string>
     <string name="title_advanced_notify_preview_all_hint">Tam mətni göstərə bilən geyinilə bilən cihazlar üçün (5,000 simvola qədər)</string>
     <string name="title_advanced_notify_preview_only_hint">Bu, mesaj mətni endirilənə qədər bildirişlərin göstərilməsini gecikdirir</string>
     <string name="title_advanced_wearable_hint">Bildirişlər, yalnız mesaj mətni endiriləndən sonra geyinilə bilən cihazlara göndərilir</string>
@@ -840,6 +854,8 @@
     <string name="title_share_as_html">HTML kimi paylaş</string>
     <string name="title_raw_save">Xam mesajı saxla</string>
     <string name="title_raw_send">Qoşma kimi saxla</string>
+    <string name="title_raw_send_message">Mesaj</string>
+    <string name="title_raw_send_thread">Danışıq</string>
     <string name="title_manage_keywords">Açar sözləri idarə et</string>
     <string name="title_manage_labels">Gmail etiketlərini idarə et</string>
     <string name="title_add_keyword">Açarsöz əlavə et</string>
@@ -847,8 +863,9 @@
     <string name="title_download_all">Hamısını endir</string>
     <string name="title_save_all">Hamısını saxla</string>
     <string name="title_save_eml">Xam mesaj faylını saxla</string>
-    <string name="title_raw_remaining">Endiriləcək xam mesajlar: %1$d</string>
-    <string name="title_ask_raw">Mesajı yönləndirmək üçün xam (orijinal) mesajların serverdən endirilməsi lazımdır. Bu, internet bağlantısı tələb edir.</string>
+    <string name="title_eml_remark">Mesajları yönləndirmək üçün xam (orijinal) mesajların serverdən endirilməsi lazımdır. Bu, internet bağlantısı tələb edir.</string>
+    <string name="title_eml_option">Bunun qarşısı, bağlantı tənzimləmələrində xam mesajlarının endirilməsi həmişəlik fəallaşdırılaraq alına bilər</string>
+    <string name="title_eml_downloaded">Xam mesajlar endirildi: %1$s</string>
     <string name="title_buttons">Düymələri seçin</string>
     <string name="title_buttons_hint">Aktual əməliyyatlar, hesab növündən və konfiqurasiyadan asılıdır</string>
     <string name="title_button_search">Mesajlarda axtar</string>
@@ -860,6 +877,7 @@
     <string name="title_subscribe">Abunə ol</string>
     <string name="title_delete">Sil</string>
     <string name="title_more">Daha çox</string>
+    <string name="title_less">Daha az</string>
     <string name="title_spam">Spam</string>
     <string name="title_move">Köçürt</string>
     <string name="title_copy_btn">Kopyala</string>
@@ -898,7 +916,6 @@
     <string name="title_no_connection">Bir və ya bir neçə hesabla bağlantı qurulur &#8230;</string>
     <string name="title_no_folder">Qovluq mövcud deyil</string>
     <string name="title_no_format">Alınan orijinal mesaj daxil ediləcək</string>
-    <string name="title_no_image">Təsvirin kodu açıla bilmədi</string>
     <string name="title_no_search">Bu hesab üçün serverdə axtarış edilə bilmir</string>
     <string name="title_too_large">Mesaj, tamamilə yenidən formatlanmayacaq qədər böyükdür</string>
     <string name="title_truncated">Mesaj, tamamilə görüntülənməyəcək qədər böyükdür</string>
@@ -1092,6 +1109,7 @@
         E-poçt serverini axtarmağa davam etmək üçün aşağıdakı seçimləri istifadə edin.
     </string>
     <string name="title_search_text_hint">Həddindən çox mesaj olanda, mesajlarda mətn axtarışı bəzi serverlərdə işləməyə bilər</string>
+    <string name="title_search_text_unsupported">\'%s\', poçt serverinin mesaj mətnlərində axtarışı dəstəkləmədiyi mənasını verir</string>
     <string name="title_search_size_hint">Həddindən çox mesaj olanda, mesajların həcminə görə axtarışı bəzi serverlərdə işləməyə bilər</string>
     <string name="title_search_more">Daha çox seçim</string>
     <string name="title_search_use_index">Axtarış indeksini istifadə et</string>
@@ -1146,8 +1164,8 @@
     <string name="title_select_all">Hamısını seçin</string>
     <string name="title_select_found">Tapılanı seçin</string>
     <string name="title_mark_all_read">Hamısını oxunmuş kimi işarələ</string>
+    <string name="title_view_thread">Danışığa bax</string>
     <string name="title_force_sync">Məcburi eyniləşdirmə</string>
-    <string name="title_force_reload">Məcburi yenidən başlatma</string>
     <string name="title_force_send">Məcburi göndərmə</string>
     <string name="title_language_all">Hamısı</string>
     <string name="title_previous">Əvvəlki</string>
@@ -1324,7 +1342,9 @@
     <string name="title_legend_create_rule">Qayda yarat</string>
     <string name="title_legend_show_unsubscribe">Siyahıdan çıx</string>
     <string name="title_legend_show_images">Təsvirləri göstər</string>
+    <string name="title_legend_hide_images">Təsvirləri gizlət</string>
     <string name="title_legend_show_full">Orijinal mesajı göstər</string>
+    <string name="title_legend_show_reformatted">Yenidən format edilən mesajı göstər</string>
     <string name="title_legend_edit">Düzəliş et</string>
     <string name="title_legend_default_color">İlkin rəng</string>
     <string name="title_legend_close_hint">Məsləhəti bağla</string>
@@ -1371,9 +1391,10 @@
     <string name="title_check_owner">Sahibini yoxla</string>
     <string name="title_remark_owner">Məlumat <a href="https://ipinfo.io/">ipinfo.io</a> saytından alınacaq</string>
     <string name="title_ip_owner">Sahibin IP ünvanı</string>
+    <string name="title_default_apps">İlkin tətbiqlər</string>
     <string name="title_reset_open">İlkin tətbiqləri tənzimlə və təmizlə</string>
     <string name="title_select_app">Tətbiq seç</string>
-    <string name="title_updated">%1$s versiyası üçün yeniləmə mövcuddur</string>
+    <string name="title_updated">%1$s versiyasına yenilənə bilər</string>
     <string name="title_issue">Sualınız və ya probleminiz var?</string>
     <string name="title_yes">Bəli</string>
     <string name="title_no">Xeyr</string>
@@ -1434,7 +1455,7 @@
     <string name="title_pro_hint">Pro xüsusiyyətlərinin alınması sizə, mövcud və gələcəkdəki pro xüsusiyyətləri istifadə etməyinizə icazə verəcək və tətbiqin uzunömürlü olması üçün bizə dəstək olacaq</string>
     <string name="title_pro_price">Pro xüsusiyyətlər niyə bu qədər bahalıdır?</string>
     <string name="title_pro_family">Google Play Ailə Kitabxanasını istifadə edə bilərəm?</string>
-    <string name="title_pro_restore">Satın alma prosesimi necə bərpa edim?</string>
+    <string name="title_pro_restore">Bir satın almanı (başqa bir cihazda) necə geri yükləyə bilərəm?</string>
     <string name="title_pro_pending">Satın alma gözləyir</string>
     <string name="title_pro_activated">Bütün pro xüsusiyyətlər aktivləşdirildi</string>
     <string name="title_pro_valid">Bütün pro xüsusiyyətlər aktivdir</string>

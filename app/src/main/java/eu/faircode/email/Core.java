@@ -571,6 +571,7 @@ class Core {
                             // Move: NO APPEND processing failed.
                             // Move: NO Server Unavailable. 15
                             // Move: NO [CANNOT] Operation is not supported on mailbox
+                            // Move: NO [ALREADYEXISTS] Mailbox already exists
                             // Copy: NO Client tried to access nonexistent namespace. (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
                             // Add: BAD Data length exceeds limit
                             // Add: NO [LIMIT] APPEND Command exceeds the maximum allowed size
@@ -997,6 +998,7 @@ class Core {
         // Get arguments
         long target = jargs.optLong(0, folder.id);
         boolean autoread = jargs.optBoolean(1, false);
+        boolean copy = jargs.optBoolean(2, false); // Cross account
 
         if (target != folder.id)
             throw new IllegalArgumentException("Invalid folder");
@@ -1160,7 +1162,8 @@ class Core {
                         EntityOperation.queue(context, message, EntityOperation.SEEN, true);
 
                     // Delete source
-                    EntityOperation.queue(context, message, EntityOperation.DELETE);
+                    if (!copy)
+                        EntityOperation.queue(context, message, EntityOperation.DELETE);
                 }
 
                 db.setTransactionSuccessful();
@@ -1231,7 +1234,8 @@ class Core {
         boolean draft = (EntityFolder.DRAFTS.equals(folder.type) || EntityFolder.DRAFTS.equals(target.type));
         boolean duplicate = (copy && !account.isGmail());
         if (draft || duplicate) {
-            Log.i(folder.name + " move from " + folder.type + " to " + target.type);
+            Log.i(folder.name + " " + (duplicate ? "copy" : "move") +
+                    " from " + folder.type + " to " + target.type);
 
             List<Message> icopies = new ArrayList<>();
             for (Message imessage : map.keySet()) {
@@ -1479,7 +1483,8 @@ class Core {
             }
 
             if (!stats.isEmpty())
-                EntityLog.log(context, account.name + "/" + folder.name + " fetch stats " + stats);
+                EntityLog.log(context, EntityLog.Type.Statistics,
+                        account.name + "/" + folder.name + " fetch stats " + stats);
         } catch (MessageRemovedException | MessageRemovedIOException ex) {
             Log.i(ex);
 
@@ -1701,7 +1706,7 @@ class Core {
         }
 
         if (jargs.length() > 0) {
-            // Cross account move
+            // Cross account move/copy
             long tid = jargs.getLong(0);
             EntityFolder target = db.folder().getFolder(tid);
             if (target == null)
@@ -2035,6 +2040,47 @@ class Core {
                 " separator=" + separator +
                 " fetched in " + duration + " ms");
 
+        // Check if system folders were renamed
+        for (Folder ifolder : ifolders) {
+            String fullName = ifolder.getFullName();
+            if (TextUtils.isEmpty(fullName))
+                continue;
+
+            String[] attrs = ((IMAPFolder) ifolder).getAttributes();
+            String type = EntityFolder.getType(attrs, fullName, false);
+            if (type != null &&
+                    !EntityFolder.USER.equals(type) &&
+                    !EntityFolder.SYSTEM.equals(type)) {
+                for (EntityFolder folder : local.values())
+                    if (type.equals(folder.type) &&
+                            !fullName.equals(folder.name) &&
+                            !istore.getFolder(folder.name).exists()) {
+                        Log.e(account.host +
+                                " renaming " + type + " folder" +
+                                " from " + folder.name + " to " + fullName);
+                        folder.name = fullName;
+                        db.folder().setFolderName(folder.id, fullName);
+                    }
+
+                // Reselect Gmail archive folder
+                if (EntityFolder.ARCHIVE.equals(type) && account.isGmail()) {
+                    boolean gmail_archive_fixed = prefs.getBoolean("gmail_archive_fixed", false);
+                    if (!gmail_archive_fixed) {
+                        prefs.edit().putBoolean("gmail_archive_fixed", true).apply();
+                        EntityFolder archive = db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE);
+                        if (archive == null) {
+                            archive = db.folder().getFolderByName(account.id, fullName);
+                            if (archive != null) {
+                                Log.e("Reselecting Gmail archive=" + fullName);
+                                archive.type = EntityFolder.ARCHIVE;
+                                db.folder().setFolderType(archive.id, archive.type);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         Map<String, EntityFolder> nameFolder = new HashMap<>();
         Map<String, List<EntityFolder>> parentFolders = new HashMap<>();
         for (Folder ifolder : ifolders) {
@@ -2343,6 +2389,14 @@ class Core {
                         uidlMsgId.put(id.uidl, id.msgid);
                 }
 
+                Map<String, TupleUidl> msgIdTuple = new HashMap<>();
+                for (TupleUidl id : ids)
+                    if (id.msgid != null) {
+                        if (msgIdTuple.containsKey(id.msgid))
+                            Log.w(account.name + " POP duplicate msgid=" + id.msgid);
+                        msgIdTuple.put(id.msgid, id);
+                    }
+
                 // Fetch UIDLs
                 if (hasUidl) {
                     FetchProfile ifetch = new FetchProfile();
@@ -2431,7 +2485,7 @@ class Core {
                             continue;
                         }
 
-                        if (db.message().countMessageByMsgId(folder.id, msgid) > 0) {
+                        if (msgIdTuple.containsKey(msgid)) {
                             _new = false;
                             Log.i(account.name + " POP having " + msgid + "/" + uidl);
                             continue;
@@ -2439,7 +2493,7 @@ class Core {
 
                         try {
                             Long sent = helper.getSent();
-                            Long received = helper.getReceivedHeader();
+                            Long received = helper.getReceivedHeader(helper.getResent());
                             if (received == null)
                                 received = sent;
                             if (received == null)
@@ -3197,7 +3251,8 @@ class Core {
 
             stats.total = (SystemClock.elapsedRealtime() - search);
 
-            EntityLog.log(context, account.name + "/" + folder.name + " sync stats " + stats);
+            EntityLog.log(context, EntityLog.Type.Statistics,
+                    account.name + "/" + folder.name + " sync stats " + stats);
         } finally {
             Log.i(folder.name + " end sync state=" + state);
             db.folder().setFolderSyncState(folder.id, null);
@@ -3527,11 +3582,12 @@ class Core {
                 if (message.blocklist != null && message.blocklist) {
                     boolean use_blocklist = prefs.getBoolean("use_blocklist", false);
                     if (use_blocklist) {
-                        EntityLog.log(context, "Block list" +
-                                " folder=" + folder.name +
-                                " message=" + message.id +
-                                "@" + new Date(message.received) +
-                                ":" + message.subject);
+                        EntityLog.log(context, EntityLog.Type.General, message,
+                                "Block list" +
+                                        " folder=" + folder.name +
+                                        " message=" + message.id +
+                                        "@" + new Date(message.received) +
+                                        ":" + message.subject);
                         EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
                         if (junk != null) {
                             EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id, false);
@@ -4179,7 +4235,9 @@ class Core {
 
             for (Long id : remove) {
                 String tag = "unseen." + group + "." + Math.abs(id);
-                EntityLog.log(context, "Notify cancel tag=" + tag + " id=" + id);
+                EntityLog.log(context, EntityLog.Type.Notification,
+                        null, null, id == 0 ? null : Math.abs(id),
+                        "Notify cancel tag=" + tag + " id=" + id);
                 nm.cancel(tag, NotificationHelper.NOTIFICATION_TAGGED);
 
                 data.groupNotifying.get(group).remove(id);
@@ -4188,7 +4246,8 @@ class Core {
 
             if (notifications.size() == 0) {
                 String tag = "unseen." + group + "." + 0;
-                EntityLog.log(context, "Notify cancel tag=" + tag);
+                EntityLog.log(context, EntityLog.Type.Notification,
+                        "Notify cancel tag=" + tag);
                 nm.cancel(tag, NotificationHelper.NOTIFICATION_TAGGED);
             }
 
@@ -4212,12 +4271,14 @@ class Core {
 
                     String tag = "unseen." + group + "." + Math.abs(id);
                     Notification notification = builder.build();
-                    EntityLog.log(context, "Notifying tag=" + tag +
-                            " id=" + id + " group=" + notification.getGroup() +
-                            (Build.VERSION.SDK_INT < Build.VERSION_CODES.O
-                                    ? " sdk=" + Build.VERSION.SDK_INT
-                                    : " channel=" + notification.getChannelId()) +
-                            " sort=" + notification.getSortKey());
+                    EntityLog.log(context, EntityLog.Type.Notification,
+                            null, null, id == 0 ? null : Math.abs(id),
+                            "Notifying tag=" + tag +
+                                    " id=" + id + " group=" + notification.getGroup() +
+                                    (Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+                                            ? " sdk=" + Build.VERSION.SDK_INT
+                                            : " channel=" + notification.getChannelId()) +
+                                    " sort=" + notification.getSortKey());
                     try {
                         nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
                         // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
@@ -4894,6 +4955,7 @@ class Core {
         intent.putExtra("type", channel);
         intent.putExtra("title", title);
         intent.putExtra("message", message);
+        intent.putExtra("account", account.id);
         intent.putExtra("faq", 22);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntentCompat.getActivity(
@@ -5254,7 +5316,8 @@ class Core {
                                 groupNotifying.put(group, new ArrayList<>());
 
                             if (id > 0) {
-                                EntityLog.log(context, "Notify restore " + tag + " id=" + id);
+                                EntityLog.log(context, EntityLog.Type.Notification, null, null, id,
+                                        "Notify restore " + tag + " id=" + id);
                                 groupNotifying.get(group).add(id);
                             }
                         }

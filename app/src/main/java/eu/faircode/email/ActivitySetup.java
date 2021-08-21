@@ -19,6 +19,8 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationChannel;
@@ -106,8 +108,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
-
-import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
 
 public class ActivitySetup extends ActivityBase implements FragmentManager.OnBackStackChangedListener {
     private View view;
@@ -294,7 +294,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             }
         }).setSubtitle(BuildConfig.VERSION_NAME));
 
-        adapter.set(menus);
+        adapter.set(menus, true);
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
@@ -571,6 +571,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             @Override
             protected Void onExecute(Context context, Bundle args) throws Throwable {
                 Uri uri = args.getParcelable("uri");
+
+                if (uri == null)
+                    throw new FileNotFoundException();
+
                 String password = args.getString("password");
                 EntityLog.log(context, "Exporting " + uri);
 
@@ -798,6 +802,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         " contacts=" + import_contacts +
                         " answers=" + import_answers +
                         " settings=" + import_settings);
+
+                if (uri == null)
+                    throw new FileNotFoundException();
 
                 if (!"content".equals(uri.getScheme()) &&
                         !Helper.hasPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -1403,6 +1410,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     Uri uri = args.getParcelable("uri");
                     Log.i("Import certificate uri=" + uri);
 
+                    if (uri == null)
+                        throw new FileNotFoundException();
+
                     boolean der = false;
                     String extension = Helper.getExtension(uri.getLastPathSegment());
                     Log.i("Extension=" + extension);
@@ -1433,7 +1443,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         }
                     }
 
-                    String fingerprint = EntityCertificate.getFingerprint(cert);
+                    String fingerprint = EntityCertificate.getFingerprintSha256(cert);
                     List<String> emails = EntityCertificate.getEmailAddresses(cert);
 
                     if (emails.size() == 0)
@@ -1556,9 +1566,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     }
 
     private void onSetupAdvanced(Intent intent) {
+        View dview = LayoutInflater.from(this).inflate(R.layout.dialog_advanced, null);
         new AlertDialog.Builder(this)
-                .setTitle(R.string.title_advanced_hint_title)
-                .setMessage(R.string.title_advanced_hint_message)
+                .setView(dview)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
     }

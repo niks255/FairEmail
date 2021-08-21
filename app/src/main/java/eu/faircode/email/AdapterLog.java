@@ -20,12 +20,15 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -45,7 +48,22 @@ public class AdapterLog extends RecyclerView.Adapter<AdapterLog.ViewHolder> {
     private LifecycleOwner owner;
     private LayoutInflater inflater;
 
-    private List<EntityLog> items = new ArrayList<>();
+    private int textColorSecondary;
+    private int solarizedYellow;
+    private int solarizedOrange;
+    private int solarizedRed;
+    private int solarizedMagenta;
+    private int solarizedViolet;
+    private int solarizedBlue;
+    private int solarizedCyan;
+    private int solarizedGreen;
+
+    private Long account = null;
+    private Long folder = null;
+    private Long message = null;
+    private List<EntityLog.Type> types = new ArrayList<>();
+    private List<EntityLog> all = new ArrayList<>();
+    private List<EntityLog> selected = new ArrayList<>();
 
     private DateFormat TF;
 
@@ -62,16 +80,54 @@ public class AdapterLog extends RecyclerView.Adapter<AdapterLog.ViewHolder> {
 
         private void bindTo(EntityLog log) {
             tvTime.setText(TF.format(log.time));
-            tvData.setText(log.data);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(log.data);
+            switch (log.type) {
+                case General:
+                    break;
+                case Statistics:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedGreen), 0, ssb.length(), 0);
+                    break;
+                case Scheduling:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedYellow), 0, ssb.length(), 0);
+                    break;
+                case Network:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedOrange), 0, ssb.length(), 0);
+                    break;
+                case Account:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedMagenta), 0, ssb.length(), 0);
+                    break;
+                case Protocol:
+                    ssb.setSpan(new ForegroundColorSpan(textColorSecondary), 0, ssb.length(), 0);
+                    break;
+                case Classification:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedViolet), 0, ssb.length(), 0);
+                    break;
+                case Notification:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedBlue), 0, ssb.length(), 0);
+                    break;
+                case Rules:
+                    ssb.setSpan(new ForegroundColorSpan(solarizedCyan), 0, ssb.length(), 0);
+                    break;
+            }
+            tvData.setText(ssb);
         }
     }
-
 
     AdapterLog(Fragment parentFragment) {
         this.parentFragment = parentFragment;
         this.context = parentFragment.getContext();
         this.owner = parentFragment.getViewLifecycleOwner();
         this.inflater = LayoutInflater.from(parentFragment.getContext());
+
+        this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
+        this.solarizedYellow = ContextCompat.getColor(context, R.color.solarizedYellow);
+        this.solarizedOrange = ContextCompat.getColor(context, R.color.solarizedOrange);
+        this.solarizedRed = ContextCompat.getColor(context, R.color.solarizedRed);
+        this.solarizedMagenta = ContextCompat.getColor(context, R.color.solarizedMagenta);
+        this.solarizedViolet = ContextCompat.getColor(context, R.color.solarizedViolet);
+        this.solarizedBlue = ContextCompat.getColor(context, R.color.solarizedBlue);
+        this.solarizedCyan = ContextCompat.getColor(context, R.color.solarizedCyan);
+        this.solarizedGreen = ContextCompat.getColor(context, R.color.solarizedGreen);
 
         this.TF = Helper.getTimeInstance(context);
 
@@ -86,12 +142,32 @@ public class AdapterLog extends RecyclerView.Adapter<AdapterLog.ViewHolder> {
         });
     }
 
-    public void set(@NonNull List<EntityLog> logs) {
+    public void set(@NonNull List<EntityLog> logs,
+                    Long account, Long folder, Long message,
+                    @NonNull List<EntityLog.Type> types) {
         Log.i("Set logs=" + logs.size());
 
-        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffCallback(items, logs), false);
+        this.all = logs;
+        this.account = account;
+        this.folder = folder;
+        this.message = message;
+        this.types = types;
 
-        items = logs;
+        List<EntityLog> items = new ArrayList<>();
+        for (EntityLog log : all)
+            if (account == null && folder == null && message == null) {
+                if (types.contains(log.type))
+                    items.add(log);
+            } else {
+                if ((account == null || account.equals(log.account)) &&
+                        (folder == null || folder.equals(log.folder)) &&
+                        (message == null || message.equals(log.message)))
+                    items.add(log);
+            }
+
+        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffCallback(selected, items), false);
+
+        this.selected = items;
 
         diff.dispatchUpdatesTo(new ListUpdateCallback() {
             @Override
@@ -115,6 +191,10 @@ public class AdapterLog extends RecyclerView.Adapter<AdapterLog.ViewHolder> {
             }
         });
         diff.dispatchUpdatesTo(this);
+    }
+
+    public void setTypes(@NonNull List<EntityLog.Type> types) {
+        set(all, account, folder, message, types);
     }
 
     private static class DiffCallback extends DiffUtil.Callback {
@@ -153,12 +233,12 @@ public class AdapterLog extends RecyclerView.Adapter<AdapterLog.ViewHolder> {
 
     @Override
     public long getItemId(int position) {
-        return items.get(position).id;
+        return selected.get(position).id;
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return selected.size();
     }
 
     @Override
@@ -169,7 +249,7 @@ public class AdapterLog extends RecyclerView.Adapter<AdapterLog.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        EntityLog log = items.get(position);
+        EntityLog log = selected.get(position);
         holder.bindTo(log);
     }
 }

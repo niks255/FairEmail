@@ -261,6 +261,7 @@
     <string name="title_share">مشاركة</string>
     <string name="title_print">طباعة</string>
     <string name="title_show_headers">عرض العنوان الرأسي</string>
+    <string name="title_raw_send_thread">المحادثة</string>
     <string name="title_manage_keywords">إدارة الكلمات المفتاحية</string>
     <string name="title_add_keyword">إضافة كلمة مفتاحية</string>
     <string name="title_download_all">تنزيل الكل</string>
@@ -430,7 +431,6 @@
     <string name="title_open_link">افتح الرابط</string>
     <string name="title_image_link">رابط الصورة</string>
     <string name="title_select_app">اختر تطبيقا</string>
-    <string name="title_updated">هناك إصدار جديد متوفر %1$s</string>
     <string name="title_issue">هل عندك تساؤل أو صادفتَ مشكلة؟</string>
     <string name="title_yes">نعم</string>
     <string name="title_no">لا</string>

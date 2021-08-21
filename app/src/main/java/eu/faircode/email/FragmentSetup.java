@@ -53,6 +53,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.view.MenuCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -64,6 +65,7 @@ public class FragmentSetup extends FragmentBase {
     private ViewGroup view;
 
     private TextView tvPrivacy;
+    private TextView tvSupport;
 
     private TextView tvNoInternet;
     private ImageButton ibHelp;
@@ -84,6 +86,7 @@ public class FragmentSetup extends FragmentBase {
 
     private TextView tvPermissionsDone;
     private Button btnPermissions;
+    private TextView tvImportContacts;
 
     private TextView tvDozeDone;
     private Button btnDoze;
@@ -124,6 +127,7 @@ public class FragmentSetup extends FragmentBase {
         // Get controls
 
         tvPrivacy = view.findViewById(R.id.tvPrivacy);
+        tvSupport = view.findViewById(R.id.tvSupport);
 
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         ibHelp = view.findViewById(R.id.ibHelp);
@@ -144,6 +148,7 @@ public class FragmentSetup extends FragmentBase {
 
         tvPermissionsDone = view.findViewById(R.id.tvPermissionsDone);
         btnPermissions = view.findViewById(R.id.btnPermissions);
+        tvImportContacts = view.findViewById(R.id.tvImportContacts);
 
         tvDozeDone = view.findViewById(R.id.tvDozeDone);
         btnDoze = view.findViewById(R.id.btnDoze);
@@ -171,6 +176,16 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        tvSupport.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent view = new Intent(Intent.ACTION_VIEW)
+                        .setData(Helper.getSupportUri(v.getContext()));
+                v.getContext().startActivity(view);
+            }
+        });
+
         ibHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,13 +206,13 @@ public class FragmentSetup extends FragmentBase {
 
                 int order = 1;
                 String gmail = getString(R.string.title_setup_oauth, getString(R.string.title_setup_gmail));
-                menu.add(Menu.NONE, R.string.title_setup_gmail, order++, gmail);
+                menu.add(Menu.FIRST, R.string.title_setup_gmail, order++, gmail);
 
                 for (EmailProvider provider : EmailProvider.loadProfiles(context))
                     if (provider.oauth != null &&
                             (provider.oauth.enabled || BuildConfig.DEBUG)) {
                         MenuItem item = menu
-                                .add(Menu.NONE, -1, order++, getString(R.string.title_setup_oauth, provider.description))
+                                .add(Menu.FIRST, -1, order++, getString(R.string.title_setup_oauth, provider.description))
                                 .setIntent(new Intent(ActivitySetup.ACTION_QUICK_OAUTH)
                                         .putExtra("id", provider.id)
                                         .putExtra("name", provider.description)
@@ -214,7 +229,7 @@ public class FragmentSetup extends FragmentBase {
 
                 menu.add(Menu.NONE, R.string.title_setup_classic, order++, R.string.title_setup_classic)
                         .setIcon(R.drawable.twotone_settings_24)
-                        .setVisible(BuildConfig.DEBUG);
+                        .setVisible(false);
 
                 SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
                 ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
@@ -225,6 +240,8 @@ public class FragmentSetup extends FragmentBase {
                         .setVisible(false);
 
                 popupMenu.insertIcons(context);
+
+                MenuCompat.setGroupDividerEnabled(menu, true);
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -392,6 +409,14 @@ public class FragmentSetup extends FragmentBase {
                           at eu.faircode.email.FragmentSetup$11.onClick(SourceFile:2)
                      */
                 }
+            }
+        });
+
+        tvImportContacts.setPaintFlags(tvImportContacts.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvImportContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 172, true);
             }
         });
 

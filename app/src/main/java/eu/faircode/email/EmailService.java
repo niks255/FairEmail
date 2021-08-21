@@ -35,13 +35,10 @@ import androidx.preference.PreferenceManager;
 import com.sun.mail.gimap.GmailSSLProvider;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import com.sun.mail.pop3.POP3Store;
 import com.sun.mail.smtp.SMTPTransport;
 import com.sun.mail.util.MailConnectException;
 import com.sun.mail.util.SocketConnectException;
-
-import org.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.asn1.x509.Extension;
-import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -57,10 +54,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.security.PrivateKey;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -317,7 +312,8 @@ public class EmailService implements AutoCloseable {
                         DB db = DB.getInstance(context);
                         int accounts = db.account().setAccountPassword(account.id, newPassword);
                         int identities = db.identity().setIdentityPassword(account.id, account.user, newPassword, account.auth_type);
-                        EntityLog.log(context, account.name + " token refreshed=" + accounts + "/" + identities);
+                        EntityLog.log(context, EntityLog.Type.Account, account,
+                                "token refreshed=" + accounts + "/" + identities);
                     }
                 },
                 account.certificate_alias, account.fingerprint);
@@ -333,7 +329,8 @@ public class EmailService implements AutoCloseable {
                     public void onPasswordChanged(Context context, String newPassword) {
                         DB db = DB.getInstance(context);
                         int count = db.identity().setIdentityPassword(identity.id, newPassword);
-                        EntityLog.log(context, identity.email + " token refreshed=" + count);
+                        EntityLog.log(context, EntityLog.Type.Account, identity.account, null, null,
+                                identity.email + " token refreshed=" + count);
 
                     }
                 },
@@ -489,7 +486,7 @@ public class EmailService implements AutoCloseable {
             Throwable ce = ex;
             while (ce != null) {
                 if (factory != null && ce instanceof CertificateException)
-                    throw new UntrustedException(factory.getFingerPrintSelect(), ex);
+                    throw new UntrustedException(ex, factory.certificate);
                 if (ce instanceof IOException)
                     ioError = true;
                 ce = ce.getCause();
@@ -506,19 +503,28 @@ public class EmailService implements AutoCloseable {
 
                     boolean has4 = false;
                     boolean has6 = false;
-                    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-                    while (interfaces != null && interfaces.hasMoreElements()) {
-                        NetworkInterface ni = interfaces.nextElement();
-                        for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
-                            InetAddress addr = iaddr.getAddress();
-                            boolean local = (addr.isLoopbackAddress() || addr.isLinkLocalAddress());
-                            EntityLog.log(context, "Interface=" + ni + " addr=" + addr + " local=" + local);
-                            if (!local)
-                                if (addr instanceof Inet4Address)
-                                    has4 = true;
-                                else if (addr instanceof Inet6Address)
-                                    has6 = true;
+                    try {
+                        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                        while (interfaces != null && interfaces.hasMoreElements()) {
+                            NetworkInterface ni = interfaces.nextElement();
+                            for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
+                                InetAddress addr = iaddr.getAddress();
+                                boolean local = (addr.isLoopbackAddress() || addr.isLinkLocalAddress());
+                                EntityLog.log(context, "Interface=" + ni + " addr=" + addr + " local=" + local);
+                                if (!local)
+                                    if (addr instanceof Inet4Address)
+                                        has4 = true;
+                                    else if (addr instanceof Inet6Address)
+                                        has6 = true;
+                            }
                         }
+                    } catch (Throwable ex2) {
+                        Log.e(ex2);
+                        /*
+                            java.lang.NullPointerException: Attempt to read from field 'java.util.List java.net.NetworkInterface.childs' on a null object reference
+                                at java.net.NetworkInterface.getAll(NetworkInterface.java:498)
+                                at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:398)
+                         */
                     }
 
                     EntityLog.log(context, "Address main=" + main +
@@ -581,7 +587,7 @@ public class EmailService implements AutoCloseable {
                             String line = bos.toString();
                             if (!line.endsWith("ignoring socket timeout"))
                                 if (log)
-                                    EntityLog.log(context, user + " " + line);
+                                    EntityLog.log(context, EntityLog.Type.Protocol, user + " " + line);
                                 else {
                                     if (BuildConfig.DEBUG)
                                         Log.i("javamail", user + " " + line);
@@ -721,6 +727,24 @@ public class EmailService implements AutoCloseable {
         return null;
     }
 
+    List<String> getCapabilities() throws MessagingException {
+        List<String> result = new ArrayList<>();
+
+        Store store = getStore();
+        Map<String, String> capabilities;
+        if (store instanceof IMAPStore)
+            capabilities = ((IMAPStore) getStore()).getCapabilities();
+        else if (store instanceof POP3Store)
+            capabilities = ((POP3Store) getStore()).getCapabilities();
+        else
+            capabilities = null;
+
+        if (capabilities != null)
+            result.addAll(capabilities.keySet());
+
+        return result;
+    }
+
     boolean hasCapability(String capability) throws MessagingException {
         Store store = getStore();
         if (store instanceof IMAPStore)
@@ -836,7 +860,7 @@ public class EmailService implements AutoCloseable {
 
                             // Check host name
                             List<String> names = EntityCertificate.getDnsNames(certificate);
-                            if (ConnectionHelper.matches(server, names))
+                            if (EntityCertificate.matches(server, names))
                                 return;
 
                             String error = server + " not in certificate: " + TextUtils.join(",", names);
@@ -970,12 +994,12 @@ public class EmailService implements AutoCloseable {
         private static boolean matches(X509Certificate certificate, @NonNull String trustedFingerprint) {
             // Get certificate fingerprint
             try {
-                String fingerprint = getFingerPrint(certificate);
+                String fingerprint = EntityCertificate.getFingerprintSha1(certificate);
                 int slash = trustedFingerprint.indexOf('/');
                 if (slash < 0)
                     return trustedFingerprint.equals(fingerprint);
                 else {
-                    String keyId = getKeyId(certificate);
+                    String keyId = EntityCertificate.getKeyId(certificate);
                     if (trustedFingerprint.substring(slash + 1).equals(keyId))
                         return true;
                     return trustedFingerprint.substring(0, slash).equals(fingerprint);
@@ -983,37 +1007,6 @@ public class EmailService implements AutoCloseable {
             } catch (Throwable ex) {
                 Log.w(ex);
                 return false;
-            }
-        }
-
-        private static String getKeyId(X509Certificate certificate) {
-            try {
-                byte[] extension = certificate.getExtensionValue(Extension.subjectKeyIdentifier.getId());
-                if (extension == null)
-                    return null;
-                byte[] bytes = DEROctetString.getInstance(extension).getOctets();
-                SubjectKeyIdentifier keyId = SubjectKeyIdentifier.getInstance(bytes);
-                return Helper.hex(keyId.getKeyIdentifier());
-            } catch (Throwable ex) {
-                Log.e(ex);
-                return null;
-            }
-        }
-
-        private static String getFingerPrint(X509Certificate certificate) throws CertificateEncodingException, NoSuchAlgorithmException {
-            return Helper.sha1(certificate.getEncoded());
-        }
-
-        String getFingerPrintSelect() {
-            try {
-                if (certificate == null)
-                    return null;
-                String keyId = getKeyId(certificate);
-                String fingerPrint = getFingerPrint(certificate);
-                return fingerPrint + (keyId == null ? "" : "/" + keyId);
-            } catch (Throwable ex) {
-                Log.e(ex);
-                return null;
             }
         }
     }
@@ -1055,16 +1048,16 @@ public class EmailService implements AutoCloseable {
         }
     }
 
-    class UntrustedException extends MessagingException {
-        private String fingerprint;
+    static class UntrustedException extends MessagingException {
+        private X509Certificate certificate;
 
-        UntrustedException(@NonNull String fingerprint, @NonNull Exception cause) {
+        UntrustedException(@NonNull Exception cause, @NonNull X509Certificate certificate) {
             super("Untrusted", cause);
-            this.fingerprint = fingerprint;
+            this.certificate = certificate;
         }
 
-        String getFingerprint() {
-            return fingerprint;
+        X509Certificate getCertificate() {
+            return certificate;
         }
 
         @NonNull

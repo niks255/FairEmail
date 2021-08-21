@@ -120,12 +120,14 @@
     <string name="title_setup_quick">Configuration rapide</string>
     <string name="title_setup_intro">La configuration d\'un compte se fait en trois étapes seulement et après cela, vous pouvez envoyer et recevoir des courriels</string>
     <string name="title_setup_simple">Il n\'est pas nécessaire de modifier d\'autres options</string>
+    <string name="title_setup_issue">FairEmail a été développé pour vous aider à protéger votre vie privée et représente littéralement des milliers d\'heures de travail. Si vous avez des problèmes, veuillez me contacter d\'abord pour obtenir de l\'aide avant de laisser une mauvaise évaluation. Je suis heureux de vous aider !</string>
     <string name="title_setup_quick_accounts">Ajouter ou modifier des comptes</string>
     <string name="title_setup_quick_support">Certains fournisseurs rendent difficile l\'ajout d\'un compte. Ne blâmez pas FairEmail pour ceci mais demandez de l\'aide à la place.</string>
     <string name="title_setup_quick_hint">La configuration rapide récupérera les informations de configuration de autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_patience">Veuillez patienter&#8230;</string>
     <string name="title_setup_quick_imap">Serveur IMAP pour la réception des messages</string>
     <string name="title_setup_quick_smtp">Serveur SMTP pour l’envoi des messages</string>
+    <string name="title_setup_quick_certificates">Certificats du serveur</string>
     <string name="title_setup_wizard">Assistant</string>
     <string name="title_setup_wizard_multiple">L\'assistant peut être utilisé plusieurs fois pour configurer plusieurs comptes</string>
     <string name="title_setup_wizard_new">J\'ai besoin d\'une nouvelle adresse courriel</string>
@@ -170,6 +172,7 @@
     <string name="title_setup_permissions">Accorder les autorisations</string>
     <string name="title_setup_permissions_remark">Pour accéder aux informations de contact (facultatif)</string>
     <string name="title_setup_permissions_explanation">L\'autorisation d\'accès aux contacts est requise pour rechercher des informations de contact et pour suggérer des contacts</string>
+    <string name="title_setup_permission_import_contacts">Comment puis-je importer des contacts?</string>
     <string name="title_setup_doze">Désactiver les optimisations de la pile</string>
     <string name="title_setup_doze_remark">Pour envoyer et recevoir des courriels de manière fiable</string>
     <string name="title_setup_doze_explanation">Les optimisations de la pile doivent être désactivées pour que l\'application assure un envoi et une réception fiables des messages en arrière-plan</string>
@@ -245,6 +248,7 @@
     <string name="title_advanced_hint_message">        Vous parcourez les paramètres avancés.
         Toutes les options ont des valeurs par défaut couramment utilisées que vous n\'avez pas besoin de modifier sauf si vous avez une préférence différente.
     </string>
+    <string name="title_advanced_hint_setup">Vous pouvez configurer un compte en appuyant sur le bouton Assistant sur l\'écran principal de configuration.</string>
     <string name="title_advanced_section_main">Principal</string>
     <string name="title_advanced_section_synchronize">Réception</string>
     <string name="title_advanced_section_send">Envoi</string>
@@ -298,6 +302,7 @@
     <string name="title_advanced_limit_reply">Limiter le nombre de citations imbriquées</string>
     <string name="title_advanced_resize_reply">Redimensionner les images dans le texte de la réponse</string>
     <string name="title_advanced_signature_location">Emplacement de la signature</string>
+    <string name="title_advanced_signature_new">Utiliser la signature pour les nouveaux messages</string>
     <string name="title_advanced_signature_reply">Utiliser la signature lors de la réponse</string>
     <string name="title_advanced_signature_forward">Utiliser la signature lors du transfert</string>
     <string name="title_advanced_discard_delete">Lors de l’abandon d’un brouillon, le supprimer définitivement</string>
@@ -327,9 +332,14 @@
     <string name="title_advanced_caption_message">Message</string>
     <string name="title_advanced_caption_message_header">En-tête du message</string>
     <string name="title_advanced_caption_message_body">Contenu du message</string>
-    <string name="title_advanced_portrait2">Utiliser deux lignes en mode portrait</string>
-    <string name="title_advanced_landscape">Utiliser deux colonnes en mode paysage</string>
-    <string name="title_advanced_landscape3">Afficher le menu de navigation en mode paysage par défaut</string>
+    <string name="title_advanced_portrait">Mode portrait</string>
+    <string name="title_advanced_landscape">Mode paysage</string>
+    <string name="title_advanced_two_row">Utiliser deux rangées</string>
+    <string name="title_advanced_two_col">Utiliser deux colonnes</string>
+    <string name="title_advanced_nav_options">Afficher les options du menu de navigation</string>
+    <string name="title_advanced_nav_pin">Épingler le menu de navigation</string>
+    <string name="title_advanced_nav_hide_title">Masquer les options du menu de navigation?</string>
+    <string name="title_advanced_nav_hide_message">Vous pouvez réactiver les options dans les paramètres d\'affichage</string>
     <string name="title_advanced_nav_message_count">Afficher le nombre de messages stockés localement dans le menu de navigation</string>
     <string name="title_advanced_startup">Afficher sur l’écran de démarrage</string>
     <string name="title_advanced_cards">Utiliser le style carte au lieu du style tableau</string>
@@ -376,7 +386,7 @@
     <string name="title_advanced_addresses">Afficher les détails de l’adresse par défaut</string>
     <string name="title_advanced_attachments_alt">Afficher les pièces jointes après le texte du message</string>
     <string name="title_advanced_thumbnails">Afficher les vignettes des images après le texte du message</string>
-    <string name="title_advanced_message_text_zoom">Zoom du texte du message par défaut</string>
+    <string name="title_advanced_message_text_zoom2">Zoom du texte du message par défaut : %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoomer sur les messages originaux pour les adapter à l\'écran</string>
     <string name="title_advanced_contrast">Utiliser un contraste élevé pour le texte du message</string>
     <string name="title_advanced_monospaced">Utiliser une police à espacement fixe pour le texte du message</string>
@@ -467,6 +477,7 @@
     <string name="title_advanced_sound">Sélectionner le son pour les notifications</string>
     <string name="title_advanced_notify_screen_on">Allumer brièvement l\'écran lors des nouvelles notifications de message</string>
     <string name="title_advanced_confirm_links">Confirmer l’ouverture des liens</string>
+    <string name="title_advanced_check_links_dbl">Vérifier les listes de blocage de domaine pour les liens suspects</string>
     <string name="title_advanced_browse_links">Déléguer l\'ouverture des liens à Android</string>
     <string name="title_advanced_confirm_images">Confirmer l’affichage des images</string>
     <string name="title_advanced_confirm_html">Afficher les messages reformatés par défaut</string>
@@ -587,6 +598,7 @@
     <string name="title_advanced_notify_manage_hint">Appuyez sur le nom d’un canal pour définir ses propriétés</string>
     <string name="title_advanced_notify_manage_default_hint">Pour définir le son par défaut, etc.</string>
     <string name="title_advanced_notify_manage_service_hint">Pour désactiver la notification « Surveillance »</string>
+    <string name="title_advanced_notify_separate_hint">Comment configurer les notifications pour les comptes, dossiers et expéditeurs ?</string>
     <string name="title_advanced_notify_preview_all_hint">Pour les appareils connectés qui peuvent afficher le texte complet (jusqu\'à 5 000 caractères)</string>
     <string name="title_advanced_notify_preview_only_hint">Ceci retarde l\'affichage des notifications jusqu\'à ce que le texte du message ait été téléchargé</string>
     <string name="title_advanced_wearable_hint">Les notifications ne sont envoyées à un appareil connecté qu’après le téléchargement du texte du message</string>
@@ -843,6 +855,8 @@
     <string name="title_share_as_html">Partager en tant que HTML</string>
     <string name="title_raw_save">Enregistrer le message original</string>
     <string name="title_raw_send">Envoyer comme pièce-jointe</string>
+    <string name="title_raw_send_message">Message</string>
+    <string name="title_raw_send_thread">Conversation</string>
     <string name="title_manage_keywords">Gérer les mots-clés</string>
     <string name="title_manage_labels">Gérer les libellés Gmail</string>
     <string name="title_add_keyword">Ajouter un mot-clé</string>
@@ -850,8 +864,9 @@
     <string name="title_download_all">Télécharger tout</string>
     <string name="title_save_all">Enregistrer tout</string>
     <string name="title_save_eml">Enregistrer le message original dans un fichier</string>
-    <string name="title_raw_remaining">Messages bruts à télécharger : %1$d</string>
-    <string name="title_ask_raw">Pour transférer des messages, les messages bruts (originaux) doivent être téléchargés depuis le serveur. Ceci nécessite une connexion Internet.</string>
+    <string name="title_eml_remark">Pour transférer des messages, les messages bruts (originaux) doivent être téléchargés depuis le serveur. Ceci nécessite une connexion Internet.</string>
+    <string name="title_eml_option">Ceci peut être évité en activant le téléchargement des fichiers de messages bruts dans les paramètres de connexion</string>
+    <string name="title_eml_downloaded">Messages bruts téléchargés : %1$s</string>
     <string name="title_buttons">Sélectionner les boutons</string>
     <string name="title_buttons_hint">Les actions réellement disponibles dépendent du type de compte et de la configuration</string>
     <string name="title_button_search">Rechercher dans les messages</string>
@@ -863,6 +878,7 @@
     <string name="title_subscribe">S’abonner</string>
     <string name="title_delete">Supprimer</string>
     <string name="title_more">Plus</string>
+    <string name="title_less">Moins</string>
     <string name="title_spam">Indésirables</string>
     <string name="title_move">Déplacer</string>
     <string name="title_copy_btn">Copier</string>
@@ -901,7 +917,6 @@
     <string name="title_no_connection">Connexion à un ou plusieurs comptes&#8230;</string>
     <string name="title_no_folder">Le dossier n’existe pas</string>
     <string name="title_no_format">Le message initialement reçu sera inclus</string>
-    <string name="title_no_image">L’image n’a pas pu être décodée</string>
     <string name="title_no_search">La recherche sur le serveur n’est pas disponible pour ce compte</string>
     <string name="title_too_large">Message trop volumineux pour être complètement reformaté</string>
     <string name="title_truncated">Message trop volumineux pour être affiché complètement</string>
@@ -1095,6 +1110,7 @@
         Les options ci-dessous permettent de continuer à rechercher sur le serveur de messagerie.
     </string>
     <string name="title_search_text_hint">La recherche de texte dans les messages peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
+    <string name="title_search_text_unsupported">\'%s\' signifie que le serveur de messagerie ne prend pas en charge la recherche dans les textes des messages</string>
     <string name="title_search_size_hint">La recherche de messages par taille peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
     <string name="title_search_more">Plus d’options</string>
     <string name="title_search_use_index">Utiliser l’index de recherche</string>
@@ -1149,8 +1165,8 @@
     <string name="title_select_all">Tout sélectionner</string>
     <string name="title_select_found">Sélectionner les messages trouvés</string>
     <string name="title_mark_all_read">Tout marquer comme lu</string>
+    <string name="title_view_thread">Afficher la conversation</string>
     <string name="title_force_sync">Forcer la synchronisation</string>
-    <string name="title_force_reload">Forcer le redémarrage</string>
     <string name="title_force_send">Forcer l’envoi</string>
     <string name="title_language_all">Toutes</string>
     <string name="title_previous">Précédent</string>
@@ -1327,7 +1343,9 @@
     <string name="title_legend_create_rule">Créer une règle</string>
     <string name="title_legend_show_unsubscribe">Se désabonner de la liste</string>
     <string name="title_legend_show_images">Afficher les images</string>
+    <string name="title_legend_hide_images">Masquer les images</string>
     <string name="title_legend_show_full">Afficher le message original</string>
+    <string name="title_legend_show_reformatted">Afficher le message reformaté</string>
     <string name="title_legend_edit">Modifier</string>
     <string name="title_legend_default_color">Couleur par défaut</string>
     <string name="title_legend_close_hint">Fermer l\'astuce</string>
@@ -1374,9 +1392,10 @@
     <string name="title_check_owner">Vérifier le propriétaire</string>
     <string name="title_remark_owner">Les informations seront récupérées depuis <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Adresse IP du propriétaire</string>
+    <string name="title_default_apps">Applications par défaut</string>
     <string name="title_reset_open">Définir ou effacer les applications par défaut</string>
     <string name="title_select_app">Sélectionner une appli</string>
-    <string name="title_updated">Une mise à jour vers la version %1$s est disponible</string>
+    <string name="title_updated">Mise à jour vers la version %1$s disponible</string>
     <string name="title_issue">Avez-vous une question ou un problème?</string>
     <string name="title_yes">Oui</string>
     <string name="title_no">Non</string>
@@ -1437,7 +1456,7 @@
     <string name="title_pro_hint">L’achat des fonctionnalités pro vous autorisera à utiliser toutes les fonctionnalités Pro actuelles et futures et permettra de maintenir et de soutenir cette application.</string>
     <string name="title_pro_price">Pourquoi les fonctionnalités Pro sont-elles si chères?</string>
     <string name="title_pro_family">Puis-je utiliser la bibliothèque familiale Google Play ?</string>
-    <string name="title_pro_restore">Comment puis-je me faire rembourser?</string>
+    <string name="title_pro_restore">Comment puis-je récupérer un achat (sur un autre appareil)?</string>
     <string name="title_pro_pending">Achat en attente</string>
     <string name="title_pro_activated">Toutes les fonctionnalités pro sont activées</string>
     <string name="title_pro_valid">Toutes les fonctionnalités pro activées</string>

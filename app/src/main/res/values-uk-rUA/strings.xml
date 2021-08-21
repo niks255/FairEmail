@@ -140,12 +140,14 @@
     <string name="title_setup_quick">Швидке налаштування</string>
     <string name="title_setup_intro">Налаштування облікового запису лише за три кроки, і після цього ви зможете відправляти та отримувати листи</string>
     <string name="title_setup_simple">Немає необхідності змінювати будь-які інші параметри</string>
+    <string name="title_setup_issue">FairEmail був розроблений для захисту Вашої приватності і являє собою буквально тисячі годин роботи. Якщо у Вас виникли проблеми, будь ласка, зв\'яжіться зі мною в першу чергу, перш ніж залишити поганий відгук. Дуже радий допомогти!</string>
     <string name="title_setup_quick_accounts">Додавання/зміна облікових записів</string>
     <string name="title_setup_quick_support">Деякі провайдери ускладнюють додавання рахунку. Будь ласка, не звинувачуйте у цьому Fairemail, а попросіть допомогу у Вашій службі підтримки.</string>
     <string name="title_setup_quick_hint">Швидке налаштування дасть інформацію про конфігурацію з autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_patience">Будь ласка, будьте терплячі &#8230;</string>
     <string name="title_setup_quick_imap">Сервер IMAP для отримання повідомлень</string>
     <string name="title_setup_quick_smtp">Сервер SMTP для надсилання повідомлень</string>
+    <string name="title_setup_quick_certificates">Сертифікати сервера</string>
     <string name="title_setup_wizard">Майстер встановлення</string>
     <string name="title_setup_wizard_multiple">Майстер можна використати кілька разів, щоб налаштувати кілька облікових записів</string>
     <string name="title_setup_wizard_new">Вкажіть нову електронну адресу</string>
@@ -265,6 +267,7 @@
     <string name="title_advanced_hint_message">        Ви переходите до більш розширених параметрів.
         Всі параметри мають загальновизнані стандартні значення, які не треба змінювати, якщо ви не маєте інших уподобань.
     </string>
+    <string name="title_advanced_hint_setup">Ви можете налаштувати обліковий запис, натиснувши на кнопку майстра на головній сторінці конфігурації.</string>
     <string name="title_advanced_section_main">Головне</string>
     <string name="title_advanced_section_synchronize">Отримання</string>
     <string name="title_advanced_section_send">Надсилання</string>
@@ -318,6 +321,7 @@
     <string name="title_advanced_limit_reply">Обмежити кількість вкладених лапок</string>
     <string name="title_advanced_resize_reply">Змінити розмір зображень в тексті відповіді</string>
     <string name="title_advanced_signature_location">Положення підпису</string>
+    <string name="title_advanced_signature_new">Використовувати підпис для нових повідомлень</string>
     <string name="title_advanced_signature_reply">Використовувати підпис під час відповіді</string>
     <string name="title_advanced_signature_forward">Використовувати підпис під час перенаправлення</string>
     <string name="title_advanced_discard_delete">Видалення чернетки на назавжди</string>
@@ -347,9 +351,14 @@
     <string name="title_advanced_caption_message">Повідомлення</string>
     <string name="title_advanced_caption_message_header">Заголовок повідомлення</string>
     <string name="title_advanced_caption_message_body">Текст повідомлення</string>
-    <string name="title_advanced_portrait2">Використовувати два рядки в портретному режимі</string>
-    <string name="title_advanced_landscape">Використовувати дві колонки в ландшафтному режимі</string>
-    <string name="title_advanced_landscape3">Показувати меню навігації в ландшафтному режимі за замовчуванням</string>
+    <string name="title_advanced_portrait">Портретний режим</string>
+    <string name="title_advanced_landscape">Альбомна орієнтація</string>
+    <string name="title_advanced_two_row">Використовувати два рядки</string>
+    <string name="title_advanced_two_col">Використовувати два стовпчики</string>
+    <string name="title_advanced_nav_options">Показати параметри меню навігації</string>
+    <string name="title_advanced_nav_pin">Прикріпити меню навігації</string>
+    <string name="title_advanced_nav_hide_title">Приховати параметри меню навігації?</string>
+    <string name="title_advanced_nav_hide_message">Ви можете знову включити опції в налаштуваннях екрану</string>
     <string name="title_advanced_nav_message_count">Показати кількість локально збережених повідомлень в меню навігації</string>
     <string name="title_advanced_startup">Показувати на стартовому екрані</string>
     <string name="title_advanced_cards">Використовувати стиль картки замість табличного стилю</string>
@@ -396,7 +405,7 @@
     <string name="title_advanced_addresses">Розгорнути деталі адреси за замовчуванням</string>
     <string name="title_advanced_attachments_alt">Показати вкладення після тексту повідомлення</string>
     <string name="title_advanced_thumbnails">Показувати ескізи зображень після повідомлення</string>
-    <string name="title_advanced_message_text_zoom">Масштабування тексту повідомлення за замовчуванням</string>
+    <string name="title_advanced_message_text_zoom2">Масштаб тексту за замовчуванням: %1$s %%</string>
     <string name="title_advanced_overview_mode">Автоматичне масштабування оригінальних повідомлень</string>
     <string name="title_advanced_contrast">Використовувати високо-контрастний текст для повідомленнь</string>
     <string name="title_advanced_monospaced">Використовувати моноширинний шрифт для тексту повідомлень за замовчуванням</string>
@@ -442,6 +451,7 @@
     <string name="title_advanced_collapse_multiple">Згорнути повідомлення в розмові з декількома повідомленнями при натисканні \'назад\'</string>
     <string name="title_advanced_autoclose">Автоматично закривати розмови</string>
     <string name="title_advanced_onclose">При закритті розмови</string>
+    <string name="title_advanced_autoclose_unread">Закрити бесіди для повідомлень котрі позначенні як непрочитані</string>
     <string name="title_advanced_undo">Час для відміни дії</string>
     <string name="title_advanced_quick_filter">Показувати ненав\'язливі піктограми швидкого фільтру</string>
     <string name="title_advanced_quick_scroll">Показати не нав\'язливі піктограми швидкого прокручування вгору/вниз</string>
@@ -486,6 +496,7 @@
     <string name="title_advanced_sound">Виберіть звук сповіщення</string>
     <string name="title_advanced_notify_screen_on">Коротке увімкнення екрану для нових повідомлень</string>
     <string name="title_advanced_confirm_links">Підтвердити відкриття посилань</string>
+    <string name="title_advanced_check_links_dbl">Перевіряти списки заблокованих доменів за сумнівними посиланнями</string>
     <string name="title_advanced_browse_links">Делегувати відкриття посилань до Android</string>
     <string name="title_advanced_confirm_images">Підтвердити показ зображень</string>
     <string name="title_advanced_confirm_html">Показати відформатовані повідомлення за замовчуванням</string>
@@ -605,6 +616,7 @@
     <string name="title_advanced_notify_manage_hint">Натисніть на назву каналу, щоб встановити властивості каналу</string>
     <string name="title_advanced_notify_manage_default_hint">Щоб встановити звук за замовчуванням</string>
     <string name="title_advanced_notify_manage_service_hint">Щоб вимкнути сповіщення \'моніторинг\'</string>
+    <string name="title_advanced_notify_separate_hint">Як налаштувати сповіщення для облікових записів, тек і відправників?</string>
     <string name="title_advanced_notify_preview_all_hint">Для пристроїв, які можуть відображати повний текст (до 5 000 символів)</string>
     <string name="title_advanced_notify_preview_only_hint">Затримує показ сповіщення поки повідомлення не буде завантажено</string>
     <string name="title_advanced_wearable_hint">Сповіщення надсилаються до пристрою тільки після завантаження тексту</string>
@@ -861,6 +873,8 @@
     <string name="title_share_as_html">Поділитися як HTML</string>
     <string name="title_raw_save">Зберігти raw повідомлення</string>
     <string name="title_raw_send">Надіслати як вкладення</string>
+    <string name="title_raw_send_message">Повідомлення</string>
+    <string name="title_raw_send_thread">Розмова</string>
     <string name="title_manage_keywords">Керування ключовими словами</string>
     <string name="title_manage_labels">Керування мітками Gmail</string>
     <string name="title_add_keyword">Додати ключове слово</string>
@@ -868,8 +882,9 @@
     <string name="title_download_all">Звантажити все</string>
     <string name="title_save_all">Зберегти все</string>
     <string name="title_save_eml">Зберігти файл raw повідомлення</string>
-    <string name="title_raw_remaining">Необроблені повідомлення для завантаження: %1$d</string>
-    <string name="title_ask_raw">Для пересилання повідомлень необхідно завантажити їх з серверу. Для цього потрібне підключення до інтернету.</string>
+    <string name="title_eml_remark">Для пересилання повідомлень необхідно завантажити їх з серверу. Для цього потрібне підключення до інтернету.</string>
+    <string name="title_eml_option">Увімкнувши в налаштуваннях підключення, це може запобігти, завжди завантажувати файли необроблених повідомлень</string>
+    <string name="title_eml_downloaded">Необроблених повідомлень завантаженно: %1$s</string>
     <string name="title_buttons">Виберіть кнопки</string>
     <string name="title_buttons_hint">Доступні поточні дії залежать від типу облікового запису і конфігурації</string>
     <string name="title_button_search">Пошук у повідомленнях</string>
@@ -881,6 +896,7 @@
     <string name="title_subscribe">Підписатися</string>
     <string name="title_delete">Видалити</string>
     <string name="title_more">Більше</string>
+    <string name="title_less">Менше</string>
     <string name="title_spam">Спам</string>
     <string name="title_move">Перемістити</string>
     <string name="title_copy_btn">Копіювати</string>
@@ -919,7 +935,6 @@
     <string name="title_no_connection">Підключення до одного або декількох облікових записів &#8230;</string>
     <string name="title_no_folder">Тека не існує</string>
     <string name="title_no_format">Початкове повідомлення буде включено</string>
-    <string name="title_no_image">Неможливо декодувати зображення</string>
     <string name="title_no_search">Пошук на сервері недоступний для цього облікового запису</string>
     <string name="title_too_large">Лист завеликий для повного переформатування</string>
     <string name="title_truncated">Лист завеликий для показу</string>
@@ -1113,6 +1128,7 @@
         Параметри нижче повинні продовжувати пошук з поштового сервера.
     </string>
     <string name="title_search_text_hint">Пошук тексту в повідомленнях, при великій кількості повідомлень, може не працювати на деяких серверах</string>
+    <string name="title_search_text_unsupported">\'%s\' означає, що поштовий сервер не підтримує пошук в повідомленнях</string>
     <string name="title_search_size_hint">Пошук повідомлень за розміром, при великій кількості повідомлень, може не працювати на деяких серверах</string>
     <string name="title_search_more">Більше опцій</string>
     <string name="title_search_use_index">Використовувати індексацію для пошуку</string>
@@ -1167,8 +1183,8 @@
     <string name="title_select_all">Виділити все</string>
     <string name="title_select_found">Вибрати знайдене</string>
     <string name="title_mark_all_read">Позначити всі як прочитані</string>
+    <string name="title_view_thread">Переглянути бесіду</string>
     <string name="title_force_sync">Примусова синхронізація</string>
-    <string name="title_force_reload">Примусове перезавантаження</string>
     <string name="title_force_send">Примусове надсилання</string>
     <string name="title_language_all">Усі</string>
     <string name="title_previous">Попереднє</string>
@@ -1345,7 +1361,9 @@
     <string name="title_legend_create_rule">Створити правило</string>
     <string name="title_legend_show_unsubscribe">Відписати зі списку</string>
     <string name="title_legend_show_images">Показати зображення</string>
+    <string name="title_legend_hide_images">Приховати зображення</string>
     <string name="title_legend_show_full">Показати оригінальне повідомлення</string>
+    <string name="title_legend_show_reformatted">Показати переформатоване повідомлення</string>
     <string name="title_legend_edit">Редагувати</string>
     <string name="title_legend_default_color">Колір за замовчуванням</string>
     <string name="title_legend_close_hint">Закрити підказку</string>
@@ -1392,9 +1410,10 @@
     <string name="title_check_owner">Перевірити власника</string>
     <string name="title_remark_owner">Інформація буде надана <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">IP-адреса власника</string>
+    <string name="title_default_apps">Додатки за замовчуванням</string>
     <string name="title_reset_open">Встановлення або очищення додатків за замовчуванням</string>
     <string name="title_select_app">Оберіть додаток</string>
-    <string name="title_updated">Оновлення до версії %1$s доступне</string>
+    <string name="title_updated">Доступно оновлення до версії %1$s</string>
     <string name="title_issue">У вас є питання або проблема?</string>
     <string name="title_yes">Так</string>
     <string name="title_no">Ні</string>
@@ -1455,7 +1474,6 @@
     <string name="title_pro_hint">Купівля Pro-функцій дозволить вам використовувати всі поточні та майбутні Pro-функції, і допоможе підтримувати і обслуговувати цей додаток.</string>
     <string name="title_pro_price">Чому Pro функції такі дорогі?</string>
     <string name="title_pro_family">Чи можна використовувати сімейну бібліотеку Google Play?</string>
-    <string name="title_pro_restore">Як я можу відновити покупку?</string>
     <string name="title_pro_pending">Покупка в очікуванні</string>
     <string name="title_pro_activated">Всі Pro-функції активовано</string>
     <string name="title_pro_valid">Всі Pro-функції активовані</string>

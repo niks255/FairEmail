@@ -81,10 +81,15 @@ public class ViewModelMessages extends ViewModel {
             final Context context, final LifecycleOwner owner,
             final AdapterMessage.ViewType viewType,
             String type, long account, long folder,
-            String thread, long id, boolean filter_archive,
+            String thread, long id,
+            boolean threading,
+            boolean filter_archive,
             BoundaryCallbackMessages.SearchCriteria criteria, boolean server) {
 
-        Args args = new Args(context, viewType, type, account, folder, thread, id, filter_archive, criteria, server);
+        Args args = new Args(context,
+                viewType, type, account, folder,
+                thread, id, threading,
+                filter_archive, criteria, server);
         Log.d("Get model=" + viewType + " " + args);
         dump();
 
@@ -475,7 +480,8 @@ public class ViewModelMessages extends ViewModel {
         Args(Context context,
              AdapterMessage.ViewType viewType,
              String type, long account, long folder,
-             String thread, long id, boolean filter_archive,
+             String thread, long id, boolean threading,
+             boolean filter_archive,
              BoundaryCallbackMessages.SearchCriteria criteria, boolean server) {
 
             this.type = type;
@@ -483,12 +489,12 @@ public class ViewModelMessages extends ViewModel {
             this.folder = folder;
             this.thread = thread;
             this.id = id;
+            this.threading = threading;
             this.filter_archive = filter_archive;
             this.criteria = criteria;
             this.server = server;
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            this.threading = prefs.getBoolean("threading", true);
             this.sort = prefs.getString("sort", "time");
             this.ascending = prefs.getBoolean(
                     viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", false);
@@ -566,6 +572,9 @@ public class ViewModelMessages extends ViewModel {
         void setCallback(LifecycleOwner owner, BoundaryCallbackMessages.IBoundaryCallbackMessages callback) {
             if (boundary != null) {
                 BoundaryCallbackMessages.State state = boundary.setCallback(callback);
+                PagedList<TupleMessageEx> plist = list.getValue();
+                if (plist != null && plist.size() > 0)
+                    plist.loadAround(0);
 
                 owner.getLifecycle().addObserver(new LifecycleObserver() {
                     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

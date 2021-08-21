@@ -139,12 +139,14 @@
     <string name="title_setup_quick">Szybkie ustawienia</string>
     <string name="title_setup_intro">Założenie konta to tylko trzy kroki, po których możesz wysyłać i odbierać wiadomości e-mail</string>
     <string name="title_setup_simple">Nie ma potrzeby zmiany innych opcji</string>
+    <string name="title_setup_issue">FairEmail został stworzony po to, aby chronić Twoją prywatność, i reprezentuje dosłownie tysiące godzin pracy. Jeśli masz jakieś problemy, najpierw skontaktuj się ze mną, zanim zostawisz złą recenzję. Chętnie pomogę!</string>
     <string name="title_setup_quick_accounts">Dodaj lub zmień konta</string>
     <string name="title_setup_quick_support">Niektórzy dostawcy utrudniają dodanie konta. To nie jest wina FairEmail. W razie problemów poproś o pomoc.</string>
     <string name="title_setup_quick_hint">Szybka konfiguracja pobierze informacje o ustawieniach z autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_patience">Proszę o cierpliwość &#8230;</string>
     <string name="title_setup_quick_imap">Serwer IMAP do odbierania wiadomości</string>
     <string name="title_setup_quick_smtp">Serwer SMTP do wysyłania wiadomości</string>
+    <string name="title_setup_quick_certificates">Certyfikaty serwera</string>
     <string name="title_setup_wizard">Kreator</string>
     <string name="title_setup_wizard_multiple">Kreator może być używany wielokrotnie, aby skonfigurować wiele kont</string>
     <string name="title_setup_wizard_new">Potrzebujesz nowego adresu e-mail?</string>
@@ -189,6 +191,7 @@
     <string name="title_setup_permissions">Przyznaj uprawnienia</string>
     <string name="title_setup_permissions_remark">Dostęp do kontaktów (opcjonalnie)</string>
     <string name="title_setup_permissions_explanation">Uprawnienia dostępu do listy kontaktów są wymagane, aby wyszukiwać informacje kontaktowe i sugerować kontakty</string>
+    <string name="title_setup_permission_import_contacts">Jak mogę zaimportować kontakty?</string>
     <string name="title_setup_doze">Wyłącz optymalizację baterii</string>
     <string name="title_setup_doze_remark">Dla niezawodnego wysyłania i odbierania wiadomości e-mail</string>
     <string name="title_setup_doze_explanation">Optymalizacja baterii powinna być wyłączona dla aplikacji, aby zapewnić niezawodne wysyłanie i odbieranie wiadomości w tle</string>
@@ -264,6 +267,7 @@
     <string name="title_advanced_hint_message">        Przechodzisz do bardziej zaawansowanych opcji.
          Wszystkie opcje mają powszechnie używane wartości standardowe, których nie trzeba zmieniać, chyba że masz inne preferencje.
     </string>
+    <string name="title_advanced_hint_setup">Konto możesz skonfigurować, dotykając przycisku kreatora na głównym ekranie konfiguracji.</string>
     <string name="title_advanced_section_main">Główne</string>
     <string name="title_advanced_section_synchronize">Odbieranie</string>
     <string name="title_advanced_section_send">Wysyłanie</string>
@@ -317,6 +321,7 @@
     <string name="title_advanced_limit_reply">Ogranicz liczbę zagnieżdżonych cytatów</string>
     <string name="title_advanced_resize_reply">Zmień rozmiar zdjęć w treści odpowiedzi</string>
     <string name="title_advanced_signature_location">Pozycja podpisu</string>
+    <string name="title_advanced_signature_new">Użyj podpisu dla nowych wiadomości</string>
     <string name="title_advanced_signature_reply">Użyj podpisu podczas odpowiadania</string>
     <string name="title_advanced_signature_forward">Użyj podpisu podczas przesyłania dalej</string>
     <string name="title_advanced_discard_delete">Po odrzuceniu wersji roboczej usuń ją trwale</string>
@@ -346,9 +351,14 @@
     <string name="title_advanced_caption_message">Wiadomość</string>
     <string name="title_advanced_caption_message_header">Nagłówek wiadomości</string>
     <string name="title_advanced_caption_message_body">Treść wiadomości</string>
-    <string name="title_advanced_portrait2">Użyj dwóch rzędów w trybie pionowym</string>
-    <string name="title_advanced_landscape">Użyj dwóch kolumn w trybie poziomym</string>
-    <string name="title_advanced_landscape3">Domyślnie pokaż menu nawigacji w trybie poziomym</string>
+    <string name="title_advanced_portrait">Orientacja pionowa</string>
+    <string name="title_advanced_landscape">Orientacja pozioma</string>
+    <string name="title_advanced_two_row">Dwa wiersze</string>
+    <string name="title_advanced_two_col">Dwie kolumny</string>
+    <string name="title_advanced_nav_options">Pokaż opcje menu nawigacji</string>
+    <string name="title_advanced_nav_pin">Przypnij menu nawigacji</string>
+    <string name="title_advanced_nav_hide_title">Ukryć opcje menu nawigacji?</string>
+    <string name="title_advanced_nav_hide_message">Możesz włączyć opcje ponownie w ustawieniach wyświetlania</string>
     <string name="title_advanced_nav_message_count">Pokaż liczbę lokalnie przechowywanych wiadomości w menu nawigacji</string>
     <string name="title_advanced_startup">Pokaż na ekranie początkowym</string>
     <string name="title_advanced_cards">Użyj stylu karty zamiast stylu tabelarycznego</string>
@@ -395,7 +405,7 @@
     <string name="title_advanced_addresses">Domyślnie pokazuj szczegóły adresu</string>
     <string name="title_advanced_attachments_alt">Pokaż załączniki za treścią wiadomości</string>
     <string name="title_advanced_thumbnails">Pokaż miniatury obrazów po tekście wiadomości</string>
-    <string name="title_advanced_message_text_zoom">Domyślne powiększenie tekstu wiadomości</string>
+    <string name="title_advanced_message_text_zoom2">Domyślne powiększenie tekstu wiadomości: %1$s %%</string>
     <string name="title_advanced_overview_mode">Powiększ oryginalne wiadomości, aby dopasować je do ekranu</string>
     <string name="title_advanced_contrast">Użyj wysokiego kontrastu dla tekstu wiadomości</string>
     <string name="title_advanced_monospaced">Użyj czcionki o stałej szerokości dla tekstu wiadomości</string>
@@ -486,6 +496,7 @@
     <string name="title_advanced_sound">Wybierz dźwięk powiadomienia</string>
     <string name="title_advanced_notify_screen_on">Włącz ekran na chwilę, aby uzyskać powiadomienia o nowych wiadomościach</string>
     <string name="title_advanced_confirm_links">Potwierdź otwieranie linków</string>
+    <string name="title_advanced_check_links_dbl">Sprawdź listy blokowanych domen pod kątem podejrzanych linków</string>
     <string name="title_advanced_browse_links">Deleguj otwieranie linków do Androida</string>
     <string name="title_advanced_confirm_images">Potwierdź wyświetlanie obrazów</string>
     <string name="title_advanced_confirm_html">Domyślnie pokaż ponownie sformatowane wiadomości</string>
@@ -606,6 +617,7 @@
     <string name="title_advanced_notify_manage_hint">Dotknij nazwę kanału, aby ustawić właściwości kanału</string>
     <string name="title_advanced_notify_manage_default_hint">Aby ustawić domyślny dźwięk, itp.</string>
     <string name="title_advanced_notify_manage_service_hint">Aby wyłączyć powiadomienie \"monitorowanie\"</string>
+    <string name="title_advanced_notify_separate_hint">Jak skonfigurować powiadomienia dla kont, folderów i nadawców?</string>
     <string name="title_advanced_notify_preview_all_hint">Dla urządzeń do noszenia, które mogą wyświetlać pełny tekst (do 5000 znaków)</string>
     <string name="title_advanced_notify_preview_only_hint">Opóźnia to wyświetlanie powiadomień do momentu pobrania tekstu wiadomości</string>
     <string name="title_advanced_wearable_hint">Powiadomienia są wysyłane na urządzenie do noszenia tylko po pobraniu treści wiadomości</string>
@@ -862,6 +874,8 @@
     <string name="title_share_as_html">Udostępnij jako HTML</string>
     <string name="title_raw_save">Zapisz nieprzetworzoną wiadomość</string>
     <string name="title_raw_send">Wyślij jako załącznik</string>
+    <string name="title_raw_send_message">Wiadomość</string>
+    <string name="title_raw_send_thread">Konwersacja</string>
     <string name="title_manage_keywords">Zarządzaj słowami kluczowymi</string>
     <string name="title_manage_labels">Zarządzaj etykietami Gmail</string>
     <string name="title_add_keyword">Dodaj słowo kluczowe</string>
@@ -869,8 +883,9 @@
     <string name="title_download_all">Pobierz wszystkie</string>
     <string name="title_save_all">Zapisz wszystkie</string>
     <string name="title_save_eml">Zapisz nieprzetworzony plik wiadomości</string>
-    <string name="title_raw_remaining">Surowe wiadomości (RAW) do pobrania: %1$d</string>
-    <string name="title_ask_raw">Aby przesyłać wiadomości dalej, należy pobrać surowe (oryginalne) wiadomości z serwera. Wymaga to połączenia z Internetem.</string>
+    <string name="title_eml_remark">Aby przesyłać wiadomości dalej, należy pobrać nieprzetworzone (oryginalne) wiadomości z serwera. Wymaga to połączenia z Internetem.</string>
+    <string name="title_eml_option">Można temu zapobiec poprzez włączanie \"Pobierz nieprzetworzone pliki wiadomości\" w ustawieniach połączenia</string>
+    <string name="title_eml_downloaded">Pobrano nieprzetworzone wiadomości: %1$s</string>
     <string name="title_buttons">Wybierz przyciski</string>
     <string name="title_buttons_hint">Dostępne działania zależą od typu konta i konfiguracji</string>
     <string name="title_button_search">Szukaj w wiadomościach</string>
@@ -882,6 +897,7 @@
     <string name="title_subscribe">Subskrybuj</string>
     <string name="title_delete">Usuń</string>
     <string name="title_more">Więcej</string>
+    <string name="title_less">Mniej</string>
     <string name="title_spam">Spam</string>
     <string name="title_move">Przenieś</string>
     <string name="title_copy_btn">Kopiuj</string>
@@ -920,7 +936,6 @@
     <string name="title_no_connection">Łączenie z jednym lub kilkoma kontami &#8230;</string>
     <string name="title_no_folder">Folder nie istnieje</string>
     <string name="title_no_format">Pierwotnie odebrana wiadomość zostanie dołączona</string>
-    <string name="title_no_image">Nie można zdekodować obrazu</string>
     <string name="title_no_search">Wyszukiwanie na serwerze nie jest dostępne dla tego konta</string>
     <string name="title_too_large">Wiadomość jest zbyt duża, aby całkowicie sformatować</string>
     <string name="title_truncated">Wiadomość jest za duża, aby wyświetlić ją w całości</string>
@@ -1114,6 +1129,7 @@
         Poniższe opcje pozwalają kontynuować wyszukiwanie serwera e-mail.
     </string>
     <string name="title_search_text_hint">Wyszukiwanie tekstu w wiadomościach może nie działać na niektórych serwerach, gdy istnieje duża liczba wiadomości</string>
+    <string name="title_search_text_unsupported">\'%s\' oznacza, że serwer pocztowy nie obsługuje wyszukiwania w tekstach wiadomości</string>
     <string name="title_search_size_hint">Wyszukiwanie wiadomości według rozmiaru może nie działać na niektórych serwerach, gdy istnieje duża liczba wiadomości</string>
     <string name="title_search_more">Więcej opcji</string>
     <string name="title_search_use_index">Użyj indeksu wyszukiwania</string>
@@ -1168,8 +1184,8 @@
     <string name="title_select_all">Wybierz wszystkie</string>
     <string name="title_select_found">Wybierz znalezione</string>
     <string name="title_mark_all_read">Oznacz wszystko jako przeczytane</string>
+    <string name="title_view_thread">Zobacz konwersację</string>
     <string name="title_force_sync">Wymuś synchronizację</string>
-    <string name="title_force_reload">Wymuś restart</string>
     <string name="title_force_send">Wymuś wysłanie</string>
     <string name="title_language_all">Wszystkie</string>
     <string name="title_previous">Poprzedni</string>
@@ -1346,7 +1362,9 @@
     <string name="title_legend_create_rule">Utwórz regułę</string>
     <string name="title_legend_show_unsubscribe">Wypisz się z listy</string>
     <string name="title_legend_show_images">Pokaż obrazy</string>
+    <string name="title_legend_hide_images">Ukryj obrazy</string>
     <string name="title_legend_show_full">Pokaż oryginalną wiadomość</string>
+    <string name="title_legend_show_reformatted">Pokaż sformatowaną wiadomość</string>
     <string name="title_legend_edit">Edycja</string>
     <string name="title_legend_default_color">Kolor domyślny</string>
     <string name="title_legend_close_hint">Zamknij podpowiedź</string>
@@ -1393,9 +1411,10 @@
     <string name="title_check_owner">Sprawdź właściciela</string>
     <string name="title_remark_owner">Informacje będą pobierane z <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Adres IP właściciela</string>
+    <string name="title_default_apps">Domyślne aplikacje</string>
     <string name="title_reset_open">Ustaw lub wyczyść domyślne aplikacje</string>
     <string name="title_select_app">Wybierz aplikację</string>
-    <string name="title_updated">Jest dostępna aktualizacja do wersji %1$s</string>
+    <string name="title_updated">Dostępna jest aktualizacja do wersji %1$s</string>
     <string name="title_issue">Masz pytanie lub problem?</string>
     <string name="title_yes">Tak</string>
     <string name="title_no">Nie</string>
@@ -1455,7 +1474,7 @@
     <string name="title_pro_hint">Kupno funkcji pro pozwoli Ci używać wszystkich obecnych i przyszłych funkcji pro oraz będzie utrzymywać i wspierać aplikację</string>
     <string name="title_pro_price">Dlaczego funkcje pro są tak drogie?</string>
     <string name="title_pro_family">Czy mogę korzystać z biblioteki rodzinnej Google Play?</string>
-    <string name="title_pro_restore">Jak mogę przywrócić zakup?</string>
+    <string name="title_pro_restore">Jak mogę przywrócić zakup (na innym urządzeniu)?</string>
     <string name="title_pro_pending">Zakup w toku</string>
     <string name="title_pro_activated">Wszystkie funkcje pro są aktywowane</string>
     <string name="title_pro_valid">Wszystkie funkcje pro aktywne</string>

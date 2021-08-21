@@ -6,25 +6,27 @@
     android:padding="24dp">
 
     <eu.faircode.email.FixedTextView
-        android:id="@+id/tvFolder"
+        android:id="@+id/tvSync"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:labelFor="@+id/etKeyword"
-        android:text="Folder"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:drawableStart="@drawable/twotone_save_alt_24"
+        android:drawablePadding="6dp"
+        android:text="@string/title_synchronize_more"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <eu.faircode.email.FixedTextView
-        android:id="@+id/tvSync"
+        android:id="@+id/tvFolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:labelFor="@+id/etKeyword"
-        android:text="@string/title_synchronize_more"
+        android:text="Folder"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvFolder" />
+        app:layout_constraintTop_toBottomOf="@id/tvSync" />
 
     <eu.faircode.email.EditTextPlain
         android:id="@+id/etMonths"
@@ -38,7 +40,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toStartOf="@+id/tvMonths"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSync">
+        app:layout_constraintTop_toBottomOf="@id/tvFolder">
 
         <requestFocus />
     </eu.faircode.email.EditTextPlain>
@@ -55,10 +57,12 @@
         app:layout_constraintTop_toTopOf="@id/etMonths" />
 
     <eu.faircode.email.FixedTextView
-        android:id="@+id/tvSystem"
+        android:id="@+id/tvRemark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:drawableEnd="@drawable/twotone_info_24"
+        android:drawablePadding="6dp"
         android:text="@string/title_synchronize_more_hint"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textStyle="italic"

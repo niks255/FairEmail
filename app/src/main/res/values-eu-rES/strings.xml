@@ -228,8 +228,6 @@
     <string name="title_advanced_caption_message">Mezua</string>
     <string name="title_advanced_caption_message_header">Mezuaren goiburua</string>
     <string name="title_advanced_caption_message_body">Mezuaren gorputza</string>
-    <string name="title_advanced_landscape">Erabili bi zutabe modu horizontalean</string>
-    <string name="title_advanced_landscape3">Erakutsi nabigazio menua horizontalean lehenetsita</string>
     <string name="title_advanced_startup">Erakutsi hasiera pantailan</string>
     <string name="title_advanced_cards">Erabili txartela estiloa tabulazio estiloaren ordez</string>
     <string name="title_advanced_date_header">Taldekatu dataren arabera</string>
@@ -605,6 +603,8 @@
     <string name="title_show_headers">Erakutsi goiburuak</string>
     <string name="title_raw_save">Gorde mezu gordina</string>
     <string name="title_raw_send">Bidali eranskin gisa</string>
+    <string name="title_raw_send_message">Mezua</string>
+    <string name="title_raw_send_thread">Elkarrizketa</string>
     <string name="title_manage_keywords">Kudeatu hitz gakoak</string>
     <string name="title_add_keyword">Gehitu hitz gakoak</string>
     <string name="title_show_inline">Erakutsi txertatutako eranskinak</string>
@@ -651,7 +651,6 @@
     <string name="title_no_connection">Konektatzen kontu batera edo batzuetara &#8230;</string>
     <string name="title_no_folder">Karpeta ez da existitzen</string>
     <string name="title_no_format">Jasotako jatorrizko mezua gehituko da</string>
-    <string name="title_no_image">Ezin izan da irudia deskodetu</string>
     <string name="title_no_search">Zerbitzariko bilaketa ez dago erabilgarri kontu honetarako</string>
     <string name="title_too_large">Mezua luzeegia da guztiz birformulatzeko</string>
     <string name="title_truncated">Mezua luzeegia da osorik erakusteko</string>
@@ -1056,7 +1055,6 @@
     <string name="title_remark_owner">Informazioa <a href="https://ipinfo.io/">ipinfo.io</a> helbidetik eskuratuko da</string>
     <string name="title_ip_owner">Jabearen IP helbidea</string>
     <string name="title_select_app">Hautatu aplikazioa</string>
-    <string name="title_updated">%1$s bertsiora eguneraketa eskuragarri dago</string>
     <string name="title_issue">Galdera edo arazoren bat duzu?</string>
     <string name="title_yes">Bai</string>
     <string name="title_no">Ez</string>

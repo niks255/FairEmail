@@ -1,5 +1,7 @@
 package eu.faircode.email;
 
+import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -41,8 +44,6 @@ import javax.mail.internet.InternetAddress;
 
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory;
 import io.requery.android.database.sqlite.SQLiteDatabase;
-
-import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
 /*
     This file is part of FairEmail.
@@ -66,7 +67,7 @@ import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 205,
+        version = 209,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -111,8 +112,8 @@ public abstract class DB extends RoomDatabase {
 
     public abstract DaoLog log();
 
-    private static Context sContext;
     private static int sPid;
+    private static Context sContext;
     private static DB sInstance;
 
     private static final String DB_NAME = "fairemail";
@@ -305,17 +306,18 @@ public abstract class DB extends RoomDatabase {
     }
 
     public static synchronized DB getInstance(Context context) {
+        int apid = android.os.Process.myPid();
         Context acontext = context.getApplicationContext();
         if (sInstance != null &&
-                sContext != null && !sContext.equals(acontext))
+                (sPid != apid || !Objects.equals(sContext, acontext)))
             try {
-                Log.e("Orphan database instance pid=" + android.os.Process.myPid() + "/" + sPid);
+                Log.e("Orphan database instance pid=" + apid + "/" + sPid);
                 sInstance = null;
             } catch (Throwable ex) {
                 Log.e(ex);
             }
+        sPid = apid;
         sContext = acontext;
-        sPid = android.os.Process.myPid();
 
         if (sInstance == null) {
             Log.i("Creating database instance pid=" + sPid);
@@ -420,10 +422,13 @@ public abstract class DB extends RoomDatabase {
 
     private static void createTriggers(@NonNull SupportSQLiteDatabase db) {
         List<String> image = new ArrayList<>();
-        for (String img : Helper.IMAGE_TYPES)
+        for (String img : ImageHelper.IMAGE_TYPES)
             image.add("'" + img + "'");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            for (String img : Helper.IMAGE_TYPES8)
+            for (String img : ImageHelper.IMAGE_TYPES8)
+                image.add("'" + img + "'");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            for (String img : ImageHelper.IMAGE_TYPES12)
                 image.add("'" + img + "'");
         String images = TextUtils.join(",", image);
 
@@ -2085,6 +2090,33 @@ public abstract class DB extends RoomDatabase {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `answer` ADD COLUMN `external` INTEGER NOT NULL DEFAULT 0");
                     }
+                }).addMigrations(new Migration(205, 206) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `capabilities` TEXT");
+                    }
+                }).addMigrations(new Migration(206, 207) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("DROP VIEW `account_view`");
+                        db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " + TupleAccountView.query);
+                    }
+                }).addMigrations(new Migration(207, 208) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `log` ADD COLUMN `type` INTEGER NOT NULL DEFAULT " + EntityLog.Type.General.ordinal());
+                    }
+                }).addMigrations(new Migration(208, 209) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `log` ADD COLUMN `account` INTEGER");
+                        db.execSQL("ALTER TABLE `log` ADD COLUMN `folder` INTEGER");
+                        db.execSQL("ALTER TABLE `log` ADD COLUMN `message` INTEGER");
+                    }
                 }).addMigrations(new Migration(998, 999) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -2213,6 +2245,17 @@ public abstract class DB extends RoomDatabase {
             }
             return result.toArray(new Address[0]);
         }
+
+        @TypeConverter
+        public static EntityLog.Type toLogType(int ordinal) {
+            return EntityLog.Type.values()[ordinal];
+        }
+
+        @TypeConverter
+        public static int fromLogType(EntityLog.Type type) {
+            if (type == null)
+                type = EntityLog.Type.General;
+            return type.ordinal();
+        }
     }
 }
-

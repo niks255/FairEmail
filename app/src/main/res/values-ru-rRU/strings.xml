@@ -140,12 +140,14 @@
     <string name="title_setup_quick">Быстрая настройка</string>
     <string name="title_setup_intro">Настройте учётную запись всего за три шага и сможете отправлять и получать письма</string>
     <string name="title_setup_simple">Нет необходимости менять другие параметры</string>
+    <string name="title_setup_issue">FairEmail был разработан для того, чтобы помочь вам защитить вашу конфиденциальность и представляет буквально тысячи часов работы. Если у вас возникли проблемы, пожалуйста, свяжитесь со мной для поддержки перед тем, как оставлять плохие отзывы. Я рад помочь!</string>
     <string name="title_setup_quick_accounts">Добавить или изменить учётные записи</string>
     <string name="title_setup_quick_support">Некоторые провайдеры затрудняют добавление учётной записи. Пожалуйста, не обвиняйте в этом FairEmail, а попросите поддержку.</string>
     <string name="title_setup_quick_hint">Быстрая настройка считывает информацию о конфигурации с autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_patience">Пожалуйста, будьте терпеливы&#8230;</string>
     <string name="title_setup_quick_imap">IMAP-сервер для получения сообщений</string>
     <string name="title_setup_quick_smtp">SMTP-сервер для отправки сообщений</string>
+    <string name="title_setup_quick_certificates">Сертификаты сервера</string>
     <string name="title_setup_wizard">Мастер</string>
     <string name="title_setup_wizard_multiple">Мастер может быть использован неоднократно для настройки разных учётных записей</string>
     <string name="title_setup_wizard_new">Мне нужен новый адрес электронной почты</string>
@@ -190,6 +192,7 @@
     <string name="title_setup_permissions">Предоставить доступ</string>
     <string name="title_setup_permissions_remark">Доступ к контактной информации (необязательно)</string>
     <string name="title_setup_permissions_explanation">Разрешение на контакты необходимо для поиска и подбора контактов</string>
+    <string name="title_setup_permission_import_contacts">Как импортировать контакты?</string>
     <string name="title_setup_doze">Отключить оптимизацию энергопотребления</string>
     <string name="title_setup_doze_remark">Для надёжного получения и отправки электронной почты</string>
     <string name="title_setup_doze_explanation">Оптимизация батареи должна быть отключена для приложения, чтобы обеспечить надёжную отправку и получение сообщений в фоновом режиме</string>
@@ -265,6 +268,7 @@
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
         Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.
     </string>
+    <string name="title_advanced_hint_setup">Можно настроить учётную запись, нажав кнопку мастера на главном экране настроек.</string>
     <string name="title_advanced_section_main">Основные</string>
     <string name="title_advanced_section_synchronize">Получение</string>
     <string name="title_advanced_section_send">Отправка</string>
@@ -318,6 +322,7 @@
     <string name="title_advanced_limit_reply">Ограничивать количество вложенных кавычек</string>
     <string name="title_advanced_resize_reply">Менять размер изображений в ответе</string>
     <string name="title_advanced_signature_location">Расположение подписи</string>
+    <string name="title_advanced_signature_new">Использовать подпись для новых сообщений</string>
     <string name="title_advanced_signature_reply">Использовать подпись при ответе</string>
     <string name="title_advanced_signature_forward">Использовать подпись при пересылке</string>
     <string name="title_advanced_discard_delete">При отказе от черновика удалять его безвозвратно</string>
@@ -347,9 +352,14 @@
     <string name="title_advanced_caption_message">Сообщение</string>
     <string name="title_advanced_caption_message_header">Заголовок сообщения</string>
     <string name="title_advanced_caption_message_body">Текст сообщения</string>
-    <string name="title_advanced_portrait2">Использовать два ряда в портретном режиме</string>
-    <string name="title_advanced_landscape">Использовать две колонки в альбомном режиме</string>
-    <string name="title_advanced_landscape3">Показывать меню навигации в альбомном режиме по умолчанию</string>
+    <string name="title_advanced_portrait">Портретный режим</string>
+    <string name="title_advanced_landscape">Альбомный режим</string>
+    <string name="title_advanced_two_row">Использовать две строки</string>
+    <string name="title_advanced_two_col">Использовать две колонки</string>
+    <string name="title_advanced_nav_options">Показать настройки меню навигации</string>
+    <string name="title_advanced_nav_pin">Закрепить меню навигации</string>
+    <string name="title_advanced_nav_hide_title">Скрыть настройки меню навигации?</string>
+    <string name="title_advanced_nav_hide_message">Снова включить отображение настроек можно в параметрах отображения</string>
     <string name="title_advanced_nav_message_count">Показывать количество сохранённых локально сообщений в меню навигации</string>
     <string name="title_advanced_startup">При запуске показывать</string>
     <string name="title_advanced_cards">Использовать карточный стиль вместо табличного</string>
@@ -396,7 +406,7 @@
     <string name="title_advanced_addresses">По умолчанию показывать подробную информацию об адресах</string>
     <string name="title_advanced_attachments_alt">Показывать вложения после текста сообщения</string>
     <string name="title_advanced_thumbnails">Показывать миниатюры изображений после текста сообщения</string>
-    <string name="title_advanced_message_text_zoom">Масштаб текста сообщения по умолчанию</string>
+    <string name="title_advanced_message_text_zoom2">Масштаб текста сообщения по умолчанию: %1$s%%</string>
     <string name="title_advanced_overview_mode">Изменять масштаб оригинальных сообщений к размеру экрана</string>
     <string name="title_advanced_contrast">Использовать высокий контраст для текста сообщений</string>
     <string name="title_advanced_monospaced">По умолчанию использовать моноширинный шрифт для текста сообщения</string>
@@ -487,6 +497,7 @@
     <string name="title_advanced_sound">Выбрать звук уведомления</string>
     <string name="title_advanced_notify_screen_on">Включать экран для новых уведомлений</string>
     <string name="title_advanced_confirm_links">Подтверждать открытие ссылок</string>
+    <string name="title_advanced_check_links_dbl">Проверять списки блокировки доменов на подозрительные ссылки</string>
     <string name="title_advanced_browse_links">Предоставить Android открывать ссылки</string>
     <string name="title_advanced_confirm_images">Подтверждать показ изображений</string>
     <string name="title_advanced_confirm_html">Показывать переформатированные сообщения по умолчанию</string>
@@ -547,7 +558,7 @@
     <string name="title_advanced_poll_hint">Периодическая проверка новых сообщений будет сравнивать сообщения на сервере с локальными. Это \"тяжёлая\" операция, которая может привести к высокому потреблению заряда батареи, особенно когда сообщений много. Постоянное получение избегает этого, непрерывно отслеживая только изменения.</string>
     <string name="title_advanced_optimize_hint">Может изменять частоту синхронизации для экономии заряда батареи в зависимости от возможностей и поведения почтовых серверов</string>
     <string name="title_advanced_schedule_hint">Нажмите на время, чтобы установить его</string>
-    <string name="title_advanced_quick_sync_hint">Это уменьшает использование трафика, но новые сообщения могут быть пропущены, если сервер электронной почты не придерживается стандартов</string>
+    <string name="title_advanced_quick_sync_hint">Уменьшается использование трафика, но новые сообщения могут быть пропущены, если сервер электронной почты не придерживается стандартов</string>
     <string name="title_advanced_no_date_hint">Некоторые провайдеры хранят сообщения с неизвестными, недействительными или будущими датами как сообщения без даты</string>
     <string name="title_advanced_unseen_hint">Некоторые провайдеры не поддерживают эту функцию правильно, что может привести к синхронизации всех или ни одного сообщения</string>
     <string name="title_advanced_deleted_unseen">Если отключено, непрочитанные сообщения хранятся на устройстве вечно</string>
@@ -607,6 +618,7 @@
     <string name="title_advanced_notify_manage_hint">Нажмите на название канала, чтобы установить его свойства</string>
     <string name="title_advanced_notify_manage_default_hint">Для установки звука по умолчанию и т.д.</string>
     <string name="title_advanced_notify_manage_service_hint">Для отключения контролирующего уведомления</string>
+    <string name="title_advanced_notify_separate_hint">Как настроить уведомления для учётных записей, папок и отправителей?</string>
     <string name="title_advanced_notify_preview_all_hint">Для носимых устройств, которые могут показывать полный текст (до 5000 символов)</string>
     <string name="title_advanced_notify_preview_only_hint">Задержит отображения уведомлений до тех пор, пока текст сообщения не будет загружен</string>
     <string name="title_advanced_wearable_hint">Уведомления на носимое устройство отправляются только после загрузки текста сообщения</string>
@@ -863,6 +875,8 @@
     <string name="title_share_as_html">Поделиться как HTML</string>
     <string name="title_raw_save">Сохранить оригинал сообщения</string>
     <string name="title_raw_send">Отправить как вложение</string>
+    <string name="title_raw_send_message">Сообщение</string>
+    <string name="title_raw_send_thread">Диалог</string>
     <string name="title_manage_keywords">Управление ключами (словами)</string>
     <string name="title_manage_labels">Управление метками Gmail</string>
     <string name="title_add_keyword">Добавить ключ (слово)</string>
@@ -870,8 +884,9 @@
     <string name="title_download_all">Загрузить все</string>
     <string name="title_save_all">Сохранить все</string>
     <string name="title_save_eml">Сохранить оригинальный файл сообщения</string>
-    <string name="title_raw_remaining">Исходные сообщения для загрузки: %1$d</string>
-    <string name="title_ask_raw">Чтобы переслать сообщения, необходимо загрузить необработанные (исходные) сообщения с сервера. Для этого необходимо подключение к интернету.</string>
+    <string name="title_eml_remark">Чтобы переслать сообщения, необходимо загрузить необработанные (исходные) сообщения с сервера. Для этого необходимо подключение к интернету.</string>
+    <string name="title_eml_option">Это можно предотвратить, включив загрузку исходных сообщений в настройках подключения</string>
+    <string name="title_eml_downloaded">Загружены исходные сообщения: %1$s</string>
     <string name="title_buttons">Выбрать кнопки</string>
     <string name="title_buttons_hint">Доступные действия зависят от типа учётной записи и конфигурации</string>
     <string name="title_button_search">Поиск в сообщениях</string>
@@ -883,6 +898,7 @@
     <string name="title_subscribe">Подписаться</string>
     <string name="title_delete">Удалить</string>
     <string name="title_more">Ещё</string>
+    <string name="title_less">Менее</string>
     <string name="title_spam">Спам</string>
     <string name="title_move">Переместить</string>
     <string name="title_copy_btn">Копировать</string>
@@ -921,7 +937,6 @@
     <string name="title_no_connection">Подключение к одной или нескольким учётным записям&#8230;</string>
     <string name="title_no_folder">Папка не существует</string>
     <string name="title_no_format">Оригинальное сообщение будет включено</string>
-    <string name="title_no_image">Изображение не может быть декодировано</string>
     <string name="title_no_search">Поиск на сервере недоступен для этой учётной записи</string>
     <string name="title_too_large">Сообщение слишком большое для полного переформатирования</string>
     <string name="title_truncated">Сообщение слишком велико для полного отображения</string>
@@ -1115,6 +1130,7 @@
         Параметры ниже для продолжения поиска по серверу электронной почты.
     </string>
     <string name="title_search_text_hint">Поиск содержащих определённый текст сообщений при большом их количестве может не работать на некоторых серверах</string>
+    <string name="title_search_text_unsupported">\"%s\" означает, что почтовый сервер не поддерживает поиск в текстах сообщений</string>
     <string name="title_search_size_hint">Поиск сообщений по размеру при большом их количестве может не работать на некоторых серверах</string>
     <string name="title_search_more">Дополнительные параметры</string>
     <string name="title_search_use_index">Использовать поисковый индекс</string>
@@ -1169,8 +1185,8 @@
     <string name="title_select_all">Выбрать все</string>
     <string name="title_select_found">Выбрать найденное</string>
     <string name="title_mark_all_read">Отметь все прочитанными</string>
+    <string name="title_view_thread">Просмотр диалога</string>
     <string name="title_force_sync">Принудительная синхронизация</string>
-    <string name="title_force_reload">Принудительный перезапуск</string>
     <string name="title_force_send">Принудительная отправка</string>
     <string name="title_language_all">Все</string>
     <string name="title_previous">Назад</string>
@@ -1347,7 +1363,9 @@
     <string name="title_legend_create_rule">Создать правило</string>
     <string name="title_legend_show_unsubscribe">Отписаться от рассылки</string>
     <string name="title_legend_show_images">Показывать изображения</string>
+    <string name="title_legend_hide_images">Скрыть изображения</string>
     <string name="title_legend_show_full">Показать оригинальное сообщение</string>
+    <string name="title_legend_show_reformatted">Показать переформатированное сообщение</string>
     <string name="title_legend_edit">Редактировать</string>
     <string name="title_legend_default_color">Цвет по умолчанию</string>
     <string name="title_legend_close_hint">Закрыть подсказку</string>
@@ -1394,9 +1412,10 @@
     <string name="title_check_owner">Проверить владельца</string>
     <string name="title_remark_owner">Информация будет получена с <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">IP-адрес владельца</string>
+    <string name="title_default_apps">Приложения по умолчанию</string>
     <string name="title_reset_open">Задать или сбросить приложения по умолчанию</string>
     <string name="title_select_app">Выбор приложения</string>
-    <string name="title_updated">Доступно обновление до версии %1$s</string>
+    <string name="title_updated">Доступно обновление до версии %1$s.</string>
     <string name="title_issue">У вас есть вопрос или проблема?</string>
     <string name="title_yes">Да</string>
     <string name="title_no">Нет</string>
@@ -1457,7 +1476,7 @@
     <string name="title_pro_hint">Покупка функций Pro позволит вам использовать все реализованные и будущие Pro-функции.</string>
     <string name="title_pro_price">Почему функции Pro так дороги?</string>
     <string name="title_pro_family">Можно ли использовать семейную библиотеку Google Play?</string>
-    <string name="title_pro_restore">Как восстановить покупку?</string>
+    <string name="title_pro_restore">Как восстановить покупку (на другом устройстве)?</string>
     <string name="title_pro_pending">Ожидание обработки покупки</string>
     <string name="title_pro_activated">Все функции Pro активированы</string>
     <string name="title_pro_valid">Все функции Pro активированы</string>

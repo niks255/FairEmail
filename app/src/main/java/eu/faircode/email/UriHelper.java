@@ -22,29 +22,41 @@ package eu.faircode.email;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
-import java.util.zip.ZipInputStream;
+import java.util.Locale;
 
 public class UriHelper {
     // https://publicsuffix.org/
     private static final HashSet<String> suffixList = new HashSet<>();
 
-    private static final String SUFFIX_LIST_NAME = "effective_tld_names.dat.txt";
+    // https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat
+    private static final String SUFFIX_LIST_NAME = "public_suffix_list.dat";
 
     static String getParentDomain(Context context, String host) {
         if (host == null)
             return null;
+        String parent = _getSuffix(context, host);
+        return (parent == null ? host : parent);
+    }
 
+    static boolean hasParentDomain(Context context, String host) {
+        return (host != null && _getSuffix(context, host) != null);
+    }
+
+    private static String _getSuffix(Context context, @NonNull String host) {
         ensureSuffixList(context);
 
-        String h = host;
+        String h = host.toLowerCase(Locale.ROOT);
         while (true) {
             int dot = h.indexOf('.');
             if (dot < 0)
-                return host;
+                return null;
+
             String prefix = h.substring(0, dot);
             h = h.substring(dot + 1);
 
@@ -52,10 +64,10 @@ public class UriHelper {
             String w = (d < 0 ? null : '*' + h.substring(d));
 
             synchronized (suffixList) {
-                if ((suffixList.contains(h) || suffixList.contains(w)) &&
-                        !suffixList.contains('!' + h)) {
+                if (!suffixList.contains('!' + h) &&
+                        (suffixList.contains(h) || suffixList.contains(w))) {
                     String parent = prefix + "." + h;
-                    Log.i("Host=" + host + " parent=" + parent);
+                    Log.d("Host=" + host + " parent=" + parent);
                     return parent;
                 }
             }

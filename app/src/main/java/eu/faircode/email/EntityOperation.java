@@ -208,12 +208,13 @@ public class EntityOperation {
                 jargs.put(1, autoread);
                 jargs.put(3, autounflag);
 
-                EntityLog.log(context, "Move message=" + message.id +
-                        "@" + new Date(message.received) +
-                        ":" + message.subject +
-                        " source=" + source.id + ":" + source.type + ":" + source.name + "" +
-                        " target=" + target.id + ":" + target.type + ":" + target.name +
-                        " auto read=" + autoread + " flag=" + autounflag + " importance=" + reset_importance);
+                EntityLog.log(context, EntityLog.Type.General, message,
+                        "Move message=" + message.id +
+                                "@" + new Date(message.received) +
+                                ":" + message.subject +
+                                " source=" + source.id + ":" + source.type + ":" + source.name + "" +
+                                " target=" + target.id + ":" + target.type + ":" + target.name +
+                                " auto read=" + autoread + " flag=" + autounflag + " importance=" + reset_importance);
 
                 if (autoread || autounflag || reset_importance)
                     for (EntityMessage similar : db.message().getMessagesBySimilarity(message.account, message.id, message.msgid)) {
@@ -225,17 +226,19 @@ public class EntityOperation {
                             db.message().setMessageImportance(similar.id, null);
                     }
 
-                EntityAccount account = db.account().getAccount(message.account);
-                if ((account != null && !account.isGmail()) ||
-                        !EntityFolder.ARCHIVE.equals(source.type) ||
-                        EntityFolder.TRASH.equals(target.type) || EntityFolder.JUNK.equals(target.type))
-                    if (!message.ui_deleted)
-                        db.message().setMessageUiHide(message.id, true);
+                if (source.account.equals(target.account)) {
+                    EntityAccount account = db.account().getAccount(message.account);
+                    if ((account != null && !account.isGmail()) ||
+                            !EntityFolder.ARCHIVE.equals(source.type) ||
+                            EntityFolder.TRASH.equals(target.type) || EntityFolder.JUNK.equals(target.type))
+                        if (!message.ui_deleted)
+                            db.message().setMessageUiHide(message.id, true);
 
-                if (account != null && account.isGmail() &&
-                        EntityFolder.ARCHIVE.equals(source.type) &&
-                        !(EntityFolder.TRASH.equals(target.type) || EntityFolder.JUNK.equals(target.type)))
-                    name = COPY;
+                    if (account != null && account.isGmail() &&
+                            EntityFolder.ARCHIVE.equals(source.type) &&
+                            !(EntityFolder.TRASH.equals(target.type) || EntityFolder.JUNK.equals(target.type)))
+                        name = COPY;
+                }
 
                 if (message.ui_snoozed != null &&
                         (EntityFolder.ARCHIVE.equals(target.type) || EntityFolder.TRASH.equals(target.type))) {
@@ -354,6 +357,26 @@ public class EntityOperation {
                 }
 
                 return;
+            } else if (COPY.equals(name)) {
+                // Parameters in:
+                // 0: target folder
+                // 1: mark seen
+
+                EntityFolder source = db.folder().getFolder(message.folder);
+                EntityFolder target = db.folder().getFolder(jargs.getLong(0));
+                if (source == null || target == null)
+                    return;
+
+                // Cross account copy
+                if (!source.account.equals(target.account)) {
+                    jargs.put(2, true); // copy
+                    if (message.raw != null && message.raw)
+                        queue(context, target.account, target.id, message.id, ADD, jargs);
+                    else
+                        queue(context, source.account, source.id, message.id, RAW, jargs);
+                    return;
+                }
+
             } else if (DELETE.equals(name)) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean perform_expunge = prefs.getBoolean("perform_expunge", true);

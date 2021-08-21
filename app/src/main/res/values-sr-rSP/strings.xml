@@ -193,7 +193,6 @@
     <string name="title_advanced_caption_message">Порука</string>
     <string name="title_advanced_caption_message_header">Заглавље поруке</string>
     <string name="title_advanced_caption_message_body">Тело поруке</string>
-    <string name="title_advanced_landscape">Користи две колоне у пејзажном режиму</string>
     <string name="title_advanced_startup">На почетном екрану прикажи</string>
     <string name="title_advanced_date_header">Групиши по датуму</string>
     <string name="title_advanced_threading">Увезивање разговора</string>
@@ -461,6 +460,8 @@
     <string name="title_show_headers">Прикажи заглавља</string>
     <string name="title_raw_save">Сачувај сирову поруку</string>
     <string name="title_raw_send">Пошаљи као прилог</string>
+    <string name="title_raw_send_message">Порука</string>
+    <string name="title_raw_send_thread">Разговор</string>
     <string name="title_manage_keywords">Управљај кључним речима</string>
     <string name="title_add_keyword">Додај кључну реч</string>
     <string name="title_show_inline">Прикажу уметнуте прилоге</string>
@@ -499,7 +500,6 @@
     <string name="title_no_connection">Повезивање на један или више налога&#8230;</string>
     <string name="title_no_folder">Фасцикла не постоји</string>
     <string name="title_no_format">Биће укључена и оригинална порука</string>
-    <string name="title_no_image">Слика не може да се декодује</string>
     <string name="title_no_search">Претрага на серверу није доступна за овај налог</string>
     <string name="title_show_full">Прикажи целу поруку</string>
     <string name="title_unused_inline">Неискоришћене уметнуте слике ће бити уклоњене при слању</string>
@@ -827,7 +827,6 @@
     <string name="title_remark_owner">Информације ће бити преузете са <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">IP адреса власника</string>
     <string name="title_select_app">Изабери апликацију</string>
-    <string name="title_updated">Постоји доступно ажурирање на верзију %1$s</string>
     <string name="title_issue">Да ли имате питање или проблем?</string>
     <string name="title_yes">Да</string>
     <string name="title_no">Не</string>

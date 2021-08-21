@@ -289,9 +289,6 @@
     <string name="title_advanced_caption_message">Üzenet</string>
     <string name="title_advanced_caption_message_header">Üzenet fejléc</string>
     <string name="title_advanced_caption_message_body">Üzenet szövege</string>
-    <string name="title_advanced_portrait2">Kéthasábos megjelenítés vízszintes tájolásnál</string>
-    <string name="title_advanced_landscape">Két oszlopba rendezés tájkép módban</string>
-    <string name="title_advanced_landscape3">Navigációs menü mutatósa fekvő módban alapértelmezésként</string>
     <string name="title_advanced_startup">Megjelenítés a kezdőképernyőn</string>
     <string name="title_advanced_cards">A kártyás stílus használata a tabuláris stílus helyett</string>
     <string name="title_advanced_cards_shadow">Árnyék használata olvasatlan üzenetekhez kártya-stílus használata esetén</string>
@@ -332,7 +329,6 @@
     <string name="title_advanced_addresses">Cím részleteinek alapértelmezett megjelenítése</string>
     <string name="title_advanced_attachments_alt">Csatolmányok megjelenítése a szöveg után</string>
     <string name="title_advanced_thumbnails">A csatolmányok a szöveg után jelenjenek meg</string>
-    <string name="title_advanced_message_text_zoom">A szöveg nagyításának alapértelmezett értéke</string>
     <string name="title_advanced_overview_mode">Eredeti üzenetek kinagyítására teljes képernyőre</string>
     <string name="title_advanced_contrast">Magas kontraszt használata az üzenetek szövegéhez</string>
     <string name="title_advanced_monospaced">Fix szélességű betűtípus használata az üzenetek szövegéhez</string>
@@ -754,6 +750,8 @@
     <string name="title_show_headers">Fejlécek megjelenítése</string>
     <string name="title_raw_save">Nyers üzenet mentése</string>
     <string name="title_raw_send">Küldés mellékletként</string>
+    <string name="title_raw_send_message">Üzenet</string>
+    <string name="title_raw_send_thread">Beszélgetés</string>
     <string name="title_manage_keywords">Kulcsszavak kezelése</string>
     <string name="title_manage_labels">Gmail címkék kezelése</string>
     <string name="title_add_keyword">Kulcsszó hozzáadása</string>
@@ -805,7 +803,6 @@
     <string name="title_no_connection">Csatlakozás egy vagy több fiókhoz &#8230;</string>
     <string name="title_no_folder">A mappa nem létezik</string>
     <string name="title_no_format">Az eredetileg kapott üzenet tartalmazva lesz</string>
-    <string name="title_no_image">A kép nem dekódolható</string>
     <string name="title_no_search">Nem elérhető a szerveren keresés ezen a fiókon</string>
     <string name="title_too_large">Az üzenet túl nagy a teljes újraformázáshoz</string>
     <string name="title_truncated">Az üzenet túl nagy a teljes megjelnítéshez</string>
@@ -1241,7 +1238,6 @@
     <string name="title_remark_owner">Az információ lekérésre fog kerülni az <a href="https://ipinfo.io/">ipinfo.io</a> -ról</string>
     <string name="title_ip_owner">Tulajdonos IP cím</string>
     <string name="title_select_app">Válasszon alkalmazást</string>
-    <string name="title_updated">Egy frissítés a %1$s verzióra elérhető</string>
     <string name="title_issue">Van egy kérdésed vagy egy problémád?</string>
     <string name="title_yes">Igen</string>
     <string name="title_no">Nem</string>
@@ -1298,7 +1294,6 @@
     <string name="title_pro_hide">A kicsi üzenet elrejtése %1$d hétre</string>
     <string name="title_pro_hint">A pro funkciók megvásárlása engedélyezi neked hogy használd az összes jelenlegi és jövőbeli pro funkciót amellett hogy fenntartva és támogatva tartja az alkalmazást.</string>
     <string name="title_pro_price">A pro funkciók miért ennyire drágák?</string>
-    <string name="title_pro_restore">Hogyan állíthatok vissza egy vásárlást?</string>
     <string name="title_pro_pending">A vásárlás folyamatban van</string>
     <string name="title_pro_activated">Minden pro szolgáltatás aktiválva van</string>
     <string name="title_pro_valid">Minden pro szolgáltatás aktiválva</string>

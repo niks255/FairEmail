@@ -140,6 +140,7 @@
     <string name="title_setup_quick">Rýchle nastavenie</string>
     <string name="title_setup_intro">Nastavenie účtu má len tri kroky a hneď potom môžete prijímať a posielať emaily</string>
     <string name="title_setup_simple">Nie je potrebné meniť žiadne ďalšie nastavenia</string>
+    <string name="title_setup_issue">FairEmail je vyvíjaný s cieľom pomôcť chrániť vaše súkromie a skutočne reprezentuje stovky hodín práce. Ak ste narazili na problém, kontaktujte ma pred tým ako zanecháte negatívne hodnotenie, prosím so žiadosťou o technickú podporu. Som pripravený s radosťou pomáhať!</string>
     <string name="title_setup_quick_accounts">Pridať alebo upraviť účty</string>
     <string name="title_setup_quick_support">Účty niektorých poskytovateľov môže byť náročné nastaviť. Neobviňujte z tohto nedostatku FairEmail a požiadajte o pomoc, ak ju potrebujete prosím.</string>
     <string name="title_setup_quick_hint">Rýchle nastavenie načíta informácie konfigurácie z autoconfig.thunderbird.net</string>
@@ -265,6 +266,7 @@
     <string name="title_advanced_hint_message">        Vstupujete do veľmi pokročilých možností.
         Všetky voľby majú prednastavené bežne používané štandardné hodnoty, ktoré nie je potrebné meniť, jedine že uprednostňujete iné nastavenie.
     </string>
+    <string name="title_advanced_hint_setup">Účet si nastavíte klepnutím na tlačidlo sprievodca na hlavnej obrazovky v okne nastavenia.</string>
     <string name="title_advanced_section_main">Hlavné</string>
     <string name="title_advanced_section_synchronize">Prijímanie správ</string>
     <string name="title_advanced_section_send">Posielanie správ</string>
@@ -282,6 +284,7 @@
     <string name="title_advanced_always">Vždy prijímať správy pre tieto účty</string>
     <string name="title_advanced_schedule">Plánovanie</string>
     <string name="title_advanced_advanced">Pokročilé</string>
+    <string name="title_advanced_quick_sync">Rýchla synchronizácia</string>
     <string name="title_advanced_no_date">Správy s neuvedeným dátumom</string>
     <string name="title_advanced_unseen">Všetky neprečítané správy</string>
     <string name="title_advanced_flagged">Všetky správy s hviezdičkov\'</string>
@@ -346,9 +349,10 @@
     <string name="title_advanced_caption_message">Správa</string>
     <string name="title_advanced_caption_message_header">Hlavička správy</string>
     <string name="title_advanced_caption_message_body">Obsah správy</string>
-    <string name="title_advanced_portrait2">Používať dva riadky v režime na výšku</string>
-    <string name="title_advanced_landscape">Používať dva stĺpce v režime na šírku</string>
-    <string name="title_advanced_landscape3">Predvolene zobrazovať navigačné menu v režime na šírku</string>
+    <string name="title_advanced_portrait">Režim na výšku</string>
+    <string name="title_advanced_landscape">Režim na šírku</string>
+    <string name="title_advanced_two_row">Použiť dva riadky</string>
+    <string name="title_advanced_two_col">Použiť dva stĺpce</string>
     <string name="title_advanced_nav_message_count">Zobraziť počet lokálne uložených správ v navigačnej ponuke</string>
     <string name="title_advanced_startup">Zobraziť na úvodnej obrazovke</string>
     <string name="title_advanced_cards">Použiť štýl kariet namiesto tabuľkového štýlu</string>
@@ -395,7 +399,6 @@
     <string name="title_advanced_addresses">Predvolene rozbaľovať podrobnosti o adresách</string>
     <string name="title_advanced_attachments_alt">Zobraziť prílohy za textom správy</string>
     <string name="title_advanced_thumbnails">Zobraziť miniatúry obrázkov za textom správy</string>
-    <string name="title_advanced_message_text_zoom">Predvolená úroveň priblíženia textu správy</string>
     <string name="title_advanced_overview_mode">Pôvodné zobrazenie správy prispôsobiť veľkosti obrazovky</string>
     <string name="title_advanced_contrast">Vysoký kontrast pre text správy</string>
     <string name="title_advanced_monospaced">Text správy písmom s pevnou šírkou</string>
@@ -546,6 +549,7 @@
 Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_advanced_optimize_hint">Nastaví frekvenciu synchronizácie s cieľom ušetriť energiu pri napájaní z batérie podľa vlastností a správania poštového servera</string>
     <string name="title_advanced_schedule_hint">Klepnutím na čas zmeníte hodnotu</string>
+    <string name="title_advanced_quick_sync_hint">Obmedzí využívanie prenosu údajov, ale zobrazovanie nových správ môže byť opozdené ak poštový server nedodržuje štandardy</string>
     <string name="title_advanced_no_date_hint">Niektorí poskytovatelia uchovávajú správy s neznámym, nesprávnym alebo budúcim časom namiesto správ bez času</string>
     <string name="title_advanced_unseen_hint">Niektorí poskytovatelia toto nepodporujú správne, čo spôsobuje synchronizáciu všetkých alebo žiadnych správ</string>
     <string name="title_advanced_deleted_unseen">Ak je to vypnuté, neprečítané správy ostávajú v zariadení uložené navždy</string>
@@ -859,6 +863,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_share_as_html">Zdieľať ako HTML</string>
     <string name="title_raw_save">Uložiť surovú správu</string>
     <string name="title_raw_send">Preposlať ako prílohu</string>
+    <string name="title_raw_send_message">Správa</string>
+    <string name="title_raw_send_thread">Konverzácia</string>
     <string name="title_manage_keywords">Spravovať kľúčové slová</string>
     <string name="title_manage_labels">Spravovať štítky Gmail</string>
     <string name="title_add_keyword">Pridať kľúčové slovo</string>
@@ -866,8 +872,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_download_all">Prevziať všetky</string>
     <string name="title_save_all">Uložiť všetky</string>
     <string name="title_save_eml">Uložiť správu ako nespracovaný súbor</string>
-    <string name="title_raw_remaining">Počet surových správ na prevzatie: %1$d</string>
-    <string name="title_ask_raw">Aby bolo možné preposlať, je potrebné zo servera prevziať surové (pôvodné) správy. Je vyžadované pripojenie na internet.</string>
+    <string name="title_eml_remark">Aby bolo možné preposlať, je potrebné zo servera prevziať surové (pôvodné) správy. Je vyžadované pripojenie na internet.</string>
     <string name="title_buttons">Vybrať tlačidlá</string>
     <string name="title_buttons_hint">Skutočne dostupné akcie závisia od typu a nastavenia účtu</string>
     <string name="title_button_search">Hľadať v správach</string>
@@ -916,7 +921,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_no_connection">Pripájanie k jednému alebo viacerým účtom &#8230;</string>
     <string name="title_no_folder">Priečinok neexistuje</string>
     <string name="title_no_format">Pôvodne obdržaná správa bude priložená</string>
-    <string name="title_no_image">Obrázok nemohol byť dekódovaný</string>
     <string name="title_no_search">Hľadanie na servery nie je dostupné pre tento účet</string>
     <string name="title_too_large">Správa je príliš veľká na úplné preformátovanie</string>
     <string name="title_truncated">Správa je príliš veľká na úplné zobrazenie</string>
@@ -1109,6 +1113,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
         Možnosti nižšie vám umožnia pokračovať v hľadaní na servery.
     </string>
     <string name="title_search_text_hint">Vyhľadávanie v tele správy nemusí na všetkých serveroch fungovať správne, hlavne ak je na servery uložených veľa správ</string>
+    <string name="title_search_text_unsupported">\'%s\' znamená, že server nepodporuje hľadanie v texte správ</string>
     <string name="title_search_size_hint">Hľadanie správ podľa veľkosti nemusí správne fungovať na niektorých serveroch, hlavne ak je na servery uložených veľa správ</string>
     <string name="title_search_more">Ďalšie možnosti</string>
     <string name="title_search_use_index">Použiť index vyhľadávania</string>
@@ -1164,7 +1169,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_select_found">Vybrať nájdené</string>
     <string name="title_mark_all_read">Označiť všetko ako prečítané</string>
     <string name="title_force_sync">Vynútiť synchronizáciu</string>
-    <string name="title_force_reload">Vynútiť reštart</string>
     <string name="title_force_send">Vynútiť odoslanie</string>
     <string name="title_language_all">Všetko</string>
     <string name="title_previous">Predchádzajúca</string>
@@ -1390,7 +1394,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_ip_owner">IP adresa vlastníka</string>
     <string name="title_reset_open">Nastavenie alebo vymazanie predvolených aplikácií</string>
     <string name="title_select_app">Vybrať aplikáciu</string>
-    <string name="title_updated">Je dostupná aktualizácia na verziu %1$s</string>
     <string name="title_issue">Máte otázku alebo chcete nahlásiť problém?</string>
     <string name="title_yes">Ǎno</string>
     <string name="title_no">Nie</string>
@@ -1451,7 +1454,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_pro_hint">Zaplatením za pro vlastnosti získate všetky terajšie aj budúce pro vlastnosti a prispejete na vývoj a podporu FairEmail.</string>
     <string name="title_pro_price">Prečo sú pro vlastnosti také drahé?</string>
     <string name="title_pro_family">Môžem použiť rodinnú knižnicu Google Play?</string>
-    <string name="title_pro_restore">Ako obnovím nákup?</string>
     <string name="title_pro_pending">Prebieha nákup</string>
     <string name="title_pro_activated">Všetky pro vlastnosti sú aktivované</string>
     <string name="title_pro_valid">Všetky pro vlastnosti aktívne</string>

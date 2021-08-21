@@ -120,12 +120,14 @@
     <string name="title_setup_quick">Snel instellen</string>
     <string name="title_setup_intro">Het instellen van een account is slechts drie stappen en daarna kunt u e-mails verzenden en ontvangen</string>
     <string name="title_setup_simple">Het is niet nodig om enige andere opties te wijzigen</string>
+    <string name="title_setup_issue">FairEmail is ontwikkeld om u te helpen uw privacy te beschermen en vertegenwoordigt letterlijk duizenden uren werk. Als u problemen ondervindt, neem dan eerst contact met mij op voor ondersteuning voordat u een slechte beoordeling achterlaat. Ik help graag!</string>
     <string name="title_setup_quick_accounts">Accounts toevoegen of wijzigen</string>
     <string name="title_setup_quick_support">Sommige providers maken het moeilijk om een account toe te voegen. Geef a.u.b. FairEmail hiervoor niet de schuld, maar vraag om ondersteuning.</string>
     <string name="title_setup_quick_hint">De snelle instelling zal configuratie-informatie ophalen van autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_patience">Even geduld a.u.b. &#8230;</string>
     <string name="title_setup_quick_imap">IMAP-server om berichten te ontvangen</string>
     <string name="title_setup_quick_smtp">SMTP-server om berichten te verzenden</string>
+    <string name="title_setup_quick_certificates">Server certificaten</string>
     <string name="title_setup_wizard">Wizard</string>
     <string name="title_setup_wizard_multiple">De wizard kan meerdere keren gebruikt worden om meerdere accounts in te stellen</string>
     <string name="title_setup_wizard_new">Ik heb een nieuw e-mailadres nodig</string>
@@ -170,6 +172,7 @@
     <string name="title_setup_permissions">Toestemmingen verlenen</string>
     <string name="title_setup_permissions_remark">Voor toegang tot contactinformatie (optioneel)</string>
     <string name="title_setup_permissions_explanation">Contact machtigingen zijn vereist voor het opzoeken van contactinformatie en het voorstellen van contacten</string>
+    <string name="title_setup_permission_import_contacts">Hoe kan ik contacten importeren?</string>
     <string name="title_setup_doze">Batterij-optimalisaties uitschakelen</string>
     <string name="title_setup_doze_remark">Om betrouwbaar e-mail te verzenden en ontvangen</string>
     <string name="title_setup_doze_explanation">Batterij optimalisaties moeten worden uitgeschakeld voor de app om zeker te zijn van het verzenden en ontvangen van berichten op de achtergrond</string>
@@ -245,6 +248,7 @@
     <string name="title_advanced_hint_message">        U navigeert naar de meer geavanceerde opties.
         Alle opties hebben vaak gebruikte standaardwaarden die je niet hoeft te wijzigen tenzij je een andere voorkeur hebt.
     </string>
+    <string name="title_advanced_hint_setup">Je kunt een account configureren door op de wizard knop op het hoofdconfiguratiescherm te tikken.</string>
     <string name="title_advanced_section_main">Hoofd</string>
     <string name="title_advanced_section_synchronize">Ontvangen</string>
     <string name="title_advanced_section_send">Verzenden</string>
@@ -298,6 +302,7 @@
     <string name="title_advanced_limit_reply">Beperk het aantal geneste citaten</string>
     <string name="title_advanced_resize_reply">Wijzig de grootte van de afbeeldingen in beantwoorde tekst</string>
     <string name="title_advanced_signature_location">Positie handtekening</string>
+    <string name="title_advanced_signature_new">Gebruik handtekening voor nieuwe berichten</string>
     <string name="title_advanced_signature_reply">Gebruik handtekening bij antwoorden</string>
     <string name="title_advanced_signature_forward">Gebruik handtekening bij doorsturen</string>
     <string name="title_advanced_discard_delete">Bij het verwijderen van een concept het concept definitief verwijderen</string>
@@ -327,9 +332,14 @@
     <string name="title_advanced_caption_message">Bericht</string>
     <string name="title_advanced_caption_message_header">Berichtkop</string>
     <string name="title_advanced_caption_message_body">Berichtinhoud</string>
-    <string name="title_advanced_portrait2">Gebruik twee rijen in portretmodus</string>
-    <string name="title_advanced_landscape">Twee kolommen gebruiken in liggende modus</string>
-    <string name="title_advanced_landscape3">Navigatiemenu standaard in liggende modus weergeven</string>
+    <string name="title_advanced_portrait">Portret-modus</string>
+    <string name="title_advanced_landscape">Landschap-modus</string>
+    <string name="title_advanced_two_row">Gebruik twee rijen</string>
+    <string name="title_advanced_two_col">Gebruik twee kolommen</string>
+    <string name="title_advanced_nav_options">Toon navigatiemenu opties</string>
+    <string name="title_advanced_nav_pin">Navigatiemenu vastzetten</string>
+    <string name="title_advanced_nav_hide_title">Verberg navigatiemenu opties?</string>
+    <string name="title_advanced_nav_hide_message">U kunt de opties opnieuw inschakelen in de weergave-instellingen</string>
     <string name="title_advanced_nav_message_count">Toon aantal lokaal opgeslagen berichten in het navigatiemenu</string>
     <string name="title_advanced_startup">Toon op het startscherm</string>
     <string name="title_advanced_cards">Gebruik kaart-stijl in plaats van tabulaire stijl</string>
@@ -376,7 +386,7 @@
     <string name="title_advanced_addresses">Adresgegevens standaard weergeven</string>
     <string name="title_advanced_attachments_alt">Bijlagen weergeven na de berichttekst</string>
     <string name="title_advanced_thumbnails">Afbeeldingsminiaturen weergeven na de berichttekst</string>
-    <string name="title_advanced_message_text_zoom">Standaard berichttekst zoom</string>
+    <string name="title_advanced_message_text_zoom2">Standaard berichttekst zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoom oorspronkelijke berichten zodat ze op het scherm passen</string>
     <string name="title_advanced_contrast">Gebruik hoge contrast voor berichttekst</string>
     <string name="title_advanced_monospaced">Gebruik standaard vaste breedte lettertype voor berichttekst</string>
@@ -431,6 +441,7 @@
     <string name="title_advanced_autounstar">Automatisch ster verwijderen van berichten bij verplaatsende berichten</string>
     <string name="title_advanced_auto_important">Automatisch berichten met een ster belangrijk maken</string>
     <string name="title_advanced_reset_importance">Reset belang bij verplaatsen van berichten</string>
+    <string name="title_advanced_reply_all">Druk lang op de antwoordknop om iedereen te antwoorden</string>
     <string name="title_advanced_default_snooze">Standaard sluimertijd</string>
     <string name="title_advanced_notifications">Beheer meldingen</string>
     <string name="title_advanced_notifications_default">Standaardkanaal</string>
@@ -467,6 +478,7 @@
     <string name="title_advanced_sound">Selecteer meldingsgeluid</string>
     <string name="title_advanced_notify_screen_on">Schakel het scherm kort in voor nieuwe berichtmeldingen</string>
     <string name="title_advanced_confirm_links">Bevestig het openen van koppelingen</string>
+    <string name="title_advanced_check_links_dbl">Controleer domeinblokkeringslijsten op verdachte links</string>
     <string name="title_advanced_browse_links">Het openen van links overdragen aan Android</string>
     <string name="title_advanced_confirm_images">Bevestig het tonen van afbeeldingen</string>
     <string name="title_advanced_confirm_html">Toon standaard opnieuw opgemaakte berichten</string>
@@ -587,6 +599,7 @@
     <string name="title_advanced_notify_manage_hint">Tik op de kanaalnaam om de kanaaleigenschappen in te stellen</string>
     <string name="title_advanced_notify_manage_default_hint">Om het standaardgeluid, etc in te stellen</string>
     <string name="title_advanced_notify_manage_service_hint">Om de bewakingsmelding uit te schakelen</string>
+    <string name="title_advanced_notify_separate_hint">Hoe stel ik meldingen in voor accounts, mappen en afzenders?</string>
     <string name="title_advanced_notify_preview_all_hint">Voor wearables die de volledige tekst kunnen weergeven (tot 5.000 tekens)</string>
     <string name="title_advanced_notify_preview_only_hint">Dit vertraagt het tonen van meldingen totdat de berichttekst is gedownload</string>
     <string name="title_advanced_wearable_hint">Meldingen worden alleen verzonden naar een wearable nadat de berichttekst is gedownload</string>
@@ -843,6 +856,8 @@
     <string name="title_share_as_html">Delen als HTML</string>
     <string name="title_raw_save">Ruw bericht opslaan</string>
     <string name="title_raw_send">Stuur als bijlage</string>
+    <string name="title_raw_send_message">Bericht</string>
+    <string name="title_raw_send_thread">Gesprek</string>
     <string name="title_manage_keywords">Sleutelwoorden beheren</string>
     <string name="title_manage_labels">Gmail labels beheren</string>
     <string name="title_add_keyword">Sleutelwoord toevoegen</string>
@@ -850,8 +865,9 @@
     <string name="title_download_all">Alles downloaden</string>
     <string name="title_save_all">Alles opslaan</string>
     <string name="title_save_eml">Ruw bericht opslaan</string>
-    <string name="title_raw_remaining">Ruwe berichten om te downloaden: %1$d</string>
-    <string name="title_ask_raw">Om berichten door te sturen, moeten de ruwe (originele) berichten worden gedownload van de server. Dit vereist een internetverbinding.</string>
+    <string name="title_eml_remark">Om berichten door te sturen, moeten de ruwe (originele) berichten worden gedownload van de server. Dit vereist een internetverbinding.</string>
+    <string name="title_eml_option">Dit kan worden voorkomen door het altijd downloaden van ruwe berichtbestanden in de verbindingsinstellingen in te schakelen</string>
+    <string name="title_eml_downloaded">Ruwe berichten om te downloaden: %1$s</string>
     <string name="title_buttons">Selecteer knoppen</string>
     <string name="title_buttons_hint">De daadwerkelijk beschikbare acties hangen af van het accounttype en de configuratie</string>
     <string name="title_button_search">Zoeken in berichten</string>
@@ -863,6 +879,7 @@
     <string name="title_subscribe">Abonneren</string>
     <string name="title_delete">Verwijder</string>
     <string name="title_more">Meer</string>
+    <string name="title_less">Minder</string>
     <string name="title_spam">Spam</string>
     <string name="title_move">Verplaatsen</string>
     <string name="title_copy_btn">Kopiëren</string>
@@ -901,7 +918,6 @@
     <string name="title_no_connection">Verbinding maken met één of meer accounts &#8230;</string>
     <string name="title_no_folder">Map bestaat niet</string>
     <string name="title_no_format">Het oorspronkelijke ontvangen bericht zal worden opgenomen</string>
-    <string name="title_no_image">Afbeelding kon niet gedecodeerd worden</string>
     <string name="title_no_search">Zoeken op server is niet beschikbaar voor dit account</string>
     <string name="title_too_large">Bericht te groot om volledig opnieuw op te maken</string>
     <string name="title_truncated">Bericht is te groot om volledig weer te geven</string>
@@ -1093,6 +1109,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_search_index_hint">Zoeken via de zoekindex gaat snel, maar vindt alleen hele woorden.
  De onderstaande opties zijn om door te gaan met zoeken op de e-mailserver.</string>
     <string name="title_search_text_hint">Zoeken naar tekst in berichten, wanneer er een groot aantal berichten is, werkt mogelijk niet op sommige servers</string>
+    <string name="title_search_text_unsupported">\'%s\' betekent dat de mailserver het zoeken in berichtteksten niet ondersteunt</string>
     <string name="title_search_size_hint">Zoeken naar berichten op grootte werkt mogelijk niet op sommige servers als er een groot aantal berichten is</string>
     <string name="title_search_more">Meer opties</string>
     <string name="title_search_use_index">Gebruik zoekindex</string>
@@ -1147,8 +1164,8 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_select_all">Selecteer alles</string>
     <string name="title_select_found">Selecteer gevonden</string>
     <string name="title_mark_all_read">Markeer alle gelezen</string>
+    <string name="title_view_thread">Toon gesprek</string>
     <string name="title_force_sync">Forceer verversen</string>
-    <string name="title_force_reload">Forceer herstart</string>
     <string name="title_force_send">Forceer verzenden</string>
     <string name="title_language_all">Alle</string>
     <string name="title_previous">Vorige</string>
@@ -1325,7 +1342,9 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_legend_create_rule">Maak regel</string>
     <string name="title_legend_show_unsubscribe">Uitschrijven van lijst</string>
     <string name="title_legend_show_images">Toon afbeeldingen</string>
+    <string name="title_legend_hide_images">Verberg afbeeldingen</string>
     <string name="title_legend_show_full">Toon het originele bericht</string>
+    <string name="title_legend_show_reformatted">Toon opnieuw opgemaakte bericht</string>
     <string name="title_legend_edit">Bewerk</string>
     <string name="title_legend_default_color">Standaard kleur</string>
     <string name="title_legend_close_hint">Sluit hint</string>
@@ -1372,9 +1391,10 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_check_owner">Controleer eigenaar</string>
     <string name="title_remark_owner">Informatie wordt opgehaald van <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Eigenaar IP-adres</string>
+    <string name="title_default_apps">Standaard apps</string>
     <string name="title_reset_open">Standaardapps instellen of wissen</string>
     <string name="title_select_app">Selecteer app</string>
-    <string name="title_updated">Er is een update naar versie %1$s beschikbaar</string>
+    <string name="title_updated">Update naar versie %1$s beschikbaar</string>
     <string name="title_issue">Heeft u een vraag of probleem?</string>
     <string name="title_yes">Ja</string>
     <string name="title_no">Nee</string>
@@ -1434,7 +1454,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_pro_hint">Het kopen van pro functies geeft toegang tot alle huidige en toekomstige pro functies en zorgt voor onderhoud en ondersteuning van deze app.</string>
     <string name="title_pro_price">Waarom zijn de pro functies zo duur?</string>
     <string name="title_pro_family">Kan ik de Google Play Familie-bibliotheek gebruiken?</string>
-    <string name="title_pro_restore">Hoe kan ik een aankoop herstellen?</string>
+    <string name="title_pro_restore">Hoe kan ik een aankoop herstellen (op een ander apparaat) ?</string>
     <string name="title_pro_pending">Aankoop in behandeling</string>
     <string name="title_pro_activated">Alle pro-functies zijn geactiveerd</string>
     <string name="title_pro_valid">Alle pro-functies geactiveerd</string>

@@ -19,6 +19,8 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
+
 import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -32,6 +34,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
@@ -49,6 +52,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -63,8 +68,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
 public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHolder> {
     private Fragment parentFragment;
@@ -103,6 +106,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
         private TextView tvQuota;
         private TextView tvMaxSize;
         private TextView tvId;
+        private TextView tvCapabilities;
         private TextView tvIdentity;
         private TextView tvDrafts;
         private TextView tvSent;
@@ -134,6 +138,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
             tvQuota = itemView.findViewById(R.id.tvQuota);
             tvMaxSize = itemView.findViewById(R.id.tvMaxSize);
             tvId = itemView.findViewById(R.id.tvId);
+            tvCapabilities = itemView.findViewById(R.id.tvCapabilities);
             tvIdentity = itemView.findViewById(R.id.tvIdentity);
             tvDrafts = itemView.findViewById(R.id.tvDrafts);
             tvSent = itemView.findViewById(R.id.tvSent);
@@ -236,7 +241,12 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                 tvQuota.setVisibility(View.VISIBLE);
 
             tvId.setText(account.id + "/" + account.uuid);
-            tvId.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+            tvId.setVisibility(settings && BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+
+            tvCapabilities.setText(account.capabilities);
+
+            tvCapabilities.setVisibility(settings && (debug || BuildConfig.DEBUG) &&
+                    !TextUtils.isEmpty(account.capabilities) ? View.VISIBLE : View.GONE);
 
             tvIdentity.setVisibility(account.identities > 0 || !settings ? View.GONE : View.VISIBLE);
             tvDrafts.setVisibility(account.drafts != null || !settings ? View.GONE : View.VISIBLE);
@@ -343,8 +353,10 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
             if (account.protocol == EntityAccount.TYPE_IMAP && settings)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_copy, 4, R.string.title_copy);
 
+            popupMenu.getMenu().add(Menu.NONE, R.string.title_log, 5, R.string.title_log);
+
             if (debug)
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_reset, 5, R.string.title_reset);
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_reset, 6, R.string.title_reset);
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -361,6 +373,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                         return true;
                     } else if (itemId == R.string.title_copy) {
                         onActionCopy();
+                        return true;
+                    } else if (itemId == R.string.title_log) {
+                        onActionLog();
                         return true;
                     } else if (itemId == R.string.title_reset) {
                         onActionReset();
@@ -463,6 +478,21 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                                     .putExtra("id", account.id)
                                     .putExtra("protocol", account.protocol)
                                     .putExtra("copy", true));
+                }
+
+                private void onActionLog() {
+                    if (owner.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                        parentFragment.getParentFragmentManager().popBackStack("logs", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    Bundle args = new Bundle();
+                    args.putLong("account", account.id);
+
+                    Fragment fragment = new FragmentLogs();
+                    fragment.setArguments(args);
+
+                    FragmentTransaction fragmentTransaction = parentFragment.getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("logs");
+                    fragmentTransaction.commit();
                 }
 
                 private void onActionReset() {

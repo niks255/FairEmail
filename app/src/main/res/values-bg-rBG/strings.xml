@@ -244,9 +244,6 @@
     <string name="title_advanced_caption_message">Съобщение</string>
     <string name="title_advanced_caption_message_header">Заглавка на съобщението</string>
     <string name="title_advanced_caption_message_body">Тяло на съобщението</string>
-    <string name="title_advanced_portrait2">Използвайте два реда в портретен режим</string>
-    <string name="title_advanced_landscape">Две колони в легнал режим</string>
-    <string name="title_advanced_landscape3">Показвайте менюто за навигация в пейзажен режим по подразбиране</string>
     <string name="title_advanced_startup">Показване при стартиране</string>
     <string name="title_advanced_cards">Използвайте стил на карти вместо табличен стил</string>
     <string name="title_advanced_date_header">Групиране по дата</string>
@@ -282,7 +279,6 @@
     <string name="title_advanced_addresses">Покажи адреса по подразбиране</string>
     <string name="title_advanced_attachments_alt">Покажи прикачените файлове след текста на съобщението</string>
     <string name="title_advanced_thumbnails">Показване на миниатюри на изображения след текста на съобщението</string>
-    <string name="title_advanced_message_text_zoom">Мащаб на текста на съобщението по подразбиране</string>
     <string name="title_advanced_contrast">Използвай висок контраст за текст на съобщението</string>
     <string name="title_advanced_monospaced">Използвайте monospaced шрифт за текст на съобщението по подразбиране</string>
     <string name="title_advanced_text_color">Избери цвят на текста</string>
@@ -625,6 +621,8 @@
     <string name="title_share_as_html">Споделяне като HTML</string>
     <string name="title_raw_save">Запиши необработено съобщение</string>
     <string name="title_raw_send">Изпращане като прикачен файл</string>
+    <string name="title_raw_send_message">Съобщение</string>
+    <string name="title_raw_send_thread">Разговор</string>
     <string name="title_manage_keywords">Управление по ключови думи</string>
     <string name="title_manage_labels">Управлявайте етикетите на Gmail</string>
     <string name="title_add_keyword">Добавяне на ключова дума</string>
@@ -675,7 +673,6 @@
     <string name="title_no_connection">Свързване с един или повече профили &#8230;</string>
     <string name="title_no_folder">Папката не съществува</string>
     <string name="title_no_format">Оригиналното съобщение ще бъде добавено</string>
-    <string name="title_no_image">Изображението не може да бъде декодирано</string>
     <string name="title_no_search">Търсенето в сървъра не е налично за този профил</string>
     <string name="title_too_large">Съобщението е твърде голямо, за да се преформатира напълно</string>
     <string name="title_truncated">Съобщението е твърде голямо, за да се покаже напълно</string>
@@ -1090,7 +1087,6 @@
     <string name="title_ip_owner">IP адрес на собственика</string>
     <string name="title_reset_open">Задаване или изчистване на приложенията по подразбиране</string>
     <string name="title_select_app">Изберете приложение</string>
-    <string name="title_updated">Налична е актуализация до версия %1$s</string>
     <string name="title_issue">Имате ли въпрос или проблем?</string>
     <string name="title_yes">Да</string>
     <string name="title_no">Не</string>
@@ -1149,7 +1145,6 @@
     <string name="title_pro_hint">Купуването на професионалните функции ще ви позволи да използвате всички настоящи и бъдещи професионални функции, ще поддържа това приложение поддържано.</string>
     <string name="title_pro_price">Защо професионалните функции са толкова скъпи?</string>
     <string name="title_pro_family">Мога ли да употребявам семейната библиотека на Google Play?</string>
-    <string name="title_pro_restore">Как мога да възстановя покупка?</string>
     <string name="title_pro_pending">Чакащо плащане</string>
     <string name="title_pro_activated">Всички pro функции са активирани</string>
     <string name="title_pro_valid">Активирай всички pro функции</string>

@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -151,13 +152,22 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
 
                 @Override
                 protected void onExecuted(Bundle args, Boolean hasAccounts) {
+                    Bundle options = null;
+                    try {
+                        if (BuildConfig.DEBUG)
+                            options = ActivityOptions.makeCustomAnimation(ActivityMain.this,
+                                    R.anim.activity_open_enter, 0).toBundle();
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
                     if (hasAccounts) {
-                        Intent view = new Intent(ActivityMain.this, ActivityView.class);
-                        view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent view = new Intent(ActivityMain.this, ActivityView.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         Intent saved = args.getParcelable("intent");
                         if (saved == null) {
-                            startActivity(view);
+                            startActivity(view, options);
                             if (sync_on_launch)
                                 ServiceUI.sync(ActivityMain.this, null);
                         } else
@@ -175,8 +185,11 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                                 ServiceSend.watchdog(ActivityMain.this);
                             }
                         }, SERVICE_START_DELAY);
-                    } else
-                        startActivity(new Intent(ActivityMain.this, ActivitySetup.class));
+                    } else {
+                        Intent setup = new Intent(ActivityMain.this, ActivitySetup.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(setup, options);
+                    }
 
                     long end = new Date().getTime();
                     Log.i("Main booted " + (end - start) + " ms");
@@ -239,11 +252,20 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             else
                 boot.execute(this, new Bundle(), "main:accounts");
         } else {
-            // Enable 3-col mode on large screen / compact view on small screens
-            if (getResources().getConfiguration().isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE))
-                prefs.edit().putBoolean("landscape3", true).apply();
-            else
-                prefs.edit().putBoolean("compact", true).apply();
+            SharedPreferences.Editor editor = prefs.edit();
+            Configuration config = getResources().getConfiguration();
+
+            // Default enable compact mode for smaller screens
+            if (!config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE))
+                editor.putBoolean("compact", true);
+
+            // Default disable landscape columns for small screens
+            if (!config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_NORMAL)) {
+                editor.putBoolean("landscape", false);
+                editor.putBoolean("landscape3", false);
+            }
+
+            editor.apply();
 
             if (Helper.isNight(this))
                 setTheme(R.style.AppThemeBlueOrangeDark);

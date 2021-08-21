@@ -59,6 +59,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class FragmentOptions extends FragmentBase {
     private ViewPager pager;
     private PagerAdapter adapter;
@@ -77,7 +81,7 @@ public class FragmentOptions extends FragmentBase {
             R.layout.fragment_options_misc
     };
 
-    private static final int[] PAGE_TITLES = {
+    static final int[] PAGE_TITLES = {
             R.string.title_advanced_section_main,
             R.string.title_advanced_section_synchronize,
             R.string.title_advanced_section_send,
@@ -90,7 +94,7 @@ public class FragmentOptions extends FragmentBase {
             R.string.title_advanced_section_misc
     };
 
-    private static final int[] PAGE_ICONS = {
+    static final int[] PAGE_ICONS = {
             R.drawable.twotone_home_24,
             R.drawable.twotone_sync_24,
             R.drawable.twotone_send_24,
@@ -103,13 +107,26 @@ public class FragmentOptions extends FragmentBase {
             R.drawable.twotone_more_24
     };
 
+    static final List<String> TAB_LABELS = Collections.unmodifiableList(Arrays.asList(
+            "main",
+            "sync",
+            "send",
+            "connection",
+            "display",
+            "behavior",
+            "privacy",
+            "encryption",
+            "notifications",
+            "misc"
+    ));
+
     static String[] OPTIONS_RESTART = new String[]{
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "subscriptions",
             "check_authentication", "check_reply_domain", "check_mx", "check_blocklist",
             "send_pending",
-            "portrait2", "landscape", "landscape3", "nav_count", "startup",
-            "cards", "beige", "tabular_card_bg", "shadow_unread",
+            "startup", "cards", "beige", "tabular_card_bg", "shadow_unread",
+            "portrait2", "portrait2c", "landscape", "nav_count", "navbar_colorize",
             "indentation", "date", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "bimi", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
@@ -121,7 +138,7 @@ public class FragmentOptions extends FragmentBase {
             "contrast", "monospaced", "monospaced_pre",
             "background_color", "text_color", "text_size", "text_font", "text_align", "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images",
-            "seekbar", "actionbar", "actionbar_color", "navbar_colorize",
+            "seekbar", "actionbar", "actionbar_color",
             "autoscroll", "swipenav", "reversed", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
             "language_detection",
             "quick_filter", "quick_scroll",
@@ -212,17 +229,12 @@ public class FragmentOptions extends FragmentBase {
         }
 
         String tab = getActivity().getIntent().getStringExtra("tab");
-        if ("connection".equals(tab))
-            pager.setCurrentItem(3);
-        else if ("display".equals(tab))
-            pager.setCurrentItem(4);
-        else if ("privacy".equals(tab))
-            pager.setCurrentItem(6);
-        else if ("encryption".equals(tab))
-            pager.setCurrentItem(7);
-        else if ("misc".equals(tab))
-            pager.setCurrentItem(9);
-        getActivity().getIntent().removeExtra("tab");
+        if (!TextUtils.isEmpty(tab)) {
+            int index = TAB_LABELS.indexOf(tab);
+            if (index >= 0)
+                pager.setCurrentItem(index);
+            getActivity().getIntent().removeExtra("tab");
+        }
     }
 
     @Override

@@ -109,12 +109,14 @@
     <string name="title_setup_quick">クイックセットアップ</string>
     <string name="title_setup_intro">アカウントの設定はたったの3ステップだけで、その後はメールの送受信ができます。</string>
     <string name="title_setup_simple">他のオプションを変更する必要はありません</string>
+    <string name="title_setup_issue">FairEmail はあなたのプライバシーを保護するために開発され、文字通り数千時間の仕事を要しています。 何か問題がある場合は悪いレビューを投稿する前にサポートに連絡してください。喜んでお手伝いします！</string>
     <string name="title_setup_quick_accounts">アカウントの追加または変更</string>
     <string name="title_setup_quick_support">一部のプロバイダはアカウントを追加しにくくしています。FairEmailを非難せずに、代わりにサポートを依頼してください。</string>
     <string name="title_setup_quick_hint">クイックセットアップはautoconfig.thunderbird.netから構成情報を取得します</string>
     <string name="title_setup_quick_patience">しばらくお待ちください &#8230;</string>
     <string name="title_setup_quick_imap">メッセージを受信する為のIMAPサーバ</string>
     <string name="title_setup_quick_smtp">メッセージを送信する為のSMTPサーバ</string>
+    <string name="title_setup_quick_certificates">サーバー証明書</string>
     <string name="title_setup_wizard">ウィザード</string>
     <string name="title_setup_wizard_multiple">ウィザードを繰り返し使用することで、複数のアカウントを設定できます。</string>
     <string name="title_setup_wizard_new">新しいメールアドレスを取得したい場合</string>
@@ -234,6 +236,7 @@
     <string name="title_advanced_hint_message">        高度なオプションに移動しています。
         全てのオプションには一般的に使用される標準的な値が設定してあるため、必要がなければ設定の変更は不要です。
     </string>
+    <string name="title_advanced_hint_setup">メイン設定画面のウィザードボタンをタップしてアカウントを設定できます。</string>
     <string name="title_advanced_section_main">メイン</string>
     <string name="title_advanced_section_synchronize">受信</string>
     <string name="title_advanced_section_send">送信</string>
@@ -251,6 +254,7 @@
     <string name="title_advanced_always">これらのアカウントのメッセージを常に受信する</string>
     <string name="title_advanced_schedule">スケジュール</string>
     <string name="title_advanced_advanced">詳細</string>
+    <string name="title_advanced_quick_sync">クイック同期</string>
     <string name="title_advanced_no_date">日付無しのメッセージ</string>
     <string name="title_advanced_unseen">すべての未読メッセージ</string>
     <string name="title_advanced_flagged">すべてのスター付きメッセージ</string>
@@ -273,6 +277,7 @@
     <string name="title_advanced_suggest_sent">送信したメッセージで見つかったアドレスを提案</string>
     <string name="title_advanced_suggest_received">受信したメッセージで見つかったアドレスを提案</string>
     <string name="title_advanced_suggest_frequently">使用頻度で提案されたアドレスを並べ替える</string>
+    <string name="title_advanced_alt_re_fwd">代替返信/接頭辞</string>
     <string name="title_advanced_send_reminders">リマインダーを表示</string>
     <string name="title_advanced_send_delayed">メッセージ送信を遅延させます</string>
     <string name="title_advanced_send_pending">目立たない送信遅延アイコンを表示</string>
@@ -285,6 +290,7 @@
     <string name="title_advanced_limit_reply">入れ子になった引用の数を制限する</string>
     <string name="title_advanced_resize_reply">返信したテキストの画像のサイズを変更する</string>
     <string name="title_advanced_signature_location">署名の場所</string>
+    <string name="title_advanced_signature_new">新しいメッセージに署名を使用する</string>
     <string name="title_advanced_signature_reply">返信時に署名を使用する</string>
     <string name="title_advanced_signature_forward">転送時に署名を使用する</string>
     <string name="title_advanced_discard_delete">下書きを破棄する場合、下書きを完全に削除</string>
@@ -314,9 +320,14 @@
     <string name="title_advanced_caption_message">メッセージ</string>
     <string name="title_advanced_caption_message_header">メッセージヘッダー</string>
     <string name="title_advanced_caption_message_body">本文</string>
-    <string name="title_advanced_portrait2">ポートレートモードで2つの行を使用</string>
-    <string name="title_advanced_landscape">横向きモードで2列を使用</string>
-    <string name="title_advanced_landscape3">デフォルトでランドスケープモードでナビゲーションメニューを表示する</string>
+    <string name="title_advanced_portrait">ポートレートモード</string>
+    <string name="title_advanced_landscape">ランドスケープモード</string>
+    <string name="title_advanced_two_row">2つの行を使用</string>
+    <string name="title_advanced_two_col">2つの列を使用</string>
+    <string name="title_advanced_nav_options">ナビゲーションメニューのオプションを表示</string>
+    <string name="title_advanced_nav_pin">ナビゲーションメニューをピン留めする</string>
+    <string name="title_advanced_nav_hide_title">ナビゲーションメニューのオプションを非表示にしますか？</string>
+    <string name="title_advanced_nav_hide_message">表示設定でもう一度オプションを有効にすることができます</string>
     <string name="title_advanced_nav_message_count">ローカルに保存されたメッセージの数をナビゲーションメニューに表示する</string>
     <string name="title_advanced_startup">スタート画面に表示</string>
     <string name="title_advanced_cards">表形式では無くカード形式を使用</string>
@@ -363,7 +374,7 @@
     <string name="title_advanced_addresses">デフォルトでアドレスの詳細を表示</string>
     <string name="title_advanced_attachments_alt">メッセージテキストの後に添付ファイルを表示</string>
     <string name="title_advanced_thumbnails">メッセージテキストの後に画像のサムネイルを表示</string>
-    <string name="title_advanced_message_text_zoom">デフォルトのメッセージ拡大率</string>
+    <string name="title_advanced_message_text_zoom2">デフォルトのメッセージ拡大率: %1$s %%</string>
     <string name="title_advanced_overview_mode">画面に合わせて元のメッセージを拡大する</string>
     <string name="title_advanced_contrast">メッセージテキストにハイコントラストを使用</string>
     <string name="title_advanced_monospaced">デフォルトでメッセージテキストに等幅フォントを使用する</string>
@@ -409,6 +420,7 @@
     <string name="title_advanced_collapse_multiple">複数のメッセージがある会話を\"戻る\"で折りたたむ</string>
     <string name="title_advanced_autoclose">会話を自動的に閉じます</string>
     <string name="title_advanced_onclose">会話を閉じる時</string>
+    <string name="title_advanced_autoclose_unread">未読としてマークした時に会話を閉じる</string>
     <string name="title_advanced_undo">Undoのタイムアウト</string>
     <string name="title_advanced_quick_filter">目立たないクイックフィルターアイコンを表示</string>
     <string name="title_advanced_quick_scroll">目立たないクイックスクロールアップ/ダウンアイコンを表示</string>
@@ -453,6 +465,7 @@
     <string name="title_advanced_sound">通知音を選択</string>
     <string name="title_advanced_notify_screen_on">新着メッセージの通知画面を短時間でオンにする</string>
     <string name="title_advanced_confirm_links">リンクを開く事を確認</string>
+    <string name="title_advanced_check_links_dbl">不審なリンクがないかドメインブロックリストを確認する</string>
     <string name="title_advanced_browse_links">Androidへのリンクを開いて下さい</string>
     <string name="title_advanced_confirm_images">画像表示を確認</string>
     <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示</string>
@@ -512,6 +525,7 @@
     <string name="title_advanced_poll_hint">新しいメッセージを定期的にチェックすると、ローカルメッセージとリモートメッセージが毎回比較されます。これはコストのかかる操作であり、特にメッセージが多い場合は、バッテリーの使用量が増える可能性があります。 常に受信することで、変更を継続的に追跡してこれを防ぎます。</string>
     <string name="title_advanced_optimize_hint">これは、バッテリー使用量を節約するために、メールサーバーの機能と動作に応じて同期頻度を変更することがあります</string>
     <string name="title_advanced_schedule_hint">時間をタップして時間を設定</string>
+    <string name="title_advanced_quick_sync_hint">これにより、データ使用量が減少しますが、メールサーバーが標準に従わない場合、新しいメッセージが見逃される可能性があります。</string>
     <string name="title_advanced_no_date_hint">一部のプロバイダは日付無しのメッセージとして不明、無効、又は将来の日付を格納しています</string>
     <string name="title_advanced_unseen_hint">一部のプロバイダーはこれを適切にサポートしていないため、メッセージが全く同期されないか全て同期されてしまう場合があります</string>
     <string name="title_advanced_deleted_unseen">無効にすると未読メッセージはデバイスに永久に保持されます</string>
@@ -560,6 +574,7 @@
     <string name="title_advanced_sender_hint">殆どのプロバイダは変更された送信者アドレスを許可しません</string>
     <string name="title_advanced_bcc_hint">アドレスは表示されませんが送信時に追加されます</string>
     <string name="title_advanced_internal_hint">別のドメインに送信するときに警告が表示されます</string>
+    <string name="title_advanced_e2e_encryption">エンドツーエンド暗号化のオプション</string>
     <string name="title_advanced_display_harmful_hint">このオプションを無効にするとプライバシーが損なわれる可能性が有ります</string>
     <string name="title_advanced_display_hidden_hint">これにより奇妙な外観になったりと二重テキストが生成される可能性があります</string>
     <string name="title_advanced_display_pin_hint">PINを生体認証よりも優先</string>
@@ -570,6 +585,7 @@
     <string name="title_advanced_notify_manage_hint">カテゴリ名をタップして、カテゴリのプロパティを設定します</string>
     <string name="title_advanced_notify_manage_default_hint">デフォルトの音などを設定</string>
     <string name="title_advanced_notify_manage_service_hint">「モニタリング」通知を無効にする</string>
+    <string name="title_advanced_notify_separate_hint">アカウント、フォルダ、送信者の通知を設定するにはどうすればよいですか?</string>
     <string name="title_advanced_notify_preview_all_hint">全文を表示出来るウェアラブル(最大5,000文字)</string>
     <string name="title_advanced_notify_preview_only_hint">メッセージテキストがダウンロードされるまで通知の表示を遅延します</string>
     <string name="title_advanced_wearable_hint">通知はメッセージテキストをダウンロード後、ウェアラブルにのみ送信されます</string>
@@ -706,6 +722,8 @@
     <string name="title_synchronize_enabled">同期</string>
     <string name="title_synchronize_batch_enable">同期を有効化</string>
     <string name="title_synchronize_batch_disable">同期を無効化</string>
+    <string name="title_notify_batch_enable">新しいメッセージの通知を有効にする</string>
+    <string name="title_notify_batch_disable">新しいメッセージの通知を無効にする</string>
     <string name="title_delete_local">ローカルのメッセージを削除</string>
     <string name="title_delete_browsed">閲覧/検索したメッセージを削除</string>
     <string name="title_empty_trash">ゴミ箱を空にする</string>
@@ -824,6 +842,8 @@
     <string name="title_share_as_html">HTMLで共有</string>
     <string name="title_raw_save">素のメッセージを保存</string>
     <string name="title_raw_send">添付ファイルとして送信</string>
+    <string name="title_raw_send_message">メッセージ</string>
+    <string name="title_raw_send_thread">会話</string>
     <string name="title_manage_keywords">キーワードを管理</string>
     <string name="title_manage_labels">Gmail ラベルの管理</string>
     <string name="title_add_keyword">キーワードの追加</string>
@@ -831,8 +851,9 @@
     <string name="title_download_all">すべてダウンロード</string>
     <string name="title_save_all">すべて保存</string>
     <string name="title_save_eml">素のメッセージファイルを保存する</string>
-    <string name="title_raw_remaining">オリジナルメッセージをダウンロード: %1$d</string>
-    <string name="title_ask_raw">メッセージを転送するには、生(オリジナル) メッセージをサーバーからダウンロードする必要があります。インターネット接続が必要です。</string>
+    <string name="title_eml_remark">メッセージを転送するには、生(オリジナル) メッセージをサーバーからダウンロードする必要があります。インターネット接続が必要です。</string>
+    <string name="title_eml_option">接続設定で常にオリジナルメッセージファイルをダウンロードすることで、これを防ぐことができます。</string>
+    <string name="title_eml_downloaded">オリジナルメッセージをダウンロード: %1$s</string>
     <string name="title_buttons">ボタンを選択</string>
     <string name="title_buttons_hint">利用可能な実際のアクションは、アカウントの種類と構成によって異なります</string>
     <string name="title_button_search">メッセージを検索</string>
@@ -844,6 +865,7 @@
     <string name="title_subscribe">申し込む</string>
     <string name="title_delete">削除</string>
     <string name="title_more">その他</string>
+    <string name="title_less">簡易</string>
     <string name="title_spam">スパム</string>
     <string name="title_move">移動する</string>
     <string name="title_copy_btn">コピー</string>
@@ -882,7 +904,6 @@
     <string name="title_no_connection">1つ以上のアカウント &#8230; への接続</string>
     <string name="title_no_folder">フォルダーが存在しません</string>
     <string name="title_no_format">受信したメッセージを引用しています</string>
-    <string name="title_no_image">画像をデコード出来ませんでした</string>
     <string name="title_no_search">サーバでの検索はこのアカウントでは利用出来ません</string>
     <string name="title_too_large">メッセージが大き過ぎて完全に再フォーマット出来ません</string>
     <string name="title_truncated">完全に表示するには大き過ぎるメッセージです</string>
@@ -1076,6 +1097,7 @@
         以下のオプションはメールサーバーの検索を続行します。
     </string>
     <string name="title_search_text_hint">メッセージ内のテキストを検索しています。多数のメッセージがある場合、一部のサーバーで動作しない可能性があります。</string>
+    <string name="title_search_text_unsupported">\'%s\' は、メールサーバーがメッセージテキスト内の検索をサポートしていないことを意味します</string>
     <string name="title_search_size_hint">サイズ別にメッセージを検索しています。メッセージが多い場合、一部のサーバーでは動作しない可能性があります。</string>
     <string name="title_search_more">その他のオプション</string>
     <string name="title_search_use_index">検索インデックスを使用</string>
@@ -1307,7 +1329,9 @@
     <string name="title_legend_create_rule">ルールの作成</string>
     <string name="title_legend_show_unsubscribe">リストから退会する</string>
     <string name="title_legend_show_images">画像を表示</string>
+    <string name="title_legend_hide_images">画像を隠す</string>
     <string name="title_legend_show_full">オリジナルのメッセージを表示する</string>
+    <string name="title_legend_show_reformatted">再フォーマットされたメッセージを表示</string>
     <string name="title_legend_edit">編集</string>
     <string name="title_legend_default_color">デフォルトの色</string>
     <string name="title_legend_close_hint">ヒントを閉じる</string>
@@ -1354,6 +1378,8 @@
     <string name="title_check_owner">所有者を確認</string>
     <string name="title_remark_owner">情報は<a href="https://ipinfo.io/">ipinfo.io</a>から取得されます</string>
     <string name="title_ip_owner">所有者のIPアドレス</string>
+    <string name="title_default_apps">既定のアプリ</string>
+    <string name="title_reset_open">デフォルトのアプリを設定またはクリア</string>
     <string name="title_select_app">アプリを選択</string>
     <string name="title_updated">バージョン %1$s のアップデートが利用可能です</string>
     <string name="title_issue">質問や問題がありますか？</string>
@@ -1416,7 +1442,6 @@
     <string name="title_pro_hint">プロ機能を購入すると、現在及び将来全てのプロ機能を使用出来る様になりアプリとサポートが維持されます</string>
     <string name="title_pro_price">なぜプロ機能はそんなに高価なのですか？</string>
     <string name="title_pro_family">Google Playファミリーライブラリを使用できますか？</string>
-    <string name="title_pro_restore">購入を復元するにはどうすればよいですか?</string>
     <string name="title_pro_pending">購入保留中</string>
     <string name="title_pro_activated">全てのプロ機能がアクティブになりました</string>
     <string name="title_pro_valid">全てのプロ機能が有効化されました</string>
@@ -1578,6 +1603,7 @@
         <item>標準</item>
         <item>大</item>
     </string-array>
+    <string name="title_size_tiny">極小</string>
     <string-array name="receiptNames">
         <item>開封確認のみ</item>
         <item>配信確認のみ</item>

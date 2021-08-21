@@ -181,6 +181,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
         private void wire() {
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
             ibExpander.setOnClickListener(this);
             if (tvFlagged != null)
                 tvFlagged.setOnClickListener(this);
@@ -188,14 +189,13 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 ibFlagged.setOnClickListener(this);
             if (ibSync != null)
                 ibSync.setOnClickListener(this);
-            if (listener == null)
-                view.setOnLongClickListener(this);
             if (btnHelp != null)
                 btnHelp.setOnClickListener(this);
         }
 
         private void unwire() {
             view.setOnClickListener(null);
+            view.setOnLongClickListener(null);
             ibExpander.setOnClickListener(null);
             if (tvFlagged != null)
                 tvFlagged.setOnClickListener(null);
@@ -203,8 +203,6 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 ibFlagged.setOnClickListener(null);
             if (ibSync != null)
                 ibSync.setOnClickListener(null);
-            if (listener == null)
-                view.setOnLongClickListener(null);
             if (btnHelp != null)
                 btnHelp.setOnClickListener(null);
         }
@@ -488,6 +486,9 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             if (folder.tbd != null || folder.local)
                 return false;
 
+            if (listener != null)
+                return listener.onFolderLongPress(folder);
+
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
             boolean debug = prefs.getBoolean("debug", false);
@@ -756,10 +757,10 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                                         .setGestureInsetBottomIgnored(true);
                                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                                     @Override
-                                    public void onClick(View view) {
-                                        context.startActivity(
-                                                new Intent(context, ActivitySetup.class)
-                                                        .putExtra("tab", "connection"));
+                                    public void onClick(View v) {
+                                        v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
+                                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                .putExtra("tab", "connection"));
                                     }
                                 });
                                 snackbar.show();
@@ -1426,5 +1427,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
     interface IFolderSelectedListener {
         void onFolderSelected(@NonNull TupleFolderEx folder);
+
+        boolean onFolderLongPress(@NonNull TupleFolderEx folder);
     }
 }

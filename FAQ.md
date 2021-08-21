@@ -4,7 +4,7 @@
 [<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_de.png" width="18" height="18" /> Deutsch](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-de-rDE.md)<br />
 [<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_fr.png" width="18" height="18" /> Français](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-fr-rFR.md)<br />
 [<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_es.png" width="18" height="18" /> Español](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-es-rES.md)<br />
-[<img src="https://github.com/M66B/FairEmail/raw/master/images/outline_translate_black_24dp.png" width="18" height="18" /> Other languages](https://github.com/M66B/FairEmail/blob/master/docs/)
+[&#x1F30E; Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md)
 
 If you have a question, please check the following frequently asked questions first.
 [At the bottom](#user-content-get-support),
@@ -93,6 +93,7 @@ Related questions:
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
+* A [bug in Crowdin](https://crowdin.com/messages/536694) blocks updating FAQ.md (this text) for translation.
 
 <h2><a name="planned-features"></a>Planned features</h2>
 
@@ -160,7 +161,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(20) Can I get a refund?](#user-content-faq20)
 * [(21) How do I enable the notification light?](#user-content-faq21)
 * [(22) What does account/folder error ... mean?](#user-content-faq22)
-* [(23) Why do I get alert .. ?](#user-content-faq23)
+* [(23) Why do I get alert ...?](#user-content-faq23)
 * [(24) What is browse messages on the server?](#user-content-faq24)
 * [(25) Why can't I select/open/save an image, attachment or a file?](#user-content-faq25)
 * [(26) Can I help to translate FairEmail in my own language?](#user-content-faq26)
@@ -177,15 +178,15 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(37) How are passwords stored?](#user-content-faq37)
 * [(39) How can I reduce the battery usage of FairEmail?](#user-content-faq39)
 * [(40) How can I reduce the data usage of FairEmail?](#user-content-faq40)
-* [(41) How can I fix the error 'Handshake failed' ?](#user-content-faq41)
+* [(41) How can I fix the error 'Handshake failed'?](#user-content-faq41)
 * [(42) Can you add a new provider to the list of providers?](#user-content-faq42)
-* [(43) Can you show the original ... ?](#user-content-faq43)
+* [(43) Can you show the original ...?](#user-content-faq43)
 * [(44) Can you show contact photos / identicons in the sent folder?](#user-content-faq44)
-* [(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!' ?](#user-content-faq45)
+* [(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!'?](#user-content-faq45)
 * [(46) Why does the message list keep refreshing?](#user-content-faq46)
-* [(47) How do I solve the error 'No primary account or no drafts folder' ?](#user-content-faq47)
-* [~~(48) How do I solve the error 'No primary account or no archive folder' ?~~](#user-content-faq48)
-* [(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?](#user-content-faq49)
+* [(47) How do I solve the error 'No primary account or no drafts folder'?](#user-content-faq47)
+* [~~(48) How do I solve the error 'No primary account or no archive folder'?~~](#user-content-faq48)
+* [(49) How do I fix 'An outdated app sent a file path instead of a file stream'?](#user-content-faq49)
 * [(50) Can you add an option to synchronize all messages?](#user-content-faq50)
 * [(51) How are folders sorted?](#user-content-faq51)
 * [(52) Why does it take some time to reconnect to an account?](#user-content-faq52)
@@ -232,7 +233,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(94) What does the red/orange stripe at the end of the header mean?](#user-content-faq94)
 * [(95) Why are not all apps shown when selecting an attachment or image?](#user-content-faq95)
 * [(96) Where can I find the IMAP and SMTP settings?](#user-content-faq96)
-* [(97) What is 'cleanup' ?](#user-content-faq97)
+* [(97) What is 'cleanup'?](#user-content-faq97)
 * [(98) Why can I still pick contacts after revoking contacts permissions?](#user-content-faq98)
 * [(99) Can you add a rich text or markdown editor?](#user-content-faq99)
 * [(100) How can I synchronize Gmail categories?](#user-content-faq100)
@@ -252,7 +253,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(114) Can you add an import for the settings of other email apps?](#user-content-faq114)
 * [(115) Can you add email address chips?](#user-content-faq115)
 * [~~(116) How can I show images in messages from trusted senders by default?~~](#user-content-faq116)
-* [(117) Can you help me restore my purchase?](#user-content-faq117)
+* [(117) How can I restore a purchase (on another device) ?](#user-content-faq117)
 * [(118) What does 'Remove tracking parameters' exactly?](#user-content-faq118)
 * [~~(119) Can you add colors to the unified inbox widget?~~](#user-content-faq119)
 * [(120) Why are new message notifications not removed on opening the app?](#user-content-faq120)
@@ -307,6 +308,9 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(169) Why does the app not start automatically?](#user-content-faq169)
 * [(170) Why can't folders be created with POP3?](#user-content-faq170)
 * [(171) How can I delete a contact?](#user-content-faq171)
+* [(172) How can I import contacts?](#user-content-faq172)
+* [(173) What is the difference between Play store / GitHub / F-Droid version?](#user-content-faq173)
+* [(174) Is auto discovery supported?](#user-content-faq174)
 
 [I have another question.](#user-content-get-support)
 
@@ -429,9 +433,9 @@ See also [this FAQ](#user-content-faq16).
 <a name="faq4"></a>
 **(4) How can I use an invalid security certificate / empty password / plain text connection?**
 
-*... Untrusted ... not in certificate ...*
-<br />
-*... Invalid security certificate (Can't verify identity of server) ...*
+*... Untrusted ... not in certificate ...*<br />
+*... Invalid security certificate (Can't verify identity of server) ...*<br />
+*... Chain validation failed ... timestamp check failed ... Certificate expired at ...*<br />
 
 This can be caused by using an incorrect host name, so first double check the host name in the advanced identity/account settings (tap Manual setup).
 Please see the documentation of the email provider about the right host name.
@@ -1249,7 +1253,7 @@ When in doubt, you can ask for [support](#user-content-get-support).
 <br />
 
 <a name="faq23"></a>
-**(23) Why do I get alert ... ?**
+**(23) Why do I get alert ...?**
 
 *General*
 
@@ -1636,7 +1640,7 @@ You can change this in the connection settings.
 <br />
 
 <a name="faq41"></a>
-**(41) How can I fix the error 'Handshake failed' ?**
+**(41) How can I fix the error 'Handshake failed'?**
 
 There are several possible causes, so please read to the end of this answer.
 
@@ -1702,7 +1706,7 @@ See below about how to contact me.
 <br />
 
 <a name="faq43"></a>
-**(43) Can you show the original ... ?**
+**(43) Can you show the original ...?**
 
 Show original, shows the original message as the sender has sent it, including original fonts, colors, margins, etc.
 FairEmail does and will not alter this in any way,
@@ -1720,7 +1724,7 @@ which will *attempt* to make small text more readable.
 <br />
 
 <a name="faq45"></a>
-**(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!' ?**
+**(45) How can I fix 'This key is not available. To use it, you must import it as one of your own!'?**
 
 You'll get the message *This key is not available. To use it, you must import it as one of your own!*
 when trying to decrypt a message with a public key. To fix this you'll need to import the private key.
@@ -1739,7 +1743,7 @@ Note that you shouldn't set the number of days to synchronize messages to more t
 <br />
 
 <a name="faq47"></a>
-**(47) How do I solve the error 'No primary account or no drafts folder' ?**
+**(47) How do I solve the error 'No primary account or no drafts folder'?**
 
 You'll get the error message *No primary account or no drafts folder* when trying to compose a message
 while there is no account set to be the primary account or when there is no drafts folder selected for the primary account.
@@ -1755,7 +1759,7 @@ Please see [this FAQ](#user-content-faq141) for some more information.
 <br />
 
 <a name="faq48"></a>
-**~~(48) How do I solve the error 'No primary account or no archive folder' ?~~**
+**~~(48) How do I solve the error 'No primary account or no archive folder'?~~**
 
 ~~You'll get the error message *No primary account or no archive folder* when searching for messages from another app.
 FairEmail needs to know where to search,
@@ -1764,7 +1768,7 @@ so you'll need to select one account to be the primary account and/or you'll nee
 <br />
 
 <a name="faq49"></a>
-**(49) How do I fix 'An outdated app sent a file path instead of a file stream' ?**
+**(49) How do I fix 'An outdated app sent a file path instead of a file stream'?**
 
 You likely selected or sent an attachment or image with an outdated file manager
 or an outdated app which assumes all apps still have storage permissions.
@@ -1916,7 +1920,7 @@ but even Google's Chrome cannot handle this.
 <br />
 
 <a name="faq60"></a>
-**(60) Did you know ... ?**
+**(60) Did you know ...?**
 
 * Did you know that starred messages can be synchronized/kept always? (this can be enabled in the receive settings)
 * Did you know that you can long press the 'write message' icon to go to the drafts folder?
@@ -2354,7 +2358,7 @@ You'll likely want to disabled [browse on server](#user-content-faq24) too.
 <br />
 
 <a name="faq80"></a>
-**~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE' ?~~**
+**~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE'?~~**
 
 ~~The error message *Unable to load BODYSTRUCTURE* is caused by bugs in the email server,~~
 ~~see [here](https://javaee.github.io/javamail/FAQ#imapserverbug) for more details.~~
@@ -2596,7 +2600,7 @@ The IMAP settings are part of the (custom) account settings and the SMTP setting
 <br />
 
 <a name="faq97"></a>
-**(97) What is 'cleanup' ?**
+**(97) What is 'cleanup'?**
 
 About each four hours FairEmail runs a cleanup job that:
 
@@ -2890,10 +2894,11 @@ Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f4
 
 <a name="faq38"></a>
 <a name="faq117"></a>
-**(117) Can you help me restore my purchase?**
+**(117) How can I restore a purchase (on another device) ?**
 
 First of all, a purchase will be available on all devices logged into the same Google account,
-*if* the app is installed via the same Google account too. You can select the account in the Play store app.
+*if* (this is important) the app is installed via the same Google account too.
+You can select the account in the Play store app by tapping on the avatar at the top right.
 
 Google manages all purchases, so as a developer I have little control over purchases.
 So, basically the only thing I can do, is give some advice:
@@ -3665,6 +3670,8 @@ provided that auto classification is enabled for the folder:
 * *Minimum class probability*: a message will only be moved when the confidence it belongs in a folder is greater than this value (default 15 %)
 * *Minimum class difference*: a message will only be moved when the difference in confidence between one class and the next most likely class is greater than this value (default 50 %)
 
+If all previously classified messages were the same and the message being evaluated is also the same, the confidence would be 100%.
+
 Both conditions must be satisfied before a message will be moved.
 
 Considering the default option values:
@@ -3737,13 +3744,17 @@ Unfortunately, it is not possible to hide messages on the email server too.
 <a name="faq167"></a>
 **(167) How can I use DeepL?**
 
+1. Make sure you have the latest version of the app installed
 1. Check if [DeepL](https://www.deepl.com/) supports your language
 1. Enable DeepL support in the miscellaneous settings
 1. [Subscribe to](https://www.deepl.com/pro#developer) the DeepL API Free or Pro plan (credit card required)
 1. [Copy](https://www.deepl.com/pro-account/plan) the authentication key
-1. In the message composer tap on the faint translate button (文A), select *Configure* and paste the key
+1. In the message composer tap on the translate button (文A) in the top action bar, select *Configure* and paste the key
 
 This feature requires an internet connection.
+
+Note that when reading a message, you can use the horizontal three-dots menu to translate too.
+If you use this frequently, you can configure a button for this.
 
 <br />
 
@@ -3827,6 +3838,68 @@ When a contact is store in the local contact database, you can delete it like th
 * Long press the contact and select to delete it
 
 <br />
+
+<a name="faq172"></a>
+**(172) How can I import contacts?**
+
+Like most Android apps, FairEmail consults the Android address book for contact information.
+
+There is also a local contact database, which is filled with contacts from sent and received messages.
+You can enable/disable this in the send settings of the app.
+
+The Android address book is managed by the Android Contacts app (or a replacement for this app).
+Please see [this article](https://support.google.com/contacts/answer/1069522) about importing contacts to the Android address book.
+
+Note that some vendors, notably Microsoft, try to lock you into their contact (data) storage.
+This is not how it should work on Android, which is more open to sharing information.
+
+Related questions:
+
+* [What are local contacts for?](#user-content-faq84)
+* [Why can I still pick contacts after revoking contacts permissions?](#user-content-faq98)
+* [Can you add calendar/contact/tasks/notes management?](#user-content-faq138)
+* [How can I insert a contact group?](#user-content-faq152)
+* [How can I delete a contact?](#user-content-faq171)
+
+<br />
+
+<a name="faq173"></a>
+**(173) What is the difference between Play store / GitHub / F-Droid version?**
+
+* The Play store version does not support Android Auto, see [this FAQ](#user-content-faq165) for more information
+* The Play store version does not support [Gravatars](https://gravatar.com/), see [here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-85226179) for the reason
+* The Play store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
+* The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases)
+* The GitHub version has some different links and some options have a different default values (more geared to advanced users)
+* The F-Droid build does not include [Google Play Billing](https://developer.android.com/google/play/billing/integrate), so Play store purchases cannot be reused
+* The F-Droid build is supported only if the version number is the same as the the version number of the latest GitHub version, see also [this FAQ](#user-content-faq147)
+
+<br />
+
+<a name="faq174"></a>
+**(174) Is auto discovery supported?**
+
+Yes, multiple methods of auto discovery are available.
+
+The preferred, simplest and fastest method is using DNS records,
+please see see [RFC6186](https://tools.ietf.org/html/rfc6186) and [RFC8314](https://tools.ietf.org/html/rfc8314) for the details.
+
+Example DNS records (SRV=record type, 0=priority, 1=weight, 993/587=port number):
+
+```
+_imaps._tcp SRV 0 1 993 imap.example.com.
+_submission._tcp SRV 0 1 587 smtp.example.com.
+```
+
+[Mozilla's autoconfiguration](https://wiki.mozilla.org/Thunderbird:Autoconfiguration) is supported too,
+but only if the configuration file is accessible via a secure (https) connection.
+
+FairEmail will also check the [MX record](https://en.wikipedia.org/wiki/MX_record) and if common email ports (143/993, 465/587) are open.
+
+There is no auto discovery for POP3.
+
+<br />
+
 
 <h2><a name="get-support"></a>Get support</h2>
 

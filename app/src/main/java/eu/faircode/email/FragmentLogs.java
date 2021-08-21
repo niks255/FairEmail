@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,6 +32,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,14 +41,42 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentLogs extends FragmentBase {
     private RecyclerView rvLog;
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
 
+    private Long account = null;
+    private Long folder = null;
+    private Long message = null;
     private boolean autoScroll = true;
+
     private AdapterLog adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args == null)
+            args = new Bundle();
+
+        account = args.getLong("account", -1L);
+        folder = args.getLong("folder", -1L);
+        message = args.getLong("message", -1L);
+
+        if (account < 0)
+            account = null;
+        if (folder < 0)
+            folder = null;
+        if (message < 0)
+            message = null;
+
+        if (savedInstanceState != null)
+            autoScroll = savedInstanceState.getBoolean("fair:scroll");
+    }
 
     @Override
     @Nullable
@@ -84,13 +114,13 @@ public class FragmentLogs extends FragmentBase {
         long from = new Date().getTime() - 24 * 3600 * 1000L;
 
         DB db = DB.getInstance(getContext());
-        db.log().liveLogs(from).observe(getViewLifecycleOwner(), new Observer<List<EntityLog>>() {
+        db.log().liveLogs(from, null).observe(getViewLifecycleOwner(), new Observer<List<EntityLog>>() {
             @Override
             public void onChanged(List<EntityLog> logs) {
                 if (logs == null)
                     logs = new ArrayList<>();
 
-                adapter.set(logs);
+                adapter.set(logs, account, folder, message, getTypes());
                 if (autoScroll)
                     rvLog.scrollToPosition(0);
 
@@ -98,6 +128,12 @@ public class FragmentLogs extends FragmentBase {
                 grpReady.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("fair:scroll", autoScroll);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -111,8 +147,13 @@ public class FragmentLogs extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean main_log = prefs.getBoolean("main_log", true);
 
+        boolean all = (account == null && folder == null && message == null);
+
         menu.findItem(R.id.menu_enabled).setChecked(main_log);
         menu.findItem(R.id.menu_auto_scroll).setChecked(autoScroll);
+        menu.findItem(R.id.menu_show).setVisible(all);
+        menu.findItem(R.id.menu_clear).setVisible(all);
+
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -121,14 +162,16 @@ public class FragmentLogs extends FragmentBase {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_enabled) {
             boolean enabled = !item.isChecked();
-            onMenuEnable(enabled);
             item.setChecked(enabled);
+            onMenuEnable(enabled);
             return true;
         } else if (itemId == R.id.menu_auto_scroll) {
             boolean enabled = !item.isChecked();
-            onMenuAutoScoll(enabled);
             item.setChecked(enabled);
+            onMenuAutoScoll(enabled);
             return true;
+        } else if (itemId == R.id.menu_show) {
+            onMenuShow();
         } else if (itemId == R.id.menu_clear) {
             onMenuClear();
             return true;
@@ -143,6 +186,46 @@ public class FragmentLogs extends FragmentBase {
 
     private void onMenuAutoScoll(boolean enabled) {
         autoScroll = enabled;
+    }
+
+    private void onMenuShow() {
+        String[] titles = new String[EntityLog.Type.values().length];
+        boolean[] states = new boolean[EntityLog.Type.values().length];
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        for (int i = 0; i < EntityLog.Type.values().length; i++) {
+            EntityLog.Type type = EntityLog.Type.values()[i];
+            titles[i] = type.toString();
+            String name = type.toString().toLowerCase(Locale.ROOT);
+            states[i] = prefs.getBoolean("show_log_" + name, true);
+        }
+
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.title_unhide)
+                .setMultiChoiceItems(titles, states, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int pos, boolean checked) {
+                        EntityLog.Type type = EntityLog.Type.values()[pos];
+                        prefs.edit().putBoolean(getKey(type), checked).apply();
+                        adapter.setTypes(getTypes());
+                    }
+                })
+                .setPositiveButton(R.string.title_setup_done, null)
+                .show();
+    }
+
+    private List<EntityLog.Type> getTypes() {
+        List<EntityLog.Type> types = new ArrayList<>();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        for (EntityLog.Type type : EntityLog.Type.values())
+            if (prefs.getBoolean(getKey(type), true))
+                types.add(type);
+
+        return types;
+    }
+
+    private String getKey(EntityLog.Type type) {
+        return "show_log_" + type.toString().toLowerCase(Locale.ROOT);
     }
 
     private void onMenuClear() {

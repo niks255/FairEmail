@@ -689,6 +689,10 @@ public class MessageHelper {
         // Build html body
         Document document = JsoupEx.parse(message.getFile(context));
 
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang
+        if (message.language != null)
+            document.body().attr("lang", message.language);
+
         // When sending message
         if (identity != null && send) {
             if (auto_link)
@@ -1553,6 +1557,10 @@ public class MessageHelper {
     }
 
     Long getReceivedHeader() throws MessagingException {
+        return getReceivedHeader(null);
+    }
+
+    Long getReceivedHeader(Long before) throws MessagingException {
         ensureHeaders();
 
         // https://tools.ietf.org/html/rfc5321#section-4.4
@@ -1561,17 +1569,24 @@ public class MessageHelper {
         if (received == null || received.length == 0)
             return null;
 
-        String last = MimeUtility.unfold(received[0]);
-        int semi = last.lastIndexOf(';');
-        if (semi < 0)
-            return null;
+        // First header is last added header
+        for (int i = 0; i < received.length; i++) {
+            String header = MimeUtility.unfold(received[i]);
+            int semi = header.lastIndexOf(';');
+            if (semi < 0)
+                return null;
 
-        MailDateFormat mdf = new MailDateFormat();
-        Date date = mdf.parse(last, new ParsePosition(semi + 1));
-        if (date == null)
-            return null;
+            MailDateFormat mdf = new MailDateFormat();
+            Date date = mdf.parse(header, new ParsePosition(semi + 1));
+            if (date == null)
+                return null;
 
-        return date.getTime();
+            long time = date.getTime();
+            if (before == null || time < before)
+                return time;
+        }
+
+        return null;
     }
 
     Long getSent() throws MessagingException {
@@ -1582,6 +1597,21 @@ public class MessageHelper {
             return null;
 
         return sent.getTime();
+    }
+
+    Long getResent() throws MessagingException {
+        ensureHeaders();
+
+        String resent = imessage.getHeader("Resent-Date", null);
+        if (resent == null)
+            return null;
+
+        MailDateFormat mdf = new MailDateFormat();
+        Date date = mdf.parse(resent, new ParsePosition(0));
+        if (date == null)
+            return null;
+
+        return date.getTime();
     }
 
     String getHeaders() throws MessagingException {

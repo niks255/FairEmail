@@ -22,6 +22,7 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,7 +55,9 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
 
     private int colorUnread;
     private int textColorSecondary;
+    private int colorWarning;
 
+    private boolean expanded = true;
     private List<TupleAccountEx> items = new ArrayList<>();
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -65,6 +68,7 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private View view;
         private ImageView ivItem;
+        private ImageView ivBadge;
         private TextView tvItem;
         private TextView tvItemExtra;
         private ImageView ivExtra;
@@ -75,6 +79,7 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
 
             view = itemView.findViewById(R.id.clItem);
             ivItem = itemView.findViewById(R.id.ivItem);
+            ivBadge = itemView.findViewById(R.id.ivBadge);
             tvItem = itemView.findViewById(R.id.tvItem);
             tvItemExtra = itemView.findViewById(R.id.tvItemExtra);
             ivExtra = itemView.findViewById(R.id.ivExtra);
@@ -107,6 +112,7 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
                 ivItem.clearColorFilter();
             else
                 ivItem.setColorFilter(account.color);
+            ivBadge.setVisibility(account.unseen == 0 || expanded ? View.GONE : View.VISIBLE);
 
             if (account.unseen == 0)
                 tvItem.setText(account.name);
@@ -116,32 +122,31 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
 
             tvItem.setTextColor(account.unseen == 0 ? textColorSecondary : colorUnread);
             tvItem.setTypeface(account.unseen == 0 ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD);
+            tvItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
             tvItemExtra.setText(account.last_connected == null ? null : TF.format(account.last_connected));
+            tvItemExtra.setVisibility(account.last_connected != null && expanded ? View.VISIBLE : View.GONE);
 
             ivExtra.setVisibility(View.GONE);
 
             Integer percent = account.getQuotaPercentage();
 
             if (account.error != null) {
-                ivWarning.setEnabled(false);
                 ivWarning.setImageResource(R.drawable.twotone_warning_24);
-                ivWarning.setVisibility(View.VISIBLE);
+                ivWarning.setVisibility(expanded ? View.VISIBLE : View.GONE);
+                view.setBackgroundColor(expanded ? Color.TRANSPARENT : colorWarning);
             } else if (percent != null && percent > QUOTA_WARNING) {
-                ivWarning.setEnabled(true);
                 ivWarning.setImageResource(R.drawable.twotone_disc_full_24);
-                ivWarning.setVisibility(View.VISIBLE);
-            } else
+                ivWarning.setVisibility(expanded ? View.VISIBLE : View.GONE);
+                view.setBackgroundColor(expanded ? Color.TRANSPARENT : colorWarning);
+            } else {
                 ivWarning.setVisibility(View.GONE);
+                view.setBackgroundColor(Color.TRANSPARENT);
+            }
         }
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.ivWarning) {
-                ToastEx.makeText(context, R.string.title_legend_quota, Toast.LENGTH_LONG).show();
-                return;
-            }
-
             int pos = getAdapterPosition();
             if (pos == RecyclerView.NO_POSITION)
                 return;
@@ -149,6 +154,11 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
             TupleAccountEx account = items.get(pos);
             if (account == null)
                 return;
+
+            if (v.getId() == R.id.ivWarning && account.error == null) {
+                ToastEx.makeText(context, R.string.title_legend_quota, Toast.LENGTH_LONG).show();
+                return;
+            }
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
             lbm.sendBroadcast(
@@ -211,13 +221,14 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
         this.colorUnread = (highlight_unread ? colorHighlight : Helper.resolveColor(context, R.attr.colorUnread));
         this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
+        this.colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
 
         this.TF = Helper.getTimeInstance(context, SimpleDateFormat.SHORT);
 
         setHasStableIds(true);
     }
 
-    public void set(@NonNull List<TupleAccountEx> accounts) {
+    public void set(@NonNull List<TupleAccountEx> accounts, boolean expanded) {
         Log.i("Set nav accounts=" + accounts.size());
 
         if (accounts.size() > 0)
@@ -225,7 +236,8 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
 
         DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffCallback(items, accounts), false);
 
-        items = accounts;
+        this.expanded = expanded;
+        this.items = accounts;
 
         diff.dispatchUpdatesTo(new ListUpdateCallback() {
             @Override
@@ -249,6 +261,11 @@ public class AdapterNavAccount extends RecyclerView.Adapter<AdapterNavAccount.Vi
             }
         });
         diff.dispatchUpdatesTo(this);
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+        notifyDataSetChanged();
     }
 
     private static class DiffCallback extends DiffUtil.Callback {

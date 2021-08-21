@@ -19,10 +19,14 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
+import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
+import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
+import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -49,6 +53,7 @@ import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainAliasCallback;
 import android.security.KeyChainException;
+import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -62,6 +67,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
@@ -116,7 +122,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -136,9 +141,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
-
-import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
-import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 
 public class Helper {
     private static Boolean hasPlayStore = null;
@@ -172,21 +174,6 @@ public class Helper {
                     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
                     ")+"
     );
-
-    // https://developer.android.com/guide/topics/media/media-formats#image-formats
-    static final List<String> IMAGE_TYPES = Collections.unmodifiableList(Arrays.asList(
-            "image/bmp",
-            "image/gif",
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "image/webp"
-    ));
-
-    static final List<String> IMAGE_TYPES8 = Collections.unmodifiableList(Arrays.asList(
-            "image/heic",
-            "image/heif"
-    ));
 
     private static final ExecutorService executor = getBackgroundExecutor(1, "helper");
 
@@ -549,6 +536,34 @@ public class Helper {
             }
     }
 
+    static boolean isAccessibilityEnabled(Context context) {
+        try {
+            AccessibilityManager am =
+                    (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+            return (am != null && am.isEnabled());
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
+    static String getStandbyBucketName(int bucket) {
+        switch (bucket) {
+            case UsageStatsManager.STANDBY_BUCKET_ACTIVE:
+                return "active";
+            case UsageStatsManager.STANDBY_BUCKET_WORKING_SET:
+                return "workingset";
+            case UsageStatsManager.STANDBY_BUCKET_FREQUENT:
+                return "frequent";
+            case UsageStatsManager.STANDBY_BUCKET_RARE:
+                return "rare";
+            case UsageStatsManager.STANDBY_BUCKET_RESTRICTED:
+                return "restricted";
+            default:
+                return Integer.toString(bucket);
+        }
+    }
+
     // View
 
     static Intent getChooser(Context context, Intent intent) {
@@ -804,12 +819,33 @@ public class Helper {
             Intent intent = new Intent(Intent.ACTION_SEND);
             //intent.setPackage(BuildConfig.APPLICATION_ID);
             intent.setType("text/plain");
+
             try {
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{Log.myAddress().getAddress()});
             } catch (UnsupportedEncodingException ex) {
                 Log.w(ex);
             }
+
             intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.title_issue_subject, version));
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String language = prefs.getString("language", null);
+            String uuid = prefs.getString("uuid", null);
+            Locale slocale = Resources.getSystem().getConfiguration().locale;
+
+            String html = "<br><br>";
+
+            html += "<p style=\"font-size:small;\">";
+            html += "Locale: " + Html.escapeHtml(slocale.toString()) + "<br>";
+            if (language != null)
+                html += "Language: " + Html.escapeHtml(language) + "<br>";
+            if (uuid != null)
+                html += "UUID: " + Html.escapeHtml(uuid) + "<br>";
+            html += "</p>";
+
+            intent.putExtra(Intent.EXTRA_TEXT, HtmlHelper.getText(context, html));
+            intent.putExtra(Intent.EXTRA_HTML_TEXT, html);
+
             return intent;
         } else {
             if (Helper.hasValidFingerprint(context))
@@ -1102,6 +1138,15 @@ public class Helper {
             return;
 
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    static void hideKeyboard(Activity activity) {
+        if (activity == null)
+            return;
+        View focused = activity.getCurrentFocus();
+        if (focused == null)
+            return;
+        hideKeyboard(focused);
     }
 
     // Formatting
@@ -1536,14 +1581,6 @@ public class Helper {
         //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(initial));
     }
 
-    static boolean isImage(String mimeType) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            if (IMAGE_TYPES8.contains(mimeType))
-                return true;
-
-        return IMAGE_TYPES.contains(mimeType);
-    }
-
     // Cryptography
 
     static String sha256(String data) throws NoSuchAlgorithmException {
@@ -1648,10 +1685,13 @@ public class Helper {
     static void authenticate(final FragmentActivity activity, final LifecycleOwner owner,
                              Boolean enabled, final
                              Runnable authenticated, final Runnable cancelled) {
+        Log.i("Authenticate " + activity);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String pin = prefs.getString("pin", null);
 
         if (enabled != null || TextUtils.isEmpty(pin)) {
+            Log.i("Authenticate biometric enabled=" + enabled);
             BiometricPrompt.PromptInfo.Builder info = new BiometricPrompt.PromptInfo.Builder()
                     .setTitle(activity.getString(enabled == null ? R.string.app_name : R.string.title_setup_biometrics));
 
@@ -1672,7 +1712,7 @@ public class Helper {
                     new BiometricPrompt.AuthenticationCallback() {
                         @Override
                         public void onAuthenticationError(final int errorCode, @NonNull final CharSequence errString) {
-                            Log.w("Biometric error " + errorCode + ": " + errString);
+                            Log.w("Authenticate biometric error " + errorCode + ": " + errString);
 
                             if (errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON &&
                                     errorCode != BiometricPrompt.ERROR_CANCELED &&
@@ -1691,14 +1731,14 @@ public class Helper {
 
                         @Override
                         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                            Log.i("Biometric succeeded");
+                            Log.i("Authenticate biometric succeeded");
                             setAuthenticated(activity);
                             ApplicationEx.getMainHandler().post(authenticated);
                         }
 
                         @Override
                         public void onAuthenticationFailed() {
-                            Log.w("Biometric failed");
+                            Log.w("Authenticate biometric failed");
                             ApplicationEx.getMainHandler().post(cancelled);
                         }
                     });
@@ -1721,11 +1761,13 @@ public class Helper {
             owner.getLifecycle().addObserver(new LifecycleObserver() {
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 public void onDestroy() {
+                    Log.i("Authenticate destroyed");
                     ApplicationEx.getMainHandler().post(cancelPrompt);
                 }
             });
 
         } else {
+            Log.i("Authenticate PIN");
             final View dview = LayoutInflater.from(activity).inflate(R.layout.dialog_pin_ask, null);
             final EditText etPin = dview.findViewById(R.id.etPin);
 
@@ -1738,23 +1780,28 @@ public class Helper {
                             String pin = prefs.getString("pin", "");
                             String entered = etPin.getText().toString();
 
+                            Log.i("Authenticate PIN ok=" + pin.equals(entered));
                             if (pin.equals(entered)) {
                                 setAuthenticated(activity);
                                 ApplicationEx.getMainHandler().post(authenticated);
-                            } else
+                            } else {
                                 ApplicationEx.getMainHandler().post(cancelled);
+                            }
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Log.i("Authenticate PIN cancelled");
                             ApplicationEx.getMainHandler().post(cancelled);
                         }
                     })
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            ApplicationEx.getMainHandler().post(cancelled);
+                            Log.i("Authenticate PIN dismissed");
+                            if (shouldAuthenticate(activity)) // Some Android versions call dismiss on OK
+                                ApplicationEx.getMainHandler().post(cancelled);
                         }
                     })
                     .create();
@@ -1820,11 +1867,14 @@ public class Helper {
     }
 
     static void setAuthenticated(Context context) {
+        Date now = new Date();
+        Log.i("Authenticated now=" + now);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putLong("last_authentication", new Date().getTime()).apply();
+        prefs.edit().putLong("last_authentication", now.getTime()).apply();
     }
 
     static void clearAuthentication(Context context) {
+        Log.i("Authenticate clear");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().remove("last_authentication").apply();
     }

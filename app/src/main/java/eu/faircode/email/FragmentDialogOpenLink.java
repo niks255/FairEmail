@@ -30,7 +30,9 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -38,11 +40,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -57,6 +61,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import java.net.IDN;
@@ -112,12 +117,13 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
     private TextView tvOwner;
     private Group grpOwner;
     private Button btnSettings;
+    private Button btnDefault;
     private TextView tvReset;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        final Uri uri = getArguments().getParcelable("uri");
+        Uri _uri = getArguments().getParcelable("uri");
         String _title = getArguments().getString("title");
         if (_title != null)
             _title = _title.replace("\uFFFC", ""); // Object replacement character
@@ -127,9 +133,32 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
 
         final Context context = getContext();
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean check_links_dbl = prefs.getBoolean("check_links_dbl", BuildConfig.PLAY_STORE_RELEASE);
+        boolean disconnect_links = prefs.getBoolean("disconnect_links", true);
 
         // Preload web view
         Helper.customTabsWarmup(context);
+
+        final Uri uri;
+        if (_uri.getScheme() == null) {
+            String url = _uri.toString();
+            if (Helper.EMAIL_ADDRESS.matcher(url).matches())
+                uri = Uri.parse("mailto:" + _uri.toString());
+            else if (android.util.Patterns.PHONE.matcher(url).matches())
+                // Alternative: PhoneNumberUtils.isGlobalPhoneNumber()
+                uri = Uri.parse("tel:" + _uri.toString());
+            else {
+                Uri g = Uri.parse(URLUtil.guessUrl(url));
+                String scheme = g.getScheme();
+                if (scheme != null) {
+                    if ("http".equals(scheme))
+                        scheme = "https";
+                    uri = Uri.parse(scheme + "://" + _uri.toString());
+                } else
+                    uri = _uri;
+            }
+        } else
+            uri = _uri;
 
         // Process link
         final Uri sanitized;
@@ -142,9 +171,12 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
 
         // Process title
         final Uri uriTitle;
-        if (title != null && PatternsCompat.WEB_URL.matcher(title).matches())
-            uriTitle = Uri.parse(title.contains("://") ? title : "http://" + title);
-        else
+        if (title != null && PatternsCompat.WEB_URL.matcher(title).matches()) {
+            String t = title.replaceAll("\\s+", "");
+            Uri u = Uri.parse(title.contains("://") ? t : "http://" + t);
+            String host = u.getHost(); // Capture1.PNG
+            uriTitle = (UriHelper.hasParentDomain(context, host) ? u : null);
+        } else
             uriTitle = null;
 
         // Get views
@@ -154,11 +186,12 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         final ImageButton ibDifferent = dview.findViewById(R.id.ibDifferent);
         final EditText etLink = dview.findViewById(R.id.etLink);
         final TextView tvLink = dview.findViewById(R.id.tvLink);
+        final ImageButton ibSearch = dview.findViewById(R.id.ibSearch);
+        final ImageButton ibShare = dview.findViewById(R.id.ibShare);
+        final ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
         final TextView tvSuspicious = dview.findViewById(R.id.tvSuspicious);
         final TextView tvDisconnect = dview.findViewById(R.id.tvDisconnect);
         final TextView tvDisconnectCategories = dview.findViewById(R.id.tvDisconnectCategories);
-        final ImageButton ibShare = dview.findViewById(R.id.ibShare);
-        final ImageButton ibCopy = dview.findViewById(R.id.ibCopy);
         final CheckBox cbSecure = dview.findViewById(R.id.cbSecure);
         final CheckBox cbSanitize = dview.findViewById(R.id.cbSanitize);
         final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
@@ -172,6 +205,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         tvOwner = dview.findViewById(R.id.tvOwner);
         grpOwner = dview.findViewById(R.id.grpOwner);
         btnSettings = dview.findViewById(R.id.btnSettings);
+        btnDefault = dview.findViewById(R.id.btnDefault);
         tvReset = dview.findViewById(R.id.tvReset);
 
         final Group grpDifferent = dview.findViewById(R.id.grpDifferent);
@@ -215,8 +249,6 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
 
                 cbSecure.setText(
                         secure ? R.string.title_link_https : R.string.title_link_http);
-                cbSecure.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        0, 0, secure ? 0 : R.drawable.twotone_http_24, 0);
                 cbSecure.setTextColor(Helper.resolveColor(context,
                         secure ? android.R.attr.textColorSecondary : R.attr.colorWarning));
                 cbSecure.setTypeface(
@@ -236,6 +268,30 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                     return true;
                 } else
                     return false;
+            }
+        });
+
+        MailTo mailto = null;
+        if ("mailto".equals(uri.getScheme()))
+            try {
+                mailto = MailTo.parse(uri);
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+        ibSearch.setVisibility(
+                mailto != null && !TextUtils.isEmpty(mailto.getTo())
+                        ? View.VISIBLE : View.GONE);
+        ibSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+
+                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+                lbm.sendBroadcast(
+                        new Intent(ActivityView.ACTION_SEARCH_ADDRESS)
+                                .putExtra("account", -1L)
+                                .putExtra("folder", -1L)
+                                .putExtra("query", MailTo.parse(uri).getTo()));
             }
         });
 
@@ -360,11 +416,17 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent privacy = new Intent(v.getContext(), ActivitySetup.class)
-                        .setAction("privacy")
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("tab", "privacy");
-                v.getContext().startActivity(privacy);
+                v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("tab", "privacy"));
+            }
+        });
+
+        final Intent manage = new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS);
+        btnDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(manage);
             }
         });
 
@@ -403,11 +465,35 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             tvSuspicious.setVisibility(Helper.isSingleScript(host) ? View.GONE : View.VISIBLE);
         }
 
+        if (check_links_dbl &&
+                tvSuspicious.getVisibility() != View.VISIBLE) {
+            Bundle args = new Bundle();
+            args.putParcelable("uri", uri);
+
+            new SimpleTask<Boolean>() {
+                @Override
+                protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                    Uri uri = args.getParcelable("uri");
+                    return DnsBlockList.isJunk(context, uri);
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Boolean blocklist) {
+                    if (blocklist != null && blocklist)
+                        tvSuspicious.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    // Ignored
+                }
+            }.execute(this, args, "link:blocklist");
+        }
+
         grpDifferent.setVisibility(
                 host == null || thost == null || host.equalsIgnoreCase(thost)
                         ? View.GONE : View.VISIBLE);
 
-        boolean disconnect_links = prefs.getBoolean("disconnect_links", true);
         List<String> categories = null;
         if (disconnect_links)
             categories = DisconnectBlacklist.getCategories(uri.getHost());
@@ -454,12 +540,14 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
     }
 
     private void setMore(boolean show) {
+        boolean n = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
         ibMore.setImageLevel(show ? 0 : 1);
         btnOwner.setVisibility(show ? View.VISIBLE : View.GONE);
         pbWait.setVisibility(View.GONE);
         tvOwnerRemark.setVisibility(show ? View.VISIBLE : View.GONE);
         grpOwner.setVisibility(View.GONE);
         btnSettings.setVisibility(show ? View.VISIBLE : View.GONE);
+        btnDefault.setVisibility(show && n ? View.VISIBLE : View.GONE);
         tvReset.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
@@ -577,6 +665,8 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
 
         try {
             int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
+            int textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
+            int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
 
             if ("tel".equals(scheme)) {
                 // tel://+123%2045%20678%123456
@@ -584,9 +674,22 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                 text = "tel://" + host;
             } else if ("mailto".equals(scheme)) {
                 if (host == null) {
-                    MailTo email = MailTo.parse(uri.toString());
+                    MailTo email = MailTo.parse(uri);
                     host = UriHelper.getEmailDomain(email.getTo());
                 }
+            }
+
+            if (scheme != null) {
+                int index = text.indexOf(scheme);
+                if (index >= 0)
+                    if ("http".equals(scheme)) {
+                        ssb.setSpan(new ForegroundColorSpan(colorWarning),
+                                index, index + scheme.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
+                                index, index + scheme.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    } else
+                        ssb.setSpan(new ForegroundColorSpan(textColorSecondary),
+                                index, index + scheme.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             if (host != null) {

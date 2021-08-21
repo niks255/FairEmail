@@ -55,12 +55,43 @@ public class EntityLog {
     @NonNull
     public Long time;
     @NonNull
+    public Type type = Type.General;
+    public Long account;
+    public Long folder;
+    public Long message;
+    @NonNull
     public String data;
+
+    enum Type {General, Statistics, Scheduling, Network, Account, Protocol, Classification, Notification, Rules}
 
     private static final ExecutorService executor =
             Helper.getBackgroundExecutor(1, "log");
 
     static void log(final Context context, String data) {
+        log(context, Type.General, data);
+    }
+
+    static void log(final Context context, @NonNull Type type, EntityAccount account, String data) {
+        log(context, type, account.id, null, null, account.name + " " + data);
+    }
+
+    static void log(final Context context, @NonNull Type type, EntityAccount account, EntityFolder folder, String data) {
+        log(context, type, account.id, folder.id, null, account.name + "/" + folder.name + " " + data);
+    }
+
+    static void log(final Context context, @NonNull Type type, EntityFolder folder, String data) {
+        log(context, type, folder.account, folder.id, null, folder.name + " " + data);
+    }
+
+    static void log(final Context context, @NonNull Type type, EntityMessage message, String data) {
+        log(context, type, message.account, message.folder, message.id, data);
+    }
+
+    static void log(final Context context, @NonNull Type type, String data) {
+        log(context, type, null, null, null, data);
+    }
+
+    static void log(final Context context, @NonNull Type type, Long account, Long folder, Long message, String data) {
         Log.i(data);
 
         if (context == null)
@@ -73,6 +104,10 @@ public class EntityLog {
 
         final EntityLog entry = new EntityLog();
         entry.time = new Date().getTime();
+        entry.type = type;
+        entry.account = account;
+        entry.folder = folder;
+        entry.message = message;
         entry.data = data;
 
         final DB db = DB.getInstance(context);

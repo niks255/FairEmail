@@ -87,17 +87,18 @@ public class MessageClassifier {
                 wordClassFrequency.put(folder.account, new HashMap<>());
 
             // Classify texts
-            String classified = classify(folder.account, folder.name, texts, target == null, context);
+            String classified = classify(message, folder.name, texts, target == null, context);
 
             long elapsed = new Date().getTime() - start;
-            EntityLog.log(context, "Classifier" +
-                    " folder=" + folder.name +
-                    " message=" + message.id +
-                    "@" + new Date(message.received) +
-                    ":" + message.subject +
-                    " class=" + classified +
-                    " re=" + message.auto_classified +
-                    " elapsed=" + elapsed);
+            EntityLog.log(context, EntityLog.Type.Classification, message,
+                    "Classifier" +
+                            " folder=" + folder.name +
+                            " message=" + message.id +
+                            "@" + new Date(message.received) +
+                            ":" + message.subject +
+                            " class=" + classified +
+                            " re=" + message.auto_classified +
+                            " elapsed=" + elapsed);
 
             // Auto classify message
             if (classified != null &&
@@ -174,13 +175,26 @@ public class MessageClassifier {
         return texts;
     }
 
-    private static String classify(long account, @NonNull String currentClass, @NonNull List<String> texts, boolean added, @NonNull Context context) {
+    private static String classify(EntityMessage message, @NonNull String currentClass, @NonNull List<String> texts, boolean added, @NonNull Context context) {
         State state = new State();
+
+        // Check classes
+        DB db = DB.getInstance(context);
+        for (String clazz : new ArrayList<>(classMessages.get(message.account).keySet())) {
+            EntityFolder folder = db.folder().getFolderByName(message.account, clazz);
+            if (folder == null) {
+                EntityLog.log(context, EntityLog.Type.Classification, message,
+                        "Classifier deleting folder class=" + message.account + ":" + clazz);
+                classMessages.get(message.account).remove(clazz);
+                for (String word : wordClassFrequency.get(message.account).keySet())
+                    wordClassFrequency.get(message.account).get(word).remove(clazz);
+            }
+        }
 
         Log.i("Classifier texts=" + texts.size());
         for (String text : texts) {
             // First word
-            processWord(account, added, null, state);
+            processWord(message.account, added, null, state);
 
             // Process words
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
@@ -189,7 +203,7 @@ public class MessageClassifier {
                 int start = boundary.first();
                 for (int end = boundary.next(); end != java.text.BreakIterator.DONE; end = boundary.next()) {
                     String word = text.substring(start, end);
-                    processWord(account, added, word, state);
+                    processWord(message.account, added, word, state);
                     if (state.words.size() >= MAX_WORDS)
                         break;
                     start = end;
@@ -201,7 +215,7 @@ public class MessageClassifier {
                 int start = boundary.first();
                 for (int end = boundary.next(); end != android.icu.text.BreakIterator.DONE; end = boundary.next()) {
                     String word = text.substring(start, end);
-                    processWord(account, added, word, state);
+                    processWord(message.account, added, word, state);
                     if (state.words.size() >= MAX_WORDS)
                         break;
                     start = end;
@@ -210,19 +224,19 @@ public class MessageClassifier {
         }
 
         // final word
-        processWord(account, added, null, state);
+        processWord(message.account, added, null, state);
 
         int maxMessages = 0;
-        for (String clazz : classMessages.get(account).keySet()) {
-            int count = classMessages.get(account).get(clazz);
+        for (String clazz : classMessages.get(message.account).keySet()) {
+            int count = classMessages.get(message.account).get(clazz);
             if (count > maxMessages)
                 maxMessages = count;
         }
 
-        updateFrequencies(account, currentClass, added, state);
+        updateFrequencies(message.account, currentClass, added, state);
 
         if (maxMessages == 0) {
-            Log.i("Classifier no messages account=" + account);
+            Log.i("Classifier no messages account=" + message.account);
             return null;
         }
 
@@ -230,25 +244,19 @@ public class MessageClassifier {
             return null;
 
         // Calculate chance per class
-        DB db = DB.getInstance(context);
         int words = state.words.size() - texts.size() - 1;
         List<Chance> chances = new ArrayList<>();
         for (String clazz : state.classStats.keySet()) {
-            EntityFolder folder = db.folder().getFolderByName(account, clazz);
-            if (folder == null) {
-                Log.w("Classifier no folder class=" + account + ":" + clazz);
-                continue;
-            }
-
             Stat stat = state.classStats.get(clazz);
 
             double chance = stat.totalFrequency / maxMessages / words;
             Chance c = new Chance(clazz, chance);
             chances.add(c);
-            EntityLog.log(context, "Classifier " + c +
-                    " frequency=" + (Math.round(stat.totalFrequency * 100.0) / 100.0) + "/" + maxMessages + " msgs" +
-                    " matched=" + stat.matchedWords + "/" + words + " words" +
-                    " text=" + TextUtils.join(", ", stat.words));
+            EntityLog.log(context, EntityLog.Type.Classification, message,
+                    "Classifier " + c +
+                            " frequency=" + (Math.round(stat.totalFrequency * 100.0) / 100.0) + "/" + maxMessages + " msgs" +
+                            " matched=" + stat.matchedWords + "/" + words + " words" +
+                            " text=" + TextUtils.join(", ", stat.words));
         }
 
         if (BuildConfig.DEBUG)

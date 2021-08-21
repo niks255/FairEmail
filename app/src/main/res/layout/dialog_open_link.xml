@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp"
-            android:labelFor="@+id/etLink"
             android:maxLines="2"
             android:text="Link title"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -82,9 +81,21 @@
             android:singleLine="true"
             android:text="Original link"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintEnd_toStartOf="@+id/ibShare"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etLink" />
+
+        <ImageButton
+            android:id="@+id/ibSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/title_search"
+            android:tooltipText="@string/title_search"
+            app:layout_constraintEnd_toStartOf="@+id/ibShare"
+            app:layout_constraintTop_toBottomOf="@id/tvLink"
+            app:srcCompat="@drawable/twotone_search_24" />
 
         <ImageButton
             android:id="@+id/ibShare"
@@ -93,8 +104,9 @@
             android:layout_marginEnd="12dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_share"
+            android:tooltipText="@string/title_share"
             app:layout_constraintEnd_toStartOf="@+id/ibCopy"
-            app:layout_constraintTop_toBottomOf="@id/etLink"
+            app:layout_constraintTop_toBottomOf="@id/tvLink"
             app:srcCompat="@drawable/twotone_share_24" />
 
         <ImageButton
@@ -103,8 +115,9 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_clipboard_copy"
+            android:tooltipText="@string/title_clipboard_copy"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etLink"
+            app:layout_constraintTop_toBottomOf="@id/tvLink"
             app:srcCompat="@drawable/twotone_file_copy_24" />
 
         <eu.faircode.email.FixedTextView
@@ -158,7 +171,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:drawableEnd="@drawable/twotone_http_24"
             android:drawablePadding="6dp"
             android:text="@string/title_link_http"
             android:textColor="?attr/colorWarning"
@@ -286,6 +298,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvOwner" />
 
+        <Button
+            android:id="@+id/btnDefault"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawableEnd="@drawable/twotone_android_24"
+            android:drawablePadding="6dp"
+            android:text="@string/title_default_apps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnSettings" />
+
         <eu.faircode.email.FixedTextView
             android:id="@+id/tvReset"
             android:layout_width="wrap_content"
@@ -296,11 +320,11 @@
             android:drawableTint="?android:textColorLink"
             android:focusable="false"
             android:text="@string/title_reset_open"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="?android:textColorLink"
             android:textIsSelectable="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSettings" />
+            app:layout_constraintTop_toBottomOf="@id/btnDefault" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grpDifferent"

@@ -335,9 +335,6 @@
     <string name="title_advanced_caption_message">Zpráva</string>
     <string name="title_advanced_caption_message_header">Hlavička zprávy</string>
     <string name="title_advanced_caption_message_body">Tělo zprávy</string>
-    <string name="title_advanced_portrait2">Dělené rozvržení v režimu na výšku</string>
-    <string name="title_advanced_landscape">Dvou-panelové rozvržení v režimu na šířku</string>
-    <string name="title_advanced_landscape3">Automaticky zobrazit navigační menu v režimu na šířku</string>
     <string name="title_advanced_startup">Na úvodní obrazovce zobrazit</string>
     <string name="title_advanced_cards">Použít styl karet namísto tabulkového zobrazení</string>
     <string name="title_advanced_cards_beige">Použít béžové pozadí při zobrazení stylem karet (pouze světlé motivy)</string>
@@ -383,7 +380,6 @@
     <string name="title_advanced_addresses">Automaticky zobrazit detaily adresy</string>
     <string name="title_advanced_attachments_alt">Zobrazit přílohy pod textem zprávy</string>
     <string name="title_advanced_thumbnails">Zobrazit náhledy obrázků pod textem zprávy</string>
-    <string name="title_advanced_message_text_zoom">Výchozí zvětšení textu zprávy</string>
     <string name="title_advanced_overview_mode">Přizpůsobit zobrazení původních zpráv šířce obrazovky</string>
     <string name="title_advanced_contrast">Použít vysoký kontrast pro text zprávy</string>
     <string name="title_advanced_monospaced">Automaticky použít neproporcionální písmo pro text zprávy</string>
@@ -841,6 +837,8 @@
     <string name="title_share_as_html">Sdílet jako HTML</string>
     <string name="title_raw_save">Uložit zdrojovou zprávu</string>
     <string name="title_raw_send">Odeslat jako přílohu</string>
+    <string name="title_raw_send_message">Zpráva</string>
+    <string name="title_raw_send_thread">Konverzace</string>
     <string name="title_manage_keywords">Spravovat klíčová slova</string>
     <string name="title_manage_labels">Spravovat Gmail štítky</string>
     <string name="title_add_keyword">Přidat klíčové slovo</string>
@@ -848,8 +846,7 @@
     <string name="title_download_all">Stáhnout vše</string>
     <string name="title_save_all">Uložit vše</string>
     <string name="title_save_eml">Uložit soubor zdrojové zprávy</string>
-    <string name="title_raw_remaining">Zdrojové zprávy ke stažení: %1$d</string>
-    <string name="title_ask_raw">Pro přeposílání zpráv je třeba stáhnout zdrojové (původní) zprávy ze serveru. K tomu je vyžadováno připojení k internetu.</string>
+    <string name="title_eml_remark">Pro přeposílání zpráv je třeba stáhnout zdrojové (původní) zprávy ze serveru. K tomu je vyžadováno připojení k internetu.</string>
     <string name="title_buttons">Vyberte tlačítka</string>
     <string name="title_buttons_hint">Skutečně dostupné akce závisí na typu účtu a konfiguraci</string>
     <string name="title_button_search">Hledat ve zprávách</string>
@@ -861,6 +858,7 @@
     <string name="title_subscribe">Přihlásit odběr</string>
     <string name="title_delete">Smazat</string>
     <string name="title_more">Více</string>
+    <string name="title_less">Méně</string>
     <string name="title_spam">Nevyžádané</string>
     <string name="title_move">Přesunout</string>
     <string name="title_copy_btn">Kopírovat</string>
@@ -899,7 +897,6 @@
     <string name="title_no_connection">Připojování k jednomu nebo více účtům &#8230;</string>
     <string name="title_no_folder">Složka neexistuje</string>
     <string name="title_no_format">Původní zpráva bude zahrnuta</string>
-    <string name="title_no_image">Obrázek nemohl být dekódován</string>
     <string name="title_no_search">Vyhledávání na serveru není pro tento účet k dispozici</string>
     <string name="title_too_large">Zpráva je příliš velká pro úplné přeformátování</string>
     <string name="title_truncated">Zpráva je příliš velká pro úplné zobrazení</string>
@@ -1318,6 +1315,7 @@
     <string name="title_legend_create_rule">Vytvořit pravidlo</string>
     <string name="title_legend_show_unsubscribe">Ukončit odebírání kanálu</string>
     <string name="title_legend_show_images">Zobrazit obrázky</string>
+    <string name="title_legend_hide_images">Skrýt obrázky</string>
     <string name="title_legend_show_full">Zobrazit původní zprávu</string>
     <string name="title_legend_edit">Upravit</string>
     <string name="title_legend_default_color">Výchozí barva</string>
@@ -1365,8 +1363,8 @@
     <string name="title_check_owner">Zkontrolovat vlastníka</string>
     <string name="title_remark_owner">Informace bude získána z <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">IP adresa vlastníka</string>
+    <string name="title_default_apps">Výchozí aplikace</string>
     <string name="title_select_app">Vybrat aplikaci</string>
-    <string name="title_updated">Je k dispozici aktualizace na verzi %1$s</string>
     <string name="title_issue">Máte dotaz nebo problém?</string>
     <string name="title_yes">Ano</string>
     <string name="title_no">Ne</string>
@@ -1427,7 +1425,6 @@
     <string name="title_pro_hint">Zakoupením Pro funkcí získáte přístup ke všem současným i budoucím Pro funkcím a pomůžete zachovat tuto aplikaci udržovanou a podporovanou</string>
     <string name="title_pro_price">Proč jsou Pro funkce tak drahé?</string>
     <string name="title_pro_family">Mohu použít Rodinnou mediatéku Google Play?</string>
-    <string name="title_pro_restore">Jak mohu obnovit svůj nákup?</string>
     <string name="title_pro_pending">Probíhá nákup</string>
     <string name="title_pro_activated">Všechny Pro funkce jsou aktivní</string>
     <string name="title_pro_valid">Všechny Pro funkce aktivovány</string>

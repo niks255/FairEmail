@@ -48,7 +48,6 @@ import android.os.DeadObjectException;
 import android.os.DeadSystemException;
 import android.os.Debug;
 import android.os.OperationCanceledException;
-import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.TransactionTooLargeException;
 import android.text.TextUtils;
@@ -1521,7 +1520,7 @@ public class Log {
             sb.append(ex.toString()).append("\n").append(android.util.Log.getStackTraceString(ex));
         if (log != null)
             sb.append(log);
-        String body = "<pre>" + TextUtils.htmlEncode(sb.toString()) + "</pre>";
+        String body = "<pre class=\"fairemail_debug_info\">" + TextUtils.htmlEncode(sb.toString()) + "</pre>";
 
         EntityMessage draft;
 
@@ -1713,15 +1712,25 @@ public class Log {
         long nheap = Debug.getNativeHeapAllocatedSize() / 1024L;
         sb.append(String.format("Heap usage: %s/%s KiB native: %s KiB\r\n", hused, hmax, nheap));
 
+        Configuration config = context.getResources().getConfiguration();
+        String size;
+        if (config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_XLARGE))
+            size = "XL";
+        else if (config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE))
+            size = "L";
+        else if (config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_NORMAL))
+            size = "M";
+        else if (config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_SMALL))
+            size = "M";
+        else
+            size = "?";
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
+        Point dim = new Point();
+        display.getSize(dim);
         float density = context.getResources().getDisplayMetrics().density;
-        sb.append(String.format("Density %f resolution: %.2f x %.2f dp %b\r\n",
-                density,
-                size.x / density, size.y / density,
-                context.getResources().getConfiguration().isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_NORMAL)));
+        sb.append(String.format("Density %f resolution: %.2f x %.2f dp %s\r\n",
+                density, dim.x / density, dim.y / density, size));
 
         int uiMode = context.getResources().getConfiguration().uiMode;
         sb.append(String.format("UI mode: 0x"))
@@ -1729,8 +1738,11 @@ public class Log {
                 .append(" night=").append(Helper.isNight(context))
                 .append("\r\n");
 
-        sb.append("canScheduleExactAlarms=")
+        sb.append("ExactAlarms")
+                .append(" can=")
                 .append(AlarmManagerCompatEx.canScheduleExactAlarms(context))
+                .append(" has=")
+                .append(AlarmManagerCompatEx.hasExactAlarms(context))
                 .append("\r\n");
 
         sb.append("Transliterate: ")
@@ -1744,17 +1756,19 @@ public class Log {
             sb.append(ex.toString()).append("\r\n");
         }
 
-        PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        boolean ignoring = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            ignoring = power.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
-        sb.append(String.format("Battery optimizations: %b\r\n", !ignoring));
-        sb.append(String.format("Charging: %b\r\n", Helper.isCharging(context)));
+        Boolean ignoring = Helper.isIgnoringOptimizations(context);
+        sb.append(String.format("Battery optimizations: %s\r\n",
+                ignoring == null ? null : Boolean.toString(!ignoring)));
+
+        sb.append(String.format("Charging: %b; level: %d\r\n",
+                Helper.isCharging(context), Helper.getBatteryLevel(context)));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             UsageStatsManager usm = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
             int bucket = usm.getAppStandbyBucket();
-            sb.append(String.format("Standby bucket: %d\r\n", bucket));
+            boolean inactive = usm.isAppInactive(BuildConfig.APPLICATION_ID);
+            sb.append(String.format("Standby bucket: %d-%s;p inactive: %b\r\n",
+                    bucket, Helper.getStandbyBucketName(bucket), inactive));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -1771,6 +1785,8 @@ public class Log {
             String uuid = prefs.getString("uuid", null);
             sb.append(String.format("UUID: %s\r\n", uuid == null ? "-" : uuid));
         }
+
+        sb.append(String.format("Configuration: %s\r\n", config.toString()));
 
         sb.append("\r\n");
 
@@ -1807,8 +1823,8 @@ public class Log {
             sb.append("\r\n");
         }
 
-        sb.append(new Date(Helper.getInstallTime(context))).append("\r\n");
-        sb.append(new Date()).append("\r\n");
+        sb.append(String.format("Installed: %s\r\n", new Date(Helper.getInstallTime(context))));
+        sb.append(String.format("Now: %s\r\n", new Date()));
 
         sb.append("\r\n");
 
@@ -1865,11 +1881,16 @@ public class Log {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean enabled = prefs.getBoolean("enabled", true);
             int pollInterval = ServiceSynchronize.getPollInterval(context);
+            boolean metered = prefs.getBoolean("metered", true);
+            Boolean ignoring = Helper.isIgnoringOptimizations(context);
             boolean schedule = prefs.getBoolean("schedule", false);
 
             size += write(os, "accounts=" + accounts.size() +
                     " enabled=" + enabled +
-                    " interval=" + pollInterval + "\r\n\r\n");
+                    " interval=" + pollInterval +
+                    " metered=" + metered +
+                    " optimizing=" + (ignoring == null ? null : !ignoring) +
+                    "\r\n\r\n");
 
             if (schedule) {
                 int minuteStart = prefs.getInt("schedule_start", 0);
@@ -1890,24 +1911,33 @@ public class Log {
 
             for (EntityAccount account : accounts) {
                 if (account.synchronize) {
+                    int content = 0;
+                    int messages = 0;
+                    List<TupleFolderEx> folders = db.folder().getFoldersEx(account.id);
+                    for (TupleFolderEx folder : folders) {
+                        content += folder.content;
+                        messages += folder.messages;
+                    }
+
                     size += write(os, account.name +
                             " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") + "/" + account.auth_type +
                             " " + account.host + ":" + account.port + "/" + account.encryption +
                             " sync=" + account.synchronize +
                             " exempted=" + account.poll_exempted +
                             " poll=" + account.poll_interval +
+                            " messages=" + content + "/" + messages +
                             " " + account.state +
                             (account.last_connected == null ? "" : " " + dtf.format(account.last_connected)) +
                             "\r\n");
 
-                    List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
                     if (folders.size() > 0)
                         Collections.sort(folders, folders.get(0).getComparator(context));
-                    for (EntityFolder folder : folders)
+                    for (TupleFolderEx folder : folders)
                         if (folder.synchronize)
                             size += write(os, "- " + folder.name + " " + folder.type +
                                     " poll=" + folder.poll + "/" + folder.poll_factor +
                                     " days=" + folder.sync_days + "/" + folder.keep_days +
+                                    " msgs=" + folder.content + "/" + folder.messages +
                                     " " + folder.state +
                                     (folder.last_sync == null ? "" : " " + dtf.format(folder.last_sync)) +
                                     "\r\n");
@@ -1917,61 +1947,63 @@ public class Log {
             }
 
             for (EntityAccount account : accounts)
-                try {
-                    JSONObject jaccount = account.toJSON();
-                    jaccount.put("state", account.state == null ? "null" : account.state);
-                    jaccount.put("warning", account.warning);
-                    jaccount.put("error", account.error);
+                if (account.synchronize)
+                    try {
+                        JSONObject jaccount = account.toJSON();
+                        jaccount.put("state", account.state == null ? "null" : account.state);
+                        jaccount.put("warning", account.warning);
+                        jaccount.put("error", account.error);
+                        jaccount.put("capabilities", account.capabilities);
 
-                    if (account.last_connected != null)
-                        jaccount.put("last_connected", new Date(account.last_connected).toString());
+                        if (account.last_connected != null)
+                            jaccount.put("last_connected", new Date(account.last_connected).toString());
 
-                    jaccount.put("keep_alive_ok", account.keep_alive_ok);
-                    jaccount.put("keep_alive_failed", account.keep_alive_failed);
-                    jaccount.put("keep_alive_succeeded", account.keep_alive_succeeded);
+                        jaccount.put("keep_alive_ok", account.keep_alive_ok);
+                        jaccount.put("keep_alive_failed", account.keep_alive_failed);
+                        jaccount.put("keep_alive_succeeded", account.keep_alive_succeeded);
 
-                    jaccount.remove("password");
+                        jaccount.remove("password");
 
-                    size += write(os, "==========\r\n");
-                    size += write(os, jaccount.toString(2) + "\r\n");
+                        size += write(os, "==========\r\n");
+                        size += write(os, jaccount.toString(2) + "\r\n");
 
-                    List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
-                    if (folders.size() > 0)
-                        Collections.sort(folders, folders.get(0).getComparator(context));
-                    for (EntityFolder folder : folders) {
-                        JSONObject jfolder = folder.toJSON();
-                        jfolder.put("level", folder.level);
-                        jfolder.put("total", folder.total);
-                        jfolder.put("initialize", folder.initialize);
-                        jfolder.put("subscribed", folder.subscribed);
-                        jfolder.put("state", folder.state == null ? "null" : folder.state);
-                        jfolder.put("sync_state", folder.sync_state == null ? "null" : folder.sync_state);
-                        jfolder.put("poll_count", folder.poll_count);
-                        jfolder.put("read_only", folder.read_only);
-                        jfolder.put("selectable", folder.selectable);
-                        jfolder.put("inferiors", folder.inferiors);
-                        jfolder.put("error", folder.error);
-                        if (folder.last_sync != null)
-                            jfolder.put("last_sync", new Date(folder.last_sync).toString());
-                        if (folder.last_sync_count != null)
-                            jfolder.put("last_sync_count", folder.last_sync_count);
-                        size += write(os, jfolder.toString(2) + "\r\n");
-                    }
-
-                    List<EntityIdentity> identities = db.identity().getIdentities(account.id);
-                    for (EntityIdentity identity : identities)
-                        try {
-                            JSONObject jidentity = identity.toJSON();
-                            jidentity.remove("password");
-                            jidentity.remove("signature");
-                            size += write(os, "----------\r\n");
-                            size += write(os, jidentity.toString(2) + "\r\n");
-                        } catch (JSONException ex) {
-                            size += write(os, ex.toString() + "\r\n");
+                        List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
+                        if (folders.size() > 0)
+                            Collections.sort(folders, folders.get(0).getComparator(context));
+                        for (EntityFolder folder : folders) {
+                            JSONObject jfolder = folder.toJSON();
+                            jfolder.put("level", folder.level);
+                            jfolder.put("total", folder.total);
+                            jfolder.put("initialize", folder.initialize);
+                            jfolder.put("subscribed", folder.subscribed);
+                            jfolder.put("state", folder.state == null ? "null" : folder.state);
+                            jfolder.put("sync_state", folder.sync_state == null ? "null" : folder.sync_state);
+                            jfolder.put("poll_count", folder.poll_count);
+                            jfolder.put("read_only", folder.read_only);
+                            jfolder.put("selectable", folder.selectable);
+                            jfolder.put("inferiors", folder.inferiors);
+                            jfolder.put("error", folder.error);
+                            if (folder.last_sync != null)
+                                jfolder.put("last_sync", new Date(folder.last_sync).toString());
+                            if (folder.last_sync_count != null)
+                                jfolder.put("last_sync_count", folder.last_sync_count);
+                            size += write(os, jfolder.toString(2) + "\r\n");
                         }
-                } catch (JSONException ex) {
-                    size += write(os, ex.toString() + "\r\n");
-                }
+
+                        List<EntityIdentity> identities = db.identity().getIdentities(account.id);
+                        for (EntityIdentity identity : identities)
+                            try {
+                                JSONObject jidentity = identity.toJSON();
+                                jidentity.remove("password");
+                                jidentity.remove("signature");
+                                size += write(os, "----------\r\n");
+                                size += write(os, jidentity.toString(2) + "\r\n");
+                            } catch (JSONException ex) {
+                                size += write(os, ex.toString() + "\r\n");
+                            }
+                    } catch (JSONException ex) {
+                        size += write(os, ex.toString() + "\r\n");
+                    }
         }
 
         db.attachment().setDownloaded(attachment.id, size);
@@ -2069,8 +2101,14 @@ public class Log {
             long from = new Date().getTime() - 24 * 3600 * 1000L;
             DateFormat TF = Helper.getTimeInstance(context);
 
-            for (EntityLog entry : db.log().getLogs(from))
-                size += write(os, String.format("%s %s\r\n", TF.format(entry.time), entry.data));
+            for (EntityLog entry : db.log().getLogs(from, null))
+                size += write(os, String.format("%s [%d:%d:%d:%d] %s\r\n",
+                        TF.format(entry.time),
+                        entry.type.ordinal(),
+                        (entry.account == null ? 0 : entry.account),
+                        (entry.folder == null ? 0 : entry.folder),
+                        (entry.message == null ? 0 : entry.message),
+                        entry.data));
         }
 
         db.attachment().setDownloaded(attachment.id, size);

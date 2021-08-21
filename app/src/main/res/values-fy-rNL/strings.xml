@@ -301,9 +301,6 @@
     <string name="title_advanced_caption_message">Berjochte</string>
     <string name="title_advanced_caption_message_header">Berjochtkoptekst</string>
     <string name="title_advanced_caption_message_body">Berjochtynhâld</string>
-    <string name="title_advanced_portrait2">Brûk twa rigen yn portretmodus</string>
-    <string name="title_advanced_landscape">Brûk twa kolommen yn lânskipsmodus</string>
-    <string name="title_advanced_landscape3">Toan standert menu yn lânskipsmodus</string>
     <string name="title_advanced_startup">Sjoch op it startskerm</string>
     <string name="title_advanced_cards">Brûk kaartstyl ynstee fan tabelstyl</string>
     <string name="title_advanced_cards_shadow">Brûk skaad foar ûnlezen berjochten at kaart styl brukt wurd</string>
@@ -345,7 +342,6 @@
     <string name="title_advanced_addresses">Lokaal opsleine kontakten foarstelle</string>
     <string name="title_advanced_attachments_alt">Lit bylagen nei de berjochttekst sjen</string>
     <string name="title_advanced_thumbnails">Lit miniatuerôfbyldings sjen nei de tekst fan it berjocht</string>
-    <string name="title_advanced_message_text_zoom">Standert berjochten tekst zoom</string>
     <string name="title_advanced_overview_mode">Zoom orizjinele berjochten yn om op it skerm te passen</string>
     <string name="title_advanced_contrast">Brûk heech kontrast foar berjochttekst</string>
     <string name="title_advanced_monospaced">Brûk standert monospaced lettertype foar berjochttekst</string>
@@ -789,6 +785,8 @@
     <string name="title_show_headers">Sjoch kopteksten</string>
     <string name="title_raw_save">Bewarje rau berjocht</string>
     <string name="title_raw_send">Stjoere as bylage</string>
+    <string name="title_raw_send_message">Berjochte</string>
+    <string name="title_raw_send_thread">Konversaasje</string>
     <string name="title_manage_keywords">Behear trefwurden</string>
     <string name="title_manage_labels">Gmail labels beheare</string>
     <string name="title_add_keyword">Foegje kaaiwurd ta</string>
@@ -796,8 +794,7 @@
     <string name="title_download_all">Download alles</string>
     <string name="title_save_all">Alles opslaan</string>
     <string name="title_save_eml">Rûge berjochtenbestân opslaan</string>
-    <string name="title_raw_remaining">Rau berjoch om te bewarjen: %1$d</string>
-    <string name="title_ask_raw">Om berjochten troch te stjoeren, moatte de rauwe (orizjinele) berjochten fan \'e server downloade wurde. Dit freget in ynternetferbining.</string>
+    <string name="title_eml_remark">Om berjochten troch te stjoeren, moatte de rauwe (orizjinele) berjochten fan \'e server downloade wurde. Dit freget in ynternetferbining.</string>
     <string name="title_buttons">Knoppen selektearje</string>
     <string name="title_buttons_hint">De eigentlike beskikbere aksjes binne ôfhinklik fan it akkount type en konfiguraasje</string>
     <string name="title_button_search">Sykje troch berjochten</string>
@@ -846,7 +843,6 @@
     <string name="title_no_connection">Ferbine mei ien of meardere akkounts &#8230;</string>
     <string name="title_no_folder">Map bestiet net</string>
     <string name="title_no_format">It oarspronklik ûntfangen berjocht sil wurde opnommen</string>
-    <string name="title_no_image">Ofbylding koe net dekodearre wurde</string>
     <string name="title_no_search">Sykje op server is net beskikber foar dit akkount</string>
     <string name="title_too_large">Berjocht te grut om opnij op te meitsjen</string>
     <string name="title_truncated">Berjocht te grut om folslein wer te jaan</string>
@@ -1303,7 +1299,6 @@
     <string name="title_remark_owner">Ynformaasje sil wurde ophelle fan <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Eigner IP adres</string>
     <string name="title_select_app">App selektearje</string>
-    <string name="title_updated">D\'r is in update foar ferzje %1$s beskikber</string>
     <string name="title_issue">Hawwe jo in fraach of probleem?</string>
     <string name="title_yes">Ja</string>
     <string name="title_no">Nee</string>
@@ -1361,7 +1356,6 @@
     <string name="title_pro_hint">Mei pro-funksjes keapje kinne jo alle aktuele en takomstige pro-funksjes brûke, sil dizze app ûnderhâlde en stipe wurde.</string>
     <string name="title_pro_price">Wêrom binne de pro-funksjes sa djoer?</string>
     <string name="title_pro_family">Kin Google Play Family Library brûkt wurde?</string>
-    <string name="title_pro_restore">Hoe kin ik in oankeap werstelle?</string>
     <string name="title_pro_pending">Oankeap yn behanneling</string>
     <string name="title_pro_activated">Alle pro-funksjes binne aktivearre</string>
     <string name="title_pro_valid">Alle pro-funksjes aktivearre</string>

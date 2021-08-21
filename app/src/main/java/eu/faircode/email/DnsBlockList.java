@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.core.net.MailTo;
 import androidx.preference.PreferenceManager;
 
 import java.net.Inet4Address;
@@ -77,6 +78,11 @@ public class DnsBlockList {
 
             new BlockList(false, "Barracuda", "b.barracudacentral.org", true, new String[]{
                     // https://www.barracudacentral.org/rbl/how-to-use
+                    "127.0.0.2",
+            }),
+
+            new BlockList(BuildConfig.DEBUG, "NordSpam", "dbl.nordspam.com", false, new String[]{
+                    // https://www.nordspam.com/
                     "127.0.0.2",
             })
     ));
@@ -149,15 +155,31 @@ public class DnsBlockList {
     }
 
     static Boolean isJunk(Context context, List<Address> addresses) {
+        boolean hasDomain = false;
         for (Address address : addresses) {
             String email = ((InternetAddress) address).getAddress();
             String domain = UriHelper.getEmailDomain(email);
             if (domain == null)
                 continue;
+            hasDomain = true;
             if (isJunk(context, domain, false, BLOCK_LISTS))
                 return true;
         }
-        return false;
+        return (hasDomain ? false : null);
+    }
+
+    static Boolean isJunk(Context context, Uri uri) {
+        String domain = null;
+        if ("mailto".equalsIgnoreCase(uri.getScheme())) {
+            MailTo email = MailTo.parse(uri.toString());
+            domain = UriHelper.getEmailDomain(email.getTo());
+        } else
+            domain = uri.getHost();
+
+        if (domain == null)
+            return null;
+
+        return isJunk(context, domain, false, BLOCK_LISTS);
     }
 
     private static boolean isJunk(Context context, String host, boolean numeric, List<BlockList> blocklists) {

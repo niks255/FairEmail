@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:text="12:34:56"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,10 +19,12 @@
         android:id="@+id/tvData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="3dp"
         android:text="log"
         android:textAppearance="@android:style/TextAppearance.Small"
+        android:textColor="?android:attr/textColorPrimary"
         android:textIsSelectable="true"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvTime"
         app:layout_constraintTop_toTopOf="parent" />

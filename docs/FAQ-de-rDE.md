@@ -73,7 +73,7 @@ Zur Autorisierung:
 * Ein [Bug im Android](https://issuetracker.google.com/issues/119872129) verursacht manchmal einen FairEmail-Absturz mit "*... Fehlerhafte Benachrichtigung ...*" auf einigen Geräten nach dem Aktualisieren von FairEmail und dem Tippen auf eine Benachrichtigung.
 * Ein [Bug in Android](https://issuetracker.google.com/issues/62427912) verursacht manchmal einen Absturz mit "*... ActivityRecord nicht gefunden für ...*" nach dem Update von FairEmail. Eine Neuinstallation ([quelle](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) könnte das Problem beheben.
 * Ein [Fehler in Android](https://issuetracker.google.com/issues/37018931) verursacht manchmal einen Absturz mit *... Der Eingabekanal wurde auf einigen Geräten nicht initialisiert ...*.
-* ~~A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) verursacht manchmal einen Absturz mit *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
+* ~~Ein [Bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) verursacht manchmal einen Absturz mit *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
 * Ein Fehler in Nova Launcher unter Android 5.x lässt FairEmail mit einem *java.lang.StackOverflowError* abstürzen, wenn Nova Launcher einen Zugriff auf die Bedienungshilfen hat.
 * ~~Die Ordnerauswahl zeigt manchmal aus noch unbekannten Gründen keine Ordner an. Dies scheint behoben zu sein.~~
 * ~~Ein [Bug in AndroidX](https://issuetracker.google.com/issues/64729576) macht es schwer, den Schnellscroller zu fassen. Ein Workaround wurde hinzugefügt.~~
@@ -366,23 +366,23 @@ Wenn Sie durch Klicken auf die Benachrichtigung hierhergekommen sind, sollten Si
 
 Die Benachrichtigung in der Statusleiste mit niedriger Priorität zeigt die Anzahl der anstehenden Vorgänge an, die sein können:
 
-* *Hinzufügen*: Nachricht zum Remote-Ordner hinzufügen
-* *Verschieben*: Nachricht in einen anderen Remote-Ordner verschieben
-* *kopieren*: Nachricht in einen anderen Remote-Ordner kopieren
+* *Hinzufügen*: Nachricht zu einem entfernten Ordner hinzufügen
+* *Verschieben*: Nachricht in einen anderen entfernten Ordner verschieben
+* *Kopieren*: Nachricht in einen anderen entfernten Ordner kopieren
 * *Abruf*: Abruf der geänderten (gedrückten) Nachricht
-* *Löschen*: Lösche Nachricht aus dem Remote-Ordner
-* *Gesehen*: Markiere Nachricht als gelesen/ungelesen im Remote-Ordner
-* *Beantwortet*: Markiere die Nachricht als beantwortet im Remote-Ordner
+* *Löschen*: Nachricht vom entfernten Ordner löschen
+* *Gesehen*: Nachricht als gelesen/ungelesen im entfernten Ordner markieren
+* *Beantwortet*: Nachricht als beantwortet im entfernten Ordner markieren
 * *Hinzufügen*: Nachricht zum entfernten Ordner hinzufügen
 * *Stichwort*: IMAP-Markierungen im entfernten Ordner hinzufügen/entfernen
 * *Label*: Gmail-Label im entfernten Ordner festlegen/zurücksetzen
-* *Kopfzeilen*: Nachrichtenüberschriften herunterladen
+* *Kopfzeilen*: Nachrichtenkopfzeilen herunterladen
 * *Roh*: Rohnachricht herunterladen
 * *body*: Nachrichtentext herunterladen
 * *Anhang*: Anhang herunterladen
 * *Synchronisation*: lokale und entfernte Nachrichten synchronisieren
 * *Abonnieren*: entfernten Ordner abonnieren
-* *Bereinigen*: Lösche alle Nachrichten aus dem entfernten Ordner
+* *Bereinigen*: Alle Nachrichten aus dem entfernten Ordner löschen
 * *Senden*: Nachricht senden
 * *Existiert*: Prüfen, ob Nachricht existiert
 * *Regel*: Regel im Text ausführen
@@ -2275,70 +2275,70 @@ Deaktivieren von *»Partial fetch« (Teilabruf)* führt zu mehr Speicherverbrauc
 <br />
 
 <a name="faq111"></a>
-**(111) Is OAuth supported?**
+**(111) Wird OAuth unterstützt?**
 
-OAuth for Gmail is supported via the quick setup wizard. The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts. OAuth for non on-device accounts is not supported because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this. You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
+OAuth für Gmail wird über den Schnelleinstellungs-Assistenten unterstützt. Der Android Account Manager wird verwendet, um OAuth Token für ausgewählte Konten auf dem Gerät zu laden und zu aktualisieren. OAuth für nicht-Gerätekonten wird nicht unterstützt, da Google dafür ein [jährliches Sicherheitsaudit](https://support.google.com/cloud/answer/9110914) ($15.000 bis $75,000) fordert. Mehr darüber können Sie [here](https://www.theregister.com/2019/02/11/google_gmail_developer/) lesen.
 
-OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
+OAuth für Outlook/Office 365, Yahoo, Mail.ru und Yandex wird über den Schnelleinstellungs-Assistenten unterstützt.
 
 <br />
 
 <a name="faq112"></a>
-**(112) Which email provider do you recommend?**
+**(112) Welchen E-Mail-Anbieter empfehlen Sie?**
 
-FairEmail is an email client only, so you need to bring your own email address. Note that this is clearly mentioned in the app description.
+FairEmail ist nur ein E-Mail-Programm, deshalb müssen Sie Ihre eigene E-Mail-Adresse mitbringen. Beachten Sie, dass dies deutlich in der App-Beschreibung erwähnt wird.
 
-There are plenty of email providers to choose from. Which email provider is best for you depends on your wishes/requirements. Please see the websites of [Restore privacy](https://restoreprivacy.com/secure-email/) or [Privacy Tools](https://www.privacytools.io/providers/email/) for a list of privacy oriented email providers with advantages and disadvantages.
+Es gibt viele E-Mail-Anbieter zur Auswahl. Welcher E-Mail-Provider am besten für Sie ist, hängt von Ihren Wünschen/Anforderungen ab. Bitte lesen Sie die Webseiten von [ Restore privacy](https://restoreprivacy.com/secure-email/) oder [Privacy Tools](https://www.privacytools.io/providers/email/) für eine Liste von E-Mail-Anbietern mit Vor- und Nachteilen.
 
-Some providers, like ProtonMail, Tutanota, use proprietary email protocols, which make it impossible to use third party email apps. Please see [this FAQ](#user-content-faq129) for more information.
+Einige Anbieter wie ProtonMail oder Tutanota verwenden proprietäre E-Mail-Protokolle, die es unmöglich machen, E-Mail-Apps von Drittanbietern zu verwenden. Weitere Informationen finden Sie in den [Häufig gestellten Fragen (FAQ)](#user-content-faq129).
 
-Using your own (custom) domain name, which is supported by most email providers, will make it easier to switch to another email provider.
+Die Verwendung Ihres eigenen (individuellen) Domain-Namens, der von den meisten E-Mail-Anbietern unterstützt wird, erleichtert den Wechsel zu einem anderen E-Mail-Provider.
 
 <br />
 
 <a name="faq113"></a>
-**(113) How does biometric authentication work?**
+**(113) Wie funktioniert die biometrische Authentifizierung?**
 
-If your device has a biometric sensor, for example a fingerprint sensor, you can enable/disable biometric authentication in the navigation (hamburger) menu of the settings screen. When enabled FairEmail will require biometric authentication after a period of inactivity or after the screen has been turned off while FairEmail was running. Activity is navigation within FairEmail, for example opening a conversation thread. The inactivity period duration can be configured in the miscellaneous settings. When biometric authentication is enabled new message notifications will not show any content and FairEmail won't be visible on the Android recents screen.
+Wenn Ihr Gerät einen biometrischen Sensor hat, zum Beispiel einen Fingerabdruck-Sensor, können Sie die biometrische Authentifizierung im Navigationsmenü (Hamburger) des Einstellungsbildschirms aktivieren/deaktivieren. Wenn eingeschaltet, benötigt FairEmail biometrische Authentifizierung nach einer Zeit der Inaktivität oder nachdem der Bildschirm ausgeschaltet wurde, während FairEmail läuft. Als Aktivität zählt dabei die Navigation innerhalb von FairEmail, zum Beispiel das Öffnen eines Gesprächsthemas. Die Dauer der Inaktivitätszeit kann in den Einstellungen unter 'Verschiedenes' konfiguriert werden. Wenn die biometrische Authentifizierung aktiviert ist, werden neue Benachrichtigungen keine Inhalte anzeigen und FairEmail wird nicht im Android Anwendungsverlauf angezeigt.
 
-Biometric authentication is meant to prevent others from seeing your messages only. FairEmail relies on device encryption for data encryption, see also [this FAQ](#user-content-faq37).
+Biometrische Authentifizierung soll nur verhindern, dass andere Ihre Nachrichten sehen. FairEmail setzt bei der Datenverschlüsselung auf Geräteverschlüsselung. Siehe auch [diese FAQ](#user-content-faq37).
 
-Biometric authentication is a pro feature.
+Biometrische Authentifizierung ist eine Pro-Funktion.
 
 <br />
 
 <a name="faq114"></a>
-**(114) Can you add an import for the settings of other email apps?**
+**(114) Können Sie den Import von Einstellungen aus anderen E-Mail-Apps hinzufügen?**
 
-The format of the settings files of most other email apps is not documented, so this is difficult. Sometimes it is possible to reverse engineer the format, but as soon as the settings format changes things will break. Also, settings are often incompatible. For example, FairEmail has unlike most other email apps settings for the number of days to synchronize messages and for the number of days to keep messages, mainly to save on battery usage. Moreover, setting up an account/identity with the quick setup wizard is simple, so it is not really worth the effort.
+Das Format der Einstellungsdateien der meisten anderen E-Mail-Apps ist nicht dokumentiert, daher ist dies schwierig. Manchmal ist es möglich, das Format rückzuentwickeln, aber sobald das Einstellungsformat geändert wird, werden Dinge schief gehen. Auch sind die Einstellungen oft inkompatibel. Beispielsweise hat FairEmail im Gegensatz zu den meisten anderen E-Mail-Apps Einstellungen für die Anzahl der Tage, an denen Nachrichten synchronisiert werden sollen, und für die Anzahl der Tage, für die Nachrichten aufbewahrt werden sollen, hauptsächlich, um den Akkuverbrauch zu senken. Darüber hinaus ist die Einrichtung eines Kontos/einer Identität mit dem Schnelleinrichtungs-Assistenten einfach, so dass es sich nicht wirklich lohnt.
 
 <br />
 
 <a name="faq115"></a>
-**(115) Can you add email address chips?**
+**(115) Können E-Mail-Adressen-Chips hinzufügt werden?**
 
-Email address [chips](https://material.io/design/components/chips.html) look nice, but cannot be edited, which is quite inconvenient when you made a typo in an email address.
+E-Mail-Adressen-[Chips](https://material.io/design/components/chips.html) sehen schön aus, können aber nicht bearbeitet werden, das ist ziemlich unpraktisch, wenn Sie einen Tippfehler in einer E-Mail-Adresse gemacht haben.
 
-Note that FairEmail will select the address only when long pressing an address, which makes it easy to delete an address.
+Bitte beachten Sie, dass FairEmail die Adresse nur bei langem Drücken einer Adresse auswählt, was es leicht macht, eine Adresse zu löschen.
 
-Chips are not suitable for showing in a list and since the message header in a list should look similar to the message header of the message view it is not an option to use chips for viewing messages.
+Chips eignen sich nicht für die Anzeige in einer Liste und da der Nachrichtenkopf in einer Liste ähnlich dem Nachrichtenkopf der Nachrichtenansicht aussehen sollte, ist es keine Option, Chips zur Anzeige von Nachrichten zu verwenden.
 
-Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f471b882ec87d5a5a5015).
+[Commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f471b882ec87d5a5a5015) zurückgesetzt.
 
 <br />
 
 <a name="faq116"></a>
-**~~(116) How can I show images in messages from trusted senders by default?~~**
+**~~(116) Wie kann ich Bilder in Nachrichten von vertrauenswürdigen Absendern standardmäßig anzeigen?~**
 
-~~You can show images in messages from trusted senders by default by enabled the display setting *Automatically show images for known contacts*.~~
+~~Sie können Bilder in Nachrichten von vertrauenswürdigen Absendern standardmäßig anzeigen, indem Sie die Anzeigeeinstellung *Automatisch Bilder für bekannte Kontakte anzeigen* einschalten.~~
 
-~~Contacts in the Android contacts list are considered to be known and trusted,~~ ~~unless the contact is in the group / has the label '*Untrusted*' (case insensitive).~~
+~~Kontakte in der Android-Kontaktliste gelten als bekannt und vertrauenswürdig, ~ ~~, es sei denn, der Kontakt ist in der Gruppe / hat das Label '*Nicht vertrauenswürdig*' (unabhängig von Groß- und Kleinschreibung).~~
 
 <br />
 
 <a name="faq38"></a>
 <a name="faq117"></a>
-**(117) Can you help me restore my purchase?**
+**(117) Können Sie mir helfen, meinen Kauf wiederherzustellen?**
 
 First of all, a purchase will be available on all devices logged into the same Google account, *if* the app is installed via the same Google account too. You can select the account in the Play store app.
 
@@ -2355,7 +2355,7 @@ You can also try to clear the cache of the Play store app via the Android apps s
 
 Note that:
 
-* Wenn Sie *ITEM_ALREADY_OWNED*erhalten, muss die Play Store App wahrscheinlich aktualisiert werden, bitte [hier finden](https://support.google.com/googleplay/answer/1050566?hl=en)
+* Wenn Sie *ITEM_ALREADY_OWNED* erhalten, muss die Play Store App wahrscheinlich aktualisiert werden, siehe [hier](https://support.google.com/googleplay/answer/1050566?hl=en)
 * Einkäufe werden in der Google Cloud gespeichert und können nicht verloren gehen
 * Bei Einkäufen gibt es keine Zeitbegrenzung, daher können sie nicht auslaufen
 * Google gibt keine Details (Name, E-Mail usw.) über Käufer an Entwickler weiter
@@ -2363,7 +2363,7 @@ Note that:
 * Es kann eine Weile dauern, bis die Play Store-App einen Kauf mit einem anderen Gerät synchronisiert hat
 * Käufe über den Play Store können ohne den Play Store nicht verwendet werden, was nach den Play-Store-Regeln ebenfalls nicht zulässig ist
 
-If you cannot solve the problem with the purchase, you will have to contact Google about it.
+Wenn Sie ein Problem beim Kauf der App nicht lösen können, kontaktieren Sie Google.
 
 <br />
 
@@ -2488,11 +2488,11 @@ You can reset asked questions via the three dots overflow menu in the miscellane
 <br />
 
 <a name="faq129"></a>
-**(129) Are ProtonMail, Tutanota supported?**
+**(129) Wird ProtonMail oder Tutanota unterstützt?**
 
-ProtonMail uses a proprietary email protocol and [does not directly support IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), so you cannot use FairEmail to access ProtonMail.
+ProtonMail verwendet ein proprietäres E-Mail-Protokoll und [unterstützt IMAP nicht direkt](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/), daher können Sie mit FairEmail nicht auf ProtonMail zugreifen.
 
-Tutanota uses a proprietary email protocol and [does not support IMAP](https://tutanota.com/faq/#imap), so you cannot use FairEmail to access Tutanota.
+Tutanota verwendet ein proprietäres E-Mail-Protokoll und [unterstützt kein IMAP](https://tutanota.com/faq/#imap), daher können Sie mit FairEmail nicht auf Tutanota zugreifen.
 
 <br />
 
@@ -2861,13 +2861,13 @@ If you've enabled *security defaults* in your organization, you might need to en
 <br />
 
 <a name="faq157"></a>
-**(157) How can I set up an Free.fr account?**
+**(157) Wie kann ich ein E-Mail-Konto bei Free.fr einrichten?**
 
-Veuillez [voir ici](https://free.fr/assistance/597.html) pour les instructions.
+Folgen Sie der Anleitung [hier](https://free.fr/assistance/597.html).
 
-**SMTP est désactivé par défaut**, veuillez [voir ici](https://free.fr/assistance/2406.html) comment il peut être activé.
+**SMTP ist standardmäßig deaktiviert**, wie es eingeschaltet werden kann, lesen Sie [hier](https://free.fr/assistance/2406.html) nach.
 
-Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr) pour un guide détaillé.
+Eine ausführliche Anleitung finden Sie [hier](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr).
 
 <br />
 
@@ -2927,15 +2927,15 @@ If I could, I would add a setting to select the primary and accent color right a
 <br />
 
 <a name="faq162"></a>
-**(162) Is IMAP NOTIFY supported?***
+**(162) Wird IMAP NOTIFY unterstützt?***
 
-Yes, [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) has been supported since version 1.1413.
+Ja, [IMAP NOTIFY](https://tools.ietf.org/html/rfc5465) wird seit Version 1.1413 unterstützt.
 
-IMAP NOTIFY support means that notifications for added, changed or deleted messages of all *subscribed* folders will be requested and if a notification is received for a subscribed folder, that the folder will be synchronized. Synchronization for subscribed folders can therefore be disable, saving folder connections to the email server.
+IMAP NOTIFY bedeutet, dass Benachrichtigungen für hinzugefügte, geänderte oder gelöschte Nachrichten aller *abonnierten* Ordner angefordert werden und wenn eine Benachrichtigung für einen abonnierten Ordner empfangen wird, dass der Ordner synchronisiert wird. Die Synchronisierung von abonnierten Ordnern kann deaktiviert werden, um Verbinungen zu Ordnern auf dem E-Mail-Server einzusparen.
 
-**Important**: push messages (=always sync) for the inbox and subscription management (receive settings) need to be enabled.
+**Wichtig**: Push-Nachrichten (=immer synchronisiert) für den Posteingang und Abonnierte Ordner (Empfangseinstellungen) müssen immer aktiviert sein.
 
-**Important**: most email servers do not support this! You can check the log via the navigation menu if an email server supports the NOTIFY capability.
+**Wichtig**: Die meisten E-Mail-Server unterstützen die Funktion nicht! Wenn Sie im Hauptmenü die Logdatei aufrufen, können Sie überprüfen, ob NOTIFY vom E-Mail-Server unterstützt wird.
 
 <br />
 
@@ -2982,15 +2982,15 @@ Message classification is a pro feature, except for the spam folder.
 <br />
 
 <a name="faq164"></a>
-**(164) Can you add customizable themes?**
+**(164) Können Sie anpassbare Themes hinzufügen?**
 
-Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need [to be predefined](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
+Leider unterstützt Android [keine](https://stackoverflow.com/a/26511725/1794097) dynamische Themes, was bedeutet, dass alle Themes [vordefiniert sein müssen](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
 
-Since for each theme there needs to be a light, dark and black variant, it is not feasible to add for each color combination (literally millions) a predefined theme.
+Da für jedes Theme eine helle, dunkle und schwarze Variante erforderlich sind, ist es nicht möglich, für jede Farbkombination (buchstäblich Millionen) ein vordefiniertes Theme hinzuzufügen.
 
-Moreover, a theme is more than just a few colors. For example themes with a yellow accent color use a darker link color for enough contrast.
+Außerdem ist ein Theme mehr als nur ein paar Farben. Zum Beispiel brauchen Themes mit gelber Akzentfarbe eine dunklere Link-Farbe für genügend Kontrast.
 
-The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
+Die Farben des Themes basieren auf dem Farbkreis nach [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 
 <br />
 
@@ -3025,13 +3025,13 @@ Um diese Probleme zu vermeiden, wird das Schlummern lokal auf dem Gerät durchge
 
 <h2><a name="get-support"></a>Hilfe erhalten</h2>
 
-FairEmail wird nur auf Android-Smartphones und -Tablets und ChromeOS unterstützt.
+Neben Smartphones und Tablets mit Android-Betriebssystem, werden auch Geräte mit ChromeOS-Betriebssystem von FairMail unterstützt.
 
-Es werden nur die neuesten Versionen aus dem Play Store und von GitHub unterstützt. Die F-Droid-Version wird nur unterstützt, wenn die Versionsnummer mit der neuesten GitHub-Version übereinstimmt. Das bedeutet auch, dass eine Herabstufung nicht unterstützt wird.
+Es werden nur die neueste Play Store-Version und die neueste GitHub-Version unterstützt. Die F-Droid-Version wird nur unterstützt, wenn die Versionsnummer mit der neuesten GitHub-Version übereinstimmt. Das bedeutet auch, dass ein Downgrade nicht unterstützt wird.
 
-Es gibt keine Hilfe für Dinge, die nicht direkt mit FairEmail zusammenhängen.
+Es gibt keinen Support für Dinge, die nicht direkt mit FairEmail verbunden sind.
 
-Es gibt keine Unterstützung beim Selberbauen und Entwickeln von eigenen Dingen.
+Es wird kein Support für ein eigenes Build oder eine eigene Entwicklung durch Sie angeboten.
 
 Angefragte Funktionen sollten:
 

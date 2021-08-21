@@ -552,6 +552,9 @@ public class HtmlHelper {
             // Element style
             style = mergeStyles(style, element.attr("style"));
 
+            if ("fairemail_debug_info".equals(clazz))
+                style = mergeStyles(style, "font-size: smaller");
+
             if (text_align) {
                 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/center
                 if ("center".equals(element.tagName())) {
@@ -2070,10 +2073,11 @@ public class HtmlHelper {
 
     static String getQuoteStyle(CharSequence quoted, int start, int end) {
         try {
-            if (TextDirectionHeuristics.FIRSTSTRONG_LTR.isRtl(quoted, start, end))
+            int count = end - start;
+            if (TextDirectionHeuristics.FIRSTSTRONG_LTR.isRtl(quoted, start, count))
                 return "border-right:3px solid #ccc; padding-left:3px;";
         } catch (Throwable ex) {
-            Log.e(new Throwable("getQuoteStyle", ex));
+            Log.e(new Throwable("getQuoteStyle " + start + "..." + end, ex));
         }
 
         return "border-left:3px solid #ccc; padding-left:3px;";
@@ -3031,7 +3035,8 @@ public class HtmlHelper {
                 .removeAttr("x-dashed")
                 .removeAttr("x-tracking")
                 .removeAttr("x-border")
-                .removeAttr("x-list-style");
+                .removeAttr("x-list-style")
+                .removeAttr("x-plain");
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {

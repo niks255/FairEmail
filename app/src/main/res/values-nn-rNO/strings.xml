@@ -257,9 +257,6 @@
     <string name="title_advanced_caption_message">Melding</string>
     <string name="title_advanced_caption_message_header">Meldingstittel</string>
     <string name="title_advanced_caption_message_body">Meldingstekst</string>
-    <string name="title_advanced_portrait2">Bruk to rader i stående modus</string>
-    <string name="title_advanced_landscape">Bruk to kolonner i liggende modus</string>
-    <string name="title_advanced_landscape3">Vis navigasjonsmenyen i liggende modus som standard</string>
     <string name="title_advanced_startup">Vis på startskjermen</string>
     <string name="title_advanced_cards">Bruk kortstil i stedet for tabellstil</string>
     <string name="title_advanced_date_header">Gruppere etter dato</string>
@@ -295,7 +292,6 @@
     <string name="title_advanced_addresses">Vis adresseinformasjon som standard</string>
     <string name="title_advanced_attachments_alt">Vis vedlegg etter meldingsteksten</string>
     <string name="title_advanced_thumbnails">Vis miniatyrbilder etter meldingsteksten</string>
-    <string name="title_advanced_message_text_zoom">Standard zooming på tekstmelding</string>
     <string name="title_advanced_overview_mode">Zoom originale meldinger slik at de passer til skjermen</string>
     <string name="title_advanced_contrast">Bruk høy kontrast for meldingstekst</string>
     <string name="title_advanced_monospaced">Bruk monospaced skrift for meldingstekst som standard</string>
@@ -690,6 +686,8 @@
     <string name="title_show_headers">Vis topptekster</string>
     <string name="title_raw_save">Lagre rå melding</string>
     <string name="title_raw_send">Send som vedlegg</string>
+    <string name="title_raw_send_message">Melding</string>
+    <string name="title_raw_send_thread">Samtale</string>
     <string name="title_manage_keywords">Administrer søkeord</string>
     <string name="title_manage_labels">Administrer Gmail-etiketter</string>
     <string name="title_add_keyword">Legg til søkeord</string>
@@ -738,7 +736,6 @@
     <string name="title_no_connection">Koble til en eller flere kontoer &#8230;</string>
     <string name="title_no_folder">Mappe eksisterer ikke</string>
     <string name="title_no_format">Den opprinnelig mottatte meldingen vil bli inkludert</string>
-    <string name="title_no_image">Bildet kunne ikke dekodes</string>
     <string name="title_no_search">Søk på serveren er ikke tilgjengelig for denne kontoen</string>
     <string name="title_too_large">Melding for stor til å omformatere fullstendig</string>
     <string name="title_truncated">Meldingen er for stor til å vises fullstendig</string>
@@ -1160,7 +1157,6 @@
     <string name="title_remark_owner">Informasjon vil bli hentet fra <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Eierens IP-adresse</string>
     <string name="title_select_app">Velg app</string>
-    <string name="title_updated">Det er en oppdatering til versjon %1$s tilgjengelig</string>
     <string name="title_issue">Har du et spørsmål eller et problem?</string>
     <string name="title_yes">Ja</string>
     <string name="title_no">Nei</string>
@@ -1217,7 +1213,6 @@
     <string name="title_pro_hide">Skjul liten melding i %1$d uker</string>
     <string name="title_pro_hint">Ved å kjøpe pro-funksjoner kan du bruke alle aktuelle og fremtidige pro-funksjoner, og vil holde denne appen vedlikeholdt og støttet</string>
     <string name="title_pro_price">Hvorfor er pro-funksjonene så dyre?</string>
-    <string name="title_pro_restore">Hvordan gjenoppretter jeg et kjøp?</string>
     <string name="title_pro_pending">Ventende kjøp</string>
     <string name="title_pro_activated">Alle pro-funksjoner er aktivert</string>
     <string name="title_pro_valid">Alle pro-funksjoner aktivert</string>

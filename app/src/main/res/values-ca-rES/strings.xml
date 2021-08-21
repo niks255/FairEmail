@@ -3,17 +3,22 @@
     <string name="app_search">Cerca FairMail</string>
     <string name="app_changelog">Registre de canvis</string>
     <string name="app_welcome">FairEmail és una aplicació de correu electrònic de codi obert centrada en la privadesa i la seguretat. Per aquesta raó, algunes funcions poden funcionar de manera diferent a la que estàs acostumat.</string>
+    <string name="app_limitations">Per exemple, els missatges es reformen per defecte per treure elements insegurs i per maximitzar la lectura, i obrir els enllaços necessita ser aprovat per seguretat.
+Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="app_crash">FairMail no és compatible en aquest dispositiu perquè els errors a Android causen bloqueigs</string>
     <string name="app_exit">Premeu «Enrere» novament per sortir</string>
     <string name="app_cake">Espai d’emmagatzematge insuficient</string>
+    <string name="app_updated">Darrera actualització: %1$s</string>
     <string name="channel_service">Rebre</string>
     <string name="channel_send">Enviar</string>
     <string name="channel_notification">Correu electrònic</string>
+    <string name="channel_progress">Progrés</string>
     <string name="channel_update">Actualitzacions</string>
     <string name="channel_warning">Advertències</string>
     <string name="channel_error">Errors</string>
     <string name="channel_alert">Alertes de servidor</string>
     <string name="channel_group_contacts">Contactes</string>
+    <string name="channel_service_description">Sincronització i monitorització dels comptes</string>
     <string name="channel_send_description">Enviant missatges</string>
     <string name="channel_notification_description">Nova notificació de missatge</string>
     <plurals name="page_conversation">
@@ -102,6 +107,7 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_setup">Preferències</string>
     <string name="title_setup_help">Ajuda</string>
     <string name="title_setup_quick">Configuració ràpida</string>
+    <string name="title_setup_issue">FairEmail va néixer per ajudar-nos a protegir la nostra privacitat y representa literalment milers d\'hores de treball. Si teniu qualsevol problema, si us plau, contacteu amb mi primer demanant suport abans de deixar un comentari negatiu. Sóc feliç ajudant!</string>
     <string name="title_setup_quick_hint">La configuració ràpida aconseguirà informació de configuració a autoconfig.thunderbird.net</string>
     <string name="title_setup_quick_imap">Servidor IMAP per rebre missatges</string>
     <string name="title_setup_quick_smtp">Servidor SMTP per enviar missatges</string>
@@ -245,9 +251,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_caption_message">Missatge</string>
     <string name="title_advanced_caption_message_header">Capçalera del missatge</string>
     <string name="title_advanced_caption_message_body">Cos del missatge</string>
-    <string name="title_advanced_portrait2">Utilitza dues files en el mode vertical</string>
-    <string name="title_advanced_landscape">Utilitzeu dues columnes en mode horitzontal</string>
-    <string name="title_advanced_landscape3">Mostra el menú de navegació en mode paisatge de manera predeterminada</string>
     <string name="title_advanced_startup">Mostra a la pantalla d\'inici</string>
     <string name="title_advanced_cards">Utilitzeu l\'estil de targeta en lloc de l\'estil tabular</string>
     <string name="title_advanced_date_header">Agrupa per data</string>
@@ -284,7 +287,7 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_addresses">Mostra els detalls de les adreces per defecte</string>
     <string name="title_advanced_attachments_alt">Mostra fitxers adjunts després del text del missatge</string>
     <string name="title_advanced_thumbnails">Mostra les miniatures després del text del missatge</string>
-    <string name="title_advanced_message_text_zoom">Zoom predeterminat del text del missatge</string>
+    <string name="title_advanced_message_text_zoom2">Ampliació per defecte del text del missatge: %1$s %%</string>
     <string name="title_advanced_contrast">Utilitzeu un alt contrast per al text del missatge</string>
     <string name="title_advanced_monospaced">Utilitzeu tipus de lletra mono per al text del missatge per defecte</string>
     <string name="title_advanced_text_color">Utilitza els colores del text</string>
@@ -617,6 +620,8 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_show_headers">Mostra les capçaleres</string>
     <string name="title_raw_save">Descarregueu el missatge en brut</string>
     <string name="title_raw_send">Envia com a fitxer adjunt</string>
+    <string name="title_raw_send_message">Missatge</string>
+    <string name="title_raw_send_thread">Conversació</string>
     <string name="title_manage_keywords">Gestiona les paraules clau</string>
     <string name="title_manage_labels">Gestiona les etiquetes de Gmail</string>
     <string name="title_add_keyword">Afegeix paraula clau</string>
@@ -665,7 +670,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_no_connection">Connectat a un o més comptes &#8230;</string>
     <string name="title_no_folder">La carpeta no existeix</string>
     <string name="title_no_format">S\'inclourà el missatge rebut originalment</string>
-    <string name="title_no_image">La imatge no s\'ha pogut descodificar</string>
     <string name="title_no_search">Cercar al servidor no està disponible per aquest compte</string>
     <string name="title_too_large">Missatge massa gran per reformatejar-lo completament</string>
     <string name="title_truncated">Missatge massa gran per mostrar-lo completament</string>
@@ -1040,7 +1044,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_remark_owner">Es recuperarà informació <a href="https://ipinfo.io/">ipinfo.io</a></string>
     <string name="title_ip_owner">Adreça IP del propietari</string>
     <string name="title_select_app">Seleccioneu aplicació</string>
-    <string name="title_updated">Hi ha disponible una actualització a la versió %1$s</string>
     <string name="title_issue">Tens alguna pregunta o problema?</string>
     <string name="title_yes">Sí</string>
     <string name="title_no">No</string>
