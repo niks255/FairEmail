@@ -292,11 +292,14 @@
     <string name="title_advanced_alt_re_fwd">Εναλλακτικό πρόθεμα απάντησης/προώθησης</string>
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
     <string name="title_advanced_send_delayed">Καθυστέρηση στην αποστολή μηνυμάτων</string>
+    <string name="title_advanced_attach_new">Προσθήκη κοινόχρηστων αρχείων σε ένα νέο προσχέδιο</string>
+    <string name="title_advanced_reply_all">Πατήστε παρατεταμένα το κουμπί απάντησης για να απαντήσετε σε όλους</string>
     <string name="title_advanced_send_pending">Προβολή διακριτικού εικονιδίου για απεσταλμένα με χρονοκαθυστέρηση</string>
     <string name="title_advanced_compose_font">Προεπιλεγμένη γραμματοσειρά</string>
     <string name="title_advanced_prefix_once">Μόνο ένα πρόθεμα κατά την απάντηση ή προώθηση μηνύματος</string>
     <string name="title_advanced_separate_reply">Εισαγωγή μιας οριζόντιας γραμμής πριν από την κεφαλίδα μιας απάντησης/προώθησης</string>
     <string name="title_advanced_extended_reply">Χρήση εκτεταμένων κεφαλίδων κατά την απάντηση/προώθηση</string>
+    <string name="title_advanced_write_above">Συγγραφή πάνω από το κείμενο του αποστολέα</string>
     <string name="title_advanced_write_below">Συγγραφή κάτω από το κείμενο του αποστολέα</string>
     <string name="title_advanced_quote_reply">Παράθεση του προς απάντηση κειμένου</string>
     <string name="title_advanced_limit_reply">Περιορισμός του αριθμού των ιεραρχημένων παραθεμάτων</string>
@@ -551,6 +554,7 @@
     <string name="title_advanced_suggest_local_hint">Επιπρόσθετα στις παρεχόμενες από το Android επαφές, θα αποθηκεύονται πληροφορίες επαφών για πρόσφατα απεσταλμένα ή ειλημμένα μηνύματα, μόνον εφόσον οι σχετικές δυνατότητες έχουν ενεργοποιηθεί.</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
+    <string name="title_advanced_reply_all_hint">Εάν απενεργοποιηθεί, το παρατεταμένο πάτημα στο κουμπί απάντησης θα στείλει απάντηση μόνον στον αποστολέα</string>
     <string name="title_advanced_reply_move_hint">Ο διακομιστής ηλ. ταχυδρομείου ενδέχεται να προσθέτει ακόμα τα μηνύματα στον φάκελο απεσταλμένων</string>
     <string name="title_advanced_metered_hint">Οι συνδέσεις με ογκοχρέωση είναι, γενικά, οι κινητές συνδέσεις διαδικτύου ή τα επί πληρωμή σημεία Wi-Fi</string>
     <string name="title_advanced_metered_warning">Αν απενεργοποιηθεί, θα απενεργοποιηθούν η λήψη και η αποστολή μηνυμάτων σε κινητές συνδέσεις διαδικτύου</string>
@@ -906,7 +910,10 @@
     <string name="title_receipt_subject">Αποδεικτικό ανάγνωσης: %1$s</string>
     <string name="title_receipt_text">Αυτό το αποδεικτικό ανάγνωσης πιστοποιεί μόνον ότι το μήνυμα έχει προβληθεί. Δεν υπάρχει εγγύηση ότι ο αποδέκτης έχει διαβάσει το περιεχόμενο του μηνύματος.</string>
     <string name="title_no_answers">Δεν έχουν οριστεί πρότυπα</string>
-    <string name="title_no_viewer">Καμία εφαρμογή διαθέσιμη για προβολή του %1$s</string>
+    <string name="title_no_viewer_caption">Δεν υπάρχει διαθέσιμη εφαρμογή προβολής</string>
+    <string name="title_no_viewer_name">Όνομα περιεχομένου</string>
+    <string name="title_no_viewer_type">Τύπος περιεχομένου</string>
+    <string name="title_no_viewer_search">Αναζήτηση εφαρμογής</string>
     <string name="title_no_recorder">Δεν βρέθηκε καμία κατάλληλη εφαρμογή ηχογράφησης</string>
     <string name="title_no_camera">Καμία κατάλληλη εφαρμογή κάμερας δεν είναι διαθέσιμη</string>
     <string name="title_no_saf">Πλαίσιο πρόσβασης αποθήκευσης δεν είναι διαθέσιμο</string>

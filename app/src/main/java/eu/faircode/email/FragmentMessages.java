@@ -64,6 +64,7 @@ import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.print.PrintAttributes;
@@ -103,7 +104,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -262,6 +262,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private ImageButton ibSeen;
     private ImageButton ibUnflagged;
     private ImageButton ibSnoozed;
+    private TextView tvDebug;
     private TextViewAutoCompleteAction etSearch;
     private BottomNavigationView bottom_navigation;
     private ContentLoadingProgressBar pbWait;
@@ -492,6 +493,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         ibUp = view.findViewById(R.id.ibUp);
         ibOutbox = view.findViewById(R.id.ibOutbox);
         tvOutboxCount = view.findViewById(R.id.tvOutboxCount);
+        tvDebug = view.findViewById(R.id.tvDebug);
         ibSeen = view.findViewById(R.id.ibSeen);
         ibUnflagged = view.findViewById(R.id.ibUnflagged);
         ibSnoozed = view.findViewById(R.id.ibSnoozed);
@@ -821,6 +823,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
+        tvDebug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Manual GC");
+                Runtime.getRuntime().runFinalization();
+                Runtime.getRuntime().gc();
+                updateDebugInfo();
+            }
+        });
+
         ibSeen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -847,7 +859,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 onMenuFilter(name, !filter);
             }
         });
-
 
         etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -1211,6 +1222,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         sbThread.setVisibility(View.GONE);
         ibDown.setVisibility(View.GONE);
         ibUp.setVisibility(View.GONE);
+        tvDebug.setText(null);
+        tvDebug.setVisibility(
+                BuildConfig.DEBUG && viewType != AdapterMessage.ViewType.THREAD
+                        ? View.VISIBLE : View.GONE);
         ibSeen.setVisibility(View.GONE);
         ibUnflagged.setVisibility(View.GONE);
         ibSnoozed.setVisibility(View.GONE);
@@ -2142,9 +2157,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             Drawable d = context.getDrawable(icon).mutate();
             d.setTint(Helper.resolveColor(context, android.R.attr.textColorSecondary));
 
+            int half = rect.width() / 2;
             if (dX > 0) {
                 // Right swipe
-                d.setAlpha(Math.round(255 * Math.min(dX / (2 * margin + size), 1.0f)));
+                if (dX < half)
+                    d.setAlpha(Math.round(255 * Math.min(dX / (2 * margin + size), 1.0f)));
+                else
+                    d.setAlpha(Math.round(255 * (1.0f - (dX - half) / half)));
                 if (swipes.right_color == null) {
                     Integer color = EntityFolder.getDefaultColor(swipes.swipe_right, swipes.right_type, context);
                     if (color != null)
@@ -2160,7 +2179,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 d.draw(canvas);
             } else if (dX < 0) {
                 // Left swipe
-                d.setAlpha(Math.round(255 * Math.min(-dX / (2 * margin + size), 1.0f)));
+                if (-dX < half)
+                    d.setAlpha(Math.round(255 * Math.min(-dX / (2 * margin + size), 1.0f)));
+                else
+                    d.setAlpha(Math.round(255 * (1.0f - (-dX - half) / half)));
                 if (swipes.left_color == null) {
                     Integer color = EntityFolder.getDefaultColor(swipes.swipe_left, swipes.left_type, context);
                     if (color != null)
@@ -5066,7 +5088,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (autoscroll) {
                     ActivityView activity = (ActivityView) getActivity();
                     if (activity != null &&
-                            activity.isFolderUpdated(viewType == AdapterMessage.ViewType.UNIFIED ? -1L : folder))
+                            activity.isFolderUpdated(viewType == AdapterMessage.ViewType.UNIFIED ? null : folder, type))
                         adapter.gotoTop();
                 }
             }
@@ -5108,11 +5130,23 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         tvNoEmail.setVisibility(none ? View.VISIBLE : View.GONE);
         tvNoEmailHint.setVisibility(none && filtered ? View.VISIBLE : View.GONE);
 
+        if (BuildConfig.DEBUG)
+            updateDebugInfo();
+
         Log.i("List state reason=" + reason +
                 " tasks=" + tasks + " loading=" + loading +
                 " items=" + items + " initialized=" + initialized +
                 " wait=" + (pbWait.getVisibility() == View.VISIBLE) +
                 " no=" + (tvNoEmail.getVisibility() == View.VISIBLE));
+    }
+
+    private void updateDebugInfo() {
+        Runtime rt = Runtime.getRuntime();
+        long hused = rt.totalMemory() - rt.freeMemory();
+        long hmax = rt.maxMemory();
+        long nheap = Debug.getNativeHeapAllocatedSize();
+        int perc = Math.round(hused * 100f / hmax);
+        tvDebug.setText(perc + "% " + (nheap / (1024 * 1024)) + "M");
     }
 
     private boolean handleThreadActions(
@@ -5954,11 +5988,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         etSearch.setText(null);
         etSearch.setVisibility(View.VISIBLE);
         etSearch.requestFocus();
-
-        InputMethodManager imm =
-                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null)
-            imm.showSoftInput(etSearch, InputMethodManager.SHOW_IMPLICIT);
+        Helper.showKeyboard(etSearch);
     }
 
     private void endSearch() {

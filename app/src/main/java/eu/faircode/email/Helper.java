@@ -156,13 +156,16 @@ public class Helper {
 
     static final String PRIVACY_URI = "https://email.faircode.eu/privacy/";
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
-    static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport&version=" + BuildConfig.VERSION_NAME;
+    static final String SUPPORT_URI = "https://contact.faircode.eu/";
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
     static final String BIMI_PRIVACY_URI = "https://datatracker.ietf.org/doc/html/draft-brotman-ietf-bimi-guidance-03#section-7.4";
     static final String FAVICON_PRIVACY_URI = "https://en.wikipedia.org/wiki/Favicon";
     static final String GRAVATAR_PRIVACY_URI = "https://en.wikipedia.org/wiki/Gravatar";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
     static final String DONTKILL_URI = "https://dontkillmyapp.com/";
+
+    // https://developer.android.com/distribute/marketing-tools/linking-to-google-play#PerformingSearch
+    private static final String PLAY_STORE_SEARCH = "https://play.google.com/store/search";
 
     static final Pattern EMAIL_ADDRESS
             = Pattern.compile(
@@ -803,8 +806,16 @@ public class Helper {
     }
 
     static Uri getSupportUri(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String language = prefs.getString("language", null);
+        Locale slocale = Resources.getSystem().getConfiguration().locale;
+
         return Uri.parse(SUPPORT_URI)
                 .buildUpon()
+                .appendQueryParameter("product", "fairemailsupport")
+                .appendQueryParameter("version", BuildConfig.VERSION_NAME)
+                .appendQueryParameter("locale", slocale.toString())
+                .appendQueryParameter("language", language == null ? "" : language)
                 .appendQueryParameter("installed", Helper.hasValidFingerprint(context) ? "" : "Other")
                 .build();
     }
@@ -991,24 +1002,47 @@ public class Helper {
     }
 
     static void reportNoViewer(Context context, Intent intent) {
-        StringBuilder sb = new StringBuilder();
+        View dview = LayoutInflater.from(context).inflate(R.layout.dialog_no_viewer, null);
+        TextView tvName = dview.findViewById(R.id.tvName);
+        TextView tvFullName = dview.findViewById(R.id.tvFullName);
+        TextView tvType = dview.findViewById(R.id.tvType);
 
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
-        if (TextUtils.isEmpty(title)) {
-            Uri data = intent.getData();
-            if (data == null)
-                sb.append(intent.toString());
-            else
-                sb.append(data.toString());
-        } else
-            sb.append(title);
-
+        Uri data = intent.getData();
         String type = intent.getType();
-        if (!TextUtils.isEmpty(type))
-            sb.append(' ').append(type);
+        String fullName = (data == null ? intent.toString() : data.toString());
+        String extension = (data == null ? null : getExtension(data.getLastPathSegment()));
 
-        String message = context.getString(R.string.title_no_viewer, sb.toString());
-        ToastEx.makeText(context, message, Toast.LENGTH_LONG).show();
+        tvName.setText(title == null ? fullName : title);
+        tvFullName.setText(fullName);
+        tvFullName.setVisibility(title == null ? View.GONE : View.VISIBLE);
+
+        tvType.setText(type);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setView(dview)
+                .setNegativeButton(android.R.string.cancel, null);
+
+        if (hasPlayStore(context) && !TextUtils.isEmpty(extension)) {
+            builder.setNeutralButton(R.string.title_no_viewer_search, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    try {
+                        Uri search = Uri.parse(PLAY_STORE_SEARCH)
+                                .buildUpon()
+                                .appendQueryParameter("q", extension)
+                                .build();
+                        Intent intent = new Intent(Intent.ACTION_VIEW, search);
+                        context.startActivity(intent);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        ToastEx.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+
+        builder.show();
     }
 
     static void excludeFromRecents(Context context) {
@@ -1131,22 +1165,26 @@ public class Helper {
         return (tv.string != null && !"light".contentEquals(tv.string));
     }
 
-    static void hideKeyboard(final View view) {
+    static void showKeyboard(final View view) {
+        final Context context = view.getContext();
         InputMethodManager imm =
-                (InputMethodManager) view.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (imm == null)
             return;
 
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Log.i("showKeyboard view=" + view);
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    static void hideKeyboard(Activity activity) {
-        if (activity == null)
+    static void hideKeyboard(final View view) {
+        final Context context = view.getContext();
+        InputMethodManager imm =
+                (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (imm == null)
             return;
-        View focused = activity.getCurrentFocus();
-        if (focused == null)
-            return;
-        hideKeyboard(focused);
+
+        Log.i("hideKeyboard view=" + view);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     // Formatting

@@ -289,11 +289,14 @@
     <string name="title_advanced_alt_re_fwd">Alternativt svar-/vidarebefordringsprefix</string>
     <string name="title_advanced_send_reminders">Visa påminnelser</string>
     <string name="title_advanced_send_delayed">Fördröj sändning av meddelanden</string>
+    <string name="title_advanced_attach_new">Lägg till delade filer till ett nytt utkast</string>
+    <string name="title_advanced_reply_all">Långtryck på svarsknappen för att svara till alla</string>
     <string name="title_advanced_send_pending">Visa icke-påträngande försenad leveransikon</string>
     <string name="title_advanced_compose_font">Standardtypsnitt</string>
     <string name="title_advanced_prefix_once">Prefix i ämnet endast när du svarar eller vidarebefordrar</string>
     <string name="title_advanced_separate_reply">Infoga en horisontell linje innan ett svar/framåt sidhuvud</string>
     <string name="title_advanced_extended_reply">Använd förlängd svars-/framåtriktad sidhuvud</string>
+    <string name="title_advanced_write_above">Skriv ovanför avsändarens text</string>
     <string name="title_advanced_write_below">Skriv under avsändarens text</string>
     <string name="title_advanced_quote_reply">Citera svarstext</string>
     <string name="title_advanced_limit_reply">Begränsa antalet nästlade citat</string>
@@ -550,6 +553,7 @@
     <string name="title_advanced_suggest_local_hint">Förutom kontakter som tillhandahålls av Android. Kontaktdata lagras endast för nyligen skickade eller mottagna meddelanden när det aktiverat.</string>
     <string name="title_advanced_usenet_hint">Infoga \'-- \' mellan texten och signaturen</string>
     <string name="title_advanced_send_reminders_hint">Visa en varning när meddelandetexten eller ämnet är tomt eller när en bilaga kanske saknas</string>
+    <string name="title_advanced_reply_all_hint">Om inaktiverad, långtryck på svarsknappen kommer att svara avsändaren</string>
     <string name="title_advanced_reply_move_hint">E-postservern kan fortfarande lägga till meddelanden till skickade mail mappen</string>
     <string name="title_advanced_metered_hint">Uppmätta anslutningar är generellt mobila anslutningar eller betalda Wi-Fi-hotspots</string>
     <string name="title_advanced_metered_warning">Inaktivering av det här alternativet inaktiverar mottagning och sändning av meddelanden på mobila internetanslutningar</string>
@@ -905,7 +909,10 @@
     <string name="title_receipt_subject">Läs kvitto: %1$s</string>
     <string name="title_receipt_text">Detta läskvitto bekräftar bara att meddelandet visades. Det finns ingen garanti för att mottagaren har läst meddelandets innehåll.</string>
     <string name="title_no_answers">Inga svarsmallar definierade</string>
-    <string name="title_no_viewer">Ingen visarapp tillgänglig för %1$s</string>
+    <string name="title_no_viewer_caption">Ingen läsapp tillgänglig</string>
+    <string name="title_no_viewer_name">Innehållets namn</string>
+    <string name="title_no_viewer_type">Typ av innehåll</string>
+    <string name="title_no_viewer_search">Sök app</string>
     <string name="title_no_recorder">Ingen lämplig ljudinspelningsapp tillgänglig</string>
     <string name="title_no_camera">Ingen lämplig kameraapp tillgänglig</string>
     <string name="title_no_saf">Ramverk för lagringstillträde är inte tillgängligt</string>

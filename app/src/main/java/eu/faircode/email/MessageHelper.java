@@ -1183,10 +1183,7 @@ public class MessageHelper {
             priority = EntityMessage.PRIORITIY_HIGH;
         else if ("normal".equalsIgnoreCase(header) ||
                 "medium".equalsIgnoreCase(header) ||
-                "med".equalsIgnoreCase(header) ||
-                "a".equalsIgnoreCase(header) ||
-                "aplus".equalsIgnoreCase(header) ||
-                "none".equalsIgnoreCase(header))
+                "med".equalsIgnoreCase(header))
             priority = EntityMessage.PRIORITIY_NORMAL;
         else if ("low".equalsIgnoreCase(header) ||
                 "lowest".equalsIgnoreCase(header) ||
@@ -1194,9 +1191,14 @@ public class MessageHelper {
                 "marketing".equalsIgnoreCase(header) ||
                 "bulk".equalsIgnoreCase(header) ||
                 "batch".equalsIgnoreCase(header) ||
-                "b".equalsIgnoreCase(header) ||
-                "mass".equalsIgnoreCase(header))
+                "mass".equalsIgnoreCase(header) ||
+                "none".equalsIgnoreCase(header))
             priority = EntityMessage.PRIORITIY_LOW;
+        else if ("a".equalsIgnoreCase(header) ||
+                "b".equalsIgnoreCase(header) ||
+                "c".equalsIgnoreCase(header) ||
+                "aplus".equalsIgnoreCase(header))
+            ; // Ignore unknown
         else if (!TextUtils.isEmpty(header))
             try {
                 priority = Integer.parseInt(header);
@@ -1219,8 +1221,14 @@ public class MessageHelper {
     Boolean getAutoSubmitted() throws MessagingException {
         // https://tools.ietf.org/html/rfc3834
         String header = imessage.getHeader("Auto-Submitted", null);
-        if (header == null)
+        if (header == null) {
+            // https://github.com/jpmckinney/multi_mail/wiki/Detecting-autoresponders
+            header = imessage.getHeader("Precedence", null);
+            if ("bulk".equalsIgnoreCase(header)) // Used by Amazon
+                return true;
             return null;
+        }
+
         return !"no".equalsIgnoreCase(header);
     }
 
@@ -1816,12 +1824,13 @@ public class MessageHelper {
     }
 
     static byte[] decodeWord(String word, String encoding, String charset) throws IOException {
+        String e = encoding.trim();
         ByteArrayInputStream bis = new ByteArrayInputStream(ASCIIUtility.getBytes(word));
 
         InputStream is;
-        if (encoding.equalsIgnoreCase("B"))
+        if (e.equalsIgnoreCase("B"))
             is = new BASE64DecoderStream(bis);
-        else if (encoding.equalsIgnoreCase("Q"))
+        else if (e.equalsIgnoreCase("Q"))
             is = new QDecoderStreamEx(bis);
         else {
             Log.e(new UnsupportedEncodingException("Encoding=" + encoding));

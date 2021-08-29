@@ -2,7 +2,7 @@
 <resources>
     <string name="app_search">FairEmail 搜尋</string>
     <string name="app_changelog">變更紀錄</string>
-    <string name="app_welcome">FairEmail 是一款專注於隱私和安全的開源電子郵件應用程式。因此，有些功能的工作方式可能與您所熟悉的不同。</string>
+    <string name="app_welcome">FairEmail 是一款專注於隱私和安全的開源電子郵件應用程式。因此，其中一些功能的工作方式可能與您所熟悉的不同。</string>
     <string name="app_limitations">例如，預設重排訊息以移除不安全的元件並改善可讀性，並且為了安全，連結的開啟還需要獲得確認。如有需要，兩者皆可停用。</string>
     <string name="app_crash">此裝置不支援 FairEmail 的執行，因為 Android 系統中存在會導致本程式崩潰的 bugs</string>
     <string name="app_exit">再一次執行‘返回’操作以退出</string>
@@ -282,12 +282,15 @@
     <string name="title_advanced_alt_re_fwd">可替代的回覆/轉寄前綴</string>
     <string name="title_advanced_send_reminders">顯示提醒</string>
     <string name="title_advanced_send_delayed">延後傳送訊息</string>
+    <string name="title_advanced_attach_new">將分享的檔案加至新建草稿中</string>
+    <string name="title_advanced_reply_all">長按應答按鈕回覆所有人</string>
     <string name="title_advanced_send_pending">顯示低存在感的傳送延後圖示</string>
     <string name="title_advanced_compose_font">預設字型</string>
     <string name="title_advanced_prefix_once">在回覆或轉寄時，主題前綴只出現一次</string>
     <string name="title_advanced_separate_reply">在回覆/轉寄標頭前插入水平線</string>
     <string name="title_advanced_extended_reply">使用擴充的回覆/轉寄標頭</string>
-    <string name="title_advanced_write_below">將回覆寫於寄件者寄件本文下方</string>
+    <string name="title_advanced_write_above">回覆書寫於寄件者寄件本文上方</string>
+    <string name="title_advanced_write_below">回覆書寫於寄件者寄件本文下方</string>
     <string name="title_advanced_quote_reply">引用回覆的文字</string>
     <string name="title_advanced_limit_reply">限制嵌套引用的數量</string>
     <string name="title_advanced_resize_reply">在回覆文字中重調圖片大小</string>
@@ -540,8 +543,9 @@
     <string name="title_advanced_sync_delay_hint">這將會減緩同步訊息的速度</string>
     <string name="title_advanced_suggest_names_hint">如果停用，則在選取聯絡人時僅有電子郵件地址會被使用</string>
     <string name="title_advanced_suggest_local_hint">除了 Android 提供的聯絡人以外，針對新近傳送或接收訊息的聯絡人數據儲存，將僅在相應選項被啟用後才會進行。</string>
-    <string name="title_advanced_usenet_hint">在本文和簽名之間插入 ‘--’</string>
+    <string name="title_advanced_usenet_hint">在本文和簽名之間插入 ‘-- ’</string>
     <string name="title_advanced_send_reminders_hint">當訊息本文或主旨為空或在附件可能有缺失時顯示警告</string>
+    <string name="title_advanced_reply_all_hint">如果停用此項設定，則長按應答按鈕僅會回覆寄件者</string>
     <string name="title_advanced_reply_move_hint">電子郵件伺服器仍可將訊息新增至已傳送訊息資料夾</string>
     <string name="title_advanced_metered_hint">計量付費連線通常是行動網路連線或付費 Wi-Fi 熱點</string>
     <string name="title_advanced_metered_warning">停用此選項也將停用在使用行動網路連線期間的訊息接收和傳送。</string>
@@ -591,7 +595,7 @@
     <string name="title_advanced_notify_preview_all_hint">針對可顯示全文的穿戴式裝置 (最多5000個字元)</string>
     <string name="title_advanced_notify_preview_only_hint">通知顯示延後，直至訊息本文被下載</string>
     <string name="title_advanced_wearable_hint">通知僅在訊息本文下載後才會被傳送至穿戴式裝置</string>
-    <string name="title_advanced_messaging_hint">需要開啟此選項以取得 Android Auto 支援</string>
+    <string name="title_advanced_messaging_hint">需要啟用此選項以取得 Android Auto 支援</string>
     <string name="title_advanced_move_hint">目標資料夾可在帳戶設定中配置</string>
     <string name="title_advanced_notify_no_grouping">此 Android 版本不支援通知分組</string>
     <string name="title_advanced_notify_no_channels">這一 Android 版本不支援通知頻道</string>
@@ -897,7 +901,10 @@
     <string name="title_receipt_subject">已讀回條: %1$s</string>
     <string name="title_receipt_text">此已讀回條僅能確認訊息被顯示，不能保證收件者已閱讀訊息內容。</string>
     <string name="title_no_answers">無已定義回覆模板</string>
-    <string name="title_no_viewer">未有可用於 %1$s 的檢視器程式</string>
+    <string name="title_no_viewer_caption">無可用檢視器程式</string>
+    <string name="title_no_viewer_name">內容名稱</string>
+    <string name="title_no_viewer_type">內容類型</string>
+    <string name="title_no_viewer_search">搜尋適用程式</string>
     <string name="title_no_recorder">無適用的音頻錄製程式</string>
     <string name="title_no_camera">無適用的相機程式</string>
     <string name="title_no_saf">儲存空間存取架構不可用</string>
@@ -905,7 +912,7 @@
     <string name="title_no_internet">無網際網路連線或連線不合宜</string>
     <string name="title_no_connection">正在連線至一個或多個帳戶 &#8230;</string>
     <string name="title_no_folder">資料夾不存在</string>
-    <string name="title_no_format">原訊息將包含在內</string>
+    <string name="title_no_format">寄件將會包含原訊息</string>
     <string name="title_no_search">於伺服器搜尋功能不可用於此帳戶</string>
     <string name="title_too_large">訊息太大，無法完整重排</string>
     <string name="title_truncated">訊息太大，無法完整顯示</string>

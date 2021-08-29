@@ -2340,9 +2340,9 @@ Chips eignen sich nicht für die Anzeige in einer Liste und da der Nachrichtenko
 <a name="faq117"></a>
 **(117) Können Sie mir helfen, meinen Kauf wiederherzustellen?**
 
-First of all, a purchase will be available on all devices logged into the same Google account, *if* the app is installed via the same Google account too. You can select the account in the Play store app.
+Zunächst einmal ist ein Kauf auf allen Geräten verfügbar, die mit demselben Google-Konto angemeldet sind, *wenn* die App auch über dasselbe Google-Konto installiert ist. Sie können das Konto in der Play Store App auswählen.
 
-Google manages all purchases, so as a developer I have little control over purchases. So, basically the only thing I can do, is give some advice:
+Google verwaltet alle Einkäufe, so dass ich als Entwickler wenig Kontrolle über Einkäufe habe. Also kann ich im Grunde nichts anderes tun, als einen Rat zu geben:
 
 * Stellen Sie sicher, dass Sie über eine stabile Internetverbindung verfügen
 * Stellen Sie sicher, dass Sie mit dem richtigen Google-Konto angemeldet sind und dass alles mit Ihrem Google-Konto in Ordnung ist
@@ -2351,9 +2351,9 @@ Google manages all purchases, so as a developer I have little control over purch
 * Öffnen Sie die App des Play Store und warten Sie mindestens eine Minute, um ihr Zeit zu geben, sich mit den Google-Servern zu synchronisieren
 * Öffnen Sie FairEmail und wechseln Sie zum Bildschirm mit den Profifunktionen, damit FairEmail die Einkäufe überprüfen kann. Oftmals hilft es, auf die Schaltfläche *Kaufen* zu tippen
 
-You can also try to clear the cache of the Play store app via the Android apps settings. Restarting the device might be necessary to let the Play store recognize the purchase correctly.
+Sie können auch versuchen, den Cache der Play Store App über die Android-App-Einstellungen zu löschen. Ein Neustart des Geräts könnte notwendig sein, damit der Play Store den Kauf richtig erkennen kann.
 
-Note that:
+Beachten Sie:
 
 * Wenn Sie *ITEM_ALREADY_OWNED* erhalten, muss die Play Store App wahrscheinlich aktualisiert werden, siehe [hier](https://support.google.com/googleplay/answer/1050566?hl=en)
 * Einkäufe werden in der Google Cloud gespeichert und können nicht verloren gehen
@@ -2368,93 +2368,93 @@ Wenn Sie ein Problem beim Kauf der App nicht lösen können, kontaktieren Sie Go
 <br />
 
 <a name="faq118"></a>
-**(118) What does 'Remove tracking parameters' exactly?**
+**(118) Was genau bedeutet »Verfolgungsparameter entfernen«?**
 
-Checking *Remove tracking parameters* will remove all [UTM parameters](https://en.wikipedia.org/wiki/UTM_parameters) from a link.
+*Verefolgungsparameter entfernen* entfernt alle [UTM-Parameter](https://en.wikipedia.org/wiki/UTM_parameters) von einem Link.
 
 <br />
 
 <a name="faq119"></a>
-**~~(119) Can you add colors to the unified inbox widget?~~**
+**~~(119) Kannst du dem Sammeleingangs-Widget Farben hinzufügen?~~**
 
-~~The widget is designed to look good on most home/launcher screens by making it monochrome and by using a half transparent background.~~ ~~This way the widget will nicely blend in, while still being properly readable.~~
+~~Das Widget ist so konzipiert, dass es auf den meisten Home/Launcher Bildschirmen gut aussieht, indem es monochrome Farben und einen halbtransparenten Hintergrund verwendet. ~ ~~Auf diese Weise wird das Widget schön integriert, während es trotzdem gut lesbar ist.~~
 
-~~Adding colors will cause problems with some backgrounds and will cause readability problems, which is why this won't be added.~~
+~~Das Hinzufügen von Farben wird Probleme mit einigen Hintergründen verursachen und zu Problemen bei der Lesbarkeit führen, weshalb dies nicht hinzugefügt wird.~~
 
-Due to Android limitations it is not possible to dynamically set the opacity of the background and to have rounded corners at the same time.
+Aufgrund von Android-Einschränkungen ist es nicht möglich, die Deckkraft des Hintergrunds dynamisch einzustellen und gleichzeitig gerundete Ecken zu haben.
 
 <br />
 
 <a name="faq120"></a>
-**(120) Why are new message notifications not removed on opening the app?**
+**(120) Warum werden die Benachrichtigungen über neue Nachrichten beim Öffnen der App nicht entfernt?**
 
-New message notifications will be removed on swiping notifications away or on marking the associated messages read. Opening the app will not remove new message notifications. This gives you a choice to leave new message notifications as a reminder that there are still unread messages.
+Neue Benachrichtigungen werden beim Wischen von Benachrichtigungen oder beim Markieren der Nachrichten als gelesen entfernt. Das Öffnen der App löscht keine neuen Nachrichten-Benachrichtigungen. Dies gibt dir die Möglichkeit, Benachrichtigungen über neue Nachrichten als Erinnerung zu behalten, dass es immer noch ungelesene Nachrichten gibt.
 
-On Android 7 Nougat and later new message notifications will be [grouped](https://developer.android.com/training/notify-user/group). Tapping on the summary notification will open the unified inbox. The summary notification can be expanded to view individual new message notifications. Tapping on an individual new message notification will open the conversation the message it is part of. See [this FAQ](#user-content-faq70) about when messages in a conversation will be auto expanded and marked read.
+Auf Android 7 Nougat und später werden neue Benachrichtigungen [gruppiert](https://developer.android.com/training/notify-user/group). Wenn Sie auf eine Zusammenfassungs-Benachrichtigung tippen, öffnet sich der Sammeleingang. Die Zusammenfassungs-Benachrichtigung kann erweitert werden, um einzelne neue Nachrichten anzuzeigen. Tippen Sie auf eine individuelle Benachrichtigung, um die Unterhaltung zu öffnen, zu der die Nachricht gehört. Siehe [diese häufig gestellten Fragen (FAQ)](#user-content-faq70) darüber, wann Nachrichten in einer Unterhaltung automatisch erweitert und als gelesen markiert werden.
 
 <br />
 
 <a name="faq121"></a>
-**(121) How are messages grouped into a conversation?**
+**(121) Wie werden Nachrichten in einer Unterhaltung gruppiert?**
 
-By default FairEmail groups messages in conversations. This can be turned of in the display settings.
+Standardmäßig gruppiert FairEmail Nachrichten in Unterhaltungen. Dies kann in den Anzeigeeinstellungen ausgeschaltet werden.
 
-FairEmail groups messages based on the standard *Message-ID*, *In-Reply-To* and *References* headers. FairEmail does not group on other criteria, like the subject, because this could result in grouping unrelated messages and would be at the expense of increased battery usage.
+FairEmail gruppiert Nachrichten basierend auf der *Message-ID*, *In-Antwort-An* und *Referenzen*-Header. FairEmail gruppiert nicht nach anderen Kriterien, wie dem Betreff, weil dies dazu führen könnte, dass Nachrichten gruppiert werden, die nichts miteinander zu tun haben und zu Lasten eines erhöhten Akkuverbrauchs ginge.
 
 <br />
 
 <a name="faq122"></a>
-**~~(122) Why is the recipient name/email address show with a warning color?~~**
+**~~(122) Warum wird der Empfängername/die E-Mail-Adresse mit einer Warnfarbe angezeigt? ~**
 
-~~The recipient name and/or email address in the addresses section will be shown in a warning color~~ ~~when the sender domain name and the domain name of the *to* address do not match.~~ ~~Mostly this indicates that the message was received *via* an account with another email address.~~
+~~Der Empfängername und/oder die E-Mail-Adresse im Adressbereich werden in einer Warnfarbe angezeigt,~ ~~~wenn der Absender-Domain-Name und der Domain-Name der *"an"-* Adresse nicht übereinstimmen. ~ ~~Meist zeigt dies an, dass die Nachricht *über* ein Konto mit einer anderen E-Mail-Adresse empfangen wurde.~~
 
 <br />
 
 <a name="faq123"></a>
-**(123) What will happen when FairEmail cannot connect to an email server?**
+**(123) Was passiert, wenn FairEmail keine Verbindung zu einem E-Mail-Server herstellen kann?**
 
-If FairEmail cannot connect to an email server to synchronize messages, for example if the internet connection is bad or a firewall or a VPN is blocking the connection, FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power). If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+Wenn FairEmail keine Verbindung zu einem E-Mail-Server herstellen kann, um Nachrichten zu synchronisieren (z. B. wenn die Internetverbindung schlecht ist oder eine Firewall oder ein VPN die Verbindung unterbindet), wird FairEmail nach einer Wartezeit von 8 Sekunden einen erneuten Versuch unternehmen, während das Gerät eingeschaltet bleibt (=verwendet Batterieleistung). Falls dies fehlschlägt, wird FairEmail einen Alarm zum erneuten Versuch nach 15, 30 und schließlich alle 60 Minuten ansetzen und das Gerät in den Ruhezustand versetzen (=kein Batterieverbrauch).
 
-Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby) does not allow to wake the device earlier than after 15 minutes.
+Bitte beachten, dass der [Android-Doze-Modus](https://developer.android.com/training/monitoring-device-state/doze-standby) es nicht erlaubt, das Gerät früher als nach 15 Minuten aufzuwecken.
 
-*Force sync* in the three-dots menu of the unified inbox can be used to let FairEmail attempt to reconnect without waiting.
+*Synchronisation erzwingen* (im Drei-Punkte-Menü des Sammeleingangs) kann verwendet werden, um eine erneute Verbindung zu versuchen, ohne die Wartezeit zu beachten.
 
-Sending messages will be retried on connectivity changes only (reconnecting to the same network or connecting to another network) to prevent the email server from blocking the connection permanently. You can pull down the outbox to retry manually.
+Das Senden von Nachrichten wird nur bei Verbindungsänderungen erneut versucht (erneute Verbindung zum selben Netzwerk oder eine Verbindung zu einem anderen Netzwerk), um zu verhindern, dass der E-Mail-Server die Verbindung dauerhaft blockiert. Sie können im Posteingang herunterziehen, um eine (erneute) Synchronisation manuell auszulösen.
 
-Note that sending will not be retried in case of authentication problems and when the server rejected the message. In this case you can pull down the outbox to try again.
+Beachten Sie, dass das Senden bei Authentifizierungsproblemen und/oder bei Ablehnung der Nachricht durch den Server nicht erneut versucht wird. In diesem Fall können Sie den Posteingang herunterziehen, um es erneut zu versuchen.
 
 <br />
 
 <a name="faq124"></a>
-**(124) Why do I get 'Message too large or too complex to display'?**
+**(124) Warum erhalte ich 'Nachricht zu groß oder zu komplex, um sie anzuzeigen'?**
 
-The message *Message too large or too complex to display* will be shown if there are more than 100,000 characters or more than 500 links in a message. Reformatting and displaying such messages will take too long. You can try to use the original message view, powered by the browser, instead.
+Die Fehlermeldung *Nachricht ist zu groß oder zu komplex für die Anzeige* wird angezeigt, wenn mehr als 100.000 Zeichen oder mehr als 500 Links in einer Nachricht vorhanden sind. Die Neuformatierung und Anzeige solcher Nachrichten dauert zu lange. Sie können stattdessen versuchen, die ursprüngliche Nachrichtenansicht zu verwenden, die durch den Browser betrieben wird.
 
 <br />
 
 <a name="faq125"></a>
-**(125) What are the current experimental features?**
+**(125) Was sind die aktuellen experimentellen Funktionen?**
 
-*Message classification (version 1.1438+)*
+*Nachrichtenklassifizierung (Version 1.1438+)*
 
-Please see [this FAQ](#user-content-faq163) for details.
+Siehe [diese häufig gestellten Fragen (FAQ)](#user-content-faq163) für Details.
 
-Since this is an experimental feature, my advice is to start with just one folder.
+Da es eine experimentelle Funktion ist, empfehle ich, mit nur einem Ordner zu beginnen.
 
 <br />
 
-*Send hard bounce (version 1.1477+)*
+*Unzustellbarkeitsnachricht (Hard Bounce) senden (Version 1.1477+)*
 
-Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=hard bounce) via the reply/answer menu.
+Eine [Zustellstatusbenachrichtigung](https://tools.ietf.org/html/rfc3464) (≙ Hard Bounce) über das Antwortmenü senden.
 
-Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
+Unzustellbarkeitsnachrichten (Hard Bounce) werden meist automatisch verarbeitet, da sie die Reputation des E-Mail-Providers beeinträchtigen. Die E-Mail-Adresse der Unzustellbarkeitsnachricht (Bounce-Adresse) (=*Antwortpfad*-Header) ist meist sehr konkret, damit der E-Mail-Server das Absenderkonto ermitteln kann.
 
 Für einige Hintergründe siehe [diesen Wikipedia-Artikel](https://en.wikipedia.org/wiki/Bounce_message).
 
 <br />
 
 <a name="faq126"></a>
-**(126) Can message previews be sent to my wearable?**
+**(126) Kann eine Vorschau des Nachrichtentexts auf mein Wearable (z.B. Smartwatch) gesendet werden?**
 
 FairEmail ruft eine Nachricht in zwei Schritten ab:
 

@@ -2041,44 +2041,51 @@ class Core {
                 " fetched in " + duration + " ms");
 
         // Check if system folders were renamed
-        for (Folder ifolder : ifolders) {
-            String fullName = ifolder.getFullName();
-            if (TextUtils.isEmpty(fullName))
-                continue;
+        try {
+            for (Folder ifolder : ifolders) {
+                String fullName = ifolder.getFullName();
+                if (TextUtils.isEmpty(fullName))
+                    continue;
 
-            String[] attrs = ((IMAPFolder) ifolder).getAttributes();
-            String type = EntityFolder.getType(attrs, fullName, false);
-            if (type != null &&
-                    !EntityFolder.USER.equals(type) &&
-                    !EntityFolder.SYSTEM.equals(type)) {
-                for (EntityFolder folder : local.values())
-                    if (type.equals(folder.type) &&
-                            !fullName.equals(folder.name) &&
-                            !istore.getFolder(folder.name).exists()) {
-                        Log.e(account.host +
-                                " renaming " + type + " folder" +
-                                " from " + folder.name + " to " + fullName);
-                        folder.name = fullName;
-                        db.folder().setFolderName(folder.id, fullName);
-                    }
+                String[] attrs = ((IMAPFolder) ifolder).getAttributes();
+                String type = EntityFolder.getType(attrs, fullName, false);
+                if (type != null &&
+                        !EntityFolder.USER.equals(type) &&
+                        !EntityFolder.SYSTEM.equals(type)) {
+                    for (EntityFolder folder : new ArrayList<>(local.values()))
+                        if (type.equals(folder.type) &&
+                                !fullName.equals(folder.name) &&
+                                !local.containsKey(fullName) &&
+                                !istore.getFolder(folder.name).exists()) {
+                            Log.e(account.host +
+                                    " renaming " + type + " folder" +
+                                    " from " + folder.name + " to " + fullName);
+                            local.remove(folder.name);
+                            local.put(fullName, folder);
+                            folder.name = fullName;
+                            db.folder().setFolderName(folder.id, fullName);
+                        }
 
-                // Reselect Gmail archive folder
-                if (EntityFolder.ARCHIVE.equals(type) && account.isGmail()) {
-                    boolean gmail_archive_fixed = prefs.getBoolean("gmail_archive_fixed", false);
-                    if (!gmail_archive_fixed) {
-                        prefs.edit().putBoolean("gmail_archive_fixed", true).apply();
-                        EntityFolder archive = db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE);
-                        if (archive == null) {
-                            archive = db.folder().getFolderByName(account.id, fullName);
-                            if (archive != null) {
-                                Log.e("Reselecting Gmail archive=" + fullName);
-                                archive.type = EntityFolder.ARCHIVE;
-                                db.folder().setFolderType(archive.id, archive.type);
+                    // Reselect Gmail archive folder
+                    if (EntityFolder.ARCHIVE.equals(type) && account.isGmail()) {
+                        boolean gmail_archive_fixed = prefs.getBoolean("gmail_archive_fixed", false);
+                        if (!gmail_archive_fixed) {
+                            prefs.edit().putBoolean("gmail_archive_fixed", true).apply();
+                            EntityFolder archive = db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE);
+                            if (archive == null) {
+                                archive = db.folder().getFolderByName(account.id, fullName);
+                                if (archive != null) {
+                                    Log.e("Reselecting Gmail archive=" + fullName);
+                                    archive.type = EntityFolder.ARCHIVE;
+                                    db.folder().setFolderType(archive.id, archive.type);
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
 
         Map<String, EntityFolder> nameFolder = new HashMap<>();
@@ -2378,9 +2385,6 @@ class Core {
                     " sync=" + sync +
                     " uidl=" + hasUidl);
 
-            folder.last_sync_count = imessages.length;
-            db.folder().setFolderLastSyncCount(folder.id, folder.last_sync_count);
-
             if (sync) {
                 // Index IDs
                 Map<String, String> uidlMsgId = new HashMap<>();
@@ -2638,6 +2642,8 @@ class Core {
                 }
             }
 
+            folder.last_sync_count = imessages.length;
+            db.folder().setFolderLastSyncCount(folder.id, folder.last_sync_count);
             db.folder().setFolderLastSync(folder.id, new Date().getTime());
             EntityLog.log(context, account.name + " POP done");
         } finally {
@@ -3139,26 +3145,26 @@ class Core {
                     Log.i(folder.name + " deleted orphans=" + orphans);
                 }
             } else {
-                List<Message> _imessages = new ArrayList<>();
                 List<Long> _ids = new ArrayList<>();
+                List<Long> _uids = new ArrayList<>();
 
-                List<EntityMessage> messages = db.message().getMessagesWithoutContent(
-                        folder.id, sync_kept || force ? null : sync_time);
-                if (messages != null) {
-                    Log.i(folder.name + " needs content=" + messages.size());
-                    for (EntityMessage message : messages) {
-                        Message imessage = ifolder.getMessageByUID(message.uid);
-                        if (imessage != null) {
-                            _imessages.add(imessage);
+                if (download && initialize == 0) {
+                    List<EntityMessage> messages = db.message().getMessagesWithoutContent(
+                            folder.id, sync_kept || force ? null : sync_time);
+                    if (messages != null) {
+                        Log.i(folder.name + " needs content=" + messages.size());
+                        for (EntityMessage message : messages) {
                             _ids.add(message.id);
+                            _uids.add(message.uid);
                         }
                     }
                 }
 
-                search = SystemClock.elapsedRealtime();
-
-                imessages = _imessages.toArray(new Message[0]);
+                // This will result in message changed events
+                imessages = ifolder.getMessagesByUID(Helper.toLongArray(_uids));
                 ids = _ids.toArray(new Long[0]);
+
+                search = SystemClock.elapsedRealtime();
             }
 
             // Update modseq
@@ -3918,8 +3924,11 @@ class Core {
                 message.received > account.created) {
             Intent report = new Intent(ActivityView.ACTION_NEW_MESSAGE);
             report.putExtra("folder", folder.id);
+            report.putExtra("type", folder.type);
             report.putExtra("unified", folder.unified);
-            Log.i("Report new id=" + message.id + " folder=" + folder.name + " unified=" + folder.unified);
+            Log.i("Report new id=" + message.id +
+                    " folder=" + folder.type + ":" + folder.name +
+                    " unified=" + folder.unified);
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
             lbm.sendBroadcast(report);

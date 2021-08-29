@@ -93,7 +93,6 @@ import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -252,6 +251,7 @@ public class FragmentCompose extends FragmentBase {
     private ImageButton ibSignature;
     private TextView tvReference;
     private ImageButton ibCloseRefHint;
+    private ImageButton ibWriteAboveBelow;
     private ImageButton ibReferenceEdit;
     private ImageButton ibReferenceImages;
     private View vwAnchor;
@@ -370,6 +370,7 @@ public class FragmentCompose extends FragmentBase {
         ibSignature = view.findViewById(R.id.ibSignature);
         tvReference = view.findViewById(R.id.tvReference);
         ibCloseRefHint = view.findViewById(R.id.ibCloseRefHint);
+        ibWriteAboveBelow = view.findViewById(R.id.ibWriteAboveBelow);
         ibReferenceEdit = view.findViewById(R.id.ibReferenceEdit);
         ibReferenceImages = view.findViewById(R.id.ibReferenceImages);
         vwAnchor = view.findViewById(R.id.vwAnchor);
@@ -767,6 +768,21 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        ibWriteAboveBelow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(v.getContext());
+                boolean write_below = !prefs.getBoolean("write_below", false);
+                prefs.edit().putBoolean("write_below", write_below).apply();
+                ibWriteAboveBelow.setImageLevel(write_below ? 1 : 0);
+                ToastEx.makeText(v.getContext(),
+                        write_below
+                                ? R.string.title_advanced_write_below
+                                : R.string.title_advanced_write_above,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
         ibReferenceEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -904,6 +920,7 @@ public class FragmentCompose extends FragmentBase {
         grpBody.setVisibility(View.GONE);
         grpSignature.setVisibility(View.GONE);
         grpReferenceHint.setVisibility(View.GONE);
+        ibWriteAboveBelow.setVisibility(View.GONE);
         ibReferenceEdit.setVisibility(View.GONE);
         ibReferenceImages.setVisibility(View.GONE);
         tvReference.setVisibility(View.GONE);
@@ -1401,13 +1418,15 @@ public class FragmentCompose extends FragmentBase {
 
     @Override
     public void onPause() {
+        final Context context = getContext();
+
         if (state == State.LOADED) {
             Bundle extras = new Bundle();
             extras.putBoolean("autosave", true);
             onAction(R.id.action_save, extras, "pause");
         }
 
-        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.unregisterNetworkCallback(networkCallback);
 
         super.onPause();
@@ -2834,6 +2853,62 @@ public class FragmentCompose extends FragmentBase {
         }.setExecutor(executor).execute(this, args, "compose:attachment:add");
     }
 
+    void onSharedAttachments(ArrayList<Uri> uris) {
+        Bundle args = new Bundle();
+        args.putLong("id", working);
+        args.putParcelableArrayList("uris", uris);
+
+        new SimpleTask<ArrayList<Uri>>() {
+            @Override
+            protected ArrayList<Uri> onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+                List<Uri> uris = args.getParcelableArrayList("uris");
+
+                ArrayList<Uri> images = new ArrayList<>();
+                for (Uri uri : uris)
+                    try {
+                        UriInfo info = getInfo(uri, context);
+                        if (info.isImage())
+                            images.add(uri);
+                        else
+                            addAttachment(context, id, uri, false, 0, false);
+                    } catch (IOException ex) {
+                        Log.e(ex);
+                    }
+
+                return images;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, ArrayList<Uri> images) {
+                if (images.size() == 0)
+                    return;
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean image_dialog = prefs.getBoolean("image_dialog", true);
+
+                if (image_dialog) {
+                    Helper.hideKeyboard(view);
+
+                    Bundle aargs = new Bundle();
+                    aargs.putInt("title", android.R.string.ok);
+                    aargs.putParcelableArrayList("images", images);
+
+                    FragmentDialogAddImage fragment = new FragmentDialogAddImage();
+                    fragment.setArguments(aargs);
+                    fragment.setTargetFragment(FragmentCompose.this, REQUEST_SHARED);
+                    fragment.show(getParentFragmentManager(), "compose:shared");
+                } else
+                    onAddImageFile(images);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "compose:shared");
+    }
+
     private List<Uri> getUris(Intent data) {
         List<Uri> result = new ArrayList<>();
 
@@ -4018,11 +4093,23 @@ public class FragmentCompose extends FragmentBase {
         protected DraftData onExecute(Context context, Bundle args) throws Throwable {
             String action = args.getString("action");
             long id = args.getLong("id", -1);
+            long aid = args.getLong("account", -1);
+            long iid = args.getLong("identity", -1);
             long reference = args.getLong("reference", -1);
             int dsn = args.getInt("dsn", EntityMessage.DSN_RECEIPT);
             File ics = (File) args.getSerializable("ics");
             String status = args.getString("status");
+            // raw
             long answer = args.getLong("answer", -1);
+            String to = args.getString("to");
+            String cc = args.getString("cc");
+            String bcc = args.getString("bcc");
+            // inreplyto
+            String external_subject = args.getString("subject", "");
+            String external_body = args.getString("body", "");
+            String external_text = args.getString("text");
+            String selected_text = args.getString("selected");
+            ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean plain_only = prefs.getBoolean("plain_only", false);
@@ -4031,6 +4118,7 @@ public class FragmentCompose extends FragmentBase {
             boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
             boolean receipt_default = prefs.getBoolean("receipt_default", false);
             boolean write_below = prefs.getBoolean("write_below", false);
+            boolean save_drafts = prefs.getBoolean("save_drafts", true);
 
             Log.i("Load draft action=" + action + " id=" + id + " reference=" + reference);
 
@@ -4063,8 +4151,6 @@ public class FragmentCompose extends FragmentBase {
 
                     // Select identity matching from address
                     EntityIdentity selected = null;
-                    long aid = args.getLong("account", -1);
-                    long iid = args.getLong("identity", -1);
 
                     if (aid < 0)
                         if (ref == null) {
@@ -4185,21 +4271,18 @@ public class FragmentCompose extends FragmentBase {
                         data.draft.thread = data.draft.msgid;
 
                         try {
-                            String to = args.getString("to");
                             data.draft.to = MessageHelper.parseAddresses(context, to);
                         } catch (AddressException ex) {
                             Log.w(ex);
                         }
 
                         try {
-                            String cc = args.getString("cc");
                             data.draft.cc = MessageHelper.parseAddresses(context, cc);
                         } catch (AddressException ex) {
                             Log.w(ex);
                         }
 
                         try {
-                            String bcc = args.getString("bcc");
                             data.draft.bcc = MessageHelper.parseAddresses(context, bcc);
                         } catch (AddressException ex) {
                             Log.w(ex);
@@ -4207,11 +4290,10 @@ public class FragmentCompose extends FragmentBase {
 
                         data.draft.inreplyto = args.getString("inreplyto", null);
 
-                        data.draft.subject = args.getString("subject", "");
+                        data.draft.subject = external_subject;
 
-                        String b = args.getString("body", "");
-                        if (!TextUtils.isEmpty(b)) {
-                            Document d = JsoupEx.parse(b); // Passed html
+                        if (!TextUtils.isEmpty(external_body)) {
+                            Document d = JsoupEx.parse(external_body); // Passed html
                             Element e = document
                                     .createElement("div")
                                     .html(d.body().html());
@@ -4345,10 +4427,9 @@ public class FragmentCompose extends FragmentBase {
                                     alt_re ? R.string.title_subject_reply_alt : R.string.title_subject_reply,
                                     subject);
 
-                            String t = args.getString("text");
-                            if (t != null) {
+                            if (external_text != null) {
                                 Element div = document.createElement("div");
-                                for (String line : t.split("\\r?\\n")) {
+                                for (String line : external_text.split("\\r?\\n")) {
                                     Element span = document.createElement("span");
                                     span.text(line);
                                     div.appendChild(span);
@@ -4454,10 +4535,9 @@ public class FragmentCompose extends FragmentBase {
                             data.draft.signature = false;
 
                         // Reply header
-                        String s = args.getString("selected");
                         if (ref.content &&
                                 !"editasnew".equals(action) &&
-                                !("list".equals(action) && TextUtils.isEmpty(s)) &&
+                                !("list".equals(action) && TextUtils.isEmpty(selected_text)) &&
                                 !"dsn".equals(action)) {
                             // Reply/forward
                             Element reply = document.createElement("div");
@@ -4472,7 +4552,7 @@ public class FragmentCompose extends FragmentBase {
                             reply.appendChild(p);
 
                             Document d;
-                            if (TextUtils.isEmpty(s)) {
+                            if (TextUtils.isEmpty(selected_text)) {
                                 // Get referenced message body
                                 d = JsoupEx.parse(ref.getFile(context));
                                 HtmlHelper.normalizeNamespaces(d, false);
@@ -4530,7 +4610,7 @@ public class FragmentCompose extends FragmentBase {
                                 d = Document.createShell("");
 
                                 Element div = d.createElement("div");
-                                for (String line : s.split("\\r?\\n")) {
+                                for (String line : selected_text.split("\\r?\\n")) {
                                     Element span = document.createElement("span");
                                     span.text(line);
                                     div.appendChild(span);
@@ -4638,24 +4718,21 @@ public class FragmentCompose extends FragmentBase {
                         }
                     }
 
-                    if ("new".equals(action)) {
-                        ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
-                        if (uris != null) {
-                            ArrayList<Uri> images = new ArrayList<>();
-                            for (Uri uri : uris)
-                                try {
-                                    UriInfo info = getInfo(uri, context);
-                                    if (info.isImage())
-                                        images.add(uri);
-                                    else
-                                        addAttachment(context, data.draft.id, uri, false, 0, false);
-                                } catch (IOException ex) {
-                                    Log.e(ex);
-                                }
+                    if ("new".equals(action) && uris != null) {
+                        ArrayList<Uri> images = new ArrayList<>();
+                        for (Uri uri : uris)
+                            try {
+                                UriInfo info = getInfo(uri, context);
+                                if (info.isImage())
+                                    images.add(uri);
+                                else
+                                    addAttachment(context, data.draft.id, uri, false, 0, false);
+                            } catch (IOException ex) {
+                                Log.e(ex);
+                            }
 
-                            if (images.size() > 0)
-                                args.putParcelableArrayList("images", images);
-                        }
+                        if (images.size() > 0)
+                            args.putParcelableArrayList("images", images);
                     }
 
                     if (ref != null &&
@@ -4699,6 +4776,19 @@ public class FragmentCompose extends FragmentBase {
                                     args.putBoolean("incomplete", true);
                             }
                     }
+
+                    if (save_drafts &&
+                            (!"new".equals(action) ||
+                                    answer > 0 ||
+                                    !TextUtils.isEmpty(to) ||
+                                    !TextUtils.isEmpty(cc) ||
+                                    !TextUtils.isEmpty(bcc) ||
+                                    !TextUtils.isEmpty(external_subject) ||
+                                    !TextUtils.isEmpty(external_body) ||
+                                    !TextUtils.isEmpty(external_text) ||
+                                    !TextUtils.isEmpty(selected_text) ||
+                                    (uris != null && uris.size() > 0)))
+                        EntityOperation.queue(context, data.draft, EntityOperation.ADD);
                 } else {
                     args.putBoolean("saved", true);
 
@@ -5235,11 +5325,18 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                     Document doc = JsoupEx.parse(draft.getFile(context));
+                    Element first = (doc.body().childrenSize() == 0 ? null : doc.body().child(0));
+                    boolean below = (first != null && first.attr("fairemail").equals("reference"));
                     doc.select("div[fairemail=signature]").remove();
                     Elements ref = doc.select("div[fairemail=reference]");
                     ref.remove();
 
                     if (extras != null && extras.containsKey("html"))
+                        dirty = true;
+
+                    if (below != write_below &&
+                            doc.body().childrenSize() > 0 &&
+                            draft.wasforwardedfrom == null)
                         dirty = true;
 
                     if (!dirty)
@@ -5750,11 +5847,12 @@ public class FragmentCompose extends FragmentBase {
                 showDraft(draft);
 
             } else if (action == R.id.action_save) {
+                boolean autosave = extras.getBoolean("autosave");
                 setFocus(
                         args.getInt("focus"),
                         args.getInt("start", -1),
                         args.getInt("end", -1),
-                        args.getBoolean("ime"));
+                        args.getBoolean("ime") && !autosave);
 
             } else if (action == R.id.action_check) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -6022,10 +6120,15 @@ public class FragmentCompose extends FragmentBase {
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 boolean ref_hint = prefs.getBoolean("compose_reference", true);
+                boolean write_below = prefs.getBoolean("write_below", false);
 
                 tvReference.setText(text[1]);
                 tvReference.setVisibility(text[1] == null ? View.GONE : View.VISIBLE);
                 grpReferenceHint.setVisibility(text[1] == null || !ref_hint ? View.GONE : View.VISIBLE);
+                ibWriteAboveBelow.setImageLevel(write_below ? 1 : 0);
+                ibWriteAboveBelow.setVisibility(text[1] == null ||
+                        draft.wasforwardedfrom != null || BuildConfig.PLAY_STORE_RELEASE
+                        ? View.GONE : View.VISIBLE);
                 ibReferenceEdit.setVisibility(text[1] == null ? View.GONE : View.VISIBLE);
                 ibReferenceImages.setVisibility(ref_has_images && !show_images ? View.VISIBLE : View.GONE);
 
@@ -6079,18 +6182,10 @@ public class FragmentCompose extends FragmentBase {
                     target.requestFocus();
 
                     Context context = target.getContext();
-
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     boolean keyboard = prefs.getBoolean("keyboard", true);
-                    if (!keyboard || !restore)
-                        return;
-
-                    InputMethodManager imm =
-                            (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm == null)
-                        return;
-
-                    imm.showSoftInput(target, InputMethodManager.SHOW_IMPLICIT);
+                    if (keyboard && restore)
+                        Helper.showKeyboard(target);
 
                 } catch (Throwable ex) {
                     Log.e(ex);

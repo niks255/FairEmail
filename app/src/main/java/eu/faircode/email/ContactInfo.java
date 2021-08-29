@@ -479,8 +479,10 @@ public class ContactInfo {
                         Log.i(ex);
                     else {
                         if (ex instanceof FileNotFoundException ||
+                                ex instanceof CertificateException ||
                                 ex instanceof CertPathValidatorException ||
-                                ex.getCause() instanceof CertPathValidatorException)
+                                ex.getCause() instanceof CertPathValidatorException ||
+                                ex.getCause() instanceof CertificateException)
                             Log.i(ex);
                         else
                             Log.e(ex);
@@ -711,14 +713,14 @@ public class ContactInfo {
         for (String size : sizes.split(" ")) {
             int min = Integer.MAX_VALUE;
             for (String p : size.trim().split("[x|X]")) {
-                if (TextUtils.isEmpty(p))
+                if (TextUtils.isEmpty(p) || "any".equalsIgnoreCase(p))
                     continue;
+
                 try {
                     int x = Integer.parseInt(p);
                     if (x < min)
                         min = x;
                 } catch (NumberFormatException ex) {
-                    // "any"
                     Log.w(ex);
                 }
             }

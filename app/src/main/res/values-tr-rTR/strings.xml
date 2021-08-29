@@ -292,11 +292,13 @@
     <string name="title_advanced_alt_re_fwd">Alternatif yanıt/iletme öneki</string>
     <string name="title_advanced_send_reminders">Hatırlatıcıları göster</string>
     <string name="title_advanced_send_delayed">Mesaj göndermede gecikme</string>
+    <string name="title_advanced_reply_all">Tümünü yanıtlamak için yanıtla düğmesine uzun basın</string>
     <string name="title_advanced_send_pending">Rahatsız edici olmayan gecikmeli gönderme simgesini göster</string>
     <string name="title_advanced_compose_font">Varsayılan yazı tipi</string>
     <string name="title_advanced_prefix_once">Önek konu sadece bir kez yanıtlarken veya yönlendirme</string>
     <string name="title_advanced_separate_reply">Yanıtlama / iletme başlığından önce yatay bir çizgi ekleyin</string>
     <string name="title_advanced_extended_reply">Genişletilmiş cevapla/ilet başlığı kullan</string>
+    <string name="title_advanced_write_above">Gönderenin metninin üstüne yazın</string>
     <string name="title_advanced_write_below">Gönderenin metninin altına yazın</string>
     <string name="title_advanced_quote_reply">Cevap metnini alıntıla</string>
     <string name="title_advanced_limit_reply">İç içe geçmiş tekliflerin sayısını sınırlayın</string>
@@ -553,6 +555,7 @@
     <string name="title_advanced_suggest_local_hint">Android tarafından sağlanan kişilere ek olarak. Kişi verileri yeni gönderilen veya alınan mesajlar için yalnızca etkin olduğunda saklanacaktır.</string>
     <string name="title_advanced_usenet_hint">Metin ve imza arasına \'-- \' ekle</string>
     <string name="title_advanced_send_reminders_hint">Mesaj metni veya konu boş olduğunda veya bir ek eksik olduğunda bir uyarı göster</string>
+    <string name="title_advanced_reply_all_hint">Devre dışı bırakılırsa, cevapla düğmesine uzun basmak göndereni cevaplayacaktır.</string>
     <string name="title_advanced_reply_move_hint">E-posta sunucusu, iletileri gönderilen ileti klasörüne eklemeye devam edebilir</string>
     <string name="title_advanced_metered_hint">Ölçülü bağlantılar genellikle mobil bağlantılar veya ücretli Wi-Fi noktalarıdır</string>
     <string name="title_advanced_metered_warning">Bu seçeneğin devre dışı bırakılması mobil internet bağlantısında ileti almayı ve göndermeyi devre dışı bırakacaktır</string>
@@ -907,7 +910,6 @@
     <string name="title_receipt_subject">Okundu bilgisi:%1$s</string>
     <string name="title_receipt_text">Bu okundu bilgisi yalnızca iletinin görüntülendiğini onaylar. Alıcının ileti içeriğini okuduğu garanti edilmez.</string>
     <string name="title_no_answers">Tanımlanmış yanıt kalıbı yok</string>
-    <string name="title_no_viewer">%1$s için mevcut görüntüleme uygulaması yok</string>
     <string name="title_no_recorder">Uygun bir ses kaydedici uygulaması yok</string>
     <string name="title_no_camera">Uygun bir kamera uygulaması yok</string>
     <string name="title_no_saf">Depolama erişim çerçevesi mevcut değil</string>

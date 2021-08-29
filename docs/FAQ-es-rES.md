@@ -909,15 +909,15 @@ Hay errores generales y errores específicos para las cuentas de Gmail (ver abaj
 **Errores generales**
 
 <a name="authfailed"></a>
-El error *... **La autenticación falló** ...* o *... AUTHENTICATE falló...* probablemente significa que su nombre de usuario o contraseña eran incorrectos. Some providers expect as username just *username* and others your full email address *username@example.com*. When copying/pasting to enter a username or password, invisible characters might be copied, which could cause this problem as well. Some password managers are known to do this incorrectly too. The username might be case sensitive, so try lowercase characters only. The password is almost always case sensitive. Some providers require using an app password instead of the account password, so please check the documentation of the provider. Sometimes it is necessary to enable external access (IMAP/SMTP) on the website of the provider first. Other possible causes are that the account is blocked or that logging in has been administratively restricted in some way, for example by allowing to login from certain networks / IP addresses only.
+El error *... **La autenticación falló** ...* o *... AUTHENTICATE falló...* probablemente significa que su nombre de usuario o contraseña eran incorrectos. Algunos proveedores esperan como nombre de usuario sólo *nombre de usuario* y otros su dirección de correo electrónico completa *nombredeusuario@ejemplo.com*. Al copiar/pegar para introducir un nombre de usuario o contraseña, pueden copiarse caracteres invisibles, lo que también podría causar este problema. También se sabe que algunos administradores de contraseñas hacen esto incorrectamente. El nombre de usuario puede ser sensible a mayúsculas, así que intente sólo caracteres en minúsculas. La contraseña es casi siempre sensible a mayúsculas y minúsculas. Algunos proveedores requieren usar una contraseña de aplicación en lugar de la contraseña de la cuenta, así que por favor revise la documentación del proveedor. A veces es necesario habilitar primero el acceso externo (IMAP/SMTP) en el sitio web del proveedor. Otras posibles causas son que la cuenta está bloqueada o que el inicio de sesión ha sido restringido administrativamente de alguna manera, por ejemplo permitiendo iniciar sesión desde ciertas redes / direcciones IP solamente.
 
-If needed, you can update a password in the account settings: navigation menu (left side menu), tap *Settings*, tap *Manual setup*, tap *Accounts* and tap on the account. Changing the account password will in most cases automatically change the password of related identities too. If the account was authorized with OAuth via the quick setup wizard instead of with a password, you can run the quick setup wizard again and tick *Authorize existing account again* to authenticate the account again. Note that this requires a recent version of the app.
+Si es necesario, puede actualizar una contraseña en la configuración de la cuenta: menú de navegación (menú izquierdo), toque *Ajustes*, toque *Configuración manual*, toque *Cuentas* y pulse la cuenta. Cambiar la contraseña de la cuenta también cambiará automáticamente la contraseña de las identidades relacionadas, en la mayoría de los casos. Si la cuenta fue autorizada con OAuth a través del asistente de configuración rápida en lugar de con una contraseña, puede volver a ejecutar el asistente de configuración rápida y marcar *Autorizar cuenta existente de nuevo* para autenticar la cuenta de nuevo. Tenga en cuenta que esto requiere una versión reciente de la aplicación.
 
-The error *... Too many bad auth attempts ...* likely means that you are using a Yahoo account password instead of an app password. Please see [this FAQ](#user-content-faq88) about how to set up a Yahoo account.
+El error *... Demasiados intentos de autenticación incorrectos ...* probablemente significa que está utilizando una contraseña de cuenta Yahoo en lugar de una contraseña de la aplicación. Por favor, consulte [estas Preguntas Frecuentes](#user-content-faq88) sobre cómo configurar una cuenta Yahoo.
 
-The message *... +OK ...* likely means that a POP3 port (usually port number 995) is being used for an IMAP account (usually port number 993).
+El mensaje *... +OK ...* probablemente significa que un puerto POP3 (normalmente el número de puerto 995) está siendo usado para una cuenta IMAP (generalmente el puerto número 993).
 
-The errors *... invalid greeting ...*, *... requires valid address ...* and *... Parameter to HELO does not conform to RFC syntax ...* can likely be solved by changing the advanced identity setting *Use local IP address instead of host name*.
+Los errores *... saludo inválido ...*, *... requiere una dirección válida ...* y *... Parameter to HELO does not conform to RFC syntax ...* can likely be solved by changing the advanced identity setting *Use local IP address instead of host name*.
 
 The error *... Couldn't connect to host ...* means that there was no response from the email server within a reasonable time (20 seconds by default). Mostly this indicates internet connectivity issues, possibly caused by a VPN or by a firewall app. You can try to increase the connection timeout in the connection settings of FairEmail, for when the email server is really slow.
 
@@ -1027,8 +1027,8 @@ This alert will be sent when there are too many folder connections for the same 
 
 Possible causes are:
 
-* There are multiple email clients connected to the same account
-* The same email client is connected multiple times to the same account
+* Hay múltiples clientes de correo conectados a una misma cuenta
+* El mismo cliente de correo está conectado múltiple veces a una misma cuenta
 * Previous connections were terminated abruptly for example by abruptly losing internet connectivity
 
 First try to wait some time to see if the problem resolves itself, else:
@@ -2982,9 +2982,9 @@ Message classification is a pro feature, except for the spam folder.
 <br />
 
 <a name="faq164"></a>
-**(164) Can you add customizable themes?**
+**(164) ¿Puedes agregar temas personalizados?**
 
-Unfortunately, Android [does not support](https://stackoverflow.com/a/26511725/1794097) dynamic themes, which means all themes need [to be predefined](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
+Desafortunadamente, Android [no soporta](https://stackoverflow.com/a/26511725/1794097) temas dinámicos esto significa que todos los temas [serán predefinidos](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/values/styles.xml).
 
 Since for each theme there needs to be a light, dark and black variant, it is not feasible to add for each color combination (literally millions) a predefined theme.
 
@@ -2995,11 +2995,11 @@ The theme colors are based on the color circle of [Johannes Itten](https://en.wi
 <br />
 
 <a name="faq165"></a>
-**(165) Is Android Auto supported?**
+**(165) ¿Android Auto es compatible?**
 
-Yes, Android Auto is supported, but only with the GitHub version, please [see here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-83801249) about why.
+Si, Android Auto es compatible, pero solo con la versión de Github, por favor [véase aquí](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-83801249) porque.
 
-For notification (messaging) support you'll need to enable the following notification options:
+Para soporte de notificaciones (mensajería) deberá tener activado las siguientes opciones de notificación:
 
 * *Use Android 'messaging style' notification format*
 * Notification actions: *Direct reply* and (mark as) *Read*
@@ -3025,24 +3025,24 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <h2><a name="get-support"></a>Get support</h2>
 
-FairEmail is supported on Android smartphones and tablets and ChromeOS only.
+FairEmail es compatible con teléfonos y tabletas con Android y ChromeOS respectivamente.
 
-Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
+Solo la última versión de Play Store y Github serán soportadas. La versión de F-Droid solo es compatible si el número de la versión es igual al de la última actualización de Github. This also means that downgrading is not supported.
 
-There is no support on things that are not directly related to FairEmail.
+No hay soporte para cosas que no estén directamente relacionadas con FairEmail.
 
-There is no support on building and developing things by yourself.
+No hay soporte en versiones y desarrollos hechos por usted mismo.
 
 Requested features should:
 
-* be useful to most people
-* not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
+* ser útil para la mayoría de la gente. 
+* no complique el uso de FairEmail
+* encaja con la filosofía de FairEmail (orientado a la privacidad y pensado en la seguridad)
 * comply with common standards (IMAP, SMTP, etc)
 
 Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
 
-If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+Si tienes una pregunta, quieres solicitar una característica o reportar un error, **por favor usa [este formulario](https://contact.faircode.eu/?product=fairemailsupport)**.
 
 GitHub issues are disabled due to frequent misusage.
 

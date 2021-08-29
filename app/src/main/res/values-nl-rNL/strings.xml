@@ -292,11 +292,15 @@
     <string name="title_advanced_alt_re_fwd">Alternatief antwoord/doorsturen voorvoegsel</string>
     <string name="title_advanced_send_reminders">Toon herinneringen</string>
     <string name="title_advanced_send_delayed">Verzenden van berichten uitstellen</string>
+    <string name="title_advanced_attach_new">31 / 5000
+Voeg gedeelde bestanden toe aan een nieuw concept</string>
+    <string name="title_advanced_reply_all">Druk lang op de antwoordknop om iedereen te antwoorden</string>
     <string name="title_advanced_send_pending">Toon niet-opdringerig pictogram voor vertraagd verzenden</string>
     <string name="title_advanced_compose_font">Standaard lettertype</string>
     <string name="title_advanced_prefix_once">Prefix onderwerp slechts één keer bij beantwoorden of doorsturen</string>
     <string name="title_advanced_separate_reply">Voeg een horizontale lijn in voor een antwoord/doorsturen kop</string>
     <string name="title_advanced_extended_reply">Gebruik uitgebreide kop bij antwoorden/doorsturen</string>
+    <string name="title_advanced_write_above">Schrijf boven de tekst van de afzender</string>
     <string name="title_advanced_write_below">Schrijf onder de tekst van de afzender</string>
     <string name="title_advanced_quote_reply">Haal beantwoorde tekst aan</string>
     <string name="title_advanced_limit_reply">Beperk het aantal geneste citaten</string>
@@ -441,7 +445,6 @@
     <string name="title_advanced_autounstar">Automatisch ster verwijderen van berichten bij verplaatsende berichten</string>
     <string name="title_advanced_auto_important">Automatisch berichten met een ster belangrijk maken</string>
     <string name="title_advanced_reset_importance">Reset belang bij verplaatsen van berichten</string>
-    <string name="title_advanced_reply_all">Druk lang op de antwoordknop om iedereen te antwoorden</string>
     <string name="title_advanced_default_snooze">Standaard sluimertijd</string>
     <string name="title_advanced_notifications">Beheer meldingen</string>
     <string name="title_advanced_notifications_default">Standaardkanaal</string>
@@ -554,6 +557,7 @@
     <string name="title_advanced_suggest_local_hint">Naast contacten die door Android worden geleverd. Contactgegevens worden alleen opgeslagen voor nieuw verzonden of ontvangen berichten wanneer ingeschakeld.</string>
     <string name="title_advanced_usenet_hint">Voeg \'-- \' in tussen de tekst en de handtekening</string>
     <string name="title_advanced_send_reminders_hint">Toon een waarschuwing wanneer de berichttekst of het onderwerp leeg is of wanneer een bijlage zou kunnen ontbreken</string>
+    <string name="title_advanced_reply_all_hint">Indien uitgeschakeld, zal door lang op de antwoordknop te drukken de afzender worden beantwoord</string>
     <string name="title_advanced_reply_move_hint">De e-mailserver kan de berichten nog steeds toevoegen aan de map met verzonden berichten</string>
     <string name="title_advanced_metered_hint">Gemeten verbindingen zijn over het algemeen mobiele verbindingen of betaalde Wi-Fi hotspots</string>
     <string name="title_advanced_metered_warning">Uitschakelen van deze optie zal het ontvangen en verzenden van berichten op mobiele internetverbindingen uitschakelen</string>
@@ -909,7 +913,10 @@
     <string name="title_receipt_subject">Leesbevestiging: %1$s</string>
     <string name="title_receipt_text">Deze leesbevestiging erkent alleen dat het bericht is weergegeven. Er is geen garantie dat de ontvanger de inhoud van het bericht heeft gelezen.</string>
     <string name="title_no_answers">Geen sjablonen gedefinieerd</string>
-    <string name="title_no_viewer">Geen app beschikbaar om %1$s te tonen</string>
+    <string name="title_no_viewer_caption">Geen viewer app beschikbaar</string>
+    <string name="title_no_viewer_name">Naam inhoud</string>
+    <string name="title_no_viewer_type">Type inhoud</string>
+    <string name="title_no_viewer_search">Zoek app</string>
     <string name="title_no_recorder">Geen geschikte audio-recorder app beschikbaar</string>
     <string name="title_no_camera">Geen geschikte camera app beschikbaar</string>
     <string name="title_no_saf">Storage access framework niet beschikbaar</string>

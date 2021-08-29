@@ -50,6 +50,13 @@ public class WidgetUnified extends AppWidgetProvider {
             int padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
             int version = prefs.getInt("widget." + appWidgetId + ".version", 0);
 
+            if (version <= 1550)
+                semi = true; // Legacy
+            if (font == 0)
+                font = 2; // Default medium
+            if (padding == 0)
+                padding = 2; // Default medium
+
             Intent view = new Intent(context, ActivityView.class);
             view.setAction("folder:" + folder);
             view.putExtra("account", account);
@@ -62,13 +69,10 @@ public class WidgetUnified extends AppWidgetProvider {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_unified);
 
-            if (font > 0)
-                views.setTextViewTextSize(R.id.title, TypedValue.COMPLEX_UNIT_SP, getFontSizeSp(font));
+            views.setTextViewTextSize(R.id.title, TypedValue.COMPLEX_UNIT_SP, getFontSizeSp(font));
 
-            if (padding > 0) {
-                int px = getPaddingPx(padding, context);
-                views.setViewPadding(R.id.title, px, px, px, px);
-            }
+            int px = getPaddingPx(padding, context);
+            views.setViewPadding(R.id.title, px, px, px, px);
 
             if (name == null)
                 views.setTextViewText(R.id.title, context.getString(R.string.title_folder_unified));
@@ -96,8 +100,13 @@ public class WidgetUnified extends AppWidgetProvider {
             views.setPendingIntentTemplate(R.id.lv, piItem);
 
             if (background == Color.TRANSPARENT) {
-                if (!semi && version > 1550)
+                if (semi)
+                    views.setInt(R.id.widget, "setBackgroundResource", R.drawable.widget_background);
+                else
                     views.setInt(R.id.widget, "setBackgroundColor", background);
+
+                int colorWidgetForeground = context.getResources().getColor(R.color.colorWidgetForeground);
+                views.setTextColor(R.id.title, colorWidgetForeground);
             } else {
                 float lum = (float) ColorUtils.calculateLuminance(background);
 
@@ -110,7 +119,11 @@ public class WidgetUnified extends AppWidgetProvider {
                     views.setTextColor(R.id.title, Color.BLACK);
             }
 
+            int dp6 = Helper.dp2pixels(context, 6);
+            views.setViewPadding(R.id.widget, dp6, 0, dp6, 0);
+
             appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.lv);
         }
     }
 

@@ -282,6 +282,7 @@
     <string name="title_advanced_alt_re_fwd">Tiền tố trả lời/chuyển tiếp thay thế</string>
     <string name="title_advanced_send_reminders">Hiện lời nhắc</string>
     <string name="title_advanced_send_delayed">Trì hoãn việc gửi thư</string>
+    <string name="title_advanced_reply_all">Nhấn giữ nút trả lời để trả lời tất cả</string>
     <string name="title_advanced_send_pending">Hiện biểu tượng gửi được trì hoãn không gây phiền</string>
     <string name="title_advanced_compose_font">Phông chữ mặc định</string>
     <string name="title_advanced_prefix_once">Chỉ đặt tiền tố cho chủ đề một lần khi trả lời hoặc chuyển tiếp</string>
@@ -897,7 +898,6 @@
     <string name="title_receipt_subject">Xác nhận đã đọc: %1$s</string>
     <string name="title_receipt_text">Xác nhận đã đọc này chỉ biết rằng thư đã được hiển thị. Không có đảm bảo rằng người nhận đã đọc nội dung thư.</string>
     <string name="title_no_answers">Không có mẫu trả lời nào được định nghĩa</string>
-    <string name="title_no_viewer">Không có ứng dụng xem %1$s</string>
     <string name="title_no_recorder">Không có ứng dụng ghi âm phù hợp</string>
     <string name="title_no_camera">Không có ứng dụng máy ảnh phù hợp</string>
     <string name="title_no_saf">Storage access framework không có sẵn</string>

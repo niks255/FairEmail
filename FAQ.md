@@ -1,10 +1,10 @@
 <a name="top"></a>
 # FairEmail support
 
-[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_de.png" width="18" height="18" /> Deutsch](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-de-rDE.md)<br />
-[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_fr.png" width="18" height="18" /> Français](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-fr-rFR.md)<br />
-[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_es.png" width="18" height="18" /> Español](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-es-rES.md)<br />
-[&#x1F30E; Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md)
+[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_de.png" width="18" height="18" /> Deutsch](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-de-rDE.md) &nbsp;
+[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_fr.png" width="18" height="18" /> Français](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-fr-rFR.md) &nbsp;
+[<img src="https://github.com/M66B/FairEmail/raw/master/app/src/main/resExtra/drawable/language_es.png" width="18" height="18" /> Español](https://github.com/M66B/FairEmail/blob/master/docs/FAQ-es-rES.md) &nbsp;
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md)
 
 If you have a question, please check the following frequently asked questions first.
 [At the bottom](#user-content-get-support),
@@ -2589,6 +2589,7 @@ Android Q will make it harder and maybe even impossible to directly access files
 see [here](https://developer.android.com/preview/privacy/scoped-storage) and [here](https://www.xda-developers.com/android-q-storage-access-framework-scoped-storage/) for more details.
 
 If you use MIUI, please make sure [MIUI optimization](https://android.stackexchange.com/questions/191228/what-is-miui-optimization) is enabled in the developer settings.
+You can enable the developer options by tapping a few times on the MIUI version number in the settings, About phone.
 
 <br />
 
@@ -2988,7 +2989,7 @@ because this could result in grouping unrelated messages and would be at the exp
 If FairEmail cannot connect to an email server to synchronize messages,
 for example if the internet connection is bad or a firewall or a VPN is blocking the connection,
 FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power).
-If this fails, FairEmail will schedule an alarm to retry after 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
+If this fails, FairEmail will schedule an alarm to retry after 5, 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby)
 does not allow to wake the device earlier than after 15 minutes.
@@ -3252,7 +3253,9 @@ you@example.com\shared@example.com
 
 Note that it should be a backslash and not a forward slash.
 
-When using a shared mailbox, you'll likely want to enable the option *Synchronize shared folder lists* in the receive settings.
+The Outlook/Office 365 quick setup wizard supports setting up shared mailboxes.
+
+When using a shared mailbox, you might want to enable the option *Synchronize shared folder lists* in the receive settings.
 
 <br />
 
@@ -3391,11 +3394,9 @@ the F-Droid build, but **only if** the version number of the F-Droid build is th
 F-Droid builds irregularly, which can be problematic when there is an important update.
 Therefore you are advised to switch to the GitHub release.
 
-The F-Droid version is built from the same source code, but signed differently.
-This means that all features are available in the F-Droid version too,
-except for using the Gmail quick setup wizard because Google approved (and allows) one app signature only.
-For all other email providers, OAuth access is only available in Play Store versions and Github releases,
-as the email providers only permit the use of OAuth for official builds.
+OAuth access is available only for Play Store and Github releases
+because email providers permitted the use of OAuth for these releases only.
+The responsible for a release, for the F-Droid build this is F-Droid, needs to ask for OAuth permissions.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
 because Android refuses to install the same app with a different signature for security reasons.
@@ -3869,8 +3870,9 @@ Related questions:
 * The Play store version does not support Android Auto, see [this FAQ](#user-content-faq165) for more information
 * The Play store version does not support [Gravatars](https://gravatar.com/), see [here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-85226179) for the reason
 * The Play store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
-* The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases)
+* The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently
 * The GitHub version has some different links and some options have a different default values (more geared to advanced users)
+* The F-Droid build does not support OAuth, see [this FAQ](#user-content-faq147) about why not
 * The F-Droid build does not include [Google Play Billing](https://developer.android.com/google/play/billing/integrate), so Play store purchases cannot be reused
 * The F-Droid build is supported only if the version number is the same as the the version number of the latest GitHub version, see also [this FAQ](#user-content-faq147)
 

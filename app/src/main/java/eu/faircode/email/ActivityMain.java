@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
@@ -36,6 +37,7 @@ import java.util.List;
 
 public class ActivityMain extends ActivityBase implements FragmentManager.OnBackStackChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final long SPLASH_DELAY = 1500L; // milliseconds
+    private static final long RESTORE_STATE_INTERVAL = 3 * 60 * 1000L; // milliseconds
     private static final long SERVICE_START_DELAY = 5 * 1000L; // milliseconds
 
     @Override
@@ -124,15 +126,25 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             long start = new Date().getTime();
             Log.i("Main boot");
 
+            final Runnable splash = new Runnable() {
+                @Override
+                public void run() {
+                    getWindow().setBackgroundDrawableResource(R.drawable.splash);
+                }
+            };
+
             final SimpleTask<Boolean> boot = new SimpleTask<Boolean>() {
                 @Override
                 protected void onPreExecute(Bundle args) {
-                    getMainHandler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getWindow().setBackgroundDrawableResource(R.drawable.splash);
-                        }
-                    }, SPLASH_DELAY);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+                        getMainHandler().postDelayed(splash, SPLASH_DELAY);
+                }
+
+                @Override
+                protected void onPostExecute(Bundle args) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+                        getMainHandler().removeCallbacks(splash);
+                    getWindow().setBackgroundDrawable(null);
                 }
 
                 @Override
@@ -165,8 +177,17 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                         Intent view = new Intent(ActivityMain.this, ActivityView.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                        // VX-N3
+                        // https://developer.android.com/docs/quality-guidelines/core-app-quality
+                        long now = new Date().getTime();
+                        long last = prefs.getLong("last_launched", 0L);
+                        if (!BuildConfig.PLAY_STORE_RELEASE &&
+                                now - last > RESTORE_STATE_INTERVAL)
+                            view.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                         Intent saved = args.getParcelable("intent");
                         if (saved == null) {
+                            prefs.edit().putLong("last_launched", now).apply();
                             startActivity(view, options);
                             if (sync_on_launch)
                                 ServiceUI.sync(ActivityMain.this, null);

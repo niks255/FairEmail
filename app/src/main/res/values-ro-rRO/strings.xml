@@ -302,11 +302,14 @@
     <string name="title_advanced_alt_re_fwd">Prefix alternativ de răspuns/întârziere</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
+    <string name="title_advanced_attach_new">Adăugați fișierele partajate la o nouă ciornă</string>
+    <string name="title_advanced_reply_all">Apăsați lung butonul de răspuns pentru a răspunde la toate</string>
     <string name="title_advanced_send_pending">Arată pictograma neobstructivă de trimitere întârziată</string>
     <string name="title_advanced_compose_font">Font prestabilit</string>
     <string name="title_advanced_prefix_once">Adaugă prefix la subiect o singură dată pentru răspuns sau redirecționare</string>
     <string name="title_advanced_separate_reply">Introduceți o linie orizontală înaintea unui antet răspuns/forward</string>
     <string name="title_advanced_extended_reply">Folosește antetul extins pentru răspuns/redirecționare</string>
+    <string name="title_advanced_write_above">Scrieți deasupra textului expeditorului</string>
     <string name="title_advanced_write_below">Scrie sub textul expeditorului</string>
     <string name="title_advanced_quote_reply">Citează textul la care răspunzi</string>
     <string name="title_advanced_limit_reply">Limitează numărul de citate imbricate</string>
@@ -563,6 +566,7 @@
     <string name="title_advanced_suggest_local_hint">Pe lângă contactele furnizate de Android. Datele contactelor vor fi memorate pentru mesajele nou trimise sau primite doar când este activată.</string>
     <string name="title_advanced_usenet_hint">Inserează \'-- \' între text și semnătură</string>
     <string name="title_advanced_send_reminders_hint">Arată o avertizare atunci când textul mesajului sau subiectul e gol sau când atașamentul s-ar putea să lipsească</string>
+    <string name="title_advanced_reply_all_hint">Dacă este dezactivată, apăsarea lungă a butonului de răspuns va răspunde expeditorului</string>
     <string name="title_advanced_reply_move_hint">Serverul de e-mail ar putea adăuga mesajele la folderul de mesaje trimise</string>
     <string name="title_advanced_metered_hint">Conexiunile contorizate sunt în general cele mobile sau punctele de acces Wi-Fi cu plată</string>
     <string name="title_advanced_metered_warning">Dezactivarea acestei opțiuni va opri primirea și trimiterea mesajelor pe conexiunile mobile de internet</string>
@@ -918,7 +922,10 @@
     <string name="title_receipt_subject">Confirmare de citire: %1$s</string>
     <string name="title_receipt_text">Confirmarea de citire doar arată că mesajul a fost afișat. Nu există garanția că destinatarul a citit conținutul mesajului.</string>
     <string name="title_no_answers">Nici un șablon de răspuns definit</string>
-    <string name="title_no_viewer">Nici o aplicație nu poate deschide %1$s</string>
+    <string name="title_no_viewer_caption">Nici o aplicație nu poate deschide</string>
+    <string name="title_no_viewer_name">Denumire conținut</string>
+    <string name="title_no_viewer_type">Tip de conținut</string>
+    <string name="title_no_viewer_search">Căutați aplicația</string>
     <string name="title_no_recorder">Nu este disponibilă o aplicație de înregistrat audio</string>
     <string name="title_no_camera">Nu este disponibilă o aplicație de fotografiat</string>
     <string name="title_no_saf">Nu se poate accesa stocarea locală</string>
