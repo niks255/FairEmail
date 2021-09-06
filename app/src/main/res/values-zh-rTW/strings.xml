@@ -766,7 +766,8 @@
     <string name="title_show_folders">顯示隱藏的資料夾</string>
     <string name="title_show_flagged">顯示已加星號訊息的計數</string>
     <string name="title_subscribed_only">僅顯示已訂閱的資料夾</string>
-    <string name="title_apply_to_all">套用至全部 &#8230;</string>
+    <string name="title_search_folder">搜尋資料夾</string>
+    <string name="title_apply_to_all">套用至全部</string>
     <string name="title_hide_folder">隱藏資料夾</string>
     <string name="title_unified_folder">顯示於全域收件匣中</string>
     <string name="title_navigation_folder">顯示於導航功能表中</string>
@@ -857,7 +858,6 @@
     <string name="title_download_all">全部下載</string>
     <string name="title_save_all">全部保存</string>
     <string name="title_save_eml">保存元訊息檔</string>
-    <string name="title_eml_remark">欲轉寄訊息，需從伺服器下載未經處理的 (原始) 訊息，需要網際網路連線。</string>
     <string name="title_eml_option">透過於連線設定中啟用總是下載元訊息檔，可以阻止此情況的發生</string>
     <string name="title_eml_downloaded">已下載元訊息: %1$s</string>
     <string name="title_buttons">選擇欲新增的按鈕</string>
@@ -1491,6 +1491,8 @@
     <string name="title_widget_font_size">文字大小</string>
     <string name="title_widget_padding">填充大小</string>
     <string name="title_widget_semi_transparent">半透明背景</string>
+    <string name="title_widget_refresh">顯示重整訊息按鈕</string>
+    <string name="title_widget_compose">顯示撰寫新訊息按鈕</string>
     <string name="title_widget_background">背景顏色</string>
     <string name="title_accessibility_collapsed">已摺疊</string>
     <string name="title_accessibility_expanded">已展開</string>

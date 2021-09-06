@@ -388,6 +388,7 @@
     <string name="title_advanced_validated">Require a validated (checked) connection</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
+    <string name="title_advanced_bind_socket" translatable="false">Bind sockets to the active network</string>
     <string name="title_advanced_standalone_vpn" translatable="false">Standalone VPN</string>
     <string name="title_advanced_tcp_keep_alive" translatable="false">TCP keep alive</string>
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
@@ -622,6 +623,7 @@
     <string name="title_advanced_debug">Debug mode</string>
     <string name="title_advanced_query_threads">Limit parallel database access</string>
     <string name="title_advanced_wal" translatable="false">WAL</string>
+    <string name="title_advanced_sqlite_cache" translatable="false">Sqlite cache %1$s %% - %2$s</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
     <string name="title_advanced_expunge" translatable="false">EXPUNGE</string>
     <string name="title_advanced_auth_plain" translatable="false">PLAIN</string>
@@ -902,7 +904,8 @@
     <string name="title_show_folders">Show hidden folders</string>
     <string name="title_show_flagged">Show starred message count</string>
     <string name="title_subscribed_only">Subscribed only</string>
-    <string name="title_apply_to_all">Apply to all &#8230;</string>
+    <string name="title_search_folder">Search for folder</string>
+    <string name="title_apply_to_all">Apply to all</string>
     <string name="title_hide_folder">Hide folder</string>
     <string name="title_unified_folder">Show in unified inbox</string>
     <string name="title_navigation_folder">Show in navigation menu</string>
@@ -999,7 +1002,7 @@
     <string name="title_save_all">Save all</string>
     <string name="title_save_eml">Save raw message file</string>
 
-    <string name="title_eml_remark">To forward messages, the raw (original) messages need to be downloaded from the server. This requires an internet connection.</string>
+    <string name="title_eml_remark">To forward messages, the raw (original) messages need to be downloaded from the email server. This requires an internet connection and the messages must still be stored on the email server.</string>
     <string name="title_eml_option">This can be prevented by enabling always downloading raw message files in the connection settings</string>
     <string name="title_eml_downloaded">Raw messages downloaded: %1$s</string>
 
@@ -1696,6 +1699,8 @@
     <string name="title_widget_font_size">Text size</string>
     <string name="title_widget_padding">Padding size</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
+    <string name="title_widget_refresh">Show refresh messages button</string>
+    <string name="title_widget_compose">Show compose new message button</string>
     <string name="title_widget_background">Background color</string>
 
     <string name="title_accessibility_collapsed">Collapsed</string>

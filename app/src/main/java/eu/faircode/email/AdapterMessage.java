@@ -61,6 +61,7 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -915,6 +916,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibKeywords.setOnClickListener(this);
                 ibCopy.setOnClickListener(this);
                 ibMove.setOnClickListener(this);
+                ibMove.setOnLongClickListener(this);
                 ibArchive.setOnClickListener(this);
                 ibTrash.setOnClickListener(this);
                 ibTrash.setOnLongClickListener(this);
@@ -928,6 +930,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibTrashBottom.setOnLongClickListener(this);
                 ibArchiveBottom.setOnClickListener(this);
                 ibMoveBottom.setOnClickListener(this);
+                ibMoveBottom.setOnLongClickListener(this);
                 ibSeenBottom.setOnClickListener(this);
 
                 tvBody.setOnTouchListener(touchListener);
@@ -1006,6 +1009,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibKeywords.setOnClickListener(null);
                 ibCopy.setOnClickListener(null);
                 ibMove.setOnClickListener(null);
+                ibMove.setOnClickListener(null);
                 ibArchive.setOnClickListener(null);
                 ibTrash.setOnClickListener(null);
                 ibTrash.setOnLongClickListener(null);
@@ -1019,6 +1023,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibTrashBottom.setOnLongClickListener(null);
                 ibArchiveBottom.setOnClickListener(null);
                 ibMoveBottom.setOnClickListener(null);
+                ibMoveBottom.setOnLongClickListener(null);
                 ibSeenBottom.setOnClickListener(null);
 
                 tvBody.setOnTouchListener(null);
@@ -1922,7 +1927,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_notes = prefs.getBoolean("button_notes", false);
                     boolean button_seen = prefs.getBoolean("button_seen", false);
                     boolean button_hide = prefs.getBoolean("button_hide", false);
-                    boolean button_translate = prefs.getBoolean("button_translate", false);
+                    boolean button_translate = prefs.getBoolean("button_translate", true);
                     boolean button_search = prefs.getBoolean("button_search", false);
                     boolean button_search_text = prefs.getBoolean("button_search_text", false);
                     boolean button_event = prefs.getBoolean("button_event", false);
@@ -1939,6 +1944,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibTrash.setTag(delete);
                     ibTrash.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
                     ibTrashBottom.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
+                    ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
 
                     ibUndo.setVisibility(outbox ? View.VISIBLE : View.GONE);
                     ibRule.setVisibility(tools && button_rule && !outbox && !message.folderReadOnly ? View.VISIBLE : View.GONE);
@@ -1961,7 +1967,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibMove.setVisibility(tools && button_move && move ? View.VISIBLE : View.GONE);
                     ibArchive.setVisibility(tools && button_archive && archive ? View.VISIBLE : View.GONE);
                     ibTrash.setVisibility(outbox || (tools && button_trash && trash) ? View.VISIBLE : View.GONE);
-                    ibJunk.setVisibility(tools && button_junk && move ? View.VISIBLE : View.GONE);
+                    ibJunk.setVisibility(tools && button_junk && !inJunk && move ? View.VISIBLE : View.GONE);
                     ibInbox.setVisibility(tools && inbox ? View.VISIBLE : View.GONE);
                     ibMore.setVisibility(tools && !outbox ? View.VISIBLE : View.GONE);
                     ibTools.setImageLevel(tools ? 0 : 1);
@@ -2520,6 +2526,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     .appendElement("p")
                                     .appendElement("em")
                                     .text(context.getString(R.string.title_truncated));
+
+                        HtmlHelper.autoLink(document);
+                        HtmlHelper.guessSchemes(document);
 
                         boolean overview_mode = prefs.getBoolean("overview_mode", false);
                         HtmlHelper.setViewport(document, overview_mode);
@@ -3521,6 +3530,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             } else if (id == R.id.ibFull) {
                 onActionOpenFull(message);
                 return true;
+            } else if (id == R.id.ibMove) {
+                onActionMoveAccount(message, ibMove);
+                return true;
+            } else if (id == R.id.ibMoveBottom) {
+                onActionMoveAccount(message, ibMoveBottom);
+                return true;
             } else if (id == R.id.ibTrash || id == R.id.ibTrashBottom) {
                 if (EntityFolder.OUTBOX.equals(message.folderType))
                     return false;
@@ -4410,10 +4425,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionMove(TupleMessageEx message, final boolean copy) {
+            onActionMove(message, copy, message.account, new long[]{message.folder});
+        }
+
+        private void onActionMove(TupleMessageEx message, final boolean copy, long account, long[] disabled) {
             Bundle args = new Bundle();
             args.putString("title", context.getString(copy ? R.string.title_copy_to : R.string.title_move_to_folder));
-            args.putLong("account", message.account);
-            args.putLongArray("disabled", new long[]{message.folder});
+            args.putLong("account", account);
+            args.putLongArray("disabled", disabled);
             args.putLong("message", message.id);
             args.putBoolean("copy", copy);
             args.putBoolean("similar", false);
@@ -4422,6 +4441,57 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             fragment.setArguments(args);
             fragment.setTargetFragment(parentFragment, FragmentMessages.REQUEST_MESSAGE_MOVE);
             fragment.show(parentFragment.getParentFragmentManager(), "message:move");
+        }
+
+        private void onActionMoveAccount(TupleMessageEx message, View anchor) {
+            Bundle args = new Bundle();
+
+            new SimpleTask<List<EntityAccount>>() {
+                @Override
+                protected List<EntityAccount> onExecute(Context context, Bundle args) {
+                    DB db = DB.getInstance(context);
+                    return db.account().getSynchronizingAccounts();
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                    if (accounts == null)
+                        return;
+
+                    PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, owner, anchor);
+
+                    int order = 0;
+                    for (EntityAccount account : accounts) {
+                        String title = context.getString(R.string.title_move_to_account, account.name);
+                        SpannableString ss = new SpannableString(title);
+                        if (account.name != null && account.color != null) {
+                            int i = title.indexOf(account.name);
+                            int first = title.codePointAt(i);
+                            int count = Character.charCount(first);
+                            ss.setSpan(new ForegroundColorSpan(account.color), i, i + count, 0);
+                        }
+                        popupMenu.getMenu().add(Menu.NONE, R.string.title_move_to_account, order++, ss)
+                                .setIntent(new Intent().putExtra("account", account.id));
+                    }
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            long account = item.getIntent().getLongExtra("account", -1);
+                            long[] disabled = (message.account.equals(account) ? new long[]{account} : new long[]{});
+                            onActionMove(message, false, account, disabled);
+                            return true;
+                        }
+                    });
+
+                    popupMenu.show();
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:amove");
         }
 
         private void onActionArchive(TupleMessageEx message) {
@@ -4554,12 +4624,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             popupMenu.getMenu().findItem(R.id.menu_share_as_html).setVisible(message.content && BuildConfig.DEBUG);
 
-            popupMenu.getMenu().findItem(R.id.menu_raw_save).setEnabled(message.uid != null);
-            popupMenu.getMenu().findItem(R.id.menu_raw_send_message).setEnabled(message.uid != null);
-            popupMenu.getMenu().findItem(R.id.menu_raw_send_thread).setEnabled(message.uid != null);
-
-            popupMenu.getMenu().findItem(R.id.menu_raw_save).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
-            popupMenu.getMenu().findItem(R.id.menu_raw_send).setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+            boolean canRaw = (message.uid != null ||
+                    (EntityFolder.INBOX.equals(message.folderType) &&
+                            message.accountProtocol == EntityAccount.TYPE_POP));
+            popupMenu.getMenu().findItem(R.id.menu_raw_save).setEnabled(canRaw);
+            popupMenu.getMenu().findItem(R.id.menu_raw_send_message).setEnabled(canRaw);
+            popupMenu.getMenu().findItem(R.id.menu_raw_send_thread).setEnabled(canRaw);
 
             popupMenu.getMenu().findItem(R.id.menu_resync)
                     .setEnabled(message.uid != null)
@@ -4712,7 +4782,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     fragment.show(parentFragment.getParentFragmentManager(), "open:link");
                 } else {
                     boolean browse_links = prefs.getBoolean("browse_links", false);
-                    Helper.view(context, uri, browse_links, browse_links);
+                    Helper.view(context, UriHelper.guessScheme(uri), browse_links, browse_links);
                 }
             }
 
@@ -6941,7 +7011,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             final View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_keyword_manage, null);
             final RecyclerView rvKeyword = dview.findViewById(R.id.rvKeyword);
-            final TextView tvPro = dview.findViewById(R.id.tvPro);
             final FloatingActionButton fabAdd = dview.findViewById(R.id.fabAdd);
             final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
 
@@ -6952,9 +7021,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final AdapterKeyword adapter = new AdapterKeyword(getContext(), getViewLifecycleOwner());
             rvKeyword.setAdapter(adapter);
 
-            Helper.linkPro(tvPro);
-
-            fabAdd.setEnabled(ActivityBilling.isPro(getContext()));
             fabAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -7276,7 +7342,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             cbKeywords.setChecked(prefs.getBoolean("button_keywords", false));
             cbSearch.setChecked(prefs.getBoolean("button_search", false));
             cbSearchText.setChecked(prefs.getBoolean("button_search_text", false));
-            cbTranslate.setChecked(prefs.getBoolean("button_translate", false));
+            cbTranslate.setChecked(prefs.getBoolean("button_translate", true));
             cbEvent.setChecked(prefs.getBoolean("button_event", false));
             cbShare.setChecked(prefs.getBoolean("button_share", false));
             cbPin.setChecked(prefs.getBoolean("button_pin", false));

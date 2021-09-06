@@ -766,7 +766,8 @@
     <string name="title_show_folders">显示隐藏文件夹</string>
     <string name="title_show_flagged">显示星标消息计数</string>
     <string name="title_subscribed_only">只显示已订阅的</string>
-    <string name="title_apply_to_all">应用到所有文件夹 &#8230;</string>
+    <string name="title_search_folder">搜索文件夹</string>
+    <string name="title_apply_to_all">应用到全部</string>
     <string name="title_hide_folder">隐藏文件夹</string>
     <string name="title_unified_folder">在聚合收件箱中显示</string>
     <string name="title_navigation_folder">在导航菜单中显示</string>
@@ -856,7 +857,6 @@
     <string name="title_download_all">全部下载</string>
     <string name="title_save_all">全部保存</string>
     <string name="title_save_eml">保存原始消息文件</string>
-    <string name="title_eml_remark">转发消息需要从服务器下载原始消息，这需要网络连接。</string>
     <string name="title_eml_option">可通过在连接设置中启用“始终下载原始消息文件”防止发生这种情况</string>
     <string name="title_eml_downloaded">已下载原始消息： %1$s</string>
     <string name="title_buttons">选择按钮</string>
@@ -1489,6 +1489,8 @@
     <string name="title_widget_font_size">文本大小</string>
     <string name="title_widget_padding">内边距尺寸</string>
     <string name="title_widget_semi_transparent">半透明背景</string>
+    <string name="title_widget_refresh">显示刷新消息按钮</string>
+    <string name="title_widget_compose">显示新建邮件按钮</string>
     <string name="title_widget_background">背景颜色</string>
     <string name="title_accessibility_collapsed">折叠</string>
     <string name="title_accessibility_expanded">展开</string>

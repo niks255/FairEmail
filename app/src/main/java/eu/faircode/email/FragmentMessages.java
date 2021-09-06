@@ -2134,7 +2134,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (EntityMessage.SWIPE_ACTION_ASK.equals(action))
                 icon = R.drawable.twotone_help_24;
             else if (EntityMessage.SWIPE_ACTION_SEEN.equals(action))
-                icon = (message.ui_seen ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
+                icon = (message.ui_seen ? R.drawable.twotone_drafts_24 : R.drawable.twotone_mail_24);
             else if (EntityMessage.SWIPE_ACTION_FLAG.equals(action))
                 icon = (message.ui_flagged ? R.drawable.twotone_star_border_24 : R.drawable.baseline_star_24);
             else if (EntityMessage.SWIPE_ACTION_SNOOZE.equals(action))
@@ -2146,7 +2146,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             else if (EntityMessage.SWIPE_ACTION_MOVE.equals(action))
                 icon = R.drawable.twotone_folder_24;
             else if (EntityMessage.SWIPE_ACTION_JUNK.equals(action))
-                icon = R.drawable.twotone_report_problem_24;
+                icon = R.drawable.twotone_report_24;
             else if (EntityMessage.SWIPE_ACTION_DELETE.equals(action) ||
                     (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
                     (EntityFolder.TRASH.equals(actionType) && EntityFolder.JUNK.equals(message.folderType)))
@@ -3038,7 +3038,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_snooze, order++, R.string.title_snooze)
                         .setIcon(R.drawable.twotone_timelapse_24);
 
-                if (result.visible)
+                if (result.visible && !result.isDrafts)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_hide, order++, R.string.title_hide)
                             .setIcon(R.drawable.twotone_visibility_off_24);
                 if (result.hidden)
@@ -3068,7 +3068,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         .setIcon(R.drawable.baseline_arrow_downward_24)
                         .setEnabled(!EntityMessage.PRIORITIY_LOW.equals(result.importance));
 
-                if (result.accounts.size() > 0 /* IMAP */ && ids.length < MAX_SEND_RAW)
+                if (ids.length < MAX_SEND_RAW)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_raw_send, order++, R.string.title_raw_send)
                             .setIcon(R.drawable.twotone_attachment_24);
 
@@ -3082,7 +3082,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 if (result.hasJunk && !result.isJunk && !result.isDrafts) // has junk and not junk/drafts
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_spam, order++, R.string.title_spam)
-                            .setIcon(R.drawable.twotone_report_problem_24);
+                            .setIcon(R.drawable.twotone_report_24);
 
                 if (!result.isTrash && result.hasTrash && !result.isJunk) // not trash and has trash and not is junk
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_trash, order++, R.string.title_trash)
@@ -5959,7 +5959,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             Helper.writeText(file, null);
             db.message().setMessageContent(message.id, true, null, null, null, null);
             //db.message().setMessageSubject(id, subject);
-            db.attachment().deleteAttachments(message.id);
+            db.attachment().deleteAttachments(message.id, new int[]{
+                    EntityAttachment.PGP_MESSAGE,
+                    EntityAttachment.SMIME_MESSAGE,
+                    EntityAttachment.SMIME_SIGNED_DATA
+            });
             db.message().setMessageEncrypt(message.id, message.ui_encrypt);
             db.message().setMessageStored(message.id, new Date().getTime());
 
@@ -6825,14 +6829,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                                 message.warning);
 
                                         // Remove existing attachments
-                                        db.attachment().deleteAttachments(message.id);
+                                        db.attachment().deleteAttachments(message.id, new int[]{EntityAttachment.PGP_MESSAGE});
 
                                         // Add decrypted attachments
                                         List<EntityAttachment> remotes = parts.getAttachments();
                                         for (int index = 0; index < remotes.size(); index++) {
                                             EntityAttachment remote = remotes.get(index);
-                                            if (remote.encryption != null)
-                                                continue;
                                             remote.message = message.id;
                                             remote.sequence = index + 1;
                                             remote.id = db.attachment().insertAttachment(remote);
@@ -7486,7 +7488,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             message.warning);
 
                     // Remove existing attachments
-                    db.attachment().deleteAttachments(message.id);
+                    db.attachment().deleteAttachments(message.id, new int[]{
+                            EntityAttachment.SMIME_MESSAGE,
+                            EntityAttachment.SMIME_SIGNED_DATA
+                    });
 
                     // Add decrypted attachments
                     List<EntityAttachment> remotes = parts.getAttachments();
@@ -8125,22 +8130,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                     URL url = new URL(src);
                                     Log.i("Caching url=" + url);
 
-                                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                    connection.setRequestMethod("GET");
-                                    connection.setReadTimeout(timeout);
-                                    connection.setConnectTimeout(timeout);
-                                    connection.setInstanceFollowRedirects(true);
-                                    connection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
-                                    connection.connect();
-
+                                    HttpURLConnection connection = null;
                                     try {
-                                        int status = connection.getResponseCode();
-                                        if (status != HttpURLConnection.HTTP_OK)
-                                            throw new FileNotFoundException("Error " + status + ": " + connection.getResponseMessage());
-
+                                        connection = Helper.openUrlRedirect(context, src, timeout);
                                         Helper.copy(connection.getInputStream(), os);
                                     } finally {
-                                        connection.disconnect();
+                                        if (connection != null)
+                                            connection.disconnect();
                                     }
                                 } catch (Throwable ex) {
                                     Log.w(ex);

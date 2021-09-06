@@ -769,7 +769,8 @@
     <string name="title_show_folders">Vis skjulte mapper</string>
     <string name="title_show_flagged">Vis stjernemarkerede beskedantal</string>
     <string name="title_subscribed_only">Abonnér på</string>
-    <string name="title_apply_to_all">Anvend for alle &#8230;</string>
+    <string name="title_search_folder">Søg efter mappe</string>
+    <string name="title_apply_to_all">Anvend på alle</string>
     <string name="title_hide_folder">Skjul mappe</string>
     <string name="title_unified_folder">Vis i samlet indbakke</string>
     <string name="title_navigation_folder">Vis i navigationsmenu</string>
@@ -859,7 +860,6 @@
     <string name="title_download_all">Download alle</string>
     <string name="title_save_all">Gem alt</string>
     <string name="title_save_eml">Gem besked i råformatsfil</string>
-    <string name="title_eml_remark">Beskedvideresendelse kræver download af de rå (originale) beskeder fra serveren, hvilket kræver Internetforbindelse.</string>
     <string name="title_eml_option">Dette kan forhindres ved i forbindelsesindstillingerne at aktivere Download altid rå beskedfiler</string>
     <string name="title_eml_downloaded">Rå beskeder downloadet: %1$s</string>
     <string name="title_buttons">Vælg knapper</string>
@@ -1492,6 +1492,8 @@
     <string name="title_widget_font_size">Tekststørrelse</string>
     <string name="title_widget_padding">Polstringsstørrelse</string>
     <string name="title_widget_semi_transparent">Halvgennemsigtig baggrund</string>
+    <string name="title_widget_refresh">Vis Opfrisk beskeder-knap</string>
+    <string name="title_widget_compose">Vis Skriv ny besked-knap</string>
     <string name="title_widget_background">Baggrundsfarve</string>
     <string name="title_accessibility_collapsed">Sammenfoldet</string>
     <string name="title_accessibility_expanded">Udfoldet</string>

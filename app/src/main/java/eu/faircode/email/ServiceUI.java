@@ -35,6 +35,7 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +57,6 @@ public class ServiceUI extends IntentService {
     static final int PI_HIDE = 9;
     static final int PI_SNOOZE = 10;
     static final int PI_IGNORED = 11;
-    static final int PI_THREAD = 12;
 
     public ServiceUI() {
         this(ServiceUI.class.getName());
@@ -158,7 +158,11 @@ public class ServiceUI extends IntentService {
                     break;
 
                 case "sync":
-                    onSync(id);
+                    onSync(id, -1L, false);
+                    break;
+
+                case "widget":
+                    onWidget(intent, (int) id);
                     break;
 
                 case "exists":
@@ -456,24 +460,35 @@ public class ServiceUI extends IntentService {
         }
     }
 
-    private void onSync(long aid) {
+    private void onSync(long aid, long fid, boolean unified) {
         DB db = DB.getInstance(this);
         try {
             db.beginTransaction();
 
             List<EntityAccount> accounts = db.account().getPollAccounts(aid < 0 ? null : aid);
             for (EntityAccount account : accounts) {
-                List<EntityFolder> folders = db.folder().getSynchronizingFolders(account.id);
+                List<EntityFolder> folders;
+                if (fid < 0)
+                    folders = db.folder().getSynchronizingFolders(account.id);
+                else
+                    folders = Arrays.asList(db.folder().getFolder(fid));
                 if (folders.size() > 0)
                     Collections.sort(folders, folders.get(0).getComparator(this));
                 for (EntityFolder folder : folders)
-                    EntityOperation.sync(this, folder.id, true);
+                    if (!unified || folder.unified)
+                        EntityOperation.sync(this, folder.id, true);
             }
 
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
+    }
+
+    private void onWidget(Intent intent, int appWidgetId) {
+        long aid = intent.getLongExtra("account", -1L);
+        long fid = intent.getLongExtra("folder", -1L);
+        onSync(aid, fid, fid < 0);
     }
 
     static void sync(Context context, Long account) {

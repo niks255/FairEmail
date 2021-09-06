@@ -2026,69 +2026,69 @@ FairEmail will try to select the best identity based on the *to* address of the 
 <br />
 
 <a name="faq86"></a>
-**~~(86) What are 'extra privacy features'?~~**
+**~~(86) "Əlavə gizlilik özəllikləri" nədir?~~**
 
-~~The advanced option *extra privacy features* enables:~~
+~~Qabaqcıl *əlavə gizlilik özəllikləri* bunları təmin edir:~~
 
-* ~~Looking up the owner of the IP address of a link~~
-* ~~Detection and removal of [tracking images](#user-content-faq82)~~
+* ~~Bir bağlantının IP ünvanının sahibinin axtarılması~~
+* ~~[İzləmə təsvirlərinin](#user-content-faq82) aşkarlanması və çıxarılması~~
 
 <br />
 
 <a name="faq87"></a>
-**(87) What does 'invalid credentials' mean?**
+**(87) "Etibarsız kimlik məlumatları" nə deməkdir?**
 
-The error message *invalid credentials* means either that the user name and/or password is incorrect, for example because the password was changed or expired, or that the account authorization has expired.
+*Etibarsız kimlik məlumatları*, istifadəçi adı və/və ya şifrənin yanlış yazıldığını bildirir, məsələn, şifrənin dəyişdirilməsi və ya müddətinin bitməsi, hesab səlahiyyətinin müddətinin bitməsi.
 
-If the password is incorrect/expired, you will have to update the password in the account and/or identity settings.
+Şifrə yanlışdırsa/müddəti bitibsə, hesab və/və ya kimlik tənzimləmələrində şifrəni yeniləməlisiniz.
 
-If the account authorization has expired, you will have to select the account again. You will likely need to save the associated identity again as well.
+Hesab səlahiyyətinin müddəti bitibsə, hesabı təkrar seçməlisiniz. Böyük ehtimal, əlaqəli kimliyi də yenidən saxlamalı olacaqsınız.
 
 <br />
 
 <a name="faq88"></a>
-**(88) How can I use a Yahoo, AOL or Sky account?**
+**(88) Yahoo, AOL və ya Sky hesabını necə istifadə edə bilərəm?**
 
-The preferred way to set up a Yahoo account is by using the quick setup wizard, which will use OAuth instead of a password and is therefore safer (and easier as well).
+Yahoo hesabını quraşdırmağın tərcih edilən yolu, şifrə əvəzinə OAuth istifadə edəcək və buna görə də, daha güvənli (və daha asan) olan cəld quraşdırma sehrbazını istifadə etməkdir.
 
-To authorize a Yahoo, AOL, or Sky account you will need to create an app password. For instructions, please see here:
+Bir Yahoo, AOL və ya Sky hesabına səlahiyyət vermək üçün bir tətbiq şifrəsi yaratmalısınız. Təlimatlar üçün, zəhmət olmasa bura baxın:
 
-* [for Yahoo](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
-* [for AOL](https://help.aol.com/articles/Create-and-manage-app-password)
-* [for Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Other email apps*)
+* [Yahoo üçün](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
+* [AOL üçün](https://help.aol.com/articles/Create-and-manage-app-password)
+* [Sky üçün](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (*Digər e-poçt tətbiqləri*nin altında)
 
-Please see [this FAQ](#user-content-faq111) about OAuth support.
+OAuth dəstəyi üçün zəhmət olmasa [bu TSS-a](#user-content-faq111) baxın.
 
-Note that Yahoo, AOL, and Sky do not support standard push messages. The Yahoo email app uses a proprietary, undocumented protocol for push messages.
+Unutmayın ki, Yahoo, AOL və ya Sky standart ani mesajları dəstəkləmir. Yahoo e-poçt tətbiqi, ani mesajlar üçün xüsusiyyətçi, sənədləşdirilməmiş protokol istifadə edir.
 
-Push messages require [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) and the Yahoo email server does not report IDLE as capability:
+Ani mesajlar [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) tələb edir və Yahoo e-poçt serveri, IDLE-ı bacarıq olaraq bildirmir:
 
 
 
 ```
 Y1 CAPABILITY
 * CAPABILITY IMAP4rev1 ID MOVE NAMESPACE XYMHIGHESTMODSEQ UIDPLUS LITERAL+ CHILDREN X-MSG-EXT UNSELECT OBJECTID
-Y1 OK CAPABILITY completed
+Y1 OK CAPABILITY tamamlandı
 ```
 
 
 <br />
 
 <a name="faq89"></a>
-**(89) How can I send plain text only messages?**
+**(89) Yalnız düz mətn mesajlarını necə göndərə bilərəm?**
 
-By default FairEmail sends each message both as plain text and as HTML formatted text because almost every receiver expects formatted messages these days. If you want/need to send plain text messages only, you can enable this in the advanced identity options. You might want to create a new identity for this if you want/need to select sending plain text messages on a case-by-case basis.
+FairEmail, ilkin olaraq hər bir mesajı həm düz mətn, həm də HTML formatı ilə göndərir, çünki bu günlərdə əksər alıcı demək olar ki, formatlanmış mesaj gözləyir. Yalnız düz mətn mesajları göndərmək istəyirsinizsə/lazımdırsa, bunu qabaqcıl kimlik seçimlərində fəallaşdıra bilərsiniz. Vəziyyətə gör düz mətn mesajı göndərmək istəyirsinizsə/lazımdırsa, bunun üçün yeni bir kimlik yarada bilərsiniz.
 
 <br />
 
 <a name="faq90"></a>
-**(90) Why are some texts linked while not being a link?**
+**(90) Niyə bəzi mətnlər bir bağlantı olmasa da, əlaqələndirilib?**
 
-FairEmail will automatically link not linked web links (http and https) and not linked email addresses (mailto) for your convenience. However, texts and links are not easily distinguished, especially not with lots of [top level domains](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) being words. This is why texts with dots are sometimes incorrectly recognized as links, which is better than not recognizing some links.
+FairEmail, rahatlığınız üçün əlaqə yaradılmamış veb bağlantılarını (http və https) və əlaqə yaradılmamış e-poçt ünvanlarını (mailto) avtomatik əlaqələndirir. Ancaq, mətnlər və bağlantılar asanlıqla fərqlənmir, xüsusən də [üst səviyyəli domenlərin](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains) söz olduğu bir çox halda heç fərqlənmir. Buna görə də, nöqtəli mətnlər əksər hallarda yanlış olaraq bağlantı olaraq tanınır, bu da bəzi bağlantıları tanımamaqdan daha yaxşıdır.
 
-Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but links for less usual or less safe protocols like telnet and ftp will not be recognized. The regex to recognize links is already *very* complex and adding more protocols will make it only slower and possibly cause errors.
+tel, geo, rtsp və xmpp protokolları üçün bağlantılar tanınacaq, ancaq telnet və ftp kimi daha az adi və daha az güvənli protokollar üçün üçün tanınmayacaq. Bağlantıları tanımaq üçün normal ifadə, onsuz da *çox* mürəkkəbdir və daha çox protokolun əlavə edilməsi onu sadəcə yavaşladacaq və mümkün xətalara səbəb olacaq.
 
-Note that original messages are shown exactly as they are, which means also that links are not automatically added.
+Orijinal mesajların tam da olduğu kimi göstərildiyinə diqqət edin. Bu da, bağlantıların avtomatik əlavə edilmədiyini bildirir.
 
 <br />
 
@@ -2225,18 +2225,18 @@ You can use *Force sync* in the three-dots menu of the unified inbox to let Fair
 <br />
 
 <a name="faq101"></a>
-**(101) What does the blue/orange dot at the bottom of the conversations mean?**
+**(101) Danışıqların altındakı mavi/narıncı nöqtənin mənası nədir?**
 
-The dot shows the relative position of the conversation in the message list. The dot will be show orange when the conversation is the first or last in the message list, else it will be blue. The dot is meant as an aid when swiping left/right to go to the previous/next conversation.
+Nöqtə, mesaj siyahısında danışığın əlaqəli mövqeyini göstərir. Danışıq, mesaj siyahısında ilk və ya son olduqda nöqtə narıncı olacaq, əks təqdirdə mavi olacaq. Nöqtə, əvvəlki/sonrakı danışığa getmək üçün sola/sağa sürüşdürərkən kömək etdiyi mənasını verir.
 
-The dot is disabled by default and can be enabled with the display settings *Show relative conversation position with a dot*.
+Nöqtə, ilkin olaraq sıradan çıxarılıb və görüntü tənzimləmələrində *"Bir nöqtə ilə əlaqəli danışıq mövqeyini göstər"i* açaraq nöqtəni fəallaşdıra bilərsiniz.
 
 <br />
 
 <a name="faq102"></a>
-**(102) How can I enable auto rotation of images?**
+**(102) Təsvirlərin avto-döndərilməsini necə fəallaşdıra bilərəm?**
 
-Images will automatically be rotated when automatic resizing of images is enabled in the settings (enabled by default). Ancaq, avtomatik döndərmə [Exif](https://en.wikipedia.org/wiki/Exif) məlumatlarının mövcud və doğru olmasından asılıdır, ki bu da həmişə belədir. Xüsusilə də, FairEmail-dən bir kamera tətbiqi ilə bir foto çəkərkən yox.
+Tənzimləmələrdə təsvirlərin avtomatik olaraq yenidən ölçüləndirilməsi fəal olanda (ilkin olaraq fəaldır), təsvirlər, avtomatik olaraq döndəriləcək. Ancaq, avtomatik döndərmə [Exif](https://en.wikipedia.org/wiki/Exif) məlumatlarının mövcud və doğru olmasından asılıdır, ki bu da həmişə belədir. Xüsusilə də, FairEmail-dən bir kamera tətbiqi ilə bir foto çəkərkən yox.
 
 Unutmayın ki, yalnız [JPEG](https://en.wikipedia.org/wiki/JPEG) və [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) formatlı təsvirlər, Exif məlumatları ehtiva edə bilər.
 

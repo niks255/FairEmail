@@ -60,6 +60,8 @@ public class ActivityWidgetUnified extends ActivityBase {
     private ViewButtonColor btnColor;
     private Spinner spFontSize;
     private Spinner spPadding;
+    private CheckBox cbRefresh;
+    private CheckBox cbCompose;
     private Button btnSave;
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
@@ -91,6 +93,8 @@ public class ActivityWidgetUnified extends ActivityBase {
         int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
         int font = prefs.getInt("widget." + appWidgetId + ".font", 0);
         int padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
+        boolean refresh = prefs.getBoolean("widget." + appWidgetId + ".refresh", false);
+        boolean compose = prefs.getBoolean("widget." + appWidgetId + ".compose", false);
 
         getSupportActionBar().setSubtitle(R.string.title_widget_title_list);
         setContentView(R.layout.activity_widget_unified);
@@ -103,6 +107,8 @@ public class ActivityWidgetUnified extends ActivityBase {
         btnColor = findViewById(R.id.btnColor);
         spFontSize = findViewById(R.id.spFontSize);
         spPadding = findViewById(R.id.spPadding);
+        cbRefresh = findViewById(R.id.cbRefresh);
+        cbCompose = findViewById(R.id.cbCompose);
         btnSave = findViewById(R.id.btnSave);
         pbWait = findViewById(R.id.pbWait);
         grpReady = findViewById(R.id.grpReady);
@@ -170,6 +176,8 @@ public class ActivityWidgetUnified extends ActivityBase {
                 editor.putInt("widget." + appWidgetId + ".background", btnColor.getColor());
                 editor.putInt("widget." + appWidgetId + ".font", tinyOut(font));
                 editor.putInt("widget." + appWidgetId + ".padding", tinyOut(padding));
+                editor.putBoolean("widget." + appWidgetId + ".refresh", cbRefresh.isChecked());
+                editor.putBoolean("widget." + appWidgetId + ".compose", cbCompose.isChecked());
                 editor.putInt("widget." + appWidgetId + ".version", BuildConfig.VERSION_CODE);
 
                 editor.apply();
@@ -287,6 +295,8 @@ public class ActivityWidgetUnified extends ActivityBase {
         btnColor.setColor(background);
         spFontSize.setSelection(tinyIn(font));
         spPadding.setSelection(tinyIn(padding));
+        cbRefresh.setChecked(refresh);
+        cbCompose.setChecked(compose);
 
         grpReady.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);

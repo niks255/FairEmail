@@ -312,7 +312,7 @@
     <string name="title_advanced_alt_re_fwd">Альтернативный префикс ответа/пересылки</string>
     <string name="title_advanced_send_reminders">Показывать напоминания</string>
     <string name="title_advanced_send_delayed">Задержка отправки сообщений</string>
-    <string name="title_advanced_attach_new">Прикреплять общие файлы к новому черновику</string>
+    <string name="title_advanced_attach_new">Создавать новый черновик для файлов, которыми поделились</string>
     <string name="title_advanced_reply_all">Долгое нажатие на кнопку ответа, чтобы ответить всем</string>
     <string name="title_advanced_send_pending">Показывать ненавязчивый значок задержки отправки</string>
     <string name="title_advanced_compose_font">Шрифт по умолчанию</string>
@@ -797,7 +797,8 @@
     <string name="title_show_folders">Показывать скрытые папки</string>
     <string name="title_show_flagged">Показывать количество избранных сообщений</string>
     <string name="title_subscribed_only">Только подписки</string>
-    <string name="title_apply_to_all">Применить ко всем&#8230;</string>
+    <string name="title_search_folder">Поиск в названии папки</string>
+    <string name="title_apply_to_all">Применить ко всем</string>
     <string name="title_hide_folder">Скрыть папку</string>
     <string name="title_unified_folder">Показывать в единой папке \"Входящие\"</string>
     <string name="title_navigation_folder">Показывать в меню навигации</string>
@@ -888,7 +889,6 @@
     <string name="title_download_all">Загрузить все</string>
     <string name="title_save_all">Сохранить все</string>
     <string name="title_save_eml">Сохранить оригинальный файл сообщения</string>
-    <string name="title_eml_remark">Чтобы переслать сообщения, необходимо загрузить необработанные (исходные) сообщения с сервера. Для этого необходимо подключение к интернету.</string>
     <string name="title_eml_option">Это можно предотвратить, включив загрузку исходных сообщений в настройках подключения</string>
     <string name="title_eml_downloaded">Загружены исходные сообщения: %1$s</string>
     <string name="title_buttons">Выбрать кнопки</string>
@@ -1522,6 +1522,8 @@
     <string name="title_widget_font_size">Размер текста</string>
     <string name="title_widget_padding">Размер отступа</string>
     <string name="title_widget_semi_transparent">Полупрозрачный фон</string>
+    <string name="title_widget_refresh">Показать кнопку обновления сообщений</string>
+    <string name="title_widget_compose">Показать кнопку создания нового сообщения</string>
     <string name="title_widget_background">Цвет фона</string>
     <string name="title_accessibility_collapsed">Свёрнуто</string>
     <string name="title_accessibility_expanded">Развёрнуто</string>

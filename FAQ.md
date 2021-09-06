@@ -56,7 +56,7 @@ Related questions:
 ## How to ...?
 
 * Change the account name: Settings, tap Manual setup, tap Accounts, tap account
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
+* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions (*)
 * Change password: Settings, tap Manual setup, tap Accounts, tap account, change password
 * Set a signature: Settings, tap Manual setup, tap Identities, tap identity, Edit signature.
 * Add CC and BCC addresses: tap the people's icon at the end of the subject
@@ -72,6 +72,8 @@ Related questions:
 * Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
 * Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
 * Export/import settings: Settings, navigation (left side) menu
+
+(*) Swipe actions for individual and POP3 accounts can be configured in the account setting: Settings, tap Manual setup, tap Accounts, tap account
 
 <h2><a name="known-problems"></a>Known problem</h2>
 
@@ -778,6 +780,7 @@ Signed-only messages are supported, encrypted-only messages are not supported.
 Common errors:
 
 * *No key*: there is no PGP key available for one of the listed email addresses
+* *No key found!*: the PGP key stored in the identity probably doesn't exist anymore. Resetting the key (see above) will probably fix this problem.
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 * *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
 * *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure the email address exactly matches the key, including lower/upper case. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
@@ -789,13 +792,16 @@ Common errors:
 Encrypting a message requires the public key(s) of the recipient(s). Signing a message requires your private key.
 
 Private keys are stored by Android and can be imported via the Android advanced security settings.
-There is a shortcut (button) for this in the encryption settings.
+There is a shortcut (button) for this in the encryption settings for Android version 10 and before.
 Android will ask you to set a PIN, pattern, or password if you didn't before.
 If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
 
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing.
 Android only imports the first key, so to import all the keys, the certificate must first be split.
 This is not very trivial and you are advised to ask the certificate supplier for support.
+
+If you renewed a certificate, you should import the renewed certificate and reset the key.
+This can be done by long pressing an identity in the list of identities (Settings, tap Manual setup, tap Identities).
 
 Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this.
 S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.
@@ -1942,6 +1948,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the send action to show the send dialog, even if it was disabled?
 * Did you know that you can long press the full screen icon to show the original message text only?
 * Did you know that you can long press the answer button to reply to the sender? (since version 1.1562)
+* Did you know that you can long press the message move button to move across accounts? (since version 1.1702)
 
 <br />
 

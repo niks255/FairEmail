@@ -49,6 +49,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.NotificationCompat;
 import androidx.core.view.MenuCompat;
@@ -103,10 +104,12 @@ public class FragmentFolders extends FragmentBase {
     private boolean compact;
 
     private long account;
+    private boolean unified = false;
     private boolean imap = false;
     private boolean primary;
     private boolean show_hidden = false;
     private boolean show_flagged = false;
+    private String searching = null;
     private AdapterFolder adapter;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -126,6 +129,7 @@ public class FragmentFolders extends FragmentBase {
         // Get arguments
         Bundle args = getArguments();
         account = args.getLong("account", -1);
+        unified = args.getBoolean("unified");
         primary = args.getBoolean("primary");
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -205,7 +209,7 @@ public class FragmentFolders extends FragmentBase {
             rvFolder.addItemDecoration(itemDecorator);
         }
 
-        adapter = new AdapterFolder(this, account, primary, compact, show_hidden, show_flagged, null);
+        adapter = new AdapterFolder(this, account, unified, primary, compact, show_hidden, show_flagged, null);
         rvFolder.setAdapter(adapter);
 
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -281,8 +285,18 @@ public class FragmentFolders extends FragmentBase {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("fair:searching", searching);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null)
+            searching = savedInstanceState.getString("fair:searching");
+        adapter.search(searching);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean folder_actions = prefs.getBoolean("folder_actions", false);
@@ -454,6 +468,37 @@ public class FragmentFolders extends FragmentBase {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_folders, menu);
+
+        MenuItem menuSearch = menu.findItem(R.id.menu_search_folder);
+        SearchView searchView = (SearchView) menuSearch.getActionView();
+        searchView.setQueryHint(getString(R.string.title_search));
+
+        if (TextUtils.isEmpty(searching))
+            menuSearch.collapseActionView();
+        else {
+            menuSearch.expandActionView();
+            searchView.setQuery(searching, true);
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (getView() != null) {
+                    searching = newText;
+                    adapter.search(newText);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searching = query;
+                adapter.search(query);
+                return true;
+            }
+        });
+
+
         MenuCompat.setGroupDividerEnabled(menu, true);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -499,6 +544,9 @@ public class FragmentFolders extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_subscribed_only) {
             onMenuSubscribedOnly();
+            return true;
+        } else if (itemId == R.id.menu_search_folder) {
+            onMenuSearchFolder(item);
             return true;
         } else if (itemId == R.id.menu_apply_all) {
             onMenuApplyToAll();
@@ -588,6 +636,13 @@ public class FragmentFolders extends FragmentBase {
         prefs.edit().putBoolean("subscribed_only", subscribed_only).apply();
         getActivity().invalidateOptionsMenu();
         adapter.setSubscribedOnly(subscribed_only);
+    }
+
+    private void onMenuSearchFolder(MenuItem item) {
+        if (item.isActionViewExpanded())
+            item.collapseActionView();
+        else
+            item.expandActionView();
     }
 
     private void onMenuApplyToAll() {

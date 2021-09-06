@@ -787,7 +787,8 @@
     <string name="title_show_folders">Arată dosarele ascunse</string>
     <string name="title_show_flagged">Arată numărul de mesaje cu stea</string>
     <string name="title_subscribed_only">Doar abonat</string>
-    <string name="title_apply_to_all">Aplicare la toate &#8230;</string>
+    <string name="title_search_folder">Căutare folder</string>
+    <string name="title_apply_to_all">Aplică la toate</string>
     <string name="title_hide_folder">Ascunde dosar</string>
     <string name="title_unified_folder">Arată în căsuța poștală comună</string>
     <string name="title_navigation_folder">Arată în meniul de navigație</string>
@@ -878,7 +879,6 @@
     <string name="title_download_all">Descarcă tot</string>
     <string name="title_save_all">Salvează tot</string>
     <string name="title_save_eml">Salvează mesaj original în fișier</string>
-    <string name="title_eml_remark">Pentru a redirecționa mesaje, mesajele brute (originale) trebuie descărcate de pe server. Acest lucru necesită o conexiune la internet.</string>
     <string name="title_eml_option">Acest lucru poate fi prevenit prin activarea funcției de descărcare permanentă a fișierelor de mesaje brute în setările de conectare</string>
     <string name="title_eml_downloaded">Mesaje brute descărcate: %1$s</string>
     <string name="title_buttons">Selectare butoane</string>
@@ -1512,6 +1512,8 @@
     <string name="title_widget_font_size">Mărime text</string>
     <string name="title_widget_padding">Mărime spațiu liber</string>
     <string name="title_widget_semi_transparent">Fundal semi transparent</string>
+    <string name="title_widget_refresh">Buton de afișare a mesajelor de reîmprospătare</string>
+    <string name="title_widget_compose">Afișați butonul de redactare a unui mesaj nou</string>
     <string name="title_widget_background">Culoare fundal</string>
     <string name="title_accessibility_collapsed">Restrâns</string>
     <string name="title_accessibility_expanded">Extins</string>

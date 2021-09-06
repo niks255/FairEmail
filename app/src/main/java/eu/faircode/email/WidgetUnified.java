@@ -29,10 +29,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
+
+import java.util.Date;
 
 public class WidgetUnified extends AppWidgetProvider {
     @Override
@@ -48,6 +51,8 @@ public class WidgetUnified extends AppWidgetProvider {
             int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
             int font = prefs.getInt("widget." + appWidgetId + ".font", 0);
             int padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
+            boolean refresh = prefs.getBoolean("widget." + appWidgetId + ".refresh", false);
+            boolean compose = prefs.getBoolean("widget." + appWidgetId + ".compose", false);
             int version = prefs.getInt("widget." + appWidgetId + ".version", 0);
 
             if (version <= 1550)
@@ -67,6 +72,21 @@ public class WidgetUnified extends AppWidgetProvider {
             PendingIntent pi = PendingIntentCompat.getActivity(
                     context, appWidgetId, view, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            Intent sync = new Intent(context, ServiceUI.class);
+            sync.setAction("widget:" + appWidgetId);
+            sync.putExtra("account", account);
+            sync.putExtra("folder", folder);
+            PendingIntent piSync = PendingIntentCompat.getService(
+                    context, appWidgetId, sync, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent edit = new Intent(context, ActivityCompose.class);
+            edit.setAction("widget:" + appWidgetId);
+            edit.putExtra("action", "new");
+            edit.putExtra("account", account);
+            edit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent piCompose = PendingIntentCompat.getActivity(
+                    context, appWidgetId, edit, PendingIntent.FLAG_UPDATE_CURRENT);
+
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_unified);
 
             views.setTextViewTextSize(R.id.title, TypedValue.COMPLEX_UNIT_SP, getFontSizeSp(font));
@@ -80,6 +100,18 @@ public class WidgetUnified extends AppWidgetProvider {
                 views.setTextViewText(R.id.title, name);
 
             views.setOnClickPendingIntent(R.id.title, pi);
+
+            views.setViewVisibility(R.id.refresh, refresh ? View.VISIBLE : View.GONE);
+            views.setViewPadding(R.id.refresh, px, px, px, px);
+            views.setOnClickPendingIntent(R.id.refresh, piSync);
+
+            boolean syncing = prefs.getBoolean("widget." + appWidgetId + ".syncing", false);
+            views.setImageViewResource(R.id.refresh, syncing ? R.drawable.twotone_compare_arrows_24 : R.drawable.twotone_sync_24);
+            views.setViewVisibility(R.id.refresh, refresh ? View.VISIBLE : View.INVISIBLE);
+
+            views.setViewVisibility(R.id.compose, compose ? View.VISIBLE : View.GONE);
+            views.setViewPadding(R.id.compose, px, px, px, px);
+            views.setOnClickPendingIntent(R.id.compose, piCompose);
 
             Intent service = new Intent(context, WidgetUnifiedService.class);
             service.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);

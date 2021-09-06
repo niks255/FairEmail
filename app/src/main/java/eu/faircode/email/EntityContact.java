@@ -68,6 +68,7 @@ public class EntityContact implements Serializable {
 
     static final int TYPE_TO = 0;
     static final int TYPE_FROM = 1;
+    static final int TYPE_NO_JUNK = 3;
 
     static final int STATE_DEFAULT = 0;
     static final int STATE_FAVORITE = 1;
@@ -239,7 +240,7 @@ public class EntityContact implements Serializable {
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof EntityContact) {
             EntityContact other = (EntityContact) obj;
-            return (this.account == other.account &&
+            return (this.account.equals(other.account) &&
                     this.type == other.type &&
                     this.email.equals(other.email) &&
                     Objects.equals(this.name, other.name) &&

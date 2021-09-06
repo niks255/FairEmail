@@ -24,7 +24,9 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -148,7 +150,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "sync_folders",
             "sync_shared_folders",
             "download_headers", "download_eml",
-            "prefer_ip4", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
+            "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", // force reconnect
             "exact_alarms" // force schedule
@@ -424,7 +426,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             for (EntityFolder folder : db.folder().getFolders(accountNetworkState.accountState.id, false, false)) {
                                 db.folder().setFolderState(folder.id, null);
-                                db.folder().setFolderSyncState(folder.id, null);
                                 db.folder().setFolderPollCount(folder.id, 0);
                             }
 
@@ -604,14 +605,75 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         final TwoStateOwner cowner = new TwoStateOwner(this, "liveUnseenNotify");
 
-        db.folder().liveSynchronizing().observe(this, new Observer<Integer>() {
+        db.folder().liveSynchronizing().observe(this, new Observer<List<TupleFolderSync>>() {
+            private List<Long> lastAccounts = new ArrayList<>();
+            private List<Long> lastFolders = new ArrayList<>();
+
             @Override
-            public void onChanged(Integer count) {
-                Log.i("Synchronizing folders=" + count);
-                if (count == null || count == 0)
+            public void onChanged(List<TupleFolderSync> syncs) {
+                int syncing = 0;
+                boolean changed = false;
+                List<Long> accounts = new ArrayList<>();
+                List<Long> folders = new ArrayList<>();
+                if (syncs != null)
+                    for (TupleFolderSync sync : syncs) {
+                        if ("syncing".equals(sync.sync_state))
+                            syncing++;
+
+                        if (sync.unified && !accounts.contains(sync.account)) {
+                            accounts.add(sync.account);
+                            if (lastAccounts.contains(sync.account))
+                                lastAccounts.remove(sync.account); // same
+                            else
+                                changed = true; // new
+                        }
+
+                        folders.add(sync.folder);
+                        if (lastFolders.contains(sync.folder))
+                            lastFolders.remove(sync.folder); // same
+                        else
+                            changed = true; // new
+                    }
+
+                changed = (changed || lastAccounts.size() > 0 || lastFolders.size() > 0); // deleted
+                lastAccounts = accounts;
+                lastFolders = folders;
+
+                Log.i("Changed=" + changed +
+                        " syncing=" + syncing +
+                        " folders=" + folders.size() +
+                        " accounts=" + accounts.size());
+
+                if (syncing == 0)
                     cowner.start();
                 else
                     cowner.stop();
+
+                if (!changed)
+                    return;
+
+                for (String _key : prefs.getAll().keySet())
+                    if (_key.startsWith("widget.") && _key.endsWith(".refresh") &&
+                            prefs.getBoolean(_key, false)) {
+                        int appWidgetId = Integer.parseInt(_key.split("\\.")[1]);
+
+                        long account = prefs.getLong("widget." + appWidgetId + ".account", -1L);
+                        long folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
+
+                        boolean state;
+                        if (folder > 0)
+                            state = folders.contains(folder);
+                        else if (account > 0)
+                            state = accounts.contains(account);
+                        else
+                            state = (accounts.size() > 0);
+
+                        String key = "widget." + appWidgetId + ".syncing";
+                        if (state != prefs.getBoolean(key, false)) {
+                            prefs.edit().putBoolean(key, state).apply();
+                            WidgetUnified.init(ServiceSynchronize.this, appWidgetId);
+                        }
+                    }
             }
         });
 
@@ -679,6 +741,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 if (lastCount == null || !lastCount.equals(count)) {
                     lastCount = count;
+
+                    EntityLog.log(ServiceSynchronize.this, "Badge count=" + count +
+                            " enabled=" + badge + " Unseen/ignored=" + unseen_ignored);
+
                     // Broadcast new message count
                     try {
                         Intent intent = new Intent(ACTION_NEW_MESSAGE_COUNT);
