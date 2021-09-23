@@ -73,20 +73,21 @@
     <string name="title_block">%1$s sperren</string>
     <string name="title_block_sender">Absender sperren</string>
     <string name="title_block_domain">Absenderdomain sperren</string>
-    <string name="title_block_sender_hint">        Das Sperren eines Absenders erstellt eine Regel, um zukünftige Nachrichten
-        von dieser Absenderadresse automatisch in den Spam-Ordner zu verschieben.
-        Regeln erstellen und verwenden ist eine Pro-Funktion.
+    <string name="title_block_sender_hint">        Das Sperren eines Absenders ist eine kostenlose Funktion.
+        Das Sperren der Domain eines Absenders verwendet Filterregeln, welche nur in der Pro-Version verfügbar sind.
     </string>
     <string name="title_junk_filter">Lokalen Spam-Filter verwenden</string>
     <string name="title_junk_filter_hint">Das kann den Akkuverbrauch erhöhen und Nachrichten fälschlicherweise als Spam kennzeichnen</string>
     <string name="title_junk_blocklist">Spam-Sperrlisten verwenden</string>
+    <string name="title_junk_clear">Löschen</string>
+    <string name="title_junk_clear_hint">Dadurch werden alle Regeln zum Sperren von Absendern gelöscht</string>
     <string name="title_notification_sending">Nachrichten werden gesendet</string>
     <string name="title_notification_waiting">Auf eine geeignete Verbindung wird gewartet</string>
     <string name="title_notification_idle">Leerlauf</string>
     <string name="title_notification_failed">\'%1$s\' fehlgeschlagen</string>
     <string name="title_notification_alert">Serverwarnung: \'%1$s\'</string>
     <string name="title_notification_sending_left">Verbleibende Versuche: %1$d</string>
-    <string name="title_notification_sending_retry">Das Senden wird erneut versucht, wenn sich die Internetverbindung ändert oder der Ausgangskorb heruntergezogen wird</string>
+    <string name="title_notification_sending_retry">Das Senden wird erneut versucht, wenn sich die Internetverbindung ändert oder der Postausgang heruntergezogen wird</string>
     <string name="title_notification_sending_failed">Senden an %1$s fehlgeschlagen</string>
     <string name="title_notification_redacted">Geschwärzt: biometrische oder PIN-Authentifizierung aktiviert</string>
     <string name="title_factor_minutes">%1$d Minuten</string>
@@ -122,6 +123,7 @@
     <string name="title_setup_intro">Die Einrichtung eines Kontos ist mit nur drei Schritten erledigt und danach können Sie bereits E-Mails senden und empfangen</string>
     <string name="title_setup_simple">Es ist nicht notwendig, andere Optionen zu ändern</string>
     <string name="title_setup_issue">FairEmail wurde entwickelt, um Ihnen zu helfen, Ihre Privatsphäre zu schützen, und erforderte buchstäblich Tausende von Arbeitsstunden. Wenn Sie irgendwelche Probleme haben, kontaktieren Sie mich bitte zuerst für Unterstützung, bevor Sie eine schlechte Bewertung abgeben. Ich freue mich Ihnen zu helfen!</string>
+    <string name="title_setup_analytics">FairEmail zeigt keine Werbung an und verfolgt oder analysiert Ihr Verhalten nicht. „Bugsnag” wird für Fehlerberichte verwendet und ist standardmäßig deaktiviert.</string>
     <string name="title_setup_quick_accounts">Konten hinzufügen oder ändern</string>
     <string name="title_setup_quick_support">Einige Anbieter erschweren das Hinzufügen eines Kontos. Bitte geben Sie nicht FairEmail dafür die Schuld, sondern bitten Sie stattdessen um Unterstützung.</string>
     <string name="title_setup_quick_hint">Die Schnelleinrichtung wird Konfigurationsinformationen von autoconfig.thunderbird.net laden</string>
@@ -326,6 +328,7 @@
     <string name="title_advanced_download_headers">Alle Kopfzeilen der Nachricht herunterladen</string>
     <string name="title_advanced_download_eml">Rohnachrichtendateien herunterladen</string>
     <string name="title_advanced_validated">Erfordert eine validierte (geprüfte) Verbindung</string>
+    <string name="title_advanced_vpn_only">Nur über ein VPN verbinden</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
@@ -352,12 +355,12 @@
     <string name="title_advanced_tabular_background">Kartenfarbe als Hintergrundfarbe verwenden, wenn Tabellenstil genutzt wird</string>
     <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
+    <string name="title_advanced_date_fixed">Feste Datumskopfzeile oben anzeigen</string>
     <string name="title_advanced_date_bold">Datum fett anzeigen</string>
     <string name="title_advanced_threading">Themenbaum</string>
     <string name="title_advanced_threading_unread">Anzahl ungelesener Nachrichten in Unterhaltungen anzeigen</string>
     <string name="title_advanced_indentation">Empfangene/gesendete Nachrichten im Themenbaum links/rechts einrücken</string>
     <string name="title_advanced_highlight_unread">Ungelesene Nachrichten hervorheben</string>
-    <string name="title_advanced_highlight_subject">Betreff hervorheben</string>
     <string name="title_advanced_color_stripe">Farbstreifen anzeigen</string>
     <string name="title_advanced_avatars">Kontaktfotos anzeigen</string>
     <string name="title_advanced_gravatars">Gravatare anzeigen</string>
@@ -376,10 +379,13 @@
     <string name="title_advanced_distinguish_contacts">Den Sender unterstrichen darstellen, wenn er ein bekannter lokaler An-Kontakt ist</string>
     <string name="title_advanced_show_recipients">Empfänger im Nachrichtenkopf anzeigen</string>
     <string name="title_advanced_font_size_sender">Schriftgröße für den Absender</string>
-    <string name="title_advanced_font_size_subject">Schriftgröße für den Betreff</string>
+    <string name="title_advanced_sender_ellipsize">Falls erforderlich, kürzen Sie den Absender</string>
     <string name="title_advanced_subject_top">Betreff oberhalb des Absenders anzeigen</string>
     <string name="title_advanced_subject_italic">Betreff kursiv anzeigen</string>
-    <string name="title_advanced_subject_elipsed">Wenn nötig, den Betreff kürzen</string>
+    <string name="title_advanced_highlight_subject">Betreff hervorheben</string>
+    <string name="title_advanced_font_size_subject">Schriftgröße für den Betreff</string>
+    <string name="title_advanced_subject_ellipsize">Wenn nötig den Betreff kürzen</string>
+    <string name="title_advanced_compact_mode_remark">Nur Kompaktmodus</string>
     <string name="title_advanced_highlight_color">Hervorhebungsfarbe</string>
     <string name="title_advanced_keywords">Schlüsselwörter im Nachrichtenkopf anzeigen</string>
     <string name="title_advanced_labels">Gmail-Labels im Nachrichtenkopf anzeigen</string>
@@ -506,6 +512,11 @@
     <string name="title_advanced_autocrypt">Autocrypt verwenden</string>
     <string name="title_advanced_autocrypt_mutual">Gegenseitiger Autocrypt-Modus</string>
     <string name="title_advanced_encrypt_subject">Betreff verschlüsseln</string>
+    <string name="title_advanced_sign_algo">Signaturalgorithmus</string>
+    <string name="title_advanced_encrypt_algo">Verschlüsselungsalgorithmus</string>
+    <string name="title_advanced_remark_algo">        Bitte beachten Sie, dass nicht alle E-Mail-Programme alle Algorithmen unterstützen.
+        Die Standardalgorithmen SHA256 und AES128 werden üblicherweise unterstützt.
+    </string>
     <string name="title_advanced_check_certificate">Öffentlichen Schlüssel beim Senden überprüfen</string>
     <string name="title_advanced_manage_certificates">Öffentliche Schlüssel verwalten</string>
     <string name="title_advanced_import_key">Privaten Schlüssel importieren</string>
@@ -528,6 +539,7 @@
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_updates">Auf GitHub nach Aktualisierungen suchen</string>
     <string name="title_advanced_check_weekly">Wöchentlich statt täglich prüfen</string>
+    <string name="title_advanced_changelog">Änderungsprotokoll nach Aktualisierungen anzeigen</string>
     <string name="title_advanced_experiments">Experimentelle Funktionen ausprobieren</string>
     <string name="title_advanced_crash_reports">Fehlerberichte senden</string>
     <string name="title_advanced_cleanup_attachments">Anhänge aus alten Nachrichten löschen</string>
@@ -538,7 +550,6 @@
     <string name="title_advanced_protocol">Protokollaufzeichnung</string>
     <string name="title_advanced_log_info">Fehlerprotokollierung</string>
     <string name="title_advanced_debug">Fehlersuchmodus</string>
-    <string name="title_advanced_query_threads">Parallelen Datenbankzugriff beschränken</string>
     <string name="title_advanced_manual_hint">Wenn der Nachrichtenempfang deaktiviert ist, ist es immer noch möglich, Nachrichten manuell zu empfangen, indem Sie die Nachrichtenliste nach unten ziehen</string>
     <string name="title_advanced_poll_hint">Bei der regelmäßigen Überprüfung auf neue Nachrichten werden jedes Mal lokale und entfernte Nachrichten verglichen, was ein aufwendiger Vorgang ist, der zu einem zusätzlichen Akkuverbrauch führen kann, insbesondere wenn viele Nachrichten vorhanden sind. Nachrichten immer empfangen verhindert das durch fortlaufendes Verfolgen von Änderungen.</string>
     <string name="title_advanced_optimize_hint">Das kann die Synchronisierungsfrequenz ändern, um den Akkuverbrauch zu verringern, abhängig von den Fähigkeiten und dem Verhalten des E-Mail-Servers.</string>
@@ -612,7 +623,6 @@
     <string name="title_advanced_move_hint">Der Zielordner kann in den Kontoeinstellungen konfiguriert werden</string>
     <string name="title_advanced_notify_no_grouping">Diese Android-Version unterstützt keine Benachrichtigungsgruppierung</string>
     <string name="title_advanced_notify_no_channels">Diese Android-Version unterstützt keine Benachrichtigungskanäle</string>
-    <string name="title_advanced_queries_hint">Das Aktivieren dieser Option wird die Leistung verringern, jedoch ist die Aktivierung auf einigen Geräten erforderlich</string>
     <string name="title_advanced_fts_hint">Dies zu aktivieren, verbessert die Suchleistung, erhöht aber auch den Akku- und Speicherverbrauch</string>
     <string name="title_advanced_english_hint">Dadurch wird die App neu gestartet</string>
     <string name="title_advanced_experiments_hint">Liste der aktuellen experimentellen Funktionen</string>
@@ -779,6 +789,7 @@
     <string name="title_show_folders">Ausgeblendete Ordner anzeigen</string>
     <string name="title_show_flagged">Anzahl markierter Nachrichten anzeigen</string>
     <string name="title_subscribed_only">Nur abonnierte</string>
+    <string name="title_sort_unread_atop">Ungelesene oben einreihen</string>
     <string name="title_search_folder">Nach Ordnern suchen</string>
     <string name="title_apply_to_all">Für alle übernehmen</string>
     <string name="title_hide_folder">Ordner ausblenden</string>
@@ -850,6 +861,7 @@
     <string name="title_editasnew">Als neu bearbeiten</string>
     <string name="title_edit_notes">Lokale Notizen bearbeiten</string>
     <string name="title_create_rule">Regel erstellen &#8230;</string>
+    <string name="title_force_light">Helles Farbschema erzwingen</string>
     <string name="title_share">Teilen</string>
     <string name="title_event">Zum Kalender hinzufügen</string>
     <string name="title_pin">Verknüpfung hinzufügen</string>
@@ -870,6 +882,7 @@
     <string name="title_download_all">Alle herunterladen</string>
     <string name="title_save_all">Alles speichern</string>
     <string name="title_save_eml">Rohdaten speichern</string>
+    <string name="title_eml_remark">Um Nachrichten weiterzuleiten, müssen die ursprünglichen Nachrichten vom E-Mail-Server heruntergeladen werden. Dazu ist eine Internetverbindung erforderlich und die Nachrichten müssen noch auf dem E-Mail-Server verfügbar sein.</string>
     <string name="title_eml_option">Dies kann verhindert werden, indem in den Verbindungseinstellungen \'Rohnachrichtendateien herunterladen\' eingeschaltet wird</string>
     <string name="title_eml_downloaded">Rohnachrichten heruntergeladen: %1$s</string>
     <string name="title_buttons">Schaltflächen auswählen</string>
@@ -944,7 +957,6 @@
     <string name="title_ask_delete_rule">Regel dauerhaft löschen?</string>
     <string name="title_ask_discard">Entwurf löschen?</string>
     <string name="title_ask_show_html">Das Anzeigen der originalen Nachricht kann vertrauliche Daten preisgeben</string>
-    <string name="title_ask_show_html_dark">Dunkles Design verwenden</string>
     <string name="title_ask_show_html_remark">Das Anzeigen der Originalnachricht mit dunklem Hintergrund ist nicht möglich, da dadurch dunkle Texte und Bilder nicht sichtbar wären</string>
     <string name="title_ask_show_html_images">Bilder immer anzeigen, wenn Originalnachrichten angezeigt werden</string>
     <string name="title_ask_show_image">Das Anzeigen von Bildern kann vertrauliche Daten preisgeben</string>
@@ -1105,6 +1117,7 @@
     <string name="title_signature_sender">E-Mail-Adresse des Absenders</string>
     <string name="title_signature_email">E-Mail-Adresse der Unterschrift</string>
     <string name="title_signature_mismatch">Die E-Mail-Adresse des Absenders und der Signatur stimmen nicht überein</string>
+    <string name="title_signature_algorithm">Algorithmus</string>
     <string name="title_signature_subject">Betreff</string>
     <string name="title_signature_validity">Gültigkeit</string>
     <string name="title_signature_outdated">Dieser öffentliche Schlüssel ist derzeit nicht gültig</string>
@@ -1181,6 +1194,7 @@
     <string name="title_previous">Vorherige</string>
     <string name="title_next">Nächste</string>
     <string name="title_edit_signature">Signatur bearbeiten</string>
+    <string name="title_edit_signature_remark">Obwohl Android nicht den gesamten HTML-Code anzeigen kann, wird er unverändert gesendet</string>
     <string name="title_edit_signature_text">Signaturtext</string>
     <string name="title_edit_signature_image">Bild einfügen</string>
     <string name="title_answer_caption">Vorlage bearbeiten</string>
@@ -1387,6 +1401,7 @@
     <string name="title_hint_reformat">Standardmäßig formatiert FairEmail Nachrichten aus Datenschutz- und Sicherheitsgründen neu. Um die Originalnachricht anzuzeigen, tippen Sie auf das Symbol „Original anzeigen“ über dem Nachrichtentext.</string>
     <string name="title_hint_design">Das Design ist absichtlich nicht ablenkend, sondern sehr funktional gehalten. Es gibt viele Optionen, um das Aussehen individuell anzupassen, aber bitte verstehen Sie, dass es unmöglich ist, alle Nutzer gleichermaßen vollkommen glücklich zu machen.</string>
     <string name="title_hint_junk">Das Filtern von Spam sollte durch den E-Mail-Server erfolgen und kann auf einem akkubetriebenen Gerät mit begrenzten Kapazitäten nicht zuverlässig durchgeführt werden.</string>
+    <string name="title_hint_junk_learn">Durch das Verschieben von Nachrichten in und aus dem Spam-Ordner „erlernt” der E-Mail-Server, welche Nachrichten Spam sind</string>
     <string name="title_hint_contact_actions">Gedrückt halten für weitere Optionen</string>
     <string name="title_hint_eml">Das ist eine Zusammenfassung des Inhalts einer Rohnachrichtendatei. Speichern Sie die Rohnachricht mit dem Speichernsymbol in der Aktionsleiste, um alle Inhalte anzuzeigen.</string>
     <string name="title_open_link">Link öffnen</string>
@@ -1481,9 +1496,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_rules_export">Regeln exportieren</string>
     <string name="title_rules_import">Regeln importieren</string>
     <string name="title_rules_delete_all">Alle Regeln löschen</string>
-    <string name="title_rules_delete_junk">Spam-Regeln löschen</string>
     <string name="title_rules_delete_all_confirm">Alle Regeln löschen?</string>
-    <string name="title_rules_delete_junk_confirm">Alle Regeln löschen, die Nachrichten in den Spam-Ordner verschieben?</string>
     <string name="title_debug_info">Fehlersuchinformationen</string>
     <string name="title_debug_info_remark">Bitte beschreiben Sie das Problem und zu welchem Zeitpunkt es aufgetreten ist:</string>
     <string name="title_crash_info_remark">Bitte beschreiben Sie, was Sie getan haben, während die App abgestürzt ist:</string>
@@ -1680,4 +1693,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Nur E-Mail-Adresse</item>
         <item>Name und E-Mail-Adresse</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

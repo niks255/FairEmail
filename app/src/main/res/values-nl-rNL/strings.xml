@@ -73,12 +73,13 @@
     <string name="title_block">Blokkeer %1$s</string>
     <string name="title_block_sender">Blokkeer afzender</string>
     <string name="title_block_domain">Afzender domein blokkeren</string>
-    <string name="title_block_sender_hint">        Het blokkeren van een afzender maakt een regel om toekomstige berichten automatisch naar de spam map te verplaatsen.
-        Het maken en gebruiken van regels is een pro-functie.
-    </string>
+    <string name="title_block_sender_hint">Het blokkeren van een afzender is een gratis functie.
+Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro functie is.    </string>
     <string name="title_junk_filter">Lokale spam filter gebruiken</string>
     <string name="title_junk_filter_hint">Dit kan het batterijgebruik verhogen en berichten onjuist markeren als spam</string>
     <string name="title_junk_blocklist">Gebruik spam blokkeerlijsten</string>
+    <string name="title_junk_clear">Wissen</string>
+    <string name="title_junk_clear_hint">Hiermee worden alle regels voor het blokkeren van afzenders verwijderd</string>
     <string name="title_notification_sending">Berichten verzenden</string>
     <string name="title_notification_waiting">Wachten op een geschikte verbinding</string>
     <string name="title_notification_idle">Inactief</string>
@@ -121,6 +122,7 @@
     <string name="title_setup_intro">Het instellen van een account is slechts drie stappen en daarna kunt u e-mails verzenden en ontvangen</string>
     <string name="title_setup_simple">Het is niet nodig om enige andere opties te wijzigen</string>
     <string name="title_setup_issue">FairEmail is ontwikkeld om u te helpen uw privacy te beschermen en vertegenwoordigt letterlijk duizenden uren werk. Als u problemen ondervindt, neem dan eerst contact met mij op voor ondersteuning voordat u een slechte beoordeling achterlaat. Ik help graag!</string>
+    <string name="title_setup_analytics">FairEmail toont geen advertenties en volgt of analyseert uw gedrag niet. Bugsnag wordt gebruikt voor foutrapportage en is standaard uitgeschakeld.</string>
     <string name="title_setup_quick_accounts">Accounts toevoegen of wijzigen</string>
     <string name="title_setup_quick_support">Sommige providers maken het moeilijk om een account toe te voegen. Geef a.u.b. FairEmail hiervoor niet de schuld, maar vraag om ondersteuning.</string>
     <string name="title_setup_quick_hint">De snelle instelling zal configuratie-informatie ophalen van autoconfig.thunderbird.net</string>
@@ -325,6 +327,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_download_headers">Download alle berichtkoppen</string>
     <string name="title_advanced_download_eml">Ruwe berichtbestanden downloaden</string>
     <string name="title_advanced_validated">Vereis een gevalideerde (gecontroleerde) verbinding</string>
+    <string name="title_advanced_vpn_only">Alleen via een VPN verbinden</string>
     <string name="title_advanced_timeout">Verbinding timeout (seconden)</string>
     <string name="title_advanced_prefer_ip4">Geef de voorkeur aan IPv4 boven IPv6</string>
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
@@ -351,12 +354,12 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_tabular_background">Gebruik kaart kleur als achtergrondkleur bij gebruik van tabulaire stijl</string>
     <string name="title_advanced_cards_shadow">Gebruik schaduw voor ongelezen berichten bij gebruik van kaartstijl</string>
     <string name="title_advanced_date_header">Op datum groeperen</string>
+    <string name="title_advanced_date_fixed">Toon vaste datumkoptekst bovenaan</string>
     <string name="title_advanced_date_bold">Datum vet weergeven</string>
     <string name="title_advanced_threading">Gesprekken groeperen</string>
     <string name="title_advanced_threading_unread">Toon aantal ongelezen berichten in gesprekken</string>
     <string name="title_advanced_indentation">Links/rechts inspringen van ontvangen/verzonden berichten in gesprekken</string>
     <string name="title_advanced_highlight_unread">Ongelezen berichten markeren</string>
-    <string name="title_advanced_highlight_subject">Onderwerp markeren</string>
     <string name="title_advanced_color_stripe">Toon kleurenstreep</string>
     <string name="title_advanced_avatars">Toon foto\'s contacten</string>
     <string name="title_advanced_gravatars">Gravatars weergeven</string>
@@ -375,10 +378,13 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_distinguish_contacts">Onderstreep de afzender wanneer de afzender bekend staat als lokaal \'aan\'-contact</string>
     <string name="title_advanced_show_recipients">Geadresseerden in berichtkop tonen</string>
     <string name="title_advanced_font_size_sender">Tekengrootte afzender</string>
-    <string name="title_advanced_font_size_subject">Tekengrootte onderwerp</string>
+    <string name="title_advanced_sender_ellipsize">Indien nodig, verkort de afzender</string>
     <string name="title_advanced_subject_top">Toon onderwerp boven afzender</string>
     <string name="title_advanced_subject_italic">Toon onderwerp cursief</string>
-    <string name="title_advanced_subject_elipsed">Wanneer nodig, verkort het onderwerp</string>
+    <string name="title_advanced_highlight_subject">Onderwerp markeren</string>
+    <string name="title_advanced_font_size_subject">Tekengrootte onderwerp</string>
+    <string name="title_advanced_subject_ellipsize">Indien nodig, verkort het onderwerp</string>
+    <string name="title_advanced_compact_mode_remark">Alleen compacte modus</string>
     <string name="title_advanced_highlight_color">Markeerkleur</string>
     <string name="title_advanced_keywords">Toon sleutelwoorden in de berichtkop</string>
     <string name="title_advanced_labels">Toon Gmail labels in de berichtkop</string>
@@ -505,6 +511,11 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_autocrypt">Gebruik Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt wederzijdse modus</string>
     <string name="title_advanced_encrypt_subject">Versleuteld onderwerp</string>
+    <string name="title_advanced_sign_algo">Handtekening algoritme</string>
+    <string name="title_advanced_encrypt_algo">Encryptie algoritme</string>
+    <string name="title_advanced_remark_algo">        Houd er rekening mee dat niet alle e-mail clients alle algoritmen ondersteunen.
+        De standaard algoritmen SHA256 en AES128 worden meestal ondersteund.
+    </string>
     <string name="title_advanced_check_certificate">Controleer de publieke sleutel bij verzenden</string>
     <string name="title_advanced_manage_certificates">Publieke sleutels beheren</string>
     <string name="title_advanced_import_key">Importeer privé sleutel</string>
@@ -527,6 +538,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_watchdog">Periodiek controleren of FairEmail nog actief is</string>
     <string name="title_advanced_updates">Controleren op GitHub updates</string>
     <string name="title_advanced_check_weekly">Controleer wekelijks in plaats van dagelijks</string>
+    <string name="title_advanced_changelog">Wijzigingsgeschiedenis weergeven na update</string>
     <string name="title_advanced_experiments">Probeer experimentele functies</string>
     <string name="title_advanced_crash_reports">Foutrapporten verzenden</string>
     <string name="title_advanced_cleanup_attachments">Bijlagen van oude berichten verwijderen</string>
@@ -537,7 +549,6 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_protocol">Protocol logging</string>
     <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Foutopsporing modus</string>
-    <string name="title_advanced_query_threads">Beperk parallelle database toegang</string>
     <string name="title_advanced_manual_hint">Als het ontvangen van berichten is uitgeschakeld, is het nog steeds mogelijk om handmatig berichten te ontvangen door de berichtenlijst omlaag te trekken</string>
     <string name="title_advanced_poll_hint">Periodiek controleren op nieuwe berichten zal elke keer lokale en externe berichten vergelijken, wat een dure operatie is die kan resulteren in extra batterijgebruik, vooral als er veel berichten zijn. Altijd ontvangen zal dit voorkomen door continu veranderingen te volgen.</string>
     <string name="title_advanced_optimize_hint">Dit kan de synchronisatie-frequentie wijzigen om op batterijgebruik te besparen, afhankelijk van de mogelijkheden en het gedrag van de e-mailservers</string>
@@ -611,7 +622,6 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_move_hint">De doelmap kan worden geconfigureerd in de accountinstellingen</string>
     <string name="title_advanced_notify_no_grouping">Deze Android-versie ondersteunt geen meldingsgroepering</string>
     <string name="title_advanced_notify_no_channels">Deze Android-versie ondersteunt geen meldingskanalen</string>
-    <string name="title_advanced_queries_hint">Dit inschakelen zal de prestaties verminderen, maar dit is noodzakelijk op sommige apparaten</string>
     <string name="title_advanced_fts_hint">Dit inschakelen verbetert de zoekprestaties, maar verhoogt ook het batterij- en opslaggebruik</string>
     <string name="title_advanced_english_hint">Dit zal de app herstarten</string>
     <string name="title_advanced_experiments_hint">Lijst van huidige experimentele functies</string>
@@ -778,6 +788,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_show_folders">Toon verborgen mappen</string>
     <string name="title_show_flagged">Toon aantal berichten met ster</string>
     <string name="title_subscribed_only">Alleen geabonneerde</string>
+    <string name="title_sort_unread_atop">Sorteer ongelezen bovenaan</string>
     <string name="title_search_folder">Zoeken naar map</string>
     <string name="title_apply_to_all">Toepassen op alle</string>
     <string name="title_hide_folder">Verberg map</string>
@@ -850,6 +861,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_editasnew">Bewerken als nieuw</string>
     <string name="title_edit_notes">Lokale notities bewerken</string>
     <string name="title_create_rule">Maak regel &#8230;</string>
+    <string name="title_force_light">Forceer licht thema</string>
     <string name="title_share">Delen</string>
     <string name="title_event">Toevoegen aan agenda</string>
     <string name="title_pin">Snelkoppeling toevoegen</string>
@@ -945,7 +957,6 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_ask_delete_rule">Verwijder regel definitief?</string>
     <string name="title_ask_discard">Concept verwijderen?</string>
     <string name="title_ask_show_html">Het originele bericht tonen kan privacy gevoelige informatie lekken</string>
-    <string name="title_ask_show_html_dark">Gebruik donker thema</string>
     <string name="title_ask_show_html_remark">Het weergeven van het oorspronkelijke bericht met een donkere achtergrond is niet mogelijk omdat het onzichtbare donkere teksten en afbeeldingen kan veroorzaken</string>
     <string name="title_ask_show_html_images">Altijd afbeeldingen tonen bij het weergeven van originele berichten</string>
     <string name="title_ask_show_image">Afbeeldingen tonen kan privacy gevoelige informatie lekken</string>
@@ -1106,6 +1117,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_signature_sender">Adres van de afzender</string>
     <string name="title_signature_email">Adres van de handtekening</string>
     <string name="title_signature_mismatch">Het e-mailadres van de afzender en de handtekening komen niet overeen</string>
+    <string name="title_signature_algorithm">Algoritme</string>
     <string name="title_signature_subject">Onderwerp</string>
     <string name="title_signature_validity">Geldigheid</string>
     <string name="title_signature_outdated">Deze publieke sleutel is momenteel niet geldig</string>
@@ -1179,6 +1191,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_previous">Vorige</string>
     <string name="title_next">Volgende</string>
     <string name="title_edit_signature">Handtekening bewerken</string>
+    <string name="title_edit_signature_remark">Hoewel Android niet alle HTML kan weergeven, zal het worden verzonden zoals het is</string>
     <string name="title_edit_signature_text">Tekst handtekening</string>
     <string name="title_edit_signature_image">Afbeelding invoegen</string>
     <string name="title_answer_caption">Bewerk sjabloon</string>
@@ -1385,6 +1398,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_hint_reformat">Standaard maakt FairEmail berichten opnieuw op om privacy- en veiligheidsredenen. Tik op het \'volledig scherm\' pictogram boven de berichttekst om het oorspronkelijke bericht te bekijken.</string>
     <string name="title_hint_design">Het ontwerp is opzettelijk niet afleidend, maar zeer functioneel gehouden. Er zijn veel opties om het uiterlijk aan te passen, maar begrijp alsjeblieft dat het onmogelijk is om iedereen tegelijkertijd helemaal gelukkig te maken.</string>
     <string name="title_hint_junk">Spamfiltering zou door de e-mailserver gedaan moeten worden en kan niet op een apparaat met beperkte mogelijkheden betrouwbaar gedaan worden.</string>
+    <string name="title_hint_junk_learn">Door berichten te verplaatsen van en naar de spam-map \"leert\" de e-mailserver wat spam is</string>
     <string name="title_hint_contact_actions">Druk lang voor opties</string>
     <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtbestand. Sla het ruwe bericht op met het \'bewaar\' icoon in de actiebalk om alle inhoud te bekijken.</string>
     <string name="title_open_link">Koppeling openen</string>
@@ -1478,9 +1492,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_rules_export">Exporteer regels</string>
     <string name="title_rules_import">Importeer regels</string>
     <string name="title_rules_delete_all">Verwijder alle regels</string>
-    <string name="title_rules_delete_junk">Verwijder spam-regels</string>
     <string name="title_rules_delete_all_confirm">Alle regels verwijderen?</string>
-    <string name="title_rules_delete_junk_confirm">Alle regels die berichten verplaatsen naar de spam-map verwijderen?</string>
     <string name="title_debug_info">Foutopsporing</string>
     <string name="title_debug_info_remark">Beschrijf alstublieft het probleem en de tijd van het probleem:</string>
     <string name="title_crash_info_remark">Beschrijf alstublieft wat u aan het doen was toen de app crashte:</string>
@@ -1677,4 +1689,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
         <item>Alleen e-mail</item>
         <item>Naam en e-mail</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

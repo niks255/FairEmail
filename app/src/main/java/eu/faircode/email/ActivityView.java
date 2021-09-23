@@ -87,6 +87,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -118,17 +119,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private RecyclerView rvAccount;
     private ImageButton ibExpanderUnified;
     private RecyclerView rvUnified;
-    private ImageButton ibExpanderFolder;
-    private RecyclerView rvFolder;
     private ImageButton ibExpanderMenu;
     private RecyclerView rvMenu;
     private ImageButton ibExpanderExtra;
     private RecyclerView rvMenuExtra;
     private Group grpOptions;
 
-    private AdapterNavAccount adapterNavAccount;
+    private AdapterNavAccountFolder adapterNavAccount;
     private AdapterNavUnified adapterNavUnified;
-    private AdapterNavFolder adapterNavFolder;
     private AdapterNavMenu adapterNavMenu;
     private AdapterNavMenu adapterNavMenuExtra;
 
@@ -297,8 +295,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         rvAccount = drawerContainer.findViewById(R.id.rvAccount);
         ibExpanderUnified = drawerContainer.findViewById(R.id.ibExpanderUnified);
         rvUnified = drawerContainer.findViewById(R.id.rvUnified);
-        ibExpanderFolder = drawerContainer.findViewById(R.id.ibExpanderFolder);
-        rvFolder = drawerContainer.findViewById(R.id.rvFolder);
         ibExpanderMenu = drawerContainer.findViewById(R.id.ibExpanderMenu);
         rvMenu = drawerContainer.findViewById(R.id.rvMenu);
         ibExpanderExtra = drawerContainer.findViewById(R.id.ibExpanderExtra);
@@ -418,18 +414,24 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         // Accounts
         rvAccount.setLayoutManager(new LinearLayoutManager(this));
-        adapterNavAccount = new AdapterNavAccount(this, this);
+        adapterNavAccount = new AdapterNavAccountFolder(this, this);
         rvAccount.setAdapter(adapterNavAccount);
 
         boolean nav_account = prefs.getBoolean("nav_account", true);
-        ibExpanderAccount.setImageLevel(nav_account ? 0 /* less */ : 1 /* more */);
-        rvAccount.setVisibility(nav_account ? View.VISIBLE : View.GONE);
+        boolean nav_folder = prefs.getBoolean("nav_folder", true);
+        ibExpanderAccount.setImageLevel(nav_account || nav_folder ? 0 /* less */ : 1 /* more */);
+        rvAccount.setVisibility(nav_account || nav_folder ? View.VISIBLE : View.GONE);
 
         ibExpanderAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean nav_account = !prefs.getBoolean("nav_account", true);
-                prefs.edit().putBoolean("nav_account", nav_account).apply();
+                boolean nav_account = prefs.getBoolean("nav_account", true);
+                boolean nav_folder = prefs.getBoolean("nav_folder", true);
+                nav_account = !(nav_account || nav_folder);
+                prefs.edit()
+                        .putBoolean("nav_account", nav_account)
+                        .putBoolean("nav_folder", false)
+                        .apply();
                 ibExpanderAccount.setImageLevel(nav_account ? 0 /* less */ : 1 /* more */);
                 rvAccount.setVisibility(nav_account ? View.VISIBLE : View.GONE);
             }
@@ -451,25 +453,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 prefs.edit().putBoolean("unified_system", unified_system).apply();
                 ibExpanderUnified.setImageLevel(unified_system ? 0 /* less */ : 1 /* more */);
                 rvUnified.setVisibility(unified_system ? View.VISIBLE : View.GONE);
-            }
-        });
-
-        // Navigation folders
-        rvFolder.setLayoutManager(new LinearLayoutManager(this));
-        adapterNavFolder = new AdapterNavFolder(this, this);
-        rvFolder.setAdapter(adapterNavFolder);
-
-        boolean nav_folder = prefs.getBoolean("nav_folder", true);
-        ibExpanderFolder.setImageLevel(nav_folder ? 0 /* less */ : 1 /* more */);
-        rvFolder.setVisibility(nav_folder ? View.VISIBLE : View.GONE);
-
-        ibExpanderFolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean nav_folder = !prefs.getBoolean("nav_folder", true);
-                prefs.edit().putBoolean("nav_folder", nav_folder).apply();
-                ibExpanderFolder.setImageLevel(nav_folder ? 0 /* less */ : 1 /* more */);
-                rvFolder.setVisibility(nav_folder ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -754,9 +737,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         DB db = DB.getInstance(this);
 
-        db.account().liveAccountsEx(false).observe(owner, new Observer<List<TupleAccountEx>>() {
+        db.account().liveAccountFolder().observe(owner, new Observer<List<TupleAccountFolder>>() {
             @Override
-            public void onChanged(@Nullable List<TupleAccountEx> accounts) {
+            public void onChanged(@Nullable List<TupleAccountFolder> accounts) {
                 if (accounts == null)
                     accounts = new ArrayList<>();
                 adapterNavAccount.set(accounts, nav_expanded);
@@ -769,15 +752,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 if (folders == null)
                     folders = new ArrayList<>();
                 adapterNavUnified.set(folders, nav_expanded);
-            }
-        });
-
-        db.folder().liveNavigation().observe(owner, new Observer<List<TupleFolderNav>>() {
-            @Override
-            public void onChanged(List<TupleFolderNav> folders) {
-                if (folders == null)
-                    folders = new ArrayList<>();
-                adapterNavFolder.set(folders, nav_expanded);
             }
         });
 
@@ -902,7 +876,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         adapterNavAccount.setExpanded(nav_expanded);
         adapterNavUnified.setExpanded(nav_expanded);
-        adapterNavFolder.setExpanded(nav_expanded);
         adapterNavMenu.setExpanded(nav_expanded);
         adapterNavMenuExtra.setExpanded(nav_expanded);
     }
@@ -1130,9 +1103,26 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     }
 
     private void checkFirst() {
+        String version = BuildConfig.VERSION_NAME + BuildConfig.REVISION;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean("first", true))
+        boolean first = prefs.getBoolean("first", true);
+        boolean show_changelog = prefs.getBoolean("show_changelog", !BuildConfig.PLAY_STORE_RELEASE);
+
+        if (first)
             new FragmentDialogFirst().show(getSupportFragmentManager(), "first");
+        else if (show_changelog) {
+            String last = prefs.getString("changelog", null);
+            if (!Objects.equals(version, last) || BuildConfig.DEBUG) {
+                Bundle args = new Bundle();
+                args.putString("name", "CHANGELOG.md");
+                FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
+                fragment.setArguments(args);
+                fragment.show(getSupportFragmentManager(), "changelog");
+            }
+        }
+
+        prefs.edit().putString("changelog", version).apply();
     }
 
     private void checkBanner() {

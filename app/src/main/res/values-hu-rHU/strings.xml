@@ -72,11 +72,9 @@
     <string name="title_block">%1$s tiltása</string>
     <string name="title_block_sender">Feladó tiltása</string>
     <string name="title_block_domain">Feladó domain tiltása</string>
-    <string name="title_block_sender_hint">        Ha letilt egy feladót, azzal létrehoz egy szabályt, ami az összes tőle származó jövőbeli üzenetet automatikusan a spam mappába mozgatja.
-        A szabályokkal kapcsolatos funkciók csak pro verzióban érhetők el.
-    </string>
     <string name="title_junk_filter">Lokális spam-filter használata</string>
     <string name="title_junk_filter_hint">Ez növelni tudja az akkumlátor használatát, és hamisan megjelöl üzeneteket spamként</string>
+    <string name="title_junk_clear">Törlés</string>
     <string name="title_notification_sending">Üzenetek küldése</string>
     <string name="title_notification_waiting">Megfelelő kapcsolatra várakozás</string>
     <string name="title_notification_idle">Tétlen</string>
@@ -119,6 +117,7 @@
     <string name="title_setup_quick_hint">A gyors beállítás alkalmazza az autoconfig.thunderbird.net-en található konfigurációs információkat</string>
     <string name="title_setup_quick_imap">Az üzenetek fogadásához használt IMAP szerver</string>
     <string name="title_setup_quick_smtp">Az üzenetek küldéséhez használt SMTP szerver</string>
+    <string name="title_setup_quick_certificates">Szerver tanúsítványok</string>
     <string name="title_setup_wizard">Varázsló</string>
     <string name="title_setup_wizard_multiple">A varázsló többször is használható több fiók hozzáadásához</string>
     <string name="title_setup_wizard_new">Új e-mail cím megadása</string>
@@ -173,6 +172,7 @@
     <string name="title_setup_still">Még meg kell csinálni</string>
     <string name="title_setup_error">Hiba</string>
     <string name="title_setup_configuring">Felhasználói fiók beállítása &#8230;</string>
+    <string name="title_setup_close">Beállítások bezárása</string>
     <string name="title_setup_export">Beállítások exportálása</string>
     <string name="title_setup_import">Beállítások importálása</string>
     <string name="title_setup_import_do">Az importált kapcsolatok hozzáadása során nem módosulnak a meglévőek</string>
@@ -182,6 +182,7 @@
     <string name="title_setup_password_missing">Hiányzó jelszó</string>
     <string name="title_setup_password_different">A jelszavak nem egyeznek</string>
     <string name="title_setup_password_invalid">Érvénytelen jelszó</string>
+    <string name="title_setup_import_contacts">Helyi névjegyek importálása</string>
     <string name="title_setup_exported">Beállítások exportálva</string>
     <string name="title_setup_imported">Beállítások importálva</string>
     <string name="title_setup_import_invalid">Érvénytelen beállítás fájl</string>
@@ -297,7 +298,6 @@
     <string name="title_advanced_threading_unread">Olvasatlan üzenetek számának mutatása beszélgetésekben</string>
     <string name="title_advanced_indentation">Beérkezett/elküldött üzenetek balra/jobbra tördelése a beszélgetésekben</string>
     <string name="title_advanced_highlight_unread">Olvasatlan üzenetek kiemelése</string>
-    <string name="title_advanced_highlight_subject">Tárgy kiemelése</string>
     <string name="title_advanced_color_stripe">Színszalag megjelenítése</string>
     <string name="title_advanced_avatars">Névjegyzék fényképeinek megjelenítése</string>
     <string name="title_advanced_gravatars">Gravatar képek megjelenítése</string>
@@ -314,10 +314,10 @@
     <string name="title_advanced_distinguish_contacts">Húzza alá a küldőt, ha az egy ismert, korábban megcímzett helyi névjegy</string>
     <string name="title_advanced_show_recipients">Címzettek mutatása az üzenet fejlécében</string>
     <string name="title_advanced_font_size_sender">Feladó nevének betűmérete</string>
-    <string name="title_advanced_font_size_subject">Tárgy betűmérete</string>
     <string name="title_advanced_subject_top">Tárgy megjelenítése a küldő fölött</string>
     <string name="title_advanced_subject_italic">Tárgy megjelnítése dőlt betűvel</string>
-    <string name="title_advanced_subject_elipsed">Tárgy rövidítése szükség esetén</string>
+    <string name="title_advanced_highlight_subject">Tárgy kiemelése</string>
+    <string name="title_advanced_font_size_subject">Tárgy betűmérete</string>
     <string name="title_advanced_highlight_color">Kiemelő szín</string>
     <string name="title_advanced_keywords">Kulcsszavak megjelenítése az üzenetek fejlécében</string>
     <string name="title_advanced_labels">Gmail címkék mutatása az üzenet fejlécében</string>
@@ -457,7 +457,6 @@
     <string name="title_advanced_protocol">Protokol naplózás</string>
     <string name="title_advanced_log_info">Hibakeresési naplózás</string>
     <string name="title_advanced_debug">Hibakeresési mód</string>
-    <string name="title_advanced_query_threads">Párhuzamos adatbázis hozzáférés korlátozása</string>
     <string name="title_advanced_manual_hint">Amennyiben az üzenetek folyamatos fogadása ki van kapcsolva, az üzenetlista a lehúzásávan manuálisan még mindíg frissíthető</string>
     <string name="title_advanced_poll_hint">A periodikus szinkronizálás minden egyes alkalommal összehasonlítja a helyileg tárolt üzeneteket a távoliakkal. Ez erőforrásigényes folyamat amely fokozott akkumulátorhasználathoz vezethet. A folyamatos szinkronizálás kiküszöböli ezt, mivel csak a változásokat figyeli és alkalmazza.</string>
     <string name="title_advanced_optimize_hint">A szinkronizálás sűrűségének az E-Mail kiszolgáló képességeihez való igazítása, az akumlátorhasználat csökkentse érdekében</string>
@@ -521,7 +520,6 @@
     <string name="title_advanced_move_hint">A célmappa szerkeszthető a fiók beállításai között</string>
     <string name="title_advanced_notify_no_grouping">Ez az Android verzió nem támogatja az értesítések csoportosítását</string>
     <string name="title_advanced_notify_no_channels">Ez az Android verzió nem támogatja az értesítés csatornákat</string>
-    <string name="title_advanced_queries_hint">Ennek az engedélyezésével romlik a teljesítmény, azonban néhány eszközön szükséges bekapcsolni</string>
     <string name="title_advanced_fts_hint">Bekapcsolása javítja a keresés sebességét, a tárhely- és akkumulátorhasználat kárára</string>
     <string name="title_advanced_english_hint">Ez újraindítja az alkalmazást</string>
     <string name="title_advanced_experiments_hint">A jelenlegi kísérleti funkciók listája</string>
@@ -819,7 +817,6 @@
     <string name="title_ask_delete_rule">Véglegesen törli a szabályt?</string>
     <string name="title_ask_discard">Elveti a piszkozatot?</string>
     <string name="title_ask_show_html">Az eredeti üzenet megjelenítése érzékeny adatok kiszivárgásával járhat</string>
-    <string name="title_ask_show_html_dark">Sötét téma használata</string>
     <string name="title_ask_show_html_remark">Az eredeti üzenet megjelenítése sötét háttérrel nem lehetséges mert láthatatlan sötét szövegeket és képeket okozhat</string>
     <string name="title_ask_show_html_images">Képek megjelenítése az eredeti üzenetek megjelenítésekor</string>
     <string name="title_ask_show_image">A képek megjelenítése érzékeny adatok kiszivárgásával járhat</string>
@@ -1307,9 +1304,7 @@
     <string name="title_rules_export">Szabályok exportálása</string>
     <string name="title_rules_import">Szabályok importálása</string>
     <string name="title_rules_delete_all">Szabályok törlése</string>
-    <string name="title_rules_delete_junk">Spam szűrő szabályok törlése</string>
     <string name="title_rules_delete_all_confirm">Biztosan törli az összes szabályt?</string>
-    <string name="title_rules_delete_junk_confirm">Biztosan törli az összes spam szűrési szabályt?</string>
     <string name="title_debug_info">Hibakeresési információ</string>
     <string name="title_debug_info_remark">Kérlek jellemezd a problémát és jelezd az idejét a problémának:</string>
     <string name="title_crash_info_remark">Kérlek magyarázd el mit csináltál amikor az alkalmazás összeomlott:</string>
@@ -1495,4 +1490,7 @@
         <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

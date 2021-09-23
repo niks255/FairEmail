@@ -69,9 +69,7 @@
     <string name="title_block">Blokkere %1$s</string>
     <string name="title_block_sender">Blokker avsender</string>
     <string name="title_block_domain">Blokker avsenderdomenet</string>
-    <string name="title_block_sender_hint">        Blokkering av avsender vil opprette en regel for automatisk å flytte fremtidige meldinger til spam-mappen.
-        Å lage og bruke regler er en pro-funksjon.
-    </string>
+    <string name="title_junk_clear">Tøm</string>
     <string name="title_notification_sending">Sender melding</string>
     <string name="title_notification_waiting">Venter på passende tilkobling</string>
     <string name="title_notification_idle">Inaktiv</string>
@@ -264,7 +262,6 @@
     <string name="title_advanced_threading_unread">Vis antall uleste meldinger i samtaler</string>
     <string name="title_advanced_indentation">Venstre/høyre innrykk mottatt/sendt meldinger i samtaler</string>
     <string name="title_advanced_highlight_unread">Merk uleste meldinger</string>
-    <string name="title_advanced_highlight_subject">Uthev emne</string>
     <string name="title_advanced_color_stripe">Vis fargestripe</string>
     <string name="title_advanced_avatars">Vis kontakt bilde</string>
     <string name="title_advanced_gravatars">Vis Gravatars</string>
@@ -277,10 +274,10 @@
     <string name="title_advanced_distinguish_contacts">Understreke avsenderen når avsenderen er kjent som lokal \'til\' -kontakt</string>
     <string name="title_advanced_show_recipients">Vis mottakere i meldingshode</string>
     <string name="title_advanced_font_size_sender">Skriftstørrelse for avsender</string>
-    <string name="title_advanced_font_size_subject">Skriftstørrelse på emne</string>
     <string name="title_advanced_subject_top">Vis emne over avsender</string>
     <string name="title_advanced_subject_italic">Vis emnet i kursivt</string>
-    <string name="title_advanced_subject_elipsed">Forkorte emnet ved behov</string>
+    <string name="title_advanced_highlight_subject">Uthev emne</string>
+    <string name="title_advanced_font_size_subject">Skriftstørrelse på emne</string>
     <string name="title_advanced_highlight_color">Uthev farge</string>
     <string name="title_advanced_keywords">Vis nøkkelord i meldingshode</string>
     <string name="title_advanced_labels">Vis Gmail-etiketter i meldingshodet</string>
@@ -413,7 +410,6 @@
     <string name="title_advanced_more">Flere valg</string>
     <string name="title_advanced_protocol">Loggprotokoll</string>
     <string name="title_advanced_debug">Feilsøkingsmodus</string>
-    <string name="title_advanced_query_threads">Begrens parallell databasetilgang</string>
     <string name="title_advanced_manual_hint">Hvis synkronisering er deaktivert, kan du fremdeles oppdatere listen ved å sveipe ned fra toppen</string>
     <string name="title_advanced_poll_hint">Synkronisering med jevne mellomrom vil sammenligne lokale og eksterne meldinger hver gang, noe som er en dyr operasjon som muligens resulterer i ekstra batteribruk, spesielt når det er mange meldinger som skal synkroniseres. Alltid synkronisering vil unngå dette ved kontinuerlig sjekking for endringer.</string>
     <string name="title_advanced_optimize_hint">Dette kan forandre synkroniseringsfrekvensen for å spare batteribruk, avhengig av e-posttjenernes muligheter og oppførsel</string>
@@ -471,7 +467,6 @@
     <string name="title_advanced_move_hint">Målmappen kan konfigureres i kontoinnstillingene</string>
     <string name="title_advanced_notify_no_grouping">Denne Android versjonen støtter ikke varslingsgruppering</string>
     <string name="title_advanced_notify_no_channels">Denne Android versjonen støtter ikke varslingskanaler</string>
-    <string name="title_advanced_queries_hint">Aktivering av dette vil redusere ytelsen, men aktivering er nødvendig på noen enheter</string>
     <string name="title_advanced_fts_hint">Aktivering av dette vil øke søke ytelsen, men også øke batteri bruken og bruke mer lagringsplass</string>
     <string name="title_advanced_english_hint">Dette vil starte appen på nytt</string>
     <string name="title_advanced_experiments_hint">Liste over aktuelle eksperimentelle funksjoner</string>
@@ -752,7 +747,6 @@
     <string name="title_ask_delete_rule">Slett regel permanent?</string>
     <string name="title_ask_discard">Kast utkast?</string>
     <string name="title_ask_show_html">Visning av den opprinnelige meldingen kan lekke sensitiv informasjon</string>
-    <string name="title_ask_show_html_dark">Bruk mørkt tema</string>
     <string name="title_ask_show_html_remark">Det er ikke mulig å vise den opprinnelige meldingen med mørk bakgrunn fordi den kan forårsake usynlige mørke tekster og bilder</string>
     <string name="title_ask_show_html_images">Vis alltid bilder når du viser originale meldinger</string>
     <string name="title_ask_show_image">Å vise bilder kan lekke sensitiv informasjon</string>
@@ -1225,9 +1219,7 @@
     <string name="title_rules_export">Eksporter regler</string>
     <string name="title_rules_import">Importer regler</string>
     <string name="title_rules_delete_all">Slett alle regler</string>
-    <string name="title_rules_delete_junk">Nullstill spam-filter</string>
     <string name="title_rules_delete_all_confirm">Slett alle regler?</string>
-    <string name="title_rules_delete_junk_confirm">Slette alle regler som flytter meldinger til søppelpostmappen?</string>
     <string name="title_debug_info">Feilsøkingsinformasjon</string>
     <string name="title_debug_info_remark">Vennligst beskriv problemet og angi tidspunktet for problemet:</string>
     <string name="title_crash_info_remark">Beskriv hva du gjorde da appen krasjet:</string>
@@ -1412,4 +1404,7 @@
         <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

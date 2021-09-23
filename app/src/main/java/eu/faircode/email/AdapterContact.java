@@ -77,6 +77,8 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     private int textColorSecondary;
 
     private String search = null;
+    private List<Integer> types = new ArrayList<>();
+
     private List<TupleContactEx> all = new ArrayList<>();
     private List<TupleContactEx> selected = new ArrayList<>();
 
@@ -126,6 +128,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
             } else if (contact.type == EntityContact.TYPE_TO) {
                 ivType.setImageResource(R.drawable.twotone_call_made_24);
                 ivType.setContentDescription(context.getString(R.string.title_accessibility_to));
+            } else if (contact.type == EntityContact.TYPE_JUNK) {
+                ivType.setImageResource(R.drawable.twotone_report_24);
+                ivType.setContentDescription(context.getString(R.string.title_legend_junk));
             } else if (contact.type == EntityContact.TYPE_NO_JUNK) {
                 ivType.setImageResource(R.drawable.twotone_report_off_24);
                 ivType.setContentDescription(context.getString(R.string.title_no_junk));
@@ -154,7 +159,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                     : Helper.getRelativeTimeSpanString(context, contact.last_contacted));
 
             ivFavorite.setImageResource(contact.state == EntityContact.STATE_FAVORITE
-                    ? R.drawable.twotone_star_24 : R.drawable.twotone_star_border_24);
+                    ? R.drawable.baseline_star_24 : R.drawable.twotone_star_border_24);
             ivFavorite.setImageTintList(ColorStateList.valueOf(
                     contact.state == EntityContact.STATE_FAVORITE ? colorAccent : textColorSecondary));
             ivFavorite.setContentDescription(contact.state == EntityContact.STATE_FAVORITE
@@ -366,17 +371,28 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     }
 
     public void set(@NonNull List<TupleContactEx> contacts) {
-        Log.i("Set contacts=" + contacts.size() + " search=" + search);
+        Log.i("Set contacts=" + contacts.size() +
+                " search=" + search + " types=" + types.size());
 
         all = contacts;
 
+        List<TupleContactEx> filtered;
+        if (types.size() == 0)
+            filtered = all;
+        else {
+            filtered = new ArrayList<>();
+            for (TupleContactEx contact : all)
+                if (types.contains(contact.type))
+                    filtered.add(contact);
+        }
+
         List<TupleContactEx> items;
         if (TextUtils.isEmpty(search))
-            items = all;
+            items = filtered;
         else {
             items = new ArrayList<>();
             String query = search.toLowerCase().trim();
-            for (TupleContactEx contact : contacts)
+            for (TupleContactEx contact : filtered)
                 if (contact.email.toLowerCase().contains(query) ||
                         (contact.name != null && contact.name.toLowerCase().contains(query)))
                     items.add(contact);
@@ -413,6 +429,11 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     public void search(String query) {
         Log.i("Contacts query=" + query);
         search = query;
+        set(all);
+    }
+
+    public void filter(List<Integer> types) {
+        this.types = types;
         set(all);
     }
 

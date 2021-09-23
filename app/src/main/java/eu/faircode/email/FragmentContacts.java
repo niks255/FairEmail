@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FragmentContacts extends FragmentBase {
@@ -50,6 +52,7 @@ public class FragmentContacts extends FragmentBase {
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
 
+    private boolean junk = false;
     private String searching = null;
     private AdapterContact adapter;
 
@@ -84,6 +87,7 @@ public class FragmentContacts extends FragmentBase {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("fair:junk", junk);
         outState.putString("fair:searching", searching);
         super.onSaveInstanceState(outState);
     }
@@ -92,8 +96,11 @@ public class FragmentContacts extends FragmentBase {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
+            junk = savedInstanceState.getBoolean("fair:junk");
             searching = savedInstanceState.getString("fair:searching");
+        }
+        onMenuJunk(junk);
         adapter.search(searching);
 
         DB db = DB.getInstance(getContext());
@@ -148,6 +155,12 @@ public class FragmentContacts extends FragmentBase {
     }
 
     @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.menu_junk).setChecked(junk);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_help) {
@@ -155,6 +168,10 @@ public class FragmentContacts extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_delete) {
             new FragmentDelete().show(getParentFragmentManager(), "contacts:delete");
+            return true;
+        } else if (itemId == R.id.menu_junk) {
+            item.setChecked(!item.isChecked());
+            onMenuJunk(item.isChecked());
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -164,19 +181,19 @@ public class FragmentContacts extends FragmentBase {
         Helper.viewFAQ(getContext(), 84);
     }
 
+    private void onMenuJunk(boolean junk) {
+        this.junk = junk;
+        adapter.filter(junk
+                ? Arrays.asList(EntityContact.TYPE_JUNK, EntityContact.TYPE_NO_JUNK)
+                : new ArrayList<>());
+    }
+
     public static class FragmentDelete extends FragmentDialogBase {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            final View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_ask_again, null);
-            final TextView tvMessage = dview.findViewById(R.id.tvMessage);
-            CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
-
-            tvMessage.setText(getString(R.string.title_delete_contacts));
-            cbNotAgain.setVisibility(View.GONE);
-
             return new AlertDialog.Builder(getContext())
-                    .setView(dview)
+                    .setMessage(getString(R.string.title_delete_contacts))
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

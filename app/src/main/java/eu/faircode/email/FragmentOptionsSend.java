@@ -159,7 +159,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
 
         List<CharSequence> fn = new ArrayList<>();
         for (int i = 0; i < fontNameNames.length; i++) {
-            SpannableStringBuilder ssb = new SpannableStringBuilder(fontNameNames[i]);
+            SpannableStringBuilder ssb = new SpannableStringBuilderEx(fontNameNames[i]);
             ssb.setSpan(new TypefaceSpan(fontNameValues[i]), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             fn.add(ssb);
         }
@@ -572,7 +572,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swSignatureNew.setChecked(prefs.getBoolean("signature_new", true));
         swSignatureReply.setChecked(prefs.getBoolean("signature_reply", true));
         swSignatureForward.setChecked(prefs.getBoolean("signature_forward", true));
-        swDiscardDelete.setChecked(prefs.getBoolean("discard_delete", false));
+        swDiscardDelete.setChecked(prefs.getBoolean("discard_delete", true));
         swReplyMove.setChecked(prefs.getBoolean("reply_move", false));
 
         swAutoLink.setChecked(prefs.getBoolean("auto_link", false));

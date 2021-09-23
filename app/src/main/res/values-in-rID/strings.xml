@@ -63,9 +63,9 @@
     <string name="title_block">Blokir %1$s</string>
     <string name="title_block_sender">Blokir Pengirim</string>
     <string name="title_block_domain">Blokir Domain Pengirim</string>
-    <string name="title_block_sender_hint">Memblokir pengirim akan membuat aturan secara otomatis memindahkan setiap email terbaru dari pengirim ini ke folder spam. Untuk membuat dan menggunakan aturan ini adalah dengan beralih ke versi pro.</string>
     <string name="title_junk_filter">Pakai penyaring spam lokal</string>
     <string name="title_junk_filter_hint">Ini dapat meningkatkan penggunaan baterai dan salah menandai pesan sebagai spam</string>
+    <string name="title_junk_clear">Bersihkan</string>
     <string name="title_notification_sending">Mengirim pesan</string>
     <string name="title_notification_waiting">Menunggu koneksi yang sesuai</string>
     <string name="title_notification_idle">Siaga</string>
@@ -295,7 +295,6 @@
     <string name="title_advanced_threading_unread">Tampilkan jumlah pesan yang belum dibaca dalam obrolan</string>
     <string name="title_advanced_indentation">Indentasi kiri/kanan menerima/mengirim pesan dalam sebuah obrolan</string>
     <string name="title_advanced_highlight_unread">Sorot pesan yang belum dibaca</string>
-    <string name="title_advanced_highlight_subject">Sorot subjek</string>
     <string name="title_advanced_color_stripe">Tampilkan garis warna</string>
     <string name="title_advanced_avatars">Tampilkan kontak foto</string>
     <string name="title_advanced_gravatars">Tampilkan Gravatar</string>
@@ -312,10 +311,10 @@
     <string name="title_advanced_distinguish_contacts">Garis bawahi pengirim ketika pengirim dikenal sebagai kontak lokal</string>
     <string name="title_advanced_show_recipients">Tampilkan penerima di header pesan</string>
     <string name="title_advanced_font_size_sender">Ukuran teks pengirim</string>
-    <string name="title_advanced_font_size_subject">Ukuran teks subjek</string>
     <string name="title_advanced_subject_top">Tampilkan subjek di atas pengirim</string>
     <string name="title_advanced_subject_italic">Tampilkan subjek dengan huruf miring</string>
-    <string name="title_advanced_subject_elipsed">Ketika dibutuhkan, mempersingkat subjek</string>
+    <string name="title_advanced_highlight_subject">Sorot subjek</string>
+    <string name="title_advanced_font_size_subject">Ukuran teks subjek</string>
     <string name="title_advanced_highlight_color">Sorot warna</string>
     <string name="title_advanced_keywords">Tampilkan kata kunci di header pesan</string>
     <string name="title_advanced_labels">Tampilkan label Gmail di header pesan</string>
@@ -458,7 +457,6 @@
     <string name="title_advanced_protocol">Aktifitas Protokol</string>
     <string name="title_advanced_log_info">Pencatatan debug</string>
     <string name="title_advanced_debug">Mode debug</string>
-    <string name="title_advanced_query_threads">Batasi akses database paralel</string>
     <string name="title_advanced_manual_hint">Bila penerimaan pesan dinonaktifkan, masih mungkin untuk menerima pesan secara manual dengan cara menarik daftar pesan</string>
     <string name="title_advanced_poll_hint">Secara berkala memeriksa pesan baru yang akan membandingkan pesan lokal dan server setiap saat, operasi ini bisa memakai penggunaan baterai secara ekstra, terutama jika ada banyak pesan. Selalu menerima akan mencegah hal ini dengan terus mengikuti perubahan.</string>
     <string name="title_advanced_optimize_hint">Ini mungkin mengubah frekuensi sinkronisasi untuk menghemat penggunaan baterai tergantung pada kemampuan dan perilaku server email</string>
@@ -527,7 +525,6 @@
     <string name="title_advanced_move_hint">Folder target dapat dikonfigurasi dalam pengaturan akun</string>
     <string name="title_advanced_notify_no_grouping">Versi Android ini tidak mendukung pengelompokan notifikasi</string>
     <string name="title_advanced_notify_no_channels">Versi Android ini tidak mendukung notifikasi channel</string>
-    <string name="title_advanced_queries_hint">Mengaktifkan hal ini akan menurunkan performa. Namun, pengaktifan diwajibkan untuk beberapa perangkat</string>
     <string name="title_advanced_fts_hint">Mengaktifkan hal ini akan meningkatkan performa pencarian, namun juga menurunkan penggunaan baterai dan ruang penyimpanan</string>
     <string name="title_advanced_english_hint">Hal ini akan mengulang aplikasi kembali</string>
     <string name="title_advanced_experiments_hint">Daftar fitur eksperimental yang sedang berjalan</string>
@@ -844,7 +841,6 @@
     <string name="title_ask_delete_rule">Hapus aturan secara permanen?</string>
     <string name="title_ask_discard">Buang draf?</string>
     <string name="title_ask_show_html">Menampilkan pesan asli dapat membocorkan informasi sensitif privasi</string>
-    <string name="title_ask_show_html_dark">Gunakan tema gelap</string>
     <string name="title_ask_show_html_images">Selalu tampilkan gambar saat menampilkan pesan asli</string>
     <string name="title_ask_show_image">Menampilkan gambar dapat membocorkan informasi sensitif privasi</string>
     <string name="title_ask_show_image_hint">Gambar yang dikenali sebagai gambar pelacakan tidak akan ditampilkan</string>
@@ -1424,4 +1420,7 @@
         <item>Hanya surel</item>
         <item>Nama dan surel</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

@@ -246,12 +246,18 @@ public class EntityOperation {
                     EntityMessage.snooze(context, message.id, null);
                 }
 
-                if (EntityFolder.JUNK.equals(source.type) && EntityFolder.INBOX.equals(target.type)) {
+                if (EntityFolder.JUNK.equals(source.type)) {
                     List<EntityRule> rules = db.rule().getRules(target.id);
                     for (EntityRule rule : rules)
                         if (rule.isBlockingSender(message, source))
                             db.rule().deleteRule(rule.id);
+
+                    EntityContact.delete(context, message.account, message.from, EntityContact.TYPE_JUNK);
+                    EntityContact.update(context, message.account, message.from, EntityContact.TYPE_NO_JUNK, message.received);
                 }
+
+                if (EntityFolder.JUNK.equals(target.type))
+                    EntityContact.delete(context, message.account, message.from, EntityContact.TYPE_NO_JUNK);
 
                 // Create copy without uid in target folder
                 // Message with same msgid can be in archive
@@ -460,7 +466,14 @@ public class EntityOperation {
                     break;
                 }
 
-        db.operation().deleteOperation(fid, SYNC);
+        int count = db.operation().deleteOperation(fid, SYNC);
+
+        Map<String, String> crumb = new HashMap<>();
+        crumb.put("folder", Long.toString(fid));
+        crumb.put("stale", Integer.toString(count));
+        crumb.put("force", Boolean.toString(force));
+        Log.breadcrumb("Poll", crumb);
+
         sync(context, fid, false, force);
     }
 

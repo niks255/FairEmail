@@ -73,12 +73,14 @@
     <string name="title_block">Blokér %1$s</string>
     <string name="title_block_sender">Blokér afsender</string>
     <string name="title_block_domain">Blokér afsenderdomænet</string>
-    <string name="title_block_sender_hint">        Blokering af en afsender opretter en regel, der automatisk flytter fremtidige beskeder til Spam-mappen.
-        Oprettelse og brug af regler er en Pro-funktion.
+    <string name="title_block_sender_hint">        Afsenderblokering er en gratisfunktion.
+        Afsenderdomæneblokering sker via filterregler og er en Pro-funktion.
     </string>
     <string name="title_junk_filter">Brug lokalt spamfilter</string>
     <string name="title_junk_filter_hint">Dette kan øge strømforbruget samt ukorrekt markere beskeder som spam</string>
     <string name="title_junk_blocklist">Brug spamblokeringslister</string>
+    <string name="title_junk_clear">Ryd</string>
+    <string name="title_junk_clear_hint">Dette sletter alle afsenderblokeringsregler</string>
     <string name="title_notification_sending">Sender beskeder</string>
     <string name="title_notification_waiting">Afventer en passende forbindelse</string>
     <string name="title_notification_idle">Inaktiv</string>
@@ -120,6 +122,7 @@
     <string name="title_setup_quick">Hurtig opsætning</string>
     <string name="title_setup_simple">Ingen grund til at ændre valgmuligheder</string>
     <string name="title_setup_issue">FairEmail er udviklet for at hjælpe dig med at beskytte din fortrolighed og repræsenterer bogstaveligt talt tusindvis af arbejdstimer. Oplever du problemer, så kontakte mig først mhp. support, inden du giver en dårlig bedømmelse. Jeg vil med glæde hjælpe!</string>
+    <string name="title_setup_analytics">FairEmail viser ikke annoncer eller sporer/analyserer brugeradfærd. Bugsnag bruges til fejlrapportering og er som standard deaktiveret.</string>
     <string name="title_setup_quick_accounts">Tilføj eller skift konti</string>
     <string name="title_setup_quick_support">Visse udbydere besværliggør kontotilføjelse. Bebrejd venligst ikke FairEmail for dette, men anmod i stedet om support.</string>
     <string name="title_setup_quick_hint">Hurtig opsætningen vil hente opsætningsoplysninger fra autoconfig.thunderbird.net</string>
@@ -321,6 +324,7 @@
     <string name="title_advanced_download_headers">Download alle brevoverskrifter</string>
     <string name="title_advanced_download_eml">Download råformat beskedfiler</string>
     <string name="title_advanced_validated">Kræv en valideret (kontrolleret) forbindelse</string>
+    <string name="title_advanced_vpn_only">Tilslut kun vha. VPN</string>
     <string name="title_advanced_timeout">Forbindelses-timeout (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Foretræk IPv4 frem for IPv6</string>
     <string name="title_advanced_ssl_harden">Hærd SSL-forbindelser</string>
@@ -346,12 +350,12 @@
     <string name="title_advanced_cards_beige">Brug beige baggrund ifm. kortstil (kun lyse temaer)</string>
     <string name="title_advanced_tabular_background">Brug kortfarve som baggrundsfarve ifm. tabelform</string>
     <string name="title_advanced_date_header">Gruppér efter dato</string>
+    <string name="title_advanced_date_fixed">Vis fast datohoved øverst</string>
     <string name="title_advanced_date_bold">Vis dato med fed</string>
     <string name="title_advanced_threading">Samtaler i tråde</string>
     <string name="title_advanced_threading_unread">Vis antal ulæste beskeder i samtaler</string>
     <string name="title_advanced_indentation">Venstre-/-højreindryk modtagne/sendte beskeder i samtaler</string>
     <string name="title_advanced_highlight_unread">Fremhæv ulæste beskeder</string>
-    <string name="title_advanced_highlight_subject">Fremhæv emne</string>
     <string name="title_advanced_color_stripe">Vis farvestripe</string>
     <string name="title_advanced_avatars">Vis kontaktfotos</string>
     <string name="title_advanced_gravatars">Vis Gravatarer</string>
@@ -370,10 +374,13 @@
     <string name="title_advanced_distinguish_contacts">Understreg afsender, når denne er kendt som lokal \'Til\'-kontakt</string>
     <string name="title_advanced_show_recipients">Vis modtagere i beskedhoved</string>
     <string name="title_advanced_font_size_sender">Tekststørrelse, Afsender</string>
-    <string name="title_advanced_font_size_subject">Tekststørrelse, Emne</string>
+    <string name="title_advanced_sender_ellipsize">Om nødvendigt, afkort afsender</string>
     <string name="title_advanced_subject_top">Vis emne over afsender</string>
     <string name="title_advanced_subject_italic">Vis emnet med kursiv</string>
-    <string name="title_advanced_subject_elipsed">Når nødvendigt, afkort emnet</string>
+    <string name="title_advanced_highlight_subject">Fremhæv emne</string>
+    <string name="title_advanced_font_size_subject">Tekststørrelse, Emne</string>
+    <string name="title_advanced_subject_ellipsize">Om nødvendigt, afkort emnet</string>
+    <string name="title_advanced_compact_mode_remark">Kun kompakttilstand</string>
     <string name="title_advanced_highlight_color">Fremhævelsesfarve</string>
     <string name="title_advanced_keywords">Vis nøgleord i beskedhovedet</string>
     <string name="title_advanced_labels">Vis Gmail-etiketter i beskedhoved</string>
@@ -499,6 +506,11 @@
     <string name="title_advanced_autocrypt">Benyt Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autokrypt gensidig tilstand</string>
     <string name="title_advanced_encrypt_subject">Kryptér emne</string>
+    <string name="title_advanced_sign_algo">Signaturalgoritme</string>
+    <string name="title_advanced_encrypt_algo">Krypteringsalgoritme</string>
+    <string name="title_advanced_remark_algo">        Bemærk, at ikke alle e -mailklienter understøtter alle algoritmer.
+        Standardalgoritmerne SHA256 og AES128 understøttes almindeligvis.
+    </string>
     <string name="title_advanced_check_certificate">Tjek offentlig nøgle ved afsendelse</string>
     <string name="title_advanced_manage_certificates">Håndtér offentlige nøgler</string>
     <string name="title_advanced_import_key">Importér privat nøgle</string>
@@ -521,6 +533,7 @@
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_updates">Tjek for GitHub-opdateringer</string>
     <string name="title_advanced_check_weekly">Tjek ugentligt i stedet for dagligt</string>
+    <string name="title_advanced_changelog">Vis ændringslog efter opdatering</string>
     <string name="title_advanced_experiments">Prøv eksperimentelle funktioner</string>
     <string name="title_advanced_crash_reports">Send fejlrapporter</string>
     <string name="title_advanced_cleanup_attachments">Slet gamle beskeders vedhæftninger</string>
@@ -531,7 +544,6 @@
     <string name="title_advanced_protocol">Protokollogning</string>
     <string name="title_advanced_log_info">Fejllogning</string>
     <string name="title_advanced_debug">Fejlretningstilstand</string>
-    <string name="title_advanced_query_threads">Begræns parallel databaseadgang</string>
     <string name="title_advanced_manual_hint">Er beskedmodtagelse er deaktiveret, er det stadig muligt at modtage beskeder ved at trække beskedlisten ned</string>
     <string name="title_advanced_poll_hint">Periodisk tjek for nye beskeder sammenligner lokal- og fjernbeskeder hver gang, hvilket er en kostbar handling, der kan resultere i ekstra batteriforbrug, især hvis der er mange beskeder. Modtag altid vilforhindre dette ved løbende at følge ændringer.</string>
     <string name="title_advanced_optimize_hint">Dette kan ændre synkfrekvensen for at spare strøm afhængigt af e-mailserverens funktioner og adfærd</string>
@@ -603,7 +615,6 @@
     <string name="title_advanced_move_hint">Målmappen kan opsættes i kontoindstillingerne</string>
     <string name="title_advanced_notify_no_grouping">Denne Android-version understøtter ikke notifikationsgruppering</string>
     <string name="title_advanced_notify_no_channels">Denne Android-version understøtter ikke notifikationskanaler</string>
-    <string name="title_advanced_queries_hint">Aktivering af dette vil reducere ydelsen, men aktivering kræves på visse enheder</string>
     <string name="title_advanced_fts_hint">Aktivering af dette forøger søgeydelsen, men forøge også batteri- og lagerpladsforbruget</string>
     <string name="title_advanced_english_hint">Dette vil genstarte app\'en</string>
     <string name="title_advanced_experiments_hint">Liste over aktuelle eksperimentelle funktioner</string>
@@ -769,6 +780,7 @@
     <string name="title_show_folders">Vis skjulte mapper</string>
     <string name="title_show_flagged">Vis stjernemarkerede beskedantal</string>
     <string name="title_subscribed_only">Abonnér på</string>
+    <string name="title_sort_unread_atop">Sortér ulæst øverst</string>
     <string name="title_search_folder">Søg efter mappe</string>
     <string name="title_apply_to_all">Anvend på alle</string>
     <string name="title_hide_folder">Skjul mappe</string>
@@ -840,6 +852,7 @@
     <string name="title_editasnew">Redigér som ny</string>
     <string name="title_edit_notes">Redigér lokale notater</string>
     <string name="title_create_rule">Opret regel &#8230;</string>
+    <string name="title_force_light">Gennemtving lyst tema</string>
     <string name="title_share">Del</string>
     <string name="title_event">Føj til kalender</string>
     <string name="title_pin">Tilføj genvej</string>
@@ -860,6 +873,7 @@
     <string name="title_download_all">Download alle</string>
     <string name="title_save_all">Gem alt</string>
     <string name="title_save_eml">Gem besked i råformatsfil</string>
+    <string name="title_eml_remark">Beskedvideresendelse kræver download af de rå (originale) beskeder fra e-mailserveren. Dette kræver Internetforbindelse, og beskederne skal stadig lagres på e-mailserveren.</string>
     <string name="title_eml_option">Dette kan forhindres ved i forbindelsesindstillingerne at aktivere Download altid rå beskedfiler</string>
     <string name="title_eml_downloaded">Rå beskeder downloadet: %1$s</string>
     <string name="title_buttons">Vælg knapper</string>
@@ -934,7 +948,6 @@
     <string name="title_ask_delete_rule">Slet regel permanent?</string>
     <string name="title_ask_discard">Kassér kladde?</string>
     <string name="title_ask_show_html">Visning af beskedindhold kan lække personfølsomme data</string>
-    <string name="title_ask_show_html_dark">Benyt mørkt tema</string>
     <string name="title_ask_show_html_remark">Visning af originalbeskeden på en mørk baggrund er ikke mulig, da det kan afstedkomme usynlige mørke tekster og billeder</string>
     <string name="title_ask_show_html_images">Vis altid billeder, når originalbeskederne vises</string>
     <string name="title_ask_show_image">Visning af billeder kan lække personfølsomme data</string>
@@ -1095,6 +1108,7 @@
     <string name="title_signature_sender">Afsenderadresse</string>
     <string name="title_signature_email">Signaturadresse</string>
     <string name="title_signature_mismatch">Afsenders e-mailadresse og signatur matcher ikke</string>
+    <string name="title_signature_algorithm">Algoritme</string>
     <string name="title_signature_subject">Emne</string>
     <string name="title_signature_validity">Gyldighed</string>
     <string name="title_signature_outdated">Den offentlige nøgle er pt, ikke gyldig</string>
@@ -1376,6 +1390,7 @@
     <string name="title_hint_reformat">Af fortrolighedshensyn og sikkerhedsårsager omformaterer FairEmail som standard beskeder. For at se den originale besked, tryk på ikonet \"fuldskærm\" over beskedteksten.</string>
     <string name="title_hint_design">Designet er bevidst ikke-distraherende, men holdt meget funktionel. Der er mange muligheder for at tilpasse udseende, men vær opmærksom på, at det er umuligt at gøre alle glade.</string>
     <string name="title_hint_junk">Spamfiltrering bør udføres på e-mailserveren, da dette ikke ske pålideligt på en batteridrevet enhed med begrænset kapacitet.</string>
+    <string name="title_hint_junk_learn">Ved at flytte beskeder til og fra spammappen, \"lærer\" e-mailserveren, hvad spam er</string>
     <string name="title_hint_contact_actions">Langt tryk for valgmuligheder</string>
     <string name="title_hint_eml">Dette er en oversigt over indholdet af en råformatsbeskedfil. Gem den rå besked med Gem-ikonet i handlingsbjælken for at se alt indhold.</string>
     <string name="title_open_link">Åbn link</string>
@@ -1469,9 +1484,7 @@
     <string name="title_rules_export">Eksportér regler</string>
     <string name="title_rules_import">Eksportér regler</string>
     <string name="title_rules_delete_all">Slet alle regler</string>
-    <string name="title_rules_delete_junk">Slet spamregler</string>
     <string name="title_rules_delete_all_confirm">Slet alle regler?</string>
-    <string name="title_rules_delete_junk_confirm">Slet alle regler og flyt beskeder til spam-mappen?</string>
     <string name="title_debug_info">Fejlretningsinfo</string>
     <string name="title_debug_info_remark">Beskriv venligst problemet og angiv tidspunktet for problemet:</string>
     <string name="title_crash_info_remark">Beskriv venligst, hvad du foretog dig, da app\'en gik ned:</string>
@@ -1668,4 +1681,7 @@
         <item>Kun e-mail</item>
         <item>Navn eller e-mail</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

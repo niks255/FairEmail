@@ -468,11 +468,11 @@ Yine de geçersiz bir güvenlik sertifikası, boş bir parola veya düz metin ba
 
 Ayarların görüntüleme bölümünde örneğin etkinleştirebilir veya devre dışı bırakabilirsiniz:
 
-* *Unified inbox*: to disable the unified inbox and to list the folders selected for the unified inbox instead
+* *birleşik gelen kutusu*: birleşik gelen kutusunu devre dışı bırakmak ve bunun yerine birleşik gelen kutusu için seçilen klasörleri listelemek için
 * *Tablo stili*: kartlar yerine doğrusal bir liste göstermek için
-* *Group by date*: show date header above messages with the same date
+* *tarihe göre gruplandır*: aynı tarihe sahip mesajların üzerinde tarih başlığını göster
 * *Konuşma dizisi oluşturma*: konuşma dizisini devre dışı bırakmak ve bunun yerine bireysel mesajları göstermek için
-* *Conversation action bar*: to disable the bottom navigation bar
+* *konuşma eylem çubuğu*: alt gezinme çubuğunu devre dışı bırakmak için
 * *Highlight color*: to select a color for the sender of unread messages
 * *Show contact photos*: to hide contact photos
 * *Show names and email addresses*: to show names or to show names and email addresses
@@ -535,7 +535,7 @@ When "less secure apps" is not enabled, you'll get the error *Authentication fai
 
 <br />
 
-*General*
+*Genel*
 
 You might get the alert "*Please log in via your web browser*". This happens when Google considers the network that connects you to the internet (this could be a VPN) to be unsafe. This can be prevented by using the Gmail quick setup wizard or an app specific password.
 

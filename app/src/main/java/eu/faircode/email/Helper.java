@@ -653,7 +653,7 @@ public class Helper {
             return true;
 
         if ("application/octet-stream".equals(type) &&
-                "winmail.dat".equals(name))
+                "winmail.dat".equalsIgnoreCase(name))
             return true;
 
         return false;
@@ -673,10 +673,14 @@ public class Helper {
     }
 
     static void view(Context context, Uri uri, boolean browse) {
-        view(context, uri, browse, false);
+        view(context, uri, null, browse, false);
     }
 
     static void view(Context context, Uri uri, boolean browse, boolean task) {
+        view(context, uri, null, browse, task);
+    }
+
+    static void view(Context context, Uri uri, String mimeType, boolean browse, boolean task) {
         if (context == null) {
             Log.e(new Throwable("view"));
             return;
@@ -687,7 +691,11 @@ public class Helper {
 
         if (browse || !has) {
             try {
-                Intent view = new Intent(Intent.ACTION_VIEW, uri);
+                Intent view = new Intent(Intent.ACTION_VIEW);
+                if (mimeType == null)
+                    view.setData(uri);
+                else
+                    view.setDataAndType(uri, mimeType);
                 if (task)
                     view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(view);
@@ -791,9 +799,9 @@ public class Helper {
             base = "https://email.faircode.eu/docs/FAQ-" + locale + ".md";
 
         if (question == 0)
-            view(context, Uri.parse(base + "#top"), false);
+            view(context, Uri.parse(base + "#top"), "text/html", false, false);
         else
-            view(context, Uri.parse(base + "#user-content-faq" + question), false);
+            view(context, Uri.parse(base + "#user-content-faq" + question), "text/html", false, false);
     }
 
     static String getOpenKeychainPackage(Context context) {
@@ -977,6 +985,27 @@ public class Helper {
         return "Blackview".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
+    static boolean isSony() {
+        return "sony".equalsIgnoreCase(Build.MANUFACTURER);
+    }
+
+    static boolean isStaminaEnabled(Context context) {
+        // https://dontkillmyapp.com/sony
+        if (BuildConfig.DEBUG)
+            return true;
+
+        if (!isSony())
+            return false;
+
+        try {
+            ContentResolver resolver = context.getContentResolver();
+            return (Settings.Secure.getInt(resolver, "somc.stamina_mode", 0) > 0);
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
     static boolean isSurfaceDuo() {
         return ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo".equals(Build.MODEL));
     }
@@ -995,6 +1024,7 @@ public class Helper {
                 // Vivo
                 isRealme() ||
                 isBlackview() ||
+                isSony() ||
                 BuildConfig.DEBUG);
     }
 
@@ -1200,7 +1230,7 @@ public class Helper {
         return humanReadableByteCount(bytes, true);
     }
 
-    private static String humanReadableByteCount(long bytes, boolean si) {
+    static String humanReadableByteCount(long bytes, boolean si) {
         int sign = (int) Math.signum(bytes);
         bytes = Math.abs(bytes);
 

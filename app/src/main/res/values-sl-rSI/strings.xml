@@ -77,9 +77,7 @@
     <string name="title_block">Blokiraj %1$s</string>
     <string name="title_block_sender">Blokiraj pošiljatelja</string>
     <string name="title_block_domain">Blokiraj domeno pošiljatelja</string>
-    <string name="title_block_sender_hint">        Blokiranje pošiljatelja bo ustvarilo pravilo za samodejno premikanje prihodnjih sporočil v mapo za vsiljeno pošto.
-        Ustvarjanje in uporaba pravil je značilnost Pro.
-    </string>
+    <string name="title_junk_clear">Počisti</string>
     <string name="title_notification_sending">Pošiljanje sporočil</string>
     <string name="title_notification_waiting">Čakanje na primerno povezavo</string>
     <string name="title_notification_idle">Nedejavno</string>
@@ -238,7 +236,6 @@
     <string name="title_advanced_threading">Niti pogovorov</string>
     <string name="title_advanced_indentation">V pogovorih zamakni prejeta/poslana sporočila levo/desno</string>
     <string name="title_advanced_highlight_unread">Poudari neprebrana sporočila</string>
-    <string name="title_advanced_highlight_subject">Poudari zadevo</string>
     <string name="title_advanced_color_stripe">Prikaži barvno črto</string>
     <string name="title_advanced_avatars">Prikaži slike stikov</string>
     <string name="title_advanced_gravatars">Prikaži splošne podobe</string>
@@ -250,7 +247,7 @@
     <string name="title_advanced_distinguish_contacts">Podčrtaj pošiljatelja, ko je ta poznan kot krajevni stik \'Za\'</string>
     <string name="title_advanced_subject_top">Prikaži zadevo nad pošiljateljem</string>
     <string name="title_advanced_subject_italic">Prikaže zadevo v ležeči pisavi</string>
-    <string name="title_advanced_subject_elipsed">Skrajšaj zadevo, ko je to potrebno</string>
+    <string name="title_advanced_highlight_subject">Poudari zadevo</string>
     <string name="title_advanced_keywords">V glavi sporočila prikaži ključne besede</string>
     <string name="title_advanced_flags">Prikaži zvezdice</string>
     <string name="title_advanced_flags_background">Prikaži obarvano ozadje namesto obarvanih zvezdic</string>
@@ -623,7 +620,6 @@
     <string name="title_ask_delete_rule">Trajno izbriši pravilo?</string>
     <string name="title_ask_discard">Zavrzi osnutek?</string>
     <string name="title_ask_show_html">Prikaz izvirnega sporočila lahko razkrije občutljive zasebne podatke.</string>
-    <string name="title_ask_show_html_dark">Uporabi temno temo</string>
     <string name="title_ask_show_html_remark">Izvirnega sporočila ni mogoče prikazati s temnim ozadjem, ker lahko povzroči nevidna temna besedila in slike.</string>
     <string name="title_ask_show_html_images">Vedno prikaži slike ob prikazu izvirnih sporočil</string>
     <string name="title_ask_show_image">Prikaz slik lahko razkrije občutljive zasebne podatke.</string>
@@ -1198,4 +1194,7 @@
         <item>10 s</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

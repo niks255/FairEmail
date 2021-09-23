@@ -58,11 +58,11 @@ public class FragmentAbout extends FragmentBase {
         TextView tvVersion = view.findViewById(R.id.tvVersion);
         TextView tvRelease = view.findViewById(R.id.tvRelease);
         TextView tvUpdated = view.findViewById(R.id.tvUpdated);
-        ImageButton ibUpdate = view.findViewById(R.id.ibUpdate);
         TextView tvGplV3 = view.findViewById(R.id.tvGplV3);
         LinearLayout llContributors = view.findViewById(R.id.llContributors);
 
-        tvVersion.setText(getString(R.string.title_version, BuildConfig.VERSION_NAME));
+        String version = BuildConfig.VERSION_NAME + BuildConfig.REVISION;
+        tvVersion.setText(getString(R.string.title_version, version));
         tvRelease.setText(BuildConfig.RELEASE_NAME);
 
         long last = 0;
@@ -76,19 +76,6 @@ public class FragmentAbout extends FragmentBase {
 
         DateFormat DF = Helper.getDateTimeInstance(context, DateFormat.SHORT, DateFormat.SHORT);
         tvUpdated.setText(getString(R.string.app_updated, last == 0 ? "-" : DF.format(last)));
-
-        ibUpdate.setVisibility(
-                Helper.hasValidFingerprint(context) || BuildConfig.DEBUG
-                        ? View.VISIBLE : View.GONE);
-        ibUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (BuildConfig.PLAY_STORE_RELEASE)
-                    Helper.view(v.getContext(), Helper.getIntentRate(v.getContext()));
-                else
-                    onMenuChangelog();
-            }
-        });
 
         tvGplV3.setPaintFlags(tvGplV3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvGplV3.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +96,8 @@ public class FragmentAbout extends FragmentBase {
             llContributors.addView(tv);
         }
 
+        FragmentDialogTheme.setBackground(context, view, false);
+
         return view;
     }
 
@@ -116,12 +105,6 @@ public class FragmentAbout extends FragmentBase {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_about, menu);
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_changelog).setVisible(!TextUtils.isEmpty(BuildConfig.CHANGELOG));
-        super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -138,7 +121,11 @@ public class FragmentAbout extends FragmentBase {
     }
 
     private void onMenuChangelog() {
-        Helper.view(getContext(), Uri.parse(BuildConfig.CHANGELOG), false);
+        Bundle args = new Bundle();
+        args.putString("name", "CHANGELOG.md");
+        FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
+        fragment.setArguments(args);
+        fragment.show(getParentFragmentManager(), "changelog");
     }
 
     private void onMenuAttribution() {
@@ -146,6 +133,6 @@ public class FragmentAbout extends FragmentBase {
         args.putString("name", "ATTRIBUTION.md");
         FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
         fragment.setArguments(args);
-        fragment.show(getParentFragmentManager(), "privacy");
+        fragment.show(getParentFragmentManager(), "attribution");
     }
 }

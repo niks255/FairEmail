@@ -73,12 +73,14 @@
     <string name="title_block">%1$s əngəllə</string>
     <string name="title_block_sender">Göndərəni əngəllə</string>
     <string name="title_block_domain">Göndərən domenini əngəllə</string>
-    <string name="title_block_sender_hint">        Göndərəni əngəlləyəndə, gələcəkdəki mesajları avtomatik olaraq spam qovluğuna köçürmək üçün bir qayda yaradılır.
-        Qaydaların yaradılması və istifadə edilməsi Pro xüsusiyyətdir.
+    <string name="title_block_sender_hint">        Göndərəni əngəlləmə ödənişsiz bir özəllikdir.
+        Göndərən domenini əngəlləmə pro özəllik olan filtr qaydalarını istifadə edir.
     </string>
     <string name="title_junk_filter">Yerli spam filtrini istifadə et</string>
     <string name="title_junk_filter_hint">Bu, batareya istifadəsini artıra və mesajları səhvən spam olaraq işarələ bilər</string>
     <string name="title_junk_blocklist">Spam əngəlləmə siyahılarını istifadə et</string>
+    <string name="title_junk_clear">Təmizlə</string>
+    <string name="title_junk_clear_hint">Bu, bütün blok göndərən qaydalarını siləcək</string>
     <string name="title_notification_sending">Mesaj göndərilir</string>
     <string name="title_notification_waiting">Əlverişli bağlantı gözlənilir</string>
     <string name="title_notification_idle">Aktiv deyil</string>
@@ -121,6 +123,7 @@
     <string name="title_setup_intro">Bir hesabın hazırlanması üç addımdan ibarətdir və bundan sonra e-poçtları göndərə və ala bilərsiniz</string>
     <string name="title_setup_simple">Başqa hər hansısa bir seçimi dəyişdirməyə ehtiyac yoxdur</string>
     <string name="title_setup_issue">FairEmail, gizliliyinizi qorumağa kömək etməsi üçün təkmilləşdirildi və sözün əsl mənasında minlərlə saatlıq çalışmanı təmsil edir. Əgər tətbiqlə bağlı hər hansısa probleminiz varsa, pis bir rəy bildirməzdən əvvəl zəhmət olmasa dəstək üçün mənimlə əlaqə saxlayın. Məmnuniyyətlə kömək edərəm!</string>
+    <string name="title_setup_analytics">FairEmail, reklam göstərmir, davranışınızı izləmir və ya təhlil etmir. Bugsnag, xəta hesabatı üçün istifadə olunur və ilkin olaraq görüntülənir.</string>
     <string name="title_setup_quick_accounts">Hesab əlavə et və ya dəyişdir</string>
     <string name="title_setup_quick_support">Bəzi təchizatçılar hesab əlavə etməyi çətinləşdirir. Xahiş edirik buna görə \"FairEmail\"i günahlandırmayın, əvəzində dəstək istəyin.</string>
     <string name="title_setup_quick_hint">Cəld quraşdırma, konfiqurasiya məlumatlarını autoconfig.thunderbird.net ünvanından alır</string>
@@ -324,6 +327,7 @@
     <string name="title_advanced_download_headers">Bütün mesaj başlıqlarını endir</string>
     <string name="title_advanced_download_eml">Xam mesaj fayllarını endir</string>
     <string name="title_advanced_validated">Təsdiqlənmiş (yoxlanılmış) bir bağlantı tələb et</string>
+    <string name="title_advanced_vpn_only">Yalnız VPN vasitəsilə bağlantı qurun</string>
     <string name="title_advanced_timeout">Bağlantı bitmə vaxtı (saniyə)</string>
     <string name="title_advanced_prefer_ip4">IPv6 əvəzinə IPv4 tərcih et</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlam et</string>
@@ -350,12 +354,12 @@
     <string name="title_advanced_tabular_background">Cədvəl stili istifadə edəndə kart rəngini arxaplan rəngi kimi istifadə et</string>
     <string name="title_advanced_cards_shadow">Kart stilini istifadə edəndə oxunmamış mesajlar üçün kölgə istifadə et</string>
     <string name="title_advanced_date_header">Tarixə görə qruplaşdır</string>
+    <string name="title_advanced_date_fixed">Sabit tarix başlığını üstdə göstər</string>
     <string name="title_advanced_date_bold">Tarixi qalın göstər</string>
     <string name="title_advanced_threading">Əlaqəli danışıqlar</string>
     <string name="title_advanced_threading_unread">Danışıqda oxunmamış mesaj sayını göstər</string>
     <string name="title_advanced_indentation">Danışıqlarda alınan/göndərilən mesajların sol/sağ boşluğu</string>
     <string name="title_advanced_highlight_unread">Oxunmamış mesajları vurğula</string>
-    <string name="title_advanced_highlight_subject">Mövzunu vurğula</string>
     <string name="title_advanced_color_stripe">Rəng zolağını göstər</string>
     <string name="title_advanced_avatars">Əlaqə fotolarını göstər</string>
     <string name="title_advanced_gravatars">\"Gravatar\"ları göstər</string>
@@ -374,10 +378,13 @@
     <string name="title_advanced_distinguish_contacts">Göndərən yerli \"alıcı\" əlaqəsi kimi bilinirsə göndərənin altından xətt çək</string>
     <string name="title_advanced_show_recipients">Mesaj başlığında alıcıları göstər</string>
     <string name="title_advanced_font_size_sender">Göndərən mətn ölçüsü</string>
-    <string name="title_advanced_font_size_subject">Mövzu mətn ölçüsü</string>
+    <string name="title_advanced_sender_ellipsize">Lazım gəlsə, göndərən hissəsini qısaldın</string>
     <string name="title_advanced_subject_top">Göndərənin üstündə mövzunu göstər</string>
     <string name="title_advanced_subject_italic">Mövzunu \"italic\" göstər</string>
-    <string name="title_advanced_subject_elipsed">Ehtiyac olanda, mövzunu qısalt</string>
+    <string name="title_advanced_highlight_subject">Mövzunu vurğula</string>
+    <string name="title_advanced_font_size_subject">Mövzu mətn ölçüsü</string>
+    <string name="title_advanced_subject_ellipsize">Lazım gəlsə, mövzu hissəsini qısaldın</string>
+    <string name="title_advanced_compact_mode_remark">Yalnız yığcam rejim</string>
     <string name="title_advanced_highlight_color">Rəngi vurğula</string>
     <string name="title_advanced_keywords">Mesaj başlığında açar sözləri göstər</string>
     <string name="title_advanced_labels">Mesaj başlığında Gmail etiketlərini göstər</string>
@@ -504,6 +511,11 @@
     <string name="title_advanced_autocrypt">Autocrypt istifadə et</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt qarşılıqlı rejim</string>
     <string name="title_advanced_encrypt_subject">Mövzunu şifrələ</string>
+    <string name="title_advanced_sign_algo">İmza alqoritmi</string>
+    <string name="title_advanced_encrypt_algo">Şifrələmə alqoritmi</string>
+    <string name="title_advanced_remark_algo">        Zəhmət olmasa yadda saxlayın ki, bütün e-poçt müştəriləri (client) bütün alqoritmləri dəstəkləmir.
+        İlkin alqoritmlər, çox vaxt SHA256 və AES128-i dəstəkləyir.
+    </string>
     <string name="title_advanced_check_certificate">Göndərəndə ictimai açarları yoxla</string>
     <string name="title_advanced_manage_certificates">İctimai açarları idarə et</string>
     <string name="title_advanced_import_key">Gizli açar idxal et</string>
@@ -526,6 +538,7 @@
     <string name="title_advanced_watchdog">Mütəmadi olaraq \"FairEmail\"in aktivliyini yoxla</string>
     <string name="title_advanced_updates">GitHub yeniləmələrini yoxla</string>
     <string name="title_advanced_check_weekly">Gündəlik əvəzinə həftəlik yoxla</string>
+    <string name="title_advanced_changelog">Yenilənmədən sonra dəyişiklik jurnalını göstər</string>
     <string name="title_advanced_experiments">Təcrübi xüsusiyyətləri sına</string>
     <string name="title_advanced_crash_reports">Xəta hesabatlarını göndər</string>
     <string name="title_advanced_cleanup_attachments">Köhnə mesajların qoşmalarını sil</string>
@@ -535,7 +548,6 @@
     <string name="title_advanced_protocol">Protokol jurnalı</string>
     <string name="title_advanced_log_info">Sazlama jurnalı</string>
     <string name="title_advanced_debug">Sazlama rejimi</string>
-    <string name="title_advanced_query_threads">Paralel verilənlər bazasına müraciəti məhdudlaşdır</string>
     <string name="title_advanced_manual_hint">Əgər mesaj qəbulu sıradan çıxarılsa, mesaj siyahısını aşağı çəkərək mesaj qəbulunu manual şəkildə təmin edə bilərsiniz</string>
     <string name="title_advanced_poll_hint">Yeni mesajların vaxtaşırı yoxlanılması, hər dəfəsində yerli və uzaq mesajları müqayisə edəcək; bu, xüsusilə də həddən çox mesaj olanda əlavə batareya istifadəsinə səbəb olacaq bahalı bir əməliyyatdır. \"Həmişə al\", dəyişiklikləri davamlı izləyərək bunun qarşısını alacaq.</string>
     <string name="title_advanced_optimize_hint">Bu, e-poçt serverlərinin imkan və davranışlarından asılı olaraq batareya istifadəsinə qənaət etmək üçün eyniləşdirmə tezliyini dəyişdirə bilər</string>
@@ -609,7 +621,6 @@
     <string name="title_advanced_move_hint">Hədəf qovluq, hesab tənzimləmələrində konfiqurasiya edilə bilər</string>
     <string name="title_advanced_notify_no_grouping">Bu Android versiyası bildiriş qruplaşdırmasını dəstəkləmir</string>
     <string name="title_advanced_notify_no_channels">Bu Android versiyası bildiriş kanallarını dəstəkləmir</string>
-    <string name="title_advanced_queries_hint">Bunu fəallaşdırmaq, performansı aşağı salır, ancaq bəzi cihazlarda fəallaşdırmaq tələb olunur</string>
     <string name="title_advanced_fts_hint">Bunu fəallaşdırmaq, axtarış performansını yaxşılaşdırır, ancaq batareya və anbar sahəsinin istifadəsini də artırır</string>
     <string name="title_advanced_english_hint">Bu, tətbiqi yenidən başladacaq</string>
     <string name="title_advanced_experiments_hint">Təcrübi xüsusiyyətlərin siyahısı</string>
@@ -776,6 +787,7 @@
     <string name="title_show_folders">Gizli qovluqları göstər</string>
     <string name="title_show_flagged">Ulduzlu mesaj sayını göstər</string>
     <string name="title_subscribed_only">Yalnız abunə olunanlar</string>
+    <string name="title_sort_unread_atop">Oxunulmayanları üstdə sırala</string>
     <string name="title_search_folder">Qovluq axtar</string>
     <string name="title_apply_to_all">Hamısına tətbiq et</string>
     <string name="title_hide_folder">Qovluğu gizlət</string>
@@ -848,6 +860,7 @@
     <string name="title_editasnew">Yeni kimi düzəliş et</string>
     <string name="title_edit_notes">Yerli qeydlərə düzəliş et</string>
     <string name="title_create_rule">Qayda yarat &#8230;</string>
+    <string name="title_force_light">Məcburi açıq tema</string>
     <string name="title_share">Paylaş</string>
     <string name="title_event">Təqvimə əlavə et</string>
     <string name="title_pin">Qısayol əlavə et</string>
@@ -868,6 +881,7 @@
     <string name="title_download_all">Hamısını endir</string>
     <string name="title_save_all">Hamısını saxla</string>
     <string name="title_save_eml">Xam mesaj faylını saxla</string>
+    <string name="title_eml_remark">Mesajları yönləndirmək üçün, xam (orijinal) mesajlar, e-poçt serverindən endirilməlidir. Bu, internet bağlantısı tələb edir və mesajlar, e-poçt serverdə saxlanılacaq.</string>
     <string name="title_eml_option">Bunun qarşısı, bağlantı tənzimləmələrində xam mesajlarının endirilməsi həmişəlik fəallaşdırılaraq alına bilər</string>
     <string name="title_eml_downloaded">Xam mesajlar endirildi: %1$s</string>
     <string name="title_buttons">Düymələri seçin</string>
@@ -942,7 +956,6 @@
     <string name="title_ask_delete_rule">Qayda birdəfəlik silinsin?</string>
     <string name="title_ask_discard">Qaralama silinsin?</string>
     <string name="title_ask_show_html">Orijinal mesajın göstərilməsi, gizlilik həssaslı məlumatları sızdıra bilər</string>
-    <string name="title_ask_show_html_dark">Tünd temanı istifadə et</string>
     <string name="title_ask_show_html_remark">Orijinal mesajın tünd arxaplanda görüntülənməsi mümkün deyildir, çünki tünd tema mətn və təsvirlərin görünməz olmasına səbəb ola bilər</string>
     <string name="title_ask_show_html_images">Orijinal mesajları göstərəndə təsvirləri həmişə göstər</string>
     <string name="title_ask_show_image">Təsvirlərin göstərilməsi, gizlilik həssaslı məlumatların sızdıra bilər</string>
@@ -1103,6 +1116,7 @@
     <string name="title_signature_sender">Göndərənin ünvanı</string>
     <string name="title_signature_email">İmzanın ünvanı</string>
     <string name="title_signature_mismatch">Göndərənin və imzanın e-poçt ünvanları uyğunlaşmır</string>
+    <string name="title_signature_algorithm">Alqoritm</string>
     <string name="title_signature_subject">Mövzu</string>
     <string name="title_signature_validity">Etibarlılıq</string>
     <string name="title_signature_outdated">Bu ictimai açar hazırda etibarsızdır</string>
@@ -1178,6 +1192,7 @@
     <string name="title_previous">Əvvəlki</string>
     <string name="title_next">Növbəti</string>
     <string name="title_edit_signature">İmzaya düzəliş et</string>
+    <string name="title_edit_signature_remark">Android, bütün HTML-i görüntüləyə bilməsə də, olduğu kimi göndərəcək</string>
     <string name="title_edit_signature_text">İmza mətni</string>
     <string name="title_edit_signature_image">Təsvir daxil et</string>
     <string name="title_answer_caption">Şablona düzəliş et</string>
@@ -1384,6 +1399,7 @@
     <string name="title_hint_reformat">İlkin olaraq, FairEmail, mesajları gizlilik və təhlükəsizlik səbəbinə görə yenidən format edir. Orijinal mesaja baxmaq üçün, mesaj mətninin üstündəki \"tam ekran\" nişanına toxunun.</string>
     <string name="title_hint_design">Dizayn qəsdən diqqəti yayındırmır, lakin yüksək dərəcədə funksional saxlayır. Görünüşü özəlləşdirmək üçün bir neçə seçim var, ancaq hər kəsi eyni anda xoşbəxt etməyin mümkün olmadığını anlamağınızı istəyirik.</string>
     <string name="title_hint_junk">Spam filtrləmə, e-poçt serveri tərəfindən edilməlidir və məhdud imkanlara sahib batareyalı bir cihazda açıq şəkildə edilə bilməz.</string>
+    <string name="title_hint_junk_learn">Mesajları spam qovluğuna və qovluğundan köçürərək, e-poçt serveri, spamın nə olduğunu \"öyrənir\"</string>
     <string name="title_hint_contact_actions">Seçimlər üçün uzun basın</string>
     <string name="title_hint_eml">Bu, xam mesaj faylının məzmununun bir icmalıdır. Bütün məzmuna baxmaq üçün xam mesajı əməliyyat sətrindəki saxla nişanı ilə saxlayın.</string>
     <string name="title_open_link">Bağlantını aç</string>
@@ -1478,9 +1494,7 @@
     <string name="title_rules_export">İxrac qaydaları</string>
     <string name="title_rules_import">İdxal qaydaları</string>
     <string name="title_rules_delete_all">Bütün qaydaları sil</string>
-    <string name="title_rules_delete_junk">Spam qaydalarını sil</string>
     <string name="title_rules_delete_all_confirm">Bütün qaydalar silinsin?</string>
-    <string name="title_rules_delete_junk_confirm">Mesajları spam qovluğuna daşıyan bütün qaydalar silinsin?</string>
     <string name="title_debug_info">Sazlama məlumatı</string>
     <string name="title_debug_info_remark">Zəhmət olmasa probleminizi təsvir edin və problemin vaxtını göstərin:</string>
     <string name="title_crash_info_remark">Zəhmət olmasa tətbiq çökərkən tətbiqdə nə etdiyinizi təsvir edin:</string>
@@ -1670,4 +1684,7 @@
         <item>Yalnız e-poçt</item>
         <item>Ad və e-poçt</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

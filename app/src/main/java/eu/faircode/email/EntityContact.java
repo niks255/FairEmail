@@ -68,6 +68,7 @@ public class EntityContact implements Serializable {
 
     static final int TYPE_TO = 0;
     static final int TYPE_FROM = 1;
+    static final int TYPE_JUNK = 2;
     static final int TYPE_NO_JUNK = 3;
 
     static final int STATE_DEFAULT = 0;
@@ -94,7 +95,7 @@ public class EntityContact implements Serializable {
     @NonNull
     public Integer state = STATE_DEFAULT;
 
-    static void update(
+    static void received(
             @NonNull Context context,
             @NonNull EntityAccount account,
             @NonNull EntityFolder folder,
@@ -114,10 +115,10 @@ public class EntityContact implements Serializable {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
         boolean suggest_received = prefs.getBoolean("suggest_received", false);
+
+        // Shortcut
         if (!suggest_sent && !suggest_received)
             return;
-
-        DB db = DB.getInstance(context);
 
         int type = (folder.isOutgoing() ? TYPE_TO : TYPE_FROM);
 
@@ -158,6 +159,14 @@ public class EntityContact implements Serializable {
                 addresses.addAll(Arrays.asList(message.cc));
         }
 
+        update(context, folder.account, addresses.toArray(new Address[0]), type, message.received);
+    }
+
+    public static void update(Context context, long account, Address[] addresses, int type, long time) {
+        if (addresses == null)
+            return;
+
+        DB db = DB.getInstance(context);
         for (Address address : addresses) {
             String email = ((InternetAddress) address).getAddress();
             String name = ((InternetAddress) address).getPersonal();
@@ -171,17 +180,17 @@ public class EntityContact implements Serializable {
             try {
                 db.beginTransaction();
 
-                EntityContact contact = db.contact().getContact(folder.account, type, email);
+                EntityContact contact = db.contact().getContact(account, type, email);
                 if (contact == null) {
                     contact = new EntityContact();
-                    contact.account = folder.account;
+                    contact.account = account;
                     contact.type = type;
                     contact.email = email;
                     contact.name = name;
                     contact.avatar = (avatar == null ? null : avatar.toString());
                     contact.times_contacted = 1;
-                    contact.first_contacted = message.received;
-                    contact.last_contacted = message.received;
+                    contact.first_contacted = time;
+                    contact.last_contacted = time;
                     contact.id = db.contact().insertContact(contact);
                     Log.i("Inserted contact=" + contact + " type=" + type);
                 } else {
@@ -189,8 +198,8 @@ public class EntityContact implements Serializable {
                         contact.name = name;
                     contact.avatar = (avatar == null ? null : avatar.toString());
                     contact.times_contacted++;
-                    contact.first_contacted = Math.min(contact.first_contacted, message.received);
-                    contact.last_contacted = message.received;
+                    contact.first_contacted = Math.min(contact.first_contacted, time);
+                    contact.last_contacted = time;
                     db.contact().updateContact(contact);
                     Log.i("Updated contact=" + contact + " type=" + type);
                 }
@@ -199,6 +208,19 @@ public class EntityContact implements Serializable {
             } finally {
                 db.endTransaction();
             }
+        }
+    }
+
+    public static void delete(Context context, long account, Address[] addresses, int type) {
+        if (addresses == null)
+            return;
+
+        DB db = DB.getInstance(context);
+        for (Address address : addresses) {
+            String email = ((InternetAddress) address).getAddress();
+            if (TextUtils.isEmpty(email))
+                continue;
+            db.contact().deleteContact(account, type, email);
         }
     }
 

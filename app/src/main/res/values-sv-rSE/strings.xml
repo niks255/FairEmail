@@ -73,12 +73,14 @@
     <string name="title_block">Blockera %1$s</string>
     <string name="title_block_sender">Blockera avsändare</string>
     <string name="title_block_domain">Blockera avsändardomän</string>
-    <string name="title_block_sender_hint">        Att blockera en avsändare skapar en regel att framtida meddelanden automatiskt ska flyttas till skräppostmappen.
-        Att skapa och använda regler är en pro-funktion.
+    <string name="title_block_sender_hint">        Att blockera en avsändare är en gratisfunktion.
+        Att blockera en avsändardomän använder filterregler, vilket är en pro-funktion.
     </string>
     <string name="title_junk_filter">Använd lokalt skräppostfilter</string>
     <string name="title_junk_filter_hint">Detta kan öka batterianvändningen och felaktigt markera meddelanden som skräppost</string>
     <string name="title_junk_blocklist">Använd skräppostblockeringslistor</string>
+    <string name="title_junk_clear">Rensa</string>
+    <string name="title_junk_clear_hint">Detta kommer att ta bort alla regler för blockering av avsändare</string>
     <string name="title_notification_sending">Skickar meddelanden</string>
     <string name="title_notification_waiting">Väntar på lämplig anslutning</string>
     <string name="title_notification_idle">Inaktiv</string>
@@ -121,6 +123,7 @@
     <string name="title_setup_intro">Att lägga till ett konto tar bara tre steg och efter det kan du skicka och ta emot e-post</string>
     <string name="title_setup_simple">Det finns ingen anledning att ändra några andra inställningar</string>
     <string name="title_setup_issue">FairEmail har utvecklats för att hjälpa dig att skydda din integritet och representerar bokstavligen tusentals timmars arbete. Om du har några problem, vängligen kontakta mig först för support innan du lämnar en dålig recension. Jag hjälper gärna till!</string>
+    <string name="title_setup_analytics">FairEmail visar inte annonser och spårar inte eller analyserar ditt beteende. Bugsnag används för felrapportering och är inaktiverat som standard.</string>
     <string name="title_setup_quick_accounts">Lägg till eller byt konton</string>
     <string name="title_setup_quick_support">Vissa leverantörer gör det svårt att lägga till ett konto. Vänligen skyll inte på FairEmail för det, be om support istället.</string>
     <string name="title_setup_quick_hint">Snabbinställningen hämtar konfigurationsinformation från autoconfig.thunderbird.net</string>
@@ -321,6 +324,7 @@
     <string name="title_advanced_download_headers">Ladda ner meddelande-huvuden</string>
     <string name="title_advanced_download_eml">Ladda ner råa meddelande-filer</string>
     <string name="title_advanced_validated">Kräv en validerad (kontrollerad) anslutning</string>
+    <string name="title_advanced_vpn_only">Anslut endast via VPN</string>
     <string name="title_advanced_timeout">Timeout för anslutning (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Föredra IPv4 över IPv6</string>
     <string name="title_advanced_ssl_harden">Strikta SSL-anslutningar</string>
@@ -347,12 +351,12 @@
     <string name="title_advanced_tabular_background">Använd kortfärg som bakgrundsfärg när du använder tabulär stil</string>
     <string name="title_advanced_cards_shadow">Använd skugga för olästa meddelanden när du använder kort-stil</string>
     <string name="title_advanced_date_header">Gruppera efter datum</string>
+    <string name="title_advanced_date_fixed">Visa fast datumrubrik högst upp</string>
     <string name="title_advanced_date_bold">Visa datum i fetstil</string>
     <string name="title_advanced_threading">Konversationstrådar</string>
     <string name="title_advanced_threading_unread">Visa antal olästa meddelanden i konversationer</string>
     <string name="title_advanced_indentation">Vänster/höger indrag mottaget/skickade meddelanden i konversationer</string>
     <string name="title_advanced_highlight_unread">Markera olästa meddelanden</string>
-    <string name="title_advanced_highlight_subject">Markera ämnet</string>
     <string name="title_advanced_color_stripe">Visa färgrand</string>
     <string name="title_advanced_avatars">Visa kontaktfoton</string>
     <string name="title_advanced_gravatars">Visa Gravatars</string>
@@ -371,10 +375,13 @@
     <string name="title_advanced_distinguish_contacts">Understryk avsändaren när avsändaren är känd som lokal \"till\" kontakt</string>
     <string name="title_advanced_show_recipients">Visa mottagare i meddelandehuvudet</string>
     <string name="title_advanced_font_size_sender">Teckenstorlek på avsändare</string>
-    <string name="title_advanced_font_size_subject">Teckenstorlek på ämnesrad</string>
+    <string name="title_advanced_sender_ellipsize">Om det behövs, förkorta avsändaren</string>
     <string name="title_advanced_subject_top">Visa ämne ovanför avsändaren</string>
     <string name="title_advanced_subject_italic">Visa ämnet kursivt</string>
-    <string name="title_advanced_subject_elipsed">När det behövs, förkorta ämnet</string>
+    <string name="title_advanced_highlight_subject">Markera ämnet</string>
+    <string name="title_advanced_font_size_subject">Teckenstorlek på ämnesrad</string>
+    <string name="title_advanced_subject_ellipsize">Om det behövs, förkorta ämnet</string>
+    <string name="title_advanced_compact_mode_remark">Endast kompakt läge</string>
     <string name="title_advanced_highlight_color">Markera färg</string>
     <string name="title_advanced_keywords">Visa nyckelord i sidhuvudet för meddelandet</string>
     <string name="title_advanced_labels">Visa Gmail-etiketter i meddelandehuvud</string>
@@ -501,6 +508,11 @@
     <string name="title_advanced_autocrypt">Använd Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autokryptera ömsesidigt läge</string>
     <string name="title_advanced_encrypt_subject">Kryptera ämne</string>
+    <string name="title_advanced_sign_algo">Signaturalgoritm</string>
+    <string name="title_advanced_encrypt_algo">Krypteringsalgoritm</string>
+    <string name="title_advanced_remark_algo">        Tänk på att inte alla e-postklienter stöder alla algoritmer.
+        Standardalgoritmerna SHA256 och AES128 stöds ofta.
+    </string>
     <string name="title_advanced_check_certificate">Kontrollera offentlig nyckel när du skickar</string>
     <string name="title_advanced_manage_certificates">Hantera publika nycklar</string>
     <string name="title_advanced_import_key">Importera privat nyckel</string>
@@ -523,6 +535,7 @@
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
     <string name="title_advanced_check_weekly">Kolla veckovis istället för dagligen</string>
+    <string name="title_advanced_changelog">Visa ändringslogg efter uppdatering</string>
     <string name="title_advanced_experiments">Prova experimentella funktioner</string>
     <string name="title_advanced_crash_reports">Skicka felrapporter</string>
     <string name="title_advanced_cleanup_attachments">Ta bort bilagor på gamla meddelanden</string>
@@ -533,7 +546,6 @@
     <string name="title_advanced_protocol">Loggar för protokoll</string>
     <string name="title_advanced_log_info">Debug Logging</string>
     <string name="title_advanced_debug">Felsökningsläge</string>
-    <string name="title_advanced_query_threads">Begränsa parallell åtkomst till databas</string>
     <string name="title_advanced_manual_hint">Om mottagande av meddelanden är inaktiverat är det fortfarande möjligt att manuellt ta emot meddelanden genom att dra ner meddelandelistan</string>
     <string name="title_advanced_poll_hint">Genom att regelbundet kontrollera efter nya meddelanden kommer att jämföra lokala- och fjärrmeddelanden varje gång, detta är en drastisk åtgärd som kan leda till extra batterianvändning, särskilt om det finns många meddelanden. Genom att alltid ta emot kommer att förhindra detta genom att kontinuerligt följa förändringar.</string>
     <string name="title_advanced_optimize_hint">Detta kan ändra synkroniseringsfrekvensen för att spara på batteriet, beroende på e-postservrarnas funktioner och beteende</string>
@@ -607,7 +619,6 @@
     <string name="title_advanced_move_hint">Målmappen kan konfigureras i kontoinställningarna</string>
     <string name="title_advanced_notify_no_grouping">Den här Android-versionen stödjer inte notifikationsgruppering</string>
     <string name="title_advanced_notify_no_channels">Den här Android-versionen stödjer inte notifikationsgruppering</string>
-    <string name="title_advanced_queries_hint">Aktivering av detta kommer att minska prestandan, men aktivering krävs på vissa enheter</string>
     <string name="title_advanced_fts_hint">Att aktivera detta förbättrar sökprestandan, men ökar både batteri- och utrymmesanvändingen</string>
     <string name="title_advanced_english_hint">Detta startar om appen</string>
     <string name="title_advanced_experiments_hint">Lista över aktuella experimentella funktioner</string>
@@ -774,6 +785,9 @@
     <string name="title_show_folders">Visa dolda mappar</string>
     <string name="title_show_flagged">Visa antal stjärnmärkta meddelanden</string>
     <string name="title_subscribed_only">Endast prenumerationer</string>
+    <string name="title_sort_unread_atop">Sortera olästa högst upp</string>
+    <string name="title_search_folder">Sök efter mapp</string>
+    <string name="title_apply_to_all">Tillämpa för alla</string>
     <string name="title_hide_folder">Dölj mapp</string>
     <string name="title_unified_folder">Visa i en samlad inkorg</string>
     <string name="title_navigation_folder">Visa i navigeringsmenyn</string>
@@ -844,6 +858,7 @@
     <string name="title_editasnew">Redigera som ny</string>
     <string name="title_edit_notes">Redigera lokala anteckningar</string>
     <string name="title_create_rule">Skapa regel &#8230;</string>
+    <string name="title_force_light">Tvinga ljust tema</string>
     <string name="title_share">Dela</string>
     <string name="title_event">Lägg till i kalender</string>
     <string name="title_pin">Lägg till genväg</string>
@@ -864,6 +879,7 @@
     <string name="title_download_all">Hämta alla</string>
     <string name="title_save_all">Spara alla</string>
     <string name="title_save_eml">Spara raw-meddelandefil</string>
+    <string name="title_eml_remark">För att vidarebefordra meddelanden, måste de råa (ursprungliga) meddelandena laddas ner från e-postservern. Detta kräver en internetanslutning och meddelandena måste fortfarande lagras på e-postservern.</string>
     <string name="title_eml_option">Detta kan förhindras genom att alltid välja att ladda ner råa meddelandefiler i anslutningsinställningarna</string>
     <string name="title_eml_downloaded">Råa meddelanden nedladdade: %1$s</string>
     <string name="title_buttons">Välj knappar</string>
@@ -938,7 +954,6 @@
     <string name="title_ask_delete_rule">Ta bort regel permanent?</string>
     <string name="title_ask_discard">Släng utkastet?</string>
     <string name="title_ask_show_html">Att visa det ursprungliga meddelandet kan läcka sekretesskänslig information</string>
-    <string name="title_ask_show_html_dark">Använd mörkt tema</string>
     <string name="title_ask_show_html_remark">Att visa originalmeddelandet med en mörk bakgrund är inte möjligt eftersom det kan orsaka osynliga mörka texter och bilder</string>
     <string name="title_ask_show_html_images">Visa alltid bilder när originalmeddelanden visas</string>
     <string name="title_ask_show_image">Att visa bilder kan läcka sekretesskänslig information</string>
@@ -1099,6 +1114,7 @@
     <string name="title_signature_sender">Avsändarens adress</string>
     <string name="title_signature_email">Signaturens adress</string>
     <string name="title_signature_mismatch">Avsändarens och signaturens e-postadress matchar inte</string>
+    <string name="title_signature_algorithm">Algoritm</string>
     <string name="title_signature_subject">Ämne</string>
     <string name="title_signature_validity">Giltighet</string>
     <string name="title_signature_outdated">Denna publika nyckel är för närvarande inte giltig</string>
@@ -1174,6 +1190,7 @@
     <string name="title_previous">Föregående</string>
     <string name="title_next">Nästa</string>
     <string name="title_edit_signature">Redigera signatur</string>
+    <string name="title_edit_signature_remark">Även om Android inte kan visa all HTML, kommer det att skickas som det är</string>
     <string name="title_edit_signature_text">Signatur</string>
     <string name="title_edit_signature_image">Infoga bild</string>
     <string name="title_answer_caption">Redigera mall</string>
@@ -1380,6 +1397,7 @@
     <string name="title_hint_reformat">Som standard formaterar FairEmail meddelanden av sekretess- och säkerhetsskäl. För att visa det ursprungliga meddelandet trycker du på ikonen \"helskärm\" ovanför meddelandetexten.</string>
     <string name="title_hint_design">Designen är avsiktligt inte distraherande, men hålls mycket funktionell. Det finns många alternativ för att anpassa utseendet, men vänligen förstå att det är omöjligt att göra alla helt glada på samma gång.</string>
     <string name="title_hint_junk">Spamfiltrering bör göras via e-postservern och kan inte göras tillförlitligt på en batteridriven enhet med begränsad kapacitet.</string>
+    <string name="title_hint_junk_learn">Genom att flytta meddelanden till och från skräppostmappen \"lär\" sig e-postservern vad skräppost är</string>
     <string name="title_hint_contact_actions">Långt tryck för alternativ</string>
     <string name="title_hint_eml">Detta är en sammanfattning av innehållet i en raw-meddelandefil. Spara raw-meddelandet med ikonen spara i åtgärdsfältet för att visa allt innehåll.</string>
     <string name="title_open_link">Öppna länken</string>
@@ -1474,9 +1492,7 @@
     <string name="title_rules_export">Exportera regler</string>
     <string name="title_rules_import">Importera regler</string>
     <string name="title_rules_delete_all">Ta bort alla regler</string>
-    <string name="title_rules_delete_junk">Ta bort skräppostregler</string>
     <string name="title_rules_delete_all_confirm">Ta bort alla regler?</string>
-    <string name="title_rules_delete_junk_confirm">Ta bort alla regler som flyttar meddelanden till skräppostmappen?</string>
     <string name="title_debug_info">Felsökningsinformation</string>
     <string name="title_debug_info_remark">Beskriv problemet och ange tidpunkten för problemet:</string>
     <string name="title_crash_info_remark">Beskriv vad du gjorde när appen kraschade:</string>
@@ -1673,4 +1689,7 @@
         <item>Endast e-post</item>
         <item>Namn och e-post</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

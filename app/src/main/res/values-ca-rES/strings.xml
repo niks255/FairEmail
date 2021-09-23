@@ -69,9 +69,8 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_block">Bloqueja %1$s</string>
     <string name="title_block_sender">Bloqueja remitent</string>
     <string name="title_block_domain">Bloquejar el domini complet del remitent</string>
-    <string name="title_block_sender_hint">Si bloqueges un remitent, es crearà una regla per traslladar automàticament els missatges futurs a la carpeta de correu brossa.
-La creació i l\'ús de regles és una característica professional.    </string>
     <string name="title_junk_filter">Utilitza el filtre local d\'SPAM</string>
+    <string name="title_junk_clear">Elimina</string>
     <string name="title_notification_sending">Enviant missatge</string>
     <string name="title_notification_waiting">S\'està esperant la connexió</string>
     <string name="title_notification_idle">Inactiu</string>
@@ -258,7 +257,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_threading_unread">Mostra el nombre de missatges sense llegir a les converses</string>
     <string name="title_advanced_indentation">Sagnat dret/esquerra als missatges enviats/rebuts en les converses</string>
     <string name="title_advanced_highlight_unread">Ressalteu els missatges sense llegir</string>
-    <string name="title_advanced_highlight_subject">Destacar el Tema</string>
     <string name="title_advanced_color_stripe">Mostra la franja de color</string>
     <string name="title_advanced_avatars">Mostra les fotos dels contactes</string>
     <string name="title_advanced_gravatars">Mostra Gravatars</string>
@@ -273,10 +271,10 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_distinguish_contacts">Subratlla l’emissor quan el remitent es coneix com a contacte “a” local</string>
     <string name="title_advanced_show_recipients">Mostra els destinataris a l’encapçalament del missatge</string>
     <string name="title_advanced_font_size_sender">Mida del text del remitent</string>
-    <string name="title_advanced_font_size_subject">Mida del text del assumpte</string>
     <string name="title_advanced_subject_top">Mostra l\'assumpte a sobre del remitent</string>
     <string name="title_advanced_subject_italic">Mostra els assumptes en cursiva</string>
-    <string name="title_advanced_subject_elipsed">Si cal, escurça l\'assumpte</string>
+    <string name="title_advanced_highlight_subject">Destacar el Tema</string>
+    <string name="title_advanced_font_size_subject">Mida del text del assumpte</string>
     <string name="title_advanced_keywords">Mostra les paraules clau a l’encapçalament de missatges</string>
     <string name="title_advanced_labels">Mostra les etiquetes de Gmail a l\'encapçalament del missatge</string>
     <string name="title_advanced_flags">Mostra estels</string>
@@ -388,7 +386,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_advanced_app">Configuració de l\'aplicació</string>
     <string name="title_advanced_more">Més opcions</string>
     <string name="title_advanced_debug">Mode de depuració</string>
-    <string name="title_advanced_query_threads">Limiteu l\'accés paral·lel a la base de dades</string>
     <string name="title_advanced_poll_hint">Si es revisen periòdicament nous missatges, es comparen els missatges locals i remots cada vegada, la qual cosa és una operació costosa que pot provocar un ús addicional de la bateria, especialment si hi ha molts missatges. Sempre rebre evitarà això seguint contínuament canvis.</string>
     <string name="title_advanced_schedule_hint">Toqueu una hora per definir-la</string>
     <string name="title_advanced_no_date_hint">Alguns proveïdors emmagatzemen missatges amb data desconeguda, invàlida o futura com a missatges sense data</string>
@@ -685,7 +682,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_ask_delete_rule">Esborrar regla per sempre?</string>
     <string name="title_ask_discard">Voleu rebutjar l\'esborrany?</string>
     <string name="title_ask_show_html">Si es mostra el missatge original es pot filtrar informació sensible a la privadesa</string>
-    <string name="title_ask_show_html_dark">Utilitza un tema fosc</string>
     <string name="title_ask_show_html_remark">No es pot mostrar el missatge original amb un fons fosc perquè pot provocar imatges i textos foscos invisibles</string>
     <string name="title_ask_show_html_images">Mostrar sempre les imatges al mostrar els missatges originals</string>
     <string name="title_ask_show_image">Si es mostra imatges, es pot filtrar informació sensible a la privadesa</string>
@@ -1102,7 +1098,6 @@ La creació i l\'ús de regles és una característica professional.    </string
     <string name="title_rules_export">Exporta regles</string>
     <string name="title_rules_import">Importa regles</string>
     <string name="title_rules_delete_all">Esborra totes les regles</string>
-    <string name="title_rules_delete_junk">Esborra totes les regles d\'SPAM</string>
     <string name="title_rules_delete_all_confirm">Esborra totes les regles?</string>
     <string name="title_debug_info">Informació de depuració</string>
     <string name="title_debug_info_remark">Per favor descriu el problema i indica quan en el que va ocorre:</string>
@@ -1271,4 +1266,7 @@ La creació i l\'ús de regles és una característica professional.    </string
         <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

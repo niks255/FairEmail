@@ -189,6 +189,7 @@ public class ApplicationEx extends Application
         if (Helper.hasWebView(this))
             CookieManager.getInstance().setAcceptCookie(false);
 
+        EncryptionHelper.init(this);
         MessageHelper.setSystemProperties(this);
 
         ContactInfo.init(this);
@@ -242,7 +243,6 @@ public class ApplicationEx extends Application
             case "secure": // privacy
             case "shortcuts": // misc
             case "language": // misc
-            case "query_threads": // misc
             case "wal": // misc
                 // Should be excluded for import
                 restart(this);
@@ -516,6 +516,9 @@ public class ApplicationEx extends Application
                 if (!prefs.contains("landscape3"))
                     editor.putBoolean("landscape3", false);
             }
+        } else if (version < 1721) {
+            if (!prefs.contains("discard_delete"))
+                editor.putBoolean("discard_delete", false);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

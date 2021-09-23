@@ -133,6 +133,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.cert.jcajce.JcaCertStore;
 import org.bouncycastle.cms.CMSAlgorithm;
 import org.bouncycastle.cms.CMSEnvelopedData;
@@ -520,6 +521,28 @@ public class FragmentCompose extends FragmentBase {
         ibCcAdd.setOnClickListener(onPick);
         ibBccAdd.setOnClickListener(onPick);
 
+        View.OnLongClickListener onGroup = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int id = view.getId();
+                if (id == R.id.ibToAdd) {
+                    onMenuContactGroup(etTo);
+                    return true;
+                } else if (id == R.id.ibCcAdd) {
+                    onMenuContactGroup(etCc);
+                    return true;
+                } else if (id == R.id.ibBccAdd) {
+                    onMenuContactGroup(etBcc);
+                    return true;
+                } else
+                    return true;
+            }
+        };
+
+        ibToAdd.setOnLongClickListener(onGroup);
+        ibCcAdd.setOnLongClickListener(onGroup);
+        ibBccAdd.setOnLongClickListener(onGroup);
+
         tvPlainTextOnly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -531,7 +554,7 @@ public class FragmentCompose extends FragmentBase {
 
         setZoom();
 
-        SpannableStringBuilder hint = new SpannableStringBuilder();
+        SpannableStringBuilder hint = new SpannableStringBuilderEx();
         hint.append(getString(R.string.title_body_hint));
         hint.append("\n");
         int pos = hint.length();
@@ -542,6 +565,7 @@ public class FragmentCompose extends FragmentBase {
         etBody.setInputContentListener(new EditTextCompose.IInputContentListener() {
             @Override
             public void onInputContent(Uri uri) {
+                Log.i("Received input uri=" + uri);
                 onAddAttachment(Arrays.asList(uri), true, 0, false);
             }
         });
@@ -1115,6 +1139,7 @@ public class FragmentCompose extends FragmentBase {
                                     if (l != 0)
                                         return l;
                                 } else {
+                                    // Prefer Android contacts
                                     int a = -Boolean.compare(i1.id == 0, i2.id == 0);
                                     if (a != 0)
                                         return a;
@@ -1475,8 +1500,11 @@ public class FragmentCompose extends FragmentBase {
 
         PopupMenuLifecycle.insertIcons(getContext(), menu);
 
-        menu.findItem(R.id.menu_encrypt).setActionView(R.layout.action_button_text);
-        ImageButton ib = menu.findItem(R.id.menu_encrypt).getActionView().findViewById(R.id.button);
+        LayoutInflater infl = LayoutInflater.from(getContext());
+
+        View v = infl.inflate(R.layout.action_button_text, null);
+        v.setId(View.generateViewId());
+        ImageButton ib = v.findViewById(R.id.button);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1496,26 +1524,31 @@ public class FragmentCompose extends FragmentBase {
                 return true;
             }
         });
+        menu.findItem(R.id.menu_encrypt).setActionView(v);
 
-        menu.findItem(R.id.menu_translate).setActionView(R.layout.action_button);
-        ImageButton ibTranslate = (ImageButton) menu.findItem(R.id.menu_translate).getActionView();
+        ImageButton ibTranslate = (ImageButton) infl.inflate(R.layout.action_button, null);
+        ibTranslate.setId(View.generateViewId());
         ibTranslate.setImageResource(R.drawable.twotone_translate_24);
+        ib.setContentDescription(getString(R.string.title_translate));
         ibTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onTranslate(vwAnchorMenu);
             }
         });
+        menu.findItem(R.id.menu_translate).setActionView(ibTranslate);
 
-        menu.findItem(R.id.menu_zoom).setActionView(R.layout.action_button);
-        ImageButton ibZoom = (ImageButton) menu.findItem(R.id.menu_zoom).getActionView();
+        ImageButton ibZoom = (ImageButton) infl.inflate(R.layout.action_button, null);
+        ibZoom.setId(View.generateViewId());
         ibZoom.setImageResource(R.drawable.twotone_format_size_24);
+        ib.setContentDescription(getString(R.string.title_legend_zoom));
         ibZoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onMenuZoom();
             }
         });
+        menu.findItem(R.id.menu_zoom).setActionView(ibZoom);
 
         MenuCompat.setGroupDividerEnabled(menu, true);
 
@@ -1526,9 +1559,11 @@ public class FragmentCompose extends FragmentBase {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
+        final Context context = getContext();
+
         menu.findItem(R.id.menu_encrypt).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
-        menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(getContext()));
+        menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(context));
         menu.findItem(R.id.menu_zoom).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_compact).setEnabled(state == State.LOADED);
@@ -1538,7 +1573,8 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_answer_create).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
 
-        int colorEncrypt = Helper.resolveColor(getContext(), R.attr.colorEncrypt);
+        int colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
+        int colorActionForeground = Helper.resolveColor(context, R.attr.colorActionForeground);
 
         View v = menu.findItem(R.id.menu_encrypt).getActionView();
         ImageButton ib = v.findViewById(R.id.button);
@@ -1549,7 +1585,7 @@ public class FragmentCompose extends FragmentBase {
 
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) || EntityMessage.SMIME_SIGNONLY.equals(encrypt)) {
             ib.setImageResource(R.drawable.twotone_gesture_24);
-            ib.setImageTintList(null);
+            ib.setImageTintList(ColorStateList.valueOf(colorActionForeground));
             tv.setText(EntityMessage.PGP_SIGNONLY.equals(encrypt) ? "P" : "S");
         } else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) || EntityMessage.SMIME_SIGNENCRYPT.equals(encrypt)) {
             ib.setImageResource(R.drawable.twotone_lock_24);
@@ -1557,11 +1593,19 @@ public class FragmentCompose extends FragmentBase {
             tv.setText(EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) ? "P" : "S");
         } else {
             ib.setImageResource(R.drawable.twotone_lock_open_24);
-            ib.setImageTintList(null);
+            ib.setImageTintList(ColorStateList.valueOf(colorActionForeground));
             tv.setText(null);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        ImageButton ibTranslate = (ImageButton) menu.findItem(R.id.menu_translate).getActionView();
+        ibTranslate.setAlpha(state == State.LOADED ? 1f : Helper.LOW_LIGHT);
+        ibTranslate.setEnabled(state == State.LOADED);
+
+        ImageButton ibZoom = (ImageButton) menu.findItem(R.id.menu_zoom).getActionView();
+        ibZoom.setAlpha(state == State.LOADED ? 1f : Helper.LOW_LIGHT);
+        ibZoom.setEnabled(state == State.LOADED);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean save_drafts = prefs.getBoolean("save_drafts", true);
         boolean send_dialog = prefs.getBoolean("send_dialog", true);
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
@@ -1788,11 +1832,11 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onMenuContactGroup() {
-        Bundle args = new Bundle();
-        args.putLong("working", working);
+        onMenuContactGroup(view.findFocus());
+    }
 
+    private void onMenuContactGroup(View v) {
         int focussed = 0;
-        View v = view.findFocus();
         if (v != null) {
             if (v.getId() == R.id.etCc)
                 focussed = 1;
@@ -1800,6 +1844,8 @@ public class FragmentCompose extends FragmentBase {
                 focussed = 2;
         }
 
+        Bundle args = new Bundle();
+        args.putLong("working", working);
         args.putInt("focussed", focussed);
 
         Helper.hideKeyboard(view);
@@ -1889,7 +1935,7 @@ public class FragmentCompose extends FragmentBase {
                 if (BuildConfig.DEBUG) {
                     SubMenu profiles = main.addSubMenu(Menu.NONE, order, order++, "Profiles");
                     for (EmailProvider p : EmailProvider.loadProfiles(getContext())) {
-                        SpannableStringBuilder ssb = new SpannableStringBuilder();
+                        SpannableStringBuilder ssb = new SpannableStringBuilderEx();
                         int start;
                         ssb.append("IMAP (account, receive)");
 
@@ -2734,7 +2780,7 @@ public class FragmentCompose extends FragmentBase {
                 CharSequence body = args.getCharSequence("body");
                 int start = args.getInt("start");
 
-                SpannableStringBuilder s = new SpannableStringBuilder(body);
+                SpannableStringBuilder s = new SpannableStringBuilderEx(body);
                 if (start < 0)
                     start = 0;
                 if (start > s.length())
@@ -3421,14 +3467,23 @@ public class FragmentCompose extends FragmentBase {
                 CMSSignedDataGenerator cmsGenerator = new CMSSignedDataGenerator();
                 cmsGenerator.addCertificates(store);
 
+                String signAlgorithm = prefs.getString("sign_algo_smime", "SHA-256");
+
                 String algorithm = privkey.getAlgorithm();
-                Log.i("Private key algorithm=" + algorithm);
+                if (TextUtils.isEmpty(algorithm) || "RSA".equals(algorithm))
+                    Log.i("Private key algorithm=" + algorithm);
+                else
+                    Log.e("Private key algorithm=" + algorithm);
+
                 if (TextUtils.isEmpty(algorithm))
                     algorithm = "RSA";
                 else if ("EC".equals(algorithm))
                     algorithm = "ECDSA";
 
-                ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256with" + algorithm)
+                algorithm = signAlgorithm.replace("-", "") + "with" + algorithm;
+                Log.i("Sign algorithm=" + algorithm);
+
+                ContentSigner contentSigner = new JcaContentSignerBuilder(algorithm)
                         .build(privkey);
                 DigestCalculatorProvider digestCalculator = new JcaDigestCalculatorProviderBuilder()
                         .build();
@@ -3450,7 +3505,7 @@ public class FragmentCompose extends FragmentBase {
                 // Build signature
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
                     ContentType ct = new ContentType("application/pkcs7-signature");
-                    ct.setParameter("micalg", "sha-256");
+                    ct.setParameter("micalg", signAlgorithm.toLowerCase(Locale.ROOT));
 
                     EntityAttachment sattachment = new EntityAttachment();
                     sattachment.message = draft.id;
@@ -3523,7 +3578,7 @@ public class FragmentCompose extends FragmentBase {
 
                 // Build message
                 ContentType ct = new ContentType("multipart/signed");
-                ct.setParameter("micalg", "sha-256");
+                ct.setParameter("micalg", signAlgorithm.toLowerCase(Locale.ROOT));
                 ct.setParameter("protocol", "application/pkcs7-signature");
                 ct.setParameter("smime-type", "signed-data");
                 String ctx = ct.toString();
@@ -3560,7 +3615,24 @@ public class FragmentCompose extends FragmentBase {
                 }
                 CMSTypedData msg = new CMSProcessableFile(einput);
 
-                OutputEncryptor encryptor = new JceCMSContentEncryptorBuilder(CMSAlgorithm.AES128_CBC)
+                ASN1ObjectIdentifier encryptionOID;
+                String encryptAlgorithm = prefs.getString("encrypt_algo_smime", "AES-128");
+                switch (encryptAlgorithm) {
+                    case "AES-128":
+                        encryptionOID = CMSAlgorithm.AES128_CBC;
+                        break;
+                    case "AES-192":
+                        encryptionOID = CMSAlgorithm.AES192_CBC;
+                        break;
+                    case "AES-256":
+                        encryptionOID = CMSAlgorithm.AES256_CBC;
+                        break;
+                    default:
+                        encryptionOID = CMSAlgorithm.AES128_CBC;
+                }
+                Log.i("Encryption algorithm=" + encryptAlgorithm + " OID=" + encryptionOID);
+
+                OutputEncryptor encryptor = new JceCMSContentEncryptorBuilder(encryptionOID)
                         .build();
                 CMSEnvelopedData cmsEnvelopedData = cmsEnvelopedDataGenerator
                         .generate(msg, encryptor);
@@ -5179,7 +5251,7 @@ public class FragmentCompose extends FragmentBase {
             EntityMessage draft;
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean discard_delete = prefs.getBoolean("discard_delete", false);
+            boolean discard_delete = prefs.getBoolean("discard_delete", true);
             boolean write_below = prefs.getBoolean("write_below", false);
             boolean save_drafts = prefs.getBoolean("save_drafts", true);
             int send_delayed = prefs.getInt("send_delayed", 0);
@@ -6071,7 +6143,7 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }, null);
 
-                SpannableStringBuilder bodyBuilder = new SpannableStringBuilder(spannedBody);
+                SpannableStringBuilder bodyBuilder = new SpannableStringBuilderEx(spannedBody);
                 QuoteSpan[] bodySpans = bodyBuilder.getSpans(0, bodyBuilder.length(), QuoteSpan.class);
                 for (QuoteSpan quoteSpan : bodySpans) {
                     QuoteSpan q;
@@ -6437,7 +6509,7 @@ public class FragmentCompose extends FragmentBase {
                     } else if (view.getId() == R.id.tvAccount && BuildConfig.DEBUG) {
                         String account = cursor.getString(3);
                         String type = cursor.getString(4);
-                        ((TextView) view).setText(account + ":" + type);
+                        ((TextView) view).setText(account + (BuildConfig.DEBUG ? "/" + type : ""));
                         return true;
                     } else
                         return false;

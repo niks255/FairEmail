@@ -127,12 +127,13 @@ public class FragmentOptions extends FragmentBase {
             "send_pending",
             "startup", "cards", "beige", "tabular_card_bg", "shadow_unread",
             "portrait2", "portrait2c", "landscape", "nav_count", "navbar_colorize",
-            "indentation", "date", "date_bold", "threading", "threading_unread",
+            "indentation", "date", "date_fixed", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe",
             "avatars", "bimi", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
-            "email_format", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients",
             "authentication", "authentication_indicator",
-            "subject_top", "font_size_sender", "font_size_subject", "subject_italic", "highlight_subject", "subject_ellipsize",
+            "email_format", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients",
+            "font_size_sender", "sender_ellipsize",
+            "subject_top", "subject_italic", "highlight_subject", "font_size_subject", "subject_ellipsize",
             "keywords_header", "labels_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines",
             "message_zoom", "overview_mode", "addresses", "button_extra", "attachments_alt", "thumbnails",
             "contrast", "monospaced", "monospaced_pre",
@@ -220,7 +221,7 @@ public class FragmentOptions extends FragmentBase {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             Drawable d = context.getDrawable(PAGE_ICONS[i]);
             d.setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
-            SpannableStringBuilder title = new SpannableStringBuilder(getString(PAGE_TITLES[i]));
+            SpannableStringBuilder title = new SpannableStringBuilderEx(getString(PAGE_TITLES[i]));
             if (i > 0)
                 title.setSpan(new RelativeSizeSpan(0.85f), 0, title.length(), 0);
             tabLayout.getTabAt(i)

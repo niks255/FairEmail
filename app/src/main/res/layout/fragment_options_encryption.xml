@@ -264,6 +264,61 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvSignAlgoSmime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_sign_algo"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCaptionSmime" />
+
+                <Spinner
+                    android:id="@+id/spSignAlgoSmime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:entries="@array/smimeSignAlgo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSignAlgoSmime" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvEncryptAlgoSmime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_encrypt_algo"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spSignAlgoSmime" />
+
+                <Spinner
+                    android:id="@+id/spEncryptAlgoSmime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:entries="@array/smimeEncryptAlgo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvEncryptAlgoSmime" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAlgoHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_remark_algo"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spEncryptAlgoSmime" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swCheckCertificate"
                     android:layout_width="0dp"
@@ -273,7 +328,7 @@
                     android:text="@string/title_advanced_check_certificate"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCaptionSmime"
+                    app:layout_constraintTop_toBottomOf="@id/tvAlgoHint"
                     app:switchPadding="12dp" />
 
                 <Button
@@ -314,13 +369,11 @@
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvManageKeysHint"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="48dp"
                     android:text="@string/title_advanced_manage_keys_hint"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnManageKeys" />
 
@@ -338,16 +391,62 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <eu.faircode.email.FixedTextView
-            android:id="@+id/tvKeySize"
-            android:layout_width="0dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDebug"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
             android:layout_marginTop="12dp"
-            android:text="@string/title_advanced_aes_key_size"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:tag="debug"
+            app:cardBackgroundColor="?attr/colorCardBackground"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardSmine" />
+            app:layout_constraintTop_toBottomOf="@id/cardSmine">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="12dp">
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvCaptionDebug"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/title_advanced_caption_debug"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvKeySize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_aes_key_size"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCaptionDebug" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvProviders"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Providers"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textIsSelectable="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvKeySize" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </eu.faircode.email.ScrollViewEx>

@@ -158,6 +158,14 @@ public class EntityAccount extends EntityOrder implements Serializable {
         return "imap.gmail.com".equalsIgnoreCase(host);
     }
 
+    boolean isYahooJp() {
+        return "imap.mail.yahoo.co.jp".equalsIgnoreCase(host);
+    }
+
+    boolean isSeznam() {
+        return "imap.seznam.cz".equalsIgnoreCase(host);
+    }
+
     boolean isTransient(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean enabled = prefs.getBoolean("enabled", true);

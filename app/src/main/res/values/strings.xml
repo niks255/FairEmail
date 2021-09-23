@@ -94,13 +94,15 @@
     <string name="title_block_sender">Block sender</string>
     <string name="title_block_domain">Block sender domain</string>
     <string name="title_block_sender_hint">
-        Blocking a sender will create a rule to automatically move future messages to the spam folder.
-        Creating and using rules is a pro feature.
+        Blocking a sender is a free feature.
+        Blocking a sender domain uses filter rules, which is a pro feature.
     </string>
 
     <string name="title_junk_filter">Use local spam filter</string>
     <string name="title_junk_filter_hint">This can increase battery usage and incorrectly mark messages as spam</string>
     <string name="title_junk_blocklist">Use spam block lists</string>
+    <string name="title_junk_clear">Clear</string>
+    <string name="title_junk_clear_hint">This will delete all block sender rules</string>
 
     <string name="title_notification_sending">Sending messages</string>
     <string name="title_notification_waiting">Waiting for suitable connection</string>
@@ -161,6 +163,7 @@
     <string name="title_setup_intro">Setting up an account is just three steps and after that you can send and receive emails</string>
     <string name="title_setup_simple">There is no need to change any other options</string>
     <string name="title_setup_issue">FairEmail was developed to help you protect your privacy and represents literally thousands of hours of work. If you have any problems, please contact me first for support before leaving a bad review. I am happy to help!</string>
+    <string name="title_setup_analytics">FairEmail does not display ads and does not track or analyze your behavior. Bugsnag is used for error reporting and is disabled by default.</string>
     <string name="title_setup_quick_accounts">Add or change accounts</string>
     <string name="title_setup_quick_support">Some providers make it difficult to add an account. Please do not blame FairEmail for this, but ask for support instead.</string>
     <string name="title_setup_quick_hint">The quick setup will fetch configuration information from autoconfig.thunderbird.net</string>
@@ -227,6 +230,7 @@
     <string name="title_setup_inexact">Alarms &amp; reminders are disabled</string>
     <string name="title_setup_background">Background restrictions are enabled</string>
     <string name="title_setup_data">Data saver is enabled</string>
+    <string name="title_setup_stamina" translatable="false">Stamina mode is enabled</string>
     <string name="title_setup_advanced_options">Show advanced options</string>
     <string name="title_setup_inbox">Go to inbox</string>
     <string name="title_setup_go">Go</string>
@@ -386,6 +390,7 @@
     <string name="title_advanced_download_headers">Download all message headers</string>
     <string name="title_advanced_download_eml">Download raw message files</string>
     <string name="title_advanced_validated">Require a validated (checked) connection</string>
+    <string name="title_advanced_vpn_only">Connect only via a VPN</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
     <string name="title_advanced_bind_socket" translatable="false">Bind sockets to the active network</string>
@@ -418,12 +423,12 @@
     <string name="title_advanced_tabular_background">Use card color as background color when using tabular style</string>
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
     <string name="title_advanced_date_header">Group by date</string>
+    <string name="title_advanced_date_fixed">Show fixed date header at the top</string>
     <string name="title_advanced_date_bold">Show date in bold</string>
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_threading_unread">Show number of unread messages in conversations</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
     <string name="title_advanced_highlight_unread">Highlight unread messages</string>
-    <string name="title_advanced_highlight_subject">Highlight subject</string>
     <string name="title_advanced_color_stripe">Show color stripe</string>
     <string name="title_advanced_avatars">Show contact photos</string>
     <string name="title_advanced_gravatars">Show Gravatars</string>
@@ -437,16 +442,23 @@
     <string name="title_advanced_color_saturation">Saturation: %1$s %%</string>
     <string name="title_advanced_color_value">Brightness: %1$s %%</string>
     <string name="title_advanced_color_threshold">Threshold letter color: %1$s %%</string>
+
     <string name="title_advanced_name_email">Show names and email addresses</string>
     <string name="title_advanced_replace_name">Prefer a contact name over a sent name</string>
     <string name="title_advanced_only_name">Display contact names only</string>
     <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
     <string name="title_advanced_show_recipients">Show recipients in message header</string>
     <string name="title_advanced_font_size_sender">Text size sender</string>
-    <string name="title_advanced_font_size_subject">Text size subject</string>
+    <string name="title_advanced_sender_ellipsize">If needed, shorten the sender</string>
+
     <string name="title_advanced_subject_top">Show subject above sender</string>
     <string name="title_advanced_subject_italic">Show subject in italics</string>
-    <string name="title_advanced_subject_elipsed">When needed, shorten the subject</string>
+    <string name="title_advanced_highlight_subject">Highlight subject</string>
+    <string name="title_advanced_font_size_subject">Text size subject</string>
+    <string name="title_advanced_subject_ellipsize">If needed, shorten the subject</string>
+
+    <string name="title_advanced_compact_mode_remark">Compact mode only</string>
+
     <string name="title_advanced_highlight_color">Highlight color</string>
     <string name="title_advanced_keywords">Show keywords in message header</string>
     <string name="title_advanced_labels">Show Gmail labels in message header</string>
@@ -585,6 +597,12 @@
     <string name="title_advanced_autocrypt">Use Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt mutual mode</string>
     <string name="title_advanced_encrypt_subject">Encrypt subject</string>
+    <string name="title_advanced_sign_algo">Signature algorithm</string>
+    <string name="title_advanced_encrypt_algo">Encryption algorithm</string>
+    <string name="title_advanced_remark_algo">
+        Please be aware that not all email clients support all algorithms.
+        The default algorithms SHA256 and AES128 are commonly supported.
+    </string>
     <string name="title_advanced_check_certificate">Check public key on sending</string>
     <string name="title_advanced_manage_certificates">Manage public keys</string>
     <string name="title_advanced_import_key">Import private key</string>
@@ -594,7 +612,7 @@
         This will open to the Android security settings.
         Keys and certificates can generally be found under Advanced - Encryption and credentials.
     </string>
-    <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$d</string>
+    <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$s</string>
 
     <string name="title_advanced_power_menu">Add actions to the Android power menu</string>
     <string name="title_advanced_external_search">Allow other apps to search in messages</string>
@@ -611,6 +629,7 @@
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
     <string name="title_advanced_check_weekly">Check weekly instead of daily</string>
+    <string name="title_advanced_changelog">Show changelog after update</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
     <string name="title_advanced_cleanup_attachments">Delete attachments of old messages</string>
@@ -621,9 +640,10 @@
     <string name="title_advanced_protocol">Protocol logging</string>
     <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Debug mode</string>
-    <string name="title_advanced_query_threads">Limit parallel database access</string>
+    <string name="title_advanced_room_query_threads" translatable="false">ROOM query threads: %1$s</string>
     <string name="title_advanced_wal" translatable="false">WAL</string>
-    <string name="title_advanced_sqlite_cache" translatable="false">Sqlite cache %1$s %% - %2$s</string>
+    <string name="title_advanced_checkpoints" translatable="false">Checkpoints</string>
+    <string name="title_advanced_sqlite_cache" translatable="false">Sqlite cache: %1$s %% - %2$s</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
     <string name="title_advanced_expunge" translatable="false">EXPUNGE</string>
     <string name="title_advanced_auth_plain" translatable="false">PLAIN</string>
@@ -722,7 +742,6 @@
     <string name="title_advanced_notify_no_grouping">This Android version does not support notification grouping</string>
     <string name="title_advanced_notify_no_channels">This Android version does not support notification channels</string>
 
-    <string name="title_advanced_queries_hint">Enabling this will decrease performance, however, enabling is required on some devices</string>
     <string name="title_advanced_fts_hint">Enabling this improves search performance, but also increases battery and storage space usage</string>
     <string name="title_advanced_english_hint">This will restart the app</string>
     <string name="title_advanced_experiments_hint">List of current experimental features</string>
@@ -904,6 +923,7 @@
     <string name="title_show_folders">Show hidden folders</string>
     <string name="title_show_flagged">Show starred message count</string>
     <string name="title_subscribed_only">Subscribed only</string>
+    <string name="title_sort_unread_atop">Sort unread on top</string>
     <string name="title_search_folder">Search for folder</string>
     <string name="title_apply_to_all">Apply to all</string>
     <string name="title_hide_folder">Hide folder</string>
@@ -981,6 +1001,7 @@
     <string name="title_editasnew">Edit as new</string>
     <string name="title_edit_notes">Edit local notes</string>
     <string name="title_create_rule">Create rule &#8230;</string>
+    <string name="title_force_light">Force light theme</string>
     <string name="title_share">Share</string>
     <string name="title_event">Add to calendar</string>
     <string name="title_pin">Add shortcut</string>
@@ -1084,7 +1105,6 @@
     <string name="title_ask_delete_rule">Delete rule permanently?</string>
     <string name="title_ask_discard">Discard draft?</string>
     <string name="title_ask_show_html">Showing the original message can leak privacy sensitive information</string>
-    <string name="title_ask_show_html_dark">Use dark theme</string>
     <string name="title_ask_show_html_remark">Displaying the original message on a dark background is not possible as it may make dark texts and images invisible</string>
     <string name="title_ask_show_html_images">Always show images on showing original messages</string>
     <string name="title_ask_show_image">Showing images can leak privacy sensitive information</string>
@@ -1260,6 +1280,7 @@
     <string name="title_signature_sender">Sender\'s address</string>
     <string name="title_signature_email">Signature\'s address</string>
     <string name="title_signature_mismatch">The email address of the sender and signature do not match</string>
+    <string name="title_signature_algorithm">Algorithm</string>
     <string name="title_signature_subject">Subject</string>
     <string name="title_signature_validity">Validity</string>
     <string name="title_signature_outdated">This public key is currently not valid</string>
@@ -1347,6 +1368,7 @@
     <string name="title_next">Next</string>
 
     <string name="title_edit_signature">Edit signature</string>
+    <string name="title_edit_signature_remark">Although Android cannot display all HTML, it will be sent as-is</string>
     <string name="title_edit_signature_text">Signature text</string>
     <string name="title_edit_signature_image">Insert image</string>
 
@@ -1570,6 +1592,7 @@
     <string name="title_hint_reformat">By default, FairEmail reformats messages for privacy and security reasons. To view the original message, tap the \'full screen\' icon above the message text.</string>
     <string name="title_hint_design">The design is intentionally not distracting, but kept highly functional. There are many options to customize the appearance, but please understand that it is impossible to make everybody completely happy at the same time.</string>
     <string name="title_hint_junk">Spam filtering should be done by the email server and cannot be done reliably on a battery powered device with limited capabilities.</string>
+    <string name="title_hint_junk_learn">By moving messages to and from the spam folder, the email server "learns" what spam is</string>
     <string name="title_hint_contact_actions">Long press for options</string>
     <string name="title_hint_eml">This is a summary of the content of a raw message file. Save the raw message with the save icon in the action bar to view all content.</string>
 
@@ -1672,9 +1695,7 @@
     <string name="title_rules_export">Export rules</string>
     <string name="title_rules_import">Import rules</string>
     <string name="title_rules_delete_all">Delete all rules</string>
-    <string name="title_rules_delete_junk">Delete spam rules</string>
     <string name="title_rules_delete_all_confirm">Delete all rules?</string>
-    <string name="title_rules_delete_junk_confirm">Delete all rules moving messages to the spam folder?</string>
     <string name="title_debug_info">Debug info</string>
     <string name="title_debug_info_remark">Please describe the problem and indicate the time of the problem:</string>
     <string name="title_crash_info_remark">Please describe what you were doing when the app crashed:</string>
@@ -2013,6 +2034,24 @@
         <item>Name only</item>
         <item>Email only</item>
         <item>Name and email</item>
+    </string-array>
+
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <string-array name="smimeSignAlgo" translatable="false">
+        <item>MD5</item>
+        <item>SHA-1</item>
+        <item>SHA-224</item>
+        <item>SHA-256</item>
+        <item>SHA-384</item>
+        <item>SHA-512</item>
+    </string-array>
+
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="smimeEncryptAlgo" translatable="false">
+        <item>AES-128</item>
+        <item>AES-192</item>
+        <item>AES-256</item>
     </string-array>
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>

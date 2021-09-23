@@ -63,11 +63,14 @@
     <string name="title_block">屏蔽 %1$s</string>
     <string name="title_block_sender">屏蔽发件人</string>
     <string name="title_block_domain">屏蔽发件人域名</string>
-    <string name="title_block_sender_hint">        拉黑某发件人将创建一条规则来自动将未来消息移动至垃圾邮件文件夹
-        创建和使用规则属于专业版功能</string>
+    <string name="title_block_sender_hint">        屏蔽发件人是一个免费功能。
+        屏蔽发件人域使用过滤规则，这是一个高级功能。
+    </string>
     <string name="title_junk_filter">使用本地垃圾邮件过滤器</string>
     <string name="title_junk_filter_hint">这可能会增加耗电量和将邮件误标为垃圾邮件</string>
     <string name="title_junk_blocklist">使用垃圾邮件拦截列表</string>
+    <string name="title_junk_clear">清除</string>
+    <string name="title_junk_clear_hint">这将删除所有拦截发件人规则</string>
     <string name="title_notification_sending">正在发送消息</string>
     <string name="title_notification_waiting">等待适合的网络连接</string>
     <string name="title_notification_idle">空闲</string>
@@ -110,6 +113,7 @@
     <string name="title_setup_intro">设置一个帐户只需三步，之后您就可以发送和接收电子邮件了</string>
     <string name="title_setup_simple">无需更改任何其他选项</string>
     <string name="title_setup_issue">FairEmail 是为了帮助您保护隐私而开发的，毫不夸张地说，我在它身上花了数千小时。如果有任何问题，请在留下差评前先联系我获取支持。我很乐意帮忙！</string>
+    <string name="title_setup_analytics">FairEmail 不会显示广告，也不会跟踪或分析您的行为。Bugsnag 用于错误报告，默认情况下是禁用的。</string>
     <string name="title_setup_quick_accounts">添加或更改账户</string>
     <string name="title_setup_quick_support">有些邮件服务提供商很难添加账户，对此请不要责怪 FairEmail，而应向提供商寻求支持。</string>
     <string name="title_setup_quick_hint">快速设置将从 autoconfig.thunderbird.net 获取配置信息</string>
@@ -313,6 +317,7 @@
     <string name="title_advanced_download_headers">下载所有消息标题</string>
     <string name="title_advanced_download_eml">下载原始消息文件</string>
     <string name="title_advanced_validated">仅限通过检查的已验证连接</string>
+    <string name="title_advanced_vpn_only">仅通过 VPN 连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
@@ -339,12 +344,12 @@
     <string name="title_advanced_tabular_background">使用表格样式时，使用卡片颜色作为背景色</string>
     <string name="title_advanced_cards_shadow">使用卡片样式时对未读消息显示阴影</string>
     <string name="title_advanced_date_header">按日期分组</string>
+    <string name="title_advanced_date_fixed">在顶部显示固定日期标题</string>
     <string name="title_advanced_date_bold">以粗体显示日期</string>
     <string name="title_advanced_threading">邮件会话</string>
     <string name="title_advanced_threading_unread">在对话中显示未读消息的数量</string>
     <string name="title_advanced_indentation">左/右缩进接收/发送的消息</string>
     <string name="title_advanced_highlight_unread">高亮未读消息</string>
-    <string name="title_advanced_highlight_subject">高亮邮件主题</string>
     <string name="title_advanced_color_stripe">头像前显示一条色带</string>
     <string name="title_advanced_avatars">显示联系人头像</string>
     <string name="title_advanced_gravatars">显示 Gravatars 头像</string>
@@ -363,10 +368,13 @@
     <string name="title_advanced_distinguish_contacts">下划线发件人(当其为本地发送给的联系人时)</string>
     <string name="title_advanced_show_recipients">在邮件头中显示收件人</string>
     <string name="title_advanced_font_size_sender">发件人文本大小</string>
-    <string name="title_advanced_font_size_subject">邮件主题文本大小</string>
+    <string name="title_advanced_sender_ellipsize">如果需要，缩短发送者长度</string>
     <string name="title_advanced_subject_top">在发件人上方显示主题</string>
     <string name="title_advanced_subject_italic">用斜体字显示邮件主题</string>
-    <string name="title_advanced_subject_elipsed">必要时缩短邮件主题</string>
+    <string name="title_advanced_highlight_subject">高亮邮件主题</string>
+    <string name="title_advanced_font_size_subject">邮件主题文本大小</string>
+    <string name="title_advanced_subject_ellipsize">如有必要，缩短主题长度</string>
+    <string name="title_advanced_compact_mode_remark">仅紧凑模式</string>
     <string name="title_advanced_highlight_color">高亮色</string>
     <string name="title_advanced_keywords">在邮件头中显示关键字</string>
     <string name="title_advanced_labels">在邮件头中显示 Gmail 标签</string>
@@ -493,6 +501,11 @@
     <string name="title_advanced_autocrypt">使用Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">自动双向加密模式</string>
     <string name="title_advanced_encrypt_subject">加密邮件主题</string>
+    <string name="title_advanced_sign_algo">签名算法</string>
+    <string name="title_advanced_encrypt_algo">加密算法</string>
+    <string name="title_advanced_remark_algo">        请注意，并非所有电子邮件客户端都支持所有算法。
+        通常支持默认算法 SHA256 和 AES128。
+    </string>
     <string name="title_advanced_check_certificate">发送时检查公钥</string>
     <string name="title_advanced_manage_certificates">管理公钥</string>
     <string name="title_advanced_import_key">导入私钥</string>
@@ -515,6 +528,7 @@
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
     <string name="title_advanced_updates">检查 GitHub 更新</string>
     <string name="title_advanced_check_weekly">每周而不是每天检查</string>
+    <string name="title_advanced_changelog">更新后显示更新日志</string>
     <string name="title_advanced_experiments">尝试实验性功能</string>
     <string name="title_advanced_crash_reports">发送错误报告</string>
     <string name="title_advanced_cleanup_attachments">删除旧消息的附件</string>
@@ -525,7 +539,6 @@
     <string name="title_advanced_protocol">协议日志</string>
     <string name="title_advanced_log_info">调试日志</string>
     <string name="title_advanced_debug">调试模式</string>
-    <string name="title_advanced_query_threads">限制并行数据库访问</string>
     <string name="title_advanced_manual_hint">如果禁用了接收消息，仍然可以通过下拉消息列表来手动接收消息</string>
     <string name="title_advanced_poll_hint">定期检查新消息将每次都比较本地消息与远程消息，这是项耗时的操作，可能消耗更多电量，尤其是消息非常多时。始终接收将通过持续跟踪变化来防止这种情况。</string>
     <string name="title_advanced_optimize_hint">这可能会改变同步频率以节省电池用量，取决于电子邮件服务器的功能和行为</string>
@@ -599,7 +612,6 @@
     <string name="title_advanced_move_hint">可在账户设定中配置目标文件夹</string>
     <string name="title_advanced_notify_no_grouping">此Android版本不支持通知分组</string>
     <string name="title_advanced_notify_no_channels">此Android版本不支持通知通道</string>
-    <string name="title_advanced_queries_hint">启用它会降低性能，但是在某些设备上这是必需的</string>
     <string name="title_advanced_fts_hint">启用此功能将提高搜索性能，但也会增加电池和存储空间用量</string>
     <string name="title_advanced_english_hint">这将重新启动应用程序</string>
     <string name="title_advanced_experiments_hint">当前实验性功能列表</string>
@@ -758,7 +770,7 @@
     <string name="title_delete_operation_deleted">%1$d 个操作已删除</string>
     <string name="title_delete_contacts">删除所有本地联系人？</string>
     <string name="title_no_operations">没有待执行操作</string>
-    <string name="title_hint_operations">删除操作可能导致丢失消息和同步问题</string>
+    <string name="title_hint_operations">删除这些操作可能弄丢相应消息和导致同步问题</string>
     <string name="title_op_title_headers">正在下载信头</string>
     <string name="title_op_title_raw">正在下载原始消息</string>
     <string name="title_folder_name">文件夹名</string>
@@ -766,6 +778,7 @@
     <string name="title_show_folders">显示隐藏文件夹</string>
     <string name="title_show_flagged">显示星标消息计数</string>
     <string name="title_subscribed_only">只显示已订阅的</string>
+    <string name="title_sort_unread_atop">将含未读邮件的文件夹排在最前面</string>
     <string name="title_search_folder">搜索文件夹</string>
     <string name="title_apply_to_all">应用到全部</string>
     <string name="title_hide_folder">隐藏文件夹</string>
@@ -837,6 +850,7 @@
     <string name="title_editasnew">作为新邮件编辑</string>
     <string name="title_edit_notes">编辑本地笔记</string>
     <string name="title_create_rule">创建规则 &#8230;</string>
+    <string name="title_force_light">强制使用浅色主题</string>
     <string name="title_share">分享</string>
     <string name="title_event">添加到日历</string>
     <string name="title_pin">添加快捷方式</string>
@@ -857,6 +871,7 @@
     <string name="title_download_all">全部下载</string>
     <string name="title_save_all">全部保存</string>
     <string name="title_save_eml">保存原始消息文件</string>
+    <string name="title_eml_remark">若要转发消息，需要从电子邮件服务器下载原始 (原始) 消息。 这需要互联网连接，且消息必须仍存储在电子邮件服务器上。</string>
     <string name="title_eml_option">可通过在连接设置中启用“始终下载原始消息文件”防止发生这种情况</string>
     <string name="title_eml_downloaded">已下载原始消息： %1$s</string>
     <string name="title_buttons">选择按钮</string>
@@ -931,7 +946,6 @@
     <string name="title_ask_delete_rule">是否永久删除规则？</string>
     <string name="title_ask_discard">舍弃草稿？</string>
     <string name="title_ask_show_html">显示原件可能会泄露隐私敏感信息</string>
-    <string name="title_ask_show_html_dark">使用深色主题</string>
     <string name="title_ask_show_html_remark">无法在暗色背景下显示原始消息，因为会导致看不见的黑色文本和图像</string>
     <string name="title_ask_show_html_images">在显示原始消息时总是显示图像</string>
     <string name="title_ask_show_image">显示图像可能会泄露隐私敏感信息</string>
@@ -1092,6 +1106,7 @@
     <string name="title_signature_sender">发件人地址：</string>
     <string name="title_signature_email">签名地址</string>
     <string name="title_signature_mismatch">发件人和签名的电子邮件地址不匹配</string>
+    <string name="title_signature_algorithm">算法</string>
     <string name="title_signature_subject">主题</string>
     <string name="title_signature_validity">有效性</string>
     <string name="title_signature_outdated">此公钥当前无效</string>
@@ -1167,6 +1182,7 @@
     <string name="title_previous">上一封</string>
     <string name="title_next">下一封</string>
     <string name="title_edit_signature">编辑签名</string>
+    <string name="title_edit_signature_remark">虽然 Android 不能显示所有的 HTML，但它将按原样发送</string>
     <string name="title_edit_signature_text">签名文本</string>
     <string name="title_edit_signature_image">插入图片</string>
     <string name="title_answer_caption">编辑模板</string>
@@ -1373,6 +1389,7 @@
     <string name="title_hint_reformat">默认情况下，FairEmail 会基于隐私和安全原因重新格式化消息。要查看原始消息，请点击消息文本上方的“全屏”图标</string>
     <string name="title_hint_design">本应用在设计上旨在不让用户分散注意力，更着眼实用性。设置中已有很多自定义外观的选项，请谅解，我没法让所有人都完全满意。</string>
     <string name="title_hint_junk">过滤垃圾邮件属于邮件服务器的工作，单凭客户端设备根本无力胜任</string>
+    <string name="title_hint_junk_learn">将消息移入或移出垃圾邮件文件夹会让电子邮件服务器“得知”什么是垃圾邮件</string>
     <string name="title_hint_contact_actions">长按以显示更多选项</string>
     <string name="title_hint_eml">这是一个原始消息文件内容的摘要。用操作栏中的保存图标保存原始消息以查看所有内容。</string>
     <string name="title_open_link">打开链接</string>
@@ -1466,9 +1483,7 @@
     <string name="title_rules_export">导出规则</string>
     <string name="title_rules_import">导入规则</string>
     <string name="title_rules_delete_all">删除所有规则</string>
-    <string name="title_rules_delete_junk">删除垃圾邮件规则</string>
     <string name="title_rules_delete_all_confirm">确定要删除所有规则吗？</string>
-    <string name="title_rules_delete_junk_confirm">确定要删除所有将邮件移动到垃圾文件夹的规则吗?</string>
     <string name="title_debug_info">调试信息</string>
     <string name="title_debug_info_remark">请描述问题及问题发生的时间：</string>
     <string name="title_crash_info_remark">请描述应用崩溃时您的操作</string>
@@ -1664,4 +1679,7 @@
         <item>仅电子邮件</item>
         <item>名字和电子邮箱</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

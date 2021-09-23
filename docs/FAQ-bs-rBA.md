@@ -1,130 +1,130 @@
 <a name="top"></a>
 
-# FairEmail support
+# FairEmail podrška
 
-If you have a question, please check the following frequently asked questions first. [At the bottom](#user-content-get-support), you can find out how to ask other questions, request features, and report bugs.
+Ukoliko imate pitanje, molimo da prvo provjerite sljedeća često postavljana pitanja. [Na dnu](#user-content-get-support), možete saznati kako postaviti drugo pitanje, zatražiti mogućnosti i prijaviti greške.
 
 Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die nachstehenden häufig gestellten Fragen (FAQ). [Ganz unten erfahren Sie](#user-content-get-support), wie Sie weitere Fragen stellen, Funktionen anfordern und Fehler melden können.
 
-## Index
+## Indeks
 
-* [Authorizing accounts](#user-content-authorizing-accounts)
-* [How to ...?](#user-content-howto)
-* [Known problems](#user-content-known-problems)
-* [Planned features](#user-content-planned-features)
-* [Frequently requested features](#user-content-frequently-requested-features)
-* [Frequently Asked Questions](#user-content-frequently-asked-questions)
-* [Get support](#user-content-get-support)
+* [Autorizacija računa](#user-content-authorizing-accounts)
+* [Kako da...?](#user-content-howto)
+* [Poznati problemi](#user-content-known-problems)
+* [Planirane mogućnosti](#user-content-planned-features)
+* [Često zahtjevane mogućnosti](#user-content-frequently-requested-features)
+* [Često postavljena pitanja](#user-content-frequently-asked-questions)
+* [Dobijte podršku](#user-content-get-support)
 
-<h2><a name="authorizing-accounts"></a>Authorizing accounts</h2>
+<h2><a name="authorizing-accounts"></a>Autorizacija računa</h2>
 
-In most cases, the quick setup wizard will be able to automatically identify the correct configuration.
+U većini slučajeva, čarobnjak za brzo postavljanje će automatski identifikovati ispravna podešavanja.
 
-If the quick setup wizard fails, you'll need to manually set up an account (to receive email) and an identity (to send email). For this you'll need the IMAP and SMTP server addresses and port numbers, whether SSL/TLS or STARTTLS should be used and your username (mostly, but not always, your email address) and your password.
+Ukoliko čarobnjak za brzu postavku ne radi, trebat ćete ručno podesiti račun (za prijem e-pošte) i identitet (za slanje e-pošte). Za ovo Vam trebaju adrese IMAP i SMTP servera, brojevi portova, koja od mogućnosti SSL/TLS ili STARTTLS bi se trebala koristiti te Vaše korisničko ime (uglavnom, ali ne uvijek, Vaša e-mail adresa) i lozinka.
 
-Searching for *IMAP* and the name of the provider is mostly sufficient to find the right documentation.
+Traženje *IMAP*-a i naziva provajdera je najčešće dovoljno za pronalazak ispravne dokumentacije.
 
-In some cases, you'll need to enable external access to your account and/or to use a special (app) password, for instance when two-factor authentication is enabled.
+U nekim slučajevima, trebat ćete uključiti vanjski pristup Vašem računu i/ili korištenje specijalne (aplikacijske) lozinke, npr. kada je uključena dvofaktorska provjera.
 
-For authorizing:
+Za autorizaciju:
 
-* Gmail / G suite, see [question 6](#user-content-faq6)
-* Outlook / Live / Hotmail, see [question 14](#user-content-faq14)
-* Office 365, see [question 14](#user-content-faq156)
-* Microsoft Exchange, see [question 8](#user-content-faq8)
-* Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
-* Apple iCloud, see [question 148](#user-content-faq148)
-* Free.fr, see [question 157](#user-content-faq157)
+* Gmail-a / G suite-a, pogledajte  [pitanje 6](#user-content-faq6)
+* Outlook-a / Live-a / Hotmail-a, pogledajte  [pitanje 14](#user-content-faq14)
+* Office-a 365, pogledajte [pitanje 14](#user-content-faq156)
+* Microsoft Exchange-a, pogledajte [pitanje 8](#user-content-faq8)
+* Yahoo-a, AOL-a i Sky-a, pogledajte [pitanje 88](#user-content-faq88)
+* Apple iCloud-a, pogledajte [pitanje 148](#user-content-faq148)
+* Free.fr-a, pogledajte [pitanje 157](#user-content-faq157)
 
-Please see [here](#user-content-faq22) for common error messages and solutions.
+Molimo da pogledate [ovdje](#user-content-faq22) za uobičajene poruke o greškama i rješenja za iste.
 
-Related questions:
+Povezana pitanja:
 
-* [Is OAuth supported?](#user-content-faq111)
-* [Why is ActiveSync not supported?](#user-content-faq133)
+* [Da li je OAuth podržan?](#user-content-faq111)
+* [Zašto ActiveSync nije podržan?](#user-content-faq133)
 
 <a name="howto">
 
-## How to ...?
+## Kako...?
 
-* Change the account name: Settings, tap Manual setup, tap Accounts, tap account
-* Change the swipe left/right target: Settings, tab page Behavior, Set swipe actions
-* Change password: Settings, tap Manual setup, tap Accounts, tap account, change password
-* Set a signature: Settings, tap Manual setup, tap Identities, tap identity, Edit signature.
-* Add CC and BCC addresses: tap the people's icon at the end of the subject
-* Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
-* Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
-* Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
-* Load more messages: long press a folder in the folder list, select *Fetch more messages*
-* Delete a message, skipping trash: long press the trash icon
-* Delete an account/identity: Settings, tap Manual setup, tap Accounts/Identities, tap the account/identity, trash icon top right
-* Delete a folder: long press the folder in the folder list, Edit properties, trash icon top right
-* Undo send: Outbox, swipe the message in the list left or right
-* Store sent messages in the inbox: please [see this FAQ](#user-content-faq142)
-* Change system folders: Settings, tap Manual setup, tap Accounts, tap account, at the bottom
-* Export/import settings: Settings, navigation (left side) menu
+* Promijeniti naziv (ime) računa: 'Postavke', dodirnite 'Ručne postavke', dodirnite 'Računi', dodirnite 'Račun'
+* Promijeniti radnje prevlačenja lijevo/desno: 'Postavke', kartica 'Ponašanje', Postavi radnje prevlačenja
+* Promijeniti lozinku: 'Postavke', dodirnite 'Ručne postavke', dodirnite 'Računi', dodirnite račun, promjena lozinke
+* Postaviti potpis: 'Postavke', dodirnite 'Ručne postavke', dodirnite 'Indentiteti', dodirnite identitet, 'Uredi potpis'.
+* Dodati CC i BCC adrese: dodirnite ikonicu s ljudima na kraju predmeta
+* Prebacivati na sljedeću/prethodnu poruku pri arhiviranju/brisanju: u postavkama za ponašanje, isključite *Automatski zatvori konverzacije* i izaberite *Prebaci na sljedeću/prethodnu konverzaciju* za opciju *Pri zatvaranju konverzacije*
+* Dodati folder u objedinjeni inbox: dugo držite folder na spisku i izaberite *Prikaži u objedinjenom inbox-u*
+* Dodati folder na navigacijskom meniju: dugo držite folder na spisku i izaberite *Prikaži u navigacijskom meniju*
+* Učitati više poruka: dugo držite folder na spisku, te izaberite opciju *Dohvati više poruka*
+* Izbrisati poruku, zaobilazeći otpad: dugo držite na ikonicu za otpad
+* Izbrisati račun/identitet: 'Postavke', dodirnite 'Ručne postavke', dodirnite 'Računi/Identiteti', dodirnite račun/identitet, dodirnite ikonicu otpad (gore-desno)
+* Izbrisati folder: dugo držite folder na spisku, izaberite 'Uredi svojstva', zatim ikonicu otpad (gore-desno)
+* Poništiti poslano: izaberite 'Za slanje', zatim prevucite poruku sa spiska lijevo ili desno
+* Sačuvati poslane poruke u inbox-u: molimo da [pogledate ova ČPP](#user-content-faq142)
+* Promijeniti sistemske foldere: 'Postavke', dodirnite 'Ručne postavke', dodirnite 'Računi', dodirnite račun na dnu
+* Izvesti/uvesti postavke: 'Postavke', prevucite navigacijski (lijevi) meni
 
-<h2><a name="known-problems"></a>Known problem</h2>
+<h2><a name="known-problems"></a>Poznati problemi</h2>
 
-* ~~A [bug in Android 5.1 and 6](https://issuetracker.google.com/issues/37054851) causes apps to sometimes show a wrong time format. Toggling the Android setting *Use 24-hour format* might temporarily solve the issue. A workaround was added.~~
-* ~~A [bug in Google Drive](https://issuetracker.google.com/issues/126362828) causes files exported to Google Drive to be empty. Google has fixed this.~~
-* ~~A [bug in AndroidX](https://issuetracker.google.com/issues/78495471) causes FairEmail to occasionally crash on long pressing or swiping. Google has fixed this.~~
-* ~~A [bug in AndroidX ROOM](https://issuetracker.google.com/issues/138441698) causes sometimes a crash with "*... Exception while computing database live data ... Couldn't read row ...*". A workaround was added.~~
-* A [bug in Android](https://issuetracker.google.com/issues/119872129) causes FairEmail to crash with "*... Bad notification posted ...*" on some devices once after updating FairEmail and tapping on a notification.
-* A [bug in Android](https://issuetracker.google.com/issues/62427912) sometimes causes a crash with "*... ActivityRecord not found for ...*" after updating FairEmail. Reinstalling ([source](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) might fix the problem.
-* A [bug in Android](https://issuetracker.google.com/issues/37018931) sometimes causes a crash with *... InputChannel is not initialized ...* on some devices.
-* ~~A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) sometimes causes a crash with *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
-* A bug in Nova Launcher on Android 5.x causes FairEmail to crash with a *java.lang.StackOverflowError* when Nova Launcher has access to the accessibility service.
-* ~~The folder selector sometimes shows no folders for yet unknown reasons. This seems to be fixed.~~
-* ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
-* ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
-* Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
-* A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. See also [this FAQ](#user-content-faq126).
-* A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
-* Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
-* Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
-* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
+* ~~Greška [u Androidu 5.1 i 6](https://issuetracker.google.com/issues/37054851) uzrokuje prikaz pogrešnog vremenskog formata u aplikacijama. Uključivanje/isključivanje postavke u Androidu *Koristi 24-satni format* može privremeno riješiti problem. Dodano je zaobilazno rješenje.~~
+* ~~Greška [u Google Drive-u](https://issuetracker.google.com/issues/126362828) uzrokuje prazne datoteke koje se izvoze u Google Drive. Google je ovo riješio.~~
+* ~~Greška [u AndroidX-u](https://issuetracker.google.com/issues/78495471) uzrokuje povremeno rušenje FairEmail-a na dugi dodir ili prevlačenje. Google je ovo riješio.~~
+* ~~Greška [u AndroidX ROOM-u](https://issuetracker.google.com/issues/138441698) uzrokuje povremeno rušenje sa "*... Izuzetkom računanja podataka iz baze podataka ... Nemoguće pročitati red ...*". Dodano je zaobilazno rješenje.~~
+* Greška [u Androidu](https://issuetracker.google.com/issues/119872129) uzrokuje rušenje FairEmail-a uz "*... Prijavu lošeg obavještenja ...*" na nekim uređajima jednom kada se ažurira FairEmail i dodirivanjem na obavještenje.
+* Greška [u Androidu](https://issuetracker.google.com/issues/62427912) ponekad uzrokuje rušenje uz "*... Javljanje da nije pronađen ActivityRecord za ...*" nakon ažuriranja FairEmail-a. Reinstalacija ([izvora](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) može riješiti problem.
+* Greška [u Androidu](https://issuetracker.google.com/issues/37018931) ponekad uzrokuje rušenje uz "*... Javljanje da InputChannel nije pokrenut...* na nekim uređajima.
+* ~~Greška [u LineageOS-u](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) ponekad uzrokuje rušenje uz poruku *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
+* Greška u Nova Launcher-u na Androidu 5.x uzrokuje rušenje FairEmail-a tuz poruku *java.lang.StackOverflowError* kada Nova Launcher ima pristup usluzi pristupačnosti.
+* ~~Izbornik foldera ponekad prikazuje da nema foldera iz još nerazješnjenih razloga. Ovo je izgleda riješeno.~~
+* ~~Greška [u AndroidX-u](https://issuetracker.google.com/issues/64729576) otežava zahvat brzog skrolera. Dodano je zaobilazno rješenje.~~
+* ~~Enkripicija sa YubiKey-em rezultira u beskonačnoj petlji. Ovo je izgleda rezultat [greške u OpenKeychain-u](https://github.com/open-keychain/open-keychain/issues/2507).~~
+* Pomicanje na interno vezanu lokaciju u izvornoj poruci ne radi. Ovo se ne može popraviti jer je prikaz izvorne poruke sadržan u prikazu pomicanja (skrolanja).
+* Pregled teksta poruke ne pojavljuje se (uvijek) na Samsung-ovim satovima jer se izgleda [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) ignoriše. Prikaz teksta poruke se ispravno prikazuje na nosivim uređajima Pebble 2, Fitbit Charge 3, Mi band 3 i Xiaomi Amazfit BIP. Također pogledajte [ova ČPP](#user-content-faq126).
+* Greška [u Androidu 6.0](https://issuetracker.google.com/issues/37068143) uzrokuje rušenje uz *... Nevažeći ofset: ... Validni raspon je...* kada se označi tekst i dodiruje na prostor izvan teksta. Ovaj problem je ispravljen u Androidu 6.0.1.
+* Unutrašnji (usidreni) linkovi neće raditi jer su izvorne poruke prikazane u ugrađenom WebView prikazu pomicanja (spisak konverzacija). Ovo je ograničenje Androida koje se ne može popraviti ni zaobići.
+* Otkrivanje jezika [ne radi više](https://issuetracker.google.com/issues/173337263) na Pixel uređajima sa (nadogradnjom na?) Android 11
+* Greška [u OpenKeychain-u](https://github.com/open-keychain/open-keychain/issues/2688) uzrokuje nevažeće PGP potpise kada se koristi hardverski token.
 
-<h2><a name="planned-features"></a>Planned features</h2>
+<h2><a name="planned-features"></a>Planirane mogućnosti</h2>
 
-* ~~Synchronize on demand (manual)~~
-* ~~Semi-automatic encryption~~
-* ~~Copy message~~
-* ~~Colored stars~~
-* ~~Notification settings per folder~~
-* ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
-* ~~Show messages matched by a rule~~
-* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
-* ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
-* ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
-* ~~Search suggestions~~
-* ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
-* ~~Generic unified folders~~
-* ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
-* ~~Copy accounts and identities~~
-* ~~Pinch zoom~~ (not reliably possible in a scrolling list; the full message view can be zoomed instead)
-* ~~More compact folder view~~
-* ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
-* ~~Pinch zoom text size~~
-* ~~Display GIFs~~
-* ~~Themes~~ (a grey light and dark theme were added because this is what most people seems to want)
-* ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
-* ~~Send as attachment~~
-* ~~Widget for selected account~~
-* ~~Remind to attach files~~
-* ~~Select domains to show images for~~ (this will be too complicated to use)
-* ~~Unified starred messages view~~ (there is already a special search for this)
-* ~~Move notification action~~
-* ~~S/MIME support~~
-* ~~Search for settings~~
+* ~~Sinhronizacija na zahtjev (ručno)~~
+* ~~Poluautomatsko šifriranje~~
+* ~~Kopiranje poruka~~
+* ~~Obojene zvjezdice~~
+* ~~Postavke obavještenja prema folderu~~
+* ~~Izbor lokalnih slika za potpise~~ (ovo neće biti dodano, jer zahtijeva upravljanje slikovnim datotekama i zato što se većina slika po zadanom ionako ne prikazuje u većini e-mail klijenata)
+* ~~Prikaz poruka podudarnih sa pravilom~~
+* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (ne postoje Java biblioteke sa prikladnom licencom i bez zavisnih datoteka, a osim toga FairEmail ima svoja vlastita pravila filtriranja)
+* ~~Traženje poruka sa/bez priloga~~ (ovo se ne može dodati, jer IMAP ne podržava pretraživanje priloga)
+* ~~Traženje foldera~~ (filtriranje hijerarhijskog spiska foldera je problematično)
+* ~~Pretraga sugestija~~
+* ~~[Poruka za postavku autošifriranja](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (sekcijan 4.4)~~ (IMO nije dobra ideja dozvoliti e-mail klijentu da upravlja osjetljivim enkripcijskim ključevima za izuzetne situacije, dok OpenKeychain također ,pže ozvoziti ključeve)
+* ~~Generički objedinjeni folderi~~
+* ~~Novi rasporedi obavještavanja o porukama prema računima~~ (implementirano preko dodavanja vremenskih uvjeta pravilima, tako da se poruke mogu odlagati tokom izabranih perioda)
+* ~~Kopiranje računa i identiteta~~
+* ~~Prstohvatno zumiranje~~ (nije moguće za listanje spiska poruka; umjesto toga zumiranje radi u prikazu cijelih poruka)
+* ~~Kompaktniji izgled foldera~~
+* ~~Pravljenje spiskova i tabela~~ (za ovo je potreban uređivač obogaćenog teksta, pogledajte [ova ČPP](#user-content-faq99))
+* ~~Prstohvatno zumiranje veličine teksta~~
+* ~~Prikazivanje GIF-ova~~
+* ~~Teme~~ (siva svjetla i tamna tema su dodane jer je izgleda to želja većine ljudi)
+* ~~Vremenski uvjet-bilo koji dan~~ (bilo koji dan se ne uklapa u vremenske uvjete od datuma-do datuma)
+* ~~Slanje kao priloga~~
+* ~~Vidžet za izabrani račun~~
+* ~~Podsjetnik za prilaganje datoteka~~
+* ~~Izbor određenih domena za prikaz slika~~ (ovo bi bilo prekomplikovano za korištenje)
+* ~~Prikaz objedinjenih poruka sa zvjezdicama~~ (već postoji specijalna vrsta pretrage za ovo)
+* ~~Radnja premještanja u obavještenju~~
+* ~~S/MIME podrška~~
+* ~~Pretraživanje postavki~~
 
-Anything on this list is in random order and *might* be added in the near future.
+Sve na ovom spisku je nasumično raspoređeno i *moguće* da će biti dodano u bliskoj budućnosti.
 
-<h2><a name="frequently-requested-features"></a>Frequently requested features</h2>
+<h2><a name="frequently-requested-features"></a>Često zahtjevane mogućnosti</h2>
 
-The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
+Dizajn je zasnovan na brojnim diskusijama i ukoliko želite, možete također raspravljati o njemu [na ovom forumu](https://forum.xda-developers.com/android/apps-games/source-email-t3824168). Cilj ovog dizajna je minimalistički (bez nepotrebnih menija, dugmadi itd.) i neometajući (bez jarkih boja, animacija itd.). Sve prikazane stavke trebaju biti korisne na neki način i pažljivo postavljene zbog jednostavne upotrebe. Fontovi, veličine, boje itd. trebaju koristiti materijalni dizajn kad god je moguće.
 
-<h2><a name="frequently-asked-questions"></a>Frequently Asked Questions</h2>
+<h2><a name="frequently-asked-questions"></a>Često postavljena pitanja</h2>
 
 * [(1) Which permissions are needed and why?](#user-content-faq1)
 * [(2) Why is there a permanent notification shown?](#user-content-faq2)
@@ -467,8 +467,8 @@ In the display section of the settings you can enable or disable for example:
 * *Show stars*: to hide stars (favorites)
 * *Show message preview*: to show 1-4 lines of the message text
 * *Show address details by default*: to expand the addresses section by default
-* *Automatically show original message for known contacts*: to automatically show original messages for contacts on your device, please read [this FAQ](#user-content-faq35)
-* *Automatically show images for known contacts*: to automatically show images for contacts on your device, please read [this FAQ](#user-content-faq35)
+* *Automatski prikaži izvornu poruku za poznate kontakte*: za automatski prikaz izvornih poruka za kontakte na vašem uređaju, molimo da pročitate [ova ČPP](#user-content-faq35)
+* *Automatski prikaži slike za poznate kontakte*: za automatski prikaz slika za kontakte na vašem uređaju, molimo da pročitate [ova ČPP](#user-content-faq35)
 
 Note that messages can be previewed only when the message text was downloaded. Larger message texts are not downloaded by default on metered (generally mobile) networks. You can change this in the connection settings.
 
@@ -535,7 +535,7 @@ See [here](https://support.google.com/mail/answer/7126229) for Google's instruct
 
 Sent messages are normally moved from the outbox to the sent folder as soon as your provider adds sent messages to the sent folder. This requires a sent folder to be selected in the account settings and the sent folder to be set to synchronizing.
 
-Some providers do not keep track of sent messages or the used SMTP server might not be related to the provider. In these cases FairEmail, will automatically add sent messages to the sent folder on synchronizing the sent folder, which will happen after a message have been sent. Note that this will result in extra internet traffic.
+Some providers do not keep track of sent messages or the used SMTP server might not be related to the provider. U ovim slučajevima, FairEmail će automatski dodati poslane poruke u folder 'Poslano' tokom sinhronizacije istog, što se događa nakon što poruka bude poslana. Note that this will result in extra internet traffic.
 
 ~~If this doesn't happen, your provider might not keep track of sent messages or you might be using an SMTP server not related to the provider.~~ ~~In these cases you can enable the advanced identity setting *Store sent messages* to let FairEmail add sent messages to the sent folder right after sending a message.~~ ~~Note that enabling this setting might result in duplicate messages if your provider adds sent messages to the sent folder too.~~ ~~Also beware that enabling this setting will result in extra data usage, especially when when sending messages with large attachments.~~
 
@@ -573,7 +573,7 @@ Note that you can copy an identity by long pressing it.
 
 Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message, if your provider allows this.
 
-FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
+FairEmail će automatski ažurirati lozinke povezanih identiteta, kada ažurirate lozinku dodijeljenog računa ili povezanog identiteta.
 
 See [this FAQ](#user-content-faq33) on editing the username of email addresses.
 
@@ -626,7 +626,7 @@ To sign/encrypt a message, just select the appropriate method in the send dialog
 
 To verify a signature or to decrypt a received message, open the message and just tap the gesture or padlock icon just below the message action bar.
 
-The first time you send a signed/encrypted message you might be asked for a sign key. FairEmail will automatically store the selected sign key in the used identity for the next time. If you need to reset the sign key, just save the identity or long press the identity in the list of identities and select *Reset sign key*. The selected sign key is visible in the list of identities. If need to select a key on a case by case basis, you can create multiple identities for the same account with the same email address.
+The first time you send a signed/encrypted message you might be asked for a sign key. FairEmail će automatski sačuvati izabrani potpisni ključ slijedeći put kada budete koristili identitet. If you need to reset the sign key, just save the identity or long press the identity in the list of identities and select *Reset sign key*. The selected sign key is visible in the list of identities. If need to select a key on a case by case basis, you can create multiple identities for the same account with the same email address.
 
 In the encryption settings you can select the default encryption method (PGP or S/MIME), enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*, but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
 
@@ -3023,29 +3023,29 @@ To prevent these issues, snoozing is done locally on the device by hiding the me
 
 <br />
 
-<h2><a name="get-support"></a>Get support</h2>
+<h2><a name="get-support"></a>Dobijte podršku</h2>
 
-FairEmail is supported on Android smartphones and tablets and ChromeOS only.
+FairEmail je podržan samo na Android pametnim telefonima i tabletima i ChromeOS uređajima.
 
-Only the latest Play store version and latest GitHub release are supported. The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release. This also means that downgrading is not supported.
+Podržani su samo najnovija verzija iz Play trgovine i najnovije GitHub izdanje. F-Droid izdanje je podržano samo ako je broj njegove verzija isti kao i broj verzije najnovijeg GitHub izdanja. Ovo također znači da povratak na stariju verziju nije podržan.
 
-There is no support on things that are not directly related to FairEmail.
+Stvari koje nisu u direktnoj vezi sa FairEmail-om, nisu podržane.
 
-There is no support on building and developing things by yourself.
+Stvari koje ste sami kreirali ili razvili nisu podržane.
 
-Requested features should:
+Zatražene mogućnosti trebaju:
 
-* be useful to most people
-* not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
-* comply with common standards (IMAP, SMTP, etc)
+* biti korisne za većinu ljudi
+* da ne komplikuju korištenje FairEmail-a
+* da se uklapaju u filozofiju FairEmail-a (orjetacija na privatnost, misliti na sigurnost)
+* poštivati uobičajene standarde (IMAP, SMTP itd.)
 
-Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible.
+Mogućnosti koje ne ispunjavaju ove zahtjeve vjerovatno će biti odbijene. Ovo je također važno zbog dugoročno izdvodivih održavanja i podrške.
 
-If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+Ukoliko imate pitanje, želite zatražiti neku mogućnost ili prijaviti grešku,  **molimo da koristite [ovaj formular](https://contact.faircode.eu/?product=fairemailsupport)**.
 
-GitHub issues are disabled due to frequent misusage.
+Pitanja o GitHub problemima su isključena zbog česte zloupotrebe.
 
 <br />
 
-Copyright &copy; 2018-2021 Marcel Bokhorst.
+Autorska prava &copy; 2018-2021 Marcel Bokhorst.

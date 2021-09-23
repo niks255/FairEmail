@@ -48,6 +48,7 @@ import android.os.Bundle;
 import android.os.DeadObjectException;
 import android.os.DeadSystemException;
 import android.os.Debug;
+import android.os.IBinder;
 import android.os.OperationCanceledException;
 import android.os.RemoteException;
 import android.os.TransactionTooLargeException;
@@ -98,6 +99,8 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.CertPathValidatorException;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -304,8 +307,7 @@ public class Log {
                 sb.append(' ').append(key).append('=').append(val);
                 ocrumb.put(key, val);
             }
-            if (BuildConfig.DEBUG)
-                Log.i(sb.toString());
+            Log.i(sb.toString());
             Bugsnag.leaveBreadcrumb(name, ocrumb, BreadcrumbType.LOG);
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -1718,6 +1720,11 @@ public class Log {
         long nsize = Debug.getNativeHeapSize() / 1024 / 1024L;
         sb.append(String.format("Heap usage: %d/%d MiB native: %d/%d MiB\r\n", hused, hmax, nheap, nsize));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            int ipc = IBinder.getSuggestedMaxIpcSizeBytes();
+            sb.append(String.format("IPC max: %s\r\n", Helper.humanReadableByteCount(ipc)));
+        }
+
         Configuration config = context.getResources().getConfiguration();
         String size;
         if (config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_XLARGE))
@@ -1765,7 +1772,8 @@ public class Log {
 
         try {
             int maxKeySize = javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
-            sb.append(context.getString(R.string.title_advanced_aes_key_size, maxKeySize)).append("\r\n");
+            sb.append(context.getString(R.string.title_advanced_aes_key_size,
+                    Helper.humanReadableByteCount(maxKeySize, false))).append("\r\n");
         } catch (Throwable ex) {
             sb.append(ex.toString()).append("\r\n");
         }
@@ -1810,6 +1818,9 @@ public class Log {
 
         sb.append(String.format("Configuration: %s\r\n", config.toString()));
 
+        sb.append("\r\n");
+        for (Provider p : Security.getProviders())
+            sb.append(p).append("\r\n");
         sb.append("\r\n");
 
         try {
@@ -1915,13 +1926,15 @@ public class Log {
             int pollInterval = ServiceSynchronize.getPollInterval(context);
             boolean metered = prefs.getBoolean("metered", true);
             Boolean ignoring = Helper.isIgnoringOptimizations(context);
+            boolean auto_optimize = prefs.getBoolean("auto_optimize", false);
             boolean schedule = prefs.getBoolean("schedule", false);
 
             size += write(os, "accounts=" + accounts.size() +
                     " enabled=" + enabled +
                     " interval=" + pollInterval +
-                    " metered=" + metered +
+                    "\r\nmetered=" + metered +
                     " optimizing=" + (ignoring == null ? null : !ignoring) +
+                    " auto_optimize=" + auto_optimize +
                     "\r\n\r\n");
 
             if (schedule) {

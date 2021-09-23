@@ -73,12 +73,10 @@
     <string name="title_block">Blokkearje %1$s</string>
     <string name="title_block_sender">Stjoerder blokkearje</string>
     <string name="title_block_domain">Stjoerderdomein blokkearje</string>
-    <string name="title_block_sender_hint">        In stjoerder blokkearje sil in regel meitsje om takomstige berjochten automatysk te ferpleatsen nei de spam-map.
-        Regels meitsje en brûke is in pro-funksje.
-    </string>
     <string name="title_junk_filter">Lokale spamfilter brûke</string>
     <string name="title_junk_filter_hint">Dit kin batterijgebrûk ferheegje en berjochten ferkeard markearje as spam</string>
     <string name="title_junk_blocklist">Brûk list mei spamblokken</string>
+    <string name="title_junk_clear">Wiskje</string>
     <string name="title_notification_sending">Ferstjoere berjochten</string>
     <string name="title_notification_waiting">Wachtsje op geskikte ferbining</string>
     <string name="title_notification_idle">Ynaktyf</string>
@@ -310,7 +308,6 @@
     <string name="title_advanced_threading_unread">Toan net-lêzen berjochten yn petearen</string>
     <string name="title_advanced_indentation">Yndruk links / rjochts ûntfangen / ferstjoerde berjochten yn petearen</string>
     <string name="title_advanced_highlight_unread">Unlês berjochten markearje</string>
-    <string name="title_advanced_highlight_subject">Underwerp markearje</string>
     <string name="title_advanced_color_stripe">Sjoch lit streep</string>
     <string name="title_advanced_avatars">Sjoch kontaktfoto\'s</string>
     <string name="title_advanced_gravatars">Sjoch gravatars</string>
@@ -327,10 +324,10 @@
     <string name="title_advanced_distinguish_contacts">Understreke de stjoerder as de stjoerder bekend is as lokaal \'nei\' kontakt</string>
     <string name="title_advanced_show_recipients">Untfangers sjen litte yn berjochtkop</string>
     <string name="title_advanced_font_size_sender">Tekstgrutte stjoerder</string>
-    <string name="title_advanced_font_size_subject">Tekstgrutte ûnderwerp</string>
     <string name="title_advanced_subject_top">Underwerp boppe stjoerder sjen litte</string>
     <string name="title_advanced_subject_italic">Underwerp kursyf sjen litte</string>
-    <string name="title_advanced_subject_elipsed">As it nedich is, koarter it ûnderwerp yn</string>
+    <string name="title_advanced_highlight_subject">Underwerp markearje</string>
+    <string name="title_advanced_font_size_subject">Tekstgrutte ûnderwerp</string>
     <string name="title_advanced_highlight_color">Kleur markearje</string>
     <string name="title_advanced_keywords">Toan kaaiwurden yn berjochtkop</string>
     <string name="title_advanced_labels">Toan Gmail labels yn berjochtkop</string>
@@ -475,7 +472,6 @@
     <string name="title_advanced_protocol">Protokol oanmeld</string>
     <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Debug mode</string>
-    <string name="title_advanced_query_threads">Beheine tagong ta parallel databank</string>
     <string name="title_advanced_manual_hint">As it ûntfangen fan berjochten is útskeakele, is it noch altyd mooglik om berjochten mei de hân te ûntfangen troch de berjochtenlist nei ûnderen te lûken</string>
     <string name="title_advanced_poll_hint">Periodyk kontrolearje op nije berjochten sil elke kear lokale en eksterne berjochten fergelykje, wat in djoere operaasje is dy\'t kin resultearje yn ekstra batterijgebrûk, fral as d\'r in soad berjochten binne. Altyd ûntfange sil dit foarkomme troch wizigingen kontinu te folgjen.</string>
     <string name="title_advanced_optimize_hint">Hjirtroch kin de syngronisaasjefrekwinsje feroarje om batterijgebrûk te sparjen, ôfhinklik fan \'e mooglikheden en gedrach fan \'e emailservers</string>
@@ -543,7 +539,6 @@
     <string name="title_advanced_move_hint">De doelmap kin wurde ynsteld yn \'e akkountynstellingen</string>
     <string name="title_advanced_notify_no_grouping">Dizze Android-ferzje stipet gjin groepearring notifikaasjes</string>
     <string name="title_advanced_notify_no_channels">Dizze Android-ferzje stipet gjin meldingskanalen</string>
-    <string name="title_advanced_queries_hint">As jo dit ynskeakelje, sille de prestaasjes ferminderje, lykwols is ynskeakeljen ferplicht op guon apparaten</string>
     <string name="title_advanced_fts_hint">As jo dit ynskeakelje, ferbettert it sykjen fan prestaasjes, mar fergruttet ek it gebrûk fan batterij en opslachromte</string>
     <string name="title_advanced_english_hint">Dit sil de app opnij starte</string>
     <string name="title_advanced_experiments_hint">List fan aktuele eksperimintele funksjes</string>
@@ -858,7 +853,6 @@
     <string name="title_ask_delete_rule">Regel permanint wiskje?</string>
     <string name="title_ask_discard">Untwerp fuortjaan?</string>
     <string name="title_ask_show_html">It orizjinele berjocht sjen litte kin privacy gefoelige ynformaasje lekke</string>
-    <string name="title_ask_show_html_dark">Tsjuster tema brûke</string>
     <string name="title_ask_show_html_remark">It orizjinele berjocht werjaan op in donkere eftergrûn is net mooglik, om\'t tsjustere teksten en ôfbyldings ûnsichtber kinne wurde</string>
     <string name="title_ask_show_html_images">Toan altyd ôfbyldings by it werjaan fan orizjinele berjochten</string>
     <string name="title_ask_show_image">Ofbyldings sjen kinne privacy-sensitive ynformaasje lekke</string>
@@ -1368,9 +1362,7 @@
     <string name="title_rules_export">Eksportregels</string>
     <string name="title_rules_import">Regels ymportearje</string>
     <string name="title_rules_delete_all">Wiskje alle regels</string>
-    <string name="title_rules_delete_junk">Ferwiderje spamregels</string>
     <string name="title_rules_delete_all_confirm">Wiskje alle regels?</string>
-    <string name="title_rules_delete_junk_confirm">Alle regels wiskje dy\'t berjochten ferpleatse nei de spam-map?</string>
     <string name="title_debug_info">Debug-ynfo</string>
     <string name="title_debug_info_remark">Beskriuw it probleem asjebleaft en jouwe de tiid fan it probleem oan:</string>
     <string name="title_crash_info_remark">Beskriuw asjebleaft wat jo diene doe\'t de app ferûngelokke:</string>
@@ -1556,4 +1548,7 @@
         <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

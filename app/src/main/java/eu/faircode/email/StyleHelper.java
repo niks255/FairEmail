@@ -40,6 +40,7 @@ import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
+import android.text.style.SuggestionSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
@@ -146,7 +147,7 @@ public class StyleHelper {
                     int[] titles = new int[]{R.string.title_style_size_small, R.string.title_style_size_medium, R.string.title_style_size_large};
                     float[] sizes = new float[]{HtmlHelper.FONT_SMALL, 1.0f, HtmlHelper.FONT_LARGE};
                     for (int i = 0; i < ids.length; i++) {
-                        SpannableStringBuilder ssb = new SpannableStringBuilder(context.getString(titles[i]));
+                        SpannableStringBuilder ssb = new SpannableStringBuilderEx(context.getString(titles[i]));
                         ssb.setSpan(new RelativeSizeSpan(sizes[i]), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         smenu.add(R.id.group_style_size, ids[i], i, ssb);
                     }
@@ -156,7 +157,7 @@ public class StyleHelper {
                 String[] fontNameValues = anchor.getResources().getStringArray(R.array.fontNameValues);
                 SubMenu smenu = popupMenu.getMenu().findItem(R.id.menu_style_font).getSubMenu();
                 for (int i = 0; i < fontNameNames.length; i++) {
-                    SpannableStringBuilder ssb = new SpannableStringBuilder(fontNameNames[i]);
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(fontNameNames[i]);
                     ssb.setSpan(getTypefaceSpan(fontNameValues[i], context), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     smenu.add(R.id.group_style_font, i, 0, ssb);
                 }
@@ -631,18 +632,24 @@ public class StyleHelper {
                         if (e + 1 < edit.length() && edit.charAt(e) == '\n')
                             e++;
 
-                        for (Object span : edit.getSpans(start, e, Object.class))
-                            if (!(span instanceof ImageSpan)) {
-                                int sstart = edit.getSpanStart(span);
-                                int send = edit.getSpanEnd(span);
-                                int flags = edit.getSpanFlags(span);
-                                if (sstart < start && send > start)
-                                    setSpan(edit, span, sstart, start, flags, etBody.getContext());
-                                if (sstart < end && send > end)
-                                    setSpan(edit, span, e, send, flags, etBody.getContext());
+                        for (Object span : edit.getSpans(start, e, Object.class)) {
+                            if (span instanceof ImageSpan || span instanceof SuggestionSpan)
+                                continue;
 
-                                edit.removeSpan(span);
-                            }
+                            int sstart = edit.getSpanStart(span);
+                            int send = edit.getSpanEnd(span);
+                            int flags = edit.getSpanFlags(span);
+
+                            if ((flags & Spanned.SPAN_COMPOSING) != 0)
+                                continue;
+
+                            if (sstart < start && send > start)
+                                setSpan(edit, span, sstart, start, flags, etBody.getContext());
+                            if (sstart < end && send > end)
+                                setSpan(edit, span, e, send, flags, etBody.getContext());
+
+                            edit.removeSpan(span);
+                        }
 
                         etBody.setText(edit);
                         etBody.setSelection(start, e);
@@ -695,9 +702,16 @@ public class StyleHelper {
             } else if (action == R.id.menu_clear) {
                 Log.breadcrumb("style", "action", "clear/all");
 
-                for (Object span : edit.getSpans(0, etBody.length(), Object.class))
-                    if (!(span instanceof ImageSpan))
-                        edit.removeSpan(span);
+                for (Object span : edit.getSpans(0, etBody.length(), Object.class)) {
+                    if (span instanceof ImageSpan || span instanceof SuggestionSpan)
+                        continue;
+
+                    int flags = edit.getSpanFlags(span);
+                    if ((flags & Spanned.SPAN_COMPOSING) != 0)
+                        continue;
+
+                    edit.removeSpan(span);
+                }
 
                 etBody.setText(edit);
                 etBody.setSelection(start, end);

@@ -73,12 +73,14 @@
     <string name="title_block">Αποκλεισμός %1$s</string>
     <string name="title_block_sender">Αποκλεισμός αποστολέα</string>
     <string name="title_block_domain">Αποκλεισμός τομέα αποστολέα</string>
-    <string name="title_block_sender_hint">         Ο  αποκλεισμός ενός αποστολέα θα δημιουργήσει έναν κανόνα ο οποίος αυτόματα θα μετακινεί τα μελλοντικά μηνύματα στον φάκελο των ανεπιθύμητων.
-        Η δημιουργία και χρήση κανόνων είναι μια δυνατότητα της έκδοσης Pro.
+    <string name="title_block_sender_hint">        Ο αποκλεισμός ενός αποστολέα είναι μια δωρεάν δυνατότητα.
+        Ο αποκλεισμός ενός τομέα αποστολέα χρησιμοποιεί κανόνες φιλτραρίσματος, κάτι που αποτελεί δυνατότητα της έκδοσης Pro.
     </string>
     <string name="title_junk_filter">Χρήση τοπικού φίλτρου ανεπιθ. αλληλογραφίας</string>
-    <string name="title_junk_filter_hint">Αυτό μπορεί να αυξήσει τη χρήση της μπαταρίας και να σημάνει εσφαλμένα μηνύματα ως spam</string>
-    <string name="title_junk_blocklist">Χρήση λιστών αποκλεισμού σπαμ</string>
+    <string name="title_junk_filter_hint">Αυτό μπορεί να αυξήσει τη χρήση της μπαταρίας και να σημάνει εσφαλμένα μηνύματα ως ανεπιθύμητα</string>
+    <string name="title_junk_blocklist">Χρήση λιστών αποκλεισμού Ανεπιθύμητων</string>
+    <string name="title_junk_clear">Καθαρισμός</string>
+    <string name="title_junk_clear_hint">Αυτό θα διαγράψει όλους τους κανόνες αποκλεισμού αποστολέα</string>
     <string name="title_notification_sending">Αποστολή μηνυμάτων</string>
     <string name="title_notification_waiting">Αναμονή για κατάλληλη σύνδεση</string>
     <string name="title_notification_idle">Σε αδράνεια</string>
@@ -121,6 +123,7 @@
     <string name="title_setup_intro">Η ρύθμιση ενός λογαριασμού αποτελείται από τρία μόνο βήματα και μετά μπορείτε να στέλνετε και να λαμβάνετε μηνύματα ηλ. ταχυδρομείου</string>
     <string name="title_setup_simple">Δεν χρειάζεται να αλλάξετε άλλες επιλογές</string>
     <string name="title_setup_issue">Το FairEmail αναπτύχθηκε για να προστατεύσει το ιδιωτικό σας απόρρητο, και αντιπροσωπεύει, κυριολεκτικά, χιλιάδες ώρες εργασίας. Αν αντιμετωπίζετε οποιοδήποτε πρόβλημα, παρακαλώ, επικοινωνήστε πρώτα μαζί μου για υποστήριξη, προτού γράψετε μια αρνητική κριτική. Θα χαρώ να σας βοηθήσω!</string>
+    <string name="title_setup_analytics">Το FairEmail δεν προβάλλει διαφημίσεις και δεν παρακολουθεί ή αναλύει τη συμπεριφορά σας. Το Bugsnag χρησιμοποιείται για την αναφορά σφαλμάτων και είναι απενεργοποιημένο από προεπιλογή.</string>
     <string name="title_setup_quick_accounts">Προσθήκη ή αλλαγή λογαριασμών</string>
     <string name="title_setup_quick_support">Ορισμένοι πάροχοι δυσχεραίνουν την προσθήκη ενός λογαριασμού. Παρακαλούμε, μην κατηγορείτε το FairEmail για αυτό, αλλά δοκιμάστε να λάβετε υποστήριξη.</string>
     <string name="title_setup_quick_hint">Η γρήγορη ρύθμιση θα ανακτήσει πληροφορίες εγκατάστασης από το autoconfig.thunderbird.net</string>
@@ -279,8 +282,8 @@
     <string name="title_advanced_check_authentication">Έλεγχος ταυτοποίησης μηνύματος</string>
     <string name="title_advanced_check_reply_domain">Να ελέγχεται η διεύθυνση απάντησης κατά τον συγχρονισμό των μηνυμάτων</string>
     <string name="title_advanced_check_mx">Έλεγχος διευθύνσεων των αποστολέων κατά τον συγχρονισμό μηνυμάτων</string>
-    <string name="title_advanced_check_blocklist">Έλεγχος αν το όνομα τομέα του αποστολέα περιλαμβάνεται σε λίστα αποκλεισμού σπαμ</string>
-    <string name="title_advanced_use_blocklist">Μετακίνηση μηνυμάτων από τομείς σε μια λίστα αποκλεισμού, προς τον φάκελο σπαμ</string>
+    <string name="title_advanced_check_blocklist">Έλεγχος αν το όνομα τομέα του αποστολέα περιλαμβάνεται σε λίστα αποκλεισμού ανεπιθύμητης αλληλογραφίας</string>
+    <string name="title_advanced_use_blocklist">Μετακίνηση μηνυμάτων από τομείς σε μια λίστα αποκλεισμού, προς τον φάκελο Ανεπιθύμητων</string>
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
     <string name="title_advanced_keyboard">Εμφάνιση του πληκτρολογίου από προεπιλογή</string>
     <string name="title_advanced_keyboard_no_fullscreen">Να μην προβάλλεται το πληκτρολόγιο σε πλήρη οθόνη</string>
@@ -324,6 +327,7 @@
     <string name="title_advanced_download_headers">Λήψη όλων των κεφαλίδων μηνυμάτων</string>
     <string name="title_advanced_download_eml">Λήψη αρχείων αρχικών μηνυμάτων</string>
     <string name="title_advanced_validated">Απαιτείται επικυρωμένη (επαληθευμένη) σύνδεση</string>
+    <string name="title_advanced_vpn_only">Σύνδεση μόνο μέσω VPN</string>
     <string name="title_advanced_timeout">Χρονικό όριο σύνδεσης (δευτερόλεπτα)</string>
     <string name="title_advanced_prefer_ip4">Να προτιμάται IPv4 παρά IPv6</string>
     <string name="title_advanced_ssl_harden">Θωράκιση συνδέσεων SSL</string>
@@ -350,12 +354,12 @@
     <string name="title_advanced_tabular_background">Να χρησιμοποιείται το χρώμα της κάρτας ως χρώμα φόντου κατά τη χρήση του στιλ πίνακα</string>
     <string name="title_advanced_cards_shadow">Σκίαση μη αναγνωσμένων μηνυμάτων κατά τη χρήση στιλ κάρτας</string>
     <string name="title_advanced_date_header">Ομαδοποίηση κατά ημερομηνία</string>
+    <string name="title_advanced_date_fixed">Προβολή κεφαλίδας σταθερής ημερομηνίας στην κορυφή</string>
     <string name="title_advanced_date_bold">Προβολή ημερομηνίας με έντονους χαρακτήρες</string>
     <string name="title_advanced_threading">Ομαδοποίηση συζητήσεων σε νήματα</string>
     <string name="title_advanced_threading_unread">Προβολή αριθμού μη αναγνωσμένων μηνυμάτων στις συζητήσεις</string>
     <string name="title_advanced_indentation">Αριστερή/δεξιά εσοχή ειλημμένων/απεσταλμένων μηνυμάτων στις συζητήσεις</string>
     <string name="title_advanced_highlight_unread">Να επισημαίνονται τα μη αναγνωσμένα μηνύματα</string>
-    <string name="title_advanced_highlight_subject">Να επισημαίνεται το θέμα</string>
     <string name="title_advanced_color_stripe">Προβολή χρωματιστής λωρίδας</string>
     <string name="title_advanced_avatars">Προβολή φωτογραφιών επαφών</string>
     <string name="title_advanced_gravatars">Προβολή Gravatar</string>
@@ -374,10 +378,13 @@
     <string name="title_advanced_distinguish_contacts">Να υπογραμμίζεται ο αποστολέας όταν ο αποστολέας είναι γνωστός ως τοπική επαφή</string>
     <string name="title_advanced_show_recipients">Να προβάλλονται οι παραλήπτες στην κεφαλίδα του μηνύματος</string>
     <string name="title_advanced_font_size_sender">Μέγεθος γραμματοσειράς για το πεδίο \"Αποστολέας\"</string>
-    <string name="title_advanced_font_size_subject">Μέγεθος γραμματοσειράς για το πεδίο \"Θέμα\"</string>
+    <string name="title_advanced_sender_ellipsize">Να συντομεύεται ο αποστολέας, εφόσον χρειάζεται</string>
     <string name="title_advanced_subject_top">Να προβάλλεται το θέμα πάνω από τον αποστολέα</string>
     <string name="title_advanced_subject_italic">Να προβάλλεται το θέμα σε πλάγια γραφή</string>
-    <string name="title_advanced_subject_elipsed">Να συντομεύεται το θέμα, εφόσον χρειάζεται</string>
+    <string name="title_advanced_highlight_subject">Να επισημαίνεται το θέμα</string>
+    <string name="title_advanced_font_size_subject">Μέγεθος γραμματοσειράς για το πεδίο \"Θέμα\"</string>
+    <string name="title_advanced_subject_ellipsize">Να συντομεύεται το θέμα, εφόσον χρειάζεται</string>
+    <string name="title_advanced_compact_mode_remark">Μόνο συμπαγής λειτουργία</string>
     <string name="title_advanced_highlight_color">Χρώμα επισήμανσης</string>
     <string name="title_advanced_keywords">Να προβάλλονται οι λέξεις-κλειδιά στην κεφαλίδα του μηνύματος</string>
     <string name="title_advanced_labels">Να προβάλλονται οι ετικέτες Gmail στην κεφαλίδα του μηνύματος</string>
@@ -504,6 +511,11 @@
     <string name="title_advanced_autocrypt">Χρήση Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Αμοιβαία λειτουργία Autocrypt</string>
     <string name="title_advanced_encrypt_subject">Κρυπτογράφηση θέματος</string>
+    <string name="title_advanced_sign_algo">Αλγόριθμος υπογραφής</string>
+    <string name="title_advanced_encrypt_algo">Αλγόριθμος κρυπτογράφησης</string>
+    <string name="title_advanced_remark_algo">        Παρακαλούμε, λάβετε υπόψη ότι δεν υποστηρίζουν όλοι οι πελάτες ηλεκτρονικού ταχυδρομείου όλους τους αλγορίθμους.
+        Οι προεπιλεγμένοι αλγόριθμοι SHA256  και AES128 συνήθως υποστηρίζονται.
+    </string>
     <string name="title_advanced_check_certificate">Επαλήθευση δημόσιου κλειδιού κατά την αποστολή</string>
     <string name="title_advanced_manage_certificates">Διαχείριση δημόσιων κλειδιών</string>
     <string name="title_advanced_import_key">Εισαγωγή ιδιωτικού κλειδιού</string>
@@ -525,6 +537,7 @@
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
     <string name="title_advanced_check_weekly">Εβδομαδιαίος έλεγχος αντί για καθημερινός</string>
+    <string name="title_advanced_changelog">Προβολή ιστορικού αλλαγών μετά την ενημέρωση</string>
     <string name="title_advanced_experiments">Δοκιμή πειραματικών χαρακτηριστικών</string>
     <string name="title_advanced_crash_reports">Αποστολή αναφοράς σφαλμάτων</string>
     <string name="title_advanced_cleanup_attachments">Διαγραφή συνημμένων από παλιά μηνύματα</string>
@@ -534,7 +547,6 @@
     <string name="title_advanced_protocol">Τήρηση αρχείων καταγραφής πρωτοκόλλου</string>
     <string name="title_advanced_log_info">Καταγραφές αποσφαλμάτωσης</string>
     <string name="title_advanced_debug">Λειτουργία αποσφαλμάτωσης</string>
-    <string name="title_advanced_query_threads">Περιορισμός παράλληλων προσβάσεων στη βάση δεδομένων</string>
     <string name="title_advanced_manual_hint">Αν η λήψη μηνυμάτων είναι απενεργοποιημένη, μπορεί ακόμη να γίνει χειροκίνητη λήψη, σύροντας προς τα κάτω τη λίστα μηνυμάτων</string>
     <string name="title_advanced_poll_hint">Ο περιοδικός έλεγχος για νέα μηνύματα συγκρίνει τοπικά και απομακρυσμένα μηνύματα κάθε φορά, το οποίο είναι μια κοστοβόρα διεργασία και μπορεί να οδηγήσει σε πρόσθετη κατανάλωση μπαταρίας, ιδίως αν υπάρχουν πολλά μηνύματα. Αυτό αποτρέπεται χάρη στην επιλογή \"Πάντα λήψη\", η οποία διαρκώς παρακολουθεί μόνον τις εκάστοτε αλλαγές.</string>
     <string name="title_advanced_optimize_hint">Ενδέχεται να αλλάξει τη συχνότητα συγχρονισμού για εξοικονόμηση μπαταρίας ανάλογα με τις δυνατότητες και τη συμπεριφορά των διακομιστών ηλ. ταχυδρομείου</string>
@@ -608,7 +620,6 @@
     <string name="title_advanced_move_hint">Μπορείτε να ρυθμίσετε τον φάκελο προορισμού στις ρυθμίσεις του λογαριασμού</string>
     <string name="title_advanced_notify_no_grouping">Αυτή η έκδοση του Android δεν υποστηρίζει ομαδοποίηση ειδοποιήσεων</string>
     <string name="title_advanced_notify_no_channels">Αυτή η έκδοση του Android δεν υποστηρίζει κανάλια ειδοποιήσεων</string>
-    <string name="title_advanced_queries_hint">Αν ενεργοποιηθεί, θα μειώσει τις επιδόσεις, απαιτείται όμως να ενεργοποιηθεί σε ορισμένες συσκευές</string>
     <string name="title_advanced_fts_hint">Αν ενεργοποιηθεί, βελτιώνεται η απόδοση της αναζήτησης, αλλά αυξάνονται επίσης η χρήση της μπαταρίας και του αποθηκευτικού χώρου</string>
     <string name="title_advanced_english_hint">Θα επανεκκινήσει την εφαρμογή</string>
     <string name="title_advanced_experiments_hint">Λίστα των τρεχόντων πειραματικών χαρακτηριστικών</string>
@@ -699,7 +710,7 @@
     <string name="title_no_password">Λείπει κωδικός πρόσβασης</string>
     <string name="title_no_inbox">Δεν βρέθηκαν εισερχόμενα</string>
     <string name="title_no_drafts">Δεν βρέθηκε φάκελος με πρόχειρα</string>
-    <string name="title_no_junk_folder">Δεν έχει επιλεγεί φάκελος ανεπιθύμητων για αυτόν τον λογαριασμό</string>
+    <string name="title_no_junk_folder">Δεν έχει επιλεγεί φάκελος Ανεπιθύμητων για αυτόν τον λογαριασμό</string>
     <string name="title_default_composable">Η προεπιλεγμένη διεύθυνση ηλ. ταχυδρομείου καθορίζεται από την κύρια ταυτότητα του κύριου λογαριασμού</string>
     <string name="title_no_composable">Για την αποστολή μηνυμάτων απαιτείται να ρυθμιστεί μια ταυτότητα και να επιλεγεί ένα φάκελος για πρόχειρα στις ρυθμίσεις λογαριασμού</string>
     <string name="title_no_standard">Αυτός ο πάροχος χρησιμοποιεί ιδιόκτητο πρωτόκολλο ηλ. ταχυδρομείου και, ως εκ τούτου, δεν υποστηρίζει τη χρήση ενός ανεξάρτητου πελάτη ηλ. ταχυδρομείου</string>
@@ -742,7 +753,7 @@
     <string name="title_delete_local">Διαγραφή τοπικών μηνυμάτων</string>
     <string name="title_delete_browsed">Διαγραφή των φυλλομετρημένων/αναζητημένων μηνυμάτων</string>
     <string name="title_empty_trash">Άδειασμα κάδου απορριμμάτων</string>
-    <string name="title_empty_spam">Άδειασμα ανεπιθύμητων</string>
+    <string name="title_empty_spam">Άδειασμα Ανεπιθύμητων</string>
     <string name="title_edit_properties">Επεξεργασία ιδιοτήτων</string>
     <string name="title_edit_rules">Επεξεργασία κανόνων</string>
     <string name="title_execute_rules">Εκτέλεση κανόνων</string>
@@ -754,9 +765,9 @@
     <string name="title_edit_contact">Επεξεργασία επαφής</string>
     <string name="title_create_sub_folder">Δημιουργία υποφακέλου</string>
     <string name="title_empty_trash_ask">Οριστική διαγραφή όλων των απορριμμάτων;</string>
-    <string name="title_empty_spam_ask">Οριστική διαγραφή όλων των ανεπιθύμητων;</string>
+    <string name="title_empty_spam_ask">Οριστική διαγραφή όλων των Ανεπιθύμητων;</string>
     <string name="title_empty_trash_all_ask">Οριστική διαγραφή όλων των απορριμμάτων όλων των λογαριασμών;</string>
-    <string name="title_empty_spam_all_ask">Οριστική διαγραφή όλων των ανεπιθύμητων όλων των λογαριασμών;</string>
+    <string name="title_empty_spam_all_ask">Οριστική διαγραφή όλων των Ανεπιθύμητων όλων των λογαριασμών;</string>
     <string name="title_empty_all">Θα διαγράψει όλα τα μηνύματα και από τη συσκευή και από τον εξυπηρετητή</string>
     <string name="title_delete_operation_title">Διαγραφή δραστηριοτήτων</string>
     <string name="title_delete_operation_error">Με ένα μήνυμα σφάλματος</string>
@@ -775,6 +786,7 @@
     <string name="title_show_folders">Εμφάνιση κρυμμένων φακέλων</string>
     <string name="title_show_flagged">Εμφάνιση του αριθμού μηνυμάτων με αστέρι</string>
     <string name="title_subscribed_only">Μόνο με συνδρομή</string>
+    <string name="title_sort_unread_atop">Ταξινόμηση των μη αναγνωσμένων στην κορυφή</string>
     <string name="title_search_folder">Αναζήτηση φακέλου</string>
     <string name="title_apply_to_all">Εφαρμογή σε όλα</string>
     <string name="title_hide_folder">Απόκρυψη φακέλου</string>
@@ -847,6 +859,7 @@
     <string name="title_editasnew">Επεξεργασία ως νέου</string>
     <string name="title_edit_notes">Επεξεργασία τοπικών σημειώσεων</string>
     <string name="title_create_rule">Δημιουργία κανόνα &#8230;</string>
+    <string name="title_force_light">Υποχρεωτικό φωτεινό θέμα</string>
     <string name="title_share">Κοινοποίηση</string>
     <string name="title_event">Προσθήκη στο ημερολόγιο</string>
     <string name="title_pin">Προσθήκη συντόμευσης</string>
@@ -867,6 +880,7 @@
     <string name="title_download_all">Κατέβασμα όλων</string>
     <string name="title_save_all">Αποθήκευση όλων</string>
     <string name="title_save_eml">Αποθήκευση αρχείου αρχικού μηνύματος</string>
+    <string name="title_eml_remark">Για να προωθήσετε μηνύματα, τα ακατέργαστα (αρχικά) μηνύματα πρέπει να κατέβουν από τον διακομιστή ηλεκτρονικού ταχυδρομείου. Απαιτείται σύνδεση στο διαδίκτυο για αυτό και τα μηνύματα πρέπει να εξακολουθούν να είναι αποθηκευμένα στον διακομιστή ηλ. ταχυδρομείου.</string>
     <string name="title_eml_option">Αυτό μπορεί να αποφευχθεί, ενεργοποιώντας να γίνεται πάντα λήψη των αρχείων αρχικών μηνυμάτων στις ρυθμίσεις σύνδεσης</string>
     <string name="title_eml_downloaded">Αρχικά μηνύματα που κατέβηκαν: %1$s</string>
     <string name="title_buttons">Επιλέξτε κουμπιά</string>
@@ -906,7 +920,7 @@
     <string name="title_move_undo">Μετακίνηση προς %1$s (%2$d)</string>
     <string name="title_open_with">Άνοιγμα με</string>
     <string name="title_authentication_failed">Η ταυτοποίηση %1$s απέτυχε</string>
-    <string name="title_on_blocklist">Σε λίστα αποκλεισμού σπαμ</string>
+    <string name="title_on_blocklist">Σε λίστα αποκλεισμού ανεπιθύμητης αλληλογραφίας</string>
     <string name="title_receipt_subject">Αποδεικτικό ανάγνωσης: %1$s</string>
     <string name="title_receipt_text">Αυτό το αποδεικτικό ανάγνωσης πιστοποιεί μόνον ότι το μήνυμα έχει προβληθεί. Δεν υπάρχει εγγύηση ότι ο αποδέκτης έχει διαβάσει το περιεχόμενο του μηνύματος.</string>
     <string name="title_no_answers">Δεν έχουν οριστεί πρότυπα</string>
@@ -941,7 +955,6 @@
     <string name="title_ask_delete_rule">Οριστική διαγραφή του κανόνα;</string>
     <string name="title_ask_discard">Απόρριψη προχείρου;</string>
     <string name="title_ask_show_html">Η προβολή του αρχικού μηνύματος μπορεί να προδώσει ευαίσθητα προσωπικά δεδομένα</string>
-    <string name="title_ask_show_html_dark">Χρήση σκοτεινού θέματος</string>
     <string name="title_ask_show_html_remark">Η προβολή του αρχικού μηνύματος σε σκούρο φόντο δεν είναι εφικτή, καθώς ενδέχεται να κάνει αόρατα κείμενα και εικόνες με σκούρα χρώματα</string>
     <string name="title_ask_show_html_images">Να προβάλλονται πάντοτε οι εικόνες κατά την προβολή των αρχικών μηνυμάτων</string>
     <string name="title_ask_show_image">Η προβολή των εικόνων ίσως προκαλέσει διαρροή ευαίσθητων προσωπικών δεδομένων</string>
@@ -1102,6 +1115,7 @@
     <string name="title_signature_sender">Διεύθυνση αποστολέα</string>
     <string name="title_signature_email">Διεύθυνση της υπογραφής</string>
     <string name="title_signature_mismatch">Η διεύθυνση ηλ. ταχυδρομείου του αποστολέα δεν ταιριάζει με την υπογραφή</string>
+    <string name="title_signature_algorithm">Αλγόριθμος</string>
     <string name="title_signature_subject">Θέμα</string>
     <string name="title_signature_validity">Εγκυρότητα</string>
     <string name="title_signature_outdated">Το δημόσιο κλειδί δεν είναι έγκυρο αυτή τη στιγμή</string>
@@ -1133,7 +1147,7 @@
     <string name="title_search_with_attachments">Με συνημμένα (μόνο στη συσκευή)</string>
     <string name="title_search_with_size">Μέγεθος μηνύματος μεγαλύτερο από</string>
     <string name="title_search_in_trash">Στον κάδο απορριμμάτων</string>
-    <string name="title_search_in_junk">Στα ανεπιθύμητα</string>
+    <string name="title_search_in_junk">Στα Ανεπιθύμητα</string>
     <string name="title_search_with_before">Πριν από</string>
     <string name="title_search_with_after">Μετά από</string>
     <string name="title_search_flag_unseen">μη αναγνωσμένα</string>
@@ -1177,6 +1191,7 @@
     <string name="title_previous">Προηγούμενο</string>
     <string name="title_next">Επόμενο</string>
     <string name="title_edit_signature">Επεξεργασία υπογραφής</string>
+    <string name="title_edit_signature_remark">Παρόλο που το Android δεν μπορεί να προβάλει όλον τον κώδικα HTML, θα αποσταλεί έτσι όπως είναι</string>
     <string name="title_edit_signature_text">Κείμενο υπογραφής</string>
     <string name="title_edit_signature_image">Εισαγωγή εικόνας</string>
     <string name="title_answer_caption">Επεξεργασία προτύπου</string>
@@ -1383,6 +1398,7 @@
     <string name="title_hint_reformat">Από προεπιλογή, το FairEmail αναμορφοποιεί τα μηνύματα για λόγους ιδιωτικότητας και ασφάλειας. Για να δείτε το αρχικό μήνυμα, πατήστε στο εικονίδιο \"πλήρης οθόνη\" πάνω από το κείμενο του μηνύματος.</string>
     <string name="title_hint_design">Ο σχεδιασμός είναι εστιασμένος στην αυξημένη λειτουργικότητα χωρίς περισπάσεις. Προσφέρονται πολλές επιλογές για εξατομικευμένη εμφάνιση αλλά, παρακαλούμε, λάβετε υπόψη πως είναι αδύνατο να μένουν οι πάντες πάντα ευχαριστημένοι.</string>
     <string name="title_hint_junk">Η διαλογή ανεπιθύμητης αλληλογραφίας θα πρέπει να γίνεται από έναν εξυπηρετητή ηλ. ταχυδρομείου, καθώς δεν μπορεί να πραγματοποιηθεί αξιόπιστα σε μια συσκευή με μπαταρία, η οποία έχει περιορισμένες δυνατότητες.</string>
+    <string name="title_hint_junk_learn">Μετακινώντας μηνύματα προς και από τον φάκελο Ανεπιθύμητων, ο διακομιστής ηλ. αλληγραφίας \"μαθαίνει\" ποια είναι τα ανεπιθύμητα μηνύματα</string>
     <string name="title_hint_contact_actions">Πατήστε παρατεταμένα για επιλογές</string>
     <string name="title_hint_eml">Αυτό είναι μια σύνοψη του περιεχομένου ενός αρχείου αρχικού μηνύματος. Αποθηκεύστε το αρχικό μήνυμα μέσω του εικονιδίου αποθήκευσης στη γραμμή ενεργειών, για να δείτε όλο το περιεχόμενο.</string>
     <string name="title_open_link">Άνοιγμα συνδέσμου</string>
@@ -1477,9 +1493,7 @@
     <string name="title_rules_export">Εξαγωγή κανόνων</string>
     <string name="title_rules_import">Εισαγωγή κανόνων</string>
     <string name="title_rules_delete_all">Διαγραφή όλων των κανόνων</string>
-    <string name="title_rules_delete_junk">Διαγραφή κανόνων ανεπιθ. αλληλογραφίας</string>
     <string name="title_rules_delete_all_confirm">Διαγραφή όλων των κανόνων;</string>
-    <string name="title_rules_delete_junk_confirm">Να διαγραφούν όλοι οι κανόνες μετακίνησης μηνυμάτων στην ανεπιθ. αλληλογραφία;</string>
     <string name="title_debug_info">Πληροφορίες απασφαλμάτωσης</string>
     <string name="title_debug_info_remark">Παρακαλούμε, περιγράψτε το πρόβλημα καθώς και τον χρόνο εμφάνισής του:</string>
     <string name="title_crash_info_remark">Παρακαλούμε, περιγράψτε τι κάνατε τη στιγμή που η εφαρμογή σταμάτησε να λειτουργεί:</string>
@@ -1676,4 +1690,7 @@
         <item>Μέιλ μόνο</item>
         <item>Όνομα και μέιλ</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

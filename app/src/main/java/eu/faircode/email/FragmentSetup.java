@@ -67,6 +67,9 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvPrivacy;
     private TextView tvSupport;
 
+    private ImageButton ibWelcome;
+    private Group grpWelcome;
+
     private TextView tvNoInternet;
     private ImageButton ibHelp;
     private Button btnQuick;
@@ -94,6 +97,7 @@ public class FragmentSetup extends FragmentBase {
     private Button btnInexactAlarms;
     private Button btnBackgroundRestricted;
     private Button btnDataSaver;
+    private TextView tvStamina;
 
     private TextView tvBatteryUsage;
     private TextView tvSyncStopped;
@@ -128,6 +132,8 @@ public class FragmentSetup extends FragmentBase {
 
         tvPrivacy = view.findViewById(R.id.tvPrivacy);
         tvSupport = view.findViewById(R.id.tvSupport);
+        ibWelcome = view.findViewById(R.id.ibWelcome);
+        grpWelcome = view.findViewById(R.id.grpWelcome);
 
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         ibHelp = view.findViewById(R.id.ibHelp);
@@ -156,6 +162,7 @@ public class FragmentSetup extends FragmentBase {
         btnInexactAlarms = view.findViewById(R.id.btnInexactAlarms);
         btnBackgroundRestricted = view.findViewById(R.id.btnBackgroundRestricted);
         btnDataSaver = view.findViewById(R.id.btnDataSaver);
+        tvStamina = view.findViewById(R.id.tvStamina);
 
         tvBatteryUsage = view.findViewById(R.id.tvBatteryUsage);
         tvSyncStopped = view.findViewById(R.id.tvSyncStopped);
@@ -183,6 +190,18 @@ public class FragmentSetup extends FragmentBase {
                 Intent view = new Intent(Intent.ACTION_VIEW)
                         .setData(Helper.getSupportUri(v.getContext()));
                 v.getContext().startActivity(view);
+            }
+        });
+
+        updateWelcome();
+
+        ibWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+                boolean setup_welcome = !prefs.getBoolean("setup_welcome", true);
+                prefs.edit().putBoolean("setup_welcome", setup_welcome).apply();
+                updateWelcome();
             }
         });
 
@@ -427,6 +446,14 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        tvStamina.setPaintFlags(tvStamina.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvStamina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.DONTKILL_URI + "sony"), true);
+            }
+        });
+
         tvBatteryUsage.setPaintFlags(tvBatteryUsage.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvBatteryUsage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -513,6 +540,7 @@ public class FragmentSetup extends FragmentBase {
         grpInexactAlarms.setVisibility(View.GONE);
         grpBackgroundRestricted.setVisibility(View.GONE);
         grpDataSaver.setVisibility(View.GONE);
+        tvStamina.setVisibility(View.GONE);
 
         setContactsPermission(hasPermission(Manifest.permission.READ_CONTACTS));
 
@@ -646,6 +674,9 @@ public class FragmentSetup extends FragmentBase {
 
         grpDataSaver.setVisibility(ConnectionHelper.isDataSaving(getContext())
                 ? View.VISIBLE : View.GONE);
+
+        tvStamina.setVisibility(Helper.isStaminaEnabled(getContext())
+                ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -656,6 +687,13 @@ public class FragmentSetup extends FragmentBase {
             ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             cm.unregisterNetworkCallback(networkCallback);
         }
+    }
+
+    private void updateWelcome() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean setup_welcome = prefs.getBoolean("setup_welcome", true);
+        ibWelcome.setImageLevel(setup_welcome ? 0 /* less */ : 1 /* more */);
+        grpWelcome.setVisibility(setup_welcome ? View.VISIBLE : View.GONE);
     }
 
     private void updateManual() {

@@ -83,12 +83,14 @@
     <string name="title_block">Blochează %1$s</string>
     <string name="title_block_sender">Blochează expeditor</string>
     <string name="title_block_domain">Blocare domeniu expeditor</string>
-    <string name="title_block_sender_hint">        Blocarea unui expeditor va crea o regulă ce mută automat orice mesaj viitor în dosarul de spam.
-        Crearea și utilizarea regulilor este o caracteristică Pro.
+    <string name="title_block_sender_hint">        Blocarea unui expeditor este o funcție gratuită.
+        Blocarea unui domeniu de expeditor utilizează reguli de filtrare, ceea ce reprezintă o caracteristică profesională.
     </string>
     <string name="title_junk_filter">Utilizați filtrul de spam local</string>
     <string name="title_junk_filter_hint">Acest lucru poate crește utilizarea bateriei și marchează incorect mesajele ca spam</string>
     <string name="title_junk_blocklist">Utilizați listele de blocare a spam-ului</string>
+    <string name="title_junk_clear">Golește jurnalul</string>
+    <string name="title_junk_clear_hint">Aceasta va șterge toate regulile de blocare a expeditorului</string>
     <string name="title_notification_sending">Se trimit mesaje</string>
     <string name="title_notification_waiting">Se așteaptă o conexiune adecvată</string>
     <string name="title_notification_idle">Inactiv</string>
@@ -131,6 +133,7 @@
     <string name="title_setup_intro">Configurarea unui cont are doar trei pași și după aceea puteți trimite și primi e-mailuri</string>
     <string name="title_setup_simple">Nu este nevoie să schimbați alte opțiuni</string>
     <string name="title_setup_issue">FairEmail a fost dezvoltat pentru a vă ajuta să vă protejați confidențialitatea și reprezintă literalmente mii de ore de muncă. Dacă aveți probleme, vă rog să mă contactați mai întâi pentru asistență înainte de a lăsa o recenzie proastă. Sunt bucuros să vă ajut!</string>
+    <string name="title_setup_analytics">FairEmail nu afișează reclame și nu urmărește sau analizează comportamentul dumneavoastră. Bugsnag este utilizat pentru raportarea erorilor și este dezactivat în mod implicit.</string>
     <string name="title_setup_quick_accounts">Adăugați sau modificați conturi</string>
     <string name="title_setup_quick_support">Unii furnizori fac dificilă adăugarea unui cont. Vă rugăm să nu dați vina pe FairEmail pentru acest lucru, dar solicitați asistență în schimb.</string>
     <string name="title_setup_quick_hint">Se vor descărca informațiile necesare de pe autoconfig.thunderbird.net</string>
@@ -334,6 +337,7 @@
     <string name="title_advanced_download_headers">Descărcați toate anteturile mesajelor</string>
     <string name="title_advanced_download_eml">Descărcați fișiere cu mesaje brute</string>
     <string name="title_advanced_validated">Necesită o conexiune validată (verificată)</string>
+    <string name="title_advanced_vpn_only">Conectați-vă numai prin intermediul unui VPN</string>
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
     <string name="title_advanced_prefer_ip4">Preferă IPv4 înaintea IPv6</string>
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
@@ -360,12 +364,12 @@
     <string name="title_advanced_tabular_background">Utilizați culoarea cardului ca și culoare de fundal atunci când folosiți stilul tabular</string>
     <string name="title_advanced_cards_shadow">Utilizează umbra pentru mesajele necitite când se folosește stilul card</string>
     <string name="title_advanced_date_header">Grupare după dată</string>
+    <string name="title_advanced_date_fixed">Afișați antetul cu dată fixă în partea de sus</string>
     <string name="title_advanced_date_bold">Afișați data marcată cu bold</string>
     <string name="title_advanced_threading">Aranjare mesaje în conversație</string>
     <string name="title_advanced_threading_unread">Arată numărul de mesaje necitite în conversații</string>
     <string name="title_advanced_indentation">Aliniere mesaje primite/trimise în stânga/dreapta în conversații</string>
     <string name="title_advanced_highlight_unread">Evidențiază mesajele necitite</string>
-    <string name="title_advanced_highlight_subject">Evidențiază subiect</string>
     <string name="title_advanced_color_stripe">Arată banda de culori</string>
     <string name="title_advanced_avatars">Arată pozele contactelor</string>
     <string name="title_advanced_gravatars">Arată iconițe de pe Gravatar</string>
@@ -384,10 +388,13 @@
     <string name="title_advanced_distinguish_contacts">Subliniază expeditorul atunci când este cunoscut drept un contact `către`</string>
     <string name="title_advanced_show_recipients">Arată destinatarii în antetul mesajului</string>
     <string name="title_advanced_font_size_sender">Mărime text expeditor</string>
-    <string name="title_advanced_font_size_subject">Mărime text subiect</string>
+    <string name="title_advanced_sender_ellipsize">Dacă este necesar, scurtați expeditorul</string>
     <string name="title_advanced_subject_top">Arată subiectul desupra expeditorului</string>
     <string name="title_advanced_subject_italic">Arată subiectul cursiv</string>
-    <string name="title_advanced_subject_elipsed">La nevoie, scurtează subiectul</string>
+    <string name="title_advanced_highlight_subject">Evidențiază subiect</string>
+    <string name="title_advanced_font_size_subject">Mărime text subiect</string>
+    <string name="title_advanced_subject_ellipsize">Dacă este necesar, scurtați subiectul</string>
+    <string name="title_advanced_compact_mode_remark">Numai în modul compact</string>
     <string name="title_advanced_highlight_color">Culoare de evidențiere</string>
     <string name="title_advanced_keywords">Arată cuvinte cheie în antetul mesajului</string>
     <string name="title_advanced_labels">Arată etichetele Gmail în antetul mesajului</string>
@@ -514,6 +521,11 @@
     <string name="title_advanced_autocrypt">Folosește Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Modul mutual Autocrypt</string>
     <string name="title_advanced_encrypt_subject">Criptează subiectul</string>
+    <string name="title_advanced_sign_algo">Algoritm de semnătură</string>
+    <string name="title_advanced_encrypt_algo">Algoritm de criptare</string>
+    <string name="title_advanced_remark_algo">        Vă rugăm să rețineți că nu toți clienții de e-mail acceptă toți algoritmii.
+        Algoritmii impliciți SHA256 și AES128 sunt suportați în mod obișnuit.
+    </string>
     <string name="title_advanced_check_certificate">Verifică cheia publică la trimitere</string>
     <string name="title_advanced_manage_certificates">Gestionare chei publice</string>
     <string name="title_advanced_import_key">Importare cheie privată</string>
@@ -536,6 +548,7 @@
     <string name="title_advanced_watchdog">Verifică periodic dacă FairEmail este încă activ</string>
     <string name="title_advanced_updates">Verificați dacă există actualizări pe Github</string>
     <string name="title_advanced_check_weekly">Verifică săptămânal în loc de zilnic</string>
+    <string name="title_advanced_changelog">Afișați lista de modificări după actualizare</string>
     <string name="title_advanced_experiments">Încercați funcţii experimentale</string>
     <string name="title_advanced_crash_reports">Trimite rapoarte de eroare</string>
     <string name="title_advanced_cleanup_attachments">Ştergeţi ataşamentele mesajelor vechi</string>
@@ -546,7 +559,6 @@
     <string name="title_advanced_protocol">Jurnalizare protocol</string>
     <string name="title_advanced_log_info">Jurnal depanare</string>
     <string name="title_advanced_debug">Depanare</string>
-    <string name="title_advanced_query_threads">Limitează accesul paralel la baza de date</string>
     <string name="title_advanced_manual_hint">Dacă primirea mesajelor este dezactivată, încă este posibilă primirea manuală a mesajelor glisând în jos lista de mesaje</string>
     <string name="title_advanced_poll_hint">Sincronizarea periodică va compara mesajele locale cu cele de pe server de fiecare dată, aceasta este o operațiune costisitoare ce va rezulta într-un consum ridicat al bateriei, mai ales atunci când sunt multe mesaje. Modul de sincronizare permanent evită aceasta prin monitorizarea continuă a schimbărilor.</string>
     <string name="title_advanced_optimize_hint">Acest lucru ar putea schimba frecvența de sincronizare pentru a economisi consumul bateriei în funcție de capacitățile și comportamentul serverelor de e-mail</string>
@@ -620,7 +632,6 @@
     <string name="title_advanced_move_hint">Dosarul țintă poate fi configurat în setările contului</string>
     <string name="title_advanced_notify_no_grouping">Această versiune de Android nu suportă gruparea notificărilor</string>
     <string name="title_advanced_notify_no_channels">Această versiune de Android nu suportă canale de notificare</string>
-    <string name="title_advanced_queries_hint">Activarea acesteia va scădea performanța, dar activarea este necesară pe unele dispozitive</string>
     <string name="title_advanced_fts_hint">Activată îmbunătățește performanța de căutare, dar de asemenea crește folosirea bateriei și a spațiului de stocare</string>
     <string name="title_advanced_english_hint">Aplicația se va restarta</string>
     <string name="title_advanced_experiments_hint">Lista de funcții experimentale curente</string>
@@ -787,6 +798,7 @@
     <string name="title_show_folders">Arată dosarele ascunse</string>
     <string name="title_show_flagged">Arată numărul de mesaje cu stea</string>
     <string name="title_subscribed_only">Doar abonat</string>
+    <string name="title_sort_unread_atop">Sortează necitite în partea de sus</string>
     <string name="title_search_folder">Căutare folder</string>
     <string name="title_apply_to_all">Aplică la toate</string>
     <string name="title_hide_folder">Ascunde dosar</string>
@@ -859,6 +871,7 @@
     <string name="title_editasnew">Editare ca nou</string>
     <string name="title_edit_notes">Editează notele locale</string>
     <string name="title_create_rule">Creare regulă &#8230;</string>
+    <string name="title_force_light">Tema forțată a luminii</string>
     <string name="title_share">Partajează</string>
     <string name="title_event">Adaugă în calendar</string>
     <string name="title_pin">Adaugă scurtătură</string>
@@ -879,6 +892,7 @@
     <string name="title_download_all">Descarcă tot</string>
     <string name="title_save_all">Salvează tot</string>
     <string name="title_save_eml">Salvează mesaj original în fișier</string>
+    <string name="title_eml_remark">Pentru a redirecționa mesajele, mesajele brute (originale) trebuie să fie descărcate de pe serverul de e-mail. Acest lucru necesită o conexiune la internet, iar mesajele trebuie să fie stocate în continuare pe serverul de e-mail.</string>
     <string name="title_eml_option">Acest lucru poate fi prevenit prin activarea funcției de descărcare permanentă a fișierelor de mesaje brute în setările de conectare</string>
     <string name="title_eml_downloaded">Mesaje brute descărcate: %1$s</string>
     <string name="title_buttons">Selectare butoane</string>
@@ -953,7 +967,6 @@
     <string name="title_ask_delete_rule">Ștergeți regula definitiv?</string>
     <string name="title_ask_discard">Renunțați la ciornă?</string>
     <string name="title_ask_show_html">Vizualizarea mesajului original poate duce la divulgarea de informații confidențiale</string>
-    <string name="title_ask_show_html_dark">Folosește tema întunecată</string>
     <string name="title_ask_show_html_remark">Afișarea mesajului original pe un fundal închis nu este posibilă pentru că imaginile și textul închise la culoare ar putea sa nu se vadă</string>
     <string name="title_ask_show_html_images">Arată mereu imaginile când se arată mesajele originale</string>
     <string name="title_ask_show_image">Vizualizarea imaginilor poate duce la divulgarea de informații confidențiale</string>
@@ -1114,6 +1127,7 @@
     <string name="title_signature_sender">Adresa expeditorului</string>
     <string name="title_signature_email">Adresa semnăturii</string>
     <string name="title_signature_mismatch">Adresa email a expeditorului și semnătura nu corespund</string>
+    <string name="title_signature_algorithm">Algoritm</string>
     <string name="title_signature_subject">Subiect</string>
     <string name="title_signature_validity">Valabilitate</string>
     <string name="title_signature_outdated">Această cheie publică nu este validă în acest moment</string>
@@ -1189,6 +1203,7 @@
     <string name="title_previous">Precedent</string>
     <string name="title_next">Următor</string>
     <string name="title_edit_signature">Editare semnătură</string>
+    <string name="title_edit_signature_remark">Deși Android nu poate afișa tot HTML-ul, acesta va fi trimis așa cum este</string>
     <string name="title_edit_signature_text">Text semnătură</string>
     <string name="title_edit_signature_image">Inserare imagine</string>
     <string name="title_answer_caption">Editare șablon</string>
@@ -1395,6 +1410,7 @@
     <string name="title_hint_reformat">În mod implicit, FairEmail reformatează mesajele din motive de confidenţialitate şi securitate. Pentru a vizualiza mesajul original, apăsaţi pictograma \"ecran complet\" deasupra textului mesajului.</string>
     <string name="title_hint_design">Designul este intenționat ca să nu distragă, ci este păstrat foarte funcțional. Există multe opțiuni pentru a personaliza aspectul, dar vă rugăm să înțelegeți că este imposibil să facem pe toată lumea fericită în același timp.</string>
     <string name="title_hint_junk">Filtrarea spam-ului ar trebui să fie efectuată de către serverul de e-mail și nu poate fi efectuată în mod fiabil pe un dispozitiv alimentat cu baterie și cu capacități limitate.</string>
+    <string name="title_hint_junk_learn">Prin mutarea mesajelor în și din folderul de spam, serverul de e-mail \"învață\" ce este un spam</string>
     <string name="title_hint_contact_actions">Atingeți lung pentru opțiuni</string>
     <string name="title_hint_eml">Acesta este sumarul conținutului unui fișier cu mesajul original. Salvați mesajul original folosind iconița de salvare din bara de acțiuni pentru a putea vizualiza tot conținutul.</string>
     <string name="title_open_link">Deschide legătura</string>
@@ -1489,9 +1505,7 @@
     <string name="title_rules_export">Exportă regulile</string>
     <string name="title_rules_import">Importă regulile</string>
     <string name="title_rules_delete_all">Șterge toate regulile</string>
-    <string name="title_rules_delete_junk">Ștergere reguli de spam</string>
     <string name="title_rules_delete_all_confirm">Ștergeți toate regulile?</string>
-    <string name="title_rules_delete_junk_confirm">Ştergeţi toate regulile care mută mesajele în folderul spam?</string>
     <string name="title_debug_info">Depanare</string>
     <string name="title_debug_info_remark">Va rog sa descrieți problema și să indicați momentul când s-a produs:</string>
     <string name="title_crash_info_remark">Vă rugăm să descrieți ce făceați atunci când aplicația s-a oprit:</string>
@@ -1689,4 +1703,7 @@
         <item>Doar e-mail</item>
         <item>Nume și e-mail</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

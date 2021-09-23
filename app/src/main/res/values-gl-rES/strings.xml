@@ -73,12 +73,10 @@
     <string name="title_block">Bloquear %1$s</string>
     <string name="title_block_sender">Bloquear remitente</string>
     <string name="title_block_domain">Bloquear o dominio do remitente</string>
-    <string name="title_block_sender_hint">        Bloquear un remitente vai crear unha regra para mover mensaxes futuras automaticamente ao cartafol de spam.
-        Crear e usar regras é unha característica avanzada (pro).
-    </string>
     <string name="title_junk_filter">Usar o filtro local de correo non desexado</string>
     <string name="title_junk_filter_hint">Isto pode aumentar o uso da batería e clasificar algunhas mensaxes incorrectamente como correo non desexado</string>
     <string name="title_junk_blocklist">Usar listas de spam</string>
+    <string name="title_junk_clear">Limpar</string>
     <string name="title_notification_sending">Enviando mensaxes</string>
     <string name="title_notification_waiting">Agardando por unha conexión axeitada</string>
     <string name="title_notification_idle">Inactivo</string>
@@ -327,7 +325,6 @@
     <string name="title_advanced_threading_unread">Mostrar o número de mensaxes sen ler nas conversas</string>
     <string name="title_advanced_indentation">Sangrar á esquerda/dereita as mensaxes enviadas/recibidas nas conversas</string>
     <string name="title_advanced_highlight_unread">Resaltar as mensaxes non lidas</string>
-    <string name="title_advanced_highlight_subject">Resaltar o asunto</string>
     <string name="title_advanced_color_stripe">Mostrar a banda de cor</string>
     <string name="title_advanced_avatars">Mostrar as fotos dos contactos</string>
     <string name="title_advanced_gravatars">Mostrar Gravatars</string>
@@ -346,10 +343,10 @@
     <string name="title_advanced_distinguish_contacts">Suliñar o remitente cando este é recoñecido como un destinatario local</string>
     <string name="title_advanced_show_recipients">Mostrar os destinatarios nas cabeceiras das mensaxes</string>
     <string name="title_advanced_font_size_sender">Tamaño do texto do remitente</string>
-    <string name="title_advanced_font_size_subject">Tamaño do texto do asunto</string>
     <string name="title_advanced_subject_top">Mostrar o asunto sobre o remitente</string>
     <string name="title_advanced_subject_italic">Mostrar o asunto en cursiva</string>
-    <string name="title_advanced_subject_elipsed">Abreviar o asunto se é preciso</string>
+    <string name="title_advanced_highlight_subject">Resaltar o asunto</string>
+    <string name="title_advanced_font_size_subject">Tamaño do texto do asunto</string>
     <string name="title_advanced_highlight_color">Cor de realce</string>
     <string name="title_advanced_keywords">Mostrar as palabras chave nas cabeceiras das mensaxes</string>
     <string name="title_advanced_labels">Mostrar as etiquetas de Gmail nas cabeceiras das mensaxes</string>
@@ -504,7 +501,6 @@
     <string name="title_advanced_protocol">Rexistros de protocolo</string>
     <string name="title_advanced_log_info">Rexistro de problemas</string>
     <string name="title_advanced_debug">Modo de depuración</string>
-    <string name="title_advanced_query_threads">Limitar o acceso simultáneo á base de datos</string>
     <string name="title_advanced_manual_hint">Se a recepción de mensaxes non está activa, aínda se poden recibir mensaxes manualmente tirando cara abaixo a lista de mensaxes</string>
     <string name="title_advanced_poll_hint">A comprobación periódica de novas mensaxes vai comparar as mensaxes locais e remotas de cada vez, o que é unha operación custosa que pode levar a un maior consumo de batería, especialmente se hai moitas mensaxes. Recibir sempre evita isto facendo un seguimento continuo dos cambios.</string>
     <string name="title_advanced_optimize_hint">Isto podería cambiar a frecuencia de sincronización para aforrar batería, dependendo das capacidades e comportamento dos servidores de correo</string>
@@ -574,7 +570,6 @@
     <string name="title_advanced_move_hint">O cartafol de destino pódese configurar na configuración das contas</string>
     <string name="title_advanced_notify_no_grouping">Esta versión de Android non pode agrupar as notificacións</string>
     <string name="title_advanced_notify_no_channels">Esta versión de Android non admite canles de notificación</string>
-    <string name="title_advanced_queries_hint">Activar isto penalizará o rendemento, máis en algúns dispositivos é imperativo</string>
     <string name="title_advanced_fts_hint">Activar isto mellora o rendemento de procura, pero tamén incrementa o uso da batería de do espazo de almacenamento</string>
     <string name="title_advanced_english_hint">Isto reiniciará a aplicación</string>
     <string name="title_advanced_experiments_hint">Lista de características experimentais</string>
@@ -895,7 +890,6 @@
     <string name="title_ask_delete_rule">Borrar regra definitivamente?</string>
     <string name="title_ask_discard">Desbotar borrador?</string>
     <string name="title_ask_show_html">Mostrar a mensaxe orixinal pode filtrar información privada sensible</string>
-    <string name="title_ask_show_html_dark">Empregar un tema escuro</string>
     <string name="title_ask_show_html_remark">Non é posible mostrar a mensaxe orixinal nun fondo escuro porque faría que os textos e as imaxes escuras tamén invisibles</string>
     <string name="title_ask_show_html_images">Mostrar sempre as imaxes cando se vexan as imaxes orixinais</string>
     <string name="title_ask_show_image">Mostrar imaxes pode filtrar información privada sensible</string>
@@ -1403,9 +1397,7 @@
     <string name="title_rules_export">Exportar regras</string>
     <string name="title_rules_import">Importar regras</string>
     <string name="title_rules_delete_all">Eliminar todas as regras</string>
-    <string name="title_rules_delete_junk">Eliminar regras de spam</string>
     <string name="title_rules_delete_all_confirm">Eliminar todas?</string>
-    <string name="title_rules_delete_junk_confirm">Eliminar todas as regras movendo as mensaxes ó cartafol spam?</string>
     <string name="title_debug_info">Información de depuración</string>
     <string name="title_debug_info_remark">Por favor, describa o problema e indique o tempo do problema:</string>
     <string name="title_crash_info_remark">Por favor, describa que estaba a facer cando a aplicación se detivo:</string>
@@ -1591,4 +1583,7 @@
         <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

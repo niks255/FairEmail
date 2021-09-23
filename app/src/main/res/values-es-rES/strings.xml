@@ -73,12 +73,10 @@
     <string name="title_block">Bloquear %1$s</string>
     <string name="title_block_sender">Bloquear remitente</string>
     <string name="title_block_domain">Bloquear dominio del remitente</string>
-    <string name="title_block_sender_hint">        Bloquear un remitente creará una regla para mover automáticamente los mensajes futuros a la carpeta de spam.
-        Crear y usar reglas es una característica Pro.
-    </string>
     <string name="title_junk_filter">Usar filtro de spam local</string>
     <string name="title_junk_filter_hint">Esto puede aumentar el uso de la batería y marcar incorrectamente mensajes como spam</string>
     <string name="title_junk_blocklist">Usar listas de bloqueo de spam</string>
+    <string name="title_junk_clear">Vaciar</string>
     <string name="title_notification_sending">Enviando mensajes</string>
     <string name="title_notification_waiting">Esperando conexión adecuada</string>
     <string name="title_notification_idle">Inactivo</string>
@@ -121,6 +119,7 @@
     <string name="title_setup_intro">Configurar una cuenta son sólo tres pasos y después puede enviar y recibir correos electrónicos</string>
     <string name="title_setup_simple">No hay necesidad de cambiar ninguna otra opción</string>
     <string name="title_setup_issue">FairEmail fue desarrollado para ayudarle a proteger su privacidad y representa literalmente miles de horas de trabajo. Si tiene algún problema, por favor contácteme primero para obtener ayuda antes de dejar una mala revisión. ¡Estoy encantado de ayudar!</string>
+    <string name="title_setup_analytics">FairEmail no muestra anuncios y no rastrea o analiza su comportamiento. Bugsnag se utiliza para informar de errores y está deshabilitado por defecto.</string>
     <string name="title_setup_quick_accounts">Añadir o cambiar cuentas</string>
     <string name="title_setup_quick_support">Algunos proveedores hacen difícil añadir una cuenta. Por favor, no culpe a FairEmail por esto, en su lugar pida ayuda.</string>
     <string name="title_setup_quick_hint">La configuración rápida obtendrá información de configuración de autoconfig.thunderbird.net</string>
@@ -324,6 +323,7 @@
     <string name="title_advanced_download_headers">Descargar todos los encabezados de mensajes</string>
     <string name="title_advanced_download_eml">Descargar archivos de mensajes sin procesar</string>
     <string name="title_advanced_validated">Requerir una conexión validada (comprobada)</string>
+    <string name="title_advanced_vpn_only">Conectar sólo a través de una VPN</string>
     <string name="title_advanced_timeout">Tiempo de espera de conexión (segundos)</string>
     <string name="title_advanced_prefer_ip4">Preferir IPv4 sobre IPv6</string>
     <string name="title_advanced_ssl_harden">Endurecer conexiones SSL</string>
@@ -350,12 +350,12 @@
     <string name="title_advanced_tabular_background">Usar el color de la tarjeta como color de fondo al utilizar el estilo tabular</string>
     <string name="title_advanced_cards_shadow">Usar sombra para mensajes no leídos al usar estilo de tarjeta</string>
     <string name="title_advanced_date_header">Agrupar por fecha</string>
+    <string name="title_advanced_date_fixed">Mostrar encabezado de fecha fijado en la parte superior</string>
     <string name="title_advanced_date_bold">Mostrar fecha en negrita</string>
     <string name="title_advanced_threading">Hilos de conversación</string>
     <string name="title_advanced_threading_unread">Mostrar número de mensajes no leídos en conversaciones</string>
     <string name="title_advanced_indentation">Sangría izquierda/derecha para mensajes recibidos/enviados en conversaciones</string>
     <string name="title_advanced_highlight_unread">Resaltar mensajes no leídos</string>
-    <string name="title_advanced_highlight_subject">Resaltar asunto</string>
     <string name="title_advanced_color_stripe">Mostrar raya de color</string>
     <string name="title_advanced_avatars">Mostrar fotos de contactos</string>
     <string name="title_advanced_gravatars">Mostrar Gravatares</string>
@@ -374,10 +374,13 @@
     <string name="title_advanced_distinguish_contacts">Subrayar el remitente cuando el remitente es conocido como contacto \'a:\' local</string>
     <string name="title_advanced_show_recipients">Mostrar destinatarios en el encabezado del mensaje</string>
     <string name="title_advanced_font_size_sender">Tamaño de fuente de remitente</string>
-    <string name="title_advanced_font_size_subject">Tamaño de fuente del asunto</string>
+    <string name="title_advanced_sender_ellipsize">Si es necesario, acortar el remitente</string>
     <string name="title_advanced_subject_top">Mostrar asunto arriba del remitente</string>
     <string name="title_advanced_subject_italic">Mostrar asunto en cursiva</string>
-    <string name="title_advanced_subject_elipsed">Acortar el asunto cuando sea necesario</string>
+    <string name="title_advanced_highlight_subject">Resaltar asunto</string>
+    <string name="title_advanced_font_size_subject">Tamaño de fuente del asunto</string>
+    <string name="title_advanced_subject_ellipsize">Si es necesario, acortar el asunto</string>
+    <string name="title_advanced_compact_mode_remark">Sólo modo compacto</string>
     <string name="title_advanced_highlight_color">Color de resaltado</string>
     <string name="title_advanced_keywords">Mostrar palabras clave en encabezado del mensaje</string>
     <string name="title_advanced_labels">Mostrar etiquetas de Gmail en encabezado de mensaje</string>
@@ -504,6 +507,11 @@
     <string name="title_advanced_autocrypt">Usar Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Modo mutuo Autocrypt</string>
     <string name="title_advanced_encrypt_subject">Cifrar asunto</string>
+    <string name="title_advanced_sign_algo">Algoritmo de firma</string>
+    <string name="title_advanced_encrypt_algo">Algoritmo de cifrado</string>
+    <string name="title_advanced_remark_algo">        Tenga en cuenta que no todos los clientes de correo electrónico soportan todos los algoritmos.
+        Los algoritmos por defecto SHA256 y AES128 son generalmente soportados.
+    </string>
     <string name="title_advanced_check_certificate">Comprobar clave pública al enviar</string>
     <string name="title_advanced_manage_certificates">Administrar claves públicas</string>
     <string name="title_advanced_import_key">Importar clave privada</string>
@@ -536,7 +544,6 @@
     <string name="title_advanced_protocol">Registro de protocolos</string>
     <string name="title_advanced_log_info">Registro de depuración</string>
     <string name="title_advanced_debug">Modo de depuración</string>
-    <string name="title_advanced_query_threads">Limitar acceso paralelo a la base de datos</string>
     <string name="title_advanced_manual_hint">Si la recepción de mensajes está desactivada, todavía es posible recibir mensajes manualmente tirando hacia abajo en la lista de mensajes</string>
     <string name="title_advanced_poll_hint">Comprobar periódicamente si hay nuevos mensajes comparará los mensajes locales y remotos cada vez, lo que es una operación costosa que puede resultar en un uso adicional de la batería, especialmente si hay muchos mensajes. Siempre recibir evitará esto siguiendo continuamente los cambios.</string>
     <string name="title_advanced_optimize_hint">Esto podría cambiar la frecuencia de sincronización para ahorrar batería dependiendo de las capacidades y el comportamiento de los servidores de correo electrónico</string>
@@ -610,7 +617,6 @@
     <string name="title_advanced_move_hint">La carpeta destino puede establecerse en la configuración de la cuenta</string>
     <string name="title_advanced_notify_no_grouping">Esta versión de Android no es compatible con la agrupación de notificaciones</string>
     <string name="title_advanced_notify_no_channels">Esta versión de Android no es compatible con canales de notificación</string>
-    <string name="title_advanced_queries_hint">Activar esto reducirá el rendimiento, sin embargo, es necesario activarlo en algunos dispositivos</string>
     <string name="title_advanced_fts_hint">Activar esto mejora el rendimiento de búsqueda, pero también aumenta el uso de batería y espacio de almacenamiento</string>
     <string name="title_advanced_english_hint">Esto reiniciará la app</string>
     <string name="title_advanced_experiments_hint">Lista de características experimentales actuales</string>
@@ -777,6 +783,7 @@
     <string name="title_show_folders">Mostrar carpetas ocultas</string>
     <string name="title_show_flagged">Mostrar cantidad de mensajes destacados</string>
     <string name="title_subscribed_only">Sólo suscritas</string>
+    <string name="title_sort_unread_atop">Mostrar no leídos arriba</string>
     <string name="title_search_folder">Buscar carpeta</string>
     <string name="title_apply_to_all">Aplicar a todos</string>
     <string name="title_hide_folder">Ocultar carpeta</string>
@@ -869,6 +876,7 @@
     <string name="title_download_all">Descargar todo</string>
     <string name="title_save_all">Guardar todo</string>
     <string name="title_save_eml">Guardar archivo de mensajes sin procesar</string>
+    <string name="title_eml_remark">Para reenviar mensajes, los mensajes sin procesar (originales) deben ser descargados desde el servidor de correo electrónico. Esto requiere una conexión a Internet y los mensajes deben estar aún almacenados en el servidor de correo electrónico.</string>
     <string name="title_eml_option">Esto se puede prevenir al habilitar siempre la descarga de archivos de mensajes sin procesar en la configuración de la conexión</string>
     <string name="title_eml_downloaded">Mensajes sin procesar descargados: %1$s</string>
     <string name="title_buttons">Seleccionar botones</string>
@@ -943,7 +951,6 @@
     <string name="title_ask_delete_rule">¿Eliminar regla permanentemente?</string>
     <string name="title_ask_discard">¿Descartar el borrador?</string>
     <string name="title_ask_show_html">Mostrar el mensaje original puede filtrar información privada sensible</string>
-    <string name="title_ask_show_html_dark">Usar tema oscuro</string>
     <string name="title_ask_show_html_remark">No es posible mostrar el mensaje original con un fondo oscuro porque puede causar que textos e imágenes oscuros sean invisibles</string>
     <string name="title_ask_show_html_images">Siempre mostrar imágenes al mostrar mensajes originales</string>
     <string name="title_ask_show_image">Mostrar imágenes puede filtrar información privada sensible</string>
@@ -1104,6 +1111,7 @@
     <string name="title_signature_sender">Dirección del remitente</string>
     <string name="title_signature_email">Dirección de la firma</string>
     <string name="title_signature_mismatch">La dirección de correo electrónico del remitente y la firma no coinciden</string>
+    <string name="title_signature_algorithm">Algorítmo</string>
     <string name="title_signature_subject">Asunto</string>
     <string name="title_signature_validity">Validez</string>
     <string name="title_signature_outdated">Esta clave pública no es válida actualmente</string>
@@ -1179,6 +1187,7 @@
     <string name="title_previous">Anterior</string>
     <string name="title_next">Siguiente</string>
     <string name="title_edit_signature">Editar firma</string>
+    <string name="title_edit_signature_remark">Aunque Android no puede mostrar todo el HTML, se enviará como es</string>
     <string name="title_edit_signature_text">Texto de la firma</string>
     <string name="title_edit_signature_image">Insertar imagen</string>
     <string name="title_answer_caption">Editar plantilla</string>
@@ -1385,6 +1394,7 @@
     <string name="title_hint_reformat">Por defecto, FairEmail reformatea los mensajes por razones de privacidad y seguridad. Para ver el mensaje original, pulse el icono \'pantalla completa\' sobre el texto del mensaje.</string>
     <string name="title_hint_design">El diseño intencionalmente no distrae, pero se mantiene altamente funcional. Hay muchas opciones para personalizar la apariencia, pero por favor entienda que es imposible hacer felices a todos al mismo tiempo.</string>
     <string name="title_hint_junk">El filtrado de spam debería ser hecho por el servidor de correo electrónico y no se puede hacer de forma confiable en un dispositivo alimentado con batería y de capacidades limitadas.</string>
+    <string name="title_hint_junk_learn">Al mover los mensajes hacia y desde la carpeta de spam, el servidor de correo electrónico \"aprende\" qué es spam</string>
     <string name="title_hint_contact_actions">Mantenga pulsado para opciones</string>
     <string name="title_hint_eml">Este es un resumen del contenido de un archivo de mensajes sin procesar. Guarde el mensaje sin procesar con el icono de guardar en la barra de acciones para ver todo el contenido.</string>
     <string name="title_open_link">Abrir enlace</string>
@@ -1479,9 +1489,7 @@
     <string name="title_rules_export">Exportar reglas</string>
     <string name="title_rules_import">Importar reglas</string>
     <string name="title_rules_delete_all">Eliminar todas las reglas</string>
-    <string name="title_rules_delete_junk">Eliminar reglas de spam</string>
     <string name="title_rules_delete_all_confirm">¿Eliminar todas las reglas?</string>
-    <string name="title_rules_delete_junk_confirm">¿Elimiar todas las reglas que mueven mensajes a la carpeta de spam?</string>
     <string name="title_debug_info">Información de depuración</string>
     <string name="title_debug_info_remark">Por favor describa el problema e indique el momento del mismo:</string>
     <string name="title_crash_info_remark">Por favor describa que estaba haciendo cuando la app falló:</string>
@@ -1678,4 +1686,7 @@
         <item>Sólo email</item>
         <item>Nombre y correo electrónico</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

@@ -73,12 +73,14 @@
     <string name="title_block">Bloquer %1$s</string>
     <string name="title_block_sender">Bloquer l\'expéditeur</string>
     <string name="title_block_domain">Bloquer le domaine de l\'expéditeur</string>
-    <string name="title_block_sender_hint">        Le blocage d\'un expéditeur créera une règle qui déplacera automatiquement les futurs messages vers le dossier courrier indésirable.
-        La création et l\'utilisation des règles sont des fonctionnalités Pro.
+    <string name="title_block_sender_hint">        Bloquer un expéditeur est une fonctionnalité gratuite.
+        Bloquer un domaine expéditeur utilise une règle de filtrage qui est une fonctionnalité Pro.
     </string>
     <string name="title_junk_filter">Utiliser le filtre de pourriel local</string>
     <string name="title_junk_filter_hint">Ceci peut augmenter l\'utilisation de la pile et marquer par erreur des messages comme indésirables</string>
     <string name="title_junk_blocklist">Utiliser des listes de blocage de courrier indésirable</string>
+    <string name="title_junk_clear">Effacer</string>
+    <string name="title_junk_clear_hint">Ceci supprimera toutes les règles de blocage d\'expéditeur</string>
     <string name="title_notification_sending">Envoi des messages en cours</string>
     <string name="title_notification_waiting">En attente d\'une connexion appropriée</string>
     <string name="title_notification_idle">Inactif</string>
@@ -121,6 +123,7 @@
     <string name="title_setup_intro">La configuration d\'un compte se fait en trois étapes seulement et après cela, vous pouvez envoyer et recevoir des courriels</string>
     <string name="title_setup_simple">Il n\'est pas nécessaire de modifier d\'autres options</string>
     <string name="title_setup_issue">FairEmail a été développé pour vous aider à protéger votre vie privée et représente littéralement des milliers d\'heures de travail. Si vous avez des problèmes, veuillez me contacter d\'abord pour obtenir de l\'aide avant de laisser une mauvaise évaluation. Je suis heureux de vous aider !</string>
+    <string name="title_setup_analytics">FairEmail n\'affiche pas de publicités et ne piste pas ou n\'analyse pas votre comportement. Bugsnag est utilisé pour les rapports d\'erreurs et est désactivé par défaut.</string>
     <string name="title_setup_quick_accounts">Ajouter ou modifier des comptes</string>
     <string name="title_setup_quick_support">Certains fournisseurs rendent difficile l\'ajout d\'un compte. Ne blâmez pas FairEmail pour ceci mais demandez de l\'aide à la place.</string>
     <string name="title_setup_quick_hint">La configuration rapide récupérera les informations de configuration de autoconfig.thunderbird.net</string>
@@ -196,8 +199,8 @@
     <string name="title_setup_close">Fermer les paramètres</string>
     <string name="title_setup_export">Exporter les paramètres</string>
     <string name="title_setup_import">Importer les paramètres</string>
-    <string name="title_setup_export_remark">        Comme le fichier de paramètres contient tous les réglages et les informations des comptes, il est chiffré avec un mot de passe.
-        Le mot de passe est requis pour importer les paramètres à nouveau donc s\'il vous plaît, ne l\'oubliez pas !
+    <string name="title_setup_export_remark">        Étant donné que le fichier de paramètres contient tous les réglages et informations des comptes, il est chiffré avec un mot de passe.
+        Le mot de passe est requis pour importer à nouveau les paramètres, donc s\'il vous plaît, ne l\'oubliez pas !
     </string>
     <string name="title_setup_export_do">Le fichier d\'exportation contiendra tous les paramètres et données mais pas de messages ni d\'images référencées dans les signatures</string>
     <string name="title_setup_import_do">Les comptes importés seront ajoutés sans remplacer les comptes existants</string>
@@ -280,7 +283,7 @@
     <string name="title_advanced_check_reply_domain">Vérifier l\'adresse de réponse lors de la synchronisation des messages</string>
     <string name="title_advanced_check_mx">Vérifier l’adresse courriel de l’expéditeur lors de la synchronisation des messages</string>
     <string name="title_advanced_check_blocklist">Vérifier si le nom de domaine de l\'expéditeur est sur une liste de blocage de courrier indésirable</string>
-    <string name="title_advanced_use_blocklist">Déplacer des messages depuis des domaines d\'une liste de blocage vers le dossier des indésirables</string>
+    <string name="title_advanced_use_blocklist">Déplacer les messages dont le domaine est présent dans une liste de blocage vers le dossier des indésirables</string>
     <string name="title_advanced_tune_keep_alive">Ajuster automatiquement l\'intervalle de connexion</string>
     <string name="title_advanced_keyboard">Afficher le clavier par défaut</string>
     <string name="title_advanced_keyboard_no_fullscreen">Ne pas afficher le clavier en plein écran</string>
@@ -324,6 +327,7 @@
     <string name="title_advanced_download_headers">Télécharger tous les en-têtes de message</string>
     <string name="title_advanced_download_eml">Télécharger les fichiers de messages bruts</string>
     <string name="title_advanced_validated">Nécessite une connexion validée (vérifiée)</string>
+    <string name="title_advanced_vpn_only">Se connecter uniquement via un RPV</string>
     <string name="title_advanced_timeout">Délai d’expiration de la connexion (secondes)</string>
     <string name="title_advanced_prefer_ip4">Préférer IPv4 à IPv6</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
@@ -350,12 +354,12 @@
     <string name="title_advanced_tabular_background">Utiliser la couleur de la carte comme couleur de fond lors de l\'utilisation du style tableau</string>
     <string name="title_advanced_cards_shadow">Utiliser une ombre autour des messages non lus pour le style carte</string>
     <string name="title_advanced_date_header">Grouper par date</string>
+    <string name="title_advanced_date_fixed">Afficher l\'en-tête de la date fixe en haut</string>
     <string name="title_advanced_date_bold">Afficher la date en gras</string>
     <string name="title_advanced_threading">Afficher en mode conversation</string>
     <string name="title_advanced_threading_unread">Afficher le nombre de messages non lus dans les conversations</string>
     <string name="title_advanced_indentation">Retrait gauche/droite des messages reçus/envoyés dans les conversations</string>
     <string name="title_advanced_highlight_unread">Afficher les messages non lus en surbrillance</string>
-    <string name="title_advanced_highlight_subject">Afficher l’objet en surbrillance</string>
     <string name="title_advanced_color_stripe">Afficher la bande de couleur</string>
     <string name="title_advanced_avatars">Afficher la photo des contacts</string>
     <string name="title_advanced_gravatars">Afficher les Gravatars</string>
@@ -374,10 +378,13 @@
     <string name="title_advanced_distinguish_contacts">Souligner l’expéditeur quand il est connu comme contact local</string>
     <string name="title_advanced_show_recipients">Afficher les destinataires dans l’en-tête du message</string>
     <string name="title_advanced_font_size_sender">Taille de police du champ « Expéditeur »</string>
-    <string name="title_advanced_font_size_subject">Taille de police du champ « Objet »</string>
+    <string name="title_advanced_sender_ellipsize">Raccourcir l\'expéditeur si nécessaire</string>
     <string name="title_advanced_subject_top">Afficher l’objet au dessus de l’expéditeur</string>
     <string name="title_advanced_subject_italic">Afficher l’objet en italique</string>
-    <string name="title_advanced_subject_elipsed">Raccourcir l’objet si nécessaire</string>
+    <string name="title_advanced_highlight_subject">Afficher l’objet en surbrillance</string>
+    <string name="title_advanced_font_size_subject">Taille de police du champ « Objet »</string>
+    <string name="title_advanced_subject_ellipsize">Raccourcir l\'objet si nécessaire</string>
+    <string name="title_advanced_compact_mode_remark">Mode compact uniquement</string>
     <string name="title_advanced_highlight_color">Couleur de surbrillance</string>
     <string name="title_advanced_keywords">Afficher les mots-clés dans l’en-tête du message</string>
     <string name="title_advanced_labels">Afficher les libellés Gmail dans l\'en-tête du message</string>
@@ -435,7 +442,7 @@
     <string name="title_advanced_collapse_multiple">Replier les multiples messages d’une conversation en faisant « Retour »</string>
     <string name="title_advanced_autoclose">Fermer automatiquement les conversations</string>
     <string name="title_advanced_onclose">Lors de la fermeture d’une conversation</string>
-    <string name="title_advanced_autoclose_unread">Fermer les conversations en marquant les messages comme non lus</string>
+    <string name="title_advanced_autoclose_unread">Fermer les conversations lors du marquage des messages comme non lus</string>
     <string name="title_advanced_undo">Délai d’expiration de l’annulation</string>
     <string name="title_advanced_quick_filter">Afficher les icônes discrètes de filtrage rapide</string>
     <string name="title_advanced_quick_scroll">Afficher les icônes discrètes de défilement rapide vers le haut/bas</string>
@@ -504,6 +511,11 @@
     <string name="title_advanced_autocrypt">Utiliser Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Mode Autocrypt mutuel</string>
     <string name="title_advanced_encrypt_subject">Chiffrer l\'objet</string>
+    <string name="title_advanced_sign_algo">Algorithme de signature</string>
+    <string name="title_advanced_encrypt_algo">Algorithme de chiffrement</string>
+    <string name="title_advanced_remark_algo">        Veuillez noter que tous les clients de messagerie ne prennent pas en charge tous les algorithmes.
+        Les algorithmes par défaut SHA256 et AES128 sont couramment pris en charge.
+    </string>
     <string name="title_advanced_check_certificate">Vérifier la clé publique lors de l\'envoi</string>
     <string name="title_advanced_manage_certificates">Gérer les clés publiques</string>
     <string name="title_advanced_import_key">Importer une clé privée</string>
@@ -526,6 +538,7 @@
     <string name="title_advanced_watchdog">Vérifier périodiquement si FairEmail est toujours actif</string>
     <string name="title_advanced_updates">Rechercher des mises à jour sur GitHub</string>
     <string name="title_advanced_check_weekly">Vérifier une fois par semaine au lieu d\'une fois par jour</string>
+    <string name="title_advanced_changelog">Afficher l\'historique des modifications après la mise à jour</string>
     <string name="title_advanced_experiments">Essayer les fonctionnalités expérimentales</string>
     <string name="title_advanced_crash_reports">Envoyer les rapports d’erreur</string>
     <string name="title_advanced_cleanup_attachments">Supprimer les pièces jointes des anciens messages</string>
@@ -536,7 +549,6 @@
     <string name="title_advanced_protocol">Journalisation du protocole</string>
     <string name="title_advanced_log_info">Journal de débogage</string>
     <string name="title_advanced_debug">Débogage</string>
-    <string name="title_advanced_query_threads">Limiter les accès multiples à la base de données</string>
     <string name="title_advanced_manual_hint">Si la réception de messages est désactivée, il est toujours possible de recevoir manuellement des messages en tirant vers le bas la liste des messages</string>
     <string name="title_advanced_poll_hint">La synchronisation périodique comparera les messages locaux et distants à chaque fois, ce qui est une opération coûteuse qui peut entraîner une utilisation supplémentaire de la batterie, surtout lorsqu\'il y a beaucoup de messages à synchroniser. La synchronisation en continu évitera cela en surveillant uniquement les changements.</string>
     <string name="title_advanced_optimize_hint">Ceci peut changer la fréquence de synchronisation pour économiser la pile en fonction des capacités et du comportement des serveurs de courriel</string>
@@ -610,7 +622,6 @@
     <string name="title_advanced_move_hint">Le dossier cible peut être configuré dans les paramètres du compte</string>
     <string name="title_advanced_notify_no_grouping">Cette version d’Android ne prend pas en charge le regroupement de notifications</string>
     <string name="title_advanced_notify_no_channels">Cette version d’Android ne prend pas en charge les canaux de notification</string>
-    <string name="title_advanced_queries_hint">Activer ceci réduira les performances, cependant l\'activation est nécessaire sur certains appareils</string>
     <string name="title_advanced_fts_hint">Activer ceci améliore les performances de la recherche mais augmente également l’utilisation de la pile et de l’espace de stockage</string>
     <string name="title_advanced_english_hint">Ceci va redémarrer l’application</string>
     <string name="title_advanced_experiments_hint">Liste des fonctionnalités expérimentales actuelles</string>
@@ -702,7 +713,7 @@
     <string name="title_no_inbox">Boîte de réception introuvable</string>
     <string name="title_no_drafts">Aucun dossier Brouillons</string>
     <string name="title_no_junk_folder">Il n\'y a aucun dossier pourriel sélectionné pour ce compte</string>
-    <string name="title_default_composable">L\'adresse courriel par défaut est déterminée par l\'identité principale du compte principal</string>
+    <string name="title_default_composable">L\'adresse courriel par défaut est déterminée à partir de l\'identité principale du compte principal</string>
     <string name="title_no_composable">L\'envoi de courriels nécessite la configuration d\'une identité et la sélection d\'un dossier Brouillons dans les paramètres du compte</string>
     <string name="title_no_standard">Ce fournisseur utilise un protocole de messagerie propriétaire, il n’est donc pas possible d’utiliser des clients de messagerie tiers</string>
     <string name="title_no_idle">Ce fournisseur ne gère pas les messages en mode push. Ceci retardera la réception de nouveaux messages et augmentera l’utilisation de la pile.</string>
@@ -727,7 +738,7 @@
     <string name="title_review">Récapitulatif</string>
     <string name="title_hint_alias">Appuyer longuement pour les options, comme copier pour créer des identités alias</string>
     <string name="title_service_auth">Le serveur de messagerie a dit : %1$s</string>
-    <string name="title_service_vpn">Ceci pourrait être dû au VPN utilisé</string>
+    <string name="title_service_vpn">Ceci pourrait être dû au RPV utilisé</string>
     <string name="title_service_port">Veuillez vérifier le numéro de port</string>
     <string name="title_service_protocol">Veuillez vérifier le protocole (SSL/TLS ou STARTTLS)</string>
     <string name="title_advanced_browse">Parcourir les messages sur le serveur</string>
@@ -777,6 +788,7 @@
     <string name="title_show_folders">Afficher les dossiers cachés</string>
     <string name="title_show_flagged">Afficher le nombre de messages suivis</string>
     <string name="title_subscribed_only">Abonnés uniquement</string>
+    <string name="title_sort_unread_atop">Dossiers avec messages non-lus en haut</string>
     <string name="title_search_folder">Rechercher un dossier</string>
     <string name="title_apply_to_all">Appliquer à tous</string>
     <string name="title_hide_folder">Masquer le dossier</string>
@@ -849,6 +861,7 @@
     <string name="title_editasnew">Modifier comme nouveau message</string>
     <string name="title_edit_notes">Modifier les notes locales</string>
     <string name="title_create_rule">Créer une règle&#8230;</string>
+    <string name="title_force_light">Forcer le thème clair</string>
     <string name="title_share">Partager</string>
     <string name="title_event">Ajouter au calendrier</string>
     <string name="title_pin">Ajouter un raccourci</string>
@@ -869,6 +882,7 @@
     <string name="title_download_all">Télécharger tout</string>
     <string name="title_save_all">Enregistrer tout</string>
     <string name="title_save_eml">Enregistrer le message original dans un fichier</string>
+    <string name="title_eml_remark">Pour transférer des messages, les messages bruts (originaux) doivent être téléchargés depuis le serveur de messagerie. Ceci nécessite une connexion Internet et les messages doivent toujours être stockés sur le serveur de messagerie.</string>
     <string name="title_eml_option">Ceci peut être évité en activant le téléchargement des fichiers de messages bruts dans les paramètres de connexion</string>
     <string name="title_eml_downloaded">Messages bruts téléchargés : %1$s</string>
     <string name="title_buttons">Sélectionner les boutons</string>
@@ -943,7 +957,6 @@
     <string name="title_ask_delete_rule">Supprimer définitivement la règle?</string>
     <string name="title_ask_discard">Abandonner le brouillon?</string>
     <string name="title_ask_show_html">L’affichage du message original peut entraîner la divulgation d’informations confidentielles</string>
-    <string name="title_ask_show_html_dark">Utiliser le thème sombre</string>
     <string name="title_ask_show_html_remark">L’affichage du message original sur fond sombre n’est pas possible car le texte et les images sombres pourraient ne pas être visibles</string>
     <string name="title_ask_show_html_images">Toujours afficher les images lors de l’affichage des messages originaux</string>
     <string name="title_ask_show_image">L’affichage des images peut entraîner la divulgation d’informations confidentielles</string>
@@ -1104,6 +1117,7 @@
     <string name="title_signature_sender">Adresse de l’expéditeur</string>
     <string name="title_signature_email">Adresse de la signature</string>
     <string name="title_signature_mismatch">Les adresses courriel de l\'expéditeur et de la signature ne correspondent pas</string>
+    <string name="title_signature_algorithm">Algorithme</string>
     <string name="title_signature_subject">Objet</string>
     <string name="title_signature_validity">Validité</string>
     <string name="title_signature_outdated">Cette clé publique n’est actuellement pas valide</string>
@@ -1179,6 +1193,7 @@
     <string name="title_previous">Précédent</string>
     <string name="title_next">Suivant</string>
     <string name="title_edit_signature">Modifier la signature</string>
+    <string name="title_edit_signature_remark">Bien qu\'Android ne puisse pas afficher tout le code HTML, il sera envoyé tel quel</string>
     <string name="title_edit_signature_text">Texte de la signature</string>
     <string name="title_edit_signature_image">Insérer une image</string>
     <string name="title_answer_caption">Modifier le modèle</string>
@@ -1385,6 +1400,7 @@
     <string name="title_hint_reformat">Par défaut, FairEmail reformate les messages pour des raisons de confidentialité et de sécurité. Appuyez sur l’icône « plein écran » au-dessus du texte du message pour afficher le message original.</string>
     <string name="title_hint_design">La conception est intentionnellement peu agrémentée mais elle reste très fonctionnelle. Il y a beaucoup d\'options pour personnaliser l\'apparence mais s\'il vous plaît, comprenez qu\'il est impossible de satisfaire pleinement tout le monde en même temps.</string>
     <string name="title_hint_junk">Le filtrage du pourriel devrait être fait par le serveur de messagerie et ne peut pas être fait de manière fiable sur un appareil ayant des capacités limitées et alimenté par une pile.</string>
+    <string name="title_hint_junk_learn">En déplaçant les messages vers et depuis le dossier des indésirables, le serveur de messagerie \"apprend\" ce qu\'est le courrier indésirable</string>
     <string name="title_hint_contact_actions">Appui long pour les options</string>
     <string name="title_hint_eml">Ceci est l’aperçu d’un fichier contenant un message original. Enregistrez le message original au moyen de l’icône de sauvegarde dans la barre d’action pour afficher tout son contenu.</string>
     <string name="title_open_link">Ouvrir le lien</string>
@@ -1479,9 +1495,7 @@
     <string name="title_rules_export">Exporter les règles</string>
     <string name="title_rules_import">Importer les règles</string>
     <string name="title_rules_delete_all">Supprimer toutes les règles</string>
-    <string name="title_rules_delete_junk">Supprimer les règles d\'indésirables</string>
     <string name="title_rules_delete_all_confirm">Supprimer toutes les règles?</string>
-    <string name="title_rules_delete_junk_confirm">Supprimer toutes les règles qui déplacent les messages dans le dossier Indésirable?</string>
     <string name="title_debug_info">Information de débogage</string>
     <string name="title_debug_info_remark">Veuillez décrire le problème et indiquer l\'heure à laquelle il est survenu :</string>
     <string name="title_crash_info_remark">Veuillez décrire ce que vous faisiez lorsque l’application s’est arrêtée :</string>
@@ -1678,4 +1692,7 @@
         <item>Courriel uniquement</item>
         <item>Nom et courriel</item>
     </string-array>
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>

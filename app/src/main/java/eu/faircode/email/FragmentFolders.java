@@ -498,6 +498,25 @@ public class FragmentFolders extends FragmentBase {
             }
         });
 
+        LayoutInflater infl = LayoutInflater.from(getContext());
+        ImageButton ibSearch = (ImageButton) infl.inflate(R.layout.action_button, null);
+        ibSearch.setId(View.generateViewId());
+        ibSearch.setImageResource(R.drawable.twotone_search_24);
+        ibSearch.setContentDescription(getString(R.string.title_legend_search));
+        ibSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMenuSearch();
+            }
+        });
+        ibSearch.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                onMenuSearchFolder(menu.findItem(R.id.menu_search_folder));
+                return true;
+            }
+        });
+        menu.findItem(R.id.menu_search).setActionView(ibSearch);
 
         MenuCompat.setGroupDividerEnabled(menu, true);
         super.onCreateOptionsMenu(menu, inflater);
@@ -508,6 +527,7 @@ public class FragmentFolders extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean subscriptions = prefs.getBoolean("subscriptions", false);
         boolean subscribed_only = prefs.getBoolean("subscribed_only", false);
+        boolean sort_unread_atop = prefs.getBoolean("sort_unread_atop", false);
 
         menu.findItem(R.id.menu_unified).setVisible(account < 0 || primary);
         menu.findItem(R.id.menu_theme).setVisible(account < 0 || primary);
@@ -516,6 +536,7 @@ public class FragmentFolders extends FragmentBase {
         menu.findItem(R.id.menu_show_flagged).setChecked(show_flagged);
         menu.findItem(R.id.menu_subscribed_only).setChecked(subscribed_only);
         menu.findItem(R.id.menu_subscribed_only).setVisible(subscriptions);
+        menu.findItem(R.id.menu_sort_unread_atop).setChecked(sort_unread_atop);
         menu.findItem(R.id.menu_apply_all).setVisible(account >= 0 && imap);
 
         super.onPrepareOptionsMenu(menu);
@@ -544,6 +565,9 @@ public class FragmentFolders extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_subscribed_only) {
             onMenuSubscribedOnly();
+            return true;
+        } else if (itemId == R.id.menu_sort_unread_atop) {
+            onMenuSortUnreadAtop();
             return true;
         } else if (itemId == R.id.menu_search_folder) {
             onMenuSearchFolder(item);
@@ -636,6 +660,14 @@ public class FragmentFolders extends FragmentBase {
         prefs.edit().putBoolean("subscribed_only", subscribed_only).apply();
         getActivity().invalidateOptionsMenu();
         adapter.setSubscribedOnly(subscribed_only);
+    }
+
+    private void onMenuSortUnreadAtop() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean sort_unread_atop = !prefs.getBoolean("sort_unread_atop", false);
+        prefs.edit().putBoolean("sort_unread_atop", sort_unread_atop).apply();
+        getActivity().invalidateOptionsMenu();
+        adapter.setSortUnreadAtop(sort_unread_atop);
     }
 
     private void onMenuSearchFolder(MenuItem item) {

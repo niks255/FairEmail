@@ -78,8 +78,19 @@
 
         <item
             android:id="@+id/menu_search_in_text"
-            android:icon="@drawable/twotone_search_24"
+            android:icon="@drawable/twotone_manage_search_24"
             android:title="@string/title_search_in_text" />
+
+        <item
+            android:id="@+id/menu_translate"
+            android:icon="@drawable/twotone_translate_24"
+            android:title="@string/title_translate" />
+
+        <item
+            android:id="@+id/menu_force_light"
+            android:checkable="true"
+            android:icon="@drawable/twotone_light_mode_24"
+            android:title="@string/title_force_light" />
     </group>
 
     <group android:id="@+id/group_sharing">

@@ -45,6 +45,10 @@ import com.sun.mail.util.MessageRemovedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.simplejavamail.outlookmessageparser.OutlookMessageParser;
+import org.simplejavamail.outlookmessageparser.model.OutlookAttachment;
+import org.simplejavamail.outlookmessageparser.model.OutlookFileAttachment;
+import org.simplejavamail.outlookmessageparser.model.OutlookMessage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -141,6 +145,7 @@ public class MessageHelper {
     ));
 
     static final String FLAG_FORWARDED = "$Forwarded";
+    static final String FLAG_JUNK = "$Junk";
     static final String FLAG_NOT_JUNK = "$NotJunk";
     static final String FLAG_CLASSIFIED = "$Classified";
     static final String FLAG_FILTERED = "$Filtered";
@@ -149,13 +154,13 @@ public class MessageHelper {
     // Not black listed: Gmail $Phishing
     private static final List<String> FLAG_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
             MessageHelper.FLAG_FORWARDED,
+            MessageHelper.FLAG_JUNK,
             MessageHelper.FLAG_NOT_JUNK,
             MessageHelper.FLAG_CLASSIFIED, // FairEmail
             MessageHelper.FLAG_FILTERED, // FairEmail
             "$MDNSent", // https://tools.ietf.org/html/rfc3503
             "$SubmitPending",
             "$Submitted",
-            "$Junk",
             "Junk",
             "NonJunk",
             "$recent",
@@ -2298,6 +2303,9 @@ public class MessageHelper {
 
             if (Helper.isTnef(local.type, local.name))
                 decodeTNEF(context, local);
+
+            if ("msg".equalsIgnoreCase(Helper.getExtension(local.name)))
+                decodeOutlook(context, local);
         }
 
         void downloadAttachment(Context context, int index, EntityAttachment local) throws MessagingException, IOException {
@@ -2326,9 +2334,13 @@ public class MessageHelper {
                 if (parts.length < 2)
                     throw new ParseException("Signed part missing");
 
+                // PGP: https://datatracker.ietf.org/doc/html/rfc3156#section-5
+                // S/MIME: https://datatracker.ietf.org/doc/html/rfc8551#section-3.1.1
                 String c = parts[1]
-                        .replaceAll(" +$", "") // trim trailing spaces
                         .replaceAll("\\r?\\n", "\r\n"); // normalize new lines
+                if (EntityAttachment.PGP_CONTENT.equals(apart.encrypt))
+                    c = c.replaceAll(" +$", ""); // trim trailing spaces
+
                 try (OutputStream os = new FileOutputStream(file)) {
                     os.write(c.getBytes());
                 }
@@ -2530,6 +2542,110 @@ public class MessageHelper {
                     Helper.writeText(attachment.getFile(context), sb.toString());
                     db.attachment().setDownloaded(attachment.id, (long) sb.length());
                 }
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+        }
+
+        private void decodeOutlook(Context context, EntityAttachment local) {
+            try {
+                DB db = DB.getInstance(context);
+                int subsequence = 0;
+
+                // https://poi.apache.org/components/hmef/index.html
+                File file = local.getFile(context);
+                OutlookMessage msg = new OutlookMessageParser().parseMsg(file);
+
+                String headers = msg.getHeaders();
+                if (!TextUtils.isEmpty(headers)) {
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = "headers.txt";
+                    attachment.type = "text/rfc822-headers";
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    Helper.writeText(attachment.getFile(context), headers);
+                    db.attachment().setDownloaded(attachment.id, (long) headers.length());
+                }
+
+                String html = msg.getBodyHTML();
+                if (!TextUtils.isEmpty(html)) {
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = "body.html";
+                    attachment.type = "text/html";
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    File a = attachment.getFile(context);
+                    Helper.writeText(a, html);
+                    db.attachment().setDownloaded(attachment.id, a.length());
+                }
+
+                if (TextUtils.isEmpty(html)) {
+                    String text = msg.getBodyText();
+                    if (!TextUtils.isEmpty(text)) {
+                        EntityAttachment attachment = new EntityAttachment();
+                        attachment.message = local.message;
+                        attachment.sequence = local.sequence;
+                        attachment.subsequence = ++subsequence;
+                        attachment.name = "body.txt";
+                        attachment.type = "text/plain";
+                        attachment.disposition = Part.ATTACHMENT;
+                        attachment.id = db.attachment().insertAttachment(attachment);
+
+                        File a = attachment.getFile(context);
+                        Helper.writeText(a, text);
+                        db.attachment().setDownloaded(attachment.id, a.length());
+                    }
+                }
+
+                String rtf = msg.getBodyRTF();
+                if (!TextUtils.isEmpty(rtf)) {
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = "body.rtf";
+                    attachment.type = "application/rtf";
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                    File a = attachment.getFile(context);
+                    Helper.writeText(a, rtf);
+                    db.attachment().setDownloaded(attachment.id, a.length());
+                }
+
+                List<OutlookAttachment> attachments = msg.getOutlookAttachments();
+                for (OutlookAttachment oa : attachments)
+                    if (oa instanceof OutlookFileAttachment) {
+                        OutlookFileAttachment ofa = (OutlookFileAttachment) oa;
+
+                        EntityAttachment attachment = new EntityAttachment();
+                        attachment.message = local.message;
+                        attachment.sequence = local.sequence;
+                        attachment.subsequence = ++subsequence;
+                        attachment.name = ofa.getFilename();
+                        attachment.type = ofa.getMimeTag();
+                        attachment.disposition = Part.ATTACHMENT;
+                        attachment.id = db.attachment().insertAttachment(attachment);
+
+                        if (TextUtils.isEmpty(attachment.type))
+                            attachment.type = Helper.guessMimeType(attachment.name);
+
+                        byte[] data = ofa.getData();
+                        try (OutputStream os = new FileOutputStream(attachment.getFile(context))) {
+                            os.write(data);
+                        }
+
+                        db.attachment().setDownloaded(attachment.id, (long) data.length);
+                    }
+
             } catch (Throwable ex) {
                 Log.w(ex);
             }

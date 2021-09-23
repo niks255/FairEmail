@@ -2476,14 +2476,14 @@ Wenn Sie ein Samsung Gerät mit der Galaxy Wearable (Samsung Gear) App verwenden
 <a name="faq127"></a>
 **(127) Wie kann ich 'Syntaktisch ungültige(s) HELO-Argument(e)' beheben?**
 
-Der Fehler *... Syntaktisch ungültige(s) HELO-Argument(e) ...* bedeutet, dass der SMTP-Server die lokale IP-Adresse oder den Hostnamen abgelehnt hat. You can likely fix this error by enabling or disabling the advanced indentity option *Use local IP address instead of host name*.
+Der Fehler *... Syntaktisch ungültige(s) HELO-Argument(e) ...* bedeutet, dass der SMTP-Server die lokale IP-Adresse oder den Hostnamen abgelehnt hat. Sie können diesen Fehler wahrscheinlich beheben, indem Sie die erweiterte Identitätsoption *Lokale IP-Adresse anstelle des Hostnamens* aktivieren oder deaktivieren.
 
 <br />
 
 <a name="faq128"></a>
-**(128) How can I reset asked questions, for example to show images?**
+**(128) Wie kann ich gestellte Fragen zurücksetzen, zum Beispiel um Bilder anzuzeigen?**
 
-You can reset asked questions via the three dots overflow menu in the miscellaneous settings.
+Sie können gestellte Fragen über das Drei-Punkte-Menü in den verschiedenen Einstellungen zurücksetzen.
 
 <br />
 
@@ -2497,130 +2497,130 @@ Tutanota verwendet ein proprietäres E-Mail-Protokoll und [unterstützt kein IMA
 <br />
 
 <a name="faq130"></a>
-**(130) What does message error ... mean?**
+**(130) Was bedeutet Nachrichtenfehler ... ?**
 
-A series of lines with orangish or red texts with technical information means that debug mode was enabled in the miscellaneous settings.
+Eine Reihe von Zeilen mit orangem oder rotem Text mit technischen Informationen bedeutet, dass der Debug-Modus in den verschiedenen Einstellungen aktiviert wurde.
 
-The warning *No server found at ...* means that there was no email server registered at the indicated domain name. Replying to the message might not be possible and might result in an error. This could indicate a falsified email address and/or spam.
+Die Warnung *Kein Server gefunden auf ...* bedeutet, dass bei dem angegebenen Domainnamen kein E-Mail-Server registriert wurde. Ein Antworten auf die Nachricht ist möglicherweise nicht möglich und kann zu einem Fehler führen. Dies könnte eine gefälschte E-Mail-Adresse und/oder Spam anzeigen.
 
-The error *... ParseException ...* means that there is a problem with a received message, likely caused by a bug in the sending software. FairEmail will workaround this is in most cases, so this message can mostly be considered as a warning instead of an error.
+Der Fehler *... ParseException ...* means that there is a problem with a received message, likely caused by a bug in the sending software. FairEmail wird dies in den meisten Fällen umgehen, so dass diese Nachricht meist als Warnung statt als Fehler angesehen werden kann.
 
-The error *...SendFailedException...* means that there was a problem while sending a message. The error will almost always include a reason. Common reasons are that the message was too big or that one or more recipient addresses were invalid.
+Der Fehler *...SendFailedException...* bedeutet, dass beim Senden einer Nachricht ein Problem aufgetreten ist. Die Fehlermeldung wird fast immer einen Grund enthalten. Häufige Gründe dafür sind, dass die Nachricht zu groß war oder dass eine oder mehrere Empfängeradressen ungültig waren.
 
-The warning *Message too large to fit into the available memory* means that the message was larger than 10 MiB. Even if your device has plenty of storage space Android provides limited working memory to apps, which limits the size of messages that can be handled.
+Die Warnung *Nachricht ist zu groß, um in den verfügbaren Speicher passen zu können*, bedeutet, dass die Nachricht größer als 10 MiB war. Selbst wenn Ihr Gerät viel Speicherplatz hat, bietet Android Apps nur begrenzten Arbeitsspeicher, die die Größe von Nachrichten begrenzt, die bearbeitet werden können.
 
-Please see [here](#user-content-faq22) for other error messages in the outbox.
+Siehe [hier](#user-content-faq22) für weitere Fehlermeldungen im Postausgang.
 
 <br />
 
 <a name="faq131"></a>
-**(131) Can you change the direction for swiping to previous/next message?**
+**(131) Kann man die Richtung für das Wischen zur vorherigen/nächsten Nachricht ändern?**
 
-If you read from left to right, swiping to the left will show the next message. Similarly, if you read from right to left, swiping to the right will show the next message.
+Wenn Sie von links nach rechts lesen, zeigt das Wischen nach links die nächste Nachricht. Umgekehrt, wenn Sie von rechts nach links lesen, zeigt das Wischen nach rechts die nächste Nachricht.
 
-This behavior seems quite natural to me, also because it is similar to turning pages.
+Dieses Verhalten erscheint mir recht natürlich, auch weil so ähnlich ist, wie Buchseiten umzublättern.
 
-Anyway, there is a behavior setting to reverse the swipe direction.
+Auf jeden Fall gibt es eine Verhaltenseinstellung, um die Wischrichtung umzukehren.
 
 <br />
 
 <a name="faq132"></a>
-**(132) Why are new message notifications silent?**
+**(132) Warum sind neue Benachrichtigungen stumm?**
 
-Notifications are silent by default on some MIUI versions. Please see [here](http://en.miui.com/thread-3930694-1-1.html) how you can fix this.
+Bei einigen MIUI-Versionen sind Benachrichtigungen standardmäßig stumm. Siehe [hier](http://en.miui.com/thread-3930694-1-1.html) wie man das beheben kann.
 
-There is a bug in some Android versions causing [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean)) to mute notifications. Since FairEmail shows new message notifications right after fetching the message headers and FairEmail needs to update new message notifications after fetching the message text later, this cannot be fixed or worked around by FairEmail.
+Es gibt einen Fehler in einigen Android-Versionen, der [setOnlyAlertOnce](https://developer.android.com/reference/android/app/Notification.Builder#setOnlyAlertOnce(boolean)) dazu veranlasst, Benachrichtigungen zu stummschalten. Da FairEmail Benachrichtigungen für neue Nachrichten direkt nach dem Abrufen der Nachrichtenüberschriften anzeigt, und FairEmail nach dem Abrufen des Nachrichtentextes neue Nachrichten aktualisieren muss, kann dies nicht durch FairEmail behoben oder umgangen werden.
 
-Android might rate limit the notification sound, which can cause some new message notifications to be silent.
+Android kann unter Umständen die Frequenz des Benachrichtigungstons einschränken, was dazu führen kann, dass einige neue Benachrichtigungen stumm sind.
 
 <br />
 
 <a name="faq133"></a>
-**(133) Why is ActiveSync not supported?**
+**(133) Warum wird ActiveSync nicht unterstützt?**
 
-The Microsoft Exchange ActiveSync protocol [is patented](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) and can therefore not be supported. For this reason you won't find many, if any, other email clients supporting ActiveSync.
+Das Microsoft Exchange ActiveSync Protokoll [ist patentiert](https://en.wikipedia.org/wiki/Exchange_ActiveSync#Licensing) und kann daher nicht unterstützt werden. Aus diesem Grund werden Sie, wenn überhaupt, nicht viele andere E-Mail-Clients finden, die ActiveSync unterstützen.
 
-Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
+Beachten Sie, dass die Beschreibung von FairEmail mit der Bemerkung beginnt, dass nicht standardmäßige Protokolle, wie Microsoft Exchange Web Services und Microsoft ActiveSync, nicht unterstützt werden.
 
 <br />
 
 <a name="faq134"></a>
-**(134) Can you add deleting local messages?**
+**(134) Kannman das Löschen lokaler Nachrichten hinzufügen?**
 
 *POP3*
 
-In the account settings (Settings, tap Manual setup, tap Accounts, tap account) you can enable *Leave deleted messages on server*.
+In den Kontoeinstellungen (Einstellungen, wähle Manuelle Einrichtung, wähle Konten, wähle Konto) können Sie *gelöschte Nachrichten auf Server lassen* aktivieren.
 
 *IMAP*
 
-Since the IMAP protocol is meant to synchronize two ways, deleting a message from the device would result in fetching the message again when synchronizing again.
+Da das IMAP-Protokoll dazu da ist in beide Richtungen zu synchronisieren, würde das Löschen einer Nachricht vom Gerät dazu führen, dass bei erneuter Synchronisation auch die Nachricht erneut abgerufen wird.
 
-However, FairEmail supports hiding messages, either via the three-dots menu in the action bar just above the message text or by multiple selecting messages in the message list. Basically this is the same as "leave on server" of the POP3 protocol with the advantage that you can show the messages again when needed.
+FairEmail unterstützt jedoch das Ausblenden von Nachrichten, entweder über das Drei-Punkte-Menü in der Aktionsleiste über dem Nachrichtentext oder durch die Auswahl mehrerer Nachrichten in der Nachrichtenliste. Im Grunde ist dies das gleiche wie das "auf dem Server lassen" des POP3-Protokolls mit dem Vorteil, dass Sie die Nachrichten bei Bedarf wieder anzeigen können.
 
-Note that it is possible to set the swipe left or right action to hide a message.
+Beachten Sie, dass es möglich ist, das Wischen nach links oder rechts zu aktivieren, um eine Nachricht auszublenden.
 
 <br />
 
 <a name="faq135"></a>
-**(135) Why are trashed messages and drafts shown in conversations?**
+**(135) Warum werden gelöschte Nachrichten oder Entwürfe in Konversationen angezeigt?**
 
-Individual messages will rarely be trashed and mostly this happens by accident. Showing trashed messages in conversations makes it easier to find them back.
+Einzelne Nachrichten werden selten gelöscht, und dies geschieht meist zufällig. Das Anzeigen von gelöschten Nachrichten in Unterhaltungen erleichtert das Wiederauffinden dieser Nachrichten.
 
-You can permanently delete a message using the message three-dots *delete* menu, which will remove the message from the conversation. Note that this irreversible.
+Sie können eine Nachricht dauerhaft löschen, in dem Sie im Drei-Punkt-Menü *löschen* auswählen, was die Nachricht aus der Konversation entfernt. Beachten Sie, dass dies die Nachricht unwiederruflich löscht.
 
-Similarly, drafts are shown in conversations to find them back in the context where they belong. It is easy to read through the received messages before continuing to write the draft later.
+Ebenso werden Entwürfe in Gesprächen gezeigt, um sie in dem Kontext wiederzufinden, wo sie hingehören. So ist es leicht, die empfangenen Nachrichten durchzulesen, bevor Sie den Entwurf später weiterschreiben.
 
 <br />
 
 <a name="faq136"></a>
-**(136) How can I delete an account/identity/folder?**
+**(136) Wie kann ich ein Konto / eine Identität / einen Ordner löschen?**
 
-Deleting an account/identity/folder is a little bit hidden to prevent accidents.
+Das Löschen eines Kontos / einer Identität / eines Ordners ist ein wenig versteckt, um Unfälle zu vermeiden.
 
-* Account: Settings > Manual setup > Accounts > tap account
-* Identity: Settings > Manual setup > Identities > tap identity
-* Folder: Long press the folder in the folder list > Edit properties
+* Konto: Einstellungen > Manuelle Einrichtung > Konten > Tippen Sie auf Konto
+* Identität: Einstellungen > Manuelle Einrichtung > Identitäten > tippen auf Identität
+* Ordner: Lange auf den den Ordner in der Ordnerliste drücken > Eigenschaften bearbeiten
 
-In the three-dots overflow menu at the top right there is an item to delete the account/identity/folder.
+Im Drei-Punkte-Menü oben rechts befindet sich ein Element, um ein Konto / eine Identität einen Ordner zu löschen.
 
 <br />
 
 <a name="faq137"></a>
-**(137) How can I reset 'Don't ask again'?**
+**(137) Wie kann ich 'Nicht erneut fragen' zurücksetzen?**
 
-You can reset all questions set to be not asked again in the miscellaneous settings.
+Sie können alle 'Nicht erneut fragen' Fragen unter verschiedene Einstellungen zurücksetzen.
 
 <br />
 
 <a name="faq138"></a>
-**(138) Can you add calendar/contact/tasks/notes management?**
+**(138) Kannst du eine Kalender-/Kontakt-/Aufgaben-/Notizverwaltung einbauen?**
 
-Calendar, contact, task and note management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.
+Kalender-, Kontakt-, Aufgaben- und Notizverwaltung können besser durch eine separate, spezialisierte App durchgeführt werden. Bitte beachten Sie, dass FairEmail eine reine E-Mail-App ist und keine Office-Suite.
 
-Also, I prefer to do a few things very well, instead of many things only half. Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.
+Außerdem ziehe ich es vor, ein paar Dinge sehr gut zu tun, anstatt viele Dinge nur halb umzusetzen. Darüber hinaus ist es aus Sicherheitsperspektiven keine gute Idee, einer einzigen App viele Berechtigungen zu erteilen.
 
-You are advised to use the excellent, open source [DAVx⁵](https://f-droid.org/packages/at.bitfire.davdroid/) app to synchronize/manage your calendars/contacts.
+Es wird empfohlen, die hervorragende Open-Source-App [DAVx5](https://f-droid.org/packages/at.bitfire.davdroid/) zu verwenden, um Ihre Kalender/Kontakte zu synchronisieren/zu verwalten.
 
-Most providers support exporting your contacts. Please [see here](https://support.google.com/contacts/answer/1069522) about how you can import contacts if synchronizing is not possible.
+Die meisten Anbieter unterstützen den Export Ihrer Kontakte. [Siehe hier](https://support.google.com/contacts/answer/1069522) für eine Anleitung, wie Sie Kontakte importieren können, wenn eine Synchronisierung nicht möglich ist.
 
-Note that FairEmail does support replying to calendar invites (a pro feature) and adding calendar invites to your personal calendar.
+Beachten Sie, dass FairEmail die Beantwortung von Kalendereinladungen (eine Pro-Funktion) und das Hinzufügen von Kalendereinladungen zu Ihrem persönlichen Kalender unterstützt.
 
 <br />
 
 <a name="faq83"></a>
 <a name="faq139"></a>
-**(139) How do I fix 'User is authenticated but not connected'?**
+**(139) Wie behebe ich 'Benutzer ist authentifiziert, aber nicht verbunden'?**
 
-In fact this Microsoft Exchange specific error is an incorrect error message caused by a bug in older Exchange server software.
+Tatsächlich ist dieser in Microsoft Exchange spezifische Fehler eine falsche Fehlermeldung, die durch einen Fehler in älterer Exchange-Server-Software verursacht wird.
 
-The error *User is authenticated but not connected* might occur if:
+Der Fehler *Der Benutzer ist authentifiziert, aber nicht verbunden* kann auftreten, wenn:
 
-* Push messages are enabled for too many folders: see [this FAQ](#user-content-faq23) for more information and a workaround
-* The account password was changed: changing it in FairEmail too should fix the problem
-* An alias email address is being used as username instead of the primary email address
-* An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
+* Push-Nachrichten für zu viele Ordner aktiviert sind: Siehe [diese häufig gestellten Fragen (FAQ)](#user-content-faq23) für weitere Informationen und eine Umgehung des Problems
+* Das Account-Passwort wurde geändert: Dieses auch in FairEmail zu ändern sollte das Problem beheben
+* Eine Alias-E-Mail-Adresse wird als Benutzername anstelle der primären E-Mail-Adresse verwendet
+* Ein falsches Login-Schema wird für eine gemeinsame Mailbox verwendet: Das richtige Schema ist *username@domain\SharedMailboxAlias*
 
-The shared mailbox alias will mostly be the email address of the shared account, like this:
+Der gemeinsam genutzte Postfach-Alias ist meistens die E-Mail-Adresse des gemeinsamen Kontos, etwa:
 
 ```
 you@example.com\shared@example.com
@@ -2850,13 +2850,13 @@ You can view it with for example the Android app [Letter Opener](https://play.go
 <br />
 
 <a name="faq156"></a>
-**(156) How can I set up an Office 365 account?**
+**(156) Wie kann ich ein Office 365-Konto erstellen?**
 
-An Office 365 account can be set up via the quick setup wizard and selecting *Office 365 (OAuth)*.
+Ein Office 365-Konto kann mit der Option *Office 365 (OAuth)* im Einrichtungsassistenten eingerichtet werden.
 
-If the wizard ends with *AUTHENTICATE failed*, IMAP and/or SMTP might be disabled for the account. In this case you should ask the administrator to enable IMAP and SMTP. The procedure is documented [here](https://docs.microsoft.com/en-in/exchange/troubleshoot/configure-mailboxes/pop3-imap-owa-activesync-office-365).
+Wenn die Einrichtung mit *AUTHENTICATE fehlgeschlagen* endet, kann es sein, dass IMAP und/oder SMTP für das Konto deaktiviert wurden. In diesem Fall sollten Sie den Administrator bitten, IMAP und SMTP zu aktivieren. Die Vorgehensweise dafür ist [hier](https://docs.microsoft.com/en-in/exchange/troubleshoot/configure-mailboxes/pop3-imap-owa-activesync-office-365) dokumentiert.
 
-If you've enabled *security defaults* in your organization, you might need to enable the SMTP AUTH protocol. Please [see here](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) about how to.
+Wenn Sie *Sicherheitseinstellungen* in Ihrem Unternehmen aktiviert haben, müssen Sie möglicherweise das SMTP AUTH-Protokoll aktivieren. Bitte [schauen Sie hier](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission), wie das geht.
 
 <br />
 

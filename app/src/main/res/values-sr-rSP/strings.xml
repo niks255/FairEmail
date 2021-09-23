@@ -65,6 +65,7 @@
         <item quantity="other">Означи %1$d порука као нежељене?</item>
     </plurals>
     <string name="title_ask_spam_who">Означи поруке од %1$s као нежељене?</string>
+    <string name="title_junk_clear">Очисти</string>
     <string name="title_notification_sending">Слање порука</string>
     <string name="title_notification_waiting">Чекам на погодну конекцију</string>
     <string name="title_notification_failed">%1$s неуспело</string>
@@ -205,7 +206,6 @@
     <string name="title_advanced_name_email">Прикажи имена и е-мејл адресе</string>
     <string name="title_advanced_subject_top">Прикажи наслов изнад пошиљаоца</string>
     <string name="title_advanced_subject_italic">Прикажи наслов курзивом</string>
-    <string name="title_advanced_subject_elipsed">Ако је потребно скратити наслов, скрати га</string>
     <string name="title_advanced_flags">Прикажи звездице</string>
     <string name="title_advanced_flags_background">Прикажи обојену позадину уместо обојених звездица</string>
     <string name="title_advanced_preview">Прикажи претпреглед поруке</string>
@@ -512,7 +512,6 @@
     <string name="title_ask_delete_rule">Обрисати правило трајно?</string>
     <string name="title_ask_discard">Одбаци нацрт?</string>
     <string name="title_ask_show_html">Приватне осетљиве информације могу да исцуре приказивањем оригиналне поруке</string>
-    <string name="title_ask_show_html_dark">Користи тамну тему</string>
     <string name="title_ask_show_html_remark">Приказивање оригиналне поруке са тамном позадином није могуће јер може да изазове да се не види тамни текст и слике</string>
     <string name="title_ask_show_html_images">Увек прикажи слике при приказивању оригиналне поруке</string>
     <string name="title_ask_show_image">Приватне осетљиве информације могу да исцуре приказивањем слика</string>
@@ -1028,4 +1027,7 @@
         <item>50 MB</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <!-- https://www.bouncycastle.org/specifications.html -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
+    <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
 </resources>
