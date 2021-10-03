@@ -286,6 +286,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean authentication_indicator;
 
     private boolean autoclose_unseen;
+    private boolean collapse_marked;
 
     private boolean language_detection;
     private List<String> languages;
@@ -1085,10 +1086,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             (Boolean.FALSE.equals(message.reply_domain) && check_reply_domain) ||
                             (Boolean.FALSE.equals(message.mx) && check_mx) ||
                             (Boolean.TRUE.equals(message.blocklist) && check_blocklist));
-            int auths = (check_authentication &&
-                    Boolean.TRUE.equals(message.dkim) ? 1 : 0) +
-                    (Boolean.TRUE.equals(message.spf) ? 1 : 0) +
-                    (Boolean.TRUE.equals(message.dmarc) ? 1 : 0);
             boolean expanded = (viewType == ViewType.THREAD && properties.getValue("expanded", message.id));
 
             // Text size
@@ -1173,7 +1170,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibAuth.setImageLevel(0);
                 ibAuth.setImageTintList(ColorStateList.valueOf(colorWarning));
                 ibAuth.setVisibility(View.VISIBLE);
-            } else if (authentication_indicator) {
+            } else if (authentication && authentication_indicator) {
+                int auths =
+                        (Boolean.TRUE.equals(message.dkim) ? 1 : 0) +
+                                (Boolean.TRUE.equals(message.spf) ? 1 : 0) +
+                                (Boolean.TRUE.equals(message.dmarc) ? 1 : 0);
+
+                // https://en.wikipedia.org/wiki/DMARC#Alignment
+                if (Boolean.TRUE.equals(message.dkim) &&
+                        !Boolean.FALSE.equals(message.spf) &&
+                        !Boolean.FALSE.equals(message.dmarc))
+                    auths = 3;
+
                 ibAuth.setImageLevel(auths + 1);
                 ibAuth.setImageTintList(ColorStateList.valueOf(
                         auths < 3 ? colorControlNormal : colorVerified));
@@ -1703,7 +1711,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (main.isVerified() || BuildConfig.DEBUG) {
                         ibVerified.setVisibility(View.VISIBLE);
 
-                        if (authentication_indicator)
+                        if (authentication && authentication_indicator)
                             ibAuth.setVisibility(View.GONE);
                     }
                 }
@@ -2268,6 +2276,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 properties.setValue("full", message.id, true);
                 properties.setValue("full_asked", message.id, true);
             }
+
+            if (!properties.getValue("force_light_default", message.id)) {
+                boolean default_light = prefs.getBoolean("default_light", false);
+                properties.setValue("force_light", message.id, default_light);
+                properties.setValue("force_light_default", message.id, true);
+            }
         }
 
         private void bindBody(TupleMessageEx message, final boolean scroll) {
@@ -2517,6 +2531,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             }
 
                     HtmlHelper.cleanup(document);
+                    HtmlHelper.removeRelativeLinks(document);
 
                     // Check for inline encryption
                     boolean iencrypted = HtmlHelper.contains(document, new String[]{
@@ -3841,24 +3856,30 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (folder == null)
                         return null;
 
+                    boolean ingoing = false;
                     boolean outgoing = EntityFolder.isOutgoing(folder.type);
 
                     if (message.identity != null) {
-                        if (message.from != null && message.from.length > 0) {
-                            EntityIdentity identity = db.identity().getIdentity(message.identity);
-                            if (identity == null)
-                                return null;
+                        EntityIdentity identity = db.identity().getIdentity(message.identity);
+                        if (identity == null)
+                            return null;
 
+                        if (message.to != null)
+                            for (Address recipient : message.to)
+                                if (identity.similarAddress(recipient)) {
+                                    ingoing = true;
+                                    break;
+                                }
+
+                        if (message.from != null)
                             for (Address sender : message.from)
                                 if (identity.similarAddress(sender)) {
                                     outgoing = true;
                                     break;
                                 }
-                        }
                     }
 
-                    if (outgoing && message.reply != null &&
-                            MessageHelper.equal(message.from, message.to))
+                    if (outgoing && ingoing && message.reply != null)
                         return message.reply;
 
                     return (outgoing ? message.to : message.from);
@@ -4260,7 +4281,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             context.startActivity(new Intent(context, ActivitySetup.class)
-                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("tab", "privacy"));
                         }
                     })
@@ -4577,7 +4598,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean canBlock = false;
             if (message.from != null && message.from.length > 0) {
                 String email = ((InternetAddress) message.from[0]).getAddress();
-                canBlock = !TextUtils.isEmpty(email) && Helper.EMAIL_ADDRESS.matcher(email).matches();
+                canBlock = !TextUtils.isEmpty(email);
             }
 
             Bundle aargs = new Bundle();
@@ -4975,10 +4996,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     message.ui_seen = args.getBoolean("seen");
                     message.unseen = (message.ui_seen ? 0 : message.count);
-                    if (!message.ui_seen &&
-                            (autoclose_unseen || getItemCount() == 1))
+
+                    if (!message.ui_seen && autoclose_unseen)
                         properties.finish();
-                    else
+                    else if (collapse_marked)
                         properties.setExpanded(message, false, true);
                 }
 
@@ -5219,7 +5240,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String link = "message://" + BuildConfig.APPLICATION_ID + "/" + message.id;
 
                     Document document = JsoupEx.parse(file);
-                    HtmlHelper.quoteLimit(document, MAX_QUOTE_LEVEL);
+                    HtmlHelper.truncate(document, HtmlHelper.MAX_FULL_TEXT_SIZE / 2);
 
                     Element a = document.createElement("a");
                     a.text(context.getString(R.string.app_name));
@@ -5284,6 +5305,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         }
                     }
+
+                    EntityLog.log(context, "Sharing " + intent +
+                            " extras=" + TextUtils.join(", ", Log.getExtras(intent.getExtras())));
 
                     PackageManager pm = context.getPackageManager();
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
@@ -5903,10 +5927,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.inline = prefs.getBoolean("inline_images", false);
         this.collapse_quotes = prefs.getBoolean("collapse_quotes", false);
         this.authentication = prefs.getBoolean("authentication", true);
-        this.authentication_indicator = (this.authentication &&
-                prefs.getBoolean("authentication_indicator", false));
+        this.authentication_indicator = prefs.getBoolean("authentication_indicator", false);
         this.language_detection = prefs.getBoolean("language_detection", false);
         this.autoclose_unseen = prefs.getBoolean("autoclose_unseen", false);
+        this.collapse_marked = prefs.getBoolean("collapse_marked", true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             languages = new ArrayList<>();
@@ -6759,7 +6783,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     FragmentDialogColor fragment = new FragmentDialogColor();
                     fragment.setArguments(args);
                     fragment.setTargetFragment(FragmentDialogNotes.this, 1);
-                    fragment.show(getParentFragmentManager(), "identity:color");
+                    fragment.show(getParentFragmentManager(), "notes:color");
                 }
             });
 

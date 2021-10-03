@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.provider.Settings;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Pair;
@@ -69,6 +70,7 @@ import androidx.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -143,7 +145,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvMemoryClass;
     private TextView tvMemoryUsage;
     private TextView tvStorageUsage;
+    private TextView tvSuffixes;
     private TextView tvFingerprint;
+    private TextView tvCursorWindow;
     private Button btnGC;
     private Button btnCharsets;
     private Button btnCiphers;
@@ -262,7 +266,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
         tvMemoryUsage = view.findViewById(R.id.tvMemoryUsage);
         tvStorageUsage = view.findViewById(R.id.tvStorageUsage);
+        tvSuffixes = view.findViewById(R.id.tvSuffixes);
         tvFingerprint = view.findViewById(R.id.tvFingerprint);
+        tvCursorWindow = view.findViewById(R.id.tvCursorWindow);
         btnGC = view.findViewById(R.id.btnGC);
         btnCharsets = view.findViewById(R.id.btnCharsets);
         btnCiphers = view.findViewById(R.id.btnCiphers);
@@ -948,7 +954,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     tvFtsIndexed.setText(getString(R.string.title_advanced_fts_indexed,
                             stats.fts,
                             stats.total,
-                            Helper.humanReadableByteCount(FtsDbHelper.size(getContext()))));
+                            Helper.humanReadableByteCount(FtsDbHelper.size(tvFtsIndexed.getContext()))));
                 last = stats;
             }
         });
@@ -959,14 +965,19 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
 
-        setPermissionInfo();
-
         swExactAlarms.setEnabled(AlarmManagerCompatEx.canScheduleExactAlarms(getContext()));
         swTestIab.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setSuffixes();
+        setPermissionInfo();
     }
 
     @Override
@@ -1164,6 +1175,17 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         tvFingerprint.setText(Helper.getFingerprint(getContext()));
 
+        int cursorWindowSize = -1;
+        try {
+            Field fCursorWindowSize = io.requery.android.database.CursorWindow.class.getDeclaredField("sDefaultCursorWindowSize");
+            fCursorWindowSize.setAccessible(true);
+            cursorWindowSize = fCursorWindowSize.getInt(null);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+        tvCursorWindow.setText(getString(R.string.title_advanced_cursor_window,
+                Helper.humanReadableByteCount(cursorWindowSize, false)));
+
         cardDebug.setVisibility(swDebug.isChecked() || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
     }
 
@@ -1227,79 +1249,121 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         time < 0 ? "-" : DTF.format(time)));
     }
 
+    private void setSuffixes() {
+        new SimpleTask<Integer>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                tvSuffixes.setText(getString(R.string.title_advanced_suffixes, -1));
+            }
+
+            @Override
+            protected Integer onExecute(Context context, Bundle args) {
+                return UriHelper.getSuffixCount(context);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Integer count) {
+                tvSuffixes.setText(getString(R.string.title_advanced_suffixes, count));
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.w(ex);
+                tvSuffixes.setText(ex.toString());
+            }
+        }.execute(this, new Bundle(), "suffixes");
+    }
+
     private void setPermissionInfo() {
-        try {
-            int start = 0;
-            int dp24 = Helper.dp2pixels(getContext(), 24);
-            SpannableStringBuilder ssb = new SpannableStringBuilderEx();
-            PackageManager pm = getContext().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PERMISSIONS);
-            for (int i = 0; i < pi.requestedPermissions.length; i++) {
-                boolean granted = ((pi.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0);
+        new SimpleTask<Spanned>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                tvPermissions.setText(null);
+            }
 
-                PermissionInfo info;
-                try {
-                    info = pm.getPermissionInfo(pi.requestedPermissions[i], PackageManager.GET_META_DATA);
-                } catch (Throwable ex) {
-                    info = new PermissionInfo();
-                    info.name = pi.requestedPermissions[i];
-                    if (!(ex instanceof PackageManager.NameNotFoundException))
-                        info.group = ex.toString();
-                }
+            @Override
+            protected Spanned onExecute(Context context, Bundle args) throws Throwable {
+                int start = 0;
+                int dp24 = Helper.dp2pixels(getContext(), 24);
+                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+                PackageManager pm = getContext().getPackageManager();
+                PackageInfo pi = pm.getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PERMISSIONS);
+                for (int i = 0; i < pi.requestedPermissions.length; i++) {
+                    boolean granted = ((pi.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0);
 
-                ssb.append(info.name).append('\n');
-                if (granted)
-                    ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
-                start = ssb.length();
+                    PermissionInfo info;
+                    try {
+                        info = pm.getPermissionInfo(pi.requestedPermissions[i], PackageManager.GET_META_DATA);
+                    } catch (Throwable ex) {
+                        info = new PermissionInfo();
+                        info.name = pi.requestedPermissions[i];
+                        if (!(ex instanceof PackageManager.NameNotFoundException))
+                            info.group = ex.toString();
+                    }
 
-                if (info.group != null) {
-                    ssb.append(info.group).append('\n');
-                    ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
+                    ssb.append(info.name).append('\n');
+                    if (granted)
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
                     start = ssb.length();
-                }
 
-                CharSequence description = info.loadDescription(pm);
-                if (description != null) {
-                    ssb.append(description).append('\n');
-                    ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
-                    ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), start, ssb.length(), 0);
-                    start = ssb.length();
-                }
+                    if (info.group != null) {
+                        ssb.append(info.group).append('\n');
+                        ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
+                        start = ssb.length();
+                    }
 
-                if (info.protectionLevel != 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                        switch (info.getProtection()) {
-                            case PermissionInfo.PROTECTION_DANGEROUS:
-                                ssb.append("dangerous ");
-                                break;
-                            case PermissionInfo.PROTECTION_NORMAL:
-                                ssb.append("normal ");
-                                break;
-                            case PermissionInfo.PROTECTION_SIGNATURE:
-                                ssb.append("signature ");
-                                break;
-                            case PermissionInfo.PROTECTION_SIGNATURE_OR_SYSTEM:
-                                ssb.append("signatureOrSystem ");
-                                break;
-                        }
+                    CharSequence description = info.loadDescription(pm);
+                    if (description != null) {
+                        ssb.append(description).append('\n');
+                        ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
+                        ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), start, ssb.length(), 0);
+                        start = ssb.length();
+                    }
 
-                    ssb.append(Integer.toHexString(info.protectionLevel));
+                    if (info.protectionLevel != 0) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                            switch (info.getProtection()) {
+                                case PermissionInfo.PROTECTION_DANGEROUS:
+                                    ssb.append("dangerous ");
+                                    break;
+                                case PermissionInfo.PROTECTION_NORMAL:
+                                    ssb.append("normal ");
+                                    break;
+                                case PermissionInfo.PROTECTION_SIGNATURE:
+                                    ssb.append("signature ");
+                                    break;
+                                case PermissionInfo.PROTECTION_SIGNATURE_OR_SYSTEM:
+                                    ssb.append("signatureOrSystem ");
+                                    break;
+                            }
 
-                    if (info.flags != 0)
-                        ssb.append(' ').append(Integer.toHexString(info.flags));
+                        ssb.append(Integer.toHexString(info.protectionLevel));
+
+                        if (info.flags != 0)
+                            ssb.append(' ').append(Integer.toHexString(info.flags));
+
+                        ssb.append('\n');
+                        ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
+                        start = ssb.length();
+                    }
 
                     ssb.append('\n');
-                    ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
-                    start = ssb.length();
                 }
 
-                ssb.append('\n');
+                return ssb;
             }
-            tvPermissions.setText(ssb);
-        } catch (Throwable ex) {
-            Log.w(ex);
-            tvPermissions.setText(ex.toString());
-        }
+
+            @Override
+            protected void onExecuted(Bundle args, Spanned permissions) {
+                tvPermissions.setText(permissions);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.w(ex);
+                tvPermissions.setText(ex.toString());
+            }
+        }.execute(this, new Bundle(), "permissions");
     }
 
     private static class StorageData {

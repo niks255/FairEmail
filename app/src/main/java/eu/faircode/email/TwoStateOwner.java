@@ -26,19 +26,38 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.OnLifecycleEvent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 // This class can be used as an externally controlled standalone or child life cycle owner
 
 public class TwoStateOwner implements LifecycleOwner {
     private String name;
+    private boolean owned = true;
     private Object condition;
     private LifecycleRegistry registry;
+    private long created;
+    private long changed;
+
+    private static DateFormat DTF = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+
+    private static final List<TwoStateOwner> list = new ArrayList<>();
+
+    static List<TwoStateOwner> getList() {
+        synchronized (list) {
+            return new ArrayList<>(list);
+        }
+    }
 
     // https://developer.android.com/topic/libraries/architecture/lifecycle#lc
 
     TwoStateOwner(String aname) {
         name = aname;
+        created = new Date().getTime();
         create();
     }
 
@@ -49,23 +68,32 @@ public class TwoStateOwner implements LifecycleOwner {
         owner.getLifecycle().addObserver(new LifecycleObserver() {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             public void onDestroyed() {
-                Log.d("LifeCycle " + name + " parent destroyed");
+                Log.i(TwoStateOwner.this + " parent destroyed");
+                owned = false;
                 destroy();
+                owner.getLifecycle().removeObserver(this);
             }
         });
     }
 
     private void create() {
-        // Initialize
-        registry = new LifecycleRegistry(this);
-        registry.addObserver(new LifecycleObserver() {
-            @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
-            public void onAny() {
-                Log.d("LifeCycle " + name + " state=" + registry.getCurrentState() + " " + registry);
-            }
-        });
+        if (owned) {
+            // Initialize
+            registry = new LifecycleRegistry(this);
+            registry.addObserver(new LifecycleObserver() {
+                @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
+                public void onAny() {
+                    Log.i(TwoStateOwner.this + " " + registry);
+                    changed = new Date().getTime();
+                }
+            });
 
-        setState(Lifecycle.State.CREATED);
+            setState(Lifecycle.State.CREATED);
+            synchronized (list) {
+                list.add(this);
+            }
+        } else
+            Log.e(TwoStateOwner.this + " not owned");
     }
 
     void start() {
@@ -103,6 +131,9 @@ public class TwoStateOwner implements LifecycleOwner {
             if (!state.equals(Lifecycle.State.CREATED))
                 setState(Lifecycle.State.CREATED);
             setState(Lifecycle.State.DESTROYED);
+            synchronized (list) {
+                list.remove(this);
+            }
         }
     }
 
@@ -130,5 +161,14 @@ public class TwoStateOwner implements LifecycleOwner {
                   at androidx.lifecycle.LifecycleRegistry.setCurrentState(SourceFile:118)
              */
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TwoStateOwner " + name +
+                " state=" + registry.getCurrentState() +
+                " owned=" + owned +
+                " created=" + DTF.format(created) +
+                " change=" + DTF.format(changed);
     }
 }

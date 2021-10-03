@@ -26,6 +26,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
+import android.app.UiModeManager;
 import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -34,6 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -432,6 +434,14 @@ public class Helper {
         return pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
     }
 
+    static boolean isOptimizing12(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || true)
+            return false;
+
+        Boolean ignoring = Helper.isIgnoringOptimizations(context);
+        return (ignoring != null && !ignoring);
+    }
+
     static Integer getBatteryLevel(Context context) {
         try {
             BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
@@ -781,7 +791,7 @@ public class Helper {
     }
 
     static void viewFAQ(Context context, int question) {
-        viewFAQ(context, question, false);
+        viewFAQ(context, question, true /* Google translate */);
     }
 
     static void viewFAQ(Context context, int question, boolean english) {
@@ -826,7 +836,7 @@ public class Helper {
         return Uri.parse(SUPPORT_URI)
                 .buildUpon()
                 .appendQueryParameter("product", "fairemailsupport")
-                .appendQueryParameter("version", BuildConfig.VERSION_NAME)
+                .appendQueryParameter("version", BuildConfig.VERSION_NAME + BuildConfig.REVISION)
                 .appendQueryParameter("locale", slocale.toString())
                 .appendQueryParameter("language", language == null ? "" : language)
                 .appendQueryParameter("installed", Helper.hasValidFingerprint(context) ? "" : "Other")
@@ -835,7 +845,7 @@ public class Helper {
 
     static Intent getIntentIssue(Context context) {
         if (ActivityBilling.isPro(context)) {
-            String version = BuildConfig.VERSION_NAME + "/" +
+            String version = BuildConfig.VERSION_NAME + BuildConfig.REVISION + "/" +
                     (Helper.hasValidFingerprint(context) ? "1" : "3") +
                     (BuildConfig.PLAY_STORE_RELEASE ? "p" : "") +
                     (BuildConfig.DEBUG ? "d" : "") +
@@ -854,16 +864,19 @@ public class Helper {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String language = prefs.getString("language", null);
+            boolean reporting = prefs.getBoolean("crash_reports", false);
             String uuid = prefs.getString("uuid", null);
             Locale slocale = Resources.getSystem().getConfiguration().locale;
 
             String html = "<br><br>";
 
             html += "<p style=\"font-size:small;\">";
+            html += "Android: " + Build.VERSION.RELEASE + " (SDK " + Build.VERSION.SDK_INT + ")<br>";
+            html += "Device: " + Build.MANUFACTURER + " " + Build.DEVICE + "<br>";
             html += "Locale: " + Html.escapeHtml(slocale.toString()) + "<br>";
             if (language != null)
                 html += "Language: " + Html.escapeHtml(language) + "<br>";
-            if (uuid != null)
+            if (reporting && uuid != null)
                 html += "UUID: " + Html.escapeHtml(uuid) + "<br>";
             html += "</p>";
 
@@ -1030,6 +1043,37 @@ public class Helper {
 
     static boolean isDozeRequired() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.R && false);
+    }
+
+    static String getUiModeType(Context context) {
+        try {
+            UiModeManager uimm =
+                    (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
+            int uiModeType = uimm.getCurrentModeType();
+            switch (uiModeType) {
+                case Configuration.UI_MODE_TYPE_UNDEFINED:
+                    return "undefined";
+                case Configuration.UI_MODE_TYPE_NORMAL:
+                    return "normal";
+                case Configuration.UI_MODE_TYPE_DESK:
+                    return "desk";
+                case Configuration.UI_MODE_TYPE_CAR:
+                    return "car";
+                case Configuration.UI_MODE_TYPE_TELEVISION:
+                    return "television";
+                case Configuration.UI_MODE_TYPE_APPLIANCE:
+                    return "applicance";
+                case Configuration.UI_MODE_TYPE_WATCH:
+                    return "watch";
+                case Configuration.UI_MODE_TYPE_VR_HEADSET:
+                    return "vr headset";
+                default:
+                    return Integer.toString(uiModeType);
+            }
+        } catch (Throwable ex) {
+            Log.w(ex);
+            return null;
+        }
     }
 
     static void reportNoViewer(Context context, Uri uri) {
@@ -1783,8 +1827,26 @@ public class Helper {
         if (!TextUtils.isEmpty(pin))
             return true;
 
-        BiometricManager bm = BiometricManager.from(context);
-        return (bm.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS);
+        try {
+            BiometricManager bm = BiometricManager.from(context);
+            return (bm.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS);
+        } catch (Throwable ex) {
+            /*
+                java.lang.SecurityException: eu.faircode.email from uid 10377 not allowed to perform USE_FINGERPRINT
+                  at android.os.Parcel.createException(Parcel.java:1953)
+                  at android.os.Parcel.readException(Parcel.java:1921)
+                  at android.os.Parcel.readException(Parcel.java:1871)
+                  at android.hardware.fingerprint.IFingerprintService$Stub$Proxy.isHardwareDetected(IFingerprintService.java:460)
+                  at android.hardware.fingerprint.FingerprintManager.isHardwareDetected(FingerprintManager.java:792)
+                  at androidx.core.hardware.fingerprint.FingerprintManagerCompat.isHardwareDetected(SourceFile:3)
+                  at androidx.biometric.BiometricManager.canAuthenticateWithFingerprint(SourceFile:3)
+                  at androidx.biometric.BiometricManager.canAuthenticateWithFingerprintOrUnknownBiometric(SourceFile:2)
+                  at androidx.biometric.BiometricManager.canAuthenticateCompat(SourceFile:10)
+                  at androidx.biometric.BiometricManager.canAuthenticate(SourceFile:5)
+             */
+            Log.e(ex);
+            return false;
+        }
     }
 
     static boolean shouldAuthenticate(Context context) {
@@ -1888,6 +1950,7 @@ public class Helper {
                 public void onDestroy() {
                     Log.i("Authenticate destroyed");
                     ApplicationEx.getMainHandler().post(cancelPrompt);
+                    owner.getLifecycle().removeObserver(this);
                 }
             });
 
@@ -2055,6 +2118,11 @@ public class Helper {
                                         intf.onNothingSelected();
                                     else
                                         intf.onSelected(selected);
+                                }
+
+                                @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+                                public void onDestroy() {
+                                    owner.getLifecycle().removeObserver(this);
                                 }
                             });
                         }

@@ -57,9 +57,11 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,7 +87,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         EntityLog.log(this, "Activity create " + this.getClass().getName() +
-                " version=" + BuildConfig.VERSION_NAME +
+                " version=" + BuildConfig.VERSION_NAME + BuildConfig.REVISION +
                 " process=" + android.os.Process.myPid());
         Intent intent = getIntent();
         if (intent != null)
@@ -509,6 +511,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             public void onDestroyed() {
                 Log.d("Removing back listener=" + listener);
                 keyPressedListeners.remove(listener);
+                owner.getLifecycle().removeObserver(this);
             }
         });
     }
@@ -763,6 +766,21 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         @Override
         public void onFragmentDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             log(fm, f, "onFragmentDestroyed");
+            if (BuildConfig.PLAY_STORE_RELEASE)
+                return;
+            try {
+                for (Field field : f.getClass().getDeclaredFields()) {
+                    Class<?> type = field.getType();
+                    if (View.class.isAssignableFrom(type) ||
+                            RecyclerView.Adapter.class.isAssignableFrom(type)) {
+                        Log.i("Clearing " + f.getClass().getSimpleName() + ":" + field.getName());
+                        field.setAccessible(true);
+                        field.set(f, null);
+                    }
+                }
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
         }
 
         @Override

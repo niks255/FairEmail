@@ -226,7 +226,8 @@
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
     <string name="title_setup_doze_device">This is probably required for this device</string>
-    <string name="title_setup_doze_android">This is required for this Android version</string>
+    <string name="title_setup_doze_12">Push messages are disabled</string>
+    <string name="title_setup_alarm_12">The app won\'t work</string>
     <string name="title_setup_inexact">Alarms &amp; reminders are disabled</string>
     <string name="title_setup_background">Background restrictions are enabled</string>
     <string name="title_setup_data">Data saver is enabled</string>
@@ -239,6 +240,7 @@
     <string name="title_setup_still">Still to do</string>
     <string name="title_setup_error">Error</string>
     <string name="title_setup_configuring">Configuring account &#8230;</string>
+    <string name="title_setup_app_password">You might need to use an app password</string>
 
     <string name="title_setup_close">Close settings</string>
     <string name="title_setup_export">Export settings</string>
@@ -292,6 +294,8 @@
     <string name="title_setup_theme_dark">Dark</string>
     <string name="title_setup_theme_system">Follow system</string>
     <string name="title_setup_theme_black_background">Black background</string>
+    <string name="title_setup_theme_html_light">Light background for original message view</string>
+    <string name="title_setup_theme_composer_light">Light background for message editor</string>
 
     <string name="title_setup_theme_system_hint">This will automatically switch to a light/dark theme on day/night mode, if supported by Android</string>
     <string name="title_setup_theme_more_colors">I want more colors</string>
@@ -417,6 +421,7 @@
     <string name="title_advanced_nav_hide_title">Hide navigation menu options?</string>
     <string name="title_advanced_nav_hide_message">You can enable the options again in the display settings</string>
     <string name="title_advanced_nav_message_count">Show number of locally stored messages in the navigation menu</string>
+    <string name="title_advanced_nav_unseen_drafts">Show number of unread drafts in the navigation menu</string>
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_cards_beige">Use beige background when using card style (light themes only)</string>
@@ -518,6 +523,7 @@
     <string name="title_advanced_autoclose">Automatically close conversations</string>
     <string name="title_advanced_onclose">On closing a conversation</string>
     <string name="title_advanced_autoclose_unread">Close conversations on marking messages as unread</string>
+    <string name="title_advanced_collapse_marked">Collapse messages which are manually marked as read or unread</string>
     <string name="title_advanced_undo">Undo timeout</string>
     <string name="title_advanced_quick_filter">Show non-obtrusive quick filter icons</string>
     <string name="title_advanced_quick_scroll">Show non-obtrusive quick scroll up/down icons</string>
@@ -656,6 +662,8 @@
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
     <string name="title_advanced_memory_usage" translatable="false">Memory usage: %1$s/%2$s Native: %3$s</string>
     <string name="title_advanced_storage_usage" translatable="false">Storage space: %1$s/%2$s App: %3$s</string>
+    <string name="title_advanced_cursor_window" translatable="false">Cursor window size: %1$s</string>
+    <string name="title_advanced_suffixes" translatable="false">Public suffix list: %1$d</string>
     <string name="title_advanced_gc" translatable="false">GC</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
@@ -898,6 +906,8 @@
     <string name="title_delete_channel">Delete notification channel</string>
     <string name="title_insert_contact">Add contact</string>
     <string name="title_edit_contact">Edit contact</string>
+    <string name="title_import_contacts">Import vCards</string>
+    <string name="title_export_contacts">Export vCards</string>
     <string name="title_create_sub_folder">Create sub folder</string>
 
     <string name="title_empty_trash_ask">Delete all trashed messages permanently?</string>
@@ -1293,7 +1303,7 @@
         To search the server too, tap the \'search again\' button.
     </string>
     <string name="title_search_index_hint">
-        Searching via the search index is fast, but only finds whole words.
+        Searching via the search index is fast, but only finds whole words in all message parts.
         The options below are to continue searching the email server.
     </string>
     <string name="title_search_text_hint">Searching for text in messages, when there are a large number of messages, might not work on some servers</string>

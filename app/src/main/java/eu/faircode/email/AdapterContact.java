@@ -20,11 +20,9 @@ package eu.faircode.email;
 */
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
@@ -42,13 +40,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -65,6 +60,7 @@ import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHolder> {
     private Fragment parentFragment;
@@ -83,6 +79,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     private List<TupleContactEx> selected = new ArrayList<>();
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
+
+    private static final ExecutorService executor =
+            Helper.getBackgroundExecutor(1, "contacts");
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private View view;
@@ -138,6 +137,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 ivType.setImageDrawable(null);
                 ivType.setContentDescription(null);
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                ivType.setTooltipText(ivType.getContentDescription());
 
             if (contact.avatar == null || !contacts)
                 ivAvatar.setImageDrawable(null);
@@ -309,8 +311,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                     args.putLong("id", contact.id);
                     args.putString("name", contact.name);
 
-                    FragmentEditName fragment = new FragmentEditName();
+                    FragmentDialogEditName fragment = new FragmentDialogEditName();
                     fragment.setArguments(args);
+                    fragment.setTargetFragment(parentFragment, FragmentContacts.REQUEST_NAME);
                     fragment.show(parentFragment.getParentFragmentManager(), "contact:edit");
                 }
 
@@ -366,6 +369,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
             public void onDestroyed() {
                 Log.d(AdapterContact.this + " parent destroyed");
                 AdapterContact.this.parentFragment = null;
+                owner.getLifecycle().removeObserver(this);
             }
         });
     }
@@ -376,54 +380,69 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
 
         all = contacts;
 
-        List<TupleContactEx> filtered;
-        if (types.size() == 0)
-            filtered = all;
-        else {
-            filtered = new ArrayList<>();
-            for (TupleContactEx contact : all)
-                if (types.contains(contact.type))
-                    filtered.add(contact);
-        }
-
-        List<TupleContactEx> items;
-        if (TextUtils.isEmpty(search))
-            items = filtered;
-        else {
-            items = new ArrayList<>();
-            String query = search.toLowerCase().trim();
-            for (TupleContactEx contact : filtered)
-                if (contact.email.toLowerCase().contains(query) ||
-                        (contact.name != null && contact.name.toLowerCase().contains(query)))
-                    items.add(contact);
-        }
-
-        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffCallback(selected, items), false);
-
-        selected = items;
-
-        diff.dispatchUpdatesTo(new ListUpdateCallback() {
+        new SimpleTask<List<TupleContactEx>>() {
             @Override
-            public void onInserted(int position, int count) {
-                Log.d("Inserted @" + position + " #" + count);
+            protected List<TupleContactEx> onExecute(Context context, Bundle args) throws Throwable {
+                List<TupleContactEx> filtered;
+                if (types.size() == 0)
+                    filtered = contacts;
+                else {
+                    filtered = new ArrayList<>();
+                    for (TupleContactEx contact : contacts)
+                        if (types.contains(contact.type))
+                            filtered.add(contact);
+                }
+
+                List<TupleContactEx> items;
+                if (TextUtils.isEmpty(search))
+                    items = filtered;
+                else {
+                    items = new ArrayList<>();
+                    String query = search.toLowerCase().trim();
+                    for (TupleContactEx contact : filtered)
+                        if (contact.email.toLowerCase().contains(query) ||
+                                (contact.name != null && contact.name.toLowerCase().contains(query)))
+                            items.add(contact);
+                }
+
+                return items;
             }
 
             @Override
-            public void onRemoved(int position, int count) {
-                Log.d("Removed @" + position + " #" + count);
+            protected void onExecuted(Bundle args, List<TupleContactEx> items) {
+                DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffCallback(selected, items), false);
+
+                selected = items;
+
+                diff.dispatchUpdatesTo(new ListUpdateCallback() {
+                    @Override
+                    public void onInserted(int position, int count) {
+                        Log.d("Inserted @" + position + " #" + count);
+                    }
+
+                    @Override
+                    public void onRemoved(int position, int count) {
+                        Log.d("Removed @" + position + " #" + count);
+                    }
+
+                    @Override
+                    public void onMoved(int fromPosition, int toPosition) {
+                        Log.d("Moved " + fromPosition + ">" + toPosition);
+                    }
+
+                    @Override
+                    public void onChanged(int position, int count, Object payload) {
+                        Log.d("Changed @" + position + " #" + count);
+                    }
+                });
+                diff.dispatchUpdatesTo(AdapterContact.this);
             }
 
             @Override
-            public void onMoved(int fromPosition, int toPosition) {
-                Log.d("Moved " + fromPosition + ">" + toPosition);
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
             }
-
-            @Override
-            public void onChanged(int position, int count, Object payload) {
-                Log.d("Changed @" + position + " #" + count);
-            }
-        });
-        diff.dispatchUpdatesTo(this);
+        }.setExecutor(executor).execute(context, owner, new Bundle(), "contacts:filter");
     }
 
     public void search(String query) {
@@ -495,49 +514,5 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
         holder.unwire();
         holder.bindTo(contact);
         holder.wire();
-    }
-
-    public static class FragmentEditName extends FragmentDialogBase {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit_name, null);
-            final EditText etName = view.findViewById(R.id.etName);
-            etName.setText(getArguments().getString("name"));
-
-            return new AlertDialog.Builder(getContext())
-                    .setView(view)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Bundle args = new Bundle();
-                            args.putLong("id", getArguments().getLong("id"));
-                            args.putString("name", etName.getText().toString());
-
-                            new SimpleTask<Void>() {
-                                @Override
-                                protected Void onExecute(Context context, Bundle args) {
-                                    long id = args.getLong("id");
-                                    String name = args.getString("name");
-
-                                    if (TextUtils.isEmpty(name))
-                                        name = null;
-
-                                    DB db = DB.getInstance(context);
-                                    db.contact().setContactName(id, name);
-
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onException(Bundle args, Throwable ex) {
-                                    Log.unexpectedError(getParentFragmentManager(), ex);
-                                }
-                            }.execute(getContext(), getActivity(), args, "edit:name");
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
-        }
     }
 }

@@ -184,7 +184,8 @@
     <string name="title_setup_doze_battery">Η μπαταρία χρησιμοποιείται παραπάνω από το κανονικό;</string>
     <string name="title_setup_doze_stopped">Σταμάτησε ο συγχρονισμός;</string>
     <string name="title_setup_doze_device">Αυτό πιθανόν απαιτείται για αυτήν τη συσκευή</string>
-    <string name="title_setup_doze_android">Αυτό απαιτείται για αυτήν την έκδοση Android</string>
+    <string name="title_setup_doze_12">Τα μηνύματα ώθησης (push) είναι απενεργοποιημένα</string>
+    <string name="title_setup_alarm_12">Η εφαρμογή δεν θα λειτουργήσει</string>
     <string name="title_setup_inexact">Ειδοποιήσεις &amp; υπενθυμίσεις απενεργοποιημένες</string>
     <string name="title_setup_background">Οι περιορισμοί παρασκηνίου είναι ενεργοποιημένοι</string>
     <string name="title_setup_data">Η εξοικονόμηση δεδομένων είναι ενεργή</string>
@@ -196,6 +197,7 @@
     <string name="title_setup_still">Απομένουν να γίνουν</string>
     <string name="title_setup_error">Σφάλμα</string>
     <string name="title_setup_configuring">Ρύθμιση λογαριασμού &#8230;</string>
+    <string name="title_setup_app_password">Ίσως χρειαστεί να χρησιμοποιήσετε έναν κωδικό πρόσβασης εφαρμογής</string>
     <string name="title_setup_close">Κλείσιμο ρυθμίσεων</string>
     <string name="title_setup_export">Εξαγωγή ρυθμίσεων</string>
     <string name="title_setup_import">Εισαγωγή ρυθμίσεων</string>
@@ -241,6 +243,8 @@
     <string name="title_setup_theme_dark">Σκούρο</string>
     <string name="title_setup_theme_system">Σύμφωνα με το σύστημα</string>
     <string name="title_setup_theme_black_background">Μαύρο φόντο</string>
+    <string name="title_setup_theme_html_light">Φωτεινό φόντο για την προβολή του αρχικού μηνύματος</string>
+    <string name="title_setup_theme_composer_light">Φωτεινό φόντο κατά τη σύνταξη μηνυμάτων</string>
     <string name="title_setup_theme_system_hint">Με την επιλογή αυτή θα εναλλάσσονται αυτόματα το φωτεινό και σκοτεινό θέμα ανάλογα με τη λειτουργία ημέρας/νύχτας, εφόσον η δυνατότητα αυτή υποστηρίζεται από το Andoid</string>
     <string name="title_setup_theme_more_colors">Θέλω περισσότερα χρώματα</string>
     <string name="title_setup_advanced">Για προχωρημένους</string>
@@ -312,7 +316,7 @@
     <string name="title_advanced_signature_reply">Χρήση υπογραφής κατά την απάντηση</string>
     <string name="title_advanced_signature_forward">Χρήση υπογραφής κατά την προώθηση</string>
     <string name="title_advanced_discard_delete">Οριστική διαγραφή ενός προσχεδίου όταν αυτό απορρίπτεται</string>
-    <string name="title_advanced_reply_move">Κατά την απάντηση ενός μηνύματος σε έναν φάκελο χρήστη, να αποθηκεύεται η απάντηση μέσα στον ίδιο φάκελο</string>
+    <string name="title_advanced_reply_move">Κατά την απάντηση ενός μηνύματος εντός ενός φακέλου χρήστη, να αποθηκεύεται η απάντηση μέσα στον ίδιο φάκελο</string>
     <string name="title_advanced_auto_link">Αυτόματη δημιουργία συνδέσμων</string>
     <string name="title_advanced_plain_only">Αποστολή απλού κειμένου από προεπιλογή</string>
     <string name="title_advanced_flow">Αναπροσαρμοσμένη μορφοποίηση για απλό κείμενο</string>
@@ -348,6 +352,7 @@
     <string name="title_advanced_nav_hide_title">Απόκρυψη των επιλογών του μενού πλοήγησης;</string>
     <string name="title_advanced_nav_hide_message">Μπορείτε να ενεργοποιήσετε ξανά τις επιλογές στις ρυθμίσεις εμφάνισης</string>
     <string name="title_advanced_nav_message_count">Να εμφανίζεται ο αριθμός των τοπικά αποθηκευμένων μηνυμάτων στο μενού πλοήγησης</string>
+    <string name="title_advanced_nav_unseen_drafts">Να εμφανίζεται ο αριθμός των μη αναγνωσμένων προσχεδίων στο μενού πλοήγησης</string>
     <string name="title_advanced_startup">Εμφάνιση στην οθόνη έναρξης</string>
     <string name="title_advanced_cards">Προβολή σε στιλ κάρτας αντί σε στιλ πίνακα</string>
     <string name="title_advanced_cards_beige">Μπεζ φόντο κατά τη χρήση του στιλ κάρτας (ανοιχτόχρωμα θέματα μόνο)</string>
@@ -443,6 +448,7 @@
     <string name="title_advanced_autoclose">Αυτόματη κλείσιμο των συζητήσεων</string>
     <string name="title_advanced_onclose">Κατά το κλείσιμο μιας συζήτησης</string>
     <string name="title_advanced_autoclose_unread">Να κλείνουν οι συζητήσεις όταν τα μηνύματα επισημαίνονται ως μη αναγνωσμένα</string>
+    <string name="title_advanced_collapse_marked">Σύμπτυξη μηνυμάτων που επισημαίνονται χειροκίνητα ως αναγνωσμένα ή μη αναγνωσμένα</string>
     <string name="title_advanced_undo">Χρονικό περιθώριο για αναίρεση</string>
     <string name="title_advanced_quick_filter">Διακριτικά εικονίδια για γρήγορο φιλτράρισμα</string>
     <string name="title_advanced_quick_scroll">Διακριτικά εικονίδια για ταχεία κύλιση προς τα πάνω/κάτω</string>
@@ -652,7 +658,7 @@
     <string name="title_account_linked">Συνδεδεμένος λογαριασμός</string>
     <string name="title_account_name">Όνομα λογαριασμού</string>
     <string name="title_account_name_hint">Χρησιμοποιείται για τη διαφοροποίηση φακέλων</string>
-    <string name="title_account_interval_hint">Συχνότητα ανανέωσης της σύνδεσης για μηνύματα push ή συχνότητα ελέγχου για νέα μηνύματα</string>
+    <string name="title_account_interval_hint">Συχνότητα ανανέωσης της σύνδεσης για μηνύματα ώθησης (push) ή συχνότητα ελέγχου για νέα μηνύματα</string>
     <string name="title_account_partial_fetch_hint">Απενεργοποιήστε το μόνο σε περιπτώσεις κενών μηνυμάτων ή χαλασμένων συνημμένων</string>
     <string name="title_color">Χρώμα</string>
     <string name="title_background">Φόντο</string>
@@ -714,7 +720,7 @@
     <string name="title_default_composable">Η προεπιλεγμένη διεύθυνση ηλ. ταχυδρομείου καθορίζεται από την κύρια ταυτότητα του κύριου λογαριασμού</string>
     <string name="title_no_composable">Για την αποστολή μηνυμάτων απαιτείται να ρυθμιστεί μια ταυτότητα και να επιλεγεί ένα φάκελος για πρόχειρα στις ρυθμίσεις λογαριασμού</string>
     <string name="title_no_standard">Αυτός ο πάροχος χρησιμοποιεί ιδιόκτητο πρωτόκολλο ηλ. ταχυδρομείου και, ως εκ τούτου, δεν υποστηρίζει τη χρήση ενός ανεξάρτητου πελάτη ηλ. ταχυδρομείου</string>
-    <string name="title_no_idle">Ο πάροχος αυτός δεν υποστηρίζει μηνύματα push. Αυτό καθυστερεί τη λήψη νέων μηνυμάτων και αυξάνει τη χρήση μπαταρίας.</string>
+    <string name="title_no_idle">Ο πάροχος αυτός δεν υποστηρίζει μηνύματα ώθησης (push). Αυτό καθυστερεί τη λήψη νέων μηνυμάτων και αυξάνει τη χρήση μπαταρίας.</string>
     <string name="title_no_utf8">Ο πάροχος αυτός δεν υποστηρίζει UTF-8</string>
     <string name="title_no_sync">Σφάλματα συγχρονισμού από %1$s</string>
     <string name="title_reply_domain">Ο τομέας αποστολέα (%1$s) και ο τομέας απάντησης (%2$s) διαφέρουν</string>
@@ -763,6 +769,8 @@
     <string name="title_delete_channel">Διαγραφή καναλιού ειδοποιήσεων</string>
     <string name="title_insert_contact">Προσθήκη επαφής</string>
     <string name="title_edit_contact">Επεξεργασία επαφής</string>
+    <string name="title_import_contacts">Εισαγωγή vCard</string>
+    <string name="title_export_contacts">Εξαγωγή vCard</string>
     <string name="title_create_sub_folder">Δημιουργία υποφακέλου</string>
     <string name="title_empty_trash_ask">Οριστική διαγραφή όλων των απορριμμάτων;</string>
     <string name="title_empty_spam_ask">Οριστική διαγραφή όλων των Ανεπιθύμητων;</string>
@@ -794,7 +802,7 @@
     <string name="title_navigation_folder">Προβολή στο μενού πλοήγησης</string>
     <string name="title_synchronize_folder">Συγχρονισμός (λήψη μηνυμάτων)</string>
     <string name="title_poll_folder">Περιοδικός έλεγχος αντί για συνεχής συγχρονισμός</string>
-    <string name="title_poll_folder_remark">Οι περισσότεροι διακομιστές ηλ. ταχυδρομείου επιτρέπουν μηνύματα ώθησης μόνον για έναν πολύ μικρό αριθμό φακέλων!</string>
+    <string name="title_poll_folder_remark">Οι περισσότεροι διακομιστές ηλ. ταχυδρομείου επιτρέπουν μηνύματα ώθησης (push) μόνον για έναν πολύ μικρό αριθμό φακέλων!</string>
     <string name="title_download_folder">Αυτόματο κατέβασμα των κειμένων των μηνυμάτων και των συνημμένων</string>
     <string name="title_notify_folder">Να ειδοποιούμαι για νέα μηνύματα</string>
     <string name="title_auto_classify_source">Ταξινόμηση νέων μηνυμάτων σε αυτόν το φάκελο</string>
@@ -805,7 +813,7 @@
     <string name="title_keep_days_remark">Τα παλιά μηνύματα θα διαγράφονται από τη συσκευή, αλλά θα παραμένουν στο διακομιστή</string>
     <string name="title_keep_all">Διατήρηση όλων των μηνυμάτων</string>
     <string name="title_poll_system">Καθόρισε φακέλους συστήματος να ελέγχουν περιοδικά για νέα μηνύματα</string>
-    <string name="title_poll_user">Καθόρισε φακέλους συστήματος να ελέγχουν περιοδικά για νέα μηνύματα</string>
+    <string name="title_poll_user">Ορισμός φακέλων χρήστη στους οποίους θα γίνεται περιοδικός έλεγχος για νέα μηνύματα</string>
     <string name="title_auto_trash">Αυτόματη μεταφορά παλαιών μηνυμάτων στα απορρίμματα</string>
     <string name="title_auto_delete">Αυτόματη οριστική διαγραφή παλαιών μηνυμάτων</string>
     <string name="title_auto_delete_hint">Παλαιά μηνύματα είναι τα μηνύματα που δεν διατηρούνται πλέον στη συσκευή</string>
@@ -1125,7 +1133,7 @@
     <string name="title_search_hint">        Αρχικά, η αναζήτηση εκτελείται στα αποθηκευμένα στη συσκευή μηνύματα.
         Για αναζήτηση και στον διακομιστή, πατήστε το κουμπί \"αναζήτηση ξανά\".
     </string>
-    <string name="title_search_index_hint">        Η αναζήτηση μέσω του ευρετηρίου αναζήτησης είναι γρήγορη, αλλά εντοπίζει μόνον ολόκληρες λέξεις.
+    <string name="title_search_index_hint">        Η αναζήτηση μέσω του ευρετηρίου αναζήτησης είναι γρήγορη, αλλά εντοπίζει μόνον ολόκληρες λέξεις μέσα σε όλα τα τμήματα ενός μηνύματος.
         Οι παρακάτω επιλογές επιτρέπουν περαιτέρω αναζήτηση στον διακομιστή ηλ. ταχυδρομείου.
     </string>
     <string name="title_search_text_hint">Η αναζήτηση κειμένου μέσα σε μηνύματα μπορεί να μη λειτουργήσει σε κάποιους διακομιστές όταν υπάρχει μεγάλος αριθμός μηνυμάτων</string>

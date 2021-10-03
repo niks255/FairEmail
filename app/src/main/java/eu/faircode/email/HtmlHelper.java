@@ -105,6 +105,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -603,12 +604,18 @@ public class HtmlHelper {
                     String value = kv.get(key);
                     switch (key) {
                         case "color":
+                        case "background":
                         case "background-color":
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/color
-                            if ("color".equals(key) && !text_color)
-                                continue;
-                            if ("background-color".equals(key) && !background_color)
-                                continue;
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/background
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/background-color
+                            if ("color".equals(key)) {
+                                if (!text_color)
+                                    continue;
+                            } else {
+                                if (!background_color)
+                                    continue;
+                            }
 
                             Integer color = parseColor(value);
 
@@ -914,7 +921,9 @@ public class HtmlHelper {
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q
         for (Element q : document.select("q")) {
             q.tagName("a");
-            q.attr("href", q.attr("cite"));
+            String cite = q.attr("cite");
+            if (!TextUtils.isEmpty(cite) && !cite.trim().startsWith("#"))
+                q.attr("href", cite);
             q.removeAttr("cite");
         }
 
@@ -1159,7 +1168,7 @@ public class HtmlHelper {
                         while (p != null && !linked)
                             if ("a".equals(p.tagName())) {
                                 String href = p.attr("href");
-                                if (TextUtils.isEmpty(href) || href.equals("#"))
+                                if (TextUtils.isEmpty(href))
                                     break;
                                 if (!TextUtils.isEmpty(p.text()))
                                     break;
@@ -1235,6 +1244,28 @@ public class HtmlHelper {
         }
 
         return document;
+    }
+
+    static void removeRelativeLinks(Document document) {
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+        Elements b = document.select("base");
+        String base = (b.size() > 0 ? b.get(0).attr("href") : null);
+        for (Element a : document.select("a")) {
+            String href = a.attr("href");
+            if (!TextUtils.isEmpty(base))
+                try {
+                    // https://developer.android.com/reference/java/net/URI
+                    href = URI.create(base).resolve(href).toString();
+                    a.attr("href", href);
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
+
+            if (href.trim().startsWith("#")) {
+                a.tagName("span");
+                a.removeAttr("href");
+            }
+        }
     }
 
     static void autoLink(Document document) {
@@ -2646,6 +2677,7 @@ public class HtmlHelper {
                             String value = param.substring(semi + 1);
                             switch (key) {
                                 case "color":
+                                case "background":
                                 case "background-color":
                                     if (!TextUtils.isEmpty(value))
                                         try {

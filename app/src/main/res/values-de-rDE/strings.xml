@@ -184,7 +184,8 @@
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
     <string name="title_setup_doze_device">Dies ist möglicherweise für dieses Gerät erforderlich</string>
-    <string name="title_setup_doze_android">Dies ist für diese Android-Version erforderlich</string>
+    <string name="title_setup_doze_12">Push-Nachrichten sind deaktiviert</string>
+    <string name="title_setup_alarm_12">Die App funktioniert nicht</string>
     <string name="title_setup_inexact">Benachrichtigungen und Erinnerungen sind deaktiviert</string>
     <string name="title_setup_background">Hintergrundbeschränkungen sind aktiviert</string>
     <string name="title_setup_data">Datensparmodus aktiviert</string>
@@ -196,6 +197,7 @@
     <string name="title_setup_still">Noch zu tun</string>
     <string name="title_setup_error">Fehler</string>
     <string name="title_setup_configuring">Konto wird konfiguriert &#8230;</string>
+    <string name="title_setup_app_password">Möglicherweise müssen Sie ein App-Passwort verwenden</string>
     <string name="title_setup_close">Einstellungen schließen</string>
     <string name="title_setup_export">Einstellungen exportieren</string>
     <string name="title_setup_import">Einstellungen importieren</string>
@@ -242,6 +244,8 @@
     <string name="title_setup_theme_dark">Dunkel</string>
     <string name="title_setup_theme_system">wie System</string>
     <string name="title_setup_theme_black_background">Schwarzer Hintergrund</string>
+    <string name="title_setup_theme_html_light">Heller Hintergrund für die Ansicht der Originalnachricht</string>
+    <string name="title_setup_theme_composer_light">Heller Hintergrund für das Verfassenfenster</string>
     <string name="title_setup_theme_system_hint">Dadurch wird automatisch auf ein helles/dunkles Design im Tag-/Nachtmodus umgeschaltet, wenn es von Android unterstützt wird</string>
     <string name="title_setup_theme_more_colors">Ich möchte mehr Farben</string>
     <string name="title_setup_advanced">Erweitert</string>
@@ -349,6 +353,7 @@
     <string name="title_advanced_nav_hide_title">Navigationsmenü-Optionen ausblenden?</string>
     <string name="title_advanced_nav_hide_message">Sie können die Optionen in den Darstellungseinstellungen wieder aktivieren</string>
     <string name="title_advanced_nav_message_count">Anzahl der lokal gespeicherten Nachrichten im Navigationsmenü anzeigen</string>
+    <string name="title_advanced_nav_unseen_drafts">Anzahl ungelesener Entwürfe im Navigationsmenü anzeigen</string>
     <string name="title_advanced_startup">Auf Startbildschirm anzeigen:</string>
     <string name="title_advanced_cards">Ordner und Unterhaltungen mit Rahmen (breit) statt in Tabellendesign (schmal) zeigen</string>
     <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund verwenden, wenn Kartenstil genutzt wird (nur bei hellen Farbschemen)</string>
@@ -379,12 +384,12 @@
     <string name="title_advanced_distinguish_contacts">Den Sender unterstrichen darstellen, wenn er ein bekannter lokaler An-Kontakt ist</string>
     <string name="title_advanced_show_recipients">Empfänger im Nachrichtenkopf anzeigen</string>
     <string name="title_advanced_font_size_sender">Schriftgröße für den Absender</string>
-    <string name="title_advanced_sender_ellipsize">Falls erforderlich, kürzen Sie den Absender</string>
+    <string name="title_advanced_sender_ellipsize">Falls erforderlich, Absendernamen kürzen</string>
     <string name="title_advanced_subject_top">Betreff oberhalb des Absenders anzeigen</string>
     <string name="title_advanced_subject_italic">Betreff kursiv anzeigen</string>
     <string name="title_advanced_highlight_subject">Betreff hervorheben</string>
     <string name="title_advanced_font_size_subject">Schriftgröße für den Betreff</string>
-    <string name="title_advanced_subject_ellipsize">Wenn nötig den Betreff kürzen</string>
+    <string name="title_advanced_subject_ellipsize">Falls erforderlich, Betreff kürzen</string>
     <string name="title_advanced_compact_mode_remark">Nur Kompaktmodus</string>
     <string name="title_advanced_highlight_color">Hervorhebungsfarbe</string>
     <string name="title_advanced_keywords">Schlüsselwörter im Nachrichtenkopf anzeigen</string>
@@ -444,6 +449,7 @@
     <string name="title_advanced_autoclose">Unterhaltungen automatisch schließen</string>
     <string name="title_advanced_onclose">Beim Schließen einer Unterhaltung</string>
     <string name="title_advanced_autoclose_unread">Unterhaltungen schließen, wenn Nachrichten als ungelesen markiert werden</string>
+    <string name="title_advanced_collapse_marked">Manuell als gelesen oder ungelesen gekennzeichnete Nachrichten einklappen</string>
     <string name="title_advanced_undo">Anzeigedauer von »Rückgängig«</string>
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
     <string name="title_advanced_quick_scroll">Nicht aufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
@@ -766,6 +772,8 @@
     <string name="title_delete_channel">Benachrichtigungskanal löschen</string>
     <string name="title_insert_contact">Kontakt hinzufügen</string>
     <string name="title_edit_contact">Kontakt bearbeiten</string>
+    <string name="title_import_contacts">vCards importieren</string>
+    <string name="title_export_contacts">vCards exportieren</string>
     <string name="title_create_sub_folder">Unterordner erstellen</string>
     <string name="title_empty_trash_ask">Alle Nachrichten im Papierkorb endgültig löschen?</string>
     <string name="title_empty_spam_ask">Alle Spam-Nachrichten endgültig löschen?</string>
@@ -1128,9 +1136,7 @@
         Um auch auf dem Server zu suchen,
         tippen Sie auf »Erneut suchen«.
     </string>
-    <string name="title_search_index_hint">        Das Suchen über den Suchindex ist schnell, findet aber nur ganze Wörter.
-        Mit den folgenden Einstellungen können Sie die Suche auf dem E-Mail-Server fortsetzen.
-    </string>
+    <string name="title_search_index_hint">Die Suche über den Suchindex ist schnell, kann aber in allen Nachrichtenteilen nur ganze Wörter finden. Mit den folgenden Optionen können Sie die Suche auf dem E-Mail-Server fortsetzen.</string>
     <string name="title_search_text_hint">Das Suchen nach Text in Nachrichten funktioniert bei einer großen Anzahl von Nachrichten auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_text_unsupported">\'%s\' bedeutet, dass der Mail-Server die Suche in Nachrichtentexten nicht unterstützt</string>
     <string name="title_search_size_hint">Die Nachrichtensuche nach Größe funktioniert, bei einer großen Anzahl von Nachrichten, auf einigen Servern möglicherweise nicht</string>

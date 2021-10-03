@@ -183,7 +183,8 @@
     <string name="title_setup_doze_battery">Højt strømforbrug?</string>
     <string name="title_setup_doze_stopped">Synk stoppet?</string>
     <string name="title_setup_doze_device">Dette er sandsynligvis nødvendigt for denne enhed</string>
-    <string name="title_setup_doze_android">Dette er påkrævet for denne Android-version</string>
+    <string name="title_setup_doze_12">Push-beskeder er deaktivet</string>
+    <string name="title_setup_alarm_12">Appen vil ikke fungere</string>
     <string name="title_setup_inexact">Alarmer og påmindelser er deaktiveret</string>
     <string name="title_setup_background">Baggrundsbegrænsninger er aktive</string>
     <string name="title_setup_data">Datasparer er aktiveret</string>
@@ -195,6 +196,7 @@
     <string name="title_setup_still">Resterer stadig</string>
     <string name="title_setup_error">Fejl</string>
     <string name="title_setup_configuring">Opsætter konto &#8230;</string>
+    <string name="title_setup_app_password">En app-adgangskode skal muligvis benyttes</string>
     <string name="title_setup_close">Luk indstillinger</string>
     <string name="title_setup_export">Eksportindstillinger</string>
     <string name="title_setup_import">Importindstillinger</string>
@@ -240,6 +242,8 @@
     <string name="title_setup_theme_dark">Mørkt</string>
     <string name="title_setup_theme_system">Følg system</string>
     <string name="title_setup_theme_black_background">Sort baggrund</string>
+    <string name="title_setup_theme_html_light">Lys baggrund til oprindelig beskedvisning</string>
+    <string name="title_setup_theme_composer_light">Lys baggrund til beskedredigering</string>
     <string name="title_setup_theme_system_hint">Følg system skifter automatisk til lyst/mørkt dag/nat, hvis understøttet af Android</string>
     <string name="title_setup_theme_more_colors">Flere farver ænskes</string>
     <string name="title_setup_advanced">Avanceret</string>
@@ -345,6 +349,7 @@
     <string name="title_advanced_nav_hide_title">Skjul navigeringsmenuindstillinger?</string>
     <string name="title_advanced_nav_hide_message">Indstillingerne kan genaktivere via skærmindstillingerne</string>
     <string name="title_advanced_nav_message_count">Vis antal lokalt gemte beskeder i navigationsmenuen</string>
+    <string name="title_advanced_nav_unseen_drafts">Vis antallet af ulæste udkast i navigeringsmenuen</string>
     <string name="title_advanced_startup">Vis på startskærmen</string>
     <string name="title_advanced_cards">Brug kortstil i stedet for tabelform</string>
     <string name="title_advanced_cards_beige">Brug beige baggrund ifm. kortstil (kun lyse temaer)</string>
@@ -439,6 +444,7 @@
     <string name="title_advanced_autoclose">Auto-luk samtaler</string>
     <string name="title_advanced_onclose">Ved lukning af i en samtale</string>
     <string name="title_advanced_autoclose_unread">Luk konversationer, når beskeder markeres som ulæste</string>
+    <string name="title_advanced_collapse_marked">Sammenfold beskeder, som manuelt markeres som læste/ulæste</string>
     <string name="title_advanced_undo">Fortryd timeout</string>
     <string name="title_advanced_quick_filter">Vis ikke-påtrængende hurtige filterikoner</string>
     <string name="title_advanced_quick_scroll">Vis ikke-påtrængende hurtige rul op/ned ikoner</string>
@@ -757,6 +763,8 @@
     <string name="title_delete_channel">Slet notifikationskanal</string>
     <string name="title_insert_contact">Tilføj Kontakt</string>
     <string name="title_edit_contact">Redigér Kontakt</string>
+    <string name="title_import_contacts">Importere vCard</string>
+    <string name="title_export_contacts">Eksportere vCard</string>
     <string name="title_create_sub_folder">Opret undermappe</string>
     <string name="title_empty_trash_ask">Slet permanent alt indhold i papirkurven?</string>
     <string name="title_empty_spam_ask">Slet permanent alle spambeskeder?</string>
@@ -1118,7 +1126,7 @@
     <string name="title_search_hint">        Indledningsvis udføres søgningen på enheden.
          For også at søge på serveren, så tryk på knappen \'søg igen\'.
     </string>
-    <string name="title_search_index_hint">        Søgning via søgeindekset er hurtig, men finder kun hele ord.
+    <string name="title_search_index_hint">        Søgning via søgeindekset er hurtig, men finder kun hele ord i alle beskeddele.
          Indstillingerne nedenfor er til at fortsætte søgningen på e-mailserveren.
     </string>
     <string name="title_search_text_hint">Søgning efter tekst i beskeder, når der er et stort antal heraf, fungerer muligvis ikke på alle servere</string>

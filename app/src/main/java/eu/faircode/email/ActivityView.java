@@ -114,19 +114,30 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private ImageButton ibSettings;
     private ImageButton ibFetchMore;
     private ImageButton ibForceSync;
+
     private View vSeparatorOptions;
     private ImageButton ibExpanderAccount;
+
     private RecyclerView rvAccount;
     private ImageButton ibExpanderUnified;
+
+    private ImageButton ibExpanderSearch;
+    private RecyclerView rvSearch;
+    private View vSeparatorSearch;
+
     private RecyclerView rvUnified;
     private ImageButton ibExpanderMenu;
+
     private RecyclerView rvMenu;
     private ImageButton ibExpanderExtra;
+
     private RecyclerView rvMenuExtra;
+
     private Group grpOptions;
 
     private AdapterNavAccountFolder adapterNavAccount;
     private AdapterNavUnified adapterNavUnified;
+    private AdapterNavSearch adapterNavSearch;
     private AdapterNavMenu adapterNavMenu;
     private AdapterNavMenu adapterNavMenuExtra;
 
@@ -291,12 +302,20 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         ibForceSync = drawerContainer.findViewById(R.id.ibForceSync);
         vSeparatorOptions = drawerContainer.findViewById(R.id.vSeparatorOptions);
         grpOptions = drawerContainer.findViewById(R.id.grpOptions);
+
         ibExpanderAccount = drawerContainer.findViewById(R.id.ibExpanderAccount);
         rvAccount = drawerContainer.findViewById(R.id.rvAccount);
+
         ibExpanderUnified = drawerContainer.findViewById(R.id.ibExpanderUnified);
         rvUnified = drawerContainer.findViewById(R.id.rvUnified);
+
+        ibExpanderSearch = drawerContainer.findViewById(R.id.ibExpanderSearch);
+        rvSearch = drawerContainer.findViewById(R.id.rvSearch);
+        vSeparatorSearch = drawerContainer.findViewById(R.id.vSeparatorSearch);
+
         ibExpanderMenu = drawerContainer.findViewById(R.id.ibExpanderMenu);
         rvMenu = drawerContainer.findViewById(R.id.rvMenu);
+
         ibExpanderExtra = drawerContainer.findViewById(R.id.ibExpanderExtra);
         rvMenuExtra = drawerContainer.findViewById(R.id.rvMenuExtra);
 
@@ -367,7 +386,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     public boolean onMenuItemClick(MenuItem item) {
                         String tab = FragmentOptions.TAB_LABELS.get(item.getOrder());
                         startActivity(new Intent(ActivityView.this, ActivitySetup.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 .putExtra("tab", tab));
                         return true;
                     }
@@ -381,7 +400,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             @Override
             public boolean onLongClick(View view) {
                 startActivity(new Intent(ActivityView.this, ActivitySetup.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 return true;
             }
         });
@@ -427,13 +446,30 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             public void onClick(View v) {
                 boolean nav_account = prefs.getBoolean("nav_account", true);
                 boolean nav_folder = prefs.getBoolean("nav_folder", true);
-                nav_account = !(nav_account || nav_folder);
+                boolean nav_quick = prefs.getBoolean("nav_quick", true);
+                boolean expanded = (nav_account || nav_folder);
+
+                if (expanded && nav_quick && adapterNavAccount.hasFolders())
+                    nav_quick = false;
+                else {
+                    expanded = !expanded;
+                    if (expanded)
+                        nav_quick = true;
+                }
+
                 prefs.edit()
-                        .putBoolean("nav_account", nav_account)
-                        .putBoolean("nav_folder", false)
+                        .putBoolean("nav_account", expanded)
+                        .putBoolean("nav_folder", expanded)
+                        .putBoolean("nav_quick", nav_quick)
                         .apply();
-                ibExpanderAccount.setImageLevel(nav_account ? 0 /* less */ : 1 /* more */);
-                rvAccount.setVisibility(nav_account ? View.VISIBLE : View.GONE);
+
+                adapterNavAccount.setFolders(nav_quick);
+
+                if (expanded && nav_quick && adapterNavAccount.hasFolders())
+                    ibExpanderAccount.setImageLevel(2 /* unfold less */);
+                else
+                    ibExpanderAccount.setImageLevel(expanded ? 0 /* less */ : 1 /* more */);
+                rvAccount.setVisibility(expanded ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -453,6 +489,27 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 prefs.edit().putBoolean("unified_system", unified_system).apply();
                 ibExpanderUnified.setImageLevel(unified_system ? 0 /* less */ : 1 /* more */);
                 rvUnified.setVisibility(unified_system ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        // Menus
+        rvSearch.setLayoutManager(new LinearLayoutManager(this));
+        adapterNavSearch = new AdapterNavSearch(this, this, getSupportFragmentManager());
+        rvSearch.setAdapter(adapterNavSearch);
+
+        boolean nav_search = prefs.getBoolean("nav_search", true);
+        ibExpanderSearch.setImageLevel(nav_search ? 0 /* less */ : 1 /* more */);
+        ibExpanderSearch.setVisibility(View.GONE);
+        rvSearch.setVisibility(View.GONE);
+        vSeparatorSearch.setVisibility(View.GONE);
+
+        ibExpanderSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean nav_search = !prefs.getBoolean("nav_search", true);
+                prefs.edit().putBoolean("nav_search", nav_search).apply();
+                ibExpanderSearch.setImageLevel(nav_search ? 0 /* less */ : 1 /* more */);
+                rvSearch.setVisibility(nav_search ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -626,6 +683,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     drawerLayout.closeDrawer(drawerContainer);
                 onMenuSetup();
             }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                if (BuildConfig.DEBUG) {
+                    ContactInfo.clearCache(ActivityView.this, true);
+                    ToastEx.makeText(ActivityView.this, R.string.title_completed, Toast.LENGTH_LONG).show();
+                }
+            }
         }));
 
         adapterNavMenu.set(menus, nav_expanded);
@@ -736,13 +801,25 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         // Live data
 
         DB db = DB.getInstance(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         db.account().liveAccountFolder().observe(owner, new Observer<List<TupleAccountFolder>>() {
             @Override
             public void onChanged(@Nullable List<TupleAccountFolder> accounts) {
                 if (accounts == null)
                     accounts = new ArrayList<>();
-                adapterNavAccount.set(accounts, nav_expanded);
+
+                boolean nav_account = prefs.getBoolean("nav_account", true);
+                boolean nav_folder = prefs.getBoolean("nav_folder", true);
+                boolean nav_quick = prefs.getBoolean("nav_quick", true);
+                boolean expanded = (nav_account || nav_folder);
+
+                adapterNavAccount.set(accounts, nav_expanded, nav_quick);
+
+                if (expanded && nav_quick && adapterNavAccount.hasFolders())
+                    ibExpanderAccount.setImageLevel(2 /* unfold less */);
+                else
+                    ibExpanderAccount.setImageLevel(expanded ? 0 /* less */ : 1 /* more */);
             }
         });
 
@@ -752,6 +829,20 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 if (folders == null)
                     folders = new ArrayList<>();
                 adapterNavUnified.set(folders, nav_expanded);
+            }
+        });
+
+        db.search().liveSearch().observe(owner, new Observer<List<EntitySearch>>() {
+            @Override
+            public void onChanged(List<EntitySearch> search) {
+                if (search == null)
+                    search = new ArrayList<>();
+                adapterNavSearch.set(search, nav_expanded);
+
+                boolean nav_search = prefs.getBoolean("nav_search", true);
+                ibExpanderSearch.setVisibility(search.size() > 0 ? View.VISIBLE : View.GONE);
+                rvSearch.setVisibility(search.size() > 0 && nav_search ? View.VISIBLE : View.GONE);
+                vSeparatorSearch.setVisibility(search.size() > 0 ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -1312,7 +1403,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
                 Intent manage = new Intent(ActivityView.this, ActivitySetup.class)
                         .setAction("misc")
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         .putExtra("tab", "misc");
                 PendingIntent piManage = PendingIntentCompat.getActivity(
                         ActivityView.this, ActivitySetup.PI_MISC, manage, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -1325,7 +1416,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 if (!TextUtils.isEmpty(info.download_url)) {
                     Intent download = new Intent(Intent.ACTION_VIEW, Uri.parse(info.download_url))
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    PendingIntent piDownload = PendingIntent.getActivity(
+                    PendingIntent piDownload = PendingIntentCompat.getActivity(
                             ActivityView.this, 0, download, 0);
                     NotificationCompat.Action.Builder actionDownload = new NotificationCompat.Action.Builder(
                             R.drawable.twotone_cloud_download_24,
@@ -1552,7 +1643,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     private void onMenuSetup() {
         startActivity(new Intent(ActivityView.this, ActivitySetup.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     private void onMenuLegend() {

@@ -184,7 +184,8 @@
     <string name="title_setup_doze_battery">Utilisation élevée de la batterie ?</string>
     <string name="title_setup_doze_stopped">Synchronisation arrêtée ?</string>
     <string name="title_setup_doze_device">Ceci est probablement nécessaire pour cet appareil</string>
-    <string name="title_setup_doze_android">Ceci est nécessaire pour cette version d\'Android</string>
+    <string name="title_setup_doze_12">Les messages push sont désactivés</string>
+    <string name="title_setup_alarm_12">L\'application ne fonctionnera pas</string>
     <string name="title_setup_inexact">Alarmes &amp; rappels désactivés</string>
     <string name="title_setup_background">Les restrictions d\'arrière-plan sont activées</string>
     <string name="title_setup_data">L\'économiseur de données est activé</string>
@@ -196,6 +197,7 @@
     <string name="title_setup_still">Encore à faire</string>
     <string name="title_setup_error">Erreur</string>
     <string name="title_setup_configuring">Configuration du compte&#8230;</string>
+    <string name="title_setup_app_password">Vous devrez éventuellement utiliser un mot de passe d\'application</string>
     <string name="title_setup_close">Fermer les paramètres</string>
     <string name="title_setup_export">Exporter les paramètres</string>
     <string name="title_setup_import">Importer les paramètres</string>
@@ -241,6 +243,8 @@
     <string name="title_setup_theme_dark">Sombre</string>
     <string name="title_setup_theme_system">Suivre le mode système</string>
     <string name="title_setup_theme_black_background">Fond noir</string>
+    <string name="title_setup_theme_html_light">Arrière-plan clair pour l\'affichage du message original</string>
+    <string name="title_setup_theme_composer_light">Arrière-plan clair pour l\'éditeur de message</string>
     <string name="title_setup_theme_system_hint">Ceci basculera automatiquement en mode clair/sombre le jour/la nuit si pris en charge par Android</string>
     <string name="title_setup_theme_more_colors">Je veux plus de couleurs</string>
     <string name="title_setup_advanced">Avancé</string>
@@ -348,6 +352,7 @@
     <string name="title_advanced_nav_hide_title">Masquer les options du menu de navigation ?</string>
     <string name="title_advanced_nav_hide_message">Vous pouvez réactiver les options dans les paramètres d\'affichage</string>
     <string name="title_advanced_nav_message_count">Afficher le nombre de messages stockés localement dans le menu de navigation</string>
+    <string name="title_advanced_nav_unseen_drafts">Afficher le nombre de brouillons non lus dans le menu de navigation</string>
     <string name="title_advanced_startup">Afficher sur l\'écran de démarrage</string>
     <string name="title_advanced_cards">Utiliser le style carte au lieu du style tableau</string>
     <string name="title_advanced_cards_beige">Afficher un arrière-plan beige lors de l\'utilisation du style carte (thèmes clairs seulement)</string>
@@ -443,6 +448,7 @@
     <string name="title_advanced_autoclose">Fermer automatiquement les conversations</string>
     <string name="title_advanced_onclose">Lors de la fermeture d\'une conversation</string>
     <string name="title_advanced_autoclose_unread">Fermer les conversations lors du marquage des messages comme non lus</string>
+    <string name="title_advanced_collapse_marked">Replier les messages marqués manuellement comme lus ou non lus</string>
     <string name="title_advanced_undo">Délai d\'expiration de l\'annulation</string>
     <string name="title_advanced_quick_filter">Afficher les icônes discrètes de filtrage rapide</string>
     <string name="title_advanced_quick_scroll">Afficher les icônes discrètes de défilement rapide vers le haut/bas</string>
@@ -765,6 +771,8 @@
     <string name="title_delete_channel">Supprimer un canal de notification</string>
     <string name="title_insert_contact">Ajouter un contact</string>
     <string name="title_edit_contact">Modifier un contact</string>
+    <string name="title_import_contacts">Importer des vCards</string>
+    <string name="title_export_contacts">Exporter des vCards</string>
     <string name="title_create_sub_folder">Créer un sous-dossier</string>
     <string name="title_empty_trash_ask">Supprimer définitivement tous les messages de la corbeille ?</string>
     <string name="title_empty_spam_ask">Supprimer définitivement tous les messages indésirables ?</string>
@@ -1127,7 +1135,7 @@
     <string name="title_search_hint">        La recherche affichera initialement les messages stockés sur votre appareil.
         Pour rechercher également sur le serveur, appuyez sur le bouton « Rechercher de nouveau ».
     </string>
-    <string name="title_search_index_hint">        La recherche via l\'index de recherche est rapide mais ne trouve que des mots entiers.
+    <string name="title_search_index_hint">        La recherche via l\'index de recherche est rapide mais ne trouve que des mots entiers dans toutes les parties d\'un message.
         Les options ci-dessous permettent de continuer à rechercher sur le serveur de messagerie.
     </string>
     <string name="title_search_text_hint">La recherche de texte dans les messages peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>

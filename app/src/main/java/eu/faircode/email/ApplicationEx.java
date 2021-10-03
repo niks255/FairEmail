@@ -97,7 +97,7 @@ public class ApplicationEx extends Application
 
         long start = new Date().getTime();
         Log.i("App create" +
-                " version=" + BuildConfig.VERSION_NAME +
+                " version=" + BuildConfig.VERSION_NAME + BuildConfig.REVISION +
                 " process=" + android.os.Process.myPid());
         Log.logMemory(this, "App");
 
@@ -196,8 +196,10 @@ public class ApplicationEx extends Application
 
         DisconnectBlacklist.init(this);
 
-        ServiceSynchronize.watchdog(this);
-        ServiceSend.watchdog(this);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            ServiceSynchronize.watchdog(this);
+            ServiceSend.watchdog(this);
+        }
 
         ServiceSynchronize.scheduleWatchdog(this);
         WorkManager.getInstance(this).cancelUniqueWork("WorkerWatchdog");

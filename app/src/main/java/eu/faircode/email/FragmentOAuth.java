@@ -50,6 +50,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 
 import net.openid.appauth.AppAuthConfiguration;
@@ -63,8 +64,10 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.ClientSecretPost;
 import net.openid.appauth.CodeVerifierUtil;
+import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.NoClientAuthentication;
 import net.openid.appauth.ResponseTypeValues;
+import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserDescriptor;
 import net.openid.appauth.browser.BrowserMatcher;
@@ -78,6 +81,7 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -365,8 +369,11 @@ public class FragmentOAuth extends FragmentBase {
             if ("gmail".equals(provider.id))
                 authRequestBuilder.setPrompt("consent");
 
+            // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
             if ("office365".equals(provider.id))
                 authRequestBuilder.setPrompt("select_account");
+            if ("outlook".equals(provider.id))
+                authRequestBuilder.setPrompt("consent");
 
             AuthorizationRequest authRequest = authRequestBuilder.build();
 
@@ -419,8 +426,23 @@ public class FragmentOAuth extends FragmentBase {
             else
                 clientAuth = new ClientSecretPost(provider.oauth.clientSecret);
 
+            TokenRequest.Builder builder = new TokenRequest.Builder(
+                    auth.request.configuration,
+                    auth.request.clientId)
+                    .setGrantType(GrantTypeValues.AUTHORIZATION_CODE)
+                    .setRedirectUri(auth.request.redirectUri)
+                    .setCodeVerifier(auth.request.codeVerifier)
+                    .setAuthorizationCode(auth.authorizationCode)
+                    .setAdditionalParameters(Collections.<String, String>emptyMap())
+                    .setNonce(auth.request.nonce);
+
+            if ("office365".equals(provider.id) || "outlook".equals(provider.id))
+                builder.setScope(TextUtils.join(" ", provider.oauth.scopes));
+
+            TokenRequest request = builder.build();
+
             authService.performTokenRequest(
-                    auth.createTokenExchangeRequest(),
+                    request,
                     clientAuth,
                     new AuthorizationService.TokenResponseCallback() {
                         @Override
@@ -489,6 +511,52 @@ public class FragmentOAuth extends FragmentBase {
                 int aencryption = (provider.imap.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
                 String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
                 int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
+
+                if ("outlook".equals(id) && BuildConfig.DEBUG) {
+                    DB db = DB.getInstance(context);
+
+                    // Create account
+                    EntityAccount account = new EntityAccount();
+
+                    account.host = provider.imap.host;
+                    account.encryption = aencryption;
+                    account.port = provider.imap.port;
+                    account.auth_type = AUTH_TYPE_OAUTH;
+                    account.provider = provider.id;
+                    account.user = address;
+                    account.password = state;
+
+                    int at = account.user.indexOf('@');
+                    String user = account.user.substring(0, at);
+
+                    account.name = provider.name + "/" + user;
+
+                    account.synchronize = true;
+                    account.primary = false;
+
+                    if (provider.keepalive > 0)
+                        account.poll_interval = provider.keepalive;
+
+                    account.partial_fetch = provider.partial;
+
+                    account.created = new Date().getTime();
+                    account.last_connected = account.created;
+
+                    account.id = db.account().insertAccount(account);
+                    args.putLong("account", account.id);
+                    EntityLog.log(context, "OAuth account=" + account.name);
+
+                    EntityFolder folder = new EntityFolder("INBOX", EntityFolder.INBOX);
+                    folder.account = account.id;
+                    folder.setProperties();
+                    folder.setSpecials(account);
+                    folder.id = db.folder().insertFolder(folder);
+                    EntityLog.log(context, "OAuth folder=" + folder.name + " type=" + folder.type);
+                    if (folder.synchronize)
+                        EntityOperation.sync(context, folder.id, true);
+
+                    return null;
+                }
 
                 /*
                  * Outlook shared mailbox
@@ -848,7 +916,7 @@ public class FragmentOAuth extends FragmentBase {
         if ("gmail".equals(id))
             tvGmailDraftsHint.setVisibility(View.VISIBLE);
 
-        if ("office365".equals(id)) {
+        if ("office365".equals(id) || "outlook".equals(id)) {
             if (ex instanceof AuthenticationFailedException)
                 tvOfficeAuthHint.setVisibility(View.VISIBLE);
         }
@@ -862,6 +930,8 @@ public class FragmentOAuth extends FragmentBase {
         getMainHandler().post(new Runnable() {
             @Override
             public void run() {
+                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return;
                 scroll.smoothScrollTo(0, tvError.getBottom());
             }
         });

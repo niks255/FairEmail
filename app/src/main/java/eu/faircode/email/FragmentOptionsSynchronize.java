@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -325,7 +326,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("sync_folders", checked).apply();
-                swSyncSharedFolders.setEnabled(checked);
             }
         });
 
@@ -449,7 +449,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swEnabled.setChecked(prefs.getBoolean("enabled", true));
         swOptimize.setChecked(prefs.getBoolean("auto_optimize", false));
 
-        int pollInterval = ServiceSynchronize.getPollInterval(getContext());
+        int pollInterval = prefs.getInt("poll_interval", 0);
         int[] pollIntervalValues = getResources().getIntArray(R.array.pollIntervalValues);
         for (int pos = 0; pos < pollIntervalValues.length; pos++)
             if (pollIntervalValues[pos] == pollInterval) {
@@ -477,7 +477,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swGmailThread.setChecked(prefs.getBoolean("gmail_thread_id", false));
         swSyncFolders.setChecked(prefs.getBoolean("sync_folders", true));
         swSyncSharedFolders.setChecked(prefs.getBoolean("sync_shared_folders", false));
-        swSyncSharedFolders.setEnabled(swSyncFolders.isChecked());
         swSubscriptions.setChecked(prefs.getBoolean("subscriptions", false));
         swTuneKeepAlive.setChecked(prefs.getBoolean("tune_keep_alive", true));
         swCheckAuthentication.setChecked(prefs.getBoolean("check_authentication", true));
@@ -555,7 +554,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             }
 
             private void bindTo(EntityAccount account) {
-                cbExempted.setEnabled(!account.ondemand && account.protocol == EntityAccount.TYPE_IMAP);
+                cbExempted.setEnabled(!Helper.isOptimizing12(context) &&
+                        !account.ondemand && account.protocol == EntityAccount.TYPE_IMAP);
                 cbExempted.setChecked(account.poll_exempted);
                 cbExempted.setText(account.name);
             }

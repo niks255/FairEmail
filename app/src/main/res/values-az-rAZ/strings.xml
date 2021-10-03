@@ -184,7 +184,8 @@
     <string name="title_setup_doze_battery">Yüksək batareya istifadəsi?</string>
     <string name="title_setup_doze_stopped">Eyniləşdirmə dayandırılsın?</string>
     <string name="title_setup_doze_device">Bu, çox güman ki, bu cihaz üçün tələb olunur</string>
-    <string name="title_setup_doze_android">Bu, bu Android versiyası üçün tələb olunur</string>
+    <string name="title_setup_doze_12">Ani mesajlar sıradan çıxarıldı</string>
+    <string name="title_setup_alarm_12">Tətbiq işləmir</string>
     <string name="title_setup_inexact">Zəngli saatlar və xatırladıcılar sıradan çıxarıldı</string>
     <string name="title_setup_background">Arxaplan məhdudiyyətləri fəaldır</string>
     <string name="title_setup_data">Verilənlərə qənaət fəallaşdırıldı</string>
@@ -196,6 +197,7 @@
     <string name="title_setup_still">Hələ ediləcəklər var</string>
     <string name="title_setup_error">Xəta</string>
     <string name="title_setup_configuring">Konfiqurasiya edilir &#8230;</string>
+    <string name="title_setup_app_password">Bir tətbiq şifrəsi istifadə etməyiniz lazım gələ bilər</string>
     <string name="title_setup_close">Tənzimləmələri bağla</string>
     <string name="title_setup_export">Tənzimləmələri ixrac et</string>
     <string name="title_setup_import">Tənzimləmələri idxal et</string>
@@ -241,6 +243,8 @@
     <string name="title_setup_theme_dark">Tünd</string>
     <string name="title_setup_theme_system">Sistem ilə eyni</string>
     <string name="title_setup_theme_black_background">Qara arxaplan</string>
+    <string name="title_setup_theme_html_light">Orijinal mesaj görünüşü üçün açıq arxaplan</string>
+    <string name="title_setup_theme_composer_light">Mesaj redaktoru üçün açıq arxaplan</string>
     <string name="title_setup_theme_system_hint">Bu, Android tərəfindən dəstəklənirsə, gündüz/gecə rejimində temanı avtomatik olaraq açıq/tünd olaraq dəyişdirəcək</string>
     <string name="title_setup_theme_more_colors">Daha çox rəng istəyirəm</string>
     <string name="title_setup_advanced">Qabaqcıl</string>
@@ -348,6 +352,7 @@
     <string name="title_advanced_nav_hide_title">Naviqasiya menyu seçimləri gizlədilsin?</string>
     <string name="title_advanced_nav_hide_message">Görüntü tənzimləmələrində bu seçimi təkrar fəallaşdıra bilərsiniz</string>
     <string name="title_advanced_nav_message_count">Naviqasiya menyusunda yerli yaddaşda saxlanılmış mesaj sayını göstər</string>
+    <string name="title_advanced_nav_unseen_drafts">Naviqasiya menyusunda oxunmamış qaralamaların sayını göstər</string>
     <string name="title_advanced_startup">Başlanğıc ekranında göstər</string>
     <string name="title_advanced_cards">Cədvəl stili əvəzinə kart stilini istifadə et</string>
     <string name="title_advanced_cards_beige">Kart stilini istifadə edəndə bej arxaplan istifadə et (yalnız açıq temalar)</string>
@@ -443,6 +448,7 @@
     <string name="title_advanced_autoclose">Söhbətləri avtomatik bağla</string>
     <string name="title_advanced_onclose">Bir danışığı bağlayanda</string>
     <string name="title_advanced_autoclose_unread">Mesajları oxunmamış kimi işarələyəndə danışıqları bağla</string>
+    <string name="title_advanced_collapse_marked">Əllə oxunmuş və ya oxunmamış olaraq işarələnmiş mesajları kiçilt</string>
     <string name="title_advanced_undo">Bitmə vaxtını geri al</string>
     <string name="title_advanced_quick_filter">Narahat edici olmayan cəld filtr nişanlarını göstər</string>
     <string name="title_advanced_quick_scroll">Narahat edici olmayan cəld yuxarı/aşağı sürüşdürmə nişanlarını göstər</string>
@@ -764,6 +770,8 @@
     <string name="title_delete_channel">Bildiriş kanalını sil</string>
     <string name="title_insert_contact">Əlaqə əlavə et</string>
     <string name="title_edit_contact">Əlaqəyə düzəliş et</string>
+    <string name="title_import_contacts"> vCard-ları idxal et</string>
+    <string name="title_export_contacts">vCard-ları ixrac et</string>
     <string name="title_create_sub_folder">Alt qovluq yarat</string>
     <string name="title_empty_trash_ask">Bütün tullantı mesajları birdəfəlik silinsin?</string>
     <string name="title_empty_spam_ask">Bütün spam mesajları birdəfəlik silinsin?</string>
@@ -1126,8 +1134,8 @@
     <string name="title_search_hint">        İlk olaraq, axtarış cihazda həyata keçirilir.
         Serverdə də axtarış etmək üçün \"yenidən axtar\" düyməsinə toxunun.
     </string>
-    <string name="title_search_index_hint">        Axtarış indeksi ilə axtarış etmək sürətlidir, ancaq yalnız tam sözləri tapır.
-        E-poçt serverini axtarmağa davam etmək üçün aşağıdakı seçimləri istifadə edin.
+    <string name="title_search_index_hint">        Axtarış indeksi ilə axtarış etmək sürətlidir, ancaq yalnız bütün mesaj hissələrindəki bütün sözləri tapır.
+        Aşağıdakı seçimlər, e-poçt serverini axtarmağa davam edir.
     </string>
     <string name="title_search_text_hint">Həddindən çox mesaj olanda, mesajlarda mətn axtarışı bəzi serverlərdə işləməyə bilər</string>
     <string name="title_search_text_unsupported">\'%s\', poçt serverinin mesaj mətnlərində axtarışı dəstəkləmədiyi mənasını verir</string>

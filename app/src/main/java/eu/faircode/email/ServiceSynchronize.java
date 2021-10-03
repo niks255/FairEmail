@@ -166,7 +166,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     @Override
     public void onCreate() {
         EntityLog.log(this, "Service create" +
-                " version=" + BuildConfig.VERSION_NAME +
+                " version=" + BuildConfig.VERSION_NAME + BuildConfig.REVISION +
                 " process=" + android.os.Process.myPid());
         super.onCreate();
 
@@ -1253,7 +1253,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         intent.putExtra("type", "alert");
         intent.putExtra("title", title);
         intent.putExtra("message", message);
+        intent.putExtra("provider", account.provider);
         intent.putExtra("account", account.id);
+        intent.putExtra("protocol", account.protocol);
+        intent.putExtra("auth_type", account.auth_type);
         intent.putExtra("faq", 23);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent piAlert = PendingIntentCompat.getActivity(
@@ -2145,7 +2148,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         int pollInterval = getPollInterval(this);
                         long now = new Date().getTime();
                         long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
-                        long maxDelayed = (pollInterval > 0 && !account.poll_exempted
+                        long maxDelayed = (pollInterval > 0 && !account.isExempted(this)
                                 ? pollInterval * ACCOUNT_ERROR_AFTER_POLL : ACCOUNT_ERROR_AFTER) * 60 * 1000L;
                         if (delayed > maxDelayed &&
                                 state.getBackoff() >= CONNECT_BACKOFF_ALARM_START * 60) {
@@ -2408,7 +2411,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 db.endTransaction();
             }
             prefs.edit().putInt("poll_interval", OPTIMIZE_POLL_INTERVAL).apply();
-        } else if (pollInterval <= 60 && account.poll_exempted) {
+        } else if (pollInterval <= 60 && account.isExempted(this)) {
             db.account().setAccountPollExempted(account.id, false);
             eval(this, "Optimize=" + reason);
         }
@@ -2577,44 +2580,65 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         }
 
         private void post(Bundle command, ConnectionHelper.NetworkState networkState, List<TupleAccountState> accountStates) {
-            if (!running) {
-                Log.i("### not running");
-                return;
+            try {
+                if (!running) {
+                    Log.i("### not running");
+                    return;
+                }
+
+                if (networkState == null)
+                    networkState = ConnectionHelper.getNetworkState(ServiceSynchronize.this);
+
+                if (accountStates == null) {
+                    EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Scheduling, "### no accounts");
+                    lastCommand = command;
+                    return;
+                }
+
+                lastCommand = null;
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
+                boolean enabled = prefs.getBoolean("enabled", true);
+                int pollInterval = getPollInterval(ServiceSynchronize.this);
+
+                long[] schedule = getSchedule(ServiceSynchronize.this);
+                long now = new Date().getTime();
+                boolean scheduled = (schedule == null || (now >= schedule[0] && now < schedule[1]));
+
+                if (command == null) {
+                    command = new Bundle();
+                    command.putString("name", "eval");
+                }
+
+                List<TupleAccountNetworkState> result = new ArrayList<>();
+                for (TupleAccountState accountState : accountStates)
+                    result.add(new TupleAccountNetworkState(
+                            enabled && (pollInterval == 0 || accountState.isExempted(ServiceSynchronize.this)) && scheduled,
+                            command,
+                            networkState,
+                            accountState));
+
+                postValue(result);
+            } catch (Throwable ex) {
+                Log.e(ex);
+                /*
+                    java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String android.content.Context.getPackageName()' on a null object reference
+                            at androidx.preference.PreferenceManager.getDefaultSharedPreferencesName(PreferenceManager:124)
+                            at androidx.preference.PreferenceManager.getDefaultSharedPreferences(PreferenceManager:119)
+                            at eu.faircode.email.ServiceSynchronize$MediatorState.post(ServiceSynchronize:2596)
+                            at eu.faircode.email.ServiceSynchronize$MediatorState.post(ServiceSynchronize:2569)
+                            at eu.faircode.email.ServiceSynchronize$MediatorState.access$400(ServiceSynchronize:2546)
+                            at eu.faircode.email.ServiceSynchronize$3.onChanged(ServiceSynchronize:219)
+                            at eu.faircode.email.ServiceSynchronize$3.onChanged(ServiceSynchronize:216)
+                            at androidx.lifecycle.MediatorLiveData$Source.onChanged(MediatorLiveData:152)
+                            at androidx.lifecycle.LiveData.considerNotify(LiveData:133)
+                            at androidx.lifecycle.LiveData.dispatchingValue(LiveData:151)
+                            at androidx.lifecycle.LiveData.setValue(LiveData:309)
+                            at androidx.lifecycle.MutableLiveData.setValue(MutableLiveData:50)
+                            at androidx.lifecycle.LiveData$1.run(LiveData:93)
+                            at android.os.Handler.handleCallback(Handler.java:761)
+                 */
             }
-
-            if (networkState == null)
-                networkState = ConnectionHelper.getNetworkState(ServiceSynchronize.this);
-
-            if (accountStates == null) {
-                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Scheduling, "### no accounts");
-                lastCommand = command;
-                return;
-            }
-
-            lastCommand = null;
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
-            boolean enabled = prefs.getBoolean("enabled", true);
-            int pollInterval = getPollInterval(ServiceSynchronize.this);
-
-            long[] schedule = getSchedule(ServiceSynchronize.this);
-            long now = new Date().getTime();
-            boolean scheduled = (schedule == null || (now >= schedule[0] && now < schedule[1]));
-
-            if (command == null) {
-                command = new Bundle();
-                command.putString("name", "eval");
-            }
-
-            List<TupleAccountNetworkState> result = new ArrayList<>();
-            for (TupleAccountState accountState : accountStates)
-                result.add(new TupleAccountNetworkState(
-                        enabled && (pollInterval == 0 || accountState.poll_exempted) && scheduled,
-                        command,
-                        networkState,
-                        accountState));
-
-            postValue(result);
         }
     }
 
@@ -2721,14 +2745,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     static int getPollInterval(Context context) {
+        if (Helper.isOptimizing12(context))
+            return (BuildConfig.DEBUG ? 2 : 15);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int poll_interval = prefs.getInt("poll_interval", 0); // minutes
-        //if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-        //    Boolean ignoring = Helper.isIgnoringOptimizations(context);
-        //    if (ignoring != null && !ignoring)
-        //        poll_interval = 15;
-        //}
-        return poll_interval;
+        return prefs.getInt("poll_interval", 0); // minutes
     }
 
     static long[] getSchedule(Context context) {

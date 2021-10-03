@@ -194,7 +194,8 @@
     <string name="title_setup_doze_battery">Utilizare intensă a bateriei?</string>
     <string name="title_setup_doze_stopped">Sincronizarea e oprită?</string>
     <string name="title_setup_doze_device">Acest lucru este probabil necesar pentru acest dispozitiv</string>
-    <string name="title_setup_doze_android">Acest lucru este necesar pentru această versiune Android</string>
+    <string name="title_setup_doze_12">Mesajele Push sunt dezactivate</string>
+    <string name="title_setup_alarm_12">Aplicația nu va funcționa</string>
     <string name="title_setup_inexact">Alarme &amp; memento-urile sunt dezactivate</string>
     <string name="title_setup_background">Restricțiile de fundal sunt activate</string>
     <string name="title_setup_data">Economizorul de date este activat</string>
@@ -206,6 +207,7 @@
     <string name="title_setup_still">Încă de făcut</string>
     <string name="title_setup_error">Eroare</string>
     <string name="title_setup_configuring">Configurare cont &#8230;</string>
+    <string name="title_setup_app_password">Este posibil să fie nevoie să folosiți o parolă de aplicație</string>
     <string name="title_setup_close">Închideți setările</string>
     <string name="title_setup_export">Exportă setări</string>
     <string name="title_setup_import">Importă setări</string>
@@ -251,6 +253,8 @@
     <string name="title_setup_theme_dark">Întunecată</string>
     <string name="title_setup_theme_system">Setare sistem</string>
     <string name="title_setup_theme_black_background">Fundal negru</string>
+    <string name="title_setup_theme_html_light">Fond deschis pentru vizualizarea mesajului original</string>
+    <string name="title_setup_theme_composer_light">Fundal luminos pentru editorul de mesaje</string>
     <string name="title_setup_theme_system_hint">Dacă este suportată de Android, setare sistem, va schimba automat la deschis/întunecat în timpul zilei/nopții</string>
     <string name="title_setup_theme_more_colors">Vreau mai multe culori</string>
     <string name="title_setup_advanced">Setări avansate</string>
@@ -358,6 +362,7 @@
     <string name="title_advanced_nav_hide_title">Ascundeți opțiunile din meniul de navigare?</string>
     <string name="title_advanced_nav_hide_message">Puteți activa din nou opțiunile în setările de afișare</string>
     <string name="title_advanced_nav_message_count">Afișarea numărului de mesaje stocate local în meniul de navigare</string>
+    <string name="title_advanced_nav_unseen_drafts">Afișarea numărului de ciorne necitite în meniul de navigare</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
     <string name="title_advanced_cards">Folosește stilul carduri în loc de cel tabular</string>
     <string name="title_advanced_cards_beige">Utilizați un fundal bej atunci când folosiți stilul de card (numai pentru teme luminoase)</string>
@@ -453,6 +458,7 @@
     <string name="title_advanced_autoclose">Închide automat conversațiile</string>
     <string name="title_advanced_onclose">La închiderea conversației</string>
     <string name="title_advanced_autoclose_unread">Închideți conversațiile la marcarea mesajelor ca necitite</string>
+    <string name="title_advanced_collapse_marked">Reducerea mesajelor care sunt marcate manual ca fiind citite sau necitite</string>
     <string name="title_advanced_undo">Expirare anulare</string>
     <string name="title_advanced_quick_filter">Arată iconițele de filtrare rapidă</string>
     <string name="title_advanced_quick_scroll">Arată iconițele de derulare sus/jos rapidă</string>
@@ -775,6 +781,8 @@
     <string name="title_delete_channel">Șterge canal de notificare</string>
     <string name="title_insert_contact">Adaugă contact</string>
     <string name="title_edit_contact">Editare contact</string>
+    <string name="title_import_contacts">Importă vCards</string>
+    <string name="title_export_contacts">Exportați vCards</string>
     <string name="title_create_sub_folder">Creează sub-dosar</string>
     <string name="title_empty_trash_ask">Şterge permanent toate mesajele din coșul de gunoi?</string>
     <string name="title_empty_spam_ask">Se șterg permanent toate mesajele spam?</string>
@@ -1137,8 +1145,8 @@
     <string name="title_search_hint">        Inițial, căutarea se efectuează pe dispozitiv.
         Pentru a căuta și pe server apăsați butonul \'căutare din nou\'.
     </string>
-    <string name="title_search_index_hint">        Căutarea pe indexul de căutare este rapidă, dar găsește doar cuvinte întregi.
-        Opțiunile de mai jos sunt pentru continuarea căutării pe serverul de e-mail.
+    <string name="title_search_index_hint">        Căutarea prin intermediul indexului de căutare este rapidă, dar găsește numai cuvinte întregi în toate părțile mesajului.
+        Opțiunile de mai jos sunt pentru a continua căutarea în serverul de e-mail.
     </string>
     <string name="title_search_text_hint">Se caută text în mesaje, atunci când există un număr mare de mesaje, s-ar putea să nu funcționeze pe unele servere</string>
     <string name="title_search_text_unsupported">\'%s\' înseamnă că serverul de e-mail nu acceptă căutarea în textele mesajelor</string>

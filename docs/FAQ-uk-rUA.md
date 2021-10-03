@@ -74,8 +74,8 @@
 * Помилка [в Android](https://issuetracker.google.com/issues/62427912) іноді призводить до аварії з "*... Активність запису не знайдено...*після оновлення FairEmail. Повторне встановлення ([джерело](https://stackoverflow.com/questions/46309428/android-activitythread-reportsizeconfigurations-causes-app-to-freeze-with-black)) може вирішити проблему.
 * Помилка [в Android](https://issuetracker.google.com/issues/37018931) іноді викликає помилку з *... Вхідний канал не ініціалізовано...* на деяких пристроях.
 * ~~A [bug in LineageOS](https://review.lineageos.org/c/LineageOS/android_frameworks_base/+/265273) sometimes causes a crash with *... java.lang.ArrayIndexOutOfBoundsException: length=...; index=... ...*.~~
-* A bug in Nova Launcher on Android 5.x causes FairEmail to crash with a *java.lang.StackOverflowError* when Nova Launcher has access to the accessibility service.
-* ~~The folder selector sometimes shows no folders for yet unknown reasons. This seems to be fixed.~~
+* Помилка в Nova Launcher на Android 5.x викликає аварійне завершення роботи FairEmail з *java.lang.cravOverflowError*, коли Nova Launcher має доступ до служби додаткових можливостей.
+* ~~The folder selector sometimes shows no folders for yet unknown reasons. Здається, це виправлено.~~
 * ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
 * ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
 * Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
@@ -83,21 +83,21 @@
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
-* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
+* Помилка [в OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) викликає невірні PGP підписи при використанні апаратного токену.
 
 <h2><a name="planned-features"></a>Заплановані можливості</h2>
 
 * ~~Synchronize on demand (manual)~~
-* ~~Semi-automatic encryption~~
-* ~~Copy message~~
+* ~~Напівавтоматичне шифрування~~
+* ~~Копіювання повідомлення~~
 * ~~Кольорові зірки~~
 * ~~Notification settings per folder~~
 * ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
-* ~~Show messages matched by a rule~~
+* ~~Показати повідомлення, що відповідають критеріям~~
 * ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
 * ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
 * ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
-* ~~Search suggestions~~
+* ~~Пошукові пропозиції~~
 * ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
 * ~~Спільні уніфіковані теки~~
 * ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
@@ -120,13 +120,13 @@
 
 Anything on this list is in random order and *might* be added in the near future.
 
-<h2><a name="frequently-requested-features"></a>Frequently requested features</h2>
+<h2><a name="frequently-requested-features"></a>Часто запитувані функції</h2>
 
 The design is based on many discussions and if you like you can discuss about it [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168) too. The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.
 
-<h2><a name="frequently-asked-questions"></a>Frequently Asked Questions</h2>
+<h2><a name="frequently-asked-questions"></a>Запитання й відповіді (FAQ)</h2>
 
-* [(1) Which permissions are needed and why?](#user-content-faq1)
+* [(1) Які дозволи необхідні і чому?](#user-content-faq1)
 * [(2) Why is there a permanent notification shown?](#user-content-faq2)
 * [(3) What are operations and why are they pending?](#user-content-faq3)
 * [(4) How can I use an invalid security certificate / empty password / plain text connection?](#user-content-faq4)
@@ -142,8 +142,8 @@ The design is based on many discussions and if you like you can discuss about it
 * [(14) How can I set up an Outlook / Live / Hotmail account?](#user-content-faq14)
 * [(15) Why does the message text keep loading?](#user-content-faq15)
 * [(16) Why are messages not being synchronized?](#user-content-faq16)
-* [~~(17) Why does manual synchronize not work?~~](#user-content-faq17)
-* [(18) Why is the message preview not always shown?](#user-content-faq18)
+* [~~(17) Чому ручне синхронізування не працює?~~](#user-content-faq17)
+* [(18) Чому попередній перегляд відображається не завжди?](#user-content-faq18)
 * [(19) Why are the pro features so expensive?](#user-content-faq19)
 * [(20) Can I get a refund?](#user-content-faq20)
 * [(21) How do I enable the notification light?](#user-content-faq21)

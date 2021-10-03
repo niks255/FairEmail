@@ -22,6 +22,7 @@ package eu.faircode.email;
 import android.app.ActivityManager;
 import android.app.ApplicationExitInfo;
 import android.app.Dialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.usage.UsageStatsManager;
@@ -1511,7 +1512,7 @@ public class Log {
         Log.w("Writing exception to " + file);
 
         try (FileWriter out = new FileWriter(file, true)) {
-            out.write(BuildConfig.VERSION_NAME + " " + new Date() + "\r\n");
+            out.write(BuildConfig.VERSION_NAME + BuildConfig.REVISION + " " + new Date() + "\r\n");
             out.write(ex + "\r\n" + android.util.Log.getStackTraceString(ex) + "\r\n");
         } catch (IOException e) {
             Log.e(e);
@@ -1550,7 +1551,8 @@ public class Log {
             draft.msgid = EntityMessage.generateMessageId();
             draft.thread = draft.msgid;
             draft.to = new Address[]{myAddress()};
-            draft.subject = context.getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " debug info";
+            draft.subject = context.getString(R.string.app_name) + " " +
+                    BuildConfig.VERSION_NAME + BuildConfig.REVISION + " debug info";
             draft.received = new Date().getTime();
             draft.seen = true;
             draft.ui_seen = true;
@@ -1670,7 +1672,7 @@ public class Log {
                 context.getString(R.string.app_name),
                 BuildConfig.APPLICATION_ID,
                 installer,
-                BuildConfig.VERSION_NAME,
+                BuildConfig.VERSION_NAME + BuildConfig.REVISION,
                 Helper.hasValidFingerprint(context) ? "1" : "3",
                 BuildConfig.PLAY_STORE_RELEASE ? "p" : "",
                 Helper.hasPlayStore(context) ? "s" : "",
@@ -1758,6 +1760,8 @@ public class Log {
                 .append(Integer.toHexString(uiMode))
                 .append(" night=").append(Helper.isNight(context))
                 .append("\r\n");
+
+        sb.append(String.format("UI type: %s\r\n", Helper.getUiModeType(context)));
 
         sb.append("ExactAlarms")
                 .append(" can=")
@@ -1982,6 +1986,7 @@ public class Log {
                             size += write(os, "- " + folder.name + " " + folder.type +
                                     " poll=" + folder.poll + "/" + folder.poll_factor +
                                     " days=" + folder.sync_days + "/" + folder.keep_days +
+                                    " notify=" + folder.notify +
                                     " msgs=" + folder.content + "/" + folder.messages +
                                     " " + folder.state +
                                     (folder.last_sync == null ? "" : " " + dtf.format(folder.last_sync)) +
@@ -2212,9 +2217,11 @@ public class Log {
         long size = 0;
         File file = attachment.getFile(context);
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
-            for (SimpleTask task : SimpleTask.getList()) {
+            for (SimpleTask task : SimpleTask.getList())
                 size += write(os, String.format("%s\r\n", task.toString()));
-            }
+            size += write(os, "\r\n");
+            for (TwoStateOwner owner : TwoStateOwner.getList())
+                size += write(os, String.format("%s\r\n", owner.toString()));
         }
 
         db.attachment().setDownloaded(attachment.id, size);
@@ -2276,6 +2283,31 @@ public class Log {
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+
+            String name;
+            int filter = nm.getCurrentInterruptionFilter();
+            switch (filter) {
+                case NotificationManager.INTERRUPTION_FILTER_UNKNOWN:
+                    name = "Unknown";
+                    break;
+                case NotificationManager.INTERRUPTION_FILTER_ALL:
+                    name = "All";
+                    break;
+                case NotificationManager.INTERRUPTION_FILTER_PRIORITY:
+                    name = "Priority";
+                    break;
+                case NotificationManager.INTERRUPTION_FILTER_NONE:
+                    name = "None";
+                    break;
+                case NotificationManager.INTERRUPTION_FILTER_ALARMS:
+                    name = "Alarms";
+                    break;
+                default:
+                    name = Integer.toString(filter);
+            }
+
+            size += write(os, String.format("Interruption filter allow=%s\r\n\r\n", name));
+
             for (NotificationChannel channel : nm.getNotificationChannels())
                 try {
                     JSONObject jchannel = NotificationHelper.channelToJSON(channel);
@@ -2284,7 +2316,20 @@ public class Log {
                     size += write(os, ex.toString() + "\r\n");
                 }
 
-            size += write(os, "Importance none=0; min=1; low=2; default=3; high=4; max=5\r\n\r\n");
+            size += write(os,
+                    String.format("Importance none=%d; min=%d; low=%d; default=%d; high=%d; max=%d; unspecified=%d\r\n",
+                            NotificationManager.IMPORTANCE_NONE,
+                            NotificationManager.IMPORTANCE_MIN,
+                            NotificationManager.IMPORTANCE_LOW,
+                            NotificationManager.IMPORTANCE_DEFAULT,
+                            NotificationManager.IMPORTANCE_HIGH,
+                            NotificationManager.IMPORTANCE_MAX,
+                            NotificationManager.IMPORTANCE_UNSPECIFIED));
+            size += write(os,
+                    String.format("Visibility private=%d; public=%d; secret=%d\r\n",
+                            Notification.VISIBILITY_PRIVATE,
+                            Notification.VISIBILITY_PUBLIC,
+                            Notification.VISIBILITY_SECRET));
         }
 
         db.attachment().setDownloaded(attachment.id, size);

@@ -382,6 +382,8 @@ public class FragmentFolder extends FragmentBase {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
+                                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                    return;
                                 scroll.smoothScrollTo(0, btnSave.getBottom());
                             }
                         });
@@ -574,11 +576,11 @@ public class FragmentFolder extends FragmentBase {
                         Log.i("Creating folder=" + name + " parent=" + parent);
 
                         if (parent != null) {
-                            EntityAccount account = db.account().getAccount(aid);
-                            if (account == null)
+                            EntityFolder p = db.folder().getFolderByName(aid, parent);
+                            if (p == null || p.separator == null)
                                 return false;
 
-                            name = parent + account.separator + name;
+                            name = parent + p.separator + name;
                         }
 
                         if (TextUtils.isEmpty(name))

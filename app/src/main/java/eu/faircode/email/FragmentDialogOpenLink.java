@@ -60,6 +60,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
+import androidx.lifecycle.Lifecycle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
@@ -344,6 +345,8 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                         ApplicationEx.getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
+                                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                    return;
                                 dview.scrollTo(0, tvOwner.getBottom());
                             }
                         });
@@ -364,7 +367,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
             @Override
             public void onClick(View v) {
                 v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         .putExtra("tab", "privacy"));
             }
         });

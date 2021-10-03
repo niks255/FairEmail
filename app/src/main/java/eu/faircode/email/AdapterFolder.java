@@ -368,7 +368,10 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                                 ? textColorPrimary : textColorSecondary));
                 ibSync.setEnabled(folder.last_sync != null);
 
-                tvKeywords.setText(BuildConfig.DEBUG ? TextUtils.join(" ", folder.keywords) : null);
+                tvKeywords.setText(BuildConfig.DEBUG ?
+                        (folder.separator == null ? "" : folder.separator + " ") +
+                                (folder.namespace == null ? "" : folder.namespace + " ") +
+                                TextUtils.join(" ", folder.keywords) : null);
                 tvKeywords.setVisibility(show_flagged ? View.VISIBLE : View.GONE);
 
                 tvFlagged.setText(NF.format(folder.flagged));
@@ -766,7 +769,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                                     @Override
                                     public void onClick(View v) {
                                         v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                                 .putExtra("tab", "connection"));
                                     }
                                 });
@@ -1149,6 +1152,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             public void onDestroyed() {
                 Log.d(AdapterFolder.this + " parent destroyed");
                 AdapterFolder.this.parentFragment = null;
+                owner.getLifecycle().removeObserver(this);
             }
         });
     }

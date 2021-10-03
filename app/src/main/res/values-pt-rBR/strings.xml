@@ -179,7 +179,6 @@
     <string name="title_setup_doze_battery">Alto uso de bateria?</string>
     <string name="title_setup_doze_stopped">A sincronização parou?</string>
     <string name="title_setup_doze_device">Isto é provavelmente exigido para este dispositivo</string>
-    <string name="title_setup_doze_android">Isto é exigido para esta versão do Android</string>
     <string name="title_setup_inexact">Alarmes &amp; os lembretes estão desativados</string>
     <string name="title_setup_background">Restrições de fundo estão habilitadas</string>
     <string name="title_setup_data">Economia de dados está habilitada</string>
@@ -1097,9 +1096,6 @@
     <string name="title_search_for_hint">Digite o texto</string>
     <string name="title_search_hint">        Inicialmente, a pesquisa é efetuada no dispositivo.
         Para pesquisar também no servidor, toque no botão \"pesquisar novamente\".
-    </string>
-    <string name="title_search_index_hint">        A pesquisa pelo índice de pesquisa é rápida, mas apenas encontra palavras inteiras.
-        As opções abaixo são para continuar a pesquisa no servidor de e-mail.
     </string>
     <string name="title_search_text_hint">Pesquisar por textos em mensagens, quando há um grande número delas, pode não funcionar em alguns servidores</string>
     <string name="title_search_text_unsupported">\'%s\' significa que o servidor de email não suporta pesquisa em textos de mensagens</string>

@@ -93,6 +93,8 @@ public class FragmentSetup extends FragmentBase {
 
     private TextView tvDozeDone;
     private Button btnDoze;
+    private TextView tvDoze12;
+    private ImageButton ibDoze;
 
     private Button btnInexactAlarms;
     private Button btnBackgroundRestricted;
@@ -158,6 +160,8 @@ public class FragmentSetup extends FragmentBase {
 
         tvDozeDone = view.findViewById(R.id.tvDozeDone);
         btnDoze = view.findViewById(R.id.btnDoze);
+        tvDoze12 = view.findViewById(R.id.tvDoze12);
+        ibDoze = view.findViewById(R.id.ibDoze);
 
         btnInexactAlarms = view.findViewById(R.id.btnInexactAlarms);
         btnBackgroundRestricted = view.findViewById(R.id.btnBackgroundRestricted);
@@ -446,6 +450,13 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        ibDoze.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 175, true);
+            }
+        });
+
         tvStamina.setPaintFlags(tvStamina.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvStamina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -534,6 +545,7 @@ public class FragmentSetup extends FragmentBase {
         tvDozeDone.setText(null);
         tvDozeDone.setCompoundDrawables(null, null, null, null);
         btnDoze.setEnabled(false);
+        tvDoze12.setVisibility(View.GONE);
 
         btnInbox.setEnabled(false);
 
@@ -660,9 +672,10 @@ public class FragmentSetup extends FragmentBase {
         tvDozeDone.setTextColor(ignoring == null || ignoring ? textColorPrimary : colorWarning);
         tvDozeDone.setTypeface(null, ignoring == null || ignoring ? Typeface.NORMAL : Typeface.BOLD);
         tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(ignoring == null || ignoring ? check : null, null, null, null);
+        tvDoze12.setVisibility(Helper.isOptimizing12(getContext()) ? View.VISIBLE : View.GONE);
 
         grpInexactAlarms.setVisibility(
-                !AlarmManagerCompatEx.canScheduleExactAlarms(getContext())
+                !AlarmManagerCompatEx.canScheduleExactAlarms(getContext()) || BuildConfig.DEBUG
                         ? View.VISIBLE : View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

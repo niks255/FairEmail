@@ -176,6 +176,7 @@ public interface DaoFolder {
             ", COUNT(message.id) AS messages" +
             ", SUM(CASE WHEN NOT message.ui_seen THEN 1 ELSE 0 END) AS unseen" +
             ", CASE WHEN folder.account IS NULL THEN folder.sync_state ELSE NULL END AS sync_state" +
+            ", folder.color, COUNT (DISTINCT folder.color) AS colorCount" +
             " FROM folder" +
             " LEFT JOIN account ON account.id = folder.account" +
             " LEFT JOIN message ON message.folder = folder.id AND NOT message.ui_hide" +
@@ -231,6 +232,11 @@ public interface DaoFolder {
 
     @Insert
     long insertFolder(EntityFolder folder);
+
+    @Query("UPDATE folder" +
+            " SET namespace = :namespace, separator = :separator" +
+            " WHERE id = :id AND NOT (namespace IS :namespace AND separator IS :separator)")
+    int setFolderNamespace(long id, String namespace, Character separator);
 
     @Query("UPDATE folder SET unified = :unified WHERE id = :id AND NOT (unified IS :unified)")
     int setFolderUnified(long id, boolean unified);

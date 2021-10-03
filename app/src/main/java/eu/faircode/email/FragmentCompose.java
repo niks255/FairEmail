@@ -300,6 +300,7 @@ public class FragmentCompose extends FragmentBase {
 
     private static final int REDUCED_IMAGE_SIZE = 1440; // pixels
     private static final int REDUCED_IMAGE_QUALITY = 90; // percent
+    // http://regex.info/blog/lightroom-goodies/jpeg-quality
 
     private static final int MAX_SHOW_RECIPIENTS = 5;
     private static final int RECIPIENTS_WARNING = 10;
@@ -579,6 +580,8 @@ public class FragmentCompose extends FragmentBase {
                     getMainHandler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                return;
                             if (styling != selection) {
                                 styling = selection;
                                 media_bar.getMenu().clear();
@@ -1688,6 +1691,8 @@ public class FragmentCompose extends FragmentBase {
         getMainHandler().post(new Runnable() {
             @Override
             public void run() {
+                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return;
                 if (grpAddresses.getVisibility() == View.GONE)
                     etSubject.requestFocus();
                 else
@@ -2331,15 +2336,30 @@ public class FragmentCompose extends FragmentBase {
             }
         }
 
-        if (uri == null) {
-            ClipboardManager cbm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            if (cbm != null && cbm.hasPrimaryClip()) {
-                String link = cbm.getPrimaryClip().getItemAt(0).coerceToText(getContext()).toString();
-                uri = Uri.parse(link);
-                if (uri.getScheme() == null)
-                    uri = null;
+        if (uri == null)
+            try {
+                ClipboardManager cbm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                if (cbm != null && cbm.hasPrimaryClip()) {
+                    String link = cbm.getPrimaryClip().getItemAt(0).coerceToText(getContext()).toString();
+                    uri = Uri.parse(link);
+                    if (uri.getScheme() == null)
+                        uri = null;
+                }
+            } catch (Throwable ex) {
+                Log.w(ex);
+                /*
+                    java.lang.SecurityException: Permission Denial: opening provider org.chromium.chrome.browser.util.ChromeFileProvider from ProcessRecord{43c6094 11175:eu.faircode.email/u0a73} (pid=11175, uid=10073) that is not exported from uid 10080
+                      at android.os.Parcel.readException(Parcel.java:1692)
+                      at android.os.Parcel.readException(Parcel.java:1645)
+                      at android.app.ActivityManagerProxy.getContentProvider(ActivityManagerNative.java:4214)
+                      at android.app.ActivityThread.acquireProvider(ActivityThread.java:5584)
+                      at android.app.ContextImpl$ApplicationContentResolver.acquireUnstableProvider(ContextImpl.java:2239)
+                      at android.content.ContentResolver.acquireUnstableProvider(ContentResolver.java:1520)
+                      at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:1133)
+                      at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:1093)
+                      at android.content.ClipData$Item.coerceToText(ClipData.java:340)
+                 */
             }
-        }
 
         Bundle args = new Bundle();
         args.putParcelable("uri", uri);
@@ -3675,7 +3695,7 @@ public class FragmentCompose extends FragmentBase {
                         public void onClick(View v) {
                             if (ex.getCause() instanceof CertificateException)
                                 v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                         .putExtra("tab", "encryption"));
                             else {
                                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
@@ -3696,7 +3716,7 @@ public class FragmentCompose extends FragmentBase {
                                             return true;
                                         } else if (itemId == R.string.title_advanced_manage_certificates) {
                                             startActivity(new Intent(getContext(), ActivitySetup.class)
-                                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                                     .putExtra("tab", "encryption"));
                                             return true;
                                         }
@@ -5191,7 +5211,7 @@ public class FragmentCompose extends FragmentBase {
                     @Override
                     public void onClick(View v) {
                         v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         getActivity().finish();
                     }
                 });
@@ -6255,6 +6275,9 @@ public class FragmentCompose extends FragmentBase {
             @Override
             public void run() {
                 try {
+                    if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                        return;
+
                     if (target instanceof EditText) {
                         EditText et = (EditText) target;
                         int len = et.length();
@@ -6472,21 +6495,29 @@ public class FragmentCompose extends FragmentBase {
             final Spinner spGroup = dview.findViewById(R.id.spGroup);
             final Spinner spTarget = dview.findViewById(R.id.spTarget);
 
-            Cursor groups = context.getContentResolver().query(
-                    ContactsContract.Groups.CONTENT_SUMMARY_URI,
-                    new String[]{
-                            ContactsContract.Groups._ID,
-                            ContactsContract.Groups.TITLE,
-                            ContactsContract.Groups.SUMMARY_COUNT,
-                            ContactsContract.Groups.ACCOUNT_NAME,
-                            ContactsContract.Groups.ACCOUNT_TYPE,
-                    },
-                    // ContactsContract.Groups.GROUP_VISIBLE + " = 1" + " AND " +
-                    ContactsContract.Groups.DELETED + " = 0" +
-                            " AND " + ContactsContract.Groups.SUMMARY_COUNT + " > 0",
-                    null,
-                    ContactsContract.Groups.TITLE
-            );
+            String[] projection = new String[]{
+                    ContactsContract.Groups._ID,
+                    ContactsContract.Groups.TITLE,
+                    ContactsContract.Groups.SUMMARY_COUNT,
+                    ContactsContract.Groups.ACCOUNT_NAME,
+                    ContactsContract.Groups.ACCOUNT_TYPE,
+            };
+
+            Cursor groups;
+            try {
+                groups = context.getContentResolver().query(
+                        ContactsContract.Groups.CONTENT_SUMMARY_URI,
+                        projection,
+                        // ContactsContract.Groups.GROUP_VISIBLE + " = 1" + " AND " +
+                        ContactsContract.Groups.DELETED + " = 0" +
+                                " AND " + ContactsContract.Groups.SUMMARY_COUNT + " > 0",
+                        null,
+                        ContactsContract.Groups.TITLE
+                );
+            } catch (SecurityException ex) {
+                Log.w(ex);
+                groups = new MatrixCursor(projection);
+            }
 
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                     context,
@@ -6716,7 +6747,7 @@ public class FragmentCompose extends FragmentBase {
                 @Override
                 public void onClick(View v) {
                     v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             .putExtra("target", "accounts"));
                 }
             });

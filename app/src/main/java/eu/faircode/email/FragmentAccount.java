@@ -96,6 +96,7 @@ public class FragmentAccount extends FragmentBase {
     private EditText etPort;
     private EditText etUser;
     private TextInputLayout tilPassword;
+    private TextView tvAppPassword;
     private TextView tvPasswordStorage;
     private Button btnCertificate;
     private TextView tvCertificate;
@@ -201,6 +202,7 @@ public class FragmentAccount extends FragmentBase {
         tvInsecureRemark = view.findViewById(R.id.tvInsecureRemark);
         etUser = view.findViewById(R.id.etUser);
         tilPassword = view.findViewById(R.id.tilPassword);
+        tvAppPassword = view.findViewById(R.id.tvAppPassword);
         tvPasswordStorage = view.findViewById(R.id.tvPasswordStorage);
         btnCertificate = view.findViewById(R.id.btnCertificate);
         tvCertificate = view.findViewById(R.id.tvCertificate);
@@ -288,6 +290,9 @@ public class FragmentAccount extends FragmentBase {
                 etUser.setTag(null);
                 etUser.setText(null);
                 tilPassword.getEditText().setText(null);
+                tvAppPassword.setVisibility(
+                        "office365".equals(provider.id) || "outlook".equals(provider.id)
+                                ? View.VISIBLE : View.GONE);
                 certificate = null;
                 tvCertificate.setText(R.string.title_optional);
                 etRealm.setText(null);
@@ -353,6 +358,15 @@ public class FragmentAccount extends FragmentBase {
             }
         });
 
+        tvAppPassword.setVisibility(View.GONE);
+        tvAppPassword.setPaintFlags(tvAppPassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvAppPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Helper.viewFAQ(view.getContext(), 14);
+            }
+        });
+
         tvPasswordStorage.setPaintFlags(tvPasswordStorage.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvPasswordStorage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -406,6 +420,8 @@ public class FragmentAccount extends FragmentBase {
                     getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
+                            if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                return;
                             scroll.smoothScrollTo(0, btnAdvanced.getTop());
                         }
                     });
@@ -744,7 +760,7 @@ public class FragmentAccount extends FragmentBase {
                         }
                     }
 
-                    EntityFolder.guessTypes(result.folders, iservice.getStore().getDefaultFolder().getSeparator());
+                    EntityFolder.guessTypes(result.folders);
 
                     if (result.folders.size() > 0)
                         Collections.sort(result.folders, result.folders.get(0).getComparator(null));
@@ -767,6 +783,8 @@ public class FragmentAccount extends FragmentBase {
                 getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
+                        if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                            return;
                         scroll.smoothScrollTo(0, cbIdentity.getBottom());
                     }
                 });
@@ -1357,6 +1375,8 @@ public class FragmentAccount extends FragmentBase {
         getMainHandler().post(new Runnable() {
             @Override
             public void run() {
+                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return;
                 if (provider != null && provider.documentation != null)
                     scroll.smoothScrollTo(0, tvInstructions.getBottom());
                 else
@@ -1454,6 +1474,9 @@ public class FragmentAccount extends FragmentBase {
 
                     etUser.setText(account == null ? null : account.user);
                     tilPassword.getEditText().setText(account == null ? null : account.password);
+                    tvAppPassword.setVisibility(account != null &&
+                            ("office365".equals(account.provider) || "outlook".equals(account.provider))
+                            ? View.VISIBLE : View.GONE);
                     certificate = (account == null ? null : account.certificate_alias);
                     tvCertificate.setText(certificate == null ? getString(R.string.title_optional) : certificate);
                     etRealm.setText(account == null ? null : account.realm);
@@ -1678,6 +1701,8 @@ public class FragmentAccount extends FragmentBase {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
+                                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                    return;
                                 scroll.smoothScrollTo(0, (save ? btnSave : btnCheck).getBottom());
                             }
                         });

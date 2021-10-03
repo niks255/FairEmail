@@ -197,6 +197,7 @@ public class MessageHelper {
         System.setProperty("mail.mime.multipart.ignoreexistingboundaryparameter", "true"); // default false
         System.setProperty("mail.mime.multipart.ignoremissingendboundary", "true"); // default true
         System.setProperty("mail.mime.multipart.allowempty", "true"); // default false
+        System.setProperty("mail.mime.contentdisposition.strict", "false"); // default true
 
         //System.setProperty("mail.imap.parse.debug", "true");
     }
@@ -1277,12 +1278,22 @@ public class MessageHelper {
     String[] getAuthentication() throws MessagingException {
         ensureHeaders();
 
-        String[] headers = imessage.getHeader("Authentication-Results");
-        if (headers == null)
+        List<String> all = new ArrayList<>();
+
+        String[] results = imessage.getHeader("Authentication-Results");
+        if (results != null)
+            all.addAll(Arrays.asList(results));
+
+        String[] aresults = imessage.getHeader("ARC-Authentication-Results");
+        if (aresults != null)
+            all.addAll(Arrays.asList(aresults));
+
+        if (all.size() == 0)
             return null;
 
-        for (int i = 0; i < headers.length; i++)
-            headers[i] = MimeUtility.unfold(headers[i]);
+        String[] headers = new String[all.size()];
+        for (int i = 0; i < all.size(); i++)
+            headers[i] = MimeUtility.unfold(all.get(i));
 
         return headers;
     }

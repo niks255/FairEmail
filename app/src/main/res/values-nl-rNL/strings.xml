@@ -183,7 +183,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_doze_battery">Hoog accugebruik?</string>
     <string name="title_setup_doze_stopped">Sync gestopt?</string>
     <string name="title_setup_doze_device">Dit is waarschijnlijk nodig voor dit apparaat</string>
-    <string name="title_setup_doze_android">Dit is vereist voor deze Android-versie</string>
+    <string name="title_setup_doze_12">Pushberichten zijn uitgeschakeld</string>
+    <string name="title_setup_alarm_12">De app zal niet werken</string>
     <string name="title_setup_inexact">Alarmen &amp; herinneringen zijn uitgeschakeld</string>
     <string name="title_setup_background">Achtergrondbeperkingen zijn ingeschakeld</string>
     <string name="title_setup_data">Gegevensbesparing is ingeschakeld</string>
@@ -195,6 +196,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_still">Nog te doen</string>
     <string name="title_setup_error">Fout</string>
     <string name="title_setup_configuring">Account configureren &#8230;</string>
+    <string name="title_setup_app_password">Mogelijk moet u een app-wachtwoord gebruiken</string>
     <string name="title_setup_close">Sluit instellingen</string>
     <string name="title_setup_export">Exporteer instellingen</string>
     <string name="title_setup_import">Importeer instellingen</string>
@@ -240,6 +242,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_theme_dark">Donker</string>
     <string name="title_setup_theme_system">Volg systeem</string>
     <string name="title_setup_theme_black_background">Zwarte achtergrond</string>
+    <string name="title_setup_theme_html_light">Lichte achtergrond voor oorspronkelijke berichtweergave</string>
+    <string name="title_setup_theme_composer_light">Lichte achtergrond voor berichteditor</string>
     <string name="title_setup_theme_system_hint">Systeemthema volgen zal automatisch overschakelen naar lichte/donker bij dag/nacht, indien ondersteund door Android</string>
     <string name="title_setup_theme_more_colors">Ik wil meer kleuren</string>
     <string name="title_setup_advanced">Geavanceerd</string>
@@ -348,6 +352,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_nav_hide_title">Verberg navigatiemenu opties?</string>
     <string name="title_advanced_nav_hide_message">U kunt de opties opnieuw inschakelen in de weergave-instellingen</string>
     <string name="title_advanced_nav_message_count">Toon aantal lokaal opgeslagen berichten in het navigatiemenu</string>
+    <string name="title_advanced_nav_unseen_drafts">Aantal ongelezen concepten in het navigatiemenu tonen</string>
     <string name="title_advanced_startup">Toon op het startscherm</string>
     <string name="title_advanced_cards">Gebruik kaart-stijl in plaats van tabulaire stijl</string>
     <string name="title_advanced_cards_beige">Gebruik een beige achtergrond bij het gebruik van de kaartstijl (alleen lichte thema\'s)</string>
@@ -443,6 +448,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_autoclose">Gesprekken automatisch sluiten</string>
     <string name="title_advanced_onclose">Bij het sluiten van een gesprek</string>
     <string name="title_advanced_autoclose_unread">Sluit gesprekken bij het markeren van berichten als ongelezen</string>
+    <string name="title_advanced_collapse_marked">Berichten samenvouwen die handmatig als gelezen of ongelezen worden gemarkeerd</string>
     <string name="title_advanced_undo">Herstel time-out</string>
     <string name="title_advanced_quick_filter">Toon niet-opdringerige snelle filterpictogrammen</string>
     <string name="title_advanced_quick_scroll">Toon niet-opdringerige snelle scroll omhoog/omlaag pictogrammen</string>
@@ -765,6 +771,8 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_delete_channel">Meldingskanaal verwijderen</string>
     <string name="title_insert_contact">Contact toevoegen</string>
     <string name="title_edit_contact">Contact bewerken</string>
+    <string name="title_import_contacts">Importeer vCards</string>
+    <string name="title_export_contacts">Exporteer vCards</string>
     <string name="title_create_sub_folder">Maak submap</string>
     <string name="title_empty_trash_ask">Alle berichten in de prullenbak definitief verwijderen?</string>
     <string name="title_empty_spam_ask">Alle spam berichten definitief verwijderen?</string>
@@ -1126,8 +1134,8 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_search_for_hint">Voer tekst in</string>
     <string name="title_search_hint">In eerste instantie wordt de zoekopdracht uitgevoerd op het apparaat.
 Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
-    <string name="title_search_index_hint">Zoeken via de zoekindex gaat snel, maar vindt alleen hele woorden.
- De onderstaande opties zijn om door te gaan met zoeken op de e-mailserver.</string>
+    <string name="title_search_index_hint">Zoeken via de zoekindex is snel, maar vindt alleen hele woorden in alle berichtdelen.
+         De onderstaande opties zijn om door te gaan met zoeken op de e-mailserver.    </string>
     <string name="title_search_text_hint">Zoeken naar tekst in berichten, wanneer er een groot aantal berichten is, werkt mogelijk niet op sommige servers</string>
     <string name="title_search_text_unsupported">\'%s\' betekent dat de mailserver het zoeken in berichtteksten niet ondersteunt</string>
     <string name="title_search_size_hint">Zoeken naar berichten op grootte werkt mogelijk niet op sommige servers als er een groot aantal berichten is</string>

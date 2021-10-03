@@ -204,7 +204,8 @@
     <string name="title_setup_doze_battery">Vysoká spotreba batérie?</string>
     <string name="title_setup_doze_stopped">Zastavila sa synchronizácia?</string>
     <string name="title_setup_doze_device">Je to vyžadované pre toto zariadenie</string>
-    <string name="title_setup_doze_android">Je to vyžadované pre túto verziu systému android</string>
+    <string name="title_setup_doze_12">Správy push nie sú povolené</string>
+    <string name="title_setup_alarm_12">Aplikácia nebude pracovať správne</string>
     <string name="title_setup_inexact">Budíky a pripomienky nie sú povolené</string>
     <string name="title_setup_background">Obmedzenia spustenia na pozadí sú aktívne</string>
     <string name="title_setup_data">Šetrenie údajov je povolené</string>
@@ -216,6 +217,7 @@
     <string name="title_setup_still">Zostáva dokončiť</string>
     <string name="title_setup_error">Chyba</string>
     <string name="title_setup_configuring">Nastavenie účtu &#8230;</string>
+    <string name="title_setup_app_password">Možno budete potrebovať použiť heslo aplikácie</string>
     <string name="title_setup_close">Zavrieť nastavenia</string>
     <string name="title_setup_export">Exportovať nastavenia</string>
     <string name="title_setup_import">Importovať nastavenia</string>
@@ -261,6 +263,8 @@
     <string name="title_setup_theme_dark">Tmavá</string>
     <string name="title_setup_theme_system">Prispôsobiť sa systému</string>
     <string name="title_setup_theme_black_background">Čierne pozadie</string>
+    <string name="title_setup_theme_html_light">Svetlé pozadie v pôvodnom zobrazení správy</string>
+    <string name="title_setup_theme_composer_light">Svetlé pozadie editora správ</string>
     <string name="title_setup_theme_system_hint">Táto možnosť automaticky prepne na svetlý alebo tmavý motív podľa toho, či je zariadenie v dennom alebo nočnom režime, ak sú podporované systémom</string>
     <string name="title_setup_theme_more_colors">Chcem viac farieb</string>
     <string name="title_setup_advanced">Pokročilé</string>
@@ -368,6 +372,7 @@
     <string name="title_advanced_nav_hide_title">Skryť možnosti navigačnej ponuky?</string>
     <string name="title_advanced_nav_hide_message">Možnosti môžete opäť povoliť v nastaveniach zobrazenia</string>
     <string name="title_advanced_nav_message_count">Zobraziť počet lokálne uložených správ v navigačnej ponuke</string>
+    <string name="title_advanced_nav_unseen_drafts">Zobrazovať počet neprečítaných konceptov v navigačnej ponuke</string>
     <string name="title_advanced_startup">Zobraziť na úvodnej obrazovke</string>
     <string name="title_advanced_cards">Použiť štýl kariet namiesto tabuľkového štýlu</string>
     <string name="title_advanced_cards_beige">Béžové pozadie pri štýle na kartách (len svetlý vzhľad)</string>
@@ -463,6 +468,7 @@
     <string name="title_advanced_autoclose">Automaticky zatvárať konverzácie</string>
     <string name="title_advanced_onclose">Pri zatvorení konverzácie</string>
     <string name="title_advanced_autoclose_unread">Zatvoriť konverzáciu po označení ako neprečítanú</string>
+    <string name="title_advanced_collapse_marked">Zbaliť správy ručne označené ako prečítané alebo neprečítané</string>
     <string name="title_advanced_undo">Časový limit funkcie späť</string>
     <string name="title_advanced_quick_filter">Zobraziť neobťažujúce ikonky pre rýchle filtrovanie</string>
     <string name="title_advanced_quick_scroll">Zobraziť neobťažujúce ikonky pre rýchly posun nahor/nadol</string>
@@ -785,6 +791,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_delete_channel">Vymazať kanál upozornení</string>
     <string name="title_insert_contact">Pridať kontakt</string>
     <string name="title_edit_contact">Upraviť kontakt</string>
+    <string name="title_import_contacts">Importovať vizitky vCard</string>
+    <string name="title_export_contacts">Exportovať vizitky vCard</string>
     <string name="title_create_sub_folder">Vytvoriť podpriečinok</string>
     <string name="title_empty_trash_ask">Natrvalo odstrániť všetky správy z koša?</string>
     <string name="title_empty_spam_ask">Natrvalo odstrániť všetky správy v spame?</string>
@@ -1143,8 +1151,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_search_hint">        Prvotné vyhľadávanie prebieha priamo na zariadení.
         Ak chcete prehľadať aj server, klepnite na tlačidlo hľadať znovu.
     </string>
-    <string name="title_search_index_hint">        Vyhľadávanie použitím indexu je veľmi rýchle, ale nájde len celé slová.
-        Možnosti nižšie vám umožnia pokračovať v hľadaní na servery.
+    <string name="title_search_index_hint">        Prehľadávanie indexu je veľmi rýchle, ale je obmedzené na hľadanie celých slov vo všetkých častiach správy.
+        Možnosti nižšie umožňujú pokračovať v hľadaní na servery.
     </string>
     <string name="title_search_text_hint">Vyhľadávanie v tele správy nemusí na všetkých serveroch fungovať správne, hlavne ak je na servery uložených veľa správ</string>
     <string name="title_search_text_unsupported">\'%s\' znamená, že server nepodporuje hľadanie v texte správ</string>

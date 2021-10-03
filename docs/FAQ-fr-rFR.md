@@ -1034,41 +1034,41 @@ Les causes possibles sont:
 Tout d'abord, essayez d'attendre un peu de temps pour voir si le problème se résout par lui-même, sinon:
 
 * basculez vers la vérification périodique des messages dans les paramètres de réception, ce qui entraînera l'ouverture des dossiers un à la fois
-* or set some folders to poll instead of synchronize (long press folder in the folder list, edit properties)
+* ou définissez certains dossiers à interroger au lieu de les synchroniser (appuyez longuement sur le dossier dans la liste des dossiers, modifiez les propriétés)
 
-An easy way to configure periodically checking for messages for all folders except the inbox is to use *Apply to all ...* in the three-dots menu of the folder list and to tick the bottom two advanced checkboxes.
+Un moyen facile de configurer la vérification périodique des messages pour tous les dossiers sauf la boîte de réception est d'utiliser *Appliquer à tous…* dans le menu à trois points de la liste des dossiers et de cocher les deux cases à cocher de la section Avancé.
 
-The maximum number of simultaneous folder connections for Gmail is 15, so you can synchronize at most 15 folders simultaneously on *all* your devices at the same time. For this reason Gmail *user* folders are set to poll by default instead of synchronize always. When needed or desired, you can change this by long pressing a folder in the folder list and selecting *Edit properties*. See [here](https://support.google.com/mail/answer/7126229) for details.
+Le nombre maximum de connexions simultanées de dossiers pour Gmail est de 15, donc vous pouvez synchroniser au maximum 15 dossiers simultanément sur *tous* vos appareils en même temps. C'est pour cette raison que les dossiers *utilisateur* Gmail sont réglés par défaut sur interroger au lieu de toujours synchroniser. Si nécessaire ou désiré, vous pouvez modifier cela en appuyant longuement sur un dossier dans la liste des dossiers et en sélectionnant *Modifier les propriétés*. Voir [ici](https://support.google.com/mail/answer/7126229) pour les détails.
 
-When using a Dovecot server, you might want to change the setting [mail_max_userip_connections](https://doc.dovecot.org/settings/dovecot_core_settings/#mail-max-userip-connections).
+Lors de l'utilisation d'un serveur Dovecot, vous pouvez modifier le paramètre [mail_max_userip_connections](https://doc.dovecot.org/settings/dovecot_core_settings/#mail-max-userip-connections).
 
-Note that it will take the email server a while to discover broken connections, for example due to going out of range of a network, which means that effectively only half of the folder connections are available. For Gmail this would be just 7 connections.
+Notez qu'il faudra un certain temps au serveur de messagerie pour découvrir des connexions cassées, par exemple si vous perdez la connexion au réseau, ce qui signifie que, de fait, la moitié seulement des connexions aux dossiers sont disponibles. Pour Gmail, ce ne sont que 7 connexions.
 
 <br />
 
 <a name="faq24"></a>
-**(24) What is browse messages on the server?**
+**(24) Qu'est-ce que parcourir les messages sur le serveur ?**
 
-Browse messages on the server will fetch messages from the email server in real time when you reach the end of the list of synchronized messages, even when the folder is set to not synchronize. You can disable this feature in the advanced account settings.
+Parcourir les messages sur le serveur récupérera les messages du serveur de messagerie en temps réel lorsque vous atteindrez la fin de la liste des messages synchronisés, même lorsque le dossier est configuré pour ne pas synchroniser. Vous pouvez désactiver cette fonctionnalité dans les paramètres avancés du compte.
 
 <br />
 
 <a name="faq25"></a>
-**(25) Why can't I select/open/save an image, attachment or a file?**
+**(25) Pourquoi ne puis-je pas sélectionner/ouvrir/sauvegarder une image, une pièce jointe ou un fichier ?**
 
-When a menu item to select/open/save a file is disabled (dimmed) or when you get the message *Storage access framework not available*, the [storage access framework](https://developer.android.com/guide/topics/providers/document-provider), a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated).
+Lorsqu'un élément de menu pour sélectionner/ouvrir/sauvegarder un fichier est désactivé (grisé) ou lorsque vous recevez le message *Storage access framework non disponible*, le [Storage access framework](https://developer.android.com/guide/topics/providers/document-provider) (la structure d'accès au stockage), un composant Android standard, n'est probablement pas présent. Cela peut être dû au fait que votre ROM personnalisée ne l'inclut pas ou qu'elle a été activement supprimée (dégonflée).
 
-FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to *all* files.
+FairEmail ne demande pas d'autorisations de stockage, donc ce framework est requis pour sélectionner des fichiers et des dossiers. Aucune application, sauf peut-être les gestionnaires de fichiers fonctionnant sous Android 4.4 KitKat ou une version ultérieure, ne devrait demander des autorisations de stockage car cela permettrait d'accéder à *tous* les fichiers.
 
-The storage access framework is provided by the package *com.android.documentsui*, which is visible as *Files* app on some Android versions (notable OxygenOS).
+Le Storage access framework est fourni par le paquet *com.android.documentsui* qui est visible comme une application *Fichiers* sur certaines versions d'Android (notamment OxygenOS).
 
-You can enable the storage access framework (again) with this adb command:
+Vous pouvez (ré)activer le Storage access framework avec cette commande adb :
 
 ```
 pm install -k --user 0 com.android.documentsui
 ```
 
-Alternatively, you might be able to enable the *Files* app again using the Android app settings.
+Ou bien, vous devriez être en mesure d'activer à nouveau l'application *Fichiers* en utilisant l'application Paramètres d'Android.
 
 <br />
 
@@ -1124,9 +1124,9 @@ Consultez [cette FAQ](#user-content-faq21) si votre appareil a un voyant de noti
 <br />
 
 <a name="faq29"></a>
-**(29) How can I get new message notifications for other folders?**
+(29) Comment puis-je recevoir des notifications de nouveaux messages pour d'autres dossiers ?
 
-Just long press a folder, select *Edit properties*, and enable either *Show in unified inbox* or *Notify new messages* (available on Android 7 Nougat and later only) and tap *Save*.
+Appuyez longuement sur un dossier, sélectionnez *Modifier les propriétés*, et activez soit *Afficher dans la boîte de réception unifiée* soit *Notifier les nouveaux messages* (disponible sur Android 7 Nougat et versions suivantes seulement) puis appuyez sur *Enregistrer*.
 
 <br />
 

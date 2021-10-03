@@ -2,6 +2,107 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Adratiklit](https://en.wikipedia.org/wiki/Adratiklit)
+
+### 1.1749
+
+* Fixed handling namespace errors
+
+### 1.1748
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1747
+
+* Disabled Android Auto support for the Play store version (*)
+* Small improvements and minor bug fixes
+* Updated translations
+
+(*) Google does not allow email apps with Android Auto support, see the FAQ.
+
+### 1.1746
+
+* Enabled Android auto support (see the FAQ for details)
+
+### [Zanabazar](https://en.wikipedia.org/wiki/Zanabazar_junior)
+
+### 1.1745
+
+* Auto delete stale grouped operations
+
+### 1.1744
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1743
+
+* Fixed listing personal root namespace
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1742
+
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1741
+
+* Fixed empty account/identity list crash
+* Updated AndroidX
+* Updated translations
+
+### 1.1740
+
+* Added importing/exporting of vCards for local contact database
+* Added option to show number of unread drafts in the navigation menu
+* Added option to disable collapsing on manually marking read/unread
+* Reduced memory usage
+* Small improvements and minor bug fixes
+
+### 1.1739
+
+* Showing search index state
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1738
+
+* Added theme option for always light message editor
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1737
+
+* Fixed crash
+
+### 1.1736
+
+* Small improvements and minor bug fixes
+
+### 1.1735
+
+* Added guided workaround for Outlook authentication errors
+
+### 1.1734
+
+* Added color to saved searches
+
+### 1.1733
+
+* Added saved searches (experimental)
+
+### 1.1732
+
+* Added collapsing of navigation menu folders
+* Added theme option for default light original message view
+* Unified colors based on account folder colors
+* Showing folders of all personal namespaces
+* Improved Android 12 support
+* Fixed all reported bugs
+
 ### [Yaverlandia](https://en.wikipedia.org/wiki/Yaverlandia)
 
 ### 1.1731

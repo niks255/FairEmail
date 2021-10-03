@@ -204,7 +204,8 @@
     <string name="title_setup_doze_battery">Wysokie użycie baterii?</string>
     <string name="title_setup_doze_stopped">Synchronizacja zatrzymana?</string>
     <string name="title_setup_doze_device">Prawdopodobnie jest to wymagane dla tego urządzenia</string>
-    <string name="title_setup_doze_android">To jest wymagane dla tej wersji Androida</string>
+    <string name="title_setup_doze_12">Wiadomości push są wyłączone</string>
+    <string name="title_setup_alarm_12">Aplikacja nie zadziała</string>
     <string name="title_setup_inexact">Alarmy &amp; przypomnienia są wyłączone</string>
     <string name="title_setup_background">Ograniczenia w tle są włączone</string>
     <string name="title_setup_data">Oszczędzanie danych jest włączone</string>
@@ -216,6 +217,7 @@
     <string name="title_setup_still">Nadal do wykonania</string>
     <string name="title_setup_error">Błąd</string>
     <string name="title_setup_configuring">Konfigurowanie konta &#8230;</string>
+    <string name="title_setup_app_password">Może być konieczne użycie hasła aplikacji</string>
     <string name="title_setup_close">Zamknij ustawienia</string>
     <string name="title_setup_export">Eksport ustawień</string>
     <string name="title_setup_import">Import ustawień</string>
@@ -261,6 +263,8 @@
     <string name="title_setup_theme_dark">Ciemny</string>
     <string name="title_setup_theme_system">Zgodnie z systemem</string>
     <string name="title_setup_theme_black_background">Czarne tło</string>
+    <string name="title_setup_theme_html_light">Jasne tło dla oryginalnego widoku wiadomości</string>
+    <string name="title_setup_theme_composer_light">Jasne tło dla edytora wiadomości</string>
     <string name="title_setup_theme_system_hint">Zgodnie z motywem systemu automatycznie przełączy się na jasny/ciemny w dzień/noc, jeśli jest wspierane przez Androida</string>
     <string name="title_setup_theme_more_colors">Chcę więcej kolorów</string>
     <string name="title_setup_advanced">Zaawansowane</string>
@@ -368,6 +372,7 @@
     <string name="title_advanced_nav_hide_title">Ukryć opcje menu nawigacji?</string>
     <string name="title_advanced_nav_hide_message">Możesz włączyć opcje ponownie w ustawieniach wyświetlania</string>
     <string name="title_advanced_nav_message_count">Pokaż liczbę lokalnie przechowywanych wiadomości w menu nawigacji</string>
+    <string name="title_advanced_nav_unseen_drafts">Pokaż liczbę nieprzeczytanych szkiców w menu nawigacji</string>
     <string name="title_advanced_startup">Pokaż na ekranie początkowym</string>
     <string name="title_advanced_cards">Użyj stylu karty zamiast stylu tabelarycznego</string>
     <string name="title_advanced_cards_beige">Użyj beżowego tła podczas używania stylu karty (tylko jasne motywy)</string>
@@ -463,6 +468,7 @@
     <string name="title_advanced_autoclose">Automatycznie zamykaj konwersacje</string>
     <string name="title_advanced_onclose">Przy zamykaniu wiadomości</string>
     <string name="title_advanced_autoclose_unread">Zamknij rozmowy przy oznaczaniu wiadomości jako nieprzeczytane</string>
+    <string name="title_advanced_collapse_marked">Zwiń wiadomości, które są ręcznie oznaczone jako przeczytane lub nieprzeczytane</string>
     <string name="title_advanced_undo">Ustaw limit czasu dla \"Cofnij\"</string>
     <string name="title_advanced_quick_filter">Pokaż nienatarczywe ikony szybkiego filtrowania</string>
     <string name="title_advanced_quick_scroll">Pokaż nienatarczywe ikony szybkiego przewijania w górę/w dół</string>
@@ -785,6 +791,8 @@
     <string name="title_delete_channel">Usuń kanał powiadomień</string>
     <string name="title_insert_contact">Dodaj kontakt</string>
     <string name="title_edit_contact">Edytuj kontakt</string>
+    <string name="title_import_contacts">Importuj karty vCards</string>
+    <string name="title_export_contacts">Eksportuj karty vCards</string>
     <string name="title_create_sub_folder">Utwórz podfolder</string>
     <string name="title_empty_trash_ask">Trwale usunąć wszystkie wiadomości z kosza?</string>
     <string name="title_empty_spam_ask">Czy trwale usunąć wszystkie wiadomości - spam?</string>
@@ -1146,9 +1154,6 @@
     <string name="title_search_for_hint">Wprowadź tekst</string>
     <string name="title_search_hint">        Wyszukiwanie początkowo obejmie wiadomości zapisane na Twoim urządzeniu.
         Aby wyszukać również na serwerze, dotknij przycisku \'Szukaj ponownie\'.
-    </string>
-    <string name="title_search_index_hint">        Wyszukiwanie za pomocą indeksu wyszukiwania jest szybkie, ale znajdują tylko całe słowa.
-        Poniższe opcje pozwalają kontynuować wyszukiwanie serwera e-mail.
     </string>
     <string name="title_search_text_hint">Wyszukiwanie tekstu w wiadomościach może nie działać na niektórych serwerach, gdy istnieje duża liczba wiadomości</string>
     <string name="title_search_text_unsupported">\'%s\' oznacza, że serwer pocztowy nie obsługuje wyszukiwania w tekstach wiadomości</string>

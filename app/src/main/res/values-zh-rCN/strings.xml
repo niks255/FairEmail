@@ -5,7 +5,7 @@
     <string name="app_welcome">FairEmail 是一款专注于隐私与安全的开源电子邮件应用。所以，某些功能的工作方式可能与您的习惯不同。</string>
     <string name="app_limitations">例如，默认情况下，消息将被重新格式化以移除不安全的元素并提高可读性；另外，为确保安全，打开链接前需要得到确认。当然如有需要，这两个选项都可以禁用</string>
     <string name="app_crash">FairEmail 不支持该设备，Android 中的 bug 会导致其崩溃</string>
-    <string name="app_exit">再按一次返回键退出</string>
+    <string name="app_exit">再按一次退出</string>
     <string name="app_cake">剩余存储空间不足</string>
     <string name="app_updated">上次更新：%1$s</string>
     <string name="channel_service">接收</string>
@@ -174,7 +174,8 @@
     <string name="title_setup_doze_battery">太耗电？</string>
     <string name="title_setup_doze_stopped">同步已停止？</string>
     <string name="title_setup_doze_device">对此设备来说，这可能是必需的</string>
-    <string name="title_setup_doze_android">这是此 Android 版本所需的</string>
+    <string name="title_setup_doze_12">推送消息已禁用</string>
+    <string name="title_setup_alarm_12">应用将无法工作</string>
     <string name="title_setup_inexact">闹钟 &amp; 提醒已禁用</string>
     <string name="title_setup_background">已启用后台限制</string>
     <string name="title_setup_data">省流量模式已启用</string>
@@ -186,13 +187,14 @@
     <string name="title_setup_still">仍待处理</string>
     <string name="title_setup_error">出错</string>
     <string name="title_setup_configuring">正在配置账户 &#8230;</string>
+    <string name="title_setup_app_password">您可能需要使用 app 密码</string>
     <string name="title_setup_close">关闭设置</string>
     <string name="title_setup_export">导出设置</string>
     <string name="title_setup_import">导入设置</string>
-    <string name="title_setup_export_remark">        因设置文件包含所有的设置和帐户信息，它受到密码加密保护。
-        导入该设置将需要密码，所以请不要忘记！
+    <string name="title_setup_export_remark">        由于该设置文件包含所有的设置和账户信息，它受到密码加密保护。
+        导入时将需要密码，所以请不要忘记！
     </string>
-    <string name="title_setup_export_do">导出文件将包含所有的设置和数据，但是没有在签名中引用的消息和图像</string>
+    <string name="title_setup_export_do">导出文件将包含所有的设置和数据，但是不含邮件，也不含签名中引用的图像</string>
     <string name="title_setup_import_do">导入的账户不会覆盖任何现有的账户</string>
     <string name="title_setup_import_gmail">        从 Android 8.0 Oreo 起，Gmail 帐户不能再被导入，因为必须选择每个帐户才能授予该帐户的访问权限。
         您可以轻松地通过快速设置向导重新配置 Gmail 帐户。
@@ -231,6 +233,8 @@
     <string name="title_setup_theme_dark">深色</string>
     <string name="title_setup_theme_system">跟随系统</string>
     <string name="title_setup_theme_black_background">黑色背景</string>
+    <string name="title_setup_theme_html_light">原始消息视图使用浅色背景</string>
+    <string name="title_setup_theme_composer_light">邮件编辑窗使用浅色背景</string>
     <string name="title_setup_theme_system_hint">如果安卓系统支持，跟随系统主题将在白天/夜间自动切换到亮/暗色主题</string>
     <string name="title_setup_theme_more_colors">我想要更多颜色</string>
     <string name="title_setup_advanced">高级选项</string>
@@ -338,6 +342,7 @@
     <string name="title_advanced_nav_hide_title">隐藏导航菜单选项？</string>
     <string name="title_advanced_nav_hide_message">您可以在显示设置中再次启用选项</string>
     <string name="title_advanced_nav_message_count">在导航菜单中显示本地存储消息的数量</string>
+    <string name="title_advanced_nav_unseen_drafts">在导航菜单中显示未读草稿的数量</string>
     <string name="title_advanced_startup">在启动屏幕上显示</string>
     <string name="title_advanced_cards">使用卡片样式而非表单样式 (即主页会话间有间隔)</string>
     <string name="title_advanced_cards_beige">使用卡牌风格时使用米色背景(仅适用于浅色主题)</string>
@@ -433,6 +438,7 @@
     <string name="title_advanced_autoclose">自动关闭对话</string>
     <string name="title_advanced_onclose">关闭对话时</string>
     <string name="title_advanced_autoclose_unread">将消息标记为已读时关闭会话</string>
+    <string name="title_advanced_collapse_marked">自动折叠手动标记为已读或未读的邮件</string>
     <string name="title_advanced_undo">撤回超时</string>
     <string name="title_advanced_quick_filter">显示不显眼的快速过滤图标</string>
     <string name="title_advanced_quick_scroll">显示不显眼的快速上/下滚动图标</string>
@@ -485,7 +491,7 @@
     <string name="title_advanced_hide_timezone">发送没有时区数据的消息</string>
     <string name="title_advanced_client_id">将应用名称和版本发送到电子邮件服务器</string>
     <string name="title_advanced_display_hidden">显示隐藏消息文本</string>
-    <string name="title_advanced_incognito_keyboard">使用隐身键盘 (Android 8+)</string>
+    <string name="title_advanced_incognito_keyboard">使用隐身模式下的输入法 (Android 8+)</string>
     <string name="title_advanced_secure">从\"最近应用\"列表中隐藏并阻止截屏</string>
     <string name="title_advanced_pin">PIN 码</string>
     <string name="title_advanced_biometrics_timeout">生物认证超时时间</string>
@@ -515,14 +521,14 @@
         密钥和证书一般可以在 “高级—加密和凭证” 选项中找到
     </string>
     <string name="title_advanced_power_menu">添加操作到 Android 电源菜单</string>
-    <string name="title_advanced_external_search">允许其他应用在消息中搜索</string>
+    <string name="title_advanced_external_search">允许其他应用搜索邮件</string>
     <string name="title_advanced_shortcuts">在安卓共享菜单中显示常用联系人</string>
     <string name="title_advanced_fts">创建搜索索引</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d 的消息已索引(%3$s)</string>
     <string name="title_advanced_classification">消息分类</string>
     <string name="title_advanced_class_min_chance">是否分类的最低概率：%1$s %%</string>
     <string name="title_advanced_class_min_difference">不同分类的最小差异：%1$s %%</string>
-    <string name="title_advanced_language">语言</string>
+    <string name="title_advanced_language">界面语言</string>
     <string name="title_advanced_language_system">系统</string>
     <string name="title_advanced_deepl">DeepL 集成</string>
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
@@ -534,7 +540,7 @@
     <string name="title_advanced_cleanup_attachments">删除旧消息的附件</string>
     <string name="title_advanced_cleanup">清理</string>
     <string name="title_advanced_last_cleanup">上次清理: %1$s</string>
-    <string name="title_advanced_app">应用设置</string>
+    <string name="title_advanced_app">应用信息</string>
     <string name="title_advanced_more">更多选项</string>
     <string name="title_advanced_protocol">协议日志</string>
     <string name="title_advanced_log_info">调试日志</string>
@@ -565,7 +571,7 @@
     <string name="title_advanced_rlah_hint">假设欧盟境内不存在漫游</string>
     <string name="title_advanced_usage_hint">这将增加电池、数据和存储空间的使用</string>
     <string name="title_advanced_tcp_keep_alive_hint">启用此选项可能会在某些设备上造成连接问题</string>
-    <string name="title_advanced_validate_hint">这可能导致消息停止同步，例如在使用 VPN 时或其他某些情况下</string>
+    <string name="title_advanced_validate_hint">这可能导致消息停止同步，例如使用 VPN 或其他某些情况下</string>
     <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
     <string name="title_advanced_ssl_harden_hint">启用此选项将禁用较弱的 SSL 协议和加密算法，这可能导致连接遇到问题</string>
     <string name="title_advanced_roaming_hint">当漫游时，将始终获取消息头。您可以使用设备的漫游设置在漫游时禁用互联网。</string>
@@ -636,7 +642,7 @@
     <string name="title_identity_unicode">使用 Unicode 传输</string>
     <string name="title_identity_unicode_remark">大多数服务器不支持这一功能</string>
     <string name="title_identity_max_size">最大消息大小 (MB)</string>
-    <string name="title_identity_receipt">默认请求送达／已读回执</string>
+    <string name="title_identity_receipt">默认请求送达/已读回执</string>
     <string name="title_identity_use_ip_hint">如果遇到“无效问候”，“需要有效的地址”或类似错误，请尝试更改此设置</string>
     <string name="title_identity_self_hint">也能防止您回复自己</string>
     <string name="title_optional">可选</string>
@@ -755,6 +761,8 @@
     <string name="title_delete_channel">删除通知通道</string>
     <string name="title_insert_contact">添加联系人</string>
     <string name="title_edit_contact">编辑联系人</string>
+    <string name="title_import_contacts">从 vCard 文件导入</string>
+    <string name="title_export_contacts">导出为 vCard 文件</string>
     <string name="title_create_sub_folder">创建子文件夹</string>
     <string name="title_empty_trash_ask">是否永久删除所有回收站的邮件？</string>
     <string name="title_empty_spam_ask">是否永久删除所有的垃圾邮件？</string>
@@ -1116,8 +1124,8 @@
     <string name="title_search_hint">        最初，搜索在设备上执行。
         要搜索服务器，点击“再次搜索”按钮。
     </string>
-    <string name="title_search_index_hint">        通过搜索索引搜索很快，但只能找到整个单词。
-        下面的选项是继续搜索电子邮件服务器。
+    <string name="title_search_index_hint">        通过索引来搜索确实很快，但只能在所有邮件部分中找到整个单词
+        下面的选项是继续搜索电子邮件服务器
     </string>
     <string name="title_search_text_hint">当消息数量很多时，在消息中搜索文本可能无法在某些服务器上正常运作</string>
     <string name="title_search_text_unsupported">\'%s\' 表示邮件服务器不支持在邮件文本中搜索</string>
@@ -1675,9 +1683,9 @@
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">
-        <item>只有名字</item>
+        <item>仅名称</item>
         <item>仅电子邮件</item>
-        <item>名字和电子邮箱</item>
+        <item>名称+电子邮箱</item>
     </string-array>
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
