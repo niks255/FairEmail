@@ -770,8 +770,13 @@ public class FragmentOAuth extends FragmentBase {
                 try {
                     db.beginTransaction();
 
-                    if (args.getBoolean("update"))
-                        update = db.account().getAccount(username, AUTH_TYPE_OAUTH);
+                    if (args.getBoolean("update")) {
+                        List<EntityAccount> accounts =
+                                db.account().getAccounts(username, AUTH_TYPE_OAUTH);
+                        if (accounts != null && accounts.size() == 1)
+                            update = accounts.get(0);
+                    }
+
                     if (update == null) {
                         EntityAccount primary = db.account().getPrimaryAccount();
 
@@ -853,6 +858,7 @@ public class FragmentOAuth extends FragmentBase {
                     } else {
                         args.putLong("account", update.id);
                         EntityLog.log(context, "OAuth update account=" + update.name);
+                        db.account().setAccountSynchronize(update.id, true);
                         db.account().setAccountPassword(update.id, state);
                         db.identity().setIdentityPassword(update.id, update.user, state, update.auth_type);
                     }

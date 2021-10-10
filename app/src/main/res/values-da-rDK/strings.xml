@@ -222,6 +222,10 @@
     <string name="title_setup_exported">Indstillinger eksporteret</string>
     <string name="title_setup_imported">Indstillinger importeret</string>
     <string name="title_setup_import_invalid">Ugyldig indstillingsfil</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Konto %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identitet %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Oversprunget - findes allerede</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Kør guide for at godkende igen</string>
     <string name="title_setup_reorder_accounts">Sortering af konti</string>
     <string name="title_setup_reorder_folders">Sortering af mapper</string>
     <string name="title_reset_order">Nulstil rækkefølge</string>
@@ -651,6 +655,7 @@
     <string name="title_recommended">Anbefalet</string>
     <string name="title_account_linked">Forbundet konto</string>
     <string name="title_account_name">Kontonavn</string>
+    <string name="title_account_category">Kategori</string>
     <string name="title_account_name_hint">Benyttes til mappedifferentiering</string>
     <string name="title_account_interval_hint">Opfriskningsfrekvensen af forbindelsen til push-beskeder eller frekvensen for tjek af nye beskeder</string>
     <string name="title_account_partial_fetch_hint">Deaktivér dette kun i tilfælde af tomme beskeder eller ødelagte vedhæftninger</string>
@@ -791,6 +796,7 @@
     <string name="title_sort_unread_atop">Sortér ulæst øverst</string>
     <string name="title_search_folder">Søg efter mappe</string>
     <string name="title_apply_to_all">Anvend på alle</string>
+    <string name="title_edit_account_name">Redigér kontonavn</string>
     <string name="title_hide_folder">Skjul mappe</string>
     <string name="title_unified_folder">Vis i samlet indbakke</string>
     <string name="title_navigation_folder">Vis i navigationsmenu</string>
@@ -1473,6 +1479,7 @@
          For at vedligeholde og supportere FairEmail i det lange løb er visse avancerede og bekvemmelighedsfunktioner ikke gratis at benytte.
          For at minde dig om dette, viser FairEmail viser en lille meddelelse, der dog fjernes, hvis du køber Pro-funktionerne.
     </string>
+    <string name="title_pro_whichever">Uanset valgte Pro-funktioner, er der altid nogle, som klager over, at en funktion ikke er gratis. Vær venligst ikke en sådan person.</string>
     <string name="title_pro_hide">Skjul små meddelelser i %1$d uger</string>
     <string name="title_pro_hint">Køb af Pro-funktioner vil tillade brug alle aktuelle og fremtidige Pro-funktioner samt sikre denne apps vedligeholdelse og understøttelse</string>
     <string name="title_pro_price">Hvorfor er Pro-funktionerne så dyre?</string>

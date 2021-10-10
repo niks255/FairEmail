@@ -223,6 +223,10 @@
     <string name="title_setup_exported">Επιτυχής εξαγωγή ρυθμίσεων</string>
     <string name="title_setup_imported">Επιτυχής εισαγωγή ρυθμίσεων</string>
     <string name="title_setup_import_invalid">Λάθος αρχείο ρυθμίσεων</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Λογαριασμός %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Ταυτότητα %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Παραλείφθηκε: υπάρχει ήδη</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Εκτέλεση οδηγού για εκ νέου ταυτοποίηση</string>
     <string name="title_setup_reorder_accounts">Ταξινόμηση λογαριασμών</string>
     <string name="title_setup_reorder_folders">Ταξινόμηση φακέλων</string>
     <string name="title_reset_order">Επαναφορά ταξινόμησης</string>
@@ -657,6 +661,7 @@
     <string name="title_recommended">Προτείνεται</string>
     <string name="title_account_linked">Συνδεδεμένος λογαριασμός</string>
     <string name="title_account_name">Όνομα λογαριασμού</string>
+    <string name="title_account_category">Κατηγορία</string>
     <string name="title_account_name_hint">Χρησιμοποιείται για τη διαφοροποίηση φακέλων</string>
     <string name="title_account_interval_hint">Συχνότητα ανανέωσης της σύνδεσης για μηνύματα ώθησης (push) ή συχνότητα ελέγχου για νέα μηνύματα</string>
     <string name="title_account_partial_fetch_hint">Απενεργοποιήστε το μόνο σε περιπτώσεις κενών μηνυμάτων ή χαλασμένων συνημμένων</string>
@@ -797,6 +802,7 @@
     <string name="title_sort_unread_atop">Ταξινόμηση των μη αναγνωσμένων στην κορυφή</string>
     <string name="title_search_folder">Αναζήτηση φακέλου</string>
     <string name="title_apply_to_all">Εφαρμογή σε όλα</string>
+    <string name="title_edit_account_name">Επεξεργασία ονόματος λογαριασμού</string>
     <string name="title_hide_folder">Απόκρυψη φακέλου</string>
     <string name="title_unified_folder">Προβολή στα ενοποιημένα εισερχόμενα</string>
     <string name="title_navigation_folder">Προβολή στο μενού πλοήγησης</string>
@@ -1481,6 +1487,7 @@
         Για να παραμείνει ενεργό το FairEmail και να αναπτυχθεί περαιτέρω, ορισμένες διευκολύνσεις και προχωρημένες δυνατότητες δεν προσφέρονται δωρεάν.
         Το FairEmail προβάλλει μια μικρή υπενθύμιση, η οποία θα αφαιρεθεί αν αγοράσετε την έκδοση pro.
     </string>
+    <string name="title_pro_whichever">Όποια δυνατότητα και αν επιλεγεί ως δυνατότητα Pro, υπάρχει πάντοτε κάποιο άτομο που παραπονιέται πως κάποια δυνατότητα θα πρέπει να είναι δωρεάν. Παρακαλούμε, μη γίνεσθε εσείς αυτό το άτομο.</string>
     <string name="title_pro_hide">Απόκρυψη μικρής υπενθύμισης για %1$d εβδομάδες</string>
     <string name="title_pro_hint">Αγοράζοντας την έκδοση pro θα μπορείτε να χρησιμοποιείτε όλες τις τρέχουσες και μελλοντικές δυνατότητες pro, και θα βοηθήσετε να ενημερώνεται και να αναπτύσσεται περαιτέρω αυτή η εφαρμογή.</string>
     <string name="title_pro_price">Γιατί είναι οι δυνατότητες pro τόσο ακριβές;</string>

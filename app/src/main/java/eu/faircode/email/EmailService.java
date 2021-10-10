@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.security.KeyChain;
@@ -43,6 +42,7 @@ import com.sun.mail.pop3.POP3Store;
 import com.sun.mail.smtp.SMTPTransport;
 import com.sun.mail.util.MailConnectException;
 import com.sun.mail.util.SocketConnectException;
+import com.sun.mail.util.TraceOutputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -148,12 +148,6 @@ public class EmailService implements AutoCloseable {
 
     // TLS_FALLBACK_SCSV https://tools.ietf.org/html/rfc7507
     // TLS_EMPTY_RENEGOTIATION_INFO_SCSV https://tools.ietf.org/html/rfc5746
-
-    static {
-        System.loadLibrary("fairemail");
-    }
-
-    private static native int jni_socket_keep_alive(int fd, int seconds);
 
     private EmailService() {
         // Prevent instantiation
@@ -299,6 +293,10 @@ public class EmailService implements AutoCloseable {
     // https://tools.ietf.org/html/rfc3461
     void setDsnNotify(String what) {
         properties.put("mail." + protocol + ".dsn.notify", what);
+    }
+
+    void setReporter(TraceOutputStream.IReport reporter) {
+        properties.put("mail." + protocol + ".reporter", reporter);
     }
 
     void setListener(StoreListener listener) {
@@ -1064,7 +1062,7 @@ public class EmailService implements AutoCloseable {
                 Log.i("Enabling TCP keep alive");
 
                 int fd = ParcelFileDescriptor.fromSocket(socket).getFd();
-                int errno = jni_socket_keep_alive(fd, TCP_KEEP_ALIVE_INTERVAL);
+                int errno = ConnectionHelper.jni_socket_keep_alive(fd, TCP_KEEP_ALIVE_INTERVAL);
                 if (errno == 0)
                     Log.i("Enabled TCP keep alive");
                 else

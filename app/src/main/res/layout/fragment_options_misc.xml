@@ -610,6 +610,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <Button
+                    android:id="@+id/btnRepair"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_bug_report_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_repair"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCaptionDebug" />
+
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvRoomQueryThreads"
                     android:layout_width="0dp"
@@ -620,7 +632,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCaptionDebug" />
+                    app:layout_constraintTop_toBottomOf="@id/btnRepair" />
 
                 <SeekBar
                     android:id="@+id/sbRoomQueryThreads"
@@ -692,7 +704,7 @@
                     android:id="@+id/sbSqliteCache"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:max="20"
+                    android:max="50"
                     android:min="0"
                     android:progress="5"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -804,6 +816,17 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swDupMsgId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_dup_msgid"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swExactAlarms"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swTestIab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -811,7 +834,7 @@
                     android:text="@string/title_advanced_test_iab"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swExactAlarms"
+                    app:layout_constraintTop_toBottomOf="@id/swDupMsgId"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView

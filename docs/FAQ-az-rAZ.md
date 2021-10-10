@@ -1954,74 +1954,74 @@ Scheduling is a pro feature.
 <br />
 
 <a name="faq79"></a>
-**(79) How do I use synchronize on demand (manual)?**
+**(79) İstədiyim eyniləşdirməni necə istifadə edə bilərəm (əllə)?**
 
-Normally, FairEmail maintains a connection to the configured email servers whenever possible to receive messages in real-time. If you don't want this, for example to be not disturbed or to save on battery usage, just disable receiving in the receive settings. This will stop the background service which takes care of automatic synchronization and will remove the associated status bar notification.
+Normalda FairEmail, mesajları real vaxt kəsiyində almaq üçün mümkün olanda konfiqurasiya edilmiş e-poçt serverləri ilə bağlantı qurur. Bunu, məsələn narahat edilmək və ya batereya istifadəsinə qənaət etmək istəmirsinizsə, sadəcə alma tənzimləmələrindən almanı (qəbulu) sıradan çıxardın. Bu, avto-eyniləşdirmə ilə məşğul olan arxaplan xidmətini dayandıracaq və əlaqəli status sətri bildirişini siləcək.
 
-You can also enable *Synchronize manually* in the advanced account settings if you want to manually synchronize specific accounts only.
+Yalnız müəyyən hesabları əllə eyniləşdirmək istəyirsinizsə, qabaqcıl hesab tənzimləmələrində *"Əllə eyniləşdirmə"ni* fəallaşdıra bilərsiniz.
 
-You can use pull-down-to-refresh in a message list or use the folder menu *Synchronize now* to manually synchronize messages.
+Mesaj siyahısını təzələmək üçün siyahını aşağı çəkə və ya mesajları əllə eyniləşdirmək üçün *"İndi eyniləşdir"* qovluq menyusunu istifadə edə bilərsiniz.
 
-If you want to synchronize some or all folders of an account manually, just disable synchronization for the folders (but not of the account).
+Bir hesabın bəzi və ya bütün qovluqlarını eyniləşdirmək istəyirsinizsə, sadəcə (hesab üçün yox) qovluqlar üçün eyniləşdirməni sıradan çıxardın.
 
-You'll likely want to disabled [browse on server](#user-content-faq24) too.
+Böyük ehtimalla ["serverdə hərəkət"i](#user-content-faq24) də sıradan çıxartmaq istəyəcəksiniz.
 
 <br />
 
 <a name="faq80"></a>
-**~~(80) How do I fix the error 'Unable to load BODYSTRUCTURE' ?~~**
+**~~(80) "BODYSTRUCTURE yüklənilə bilmir" xətasını necə düzəldə bilərəm?~~**
 
-~~The error message *Unable to load BODYSTRUCTURE* is caused by bugs in the email server,~~ ~~see [here](https://javaee.github.io/javamail/FAQ#imapserverbug) for more details.~~
+~~*"BODYSTRUCTURE yüklənilə bilmir"* xəta mesajının səbəbi, e-poçt serverindəki xətalardır.~~ ~~Daha çox məlumat üçün [bura](https://javaee.github.io/javamail/FAQ#imapserverbug) baxın.~~
 
-~~FairEmail already tries to workaround these bugs, but if this fail you'll need to ask for support from your provider.~~
+~~Onsuz da FairEmail, bu xətaları aradan qaldırmağa çalışır, ancaq bu nəticə verməsə, dəstək üçün e-poçt təchizatçınıza müraciət etməli olacaqsınız.~~
 
 <br />
 
 <a name="faq81"></a>
-**~~(81) Can you make the background of the original message dark in the dark theme?~~**
+**~~(81) Tünd temada orijinal mesajın arxaplanını da tünd edə bilərsiniz?~~**
 
-~~The original message is shown as the sender has sent it, including all colors.~~ ~~Changing the background color would not only make the original view not original anymore, it can also result in unreadable messages.~~
+~~Orijinal mesaj, bütün rənglər daxil olmaqla göndərənin göndərdiyi kimi görünür.~~ ~~Arxaplan rənginin dəyişdirilməsi həm orijinal görünüşü orijinallıqdan çıxarır, həm də mesajları, oxuna bilməyən hala çevirir.~~
 
 <br />
 
 <a name="faq82"></a>
-**(82) What is a tracking image?**
+**(82) İzləmə təsviri nədir?**
 
-Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a tracking image exactly is. In short tracking images keep track if you opened a message.
+İzləmə təsvirinin tam olaraq nə olduğunu öyrənmək üçün zəhmət olmasa [bura](https://en.wikipedia.org/wiki/Web_beacon) baxın. Qısaca, bir mesajı açmısınızsa, izləmə təsvirləri izləməyə başlayır.
 
-FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
+FairEmail əksər hallarda izləmə təsvirlərini avtomatik olaraq tanıyır və onları bu nişanla əvəz edir:
 
 ![Xarici təsvir](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
 
-Automatic recognition of tracking images can be disabled in the privacy settings.
+İzləmə təsvirlərinin avtomatik tanınması, gizlilik tənzimləmələrində sıradan çıxarıla bilər.
 
 <br />
 
 <a name="faq84"></a>
-**(84) What are local contacts for?**
+**(84) Yerli əlaqələr nə üçündür?**
 
-Local contact information is based on names and addresses found in incoming and outgoing messages.
+Yerli əlaqə məlumatları, gələn və gedən mesajlardan tapılan ad və ünvanlara əsaslanır.
 
-The main use of the local contacts storage is to offer auto completion when no contacts permission has been granted to FairEmail.
+FairEmail-ə heç bir əlaqə icazəsi verilməyəndə yerli əlaqələr anbarının əsas istifadəsi avto-tamamlama təklif edir.
 
-Another use is to generate [shortcuts](#user-content-faq31) on recent Android versions to quickly send a message to frequently contacted people. This is also why the number of times contacted and the last time contacted is being recorded and why you can make a contact a favorite or exclude it from favorites by long pressing it.
+Başqa bir istifadəsi isə tez-tez əlaqə saxlanılan şəxslərə cəld bir mesaj göndərmək üçün ən son Android versiyalarında [qısayollar](#user-content-faq31) yaratmaqdır. Həmçinin bu, bir şəxs ilə neçə dəfə və ən son nə vaxt əlaqə saxlanıldığı kimi məlumatları qeyd edir və buna görə də həmin əlaqəni uzun basaraq sevimlilərə əlavə edə və ya sevimlilərdən çıxarda bilərsiniz.
 
-The list of contacts is sorted on number of times contacted and the last time contacted.
+Əlaqələr siyahısı, əlaqə saxlanılma sayına və son dəfə əlaqə saxlanılmaya görə sıralanır.
 
-By default only names and addresses to whom you send messages to will be recorded. You can change this in the send settings.
+İlkin olaraq yalnız mesaj göndərdiyiniz adlar və ünvanlar qeyd ediləcək. Bunu göndərmə tənzimləmələrindən dəyişdirə bilərsiniz.
 
 <br />
 
 <a name="faq85"></a>
-**(85) Why is an identity not available?**
+**(85) Niyə heç bir kimlik mövcud deyil?**
 
-An identity is available for sending a new message or replying or forwarding an existing message only if:
+Yalnız aşağıdakı hallarda bir kimlik, yeni bir mesaj göndərmək və ya mesajı cavablandırmaq və ya mövcud bir mesajı yönləndirmək üçün əlçatan olur:
 
-* the identity is set to synchronize (send messages)
-* the associated account is set to synchronize (receive messages)
-* the associated account has a drafts folder
+* kimlik, eyniləşdiriləcək formada tənzimləndi (mesajları göndərilməsi)
+* əlaqəli hesab, eyniləşdiriləcək formada tənzimləndi (mesajların alınması)
+* əlaqəli hesabın bir qaralamalar qovluğu var
 
-FairEmail will try to select the best identity based on the *to* address of the message replied to / being forwarded.
+FairEmail, cavablandırılan/yönləndirilən mesajın *ünvanına* görə ən yaxşı kimliyi seçməyə çalışacaq.
 
 <br />
 

@@ -125,6 +125,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swLogInfo;
     private SwitchCompat swDebug;
 
+    private Button btnRepair;
     private TextView tvRoomQueryThreads;
     private SeekBar sbRoomQueryThreads;
     private ImageButton ibRoom;
@@ -140,6 +141,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAuthNtlm;
     private SwitchCompat swAuthSasl;
     private SwitchCompat swExactAlarms;
+    private SwitchCompat swDupMsgId;
     private SwitchCompat swTestIab;
     private TextView tvProcessors;
     private TextView tvMemoryClass;
@@ -169,7 +171,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "protocol", "debug", "log_level",
             "use_modseq", "perform_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
-            "exact_alarms", "test_iab"
+            "exact_alarms", "dup_msgids", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -246,6 +248,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swLogInfo = view.findViewById(R.id.swLogInfo);
         swDebug = view.findViewById(R.id.swDebug);
 
+        btnRepair = view.findViewById(R.id.btnRepair);
         tvRoomQueryThreads = view.findViewById(R.id.tvRoomQueryThreads);
         sbRoomQueryThreads = view.findViewById(R.id.sbRoomQueryThreads);
         ibRoom = view.findViewById(R.id.ibRoom);
@@ -261,6 +264,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
         swExactAlarms = view.findViewById(R.id.swExactAlarms);
+        swDupMsgId = view.findViewById(R.id.swDupMsgId);
         swTestIab = view.findViewById(R.id.swTestIab);
         tvProcessors = view.findViewById(R.id.tvProcessors);
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
@@ -740,6 +744,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swDupMsgId.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("dup_msgids", checked).apply();
+            }
+        });
+
         swTestIab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1144,6 +1155,62 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swLogInfo.setChecked(prefs.getInt("log_level", Log.getDefaultLogLevel()) <= android.util.Log.INFO);
         swDebug.setChecked(prefs.getBoolean("debug", false));
 
+        btnRepair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTask<Void>() {
+                    @Override
+                    protected void onPostExecute(Bundle args) {
+                        ToastEx.makeText(v.getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected Void onExecute(Context context, Bundle args) throws Throwable {
+                        DB db = DB.getInstance(context);
+
+                        List<EntityAccount> accounts = db.account().getAccounts();
+                        if (accounts == null)
+                            return null;
+
+                        for (EntityAccount account : accounts) {
+                            if (account.protocol != EntityAccount.TYPE_IMAP)
+                                continue;
+
+                            List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
+                            if (folders == null)
+                                continue;
+
+                            EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
+                            for (EntityFolder folder : folders) {
+                                if (inbox == null && "inbox".equalsIgnoreCase(folder.name))
+                                    folder.type = EntityFolder.INBOX;
+
+                                if (!EntityFolder.USER.equals(folder.type) &&
+                                        !EntityFolder.SYSTEM.equals(folder.type)) {
+                                    EntityLog.log(context, "Repairing " + account.name + ":" + folder.type);
+                                    folder.setProperties();
+                                    folder.setSpecials(account);
+                                    db.folder().updateFolder(folder);
+                                }
+                            }
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Void data) {
+                        ServiceSynchronize.reload(v.getContext(), null, true, "repair");
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    }
+                }.execute(FragmentOptionsMisc.this, new Bundle(), "repair");
+            }
+        });
+
         int query_threads = prefs.getInt("query_threads", DB.DEFAULT_QUERY_THREADS);
         tvRoomQueryThreads.setText(getString(R.string.title_advanced_room_query_threads, NF.format(query_threads)));
         sbRoomQueryThreads.setProgress(query_threads);
@@ -1165,6 +1232,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
         swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", true));
+        swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
         swTestIab.setChecked(prefs.getBoolean("test_iab", false));
 
         tvProcessors.setText(getString(R.string.title_advanced_processors, Runtime.getRuntime().availableProcessors()));

@@ -223,6 +223,10 @@
     <string name="title_setup_exported">Tənzimləmələr ixrac edildi</string>
     <string name="title_setup_imported">Tənzimləmələr idxal edildi</string>
     <string name="title_setup_import_invalid">Etibarsız tənzimləmələr faylı</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Hesab %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Kimlik %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Ötürüldü: artıq mövcuddur</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Yenidən kimlik təsdiqləməsi etmək üçün sehrbazı işə salın</string>
     <string name="title_setup_reorder_accounts">Hesabları sırala</string>
     <string name="title_setup_reorder_folders">Qovluqları sırala</string>
     <string name="title_reset_order">Sıralamanı sıfırla</string>
@@ -658,6 +662,7 @@
     <string name="title_recommended">Tövsiyə edilən</string>
     <string name="title_account_linked">Birləşdirilmiş hesablar</string>
     <string name="title_account_name">Hesab adı</string>
+    <string name="title_account_category">Kateqoriya</string>
     <string name="title_account_name_hint">Qovluqları fərqləndirmək üçün istifadə edilir</string>
     <string name="title_account_interval_hint">Ani mesajlar üçün bağlantını təzələmə tezliyi və ya yeni mesajların yoxlanış tezliyi</string>
     <string name="title_account_partial_fetch_hint">Bunu yalnız boş mesajlar və ya zədəli qoşmalar olduğu halda sıradan çıxardın</string>
@@ -798,6 +803,7 @@
     <string name="title_sort_unread_atop">Oxunulmayanları üstdə sırala</string>
     <string name="title_search_folder">Qovluq axtar</string>
     <string name="title_apply_to_all">Hamısına tətbiq et</string>
+    <string name="title_edit_account_name">Hesab adına düzəliş et</string>
     <string name="title_hide_folder">Qovluğu gizlət</string>
     <string name="title_unified_folder">Birləşmiş gələn qutusunda göstər</string>
     <string name="title_navigation_folder">Naviqasiya menyusunda göstər</string>
@@ -1482,6 +1488,7 @@
         \"FairEmail\"i uzun müddət qorumaq və dəstəkləmək üçün bəzi rahatlığa yönələn və qabaqcıl özəlliklərdən istifadə ödənişsiz deyil.
         FairEmail bunu xatırlatmaq üçün kiçik bir mesaj göstərir və Pro özəllikləri satın alsanız bu mesaj görünməyəcək.
     </string>
+    <string name="title_pro_whichever">Hansı özəlliyin pro özəllik kimi seçilməsindən asılı olmayaraq, hər zaman həmin özəlliyin ödənişsiz olması üçün şikayət edən biriləri olur. Xahiş edirəm elələri kimi olmayın.</string>
     <string name="title_pro_hide">Kiçik mesajı %1$d həftəlik gizlət</string>
     <string name="title_pro_hint">Pro xüsusiyyətlərinin alınması sizə, mövcud və gələcəkdəki pro xüsusiyyətləri istifadə etməyinizə icazə verəcək və tətbiqin uzunömürlü olması üçün bizə dəstək olacaq</string>
     <string name="title_pro_price">Pro xüsusiyyətlər niyə bu qədər bahalıdır?</string>

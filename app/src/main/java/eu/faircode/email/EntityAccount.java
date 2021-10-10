@@ -32,6 +32,7 @@ import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import org.json.JSONException;
@@ -47,6 +48,8 @@ import java.util.UUID;
 @Entity(
         tableName = EntityAccount.TABLE_NAME,
         indices = {
+                @Index(value = {"synchronize"}),
+                @Index(value = {"category"})
         }
 )
 public class EntityAccount extends EntityOrder implements Serializable {
@@ -92,6 +95,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
     public String fingerprint;
 
     public String name;
+    public String category;
     public String signature; // obsolete
     public Integer color;
 
@@ -255,6 +259,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
         json.put("fingerprint", fingerprint);
 
         json.put("name", name);
+        json.put("category", category);
         json.put("color", color);
 
         json.put("synchronize", synchronize);
@@ -328,6 +333,8 @@ public class EntityAccount extends EntityOrder implements Serializable {
 
         if (json.has("name") && !json.isNull("name"))
             account.name = json.getString("name");
+        if (json.has("category") && !json.isNull("category"))
+            account.category = json.getString("category");
         if (json.has("color"))
             account.color = json.getInt("color");
 
@@ -386,6 +393,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
                     this.password.equals(other.password) &&
                     Objects.equals(this.realm, other.realm) &&
                     Objects.equals(this.name, other.name) &&
+                    Objects.equals(this.category, other.category) &&
                     Objects.equals(this.color, other.color) &&
                     this.synchronize.equals(other.synchronize) &&
                     this.primary.equals(other.primary) &&

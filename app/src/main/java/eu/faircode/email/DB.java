@@ -68,7 +68,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 212,
+        version = 214,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -121,7 +121,7 @@ public abstract class DB extends RoomDatabase {
     private static DB sInstance;
 
     static final int DEFAULT_QUERY_THREADS = 4; // AndroidX default thread count: 4
-    static final int DEFAULT_CACHE_SIZE = 5; // percentage
+    static final int DEFAULT_CACHE_SIZE = 10; // percentage
 
     private static final String DB_NAME = "fairemail";
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
@@ -2168,6 +2168,21 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `search` ADD COLUMN `color` INTEGER");
+                    }
+                }).addMigrations(new Migration(212, 213) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `category` TEXT");
+                    }
+                }).addMigrations(new Migration(213, 214) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("CREATE INDEX `index_account_synchronize` ON `account` (`synchronize`)");
+                        db.execSQL("CREATE INDEX `index_account_category` ON `account` (`category`)");
+                        db.execSQL("DROP VIEW `account_view`");
+                        db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " + TupleAccountView.query);
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

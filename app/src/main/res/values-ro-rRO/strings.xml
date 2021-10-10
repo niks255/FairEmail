@@ -233,6 +233,10 @@
     <string name="title_setup_exported">Setări exportate</string>
     <string name="title_setup_imported">Setări importate</string>
     <string name="title_setup_import_invalid">Fișier de setări invalid</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Cont %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identitate %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Sărit: există deja</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Rulați expertul pentru a vă autentifica din nou</string>
     <string name="title_setup_reorder_accounts">Ordine conturi</string>
     <string name="title_setup_reorder_folders">Ordine dosare</string>
     <string name="title_reset_order">Resetare ordine</string>
@@ -669,6 +673,7 @@
     <string name="title_recommended">Recomandat</string>
     <string name="title_account_linked">Cont asociat</string>
     <string name="title_account_name">Nume cont</string>
+    <string name="title_account_category">Categorie</string>
     <string name="title_account_name_hint">Folosit la diferențierea dosarelor</string>
     <string name="title_account_interval_hint">Frecvența de actualizare a conexiunii pentru mesaje push sau frecventa de verificare de mesaje noi</string>
     <string name="title_account_partial_fetch_hint">Dezactivați numai pentru mesaje goale sau atașamente corupte</string>
@@ -809,6 +814,7 @@
     <string name="title_sort_unread_atop">Sortează necitite în partea de sus</string>
     <string name="title_search_folder">Căutare folder</string>
     <string name="title_apply_to_all">Aplică la toate</string>
+    <string name="title_edit_account_name">Editează numele contului</string>
     <string name="title_hide_folder">Ascunde dosar</string>
     <string name="title_unified_folder">Arată în căsuța poștală comună</string>
     <string name="title_navigation_folder">Arată în meniul de navigație</string>
@@ -1493,6 +1499,7 @@
         Pentru a menține și sprijini FairEmail pe termen lung, unele caracteristici avansate sau ce țin de comoditate nu se pot folosi gratuit.
         FairEmail afișează un mic mesaj pentru a vă reaminti acest lucru, care va fi eliminat dacă achiziționați funcțiile Pro.
     </string>
+    <string name="title_pro_whichever">Oricare ar fi caracteristicile alese ca funcții pro, există întotdeauna cineva care se plânge că o caracteristică ar trebui să fie gratuită. Vă rugăm să nu fiți acea persoană.</string>
     <string name="title_pro_hide">Ascunde micul mesaj timp de %1$d săptămâni</string>
     <string name="title_pro_hint">Cumpărarea caracteristicilor Pro vă va permite să utilizați toate caracteristicile actuale cât și cele viitoare, și ajută la dezvoltarea acestei aplicații</string>
     <string name="title_pro_price">De ce sunt caracteristicile Pro sunt atât de scumpe?</string>

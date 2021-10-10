@@ -393,6 +393,7 @@ public class Log {
             String no_internet = context.getString(R.string.title_no_internet);
 
             String installer = context.getPackageManager().getInstallerPackageName(BuildConfig.APPLICATION_ID);
+            config.addMetadata("extra", "revision", BuildConfig.REVISION);
             config.addMetadata("extra", "installer", installer == null ? "-" : installer);
             config.addMetadata("extra", "installed", new Date(Helper.getInstallTime(context)).toString());
             config.addMetadata("extra", "fingerprint", Helper.hasValidFingerprint(context));
@@ -1937,6 +1938,7 @@ public class Log {
                     " enabled=" + enabled +
                     " interval=" + pollInterval +
                     "\r\nmetered=" + metered +
+                    " VPN=" + ConnectionHelper.vpnActive(context) +
                     " optimizing=" + (ignoring == null ? null : !ignoring) +
                     " auto_optimize=" + auto_optimize +
                     "\r\n\r\n");
@@ -1984,9 +1986,10 @@ public class Log {
                     for (TupleFolderEx folder : folders)
                         if (folder.synchronize)
                             size += write(os, "- " + folder.name + " " + folder.type +
+                                    (folder.unified ? " unified" : "") +
+                                    (folder.notify ? " notify" : "") +
                                     " poll=" + folder.poll + "/" + folder.poll_factor +
                                     " days=" + folder.sync_days + "/" + folder.keep_days +
-                                    " notify=" + folder.notify +
                                     " msgs=" + folder.content + "/" + folder.messages +
                                     " " + folder.state +
                                     (folder.last_sync == null ? "" : " " + dtf.format(folder.last_sync)) +

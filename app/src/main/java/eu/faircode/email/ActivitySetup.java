@@ -35,18 +35,24 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -777,6 +783,20 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 Log.w(ex);
             }
 
+        final int colorWarning = Helper.resolveColor(this, R.attr.colorWarning);
+
+        View dview = LayoutInflater.from(this).inflate(R.layout.dialog_import_progress, null);
+        TextView tvLog = dview.findViewById(R.id.tvLog);
+        tvLog.setText(null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dview)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+
+        Button ok = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        ok.setEnabled(false);
+
         Bundle args = new Bundle();
         args.putParcelable("uri", uri);
         args.putString("password", this.password);
@@ -787,9 +807,17 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         args.putBoolean("import_settings", this.import_settings);
 
         new SimpleTask<Void>() {
+            private SpannableStringBuilder ssb = new SpannableStringBuilder();
+
             @Override
-            protected void onPreExecute(Bundle args) {
-                ToastEx.makeText(ActivitySetup.this, R.string.title_executing, Toast.LENGTH_LONG).show();
+            protected void onProgress(CharSequence status, Bundle data) {
+                ssb.append(status).append("\n");
+                tvLog.setText(ssb);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                ok.setEnabled(true);
             }
 
             @Override
@@ -867,6 +895,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     List<EntityRule> rules = new ArrayList<>();
 
                     if (import_answers) {
+                        postProgress(context.getString(R.string.title_setup_import_answers), null);
+
                         // Answers
                         JSONArray janswers = jimport.getJSONArray("answers");
                         for (int a = 0; a < janswers.length(); a++) {
@@ -890,19 +920,29 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         for (int a = 0; a < jaccounts.length(); a++) {
                             JSONObject jaccount = (JSONObject) jaccounts.get(a);
                             EntityAccount account = EntityAccount.fromJSON(jaccount);
+                            postProgress(context.getString(R.string.title_importing_account, account.name));
 
                             EntityAccount existing = db.account().getAccountByUUID(account.uuid);
                             if (existing != null) {
+                                SpannableStringBuilder ssb = new SpannableStringBuilder();
+                                ssb.append(context.getString(R.string.title_importing_exists));
+                                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, ssb.length(), 0);
+                                postProgress(ssb);
                                 EntityLog.log(context, "Existing account=" + account.name +
                                         "id=" + account.id);
                                 continue;
                             }
 
-                            if (account.auth_type == AUTH_TYPE_GMAIL) {
-                                if (GmailState.getAccount(context, account.user) == null) {
-                                    Log.i("Google account not found user=" + account.user);
-                                    continue;
-                                }
+                            if (account.auth_type == AUTH_TYPE_GMAIL &&
+                                    GmailState.getAccount(context, account.user) == null) {
+                                SpannableStringBuilder ssb = new SpannableStringBuilder();
+                                ssb.append(context.getString(R.string.title_importing_wizard));
+                                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, ssb.length(), 0);
+                                ssb.setSpan(new ForegroundColorSpan(colorWarning), 0, ssb.length(), 0);
+                                postProgress(ssb);
+                                EntityLog.log(context, "Run wizard account=" + account.name +
+                                        "id=" + account.id);
+                                account.synchronize = false;
                             }
 
                             Long aid = account.id;
@@ -948,6 +988,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             for (int i = 0; i < jidentities.length(); i++) {
                                 JSONObject jidentity = (JSONObject) jidentities.get(i);
                                 EntityIdentity identity = EntityIdentity.fromJSON(jidentity);
+                                postProgress(context.getString(R.string.title_importing_identity, identity.email));
+
                                 long id = identity.id;
                                 identity.id = null;
 
@@ -1008,6 +1050,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             if (import_contacts) {
                                 // Contacts
                                 if (jaccount.has("contacts")) {
+                                    postProgress(context.getString(R.string.title_setup_import_contacts), null);
+
                                     JSONArray jcontacts = jaccount.getJSONArray("contacts");
                                     for (int c = 0; c < jcontacts.length(); c++) {
                                         JSONObject jcontact = (JSONObject) jcontacts.get(c);
@@ -1024,7 +1068,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             db.account().updateAccount(account);
                         }
 
-                        if (import_rules)
+                        if (import_rules) {
+                            postProgress(context.getString(R.string.title_setup_import_rules), null);
                             for (EntityRule rule : rules) {
                                 try {
                                     JSONObject jaction = new JSONObject(rule.action);
@@ -1054,9 +1099,12 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
                                 db.rule().insertRule(rule);
                             }
+                        }
                     }
 
                     if (import_settings) {
+                        postProgress(context.getString(R.string.title_setup_import_settings), null);
+
                         // Certificates
                         if (jimport.has("certificates")) {
                             JSONArray jcertificates = jimport.getJSONArray("certificates");
@@ -1180,29 +1228,27 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 ServiceSynchronize.eval(context, "import");
                 Log.i("Imported data");
 
+                SpannableStringBuilder ssb = new SpannableStringBuilder();
+                ssb.append(context.getString(R.string.title_setup_imported));
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, ssb.length(), 0);
+                postProgress(ssb, null);
                 return null;
             }
 
             @Override
-            protected void onExecuted(Bundle args, Void data) {
-                ToastEx.makeText(ActivitySetup.this, R.string.title_setup_imported, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
             protected void onException(Bundle args, Throwable ex) {
+                SpannableStringBuilder ssb = new SpannableStringBuilder();
                 if (ex.getCause() instanceof BadPaddingException)
-                    ToastEx.makeText(ActivitySetup.this, R.string.title_setup_password_invalid, Toast.LENGTH_LONG).show();
+                    ssb.append(getString(R.string.title_setup_password_invalid));
                 else if (ex instanceof IOException && ex.getCause() instanceof IllegalBlockSizeException)
-                    ToastEx.makeText(ActivitySetup.this, R.string.title_setup_import_invalid, Toast.LENGTH_LONG).show();
-                else {
-                    boolean expected =
-                            (ex instanceof IllegalArgumentException ||
-                                    ex instanceof IOException ||
-                                    ex instanceof FileNotFoundException ||
-                                    ex instanceof JSONException ||
-                                    ex instanceof SecurityException);
-                    Log.unexpectedError(getSupportFragmentManager(), ex, !expected);
+                    ssb.append(getString(R.string.title_setup_import_invalid));
+                if (ssb.length() > 0) {
+                    ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, ssb.length(), 0);
+                    ssb.setSpan(new ForegroundColorSpan(colorWarning), 0, ssb.length(), 0);
+                    ssb.append("\n\n");
                 }
+                ssb.append(ex.toString());
+                onProgress(ssb, null);
             }
         }.execute(this, args, "setup:import");
     }

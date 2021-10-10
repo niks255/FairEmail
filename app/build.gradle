@@ -3,9 +3,9 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1749 }
-def getRevision = { -> "\"a\"" }
-def getReleaseName = { -> return "\"Adratiklit\"" }
+def getVersionCode = { -> return 1757 }
+def getRevision = { -> "a" }
+def getReleaseName = { -> return "Banji" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -22,9 +22,10 @@ android {
         targetSdkVersion 31
         versionCode getVersionCode()
         versionName "1." + getVersionCode()
-        archivesBaseName = "FairEmail-v$versionName"
+        archivesBaseName = "FairEmail-v$versionName" + getRevision()
 
-        buildConfigField "String", "RELEASE_NAME", getReleaseName()
+        buildConfigField "String", "REVISION", "\"" + getRevision() + "\""
+        buildConfigField "String", "RELEASE_NAME", "\"" + getReleaseName() + "\""
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -138,7 +139,6 @@ android {
     productFlavors {
         github {
             dimension "all"
-            buildConfigField "String", "REVISION", getRevision()
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
             buildConfigField "boolean", "AMAZON_RELEASE", "false"
@@ -150,7 +150,6 @@ android {
         }
         fdroid {
             dimension "all"
-            buildConfigField "String", "REVISION", getRevision()
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
             buildConfigField "boolean", "AMAZON_RELEASE", "false"
@@ -163,7 +162,6 @@ android {
         play {
             dimension "all"
             //minSdkVersion 23
-            buildConfigField "String", "REVISION", getRevision()
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "true"
             buildConfigField "boolean", "AMAZON_RELEASE", "false"

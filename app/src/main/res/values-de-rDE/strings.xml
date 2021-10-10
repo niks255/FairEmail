@@ -224,6 +224,10 @@
     <string name="title_setup_exported">Einstellungen exportiert</string>
     <string name="title_setup_imported">Einstellungen importiert</string>
     <string name="title_setup_import_invalid">Ungültige Einstellungsdatei</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Konto %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identität %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Übersprungen: bereits vorhanden</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Assistent zur erneuten Authentifizierung ausführen</string>
     <string name="title_setup_reorder_accounts">Konten sortieren</string>
     <string name="title_setup_reorder_folders">Ordner sortieren</string>
     <string name="title_reset_order">Standard-Reihenfolge</string>
@@ -660,6 +664,7 @@
     <string name="title_recommended">Empfohlen</string>
     <string name="title_account_linked">Verknüpftes Konto</string>
     <string name="title_account_name">Kontobezeichnung</string>
+    <string name="title_account_category">Kategorie</string>
     <string name="title_account_name_hint">Wird verwendet, um Ordner zu unterscheiden</string>
     <string name="title_account_interval_hint">Häufigkeit der Aktualisierung der Verbindung für Push-Meldungen oder Häufigkeit der Überprüfung auf neue Nachrichten</string>
     <string name="title_account_partial_fetch_hint">Nur bei Nachrichten ohne Inhalt oder beschädigten Anhängen deaktivieren</string>
@@ -800,6 +805,7 @@
     <string name="title_sort_unread_atop">Ungelesene oben einreihen</string>
     <string name="title_search_folder">Nach Ordnern suchen</string>
     <string name="title_apply_to_all">Für alle übernehmen</string>
+    <string name="title_edit_account_name">Kontoname ändern</string>
     <string name="title_hide_folder">Ordner ausblenden</string>
     <string name="title_unified_folder">Im Sammeleingang anzeigen</string>
     <string name="title_navigation_folder">Im Navigationsmenü anzeigen</string>
@@ -980,7 +986,7 @@
     <string name="title_need_help">Ich benötige Hilfe</string>
     <string name="title_ask_once">Diese Meldung wird nur einmal angezeigt, es sei denn, Sie wählen „Später”</string>
     <string name="title_third_party">Sie verwenden eine Version eines Drittanbieters</string>
-    <string name="title_expand_warning">Durch Erweitern dieser Nachricht wird %1$s heruntergeladen</string>
+    <string name="title_expand_warning">Durch Erweitern dieser Nachricht werden %1$s heruntergeladen</string>
     <string name="title_download_message">wird heruntergeladen &#8230;</string>
     <string name="title_reformatted">        Dies ist die neu formatierte Nachrichtenansicht.
         Sie können auf das &#x26F6; -Symbol tippen, um die ursprüngliche Nachricht zu sehen und diese Ansicht zu verstecken.
@@ -1482,6 +1488,7 @@ FairEmail nimmt Ihre Privatsphäre ernst, zeigt keine Werbung an und verwendet k
 Um FairEmail auf lange Sicht zu erhalten und zu unterstützen, sind einige Komfort- und erweiterte Funktionen nicht kostenlos nutzbar.
 Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwindet beim Kauf der Pro-Funktionen.
     </string>
+    <string name="title_pro_whichever">Welche Funktionen auch immer als Pro-Funktionen ausgewählt werden, es gibt immer jemanden, der sich beschwert, dass eine Funktion frei sein sollte. Bitte seien Sie nicht diese Person.</string>
     <string name="title_pro_hide">Kleinen Hinweis für %1$d Wochen ausblenden</string>
     <string name="title_pro_hint">Der Erwerb der Pro-Funktionen erlaubt es Ihnen alle momentan und zukünftig verfügbaren Pro-Funktionen zu nutzen und ermöglicht die Weiterentwicklung und Pflege der App.</string>
     <string name="title_pro_price">Warum sind die Pro-Funktionen so teuer?</string>

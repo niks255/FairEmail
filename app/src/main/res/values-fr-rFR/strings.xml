@@ -223,6 +223,10 @@
     <string name="title_setup_exported">Paramètres exportés</string>
     <string name="title_setup_imported">Paramètres importés</string>
     <string name="title_setup_import_invalid">Fichier de paramètres non valide</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Compte %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identité %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Ignoré : existe déjà</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Exécutez l\'assistant pour vous authentifier à nouveau</string>
     <string name="title_setup_reorder_accounts">Réordonner les comptes</string>
     <string name="title_setup_reorder_folders">Réordonner les dossiers</string>
     <string name="title_reset_order">Réinitialiser l’ordre</string>
@@ -659,6 +663,7 @@
     <string name="title_recommended">Recommandé</string>
     <string name="title_account_linked">Compte associé</string>
     <string name="title_account_name">Nom du compte</string>
+    <string name="title_account_category">Catégorie</string>
     <string name="title_account_name_hint">Utilisé pour différencier les dossiers</string>
     <string name="title_account_interval_hint">Fréquence de rafraîchissement de la connexion pour les messages push ou fréquence de vérification des nouveaux messages</string>
     <string name="title_account_partial_fetch_hint">Désactiver ceci seulement dans le cas de messages vides ou de pièces jointes corrompues</string>
@@ -799,6 +804,7 @@
     <string name="title_sort_unread_atop">Dossiers avec messages non-lus en haut</string>
     <string name="title_search_folder">Rechercher un dossier</string>
     <string name="title_apply_to_all">Appliquer à tous</string>
+    <string name="title_edit_account_name">Modifier le nom du compte</string>
     <string name="title_hide_folder">Masquer le dossier</string>
     <string name="title_unified_folder">Afficher dans la boîte de réception unifiée</string>
     <string name="title_navigation_folder">Afficher dans le menu de navigation</string>
@@ -1483,6 +1489,7 @@
         Pour maintenir et rendre FairEmail durable à long terme, certaines fonctionnalités pratiques et avancées ne sont pas gratuites.
         FairEmail affiche une bannière pour vous le rappeler, laquelle sera retirée si vous achetez les fonctionnalités Pro.
     </string>
+    <string name="title_pro_whichever">Quelles que soient les fonctionnalités choisies en tant que fonctionnalités Pro, il y a toujours quelqu\'un qui se plaint qu\'une fonctionnalité devrait être gratuite. Ne soyez pas cette personne-là.</string>
     <string name="title_pro_hide">Masquer la bannière pendant %1$d semaines</string>
     <string name="title_pro_hint">L\'achat des fonctionnalités Pro vous autorisera à utiliser toutes les fonctionnalités Pro actuelles et futures et permettra de maintenir et de soutenir cette application.</string>
     <string name="title_pro_price">Pourquoi les fonctionnalités Pro sont-elles si chères ?</string>

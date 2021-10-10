@@ -251,10 +251,6 @@
     </string>
     <string name="title_setup_export_do">The export file will contain all settings and data, but no messages and no images referenced in signatures</string>
     <string name="title_setup_import_do">Imported accounts will be added without overwriting any existing ones</string>
-    <string name="title_setup_import_gmail">
-        Since Android 8.0 Oreo, Gmail accounts can no longer be imported, as each account must be selected to grant access to the account.
-        You can easily reconfigure Gmail accounts with the quick setup wizard.
-    </string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
     <string name="title_setup_password_repeat">Repeat password</string>
@@ -269,6 +265,10 @@
     <string name="title_setup_exported">Settings exported</string>
     <string name="title_setup_imported">Settings imported</string>
     <string name="title_setup_import_invalid">Invalid settings file</string>
+    <string name="title_importing_account">Account %1$s</string>
+    <string name="title_importing_identity">Identity %1$s</string>
+    <string name="title_importing_exists">Skipped: already exists</string>
+    <string name="title_importing_wizard">Run wizard to authenticate again</string>
 
     <string name="title_setup_reorder_accounts">Order accounts</string>
     <string name="title_setup_reorder_folders">Order folders</string>
@@ -646,6 +646,7 @@
     <string name="title_advanced_protocol">Protocol logging</string>
     <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Debug mode</string>
+    <string name="title_advanced_repair" translatable="false">Repair</string>
     <string name="title_advanced_room_query_threads" translatable="false">ROOM query threads: %1$s</string>
     <string name="title_advanced_wal" translatable="false">WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">Checkpoints</string>
@@ -657,6 +658,7 @@
     <string name="title_advanced_auth_ntlm" translatable="false">NTLM</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
+    <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
     <string name="title_advanced_processors" translatable="false">Processors: %1$d</string>
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
@@ -784,6 +786,7 @@
     <string name="title_recommended">Recommended</string>
     <string name="title_account_linked">Linked account</string>
     <string name="title_account_name">Account name</string>
+    <string name="title_account_category">Category</string>
     <string name="title_account_name_hint">Used to differentiate folders</string>
     <string name="title_account_interval_hint">Frequency of refreshing the connection for push messages or frequency of checking for new messages</string>
     <string name="title_account_partial_fetch_hint">Disable this only in case of empty messages or corrupt attachments</string>
@@ -936,6 +939,7 @@
     <string name="title_sort_unread_atop">Sort unread on top</string>
     <string name="title_search_folder">Search for folder</string>
     <string name="title_apply_to_all">Apply to all</string>
+    <string name="title_edit_account_name">Edit account name</string>
     <string name="title_hide_folder">Hide folder</string>
     <string name="title_unified_folder">Show in unified inbox</string>
     <string name="title_navigation_folder">Show in navigation menu</string>
@@ -1682,6 +1686,7 @@
         To maintain and support FairEmail in the long run, some convenience and advanced features are not free to use.
         FairEmail shows a small message to remind you of this, which will be removed if you purchase the pro features.
     </string>
+    <string name="title_pro_whichever">Whichever features are chosen as pro features, there is always someone who complains that a feature should be free. Please don\'t be that person.</string>
     <string name="title_pro_hide">Hide small message for %1$d weeks</string>
     <string name="title_pro_hint">Buying pro features will allow you to use all current and future pro features, will keep this app maintained, and supported.</string>
     <string name="title_pro_price">Why are the pro features so expensive?</string>

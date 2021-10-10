@@ -107,7 +107,6 @@ import android.view.inputmethod.EditorInfo;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -667,14 +666,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             rvMessage.addItemDecoration(itemDecorator);
         }
 
-        View inDate = view.findViewById(R.id.inDate);
-        TextView tvFixedDate = inDate.findViewById(R.id.tvDate);
-        View vSeparatorDate = inDate.findViewById(R.id.vSeparatorDate);
+        View inGroup = view.findViewById(R.id.inGroup);
+        TextView tvFixedCategory = inGroup.findViewById(R.id.tvCategory);
+        TextView tvFixedDate = inGroup.findViewById(R.id.tvDate);
+        View vFixedSeparator = inGroup.findViewById(R.id.vSeparator);
 
         String sort = prefs.getString("sort", "time");
-        inDate.setVisibility(date_fixed && "time".equals(sort) ? View.INVISIBLE : View.GONE);
+        inGroup.setVisibility(date_fixed && "time".equals(sort) ? View.INVISIBLE : View.GONE);
+        tvFixedCategory.setVisibility(View.GONE);
         if (cards)
-            vSeparatorDate.setVisibility(View.GONE);
+            vFixedSeparator.setVisibility(View.GONE);
         if (date_bold)
             tvFixedDate.setTypeface(Typeface.DEFAULT_BOLD);
 
@@ -684,9 +685,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 int count = parent.getChildCount();
                 if (date_fixed)
                     if ("time".equals(adapter.getSort()))
-                        inDate.setVisibility(count > 0 ? View.VISIBLE : View.INVISIBLE);
+                        inGroup.setVisibility(count > 0 ? View.VISIBLE : View.INVISIBLE);
                     else
-                        inDate.setVisibility(View.GONE);
+                        inGroup.setVisibility(View.GONE);
 
                 for (int i = 0; i < count; i++) {
                     View view = parent.getChildAt(i);
@@ -696,7 +697,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         TupleMessageEx top = adapter.getItemAtPosition(pos);
                         tvFixedDate.setVisibility(top == null ? View.INVISIBLE : View.VISIBLE);
                         if (!cards)
-                            vSeparatorDate.setVisibility(top == null ? View.INVISIBLE : View.VISIBLE);
+                            vFixedSeparator.setVisibility(top == null ? View.INVISIBLE : View.VISIBLE);
                         tvFixedDate.setText(top == null ? null : getRelativeDate(top.received, parent.getContext()));
                     } else {
                         View header = getView(view, parent, pos);
@@ -721,9 +722,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
 
             private View getView(View view, RecyclerView parent, int pos) {
-                if (!date || !SORT_DATE_HEADER.contains(adapter.getSort()) || date_fixed)
-                    return null;
-
                 if (pos == NO_POSITION)
                     return null;
 
@@ -732,6 +730,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (pos > 0 && prev == null)
                     return null;
                 if (message == null)
+                    return null;
+
+                boolean ch = (viewType == AdapterMessage.ViewType.UNIFIED &&
+                        (pos == 0
+                                ? message.accountCategory != null
+                                : !Objects.equals(prev.accountCategory, message.accountCategory)));
+                boolean dh = (date && !date_fixed && SORT_DATE_HEADER.contains(adapter.getSort()));
+
+                if (!ch && !dh)
                     return null;
 
                 if (pos > 0) {
@@ -744,25 +751,40 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     int day0 = cal0.get(Calendar.DAY_OF_YEAR);
                     int day1 = cal1.get(Calendar.DAY_OF_YEAR);
                     if (year0 == year1 && day0 == day1)
-                        return null;
+                        dh = false;
                 }
 
-                View header = inflater.inflate(R.layout.item_message_date, parent, false);
+                if (!ch && !dh)
+                    return null;
+
+                View header = inflater.inflate(R.layout.item_group, parent, false);
+                TextView tvCategory = header.findViewById(R.id.tvCategory);
                 TextView tvDate = header.findViewById(R.id.tvDate);
-                tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, Helper.getTextSize(parent.getContext(), adapter.getZoom()));
-                if (date_bold)
-                    tvDate.setTypeface(Typeface.DEFAULT_BOLD);
+                tvCategory.setVisibility(ch ? View.VISIBLE : View.GONE);
+                tvDate.setVisibility(dh ? View.VISIBLE : View.GONE);
 
-                if (cards) {
-                    View vSeparatorDate = header.findViewById(R.id.vSeparatorDate);
-                    vSeparatorDate.setVisibility(View.GONE);
+                if (ch) {
+                    tvCategory.setText(message.accountCategory);
+                    if (date_bold)
+                        tvCategory.setTypeface(Typeface.DEFAULT_BOLD);
                 }
 
-                tvDate.setText(getRelativeDate(message.received, parent.getContext()));
+                if (dh) {
+                    tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, Helper.getTextSize(parent.getContext(), adapter.getZoom()));
+                    if (date_bold)
+                        tvDate.setTypeface(Typeface.DEFAULT_BOLD);
 
-                view.setContentDescription(tvDate.getText().toString());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    view.setAccessibilityHeading(true);
+                    if (cards) {
+                        View vSeparator = header.findViewById(R.id.vSeparator);
+                        vSeparator.setVisibility(View.GONE);
+                    }
+
+                    tvDate.setText(getRelativeDate(message.received, parent.getContext()));
+
+                    view.setContentDescription(tvDate.getText().toString());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                        view.setAccessibilityHeading(true);
+                }
 
                 header.measure(View.MeasureSpec.makeMeasureSpec(parent.getWidth(), View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -5330,17 +5352,33 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return true;
         }
 
+        final Context context = getContext();
+        if (context == null)
+            return true;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean expand_first = prefs.getBoolean("expand_first", true);
+        boolean expand_all = prefs.getBoolean("expand_all", false);
+        long download = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
+        boolean dup_msgids = prefs.getBoolean("dup_msgids", false);
+
         // Mark duplicates
         Map<String, List<TupleMessageEx>> duplicates = new HashMap<>();
-        for (TupleMessageEx message : messages)
-            if (message != null &&
-                    !TextUtils.isEmpty(message.hash)) {
-                if (!duplicates.containsKey(message.hash))
-                    duplicates.put(message.hash, new ArrayList<>());
-                duplicates.get(message.hash).add(message);
-            }
-        for (String hash : duplicates.keySet()) {
-            List<TupleMessageEx> dups = duplicates.get(hash);
+        for (TupleMessageEx message : messages) {
+            if (message == null)
+                continue;
+
+            String key = (dup_msgids ? message.msgid : message.hash);
+            if (TextUtils.isEmpty(key))
+                continue;
+
+            if (!duplicates.containsKey(key))
+                duplicates.put(key, new ArrayList<>());
+            duplicates.get(key).add(message);
+        }
+
+        for (String key : duplicates.keySet()) {
+            List<TupleMessageEx> dups = duplicates.get(key);
             int base = 0;
             for (int i = 0; i < dups.size(); i++)
                 if (dups.get(i).folder == folder) {
@@ -5354,16 +5392,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         if (autoExpanded) {
             autoExpanded = false;
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            boolean expand_first = prefs.getBoolean("expand_first", true);
-            boolean expand_all = prefs.getBoolean("expand_all", false);
-            long download = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
-
             if (download == 0)
                 download = Long.MAX_VALUE;
 
-            boolean unmetered = ConnectionHelper.getNetworkState(getContext()).isUnmetered();
+            boolean unmetered = ConnectionHelper.getNetworkState(context).isUnmetered();
 
             int count = 0;
             int unseen = 0;
@@ -5680,14 +5712,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
 
                     if (account.protocol != EntityAccount.TYPE_IMAP) {
-                        if (!message.ui_seen && account.auto_seen)
+                        if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
                     } else {
-                        if (!folder.read_only && account.auto_seen) {
-                            int ops = db.operation().getOperationCount(message.folder, message.id, EntityOperation.SEEN);
-                            if (!message.seen || ops > 0)
-                                EntityOperation.queue(context, message, EntityOperation.SEEN, true);
-                        }
+                        if (account.auto_seen && !folder.read_only)
+                            EntityOperation.queue(context, message, EntityOperation.SEEN, true);
 
                         if (!message.content)
                             EntityOperation.queue(context, message, EntityOperation.BODY);

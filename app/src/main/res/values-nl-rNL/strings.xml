@@ -222,6 +222,10 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_exported">Instellingen geëxporteerd</string>
     <string name="title_setup_imported">Instellingen geïmporteerd</string>
     <string name="title_setup_import_invalid">Ongeldig instellingenbestand</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Account %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identiteit %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Overgeslagen: bestaat al</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Voer de wizard uit om opnieuw te verifiëren</string>
     <string name="title_setup_reorder_accounts">Volgorde accounts</string>
     <string name="title_setup_reorder_folders">Volgorde mappen</string>
     <string name="title_reset_order">Reset volgorde</string>
@@ -659,6 +663,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_recommended">Aanbevolen</string>
     <string name="title_account_linked">Gekoppeld account</string>
     <string name="title_account_name">Accountnaam</string>
+    <string name="title_account_category">Categorie</string>
     <string name="title_account_name_hint">Wordt gebruikt voor het onderscheiden van mappen</string>
     <string name="title_account_interval_hint">Frequentie van het verversen van de verbinding voor push berichten of frequentie van het controleren op nieuwe berichten</string>
     <string name="title_account_partial_fetch_hint">Schakel dit alleen uit in het geval van lege berichten of corrupte bijlagen</string>
@@ -799,6 +804,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_sort_unread_atop">Sorteer ongelezen bovenaan</string>
     <string name="title_search_folder">Zoeken naar map</string>
     <string name="title_apply_to_all">Toepassen op alle</string>
+    <string name="title_edit_account_name">Bewerk accountnaam</string>
     <string name="title_hide_folder">Verberg map</string>
     <string name="title_unified_folder">Toon in het gecombineerde postvak in</string>
     <string name="title_navigation_folder">Toon in navigatiemenu</string>
@@ -1480,6 +1486,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
          FairEmail neemt uw privacy serieus en toont geen advertenties en gebruikt geen tracking of analyse om geld te verdienen.
          Om FairEmail op de lange termijn te onderhouden en te ondersteunen, zijn sommige gemaks- en geavanceerde functies niet gratis te gebruiken.
          FairEmail toont een klein bericht om u hieraan te herinneren, dat wordt verwijderd als u de pro-functies koopt.</string>
+    <string name="title_pro_whichever">Welke functies ook gekozen worden als pro functies, er is altijd wel iemand die klaagt dat een functie gratis zou moeten zijn. Wees alsjeblieft niet die persoon.</string>
     <string name="title_pro_hide">Verberg het kleine bericht voor %1$d weken</string>
     <string name="title_pro_hint">Het kopen van pro functies geeft toegang tot alle huidige en toekomstige pro functies en zorgt voor onderhoud en ondersteuning van deze app.</string>
     <string name="title_pro_price">Waarom zijn de pro functies zo duur?</string>

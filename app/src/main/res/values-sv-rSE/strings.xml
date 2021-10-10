@@ -221,6 +221,10 @@
     <string name="title_setup_exported">Inställningar exporterade</string>
     <string name="title_setup_imported">Inställningar importerade</string>
     <string name="title_setup_import_invalid">Ogiltig inställningsfil</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Konto %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identitet %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Hoppat över: finns redan</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Använd guiden för att autentisera igen</string>
     <string name="title_setup_reorder_accounts">Ordna konton</string>
     <string name="title_setup_reorder_folders">Ordna mappar</string>
     <string name="title_reset_order">Återställ ordning</string>
@@ -656,6 +660,7 @@
     <string name="title_recommended">Rekommenderat</string>
     <string name="title_account_linked">Länkade kontot</string>
     <string name="title_account_name">Kontonamn</string>
+    <string name="title_account_category">Kategori</string>
     <string name="title_account_name_hint">Används för att differentiera mappar</string>
     <string name="title_account_interval_hint">Frekvens för att uppdatera anslutningen för pushmeddelanden eller frekvens för att söka efter nya meddelanden</string>
     <string name="title_account_partial_fetch_hint">Inaktivera detta endast vid tomma meddelanden eller korrupta bilagor</string>
@@ -796,6 +801,7 @@
     <string name="title_sort_unread_atop">Sortera olästa högst upp</string>
     <string name="title_search_folder">Sök efter mapp</string>
     <string name="title_apply_to_all">Tillämpa för alla</string>
+    <string name="title_edit_account_name">Redigera kontonamn</string>
     <string name="title_hide_folder">Dölj mapp</string>
     <string name="title_unified_folder">Visa i en samlad inkorg</string>
     <string name="title_navigation_folder">Visa i navigeringsmenyn</string>
@@ -1480,6 +1486,7 @@
         Att underhålla och stödja FairEmail i det långa loppet, vissa bekvämlighets- och avancerade funktioner är inte gratis att använda.
         FairEmail visar ett litet meddelande för att påminna dig om detta, som kommer att tas bort om du köper pro funktionerna.
     </string>
+    <string name="title_pro_whichever">Oavsett vilka funktioner som väljs som pro funktioner, finns det alltid någon som klagar över att en funktion ska vara gratis. Var inte den personen.</string>
     <string name="title_pro_hide">Dölj små meddelanden i %1$d veckor</string>
     <string name="title_pro_hint">Att köpa pro-funktioner gör att du kan använda alla aktuella och framtida pro-funktioner, kommer att göra att denna app underhålls och stöds</string>
     <string name="title_pro_price">Varför är pro-funktionerna så dyra?</string>

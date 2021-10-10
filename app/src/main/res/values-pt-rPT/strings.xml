@@ -199,6 +199,10 @@
     <string name="title_setup_exported">Configurações exportadas</string>
     <string name="title_setup_imported">Configurações importadas</string>
     <string name="title_setup_import_invalid">Ficheiro de configurações inválido</string>
+    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Conta %1$s</string>
+    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identidade %1$s</string>
+    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Ignorado: já existe</string>
+    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Execute o assistente para autenticar novamente</string>
     <string name="title_setup_reorder_accounts">Ordenar contas</string>
     <string name="title_setup_reorder_folders">Ordenar pastas</string>
     <string name="title_reset_order">Reverter ordem</string>
@@ -489,6 +493,7 @@
     <string name="title_sort_unread_atop">Ordenar as não lidas no topo</string>
     <string name="title_search_folder">Pesquisar pasta</string>
     <string name="title_apply_to_all">Aplicar a tudo</string>
+    <string name="title_edit_account_name">Editar nome da conta</string>
     <string name="title_months_all">Todos</string>
     <string name="title_folder_all">Arquivar</string>
     <string name="title_folder_trash">Lixo</string>
@@ -559,6 +564,7 @@
     <string name="title_snooze_now">Adiar</string>
     <string name="title_pro_feature">Esta é uma funcionalidade da versão pro</string>
     <string name="title_pro_purchase">Comprar</string>
+    <string name="title_pro_whichever">Quaisquer que sejam os recursos escolhidos como recursos profissionais, há sempre alguém que reclama que um recurso deve ser gratuito. Por favor, não seja essa pessoa.</string>
     <string name="title_pro_restore">Como posso restaurar uma compra (em outro dispositivo) ?</string>
     <string name="title_log_clear">Limpar</string>
     <string name="title_debug_info_remark">Por favor descreva o problema e indique quando ocorreu:</string>

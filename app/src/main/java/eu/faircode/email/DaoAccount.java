@@ -72,8 +72,9 @@ public interface DaoAccount {
             " LEFT JOIN folder AS sent ON sent.account = account.id AND sent.type = '" + EntityFolder.SENT + "'" +
             " WHERE :all OR account.synchronize" +
             " GROUP BY account.id" +
-            " ORDER BY CASE WHEN :all THEN 0 ELSE account.`order` END" +
-            ", CASE WHEN :all THEN 0 ELSE account.`primary` END DESC" +
+            " ORDER BY account.`order`" +
+            ", account.`primary` DESC" +
+            ", account.category COLLATE NOCASE" +
             ", account.name COLLATE NOCASE")
     LiveData<List<TupleAccountEx>> liveAccountsEx(boolean all);
 
@@ -150,7 +151,7 @@ public interface DaoAccount {
     @Query("SELECT * FROM account" +
             " WHERE user = :user" +
             " AND auth_type = :auth_type")
-    EntityAccount getAccount(String user, int auth_type);
+    List<EntityAccount> getAccounts(String user, int auth_type);
 
     @Query("SELECT * FROM account WHERE `primary`")
     EntityAccount getPrimaryAccount();
@@ -196,6 +197,9 @@ public interface DaoAccount {
 
     @Query("UPDATE account SET state = :state WHERE id = :id AND NOT (state IS :state)")
     int setAccountState(long id, String state);
+
+    @Query("UPDATE account SET name = :name WHERE id = :id AND NOT (name IS :name)")
+    int setAccountName(long id, String name);
 
     @Query("UPDATE account SET password = :password WHERE id = :id AND NOT (password IS :password)")
     int setAccountPassword(long id, String password);

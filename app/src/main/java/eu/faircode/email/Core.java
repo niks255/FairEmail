@@ -2138,35 +2138,39 @@ class Core {
                 String[] attrs = ((IMAPFolder) ifolder.second).getAttributes();
                 String type = EntityFolder.getType(attrs, fullName, false);
                 if (type != null &&
-                        !EntityFolder.INBOX.equals(type) &&
                         !EntityFolder.USER.equals(type) &&
                         !EntityFolder.SYSTEM.equals(type)) {
-                    for (EntityFolder folder : new ArrayList<>(local.values()))
-                        if (type.equals(folder.type) &&
-                                !fullName.equals(folder.name) &&
-                                !local.containsKey(fullName) &&
-                                !istore.getFolder(folder.name).exists()) {
-                            Log.e(account.host +
-                                    " renaming " + type + " folder" +
-                                    " from " + folder.name + " to " + fullName);
-                            local.remove(folder.name);
-                            local.put(fullName, folder);
-                            folder.name = fullName;
-                            db.folder().setFolderName(folder.id, fullName);
-                        }
+
+                    // Rename system folders
+                    if (!EntityFolder.INBOX.equals(type))
+                        for (EntityFolder folder : new ArrayList<>(local.values()))
+                            if (type.equals(folder.type) &&
+                                    !fullName.equals(folder.name) &&
+                                    !local.containsKey(fullName) &&
+                                    !istore.getFolder(folder.name).exists()) {
+                                Log.e(account.host +
+                                        " renaming " + type + " folder" +
+                                        " from " + folder.name + " to " + fullName);
+                                local.remove(folder.name);
+                                local.put(fullName, folder);
+                                folder.name = fullName;
+                                db.folder().setFolderName(folder.id, fullName);
+                            }
 
                     // Reselect system folders once
-                    String key = "reselected." + account.id + "." + type;
+                    String key = "updated." + account.id + "." + type;
                     boolean reselected = prefs.getBoolean(key, false);
                     if (!reselected) {
                         prefs.edit().putBoolean(key, true).apply();
                         EntityFolder folder = db.folder().getFolderByType(account.id, type);
                         if (folder == null) {
                             folder = db.folder().getFolderByName(account.id, fullName);
-                            if (folder != null) {
-                                Log.e("Reselecting " + account.host + " " + type + "=" + fullName);
+                            if (folder != null && !folder.local) {
+                                Log.e("Updated " + account.host + " " + type + "=" + fullName);
                                 folder.type = type;
-                                db.folder().setFolderType(folder.id, folder.type);
+                                folder.setProperties();
+                                folder.setSpecials(account);
+                                db.folder().updateFolder(folder);
                             }
                         }
                     }
@@ -2826,6 +2830,12 @@ class Core {
                     " quick=" + sync_quick_imap + " force=" + force +
                     " sync unseen=" + sync_unseen + " flagged=" + sync_flagged +
                     " delete unseen=" + delete_unseen + " kept=" + sync_kept);
+
+            if (folder.local) {
+                folder.synchronize = false;
+                db.folder().setFolderSynchronize(folder.id, folder.synchronize);
+                return;
+            }
 
             db.folder().setFolderSyncState(folder.id, "syncing");
 
@@ -3969,10 +3979,13 @@ class Core {
                     db.message().setMessageSeen(similar.id, message.seen);
                     db.message().setMessageUiSeen(similar.id, message.seen);
                 }
+
                 if (similar.answered != message.answered) {
                     Log.i(folder.name + " Synchronize similar id=" + similar.id + " answered=" + message.answered);
                     db.message().setMessageAnswered(similar.id, message.answered);
+                    db.message().setMessageUiAnswered(similar.id, message.answered);
                 }
+
                 if (similar.flagged != flagged) {
                     Log.i(folder.name + " Synchronize similar id=" + similar.id + " flagged=" + message.flagged);
                     db.message().setMessageFlagged(similar.id, message.flagged);

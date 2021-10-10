@@ -451,8 +451,13 @@ public class FragmentGmail extends FragmentBase {
                 try {
                     db.beginTransaction();
 
-                    if (args.getBoolean("update"))
-                        update = db.account().getAccount(user, AUTH_TYPE_GMAIL);
+                    if (args.getBoolean("update")) {
+                        List<EntityAccount> accounts =
+                                db.account().getAccounts(user, AUTH_TYPE_GMAIL);
+                        if (accounts != null && accounts.size() == 1)
+                            update = accounts.get(0);
+                    }
+
                     if (update == null) {
                         EntityAccount primary = db.account().getPrimaryAccount();
 
@@ -524,6 +529,7 @@ public class FragmentGmail extends FragmentBase {
                     } else {
                         args.putLong("account", update.id);
                         EntityLog.log(context, "Gmail update account=" + update.name);
+                        db.account().setAccountSynchronize(update.id, true);
                         db.account().setAccountPassword(update.id, password);
                         db.identity().setIdentityPassword(update.id, update.user, password, update.auth_type);
                     }

@@ -32,6 +32,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
+import com.sun.mail.smtp.SMTPTransport;
+import com.sun.mail.util.TraceOutputStream;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,6 +70,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     private TupleUnsent lastUnsent = null;
     private Network lastActive = null;
     private boolean lastSuitable = false;
+    private int lastProgress = -1;
 
     private TwoStateOwner owner;
     private PowerManager.WakeLock wlOutbox;
@@ -76,6 +80,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
     private static final int RETRY_MAX = 3;
     private static final int CONNECTIVITY_DELAY = 5000; // milliseconds
+    private static final int PROGRESS_UPDATE_INTERVAL = 1000; // milliseconds
 
     static final int PI_SEND = 1;
 
@@ -232,6 +237,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             builder.setSubText(getString(R.string.title_notification_idle));
         if (!lastSuitable)
             builder.setSubText(getString(R.string.title_notification_waiting));
+        if (lastProgress >= 0)
+            builder.setProgress(100, lastProgress, false);
 
         return builder;
     }
@@ -514,6 +521,9 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             db.message().setMessageLastAttempt(message.id, message.last_attempt);
         }
 
+        NotificationManager nm =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean reply_move = prefs.getBoolean("reply_move", false);
         boolean debug = prefs.getBoolean("debug", false);
@@ -675,6 +685,25 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             String via = "via " + ident.host + "/" + ident.user +
                     " to " + (to == null ? null : TextUtils.join(", ", to));
 
+            iservice.setReporter(new TraceOutputStream.IReport() {
+                private int progress = -1;
+                private long last = SystemClock.elapsedRealtime();
+
+                @Override
+                public void report(int pos, int total) {
+                    int p = (total == 0 ? 0 : 100 * pos / total);
+                    if (p > progress) {
+                        progress = p;
+                        long now = SystemClock.elapsedRealtime();
+                        if (now > last + PROGRESS_UPDATE_INTERVAL) {
+                            last = now;
+                            lastProgress = progress;
+                            nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService().build());
+                        }
+                    }
+                }
+            });
+
             // Send message
             EntityLog.log(this, "Sending " + via);
             start = new Date().getTime();
@@ -703,6 +732,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
             throw ex;
         } finally {
+            if (lastProgress >= 0) {
+                lastProgress = -1;
+                nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService().build());
+            }
             db.identity().setIdentityState(ident.id, null);
         }
 
@@ -745,8 +778,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             db.endTransaction();
         }
 
-        NotificationManager nm =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancel("send:" + message.id, NotificationHelper.NOTIFICATION_TAGGED);
 
         // Check sent message
