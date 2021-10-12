@@ -204,9 +204,6 @@
     <string name="title_setup_export_remark">Eftersom konfigurationsfilen innehåller alla inställningar och all kontoinformation så krypteras den med ett lösenord. Lösenordet behövs för att importera konfigurationsfilen igen, så glöm inte bort det!    </string>
     <string name="title_setup_export_do">Exportfilen kommer att innehålla alla inställningar och data, men inga meddelanden och inga bilder från signaturer</string>
     <string name="title_setup_import_do">Importerade konton kommer att läggas till utan att skriva över några befintliga</string>
-    <string name="title_setup_import_gmail">        Sedan Android 8. Oreo kan inte Gmail-konton längre importeras, eftersom varje konto måste väljas för att ge åtkomst till kontot.
-        Du kan enkelt konfigurera Gmail-konton med snabbinstallationsguiden.
-    </string>
     <string name="title_setup_password">Lösenord</string>
     <string name="title_setup_password_chars">Lösenordet innehåller CTRL- eller blanksteg</string>
     <string name="title_setup_password_repeat">Upprepa lösenord</string>
@@ -221,10 +218,10 @@
     <string name="title_setup_exported">Inställningar exporterade</string>
     <string name="title_setup_imported">Inställningar importerade</string>
     <string name="title_setup_import_invalid">Ogiltig inställningsfil</string>
-    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Konto %1$s</string>
-    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identitet %1$s</string>
-    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Hoppat över: finns redan</string>
-    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Använd guiden för att autentisera igen</string>
+    <string name="title_importing_account">Konto %1$s</string>
+    <string name="title_importing_identity">Identitet %1$s</string>
+    <string name="title_importing_exists">Hoppat över: finns redan</string>
+    <string name="title_importing_wizard">Använd guiden för att autentisera igen</string>
     <string name="title_setup_reorder_accounts">Ordna konton</string>
     <string name="title_setup_reorder_folders">Ordna mappar</string>
     <string name="title_reset_order">Återställ ordning</string>
@@ -253,6 +250,7 @@
     <string name="title_setup_options">Alternativ</string>
     <string name="title_setup_defaults">Återställ standardvärden</string>
     <string name="title_setup_reset_questions">Återställ frågor</string>
+    <string name="title_setup_reset_images" comment="title_setup_reset_images&#10;Title for option to reset questions about showing images">Visa bilder</string>
     <string name="title_advanced_hint_title">Mer avancerade alternativ</string>
     <string name="title_advanced_hint_message">Du navigerar till de mer avancerade alternativen.
         Alla alternativ har använt standardvärden som kan ändras om du har en annan inställning.    </string>
@@ -557,6 +555,7 @@
     <string name="title_advanced_log_info">Debug Logging</string>
     <string name="title_advanced_debug">Felsökningsläge</string>
     <string name="title_advanced_manual_hint">Om mottagande av meddelanden är inaktiverat är det fortfarande möjligt att manuellt ta emot meddelanden genom att dra ner meddelandelistan</string>
+    <string name="title_advanced_poll_battery">Detta kan orsaka hög batterianvändning!</string>
     <string name="title_advanced_poll_hint">Genom att regelbundet kontrollera efter nya meddelanden kommer att jämföra lokala- och fjärrmeddelanden varje gång, detta är en drastisk åtgärd som kan leda till extra batterianvändning, särskilt om det finns många meddelanden. Genom att alltid ta emot kommer att förhindra detta genom att kontinuerligt följa förändringar.</string>
     <string name="title_advanced_optimize_hint">Detta kan ändra synkroniseringsfrekvensen för att spara på batteriet, beroende på e-postservrarnas funktioner och beteende</string>
     <string name="title_advanced_schedule_hint">Tryck på en tid för att ställa in en tid</string>
@@ -1138,9 +1137,6 @@
     <string name="title_search_hint">        Till en början görs sökningen på enheten.
         Tryck på knappen \"Sök igen\" för att söka på servern.
     </string>
-    <string name="title_search_index_hint">        Sökning via sökindex är snabb, men hittar bara hela ord i alla meddelandedelar.
-        Alternativen nedan är att fortsätta söka på e-postservern.
-    </string>
     <string name="title_search_text_hint">Sökning efter text i meddelanden, när det finns ett stort antal meddelanden, kanske inte fungerar på vissa servrar</string>
     <string name="title_search_text_unsupported">\'%s\' betyder att e-postservern inte stöder sökning i meddelandetexter</string>
     <string name="title_search_size_hint">Sökning efter meddelanden efter storlek, när det finns ett stort antal meddelanden, kanske inte fungerar på vissa servrar</string>
@@ -1568,8 +1564,9 @@
     <string name="title_accessibility_to">Mottagare</string>
     <string-array name="pollIntervalNames">
         <item>Kontinuerligt</item>
-        <item>Varje 15 minuter</item>
-        <item>Varje 30 minuter</item>
+        <item>Var 5:e minut</item>
+        <item>Var 15:e minut</item>
+        <item>Var 30:e minut</item>
         <item>Varje timme</item>
         <item>Varannan timme</item>
         <item>Var 4:e timme</item>

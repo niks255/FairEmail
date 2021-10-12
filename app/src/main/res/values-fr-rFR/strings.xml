@@ -206,9 +206,6 @@
     </string>
     <string name="title_setup_export_do">Le fichier d\'exportation contiendra tous les paramètres et données mais pas de messages ni d\'images référencées dans les signatures</string>
     <string name="title_setup_import_do">Les comptes importés seront ajoutés sans remplacer les comptes existants</string>
-    <string name="title_setup_import_gmail">        Depuis Android 8.0 Oreo, les comptes Gmail ne peuvent plus être importés car chaque compte doit être sélectionné pour donner accès au compte.
-        Vous pouvez facilement reconfigurer les comptes Gmail avec l\'assistant d\'installation rapide.
-    </string>
     <string name="title_setup_password">Mot de passe</string>
     <string name="title_setup_password_chars">Le mot de passe contient des caractères de contrôle ou des espaces</string>
     <string name="title_setup_password_repeat">Confirmer le mot de passe</string>
@@ -223,10 +220,10 @@
     <string name="title_setup_exported">Paramètres exportés</string>
     <string name="title_setup_imported">Paramètres importés</string>
     <string name="title_setup_import_invalid">Fichier de paramètres non valide</string>
-    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Compte %1$s</string>
-    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identité %1$s</string>
-    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Ignoré : existe déjà</string>
-    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Exécutez l\'assistant pour vous authentifier à nouveau</string>
+    <string name="title_importing_account">Compte %1$s</string>
+    <string name="title_importing_identity">Identité %1$s</string>
+    <string name="title_importing_exists">Ignoré : existe déjà</string>
+    <string name="title_importing_wizard">Exécutez l\'assistant pour vous authentifier à nouveau</string>
     <string name="title_setup_reorder_accounts">Réordonner les comptes</string>
     <string name="title_setup_reorder_folders">Réordonner les dossiers</string>
     <string name="title_reset_order">Réinitialiser l’ordre</string>
@@ -255,6 +252,10 @@
     <string name="title_setup_options">Options</string>
     <string name="title_setup_defaults">Rétablir les paramètres par défaut</string>
     <string name="title_setup_reset_questions">Réinitialiser les questions</string>
+    <string name="title_setup_reset_general" comment="title_setup_reset_general&#10;Title for option to reset general questions&#10;">Questions générales</string>
+    <string name="title_setup_reset_full" comment="title_setup_reset_full&#10;Title for option to reset questions about showing original messages&#10;">Afficher les messages originaux</string>
+    <string name="title_setup_reset_images" comment="title_setup_reset_images&#10;Title for option to reset questions about showing images">Afficher les images</string>
+    <string name="title_setup_reset_links" comment="title_setup_reset_links&#10;Title for option to reset questions about confirming links&#10;">Confirmer les liens</string>
     <string name="title_advanced_hint_title">Paramètres avancés</string>
     <string name="title_advanced_hint_message">        Vous parcourez les paramètres avancés.
         Toutes les options ont des valeurs par défaut couramment utilisées que vous n\'avez pas besoin de modifier sauf si vous avez une préférence différente.
@@ -560,6 +561,7 @@
     <string name="title_advanced_log_info">Journal de débogage</string>
     <string name="title_advanced_debug">Débogage</string>
     <string name="title_advanced_manual_hint">Si la réception de messages est désactivée, il est toujours possible de recevoir manuellement des messages en tirant vers le bas la liste des messages</string>
+    <string name="title_advanced_poll_battery">Ceci peut entraîner une utilisation élevée de la batterie !</string>
     <string name="title_advanced_poll_hint">La synchronisation périodique comparera les messages locaux et distants à chaque fois, ce qui est une opération coûteuse qui peut entraîner une utilisation supplémentaire de la batterie surtout lorsqu\'il y a beaucoup de messages à synchroniser. La synchronisation en continu évitera cela en surveillant uniquement les changements.</string>
     <string name="title_advanced_optimize_hint">Ceci peut changer la fréquence de synchronisation pour économiser la batterie en fonction des capacités et du comportement des serveurs de messagerie</string>
     <string name="title_advanced_schedule_hint">Appuyez sur une heure pour définir une période</string>
@@ -1141,9 +1143,7 @@
     <string name="title_search_hint">        La recherche affichera initialement les messages stockés sur votre appareil.
         Pour rechercher également sur le serveur, appuyez sur le bouton « Rechercher de nouveau ».
     </string>
-    <string name="title_search_index_hint">        La recherche via l\'index de recherche est rapide mais ne trouve que des mots entiers dans toutes les parties d\'un message.
-        Les options ci-dessous permettent de continuer à rechercher sur le serveur de messagerie.
-    </string>
+    <string name="title_search_index_hint">La recherche via l’index de recherche est rapide mais elle ne trouve que des mots entiers.</string>
     <string name="title_search_text_hint">La recherche de texte dans les messages peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
     <string name="title_search_text_unsupported">\'%s\' signifie que le serveur de messagerie ne prend pas en charge la recherche dans les textes des messages</string>
     <string name="title_search_size_hint">La recherche de messages par taille peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
@@ -1571,6 +1571,7 @@
     <string name="title_accessibility_to">Destinataire</string>
     <string-array name="pollIntervalNames">
         <item>En continu</item>
+        <item>Toutes les 5 minutes</item>
         <item>Toutes les 15 minutes</item>
         <item>Toutes les 30 minutes</item>
         <item>Toutes les heures</item>

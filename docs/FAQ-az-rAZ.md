@@ -1818,47 +1818,47 @@ There can be just one primary account and there can be just one primary identity
 <br />
 
 <a name="faq73"></a>
-**(73) Is moving messages across accounts safe/efficient?**
+**(73) Mesajları hesablar arasında daşımaq güvənli/səmərəlidir?**
 
-Moving messages across accounts is safe because the raw, original messages will be downloaded and moved and because the source messages will be deleted only after the target messages have been added
+Xam, orijinal mesajlar endirilib daşınacağı və mənbə mesajlar, yalnız hədəf mesajlar əlavə ediləndən sonra silinəcəyi üçün mesajların hesablar arasında daşınması güvənlidir.
 
-Batch moving messages across accounts is efficient if both the source folder and target folder are set to synchronize, else FairEmail needs to connect to the folder(s) for each message.
+Həm mənbə qovluq, həm də hədəf qovluq eyniləşdirilmək üzrə tənzimlənibsə, mesajların hesablar arasında toplu daşınması səmərəlidir, əks halda FairEmail-in, hər mesaj üçün qovluq(lar)la bağlantı qurması lazımdır.
 
 <br />
 
 <a name="faq74"></a>
-**(74) Why do I see duplicate messages?**
+**(74) Niyə təkrarlanan mesajları görürəm?**
 
-Some providers, notably Gmail, list all messages in all folders, except trashed messages, in the archive (all messages) folder too. FairEmail shows all these messages in a non obtrusive way to indicate that these messages are in fact the same message.
+Bəzi təchizatçılar, xüsusilə də Gmail, tullantı qovluğundakı mesajlar istisna olmaqla, bütün qovluqlardakı bütün mesajları arxiv qovluğunda da (bütün mesajlar) siyahılayır. FairEmail, bu mesajların eyni mesaj olduğunu göstərmək üçün bütün mesajları narahat etməyən versiyada göstərir.
 
-Gmail allows one message to have multiple labels, which are presented to FairEmail as folders. This means that messages with multiple labels will be shown multiple times as well.
+Gmail, bir mesajın bir neçə etiketə sahib olmasına icazə verir, həmin etiketlər də FairEmail-ə qovluqlar olaraq təqdim edilir. Bu o deməkdir ki, bir neçə etiketə sahib mesajlar, bir neçə dəfə göstəriləcək.
 
 <br />
 
 <a name="faq75"></a>
-**(75) Can you make an iOS, Windows, Linux, etc version?**
+**(75) iOS, Windows, Linux və s. versiyasını hazırlaya bilərsiniz?**
 
-A lot of knowledge and experience is required to successfully develop an app for a specific platform, which is why I develop apps for Android only.
+Müəyyən bir platformda tətbiqi uğurlu şəkildə tərtib etmək üçün kifayət qədər bilik və təcrübə lazımdır, buna görə də tətbiqləri yalnız Android üçün tərtib edirəm.
 
 <br />
 
 <a name="faq76"></a>
-**(76) What does 'Clear local messages' do?**
+**(76) "Yerli mesajları təmizlə" nə edir?**
 
-The folder menu *Clear local messages* removes messages from the device which are present on the server too. It does not delete messages from the server. This can be useful after changing the folder settings to not download the message content (text and attachments), for example to save space.
+*"Yerli mesajları təmizlə"* qovluq menyusu, serverdə saxlanılan mesajları da cihazdan silir. Serverdən gələn mesajları silmir. Bu, məsələn yaddaş istifadəsinə qənaət etmək üçün qovluq tənzimləmələrini mesaj məzmununu (mətn və qoşmalar) endirməyəcək formada tənzimlədikdən sonra faydalı ola bilər.
 
 <br />
 
 <a name="faq77"></a>
-**(77) Why are messages sometimes shown with a small delay?**
+**(77) Niyə mesajlar bəzən kiçik bir gecikmə ilə göstərilir?**
 
-Depending on the speed of your device (processor speed and maybe even more memory speed) messages might be displayed with a small delay. FairEmail is designed to dynamically handle a large number of messages without running out of memory. This means that messages needs to be read from a database and that this database needs to be watched for changes, both of which might cause small delays.
+Cihazınızın sürətindən asılı olaraq (prosessor sürəti və bəlkə də həddən çox yaddaş sürəti) mesajlar, kiçik bir gecikmə ilə görüntülənə bilər. FairEmail, çox sayda mesajı, yaddaşı çox istifadə etmədən dinamik olaraq emal etmək üçün dizayn edilib. Bu o deməkdir ki, mesajlar, verilənlər bazasından oxunmalıdır və hər ikisi də kiçik gecikmələrə səbəb ola bildiyi üçün verilənlər bazası dəyişikliklər üçün izlənməlidir.
 
-Some convenience features, like grouping messages to display conversation threads and determining the previous/next message, take a little extra time. Note that there is no *the* next message because in the meantime a new message might have been arrived.
+Danışıq mövzularının görüntülənməsi üçün mesajların qruplaşdırılması və əvvəlki/sonrakı mesajların aşkarlanması kimi bəzi əlverişli özəlliklər, bir az vaxt aparır. Bu arada yeni bir mesaj gəlmiş ola biləcəyi üçün, *növbəti mesaj* olmadığını unutmayın.
 
-When comparing the speed of FairEmail with similar apps this should be part of the comparison. It is easy to write a similar, faster app which just displays a lineair list of messages while possible using too much memory, but it is not so easy to properly manage resource usage and to offer more advanced features like conversation threading.
+FairEmail-in sürətini oxşar tətbiqlərlə müqayisə edərkən, bu, müqayisənin bir hissəsi olmalıdır. Daha çox yaddaş istifadə edərək mümkün olub sadəcə mesajlarıın xətti bir siyahısını görüntüləyən oxşar və sürətli bir tətbiq yazmaq asandır, ancaq mənbə istifadəsini düzgün idarə etmək və danışıq mövzularının yaradılması kimi daha qabaqcıl özəllikləri təklif etmək heç də asan deyil.
 
-FairEmail is based on the state-of-the-art [Android architecture components](https://developer.android.com/topic/libraries/architecture/), so there is little room for performance improvements.
+FairEmail, [Android arxitektura komponentləri](https://developer.android.com/topic/libraries/architecture/) kimi ən son texnologiyaya əsaslanır, ona görə də performans təkmilləşdirmələri üçün az yer var.
 
 <br />
 

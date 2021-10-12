@@ -206,9 +206,6 @@
     </string>
     <string name="title_setup_export_do">Il file d\'esportazione conterrà tutte le impostazioni e i dati, ma nessun messaggio e nessun\'immagine riferita nelle firme</string>
     <string name="title_setup_import_do">I profili importati saranno aggiunti senza sovrascriverne alcuno esistente</string>
-    <string name="title_setup_import_gmail">        Da Android 8. Oreo, gli account Gmail non sono più importabili, poiché ogni profilo dev\'essere selezionato per concedere l\'accesso al profilo.
-        Puoi facilmente riconfigurare i profili di Gmail con la procedura guidata di configurazione rapida.
-    </string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">La password contiene caratteri di controllo o spazi vuoti</string>
     <string name="title_setup_password_repeat">Ripeti password</string>
@@ -223,6 +220,10 @@
     <string name="title_setup_exported">Impostazioni esportate</string>
     <string name="title_setup_imported">Impostazioni importate</string>
     <string name="title_setup_import_invalid">File di impostazioni non valido</string>
+    <string name="title_importing_account">Profilo %1$s</string>
+    <string name="title_importing_identity">Identità %1$s</string>
+    <string name="title_importing_exists">Saltato: esiste già</string>
+    <string name="title_importing_wizard">Esegui la procedura guidata per autenticarti di nuovo</string>
     <string name="title_setup_reorder_accounts">Ordina profili</string>
     <string name="title_setup_reorder_folders">Ordina le cartelle</string>
     <string name="title_reset_order">Ripristina ordine</string>
@@ -251,6 +252,10 @@
     <string name="title_setup_options">Opzioni</string>
     <string name="title_setup_defaults">Ripristina predefiniti</string>
     <string name="title_setup_reset_questions">Ripristina domande</string>
+    <string name="title_setup_reset_general" comment="title_setup_reset_general&#10;Title for option to reset general questions&#10;">Domande generali</string>
+    <string name="title_setup_reset_full" comment="title_setup_reset_full&#10;Title for option to reset questions about showing original messages&#10;">Mostra i messaggi originali</string>
+    <string name="title_setup_reset_images" comment="title_setup_reset_images&#10;Title for option to reset questions about showing images">Mostra le immagini</string>
+    <string name="title_setup_reset_links" comment="title_setup_reset_links&#10;Title for option to reset questions about confirming links&#10;">Confermare i link</string>
     <string name="title_advanced_hint_title">Opzioni più avanzate</string>
     <string name="title_advanced_hint_message">        Stai navigando alle opzioni più avanzate.
         Tutte le opzioni hanno comunemente usato valori standard, che non devi cambiare a meno che non abbia una preferenza differente.
@@ -304,7 +309,7 @@
     <string name="title_advanced_send_pending">Mostra icona ritardata di invio non vistosa</string>
     <string name="title_advanced_compose_font">Font predefinito</string>
     <string name="title_advanced_prefix_once">Prefissa l\'oggetto solo una volta alla risposta o l\'inoltro</string>
-    <string name="title_advanced_separate_reply">Inserisci una riga orizzontale prima dell\'instestazione di risposta/inoltro</string>
+    <string name="title_advanced_separate_reply">Inserisci una riga orizzontale prima dell\'intestazione di risposta/inoltro</string>
     <string name="title_advanced_extended_reply">Usa intestazione estesa di risposto/inoltro</string>
     <string name="title_advanced_write_above">Scrivi sopra al testo del mittente</string>
     <string name="title_advanced_write_below">Scrivi sotto il testo del mittente</string>
@@ -556,6 +561,7 @@
     <string name="title_advanced_log_info">Registrazione di debug</string>
     <string name="title_advanced_debug">Modalità di debug</string>
     <string name="title_advanced_manual_hint">Se la ricezione dei messaggi è disabilitata, è ancora possibile ricevere manualmente i messaggi scorrendo in giù nell\'elenco dei messaggi</string>
+    <string name="title_advanced_poll_battery">Questo può causare un elevato uso della batteria!</string>
     <string name="title_advanced_poll_hint">Cercare periodicamente i nuovi messaggi confronterà i messaggi locali e remoti ogni volta, che è un\'operazione costosa che potrebbe risultare in un uso extra della batteria, specialmente se ci sono molti messaggi. Ricevere sempre lo impedirà seguendo continuamento le modifiche.</string>
     <string name="title_advanced_optimize_hint">Questo potrebbe cambiare la frequenza di sincronizzazione per risparmiare sull\'uso della batteria in base alle capacità e il comportamento dei server email</string>
     <string name="title_advanced_schedule_hint">Tocca sull\'orario per impostarlo</string>
@@ -1137,9 +1143,7 @@
     <string name="title_search_hint">        Inizialmente, la ricerca è eseguita sul dispositivo.
         Per cercare anche nel server, tocca il pulsante \'cerca di nuovo\'.
     </string>
-    <string name="title_search_index_hint">        La ricerca tramite l\'indice di ricerca è veloce, ma trova solo parole intere in tutte le parti del messaggio.
-        Le seguenti opzioni servono a continuare la ricerca del server email.
-    </string>
+    <string name="title_search_index_hint">La ricerca tramite indice di ricerca è veloce, ma trova solo parole intere.</string>
     <string name="title_search_text_hint">La ricerca del testo nei messaggi, quando ci sono molti messaggi, potrebbe non funzionare su alcuni server</string>
     <string name="title_search_text_unsupported">\'%s\' significa che il server email non supporta la ricerca nei testi dei messaggi</string>
     <string name="title_search_size_hint">La ricerca dei messaggi per dimensione, quando ci sono molti messaggi, potrebbe non funzionare su alcuni server</string>
@@ -1485,7 +1489,7 @@
         Per mantenere e supportare FairEmail a lungo termine, alcune funzionalità convenzionali e avanzate non sono gratuite.
         FairEmail mostra un piccolo messaggio per ricordartene, che sarà rimosso se acquisti le funzionalità pro.
     </string>
-    <string name="title_pro_whichever">Qualunque siano le caratteristiche scelte come funzioni pro, c\'è sempre qualcuno che si lamenta che una funzione dovrebbe essere gratuita. Per favore, non essere quella persona.</string>
+    <string name="title_pro_whichever">Qualsiasi caratteristica sia scelta come funzionalità pro, c\'è sempre qualcuno che si lamenta del fatto che dovrebbe esser gratuita. Per favore, non essere quella persona.</string>
     <string name="title_pro_hide">Nascondi il piccolo messaggio per %1$d settimane</string>
     <string name="title_pro_hint">Acquistare le funzionalità pro ti consentirà di usare tutte le funzionalità pro correnti e future, aiuterà a mantenere e supportare quest\'app.</string>
     <string name="title_pro_price">Perché le funzionalità pro sono così costose?</string>
@@ -1567,6 +1571,7 @@
     <string name="title_accessibility_to">Destinatario</string>
     <string-array name="pollIntervalNames">
         <item>Sempre</item>
+        <item>Ogni 5 minuti</item>
         <item>Ogni 15 minuti</item>
         <item>Ogni 30 minuti</item>
         <item>Ogni ora</item>

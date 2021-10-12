@@ -206,10 +206,6 @@
     </string>
     <string name="title_setup_export_do">Die Exportdatei enthält alle Einstellungen und Daten, aber keine Nachrichten und keine in Signaturen eingebettete Grafiken.</string>
     <string name="title_setup_import_do">Importierte Konten werden hinzugefügt, ohne vorhandene zu überschreiben</string>
-    <string name="title_setup_import_gmail">        Seit Android 8.0 (Oreo) können Gmail-Konten nicht mehr importiert werden,
-        da jedes Konto ausgewählt werden muss, um Zugriff auf das Konto zu gewähren.
-        Sie können jedoch Gmail-Konten ganz einfach mit dem Schnelleinrichtungsassistenten neu konfigurieren.
-    </string>
     <string name="title_setup_password">Passwort</string>
     <string name="title_setup_password_chars">Passwort enthält Steuer- oder Leerzeichen</string>
     <string name="title_setup_password_repeat">Passwort erneut eingeben</string>
@@ -224,10 +220,10 @@
     <string name="title_setup_exported">Einstellungen exportiert</string>
     <string name="title_setup_imported">Einstellungen importiert</string>
     <string name="title_setup_import_invalid">Ungültige Einstellungsdatei</string>
-    <string name="title_importing_account" comment="title_importing_account&#10;Import status message">Konto %1$s</string>
-    <string name="title_importing_identity" comment="title_importing_identity&#10;Import status message">Identität %1$s</string>
-    <string name="title_importing_exists" comment="title_importing_exists&#10;Import status message">Übersprungen: bereits vorhanden</string>
-    <string name="title_importing_wizard" comment="title_importing_wizard&#10;Import status message&#10;">Assistent zur erneuten Authentifizierung ausführen</string>
+    <string name="title_importing_account">Konto %1$s</string>
+    <string name="title_importing_identity">Identität %1$s</string>
+    <string name="title_importing_exists">Übersprungen: bereits vorhanden</string>
+    <string name="title_importing_wizard">Assistent zur erneuten Authentifizierung ausführen</string>
     <string name="title_setup_reorder_accounts">Konten sortieren</string>
     <string name="title_setup_reorder_folders">Ordner sortieren</string>
     <string name="title_reset_order">Standard-Reihenfolge</string>
@@ -256,6 +252,10 @@
     <string name="title_setup_options">Optionen</string>
     <string name="title_setup_defaults">Standardeinstellungen wiederherstellen</string>
     <string name="title_setup_reset_questions">Fragen zurücksetzen</string>
+    <string name="title_setup_reset_general" comment="title_setup_reset_general&#10;Title for option to reset general questions&#10;">Allgemeine Fragen</string>
+    <string name="title_setup_reset_full" comment="title_setup_reset_full&#10;Title for option to reset questions about showing original messages&#10;">Originalnachrichten anzeigen</string>
+    <string name="title_setup_reset_images" comment="title_setup_reset_images&#10;Title for option to reset questions about showing images">Bilder anzeigen</string>
+    <string name="title_setup_reset_links" comment="title_setup_reset_links&#10;Title for option to reset questions about confirming links&#10;">Links bestätigen</string>
     <string name="title_advanced_hint_title">Erweiterte Optionen</string>
     <string name="title_advanced_hint_message">        Sie wechseln zu den erweiterten Optionen.
         Alle Optionen haben allgemein verwendete Standardwerte, die nur geändert werden sollten, wenn Sie andere Einstellungen bevorzugen.
@@ -561,6 +561,7 @@
     <string name="title_advanced_log_info">Fehlerprotokollierung</string>
     <string name="title_advanced_debug">Fehlersuchmodus</string>
     <string name="title_advanced_manual_hint">Wenn der Nachrichtenempfang deaktiviert ist, ist es immer noch möglich, Nachrichten manuell zu empfangen, indem Sie die Nachrichtenliste nach unten ziehen</string>
+    <string name="title_advanced_poll_battery">Dies kann zu einem hohen Akkuverbrauch führen!</string>
     <string name="title_advanced_poll_hint">Bei der regelmäßigen Überprüfung auf neue Nachrichten werden jedes Mal lokale und entfernte Nachrichten verglichen, was ein aufwendiger Vorgang ist, der zu einem zusätzlichen Akkuverbrauch führen kann, insbesondere wenn viele Nachrichten vorhanden sind. Nachrichten immer empfangen verhindert das durch fortlaufendes Verfolgen von Änderungen.</string>
     <string name="title_advanced_optimize_hint">Das kann die Synchronisierungsfrequenz ändern, um den Akkuverbrauch zu verringern, abhängig von den Fähigkeiten und dem Verhalten des E-Mail-Servers.</string>
     <string name="title_advanced_schedule_hint">Auf eine Zeit tippen, um eine Zeit festzulegen</string>
@@ -1142,7 +1143,7 @@
         Um auch auf dem Server zu suchen,
         tippen Sie auf »Erneut suchen«.
     </string>
-    <string name="title_search_index_hint">Die Suche über den Suchindex ist schnell, kann aber in allen Nachrichtenteilen nur ganze Wörter finden. Mit den folgenden Optionen können Sie die Suche auf dem E-Mail-Server fortsetzen.</string>
+    <string name="title_search_index_hint">Die Suche über den Suchindex ist sehr schnell, kann aber nur ganze Wörter finden.</string>
     <string name="title_search_text_hint">Das Suchen nach Text in Nachrichten funktioniert bei einer großen Anzahl von Nachrichten auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_text_unsupported">\'%s\' bedeutet, dass der Mail-Server die Suche in Nachrichtentexten nicht unterstützt</string>
     <string name="title_search_size_hint">Die Nachrichtensuche nach Größe funktioniert, bei einer großen Anzahl von Nachrichten, auf einigen Servern möglicherweise nicht</string>
@@ -1570,9 +1571,10 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_accessibility_to">Empfänger</string>
     <string-array name="pollIntervalNames">
         <item>Immer</item>
+        <item>Alle 5 Minuten</item>
         <item>Alle 15 Minuten</item>
         <item>Alle 30 Minuten</item>
-        <item>Jede Stunde</item>
+        <item>Stündlich</item>
         <item>Alle 2 Stunden</item>
         <item>Alle 4 Stunden</item>
         <item>Alle 8 Stunden</item>

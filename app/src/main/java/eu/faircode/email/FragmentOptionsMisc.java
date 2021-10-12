@@ -50,6 +50,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -126,6 +127,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swDebug;
 
     private Button btnRepair;
+    private SwitchCompat swAutostart;
     private TextView tvRoomQueryThreads;
     private SeekBar sbRoomQueryThreads;
     private ImageButton ibRoom;
@@ -166,9 +168,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private final static String[] RESET_OPTIONS = new String[]{
             "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
-            "language", "deepl_enabled", "watchdog", "updates", "weekly", "show_changelog",
-            "experiments", "wal", "checkpoints", "query_threads", "sqlite_cache", "crash_reports", "cleanup_attachments",
+            "language", "deepl_enabled", "watchdog",
+            "updates", "weekly", "show_changelog",
+            "experiments", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "log_level",
+            "query_threads", "wal", "checkpoints", "sqlite_cache",
             "use_modseq", "perform_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
             "exact_alarms", "dup_msgids", "test_iab"
@@ -249,6 +253,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swDebug = view.findViewById(R.id.swDebug);
 
         btnRepair = view.findViewById(R.id.btnRepair);
+        swAutostart = view.findViewById(R.id.swAutostart);
         tvRoomQueryThreads = view.findViewById(R.id.tvRoomQueryThreads);
         sbRoomQueryThreads = view.findViewById(R.id.sbRoomQueryThreads);
         ibRoom = view.findViewById(R.id.ibRoom);
@@ -619,6 +624,69 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                             view.scrollTo(0, swDebug.getTop());
                         }
                     });
+            }
+        });
+
+        btnRepair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTask<Void>() {
+                    @Override
+                    protected void onPostExecute(Bundle args) {
+                        ToastEx.makeText(v.getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected Void onExecute(Context context, Bundle args) throws Throwable {
+                        DB db = DB.getInstance(context);
+
+                        List<EntityAccount> accounts = db.account().getAccounts();
+                        if (accounts == null)
+                            return null;
+
+                        for (EntityAccount account : accounts) {
+                            if (account.protocol != EntityAccount.TYPE_IMAP)
+                                continue;
+
+                            List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
+                            if (folders == null)
+                                continue;
+
+                            EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
+                            for (EntityFolder folder : folders) {
+                                if (inbox == null && "inbox".equalsIgnoreCase(folder.name))
+                                    folder.type = EntityFolder.INBOX;
+
+                                if (!EntityFolder.USER.equals(folder.type) &&
+                                        !EntityFolder.SYSTEM.equals(folder.type)) {
+                                    EntityLog.log(context, "Repairing " + account.name + ":" + folder.type);
+                                    folder.setProperties();
+                                    folder.setSpecials(account);
+                                    db.folder().updateFolder(folder);
+                                }
+                            }
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Void data) {
+                        ServiceSynchronize.reload(v.getContext(), null, true, "repair");
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    }
+                }.execute(FragmentOptionsMisc.this, new Bundle(), "repair");
+            }
+        });
+
+        swAutostart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
+                Helper.enableComponent(v.getContext(), ReceiverAutoStart.class, checked);
             }
         });
 
@@ -1044,21 +1112,33 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     private void onResetQuestions() {
         final Context context = getContext();
+        View dview = LayoutInflater.from(context).inflate(R.layout.dialog_reset_questions, null);
+        final CheckBox cbGeneral = dview.findViewById(R.id.cbGeneral);
+        final CheckBox cbFull = dview.findViewById(R.id.cbFull);
+        final CheckBox cbImages = dview.findViewById(R.id.cbImages);
+        final CheckBox cbLinks = dview.findViewById(R.id.cbLinks);
+
         new AlertDialog.Builder(context)
-                .setTitle(R.string.title_setup_reset_questions)
+                .setView(dview)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                         SharedPreferences.Editor editor = prefs.edit();
-                        for (String option : RESET_QUESTIONS)
-                            editor.remove(option);
+
+                        if (cbGeneral.isChecked())
+                            for (String option : RESET_QUESTIONS)
+                                editor.remove(option);
+
                         for (String key : prefs.getAll().keySet())
-                            if (key.startsWith("translated_") ||
-                                    key.endsWith(".show_full") ||
-                                    key.endsWith(".show_images") ||
-                                    key.endsWith(".confirm_link"))
+                            if ((key.startsWith("translated_") && cbGeneral.isChecked()) ||
+                                    (key.endsWith(".show_full") && cbFull.isChecked()) ||
+                                    (key.endsWith(".show_images") && cbImages.isChecked()) ||
+                                    (key.endsWith(".confirm_link") && cbLinks.isChecked())) {
+                                Log.i("Removing option=" + key);
                                 editor.remove(key);
+                            }
+
                         editor.apply();
 
                         ToastEx.makeText(context, R.string.title_setup_done, Toast.LENGTH_LONG).show();
@@ -1155,61 +1235,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swLogInfo.setChecked(prefs.getInt("log_level", Log.getDefaultLogLevel()) <= android.util.Log.INFO);
         swDebug.setChecked(prefs.getBoolean("debug", false));
 
-        btnRepair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SimpleTask<Void>() {
-                    @Override
-                    protected void onPostExecute(Bundle args) {
-                        ToastEx.makeText(v.getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    protected Void onExecute(Context context, Bundle args) throws Throwable {
-                        DB db = DB.getInstance(context);
-
-                        List<EntityAccount> accounts = db.account().getAccounts();
-                        if (accounts == null)
-                            return null;
-
-                        for (EntityAccount account : accounts) {
-                            if (account.protocol != EntityAccount.TYPE_IMAP)
-                                continue;
-
-                            List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
-                            if (folders == null)
-                                continue;
-
-                            EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
-                            for (EntityFolder folder : folders) {
-                                if (inbox == null && "inbox".equalsIgnoreCase(folder.name))
-                                    folder.type = EntityFolder.INBOX;
-
-                                if (!EntityFolder.USER.equals(folder.type) &&
-                                        !EntityFolder.SYSTEM.equals(folder.type)) {
-                                    EntityLog.log(context, "Repairing " + account.name + ":" + folder.type);
-                                    folder.setProperties();
-                                    folder.setSpecials(account);
-                                    db.folder().updateFolder(folder);
-                                }
-                            }
-                        }
-
-                        return null;
-                    }
-
-                    @Override
-                    protected void onExecuted(Bundle args, Void data) {
-                        ServiceSynchronize.reload(v.getContext(), null, true, "repair");
-                    }
-
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        Log.unexpectedError(getParentFragmentManager(), ex);
-                    }
-                }.execute(FragmentOptionsMisc.this, new Bundle(), "repair");
-            }
-        });
+        swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
 
         int query_threads = prefs.getInt("query_threads", DB.DEFAULT_QUERY_THREADS);
         tvRoomQueryThreads.setText(getString(R.string.title_advanced_room_query_threads, NF.format(query_threads)));

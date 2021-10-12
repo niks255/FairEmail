@@ -4,6 +4,14 @@
 
 ### [Banji](https://en.wikipedia.org/wiki/Banji)
 
+### Next version
+
+* Added multiple select spam / block sender
+* Added conditional searching via search index
+* Added selective resetting of questions
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1757
 
 * Improved send progress calculation

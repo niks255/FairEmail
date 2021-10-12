@@ -253,18 +253,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 prefs.edit().putBoolean("last_fts", isChecked).apply();
-                cbSenders.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbRecipients.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbSubject.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbKeywords.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbMessage.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbNotes.setEnabled(!isChecked);
                 cbHeaders.setEnabled(!isChecked);
                 cbHtml.setEnabled(!isChecked);
-                cbUnseen.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbFlagged.setAlpha(isChecked ? Helper.LOW_LIGHT : 1.0f);
-                cbHidden.setEnabled(!isChecked);
-                cbEncrypted.setEnabled(!isChecked);
                 cbAttachments.setEnabled(!isChecked);
                 spMessageSize.setEnabled(!isChecked);
             }
@@ -391,21 +381,21 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                             criteria.query = null;
 
                         criteria.fts = cbSearchIndex.isChecked();
-                        if (!criteria.fts) {
-                            criteria.in_senders = cbSenders.isChecked();
-                            criteria.in_recipients = cbRecipients.isChecked();
-                            criteria.in_subject = cbSubject.isChecked();
-                            criteria.in_keywords = cbKeywords.isChecked();
-                            criteria.in_message = cbMessage.isChecked();
-                            criteria.in_notes = cbNotes.isChecked();
-                            criteria.in_headers = cbHeaders.isChecked();
-                            criteria.in_html = cbHtml.isChecked();
-                            criteria.with_unseen = cbUnseen.isChecked();
-                            criteria.with_flagged = cbFlagged.isChecked();
-                            criteria.with_hidden = cbHidden.isChecked();
-                            criteria.with_encrypted = cbEncrypted.isChecked();
-                            criteria.with_attachments = cbAttachments.isChecked();
+                        criteria.in_senders = cbSenders.isChecked();
+                        criteria.in_recipients = cbRecipients.isChecked();
+                        criteria.in_subject = cbSubject.isChecked();
+                        criteria.in_keywords = cbKeywords.isChecked();
+                        criteria.in_message = cbMessage.isChecked();
+                        criteria.in_notes = cbNotes.isChecked();
+                        criteria.in_headers = (!criteria.fts && cbHeaders.isChecked());
+                        criteria.in_html = (!criteria.fts && cbHtml.isChecked());
+                        criteria.with_unseen = cbUnseen.isChecked();
+                        criteria.with_flagged = cbFlagged.isChecked();
+                        criteria.with_hidden = cbHidden.isChecked();
+                        criteria.with_encrypted = cbEncrypted.isChecked();
+                        criteria.with_attachments = (!criteria.fts && cbAttachments.isChecked());
 
+                        if (!criteria.fts) {
                             int pos = spMessageSize.getSelectedItemPosition();
                             if (pos > 0) {
                                 int[] sizes = getResources().getIntArray(R.array.sizeValues);

@@ -304,7 +304,12 @@
 
     <string name="title_setup_options">Options</string>
     <string name="title_setup_defaults">Restore defaults</string>
+
     <string name="title_setup_reset_questions">Reset questions</string>
+    <string name="title_setup_reset_general">General questions</string>
+    <string name="title_setup_reset_full">Show original messages</string>
+    <string name="title_setup_reset_images">Show images</string>
+    <string name="title_setup_reset_links">Confirm links</string>
 
     <string name="title_advanced_hint_title">More advanced options</string>
     <string name="title_advanced_hint_message">
@@ -647,6 +652,7 @@
     <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Debug mode</string>
     <string name="title_advanced_repair" translatable="false">Repair</string>
+    <string name="title_advanced_autostart" translatable="false">Autostart</string>
     <string name="title_advanced_room_query_threads" translatable="false">ROOM query threads: %1$s</string>
     <string name="title_advanced_wal" translatable="false">WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">Checkpoints</string>
@@ -672,6 +678,7 @@
     <string name="title_advanced_files" translatable="false">Files &gt;%1$s</string>
 
     <string name="title_advanced_manual_hint">If receiving messages is disabled, it is still possible to manually receive messages by pulling down the message list</string>
+    <string name="title_advanced_poll_battery">This can cause high battery usage!</string>
     <string name="title_advanced_poll_hint">Periodically checking for new messages will compare local and remote messages every time, which is an expensive operation that may result in extra battery usage, especially if there are a lot of messages. Always receive will prevent this by continuously following changes.</string>
     <string name="title_advanced_optimize_hint">This might change the sync frequency to save battery usage depending on the capabilities and behavior of the email servers</string>
     <string name="title_advanced_schedule_hint">Tap on a time to set a time</string>
@@ -1306,10 +1313,7 @@
         Initially, the search is performed on the device.
         To search the server too, tap the \'search again\' button.
     </string>
-    <string name="title_search_index_hint">
-        Searching via the search index is fast, but only finds whole words in all message parts.
-        The options below are to continue searching the email server.
-    </string>
+    <string name="title_search_index_hint">Searching via the search index is fast, but only finds whole words.</string>
     <string name="title_search_text_hint">Searching for text in messages, when there are a large number of messages, might not work on some servers</string>
     <string name="title_search_text_unsupported">\'%s\' means that the mail server doesn\'t support searching in message texts</string>
     <string name="title_search_size_hint">Searching for messages by size, when there are a large number of messages, might not work on some servers</string>
@@ -1780,6 +1784,7 @@
 
     <string-array name="pollIntervalNames">
         <item>Always</item>
+        <item>Every 5 minutes</item>
         <item>Every 15 minutes</item>
         <item>Every 30 minutes</item>
         <item>Every hour</item>
@@ -1791,6 +1796,7 @@
 
     <integer-array name="pollIntervalValues" translatable="false">
         <item>0</item>
+        <item>5</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>

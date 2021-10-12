@@ -4,6 +4,23 @@
 
 ### [Banji](https://en.wikipedia.org/wiki/Banji)
 
+### 1.1762
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1761
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1760
+
+* Added multiple select spam / block sender
+* Added conditional searching via search index
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1757
 
 * Improved send progress calculation

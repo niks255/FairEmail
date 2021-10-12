@@ -50,14 +50,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
-            app:constraint_referenced_ids="ibMore,ibInbox,ibJunk,ibTrash,ibArchive,ibMove,ibCopy,ibKeywords,ibLabels,ibNotes,ibAnswer,ibSeen,ibHide,ibTranslate,ibForceLight,ibSearch,ibSearchText,ibEvent,ibShare,ibPin,ibPrint,ibHeaders,ibUnsubscribe,ibRule,ibUndo"
+            app:constraint_referenced_ids="vwEmpty,ibMore,ibInbox,ibJunk,ibTrash,ibArchive,ibMove,ibCopy,ibKeywords,ibLabels,ibNotes,ibAnswer,ibSeen,ibHide,ibTranslate,ibForceLight,ibSearch,ibSearchText,ibEvent,ibShare,ibPin,ibPrint,ibHeaders,ibUnsubscribe,ibRule,ibUndo"
             app:flow_horizontalBias="0"
             app:flow_horizontalGap="3dp"
             app:flow_horizontalStyle="packed"
             app:flow_wrapMode="chain"
-            app:layout_constraintEnd_toStartOf="@+id/ibVerify"
-            app:layout_constraintStart_toEndOf="@id/ibTools"
+            app:layout_constraintEnd_toStartOf="@+id/ibImages"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vSeparator" />
+
+        <View
+            android:id="@+id/vwEmpty"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            tools:ignore="MissingConstraints" />
 
         <ImageButton
             android:id="@+id/ibMore"
@@ -364,21 +370,20 @@
             android:scaleType="fitCenter"
             android:tooltipText="@string/title_verify"
             app:layout_constraintEnd_toStartOf="@+id/ibDecrypt"
-            app:layout_constraintTop_toBottomOf="@id/vSeparator"
+            app:layout_constraintTop_toBottomOf="@+id/ibFull"
             app:srcCompat="@drawable/twotone_gesture_24" />
 
         <ImageButton
             android:id="@+id/ibDecrypt"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginEnd="3dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_decrypt"
             android:padding="6dp"
             android:scaleType="fitCenter"
             android:tooltipText="@string/title_decrypt"
-            app:layout_constraintEnd_toStartOf="@+id/ibImages"
-            app:layout_constraintTop_toBottomOf="@id/vSeparator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ibFull"
             app:srcCompat="@drawable/twotone_lock_open_24" />
 
         <ImageButton
@@ -393,7 +398,8 @@
             android:tooltipText="@string/title_legend_show_images"
             app:layout_constraintEnd_toStartOf="@+id/ibFull"
             app:layout_constraintTop_toBottomOf="@id/vSeparator"
-            app:srcCompat="@drawable/twotone_image_24" />
+            app:srcCompat="@drawable/twotone_image_24"
+            app:tint="?attr/colorAccent" />
 
         <ImageButton
             android:id="@+id/ibFull"
@@ -406,14 +412,15 @@
             android:tooltipText="@string/title_legend_show_full"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vSeparator"
-            app:srcCompat="@drawable/twotone_fullscreen_24" />
+            app:srcCompat="@drawable/twotone_fullscreen_24"
+            app:tint="?attr/colorAccent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <eu.faircode.email.FixedTextView
         android:id="@+id/tvReformatted"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="12dp"
+        android:paddingVertical="6dp"
         android:text="@string/title_reformatted"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textStyle="italic"
@@ -426,7 +433,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="12dp"
+        android:paddingVertical="6dp"
         android:text="@string/title_signed_data"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textStyle="italic"
