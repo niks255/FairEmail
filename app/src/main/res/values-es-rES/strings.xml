@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Buscar en FairEmail</string>
-    <string name="app_changelog">Historial de cambios</string>
+    <string name="app_changelog">Registro de cambios</string>
     <string name="app_welcome">FairEmail es una aplicación de correo electrónico de código abierto centrada en la privacidad y la seguridad. Por esta razón, algunas funciones pueden comportarse de manera diferente a lo que esté acostumbrado.</string>
     <string name="app_limitations">Por ejemplo, los mensajes se reformatean por defecto para eliminar elementos inseguros y mejorar la legibilidad, y la apertura de enlaces debe ser confirmada por seguridad. Ambos pueden ser desactivados si se desea.</string>
     <string name="app_crash">FairEmail no es compatible con este dispositivo porque existen errores en Android que provocan fallos</string>
@@ -252,10 +252,10 @@
     <string name="title_setup_options">Opciones</string>
     <string name="title_setup_defaults">Restablecer ajustes por defecto</string>
     <string name="title_setup_reset_questions">Restablecer preguntas</string>
-    <string name="title_setup_reset_general" comment="title_setup_reset_general&#10;Title for option to reset general questions&#10;">Preguntas generales</string>
-    <string name="title_setup_reset_full" comment="title_setup_reset_full&#10;Title for option to reset questions about showing original messages&#10;">Mostrar el mensaje original</string>
-    <string name="title_setup_reset_images" comment="title_setup_reset_images&#10;Title for option to reset questions about showing images">Mostrar imágenes</string>
-    <string name="title_setup_reset_links" comment="title_setup_reset_links&#10;Title for option to reset questions about confirming links&#10;">Confirmar enlaces</string>
+    <string name="title_setup_reset_general">Preguntas generales</string>
+    <string name="title_setup_reset_full">Mostrar el mensaje original</string>
+    <string name="title_setup_reset_images">Mostrar imágenes</string>
+    <string name="title_setup_reset_links">Confirmar enlaces</string>
     <string name="title_advanced_hint_title">Opciones más avanzadas</string>
     <string name="title_advanced_hint_message">        Está navegando a las opciones más avanzadas.
         Todas las opciones tienen por defecto valores estándar, que no necesitan ser modificados a menos que así lo prefiera.
@@ -1445,6 +1445,7 @@
     <string name="title_download">Descargar</string>
     <string name="title_report">Reportar</string>
     <string name="title_fix">Reparar</string>
+    <string name="title_show" comment="title_show&#10;Title for actions to show something, like a message or conversation">Mostrar</string>
     <string name="title_enable">Activar</string>
     <string name="title_enabled">Activado</string>
     <string name="title_disable">Desactivar</string>

@@ -446,6 +446,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibInbox;
         private ImageButton ibMore;
         private ImageButton ibTools;
+        private View vwEmpty;
         private TextView tvReformatted;
         private TextView tvSignedData;
 
@@ -822,6 +823,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibInbox = vsBody.findViewById(R.id.ibInbox);
             ibMore = vsBody.findViewById(R.id.ibMore);
             ibTools = vsBody.findViewById(R.id.ibTools);
+            vwEmpty = vsBody.findViewById(R.id.vwEmpty);
             tvReformatted = vsBody.findViewById(R.id.tvReformatted);
             tvSignedData = vsBody.findViewById(R.id.tvSignedData);
 
@@ -1556,6 +1558,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibInbox.setVisibility(View.GONE);
             ibMore.setVisibility(View.GONE);
             ibTools.setVisibility(View.GONE);
+            vwEmpty.setVisibility(View.GONE);
             tvReformatted.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
 
@@ -1791,6 +1794,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibInbox.setVisibility(View.GONE);
             ibMore.setVisibility(View.GONE);
             ibTools.setVisibility(View.GONE);
+            vwEmpty.setVisibility(View.GONE);
             tvReformatted.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
 
@@ -2016,6 +2020,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                         ibTools.setTooltipText(ibTools.getContentDescription());
                     ibTools.setVisibility(outbox ? View.GONE : View.VISIBLE);
+                    vwEmpty.setVisibility(View.VISIBLE);
 
                     ibTrashBottom.setVisibility(button_extra && button_trash && trash ? View.VISIBLE : View.GONE);
                     ibArchiveBottom.setVisibility(button_extra && button_archive && archive ? View.VISIBLE : View.GONE);
@@ -2675,18 +2680,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     // Show images
                     ibImages.setVisibility(has_images && !(show_full && always_images) ? View.VISIBLE : View.INVISIBLE);
 
-                    // Show encrypt actions
-                    ibVerify.setVisibility(false ||
-                            EntityMessage.PGP_SIGNONLY.equals(message.encrypt) ||
-                            EntityMessage.SMIME_SIGNONLY.equals(message.encrypt)
-                            ? View.VISIBLE : View.GONE);
-                    ibDecrypt.setImageResource(false ||
-                            (EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) &&
-                                    !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
+                    boolean verifyable = (EntityMessage.PGP_SIGNONLY.equals(message.encrypt) ||
+                            EntityMessage.SMIME_SIGNONLY.equals(message.encrypt));
+
+                    boolean unlocked = (EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) &&
+                            !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
                             (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
-                                    !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
-                            ? R.drawable.twotone_lock_24 : R.drawable.twotone_lock_open_24
-                    );
+                                    !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt));
+
+                    // Show encrypt actions
+                    ibVerify.setVisibility(verifyable ? View.VISIBLE : View.GONE);
+                    ibDecrypt.setImageResource(unlocked
+                            ? R.drawable.twotone_lock_24 : R.drawable.twotone_lock_open_24);
+                    ibDecrypt.setImageTintList(ColorStateList.valueOf(unlocked
+                            ? colorControlNormal : colorAccent));
                     ibDecrypt.setVisibility(!EntityFolder.OUTBOX.equals(message.folderType) &&
                             (args.getBoolean("inline_encrypted") ||
                                     EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) ||
@@ -4691,7 +4698,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_show_headers).setEnabled(message.uid != null ||
                     (message.accountProtocol == EntityAccount.TYPE_POP && message.headers != null));
 
-            popupMenu.getMenu().findItem(R.id.menu_share_as_html).setVisible(message.content && BuildConfig.DEBUG);
+            popupMenu.getMenu().findItem(R.id.menu_share_as_html).setVisible(message.content &&
+                    (BuildConfig.DEBUG || !BuildConfig.PLAY_STORE_RELEASE));
 
             boolean canRaw = (message.uid != null ||
                     (EntityFolder.INBOX.equals(message.folderType) &&
@@ -5237,7 +5245,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (!TextUtils.isEmpty(message.subject))
                         result.put("subject", message.subject);
 
-                    String link = "message://" + BuildConfig.APPLICATION_ID + "/" + message.id;
+                    String link = "message://email.faircode.eu/link/#" + message.id;
 
                     Document document = JsoupEx.parse(file);
                     HtmlHelper.truncate(document, HtmlHelper.MAX_FULL_TEXT_SIZE / 2);
@@ -6466,7 +6474,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (rv != null)
             savedState = rv.getLayoutManager().onSaveInstanceState();
 
-        differ.submitList(list);
+        differ.submitList(list, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (rv != null)
+                        rv.invalidateItemDecorations();
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
     }
 
     PagedList<TupleMessageEx> getCurrentList() {

@@ -242,7 +242,10 @@
     <string name="title_setup_options">Tuỳ chọn</string>
     <string name="title_setup_defaults">Khôi phục mặc định</string>
     <string name="title_setup_reset_questions">Đặt lại các câu hỏi</string>
-    <string name="title_setup_reset_images" comment="title_setup_reset_images&#10;Title for option to reset questions about showing images">Hiện hình ảnh</string>
+    <string name="title_setup_reset_general">Câu hỏi chung</string>
+    <string name="title_setup_reset_full">Hiện thư gốc</string>
+    <string name="title_setup_reset_images">Hiện hình ảnh</string>
+    <string name="title_setup_reset_links">Xác nhận liên kết</string>
     <string name="title_advanced_hint_title">Tuỳ chọn nâng cao hơn</string>
     <string name="title_advanced_hint_message">        Bạn đang điều hướng đến các tùy chọn nâng cao hơn.
         Tất cả các tùy chọn đều có các giá trị tiêu chuẩn thường được sử dụng, bạn không cần phải thay đổi trừ khi bạn có tùy chọn khác.
@@ -1129,6 +1132,7 @@
     <string name="title_search_hint">Ban đầu, việc tìm kiếm được thực hiện trên thiết bị.
         Để cũng tìm kiếm máy chủ, nhấn nút \'tìm kiếm lại\'.
     </string>
+    <string name="title_search_index_hint">Việc tìm kiếm qua mục lục tìm kiếm rất nhanh, nhưng sẽ chỉ tìm các từ toàn thể.</string>
     <string name="title_search_text_hint">Việc tìm kiếm văn bản trong thư khi có nhiều thư có thể không được trên một số máy chủ</string>
     <string name="title_search_text_unsupported">\'%s\' có nghĩa là máy chủ mail không hỗ trợ tìm kiếm trong văn bản thư</string>
     <string name="title_search_size_hint">Việc tìm kiếm thư theo kích cỡ khi có nhiều thư có thể không được trên một số máy chủ</string>
@@ -1430,6 +1434,7 @@
     <string name="title_download">Tải xuống</string>
     <string name="title_report">Báo cáo</string>
     <string name="title_fix">Sửa</string>
+    <string name="title_show" comment="title_show&#10;Title for actions to show something, like a message or conversation">Show</string>
     <string name="title_enable">Bật</string>
     <string name="title_enabled">Đã bật</string>
     <string name="title_disable">Tắt</string>

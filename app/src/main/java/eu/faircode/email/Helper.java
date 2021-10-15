@@ -47,7 +47,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileUtils;
 import android.os.LocaleList;
 import android.os.Parcel;
 import android.os.PowerManager;
@@ -174,6 +173,11 @@ public class Helper {
 
     // https://developer.android.com/distribute/marketing-tools/linking-to-google-play#PerformingSearch
     private static final String PLAY_STORE_SEARCH = "https://play.google.com/store/search";
+
+    private static final String[] ROMAN_1000 = {"", "M", "MM", "MMM"};
+    private static final String[] ROMAN_100 = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+    private static final String[] ROMAN_10 = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+    private static final String[] ROMAN_1 = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
     static final Pattern EMAIL_ADDRESS
             = Pattern.compile(
@@ -1527,6 +1531,15 @@ public class Helper {
         }
     }
 
+    public static String toRoman(int value) {
+        if (value < 0 || value >= 4000)
+            return Integer.toString(value);
+        return ROMAN_1000[value / 1000] +
+                ROMAN_100[(value % 1000) / 100] +
+                ROMAN_10[(value % 100) / 10] +
+                ROMAN_1[value % 10];
+    }
+
     // Files
 
     static String sanitizeFilename(String name) {
@@ -1643,20 +1656,20 @@ public class Helper {
     static long copy(Context context, Uri uri, File file) throws IOException {
         try (InputStream is = context.getContentResolver().openInputStream(uri)) {
             try (OutputStream os = new FileOutputStream(file)) {
-                copy(is, os);
+                return copy(is, os);
             }
         }
-        return file.length();
     }
 
-    static void copy(InputStream is, OutputStream os) throws IOException {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            byte[] buf = new byte[BUFFER_SIZE];
-            int len;
-            while ((len = is.read(buf)) > 0)
-                os.write(buf, 0, len);
-        } else
-            FileUtils.copy(is, os);
+    static long copy(InputStream is, OutputStream os) throws IOException {
+        long size = 0;
+        byte[] buf = new byte[BUFFER_SIZE];
+        int len;
+        while ((len = is.read(buf)) > 0) {
+            size += len;
+            os.write(buf, 0, len);
+        }
+        return size;
     }
 
     static long getAvailableStorageSpace() {

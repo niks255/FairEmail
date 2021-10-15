@@ -4,6 +4,22 @@
 
 ### [Banji](https://en.wikipedia.org/wiki/Banji)
 
+### 1.1764
+
+* Added support for latin and roman numbered lists (view only)
+* Report new messages when composing a message [1]
+* Use account categories for identities
+* Small improvements and minor bug fixes
+* Updated translations
+
+[1] This is an experiment which needs to be enabled in the miscellaneous settings.
+
+### 1.1763
+
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
 ### 1.1762
 
 * Small improvements and minor bug fixes

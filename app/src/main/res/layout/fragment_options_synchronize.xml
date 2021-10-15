@@ -659,8 +659,11 @@
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvCaptionChecks"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/twotone_flag_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorWarning"
                     android:gravity="center"
                     android:text="@string/title_advanced_caption_checks"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"

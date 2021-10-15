@@ -758,6 +758,7 @@ public class FragmentCompose extends FragmentBase {
                 Object tag = cbSignature.getTag();
                 if (tag == null || !tag.equals(checked)) {
                     cbSignature.setTag(checked);
+                    tvSignature.setAlpha(checked ? 1.0f : Helper.LOW_LIGHT);
                     if (tag != null)
                         onAction(R.id.action_save, "signature");
                 }
@@ -4262,46 +4263,54 @@ public class FragmentCompose extends FragmentBase {
                                 break;
                             }
 
-                    Address[] refto = (ref == null ? null
-                            : ref.replySelf(data.identities, ref.account) ? ref.from : ref.to);
-                    if (refto != null && refto.length > 0) {
-                        if (selected == null)
-                            for (Address sender : refto)
-                                for (EntityIdentity identity : data.identities)
-                                    if (identity.account.equals(aid) &&
-                                            identity.sameAddress(sender)) {
-                                        selected = identity;
-                                        EntityLog.log(context, "Selected same account/identity");
-                                        break;
-                                    }
+                    if (ref != null) {
+                        Address[] refto;
+                        boolean self = ref.replySelf(data.identities, ref.account);
+                        if (ref.to == null || ref.to.length == 0 || self)
+                            refto = ref.from;
+                        else
+                            refto = ref.to;
+                        Log.i("Ref self=" + self +
+                                " to=" + MessageHelper.formatAddresses(refto));
+                        if (refto != null && refto.length > 0) {
+                            if (selected == null)
+                                for (Address sender : refto)
+                                    for (EntityIdentity identity : data.identities)
+                                        if (identity.account.equals(aid) &&
+                                                identity.sameAddress(sender)) {
+                                            selected = identity;
+                                            EntityLog.log(context, "Selected same account/identity");
+                                            break;
+                                        }
 
-                        if (selected == null)
-                            for (Address sender : refto)
-                                for (EntityIdentity identity : data.identities)
-                                    if (identity.account.equals(aid) &&
-                                            identity.similarAddress(sender)) {
-                                        selected = identity;
-                                        EntityLog.log(context, "Selected similar account/identity");
-                                        break;
-                                    }
+                            if (selected == null)
+                                for (Address sender : refto)
+                                    for (EntityIdentity identity : data.identities)
+                                        if (identity.account.equals(aid) &&
+                                                identity.similarAddress(sender)) {
+                                            selected = identity;
+                                            EntityLog.log(context, "Selected similar account/identity");
+                                            break;
+                                        }
 
-                        if (selected == null)
-                            for (Address sender : refto)
-                                for (EntityIdentity identity : data.identities)
-                                    if (identity.sameAddress(sender)) {
-                                        selected = identity;
-                                        EntityLog.log(context, "Selected same */identity");
-                                        break;
-                                    }
+                            if (selected == null)
+                                for (Address sender : refto)
+                                    for (EntityIdentity identity : data.identities)
+                                        if (identity.sameAddress(sender)) {
+                                            selected = identity;
+                                            EntityLog.log(context, "Selected same */identity");
+                                            break;
+                                        }
 
-                        if (selected == null)
-                            for (Address sender : refto)
-                                for (EntityIdentity identity : data.identities)
-                                    if (identity.similarAddress(sender)) {
-                                        selected = identity;
-                                        EntityLog.log(context, "Selected similer */identity");
-                                        break;
-                                    }
+                            if (selected == null)
+                                for (Address sender : refto)
+                                    for (EntityIdentity identity : data.identities)
+                                        if (identity.similarAddress(sender)) {
+                                            selected = identity;
+                                            EntityLog.log(context, "Selected similer */identity");
+                                            break;
+                                        }
+                        }
                     }
 
                     if (selected == null)
@@ -5188,6 +5197,55 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }
             });
+
+            boolean experiments = prefs.getBoolean("experiments", false);
+            boolean threading = prefs.getBoolean("threading", true);
+            if (experiments && threading)
+                db.message().liveUnreadThread(data.draft.account, data.draft.thread).observe(getViewLifecycleOwner(), new Observer<List<EntityMessage>>() {
+                    private int lastDiff = 0;
+                    private List<EntityMessage> base = null;
+
+                    @Override
+                    public void onChanged(List<EntityMessage> messages) {
+                        if (messages == null)
+                            return;
+
+                        if (base == null) {
+                            base = messages;
+                            return;
+                        }
+
+                        int diff = (messages.size() - base.size());
+                        if (diff > lastDiff) {
+                            lastDiff = diff;
+                            String msg = getResources().getQuantityString(
+                                    R.plurals.title_notification_unseen, diff, diff);
+
+                            Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE)
+                                    .setGestureInsetBottomIgnored(true);
+                            snackbar.setAction(R.string.title_show, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    EntityMessage message = messages.get(0);
+                                    boolean notify_remove = prefs.getBoolean("notify_remove", true);
+
+                                    Intent thread = new Intent(v.getContext(), ActivityView.class);
+                                    thread.setAction("thread:" + message.id);
+                                    thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    thread.putExtra("account", message.account);
+                                    thread.putExtra("folder", message.folder);
+                                    thread.putExtra("thread", message.thread);
+                                    thread.putExtra("filter_archive", true);
+                                    thread.putExtra("ignore", notify_remove);
+
+                                    v.getContext().startActivity(thread);
+                                    getActivity().finish();
+                                }
+                            });
+                            snackbar.show();
+                        }
+                    }
+                });
         }
 
         @Override
