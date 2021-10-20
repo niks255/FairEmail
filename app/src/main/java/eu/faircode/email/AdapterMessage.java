@@ -154,6 +154,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.w3c.dom.css.CSSStyleSheet;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -314,8 +315,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     private static final int MAX_RECIPIENTS_COMPACT = 3;
     private static final int MAX_RECIPIENTS_NORMAL = 7;
-    private static final int MAX_QUOTE_LEVEL = 3;
-    private static final int MAX_TRANSLATABLE_TEXT_SIZE = 50 * 1024;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
@@ -5248,7 +5247,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String link = "message://email.faircode.eu/link/#" + message.id;
 
                     Document document = JsoupEx.parse(file);
-                    HtmlHelper.truncate(document, HtmlHelper.MAX_FULL_TEXT_SIZE / 2);
+                    HtmlHelper.truncate(document, HtmlHelper.MAX_SHARE_TEXT_SIZE);
 
                     Element a = document.createElement("a");
                     a.text(context.getString(R.string.app_name));
@@ -5441,23 +5440,39 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Bundle args = new Bundle();
             args.putLong("id", message.id);
 
-            new SimpleTask<String>() {
+            new SimpleTask<File>() {
                 @Override
-                protected String onExecute(Context context, Bundle args) throws IOException {
+                protected File onExecute(Context context, Bundle args) throws IOException {
                     Long id = args.getLong("id");
 
                     File file = EntityMessage.getFile(context, id);
                     Document d = JsoupEx.parse(file);
 
-                    return d.html();
+                    List<CSSStyleSheet> sheets =
+                            HtmlHelper.parseStyles(d.head().select("style"));
+                    for (Element element : d.select("*")) {
+                        String computed = HtmlHelper.processStyles(
+                                element.tagName(),
+                                element.className(),
+                                element.attr("style"),
+                                sheets);
+                        if (!TextUtils.isEmpty(computed))
+                            element.attr("computed", computed);
+                    }
+
+                    File dir = new File(context.getCacheDir(), "shared");
+                    if (!dir.exists())
+                        dir.mkdir();
+
+                    File share = new File(dir, message.id + ".txt");
+                    Helper.writeText(share, d.html());
+
+                    return share;
                 }
 
                 @Override
-                protected void onExecuted(Bundle args, String html) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, html);
-                    context.startActivity(intent);
+                protected void onExecuted(Bundle args, File share) {
+                    Helper.share(context, share, "text/plain", share.getName());
                 }
 
                 @Override
@@ -7004,7 +7019,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     String html = Helper.readText(file);
                     Document d = HtmlHelper.sanitizeCompose(context, html, false);
                     d.select("blockquote").remove();
-                    HtmlHelper.truncate(d, MAX_TRANSLATABLE_TEXT_SIZE);
+                    HtmlHelper.truncate(d, HtmlHelper.MAX_TRANSLATABLE_TEXT_SIZE);
                     SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, d, null, null);
                     return ssb.toString()
                             .replace("\uFFFC", "") // Object replacement character

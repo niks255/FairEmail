@@ -531,6 +531,7 @@
     <string name="title_advanced_secure">Приховати з екрану останніх програм і не дозволяти робити знімки екрану</string>
     <string name="title_advanced_pin">PIN-код</string>
     <string name="title_advanced_biometrics_timeout">Тайм-аут біометричної автентифікації</string>
+    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">Блокування при вимкненому екрані</string>
     <string name="title_advanced_generic_user_agent">Використовувати User agent браузера</string>
     <string name="title_advanced_disconnect_auto_update">Автоматично оновлювати списки щотижня</string>
     <string name="title_advanced_disconnect_links">Використовуйте списки для попередження про посилання за якими можливе відслідковування</string>
@@ -1465,7 +1466,7 @@
     <string name="title_download">Завантаження</string>
     <string name="title_report">Звіт</string>
     <string name="title_fix">Виправлення</string>
-    <string name="title_show" comment="title_show&#10;Title for actions to show something, like a message or conversation">Показати</string>
+    <string name="title_show">Показати</string>
     <string name="title_enable">Увімкнути</string>
     <string name="title_enabled">Увімкнено</string>
     <string name="title_disable">Вимкнути</string>

@@ -593,6 +593,7 @@
     <string name="title_advanced_secure">Hide from recent apps screen and prevent taking screenshots</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Biometric authentication timeout</string>
+    <string name="title_advanced_autolock">Lock on screen off</string>
     <string name="title_advanced_generic_user_agent">Use generic browser user agent</string>
     <string name="title_advanced_safe_browsing" translatable="false">Google Safe browsing (Android 8+)</string>
     <string name="title_advanced_disconnect_blacklist" translatable="false">Disconnect\'s tracker protection lists</string>
@@ -657,6 +658,7 @@
     <string name="title_advanced_wal" translatable="false">WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">Checkpoints</string>
     <string name="title_advanced_sqlite_cache" translatable="false">Sqlite cache: %1$s %% - %2$s</string>
+    <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
     <string name="title_advanced_expunge" translatable="false">EXPUNGE</string>
     <string name="title_advanced_auth_plain" translatable="false">PLAIN</string>
@@ -672,6 +674,7 @@
     <string name="title_advanced_storage_usage" translatable="false">Storage space: %1$s/%2$s App: %3$s</string>
     <string name="title_advanced_cursor_window" translatable="false">Cursor window size: %1$s</string>
     <string name="title_advanced_suffixes" translatable="false">Public suffix list: %1$d</string>
+    <string name="title_advanced_android_id" translatable="false">Android ID: %1$s</string>
     <string name="title_advanced_gc" translatable="false">GC</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>

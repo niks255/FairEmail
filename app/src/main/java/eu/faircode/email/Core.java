@@ -67,7 +67,6 @@ import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.FLAGS;
 import com.sun.mail.imap.protocol.FetchResponse;
 import com.sun.mail.imap.protocol.IMAPProtocol;
-import com.sun.mail.imap.protocol.Namespaces;
 import com.sun.mail.imap.protocol.UID;
 import com.sun.mail.pop3.POP3Folder;
 import com.sun.mail.pop3.POP3Message;
@@ -137,10 +136,11 @@ import javax.mail.search.SentDateTerm;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 class Core {
+    static final int DEFAULT_SYNC_CHUNCK_SIZE = 100;
+
     private static final int MAX_NOTIFICATION_DISPLAY = 10; // per group
     private static final int MAX_NOTIFICATION_COUNT = 100; // per group
     private static final long SCREEN_ON_DURATION = 3000L; // milliseconds
-    private static final int SYNC_CHUNCK_SIZE = 200;
     private static final int SYNC_BATCH_SIZE = 20;
     private static final int DOWNLOAD_BATCH_SIZE = 20;
     private static final int SYNC_YIELD_COUNT = 100;
@@ -1835,6 +1835,8 @@ class Core {
             throw new IllegalArgumentException("Download of sub attachment");
         if (attachment.available)
             return;
+        if (message.uid == null)
+            throw new IllegalArgumentException("Attachment/message uid missing");
 
         // Get message
         Message imessage = ifolder.getMessageByUID(message.uid);
@@ -3117,7 +3119,12 @@ class Core {
                                 if (first > 0)
                                     ranges.add(new Pair<>(first, last < 0 ? first : last));
 
-                                List<List<Pair<Long, Long>>> chunks = Helper.chunkList(ranges, SYNC_CHUNCK_SIZE);
+                                // https://datatracker.ietf.org/doc/html/rfc2683#section-3.2.1.5
+                                int chunk_size = prefs.getInt("chunk_size", DEFAULT_SYNC_CHUNCK_SIZE);
+                                if (chunk_size < 200 &&
+                                        (account.isGmail() || account.isOutlook()))
+                                    chunk_size = 200;
+                                List<List<Pair<Long, Long>>> chunks = Helper.chunkList(ranges, chunk_size);
 
                                 Log.i(folder.name + " executing uid fetch count=" + uids.size() +
                                         " ranges=" + ranges.size() + " chunks=" + chunks.size());
