@@ -175,6 +175,10 @@ public class EntityAccount extends EntityOrder implements Serializable {
         return "imap.seznam.cz".equalsIgnoreCase(host);
     }
 
+    boolean isZoho() {
+        return (host != null && host.toLowerCase(Locale.ROOT).startsWith("imap.zoho."));
+    }
+
     boolean isTransient(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean enabled = prefs.getBoolean("enabled", true);
@@ -216,6 +220,7 @@ public class EntityAccount extends EntityOrder implements Serializable {
                 NotificationManager.IMPORTANCE_HIGH);
         channel.setGroup(group.getId());
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        channel.setBypassDnd(true);
         channel.enableLights(true);
         nm.createNotificationChannel(channel);
     }

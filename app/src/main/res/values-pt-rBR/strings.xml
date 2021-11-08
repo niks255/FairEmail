@@ -139,8 +139,6 @@
     <string name="title_setup_identities">Identidades</string>
     <string name="title_setup_other">Outro provedor</string>
     <string name="title_setup_pop3">Conta POP3</string>
-    <string name="title_setup_oauth_permission">Este provedor de email só aprovou OAuth nos seus aplicativos oficiais</string>
-    <string name="title_setup_gmail_support">Autorizar contas do Google funcionará apenas em versões oficiais porque o Android verifica a assinatura do aplicativo</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permissão para selecionar uma conta e ler seu nome</string>
     <string name="title_setup_gmail_permissions">Google pedirá permissão para ler, compor, enviar e excluir permanentemente todo seu e-mail. O FairEmail nunca apagará suas mensagens sem o seu consentimento explícito.</string>
     <string name="title_setup_gmail_drafts">Se a pasta rascunho não estiver acessível pelo IMAP, ela pode ser fixa nas configurações de etiqueta do Gmail</string>
@@ -238,6 +236,8 @@
     <string name="title_setup_options">Opções</string>
     <string name="title_setup_defaults">Restaurar padrão</string>
     <string name="title_setup_reset_questions">Redefinir perguntas</string>
+    <string name="title_setup_reset_general">Dúvidas gerais</string>
+    <string name="title_setup_reset_full">Mostrar mensagens originais</string>
     <string name="title_setup_reset_images">Mostrar Imagens</string>
     <string name="title_advanced_hint_title">Opções mais avançadas</string>
     <string name="title_advanced_hint_message">        Você está navegando para as opções mais avançadas.
@@ -369,6 +369,7 @@
     <string name="title_advanced_subject_italic">Mostrar assunto em itálico</string>
     <string name="title_advanced_highlight_subject">Destacar assunto</string>
     <string name="title_advanced_font_size_subject">Tamanho do texto do assunto</string>
+    <string name="title_advanced_compact_mode_remark">Apenas modo compacto</string>
     <string name="title_advanced_highlight_color">Cor de destaque</string>
     <string name="title_advanced_keywords">Mostrar palavras-chave no cabeçalho da mensagem</string>
     <string name="title_advanced_labels">Mostrar rótulos do Gmail no cabeçalho da mensagem</string>
@@ -473,7 +474,7 @@
     <string name="title_advanced_confirm_links">Confirmar abertura de links</string>
     <string name="title_advanced_check_links_dbl">Verificar listas de bloqueio de domínios para links suspeitos</string>
     <string name="title_advanced_browse_links">Delegar abertura de links ao Android</string>
-    <string name="title_advanced_confirm_images">Confirmar a exibição de imagens</string>
+    <string name="title_advanced_ask_images">Confirmar a exibição de imagens</string>
     <string name="title_advanced_confirm_html">Mostrar mensagens reformatadas por padrão</string>
     <string name="title_advanced_tracking">Tentativa de reconhecer e desativar imagens de rastreamento</string>
     <string name="title_advanced_hide_timezone">Enviar mensagens sem dados de fuso horário</string>
@@ -630,6 +631,7 @@
     <string name="title_recommended">Recomendado</string>
     <string name="title_account_linked">Conta vinculada</string>
     <string name="title_account_name">Nome da conta</string>
+    <string name="title_account_category">Categoria</string>
     <string name="title_account_name_hint">Usada para diferenciar pastas</string>
     <string name="title_account_interval_hint">Frequência de atualizar a conexão para mensagens push ou frequência de verificação de novas mensagens</string>
     <string name="title_account_partial_fetch_hint">Desativar isto somente em caso de mensagens vazias ou anexos corrompidos</string>
@@ -765,6 +767,7 @@
     <string name="title_show_folders">Mostrar pastas ocultas</string>
     <string name="title_show_flagged">Exibir contagem de mensagens favoritas</string>
     <string name="title_subscribed_only">Somente inscritos</string>
+    <string name="title_edit_account_name">Editar nome da conta</string>
     <string name="title_hide_folder">Ocultar pasta</string>
     <string name="title_unified_folder">Mostrar na caixa de entrada unificada</string>
     <string name="title_navigation_folder">Mostrar no menu de navegação</string>
@@ -835,6 +838,7 @@
     <string name="title_editasnew">Editar como novo</string>
     <string name="title_edit_notes">Editar notas locais</string>
     <string name="title_create_rule">Criar regra &#8230;</string>
+    <string name="title_force_light">Forçar tema claro</string>
     <string name="title_share">Compartilhar</string>
     <string name="title_event">Adicionar ao calendário</string>
     <string name="title_pin">Adicionar atalho</string>
@@ -910,7 +914,6 @@
     <string name="title_no_search">Pesquisa no servidor não está disponível para esta conta</string>
     <string name="title_too_large">Mensagem muito grande para reformar completamente</string>
     <string name="title_truncated">Mensagem muito grande para exibir completamente</string>
-    <string name="title_insufficient_memory">Mensagem muito grande para caber na memória disponível</string>
     <string name="title_show_full">Mostrar mensagem completa</string>
     <string name="title_unused_inline">Imagens embutidas não utilizadas serão removidas ao enviar</string>
     <string name="title_accross_remark">Mensagens movidas entre contas serão baixadas novamente, resultando em uso extra de dados</string>
@@ -1147,6 +1150,7 @@
     <string name="title_filter_duplicates">Duplicados</string>
     <string name="title_compact">Visualização compacta</string>
     <string name="title_zoom">Tamanho do texto</string>
+    <string name="title_padding">Tamanho do preenchimento</string>
     <string name="title_select_language">Selecionar idioma</string>
     <string name="title_select_all">Selecionar todos</string>
     <string name="title_select_found">Selecionar encontrados</string>

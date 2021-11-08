@@ -186,8 +186,8 @@
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
     <string name="title_setup_other">Other provider</string>
     <string name="title_setup_pop3">POP3 account</string>
-    <string name="title_setup_oauth_permission">The email provider has approved OAuth only for official app versions</string>
-    <string name="title_setup_gmail_support">Authorizing Google accounts will work in official versions only because Android checks the app signature</string>
+    <string name="title_setup_oauth_permission">The email provider has approved OAuth only for the Play Store and GitHub version</string>
+    <string name="title_setup_gmail_support">Authorizing Google accounts will work in the Play Store and GitHub version only because Android checks the digital app signature</string>
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
     <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
     <string name="title_setup_gmail_drafts">If the drafts folder is not accessible by IMAP, this can be fixed in the Gmail label settings</string>
@@ -285,9 +285,10 @@
     <string name="title_setup_theme_yellow_purple">Yellow/purple</string>
     <string name="title_setup_theme_red_green">Red/green</string>
     <string name="title_setup_theme_grey">Grey</string>
+    <string name="title_setup_theme_solarized" translatable="false">Solarized</string>
     <string name="title_setup_theme_black">Black</string>
     <string name="title_setup_theme_black_and_white">Black and white</string>
-    <string name="title_setup_theme_solarized" translatable="false">Solarized</string>
+    <string name="title_setup_theme_you" translatable="false">Material You</string>
 
     <string name="title_setup_theme_reverse">Swap colors</string>
     <string name="title_setup_theme_light">Light</string>
@@ -297,6 +298,7 @@
     <string name="title_setup_theme_html_light">Light background for original message view</string>
     <string name="title_setup_theme_composer_light">Light background for message editor</string>
 
+    <string name="title_setup_theme_you_hint">The Material You colors can be configured in the Android Wallpaper &amp; style settings</string>
     <string name="title_setup_theme_system_hint">This will automatically switch to a light/dark theme on day/night mode, if supported by Android</string>
     <string name="title_setup_theme_more_colors">I want more colors</string>
 
@@ -315,6 +317,9 @@
     <string name="title_advanced_hint_message">
         You are navigating to the more advanced options.
         All options have commonly used standard values, which you do not need to change unless you have a different preference.
+    </string>
+    <string name="title_advanced_hint_remark">
+        The options are categorized by tab, divided into sections, organized by appearance or use, and searchable.
     </string>
     <string name="title_advanced_hint_setup">You can configure an account by tapping the wizard button on the main configuration screen.</string>
 
@@ -583,8 +588,10 @@
     <string name="title_advanced_confirm_links">Confirm opening links</string>
     <string name="title_advanced_check_links_dbl">Check domain block lists for suspicious links</string>
     <string name="title_advanced_browse_links">Delegate opening links to Android</string>
-    <string name="title_advanced_confirm_images">Confirm showing images</string>
+    <string name="title_advanced_confirm_images">Show no images by default</string>
+    <string name="title_advanced_ask_images">Confirm showing images</string>
     <string name="title_advanced_confirm_html">Show reformatted messages by default</string>
+    <string name="title_advanced_ask_html">Confirm showing original messages</string>
     <string name="title_advanced_tracking">Attempt to recognize and disable tracking images</string>
     <string name="title_advanced_hide_timezone">Send messages without timezone data</string>
     <string name="title_advanced_client_id">Send app name and version to email server</string>
@@ -594,8 +601,10 @@
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Biometric authentication timeout</string>
     <string name="title_advanced_autolock">Lock on screen off</string>
+    <string name="title_advanced_autolock_nav">Lock on leaving the app</string>
     <string name="title_advanced_generic_user_agent">Use generic browser user agent</string>
     <string name="title_advanced_safe_browsing" translatable="false">Google Safe browsing (Android 8+)</string>
+    <string name="title_advanced_load_emoji">Load updated Emoji from Google Play Services</string>
     <string name="title_advanced_disconnect_blacklist" translatable="false">Disconnect\'s tracker protection lists</string>
     <string name="title_advanced_disconnect_auto_update">Automatically update lists weekly</string>
     <string name="title_advanced_disconnect_links">Use lists to warn about tracking links</string>
@@ -660,11 +669,13 @@
     <string name="title_advanced_sqlite_cache" translatable="false">Sqlite cache: %1$s %% - %2$s</string>
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
-    <string name="title_advanced_expunge" translatable="false">EXPUNGE</string>
+    <string name="title_advanced_expunge" translatable="false">AUTO EXPUNGE</string>
+    <string name="title_advanced_uid_expunge" translatable="false">UID EXPUNGE</string>
     <string name="title_advanced_auth_plain" translatable="false">PLAIN</string>
     <string name="title_advanced_auth_login" translatable="false">LOGIN</string>
     <string name="title_advanced_auth_ntlm" translatable="false">NTLM</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
+    <string name="title_advanced_idle_done" translatable="false">IDLE/DONE</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
@@ -745,6 +756,7 @@
     <string name="title_advanced_display_harmful_hint">Disabling this option might be harmful to your privacy</string>
     <string name="title_advanced_display_hidden_hint">This can result in odd looking and double texts</string>
     <string name="title_advanced_display_pin_hint">A PIN takes precedence over biometrics authentication</string>
+    <string name="title_advanced_display_autolock_nav_hint">There will be a grace time of %1$d seconds</string>
     <string name="title_advanced_safe_browsing_hint">The Google server knows which addresses are being looked up</string>
 
     <string name="title_advanced_badge_hint">Only available on supported launchers</string>
@@ -908,6 +920,8 @@
     <string name="title_notify_batch_disable">Disable new message notifications</string>
     <string name="title_delete_local">Delete local messages</string>
     <string name="title_delete_browsed">Delete browsed/searched messages</string>
+    <string name="title_expunge">Expunge</string>
+    <string name="title_expunge_remark">This will permanently delete all messages marked for deletion</string>
     <string name="title_empty_trash">Empty trash</string>
     <string name="title_empty_spam">Empty spam</string>
     <string name="title_edit_properties">Edit properties</string>
@@ -1113,7 +1127,7 @@
     <string name="title_no_search">Search on server is not available for this account</string>
     <string name="title_too_large">Message too large to completely reformat</string>
     <string name="title_truncated">Message too large to display completely</string>
-    <string name="title_insufficient_memory">Message too large to fit into the available memory</string>
+    <string name="title_insufficient_memory">Message too large for the available memory (%1$d)</string>
     <string name="title_show_full">Show full message</string>
     <string name="title_unused_inline">Unused inline images will be removed on send</string>
     <string name="title_accross_remark">Messages moved across accounts will be downloaded again resulting in extra data usage</string>
@@ -1234,6 +1248,7 @@
     <string name="title_send_dialog">Show send options</string>
     <string name="title_image_dialog">Show image options</string>
     <string name="title_media_toolbar">Media toolbar</string>
+    <string name="title_manage_local_contacts">Manage local contacts</string>
     <string name="title_insert_contact_group">Insert contact group</string>
     <string name="title_insert_template">Insert template</string>
     <string name="title_create_template">Create template</string>
@@ -1264,6 +1279,7 @@
     <string name="title_smime_reminder">S/MIME keys available</string>
     <string name="title_to_missing">Recipient missing</string>
     <string name="title_extra_missing">Username missing</string>
+    <string name="title_noreply_reminder">Sending to a \'no-reply\' address</string>
     <string name="title_external_reminder">Sending to an external address</string>
     <string name="title_subject_reminder">Subject is empty</string>
     <string name="title_text_reminder">Message is empty</string>
@@ -1375,6 +1391,7 @@
 
     <string name="title_compact">Compact view</string>
     <string name="title_zoom">Text size</string>
+    <string name="title_padding">Padding size</string>
     <string name="title_select_language">Select language</string>
     <string name="title_select_all">Select all</string>
     <string name="title_select_found">Select found</string>

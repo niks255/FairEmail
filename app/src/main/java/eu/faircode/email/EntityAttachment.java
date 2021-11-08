@@ -167,6 +167,9 @@ public class EntityAttachment {
         extension = extension.toLowerCase(Locale.ROOT);
 
         // Fix types
+        if ("csv".equals(extension))
+            return "text/csv";
+
         if ("dxf".equals(extension))
             return "application/dxf";
 
@@ -200,6 +203,9 @@ public class EntityAttachment {
 
         if ("text/plain".equals(type) && "ovpn".equals(extension))
             return "application/x-openvpn-profile";
+
+        if ("audio/mid".equals(type))
+            return "audio/midi";
 
         // https://www.rfc-editor.org/rfc/rfc3555.txt
         if ("video/jpeg".equals(type))

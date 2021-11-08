@@ -19,20 +19,12 @@ package eu.faircode.email;
     Copyright 2018-2021 by Marcel Bokhorst (M66B)
 */
 
-import android.content.Context;
-
 public class TrafficStatsHelper {
-    private static Context ctx;
-
-    static void init(Context context) {
-        ctx = context;
+    public static void connect(String host, int port, String prefix) {
+        Log.persist("Connected " + prefix + " " + host + ":" + port);
     }
 
-    public static void report(String host, String protocol, long sent, long received) {
-        String msg = protocol + " " + host + " tx=" + sent + " rx=" + received;
-        if (ctx == null)
-            Log.i(msg);
-        else
-            EntityLog.log(ctx, EntityLog.Type.Statistics, msg);
+    public static void report(String host, String prefix, long sent, long received) {
+        Log.persist("Disconnected " + prefix + " " + host + " tx=" + sent + " rx=" + received);
     }
 }

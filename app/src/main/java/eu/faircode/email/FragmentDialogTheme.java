@@ -3,12 +3,17 @@ package eu.faircode.email;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -22,18 +27,22 @@ import androidx.preference.PreferenceManager;
 public class FragmentDialogTheme extends FragmentDialogBase {
     private RadioGroup rgTheme;
     private SwitchCompat swReverse;
+    private RadioButton rbThemeYou;
+    private TextView tvYou;
     private RadioGroup rgThemeOptions;
     private TextView tvSystem;
     private SwitchCompat swBlack;
     private SwitchCompat swHtmlLight;
     private SwitchCompat swComposerLight;
+    private Button btnMore;
     private TextView tvMore;
 
     private void eval() {
         int checkedId = rgTheme.getCheckedRadioButtonId();
         boolean grey = (checkedId == R.id.rbThemeGrey);
         boolean solarized = (checkedId == R.id.rbThemeSolarized);
-        boolean colored = (grey || solarized ||
+        boolean you = (checkedId == R.id.rbThemeYou);
+        boolean colored = (grey || solarized || you ||
                 checkedId == R.id.rbThemeBlueOrange ||
                 checkedId == R.id.rbThemeRedGreen ||
                 checkedId == R.id.rbThemeYellowPurple);
@@ -56,6 +65,9 @@ public class FragmentDialogTheme extends FragmentDialogBase {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        boolean settings = (args != null && args.getBoolean("settings"));
+
         final Context context = getContext();
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String theme = prefs.getString("theme", "blue_orange_system");
@@ -64,18 +76,31 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_theme, null);
         rgTheme = dview.findViewById(R.id.rgTheme);
+        rbThemeYou = dview.findViewById(R.id.rbThemeYou);
+        tvYou = dview.findViewById(R.id.tvYou);
         swReverse = dview.findViewById(R.id.swReverse);
         rgThemeOptions = dview.findViewById(R.id.rgThemeOptions);
         tvSystem = dview.findViewById(R.id.tvSystem);
         swBlack = dview.findViewById(R.id.swBlack);
         swHtmlLight = dview.findViewById(R.id.swHtmlLight);
         swComposerLight = dview.findViewById(R.id.swComposerLight);
+        btnMore = dview.findViewById(R.id.btnMore);
         tvMore = dview.findViewById(R.id.tvMore);
 
         rgTheme.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 eval();
+            }
+        });
+
+        rbThemeYou.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.S ? View.GONE : View.VISIBLE);
+        tvYou.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.S ? View.GONE : View.VISIBLE);
+
+        tvYou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
             }
         });
 
@@ -101,7 +126,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         });
 
         boolean reversed =
-                (theme.startsWith("orange_blue") ||
+                (theme.contains("reversed") ||
+                        theme.startsWith("orange_blue") ||
                         theme.startsWith("purple_yellow") ||
                         theme.startsWith("green_red"));
         boolean dark = theme.endsWith("dark");
@@ -181,6 +207,18 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             case "black_and_white":
                 rgTheme.check(R.id.rbThemeBlackAndWhite);
                 break;
+            case "you_light":
+            case "you_dark":
+            case "you_black":
+            case "you_system":
+            case "you_system_black":
+            case "you_reversed_light":
+            case "you_reversed_dark":
+            case "you_reversed_black":
+            case "you_reversed_system":
+            case "you_reversed_system_black":
+                rgTheme.check(R.id.rbThemeYou);
+                break;
         }
 
         tvMore.setPaintFlags(tvMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -188,6 +226,17 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 164);
+            }
+        });
+
+        btnMore.setVisibility(settings ? View.GONE : View.VISIBLE);
+        btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        .putExtra("tab", "display"));
             }
         });
 
@@ -254,6 +303,15 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                             editor.putString("theme", "black").apply();
                         } else if (checkedRadioButtonId == R.id.rbThemeBlackAndWhite) {
                             editor.putString("theme", "black_and_white").apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeYou) {
+                            if (system)
+                                editor.putString("theme",
+                                        (reverse ? "you_reversed_system" : "you_system") +
+                                                (black ? "_black" : "")).apply();
+                            else
+                                editor.putString("theme",
+                                        (reverse ? "you_reversed" : "you") +
+                                                (black ? "_black" : dark ? "_dark" : "_light")).apply();
                         }
 
                         editor.putBoolean("default_light", swHtmlLight.isChecked());
@@ -440,8 +498,41 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                 return (night
                         ? R.style.AppThemeSolarizedDark : R.style.AppThemeSolarizedLight);
 
+            case "you_light":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return R.style.AppThemeYouLight;
+            case "you_dark":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (light ? R.style.AppThemeYouLight : R.style.AppThemeYouDark);
+            case "you_black":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (light ? R.style.AppThemeYouLight : R.style.AppThemeYouBlack);
+            case "you_system":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (night ? R.style.AppThemeYouDark : R.style.AppThemeYouLight);
+            case "you_system_black":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (night ? R.style.AppThemeYouBlack : R.style.AppThemeYouLight);
+
+            case "you_reversed_light":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return R.style.AppThemeYouReversedLight;
+            case "you_reversed_dark":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (light ? R.style.AppThemeYouReversedLight : R.style.AppThemeYouReversedDark);
+            case "you_reversed_black":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (light ? R.style.AppThemeYouReversedLight : R.style.AppThemeYouReversedBlack);
+            case "you_reversed_system":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (night ? R.style.AppThemeYouReversedDark : R.style.AppThemeYouReversedLight);
+            case "you_reversed_system_black":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    return (night ? R.style.AppThemeYouReversedBlack : R.style.AppThemeYouReversedLight);
+
             default:
-                Log.e("Unknown theme=" + theme);
+                if (!theme.startsWith("you_"))
+                    Log.e("Unknown theme=" + theme);
                 return R.style.AppThemeBlueOrangeLight;
         }
     }

@@ -78,6 +78,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.SortedMap;
@@ -140,10 +141,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private ImageButton ibSqliteCache;
     private SwitchCompat swModSeq;
     private SwitchCompat swExpunge;
+    private SwitchCompat swUidExpunge;
     private SwitchCompat swAuthPlain;
     private SwitchCompat swAuthLogin;
     private SwitchCompat swAuthNtlm;
     private SwitchCompat swAuthSasl;
+    private SwitchCompat swIdleDone;
     private SwitchCompat swExactAlarms;
     private SwitchCompat swDupMsgId;
     private SwitchCompat swTestIab;
@@ -176,8 +179,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "experiments", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "log_level",
             "query_threads", "wal", "checkpoints", "sqlite_cache",
-            "chunk_size", "use_modseq", "perform_expunge",
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
+            "chunk_size", "use_modseq", "perform_expunge", "uid_expunge",
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "idle_done",
             "exact_alarms", "dup_msgids", "test_iab"
     };
 
@@ -185,6 +188,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "crash_reports_asked", "review_asked", "review_later", "why",
             "reply_hint", "html_always_images", "open_full_confirmed",
+            "ask_images", "ask_html",
             "print_html_confirmed", "print_html_header", "print_html_images",
             "reformatted_hint",
             "selected_folders", "move_1_confirmed", "move_n_confirmed",
@@ -269,10 +273,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         sbChunkSize = view.findViewById(R.id.sbChunkSize);
         swModSeq = view.findViewById(R.id.swModSeq);
         swExpunge = view.findViewById(R.id.swExpunge);
+        swUidExpunge = view.findViewById(R.id.swUidExpunge);
         swAuthPlain = view.findViewById(R.id.swAuthPlain);
         swAuthLogin = view.findViewById(R.id.swAuthLogin);
         swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
+        swIdleDone = view.findViewById(R.id.swIdleDone);
         swExactAlarms = view.findViewById(R.id.swExactAlarms);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
         swTestIab = view.findViewById(R.id.swTestIab);
@@ -804,7 +810,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("protocol", checked).apply();
-                if (!checked)
+                if (checked)
+                    prefs.edit().putLong("protocol_since", new Date().getTime()).apply();
+                else
                     EntityLog.clear(compoundButton.getContext());
             }
         });
@@ -821,6 +829,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("perform_expunge", checked).apply();
+                swUidExpunge.setEnabled(checked);
+                ServiceSynchronize.reload(compoundButton.getContext(), null, true, "perform_expunge");
+            }
+        });
+
+        swUidExpunge.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("uid_expunge", checked).apply();
                 ServiceSynchronize.reload(compoundButton.getContext(), null, true, "perform_expunge");
             }
         });
@@ -850,6 +867,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("auth_sasl", checked).apply();
+            }
+        });
+
+        swIdleDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("idle_done", checked).apply();
             }
         });
 
@@ -906,6 +930,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         for (String key : charsets.keySet())
                             sb.append(charsets.get(key).displayName()).append("\r\n");
                         new AlertDialog.Builder(getContext())
+                                .setIcon(R.drawable.twotone_info_24)
                                 .setTitle(R.string.title_advanced_charsets)
                                 .setMessage(sb.toString())
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -964,6 +989,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 }
 
                 new AlertDialog.Builder(getContext())
+                        .setIcon(R.drawable.twotone_info_24)
                         .setTitle(R.string.title_advanced_ciphers)
                         .setMessage(sb.toString())
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -1049,6 +1075,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                     .append("\r\n");
 
                         new AlertDialog.Builder(context)
+                                .setIcon(R.drawable.twotone_info_24)
                                 .setTitle(title)
                                 .setMessage(sb.toString())
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -1312,16 +1339,19 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 Helper.humanReadableByteCount(cache_size * 1024L)));
         sbSqliteCache.setProgress(sqlite_cache);
 
-        int chunk_size = prefs.getInt("chunk_size", Core.DEFAULT_SYNC_CHUNCK_SIZE);
+        int chunk_size = prefs.getInt("chunk_size", Core.DEFAULT_CHUNCK_SIZE);
         tvChunkSize.setText(getString(R.string.title_advanced_chunk_size, chunk_size));
         sbChunkSize.setProgress(chunk_size);
 
         swModSeq.setChecked(prefs.getBoolean("use_modseq", true));
         swExpunge.setChecked(prefs.getBoolean("perform_expunge", true));
+        swUidExpunge.setChecked(prefs.getBoolean("uid_expunge", false));
+        swUidExpunge.setEnabled(swExpunge.isChecked());
         swAuthPlain.setChecked(prefs.getBoolean("auth_plain", true));
         swAuthLogin.setChecked(prefs.getBoolean("auth_login", true));
         swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
+        swIdleDone.setChecked(prefs.getBoolean("idle_done", true));
         swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", true));
         swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
         swTestIab.setChecked(prefs.getBoolean("test_iab", false));

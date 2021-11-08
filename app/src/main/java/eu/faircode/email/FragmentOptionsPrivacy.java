@@ -63,14 +63,18 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     private SwitchCompat swCheckLinksDbl;
     private SwitchCompat swBrowseLinks;
     private SwitchCompat swConfirmImages;
+    private SwitchCompat swAskImages;
     private SwitchCompat swHtmlImages;
     private SwitchCompat swConfirmHtml;
+    private SwitchCompat swAskHtml;
     private SwitchCompat swDisableTracking;
     private SwitchCompat swHideTimeZone;
     private Button btnPin;
     private Button btnBiometrics;
     private Spinner spBiometricsTimeout;
     private SwitchCompat swAutoLock;
+    private SwitchCompat swAutoLockNav;
+    private TextView tvAutoLockNavHint;
     private SwitchCompat swClientId;
     private TextView tvClientId;
     private SwitchCompat swDisplayHidden;
@@ -81,6 +85,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     private TextView tvGenericUserAgent;
     private SwitchCompat swSafeBrowsing;
     private ImageButton ibSafeBrowsing;
+    private SwitchCompat swLoadEmoji;
     private ImageButton ibDisconnectBlacklist;
     private Button btnDisconnectBlacklist;
     private TextView tvDisconnectBlacklistTime;
@@ -92,11 +97,11 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
 
     private final static String[] RESET_OPTIONS = new String[]{
             "confirm_links", "check_links_dbl", "browse_links",
-            "confirm_images", "html_always_images", "confirm_html",
+            "confirm_images", "ask_images", "html_always_images", "confirm_html", "ask_html",
             "disable_tracking", "hide_timezone",
-            "pin", "biometrics", "biometrics_timeout", "autolock",
+            "pin", "biometrics", "biometrics_timeout", "autolock", "autolock_nav",
             "client_id", "display_hidden", "incognito_keyboard", "secure",
-            "generic_ua", "safe_browsing",
+            "generic_ua", "safe_browsing", "load_emoji",
             "disconnect_auto_update", "disconnect_links", "disconnect_images"
     };
 
@@ -114,14 +119,18 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swCheckLinksDbl = view.findViewById(R.id.swCheckLinksDbl);
         swBrowseLinks = view.findViewById(R.id.swBrowseLinks);
         swConfirmImages = view.findViewById(R.id.swConfirmImages);
+        swAskImages = view.findViewById(R.id.swAskImages);
         swHtmlImages = view.findViewById(R.id.swHtmlImages);
         swConfirmHtml = view.findViewById(R.id.swConfirmHtml);
+        swAskHtml = view.findViewById(R.id.swAskHtml);
         swDisableTracking = view.findViewById(R.id.swDisableTracking);
         swHideTimeZone = view.findViewById(R.id.swHideTimeZone);
         btnPin = view.findViewById(R.id.btnPin);
         btnBiometrics = view.findViewById(R.id.btnBiometrics);
         spBiometricsTimeout = view.findViewById(R.id.spBiometricsTimeout);
         swAutoLock = view.findViewById(R.id.swAutoLock);
+        swAutoLockNav = view.findViewById(R.id.swAutoLockNav);
+        tvAutoLockNavHint = view.findViewById(R.id.tvAutoLockNavHint);
         swClientId = view.findViewById(R.id.swClientId);
         tvClientId = view.findViewById(R.id.tvClientId);
         swDisplayHidden = view.findViewById(R.id.swDisplayHidden);
@@ -132,6 +141,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         tvGenericUserAgent = view.findViewById(R.id.tvGenericUserAgent);
         swSafeBrowsing = view.findViewById(R.id.swSafeBrowsing);
         ibSafeBrowsing = view.findViewById(R.id.ibSafeBrowsing);
+        swLoadEmoji = view.findViewById(R.id.swLoadEmoji);
         ibDisconnectBlacklist = view.findViewById(R.id.ibDisconnectBlacklist);
         btnDisconnectBlacklist = view.findViewById(R.id.btnDisconnectBlacklist);
         tvDisconnectBlacklistTime = view.findViewById(R.id.tvDisconnectBlacklistTime);
@@ -174,6 +184,14 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("confirm_images", checked).apply();
+                swAskImages.setEnabled(checked);
+            }
+        });
+
+        swAskImages.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("ask_images", checked).apply();
             }
         });
 
@@ -188,6 +206,14 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("confirm_html", checked).apply();
+                swAskHtml.setEnabled(checked);
+            }
+        });
+
+        swAskHtml.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("ask_html", checked).apply();
             }
         });
 
@@ -264,6 +290,15 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             }
         });
 
+        swAutoLockNav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("autolock_nav", checked).apply();
+            }
+        });
+
+        tvAutoLockNavHint.setText(getString(R.string.title_advanced_display_autolock_nav_hint, Helper.AUTOLOCK_GRACE));
+
         swClientId.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -323,6 +358,13 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         });
 
         grpSafeBrowsing.setEnabled(WebViewEx.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE));
+
+        swLoadEmoji.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("load_emoji", checked).commit(); // apply won't work here
+            }
+        });
 
         ibDisconnectBlacklist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -431,8 +473,12 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swBrowseLinks.setChecked(prefs.getBoolean("browse_links", false));
         swBrowseLinks.setEnabled(!swConfirmLinks.isChecked());
         swConfirmImages.setChecked(prefs.getBoolean("confirm_images", true));
+        swAskImages.setChecked(prefs.getBoolean("ask_images", true));
+        swAskImages.setEnabled(swConfirmImages.isChecked());
         swHtmlImages.setChecked(prefs.getBoolean("html_always_images", false));
         swConfirmHtml.setChecked(prefs.getBoolean("confirm_html", true));
+        swAskHtml.setChecked(prefs.getBoolean("ask_html", true));
+        swAskHtml.setEnabled(swConfirmHtml.isChecked());
         swDisableTracking.setChecked(prefs.getBoolean("disable_tracking", true));
         swHideTimeZone.setChecked(prefs.getBoolean("hide_timezone", true));
 
@@ -455,6 +501,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             }
 
         swAutoLock.setChecked(prefs.getBoolean("autolock", true));
+        swAutoLockNav.setChecked(prefs.getBoolean("autolock_nav", false));
 
         swClientId.setChecked(prefs.getBoolean("client_id", true));
         swDisplayHidden.setChecked(prefs.getBoolean("display_hidden", false));
@@ -464,6 +511,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         tvGenericUserAgent.setText(WebViewEx.getUserAgent(getContext()));
         swGenericUserAgent.setChecked(prefs.getBoolean("generic_ua", true));
         swSafeBrowsing.setChecked(prefs.getBoolean("safe_browsing", false));
+        swLoadEmoji.setChecked(prefs.getBoolean("load_emoji", BuildConfig.PLAY_STORE_RELEASE));
 
         long time = prefs.getLong("disconnect_last", -1);
         DateFormat DF = SimpleDateFormat.getDateTimeInstance();

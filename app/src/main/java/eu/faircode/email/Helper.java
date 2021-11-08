@@ -68,6 +68,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
@@ -157,6 +158,7 @@ public class Helper {
     static final int BUFFER_SIZE = 8192; // Same as in Files class
     static final long MIN_REQUIRED_SPACE = 250 * 1024L * 1024L;
     static final int MAX_REDIRECTS = 5; // https://www.freesoft.org/CIE/RFC/1945/46.htm
+    static final int AUTOLOCK_GRACE = 7; // seconds
 
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
     static final String PGP_END_MESSAGE = "-----END PGP MESSAGE-----";
@@ -170,6 +172,8 @@ public class Helper {
     static final String GRAVATAR_PRIVACY_URI = "https://en.wikipedia.org/wiki/Gravatar";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
     static final String DONTKILL_URI = "https://dontkillmyapp.com/";
+    static final String URI_SUPPORT_RESET_OPEN = "https://support.google.com/pixelphone/answer/6271667";
+    static final String URI_SUPPORT_CONTACT_GROUP = "https://support.google.com/contacts/answer/30970";
 
     // https://developer.android.com/distribute/marketing-tools/linking-to-google-play#PerformingSearch
     private static final String PLAY_STORE_SEARCH = "https://play.google.com/store/search";
@@ -959,6 +963,10 @@ public class Helper {
         return true;
     }
 
+    static boolean isGoogle() {
+        return "Google".equalsIgnoreCase(Build.MANUFACTURER);
+    }
+
     static boolean isSamsung() {
         return "Samsung".equalsIgnoreCase(Build.MANUFACTURER);
     }
@@ -1256,8 +1264,13 @@ public class Helper {
         if (imm == null)
             return;
 
-        Log.i("showKeyboard view=" + view);
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("showKeyboard view=" + view);
+                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 250);
     }
 
     static void hideKeyboard(final View view) {
@@ -1645,6 +1658,14 @@ public class Helper {
         }
     }
 
+    static byte[] readBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream(Math.max(BUFFER_SIZE, is.available()));
+        byte[] buffer = new byte[BUFFER_SIZE];
+        for (int len = is.read(buffer); len != -1; len = is.read(buffer))
+            os.write(buffer, 0, len);
+        return os.toByteArray();
+    }
+
     static void copy(File src, File dst) throws IOException {
         try (InputStream is = new FileInputStream(src)) {
             try (OutputStream os = new FileOutputStream(dst)) {
@@ -1850,7 +1871,7 @@ public class Helper {
         }
     }
 
-    static boolean shouldAuthenticate(Context context) {
+    static boolean shouldAuthenticate(Context context, boolean pausing) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean biometrics = prefs.getBoolean("biometrics", false);
         String pin = prefs.getString("pin", null);
@@ -1859,12 +1880,17 @@ public class Helper {
             long now = new Date().getTime();
             long last_authentication = prefs.getLong("last_authentication", 0);
             long biometrics_timeout = prefs.getInt("biometrics_timeout", 2) * 60 * 1000L;
+            boolean autolock_nav = prefs.getBoolean("autolock_nav", false);
             Log.i("Authentication valid until=" + new Date(last_authentication + biometrics_timeout));
 
             if (last_authentication + biometrics_timeout < now)
                 return true;
 
-            prefs.edit().putLong("last_authentication", now).apply();
+            if (autolock_nav && pausing)
+                last_authentication = now - biometrics_timeout + AUTOLOCK_GRACE * 1000L;
+            else
+                last_authentication = now;
+            prefs.edit().putLong("last_authentication", last_authentication).apply();
         }
 
         return false;
@@ -1989,7 +2015,7 @@ public class Helper {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
                             Log.i("Authenticate PIN dismissed");
-                            if (shouldAuthenticate(activity)) // Some Android versions call dismiss on OK
+                            if (shouldAuthenticate(activity, false)) // Some Android versions call dismiss on OK
                                 ApplicationEx.getMainHandler().post(cancelled);
                         }
                     })

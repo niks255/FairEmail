@@ -161,6 +161,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
+import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -298,6 +299,8 @@ public class FragmentCompose extends FragmentBase {
     private long[] pgpKeyIds;
     private long pgpSignKeyId;
 
+    private static final long MAX_PGP_BIND_DELAY = 250; // milliseconds
+
     private static final int REDUCED_IMAGE_SIZE = 1440; // pixels
     private static final int REDUCED_IMAGE_QUALITY = 90; // percent
     // http://regex.info/blog/lightroom-goodies/jpeg-quality
@@ -324,6 +327,10 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_PERMISSION = 15;
 
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "encrypt");
+
+    private static final List<String> DO_NOT_REPLY = Collections.unmodifiableList(Arrays.asList(
+            "noreply", "no-reply", "do-not-reply"
+    ));
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -588,6 +595,7 @@ public class FragmentCompose extends FragmentBase {
                                 media_bar.inflateMenu(styling
                                         ? R.menu.action_compose_style_alt
                                         : R.menu.action_compose_media);
+                                invalidateOptionsMenu();
                             }
                         }
                     }, 20);
@@ -880,10 +888,10 @@ public class FragmentCompose extends FragmentBase {
                     onActionRecordAudio();
                     return true;
                 } else if (action == R.id.menu_take_photo) {
-                    onActionImage(true);
+                    onActionImage(true, false);
                     return true;
                 } else if (action == R.id.menu_image) {
-                    onActionImage(false);
+                    onActionImage(false, false);
                     return true;
                 } else if (action == R.id.menu_attachment) {
                     onActionAttachment();
@@ -957,7 +965,7 @@ public class FragmentCompose extends FragmentBase {
         bottom_navigation.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);
 
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
         Helper.setViewsEnabled(view, false);
 
         final DB db = DB.getInstance(getContext());
@@ -1205,11 +1213,6 @@ public class FragmentCompose extends FragmentBase {
 
         tvNoInternetAttachments.setVisibility(View.GONE);
 
-        final String pkg = Helper.getOpenKeychainPackage(getContext());
-        Log.i("PGP binding to " + pkg);
-        pgpService = new OpenPgpServiceConnection(getContext(), pkg);
-        pgpService.bindToService();
-
         return view;
     }
 
@@ -1374,62 +1377,97 @@ public class FragmentCompose extends FragmentBase {
 
         state = State.NONE;
 
-        if (savedInstanceState == null) {
-            if (working < 0) {
-                Bundle a = getArguments();
-                if (a == null) {
-                    a = new Bundle();
-                    a.putString("action", "new");
-                    setArguments(a);
+        Runnable load = new Runnable() {
+            private boolean once = false;
+
+            @Override
+            public void run() {
+                if (once)
+                    return;
+                once = true;
+
+                try {
+                    if (savedInstanceState == null) {
+                        if (working < 0) {
+                            Bundle a = getArguments();
+                            if (a == null) {
+                                a = new Bundle();
+                                a.putString("action", "new");
+                                setArguments(a);
+                            }
+
+                            Bundle args = new Bundle();
+
+                            args.putString("action", a.getString("action"));
+                            args.putLong("id", a.getLong("id", -1));
+                            args.putLong("account", a.getLong("account", -1));
+                            args.putLong("identity", a.getLong("identity", -1));
+                            args.putLong("reference", a.getLong("reference", -1));
+                            args.putInt("dsn", a.getInt("dsn", -1));
+                            args.putSerializable("ics", a.getSerializable("ics"));
+                            args.putString("status", a.getString("status"));
+                            args.putBoolean("raw", a.getBoolean("raw", false));
+                            args.putLong("answer", a.getLong("answer", -1));
+                            args.putString("to", a.getString("to"));
+                            args.putString("cc", a.getString("cc"));
+                            args.putString("bcc", a.getString("bcc"));
+                            args.putString("inreplyto", a.getString("inreplyto"));
+                            args.putString("subject", a.getString("subject"));
+                            args.putString("body", a.getString("body"));
+                            args.putString("text", a.getString("text"));
+                            args.putString("selected", a.getString("selected"));
+
+                            if (a.containsKey("attachments")) {
+                                args.putParcelableArrayList("attachments", a.getParcelableArrayList("attachments"));
+                                a.remove("attachments");
+                                setArguments(a);
+                            }
+
+                            draftLoader.execute(FragmentCompose.this, args, "compose:new");
+                        } else {
+                            Bundle args = new Bundle();
+                            args.putString("action", "edit");
+                            args.putLong("id", working);
+                            draftLoader.execute(FragmentCompose.this, args, "compose:edit");
+                        }
+                    } else {
+                        working = savedInstanceState.getLong("fair:working");
+                        show_images = savedInstanceState.getBoolean("fair:show_images");
+                        photoURI = savedInstanceState.getParcelable("fair:photo");
+
+                        pickRequest = savedInstanceState.getInt("fair:pickRequest");
+                        pickUri = savedInstanceState.getParcelable("fair:pickUri");
+
+                        Bundle args = new Bundle();
+                        args.putString("action", working < 0 ? "new" : "edit");
+                        args.putLong("id", working);
+                        draftLoader.execute(FragmentCompose.this, args, "compose:instance");
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
                 }
-
-                Bundle args = new Bundle();
-
-                args.putString("action", a.getString("action"));
-                args.putLong("id", a.getLong("id", -1));
-                args.putLong("account", a.getLong("account", -1));
-                args.putLong("identity", a.getLong("identity", -1));
-                args.putLong("reference", a.getLong("reference", -1));
-                args.putInt("dsn", a.getInt("dsn", -1));
-                args.putSerializable("ics", a.getSerializable("ics"));
-                args.putString("status", a.getString("status"));
-                args.putBoolean("raw", a.getBoolean("raw", false));
-                args.putLong("answer", a.getLong("answer", -1));
-                args.putString("to", a.getString("to"));
-                args.putString("cc", a.getString("cc"));
-                args.putString("bcc", a.getString("bcc"));
-                args.putString("inreplyto", a.getString("inreplyto"));
-                args.putString("subject", a.getString("subject"));
-                args.putString("body", a.getString("body"));
-                args.putString("text", a.getString("text"));
-                args.putString("selected", a.getString("selected"));
-
-                if (a.containsKey("attachments")) {
-                    args.putParcelableArrayList("attachments", a.getParcelableArrayList("attachments"));
-                    a.remove("attachments");
-                    setArguments(a);
-                }
-
-                draftLoader.execute(this, args, "compose:new");
-            } else {
-                Bundle args = new Bundle();
-                args.putString("action", "edit");
-                args.putLong("id", working);
-                draftLoader.execute(this, args, "compose:edit");
             }
-        } else {
-            working = savedInstanceState.getLong("fair:working");
-            show_images = savedInstanceState.getBoolean("fair:show_images");
-            photoURI = savedInstanceState.getParcelable("fair:photo");
+        };
 
-            pickRequest = savedInstanceState.getInt("fair:pickRequest");
-            pickUri = savedInstanceState.getParcelable("fair:pickUri");
+        final String pkg = Helper.getOpenKeychainPackage(getContext());
+        Log.i("PGP binding to " + pkg);
+        pgpService = new OpenPgpServiceConnection(getContext(), pkg, new OpenPgpServiceConnection.OnBound() {
+            @Override
+            public void onBound(IOpenPgpService2 service) {
+                Log.i("Bound to " + pkg);
+                load.run();
+            }
 
-            Bundle args = new Bundle();
-            args.putString("action", working < 0 ? "new" : "edit");
-            args.putLong("id", working);
-            draftLoader.execute(this, args, "compose:instance");
-        }
+            @Override
+            public void onError(Exception ex) {
+                Log.i(ex.getMessage());
+                load.run();
+            }
+        });
+        pgpService.bindToService();
+
+        // Fail-safe
+        getMainHandler().postDelayed(load, MAX_PGP_BIND_DELAY);
     }
 
     @Override
@@ -1573,6 +1611,7 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_compact).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_contact_group).setEnabled(
                 state == State.LOADED && hasPermission(Manifest.permission.READ_CONTACTS));
+        menu.findItem(R.id.menu_manage_local_contacts).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_answer_insert).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_answer_create).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
@@ -1619,6 +1658,16 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_image_dialog).setChecked(image_dialog);
         menu.findItem(R.id.menu_media).setChecked(media);
         menu.findItem(R.id.menu_compact).setChecked(compact);
+
+        View image = media_bar.findViewById(R.id.menu_image);
+        if (image != null)
+            image.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onActionImage(false, true);
+                    return true;
+                }
+            });
 
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) ||
                 EntityMessage.SMIME_SIGNONLY.equals(encrypt))
@@ -1670,6 +1719,9 @@ public class FragmentCompose extends FragmentBase {
         } else if (itemId == R.id.menu_contact_group) {
             onMenuContactGroup();
             return true;
+        } else if (itemId == R.id.menu_manage_local_contacts) {
+            onMenuManageLocalContacts();
+            return true;
         } else if (itemId == R.id.menu_answer_insert) {
             onMenuAnswerInsert();
             return true;
@@ -1720,7 +1772,7 @@ public class FragmentCompose extends FragmentBase {
                 encrypt = EntityMessage.ENCRYPT_NONE;
         }
 
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
 
         Bundle args = new Bundle();
         args.putLong("id", working);
@@ -1768,12 +1820,13 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void setZoom() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int message_zoom = prefs.getInt("message_zoom", 100);
-        float textSize = Helper.getTextSize(getContext(), zoom);
+        float textSize = Helper.getTextSize(context, zoom);
         if (textSize != 0) {
             etBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * message_zoom / 100f);
-            tvReference.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            tvReference.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * message_zoom / 100f);
         }
     }
 
@@ -1804,6 +1857,7 @@ public class FragmentCompose extends FragmentBase {
         media_bar.inflateMenu(R.menu.action_compose_media);
         media_bar.setVisibility(media ? View.VISIBLE : View.GONE);
         style_bar.setVisibility(View.GONE);
+        invalidateOptionsMenu();
     }
 
     private void onMenuCompact() {
@@ -1839,6 +1893,12 @@ public class FragmentCompose extends FragmentBase {
 
     private void onMenuContactGroup() {
         onMenuContactGroup(view.findFocus());
+    }
+
+    private void onMenuManageLocalContacts() {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, new FragmentContacts()).addToBackStack("contacts");
+        fragmentTransaction.commit();
     }
 
     private void onMenuContactGroup(View v) {
@@ -2278,10 +2338,10 @@ public class FragmentCompose extends FragmentBase {
             }
     }
 
-    private void onActionImage(boolean photo) {
+    private void onActionImage(boolean photo, boolean force) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
-        if (image_dialog) {
+        if (image_dialog || force) {
             Helper.hideKeyboard(view);
 
             Bundle args = new Bundle();
@@ -2608,6 +2668,9 @@ public class FragmentCompose extends FragmentBase {
 
         Bundle args = new Bundle();
         args.putLong("id", working);
+        args.putString("to", etTo.getText().toString().trim());
+        args.putString("cc", etCc.getText().toString().trim());
+        args.putString("bcc", etBcc.getText().toString().trim());
         args.putInt("requestCode", requestCode);
         args.putParcelable("uri", uri);
 
@@ -2615,6 +2678,9 @@ public class FragmentCompose extends FragmentBase {
             @Override
             protected EntityMessage onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
+                String to = args.getString("to");
+                String cc = args.getString("cc");
+                String bcc = args.getString("bcc");
                 int requestCode = args.getInt("requestCode");
                 Uri uri = args.getParcelable("uri");
 
@@ -2652,6 +2718,10 @@ public class FragmentCompose extends FragmentBase {
                                 draft = db.message().getMessage(id);
                                 if (draft == null)
                                     return null;
+
+                                draft.to = MessageHelper.parseAddresses(context, to);
+                                draft.cc = MessageHelper.parseAddresses(context, cc);
+                                draft.bcc = MessageHelper.parseAddresses(context, bcc);
 
                                 Address[] address = null;
                                 if (requestCode == REQUEST_CONTACT_TO)
@@ -3744,12 +3814,19 @@ public class FragmentCompose extends FragmentBase {
         if (args.getInt("target") > 0)
             grpAddresses.setVisibility(View.VISIBLE);
 
+        args.putString("to", etTo.getText().toString().trim());
+        args.putString("cc", etCc.getText().toString().trim());
+        args.putString("bcc", etBcc.getText().toString().trim());
+
         new SimpleTask<EntityMessage>() {
             @Override
             protected EntityMessage onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
                 int target = args.getInt("target");
                 long group = args.getLong("group");
+                String to = args.getString("to");
+                String cc = args.getString("cc");
+                String bcc = args.getString("bcc");
 
                 EntityLog.log(context, "Selected group=" + group);
 
@@ -3793,6 +3870,10 @@ public class FragmentCompose extends FragmentBase {
                     draft = db.message().getMessage(id);
                     if (draft == null)
                         return null;
+
+                    draft.to = MessageHelper.parseAddresses(context, to);
+                    draft.cc = MessageHelper.parseAddresses(context, cc);
+                    draft.bcc = MessageHelper.parseAddresses(context, bcc);
 
                     Address[] address = null;
                     if (target == 0)
@@ -4602,13 +4683,25 @@ public class FragmentCompose extends FragmentBase {
                             data.draft.plain_only = true;
 
                         // Encryption
+                        List<Address> recipients = new ArrayList<>();
+                        if (data.draft.to != null)
+                            recipients.addAll(Arrays.asList(data.draft.to));
+                        if (data.draft.cc != null)
+                            recipients.addAll(Arrays.asList(data.draft.cc));
+                        if (data.draft.bcc != null)
+                            recipients.addAll(Arrays.asList(data.draft.bcc));
+
                         if (EntityMessage.PGP_SIGNONLY.equals(ref.ui_encrypt) ||
                                 EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
-                            if (Helper.isOpenKeychainInstalled(context) && selected.sign_key != null)
+                            if (Helper.isOpenKeychainInstalled(context) &&
+                                    selected.sign_key != null &&
+                                    hasPgpKey(context, recipients))
                                 data.draft.ui_encrypt = ref.ui_encrypt;
                         } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
                                 EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
-                            if (ActivityBilling.isPro(context) && selected.sign_key_alias != null)
+                            if (ActivityBilling.isPro(context) &&
+                                    selected.sign_key_alias != null &&
+                                    hasSmimeKey(context, recipients))
                                 data.draft.ui_encrypt = ref.ui_encrypt;
                         }
 
@@ -4990,7 +5083,7 @@ public class FragmentCompose extends FragmentBase {
 
             working = data.draft.id;
             encrypt = data.draft.ui_encrypt;
-            getActivity().invalidateOptionsMenu();
+            invalidateOptionsMenu();
 
             subject = data.draft.subject;
             saved = args.getBoolean("saved");
@@ -5146,7 +5239,7 @@ public class FragmentCompose extends FragmentBase {
                         finish();
                     else {
                         encrypt = draft.ui_encrypt;
-                        getActivity().invalidateOptionsMenu();
+                        invalidateOptionsMenu();
 
                         Log.i("Draft content=" + draft.content);
                         if (draft.content && state == State.NONE) {
@@ -5269,7 +5362,8 @@ public class FragmentCompose extends FragmentBase {
                     @Override
                     public void onClick(View v) {
                         v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                .putExtra("manual", true));
                         getActivity().finish();
                     }
                 });
@@ -5415,9 +5509,9 @@ public class FragmentCompose extends FragmentBase {
 
                     // Get data
                     InternetAddress[] afrom = (identity == null ? null : new InternetAddress[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())});
-                    InternetAddress[] ato = MessageHelper.parseAddresses(context, to);
-                    InternetAddress[] acc = MessageHelper.parseAddresses(context, cc);
-                    InternetAddress[] abcc = MessageHelper.parseAddresses(context, bcc);
+                    InternetAddress[] ato = MessageHelper.dedup(MessageHelper.parseAddresses(context, to));
+                    InternetAddress[] acc = MessageHelper.dedup(MessageHelper.parseAddresses(context, cc));
+                    InternetAddress[] abcc = MessageHelper.dedup(MessageHelper.parseAddresses(context, bcc));
 
                     // Safe guard
                     if (action == R.id.action_send) {
@@ -5707,6 +5801,21 @@ public class FragmentCompose extends FragmentBase {
                             if (draft.bcc != null)
                                 recipients.addAll(Arrays.asList(draft.bcc));
 
+                            boolean noreply = false;
+                            for (Address recipient : recipients) {
+                                String email = ((InternetAddress) recipient).getAddress();
+                                String username = UriHelper.getEmailUser(email);
+                                if (!TextUtils.isEmpty(username)) {
+                                    username = username.toLowerCase(Locale.ROOT);
+                                    for (String value : DO_NOT_REPLY)
+                                        if (username.contains(value)) {
+                                            noreply = true;
+                                            break;
+                                        }
+                                }
+                            }
+                            args.putBoolean("remind_noreply", noreply);
+
                             if (identity != null && !TextUtils.isEmpty(identity.internal)) {
                                 boolean external = false;
                                 String[] internals = identity.internal.split(",");
@@ -5732,41 +5841,9 @@ public class FragmentCompose extends FragmentBase {
 
                             if (draft.ui_encrypt == null ||
                                     EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt)) {
-                                if (recipients.size() > 0) {
-                                    if (pgpService != null && pgpService.isBound()) {
-                                        String[] userIds = new String[recipients.size()];
-                                        for (int i = 0; i < recipients.size(); i++) {
-                                            InternetAddress recipient = (InternetAddress) recipients.get(i);
-                                            userIds[i] = recipient.getAddress();
-                                        }
-
-                                        Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
-                                        intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds);
-
-                                        try {
-                                            OpenPgpApi api = new OpenPgpApi(context, pgpService.getService());
-                                            Intent result = api.executeApi(intent, (InputStream) null, (OutputStream) null);
-                                            int resultCode = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
-                                            if (resultCode == OpenPgpApi.RESULT_CODE_SUCCESS) {
-                                                long[] keyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
-                                                args.putBoolean("remind_pgp", keyIds.length > 0);
-                                            }
-                                        } catch (Throwable ex) {
-                                            Log.w(ex);
-                                        }
-                                    }
-
-                                    for (Address address : recipients) {
-                                        String email = ((InternetAddress) address).getAddress();
-                                        List<EntityCertificate> certs = db.certificate().getCertificateByEmail(email);
-                                        if (certs != null && certs.size() > 0) {
-                                            args.putBoolean("remind_smime", true);
-                                            break;
-                                        }
-                                    }
-                                }
+                                args.putBoolean("remind_pgp", hasPgpKey(context, recipients));
+                                args.putBoolean("remind_smime", hasSmimeKey(context, recipients));
                             }
-
 
                             if (TextUtils.isEmpty(draft.subject))
                                 args.putBoolean("remind_subject", true);
@@ -6031,6 +6108,7 @@ public class FragmentCompose extends FragmentBase {
                 boolean remind_smime = args.getBoolean("remind_smime", false);
                 boolean remind_to = args.getBoolean("remind_to", false);
                 boolean remind_extra = args.getBoolean("remind_extra", false);
+                boolean remind_noreply = args.getBoolean("remind_noreply", false);
                 boolean remind_external = args.getBoolean("remind_external", false);
                 boolean remind_subject = args.getBoolean("remind_subject", false);
                 boolean remind_text = args.getBoolean("remind_text", false);
@@ -6042,7 +6120,8 @@ public class FragmentCompose extends FragmentBase {
                         (draft.bcc == null ? 0 : draft.bcc.length);
                 if (send_dialog || force_dialog ||
                         sent_missing || address_error != null || mx_error != null ||
-                        remind_dsn || remind_size || remind_pgp || remind_smime || remind_to || remind_external ||
+                        remind_dsn || remind_size || remind_pgp || remind_smime ||
+                        remind_to || remind_noreply || remind_external ||
                         recipients > RECIPIENTS_WARNING ||
                         (formatted && (draft.plain_only != null && draft.plain_only)) ||
                         (send_reminders &&
@@ -6127,7 +6206,7 @@ public class FragmentCompose extends FragmentBase {
     private void setBusy(boolean busy) {
         state = (busy ? State.LOADING : State.LOADED);
         Helper.setViewsEnabled(view, !busy);
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
     }
 
     private static void addSignature(Context context, Document document, EntityMessage draft, EntityIdentity identity) {
@@ -6187,7 +6266,7 @@ public class FragmentCompose extends FragmentBase {
 
                 Helper.setViewsEnabled(view, true);
 
-                getActivity().invalidateOptionsMenu();
+                invalidateOptionsMenu();
             }
 
             @Override
@@ -6397,6 +6476,51 @@ public class FragmentCompose extends FragmentBase {
         return -1;
     }
 
+    private boolean hasPgpKey(Context context, List<Address> recipients) {
+        if (pgpService == null || !pgpService.isBound())
+            return false;
+        if (recipients == null || recipients.size() == 0)
+            return false;
+
+        String[] userIds = new String[recipients.size()];
+        for (int i = 0; i < recipients.size(); i++) {
+            InternetAddress recipient = (InternetAddress) recipients.get(i);
+            userIds[i] = recipient.getAddress();
+        }
+
+        Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
+        intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds);
+
+        try {
+            OpenPgpApi api = new OpenPgpApi(context, pgpService.getService());
+            Intent result = api.executeApi(intent, (InputStream) null, (OutputStream) null);
+            int resultCode = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
+            if (resultCode == OpenPgpApi.RESULT_CODE_SUCCESS) {
+                long[] keyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
+                return (keyIds.length > 0);
+            }
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+
+        return false;
+    }
+
+    private boolean hasSmimeKey(Context context, List<Address> recipients) {
+        if (recipients == null || recipients.size() == 0)
+            return false;
+
+        DB db = DB.getInstance(context);
+        for (Address address : recipients) {
+            String email = ((InternetAddress) address).getAddress();
+            List<EntityCertificate> certs = db.certificate().getCertificateByEmail(email);
+            if (certs != null && certs.size() > 0)
+                return true;
+        }
+
+        return false;
+    }
+
     private AdapterView.OnItemSelectedListener identitySelected = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -6544,16 +6668,28 @@ public class FragmentCompose extends FragmentBase {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            final long working = getArguments().getLong("working");
-            int focussed = getArguments().getInt("focussed");
+            final Bundle args = getArguments();
+            final long working = args.getLong("working");
+            int focussed = args.getInt("focussed");
 
             final Context context = getContext();
+            final PackageManager pm = context.getPackageManager();
+            final ContentResolver resolver = context.getContentResolver();
 
             View dview = LayoutInflater.from(context).inflate(R.layout.dialog_contact_group, null);
+            final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
             final Spinner spGroup = dview.findViewById(R.id.spGroup);
             final Spinner spTarget = dview.findViewById(R.id.spTarget);
+            final Button btnManage = dview.findViewById(R.id.btnManage);
 
-            String[] projection = new String[]{
+            ibInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.view(v.getContext(), Uri.parse(Helper.URI_SUPPORT_CONTACT_GROUP), true);
+                }
+            });
+
+            final String[] projection = new String[]{
                     ContactsContract.Groups._ID,
                     ContactsContract.Groups.TITLE,
                     ContactsContract.Groups.SUMMARY_COUNT,
@@ -6563,7 +6699,7 @@ public class FragmentCompose extends FragmentBase {
 
             Cursor groups;
             try {
-                groups = context.getContentResolver().query(
+                groups = resolver.query(
                         ContactsContract.Groups.CONTENT_SUMMARY_URI,
                         projection,
                         // ContactsContract.Groups.GROUP_VISIBLE + " = 1" + " AND " +
@@ -6747,6 +6883,7 @@ public class FragmentCompose extends FragmentBase {
             final boolean remind_smime = args.getBoolean("remind_smime", false);
             final boolean remind_to = args.getBoolean("remind_to", false);
             final boolean remind_extra = args.getBoolean("remind_extra", false);
+            final boolean remind_noreply = args.getBoolean("remind_noreply", false);
             final boolean remind_external = args.getBoolean("remind_external", false);
             final boolean remind_subject = args.getBoolean("remind_subject", false);
             final boolean remind_text = args.getBoolean("remind_text", false);
@@ -6777,6 +6914,7 @@ public class FragmentCompose extends FragmentBase {
             final TextView tvRemindSmime = dview.findViewById(R.id.tvRemindSmime);
             final TextView tvRemindTo = dview.findViewById(R.id.tvRemindTo);
             final TextView tvRemindExtra = dview.findViewById(R.id.tvRemindExtra);
+            final TextView tvRemindNoReply = dview.findViewById(R.id.tvRemindNoReply);
             final TextView tvRemindExternal = dview.findViewById(R.id.tvRemindExternal);
             final TextView tvRemindSubject = dview.findViewById(R.id.tvRemindSubject);
             final TextView tvRemindText = dview.findViewById(R.id.tvRemindText);
@@ -6827,6 +6965,7 @@ public class FragmentCompose extends FragmentBase {
 
             tvRemindTo.setVisibility(remind_to ? View.VISIBLE : View.GONE);
             tvRemindExtra.setVisibility(send_reminders && remind_extra ? View.VISIBLE : View.GONE);
+            tvRemindNoReply.setVisibility(remind_noreply ? View.VISIBLE : View.GONE);
             tvRemindExternal.setVisibility(remind_external ? View.VISIBLE : View.GONE);
             tvRemindSubject.setVisibility(send_reminders && remind_subject ? View.VISIBLE : View.GONE);
             tvRemindText.setVisibility(send_reminders && remind_text ? View.VISIBLE : View.GONE);

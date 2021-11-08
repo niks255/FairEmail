@@ -323,6 +323,9 @@ public class FragmentGmail extends FragmentBase {
                                         throw new IllegalArgumentException("Android returned no token");
                                     Log.i("Got token name=" + account.name);
 
+                                    if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                        return;
+
                                     onAuthorized(name, token);
                                 } catch (Throwable ex) {
                                     // android.accounts.OperationCanceledException = ServiceDisabled?
@@ -331,6 +334,9 @@ public class FragmentGmail extends FragmentBase {
                                         ex = new IllegalArgumentException(disabled, ex);
 
                                     Log.e(ex);
+
+                                    if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                                        return;
 
                                     tvError.setText(Log.formatThrowable(ex, false));
                                     grpError.setVisibility(View.VISIBLE);

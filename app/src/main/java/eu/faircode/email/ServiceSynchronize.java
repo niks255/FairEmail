@@ -80,6 +80,7 @@ import javax.mail.Folder;
 import javax.mail.FolderClosedException;
 import javax.mail.FolderNotFoundException;
 import javax.mail.Message;
+import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Quota;
@@ -115,7 +116,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private static final long BACKUP_DELAY = 30 * 1000L; // milliseconds
     private static final long PURGE_DELAY = 30 * 1000L; // milliseconds
-    private static final int QUIT_DELAY = 7; // seconds
+    private static final int QUIT_DELAY = 10; // seconds
     private static final long STILL_THERE_THRESHOLD = 3 * 60 * 1000L; // milliseconds
     private static final int OPTIMIZE_KEEP_ALIVE_INTERVAL = 12; // minutes
     private static final int OPTIMIZE_POLL_INTERVAL = 15; // minutes
@@ -150,7 +151,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "download_headers", "download_eml",
             "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", // force reconnect
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "idle_done", // force reconnect
             "exact_alarms" // force schedule
     ));
 
@@ -1607,27 +1608,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 public void messagesAdded(MessageCountEvent e) {
                                     try {
                                         wlMessage.acquire();
-                                        Log.i(folder.name + " messages added");
-
-                                        try {
-                                            db.beginTransaction();
-
-                                            for (Message imessage : e.getMessages()) {
-                                                long uid = ifolder.getUID(imessage);
-                                                EntityOperation.queue(ServiceSynchronize.this, folder, EntityOperation.FETCH, uid);
-                                            }
-
-                                            db.setTransactionSuccessful();
-                                        } finally {
-                                            db.endTransaction();
-                                        }
-
+                                        fetch(folder, ifolder, e.getMessages(), false, "added");
                                         Thread.sleep(FETCH_YIELD_DURATION);
                                     } catch (Throwable ex) {
                                         Log.e(folder.name, ex);
                                         EntityLog.log(ServiceSynchronize.this,
                                                 folder.name + " added " + Log.formatThrowable(ex, false));
-                                        state.error(ex);
+                                        EntityOperation.sync(ServiceSynchronize.this, folder.id, false);
                                     } finally {
                                         wlMessage.release();
                                     }
@@ -1637,27 +1624,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 public void messagesRemoved(MessageCountEvent e) {
                                     try {
                                         wlMessage.acquire();
-                                        Log.i(folder.name + " messages removed");
-
-                                        try {
-                                            db.beginTransaction();
-
-                                            for (Message imessage : e.getMessages()) {
-                                                long uid = ifolder.getUID(imessage);
-                                                EntityOperation.queue(ServiceSynchronize.this, folder, EntityOperation.FETCH, uid, true);
-                                            }
-
-                                            db.setTransactionSuccessful();
-                                        } finally {
-                                            db.endTransaction();
-                                        }
-
+                                        fetch(folder, ifolder, e.getMessages(), true, "removed");
                                         Thread.sleep(FETCH_YIELD_DURATION);
                                     } catch (Throwable ex) {
                                         Log.e(folder.name, ex);
                                         EntityLog.log(ServiceSynchronize.this,
                                                 folder.name + " removed " + Log.formatThrowable(ex, false));
-                                        state.error(ex);
+                                        EntityOperation.sync(ServiceSynchronize.this, folder.id, false);
                                     } finally {
                                         wlMessage.release();
                                     }
@@ -1672,17 +1645,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 public void messageChanged(MessageChangedEvent e) {
                                     try {
                                         wlMessage.acquire();
-                                        Log.i(folder.name + " message changed");
-
-                                        long uid = ifolder.getUID(e.getMessage());
-                                        EntityOperation.queue(ServiceSynchronize.this, folder, EntityOperation.FETCH, uid);
-
+                                        fetch(folder, ifolder, new Message[]{e.getMessage()}, false, "changed");
                                         Thread.sleep(FETCH_YIELD_DURATION);
                                     } catch (Throwable ex) {
                                         Log.e(folder.name, ex);
                                         EntityLog.log(ServiceSynchronize.this,
                                                 folder.name + " changed " + Log.formatThrowable(ex, false));
-                                        state.error(ex);
+                                        EntityOperation.sync(ServiceSynchronize.this, folder.id, false);
                                     } finally {
                                         wlMessage.release();
                                     }
@@ -1833,7 +1802,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         }
 
                                         final EntityFolder folder = found;
-                                        Log.i(folder.name + " queuing operations=" + added.size() +
+                                        Log.i(account.name + "/" + folder.name + " queuing operations=" + added.size() +
                                                 " init=" + folder.initialize + " poll=" + folder.poll);
 
                                         // Partition operations by priority
@@ -1871,7 +1840,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             int ops;
                                             synchronized (partitions) {
                                                 ops = partitions.get(key).size();
-                                                Log.i(folder.name +
+                                                Log.i(account.name + "/" + folder.name +
                                                         " queuing partition=" + key +
                                                         " operations=" + ops);
                                             }
@@ -1899,7 +1868,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                             partitions.remove(key);
                                                         }
 
-                                                        Log.i(folder.name +
+                                                        Log.i(account.name + "/" + folder.name +
                                                                 " executing partition=" + key +
                                                                 " serial=" + serial +
                                                                 " operations=" + partition.size());
@@ -1919,7 +1888,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                         final boolean shouldClose = (ifolder == null && canOpen);
 
                                                         try {
-                                                            Log.i(folder.name + " run " + (shouldClose ? "offline" : "online"));
+                                                            Log.i(account.name + "/" + folder.name + " run " + (shouldClose ? "offline" : "online"));
 
                                                             if (shouldClose) {
                                                                 // Prevent unnecessary folder connections
@@ -2366,6 +2335,33 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             EntityLog.log(this, EntityLog.Type.Account,
                     account.name + " stopped");
             wlAccount.release();
+        }
+    }
+
+    private void fetch(EntityFolder folder, IMAPFolder ifolder, Message[] messages, boolean deleted, String reason) throws MessagingException {
+        Log.i(folder.name + " " + messages.length + " messages " + reason);
+
+        List<Long> uids = new ArrayList<>();
+        for (Message imessage : messages)
+            try {
+                long uid = ifolder.getUID(imessage);
+                uids.add(uid);
+            } catch (MessageRemovedException ex) {
+                Log.w(ex);
+            }
+
+        Log.i(folder.name + " messages " + reason + " uids=" + TextUtils.join(",", uids));
+
+        DB db = DB.getInstance(this);
+        try {
+            db.beginTransaction();
+
+            for (long uid : uids)
+                EntityOperation.queue(this, folder, EntityOperation.FETCH, uid, deleted);
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 

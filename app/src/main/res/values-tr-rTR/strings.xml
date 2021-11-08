@@ -143,8 +143,6 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_identities">Kimlikler</string>
     <string name="title_setup_other">Diğer sağlayıcı</string>
     <string name="title_setup_pop3">POP3 hesabı</string>
-    <string name="title_setup_oauth_permission">E-posta sağlayıcısı OAuth\'u yalnızca resmi uygulama sürümleri için onayladı</string>
-    <string name="title_setup_gmail_support">Google hesaplarını yetkilendirmek sadece resmi versiyonlarda çalışacaktır çünkü Android uygulama imzasını kontrol etmektedir</string>
     <string name="title_setup_gmail_rationale">Lütfen bir hesap seçmek ve isminizi okumak için izin verin</string>
     <string name="title_setup_gmail_permissions">Google, tüm e-postalarınızı okumak, oluşturmak, göndermek ve kalıcı olarak silmek için izin isteyecektir. FairEmail, açık onayınız olmadan mesajlarınızı asla silmeyecektir.</string>
     <string name="title_setup_gmail_drafts">Taslaklar klasörüne IMAP tarafından erişilemiyorsa, bu Gmail etiket ayarlarında düzeltilebilir</string>
@@ -245,6 +243,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_theme_black_background">Siyah arka plan</string>
     <string name="title_setup_theme_html_light">Orijinal mesaj görünümü için açık renkli arka plan</string>
     <string name="title_setup_theme_composer_light">Mesaj düzenleyici için açık renkli arka plan</string>
+    <string name="title_setup_theme_you_hint">Material You renkleri, Android Duvar Kağıdı ve &amp; stil ayarlarında yapılandırılabilir</string>
     <string name="title_setup_theme_system_hint">Eğer Android tarafından destekleniyorsa, sistem temasını izleme, gündüz/gece otomatik olarak açık/koyu olarak değişecektir</string>
     <string name="title_setup_theme_more_colors">Daha fazla renk istiyorum</string>
     <string name="title_setup_advanced">Gelişmiş</string>
@@ -258,6 +257,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_hint_title">Daha gelişmiş seçenekler</string>
     <string name="title_advanced_hint_message">        Daha gelişmiş seçeneklere gidiyorsunuz.
         Tüm seçenekler, farklı bir tercihiniz olmadığı sürece değiştirmenizin gerekmediği yaygın kullanılan varsayılan değerlere sahiptir.
+    </string>
+    <string name="title_advanced_hint_remark">Seçenekler sekmeye göre sınıflandırılmış, bölümlere ayrılmış, görünüm veya kullanıma göre düzenlenmiş ve aranabilir.
     </string>
     <string name="title_advanced_hint_setup">Ana yapılandırma ekranındaki sihirbaz düğmesine dokunarak bir hesabı yapılandırabilirsiniz.</string>
     <string name="title_advanced_section_main">Ana</string>
@@ -499,8 +500,10 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_confirm_links">Bağlantıları açmayı onayla</string>
     <string name="title_advanced_check_links_dbl">Şüpheli bağlantılar için alan engelleme listelerini kontrol edin</string>
     <string name="title_advanced_browse_links">Android\'i bağlantıları açması için görevlendir</string>
-    <string name="title_advanced_confirm_images">Görüntüleri göstermeyi onayla</string>
+    <string name="title_advanced_confirm_images">Varsayılan olarak resim gösterme</string>
+    <string name="title_advanced_ask_images">Görüntüleri göstermeyi onayla</string>
     <string name="title_advanced_confirm_html">Yeniden formatlanmış mesajları varsayılan olarak göster</string>
+    <string name="title_advanced_ask_html">Orijinal mesajların gösterilmesini onaylayın</string>
     <string name="title_advanced_tracking">Takip resimlerini tanımaya ve devre dışı bırakmaya çalışın</string>
     <string name="title_advanced_hide_timezone">İletileri saat dilimi verisi olmadan gönder</string>
     <string name="title_advanced_client_id">Uygulama adını ve sürümünü e-posta sunucusuna gönder</string>
@@ -509,7 +512,9 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_secure">Son kullanılan uygulamalar ekranından gizle ve ekran görüntüsü alınmasını engelle</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Biyometrik doğrulama süresi bitti</string>
+    <string name="title_advanced_autolock">Ekran kapandığında kilitle</string>
     <string name="title_advanced_generic_user_agent">Genel tarayıcı kullanıcı aracısını kullan</string>
+    <string name="title_advanced_load_emoji">Google Play Hizmetlerinden güncellenmiş Emojiyi yükleyin</string>
     <string name="title_advanced_disconnect_auto_update">Listeleri haftalık olarak otomatik güncelle</string>
     <string name="title_advanced_disconnect_links">Takipçi içeren bağlantıları önden uyarabilmek için listeleri kullan</string>
     <string name="title_advanced_disconnect_images">Takipçi içeren görselleri tanımak için listeleri kullan</string>
@@ -766,6 +771,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_notify_batch_disable">Yeni mesaj bildirimlerini devre dışı bırak</string>
     <string name="title_delete_local">Yerel iletileri sil</string>
     <string name="title_delete_browsed">Gözatılmış/aranmış iletileri sil</string>
+    <string name="title_expunge">Sil</string>
+    <string name="title_expunge_remark">Bu, silinmek üzere işaretlenen tüm mesajları kalıcı olarak siler</string>
     <string name="title_empty_trash">Çöp kutusunu temizle</string>
     <string name="title_empty_spam">Spam kutusunu temizle</string>
     <string name="title_edit_properties">Özellikleri düzenle</string>
@@ -955,7 +962,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_no_search">Bu hesap için sunucuda arama yapılamıyor</string>
     <string name="title_too_large">Mesaj, tamamen yeniden biçimlendirilemeyecek kadar büyük</string>
     <string name="title_truncated">Mesaj tamamen görüntülenemeyecek kadar büyük</string>
-    <string name="title_insufficient_memory">Mesaj kullanılabilir belleğe sığmayacak kadar büyük</string>
+    <string name="title_insufficient_memory">İleti, kullanılabilir bellek için çok büyük (%1$d)</string>
     <string name="title_show_full">Mesajın tamamını göster</string>
     <string name="title_unused_inline">Kullanılmayan satır içi resimler gönderirken kaldırılacaktır</string>
     <string name="title_accross_remark">Hesaplar arasında taşınan iletiler daha fazla veri kullanımıyla sonuçlanacak şekilde tekrar indirilecek</string>
@@ -1194,6 +1201,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_filter_duplicates">Çift kopyalar</string>
     <string name="title_compact">Derlitoplu görünüm</string>
     <string name="title_zoom">Metin boyutu</string>
+    <string name="title_padding">Boşluk boyutu</string>
     <string name="title_select_language">Dil seçiniz</string>
     <string name="title_select_all">Hepsini seç</string>
     <string name="title_select_found">Bulunanları seç</string>

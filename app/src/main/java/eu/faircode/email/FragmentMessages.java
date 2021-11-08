@@ -3032,19 +3032,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             result.visible && result.hidden)
                         continue;
 
+                    if (message.ui_seen)
+                        result.seen = true;
+                    if (!message.ui_flagged)
+                        result.unflagged = true;
+
                     List<EntityMessage> messages = db.message().getMessagesByThread(
                             message.account, message.thread, threading ? null : id, null);
                     for (EntityMessage threaded : messages) {
                         if (threaded.folder.equals(message.folder))
-                            if (threaded.ui_seen)
-                                result.seen = true;
-                            else
+                            if (!threaded.ui_seen)
                                 result.unseen = true;
 
                         if (threaded.ui_flagged)
                             result.flagged = true;
-                        else
-                            result.unflagged = true;
 
                         int i = (message.importance == null ? EntityMessage.PRIORITIY_NORMAL : message.importance);
                         if (result.importance == null)
@@ -3123,6 +3124,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 long[] ids = args.getLongArray("ids");
 
                 final Context context = getContext();
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean flags = prefs.getBoolean("flags", true);
+                boolean flags_background = prefs.getBoolean("flags_background", false);
+
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), fabMore);
 
                 int order = 0;
@@ -3144,13 +3149,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_unhide, order++, R.string.title_unhide)
                             .setIcon(R.drawable.twotone_visibility_24);
 
-                if (result.unflagged)
+                if (result.unflagged && flags)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_flag, order++, R.string.title_flag)
                             .setIcon(R.drawable.twotone_star_24);
-                if (result.flagged)
+                if (result.flagged && flags)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_unflag, order++, R.string.title_unflag)
                             .setIcon(R.drawable.twotone_star_border_24);
-                if (result.unflagged || result.flagged)
+                if ((result.unflagged || result.flagged) && flags_background)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_flag_color, order++, R.string.title_flag_color)
                             .setIcon(R.drawable.twotone_auto_awesome_24);
 
@@ -3998,7 +4003,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (FragmentMessages.this.primary != primary || FragmentMessages.this.connected != connected) {
                     FragmentMessages.this.primary = primary;
                     FragmentMessages.this.connected = connected;
-                    getActivity().invalidateOptionsMenu();
+                    invalidateOptionsMenu();
                 }
             }
         });
@@ -4421,6 +4426,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         boolean language_detection = prefs.getBoolean("language_detection", false);
         String filter_language = prefs.getString("filter_language", null);
         boolean compact = prefs.getBoolean("compact", false);
+        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int padding = prefs.getInt("view_padding", compact ? 0 : 1);
         boolean quick_filter = prefs.getBoolean("quick_filter", false);
 
         boolean drafts = EntityFolder.DRAFTS.equals(type);
@@ -4511,7 +4518,22 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_filter_language).setVisible(language_detection && folder);
         menu.findItem(R.id.menu_filter_duplicates).setChecked(filter_duplicates);
 
+        SpannableStringBuilder ssbZoom = new SpannableStringBuilder(getString(R.string.title_zoom));
+        if (zoom == 0)
+            ssbZoom.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssbZoom.length(), 0);
+        else if (zoom == 2)
+            ssbZoom.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, ssbZoom.length(), 0);
+
+        SpannableStringBuilder ssbPadding = new SpannableStringBuilder(getString(R.string.title_padding));
+        if (padding == 0)
+            ssbPadding.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssbPadding.length(), 0);
+        else if (padding == 2)
+            ssbPadding.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, ssbPadding.length(), 0);
+
         menu.findItem(R.id.menu_compact).setChecked(compact);
+        menu.findItem(R.id.menu_zoom).setTitle(ssbZoom);
+        menu.findItem(R.id.menu_padding).setTitle(ssbPadding);
+        menu.findItem(R.id.menu_padding).setVisible(cards);
         menu.findItem(R.id.menu_theme).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
 
         menu.findItem(R.id.menu_select_all).setVisible(folder);
@@ -4617,6 +4639,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return true;
         } else if (itemId == R.id.menu_zoom) {
             onMenuZoom();
+            return true;
+        } else if (itemId == R.id.menu_padding) {
+            onMenuPadding();
             return true;
         } else if (itemId == R.id.menu_compact) {
             onMenuCompact();
@@ -4747,14 +4772,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         prefs.edit().putBoolean(
                 viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", ascending).apply();
         adapter.setAscending(ascending);
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
         loadMessages(true);
     }
 
     private void onMenuFilter(String name, boolean filter) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.edit().putBoolean(name, filter).apply();
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
         if (selectionTracker != null)
             selectionTracker.clearSelection();
         loadMessages(true);
@@ -4856,7 +4881,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void onMenuFilterDuplicates(boolean filter) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.edit().putBoolean("filter_duplicates", filter).apply();
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
         adapter.setFilterDuplicates(filter);
     }
 
@@ -4868,6 +4893,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         prefs.edit().putInt("view_zoom", zoom).apply();
         clearMeasurements();
         adapter.setZoom(zoom);
+        invalidateOptionsMenu();
+    }
+
+    private void onMenuPadding() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean compact = prefs.getBoolean("compact", false);
+        int padding = prefs.getInt("view_padding", compact ? 0 : 1);
+        padding = ++padding % 3;
+        prefs.edit().putInt("view_padding", padding).apply();
+        clearMeasurements();
+        adapter.setPadding(padding);
+        invalidateOptionsMenu();
     }
 
     private void onMenuCompact() {
@@ -4876,12 +4913,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         prefs.edit().putBoolean("compact", compact).apply();
 
         int zoom = (compact ? 0 : 1);
-        prefs.edit().putInt("view_zoom", zoom).apply();
+        int padding = (compact ? 0 : 1);
+        prefs.edit()
+                .putInt("view_zoom", zoom)
+                .putInt("view_padding", padding)
+                .apply();
 
         adapter.setCompact(compact);
         adapter.setZoom(zoom);
+        adapter.setPadding(padding);
         clearMeasurements();
-        getActivity().invalidateOptionsMenu();
+        invalidateOptionsMenu();
     }
 
     private void onMenuTheme() {
@@ -5304,14 +5346,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
 
+        boolean outbox = EntityFolder.OUTBOX.equals(type);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean filter_seen = prefs.getBoolean(getFilter("seen", type), false);
         boolean filter_unflagged = prefs.getBoolean(getFilter("unflagged", type), false);
         boolean filter_unknown = prefs.getBoolean(getFilter("unknown", type), false);
         boolean language_detection = prefs.getBoolean("language_detection", false);
         String filter_language = prefs.getString("filter_language", null);
-        boolean filter_active = (filter_seen || filter_unflagged || filter_unknown ||
-                (language_detection && !TextUtils.isEmpty(filter_language)));
+        boolean filter_active = ((filter_seen && !outbox) ||
+                (filter_unflagged && !outbox) ||
+                (filter_unknown && !EntityFolder.isOutgoing(type)) ||
+                (language_detection && !TextUtils.isEmpty(filter_language) && !outbox));
 
         boolean none = (items == 0 && !loading && tasks == 0 && initialized);
         boolean filtered = (filter_active && viewType != AdapterMessage.ViewType.SEARCH);

@@ -164,8 +164,6 @@
     <string name="title_setup_identities">Идентификаторы</string>
     <string name="title_setup_other">Другой провайдер</string>
     <string name="title_setup_pop3">Учётная запись POP3</string>
-    <string name="title_setup_oauth_permission">Поставщик электронной почты одобрил OAuth только для официальных версий приложения</string>
-    <string name="title_setup_gmail_support">Авторизация учётных записей Google будет работать только в официальных версиях, так как Android проверяет подпись приложения</string>
     <string name="title_setup_gmail_rationale">Пожалуйста, предоставьте разрешения для выбора учётной записи и чтения вашего имени</string>
     <string name="title_setup_gmail_permissions">Google запросит разрешения на чтение, создание, отправку и безвозвратное удаление всех ваших сообщений. FairEmail никогда не будет удалять ваши сообщения без вашего явного согласия.</string>
     <string name="title_setup_gmail_drafts">Если папка черновиков недоступна по IMAP, это может быть исправлено в настройках ярлыка Gmail</string>
@@ -266,6 +264,7 @@
     <string name="title_setup_theme_black_background">Чёрный фон</string>
     <string name="title_setup_theme_html_light">Светлый фон для просмотра исходного сообщения</string>
     <string name="title_setup_theme_composer_light">Светлый фон для редактора сообщений</string>
+    <string name="title_setup_theme_you_hint">Цвета \"Material You\" настраиваются в разделе настроек обоев и стиля Android</string>
     <string name="title_setup_theme_system_hint">Системная тема автоматически переключится на светлую или тёмную в зависимости от времени суток, если поддерживается Android</string>
     <string name="title_setup_theme_more_colors">Я хочу больше цветов</string>
     <string name="title_setup_advanced">Дополнительные настройки</string>
@@ -274,11 +273,13 @@
     <string name="title_setup_reset_questions">Заново включить вопросы</string>
     <string name="title_setup_reset_general">Общие вопросы</string>
     <string name="title_setup_reset_full">Показывать исходные сообщения</string>
-    <string name="title_setup_reset_images">Показать изображения</string>
+    <string name="title_setup_reset_images">Показывать изображения</string>
     <string name="title_setup_reset_links">Подтверждать ссылки</string>
     <string name="title_advanced_hint_title">Настройки для опытных</string>
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
         Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.
+    </string>
+    <string name="title_advanced_hint_remark">        Параметры сгруппированы по вкладкам, поделены на разделы, организованы по внешнему виду или использованию и доступны через поиск.
     </string>
     <string name="title_advanced_hint_setup">Можно настроить учётную запись, нажав кнопку мастера на главном экране настроек.</string>
     <string name="title_advanced_section_main">Основные</string>
@@ -520,8 +521,10 @@
     <string name="title_advanced_confirm_links">Подтверждать открытие ссылок</string>
     <string name="title_advanced_check_links_dbl">Проверять списки блокировки доменов на подозрительные ссылки</string>
     <string name="title_advanced_browse_links">Предоставить Android открывать ссылки</string>
-    <string name="title_advanced_confirm_images">Подтверждать показ изображений</string>
+    <string name="title_advanced_confirm_images">Не показывать изображения по умолчанию</string>
+    <string name="title_advanced_ask_images">Подтверждать отображение изображений</string>
     <string name="title_advanced_confirm_html">Показывать переформатированные сообщения по умолчанию</string>
+    <string name="title_advanced_ask_html">Подтверждать отображение оригинальных сообщений</string>
     <string name="title_advanced_tracking">Пытаться распознавать и отключать отслеживающие изображения</string>
     <string name="title_advanced_hide_timezone">Отправлять сообщения без данных часового пояса</string>
     <string name="title_advanced_client_id">Отправлять название и версию приложения на сервер электронной почты</string>
@@ -530,8 +533,10 @@
     <string name="title_advanced_secure">Скрыть с экрана недавних приложений и запретить создание снимков экрана</string>
     <string name="title_advanced_pin">PIN-код</string>
     <string name="title_advanced_biometrics_timeout">Время до включения биометрической аутентификации</string>
-    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">Отключить блокировку экпана</string>
+    <string name="title_advanced_autolock">Отключить блокировку экпана</string>
+    <string name="title_advanced_autolock_nav">Блокировка при выходе из приложения</string>
     <string name="title_advanced_generic_user_agent">Использовать обычный пользовательский агент браузера</string>
+    <string name="title_advanced_load_emoji">Загружать обновлённые эмодзи из Google Play Services</string>
     <string name="title_advanced_disconnect_auto_update">Еженедельное автообновление списков</string>
     <string name="title_advanced_disconnect_links">Использовать списки для предупреждения об отслеживающих ссылках</string>
     <string name="title_advanced_disconnect_images">Использовать списки для распознавания отслеживающих изображений</string>
@@ -640,6 +645,7 @@
     <string name="title_advanced_display_harmful_hint">Отключение этой функции может навредить вашей конфиденциальности</string>
     <string name="title_advanced_display_hidden_hint">Может вызвать странное отображение и дублирование текста</string>
     <string name="title_advanced_display_pin_hint">PIN-код имеет приоритет над биометрической аутентификацией</string>
+    <string name="title_advanced_display_autolock_nav_hint">Время задержки до выполнения %1$d сек.</string>
     <string name="title_advanced_safe_browsing_hint">Сервер Google знает, какие адреса запрашиваются</string>
     <string name="title_advanced_badge_hint">Доступно только на поддерживаемых рабочих столах</string>
     <string name="title_advanced_notify_action_hint">Будут показаны максимум три действия</string>
@@ -788,6 +794,8 @@
     <string name="title_notify_batch_disable">Отключить уведомления о новых сообщениях</string>
     <string name="title_delete_local">Удалить локальные сообщения</string>
     <string name="title_delete_browsed">Удалить просмотренные/найденные сообщения</string>
+    <string name="title_expunge">Уничтожить</string>
+    <string name="title_expunge_remark">Необратимое удаление всех сообщений, помеченных для удаления</string>
     <string name="title_empty_trash">Очистить корзину</string>
     <string name="title_empty_spam">Очистить \"Спам\"</string>
     <string name="title_edit_properties">Изменить свойства</string>
@@ -978,7 +986,7 @@
     <string name="title_no_search">Поиск на сервере недоступен для этой учётной записи</string>
     <string name="title_too_large">Сообщение слишком большое для полного переформатирования</string>
     <string name="title_truncated">Сообщение слишком велико для полного отображения</string>
-    <string name="title_insufficient_memory">Сообщение слишком велико, чтобы поместиться в доступной памяти</string>
+    <string name="title_insufficient_memory">Сообщение слишком большое для доступной памяти (%1$d)</string>
     <string name="title_show_full">Показать сообщение полностью</string>
     <string name="title_unused_inline">Неиспользуемые встроенные изображения будут удалены при отправке</string>
     <string name="title_accross_remark">Сообщения, перемещаемые между учётными записями, будут загружены заново, порождая дополнительный трафик</string>
@@ -1087,6 +1095,7 @@
     <string name="title_send_dialog">Параметры отправки</string>
     <string name="title_image_dialog">Параметры изображения</string>
     <string name="title_media_toolbar">Панель медиа</string>
+    <string name="title_manage_local_contacts">Управление локальными контактами</string>
     <string name="title_insert_contact_group">Добавить группу контактов</string>
     <string name="title_insert_template">Вставить шаблон</string>
     <string name="title_create_template">Создать шаблон</string>
@@ -1116,6 +1125,7 @@
     <string name="title_smime_reminder">Доступные ключи S/MIME</string>
     <string name="title_to_missing">Отсутствует получатель</string>
     <string name="title_extra_missing">Отсутствует имя пользователя</string>
+    <string name="title_noreply_reminder">Отправка на адрес \"no-reply\"</string>
     <string name="title_external_reminder">Отправка на внешний адрес</string>
     <string name="title_subject_reminder">Тема пустая</string>
     <string name="title_text_reminder">Сообщение пустое</string>
@@ -1217,6 +1227,7 @@
     <string name="title_filter_duplicates">Дубликаты</string>
     <string name="title_compact">Компактный вид</string>
     <string name="title_zoom">Размер текста</string>
+    <string name="title_padding">Размер отступа</string>
     <string name="title_select_language">Выбрать язык</string>
     <string name="title_select_all">Выбрать все</string>
     <string name="title_select_found">Выбрать найденное</string>

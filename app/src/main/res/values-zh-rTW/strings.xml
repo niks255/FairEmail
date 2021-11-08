@@ -79,7 +79,7 @@
     <string name="title_notification_sending_left">剩餘嘗試數: %1$d</string>
     <string name="title_notification_sending_retry">傳送操作將在互聯網連線變更或於寄件匣執行下拉操作後重試</string>
     <string name="title_notification_sending_failed">訊息未能成功傳送至 %1$s</string>
-    <string name="title_notification_redacted">已編輯： 生物特徵辨識或 PIN 碼驗證已啟用。</string>
+    <string name="title_notification_redacted">已隱去敏感內容： 生物特徵辨識或 PIN 碼驗證已啟用。</string>
     <string name="title_factor_minutes">%1$d 分鐘</string>
     <string name="menu_answers">模板</string>
     <string name="menu_operations">操作</string>
@@ -134,8 +134,6 @@
     <string name="title_setup_identities">身分</string>
     <string name="title_setup_other">其他電子郵件供應商</string>
     <string name="title_setup_pop3">POP3 帳戶</string>
-    <string name="title_setup_oauth_permission">電子郵件供應商僅批准 FairEmail 的 GitHub 和 Google Play Store 發布版本使用 OAuth</string>
-    <string name="title_setup_gmail_support">授權使用 Google 帳戶功能僅工作在 FairEmail 的 GitHub 和 Play Store 發布版本中，因為 Android 會檢查程式簽名</string>
     <string name="title_setup_gmail_rationale">請授予權限以選擇帳戶並讀取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 會請求權限以讀取、撰寫、傳送及永久刪除您的電子郵件。FairEmail 永遠不會在您未予明確同意的前提下刪除您的訊息。</string>
     <string name="title_setup_gmail_drafts">如遇草稿資料夾無法透過 IMAP 存取的情況，可於 Gmail 標籤設定中獲得修復</string>
@@ -248,6 +246,8 @@
     <string name="title_advanced_hint_title">更高階的選項</string>
     <string name="title_advanced_hint_message">        您正在訪問更高階的選項。
         所有選項都有常用的標準值，除非您有不同的偏好，否則您不需要變更這些選項。
+    </string>
+    <string name="title_advanced_hint_remark">        選項以頁籤分類，分為幾個部分，以外觀或用途編組，且可被搜尋。 
     </string>
     <string name="title_advanced_hint_setup">您可透過輕觸主設定螢幕上的精靈按鈕來設置帳戶。</string>
     <string name="title_advanced_section_main">主設定</string>
@@ -482,14 +482,14 @@
     <string name="title_advanced_notify_subtext">帳戶或資料夾名稱顯示為從屬文字</string>
     <string name="title_advanced_wearable_preview">僅向穿戴式裝置傳送帶有訊息預覽的通知</string>
     <string name="title_advanced_notify_messaging">使用 Android ‘訊息式樣’通知格式</string>
-    <string name="title_advanced_biometrics_notify">在使用生物特徵辨識驗證時顯示通知內容</string>
+    <string name="title_advanced_biometrics_notify">採用生物特徵辨識驗證時顯示通知內容</string>
     <string name="title_advanced_light">使用通知指示燈</string>
     <string name="title_advanced_sound">選擇通知音效</string>
     <string name="title_advanced_notify_screen_on">為新訊息通知而暫時開啟螢幕</string>
     <string name="title_advanced_confirm_links">開啟超連結前確認</string>
     <string name="title_advanced_check_links_dbl">檢查可疑連結有否出現於網域封鎖清單中</string>
     <string name="title_advanced_browse_links">將連結開啟處理交由 Android 進行</string>
-    <string name="title_advanced_confirm_images">顯示圖片前確認</string>
+    <string name="title_advanced_ask_images">顯示圖片前確認</string>
     <string name="title_advanced_confirm_html">預設顯示經過重排的訊息</string>
     <string name="title_advanced_tracking">嘗試辨識和停用追蹤圖片</string>
     <string name="title_advanced_hide_timezone">傳送不附帶時區資料的訊息</string>
@@ -499,7 +499,7 @@
     <string name="title_advanced_secure">自最近應用程式螢幕中隱藏並阻止螢幕畫面擷取</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">生物特徵辨識驗證時限</string>
-    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">關閉螢幕後上鎖</string>
+    <string name="title_advanced_autolock">關閉螢幕後上鎖</string>
     <string name="title_advanced_generic_user_agent">使用通用瀏覽器使用者代理</string>
     <string name="title_advanced_disconnect_auto_update">每周自動更新清單一次</string>
     <string name="title_advanced_disconnect_links">使用追蹤保護清單來發出追蹤連結相關警告</string>
@@ -756,6 +756,8 @@
     <string name="title_notify_batch_disable">停用新訊息通知</string>
     <string name="title_delete_local">刪除本地訊息</string>
     <string name="title_delete_browsed">刪除已瀏覽/搜尋的訊息</string>
+    <string name="title_expunge">抹去</string>
+    <string name="title_expunge_remark">這將永久刪除所有標示刪除的訊息</string>
     <string name="title_empty_trash">清空垃圾桶資料夾</string>
     <string name="title_empty_spam">清空垃圾郵件資料夾</string>
     <string name="title_edit_properties">編輯屬性</string>
@@ -946,7 +948,6 @@
     <string name="title_no_search">於伺服器搜尋功能不可用於此帳戶</string>
     <string name="title_too_large">訊息太大，無法完整重排</string>
     <string name="title_truncated">訊息太大，無法完整顯示</string>
-    <string name="title_insufficient_memory">訊息太大，可用記憶體已無法承載</string>
     <string name="title_show_full">顯示完整訊息</string>
     <string name="title_unused_inline">未使用的行內圖片將會在傳送時被移除</string>
     <string name="title_accross_remark">跨帳戶移動的訊息會再次被下載，從而產生額外的數據用量</string>
@@ -1185,6 +1186,7 @@
     <string name="title_filter_duplicates">重複</string>
     <string name="title_compact">緊湊型視圖</string>
     <string name="title_zoom">文字大小</string>
+    <string name="title_padding">填充大小</string>
     <string name="title_select_language">選擇語言</string>
     <string name="title_select_all">全選</string>
     <string name="title_select_found">選取已尋獲的</string>

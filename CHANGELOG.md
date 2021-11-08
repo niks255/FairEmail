@@ -4,6 +4,54 @@
 
 ### [Banji](https://en.wikipedia.org/wiki/Banji)
 
+### 1.1774 - 2021-11-08
+
+* Added option to configure card padding (3-dots overflow menu)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1773 - 2021-11-06
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1772 - 2021-11-04
+
+* Added check for sending to no-reply addresses
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1771 - 2021-11-03
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1770 - 2021-11-01
+
+* Added option to lock app (biometric/PIN) on leaving app
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1769 - 2021-10-28
+
+* Fixed drafts not being removed
+* Added Emoji font loading (privacy settings)
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1768 - 2021-10-27
+
+* Added Material You theme (Android 12)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1767 - 2021-10-26
+
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1766
 
 * Small improvements and minor bug fixes

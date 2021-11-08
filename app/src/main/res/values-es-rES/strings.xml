@@ -144,8 +144,6 @@
     <string name="title_setup_identities">Identidades</string>
     <string name="title_setup_other">Otro proveedor</string>
     <string name="title_setup_pop3">Cuenta POP3</string>
-    <string name="title_setup_oauth_permission">El proveedor de correo electrónico ha aprobado OAuth sólo para versiones oficiales de la aplicación</string>
-    <string name="title_setup_gmail_support">La autorización de cuentas de Google sólo funcionará en versiones oficiales ya que Android comprueba la firma de la aplicación</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar una cuenta y leer su nombre</string>
     <string name="title_setup_gmail_permissions">Google solicitará permisos para leer, redactar, enviar y eliminar permanentemente todo su correo electrónico. FairEmail nunca eliminará sus mensajes sin su consentimiento explícito.</string>
     <string name="title_setup_gmail_drafts">Si la carpeta de borradores no es accesible por IMAP, esto se puede arreglar en la configuración de etiquetas de Gmail</string>
@@ -246,6 +244,7 @@
     <string name="title_setup_theme_black_background">Fondo negro</string>
     <string name="title_setup_theme_html_light">Fondo claro para la vista original del mensaje</string>
     <string name="title_setup_theme_composer_light">Fondo claro para el editor de mensajes</string>
+    <string name="title_setup_theme_you_hint">Los colores de Material You se pueden configurar en el fondo de pantalla de Android &amp; configuración de estilo</string>
     <string name="title_setup_theme_system_hint">Igual que el tema del sistema cambiará automáticamente a luz/oscuro en el día y la noche, si es compatible con Android</string>
     <string name="title_setup_theme_more_colors">Quiero más colores</string>
     <string name="title_setup_advanced">Avanzado</string>
@@ -259,6 +258,8 @@
     <string name="title_advanced_hint_title">Opciones más avanzadas</string>
     <string name="title_advanced_hint_message">        Está navegando a las opciones más avanzadas.
         Todas las opciones tienen por defecto valores estándar, que no necesitan ser modificados a menos que así lo prefiera.
+    </string>
+    <string name="title_advanced_hint_remark">        Las opciones se clasifican en pestañas, divididas en secciones, organizadas por apariencia o uso y buscables.
     </string>
     <string name="title_advanced_hint_setup">Puede configurar una cuenta tocando el botón del asistente en la pantalla de configuración principal.</string>
     <string name="title_advanced_section_main">Principal</string>
@@ -500,8 +501,10 @@
     <string name="title_advanced_confirm_links">Confirmar abrir enlaces</string>
     <string name="title_advanced_check_links_dbl">Comprobar listas de bloqueo de dominio para enlaces sospechosos</string>
     <string name="title_advanced_browse_links">Delegar apertura de enlaces a Android</string>
-    <string name="title_advanced_confirm_images">Confirmar mostrar imágenes</string>
+    <string name="title_advanced_confirm_images">No mostrar imágenes por defecto</string>
+    <string name="title_advanced_ask_images">Confirmar mostrar imágenes</string>
     <string name="title_advanced_confirm_html">Mostrar mensajes reformateados por defecto</string>
+    <string name="title_advanced_ask_html">Confirmar mostrar mensajes originales</string>
     <string name="title_advanced_tracking">Intentar reconocer y deshabilitar imágenes de rastreo</string>
     <string name="title_advanced_hide_timezone">Enviar mensajes sin datos de zona horaria</string>
     <string name="title_advanced_client_id">Enviar nombre y versión de la aplicación al servidor de correo electrónico</string>
@@ -510,7 +513,10 @@
     <string name="title_advanced_secure">Ocultar de la pantalla de aplicaciones recientes e impedir capturas de pantallas</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Límite de tiempo para autenticación biométrica</string>
+    <string name="title_advanced_autolock">Bloquear al apagar pantalla</string>
+    <string name="title_advanced_autolock_nav">Bloquear al salir de la aplicación</string>
     <string name="title_advanced_generic_user_agent">Usar agente de usuario de navegador genérico</string>
+    <string name="title_advanced_load_emoji">Cargar Emoji actualizado desde los Servicios de Google Play</string>
     <string name="title_advanced_disconnect_auto_update">Actualizar las listas automáticamente en forma semanal</string>
     <string name="title_advanced_disconnect_links">Usar listas para advertir sobre enlaces de seguimiento</string>
     <string name="title_advanced_disconnect_images">Usar listas para reconocer imágenes de rastreo</string>
@@ -619,6 +625,7 @@
     <string name="title_advanced_display_harmful_hint">Desactivar esta opción podría ser perjudicial para su privacidad</string>
     <string name="title_advanced_display_hidden_hint">Esto puede resultar en textos dobles o de apariencia extraña</string>
     <string name="title_advanced_display_pin_hint">Un PIN tiene prioridad sobre la autenticación biométrica</string>
+    <string name="title_advanced_display_autolock_nav_hint">Habrá un tiempo de gracia de %1$d segundos</string>
     <string name="title_advanced_safe_browsing_hint">El servidor de Google sabe qué direcciones se están buscando</string>
     <string name="title_advanced_badge_hint">Sólo disponible en lanzadores soportados</string>
     <string name="title_advanced_notify_action_hint">Máximo 3 acciones mostradas</string>
@@ -767,6 +774,8 @@
     <string name="title_notify_batch_disable">Desactivar notificaciones de mensajes nuevos</string>
     <string name="title_delete_local">Eliminar mensajes locales</string>
     <string name="title_delete_browsed">Eliminar mensajes explorados/buscados</string>
+    <string name="title_expunge">Purgar</string>
+    <string name="title_expunge_remark">Esto eliminará permanentemente todos los mensajes marcados para su eliminación</string>
     <string name="title_empty_trash">Vaciar papelera</string>
     <string name="title_empty_spam">Vaciar spam</string>
     <string name="title_edit_properties">Editar propiedades</string>
@@ -957,7 +966,7 @@
     <string name="title_no_search">La búsqueda en el servidor no está disponible para esta cuenta</string>
     <string name="title_too_large">Mensaje demasiado grande para reformatear completamente</string>
     <string name="title_truncated">Mensaje demasiado grande para mostrarlo por completo</string>
-    <string name="title_insufficient_memory">El mensaje es demasiado grande para caber en la memoria disponible</string>
+    <string name="title_insufficient_memory">Mensaje demasiado grande para la memoria disponible (%1$d)</string>
     <string name="title_show_full">Mostrar mensaje completo</string>
     <string name="title_unused_inline">Las imágenes embebidas no usadas serán eliminadas al enviar</string>
     <string name="title_accross_remark">Los mensajes movidos a otras cuentas serán descargados nuevamente causando uso adicional de datos</string>
@@ -1066,6 +1075,7 @@
     <string name="title_send_dialog">Mostrar opciones de envío</string>
     <string name="title_image_dialog">Mostrar opciones de imagen</string>
     <string name="title_media_toolbar">Barra de herramientas multimedia</string>
+    <string name="title_manage_local_contacts">Administrar contactos locales</string>
     <string name="title_insert_contact_group">Insertar grupo de contactos</string>
     <string name="title_insert_template">Insertar plantilla</string>
     <string name="title_create_template">Crear plantilla</string>
@@ -1095,6 +1105,7 @@
     <string name="title_smime_reminder">Claves S/MIME disponibles</string>
     <string name="title_to_missing">Falta destinatario</string>
     <string name="title_extra_missing">Falta el nombre de usuario</string>
+    <string name="title_noreply_reminder">Enviando a una dirección \'no responder\'</string>
     <string name="title_external_reminder">Enviando a una dirección externa</string>
     <string name="title_subject_reminder">El asunto está vacío</string>
     <string name="title_text_reminder">El mensaje está vacío</string>
@@ -1196,6 +1207,7 @@
     <string name="title_filter_duplicates">Duplicados</string>
     <string name="title_compact">Vista compacta</string>
     <string name="title_zoom">Tamaño del texto</string>
+    <string name="title_padding">Tamaño de margen interno</string>
     <string name="title_select_language">Seleccionar idioma</string>
     <string name="title_select_all">Seleccionar todo</string>
     <string name="title_select_found">Seleccionar lo encontrado</string>

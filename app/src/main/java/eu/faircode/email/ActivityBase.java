@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -49,6 +50,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.ColorUtils;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -123,18 +125,29 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         int colorPrimaryDark = Helper.resolveColor(this, R.attr.colorPrimaryDark);
         int colorActionForeground = Helper.resolveColor(this, R.attr.colorActionForeground);
 
-        Drawable d = getDrawable(R.drawable.baseline_mail_24);
-        Bitmap bm = Bitmap.createBitmap(
-                d.getIntrinsicWidth(),
-                d.getIntrinsicHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bm);
-        d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        d.setTint(colorActionForeground);
-        d.draw(canvas);
+        try {
+            Drawable d = getDrawable(R.drawable.baseline_mail_24);
+            Bitmap bm = Bitmap.createBitmap(
+                    d.getIntrinsicWidth(),
+                    d.getIntrinsicHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bm);
+            d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            d.setTint(colorActionForeground);
+            d.draw(canvas);
 
-        ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(null, bm, colorPrimaryDark);
-        setTaskDescription(td);
+            int colorPrimary = colorPrimaryDark;
+            if (colorPrimary != 0 && Color.alpha(colorPrimary) != 255) {
+                Log.w("Task color primary=" + Integer.toHexString(colorPrimary));
+                colorPrimary = ColorUtils.setAlphaComponent(colorPrimary, 255);
+            }
+
+            ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(
+                    null, bm, colorPrimary);
+            setTaskDescription(td);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
 
         boolean navbar_colorize = prefs.getBoolean("navbar_colorize", false);
         if (navbar_colorize) {
@@ -244,7 +257,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
         visible = false;
 
-        if (!this.getClass().equals(ActivityMain.class) && Helper.shouldAuthenticate(this))
+        if (!this.getClass().equals(ActivityMain.class) &&
+                Helper.shouldAuthenticate(this, true))
             finishAndRemoveTask();
     }
 
@@ -258,7 +272,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     public void onUserInteraction() {
         Log.d("User interaction");
 
-        if (!this.getClass().equals(ActivityMain.class) && Helper.shouldAuthenticate(this)) {
+        if (!this.getClass().equals(ActivityMain.class) &&
+                Helper.shouldAuthenticate(this, false)) {
             finishAndRemoveTask();
             Intent main = new Intent(this, ActivityMain.class);
             main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -365,9 +380,11 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     }
 
     private void checkAuthentication() {
-        if (!this.getClass().equals(ActivityMain.class) && Helper.shouldAuthenticate(this)) {
+        if (!this.getClass().equals(ActivityMain.class) &&
+                Helper.shouldAuthenticate(this, false)) {
             Intent intent = getIntent();
             finishAndRemoveTask();
+            finishAffinity();
             processStreams(intent);
             Intent main = new Intent(this, ActivityMain.class)
                     .putExtra("intent", intent);

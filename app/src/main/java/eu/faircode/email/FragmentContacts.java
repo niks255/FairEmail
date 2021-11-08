@@ -84,9 +84,17 @@ public class FragmentContacts extends FragmentBase {
     static final int REQUEST_EDIT_NAME = 4;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        this.junk = (args != null && args.getBoolean("junk"));
+    }
+
+    @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setSubtitle(R.string.menu_contacts);
+        setSubtitle(junk ? R.string.title_block_sender : R.string.menu_contacts);
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
@@ -218,6 +226,7 @@ public class FragmentContacts extends FragmentBase {
 
     private void onMenuJunk(boolean junk) {
         this.junk = junk;
+        setSubtitle(junk ? R.string.title_block_sender : R.string.menu_contacts);
         adapter.filter(junk
                 ? Arrays.asList(EntityContact.TYPE_JUNK, EntityContact.TYPE_NO_JUNK)
                 : new ArrayList<>());
@@ -457,7 +466,8 @@ public class FragmentContacts extends FragmentBase {
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setMessage(getString(R.string.title_delete_contacts))
+                    .setIcon(R.drawable.twotone_warning_24)
+                    .setTitle(getString(R.string.title_delete_contacts))
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

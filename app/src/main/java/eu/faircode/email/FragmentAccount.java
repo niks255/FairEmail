@@ -662,7 +662,7 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onPreExecute(Bundle args) {
                 saving = true;
-                getActivity().invalidateOptionsMenu();
+                invalidateOptionsMenu();
                 Helper.setViewsEnabled(view, false);
                 pbCheck.setVisibility(View.VISIBLE);
                 tvIdle.setVisibility(View.GONE);
@@ -677,7 +677,7 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onPostExecute(Bundle args) {
                 saving = false;
-                getActivity().invalidateOptionsMenu();
+                invalidateOptionsMenu();
                 Helper.setViewsEnabled(view, true);
                 pbCheck.setVisibility(View.GONE);
             }
@@ -891,7 +891,7 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onPreExecute(Bundle args) {
                 saving = true;
-                getActivity().invalidateOptionsMenu();
+                invalidateOptionsMenu();
                 Helper.setViewsEnabled(view, false);
                 pbSave.setVisibility(View.VISIBLE);
                 grpError.setVisibility(View.GONE);
@@ -903,7 +903,7 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onPostExecute(Bundle args) {
                 saving = false;
-                getActivity().invalidateOptionsMenu();
+                invalidateOptionsMenu();
                 Helper.setViewsEnabled(view, true);
                 pbSave.setVisibility(View.GONE);
             }
@@ -1034,6 +1034,8 @@ public class FragmentAccount extends FragmentBase {
                     if (!Objects.equals(account.use_date, use_date))
                         return true;
                     if (!Objects.equals(account.use_received, use_received))
+                        return true;
+                    if (account.error != null && account.synchronize)
                         return true;
 
                     EntityFolder edrafts = db.folder().getFolderByType(account.id, EntityFolder.DRAFTS);

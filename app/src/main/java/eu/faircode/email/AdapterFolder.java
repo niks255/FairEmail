@@ -23,6 +23,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -50,6 +51,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.pm.ShortcutInfoCompat;
@@ -124,6 +126,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
         private ImageView ivSubscribed;
         private ImageView ivRule;
         private ImageView ivNotify;
+        private ImageView ivAutoAdd;
         private TextView tvName;
         private TextView tvMessages;
         private ImageView ivMessages;
@@ -162,6 +165,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             ivSubscribed = itemView.findViewById(R.id.ivSubscribed);
             ivRule = itemView.findViewById(R.id.ivRule);
             ivNotify = itemView.findViewById(R.id.ivNotify);
+            ivAutoAdd = itemView.findViewById(R.id.ivAutoAdd);
             tvName = itemView.findViewById(R.id.tvName);
             tvMessages = itemView.findViewById(R.id.tvMessages);
             ivMessages = itemView.findViewById(R.id.ivMessages);
@@ -280,6 +284,10 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 ivSubscribed.setVisibility(subscriptions && folder.subscribed != null && folder.subscribed ? View.VISIBLE : View.GONE);
                 ivRule.setVisibility(folder.rules > 0 ? View.VISIBLE : View.GONE);
                 ivNotify.setVisibility(folder.notify ? View.VISIBLE : View.GONE);
+                ivAutoAdd.setVisibility(BuildConfig.DEBUG &&
+                        EntityFolder.SENT.equals(folder.type) &&
+                        (folder.auto_add == null || folder.auto_add)
+                        ? View.VISIBLE : View.GONE);
             }
 
             int cunseen = (folder.collapsed ? folder.childs_unseen : 0);
@@ -529,7 +537,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_delete_local, order++, R.string.title_delete_local);
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_delete_browsed, order++, R.string.title_delete_browsed);
                     if (!perform_expunge || BuildConfig.DEBUG)
-                        popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_expunge, order++, R.string.title_advanced_expunge);
+                        popupMenu.getMenu().add(Menu.NONE, R.string.title_expunge, order++, R.string.title_expunge);
                 }
 
                 if (EntityFolder.TRASH.equals(folder.type))
@@ -658,7 +666,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                     } else if (itemId == R.string.title_delete_browsed) {
                         OnActionDeleteLocal(true);
                         return true;
-                    } else if (itemId == R.string.title_advanced_expunge) {
+                    } else if (itemId == R.string.title_expunge) {
                         onActionExpunge();
                         return true;
                     } else if (itemId == R.string.title_empty_trash) {
@@ -944,6 +952,26 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 }
 
                 private void onActionExpunge() {
+                    new AlertDialog.Builder(view.getContext())
+                            .setIcon(R.drawable.twotone_warning_24)
+                            .setTitle(R.string.title_expunge)
+                            .setMessage(R.string.title_expunge_remark)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    expunge();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing
+                                }
+                            })
+                            .show();
+                }
+
+                private void expunge() {
                     Bundle args = new Bundle();
                     args.putLong("id", folder.id);
 

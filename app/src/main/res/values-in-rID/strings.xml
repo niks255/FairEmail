@@ -120,8 +120,6 @@
     <string name="title_setup_identities">Identitas</string>
     <string name="title_setup_other">Penyedia Lainnya</string>
     <string name="title_setup_pop3">Akun POP3</string>
-    <string name="title_setup_oauth_permission">Pengelola surel ini telah menerima OAuth hanya untuk versi aplikasi yang resmi saja</string>
-    <string name="title_setup_gmail_support">Memberi otorisasi pada akun Google hanya akan berfungsi dalam versi resminya karena Android memeriksa tanda tangan aplikasi.</string>
     <string name="title_setup_gmail_rationale">Mohon berikan izin untuk memilih akun dan membaca nama Anda.</string>
     <string name="title_setup_gmail_permissions">Google akan meminta izin untuk membaca, menulis, mengirim dan menghapus semua email Anda secara permanen. FairEmail tidak akan pernah menghapus pesan tanpa persetujuan tegas dari Anda.</string>
     <string name="title_setup_gmail_drafts">Jika folder draf tidak dapat diakses oleh IMAP, hal ini dapat diperbaiki pada pengaturan label Gmail.</string>
@@ -407,7 +405,7 @@
     <string name="title_advanced_sound">Pilih suara pemberitahuan</string>
     <string name="title_advanced_confirm_links">Minta konfirmasi ketika membuka tautan</string>
     <string name="title_advanced_browse_links">Delegasikan ketika membuka tautan ke sistem Android</string>
-    <string name="title_advanced_confirm_images">Minta konfirmasi ketika menampilkan gambar</string>
+    <string name="title_advanced_ask_images">Minta konfirmasi ketika menampilkan gambar</string>
     <string name="title_advanced_confirm_html">Tampilkan pesan yang diformat ulang secara standar</string>
     <string name="title_advanced_tracking">Coba untuk mengenali dan nonaktifkan pelacakan gambar</string>
     <string name="title_advanced_hide_timezone">Kirim pesan tanpa data zona waktu</string>
@@ -825,7 +823,6 @@
     <string name="title_no_search">Pencarian di server tidak tersedia untuk akun ini</string>
     <string name="title_too_large">Pesan terlalu besar untuk diformat ulang sepenuhnya</string>
     <string name="title_truncated">Pesan terlalu besar untuk ditampilkan sepenuhnya</string>
-    <string name="title_insufficient_memory">Pesan terlalu besar untuk di simpan</string>
     <string name="title_show_full">Tampilkan pesan penuh</string>
     <string name="title_unused_inline">Gambar sebaris yang tidak digunakan akan dihapus saat dikirim</string>
     <string name="title_accross_remark">Pesan yang dipindahkan ke akun lain akan diunduh lagi sehingga mengakibatkan penggunaan data bertambah</string>
@@ -1001,6 +998,7 @@
     <string name="title_filter_duplicates">Duplikat</string>
     <string name="title_compact">Tampilan ringkas</string>
     <string name="title_zoom">Ukuran teks</string>
+    <string name="title_padding">Ukuran padding</string>
     <string name="title_select_language">Pilih bahasa</string>
     <string name="title_select_all">Pilih semua</string>
     <string name="title_select_found">Pilihan yang berhasil ditemukan</string>

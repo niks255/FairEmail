@@ -165,8 +165,6 @@
     <string name="title_setup_identities">Особисті дані</string>
     <string name="title_setup_other">Інші постачальники</string>
     <string name="title_setup_pop3">Обліковий запис POP3</string>
-    <string name="title_setup_oauth_permission">Постачальник електронної пошти затвердив OAuth лише для офіційних версій додатків</string>
-    <string name="title_setup_gmail_support">Авторизація облікових записів Google працюватиме лише в офіційних версіях, тому що Android перевіряє підпис додатку</string>
     <string name="title_setup_gmail_rationale">Будь ласка, надайте дозвіл для вибору облікового запису та читання вашого імені</string>
     <string name="title_setup_gmail_permissions">Google буде запитувати про дозволи на читання, створення, надсилання і остаточне видаляння всієї Вашої електронної пошти. FairEmail ніколи не буде видаляти ваші повідомлення без вашої явної згоди.</string>
     <string name="title_setup_gmail_drafts">Якщо тека чернеток недоступна для IMAP, то її можна виправити в налаштуваннях Gmail</string>
@@ -267,6 +265,7 @@
     <string name="title_setup_theme_black_background">Чорний фон</string>
     <string name="title_setup_theme_html_light">Світлий фон для оригінального перегляду повідомлень</string>
     <string name="title_setup_theme_composer_light">Світлий фон для редактора повідомлень</string>
+    <string name="title_setup_theme_you_hint">Колір \"Material You\", який ви можете налаштувати в налаштуваннях Android : Фоновий малюнок та теми пристрою</string>
     <string name="title_setup_theme_system_hint">Автоматичне перемкнення на світлу або темну тему вдень або вночі, якщо це підтримується в Android</string>
     <string name="title_setup_theme_more_colors">Я хочу більше кольорів</string>
     <string name="title_setup_advanced">Додатково</string>
@@ -280,6 +279,8 @@
     <string name="title_advanced_hint_title">Розширенні налаштування</string>
     <string name="title_advanced_hint_message">        Ви переходите до більш розширених параметрів.
         Всі параметри мають загальновизнані стандартні значення, які не треба змінювати, якщо ви не маєте інших уподобань.
+    </string>
+    <string name="title_advanced_hint_remark">        Параметри класифіковані вкладками, розділені на секції, організовані за зовнішній виглядом або за використанням, та доступні для пошуку.
     </string>
     <string name="title_advanced_hint_setup">Ви можете налаштувати обліковий запис, натиснувши на кнопку майстра на головній сторінці конфігурації.</string>
     <string name="title_advanced_section_main">Головне</string>
@@ -521,8 +522,10 @@
     <string name="title_advanced_confirm_links">Підтвердити відкриття посилань</string>
     <string name="title_advanced_check_links_dbl">Перевіряти списки заблокованих доменів за сумнівними посиланнями</string>
     <string name="title_advanced_browse_links">Делегувати відкриття посилань до Android</string>
-    <string name="title_advanced_confirm_images">Підтвердити показ зображень</string>
+    <string name="title_advanced_confirm_images">Не показувати зображення за замовчуванням</string>
+    <string name="title_advanced_ask_images">Підтвердити показ зображень</string>
     <string name="title_advanced_confirm_html">Показати відформатовані повідомлення за замовчуванням</string>
+    <string name="title_advanced_ask_html">Підтвердіть відображення оригінальних повідомлень</string>
     <string name="title_advanced_tracking">Автоматично розпізнавати та вимикати зображення які використовуються для відстеження</string>
     <string name="title_advanced_hide_timezone">Надсилати повідомлення без даних часового поясу</string>
     <string name="title_advanced_client_id">Надсилати назву і версію застосунку до поштового серверу</string>
@@ -531,8 +534,10 @@
     <string name="title_advanced_secure">Приховати з екрану останніх програм і не дозволяти робити знімки екрану</string>
     <string name="title_advanced_pin">PIN-код</string>
     <string name="title_advanced_biometrics_timeout">Тайм-аут біометричної автентифікації</string>
-    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">Блокування при вимкненому екрані</string>
+    <string name="title_advanced_autolock">Блокування при вимкненому екрані</string>
+    <string name="title_advanced_autolock_nav">Блокувати при виході з програми</string>
     <string name="title_advanced_generic_user_agent">Використовувати User agent браузера</string>
+    <string name="title_advanced_load_emoji">Завантаження оновлених емодзі з служб Google Play</string>
     <string name="title_advanced_disconnect_auto_update">Автоматично оновлювати списки щотижня</string>
     <string name="title_advanced_disconnect_links">Використовуйте списки для попередження про посилання за якими можливе відслідковування</string>
     <string name="title_advanced_disconnect_images">Використовувати списки для розпізнавання зображень за якими можливе відстеження</string>
@@ -640,6 +645,7 @@
     <string name="title_advanced_display_harmful_hint">Вимкнення цієї опції може зашкодити вашій конфіденційності</string>
     <string name="title_advanced_display_hidden_hint">Це може призвести до дивного вигляду та подвійних текстів</string>
     <string name="title_advanced_display_pin_hint">PIN-код має пріоритет над біометричною аутентифікацією</string>
+    <string name="title_advanced_display_autolock_nav_hint">Затримка до виконання на %1$d секунд</string>
     <string name="title_advanced_safe_browsing_hint">Сервер Google знає, на які адреси звертаються</string>
     <string name="title_advanced_badge_hint">Доступно лише для підтримуваних лаунчерів</string>
     <string name="title_advanced_notify_action_hint">Не більше трьох дій буде показано</string>
@@ -788,6 +794,8 @@
     <string name="title_notify_batch_disable">Вимкнути сповіщення про нові повідомлення</string>
     <string name="title_delete_local">Видалити локальні повідомлення</string>
     <string name="title_delete_browsed">Видалити переглянуті/знайденні повідомлення</string>
+    <string name="title_expunge">Витерти</string>
+    <string name="title_expunge_remark">Це назавжди видалить усі повідомлення, позначені для видалення</string>
     <string name="title_empty_trash">Очистити кошик</string>
     <string name="title_empty_spam">Очистити спам</string>
     <string name="title_edit_properties">Редагувати властивості</string>
@@ -978,7 +986,7 @@
     <string name="title_no_search">Пошук на сервері недоступний для цього облікового запису</string>
     <string name="title_too_large">Лист завеликий для повного переформатування</string>
     <string name="title_truncated">Лист завеликий для показу</string>
-    <string name="title_insufficient_memory">Лист завеликий для розміщення в доступній пам\'яті</string>
+    <string name="title_insufficient_memory">Повідомлення занадто велике для доступної пам\'яті (%1$d)</string>
     <string name="title_show_full">Показати повне повідомлення</string>
     <string name="title_unused_inline">Невикористані вбудовані зображення будуть видалені при надсиланні</string>
     <string name="title_accross_remark">Повідомлення, які переміщуються через облікові записи, будуть завантажені знову, в результаті буде додаткове використання даних</string>
@@ -1087,6 +1095,7 @@
     <string name="title_send_dialog">Показати параметри надсилання</string>
     <string name="title_image_dialog">Показати параметри зображення</string>
     <string name="title_media_toolbar">Панель інструментів мультимедіа</string>
+    <string name="title_manage_local_contacts">Керування локальними контактами</string>
     <string name="title_insert_contact_group">Вставити групу контактів</string>
     <string name="title_insert_template">Вставити шаблон</string>
     <string name="title_create_template">Створити шаблон</string>
@@ -1116,6 +1125,7 @@
     <string name="title_smime_reminder">Доступні S/MIME ключі</string>
     <string name="title_to_missing">Відсутній отримувач</string>
     <string name="title_extra_missing">Не вказано ім\'я користувача</string>
+    <string name="title_noreply_reminder">Надсилання на адресу \'no-reply\'</string>
     <string name="title_external_reminder">Надсилання на зовнішню адресу</string>
     <string name="title_subject_reminder">Тема не вказана</string>
     <string name="title_text_reminder">Порожнє повідомлення</string>
@@ -1217,6 +1227,7 @@
     <string name="title_filter_duplicates">Дублікати</string>
     <string name="title_compact">Компактний вигляд</string>
     <string name="title_zoom">Розмір тексту</string>
+    <string name="title_padding">Розмір відступів</string>
     <string name="title_select_language">Вибрати мову</string>
     <string name="title_select_all">Виділити все</string>
     <string name="title_select_found">Вибрати знайдене</string>

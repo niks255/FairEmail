@@ -34,6 +34,7 @@ import androidx.preference.PreferenceManager;
 
 import com.sun.mail.gimap.GmailMessage;
 import com.sun.mail.iap.ProtocolException;
+import com.sun.mail.imap.IMAPBodyPart;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.imap.protocol.IMAPProtocol;
@@ -2007,8 +2008,11 @@ public class MessageHelper {
             parts.addAll(text);
             parts.addAll(extra);
             for (PartHolder h : parts) {
-                if (h.part.getSize() > MAX_MESSAGE_SIZE) {
-                    warnings.add(context.getString(R.string.title_insufficient_memory));
+                int size = h.part.getSize();
+                if (size > 100 * 1024 * 1024)
+                    Log.e("Unreasonable message size=" + size);
+                if (size > MAX_MESSAGE_SIZE && size != Integer.MAX_VALUE) {
+                    warnings.add(context.getString(R.string.title_insufficient_memory, size));
                     return null;
                 }
 
@@ -2745,7 +2749,7 @@ public class MessageHelper {
                                 return parts;
                             } else {
                                 StringBuilder sb = new StringBuilder();
-                                sb.append(ct);
+                                sb.append(ct).append(" parts=").append(multipart.getCount()).append("/2");
                                 for (int i = 0; i < multipart.getCount(); i++)
                                     sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
                                 Log.e(sb.toString());
@@ -2767,7 +2771,7 @@ public class MessageHelper {
                                 return parts;
                             } else {
                                 StringBuilder sb = new StringBuilder();
-                                sb.append(ct);
+                                sb.append(ct).append(" parts=").append(multipart.getCount()).append("/2");
                                 for (int i = 0; i < multipart.getCount(); i++)
                                     sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
                                 Log.e(sb.toString());
@@ -2799,7 +2803,9 @@ public class MessageHelper {
                                 return parts;
                             }
                         }
-                        Log.e(ct.toString());
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("Unexpected smime-type=").append(ct);
+                        Log.e(sb.toString());
                     }
                 }
             } catch (ParseException ex) {
@@ -2961,9 +2967,15 @@ public class MessageHelper {
                     apart.encrypt = encrypt;
                     apart.part = part;
 
-                    String[] cid = null;
+                    String cid = null;
                     try {
-                        cid = apart.part.getHeader("Content-ID");
+                        if (apart.part instanceof IMAPBodyPart)
+                            cid = ((IMAPBodyPart) apart.part).getContentID();
+                        if (TextUtils.isEmpty(cid)) {
+                            String[] cids = apart.part.getHeader("Content-ID");
+                            if (cids != null && cids.length > 0)
+                                cid = MimeUtility.unfold(cids[0]);
+                        }
                     } catch (MessagingException ex) {
                         Log.w(ex);
                         if (!"Failed to fetch headers".equals(ex.getMessage()))
@@ -2975,7 +2987,7 @@ public class MessageHelper {
                     apart.attachment.name = apart.filename;
                     apart.attachment.type = contentType.getBaseType().toLowerCase(Locale.ROOT);
                     apart.attachment.size = (long) apart.part.getSize();
-                    apart.attachment.cid = (cid == null || cid.length == 0 ? null : MimeUtility.unfold(cid[0]));
+                    apart.attachment.cid = cid;
                     apart.attachment.encryption = apart.encrypt;
 
                     if ("text/calendar".equalsIgnoreCase(apart.attachment.type) &&
@@ -3161,6 +3173,23 @@ public class MessageHelper {
         }
 
         return addresses;
+    }
+
+    static InternetAddress[] dedup(InternetAddress[] addresses) {
+        if (addresses == null)
+            return null;
+
+        List<String> emails = new ArrayList<>();
+        List<Address> result = new ArrayList<>();
+        for (InternetAddress address : addresses) {
+            String email = address.getAddress();
+            if (!emails.contains(email)) {
+                emails.add(email);
+                result.add(address);
+            }
+        }
+
+        return result.toArray(new InternetAddress[0]);
     }
 
     static boolean isRemoved(Throwable ex) {

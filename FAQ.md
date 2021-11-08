@@ -449,8 +449,9 @@ See also [this FAQ](#user-content-faq16).
 *... Invalid security certificate (Can't verify identity of server) ...*<br />
 *... Chain validation failed ... timestamp check failed ... Certificate expired at ...*<br />
 
-This can be caused by using an incorrect host name, so first double check the host name in the advanced identity/account settings (tap Manual setup).
+This can be caused by using an incorrect host name, so first double check the host name in the advanced identity/account settings (tap *Manual setup and account options*).
 Please see the documentation of the email provider about the right host name.
+Sometimes the right host name is in the error message.
 
 You should try to fix this by contacting your provider or by getting a valid security certificate
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
@@ -575,6 +576,7 @@ After enabling two factor authentication there will be this error message:
 The error message "*Authentication failed - Invalid credentials*" means that the Android account manager was not able to refresh the access token.
 A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager.
 You can workaround this issue by using an app password.
+Please [see here](#user-content-howto) about how you can delete the account configured with the quick setup wizard.
 
 <br />
 
@@ -824,7 +826,8 @@ Common errors:
 
 Encrypting a message requires the public key(s) of the recipient(s). Signing a message requires your private key.
 
-Private keys are stored by Android and can be imported via the Android advanced security settings.
+Private keys are stored by Android and can be imported via the Android advanced security settings
+(Encryption & credentials, Install a certificate, VPN & app user certificate).
 There is a shortcut (button) for this in the encryption settings for Android version 10 and before.
 Android will ask you to set a PIN, pattern, or password if you didn't before.
 If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
@@ -926,6 +929,8 @@ You can select in which folder to continue the search.
 The IMAP protocol doesn't support searching in more than one folder at the same time.
 Searching on the server is an expensive operation, therefore it is not possible to select multiple folders.
 
+The POP3 protocol doesn't support searching on the server at all.
+
 Searching local messages is case insensitive and on partial text.
 The message text of local messages will not be searched if the message text was not downloaded yet.
 Searching on the server might be case sensitive or case insensitive and might be on partial text or whole words, depending on the provider.
@@ -999,10 +1004,12 @@ The easiest way is to use the menu item *Fetch more messages* in the three-dots 
 
 An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting *Outlook/Office 365*.
 
-To use an Outlook, Live or Hotmail account with two factor authentication enabled, you need to create an app password.
+To use an Outlook, Live or Hotmail account with two factor authentication enabled, you might need to create an app password.
 See [here](https://support.microsoft.com/en-us/help/12409/microsoft-account-app-passwords-two-step-verification) for the details.
 
 See [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for Microsoft's instructions.
+
+Please see [this FAQ](#user-content-faq139) for possible causes of the error *... User is authenticated but not connected ...*.
 
 For setting up an Office 365 account, please see [this FAQ](#user-content-faq156).
 
@@ -2091,6 +2098,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the message move button to move across accounts? (since version 1.1702)
 * Did you know that you can long press the folder name in the message header when viewing a conversation to navigate to the folder? (since version 1.1720)
 * Did you know that you can long press the add contact button in the message composer to insert a contact group? (since version 1.1721)
+* Did you know that you can long press the image action to show the image dialog, even if it was disabled? (since version 1.1772)
 
 <br />
 
@@ -2282,7 +2290,7 @@ You can check the rule and apply the rule to existing messages or, alternatively
 
 You'll need to give a rule a name and you'll need to define the order in which a rule should be executed relative to other rules.
 
-You can disable a rule and you can stop processing other rules after a rule has been executed.
+You can disable a rule and you can stop processing other rules after a rule has been executed, which can be used to create a *not* condition.
 
 The following rule conditions are available:
 
@@ -2372,7 +2380,12 @@ The primary account is used when the account is ambiguous, for example when star
 
 Similarly, the primary identity of an account is used when the identity is ambiguous.
 
+The default email address is the email address of the primary identity of the primary account.
+
 There can be just one primary account and there can be just one primary identity per account.
+
+You can set an account or an identity to be primary by long pressing it in the list of accounts or identities.
+You can go to the list of accounts via *Manual setup and account options* in the main setup screen.
 
 <br />
 
@@ -3957,7 +3970,7 @@ Advanced: the IMAP delete flag in combination with the EXPUNGE command is not su
 because both email servers and not all people can handle this, risking unexpected loss of messages.
 A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
 
-From version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable expunging messages.
+From version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable auto expunging messages.
 Note that messages with a *\Deleted* flag will not be shown in FairEmail.
 
 <br />

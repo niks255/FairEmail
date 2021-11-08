@@ -557,11 +557,11 @@ Bazı sağlayıcılar gönderilen mesajları takip etmez veya kullanılan SMTP s
 <br />
 
 <a name="faq8"></a>
-**(8) Can I use a Microsoft Exchange account?**
+**(8) Microsoft Exchange hesabımı kullanabilir miyim?**
 
-The Microsoft Exchange Web Services protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055). So, it makes little sense to add this protocol anymore.
+Microsoft Exchange Web Hizmetleri protokolü [aşamalı olarak kaldırılıyor](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055). Bu nedenle, artık bu protokolü eklemek pek mantıklı değil.
 
-You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case. See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
+IMAP aracılığıyla Microsoft Exchange hesabınıza erişebiliyorsanız bu hesabı kullanabilirsiniz. Daha fazla bilgi için [buraya](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) tıklayın.
 
 Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services and Microsoft ActiveSync are not supported.
 

@@ -134,8 +134,6 @@
     <string name="title_setup_identities">身份</string>
     <string name="title_setup_other">其他提供商</string>
     <string name="title_setup_pop3">POP3 账户</string>
-    <string name="title_setup_oauth_permission">电子邮件服务提供商仅允许官方应用程序版本使用OAuth</string>
-    <string name="title_setup_gmail_support">授权 Google 账户仅在官方版本下有效，因为 Android 会检查应用签名</string>
     <string name="title_setup_gmail_rationale">请授予权限来选择一个账户并读取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 会请求读取、撰写、发送和永久删除您的所有电子邮件的权限。相比之下，未经您的明确同意，FairEmail 永远不会删除您的邮件。</string>
     <string name="title_setup_gmail_drafts">如果草稿文件夹无法通过IMAP访问，可以在Gmail的标签设置中进行修复</string>
@@ -236,6 +234,7 @@
     <string name="title_setup_theme_black_background">黑色背景</string>
     <string name="title_setup_theme_html_light">原始消息视图使用浅色背景</string>
     <string name="title_setup_theme_composer_light">邮件编辑窗使用浅色背景</string>
+    <string name="title_setup_theme_you_hint">可以在系统设置“壁纸和样式”中配置 Material You 颜色</string>
     <string name="title_setup_theme_system_hint">如果安卓系统支持，跟随系统主题将在白天/夜间自动切换到亮/暗色主题</string>
     <string name="title_setup_theme_more_colors">我想要更多颜色</string>
     <string name="title_setup_advanced">高级选项</string>
@@ -249,6 +248,8 @@
     <string name="title_advanced_hint_title">更多高级选项</string>
     <string name="title_advanced_hint_message">        您正在前往更多的高级选项
         所有选项默认均使用可更改的常用标准值
+    </string>
+    <string name="title_advanced_hint_remark">        各个选项按照标签页分类，标签页内又分为多个部分，按外观或用途进行整理，并且可搜索。
     </string>
     <string name="title_advanced_hint_setup">您可以通过点击主配置屏幕上的向导按钮来配置一个帐户。</string>
     <string name="title_advanced_section_main">主要</string>
@@ -490,8 +491,10 @@
     <string name="title_advanced_confirm_links">确认打开链接</string>
     <string name="title_advanced_check_links_dbl">使用域名拦截列表检查可疑链接</string>
     <string name="title_advanced_browse_links">授权打开到 Android的链接</string>
-    <string name="title_advanced_confirm_images">确认显示图像</string>
+    <string name="title_advanced_confirm_images">默认不显示图片</string>
+    <string name="title_advanced_ask_images">确认显示图片</string>
     <string name="title_advanced_confirm_html">默认显示重新格式化的消息</string>
+    <string name="title_advanced_ask_html">确认显示原始邮件</string>
     <string name="title_advanced_tracking">尝试识别和禁用跟踪图像</string>
     <string name="title_advanced_hide_timezone">发送没有时区数据的消息</string>
     <string name="title_advanced_client_id">将应用名称和版本发送到电子邮件服务器</string>
@@ -500,8 +503,10 @@
     <string name="title_advanced_secure">从\"最近应用\"列表中隐藏并阻止截屏</string>
     <string name="title_advanced_pin">PIN 码</string>
     <string name="title_advanced_biometrics_timeout">生物认证超时时间</string>
-    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">屏幕关闭时锁定</string>
+    <string name="title_advanced_autolock">屏幕关闭时锁定</string>
+    <string name="title_advanced_autolock_nav">离开应用后锁定</string>
     <string name="title_advanced_generic_user_agent">使用通用浏览器用户代理</string>
+    <string name="title_advanced_load_emoji">从 Google Play 服务加载更新的 Emoji</string>
     <string name="title_advanced_disconnect_auto_update">每周自动更新列表</string>
     <string name="title_advanced_disconnect_links">使用列表警告跟踪链接</string>
     <string name="title_advanced_disconnect_images">使用列表来识别跟踪图像</string>
@@ -610,6 +615,7 @@
     <string name="title_advanced_display_harmful_hint">禁用此选项可能会危害您的隐私</string>
     <string name="title_advanced_display_hidden_hint">这可能导致古怪的外观和双重文本</string>
     <string name="title_advanced_display_pin_hint">PIN码优先于生物验证</string>
+    <string name="title_advanced_display_autolock_nav_hint">将会有 %1$d 秒的宽限时间</string>
     <string name="title_advanced_safe_browsing_hint">Google 服务器知道被查找的地址</string>
     <string name="title_advanced_badge_hint">仅可用于支持的启动器</string>
     <string name="title_advanced_notify_action_hint">最多显示三项操作</string>
@@ -758,6 +764,8 @@
     <string name="title_notify_batch_disable">禁用新消息通知</string>
     <string name="title_delete_local">删除本地消息</string>
     <string name="title_delete_browsed">删除浏览过/搜索过的消息</string>
+    <string name="title_expunge">Expunge</string>
+    <string name="title_expunge_remark">这将永久删除所有标记要删除的邮件</string>
     <string name="title_empty_trash">清空回收站</string>
     <string name="title_empty_spam">清空垃圾邮件</string>
     <string name="title_edit_properties">编辑属性</string>
@@ -947,7 +955,7 @@
     <string name="title_no_search">在服务器上搜索对该账户不可用</string>
     <string name="title_too_large">消息内容太多，不能完全重新格式化</string>
     <string name="title_truncated">消息内容太多，无法完全显示</string>
-    <string name="title_insufficient_memory">内存不足以容纳消息数量</string>
+    <string name="title_insufficient_memory">邮件过大，内存不足（可用内存为 %1$d）</string>
     <string name="title_show_full">显示完整消息</string>
     <string name="title_unused_inline">未使用的内联图像将在发送时被删除</string>
     <string name="title_accross_remark">App会再次下载在不同账户间移动的消息，这将导致额外的数据使用</string>
@@ -1056,6 +1064,7 @@
     <string name="title_send_dialog">显示发送选项</string>
     <string name="title_image_dialog">显示图像选项</string>
     <string name="title_media_toolbar">媒体工具栏</string>
+    <string name="title_manage_local_contacts">管理本地联系人</string>
     <string name="title_insert_contact_group">插入联系人组</string>
     <string name="title_insert_template">插入模板</string>
     <string name="title_create_template">创建模板</string>
@@ -1085,6 +1094,7 @@
     <string name="title_smime_reminder">S/MIME 密钥可用</string>
     <string name="title_to_missing">缺少收件人</string>
     <string name="title_extra_missing">缺少用户名</string>
+    <string name="title_noreply_reminder">正在向“无回复”地址发送邮件</string>
     <string name="title_external_reminder">发送到外部地址</string>
     <string name="title_subject_reminder">主题为空</string>
     <string name="title_text_reminder">消息为空</string>
@@ -1186,6 +1196,7 @@
     <string name="title_filter_duplicates">重复项</string>
     <string name="title_compact">紧凑视图</string>
     <string name="title_zoom">文本大小</string>
+    <string name="title_padding">内边距尺寸</string>
     <string name="title_select_language">选择语言</string>
     <string name="title_select_all">全选</string>
     <string name="title_select_found">选中找到的</string>

@@ -120,6 +120,7 @@
     <string name="title_setup">Indstillinger</string>
     <string name="title_setup_help">Hjælp</string>
     <string name="title_setup_quick">Hurtig opsætning</string>
+    <string name="title_setup_intro">Oprettelse af en konto består kun af tre trin, hvorefter du kan sende og modtage e-mails</string>
     <string name="title_setup_simple">Ingen grund til at ændre valgmuligheder</string>
     <string name="title_setup_issue">FairEmail er udviklet for at hjælpe dig med at beskytte din fortrolighed og repræsenterer bogstaveligt talt tusindvis af arbejdstimer. Oplever du problemer, så kontakte mig først mhp. support, inden du giver en dårlig bedømmelse. Jeg vil med glæde hjælpe!</string>
     <string name="title_setup_analytics">FairEmail viser ikke annoncer eller sporer/analyserer brugeradfærd. Bugsnag bruges til fejlrapportering og er som standard deaktiveret.</string>
@@ -143,8 +144,6 @@
     <string name="title_setup_identities">Identiteter</string>
     <string name="title_setup_other">Anden udbyder</string>
     <string name="title_setup_pop3">POP3 konto</string>
-    <string name="title_setup_oauth_permission">E-mailudbyderen har alene godkendt OAuth for officielle app-versioner</string>
-    <string name="title_setup_gmail_support">Godkendelse af Google-konti fungerer kun i officielle versioner, da Android tjekker app-signaturen</string>
     <string name="title_setup_gmail_rationale">Giv tilladelser til at vælge en konto og læse dit navn</string>
     <string name="title_setup_gmail_permissions">Google vil beder om tilladelse til at læse, komponere, sende samt permanent slette alle din e-mails. FairEmail sletter aldrig dine beskeder uden dit samtykke.</string>
     <string name="title_setup_gmail_drafts">Er kladdermappen ikke er tilgængelig med IMAP, kan dette rettes i Gmail-etiketindstillingerne</string>
@@ -245,6 +244,7 @@
     <string name="title_setup_theme_black_background">Sort baggrund</string>
     <string name="title_setup_theme_html_light">Lys baggrund til oprindelig beskedvisning</string>
     <string name="title_setup_theme_composer_light">Lys baggrund til beskedredigering</string>
+    <string name="title_setup_theme_you_hint">Material You-farverne kan opsættes i Android Tapet og stil indstillinger</string>
     <string name="title_setup_theme_system_hint">Følg system skifter automatisk til lyst/mørkt dag/nat, hvis understøttet af Android</string>
     <string name="title_setup_theme_more_colors">Flere farver ænskes</string>
     <string name="title_setup_advanced">Avanceret</string>
@@ -258,6 +258,8 @@
     <string name="title_advanced_hint_title">Flere avancerede indstillinger</string>
     <string name="title_advanced_hint_message">        De mere avancerede indstillinger tilgås nu.
         Alle valgmuligheder har almindeligt brugte standardværdier, som kan ændres jf. dine præferencer.
+    </string>
+    <string name="title_advanced_hint_remark">        Indstillingerne er kategoriseret efter fane, opdelt i afsnit, organiseret efter udseende/brug, og er søgbare.
     </string>
     <string name="title_advanced_hint_setup">En konto kan opsættes ved at trykke på guideknappen på hovedopsætningsskærmen.</string>
     <string name="title_advanced_section_synchronize">Modtag</string>
@@ -496,8 +498,10 @@
     <string name="title_advanced_confirm_links">Bekræft åbning af links</string>
     <string name="title_advanced_check_links_dbl">Tjek domæneblokeringslister for mistænkelige links</string>
     <string name="title_advanced_browse_links">Delegér åbningslinks til Android</string>
-    <string name="title_advanced_confirm_images">Bekræft visning af billeder</string>
+    <string name="title_advanced_confirm_images">Som standard Ingen billedvisning</string>
+    <string name="title_advanced_ask_images">Bekræft visning af billeder</string>
     <string name="title_advanced_confirm_html">Vis som standard omformaterede beskeder</string>
+    <string name="title_advanced_ask_html">Bekræft visning af originale beskeder</string>
     <string name="title_advanced_tracking">Forsøg på at genkend og deaktivere sporingsbilleder</string>
     <string name="title_advanced_hide_timezone">Send beskeder uden tidszonedata</string>
     <string name="title_advanced_client_id">Send app-navn og -version til e-mailserver</string>
@@ -506,7 +510,9 @@
     <string name="title_advanced_secure">Skjul fra seneste apps-skærm og forhindr skærmfotofunktion</string>
     <string name="title_advanced_pin">PIN-kode</string>
     <string name="title_advanced_biometrics_timeout">Biometrisk godkendelse fik timeout</string>
-    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">Lås ved skærmslukning</string>
+    <string name="title_advanced_autolock">Lås ved skærmslukning</string>
+    <string name="title_advanced_autolock_nav">Lås, når app forlades</string>
+    <string name="title_advanced_load_emoji">Indlæs opdaterede Emoji fra Google Play-tjenester</string>
     <string name="title_advanced_disconnect_auto_update">Opdatér automatisk lister ugentligt</string>
     <string name="title_advanced_disconnect_links">Benyt lister til at advare om sporingslinks</string>
     <string name="title_advanced_disconnect_images">Benyt lister til at genkende sporingsbilleder</string>
@@ -613,6 +619,7 @@
     <string name="title_advanced_display_harmful_hint">Deaktivering af denne indstilling kan være skadelig for din datafortrolighed</string>
     <string name="title_advanced_display_hidden_hint">Dette kan resultere i underligt udseende/dobbelte tekster</string>
     <string name="title_advanced_display_pin_hint">PIN-kode har forrang frem for biometrisk godkendelse</string>
+    <string name="title_advanced_display_autolock_nav_hint">Respitperioden udgør %1$d sek</string>
     <string name="title_advanced_safe_browsing_hint">Google-serveren ved, hvilke adresser, som bliver slået op</string>
     <string name="title_advanced_badge_hint">Kun tilgængelig i understøttede launchers</string>
     <string name="title_advanced_notify_action_hint">Maksimalt tre handlinger vises</string>
@@ -760,6 +767,8 @@
     <string name="title_notify_batch_disable">Deaktivér ny besked notifikation</string>
     <string name="title_delete_local">Slet lokale beskeder</string>
     <string name="title_delete_browsed">Slet gennemsete/søgte beskeder</string>
+    <string name="title_expunge">Fjern permanent</string>
+    <string name="title_expunge_remark">Dette sletter permanent alle beskeder markeret for sletning</string>
     <string name="title_empty_trash">Tøm papirkurv</string>
     <string name="title_empty_spam">Tøm spam</string>
     <string name="title_edit_properties">Redigér egenskaber</string>
@@ -949,7 +958,7 @@
     <string name="title_no_search">Søg på server er utilgængelig for denne konto</string>
     <string name="title_too_large">Besked for stor til fuldstændig omformatering</string>
     <string name="title_truncated">Besked for stor til fuldstændig visning</string>
-    <string name="title_insufficient_memory">Beksked for stor til at være i hukommelsen</string>
+    <string name="title_insufficient_memory">Besked for stor ift. tilgængelige hukommelse (%1$d)</string>
     <string name="title_show_full">Vis fuld besked</string>
     <string name="title_unused_inline">Ubrugte inline-billeder fjernes ved afsendelsen</string>
     <string name="title_accross_remark">Beskeder flyttet mellem konti gen-downloades, hvilket betyder ekstra dataforbrug</string>
@@ -1058,6 +1067,7 @@
     <string name="title_send_dialog">Vis Send-muligheder</string>
     <string name="title_image_dialog">Vis Billed-muligheder</string>
     <string name="title_media_toolbar">Medieværktøjsbjælke</string>
+    <string name="title_manage_local_contacts">Håndtér lokale kontakter</string>
     <string name="title_insert_contact_group">Indsæt kontaktgruppe</string>
     <string name="title_insert_template">Indsæt skabelon</string>
     <string name="title_create_template">Opret skabelon</string>
@@ -1087,6 +1097,7 @@
     <string name="title_smime_reminder">S/MIME-nøgler tilgængelige</string>
     <string name="title_to_missing">Modtager mangler</string>
     <string name="title_extra_missing">Brugernavn mangler</string>
+    <string name="title_noreply_reminder">Sender til en \'ikke-svar\' adresse</string>
     <string name="title_external_reminder">Sender til et eksternt domæne</string>
     <string name="title_subject_reminder">Emne er tomt</string>
     <string name="title_text_reminder">Besked er tom</string>
@@ -1188,6 +1199,7 @@
     <string name="title_filter_duplicates">Dubletter</string>
     <string name="title_compact">Kompaktvisning</string>
     <string name="title_zoom">Tekststørrelse</string>
+    <string name="title_padding">Fyldstørrelse</string>
     <string name="title_select_language">Vælg sprog</string>
     <string name="title_select_all">Markér alle</string>
     <string name="title_select_found">Markér fundne</string>

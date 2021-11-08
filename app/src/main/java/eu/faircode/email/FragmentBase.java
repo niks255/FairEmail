@@ -105,6 +105,12 @@ public class FragmentBase extends Fragment {
         updateSubtitle();
     }
 
+    void invalidateOptionsMenu() {
+        FragmentActivity activity = getActivity();
+        if (activity != null)
+            activity.invalidateOptionsMenu();
+    }
+
     void scrollTo(int resid, int offset) {
         scrollToResid = resid;
         scrollToOffset = offset;
@@ -225,11 +231,11 @@ public class FragmentBase extends Fragment {
         Log.i("Create " + this + " saved=" + (savedInstanceState != null));
         super.onCreate(savedInstanceState);
 
-        Bundle args = getArguments();
-        if (args == null)
-            setArguments(new Bundle());
-
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            Bundle args = getArguments();
+            if (args == null)
+                setArguments(new Bundle());
+        } else {
             subtitle = savedInstanceState.getString("fair:subtitle");
             requestKey = savedInstanceState.getString("fair:requestKey");
         }

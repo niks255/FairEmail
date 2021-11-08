@@ -134,8 +134,6 @@
     <string name="title_setup_identities">ID</string>
     <string name="title_setup_other">他のプロバイダー</string>
     <string name="title_setup_pop3">POP3 アカウント</string>
-    <string name="title_setup_oauth_permission">メールプロバイダーは、公式のアプリに対してのみOAuthを承認しています</string>
-    <string name="title_setup_gmail_support">Androidがアプリの署名をチェックする為、Googleアカウントの承認は公式バージョンでのみ機能します</string>
     <string name="title_setup_gmail_rationale">アカウントを選択してアクセス許可を与えて下さい</string>
     <string name="title_setup_gmail_permissions">Googleは全てのメールの読み取り、作成、送信、完全削除の許可を求めます。FairEmailは明示的な同意なしにメッセージを削除する事は有りません</string>
     <string name="title_setup_gmail_drafts">IMAPで下書きフォルダにアクセス出来ない場合、Gmailラベル設定で修正出来ます</string>
@@ -236,16 +234,22 @@
     <string name="title_setup_theme_black_background">ブラック背景</string>
     <string name="title_setup_theme_html_light">元のメッセージを表示するときは背景色を明るくする</string>
     <string name="title_setup_theme_composer_light">メッセージエディタの背景色を明るくする</string>
+    <string name="title_setup_theme_you_hint"> マテリアルカラーはAndroidの壁紙 &amp; スタイル設定で設定できます</string>
     <string name="title_setup_theme_system_hint">Androidでサポートされている場合、システムテーマは昼/夜に自動的に切り替わります</string>
     <string name="title_setup_theme_more_colors">もっと色が欲しい場合</string>
     <string name="title_setup_advanced">詳細</string>
     <string name="title_setup_options">オプション</string>
     <string name="title_setup_defaults">既定に戻します</string>
     <string name="title_setup_reset_questions">質問をリセット</string>
+    <string name="title_setup_reset_general">よくある質問</string>
+    <string name="title_setup_reset_full">元のメッセージを表示</string>
     <string name="title_setup_reset_images">画像を表示</string>
+    <string name="title_setup_reset_links">リンクの確認</string>
     <string name="title_advanced_hint_title">高度なオプション</string>
     <string name="title_advanced_hint_message">        高度なオプションに移動しています。
         全てのオプションには一般的に使用される標準的な値が設定してあるため、必要がなければ設定の変更は不要です。
+    </string>
+    <string name="title_advanced_hint_remark">        オプションは、タブごとに分類され、セクションに分けられ、外観や用途ごとに整理され、検索も可能です。
     </string>
     <string name="title_advanced_hint_setup">メイン設定画面のウィザードボタンをタップしてアカウントを設定できます。</string>
     <string name="title_advanced_section_main">メイン</string>
@@ -487,8 +491,10 @@
     <string name="title_advanced_confirm_links">リンクを開く事を確認</string>
     <string name="title_advanced_check_links_dbl">不審なリンクがないかドメインブロックリストを確認する</string>
     <string name="title_advanced_browse_links">Androidへのリンクを開いて下さい</string>
-    <string name="title_advanced_confirm_images">画像表示を確認</string>
+    <string name="title_advanced_confirm_images">デフォルトで画像を表示しない</string>
+    <string name="title_advanced_ask_images">画像表示を確認</string>
     <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示</string>
+    <string name="title_advanced_ask_html">元のメッセージの表示を確認する</string>
     <string name="title_advanced_tracking">トラッキング画像の認識と無効化を試みます</string>
     <string name="title_advanced_hide_timezone">タイムゾーンデータ無しでメッセージを送信</string>
     <string name="title_advanced_client_id">アプリ名とバージョンをメールサーバーに送信</string>
@@ -497,7 +503,10 @@
     <string name="title_advanced_secure">最近使ったアプリから非表示にしスクリーンショット撮影から守る</string>
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">生体認証タイムアウト</string>
+    <string name="title_advanced_autolock">ロック画面 OFF</string>
+    <string name="title_advanced_autolock_nav">アプリを終了する時にロックする</string>
     <string name="title_advanced_generic_user_agent">既定のブラウザのユーザーエージェントを使用する</string>
+    <string name="title_advanced_load_emoji">Google Playサービスから更新された絵文字を読み込む</string>
     <string name="title_advanced_disconnect_auto_update">リストを自動的に毎週更新</string>
     <string name="title_advanced_disconnect_links">リストを使用して追跡リンクについて警告する</string>
     <string name="title_advanced_disconnect_images">リストを使用して追跡画像を認識する</string>
@@ -604,6 +613,7 @@
     <string name="title_advanced_display_harmful_hint">このオプションを無効にするとプライバシーが損なわれる可能性が有ります</string>
     <string name="title_advanced_display_hidden_hint">これにより奇妙な外観になったりと二重テキストが生成される可能性があります</string>
     <string name="title_advanced_display_pin_hint">PINを生体認証よりも優先</string>
+    <string name="title_advanced_display_autolock_nav_hint">%1$d 秒の猶予があります</string>
     <string name="title_advanced_safe_browsing_hint">Googleのサーバーは、どのアドレスが検索されているかを知っています</string>
     <string name="title_advanced_badge_hint">サポートされているランチャーでのみ利用可能</string>
     <string name="title_advanced_notify_action_hint">最大3つのアクションが表示されます</string>
@@ -752,6 +762,8 @@
     <string name="title_notify_batch_disable">新しいメッセージの通知を無効にする</string>
     <string name="title_delete_local">ローカルのメッセージを削除</string>
     <string name="title_delete_browsed">閲覧/検索したメッセージを削除</string>
+    <string name="title_expunge">消去</string>
+    <string name="title_expunge_remark">これにより、削除マークのついたすべてのメッセージが永久に削除されます</string>
     <string name="title_empty_trash">ゴミ箱を空にする</string>
     <string name="title_empty_spam">迷惑メールを空にする</string>
     <string name="title_edit_properties">プロパティを編集</string>
@@ -942,7 +954,7 @@
     <string name="title_no_search">サーバでの検索はこのアカウントでは利用出来ません</string>
     <string name="title_too_large">メッセージが大き過ぎて完全に再フォーマット出来ません</string>
     <string name="title_truncated">完全に表示するには大き過ぎるメッセージです</string>
-    <string name="title_insufficient_memory">メッセージが大き過ぎて使用可能メモリに収まりません</string>
+    <string name="title_insufficient_memory">使用可能なメモリに対してメッセージが大きすぎます (%1$d)</string>
     <string name="title_show_full">メッセージ全体を表示</string>
     <string name="title_unused_inline">未使用のインライン画像は送信時に削除されます</string>
     <string name="title_accross_remark">アカウント間で移動されたメッセージは再度ダウンロードされる為、余分なデータが使用されます</string>
@@ -1051,6 +1063,7 @@
     <string name="title_send_dialog">オプションを表示</string>
     <string name="title_image_dialog">画像オプションを表示</string>
     <string name="title_media_toolbar">メディアツールバー</string>
+    <string name="title_manage_local_contacts">ローカルの連絡先を管理</string>
     <string name="title_insert_contact_group">連絡先グループを挿入</string>
     <string name="title_insert_template">テンプレートを挿入</string>
     <string name="title_create_template">テンプレートを作成</string>
@@ -1128,6 +1141,7 @@
     <string name="title_search_hint">        はじめに、お使いのデバイスに保存されているメッセージを検索します。
         サーバーも検索するには「もう一度検索」ボタンをタップします
     </string>
+    <string name="title_search_index_hint">検索インデックスを介した検索は高速ですが単語全体しか検索されません。</string>
     <string name="title_search_text_hint">メッセージ内のテキストを検索しています。多数のメッセージがある場合、一部のサーバーで動作しない可能性があります。</string>
     <string name="title_search_text_unsupported">\'%s\' は、メールサーバーがメッセージテキスト内の検索をサポートしていないことを意味します</string>
     <string name="title_search_size_hint">サイズ別にメッセージを検索しています。メッセージが多い場合、一部のサーバーでは動作しない可能性があります。</string>
@@ -1180,6 +1194,7 @@
     <string name="title_filter_duplicates">重複</string>
     <string name="title_compact">簡易表示</string>
     <string name="title_zoom">テキストサイズ</string>
+    <string name="title_padding">余白のサイズ</string>
     <string name="title_select_language">言語を選択</string>
     <string name="title_select_all">すべて選択</string>
     <string name="title_select_found">見つかったものを選択</string>

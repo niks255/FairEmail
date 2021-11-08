@@ -143,8 +143,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_identities">Identiteiten</string>
     <string name="title_setup_other">Andere provider</string>
     <string name="title_setup_pop3">POP3 account</string>
-    <string name="title_setup_oauth_permission">De e-mailprovider heeft OAuth alleen goedgekeurd voor officiële app versies</string>
-    <string name="title_setup_gmail_support">Het autoriseren van Google accounts werkt alleen in officiële versies omdat Android de app handtekening controleert</string>
+    <string name="title_setup_oauth_permission">De e-mailprovider heeft OAuth alleen goedgekeurd voor de Play Store en GitHub versie</string>
+    <string name="title_setup_gmail_support">Autoriseren van Google accounts werkt alleen in de Play Store en GitHub versie omdat Android de digitale app handtekening controleert</string>
     <string name="title_setup_gmail_rationale">Geef a.u.b. toestemming om een account te selecteren en uw naam te lezen</string>
     <string name="title_setup_gmail_permissions">Google zal machtigingen vragen om al uw e-mail te lezen, op te stellen, te verzenden en definitief te verwijderen. FairEmail zal uw berichten nooit verwijderen zonder uw expliciete toestemming.</string>
     <string name="title_setup_gmail_drafts">Als de conceptmap niet toegankelijk is voor IMAP, dan kan dit worden opgelost in de Gmail label instellingen</string>
@@ -245,6 +245,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_theme_black_background">Zwarte achtergrond</string>
     <string name="title_setup_theme_html_light">Lichte achtergrond voor oorspronkelijke berichtweergave</string>
     <string name="title_setup_theme_composer_light">Lichte achtergrond voor berichteditor</string>
+    <string name="title_setup_theme_you_hint">De Material You kleuren kunnen worden geconfigureerd in de Android achtergrond en stijl instellingen</string>
     <string name="title_setup_theme_system_hint">Systeemthema volgen zal automatisch overschakelen naar lichte/donker bij dag/nacht, indien ondersteund door Android</string>
     <string name="title_setup_theme_more_colors">Ik wil meer kleuren</string>
     <string name="title_setup_advanced">Geavanceerd</string>
@@ -258,6 +259,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_hint_title">Meer geavanceerde opties</string>
     <string name="title_advanced_hint_message">        U navigeert naar de meer geavanceerde opties.
         Alle opties hebben vaak gebruikte standaardwaarden die je niet hoeft te wijzigen tenzij je een andere voorkeur hebt.
+    </string>
+    <string name="title_advanced_hint_remark">        De opties zijn gecategoriseerd op tabblad, verdeeld in secties, georganiseerd op uiterlijk of gebruik en doorzoekbaar.
     </string>
     <string name="title_advanced_hint_setup">Je kunt een account configureren door op de wizard knop op het hoofdconfiguratiescherm te tikken.</string>
     <string name="title_advanced_section_main">Hoofd</string>
@@ -500,8 +503,10 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_confirm_links">Bevestig het openen van koppelingen</string>
     <string name="title_advanced_check_links_dbl">Controleer domeinblokkeringslijsten op verdachte links</string>
     <string name="title_advanced_browse_links">Het openen van links overdragen aan Android</string>
-    <string name="title_advanced_confirm_images">Bevestig het tonen van afbeeldingen</string>
+    <string name="title_advanced_confirm_images">Toon standaard geen afbeeldingen</string>
+    <string name="title_advanced_ask_images">Bevestig het tonen van afbeeldingen</string>
     <string name="title_advanced_confirm_html">Toon standaard opnieuw opgemaakte berichten</string>
+    <string name="title_advanced_ask_html">Bevestig het tonen van originele berichten</string>
     <string name="title_advanced_tracking">Probeer om tracking afbeeldingen te herkennen en uit te schakelen</string>
     <string name="title_advanced_hide_timezone">Berichten verzenden zonder tijdzone data</string>
     <string name="title_advanced_client_id">App-naam en -versie verzenden naar mailserver</string>
@@ -510,8 +515,10 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_secure">Verbergen van recente apps scherm en voorkomen dat screenshots worden gemaakt</string>
     <string name="title_advanced_pin">Pincode</string>
     <string name="title_advanced_biometrics_timeout">Biometrische verificatie verloopt na</string>
-    <string name="title_advanced_autolock" comment="title_advanced_autolock&#10;Title for option to disable automatically locking on screen off when biometric authentication is enabled">Vergrendel als scherm uitgaat</string>
+    <string name="title_advanced_autolock">Vergrendel als scherm uitgaat</string>
+    <string name="title_advanced_autolock_nav">Vergrendel bij het verlaten van de app</string>
     <string name="title_advanced_generic_user_agent">Gebruik algemene browser user agent</string>
+    <string name="title_advanced_load_emoji">Laad bijgewerkte Emoji van Google Play Services</string>
     <string name="title_advanced_disconnect_auto_update">Werk lijsten wekelijks automatisch bij</string>
     <string name="title_advanced_disconnect_links">Gebruik lijsten om te waarschuwen voor tracking links</string>
     <string name="title_advanced_disconnect_images">Gebruik lijsten om tracking afbeeldingen te herkennen</string>
@@ -620,6 +627,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_display_harmful_hint">Het uitschakelen van deze optie kan schadelijk zijn voor uw privacy</string>
     <string name="title_advanced_display_hidden_hint">Dit kan leiden tot vreemd uitziende en dubbele teksten</string>
     <string name="title_advanced_display_pin_hint">Een PIN code gaat voor biometrische authenticatie</string>
+    <string name="title_advanced_display_autolock_nav_hint">Er zal een vrijwaringstijd van %1$d seconden zijn</string>
     <string name="title_advanced_safe_browsing_hint">De Google-server weet welke adressen worden opgezocht</string>
     <string name="title_advanced_badge_hint">Alleen beschikbaar op ondersteunde launchers</string>
     <string name="title_advanced_notify_action_hint">Er worden maximaal drie acties getoond</string>
@@ -768,6 +776,8 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_notify_batch_disable">Schakel meldingen voor nieuwe berichten uit</string>
     <string name="title_delete_local">Verwijder lokale berichten</string>
     <string name="title_delete_browsed">Verwijder gebladerde/gezochte berichten</string>
+    <string name="title_expunge">Uitwissen</string>
+    <string name="title_expunge_remark">Dit zal alle berichten die gemarkeerd zijn om te verwijderen permanent verwijderen</string>
     <string name="title_empty_trash">Prullenbak leegmaken</string>
     <string name="title_empty_spam">Spam map leegmaken</string>
     <string name="title_edit_properties">Bewerk eigenschappen</string>
@@ -958,7 +968,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_no_search">Zoeken op server is niet beschikbaar voor dit account</string>
     <string name="title_too_large">Bericht te groot om volledig opnieuw op te maken</string>
     <string name="title_truncated">Bericht is te groot om volledig weer te geven</string>
-    <string name="title_insufficient_memory">Bericht te groot om in het beschikbare geheugen te passen</string>
+    <string name="title_insufficient_memory">Bericht te groot voor het beschikbare geheugen (%1$d)</string>
     <string name="title_show_full">Toon volledig bericht</string>
     <string name="title_unused_inline">Ongebruikte inline afbeeldingen worden verwijderd bij verzenden</string>
     <string name="title_accross_remark">Berichten die worden verplaatst tussen accounts worden opnieuw gedownload en veroorzaken extra datagebruik</string>
@@ -1067,6 +1077,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_send_dialog">Toon verzendopties</string>
     <string name="title_image_dialog">Toon afbeeldingsopties</string>
     <string name="title_media_toolbar">Media werkbalk</string>
+    <string name="title_manage_local_contacts">Beheer lokale contacten</string>
     <string name="title_insert_contact_group">Contactgroep toevoegen</string>
     <string name="title_insert_template">Sjabloon invoegen</string>
     <string name="title_create_template">Maak sjabloon</string>
@@ -1096,6 +1107,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_smime_reminder">S/MIME-sleutels beschikbaar</string>
     <string name="title_to_missing">Ontvanger ontbreekt</string>
     <string name="title_extra_missing">Gebruikersnaam ontbreekt</string>
+    <string name="title_noreply_reminder">Verzenden naar een \'no-reply\' adres</string>
     <string name="title_external_reminder">Verzending naar een extern adres</string>
     <string name="title_subject_reminder">Onderwerp is leeg</string>
     <string name="title_text_reminder">Bericht is leeg</string>
@@ -1196,6 +1208,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_filter_duplicates">Duplicaten</string>
     <string name="title_compact">Compacte weergave</string>
     <string name="title_zoom">Tekstgrootte</string>
+    <string name="title_padding">Opvul grootte</string>
     <string name="title_select_language">Selecteer taal</string>
     <string name="title_select_all">Selecteer alles</string>
     <string name="title_select_found">Selecteer gevonden</string>

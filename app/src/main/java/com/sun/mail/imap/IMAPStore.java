@@ -372,6 +372,11 @@ public class IMAPStore extends Store
 		logger.config("dedicate a store connection");
 
 	}
+	int getConnections() {
+		return authenticatedConnections.size() +
+				(folders == null ? 0 : folders.size()) +
+				(idleProtocol == null ? 0 : 1);
+	}
     }
  
     private final ConnectionPool pool;
@@ -665,7 +670,7 @@ public class IMAPStore extends Store
 		synchronized (pool) {
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			eu.faircode.email.Log.breadcrumb("protocolConnect", crumb);
 		}
@@ -1159,7 +1164,7 @@ public class IMAPStore extends Store
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
 			crumb.put("reason", reason);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			eu.faircode.email.Log.breadcrumb("getStoreProtocol", crumb);
 		}
@@ -1194,7 +1199,7 @@ public class IMAPStore extends Store
              
 	        p.addResponseHandler(this);
                 pool.authenticatedConnections.addElement(p);
- 
+
             } else {
                 // Always use the first element in the Authenticated queue.
 		if (pool.logger.isLoggable(Level.FINE))
@@ -1338,7 +1343,7 @@ public class IMAPStore extends Store
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
 			crumb.put("folder", folder.fullName);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			eu.faircode.email.Log.breadcrumb("releaseProtocol", crumb);
 		}
@@ -1365,7 +1370,7 @@ public class IMAPStore extends Store
             }
 
             if (pool.folders != null)
-                pool.folders.removeElement(folder);
+				pool.folders.removeElement(folder);
 
             timeoutConnections();
         }
@@ -1378,7 +1383,7 @@ public class IMAPStore extends Store
 		synchronized (pool) {
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			eu.faircode.email.Log.breadcrumb("releaseStoreProtocol", crumb);
 		}
@@ -1428,7 +1433,7 @@ public class IMAPStore extends Store
 		synchronized (pool) {
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			eu.faircode.email.Log.breadcrumb("releaseFolderStoreProtocol", crumb);
 		}
@@ -1454,7 +1459,7 @@ public class IMAPStore extends Store
 		synchronized (pool) {
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			crumb.put("force", Boolean.toString(force));
 			eu.faircode.email.Log.breadcrumb("emptyConnectionPool", crumb);
@@ -1792,7 +1797,7 @@ public class IMAPStore extends Store
 		synchronized (pool) {
 			Map<String, String> crumb = new HashMap<>();
 			crumb.put("host", host);
-			crumb.put("connections", Integer.toString(pool.authenticatedConnections.size()));
+			crumb.put("connections", Integer.toString(pool.getConnections()));
 			crumb.put("inuse", Boolean.toString(pool.storeConnectionInUse));
 			crumb.put("force", Boolean.toString(force));
 			eu.faircode.email.Log.breadcrumb("closeAllFolders", crumb);
