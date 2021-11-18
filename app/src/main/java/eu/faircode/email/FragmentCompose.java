@@ -47,6 +47,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -327,10 +328,6 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_PERMISSION = 15;
 
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "encrypt");
-
-    private static final List<String> DO_NOT_REPLY = Collections.unmodifiableList(Arrays.asList(
-            "noreply", "no-reply", "do-not-reply"
-    ));
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1540,9 +1537,10 @@ public class FragmentCompose extends FragmentBase {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_compose, menu);
 
-        PopupMenuLifecycle.insertIcons(getContext(), menu);
+        final Context context = getContext();
+        PopupMenuLifecycle.insertIcons(context, menu, false);
 
-        LayoutInflater infl = LayoutInflater.from(getContext());
+        LayoutInflater infl = LayoutInflater.from(context);
 
         View v = infl.inflate(R.layout.action_button_text, null);
         v.setId(View.generateViewId());
@@ -1560,7 +1558,8 @@ public class FragmentCompose extends FragmentBase {
                 ib.getLocationOnScreen(pos);
                 int dp24 = Helper.dp2pixels(v.getContext(), 24);
 
-                Toast toast = ToastEx.makeTextBw(getContext(), getString(R.string.title_encrypt), Toast.LENGTH_LONG);
+                Toast toast = ToastEx.makeTextBw(v.getContext(),
+                        getString(R.string.title_encrypt), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP | Gravity.START, pos[0], pos[1] + dp24);
                 toast.show();
                 return true;
@@ -1615,6 +1614,13 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_answer_insert).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_answer_create).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_clear).setEnabled(state == State.LOADED);
+
+        SpannableStringBuilder ssbZoom = new SpannableStringBuilder(getString(R.string.title_zoom));
+        ssbZoom.append(' ');
+        for (int i = 0; i <= zoom; i++)
+            ssbZoom.append('+');
+        menu.findItem(R.id.menu_zoom).setTitle(ssbZoom);
+        PopupMenuLifecycle.insertIcon(context, menu.findItem(R.id.menu_zoom), false);
 
         int colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         int colorActionForeground = Helper.resolveColor(context, R.attr.colorActionForeground);
@@ -5802,18 +5808,11 @@ public class FragmentCompose extends FragmentBase {
                                 recipients.addAll(Arrays.asList(draft.bcc));
 
                             boolean noreply = false;
-                            for (Address recipient : recipients) {
-                                String email = ((InternetAddress) recipient).getAddress();
-                                String username = UriHelper.getEmailUser(email);
-                                if (!TextUtils.isEmpty(username)) {
-                                    username = username.toLowerCase(Locale.ROOT);
-                                    for (String value : DO_NOT_REPLY)
-                                        if (username.contains(value)) {
-                                            noreply = true;
-                                            break;
-                                        }
+                            for (Address recipient : recipients)
+                                if (MessageHelper.isNoReply(recipient)) {
+                                    noreply = true;
+                                    break;
                                 }
-                            }
                             args.putBoolean("remind_noreply", noreply);
 
                             if (identity != null && !TextUtils.isEmpty(identity.internal)) {
@@ -6905,6 +6904,8 @@ public class FragmentCompose extends FragmentBase {
             final int[] sendDelayedValues = getResources().getIntArray(R.array.sendDelayedValues);
             final String[] sendDelayedNames = getResources().getStringArray(R.array.sendDelayedNames);
 
+            final String pkgOpenKeyChain = Helper.getOpenKeychainPackage(context);
+
             final ViewGroup dview = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.dialog_send, null);
             final Button btnFixSent = dview.findViewById(R.id.btnFixSent);
             final TextView tvAddressError = dview.findViewById(R.id.tvAddressError);
@@ -6928,6 +6929,7 @@ public class FragmentCompose extends FragmentBase {
             final TextView tvPlainHint = dview.findViewById(R.id.tvPlainHint);
             final CheckBox cbReceipt = dview.findViewById(R.id.cbReceipt);
             final TextView tvReceiptHint = dview.findViewById(R.id.tvReceiptHint);
+            final TextView tvEncrypt = dview.findViewById(R.id.tvEncrypt);
             final Spinner spEncrypt = dview.findViewById(R.id.spEncrypt);
             final ImageButton ibEncryption = dview.findViewById(R.id.ibEncryption);
             final Spinner spPriority = dview.findViewById(R.id.spPriority);
@@ -7068,6 +7070,18 @@ public class FragmentCompose extends FragmentBase {
                     }.setExecutor(executor).execute(FragmentDialogSend.this, args, "compose:receipt");
                 }
             });
+
+            if (Helper.isOpenKeychainInstalled(context)) {
+                tvEncrypt.setPaintFlags(tvEncrypt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                tvEncrypt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String pkg = Helper.getOpenKeychainPackage(v.getContext());
+                        PackageManager pm = v.getContext().getPackageManager();
+                        v.getContext().startActivity(pm.getLaunchIntentForPackage(pkg));
+                    }
+                });
+            }
 
             spEncrypt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override

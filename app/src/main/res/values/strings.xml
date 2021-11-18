@@ -92,7 +92,7 @@
 
     <string name="title_block">Block %1$s</string>
     <string name="title_block_sender">Block sender</string>
-    <string name="title_block_domain">Block sender domain</string>
+    <string name="title_block_sender_domain">Block domain \'%1$s\'</string>
     <string name="title_block_sender_hint">
         Blocking a sender is a free feature.
         Blocking a sender domain uses filter rules, which is a pro feature.
@@ -542,7 +542,7 @@
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
-    <string name="title_advanced_default_snooze">Default snooze time</string>
+    <string name="title_advanced_default_snooze">Default snooze/delay time</string>
 
     <string name="title_advanced_notifications">Manage notifications</string>
     <string name="title_advanced_notifications_default">Default channel</string>
@@ -647,6 +647,7 @@
     <string name="title_advanced_language">Language</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_deepl">DeepL integration</string>
+    <string name="title_advanced_sdcard">I want to use an sdcard</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
     <string name="title_advanced_check_weekly">Check weekly instead of daily</string>
@@ -677,6 +678,7 @@
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_idle_done" translatable="false">IDLE/DONE</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
+    <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
     <string name="title_advanced_processors" translatable="false">Processors: %1$d</string>
@@ -746,6 +748,7 @@
 
     <string name="title_advanced_language_detection_hint">Language detection support depends on the device manufacturer</string>
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
+    <string name="title_advanced_expandall_hint">The answer button will not be shown when multiple messages are expanded because it is unclear which message the button applies to</string>
     <string name="title_advanced_autoseen_hint">Automatically marking messages as read on expanding can be disabled in the advanced account settings of each account</string>
     <string name="title_advanced_autoclose_hint">Automatically close conversations when all messages are archived, sent or trashed</string>
     <string name="title_advanced_sender_hint">Most providers do not allow modified sender addresses</string>
@@ -1013,6 +1016,7 @@
     <string name="title_no_messages">No messages</string>
     <string name="title_filters_active">One or more filters active</string>
     <string name="title_duplicate_in">Duplicate message in %1$s</string>
+    <string name="title_trashed_from">Trashed message from %1$s</string>
 
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
@@ -1388,6 +1392,7 @@
     <string name="title_filter_unknown">Unknown senders</string>
     <string name="title_filter_hidden">Hidden</string>
     <string name="title_filter_duplicates">Duplicates</string>
+    <string name="title_filter_trash">Trashed</string>
 
     <string name="title_compact">Compact view</string>
     <string name="title_zoom">Text size</string>
@@ -1690,6 +1695,7 @@
     <string name="title_snooze_now">Snooze</string>
     <string name="title_loading">Loading &#8230;</string>
     <string name="title_fetching_again">Fetching message again from the server</string>
+    <string name="title_go_back">Go back</string>
 
     <string name="title_conversation_actions">Actions</string>
     <string name="title_conversation_action_reply">Reply with: \'%1$s\'</string>
@@ -1802,6 +1808,26 @@
     <string name="title_accessibility_attachment">Attachment</string>
     <string name="title_accessibility_from">Sender</string>
     <string name="title_accessibility_to">Recipient</string>
+
+    <string name="infra_awsses" translatable="false">Amazon SES</string>
+    <string name="infra_elastic" translatable="false">Elastic Email</string>
+    <string name="infra_gmail" translatable="false">Gmail/Gsuite</string>
+    <string name="infra_icloud" translatable="false">Apple/iCloud</string>
+    <string name="infra_mailchimp" translatable="false">Mailchimp</string>
+    <string name="infra_mailgun" translatable="false">Mailgun</string>
+    <string name="infra_mailjet" translatable="false">Mailjet</string>
+    <string name="infra_mandrill" translatable="false">Mandrill</string>
+    <string name="infra_netcore" translatable="false">Pepipost/netcore</string>
+    <string name="infra_outlook" translatable="false">Outlook/Office 365</string>
+    <string name="infra_phpmailer" translatable="false">PHPMailer</string>
+    <string name="infra_postmark" translatable="false">Postmark</string>
+    <string name="infra_salesforce" translatable="false">Salesforce</string>
+    <string name="infra_sendgrid" translatable="false">SendGrid</string>
+    <string name="infra_sendinblue" translatable="false">Sendinblue</string>
+    <string name="infra_sparkpost" translatable="false">Sparkpost</string>
+    <string name="infra_yahoo" translatable="false">Yahoo!</string>
+    <string name="infra_zeptomail" translatable="false">Zeptomail/Zoho</string>
+    <string name="infra_zoho" translatable="false">Zoho</string>
 
     <string-array name="pollIntervalNames">
         <item>Always</item>

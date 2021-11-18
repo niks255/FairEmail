@@ -4,6 +4,43 @@
 
 ### [Banji](https://en.wikipedia.org/wiki/Banji)
 
+### 1.1780 - 2021-11-15
+
+* Fixed empty lines in message headers
+* Improved handling of read-only folders
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1779 - 2021-11-13
+
+* Added using folder colors for Gmail labels
+* Added highlighting of searched text in messages
+* Added filter for trashed messages in conversations
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1778 - 2021-11-11
+
+* Fixed duplicate submenu icons
+* Small improvements and minor bug fixes
+
+### 1.1777 - 2021-11-11
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1776 - 2021-11-10
+
+* Added message menu icons
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1775 - 2021-11-09
+
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
 ### 1.1774 - 2021-11-08
 
 * Added option to configure card padding (3-dots overflow menu)

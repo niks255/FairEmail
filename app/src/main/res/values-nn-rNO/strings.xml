@@ -68,7 +68,6 @@
     <string name="title_junk_hint">Din e-postleverandør er ansvarlig for filtrering av nettsøppel. En e-postapp har ikke alle dataene som trengs for å gjøre dette pålitelig.</string>
     <string name="title_block">Blokkere %1$s</string>
     <string name="title_block_sender">Blokker avsender</string>
-    <string name="title_block_domain">Blokker avsenderdomenet</string>
     <string name="title_junk_clear">Tøm</string>
     <string name="title_notification_sending">Sender melding</string>
     <string name="title_notification_waiting">Venter på passende tilkobling</string>
@@ -330,7 +329,6 @@
     <string name="title_advanced_autounstar">Fjern stjernen automatisk fra meldinger som blir flyttet</string>
     <string name="title_advanced_auto_important">Gjør stjernemerkede meldinger automatisk viktige</string>
     <string name="title_advanced_reset_importance">Tilbakestill viktigheten for å flytte meldinger</string>
-    <string name="title_advanced_default_snooze">Standard slumretid</string>
     <string name="title_advanced_notifications">Administrer varsler</string>
     <string name="title_advanced_notifications_default">Standard kanal</string>
     <string name="title_advanced_notifications_service">Motta kanal</string>

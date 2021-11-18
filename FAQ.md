@@ -2363,6 +2363,23 @@ Some common header conditions (regex):
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;Content-Type: multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
+You can match IMAP flags (keywords) via a header condition too (from version 1.1777), like this:
+
+```
+$<keyword>$
+```
+
+You can use these special values too, representing common system flags:
+
+```
+$$seen$
+$$answered$
+$$flagged$
+$$deleted$
+```
+
+Note that *regex* should be disable and that there should be no white space.
+
 In the three-dots *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
 
 The POP3 protocol does not support setting keywords and moving or copying messages.
@@ -2701,8 +2718,9 @@ Y1 OK CAPABILITY completed
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq89)
 
 By default FairEmail sends each message both as plain text and as HTML formatted text because almost every receiver expects formatted messages these days.
-If you want/need to send plain text messages only, you can enable this in the advanced identity options.
-You might want to create a new identity for this if you want/need to select sending plain text messages on a case-by-case basis.
+If you want/need to send plain text only messages, you can enable this in the send options.
+You can enable/disable sending plain text only messages in the send dialog on a case by case basis as well.
+If you disabled the send dialog, you can long press the *Send* button to show it again.
 
 <br />
 
@@ -3087,6 +3105,8 @@ OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the qui
 The OAuth [jump page](https://oauth.faircode.eu/) exists
 for when [Android App Links](https://developer.android.com/training/app-links/verify-site-associations)
 are not available, for example when using a non Play store version of the app, or do not work for some reason.
+
+OAuth is not supported for third party builds like the F-Droid build, please [see here](#user-content-faq147) about why not.
 
 <br />
 
@@ -3740,7 +3760,8 @@ Therefore you are advised to switch to the GitHub release.
 
 OAuth access is available only for Play Store and Github releases
 because email providers permitted the use of OAuth for these releases only.
-The responsible for a release, for the F-Droid build this is F-Droid, needs to ask for OAuth permissions.
+The responsible for a release, for the F-Droid build this is the F-Droid organization, needs to ask for OAuth permissions,
+which mostly involves signing a contract with binding terms and conditions.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
 because Android refuses to install the same app with a different signature for security reasons.
@@ -3748,7 +3769,8 @@ because Android refuses to install the same app with a different signature for s
 Note that the GitHub version will automatically check for updates.
 When desired, this can be turned off in the miscellaneous settings.
 
-Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#user-content-downloads) for all download options.
+Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#user-content-downloads) for all download option
+and [see here](#user-content-faq173) for the differences between the different release types.
 
 If you have a problem with the F-Droid build, please check if there is a newer GitHub version first.
 
@@ -4082,6 +4104,8 @@ it is not feasible to add for each color combination (literally millions) a pred
 
 Moreover, a theme is more than just a few colors.
 For example themes with a yellow accent color use a darker link color for enough contrast.
+
+The [Material You](https://material.io/blog/announcing-material-you) theme, a more dynamic theme introduced in Android 12, is supported.
 
 The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 

@@ -109,6 +109,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private ImageButton ibResetLanguage;
     private SwitchCompat swDeepL;
     private ImageButton ibDeepL;
+    private TextView tvSdcard;
     private SwitchCompat swWatchdog;
     private SwitchCompat swUpdates;
     private SwitchCompat swCheckWeekly;
@@ -148,6 +149,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAuthSasl;
     private SwitchCompat swIdleDone;
     private SwitchCompat swExactAlarms;
+    private SwitchCompat swInfra;
     private SwitchCompat swDupMsgId;
     private SwitchCompat swTestIab;
     private TextView tvProcessors;
@@ -181,7 +183,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "query_threads", "wal", "checkpoints", "sqlite_cache",
             "chunk_size", "use_modseq", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "idle_done",
-            "exact_alarms", "dup_msgids", "test_iab"
+            "exact_alarms", "infra", "dup_msgids", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -241,6 +243,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         ibResetLanguage = view.findViewById(R.id.ibResetLanguage);
         swDeepL = view.findViewById(R.id.swDeepL);
         ibDeepL = view.findViewById(R.id.ibDeepL);
+        tvSdcard = view.findViewById(R.id.tvSdcard);
         swWatchdog = view.findViewById(R.id.swWatchdog);
         swUpdates = view.findViewById(R.id.swUpdates);
         swCheckWeekly = view.findViewById(R.id.swWeekly);
@@ -280,6 +283,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
         swIdleDone = view.findViewById(R.id.swIdleDone);
         swExactAlarms = view.findViewById(R.id.swExactAlarms);
+        swInfra = view.findViewById(R.id.swInfra);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
         swTestIab = view.findViewById(R.id.swTestIab);
         tvProcessors = view.findViewById(R.id.tvProcessors);
@@ -513,6 +517,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 167, true);
+            }
+        });
+
+        tvSdcard.setPaintFlags(tvSdcard.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvSdcard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 93);
             }
         });
 
@@ -881,6 +893,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("exact_alarms", checked).apply();
+            }
+        });
+
+        swInfra.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("infra", checked).apply();
             }
         });
 
@@ -1353,6 +1372,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
         swIdleDone.setChecked(prefs.getBoolean("idle_done", true));
         swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", true));
+        swInfra.setChecked(prefs.getBoolean("infra", false));
         swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
         swTestIab.setChecked(prefs.getBoolean("test_iab", false));
 

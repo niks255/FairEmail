@@ -560,9 +560,10 @@ class Core {
                             // Fetch: NO The specified message set is invalid.
                             // Fetch: NO [SERVERBUG] SELECT Server error - Please try again later
                             // Fetch: NO [SERVERBUG] UID FETCH Server error - Please try again later
-                            // Fetch: NO Invalid message number (took 123 ms)
+                            // Fetch: NO Invalid message number (took nnn ms)
                             // Fetch: BAD Internal Server Error
                             // Fetch: BAD Error in IMAP command FETCH: Invalid messageset (n.nnn + n .nnn secs).
+                            // Fetch: NO FETCH sequence parse error in: nnn
                             // Fetch UID: NO Some messages could not be FETCHed (Failure)
                             // Fetch UID: NO [LIMIT] UID FETCH Rate limit hit.
                             // Fetch UID: NO Server Unavailable. 15
@@ -814,6 +815,9 @@ class Core {
         // Mark message (un)seen
         DB db = DB.getInstance(context);
 
+        if (folder.read_only)
+            return;
+
         if (!ifolder.getPermanentFlags().contains(Flags.Flag.SEEN)) {
             db.message().setMessageSeen(message.id, false);
             db.message().setMessageUiSeen(message.id, false);
@@ -844,6 +848,9 @@ class Core {
     private static void onFlag(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException, IOException {
         // Star/unstar message
         DB db = DB.getInstance(context);
+
+        if (folder.read_only)
+            return;
 
         if (!ifolder.getPermanentFlags().contains(Flags.Flag.FLAGGED)) {
             db.message().setMessageFlagged(message.id, false);
@@ -878,6 +885,9 @@ class Core {
         // Mark message (un)answered
         DB db = DB.getInstance(context);
 
+        if (folder.read_only)
+            return;
+
         if (!ifolder.getPermanentFlags().contains(Flags.Flag.ANSWERED)) {
             db.message().setMessageAnswered(message.id, false);
             db.message().setMessageUiAnswered(message.id, false);
@@ -904,6 +914,7 @@ class Core {
     private static void onKeyword(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException {
         // Set/reset user flag
         // https://tools.ietf.org/html/rfc3501#section-2.3.2
+
         String keyword = jargs.getString(0);
         boolean set = jargs.getBoolean(1);
 
@@ -913,14 +924,9 @@ class Core {
         if (message.uid == null)
             throw new IllegalArgumentException("keyword/uid");
 
-        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
-            if (MessageHelper.FLAG_FORWARDED.equals(keyword) && false) {
-                JSONArray janswered = new JSONArray();
-                janswered.put(true);
-                onAnswered(context, janswered, folder, message, ifolder);
-            }
+        if (folder.read_only ||
+                !ifolder.getPermanentFlags().contains(Flags.Flag.USER))
             return;
-        }
 
         Message imessage = ifolder.getMessageByUID(message.uid);
         if (imessage == null)
@@ -1977,7 +1983,7 @@ class Core {
         boolean drafts = false;
         Map<String, EntityFolder> local = new HashMap<>();
         List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
-        for (EntityFolder folder : folders)
+        for (EntityFolder folder : folders) {
             if (folder.tbc != null) {
                 try {
                     Log.i(folder.name + " creating");
@@ -2052,6 +2058,13 @@ class Core {
                         sync_folders = true;
                 }
             }
+
+            String key = "label.color." + folder.name;
+            if (folder.color == null)
+                prefs.edit().remove(key).apply();
+            else
+                prefs.edit().putInt(key, folder.color).apply();
+        }
         Log.i("Local folder count=" + local.size() + " drafts=" + drafts);
 
         if (!drafts) {
@@ -2725,6 +2738,7 @@ class Core {
                         message.list_post = helper.getListPost();
                         message.unsubscribe = helper.getListUnsubscribe();
                         message.headers = helper.getHeaders();
+                        message.infrastructure = helper.getInfrastructure();
                         message.subject = helper.getSubject();
                         message.size = parts.getBodySize();
                         message.total = helper.getSize();
@@ -3245,8 +3259,10 @@ class Core {
                                         for (Response response : responses)
                                             if (response.isBYE())
                                                 return new MessagingException("UID FETCH", new IOException(response.toString()));
-                                            else if (response.isNO() || response.isBAD())
-                                                return new MessagingException(response.toString());
+                                            else if (response.isNO())
+                                                return new CommandFailedException(response);
+                                            else if (response.isBAD())
+                                                return new BadCommandException(response);
                                         return new MessagingException("UID FETCH failed");
                                     }
                                 }
@@ -3686,6 +3702,7 @@ class Core {
             message.autocrypt = helper.getAutocrypt();
             if (download_headers)
                 message.headers = helper.getHeaders();
+            message.infrastructure = helper.getInfrastructure();
             message.subject = helper.getSubject();
             message.size = parts.getBodySize();
             message.total = helper.getSize();
@@ -3929,7 +3946,8 @@ class Core {
                 }
             }
 
-            if ((!message.seen.equals(seen) || !message.ui_seen.equals(seen)) &&
+            if ((!message.seen.equals(seen) ||
+                    (!folder.read_only && !message.ui_seen.equals(seen))) &&
                     db.operation().getOperationCount(folder.id, message.id, EntityOperation.SEEN) == 0) {
                 update = true;
                 message.seen = seen;
@@ -3940,7 +3958,8 @@ class Core {
                 syncSimilar = true;
             }
 
-            if ((!message.answered.equals(answered) || !message.ui_answered.equals(message.answered)) &&
+            if ((!message.answered.equals(answered) ||
+                    (!folder.read_only && !message.ui_answered.equals(message.answered))) &&
                     db.operation().getOperationCount(folder.id, message.id, EntityOperation.ANSWERED) == 0) {
                 update = true;
                 message.answered = answered;
@@ -3949,7 +3968,8 @@ class Core {
                 syncSimilar = true;
             }
 
-            if ((!message.flagged.equals(flagged) || !message.ui_flagged.equals(flagged)) &&
+            if ((!message.flagged.equals(flagged) ||
+                    (!folder.read_only && !message.ui_flagged.equals(flagged))) &&
                     db.operation().getOperationCount(folder.id, message.id, EntityOperation.FLAG) == 0) {
                 update = true;
                 message.flagged = flagged;
@@ -3976,6 +3996,7 @@ class Core {
             }
 
             if (!Helper.equal(message.keywords, keywords) &&
+                    !folder.read_only &&
                     ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
                 update = true;
                 message.keywords = keywords;
@@ -4206,6 +4227,8 @@ class Core {
             EntityAccount account, EntityFolder folder, EntityMessage message,
             List<EntityRule> rules) {
 
+        if (account.protocol == EntityAccount.TYPE_IMAP && folder.read_only)
+            return;
         if (!ActivityBilling.isPro(context))
             return;
 

@@ -72,7 +72,6 @@
     <string name="title_junk_hint">Dien emailoanbieder is ferantwurdlik foar filterjen fan spam. In emailapp hat net alle gegevens om dit betrouber te dwaan.</string>
     <string name="title_block">Blokkearje %1$s</string>
     <string name="title_block_sender">Stjoerder blokkearje</string>
-    <string name="title_block_domain">Stjoerderdomein blokkearje</string>
     <string name="title_junk_filter">Lokale spamfilter brûke</string>
     <string name="title_junk_filter_hint">Dit kin batterijgebrûk ferheegje en berjochten ferkeard markearje as spam</string>
     <string name="title_junk_blocklist">Brûk list mei spamblokken</string>
@@ -387,7 +386,6 @@
     <string name="title_advanced_autounstar">Fuortsmite stjerren automatysk fan berjochten op bewegende berjochten</string>
     <string name="title_advanced_auto_important">Meitsje automatyske berjochten wichtich</string>
     <string name="title_advanced_reset_importance">Belang werstelle by it ferpleatsen fan berjochten</string>
-    <string name="title_advanced_default_snooze">Standert sluimertiid</string>
     <string name="title_advanced_notifications">Notifikaasjes beheare</string>
     <string name="title_advanced_notifications_default">Standert kanaal</string>
     <string name="title_advanced_notifications_service">Kanaal ûntfange</string>

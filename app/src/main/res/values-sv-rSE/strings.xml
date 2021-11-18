@@ -72,7 +72,7 @@
     <string name="title_junk_hint">Din e-postleverantör ansvarar för att filtrera skräppost. En e-postapp har inte all data som behövs för att göra detta på ett tillförlitligt sätt.</string>
     <string name="title_block">Blockera %1$s</string>
     <string name="title_block_sender">Blockera avsändare</string>
-    <string name="title_block_domain">Blockera avsändardomän</string>
+    <string name="title_block_sender_domain">Blockera domän \'%1$s\'</string>
     <string name="title_block_sender_hint">        Att blockera en avsändare är en gratisfunktion.
         Att blockera en avsändardomän använder filterregler, vilket är en pro-funktion.
     </string>
@@ -144,6 +144,8 @@
     <string name="title_setup_identities">Identiteter</string>
     <string name="title_setup_other">Annan leverantör</string>
     <string name="title_setup_pop3">POP3-konto</string>
+    <string name="title_setup_oauth_permission">E-postleverantören har godkänt OAuth endast för Play Store- och GitHub-versionen</string>
+    <string name="title_setup_gmail_support">Auktorisera Google-konton kommer endast att fungera i Play Store- och GitHub-versionen eftersom Android kontrollerar den digitala app-signaturen</string>
     <string name="title_setup_gmail_rationale">Vänligen bevilja behörigheter för att välja ett konto och läsa ditt namn</string>
     <string name="title_setup_gmail_permissions">Google kommer att be om behörighet att läsa, komponera, skicka och permanent ta bort all din e-post. FairEmail kommer aldrig att ta bort dina meddelanden utan ditt uttryckliga medgivande.</string>
     <string name="title_setup_gmail_drafts">Om mappen för utkast inte är åtkomlig för IMAP kan detta lösas under inställningarna för Gmail-etiketten</string>
@@ -457,7 +459,6 @@
     <string name="title_advanced_autounstar">Ta automatiskt bort stjärnmarkeringar från meddelanden när meddelanden flyttas</string>
     <string name="title_advanced_auto_important">Gör automatiskt stjärnmärkta meddelanden viktiga</string>
     <string name="title_advanced_reset_importance">Återställ betydelsen när du flyttar meddelanden</string>
-    <string name="title_advanced_default_snooze">Standardlängd på slumra</string>
     <string name="title_advanced_notifications">Hantera aviseringar</string>
     <string name="title_advanced_notifications_default">Standard kanal</string>
     <string name="title_advanced_notifications_service">Mottagningskanal</string>
@@ -508,6 +509,7 @@
     <string name="title_advanced_pin">PIN-kod</string>
     <string name="title_advanced_biometrics_timeout">Tidsgräns för biometrisk autentisering</string>
     <string name="title_advanced_autolock">Lås när skärmen stängs av</string>
+    <string name="title_advanced_autolock_nav">Lås när appen lämnas</string>
     <string name="title_advanced_generic_user_agent">Använd generisk webbläsare användaragent</string>
     <string name="title_advanced_load_emoji">Ladda uppdaterade emoji från Google Play Services</string>
     <string name="title_advanced_disconnect_auto_update">Uppdatera listor automatiskt varje vecka</string>
@@ -545,6 +547,7 @@
     <string name="title_advanced_language">Språk</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_deepl">DeepL integration</string>
+    <string name="title_advanced_sdcard">Jag vill använda ett SD-kort</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
     <string name="title_advanced_check_weekly">Kolla veckovis istället för dagligen</string>
@@ -609,6 +612,7 @@
     <string name="title_advanced_parse_classes_hint">Detta kommer att visa meddelanden mer korrekt, men möjligen med en fördröjning</string>
     <string name="title_advanced_language_detection_hint">Stöd för språkdetektering beror på enhetstillverkaren</string>
     <string name="title_advanced_autoexpand_hint">Öppna automatiskt meddelandet när det bara finns ett meddelande eller bara ett oläst meddelande i en konversation</string>
+    <string name="title_advanced_expandall_hint">Svarsknappen kommer inte att visas när flera meddelanden visas i utökat läge eftersom det är oklart vilket meddelande knappen gäller</string>
     <string name="title_advanced_autoseen_hint">Automatiskt markering av meddelanden som lästa när du expanderar dem kan inaktiveras i avancerade kontoinställningar för varje konto</string>
     <string name="title_advanced_autoclose_hint">Stäng automatiskt konversationstrådar när alla meddelanden arkiveras, skickas eller kastas</string>
     <string name="title_advanced_sender_hint">De flesta leverantörer tillåter inte ändrade avsändaradresser</string>
@@ -855,6 +859,7 @@
     <string name="title_no_messages">Inga meddelanden</string>
     <string name="title_filters_active">Ett eller flera filter är aktiva</string>
     <string name="title_duplicate_in">Duplicerade meddelande i %1$s</string>
+    <string name="title_trashed_from">Kastat meddelande från %1$s</string>
     <string name="title_subject_reply">Sv: %1$s</string>
     <string name="title_subject_forward">Vb: %1$s</string>
     <string name="title_subject_reply_alt">Sv: %1$s</string>
@@ -1067,6 +1072,7 @@
     <string name="title_send_dialog">Visa alternativ för skicka</string>
     <string name="title_image_dialog">Visa bildalternativ</string>
     <string name="title_media_toolbar">Verktygsfält för media</string>
+    <string name="title_manage_local_contacts">Hantera lokala kontakter</string>
     <string name="title_insert_contact_group">Infoga kontaktgrupp</string>
     <string name="title_insert_template">Infoga mall</string>
     <string name="title_create_template">Skapa mall</string>
@@ -1096,6 +1102,7 @@
     <string name="title_smime_reminder">S/MIME-nycklar tillgängliga</string>
     <string name="title_to_missing">Mottagare saknas</string>
     <string name="title_extra_missing">Användarnamn saknas</string>
+    <string name="title_noreply_reminder">Skickar till en \"no-reply\" adress</string>
     <string name="title_external_reminder">Skickar till en extern adress</string>
     <string name="title_subject_reminder">Ämnet är tomt</string>
     <string name="title_text_reminder">Meddelandet är tomt</string>
@@ -1194,6 +1201,7 @@
     <string name="title_filter_unknown">Okända avsändare</string>
     <string name="title_filter_hidden">Dold</string>
     <string name="title_filter_duplicates">Dubbletter</string>
+    <string name="title_filter_trash">Kastade</string>
     <string name="title_compact">Kompakt vy</string>
     <string name="title_zoom">Textstorlek</string>
     <string name="title_padding">Utfyllnadsstorlek</string>
@@ -1474,6 +1482,7 @@
     <string name="title_snooze_now">Slumra</string>
     <string name="title_loading">Läser in &#8230;</string>
     <string name="title_fetching_again">Hämtar meddelande igen från servern</string>
+    <string name="title_go_back">Gå tillbaka</string>
     <string name="title_conversation_actions">Åtgärder</string>
     <string name="title_conversation_action_reply">Svara med: \'%1$s\'</string>
     <string name="title_conversation_action_copy">Kopiera: \'%1$s\'</string>

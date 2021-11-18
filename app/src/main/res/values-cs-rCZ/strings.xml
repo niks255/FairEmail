@@ -92,7 +92,6 @@
     <string name="title_junk_hint">Za filtrování nevyžádané pošty je zodpovědný poskytovatel e-mailu. E-mailové aplikace nemají k dispozici všechna data, aby to mohly provádět spolehlivě.</string>
     <string name="title_block">Blokovat %1$s</string>
     <string name="title_block_sender">Blokovat odesílatele</string>
-    <string name="title_block_domain">Blokovat doménu odesílatele</string>
     <string name="title_block_sender_hint">        Blokování odesílatele je volná funkce.
         Blokování domény odesílatele používá pravidla filtru, což je Pro funkce.
     </string>
@@ -483,7 +482,6 @@
     <string name="title_advanced_autounstar">Při přesunu odebrat zprávám hvězdičku automaticky</string>
     <string name="title_advanced_auto_important">Automaticky činit zprávy s hvězdičkou důležitými</string>
     <string name="title_advanced_reset_importance">Obnovit důležitost při přesunu zpráv</string>
-    <string name="title_advanced_default_snooze">Výchozí délka odložení</string>
     <string name="title_advanced_notifications">Spravovat oznámení</string>
     <string name="title_advanced_notifications_default">Výchozí kanál</string>
     <string name="title_advanced_notifications_service">Kanál „příjem“</string>

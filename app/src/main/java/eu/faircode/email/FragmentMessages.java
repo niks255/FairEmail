@@ -290,6 +290,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private int lpos;
     private boolean filter_archive;
     private boolean found;
+    private String searched;
     private boolean pinned;
     private String msgid;
     private BoundaryCallbackMessages.SearchCriteria criteria = null;
@@ -413,9 +414,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         lpos = args.getInt("lpos", RecyclerView.NO_POSITION);
         filter_archive = args.getBoolean("filter_archive", true);
         found = args.getBoolean("found", false);
+        searched = args.getString("searched");
         pinned = args.getBoolean("pinned", false);
         msgid = args.getString("msgid");
         criteria = (BoundaryCallbackMessages.SearchCriteria) args.getSerializable("criteria");
+        if (criteria != null)
+            searched = criteria.query;
         pane = args.getBoolean("pane", false);
         primary = args.getLong("primary", -1);
         connected = args.getBoolean("connected", false);
@@ -843,10 +847,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         boolean ascending = prefs.getBoolean(
                 viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", false);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
+        boolean filter_trash = prefs.getBoolean("filter_trash", false);
+
+        if (viewType != AdapterMessage.ViewType.THREAD)
+            filter_trash = false;
 
         adapter = new AdapterMessage(
-                this, type, found, viewType,
-                compact, zoom, sort, ascending, filter_duplicates,
+                this, type, found, searched, viewType,
+                compact, zoom, sort, ascending,
+                filter_duplicates, filter_trash,
                 iProperties);
         if (viewType == AdapterMessage.ViewType.THREAD)
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT);
@@ -1801,7 +1810,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         @Override
         public void setExpanded(TupleMessageEx message, boolean value, boolean scroll) {
             // Prevent flicker
-            if (value && message.accountAutoSeen && !message.folderReadOnly) {
+            if (value && message.accountAutoSeen) {
                 message.unseen = 0;
                 message.ui_seen = true;
                 message.visible_unseen = 0;
@@ -4384,7 +4393,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_messages, menu);
 
-        LayoutInflater infl = LayoutInflater.from(getContext());
+        final Context context = getContext();
+        PopupMenuLifecycle.insertIcons(context, menu, false);
+
+        LayoutInflater infl = LayoutInflater.from(context);
         ImageButton ib = (ImageButton) infl.inflate(R.layout.action_button, null);
         ib.setId(View.generateViewId());
         ib.setImageResource(R.drawable.twotone_folder_24);
@@ -4414,7 +4426,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String sort = prefs.getString("sort", "time");
         boolean ascending = prefs.getBoolean(
                 viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", false);
@@ -4423,6 +4436,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         boolean filter_unknown = prefs.getBoolean(getFilter("unknown", type), false);
         boolean filter_snoozed = prefs.getBoolean(getFilter("snoozed", type), true);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
+        boolean filter_trash = prefs.getBoolean("filter_trash", false);
         boolean language_detection = prefs.getBoolean("language_detection", false);
         String filter_language = prefs.getString("filter_language", null);
         boolean compact = prefs.getBoolean("compact", false);
@@ -4440,13 +4454,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         boolean filter_active = (filter_seen || filter_unflagged || filter_unknown ||
                 (language_detection && !TextUtils.isEmpty(filter_language)));
+        int filterColor = Helper.resolveColor(context, R.attr.colorAccent);
+        float filterLighten = 0.7f - (float) ColorUtils.calculateLuminance(filterColor);
+        if (filterLighten > 0)
+            filterColor = ColorUtils.blendARGB(filterColor, Color.WHITE, filterLighten);
         MenuItem menuFilter = menu.findItem(R.id.menu_filter);
         menuFilter.setShowAsAction(folder && filter_active
                 ? MenuItem.SHOW_AS_ACTION_ALWAYS
                 : MenuItem.SHOW_AS_ACTION_NEVER);
-        MenuItemCompat.setIconTintList(menuFilter,
-                folder && filter_active ?
-                        ColorStateList.valueOf(Helper.resolveColor(getContext(), R.attr.colorAccent)) : null);
+        MenuItemCompat.setIconTintList(menuFilter, folder && filter_active
+                ? ColorStateList.valueOf(filterColor) : null);
         menuFilter.setIcon(folder && filter_active ? R.drawable.twotone_filter_alt_24 : R.drawable.twotone_filter_list_24);
 
         MenuItem menuSearch = menu.findItem(R.id.menu_search);
@@ -4510,6 +4527,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_filter_unknown).setVisible(folder && !drafts && !sent);
         menu.findItem(R.id.menu_filter_snoozed).setVisible(folder && !drafts);
         menu.findItem(R.id.menu_filter_duplicates).setVisible(viewType == AdapterMessage.ViewType.THREAD);
+        menu.findItem(R.id.menu_filter_trash).setVisible(viewType == AdapterMessage.ViewType.THREAD);
 
         menu.findItem(R.id.menu_filter_seen).setChecked(filter_seen);
         menu.findItem(R.id.menu_filter_unflagged).setChecked(filter_unflagged);
@@ -4517,23 +4535,27 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         menu.findItem(R.id.menu_filter_snoozed).setChecked(filter_snoozed);
         menu.findItem(R.id.menu_filter_language).setVisible(language_detection && folder);
         menu.findItem(R.id.menu_filter_duplicates).setChecked(filter_duplicates);
+        menu.findItem(R.id.menu_filter_trash).setChecked(filter_trash);
 
         SpannableStringBuilder ssbZoom = new SpannableStringBuilder(getString(R.string.title_zoom));
-        if (zoom == 0)
-            ssbZoom.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssbZoom.length(), 0);
-        else if (zoom == 2)
-            ssbZoom.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, ssbZoom.length(), 0);
+        ssbZoom.append(' ');
+        for (int i = 0; i <= zoom; i++)
+            ssbZoom.append('+');
 
         SpannableStringBuilder ssbPadding = new SpannableStringBuilder(getString(R.string.title_padding));
-        if (padding == 0)
-            ssbPadding.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssbPadding.length(), 0);
-        else if (padding == 2)
-            ssbPadding.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, ssbPadding.length(), 0);
+        ssbPadding.append(' ');
+        for (int i = 0; i <= padding; i++)
+            ssbPadding.append('+');
 
         menu.findItem(R.id.menu_compact).setChecked(compact);
+
         menu.findItem(R.id.menu_zoom).setTitle(ssbZoom);
+        PopupMenuLifecycle.insertIcon(context, menu.findItem(R.id.menu_zoom), false);
+
         menu.findItem(R.id.menu_padding).setTitle(ssbPadding);
         menu.findItem(R.id.menu_padding).setVisible(cards);
+        PopupMenuLifecycle.insertIcon(context, menu.findItem(R.id.menu_padding), false);
+
         menu.findItem(R.id.menu_theme).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
 
         menu.findItem(R.id.menu_select_all).setVisible(folder);
@@ -4636,6 +4658,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return true;
         } else if (itemId == R.id.menu_filter_duplicates) {
             onMenuFilterDuplicates(!item.isChecked());
+            return true;
+        } else if (itemId == R.id.menu_filter_trash) {
+            onMenuFilterTrash(!item.isChecked());
             return true;
         } else if (itemId == R.id.menu_zoom) {
             onMenuZoom();
@@ -4883,6 +4908,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         prefs.edit().putBoolean("filter_duplicates", filter).apply();
         invalidateOptionsMenu();
         adapter.setFilterDuplicates(filter);
+    }
+
+    private void onMenuFilterTrash(boolean filter) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefs.edit().putBoolean("filter_trash", filter).apply();
+        invalidateOptionsMenu();
+        adapter.setFilterTrash(filter);
     }
 
     private void onMenuZoom() {
@@ -5763,7 +5795,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
                     } else {
-                        if (account.auto_seen && !folder.read_only)
+                        if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
 
                         if (!message.content)
@@ -5893,6 +5925,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     else
                         nargs.putInt("lpos", forward ^ reversed ? lpos + 1 : lpos - 1);
                 nargs.putBoolean("found", found);
+                nargs.putString("searched", searched);
                 nargs.putBoolean("pane", pane);
                 nargs.putLong("primary", primary);
                 nargs.putBoolean("connected", connected);

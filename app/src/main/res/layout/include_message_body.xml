@@ -115,6 +115,17 @@
         app:layout_constraintTop_toBottomOf="@id/tvBody" />
 
     <ImageButton
+        android:id="@+id/ibInfrastructure"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="6dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wvBody"
+        app:srcCompat="@drawable/infra_awsses" />
+
+    <ImageButton
         android:id="@+id/ibTrashBottom"
         android:layout_width="36dp"
         android:layout_height="36dp"
@@ -123,7 +134,7 @@
         android:contentDescription="@string/title_trash"
         android:padding="6dp"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibInfrastructure"
         app:layout_constraintTop_toBottomOf="@id/wvBody"
         app:srcCompat="@drawable/twotone_delete_24"
         app:tint="?attr/colorAccent" />

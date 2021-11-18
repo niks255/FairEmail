@@ -1702,6 +1702,13 @@ public class Log {
                 ActivityBilling.isPro(context) ? "+" : ""));
         sb.append(String.format("Android: %s (SDK %d/%d)\r\n",
                 Build.VERSION.RELEASE, Build.VERSION.SDK_INT, targetSdk));
+
+        boolean reporting = prefs.getBoolean("crash_reports", false);
+        if (reporting) {
+            String uuid = prefs.getString("uuid", null);
+            sb.append(String.format("UUID: %s\r\n", uuid == null ? "-" : uuid));
+        }
+
         sb.append("\r\n");
 
         // Get device info
@@ -1837,12 +1844,6 @@ public class Log {
         String charset = MimeUtility.getDefaultJavaCharset();
         sb.append(String.format("Default charset: %s/%s\r\n", charset, MimeUtility.mimeCharset(charset)));
 
-        boolean reporting = prefs.getBoolean("crash_reports", false);
-        if (reporting) {
-            String uuid = prefs.getString("uuid", null);
-            sb.append(String.format("UUID: %s\r\n", uuid == null ? "-" : uuid));
-        }
-
         sb.append(String.format("Configuration: %s\r\n", config.toString()));
 
         sb.append("\r\n");
@@ -1958,9 +1959,10 @@ public class Log {
 
             size += write(os, "accounts=" + accounts.size() +
                     " enabled=" + enabled +
-                    " interval=" + pollInterval +
-                    "\r\nmetered=" + metered +
+                    " interval=" + pollInterval + "\r\n" +
+                    " metered=" + metered +
                     " VPN=" + ConnectionHelper.vpnActive(context) +
+                    " NetGuard=" + Helper.isInstalled(context, "eu.faircode.netguard") + "\r\n" +
                     " optimizing=" + (ignoring == null ? null : !ignoring) +
                     " auto_optimize=" + auto_optimize +
                     "\r\n\r\n");

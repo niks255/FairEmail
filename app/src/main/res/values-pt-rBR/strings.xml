@@ -72,7 +72,6 @@
     <string name="title_junk_hint">Seu provedor de e-mail é responsável por filtrar spam. Um aplicativo de e-mail não possui todos os dados necessários para fazer isso de forma confiável.</string>
     <string name="title_block">Bloquear %1$s</string>
     <string name="title_block_sender">Bloquear remetente</string>
-    <string name="title_block_domain">Bloquear domínio do remetente</string>
     <string name="title_junk_filter">Usar filtro de spam local</string>
     <string name="title_junk_filter_hint">Isso pode aumentar o uso de bateria e incorretamente marcar mensagens como spam</string>
     <string name="title_junk_blocklist">Usar listas de bloqueio por spam</string>
@@ -436,7 +435,6 @@
     <string name="title_advanced_autounstar">Remover estrelas automaticamente das mensagens ao movê-las</string>
     <string name="title_advanced_auto_important">Torne as mensagens com estrela automaticamente importantes</string>
     <string name="title_advanced_reset_importance">Redefinir importância de mensagens em movimento</string>
-    <string name="title_advanced_default_snooze">Tempo padrão de soneca</string>
     <string name="title_advanced_notifications">Gerenciar notificações</string>
     <string name="title_advanced_notifications_default">Canal padrão</string>
     <string name="title_advanced_notifications_service">Receber canal</string>

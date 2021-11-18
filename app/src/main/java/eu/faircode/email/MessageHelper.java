@@ -145,6 +145,15 @@ public class MessageHelper {
             StandardCharsets.UTF_16LE
     ));
 
+    private static final List<String> DO_NOT_REPLY = Collections.unmodifiableList(Arrays.asList(
+            "noreply",
+            "no.reply",
+            "no-reply",
+            "donotreply",
+            "do.not.reply",
+            "do-not-reply"
+    ));
+
     static final String FLAG_FORWARDED = "$Forwarded";
     static final String FLAG_JUNK = "$Junk";
     static final String FLAG_NOT_JUNK = "$NotJunk";
@@ -1650,6 +1659,94 @@ public class MessageHelper {
             sb.append(header.getName()).append(": ").append(header.getValue()).append('\n');
         }
         return sb.toString();
+    }
+
+    String getInfrastructure() throws MessagingException {
+        ensureHeaders();
+
+        String awsses = imessage.getHeader("X-SES-Outgoing", null);
+        if (!TextUtils.isEmpty(awsses))
+            return "awsses";
+
+        String sendgrid = imessage.getHeader("X-SG-EID", null);
+        if (!TextUtils.isEmpty(sendgrid))
+            return "sendgrid";
+
+        String mailgun = imessage.getHeader("X-Mailgun-Sid", null);
+        if (!TextUtils.isEmpty(mailgun))
+            return "mailgun";
+
+        String mandrill = imessage.getHeader("X-Mandrill-User", null);
+        if (!TextUtils.isEmpty(mandrill))
+            return "mandrill";
+
+        String mailchimp = imessage.getHeader("X-MC-User", null);
+        if (!TextUtils.isEmpty(mailchimp))
+            return "mailchimp";
+
+        String postmark = imessage.getHeader("X-PM-Message-Id", null);
+        if (!TextUtils.isEmpty(postmark))
+            return "postmark";
+
+        String salesforce = imessage.getHeader("X-SFDC-User", null);
+        if (!TextUtils.isEmpty(salesforce))
+            return "salesforce";
+
+        String mailjet = imessage.getHeader("X-MJ-Mid", null);
+        if (!TextUtils.isEmpty(mailjet))
+            return "mailjet";
+
+        String sendinblue = imessage.getHeader("X-sib-id", null);
+        if (!TextUtils.isEmpty(sendinblue))
+            return "sendinblue";
+
+        String sparkpost = imessage.getHeader("X-MSFBL", null);
+        if (!TextUtils.isEmpty(sparkpost))
+            return "sparkpost";
+
+        String netcore = imessage.getHeader("X-FNCID", null);
+        if (!TextUtils.isEmpty(netcore))
+            return "netcore";
+
+        String elastic = imessage.getHeader("X-Msg-EID", null);
+        if (!TextUtils.isEmpty(elastic))
+            return "elastic";
+
+        String zeptomail = imessage.getHeader("X-JID", null); // TM-MAIL-JID
+        if (!TextUtils.isEmpty(zeptomail))
+            return "zeptomail";
+
+        String gmail = imessage.getHeader("X-Gm-Message-State", null);
+        if (!TextUtils.isEmpty(gmail))
+            return "gmail";
+
+        String outlook = imessage.getHeader("x-ms-publictraffictype", null);
+        if (!TextUtils.isEmpty(outlook))
+            return "outlook";
+
+        String yahoo = imessage.getHeader("X-Sonic-MF", null);
+        if (!TextUtils.isEmpty(yahoo))
+            return "yahoo";
+
+        String icloud = imessage.getHeader("X-Proofpoint-Spam-Details", null);
+        if (!TextUtils.isEmpty(icloud))
+            return "icloud";
+
+        String zoho = imessage.getHeader("X-ZohoMailClient", null);
+        if (!TextUtils.isEmpty(zoho))
+            return "zoho";
+
+        String xmailer = imessage.getHeader("X-Mailer", null);
+        if (!TextUtils.isEmpty(xmailer)) {
+            if (xmailer.contains("iPhone Mail"))
+                return "icloud";
+            if (xmailer.contains("PHPMailer"))
+                return "phpmailer";
+            if (xmailer.contains("Zoho Mail"))
+                return "zoho";
+        }
+
+        return null;
     }
 
     String getHash() throws MessagingException {
@@ -3162,6 +3259,20 @@ public class MessageHelper {
         if (TextUtils.isEmpty(text))
             return null;
 
+        int skip = 0;
+        StringBuilder sb = new StringBuilder();
+        int len = text.length();
+        for (int i = 0; i < len; i++) {
+            char kar = text.charAt(i);
+            if (kar == '(')
+                skip++;
+            else if (kar == ')')
+                skip--;
+            else if (skip == 0)
+                sb.append(kar);
+        }
+        text = sb.toString();
+
         InternetAddress[] addresses = InternetAddress.parseHeader(text, false);
         if (addresses.length == 0)
             return null;
@@ -3199,6 +3310,29 @@ public class MessageHelper {
                 return true;
             ex = ex.getCause();
         }
+        return false;
+    }
+
+    static boolean isNoReply(Address address) {
+        if (address instanceof InternetAddress) {
+            String email = ((InternetAddress) address).getAddress();
+            String username = UriHelper.getEmailUser(email);
+            String domain = UriHelper.getEmailDomain(email);
+
+            if (!TextUtils.isEmpty(username)) {
+                username = username.toLowerCase(Locale.ROOT);
+                for (String value : DO_NOT_REPLY)
+                    if (username.contains(value))
+                        return true;
+            }
+            if (!TextUtils.isEmpty(domain)) {
+                domain = domain.toLowerCase(Locale.ROOT);
+                for (String value : DO_NOT_REPLY)
+                    if (domain.startsWith(value))
+                        return true;
+            }
+        }
+
         return false;
     }
 

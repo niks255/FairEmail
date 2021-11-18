@@ -62,7 +62,6 @@
     <string name="title_junk_hint">Nhà cung cấp email của bạn có trách nhiệm lọc thư rác. Một ứng dụng email không có tất cả dữ liệu cần thiết để làm việc này một cách đáng tin cậy.</string>
     <string name="title_block">Chặn %1$s</string>
     <string name="title_block_sender">Chặn người gửi</string>
-    <string name="title_block_domain">Chặn miền người gửi</string>
     <string name="title_block_sender_hint">        Chặn người gửi là tính năng miễn phí.
         Chặn miền người gửi có sử dụng quy tắc lọc, đó là tính năng pro.
     </string>
@@ -453,7 +452,6 @@
     <string name="title_advanced_autounstar">Tự động bỏ sao khỏi thư khi di chuyển thư</string>
     <string name="title_advanced_auto_important">Tự động làm cho thư được gắn sao trở nên quan trọng</string>
     <string name="title_advanced_reset_importance">Đặt lại tầm quan trọng khi di chuyển thư</string>
-    <string name="title_advanced_default_snooze">Thời gian báo lại mặc định</string>
     <string name="title_advanced_notifications">Quản lý thông báo</string>
     <string name="title_advanced_notifications_default">Kênh mặc định</string>
     <string name="title_advanced_notifications_service">Kênh nhận</string>
