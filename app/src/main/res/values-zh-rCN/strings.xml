@@ -107,6 +107,7 @@
     <string name="title_edit_account">编辑账户</string>
     <string name="title_edit_identity">编辑身份</string>
     <string name="title_edit_folder">编辑文件夹</string>
+    <string name="title_disable_gmail">禁用 Gmail 应用</string>
     <string name="title_setup">设置</string>
     <string name="title_setup_help">帮助</string>
     <string name="title_setup_quick">快速设置</string>
@@ -455,6 +456,7 @@
     <string name="title_advanced_autounstar">移动消息时自动移除星标</string>
     <string name="title_advanced_auto_important">自动标注星标消息为重要</string>
     <string name="title_advanced_reset_importance">在移动消息时重置其重要性</string>
+    <string name="title_advanced_swipe_reply">右滑展开的邮件进行回复</string>
     <string name="title_advanced_default_snooze">默认打盹/延迟时间</string>
     <string name="title_advanced_notifications">管理通知</string>
     <string name="title_advanced_notifications_default">默认频道</string>
@@ -559,7 +561,7 @@
     <string name="title_advanced_protocol">协议日志</string>
     <string name="title_advanced_log_info">调试日志</string>
     <string name="title_advanced_debug">调试模式</string>
-    <string name="title_advanced_manual_hint">如果禁用了接收消息，仍然可以通过下拉消息列表来手动接收消息</string>
+    <string name="title_advanced_manual_hint">如果禁用了自动接收消息，仍然可以通过下拉消息列表来手动接收消息</string>
     <string name="title_advanced_poll_battery">这可能会导致高耗电量！</string>
     <string name="title_advanced_poll_hint">定期检查新消息将每次都比较本地消息与远程消息，这是项耗时的操作，可能消耗更多电量，尤其是消息非常多时。始终接收将通过持续跟踪变化来防止这种情况。</string>
     <string name="title_advanced_optimize_hint">这可能会改变同步频率以节省电池用量，取决于电子邮件服务器的功能和行为</string>
@@ -577,10 +579,11 @@
     <string name="title_advanced_sync_delay_hint">这将减缓同步消息的速度</string>
     <string name="title_advanced_suggest_names_hint">如果禁用，选择联系人时将只使用电子邮件地址</string>
     <string name="title_advanced_suggest_local_hint">除了Android提供的联系人，只有在设置中允许，应用才会储存新接收或发送消息的联系人数据。</string>
-    <string name="title_advanced_usenet_hint">在文本和签名之间插入 \'-- \'</string>
     <string name="title_advanced_send_reminders_hint">当消息文本或主题为空或缺失某个附件时显示警告</string>
     <string name="title_advanced_reply_all_hint">如禁用，长按答复按钮将答复发送者</string>
     <string name="title_advanced_reply_move_hint">邮件服务器仍然可以将消息添加到“已发送消息”文件夹</string>
+    <string name="title_advanced_usenet_hint">在文本和签名之间插入 \'-- \'</string>
+    <string name="title_advanced_remove_signature_hint">这可能会导致删除太少或太多文本</string>
     <string name="title_advanced_metered_hint">计量连接通常是指移动连接或付费WiFi热点</string>
     <string name="title_advanced_metered_warning">禁用此选项将禁止在使用移动互联网连接时接收和发送消息</string>
     <string name="title_advanced_rlah_hint">假设欧盟境内不存在漫游</string>
@@ -805,8 +808,8 @@
     <string name="title_display_name">显示昵称</string>
     <string name="title_show_folders">显示隐藏文件夹</string>
     <string name="title_show_flagged">显示星标消息计数</string>
-    <string name="title_subscribed_only">只显示已订阅的</string>
-    <string name="title_sort_unread_atop">将含未读邮件的文件夹排在最前面</string>
+    <string name="title_subscribed_only">隐藏未订阅</string>
+    <string name="title_sort_unread_atop">未读居前</string>
     <string name="title_search_folder">搜索文件夹</string>
     <string name="title_apply_to_all">应用到全部</string>
     <string name="title_edit_account_name">编辑账户名称</string>
@@ -1384,7 +1387,7 @@
     <string name="title_legend_show_quotes">显示引用内容</string>
     <string name="title_legend_show_junk">视为垃圾邮件</string>
     <string name="title_legend_create_rule">创建规则</string>
-    <string name="title_legend_show_unsubscribe">从列表取消订阅</string>
+    <string name="title_legend_show_unsubscribe">取消订阅</string>
     <string name="title_legend_show_images">显示图片</string>
     <string name="title_legend_hide_images">隐藏图片</string>
     <string name="title_legend_show_full">显示原始消息</string>

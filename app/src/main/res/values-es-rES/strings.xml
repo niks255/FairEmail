@@ -117,6 +117,7 @@
     <string name="title_edit_account">Editar cuenta</string>
     <string name="title_edit_identity">Editar identidad</string>
     <string name="title_edit_folder">Editar carpeta</string>
+    <string name="title_disable_gmail">Desactivar aplicación de Gmail</string>
     <string name="title_setup">Ajustes</string>
     <string name="title_setup_help">Ayuda</string>
     <string name="title_setup_quick">Configuración rápida</string>
@@ -465,6 +466,8 @@
     <string name="title_advanced_autounstar">Eliminar automáticamente la estrella de los mensajes al ser movidos</string>
     <string name="title_advanced_auto_important">Hacer que los mensajes destacados sean importantes automáticamente</string>
     <string name="title_advanced_reset_importance">Restablecer importancia al mover mensajes</string>
+    <string name="title_advanced_swipe_reply">Deslice los mensajes expandidos a la derecha para responder</string>
+    <string name="title_advanced_default_snooze">Tiempo de posponer/retraso por defecto</string>
     <string name="title_advanced_notifications">Administrar notificaciones</string>
     <string name="title_advanced_notifications_default">Canal por defecto</string>
     <string name="title_advanced_notifications_service">Canal de recepción</string>
@@ -586,10 +589,11 @@
     <string name="title_advanced_sync_delay_hint">Esto ralentizará la sincronización de mensajes</string>
     <string name="title_advanced_suggest_names_hint">Si está desactivado, sólo se usarán direcciones de correo electrónico al seleccionar contactos</string>
     <string name="title_advanced_suggest_local_hint">Además de los contactos proporcionados por Android, los datos de contactos se almacenarán para nuevos mensajes enviados o recibidos sólo cuando esté activado.</string>
-    <string name="title_advanced_usenet_hint">Insertar \'-- \' entre el texto y la firma</string>
     <string name="title_advanced_send_reminders_hint">Mostrar una advertencia cuando el texto del mensaje o el asunto estén vacíos o cuando un archivo adjunto pueda estar ausente</string>
     <string name="title_advanced_reply_all_hint">Si está desactivado, mantener presionado el botón de respuesta responderá al remitente</string>
     <string name="title_advanced_reply_move_hint">El servidor de correo electrónico todavía puede añadir los mensajes a la carpeta de mensajes enviados</string>
+    <string name="title_advanced_usenet_hint">Insertar \'-- \' entre el texto y la firma</string>
+    <string name="title_advanced_remove_signature_hint">Esto puede dar lugar a que se elimine demasiado poco o demasiado texto</string>
     <string name="title_advanced_metered_hint">Las conexiones medidas son generalmente conexiones móviles o puntos de acceso Wi-Fi de pago</string>
     <string name="title_advanced_metered_warning">Desactivar esta opción desactivará la recepción y envío de mensajes en conexiones móviles a Internet</string>
     <string name="title_advanced_rlah_hint">Suponiendo que no hay itinerancia dentro de la UE</string>

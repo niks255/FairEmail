@@ -866,6 +866,18 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swEmptyPool"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_empty_pool"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAuthSasl"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swIdleDone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -874,7 +886,7 @@
                     android:text="@string/title_advanced_idle_done"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swAuthSasl"
+                    app:layout_constraintTop_toBottomOf="@id/swEmptyPool"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -906,7 +918,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="48dp"
                     app:constraint_referenced_ids="
-                        infra_awsses,infra_elastic,infra_gmail,infra_icloud,
+                        infra_awsses,infra_elastic,infra_gmail,infra_icloud,infra_icontact,
                         infra_mailchimp,infra_mailgun,infra_mailjet,infra_mandrill,
                         infra_netcore,infra_outlook,infra_phpmailer,infra_postmark,
                         infra_salesforce,infra_sendgrid,infra_sendinblue,infra_sparkpost,
@@ -954,6 +966,15 @@
                     android:contentDescription="@string/infra_icloud"
                     android:tooltipText="@string/infra_icloud"
                     app:srcCompat="@drawable/infra_icloud"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/infra_icontact"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/infra_icontact"
+                    android:tooltipText="@string/infra_icontact"
+                    app:srcCompat="@drawable/infra_icontact"
                     tools:ignore="MissingConstraints" />
 
                 <ImageView

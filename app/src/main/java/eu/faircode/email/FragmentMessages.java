@@ -65,6 +65,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.OperationCanceledException;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.print.PrintAttributes;
@@ -301,8 +302,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private WebView printWebView = null;
 
-    private OpenPgpServiceConnection pgpService;
-
     private boolean cards;
     private boolean date;
     private boolean date_fixed;
@@ -317,6 +316,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private String onclose;
     private boolean quick_scroll;
     private boolean addresses;
+    private boolean swipe_reply;
 
     private int colorPrimary;
     private int colorAccent;
@@ -444,6 +444,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         onclose = (autoclose ? null : prefs.getString("onclose", null));
         quick_scroll = prefs.getBoolean("quick_scroll", true);
         addresses = prefs.getBoolean("addresses", false);
+        swipe_reply = prefs.getBoolean("swipe_reply", false);
 
         colorPrimary = Helper.resolveColor(getContext(), R.attr.colorPrimary);
         colorAccent = Helper.resolveColor(getContext(), R.attr.colorAccent);
@@ -675,7 +676,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         TextView tvFixedDate = inGroup.findViewById(R.id.tvDate);
         View vFixedSeparator = inGroup.findViewById(R.id.vSeparator);
 
-        String sort = prefs.getString("sort", "time");
+        String sort = prefs.getString(getSort(getContext(), viewType, type), "time");
         inGroup.setVisibility(date_fixed && "time".equals(sort) ? View.INVISIBLE : View.GONE);
         tvFixedCategory.setVisibility(View.GONE);
         if (cards)
@@ -844,8 +845,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
-        boolean ascending = prefs.getBoolean(
-                viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", false);
+        boolean ascending = prefs.getBoolean(getSortOrder(getContext(), viewType, type), false);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
         boolean filter_trash = prefs.getBoolean("filter_trash", false);
 
@@ -922,8 +922,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         ibSeen.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String name = getFilter("seen", type);
+            public void onClick(View v) {
+                String name = getFilter(v.getContext(), "seen", viewType, type);
                 boolean filter = prefs.getBoolean(name, true);
                 onMenuFilter(name, !filter);
             }
@@ -931,8 +931,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         ibUnflagged.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String name = getFilter("unflagged", type);
+            public void onClick(View v) {
+                String name = getFilter(v.getContext(), "unflagged", viewType, type);
                 boolean filter = prefs.getBoolean(name, true);
                 onMenuFilter(name, !filter);
             }
@@ -940,8 +940,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         ibSnoozed.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String name = getFilter("snoozed", type);
+            public void onClick(View v) {
+                String name = getFilter(v.getContext(), "snoozed", viewType, type);
                 boolean filter = prefs.getBoolean(name, true);
                 onMenuFilter(name, !filter);
             }
@@ -1584,11 +1584,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
              */
             }
 
-        final String pkg = Helper.getOpenKeychainPackage(getContext());
-        Log.i("PGP binding to " + pkg);
-        pgpService = new OpenPgpServiceConnection(getContext(), pkg);
-        pgpService.bindToService();
-
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
         IntentFilter iff = new IntentFilter(SimpleTask.ACTION_TASK_COUNT);
         lbm.registerReceiver(treceiver, iff);
@@ -1600,12 +1595,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     public void onDestroyView() {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
         lbm.unregisterReceiver(treceiver);
-
-        if (pgpService != null && pgpService.isBound()) {
-            Log.i("PGP unbinding");
-            pgpService.unbindFromService();
-        }
-        pgpService = null;
 
         super.onDestroyView();
     }
@@ -2121,6 +2110,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (message == null)
                 return 0;
 
+            boolean expanded = iProperties.getValue("expanded", message.id);
+
+            if (expanded && swipe_reply)
+                return makeMovementFlags(0, ItemTouchHelper.RIGHT);
+
             if (EntityFolder.OUTBOX.equals(message.folderType))
                 return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
 
@@ -2193,8 +2187,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (message == null)
                 return;
 
+            boolean expanded = iProperties.getValue("expanded", message.id);
+
             TupleAccountSwipes swipes;
-            if (EntityFolder.OUTBOX.equals(message.folderType)) {
+            if (expanded && swipe_reply) {
+                swipes = new TupleAccountSwipes();
+                swipes.swipe_right = EntityMessage.SWIPE_ACTION_REPLY;
+                swipes.right_type = null;
+                swipes.swipe_left = null;
+                swipes.left_type = null;
+            } else if (EntityFolder.OUTBOX.equals(message.folderType)) {
                 swipes = new TupleAccountSwipes();
                 swipes.swipe_right = 0L;
                 swipes.right_type = EntityFolder.DRAFTS;
@@ -2235,6 +2237,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             int margin = Helper.dp2pixels(context, 12);
             int size = Helper.dp2pixels(context, 24);
 
+            if (expanded && swipe_reply) {
+                Rect r1 = new Rect();
+                holder.itemView.getGlobalVisibleRect(r1);
+                Rect r2 = new Rect();
+                recyclerView.getGlobalVisibleRect(r2);
+                rect.top = Math.max(rect.top, r1.top - r2.top);
+                rect.bottom = Math.min(rect.bottom, r1.bottom - r2.top);
+            }
+
             int icon;
             if (EntityMessage.SWIPE_ACTION_ASK.equals(action))
                 icon = R.drawable.twotone_help_24;
@@ -2256,6 +2267,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
                     (EntityFolder.TRASH.equals(actionType) && EntityFolder.JUNK.equals(message.folderType)))
                 icon = R.drawable.twotone_delete_forever_24;
+            else if (EntityMessage.SWIPE_ACTION_REPLY.equals(action))
+                icon = R.drawable.twotone_reply_24;
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
 
@@ -2321,6 +2334,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             TupleMessageEx message = getMessage(pos);
             if (message == null) {
                 adapter.notifyDataSetChanged();
+                return;
+            }
+
+            boolean expanded = iProperties.getValue("expanded", message.id);
+
+            if (expanded && swipe_reply) {
+                adapter.notifyItemChanged(pos);
+                onMenuReply(message, "reply", null);
                 return;
             }
 
@@ -2405,7 +2426,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (message == null)
                 return null;
 
-            if (iProperties.getValue("expanded", message.id))
+            boolean expanded = iProperties.getValue("expanded", message.id);
+
+            if (expanded && !swipe_reply)
                 return null;
 
             return message;
@@ -3135,7 +3158,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 final Context context = getContext();
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean flags = prefs.getBoolean("flags", true);
-                boolean flags_background = prefs.getBoolean("flags_background", false);
 
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), fabMore);
 
@@ -3164,7 +3186,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (result.flagged && flags)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_unflag, order++, R.string.title_unflag)
                             .setIcon(R.drawable.twotone_star_border_24);
-                if ((result.unflagged || result.flagged) && flags_background)
+                if ((result.unflagged || result.flagged) && flags)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_flag_color, order++, R.string.title_flag_color)
                             .setIcon(R.drawable.twotone_auto_awesome_24);
 
@@ -4131,9 +4153,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     public void onResume() {
         super.onResume();
 
-        if (!pgpService.isBound())
-            pgpService.bindToService();
-
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
         IntentFilter iff = new IntentFilter();
         iff.addAction(ACTION_STORE_RAW);
@@ -4428,13 +4447,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     public void onPrepareOptionsMenu(Menu menu) {
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String sort = prefs.getString("sort", "time");
-        boolean ascending = prefs.getBoolean(
-                viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", false);
-        boolean filter_seen = prefs.getBoolean(getFilter("seen", type), false);
-        boolean filter_unflagged = prefs.getBoolean(getFilter("unflagged", type), false);
-        boolean filter_unknown = prefs.getBoolean(getFilter("unknown", type), false);
-        boolean filter_snoozed = prefs.getBoolean(getFilter("snoozed", type), true);
+        String sort = prefs.getString(getSort(context, viewType, type), "time");
+        boolean ascending = prefs.getBoolean(getSortOrder(context, viewType, type), false);
+        boolean filter_seen = prefs.getBoolean(getFilter(context, "seen", viewType, type), false);
+        boolean filter_unflagged = prefs.getBoolean(getFilter(context, "unflagged", viewType, type), false);
+        boolean filter_unknown = prefs.getBoolean(getFilter(context, "unknown", viewType, type), false);
+        boolean filter_snoozed = prefs.getBoolean(getFilter(context, "snoozed", viewType, type), true);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
         boolean filter_trash = prefs.getBoolean("filter_trash", false);
         boolean language_detection = prefs.getBoolean("language_detection", false);
@@ -4642,16 +4660,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             onMenuAscending(!item.isChecked());
             return true;
         } else if (itemId == R.id.menu_filter_seen) {
-            onMenuFilter(getFilter("seen", type), !item.isChecked());
+            onMenuFilter(getFilter(getContext(), "seen", viewType, type), !item.isChecked());
             return true;
         } else if (itemId == R.id.menu_filter_unflagged) {
-            onMenuFilter(getFilter("unflagged", type), !item.isChecked());
+            onMenuFilter(getFilter(getContext(), "unflagged", viewType, type), !item.isChecked());
             return true;
         } else if (itemId == R.id.menu_filter_unknown) {
-            onMenuFilter(getFilter("unknown", type), !item.isChecked());
+            onMenuFilter(getFilter(getContext(), "unknown", viewType, type), !item.isChecked());
             return true;
         } else if (itemId == R.id.menu_filter_snoozed) {
-            onMenuFilter(getFilter("snoozed", type), !item.isChecked());
+            onMenuFilter(getFilter(getContext(), "snoozed", viewType, type), !item.isChecked());
             return true;
         } else if (itemId == R.id.menu_filter_language) {
             onMenuFilterLanguage();
@@ -4786,16 +4804,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onMenuSort(String sort) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        prefs.edit().putString("sort", sort).apply();
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(getSort(context, viewType, type), sort).apply();
         adapter.setSort(sort);
         loadMessages(true);
     }
 
     private void onMenuAscending(boolean ascending) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        prefs.edit().putBoolean(
-                viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", ascending).apply();
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putBoolean(getSortOrder(context, viewType, type), ascending).apply();
         adapter.setAscending(ascending);
         invalidateOptionsMenu();
         loadMessages(true);
@@ -5027,9 +5046,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 long folder = args.getLong("folder");
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                boolean filter_unflagged = prefs.getBoolean(getFilter("unflagged", type), false);
-                boolean filter_unknown = prefs.getBoolean(getFilter("unknown", type), false);
-                boolean filter_snoozed = prefs.getBoolean(getFilter("snoozed", type), true);
+                boolean filter_unflagged = prefs.getBoolean(getFilter(context, "unflagged", viewType, type), false);
+                boolean filter_unknown = prefs.getBoolean(getFilter(context, "unknown", viewType, type), false);
+                boolean filter_snoozed = prefs.getBoolean(getFilter(context, "snoozed", viewType, type), true);
                 boolean language_detection = prefs.getBoolean("language_detection", false);
                 String filter_language = prefs.getString("filter_language", null);
 
@@ -5381,9 +5400,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         boolean outbox = EntityFolder.OUTBOX.equals(type);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean filter_seen = prefs.getBoolean(getFilter("seen", type), false);
-        boolean filter_unflagged = prefs.getBoolean(getFilter("unflagged", type), false);
-        boolean filter_unknown = prefs.getBoolean(getFilter("unknown", type), false);
+        boolean filter_seen = prefs.getBoolean(getFilter(context, "seen", viewType, type), false);
+        boolean filter_unflagged = prefs.getBoolean(getFilter(context, "unflagged", viewType, type), false);
+        boolean filter_unknown = prefs.getBoolean(getFilter(context, "unknown", viewType, type), false);
         boolean language_detection = prefs.getBoolean("language_detection", false);
         String filter_language = prefs.getString("filter_language", null);
         boolean filter_active = ((filter_seen && !outbox) ||
@@ -6210,7 +6229,23 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         return sb.toString();
     }
 
-    static String getFilter(String name, String type) {
+    static String getSort(Context context, AdapterMessage.ViewType viewType, String type) {
+        if (viewType == AdapterMessage.ViewType.UNIFIED)
+            return "sort_unified";
+        else
+            return "sort";
+    }
+
+    static String getSortOrder(Context context, AdapterMessage.ViewType viewType, String type) {
+        if (viewType == AdapterMessage.ViewType.THREAD)
+            return "ascending_thread";
+        else if (viewType == AdapterMessage.ViewType.UNIFIED)
+            return "ascending_unified";
+        else
+            return "ascending_list";
+    }
+
+    static String getFilter(Context context, String name, AdapterMessage.ViewType viewType, String type) {
         return "filter_" + (EntityFolder.isOutgoing(type) ? "out_" : "") + name;
     }
 
@@ -6690,22 +6725,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 }
             }.execute(this, args, "messages:alias");
         } else {
-            if (pgpService.isBound()) {
-                Intent data = new Intent();
-                data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
-                data.putExtra(BuildConfig.APPLICATION_ID, id);
-                onPgp(data, auto);
-            } else {
-                Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true);
-                snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Helper.viewFAQ(v.getContext(), 12);
-                    }
-                });
-                snackbar.show();
-            }
+            Intent data = new Intent();
+            data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
+            data.putExtra(BuildConfig.APPLICATION_ID, id);
+            onPgp(data, auto);
         }
     }
 
@@ -7069,14 +7092,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Intent result;
                 try {
                     // Decrypt message
-                    Log.i("Executing " + data.getAction());
-                    Log.logExtras(data);
-                    OpenPgpApi api = new OpenPgpApi(context, pgpService.getService());
-                    result = api.executeApi(data, in, out);
-
+                    result = PgpHelper.execute(context, data, in, out);
                     int resultCode = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
-                    Log.i("Result action=" + data.getAction() + " code=" + resultCode);
-                    Log.logExtras(data);
                     switch (resultCode) {
                         case OpenPgpApi.RESULT_CODE_SUCCESS:
                             if (out != null)
@@ -7272,6 +7289,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     Log.i(ex);
                     Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
+                } else if (ex instanceof OperationCanceledException) {
+                    Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE)
+                            .setGestureInsetBottomIgnored(true);
+                    snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                            Helper.viewFAQ(v.getContext(), 12);
+                        }
+                    });
+                    snackbar.show();
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }

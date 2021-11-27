@@ -76,6 +76,7 @@ public class ViewModelMessages extends ViewModel {
     private static final int REMOTE_PAGE_SIZE = 10;
     private static final int SEARCH_PAGE_SIZE = 10;
     private static final int MAX_CACHED_ITEMS = LOCAL_PAGE_SIZE * 50;
+    private static final int CHUNK_SIZE = 100;
 
     Model getModel(
             final Context context, final LifecycleOwner owner,
@@ -105,10 +106,10 @@ public class ViewModelMessages extends ViewModel {
             BoundaryCallbackMessages boundary = null;
             if (viewType == AdapterMessage.ViewType.FOLDER)
                 boundary = new BoundaryCallbackMessages(context,
-                        args.account, args.folder, true, args.criteria, REMOTE_PAGE_SIZE);
+                        viewType, args.account, args.folder, true, args.criteria, REMOTE_PAGE_SIZE);
             else if (viewType == AdapterMessage.ViewType.SEARCH)
                 boundary = new BoundaryCallbackMessages(context,
-                        args.account, args.folder, args.server, args.criteria,
+                        viewType, args.account, args.folder, args.server, args.criteria,
                         args.server ? REMOTE_PAGE_SIZE : SEARCH_PAGE_SIZE);
 
             LivePagedListBuilder<Integer, TupleMessageEx> builder = null;
@@ -360,14 +361,20 @@ public class ViewModelMessages extends ViewModel {
                                     return getPair(plist, ds, count, from + j);
                         }
 
-                        for (int i = 0; i < count; i += 100) {
+                        for (int i = 0; i < count; i += CHUNK_SIZE) {
                             Log.i("Observe previous/next load" +
                                     " range=" + i + "/#" + count);
-                            List<TupleMessageEx> messages = ds.loadRange(i, Math.min(100, count - i));
+                            List<TupleMessageEx> messages = ds.loadRange(i, Math.min(CHUNK_SIZE, count - i));
                             for (int j = 0; j < messages.size(); j++)
                                 if (messages.get(j).id == id)
                                     return getPair(plist, ds, count, i + j);
+
+                            if (lpos < 0 && i == CHUNK_SIZE * 2 && count > CHUNK_SIZE * 4)
+                                i = count - CHUNK_SIZE * 2;
                         }
+
+                        Log.i("Observe previous/next message not found" +
+                                " lpos=" + lpos + " count=" + count + " " + model.args);
 
                         return null;
                     }
@@ -497,13 +504,12 @@ public class ViewModelMessages extends ViewModel {
             this.server = server;
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            this.sort = prefs.getString("sort", "time");
-            this.ascending = prefs.getBoolean(
-                    viewType == AdapterMessage.ViewType.THREAD ? "ascending_thread" : "ascending_list", false);
-            this.filter_seen = prefs.getBoolean(FragmentMessages.getFilter("seen", type), false);
-            this.filter_unflagged = prefs.getBoolean(FragmentMessages.getFilter("unflagged", type), false);
-            this.filter_unknown = prefs.getBoolean(FragmentMessages.getFilter("unknown", type), false);
-            this.filter_snoozed = prefs.getBoolean(FragmentMessages.getFilter("snoozed", type), true);
+            this.sort = prefs.getString(FragmentMessages.getSort(context, viewType, type), "time");
+            this.ascending = prefs.getBoolean(FragmentMessages.getSortOrder(context, viewType, type), false);
+            this.filter_seen = prefs.getBoolean(FragmentMessages.getFilter(context, "seen", viewType, type), false);
+            this.filter_unflagged = prefs.getBoolean(FragmentMessages.getFilter(context, "unflagged", viewType, type), false);
+            this.filter_unknown = prefs.getBoolean(FragmentMessages.getFilter(context, "unknown", viewType, type), false);
+            this.filter_snoozed = prefs.getBoolean(FragmentMessages.getFilter(context, "snoozed", viewType, type), true);
 
             boolean language_detection = prefs.getBoolean("language_detection", false);
             String filter_language = prefs.getString("filter_language", null);

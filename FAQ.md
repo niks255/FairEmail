@@ -555,10 +555,13 @@ you can use the quick setup wizard to easily setup a Gmail account and identity.
 The Gmail quick setup wizard is not available for third party builds, like the F-Droid build
 because Google approved the use of OAuth for official builds only.
 
+The Gmail quick setup wizard won't work if the Android account manager doesn't work or doesn't support Google accounts,
+which is typically the case if the account selection is being *canceled* right away.
+
 If you don't want to use or can't use an on-device Google account, for example on recent Huawei devices,
 you can either enable access for "less secure apps" and use your account password (not advised)
 or enable two factor authentication and use an app specific password.
-To use a password you'll need to set up an account and identity via the manual setup instead of via the quick setup wizard.
+To use a password you can use the quick setup wizard and select *Other provider*.
 
 **Important**: sometimes Google issues this alert:
 
@@ -819,6 +822,10 @@ Common errors:
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 * *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
 * *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure the email address exactly matches the key, including lower/upper case. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
+
+**Important**: if *Don't keep activities* is enabled in the Android developer options,
+FairEmail and the OpenKeychain app cannot run at the same time, causing PGP operations to fail.
+If needed, please [see here](https://developer.android.com/studio/debug/dev-options#enable) about how to enable the developer options.
 
 <br />
 
@@ -1250,6 +1257,8 @@ Please [see here](#user-content-faq41) for the error *... Handshake failed ...*.
 
 See [here](https://linux.die.net/man/3/connect) for what error codes like EHOSTUNREACH and ETIMEDOUT mean.
 
+The error *... connect failed: EACCES (Permission denied) ...* means that  *Restrict data usage* was disabled in the Android MIUI app settings for FairEmail.
+
 Possible causes are:
 
 * A firewall or router is blocking connections to the server
@@ -1274,6 +1283,7 @@ Note that [Google Fi](https://fi.google.com/) is using a VPN too.
 SMTP servers can reject messages for [a variety of reasons](https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes).
 Too large messages and triggering the spam filter of an email server are the most common reasons.
 
+* The error *... Socket is closed ...* might be caused by sending a too large message / attachments
 * The attachment size limit for Gmail [is 25 MB](https://support.google.com/mail/answer/6584)
 * The attachment size limit for Outlook and Office 365 [is 20 MB](https://support.microsoft.com/en-us/help/2813269/attachment-size-exceeds-the-allowable-limit-error-when-you-add-a-large)
 * The attachment size limit for Yahoo [is 25 MB](https://help.yahoo.com/kb/SLN5673.html)
@@ -1576,6 +1586,8 @@ and like to have a fallback email address main@example.com as well, you could do
 * Identity: abc@example.com; regex: **(?i)abc**
 * Identity: xyz@example.com; regex: **(?i)xyz**
 * Identity: main@example.com; regex: **^(?i)((?!abc|xyz).)\*$**
+
+You can test a regex [here](https://regexr.com/).
 
 Matched identities can be used to color code messages.
 The identity color takes precedence over the folder and account color.
@@ -2380,6 +2392,15 @@ $$deleted$
 
 Note that *regex* should be disable and that there should be no white space.
 
+The automation action will broadcast the intent *eu.faircode.email.AUTOMATION* with the following string extras:
+
+* *name*
+* *sender*
+* *subject*
+* *received* (ISO 8601 date/time)
+
+An app like Tasker can listen for this intent and perform some action.
+
 In the three-dots *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
 
 The POP3 protocol does not support setting keywords and moving or copying messages.
@@ -3005,6 +3026,9 @@ This feature depends on support of your launcher.
 FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library.
 If it doesn't work, this cannot be fixed by changes in FairEmail.
 
+If you are using Nova launcher and you want to show the number of notifications in the launcher icon (maximum 10), you'll need to enable
+*Notification access* in the Android *Special app access* settings for Nova launcher on recent Android versions.
+
 Some launchers display a dot or a '1' for [the monitoring notification](#user-content-faq2),
 despite FairEmail explicitly requesting not to show a *badge* for this notification.
 This could be caused by a bug in the launcher app or in your Android version.
@@ -3344,17 +3368,6 @@ Hard bounces will mostly be processed automatically because they affect the repu
 The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
-
-<br />
-
-*Report new messages when composing a message*
-
-A bottom notification will be shown if a new message arrives in the same conversation thread as a new message is being composed for.
-
-There will be a *show* button to show the conversation and from there you can tap on the draft message to continue editting.
-The notification can be swiped away.
-
-This requires grouping of messages into conversations to be enabled.
 
 <br />
 

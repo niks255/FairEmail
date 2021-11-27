@@ -273,32 +273,8 @@ public class MessageHelper {
         imessage.addHeader(HEADER_CORRELATION_ID, message.msgid);
 
         // Addresses
-        if (message.from != null && message.from.length > 0) {
-            InternetAddress from = ((InternetAddress) message.from[0]);
-            String email = from.getAddress();
-            String name = from.getPersonal();
-
-            if (identity != null && identity.sender_extra &&
-                    email != null && message.extra != null) {
-                int at = email.indexOf('@');
-                String username = UriHelper.getEmailUser(identity.email);
-                if (at > 0 && !message.extra.equals(username)) {
-                    if (message.extra.length() > 1 && message.extra.startsWith("+"))
-                        email = email.substring(0, at) + message.extra + email.substring(at);
-                    else if (message.extra.length() > 1 && message.extra.startsWith("@"))
-                        email = email.substring(0, at) + message.extra + '.' + email.substring(at + 1);
-                    else
-                        email = message.extra + email.substring(at);
-
-                    if (!identity.sender_extra_name)
-                        name = null;
-
-                    Log.i("extra=\"" + name + "\" <" + email + ">");
-                }
-            }
-
-            imessage.setFrom(new InternetAddress(email, name, StandardCharsets.UTF_8.name()));
-        }
+        if (message.from != null && message.from.length > 0)
+            imessage.setFrom(getFrom(message, identity));
 
         if (message.to != null && message.to.length > 0)
             imessage.setRecipients(Message.RecipientType.TO, convertAddress(message.to, identity));
@@ -583,6 +559,45 @@ public class MessageHelper {
         return imessage;
     }
 
+    static Address getFrom(EntityMessage message, EntityIdentity identity) throws UnsupportedEncodingException {
+        InternetAddress from = ((InternetAddress) message.from[0]);
+        String email = from.getAddress();
+        String name = from.getPersonal();
+
+        if (identity != null && identity.sender_extra &&
+                email != null && message.extra != null) {
+            String username = UriHelper.getEmailUser(identity.email);
+            if (!message.extra.equals(username)) {
+                email = addExtra(email, message.extra);
+
+                if (!identity.sender_extra_name)
+                    name = null;
+
+                Log.i("extra=\"" + name + "\" <" + email + ">");
+            }
+        }
+
+        if (EntityMessage.DSN_HARD_BOUNCE.equals(message.dsn))
+            name = null;
+
+        return new InternetAddress(email, name, StandardCharsets.UTF_8.name());
+    }
+
+    static String addExtra(String email, String extra) {
+        int at = email.indexOf('@');
+        if (at < 0)
+            return email;
+
+        if (extra.length() > 1 && extra.startsWith("+"))
+            email = email.substring(0, at) + extra + email.substring(at);
+        else if (extra.length() > 1 && extra.startsWith("@"))
+            email = email.substring(0, at) + extra + '.' + email.substring(at + 1);
+        else
+            email = extra + email.substring(at);
+
+        return email;
+    }
+
     private static void addAddress(String email, Message.RecipientType type, MimeMessage imessage, EntityIdentity identity) throws MessagingException {
         List<Address> result = new ArrayList<>();
 
@@ -632,17 +647,26 @@ public class MessageHelper {
             plainPart.setContent(plainContent, "text/plain; charset=" + Charset.defaultCharset().name());
             report.addBodyPart(plainPart);
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean client_id = prefs.getBoolean("client_id", true);
+
             String from = null;
             if (message.from != null && message.from.length > 0)
                 from = ((InternetAddress) message.from[0]).getAddress();
 
             StringBuilder sb = new StringBuilder();
-            sb.append("Reporting-UA: ")
-                    .append(BuildConfig.APPLICATION_ID).append("; ")
-                    .append(context.getString(R.string.app_name)).append(' ')
-                    .append(BuildConfig.VERSION_NAME).append("\r\n");
+
+            sb.append("Reporting-UA: ");
+            if (client_id)
+                sb.append(BuildConfig.APPLICATION_ID).append("; ")
+                        .append(context.getString(R.string.app_name)).append(' ')
+                        .append(BuildConfig.VERSION_NAME).append("\r\n");
+            else
+                sb.append("example.com").append("\r\n");
+
             if (from != null)
                 sb.append("Original-Recipient: rfc822;").append(from).append("\r\n");
+
             sb.append("Disposition: manual-action/MDN-sent-manually; displayed").append("\r\n");
 
             BodyPart dnsPart = new MimeBodyPart();
@@ -1239,10 +1263,39 @@ public class MessageHelper {
         // https://tools.ietf.org/html/rfc3834
         String header = imessage.getHeader("Auto-Submitted", null);
         if (header == null) {
+            // https://www.arp242.net/autoreply.html
             // https://github.com/jpmckinney/multi_mail/wiki/Detecting-autoresponders
+
+            // Microsoft
+            header = imessage.getHeader("X-Auto-Response-Suppress", null);
+            if ("DR".equalsIgnoreCase(header)) // Suppress delivery reports
+                return true;
+            if ("AutoReply".equalsIgnoreCase(header)) // Suppress autoreply messages other than OOF notifications
+                return true;
+            if ("All".equalsIgnoreCase(header))
+                return true;
+
+            // Google
+            header = imessage.getHeader("Feedback-ID", null);
+            if (header != null)
+                return true;
+
             header = imessage.getHeader("Precedence", null);
             if ("bulk".equalsIgnoreCase(header)) // Used by Amazon
                 return true;
+            if ("auto_reply".equalsIgnoreCase(header))
+                return true;
+            if ("list".equalsIgnoreCase(header))
+                return true;
+
+            // Lists
+            header = imessage.getHeader("List-Id", null);
+            if (header != null)
+                return true;
+            header = imessage.getHeader("List-Unsubscribe", null);
+            if (header != null)
+                return true;
+
             return null;
         }
 
@@ -1736,6 +1789,10 @@ public class MessageHelper {
         if (!TextUtils.isEmpty(zoho))
             return "zoho";
 
+        String icontact = imessage.getHeader("X-SFMC-Stack", null);
+        if (!TextUtils.isEmpty(icontact))
+            return "icontact";
+
         String xmailer = imessage.getHeader("X-Mailer", null);
         if (!TextUtils.isEmpty(xmailer)) {
             if (xmailer.contains("iPhone Mail"))
@@ -1744,6 +1801,14 @@ public class MessageHelper {
                 return "phpmailer";
             if (xmailer.contains("Zoho Mail"))
                 return "zoho";
+        }
+
+        String return_path = imessage.getHeader("Return-Path", null);
+        if (!TextUtils.isEmpty(return_path)) {
+            if (return_path.contains("pdmailservice.com"))
+                return "icontact";
+            if (return_path.contains("flowmailer.com"))
+                return "flowmailer";
         }
 
         return null;

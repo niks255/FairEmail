@@ -137,6 +137,7 @@
     <string name="title_edit_account">Edytuj konto</string>
     <string name="title_edit_identity">Edycja tożsamości</string>
     <string name="title_edit_folder">Edytuj folder</string>
+    <string name="title_disable_gmail">Wyłącz aplikację Gmail</string>
     <string name="title_setup">Ustawienia</string>
     <string name="title_setup_help">Pomoc</string>
     <string name="title_setup_quick">Szybkie ustawienia</string>
@@ -485,6 +486,8 @@
     <string name="title_advanced_autounstar">Automatycznie usuwaj gwiazdki z wiadomości przy ich przenoszeniu</string>
     <string name="title_advanced_auto_important">Wiadomości oznaczone gwiazdką automatycznie ustaw jako ważne</string>
     <string name="title_advanced_reset_importance">Resetuj ważność przy przenoszeniu wiadomości</string>
+    <string name="title_advanced_swipe_reply">Przesuń rozszerzone wiadomości w prawo, aby odpowiedzieć</string>
+    <string name="title_advanced_default_snooze">Domyślny czas odłożenia/opóźnienia</string>
     <string name="title_advanced_notifications">Zarządzaj powiadomieniami</string>
     <string name="title_advanced_notifications_default">Domyślny kanał</string>
     <string name="title_advanced_notifications_service">Kanał odbioru</string>
@@ -606,10 +609,11 @@
     <string name="title_advanced_sync_delay_hint">Wydłuży to synchronizację wiadomości</string>
     <string name="title_advanced_suggest_names_hint">Jeśli wyłączone, tylko adresy e-mail będą używane podczas wybierania kontaktów</string>
     <string name="title_advanced_suggest_local_hint">Oprócz kontaktów dostarczanych przez Androida. Dane kontaktowe będą przechowywane dla nowo wysłanych lub odebranych wiadomości tylko kiedy włączone.</string>
-    <string name="title_advanced_usenet_hint">Wstaw \'-- \' między tekstem a podpisem</string>
     <string name="title_advanced_send_reminders_hint">Pokaż ostrzeżenie, gdy tekst wiadomości lub temat jest pusty lub gdy może brakować załącznika</string>
     <string name="title_advanced_reply_all_hint">Jeśli wyłączone, długie naciśnięcie przycisku odpowiedzi wyśle odpowiedź do nadawcy</string>
     <string name="title_advanced_reply_move_hint">Serwer e-mail może nadal dodawać wiadomości do folderu wysłanych wiadomości</string>
+    <string name="title_advanced_usenet_hint">Wstaw \'-- \' między tekstem a podpisem</string>
+    <string name="title_advanced_remove_signature_hint">Może to spowodować usunięcie zbyt małego lub zbyt dużego tekstu</string>
     <string name="title_advanced_metered_hint">Połączenia taryfowe to głównie połączenia komórkowe lub płatne hotspoty Wi-Fi</string>
     <string name="title_advanced_metered_warning">Wyłączenie tej opcji uniemożliwi odbieranie i wysyłanie wiadomości przy użyciu komórkowego połączenia internetowego</string>
     <string name="title_advanced_rlah_hint">Zakładając brak roamingu w UE</string>
@@ -889,8 +893,8 @@
     <string name="title_trashed_from">Wiadomość usunięta od %1$s</string>
     <string name="title_subject_reply">Odp: %1$s</string>
     <string name="title_subject_forward">Pd: %1$s</string>
-    <string name="title_subject_reply_alt">Odp: %1$s</string>
-    <string name="title_subject_forward_alt">Pd: %1$s</string>
+    <string name="title_subject_reply_alt">Re: %1$s</string>
+    <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">Oznacz jako przeczytane</string>
     <string name="title_unseen">Oznacz jako nieprzeczytane</string>
     <string name="title_toggle_seen">Przeczytane/nieprzeczytane</string>
