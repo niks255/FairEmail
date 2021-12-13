@@ -421,9 +421,11 @@ public interface DaoMessage {
             " AND inreplyto = :inreplyto")
     List<EntityMessage> getMessagesByInReplyTo(long account, String inreplyto);
 
-    @Query("SELECT * FROM message" +
-            " WHERE account = :account" +
-            " AND (id = :id OR msgid = :msgid)")
+    @Query("SELECT message.* FROM message" +
+            " LEFT JOIN message AS base ON base.id = :id" +
+            " WHERE message.account = :account" +
+            " AND (message.id = :id" +
+            " OR (message.msgid = :msgid AND message.folder <> base.folder))")
     List<EntityMessage> getMessagesBySimilarity(long account, long id, String msgid);
 
     @Query("SELECT COUNT(*) FROM message" +
@@ -878,8 +880,9 @@ public interface DaoMessage {
             "  (SELECT * FROM operation o" +
             "  JOIN message m ON m.id = o.message" +
             "  WHERE o.account = message.account" +
-            "  AND o.name = '" + EntityOperation.MOVE + "'" +
-            "  AND m.msgid = message.msgid)")
+            "  AND o.name IN ('" + EntityOperation.MOVE + "', '" + EntityOperation.COPY + "')" +
+            "  AND m.msgid = message.msgid)"
+    )
     int deleteOrphans(long folder, long now);
 
     @Query("SELECT * FROM message" +

@@ -42,6 +42,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -68,6 +69,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
@@ -1291,6 +1293,49 @@ public class Helper {
 
         Log.i("hideKeyboard view=" + view);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    static String getViewName(View view) {
+        StringBuilder sb = new StringBuilder(_getViewName(view));
+        ViewParent parent = view.getParent();
+        while (parent != null) {
+            if (parent instanceof View)
+                sb.insert(0, '/').insert(0, _getViewName((View) parent));
+            parent = parent.getParent();
+        }
+        return sb.toString();
+    }
+
+    private static String _getViewName(View view) {
+        if (view == null)
+            return "<null>";
+        int id = view.getId();
+        if (id == View.NO_ID)
+            return "";
+        try {
+            return view.getContext().getResources().getResourceEntryName(id);
+        } catch (Throwable ex) {
+            return ex.toString();
+        }
+    }
+
+    static int getBytesPerPixel(Bitmap.Config config) {
+        switch (config) {
+            case ALPHA_8:
+                return 1;
+            case RGB_565:
+                return 2;
+            case ARGB_4444:
+                return 4;
+            case ARGB_8888:
+                return 8;
+            case RGBA_F16:
+                return 8;
+            case HARDWARE:
+                return 0;
+            default:
+                return 8;
+        }
     }
 
     // Formatting

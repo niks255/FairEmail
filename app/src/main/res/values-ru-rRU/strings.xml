@@ -4,7 +4,8 @@
     <string name="app_changelog">Список изменений</string>
     <string name="app_welcome">FairEmail — это почтовое приложение с открытым исходным кодом, ориентированное на конфиденциальность и безопасность. По этой причине некоторые функции могут работать не так, как вы привыкли.</string>
     <string name="app_limitations">Например, по умолчанию сообщения переформатируются, так чтобы удалять небезопасные элементы и улучшать читаемость, а открытие ссылок нужно в целях безопасности подтверждать. Обе функции можно отключить.</string>
-    <string name="app_crash">Это устройство не поддерживает FairEmail, так как ошибки Android вызывают сбои</string>
+    <string name="app_unsupported">Ошибки в версии Android этого конкретного устройства вызывают сбои</string>
+    <string name="app_continue">Всё равно продолжить</string>
     <string name="app_exit">Для выхода снова перейдите \"назад\"</string>
     <string name="app_cake">Недостаточно места</string>
     <string name="app_updated">Последнее обновление: %1$s</string>
@@ -100,14 +101,14 @@
     <string name="title_junk_filter_hint">Может увеличить расход заряда батареи и неправильно помечать сообщения как спам</string>
     <string name="title_junk_blocklist">Использовать списки блокировки спама</string>
     <string name="title_junk_clear">Очистить</string>
-    <string name="title_junk_clear_hint">Это удалит все правила блокировки отправителя</string>
+    <string name="title_junk_clear_hint">Будут удалены все правила блокировки отправителя</string>
     <string name="title_notification_sending">Отправка сообщений</string>
     <string name="title_notification_waiting">Ожидание подходящего подключения</string>
     <string name="title_notification_idle">Низкий</string>
     <string name="title_notification_failed">\"%1$s\" не выполнено</string>
     <string name="title_notification_alert">Предупреждение сервера: \"%1$s\"</string>
     <string name="title_notification_sending_left">Оставшиеся попытки: %1$d</string>
-    <string name="title_notification_sending_retry">Повторная отправка будет произведена при изменении интернет-подключения или жесте «потянуть вниз» в исходящей папке</string>
+    <string name="title_notification_sending_retry">Повторная отправка будет произведена при изменении интернет-подключения или жесте \"потянуть вниз\" в исходящей папке</string>
     <string name="title_notification_sending_failed">Отправка для %1$s не выполнена</string>
     <string name="title_notification_redacted">Требуется биометрическая аутентификация или ввод PIN-кода</string>
     <string name="title_factor_minutes">%1$d мин.</string>
@@ -115,7 +116,7 @@
     <string name="menu_operations">Операции</string>
     <string name="menu_contacts">Локальные контакты</string>
     <string name="menu_setup">Настройки</string>
-    <string name="menu_legend">Легенда</string>
+    <string name="menu_legend">Смысл значков</string>
     <string name="menu_test">Программа тестирования</string>
     <string name="menu_faq">Поддержка</string>
     <string name="menu_translate">Помощь в переводе</string>
@@ -126,8 +127,8 @@
     <string name="menu_pro">Функции Pro</string>
     <string name="menu_rate">Оценить приложение</string>
     <string name="title_welcome">Добро пожаловать</string>
-    <string name="title_eula">Пользовательское соглашение</string>
-    <string name="title_contributors">Имена разработчиков</string>
+    <string name="title_eula">Лицензионное соглашение</string>
+    <string name="title_contributors">Переводчики</string>
     <string name="title_agree">Принимаю</string>
     <string name="title_disagree">Не принимаю</string>
     <string name="title_version">Версия %1$s</string>
@@ -201,7 +202,7 @@
     <string name="title_setup_doze_remark">Для надёжного получения и отправки электронной почты</string>
     <string name="title_setup_doze_explanation">Оптимизация батареи должна быть отключена для приложения, чтобы обеспечить надёжную отправку и получение сообщений в фоновом режиме</string>
     <string name="title_setup_doze_hint">Хотя это может показаться противоречивым, отключение оптимизации потребления заряда батареи для этого приложения приведёт к сокращению использования заряда батареи</string>
-    <string name="title_setup_doze_instructions">В следующем диалоговом окне Android измените «Не оптимизировать» на «Все приложения», выберите это приложение и для него выберите «Не оптимизировать»</string>
+    <string name="title_setup_doze_instructions">В следующем диалоговом окне Android измените \"Не оптимизировать\" на \"Все приложения\", выберите это приложение и для него выберите \"Не оптимизировать\"</string>
     <string name="title_setup_doze_battery">Высокий расход заряда батареи?</string>
     <string name="title_setup_doze_stopped">Синхронизация останавливается?</string>
     <string name="title_setup_doze_device">Вероятно, это необходимо для вашего устройства</string>
@@ -310,6 +311,7 @@
     <string name="title_advanced_kept_removed">Проверять, были ли удалены старые сообщения с сервера</string>
     <string name="title_advanced_gmail_thread">Стиль группировки сообщений Gmail для соответствующих учётных записей</string>
     <string name="title_advanced_sync_folders">Синхронизировать список папок</string>
+    <string name="title_advanced_sync_folders_poll">Активная синхронизация списка папок</string>
     <string name="title_advanced_sync_shared_folders">Синхронизировать списки общих папок</string>
     <string name="title_advanced_subscriptions">Управление подпиской на папки</string>
     <string name="title_advanced_check_authentication">Проверять аутентификацию сообщения</string>
@@ -387,6 +389,7 @@
     <string name="title_advanced_cards_beige">Использовать бежевый фон для карточного стиля (только для светлых тем)</string>
     <string name="title_advanced_tabular_background">Использовать цвет карточки в качестве цвета фона при использовании табличного стиля</string>
     <string name="title_advanced_cards_shadow">Использовать тень для непрочитанных сообщений для карточного стиля</string>
+    <string name="title_advanced_cards_shadow_highlight">Использовать цвет подсветки вместо цвета акцента</string>
     <string name="title_advanced_date_header">Группировать по дате</string>
     <string name="title_advanced_date_fixed">Показывать постоянный заголовок с датой вверху</string>
     <string name="title_advanced_date_bold">Показывать дату жирным шрифтом</string>
@@ -395,6 +398,7 @@
     <string name="title_advanced_indentation">Левый/правый отступ для полученных/отправленных сообщений в диалогах</string>
     <string name="title_advanced_highlight_unread">Выделять непрочитанные сообщения</string>
     <string name="title_advanced_color_stripe">Показывать цветовую полосу</string>
+    <string name="title_advanced_color_stripe_wide">Использовать широкий диапазон цветов</string>
     <string name="title_advanced_avatars">Показывать фотографии контакта</string>
     <string name="title_advanced_gravatars">Показывать Граватары</string>
     <string name="title_advanced_bimi_unverified">Непроверенный отправитель</string>
@@ -432,6 +436,7 @@
     <string name="title_advanced_thumbnails">Показывать миниатюры изображений после текста сообщения</string>
     <string name="title_advanced_message_text_zoom2">Масштаб текста сообщения по умолчанию: %1$s%%</string>
     <string name="title_advanced_overview_mode">Изменять масштаб исходных сообщений к размеру экрана</string>
+    <string name="title_advanced_override_width">Отключить фиксированную ширину в оригинальных сообщениях</string>
     <string name="title_advanced_contrast">Использовать высокий контраст для текста сообщений</string>
     <string name="title_advanced_monospaced">По умолчанию использовать моноширинный шрифт для текста сообщения</string>
     <string name="title_advanced_monospaced_pre">Использовать моноширинный шрифт для форматированного текста</string>
@@ -504,6 +509,7 @@
     <string name="title_advanced_notify_preview_only">Показывать уведомления только с предпросмотром текста</string>
     <string name="title_advanced_notify_actions">Действия с уведомлениями</string>
     <string name="title_advanced_notify_action_trash">Корзина</string>
+    <string name="title_advanced_notify_action_delete">Удалить</string>
     <string name="title_advanced_notify_action_junk">Спам</string>
     <string name="title_advanced_notify_action_archive">Архив</string>
     <string name="title_advanced_notify_action_move">Переместить</string>
@@ -603,6 +609,7 @@
     <string name="title_advanced_sync_kept_hint">Это приведёт к большему потреблению трафика и заряда батареи, особенно если на устройстве хранится много сообщений</string>
     <string name="title_advanced_gmail_thread_hint">Это относится только к вновь полученным сообщениям и может нарушить существующие группы</string>
     <string name="title_advanced_sync_folders_hint">Отключение этой функции уменьшит потребление трафика и заряда батареи, но также отключит обновление списка папок</string>
+    <string name="title_advanced_poll_folders_hint">Периодическая синхронизация списка папок в дополнение к синхронизации после подключения к учётной записи</string>
     <string name="title_advanced_check_authentication_hint">Проверка результатов аутентификации DKIM, SPF и DMARC в зависимости от почтового сервера</string>
     <string name="title_advanced_check_reply_hint">Проверка совпадения доменного имени отправителя и адреса для ответа</string>
     <string name="title_advanced_lookup_mx_hint">Проверка наличия записей DNS MX</string>
@@ -613,7 +620,7 @@
     <string name="title_advanced_reply_all_hint">Если отключено, долгое нажатие на кнопку ответа приведёт к ответу отправителю</string>
     <string name="title_advanced_reply_move_hint">Сервер электронной почты всё ещё может добавлять сообщения в папку отправленных</string>
     <string name="title_advanced_usenet_hint">Вставлять \"-- \" между текстом и подписью</string>
-    <string name="title_advanced_remove_signature_hint">Это может привести к слишком маленькому или большому убиранию текста</string>
+    <string name="title_advanced_remove_signature_hint">Может привести к слишком маленькому или большому убиранию текста</string>
     <string name="title_advanced_metered_hint">Лимитированные подключения — это обычно мобильные сети или платные Wi-Fi</string>
     <string name="title_advanced_metered_warning">Отключение данной функции отключит получение и отправку сообщений при мобильном подключении к интернету</string>
     <string name="title_advanced_rlah_hint">Предполагать отсутствие роуминга внутри ЕС</string>
@@ -637,6 +644,7 @@
     <string name="title_advanced_preview_lines_hint">Всего не более %s символов</string>
     <string name="title_advanced_preview_issue">Прокрутка может быть медленной из-за ошибки в некоторых версиях Android, когда строк больше одной</string>
     <string name="title_advanced_overview_mode_hint">Может привести к очень маленьким шрифтам</string>
+    <string name="title_advanced_override_width_hint">Может сделать сообщения более узкими, но странно выглядящими</string>
     <string name="title_advanced_placeholders_hint">Относится только к изменённым сообщениям</string>
     <string name="title_advanced_inline_hint">Встроенные изображения – это изображения, включённые в сообщение</string>
     <string name="title_advanced_parse_classes_hint">Позволит более точно отображать сообщения, но, возможно, с задержкой</string>
@@ -996,6 +1004,9 @@
     <string name="title_truncated">Сообщение слишком велико для полного отображения</string>
     <string name="title_insufficient_memory">Сообщение слишком большое для доступной памяти (%1$d)</string>
     <string name="title_show_full">Показать сообщение полностью</string>
+    <string name="title_fullscreen">На полный экран</string>
+    <string name="title_fit_width">По ширине</string>
+    <string name="title_disable_widths">Не подгонять по ширине</string>
     <string name="title_unused_inline">Неиспользуемые встроенные изображения будут удалены при отправке</string>
     <string name="title_accross_remark">Сообщения, перемещаемые между учётными записями, будут загружены заново, порождая дополнительный трафик</string>
     <string name="title_raw_saved">Оригинал сообщения сохранён</string>
@@ -1291,6 +1302,8 @@
     <string name="title_rule_subject">\"Тема\" содержит</string>
     <string name="title_rule_attachments">Имеет вложения</string>
     <string name="title_rule_header">Заголовок содержит</string>
+    <string name="title_rule_body">Текст содержит</string>
+    <string name="title_rule_body_remark">Использование этого условия всегда будет загружать текст сообщения, что может замедлить синхронизацию списка сообщений</string>
     <string name="title_rule_time_abs">Абсолютное время (получения) между</string>
     <string name="title_rule_time_after">Получено после</string>
     <string name="title_rule_time_before">Получено до</string>
@@ -1320,6 +1333,7 @@
     <string name="title_rule_applied">Затронутые сообщения: %1$d</string>
     <string name="title_rule_check">Проверить</string>
     <string name="title_rule_no_headers">Условия заголовка не могут быть проверены</string>
+    <string name="title_rule_no_body">Текст сообщения недоступен</string>
     <string name="title_rule_matched">Подходящие сообщения</string>
     <string name="title_rule_no_matches">Нет подходящих сообщений</string>
     <string name="title_rule_tts_ok">Установка в порядке</string>

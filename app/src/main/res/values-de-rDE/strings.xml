@@ -4,7 +4,8 @@
     <string name="app_changelog">Änderungsprotokoll</string>
     <string name="app_welcome">FairEmail ist eine quelloffene E-Mail-App, die sich auf Privatsphäre und Sicherheit konzentriert. Aus diesem Grund könnten einige Dinge anders funktionieren, als Sie es gewohnt sind.</string>
     <string name="app_limitations">Zum Beispiel werden Nachrichten standardmäßig neu formatiert, um unsichere Elemente zu entfernen und die Lesbarkeit zu verbessern. Außerdem muss das Öffnen von Links zur Sicherheit bestätigt werden. Beides kann auf Wunsch deaktiviert werden.</string>
-    <string name="app_crash">FairEmail wird auf diesem Gerät nicht unterstützt, da Fehler in der benutzten Android-Version Abstürze verursachen</string>
+    <string name="app_unsupported">Fehler in der Android-Version dieses speziellen Geräts verursachen Abstürze</string>
+    <string name="app_continue">Trotzdem fortfahren</string>
     <string name="app_exit">Zum Beenden erneut „Zurück“ drücken</string>
     <string name="app_cake">Unzureichender Speicherplatz</string>
     <string name="app_updated">Letzte Aktualisierung: %1$s</string>
@@ -290,6 +291,7 @@
     <string name="title_advanced_kept_removed">Überprüfen, ob alte Nachrichten vom Server entfernt wurden</string>
     <string name="title_advanced_gmail_thread">Die Nachrichten in Gmail-Konten im Stil von Gmail gruppieren</string>
     <string name="title_advanced_sync_folders">Ordnerliste synchronisieren</string>
+    <string name="title_advanced_sync_folders_poll">Ordnerliste aktiv synchronisieren</string>
     <string name="title_advanced_sync_shared_folders">Listen der freigegebenen Ordner synchronisieren</string>
     <string name="title_advanced_subscriptions">Abonnierte Ordner verwalten</string>
     <string name="title_advanced_check_authentication">Nachrichtenauthentifizierung prüfen</string>
@@ -367,6 +369,7 @@
     <string name="title_advanced_cards_beige">Beigefarbenen Hintergrund verwenden, wenn Kartenstil genutzt wird (nur bei hellen Farbschemen)</string>
     <string name="title_advanced_tabular_background">Kartenfarbe als Hintergrundfarbe verwenden, wenn Tabellenstil genutzt wird</string>
     <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
+    <string name="title_advanced_cards_shadow_highlight">Hervorhebungsfarbe statt Akzentfarbe verwenden</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
     <string name="title_advanced_date_fixed">Feste Datumskopfzeile oben anzeigen</string>
     <string name="title_advanced_date_bold">Datum fett anzeigen</string>
@@ -375,6 +378,7 @@
     <string name="title_advanced_indentation">Empfangene/gesendete Nachrichten im Themenbaum links/rechts einrücken</string>
     <string name="title_advanced_highlight_unread">Ungelesene Nachrichten hervorheben</string>
     <string name="title_advanced_color_stripe">Farbstreifen anzeigen</string>
+    <string name="title_advanced_color_stripe_wide">Breite Farbstreifen verwenden</string>
     <string name="title_advanced_avatars">Kontaktfotos anzeigen</string>
     <string name="title_advanced_gravatars">Gravatare anzeigen</string>
     <string name="title_advanced_bimi_unverified">Nicht verifizierter Absender</string>
@@ -412,6 +416,7 @@
     <string name="title_advanced_thumbnails">Vorschaubilder nach dem Nachrichtentext anzeigen</string>
     <string name="title_advanced_message_text_zoom2">Standard der Nachrichtentextvergrößerung: %1$s %%</string>
     <string name="title_advanced_overview_mode">Originalnachrichten in Bildschirmgröße einpassen</string>
+    <string name="title_advanced_override_width">Festgelegte Breiten in Originalnachrichten deaktivieren</string>
     <string name="title_advanced_contrast">Hohen Kontrast für den Nachrichtentext verwenden</string>
     <string name="title_advanced_monospaced">Festbreitenschriftarten standardmäßig für den Nachrichtentext verwenden</string>
     <string name="title_advanced_monospaced_pre">Festbreitenschriftart für vorformatierten Text verwenden</string>
@@ -484,6 +489,7 @@
     <string name="title_advanced_notify_preview_only">Nur Benachrichtigungen mit Vorschautext anzeigen</string>
     <string name="title_advanced_notify_actions">Benachrichtigungsaktionen</string>
     <string name="title_advanced_notify_action_trash">Löschen</string>
+    <string name="title_advanced_notify_action_delete">Löschen</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archivieren</string>
     <string name="title_advanced_notify_action_move">Verschieben</string>
@@ -583,6 +589,7 @@
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
     <string name="title_advanced_gmail_thread_hint">Dies gilt nur für neu empfangene Nachrichten und kann bestehende Gruppen zerbrechen</string>
     <string name="title_advanced_sync_folders_hint">Die Deaktivierung dieser Funktion verringert den Daten- und Akkuverbrauch etwas, deaktiviert aber auch die Aktualisierung der Ordnerliste.</string>
+    <string name="title_advanced_poll_folders_hint">Synchronisiert die Ordnerliste regelmäßig und zusätzlich nach der Verbindung mit einem Konto</string>
     <string name="title_advanced_check_authentication_hint">Damit werden die Ergebnisse der DKIM-, SPF- und DMARC-Authentifizierung geprüft, wie sie vom E-Mail-Server durchgeführt werden</string>
     <string name="title_advanced_check_reply_hint">Überprüft, ob die Domain des Absenders und der Antwort-An-Adresse gleich sind</string>
     <string name="title_advanced_lookup_mx_hint">Überprüft, ob DNS-MX-Einträge vorhanden sind</string>
@@ -593,6 +600,7 @@
     <string name="title_advanced_reply_all_hint">Wenn deaktiviert, wird durch langes Drücken der Schaltfläche „Antworten” nur dem Absender geantwortet</string>
     <string name="title_advanced_reply_move_hint">Der E-Mail-Server könnte die Nachrichten trotzdem noch in den Ordner für gesendete Nachrichten hinzufügen</string>
     <string name="title_advanced_usenet_hint">Signaturtrenner »-- « zwischen Text und Signatur einfügen</string>
+    <string name="title_advanced_remove_signature_hint">Das kann dazu führen, dass zu wenig oder zu viel Text entfernt wird</string>
     <string name="title_advanced_metered_hint">Getaktete Verbindungen sind in der Regel mobile Verbindungen oder bezahlte WLAN-Zugangspunkte</string>
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
@@ -616,6 +624,7 @@
     <string name="title_advanced_preview_lines_hint">Maximal %s Zeichen</string>
     <string name="title_advanced_preview_issue">Scrollen kann aufgrund eines Fehlers in einigen Android-Versionen langsam sein, wenn die Anzahl der Zeilen mehr als eine ist</string>
     <string name="title_advanced_overview_mode_hint">Dies kann zu sehr kleinen Schriften führen</string>
+    <string name="title_advanced_override_width_hint">Dies kann nicht nur dazu führen, dass die Nachrichten schmaler werden, sondern auch ungewohnt aussehen.</string>
     <string name="title_advanced_placeholders_hint">Das gilt nur für umformatierte Nachrichten</string>
     <string name="title_advanced_inline_hint">Eingebettete Grafiken sind Grafiken, die innerhalb der Nachricht enthalten sind</string>
     <string name="title_advanced_parse_classes_hint">Dies wird die Nachrichten genauer anzeigen, aber möglicherweise mit einer Verzögerung</string>
@@ -974,6 +983,9 @@
     <string name="title_truncated">Nachricht zu groß, um vollständig angezeigt zu werden</string>
     <string name="title_insufficient_memory">Nachricht zu groß für den verfügbaren Speicher (%1$d)</string>
     <string name="title_show_full">Vollständige Nachricht anzeigen</string>
+    <string name="title_fullscreen">Vollbild anzeigen</string>
+    <string name="title_fit_width">An Bildschirmbreite anpassen</string>
+    <string name="title_disable_widths">Breitenanpassung deaktivieren</string>
     <string name="title_unused_inline">Ungenutzte Inline-Bilder werden beim Senden entfernt</string>
     <string name="title_accross_remark">E-Mails, die über unterschiedliche Konten verschoben werden, werden erneut heruntergeladen, was zu einem erhöhtem Datenverbrauch führt</string>
     <string name="title_raw_saved">Rohdaten gespeichert</string>
@@ -1270,6 +1282,8 @@
     <string name="title_rule_subject">Betreff enthält</string>
     <string name="title_rule_attachments">Anhang vorhanden</string>
     <string name="title_rule_header">Kopfzeile enthält</string>
+    <string name="title_rule_body">Text enthält</string>
+    <string name="title_rule_body_remark">Bei Verwendung dieser Bedingung wird der Nachrichtentext immer heruntergeladen, was jedoch die Synchronisation der Nachrichtenliste verlangsamen kann</string>
     <string name="title_rule_time_abs">Absolute Zeit (empfangen) zwischen</string>
     <string name="title_rule_time_after">Erhalten ab</string>
     <string name="title_rule_time_before">Erhalten bis</string>
@@ -1299,6 +1313,7 @@
     <string name="title_rule_applied">Betroffene Nachrichten: %1$d</string>
     <string name="title_rule_check">Prüfen</string>
     <string name="title_rule_no_headers">Nachrichtenkopf-Bedingungen können nicht überprüft werden</string>
+    <string name="title_rule_no_body">Nachrichtentext nicht verfügbar</string>
     <string name="title_rule_matched">Passende Nachrichten</string>
     <string name="title_rule_no_matches">Keine passenden Nachrichten</string>
     <string name="title_rule_tts_ok">Erfolgreich eingerichtet</string>

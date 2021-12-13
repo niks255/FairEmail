@@ -3,7 +3,6 @@
     <string name="app_search">FairEmail søk</string>
     <string name="app_changelog">Endringer</string>
     <string name="app_welcome">FairEmail er en e-postleser med åpen kildekode fokusert på personvern og sikkerhet. Derfor kan noen funksjoner virke annerledes enn det du er vant til.</string>
-    <string name="app_crash">FairEmail støttes ikke på denne enheten fordi feil i Android forårsaker krasjer</string>
     <string name="app_exit">Gå \'tilbake\' igjen for å avslutte</string>
     <string name="app_cake">Ikke nok lagringsplass igjen</string>
     <string name="channel_service">Motta</string>
@@ -345,6 +344,7 @@
     <string name="title_advanced_notify_preview_only">Vis varsler med bare forhåndsvisning</string>
     <string name="title_advanced_notify_actions">Varselshandlinger</string>
     <string name="title_advanced_notify_action_trash">Søppel</string>
+    <string name="title_advanced_notify_action_delete">Slett</string>
     <string name="title_advanced_notify_action_junk">Søppelpost</string>
     <string name="title_advanced_notify_action_archive">Arkiver</string>
     <string name="title_advanced_notify_action_move">Flytt</string>
@@ -730,6 +730,7 @@
     <string name="title_too_large">Melding for stor til å omformatere fullstendig</string>
     <string name="title_truncated">Meldingen er for stor til å vises fullstendig</string>
     <string name="title_show_full">Vis full melding</string>
+    <string name="title_fullscreen">Vis fullskjerm</string>
     <string name="title_unused_inline">Ubrukte inline bilder blir fjernet ved sending</string>
     <string name="title_accross_remark">Meldinger som er flyttet over kontoer, lastes ned igjen, noe som resulterer i ekstra databruk</string>
     <string name="title_raw_saved">Rå melding lagret</string>

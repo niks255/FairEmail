@@ -41,9 +41,10 @@ For authorizing:
 * Office 365, see [question 156](#user-content-faq156)
 * Microsoft Exchange, see [question 8](#user-content-faq8)
 * Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
-* Apple iCloud, see [question 148](#user-content-faq148)
+* Apple iCloud, see [question 148](#user-content-faq148) ([German](https://support.apple.com/de-de/HT204397))
 * Free.fr, see [question 157](#user-content-faq157)
 * Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) isn't enabled
+* Web.de: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html))
 
 Please see [here](#user-content-faq22) for common error messages and solutions.
 
@@ -576,7 +577,7 @@ After enabling two factor authentication there will be this error message:
 
 *[ALERT] Application-specific password required: https://support.google.com/mail/accounts/answer/185833 (Failure)*
 
-The error message "*Authentication failed - Invalid credentials*" means that the Android account manager was not able to refresh the access token.
+The error message "*Authentication failed - Invalid credentials*" or *Token refresh required* means that the Android account manager was not able to refresh the access token.
 A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager.
 You can workaround this issue by using an app password.
 Please [see here](#user-content-howto) about how you can delete the account configured with the quick setup wizard.
@@ -1055,6 +1056,7 @@ Possible causes of messages not being synchronized (sent or received) are:
 * There is no usable internet connection
 * The email server is temporarily not available
 * Android stopped the synchronization service
+* A memory management app stopped the synchronization service
 
 So, check your account and folder settings and check if the accounts/folders are connected (see the legend in the navigation menu for the meaning of the icons).
 
@@ -1064,6 +1066,7 @@ On some devices, where there are lots of applications competing for memory, Andr
 
 Some Android versions stop apps and services too aggressively.
 See [this dedicated website](https://dontkillmyapp.com/) and [this Android issue](https://issuetracker.google.com/issues/122098785) for more information.
+If you have a Doogee device, please [see here](https://android.stackexchange.com/questions/214639/background-apps-get-killed-by-something-other-than-battery-optimization).
 
 Disabling battery optimizations (setup step 3) reduces the chance Android will stop the synchronization service.
 
@@ -2311,6 +2314,7 @@ The following rule conditions are available:
 * Subject contains
 * Has attachments (optional of specific type)
 * Header contains
+* Text contains (since version 1.1785)
 * Absolute time (received) between (since version 1.1540)
 * Relative time (received) between
 
@@ -2324,6 +2328,9 @@ Note that email addresses are formatted like this:
 ``
 "Somebody" <somebody@example.org>
 ``
+
+Note that message texts are normalized, which means that all whitespaces (spaces, tabs, line breaks, etc) are replaced by a single space.
+This makes it easier to match texts on multiple lines or when the line break is at different places.
 
 You can use multiple rules, possibly with a *stop processing*, for an *or* or a *not* condition.
 
@@ -2375,13 +2382,13 @@ Some common header conditions (regex):
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;Content-Type: multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
-You can match IMAP flags (keywords) via a header condition too (from version 1.1777), like this:
+To match *set* IMAP flags (keywords) via a header condition (since version 1.1777):
 
 ```
 $<keyword>$
 ```
 
-You can use these special values too, representing common system flags:
+To match *set* message flags (since version 1.1777):
 
 ```
 $$seen$
@@ -2390,7 +2397,20 @@ $$flagged$
 $$deleted$
 ```
 
+To match *passed* message checks (since version 1.1787):
+
+```
+$$dkim$
+$$spf$
+$$dmarc$
+$$mx$
+$$blocklist$
+$$replydomain$
+```
+
 Note that *regex* should be disable and that there should be no white space.
+
+Please be aware that a difference in the *from* and *reply-to* domain isn't a good indication of spam.
 
 The automation action will broadcast the intent *eu.faircode.email.AUTOMATION* with the following string extras:
 
@@ -3618,6 +3638,8 @@ The Outlook/Office 365 quick setup wizard supports setting up shared mailboxes.
 
 When using a shared mailbox, you might want to enable the option *Synchronize shared folder lists* in the receive settings.
 
+Sometimes it helps to use the *Other provider* wizard instead of the *Outlook/Office 365* wizard.
+
 <br />
 
 <a name="faq140"></a>
@@ -4118,7 +4140,10 @@ it is not feasible to add for each color combination (literally millions) a pred
 Moreover, a theme is more than just a few colors.
 For example themes with a yellow accent color use a darker link color for enough contrast.
 
-The [Material You](https://material.io/blog/announcing-material-you) theme, a more dynamic theme introduced in Android 12, is supported.
+The [Material You](https://material.io/blog/announcing-material-you) theme,
+a more dynamic theme based on the selected background image ("Monet"),
+which was introduced in Android 12 on Google Pixel devices,
+is supported and can be selected in the theme selection dialog (via the three-dots menu of the start screen).
 
 The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 

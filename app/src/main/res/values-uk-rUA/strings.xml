@@ -4,7 +4,8 @@
     <string name="app_changelog">Список змін</string>
     <string name="app_welcome">FairEmail - це додаток з відкритим вихідним кодом, орієнтований на конфіденційність та безпеку. Тому деякі функції можуть відрізнятися від того, що ви використовуєте.</string>
     <string name="app_limitations">Наприклад, щоб видалити небезпечні елементи та покращити читання, і для додавання підтвердження відкриття посилань з метою безпеки - повідомлення переформатуються за замовчуванням. За бажанням, ці дії можуть бути відключені.</string>
-    <string name="app_crash">На цьому пристрої не підтримується FairEMail, оскільки помилки в Android спричиняють збої самої програми</string>
+    <string name="app_unsupported">Помилка в версії Android для конкретного пристрою викликають аварійне завершення роботи</string>
+    <string name="app_continue">Все одно продовжити</string>
     <string name="app_exit">Натисніть \"Назад\" знову, щоб вийти</string>
     <string name="app_cake">Залишилося недостатньо вільного місця для зберігання</string>
     <string name="app_updated">Останнє оновлення: %1$s</string>
@@ -92,6 +93,7 @@
     <string name="title_junk_hint">Ваш провайдер електронної пошти відповідальний за фільтрацію спаму. У поштовому додатку немає усіх даних, що потрібні для визначення листа як спам чи не спам.</string>
     <string name="title_block">Заблокувати %1$s</string>
     <string name="title_block_sender">Блокувати відправника</string>
+    <string name="title_block_sender_domain">Заблокувати домен \'%1$s\'</string>
     <string name="title_block_sender_hint">        Блокування відправника - безкоштовна функція.
         Блокування домену відправника використовує правила фільтрів, які є функцією професійної версії.
     </string>
@@ -310,6 +312,7 @@
     <string name="title_advanced_kept_removed">Перевірка, чи були старі повідомлення видалені з сервера</string>
     <string name="title_advanced_gmail_thread">Gmail стиль групування повідомлень для облікових записів Gmail</string>
     <string name="title_advanced_sync_folders">Синхронізувати список тек</string>
+    <string name="title_advanced_sync_folders_poll">Активна синхронізація списку тек</string>
     <string name="title_advanced_sync_shared_folders">Синхронізувати спільний список тек</string>
     <string name="title_advanced_subscriptions">Керувати підписками тек</string>
     <string name="title_advanced_check_authentication">Перевірка автентичності повідомлення</string>
@@ -387,6 +390,7 @@
     <string name="title_advanced_cards_beige">Використовувати бежевий фон під час використання стилю карт (тільки для світлої теми)</string>
     <string name="title_advanced_tabular_background">Використовувати колір картки як тло під час використання табличного стилю</string>
     <string name="title_advanced_cards_shadow">Використовувати тінь для непрочитаних повідомлень під час використання стилю картки</string>
+    <string name="title_advanced_cards_shadow_highlight">Використовувати колір підсвітки замість кольору акценту</string>
     <string name="title_advanced_date_header">Групувати за датою</string>
     <string name="title_advanced_date_fixed">Показати фіксований заголовок дати зверху</string>
     <string name="title_advanced_date_bold">Показувати дату в жирному шрифті</string>
@@ -395,6 +399,7 @@
     <string name="title_advanced_indentation">Відступати ліворуч чи праворуч для отриманих або надісланих повідомлень у розмовах</string>
     <string name="title_advanced_highlight_unread">Підсвічувати непрочитані повідомлення</string>
     <string name="title_advanced_color_stripe">Показати смугу кольорів</string>
+    <string name="title_advanced_color_stripe_wide">Використовувати широку смугу кольорів</string>
     <string name="title_advanced_avatars">Показувати фото контактів</string>
     <string name="title_advanced_gravatars">Показувати Gravatars</string>
     <string name="title_advanced_bimi_unverified">Неперевірений відправник</string>
@@ -432,6 +437,7 @@
     <string name="title_advanced_thumbnails">Показувати ескізи зображень після повідомлення</string>
     <string name="title_advanced_message_text_zoom2">Масштаб тексту за замовчуванням: %1$s %%</string>
     <string name="title_advanced_overview_mode">Автоматичне масштабування оригінальних повідомлень</string>
+    <string name="title_advanced_override_width">Відключити фіксовані ширини в оригінальних повідомленнях</string>
     <string name="title_advanced_contrast">Використовувати високо-контрастний текст для повідомленнь</string>
     <string name="title_advanced_monospaced">Використовувати моноширинний шрифт для тексту повідомлень за замовчуванням</string>
     <string name="title_advanced_monospaced_pre">Використовувати моноширинний шрифт для попередньо форматуванного тексту</string>
@@ -504,6 +510,7 @@
     <string name="title_advanced_notify_preview_only">Показувати сповіщення тільки з попереднім переглядом</string>
     <string name="title_advanced_notify_actions">Дії зі сповіщеннями</string>
     <string name="title_advanced_notify_action_trash">Кошик</string>
+    <string name="title_advanced_notify_action_delete">Вилучити</string>
     <string name="title_advanced_notify_action_junk">Спам</string>
     <string name="title_advanced_notify_action_archive">Архів</string>
     <string name="title_advanced_notify_action_move">Переміщення</string>
@@ -576,6 +583,7 @@
     <string name="title_advanced_language">Мова</string>
     <string name="title_advanced_language_system">Системи</string>
     <string name="title_advanced_deepl">Інтеграція з DeepL</string>
+    <string name="title_advanced_sdcard">Я хочу використовувати SD-карту</string>
     <string name="title_advanced_watchdog">Періодично перевіряти, чи ще активнний додатк FairEmail</string>
     <string name="title_advanced_updates">Перевірити наявність оновлень з GitHub</string>
     <string name="title_advanced_check_weekly">Щотижнева перевірка замість щоденної</string>
@@ -601,6 +609,7 @@
     <string name="title_advanced_sync_kept_hint">Це призведе до передачі додаткових даних та більшого споживання заряду акумулятора, особливо якщо багато повідомлень зберігаються на пристрої</string>
     <string name="title_advanced_gmail_thread_hint">Це відноситься тільки до нових повідомлень і може не стосуватися існуючих груп</string>
     <string name="title_advanced_sync_folders_hint">Вимкнення цього призведе до зменшення споживання даних та використання акумулятора, але також вимкне оновлення списку тек</string>
+    <string name="title_advanced_poll_folders_hint">Періодично синхронізувати список тек після підключення до облікового запису</string>
     <string name="title_advanced_check_authentication_hint">Це може перевіряти результати перевірок на DKIM, SPF і DMARC які були виконані сервером електронної пошти</string>
     <string name="title_advanced_check_reply_hint">Це перевірить, чи доменне ім\'я відправника та адреса для відповіді співпадають</string>
     <string name="title_advanced_lookup_mx_hint">Це перевірить, чи існують записи DNS MX</string>
@@ -635,6 +644,7 @@
     <string name="title_advanced_preview_lines_hint">Максимум: %s символів</string>
     <string name="title_advanced_preview_issue">Прокручування може бути повільним через помилку у деяких версіях Android, коли кількість рядків більше одного</string>
     <string name="title_advanced_overview_mode_hint">Це може призвести до дуже малих шрифтів</string>
+    <string name="title_advanced_override_width_hint">Це може зробити повідомлення вужчими, але і воно може виглядати дивно</string>
     <string name="title_advanced_placeholders_hint">Це стосується лише для переформатованих повідомлень</string>
     <string name="title_advanced_inline_hint">Вбудовані зображення включені в повідомлення</string>
     <string name="title_advanced_parse_classes_hint">Можливо, це буде більш точно відображати повідомлення, але, можливо, з затримкою</string>
@@ -888,6 +898,7 @@
     <string name="title_no_messages">Немає повідомлень</string>
     <string name="title_filters_active">Один або кілька фільтрів активні</string>
     <string name="title_duplicate_in">Дублювати повідомлення в %1$s</string>
+    <string name="title_trashed_from">Видалені повідомлення від %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -993,6 +1004,9 @@
     <string name="title_truncated">Лист завеликий для показу</string>
     <string name="title_insufficient_memory">Повідомлення занадто велике для доступної пам\'яті (%1$d)</string>
     <string name="title_show_full">Показати повне повідомлення</string>
+    <string name="title_fullscreen">Показати на весь екран</string>
+    <string name="title_fit_width">За шириною</string>
+    <string name="title_disable_widths">Відключити ширину</string>
     <string name="title_unused_inline">Невикористані вбудовані зображення будуть видалені при надсиланні</string>
     <string name="title_accross_remark">Повідомлення, які переміщуються через облікові записи, будуть завантажені знову, в результаті буде додаткове використання даних</string>
     <string name="title_raw_saved">Збережено початковий текст повідомлення</string>
@@ -1230,6 +1244,7 @@
     <string name="title_filter_unknown">Невідомі відправники</string>
     <string name="title_filter_hidden">Приховані</string>
     <string name="title_filter_duplicates">Дублікати</string>
+    <string name="title_filter_trash">Видалені</string>
     <string name="title_compact">Компактний вигляд</string>
     <string name="title_zoom">Розмір тексту</string>
     <string name="title_padding">Розмір відступів</string>
@@ -1287,6 +1302,8 @@
     <string name="title_rule_subject">Тема містить</string>
     <string name="title_rule_attachments">Є вкладення</string>
     <string name="title_rule_header">Заголовок містить</string>
+    <string name="title_rule_body">Текст містить</string>
+    <string name="title_rule_body_remark">Використання цієї умови завжди завантажить текст повідомлення, який може уповільнити синхронізацію списку повідомлень</string>
     <string name="title_rule_time_abs">Абсолютний час (отримано) між</string>
     <string name="title_rule_time_after">Отримано після</string>
     <string name="title_rule_time_before">Отримано до</string>
@@ -1316,6 +1333,7 @@
     <string name="title_rule_applied">Повідомлення котрі підлягають: %1$d</string>
     <string name="title_rule_check">Перевірити</string>
     <string name="title_rule_no_headers">Умови заголовка не можуть бути перевірені</string>
+    <string name="title_rule_no_body">Не містить текст повідомлення</string>
     <string name="title_rule_matched">Відповідність повідомлень</string>
     <string name="title_rule_no_matches">Немає відповідних повідомлень</string>
     <string name="title_rule_tts_ok">Налаштування завершене</string>
@@ -1510,6 +1528,7 @@
     <string name="title_snooze_now">Відкласти</string>
     <string name="title_loading">Завантаження &#8230;</string>
     <string name="title_fetching_again">Знову отримую повідомлення з сервера</string>
+    <string name="title_go_back">Назад</string>
     <string name="title_conversation_actions">Дії</string>
     <string name="title_conversation_action_reply">Відповісти з: \'%1$s\'</string>
     <string name="title_conversation_action_copy">Копіювати: \'%1$s\'</string>

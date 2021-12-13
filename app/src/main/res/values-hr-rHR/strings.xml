@@ -3,7 +3,6 @@
     <string name="app_search">FairEmail pretraživanje</string>
     <string name="app_changelog">Promjene</string>
     <string name="app_welcome">FairEmail je aplikacija otvorenog izvora (open source) usmjerena na privatnost i sigurnost. Zbog toga neke funkcije mogu raditi drugačije od onoga na što ste navikli.</string>
-    <string name="app_crash">FairEmail nije podržan na ovom uređaju jer greške u Androidu uzrokuju probleme i padove</string>
     <string name="app_exit">Ponovo pritisnite \'natrag\' za izlazak</string>
     <string name="app_cake">Nedovoljno mjesta u memoriji</string>
     <string name="channel_service">Primanje</string>
@@ -292,6 +291,7 @@
     <string name="title_advanced_notify_preview_all">Pregledaj sav tekst</string>
     <string name="title_advanced_notify_actions">Akcije za Obavijesti</string>
     <string name="title_advanced_notify_action_trash">Otpad</string>
+    <string name="title_advanced_notify_action_delete">Izbriši</string>
     <string name="title_advanced_notify_action_junk">Neželjena pošta</string>
     <string name="title_advanced_notify_action_archive">Arhiva</string>
     <string name="title_advanced_notify_action_move">Premjesti</string>
@@ -587,6 +587,7 @@
     <string name="title_too_large">Poruka je prevelika da bi se u potpunosti preoblikovala</string>
     <string name="title_truncated">Poruka je prevelika da bi se u potpunosti prikazala</string>
     <string name="title_show_full">Prikaži cijelu poruku</string>
+    <string name="title_fullscreen">Prikaži cijeli ekran</string>
     <string name="title_unused_inline">Neiskorištene umetnute slike uklanjaju se prilikom slanja</string>
     <string name="title_accross_remark">Poruke prebačene preko računa ponovno će se preuzeti, što će rezultirati dodatnom upotrebom podataka</string>
     <string name="title_raw_saved">Spremljena je sirova poruka</string>

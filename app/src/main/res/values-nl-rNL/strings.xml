@@ -4,7 +4,8 @@
     <string name="app_changelog">Wijzigingsgeschiedenis</string>
     <string name="app_welcome">FairEmail is een open source e-mail app gericht op privacy en veiligheid. Om deze reden werken sommige functies mogelijk anders dan u gewend bent.</string>
     <string name="app_limitations">Berichten worden bijvoorbeeld standaard opnieuw opgemaakt om onveilige elementen te verwijderen en de leesbaarheid te verbeteren, en het openen van links moet voor de veiligheid worden bevestigd. Beide kunnen desgewenst uitgeschakeld worden.</string>
-    <string name="app_crash">FairEmail wordt niet ondersteund op dit apparaat omdat bugs in Android crashes veroorzaken</string>
+    <string name="app_unsupported">Bugs in de Android-versie van dit specifieke apparaat veroorzaken crashes</string>
+    <string name="app_continue">Toch doorgaan</string>
     <string name="app_exit">Ga nogmaals \'terug\' om af te sluiten</string>
     <string name="app_cake">Onvoldoende opslagruimte over</string>
     <string name="app_updated">Laatst bijgewerkt: %1$s</string>
@@ -289,6 +290,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_kept_removed">Controleer of oude berichten van de server werden verwijderd</string>
     <string name="title_advanced_gmail_thread">Gmail bericht groeperingsstijl voor Gmail accounts</string>
     <string name="title_advanced_sync_folders">Lijst met mappen synchroniseren</string>
+    <string name="title_advanced_sync_folders_poll">Actief mappenlijst synchroniseren</string>
     <string name="title_advanced_sync_shared_folders">Lijst met gedeelde mappen synchroniseren</string>
     <string name="title_advanced_subscriptions">Beheer map abonnementen</string>
     <string name="title_advanced_check_authentication">Controleer authenticatie bericht</string>
@@ -367,6 +369,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_cards_beige">Gebruik een beige achtergrond bij het gebruik van de kaartstijl (alleen lichte thema\'s)</string>
     <string name="title_advanced_tabular_background">Gebruik kaart kleur als achtergrondkleur bij gebruik van tabulaire stijl</string>
     <string name="title_advanced_cards_shadow">Gebruik schaduw voor ongelezen berichten bij gebruik van kaartstijl</string>
+    <string name="title_advanced_cards_shadow_highlight">Gebruik markeerkleur in plaats van accentkleur</string>
     <string name="title_advanced_date_header">Op datum groeperen</string>
     <string name="title_advanced_date_fixed">Toon vaste datumkoptekst bovenaan</string>
     <string name="title_advanced_date_bold">Datum vet weergeven</string>
@@ -375,6 +378,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_indentation">Links/rechts inspringen van ontvangen/verzonden berichten in gesprekken</string>
     <string name="title_advanced_highlight_unread">Ongelezen berichten markeren</string>
     <string name="title_advanced_color_stripe">Toon kleurenstreep</string>
+    <string name="title_advanced_color_stripe_wide">Gebruik brede kleurenstreep</string>
     <string name="title_advanced_avatars">Toon foto\'s contacten</string>
     <string name="title_advanced_gravatars">Gravatars weergeven</string>
     <string name="title_advanced_bimi_unverified">Niet-geverifieerde afzender</string>
@@ -412,6 +416,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_thumbnails">Afbeeldingsminiaturen weergeven na de berichttekst</string>
     <string name="title_advanced_message_text_zoom2">Standaard berichttekst zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoom oorspronkelijke berichten zodat ze op het scherm passen</string>
+    <string name="title_advanced_override_width">Schakel vaste breedtes uit in originele berichten</string>
     <string name="title_advanced_contrast">Gebruik hoge contrast voor berichttekst</string>
     <string name="title_advanced_monospaced">Gebruik standaard vaste breedte lettertype voor berichttekst</string>
     <string name="title_advanced_monospaced_pre">Gebruik vaste breedte lettertype voor vooraf opgemaakte tekst</string>
@@ -483,7 +488,8 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_notify_preview_all">Voorbeeld van alle tekst</string>
     <string name="title_advanced_notify_preview_only">Alleen meldingen met een voorbeeldtekst weergeven</string>
     <string name="title_advanced_notify_actions">Meldingsacties</string>
-    <string name="title_advanced_notify_action_trash">Prullenbak</string>
+    <string name="title_advanced_notify_action_trash">Weggooien</string>
+    <string name="title_advanced_notify_action_delete">Verwijderen</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archiveren</string>
     <string name="title_advanced_notify_action_move">Verplaatsen</string>
@@ -583,6 +589,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_sync_kept_hint">Dit zal extra gegevens en extra batterijvermogen gebruiken, vooral als er veel berichten op het apparaat zijn opgeslagen</string>
     <string name="title_advanced_gmail_thread_hint">Dit geldt alleen voor nieuw ontvangen berichten en kan bestaande groepen verbreken</string>
     <string name="title_advanced_sync_folders_hint">Dit uitschakelen zal het gebruik van gegevens en batterij enigszins verminderen, maar zal ook het bijwerken van de lijst met mappen uitschakelen</string>
+    <string name="title_advanced_poll_folders_hint">Periodiek synchroniseren van de mappenlijst naast na verbinding maken met een account</string>
     <string name="title_advanced_check_authentication_hint">Dit controleert de resultaten van DKIM, SPF en DMARC authenticatie zoals uitgevoerd door de e-mailserver</string>
     <string name="title_advanced_check_reply_hint">Hiermee wordt gecontroleerd of de domeinnaam van de afzender en het antwoordadres hetzelfde zijn</string>
     <string name="title_advanced_lookup_mx_hint">Dit zal controleren of DNS MX records bestaan</string>
@@ -617,6 +624,7 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_advanced_preview_lines_hint">Maximaal %s tekens in totaal</string>
     <string name="title_advanced_preview_issue">Scrollen kan langzaam zijn vanwege een fout in sommige Android-versies wanneer het aantal regels meer dan één is</string>
     <string name="title_advanced_overview_mode_hint">Dit kan resulteren in zeer kleine lettertypen</string>
+    <string name="title_advanced_override_width_hint">Dit kan berichten smaller maken, maar er ook vreemd laten uitzien</string>
     <string name="title_advanced_placeholders_hint">Dit geldt alleen voor opnieuw opgemaakte berichten</string>
     <string name="title_advanced_inline_hint">Inline afbeeldingen zijn afbeeldingen opgenomen in het bericht</string>
     <string name="title_advanced_parse_classes_hint">Dit zal nauwkeuriger berichten weergeven, maar mogelijk met een vertraging</string>
@@ -976,6 +984,9 @@ Voeg gedeelde bestanden toe aan een nieuw concept</string>
     <string name="title_truncated">Bericht is te groot om volledig weer te geven</string>
     <string name="title_insufficient_memory">Bericht te groot voor het beschikbare geheugen (%1$d)</string>
     <string name="title_show_full">Toon volledig bericht</string>
+    <string name="title_fullscreen">Toon volledig scherm</string>
+    <string name="title_fit_width">Maak breedte passend</string>
+    <string name="title_disable_widths">Breedtes uitschakelen</string>
     <string name="title_unused_inline">Ongebruikte inline afbeeldingen worden verwijderd bij verzenden</string>
     <string name="title_accross_remark">Berichten die worden verplaatst tussen accounts worden opnieuw gedownload en veroorzaken extra datagebruik</string>
     <string name="title_raw_saved">Ruw bericht opgeslagen</string>
@@ -1270,6 +1281,8 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_rule_subject">Onderwerp bevat</string>
     <string name="title_rule_attachments">Heeft bijlagen</string>
     <string name="title_rule_header">De kop bevat</string>
+    <string name="title_rule_body">Tekst bevat</string>
+    <string name="title_rule_body_remark">Het gebruik van deze voorwaarde zal altijd de berichttekst downloaden, wat de synchronisatie van de berichtenlijst kan vertragen</string>
     <string name="title_rule_time_abs">Absolute tijd (ontvangen) tussen</string>
     <string name="title_rule_time_after">Ontvangen na</string>
     <string name="title_rule_time_before">Ontvangen voor</string>
@@ -1299,6 +1312,7 @@ Tik op de knop \'opnieuw zoeken\' om ook op de server te zoeken.</string>
     <string name="title_rule_applied">Beïnvloede berichten: %1$d</string>
     <string name="title_rule_check">Controleer</string>
     <string name="title_rule_no_headers">Header condities kunnen niet worden gecontroleerd</string>
+    <string name="title_rule_no_body">Berichttekst niet beschikbaar</string>
     <string name="title_rule_matched">Overeenkomende berichten</string>
     <string name="title_rule_no_matches">Geen overeenkomende berichten</string>
     <string name="title_rule_tts_ok">Setup oke</string>

@@ -51,8 +51,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -61,7 +61,6 @@ import java.util.regex.Pattern;
 
 import javax.mail.Address;
 import javax.mail.Header;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -125,7 +124,28 @@ public class EntityRule {
 
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "rule");
 
-    boolean matches(Context context, EntityMessage message, Message imessage) throws MessagingException {
+    static boolean needsHeaders(List<EntityRule> rules) {
+        return needs(rules, "header");
+    }
+
+    static boolean needsBody(List<EntityRule> rules) {
+        return needs(rules, "body");
+    }
+
+    private static boolean needs(List<EntityRule> rules, String what) {
+        for (EntityRule rule : rules)
+            try {
+                JSONObject jcondition = new JSONObject(rule.condition);
+                if (jcondition.has(what))
+                    return true;
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
+        return false;
+    }
+
+    boolean matches(Context context, EntityMessage message, List<Header> headers, String html) throws MessagingException {
         try {
             JSONObject jcondition = new JSONObject(condition);
 
@@ -245,33 +265,53 @@ public class EntityRule {
                         value.endsWith("$")) {
                     String keyword = value.substring(1, value.length() - 1);
 
-                    List<String> keywords = new ArrayList<>();
-                    if (message.ui_seen)
-                        keywords.add("$seen");
-                    if (message.ui_answered)
-                        keywords.add("$answered");
-                    if (message.ui_flagged)
-                        keywords.add("$flagged");
-                    if (message.ui_deleted)
-                        keywords.add("$deleted");
-                    if (message.infrastructure != null)
-                        keywords.add('@' + message.infrastructure);
-                    keywords.addAll(Arrays.asList(message.keywords));
+                    if ("$dkim".equals(keyword)) {
+                        if (!Boolean.TRUE.equals(message.dkim))
+                            return false;
+                    } else if ("$spf".equals(keyword)) {
+                        if (!Boolean.TRUE.equals(message.spf))
+                            return false;
+                    } else if ("$dmarc".equals(keyword)) {
+                        if (!Boolean.TRUE.equals(message.dmarc))
+                            return false;
+                    } else if ("$mx".equals(keyword)) {
+                        if (!Boolean.TRUE.equals(message.mx))
+                            return false;
+                    } else if ("$blocklist".equals(keyword)) {
+                        if (!Boolean.FALSE.equals(message.blocklist))
+                            return false;
+                    } else if ("$replydomain".equals(keyword)) {
+                        if (!Boolean.TRUE.equals(message.reply_domain))
+                            return false;
+                    } else {
+                        List<String> keywords = new ArrayList<>();
+                        keywords.addAll(Arrays.asList(message.keywords));
 
-                    if (!keywords.contains(keyword))
-                        return false;
+                        if (message.ui_seen)
+                            keywords.add("$seen");
+                        if (message.ui_answered)
+                            keywords.add("$answered");
+                        if (message.ui_flagged)
+                            keywords.add("$flagged");
+                        if (message.ui_deleted)
+                            keywords.add("$deleted");
+                        if (message.infrastructure != null)
+                            keywords.add('$' + message.infrastructure);
+
+                        if (!keywords.contains(keyword))
+                            return false;
+                    }
                 } else {
-                    boolean matches = false;
-                    Enumeration<Header> headers;
-                    if (imessage != null)
-                        headers = imessage.getAllHeaders();
-                    else if (message.headers != null) {
+                    if (headers == null) {
+                        if (message.headers == null)
+                            throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
+
                         ByteArrayInputStream bis = new ByteArrayInputStream(message.headers.getBytes());
-                        headers = new InternetHeaders(bis).getAllHeaders();
-                    } else
-                        throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
-                    while (headers.hasMoreElements()) {
-                        Header header = headers.nextElement();
+                        headers = Collections.list(new InternetHeaders(bis).getAllHeaders());
+                    }
+
+                    boolean matches = false;
+                    for (Header header : headers) {
                         String formatted = header.getName() + ": " + header.getValue();
                         if (matches(context, message, value, formatted, regex)) {
                             matches = true;
@@ -281,6 +321,32 @@ public class EntityRule {
                     if (!matches)
                         return false;
                 }
+            }
+
+            // Body
+            JSONObject jbody = jcondition.optJSONObject("body");
+            if (jbody != null) {
+                String value = jbody.getString("value");
+                boolean regex = jbody.getBoolean("regex");
+
+                if (!regex)
+                    value = value.replaceAll("\\s+", " ");
+
+                if (html == null && message.content) {
+                    File file = message.getFile(context);
+                    try {
+                        html = Helper.readText(file);
+                    } catch (IOException ex) {
+                        Log.e(ex);
+                    }
+                }
+
+                if (html == null)
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_no_body));
+
+                String text = HtmlHelper.getFullText(html);
+                if (!matches(context, message, value, text, regex))
+                    return false;
             }
 
             // Date
@@ -315,6 +381,7 @@ public class EntityRule {
                     jsubject == null &&
                     !jcondition.optBoolean("attachments") &&
                     jheader == null &&
+                    jbody == null &&
                     jdate == null &&
                     jschedule == null)
                 return false;

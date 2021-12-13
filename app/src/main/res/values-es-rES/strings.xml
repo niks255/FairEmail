@@ -4,7 +4,6 @@
     <string name="app_changelog">Registro de cambios</string>
     <string name="app_welcome">FairEmail es una aplicación de correo electrónico de código abierto centrada en la privacidad y la seguridad. Por esta razón, algunas funciones pueden comportarse de manera diferente a lo que esté acostumbrado.</string>
     <string name="app_limitations">Por ejemplo, los mensajes se reformatean por defecto para eliminar elementos inseguros y mejorar la legibilidad, y la apertura de enlaces debe ser confirmada por seguridad. Ambos pueden ser desactivados si se desea.</string>
-    <string name="app_crash">FairEmail no es compatible con este dispositivo porque existen errores en Android que provocan fallos</string>
     <string name="app_exit">Volver \'atrás\' para salir</string>
     <string name="app_cake">Espacio de almacenamiento insuficiente</string>
     <string name="app_updated">Última actualización: %1$s</string>
@@ -290,6 +289,7 @@
     <string name="title_advanced_kept_removed">Comprobar si los mensajes antiguos fueron eliminados del servidor</string>
     <string name="title_advanced_gmail_thread">Estilo de agrupación de mensajes de Gmail para cuentas de Gmail</string>
     <string name="title_advanced_sync_folders">Sincronizar lista de carpetas</string>
+    <string name="title_advanced_sync_folders_poll">Sincronizar la lista de carpetas activamente</string>
     <string name="title_advanced_sync_shared_folders">Sincronizar listas de carpetas compartidas</string>
     <string name="title_advanced_subscriptions">Administrar suscripciones de carpeta</string>
     <string name="title_advanced_check_authentication">Comprobar autenticación de mensaje</string>
@@ -367,6 +367,7 @@
     <string name="title_advanced_cards_beige">Usar fondo beige al utilizar el estilo de la tarjeta (solo temas claros)</string>
     <string name="title_advanced_tabular_background">Usar el color de la tarjeta como color de fondo al utilizar el estilo tabular</string>
     <string name="title_advanced_cards_shadow">Usar sombra para mensajes no leídos al usar estilo de tarjeta</string>
+    <string name="title_advanced_cards_shadow_highlight">Usar color de resaltado en lugar de color de acento</string>
     <string name="title_advanced_date_header">Agrupar por fecha</string>
     <string name="title_advanced_date_fixed">Mostrar encabezado de fecha fijado en la parte superior</string>
     <string name="title_advanced_date_bold">Mostrar fecha en negrita</string>
@@ -375,6 +376,7 @@
     <string name="title_advanced_indentation">Sangría izquierda/derecha para mensajes recibidos/enviados en conversaciones</string>
     <string name="title_advanced_highlight_unread">Resaltar mensajes no leídos</string>
     <string name="title_advanced_color_stripe">Mostrar raya de color</string>
+    <string name="title_advanced_color_stripe_wide">Usar banda de color ancha</string>
     <string name="title_advanced_avatars">Mostrar fotos de contactos</string>
     <string name="title_advanced_gravatars">Mostrar Gravatares</string>
     <string name="title_advanced_bimi_unverified">Remitente no verificado</string>
@@ -412,6 +414,7 @@
     <string name="title_advanced_thumbnails">Mostrar miniaturas de la imagen después del texto del mensaje</string>
     <string name="title_advanced_message_text_zoom2">Zoom por defecto del texto del mensaje: %1$s %%</string>
     <string name="title_advanced_overview_mode">Hacer zoom en mensajes originales para ajustarse a la pantalla</string>
+    <string name="title_advanced_override_width">Desactivar anchos fijos en los mensajes originales</string>
     <string name="title_advanced_contrast">Utilizar contraste alto para el texto del mensaje</string>
     <string name="title_advanced_monospaced">Usar fuente monoespaciada para el texto del mensaje por defecto</string>
     <string name="title_advanced_monospaced_pre">Usar fuente monoespaciada para texto preformateado</string>
@@ -484,6 +487,7 @@
     <string name="title_advanced_notify_preview_only">Mostrar notificaciones sólo con un texto de vista previa</string>
     <string name="title_advanced_notify_actions">Acciones de notificación</string>
     <string name="title_advanced_notify_action_trash">Papelera</string>
+    <string name="title_advanced_notify_action_delete">Eliminar</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archivar</string>
     <string name="title_advanced_notify_action_move">Mover</string>
@@ -583,6 +587,7 @@
     <string name="title_advanced_sync_kept_hint">Esto transferirá datos adicionales y consumirá energía adicional de batería, especialmente si hay muchos mensajes almacenados en el dispositivo</string>
     <string name="title_advanced_gmail_thread_hint">Esto sólo se aplica a los mensajes recibidos recientemente y puede romper los grupos existentes</string>
     <string name="title_advanced_sync_folders_hint">Desactivar esto reducirá el uso de datos y batería, pero también desactivará la actualización de la lista de carpetas</string>
+    <string name="title_advanced_poll_folders_hint">Sincronizar la lista de carpetas periódicamente además de después de conectarse a una cuenta</string>
     <string name="title_advanced_check_authentication_hint">Esto comprobará los resultados de autenticación DKIM, SPF y DMARC tal como se realiza por el servidor de correo</string>
     <string name="title_advanced_check_reply_hint">Esto comprobará si el nombre de dominio del remitente y la dirección de respuesta son los mismos</string>
     <string name="title_advanced_lookup_mx_hint">Esto comprobará si existen registros DNS MX</string>
@@ -617,6 +622,7 @@
     <string name="title_advanced_preview_lines_hint">Máximo %s caracteres en total</string>
     <string name="title_advanced_preview_issue">El desplazamiento puede ser lento debido a un error en algunas versiones de Android cuando el número de líneas es más de una</string>
     <string name="title_advanced_overview_mode_hint">Esto puede resultar en fuentes muy pequeñas</string>
+    <string name="title_advanced_override_width_hint">Esto puede hacer que los mensajes sean más estrechos, pero también pueden verse extraños</string>
     <string name="title_advanced_placeholders_hint">Esto sólo se aplica a los mensajes reformateados</string>
     <string name="title_advanced_inline_hint">Las imágenes embebidas son imágenes incluídas en el mensaje</string>
     <string name="title_advanced_parse_classes_hint">Esto mostrará los mensajes con mayor precisión, pero posiblemente con un retraso</string>
@@ -976,6 +982,9 @@
     <string name="title_truncated">Mensaje demasiado grande para mostrarlo por completo</string>
     <string name="title_insufficient_memory">Mensaje demasiado grande para la memoria disponible (%1$d)</string>
     <string name="title_show_full">Mostrar mensaje completo</string>
+    <string name="title_fullscreen">Mostrar en pantalla completa</string>
+    <string name="title_fit_width">Ajustar ancho</string>
+    <string name="title_disable_widths">Desactivar anchos</string>
     <string name="title_unused_inline">Las imágenes embebidas no usadas serán eliminadas al enviar</string>
     <string name="title_accross_remark">Los mensajes movidos a otras cuentas serán descargados nuevamente causando uso adicional de datos</string>
     <string name="title_raw_saved">Mensaje sin procesar guardado</string>
@@ -1271,6 +1280,8 @@
     <string name="title_rule_subject">Asunto contiene</string>
     <string name="title_rule_attachments">Tiene adjuntos</string>
     <string name="title_rule_header">Encabezado contiene</string>
+    <string name="title_rule_body">El texto contiene</string>
+    <string name="title_rule_body_remark">Utilizar esta condición siempre descargará el texto del mensaje, que puede ralentizar la sincronización de la lista de mensajes</string>
     <string name="title_rule_time_abs">Tiempo absoluto (recibido) entre</string>
     <string name="title_rule_time_after">Recibido después de</string>
     <string name="title_rule_time_before">Recibido antes de</string>
@@ -1300,6 +1311,7 @@
     <string name="title_rule_applied">Mensajes afectados: %1$d</string>
     <string name="title_rule_check">Comprobar</string>
     <string name="title_rule_no_headers">Las condiciones del encabezado no se pueden comprobar</string>
+    <string name="title_rule_no_body">Texto del mensaje no disponible</string>
     <string name="title_rule_matched">Mensajes coincidentes</string>
     <string name="title_rule_no_matches">No hay mensajes coincidentes</string>
     <string name="title_rule_tts_ok">Configuración Ok</string>

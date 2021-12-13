@@ -98,6 +98,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -114,6 +115,7 @@ import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.FolderClosedException;
 import javax.mail.FolderNotFoundException;
+import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
@@ -149,7 +151,8 @@ class Core {
     private static final int DOWNLOAD_YIELD_COUNT = 25;
     private static final long DOWNLOAD_YIELD_DURATION = 1000; // milliseconds
     private static final long YIELD_DURATION = 200L; // milliseconds
-    private static final long JOIN_WAIT = 180 * 1000L; // milliseconds
+    private static final long JOIN_WAIT_ALIVE = 5 * 60 * 1000L; // milliseconds
+    private static final long JOIN_WAIT_INTERRUPT = 1 * 60 * 1000L; // milliseconds
     private static final long FUTURE_RECEIVED = 30 * 24 * 3600 * 1000L; // milliseconds
     private static final int LOCAL_RETRY_MAX = 2;
     private static final long LOCAL_RETRY_DELAY = 5 * 1000L; // milliseconds
@@ -181,7 +184,7 @@ class Core {
             EntityAccount account, EntityFolder folder, List<TupleOperationEx> ops,
             Store istore, Folder ifolder,
             State state, long serial)
-            throws JSONException {
+            throws JSONException, FolderClosedException {
         try {
             Log.i(folder.name + " start process");
 
@@ -215,10 +218,14 @@ class Core {
                         throw new IllegalArgumentException("Invalid folder=" + folder.id + "/" + op.folder);
 
                     if (account.protocol == EntityAccount.TYPE_IMAP &&
-                            !folder.local && ifolder != null && !ifolder.isOpen()) {
-                        Log.w(folder.name + " is closed");
-                        break;
-                    }
+                            !folder.local &&
+                            ifolder != null && !ifolder.isOpen())
+                        throw new FolderClosedException(ifolder, account.name + "/" + folder.name + " unexpectedly closed");
+
+                    if (account.protocol == EntityAccount.TYPE_POP &&
+                            EntityFolder.INBOX.equals(folder.type) &&
+                            ifolder != null && !ifolder.isOpen())
+                        throw new FolderClosedException(ifolder, account.name + "/" + folder.name + " unexpectedly closed");
 
                     // Fetch most recent copy of message
                     EntityMessage message = null;
@@ -1661,7 +1668,7 @@ class Core {
                 }
 
             if (perform_expunge) {
-                if (expunge(context, ifolder, deleted))
+                if (deleted.size() == 0 || expunge(context, ifolder, deleted))
                     db.message().deleteMessage(message.id);
             } else {
                 if (deleted.size() > 0)
@@ -1965,16 +1972,21 @@ class Core {
     }
 
     static void onSynchronizeFolders(
-            Context context, EntityAccount account, Store istore,
-            State state, boolean force) throws MessagingException {
+            Context context, EntityAccount account, Store istore, State state,
+            boolean keep_alive, boolean force) throws MessagingException {
         DB db = DB.getInstance(context);
+
+        if (account.protocol != EntityAccount.TYPE_IMAP)
+            return;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean sync_folders = prefs.getBoolean("sync_folders", true);
+        boolean sync_folders_poll = prefs.getBoolean("sync_folders_poll", false);
         boolean sync_shared_folders = prefs.getBoolean("sync_shared_folders", false);
-        Log.i(account.name + " sync folders=" + sync_folders + " shared=" + sync_shared_folders + " force=" + force);
+        Log.i(account.name + " sync folders=" + sync_folders + " poll=" + sync_folders_poll +
+                " shared=" + sync_shared_folders + " force=" + force);
 
-        if (force)
+        if (force || (keep_alive && sync_folders_poll))
             sync_folders = true;
         if (!sync_folders)
             sync_shared_folders = false;
@@ -2084,7 +2096,7 @@ class Core {
         if (!sync_folders)
             return;
 
-        Log.i("Start sync folders account=" + account.name);
+        EntityLog.log(context, "Start sync folders account=" + account.name);
 
         // Get default folder
         Folder defaultFolder = istore.getDefaultFolder();
@@ -2717,7 +2729,7 @@ class Core {
                         message.references = TextUtils.join(" ", helper.getReferences());
                         message.inreplyto = helper.getInReplyTo();
                         message.deliveredto = helper.getDeliveredTo();
-                        message.thread = helper.getThreadId(context, account.id, 0);
+                        message.thread = helper.getThreadId(context, account.id, folder.id, 0);
                         message.priority = helper.getPriority();
                         message.auto_submitted = helper.getAutoSubmitted();
                         message.receipt_request = helper.getReceiptRequested();
@@ -2786,6 +2798,10 @@ class Core {
 
                         // No MX check
 
+                        boolean needsHeaders = EntityRule.needsHeaders(rules);
+                        List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
+                        String body = parts.getHtml(context);
+
                         try {
                             db.beginTransaction();
 
@@ -2804,7 +2820,7 @@ class Core {
                                 attachment.id = db.attachment().insertAttachment(attachment);
                             }
 
-                            runRules(context, imessage, account, folder, message, rules);
+                            runRules(context, headers, body, account, folder, message, rules);
                             reportNewMessage(context, account, folder, message);
 
                             db.setTransactionSuccessful();
@@ -2812,7 +2828,6 @@ class Core {
                             db.endTransaction();
                         }
 
-                        String body = parts.getHtml(context);
                         File file = message.getFile(context);
                         Helper.writeText(file, body);
                         String text = HtmlHelper.getFullText(body);
@@ -3028,7 +3043,7 @@ class Core {
 
                 SearchTerm searchTerm = dateTerm;
                 Flags flags = ifolder.getPermanentFlags();
-                if (sync_nodate)
+                if (sync_nodate && !account.isOutlook())
                     searchTerm = new OrTerm(searchTerm, new ReceivedDateTerm(ComparisonTerm.LT, new Date(365 * 24 * 3600 * 1000L)));
                 if (sync_unseen && flags.contains(Flags.Flag.SEEN))
                     searchTerm = new OrTerm(searchTerm, new FlagTerm(new Flags(Flags.Flag.SEEN), false));
@@ -3600,7 +3615,7 @@ class Core {
                     have = true;
 
                 if (dup.folder.equals(folder.id)) {
-                    String thread = helper.getThreadId(context, account.id, uid);
+                    String thread = helper.getThreadId(context, account.id, folder.id, uid);
                     Log.i(folder.name + " found as id=" + dup.id +
                             " uid=" + dup.uid + "/" + uid +
                             " msgid=" + msgid + " thread=" + thread);
@@ -3679,7 +3694,7 @@ class Core {
             message.inreplyto = helper.getInReplyTo();
             // Local address contains control or whitespace in string ``mailing list someone@example.org''
             message.deliveredto = helper.getDeliveredTo();
-            message.thread = helper.getThreadId(context, account.id, uid);
+            message.thread = helper.getThreadId(context, account.id, folder.id, uid);
             message.priority = helper.getPriority();
             message.auto_submitted = helper.getAutoSubmitted();
             message.receipt_request = helper.getReceiptRequested();
@@ -3773,7 +3788,7 @@ class Core {
                     }
 
             if (!self) {
-                String warning = message.checkReplyDomain(context);
+                String[] warning = message.checkReplyDomain(context);
                 message.reply_domain = (warning == null);
             }
 
@@ -3834,6 +3849,13 @@ class Core {
                     }
             }
 
+            boolean needsHeaders = EntityRule.needsHeaders(rules);
+            boolean needsBody = EntityRule.needsBody(rules);
+            if (needsHeaders || needsBody)
+                Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
+            List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
+            String body = (needsBody ? helper.getMessageParts().getHtml(context) : null);
+
             try {
                 db.beginTransaction();
 
@@ -3850,7 +3872,7 @@ class Core {
                     attachment.id = db.attachment().insertAttachment(attachment);
                 }
 
-                runRules(context, imessage, account, folder, message, rules);
+                runRules(context, headers, body, account, folder, message, rules);
 
                 if (message.blocklist != null && message.blocklist) {
                     boolean use_blocklist = prefs.getBoolean("use_blocklist", false);
@@ -3892,7 +3914,7 @@ class Core {
                 EntityContact.received(context, account, folder, message);
 
                 // Download small messages inline
-                if (download && !message.ui_hide) {
+                if (body != null || (download && !message.ui_hide)) {
                     long maxSize;
                     if (state == null || state.networkState.isUnmetered())
                         maxSize = MessageHelper.SMALL_MESSAGE_SIZE;
@@ -3902,10 +3924,12 @@ class Core {
                             maxSize = MessageHelper.SMALL_MESSAGE_SIZE;
                     }
 
-                    if ((message.size != null && message.size < maxSize) ||
+                    if (body != null ||
+                            (message.size != null && message.size < maxSize) ||
                             (MessageClassifier.isEnabled(context)) && folder.auto_classify_source)
                         try {
-                            String body = parts.getHtml(context);
+                            if (body == null)
+                                body = parts.getHtml(context);
                             File file = message.getFile(context);
                             Helper.writeText(file, body);
                             String text = HtmlHelper.getFullText(body);
@@ -4053,19 +4077,27 @@ class Core {
                 }
             }
 
-            if (update || process)
+            if (update || process) {
+                boolean needsHeaders = EntityRule.needsHeaders(rules);
+                boolean needsBody = EntityRule.needsBody(rules);
+                if (needsHeaders || needsBody)
+                    Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
+                List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
+                String body = (needsBody ? helper.getMessageParts().getHtml(context) : null);
+
                 try {
                     db.beginTransaction();
 
                     db.message().updateMessage(message);
 
                     if (process)
-                        runRules(context, imessage, account, folder, message, rules);
+                        runRules(context, headers, body, account, folder, message, rules);
 
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
                 }
+            }
 
             if (process) {
                 EntityContact.received(context, account, folder, message);
@@ -4223,7 +4255,7 @@ class Core {
     }
 
     private static void runRules(
-            Context context, Message imessage,
+            Context context, List<Header> headers, String html,
             EntityAccount account, EntityFolder folder, EntityMessage message,
             List<EntityRule> rules) {
 
@@ -4236,7 +4268,7 @@ class Core {
         try {
             boolean executed = false;
             for (EntityRule rule : rules)
-                if (rule.matches(context, message, imessage)) {
+                if (rule.matches(context, message, headers, html)) {
                     rule.execute(context, message);
                     executed = true;
                     if (rule.stop)
@@ -5011,6 +5043,26 @@ class Core {
                 wactions.add(actionTrash.build());
             }
 
+            if (notify_trash &&
+                    message.accountProtocol == EntityAccount.TYPE_POP &&
+                    message.accountLeaveDeleted) {
+                Intent delete = new Intent(context, ServiceUI.class)
+                        .setAction("delete:" + message.id)
+                        .putExtra("group", group);
+                PendingIntent piDelete = PendingIntentCompat.getService(
+                        context, ServiceUI.PI_DELETE, delete, PendingIntent.FLAG_UPDATE_CURRENT);
+                NotificationCompat.Action.Builder actionDelete = new NotificationCompat.Action.Builder(
+                        R.drawable.twotone_delete_forever_24,
+                        context.getString(R.string.title_advanced_notify_action_delete),
+                        piDelete)
+                        .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_DELETE)
+                        .setShowsUserInterface(false)
+                        .setAllowGeneratedReplies(false);
+                mbuilder.addAction(actionDelete.build());
+
+                wactions.add(actionDelete.build());
+            }
+
             if (notify_junk &&
                     message.accountProtocol == EntityAccount.TYPE_IMAP &&
                     db.folder().getFolderByType(message.account, EntityFolder.JUNK) != null) {
@@ -5447,6 +5499,8 @@ class Core {
         }
 
         void reset() {
+            Thread.currentThread().interrupted(); // clear interrupted status
+            Log.i("Permits=" + semaphore.drainPermits());
             recoverable = true;
             lastActivity = null;
         }
@@ -5503,17 +5557,20 @@ class Core {
                 try {
                     Log.i("Joining " + name +
                             " alive=" + thread.isAlive() +
-                            " state=" + thread.getState());
+                            " state=" + thread.getState() +
+                            " interrupted=" + interrupted);
 
-                    thread.join(JOIN_WAIT);
+                    thread.join(interrupted ? JOIN_WAIT_INTERRUPT : JOIN_WAIT_ALIVE);
 
                     // https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html
                     Thread.State state = thread.getState();
-                    if (thread.isAlive()) {
+                    if (thread.isAlive() &&
+                            state != Thread.State.NEW &&
+                            state != Thread.State.TERMINATED) {
+                        Log.e("Join " + name + " failed" +
+                                " state=" + state + " interrupted=" + interrupted);
                         if (interrupted)
-                            Log.w("Join " + name + " failed state=" + state + " interrupted=" + interrupted);
-                        if (interrupted)
-                            joined = true; // give up
+                            joined = true; // giving up
                         else {
                             thread.interrupt();
                             interrupted = true;
@@ -5523,7 +5580,7 @@ class Core {
                         joined = true;
                     }
                 } catch (InterruptedException ex) {
-                    Log.w(thread.getName() + " join " + ex.toString());
+                    Log.i(new Throwable(name, ex));
                 }
         }
 

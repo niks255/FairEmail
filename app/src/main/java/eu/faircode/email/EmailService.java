@@ -78,7 +78,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.regex.Pattern;
 
 import javax.mail.AuthenticationFailedException;
-import javax.mail.Authenticator;
 import javax.mail.Folder;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
@@ -110,10 +109,13 @@ public class EmailService implements AutoCloseable {
     private String ehlo;
     private boolean log;
     private boolean debug;
+    private int level;
     private Properties properties;
     private Session isession;
     private Service iservice;
     private StoreListener listener;
+    private ServiceAuthenticator authenticator;
+    private RingBuffer<String> breadcrumbs;
 
     private ExecutorService executor = Helper.getBackgroundExecutor(0, "mail");
 
@@ -133,6 +135,7 @@ public class EmailService implements AutoCloseable {
     private final static int POOL_SIZE = 1; // connections
     private final static int POOL_TIMEOUT = 60 * 1000; // milliseconds, default 45 sec
     private final static long PROTOCOL_LOG_DURATION = 12 * 3600 * 1000L;
+    private final static int BREADCRUMBS_SIZE = 100;
 
     private final static int MAX_IPV4 = 2;
     private final static int MAX_IPV6 = 1;
@@ -178,6 +181,7 @@ public class EmailService implements AutoCloseable {
         else if (protocol_since + PROTOCOL_LOG_DURATION < now)
             prefs.edit().putBoolean("protocol", false).apply();
         this.log = prefs.getBoolean("protocol", false);
+        this.level = prefs.getInt("log_level", Log.getDefaultLogLevel());
         this.harden = prefs.getBoolean("ssl_harden", false);
 
         boolean auth_plain = prefs.getBoolean("auth_plain", true);
@@ -325,8 +329,9 @@ public class EmailService implements AutoCloseable {
                     @Override
                     public void onPasswordChanged(Context context, String newPassword) {
                         DB db = DB.getInstance(context);
-                        int accounts = db.account().setAccountPassword(account.id, newPassword);
-                        int identities = db.identity().setIdentityPassword(account.id, account.user, newPassword, account.auth_type);
+                        account.password = newPassword;
+                        int accounts = db.account().setAccountPassword(account.id, account.password);
+                        int identities = db.identity().setIdentityPassword(account.id, account.user, account.password, account.auth_type);
                         EntityLog.log(context, EntityLog.Type.Account, account,
                                 "token refreshed=" + accounts + "/" + identities);
                     }
@@ -343,7 +348,8 @@ public class EmailService implements AutoCloseable {
                     @Override
                     public void onPasswordChanged(Context context, String newPassword) {
                         DB db = DB.getInstance(context);
-                        int count = db.identity().setIdentityPassword(identity.id, newPassword);
+                        identity.password = newPassword;
+                        int count = db.identity().setIdentityPassword(identity.id, identity.password);
                         EntityLog.log(context, EntityLog.Type.Account, identity.account, null, null,
                                 identity.email + " token refreshed=" + count);
 
@@ -409,7 +415,7 @@ public class EmailService implements AutoCloseable {
         }
 
         properties.put("mail." + protocol + ".forcepasswordrefresh", "true");
-        ServiceAuthenticator authenticator = new ServiceAuthenticator(context,
+        authenticator = new ServiceAuthenticator(context,
                 auth, provider, keep_alive, user, password, intf);
 
         if ("imap.wp.pl".equals(host))
@@ -425,7 +431,7 @@ public class EmailService implements AutoCloseable {
             if (auth == AUTH_TYPE_OAUTH && "imap.mail.yahoo.com".equals(host))
                 properties.put("mail." + protocol + ".yahoo.guid", "FAIRMAIL_V1");
 
-            connect(host, port, auth, user, authenticator, factory);
+            connect(host, port, auth, user, factory);
         } catch (AuthenticationFailedException ex) {
             //if ("outlook.office365.com".equals(host) &&
             //        "AUTHENTICATE failed.".equals(ex.getMessage()))
@@ -437,7 +443,7 @@ public class EmailService implements AutoCloseable {
             if (auth == AUTH_TYPE_GMAIL || auth == AUTH_TYPE_OAUTH) {
                 try {
                     authenticator.refreshToken(true);
-                    connect(host, port, auth, user, authenticator, factory);
+                    connect(host, port, auth, user, factory);
                 } catch (Exception ex1) {
                     Log.e(ex1);
                     throw new AuthenticationFailedException(
@@ -489,8 +495,7 @@ public class EmailService implements AutoCloseable {
     }
 
     private void connect(
-            String host, int port, int auth,
-            String user, Authenticator authenticator,
+            String host, int port, int auth, String user,
             SSLSocketFactoryService factory) throws MessagingException {
         InetAddress main = null;
         boolean require_id = (purpose == PURPOSE_CHECK &&
@@ -533,7 +538,7 @@ public class EmailService implements AutoCloseable {
                 }
 
             EntityLog.log(context, "Connecting to " + main);
-            _connect(main, port, require_id, user, authenticator, factory);
+            _connect(main, port, require_id, user, factory);
         } catch (UnknownHostException ex) {
             throw new MessagingException(ex.getMessage(), ex);
         } catch (MessagingException ex) {
@@ -653,7 +658,7 @@ public class EmailService implements AutoCloseable {
 
                         try {
                             EntityLog.log(context, "Falling back to " + iaddr);
-                            _connect(iaddr, port, require_id, user, authenticator, factory);
+                            _connect(iaddr, port, require_id, user, factory);
                             return;
                         } catch (MessagingException ex1) {
                             ex = ex1;
@@ -671,13 +676,16 @@ public class EmailService implements AutoCloseable {
     }
 
     private void _connect(
-            InetAddress address, int port, boolean require_id,
-            String user, Authenticator authenticator,
+            InetAddress address, int port, boolean require_id, String user,
             SSLSocketFactoryService factory) throws MessagingException {
         isession = Session.getInstance(properties, authenticator);
 
-        isession.setDebug(debug || log);
-        if (debug || log)
+        breadcrumbs = new RingBuffer<>(BREADCRUMBS_SIZE);
+
+        boolean trace = (debug || log || level <= android.util.Log.INFO);
+
+        isession.setDebug(trace);
+        if (trace)
             isession.setDebugOut(new PrintStream(new OutputStream() {
                 private ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -690,6 +698,7 @@ public class EmailService implements AutoCloseable {
                                 if (log)
                                     EntityLog.log(context, EntityLog.Type.Protocol, user + " " + line);
                                 else {
+                                    breadcrumbs.push(line);
                                     if (BuildConfig.DEBUG)
                                         Log.i("javamail", user + " " + line);
                                 }
@@ -854,6 +863,10 @@ public class EmailService implements AutoCloseable {
             return false;
     }
 
+    public void check() {
+        authenticator.checkToken();
+    }
+
     public boolean isOpen() {
         return (iservice != null && iservice.isConnected());
     }
@@ -862,9 +875,18 @@ public class EmailService implements AutoCloseable {
         try {
             if (iservice != null && iservice.isConnected())
                 iservice.close();
+            if (authenticator != null)
+                authenticator = null;
         } finally {
             context = null;
         }
+    }
+
+    public void dump() {
+        EntityLog.log(context, "Dump start");
+        while (breadcrumbs != null && !breadcrumbs.isEmpty())
+            EntityLog.log(context, "Dump " + breadcrumbs.pop());
+        EntityLog.log(context, "Dump end");
     }
 
     private static class SocketFactoryService extends SocketFactory {
@@ -1133,6 +1155,16 @@ public class EmailService implements AutoCloseable {
         if (linger >= 0) {
             Log.e("Socket linger=" + linger);
             socket.setSoLinger(false, -1);
+        }
+
+        if (reuse) {
+            Log.e("Socket reuse=" + reuse);
+            socket.setReuseAddress(false);
+        }
+
+        if (delay) {
+            Log.e("Socket delay=" + delay);
+            socket.setTcpNoDelay(false);
         }
 
         try {

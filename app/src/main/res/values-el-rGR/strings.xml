@@ -4,7 +4,8 @@
     <string name="app_changelog">Αρχείο καταγραφής αλλαγών</string>
     <string name="app_welcome">Το FairEmail είναι μια ανοικτού κώδικα εφαρμογή ηλ. ταχυδρομείου που επικεντρώνεται στην προστασία του απορρήτου και την ασφάλειά σας. Για τον λόγο αυτό ορισμένες δυνατότητες ενδέχεται να λειτουργούν διαφορετικά από ό, τι έχετε συνηθίσει.</string>
     <string name="app_limitations">Για παράδειγμα, τα μηνύματα επαναμορφοποιούνται από προεπιλογή, με στόχο την αφαίρεση μη ασφαλών στοιχείων και τη βελτίωση της αναγνωσιμότητας, ενώ το άνοιγμα συνδέσμων πρέπει να επιβεβαιώνεται για λόγους ασφάλειας. Και οι δύο λειτουργίες απενεργοποιούνται, εφόσον το επιθυμείτε.</string>
-    <string name="app_crash">Το FairEmail δεν υποστηρίζεται σε αυτήν τη συσκευή επειδή κάποια σφάλματα στο Android το κάνουν να κολλάει</string>
+    <string name="app_unsupported">Σφάλματα στην έκδοση Android της συγκεκριμένης συσκευής κάνουν την εφαρμογή να καταρρέει</string>
+    <string name="app_continue">Συνέχεια ούτως ή άλλως</string>
     <string name="app_exit">\"Πίσω\" ξανά για έξοδο</string>
     <string name="app_cake">Ανεπαρκής χώρος αποθήκευσης</string>
     <string name="app_updated">Τελευταία ενημέρωση: %1$s</string>
@@ -290,6 +291,7 @@
     <string name="title_advanced_kept_removed">Έλεγχος αν τα παλιά μηνύματα έχουν διαγραφεί από τον διακομιστή</string>
     <string name="title_advanced_gmail_thread">Ομαδοποίηση μηνυμάτων με το στιλ του Gmail για λογαριασμούς Google</string>
     <string name="title_advanced_sync_folders">Συγχρονισμός της λίστας φακέλων</string>
+    <string name="title_advanced_sync_folders_poll">Ενεργός συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_shared_folders">Συγχρονισμός της λίστας κοινών φακέλων</string>
     <string name="title_advanced_subscriptions">Διαχείριση συνδρομών σε φακέλους</string>
     <string name="title_advanced_check_authentication">Έλεγχος ταυτοποίησης μηνύματος</string>
@@ -367,6 +369,7 @@
     <string name="title_advanced_cards_beige">Μπεζ φόντο κατά τη χρήση του στιλ κάρτας (ανοιχτόχρωμα θέματα μόνο)</string>
     <string name="title_advanced_tabular_background">Να χρησιμοποιείται το χρώμα της κάρτας ως χρώμα φόντου κατά τη χρήση του στιλ πίνακα</string>
     <string name="title_advanced_cards_shadow">Σκίαση μη αναγνωσμένων μηνυμάτων κατά τη χρήση στιλ κάρτας</string>
+    <string name="title_advanced_cards_shadow_highlight">Χρήση του χρώματος επισήμανσης αντί του χρώματος έμφασης</string>
     <string name="title_advanced_date_header">Ομαδοποίηση κατά ημερομηνία</string>
     <string name="title_advanced_date_fixed">Προβολή κεφαλίδας σταθερής ημερομηνίας στην κορυφή</string>
     <string name="title_advanced_date_bold">Προβολή ημερομηνίας με έντονους χαρακτήρες</string>
@@ -375,6 +378,7 @@
     <string name="title_advanced_indentation">Αριστερή/δεξιά εσοχή ειλημμένων/απεσταλμένων μηνυμάτων στις συζητήσεις</string>
     <string name="title_advanced_highlight_unread">Να επισημαίνονται τα μη αναγνωσμένα μηνύματα</string>
     <string name="title_advanced_color_stripe">Προβολή χρωματιστής λωρίδας</string>
+    <string name="title_advanced_color_stripe_wide">Χρήση φαρδιάς λωρίδας χρώματος</string>
     <string name="title_advanced_avatars">Προβολή φωτογραφιών επαφών</string>
     <string name="title_advanced_gravatars">Προβολή Gravatar</string>
     <string name="title_advanced_bimi_unverified">Μη επαληθευμένος αποστολέας</string>
@@ -412,6 +416,7 @@
     <string name="title_advanced_thumbnails">Να προβάλλονται οι μικρογραφίες μετά από το κείμενο του μηνύματος</string>
     <string name="title_advanced_message_text_zoom2">Μεγέθυνση κειμένου μηνύματος από προεπιλογή: %1$s %%</string>
     <string name="title_advanced_overview_mode">Μεγέθυνση αρχικού μηνύματος για προσαρμογή στην οθόνη</string>
+    <string name="title_advanced_override_width">Να απενεργοποιηθούν τα σταθερά πλάτη στα αρχικά μηνύματα</string>
     <string name="title_advanced_contrast">Χρήση υψηλής αντίθεσης για το κείμενο του μηνύματος</string>
     <string name="title_advanced_monospaced">Χρήση γραμματοσειράς σταθερού πλάτους από προεπιλογή</string>
     <string name="title_advanced_monospaced_pre">Χρήση γραμματοσειράς σταθερού πλάτους για προ-μορφοποιημένο κείμενο</string>
@@ -484,6 +489,7 @@
     <string name="title_advanced_notify_preview_only">Προβολή ειδοποιήσεων μόνο με ένα κείμενο προεπισκόπησης</string>
     <string name="title_advanced_notify_actions">Ενέργειες ειδοποιήσεων</string>
     <string name="title_advanced_notify_action_trash">Απορρίμματα</string>
+    <string name="title_advanced_notify_action_delete">Διαγραφή</string>
     <string name="title_advanced_notify_action_junk">Ανεπιθύμητα</string>
     <string name="title_advanced_notify_action_archive">Αρχειοθέτηση</string>
     <string name="title_advanced_notify_action_move">Μετακίνηση</string>
@@ -581,6 +587,7 @@
     <string name="title_advanced_sync_kept_hint">Μεταφέρει πρόσθετα δεδομένα και καταναλώνει επιπλέον μπαταρία, ιδίως αν είναι αποθηκευμένα στη συσκευή πολλά μηνύματα</string>
     <string name="title_advanced_gmail_thread_hint">Αυτό εφαρμόζεται μόνον σε μηνύματα που λήφθηκαν πρόσφατα και μπορεί να διαλύσει υπάρχουσες ομάδες</string>
     <string name="title_advanced_sync_folders_hint">Αν απενεργοποιηθεί, θα μειωθεί κάπως η χρήση δεδομένων και μπαταρίας, αλλά θα απενεργοποιηθεί και ο συγχρονισμός της λίστας των φακέλων επίσης</string>
+    <string name="title_advanced_poll_folders_hint">Περιοδικός συγχρονισμός της λίστας φακέλων, επιπρόσθετα στον αρχικό συγχρονισμό μετά από τη σύνδεση σε έναν λογαριασμό</string>
     <string name="title_advanced_check_authentication_hint">Αυτό θα ελέγξει τα αποτελέσματα της ταυτοποίησης DKIM, SPF και DMARC, όπως εκτελείται από τον διακομιστή ηλ. ταχυδρομείου</string>
     <string name="title_advanced_check_reply_hint">Ελέγχει αν το το όνομα τομέα του αποστολέα και η διεύθυνση απάντησης είναι ίδια</string>
     <string name="title_advanced_lookup_mx_hint">Ελέγχει αν υπάρχουν καταγραφές DNS MX</string>
@@ -608,13 +615,14 @@
     <string name="title_advanced_navbar_colorize_hint">Το αν αυτό λειτουργεί ή όχι, εξαρτάται από την έκδοση και εκδοχή του Android</string>
     <string name="title_advanced_split_hint">Θα χωρίσει την οθόνη σε μέρη</string>
     <string name="title_advanced_threading_hint">Ομαδοποίηση των μηνυμάτων που σχετίζονται αναμεταξύ τους</string>
-    <string name="title_advanced_highlight_hint">Το χρώμα επισήμανσης του θέματος θα χρησιμοποιηθεί για έμφαση</string>
+    <string name="title_advanced_highlight_hint">Το χρώμα έμφασης του θέματος θα χρησιμοποιηθεί για την επισήμανση</string>
     <string name="title_advanced_gravatars_hint">Το προσωπικό σας απόρρητο μπορεί να τεθεί σε κίνδυνο</string>
     <string name="title_advanced_name_email_hint">Τα ονόματα θα εμφανίζονται μόνον όταν είναι διαθέσιμα</string>
     <string name="title_advanced_preview_hint">Διαθέσιμο μόνον εφόσον το κείμενο του μηνύματος έχει κατέβει</string>
     <string name="title_advanced_preview_lines_hint">Μέγιστο %s χαρακτήρες συνολικά</string>
     <string name="title_advanced_preview_issue">Η κύλιση ενδέχεται να καθυστερεί εξαιτίας ενός σφάλματος σε ορισμένες εκδόσεις του Android, όταν ο αριθμός των σειρών υπερβαίνει τη μία</string>
     <string name="title_advanced_overview_mode_hint">Μπορεί να προκαλέσει πολύ μικρές γραμματοσειρές</string>
+    <string name="title_advanced_override_width_hint">Αυτό μπορεί να κάνει τα μηνύματα να προβάλλονται πιο στενά, αλλά και κάπως παράξενα</string>
     <string name="title_advanced_placeholders_hint">Εφαρμόζεται μόνον στα αναμορφοποιημένα μηνύματα</string>
     <string name="title_advanced_inline_hint">Οι ένθετες εικόνες είναι οι εικόνες που περιλαμβάνονται στο μήνυμα</string>
     <string name="title_advanced_parse_classes_hint">Η προβολή των εικόνων θα είναι πιο ακριβής αλλά με ενδεχόμενη καθυστέρηση</string>
@@ -974,6 +982,9 @@
     <string name="title_truncated">Το μύνημα είναι πολύ μεγάλο για να προβληθεί ολόκληρο</string>
     <string name="title_insufficient_memory">Υπερβολικά μεγάλο μήνυμα για τη διαθέσιμη μνήμη (%1$d)</string>
     <string name="title_show_full">Προβολή πλήρους μηνύματος</string>
+    <string name="title_fullscreen">Προβολή σε πλήρη οθόνη</string>
+    <string name="title_fit_width">Προσαρμογή στο πλάτος οθόνης</string>
+    <string name="title_disable_widths">Απενεργοποίηση πλατών</string>
     <string name="title_unused_inline">Οι μη χρησιμοποιημένες ένθετες εικόνες θα αφαιρεθούν κατά την αποστολή</string>
     <string name="title_accross_remark">Μηνύματα που έχουν μετακινηθεί μεταξύ των λογαριασμών θα κατέβουν εκ νέου, με αποτέλεσμα επιπλέον χρήση δεδομένων</string>
     <string name="title_raw_saved">Το αρχικό μήνυμα αποθηκεύτηκε</string>
@@ -1269,6 +1280,8 @@
     <string name="title_rule_subject">Το θέμα περιέχει</string>
     <string name="title_rule_attachments">Έχει συνημμένα</string>
     <string name="title_rule_header">Η κεφαλίδα περιέχει</string>
+    <string name="title_rule_body">Το κείμενο περιέχει</string>
+    <string name="title_rule_body_remark">Χρησιμοποιώντας αυτή τη συνθήκη, θα κατεβαίνει πάντα το κείμενο του μηνύματος, κάτι που μπορεί να επιβραδύνει τον συγχρονισμό της λίστας μηνυμάτων</string>
     <string name="title_rule_time_abs">Απόλυτος χρόνος (λήψης) μεταξύ</string>
     <string name="title_rule_time_after">Λήφθηκε μετά από</string>
     <string name="title_rule_time_before">Λήφθηκε πριν από</string>
@@ -1298,6 +1311,7 @@
     <string name="title_rule_applied">Μηνύματα που αφορά: %1$d</string>
     <string name="title_rule_check">Έλεγχος</string>
     <string name="title_rule_no_headers">Οι συνθήκες για τις κεφαλίδες δεν μπορούν να ελεγχθούν</string>
+    <string name="title_rule_no_body">Το κείμενο του μηνύματος δεν είναι διαθέσιμο</string>
     <string name="title_rule_matched">Μηνύματα που ανταποκρίνονται</string>
     <string name="title_rule_no_matches">Κανένα μήνυμα δεν ανταποκρίνεται</string>
     <string name="title_rule_tts_ok">Επιτυχής ρύθμιση</string>

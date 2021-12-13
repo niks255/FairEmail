@@ -4,7 +4,6 @@
     <string name="app_changelog">Újdonságok</string>
     <string name="app_welcome">A FairEmail egy nyílt forráskódú e-mail alkalmazás, melynek elsődleges szempontja az adatvédelem és biztonság. Emiatt némely funkció másképp működhet a megszokottnál.</string>
     <string name="app_limitations">Például az üzenetek átformáltak alapból, hogy eltávolítsa a nem biztonságos elemeket és javítsa az olvashatóságot, és linkek megnyitásánál szükséges, hogy legyen megerősítve biztonságért. Mind a kettőt le lehet tiltani, ha kívánt.</string>
-    <string name="app_crash">FairEmail nem támogatott ezen az eszközön, az Android hibái miatt</string>
     <string name="app_exit">A kilépéshez használja újra a \'vissza\' opciót</string>
     <string name="app_cake">Nincs elég tárhely</string>
     <string name="app_updated">Utoljára frissítve: %1$s</string>
@@ -408,6 +407,7 @@
     <string name="title_advanced_notify_preview_only">Az értesítések csak a szöveg előnézete jelenjen meg</string>
     <string name="title_advanced_notify_actions">Értesítési műveletek</string>
     <string name="title_advanced_notify_action_trash">Kuka</string>
+    <string name="title_advanced_notify_action_delete">Tőrlés</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archiválás</string>
     <string name="title_advanced_notify_action_move">Áthelyezés</string>
@@ -829,6 +829,7 @@
     <string name="title_too_large">Az üzenet túl nagy a teljes újraformázáshoz</string>
     <string name="title_truncated">Az üzenet túl nagy a teljes megjelnítéshez</string>
     <string name="title_show_full">Teljes szöveg megjelnítése</string>
+    <string name="title_fullscreen">Teljes képernyős megjelenítés</string>
     <string name="title_unused_inline">Nem használt beágyazott képek küldéskor törölve lesznek</string>
     <string name="title_accross_remark">A különböző fiókok között átmozgatott üzenetek újra letöltsére kerülnek, amely további adatforgalmat eredményez</string>
     <string name="title_raw_saved">Nyers üzenet mentve</string>

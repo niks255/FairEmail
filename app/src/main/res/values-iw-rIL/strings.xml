@@ -4,7 +4,8 @@
     <string name="app_changelog">יומן שינויים</string>
     <string name="app_welcome">FairEmail הוא יישומון בקוד פתוח שמתמקד בפרטיות ואבטחת מידע. משום כך, חלק מהיכולות כנראה תעבודנה אחרת ממה שהתרגלת.</string>
     <string name="app_limitations">למשל, הודעות מעוצבות מחדש כדי להסיר רכיבים חשודים ולשפר את היכולת לקרוא אותם, נוסף על כך, יש לאשר פתיחת קישורים לשיפור האבטחה. את שני אלו ניתן להשבית במידת הצורך.</string>
-    <string name="app_crash">היישומון FairEmail לא נתמך במכשיר הזה עקב תקלות ב־Android שמובילות לקריסתו</string>
+    <string name="app_unsupported">תקלות בגירסת ה־Android של המכשיר המסוים הזה גורמות לקריסות</string>
+    <string name="app_continue">להמשיך בכל זאת</string>
     <string name="app_exit">יש ‚לחזור’ שוב אחורה כדי לצאת</string>
     <string name="app_cake">לא נותר די שטח אחסון</string>
     <string name="app_updated">עדכון אחרון: %1$s</string>
@@ -310,6 +311,7 @@
     <string name="title_advanced_kept_removed">לבדוק אם הודעות ישנות הוסרו מהשרת</string>
     <string name="title_advanced_gmail_thread">סגנון קיבוץ הודעות ב־Gmail לחשבונות Gmail</string>
     <string name="title_advanced_sync_folders">סנכרון רשימת התיקיות</string>
+    <string name="title_advanced_sync_folders_poll">סנכרון רשימת התיקיות באופן פעיל</string>
     <string name="title_advanced_sync_shared_folders">סנכרון רשימות תיקיות משותפות</string>
     <string name="title_advanced_subscriptions">ניהול מינוי על תיקיות</string>
     <string name="title_advanced_check_authentication">בדיקת אימות ההודעה</string>
@@ -387,6 +389,7 @@
     <string name="title_advanced_cards_beige">להשתמש ברקע בז׳ בעת שימוש בסגנון כרטיסים (ערכות עיצוב בהירות בלבד)</string>
     <string name="title_advanced_tabular_background">להשתמש בצבע הכרטיס כצבע הרקע בעת שימוש בסגנון כרטיסיות</string>
     <string name="title_advanced_cards_shadow">להשתמש בהצללה להודעות שלא נקראו בעת שימוש בסגנון כרטיסים</string>
+    <string name="title_advanced_cards_shadow_highlight">להשתמש בצבע ההדגשה במקום בצבע המשני</string>
     <string name="title_advanced_date_header">קיבוץ לפי תאריך</string>
     <string name="title_advanced_date_fixed">להציג כותרת תאריך מקובעת למעלה</string>
     <string name="title_advanced_date_bold">הצגת תאריך בהדגשה</string>
@@ -395,6 +398,7 @@
     <string name="title_advanced_indentation">הזחה שמאלית/ימנית להודעות שהתקבלו/נשלחו בדיונים</string>
     <string name="title_advanced_highlight_unread">הדגשת הודעות שלא נקראו</string>
     <string name="title_advanced_color_stripe">הצגת פס צבע</string>
+    <string name="title_advanced_color_stripe_wide">להשתמש בפס צבע רחב</string>
     <string name="title_advanced_avatars">הצגת תמונות אנשי קשר</string>
     <string name="title_advanced_gravatars">הצגת Gravatarים</string>
     <string name="title_advanced_bimi_unverified">מוען בלתי מאומת</string>
@@ -432,6 +436,7 @@
     <string name="title_advanced_thumbnails">הצגת תמונות ממוזערות אחרי טקסט ההודעה</string>
     <string name="title_advanced_message_text_zoom2">תקריב טקסט ההודעות כבררת מחדל: %1$s %%</string>
     <string name="title_advanced_overview_mode">התאמת התקריב של ההודעות המקוריות לגודל המסך</string>
+    <string name="title_advanced_override_width">השבתת הגדרות רוחב קבועות בהודעות המקוריות</string>
     <string name="title_advanced_contrast">להשתמש בניגודיות גבוהה לטקסט ההודעות</string>
     <string name="title_advanced_monospaced">להשתמש בגופן ברוחב אחיד לטקסט ההודעה כבררת מחדל</string>
     <string name="title_advanced_monospaced_pre">להשתמש בטקסט ברוחב אחיד לטקסט שעוצב מראש</string>
@@ -504,6 +509,7 @@
     <string name="title_advanced_notify_preview_only">הצגת התראות עם תמצית טקסט בלבד</string>
     <string name="title_advanced_notify_actions">פעולות התראה</string>
     <string name="title_advanced_notify_action_trash">אשפה</string>
+    <string name="title_advanced_notify_action_delete">מחיקה</string>
     <string name="title_advanced_notify_action_junk">ספאם</string>
     <string name="title_advanced_notify_action_archive">ארכיון</string>
     <string name="title_advanced_notify_action_move">העברה</string>
@@ -602,6 +608,7 @@
     <string name="title_advanced_sync_kept_hint">יגרום להעברה של יותר נתונים וצריכה גבוהה יותר של סוללה, במיוחד אם הודעות רבות מאוחסנות במכשיר</string>
     <string name="title_advanced_gmail_thread_hint">חל רק על הודעות חדשות שמתקבלות ועלול לפגום בקבוצות קיימות</string>
     <string name="title_advanced_sync_folders_hint">השבתת האפשרות הזאת תצמצם את צריכת הנתונים והסוללהבמידה מסוימת אך תשבית גם את עדכון רשימת התיקיות</string>
+    <string name="title_advanced_poll_folders_hint">לסנכרן את רשימת התיקיות מדי פעם בנוסף לסנכרון שאחרי ההתחברות לחשבון</string>
     <string name="title_advanced_check_authentication_hint">אפשרות זו תבדוק את תוצאות אימות DKIM,‏ SPF ו־DMARC כפי שמבוצעות על ידי שרת הדוא״ל</string>
     <string name="title_advanced_check_reply_hint">מנגנון זה יבדוק אם שם התחום של המוען וכתובת המענה זהות</string>
     <string name="title_advanced_lookup_mx_hint">יבדוק אם קיימות רשומות MX ב־DNS</string>
@@ -636,6 +643,7 @@
     <string name="title_advanced_preview_lines_hint">%s תווים לכל היותר בסך הכול</string>
     <string name="title_advanced_preview_issue">גלילה עשויה להאט עקב תקלה בחלק מגרסאות ה־Android כשמספר השורות עולה על אחת</string>
     <string name="title_advanced_overview_mode_hint">יכול לגרום להקטנה מוגזמת של הגופנים</string>
+    <string name="title_advanced_override_width_hint">זה יכול להצר הודעות אבל גם להציג בצורה מוזרה</string>
     <string name="title_advanced_placeholders_hint">חל על הודעות שעוצבו מחדש בלבד</string>
     <string name="title_advanced_inline_hint">תמונות מובנות הן תמונות שכלולות בהודעה</string>
     <string name="title_advanced_parse_classes_hint">זה יציג הודעות בצורה יותר מדויקת אך כנראה עם עיכוב מסוים</string>
@@ -995,6 +1003,9 @@
     <string name="title_truncated">ההודעה גדולה מכדי להופיע במלואה</string>
     <string name="title_insufficient_memory">ההודעה גדולה מדי לזיכרון הזמין (%1$d)</string>
     <string name="title_show_full">הצגת ההודעה המלאה</string>
+    <string name="title_fullscreen">הצגה במסך מלא</string>
+    <string name="title_fit_width">התאמה לרוחב</string>
+    <string name="title_disable_widths">השבתת רוחבים</string>
     <string name="title_unused_inline">תמונות פנימיות שאינן בשימוש תוסרנה בעת השליחה</string>
     <string name="title_accross_remark">הודעות שמועברות בין הודעות תתקבלנה שוב ותוביל לצריכת נתונים גבוהה</string>
     <string name="title_raw_saved">ההודעה הגולמית נשמרה</string>
@@ -1290,6 +1301,8 @@
     <string name="title_rule_subject">הנושא מכיל</string>
     <string name="title_rule_attachments">יש קבצים מצורפים</string>
     <string name="title_rule_header">הכותרת מכילה</string>
+    <string name="title_rule_body">הטקסט מכיל</string>
+    <string name="title_rule_body_remark">השימוש בתנאי זה תמיד יוריד את טקסט ההודעה, מה שעלול להאט את סנכרון רשימת ההודעות</string>
     <string name="title_rule_time_abs">זמן מוחלט (של הקבלה) בין</string>
     <string name="title_rule_time_after">התקבל לאחר</string>
     <string name="title_rule_time_before">התקבל לפני</string>
@@ -1319,6 +1332,7 @@
     <string name="title_rule_applied">הודעות שיושפעו: %1$d</string>
     <string name="title_rule_check">בדיקה</string>
     <string name="title_rule_no_headers">אי אפשר לבדוק תנאי כותרות</string>
+    <string name="title_rule_no_body">טקסט ההודעה לא זמין</string>
     <string name="title_rule_matched">הודעות תואמות</string>
     <string name="title_rule_no_matches">אין הודעות תואמות</string>
     <string name="title_rule_tts_ok">ההגדרה הצליחה</string>

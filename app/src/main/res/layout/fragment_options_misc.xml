@@ -192,7 +192,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swClassification" />
 
-                <ImageButton
+                <eu.faircode.email.FixedImageButton
                     android:id="@+id/ibClassification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -271,7 +271,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLanguage" />
 
-                <ImageButton
+                <eu.faircode.email.FixedImageButton
                     android:id="@+id/ibResetLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -308,7 +308,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tvLanguageHint"
                     app:switchPadding="12dp" />
 
-                <ImageButton
+                <eu.faircode.email.FixedImageButton
                     android:id="@+id/ibDeepL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -671,7 +671,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvRoomQueryThreads" />
 
-                <ImageButton
+                <eu.faircode.email.FixedImageButton
                     android:id="@+id/ibRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -737,7 +737,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvSqliteCache" />
 
-                <ImageButton
+                <eu.faircode.email.FixedImageButton
                     android:id="@+id/ibSqliteCache"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -866,6 +866,17 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swKeepAlivePoll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_keep_alive_poll"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAuthSasl"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swEmptyPool"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -874,7 +885,7 @@
                     android:text="@string/title_advanced_empty_pool"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swAuthSasl"
+                    app:layout_constraintTop_toBottomOf="@id/swKeepAlivePoll"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -932,7 +943,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swInfra" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_awsses"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -941,7 +952,7 @@
                     app:srcCompat="@drawable/infra_awsses"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_elastic"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -950,7 +961,7 @@
                     app:srcCompat="@drawable/infra_elastic"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_gmail"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -959,7 +970,7 @@
                     app:srcCompat="@drawable/infra_gmail"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_icloud"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -968,7 +979,7 @@
                     app:srcCompat="@drawable/infra_icloud"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_icontact"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -977,7 +988,7 @@
                     app:srcCompat="@drawable/infra_icontact"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_mailchimp"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -986,7 +997,7 @@
                     app:srcCompat="@drawable/infra_mailchimp"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_mailgun"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -995,7 +1006,7 @@
                     app:srcCompat="@drawable/infra_mailgun"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_mailjet"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1004,7 +1015,7 @@
                     app:srcCompat="@drawable/infra_mailjet"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_mandrill"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1013,7 +1024,7 @@
                     app:srcCompat="@drawable/infra_mandrill"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_netcore"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1022,7 +1033,7 @@
                     app:srcCompat="@drawable/infra_netcore"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_outlook"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1031,7 +1042,7 @@
                     app:srcCompat="@drawable/infra_outlook"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_phpmailer"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1040,7 +1051,7 @@
                     app:srcCompat="@drawable/infra_phpmailer"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_postmark"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1049,7 +1060,7 @@
                     app:srcCompat="@drawable/infra_postmark"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_salesforce"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1058,7 +1069,7 @@
                     app:srcCompat="@drawable/infra_salesforce"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_sendgrid"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1067,7 +1078,7 @@
                     app:srcCompat="@drawable/infra_sendgrid"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_sendinblue"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1076,7 +1087,7 @@
                     app:srcCompat="@drawable/infra_sendinblue"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_sparkpost"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1085,7 +1096,7 @@
                     app:srcCompat="@drawable/infra_sparkpost"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_yahoo"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1094,7 +1105,7 @@
                     app:srcCompat="@drawable/infra_yahoo"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_zeptomail"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -1103,7 +1114,7 @@
                     app:srcCompat="@drawable/infra_zeptomail"
                     tools:ignore="MissingConstraints" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/infra_zoho"
                     android:layout_width="24dp"
                     android:layout_height="24dp"

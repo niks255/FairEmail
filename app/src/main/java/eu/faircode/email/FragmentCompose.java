@@ -285,7 +285,8 @@ public class FragmentCompose extends FragmentBase {
     private long working = -1;
     private State state = State.NONE;
     private boolean show_images = false;
-    private int last_available = 0; // attachments
+    private Boolean last_plain_only = null;
+    private List<EntityAttachment> last_attachments = null;
     private boolean saved = false;
     private String subject = null;
 
@@ -1291,6 +1292,7 @@ public class FragmentCompose extends FragmentBase {
                         Bundle extras = new Bundle();
                         extras.putString("html", html);
                         extras.putBoolean("show", true);
+                        extras.putBoolean("refedit", true);
                         onAction(R.id.action_save, extras, "refedit");
                     }
 
@@ -1939,12 +1941,18 @@ public class FragmentCompose extends FragmentBase {
                 for (String group : groups)
                     map.put(group, main.addSubMenu(Menu.NONE, order, order++, group));
 
+                NumberFormat NF = NumberFormat.getNumberInstance();
                 for (EntityAnswer answer : answers) {
                     if (answer.favorite)
                         continue;
                     order++;
 
-                    String name = answer.name;
+                    SpannableStringBuilder name = new SpannableStringBuilder(answer.name);
+                    if (grouped && answer.applied > 0) {
+                        name.append(" (").append(NF.format(answer.applied)).append(")");
+                        name.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
+                                answer.name.length() + 1, name.length(), 0);
+                    }
 
                     MenuItem item;
                     if (answer.group == null)
@@ -4935,6 +4943,8 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                     if (save_drafts &&
+                            (data.draft.ui_encrypt == null ||
+                                    EntityMessage.ENCRYPT_NONE.equals(data.draft.ui_encrypt)) &&
                             (!"new".equals(action) ||
                                     answer > 0 ||
                                     !TextUtils.isEmpty(to) ||
@@ -4944,10 +4954,20 @@ public class FragmentCompose extends FragmentBase {
                                     !TextUtils.isEmpty(external_body) ||
                                     !TextUtils.isEmpty(external_text) ||
                                     !TextUtils.isEmpty(selected_text) ||
-                                    (uris != null && uris.size() > 0)))
+                                    (uris != null && uris.size() > 0))) {
+                        Map<String, String> c = new HashMap<>();
+                        c.put("id", data.draft.id == null ? null : Long.toString(data.draft.id));
+                        c.put("encrypt", data.draft.encrypt + "/" + data.draft.ui_encrypt);
+                        c.put("action", action);
+                        Log.breadcrumb("Load draft", c);
+
                         EntityOperation.queue(context, data.draft, EntityOperation.ADD);
+                    }
                 } else {
                     args.putBoolean("saved", true);
+
+                    if (!data.draft.ui_seen)
+                        EntityOperation.queue(context, data.draft, EntityOperation.SEEN, true);
 
                     // External draft
                     if (data.draft.identity == null) {
@@ -5019,15 +5039,13 @@ public class FragmentCompose extends FragmentBase {
                         EntityOperation.queue(context, data.draft, EntityOperation.BODY);
                 }
 
-                List<EntityAttachment> attachments = db.attachment().getAttachments(data.draft.id);
-                for (EntityAttachment attachment : attachments)
-                    if (attachment.available) {
-                        if (!attachment.isEncryption())
-                            last_available++;
-                    } else {
-                        if (attachment.progress == null)
+                last_plain_only = data.draft.plain_only;
+                last_attachments = db.attachment().getAttachments(data.draft.id);
+
+                if (last_attachments != null)
+                    for (EntityAttachment attachment : last_attachments)
+                        if (!attachment.available && attachment.progress == null)
                             EntityOperation.queue(context, data.draft, EntityOperation.ATTACHMENT, attachment.id);
-                    }
 
                 db.setTransactionSuccessful();
             } finally {
@@ -5237,7 +5255,7 @@ public class FragmentCompose extends FragmentBase {
                                 };
                             }
 
-                            showDraft(draft, postShow);
+                            showDraft(draft, false, postShow);
                         }
 
                         tvDsn.setVisibility(
@@ -5411,6 +5429,11 @@ public class FragmentCompose extends FragmentBase {
                     if (empty || trash == null || discard_delete || (drafts != null && drafts.local))
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
                     else {
+                        Map<String, String> c = new HashMap<>();
+                        c.put("id", draft.id == null ? null : Long.toString(draft.id));
+                        c.put("encrypt", draft.encrypt + "/" + draft.ui_encrypt);
+                        Log.breadcrumb("Discard draft", c);
+
                         EntityOperation.queue(context, draft, EntityOperation.ADD);
                         EntityOperation.queue(context, draft, EntityOperation.MOVE, trash.id);
                     }
@@ -5485,14 +5508,42 @@ public class FragmentCompose extends FragmentBase {
                     if (TextUtils.isEmpty(extra))
                         extra = null;
 
-                    int available = 0;
+                    if (action == R.id.action_send) {
+                        if (draft.plain_only == null || !draft.plain_only) {
+                            // Remove unused inline images
+                            List<String> cids = new ArrayList<>();
+                            Document d = JsoupEx.parse(body);
+                            for (Element element : d.select("img")) {
+                                String src = element.attr("src");
+                                if (src.startsWith("cid:"))
+                                    cids.add("<" + src.substring(4) + ">");
+                            }
+
+                            for (EntityAttachment attachment : new ArrayList<>(attachments))
+                                if (attachment.isInline() && attachment.isImage() &&
+                                        attachment.cid != null && !cids.contains(attachment.cid)) {
+                                    Log.i("Removing unused inline attachment cid=" + attachment.cid);
+                                    attachments.remove(attachment);
+                                    db.attachment().deleteAttachment(attachment.id);
+                                    dirty = true;
+                                }
+                        } else {
+                            // Convert inline images to attachments
+                            for (EntityAttachment attachment : new ArrayList<>(attachments))
+                                if (attachment.isInline() && attachment.isImage()) {
+                                    Log.i("Converting to attachment cid=" + attachment.cid);
+                                    attachment.disposition = Part.ATTACHMENT;
+                                    db.attachment().setDisposition(attachment.id, attachment.disposition);
+                                    dirty = true;
+                                }
+                        }
+                    }
+
                     List<Integer> eparts = new ArrayList<>();
                     for (EntityAttachment attachment : attachments)
                         if (attachment.available)
                             if (attachment.isEncryption())
                                 eparts.add(attachment.encryption);
-                            else
-                                available++;
 
                     if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt)) {
                         if (!eparts.contains(EntityAttachment.PGP_KEY) ||
@@ -5521,10 +5572,12 @@ public class FragmentCompose extends FragmentBase {
                             !MessageHelper.equal(draft.bcc, abcc) ||
                             !Objects.equals(draft.subject, subject) ||
                             !draft.signature.equals(signature) ||
-                            last_available != available)
+                            !Objects.equals(last_plain_only, draft.plain_only) ||
+                            !EntityAttachment.equals(last_attachments, attachments))
                         dirty = true;
 
-                    last_available = available;
+                    last_plain_only = draft.plain_only;
+                    last_attachments = attachments;
 
                     if (dirty) {
                         // Update draft
@@ -5689,9 +5742,21 @@ public class FragmentCompose extends FragmentBase {
                             action == R.id.action_undo ||
                             action == R.id.action_redo ||
                             action == R.id.action_check) {
-                        if ((dirty || encrypted) && !needsEncryption) {
-                            if (save_drafts)
+                        boolean unencrypted = (draft.ui_encrypt == null ||
+                                EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt));
+                        if ((dirty && unencrypted) || encrypted) {
+                            if (save_drafts) {
+                                Map<String, String> c = new HashMap<>();
+                                c.put("id", draft.id == null ? null : Long.toString(draft.id));
+                                c.put("dirty", Boolean.toString(dirty));
+                                c.put("encrypt", draft.encrypt + "/" + draft.ui_encrypt);
+                                c.put("encrypted", Boolean.toString(encrypted));
+                                c.put("needsEncryption", Boolean.toString(needsEncryption));
+                                c.put("autosave", Boolean.toString(autosave));
+                                Log.breadcrumb("Save draft", c);
+
                                 EntityOperation.queue(context, draft, EntityOperation.ADD);
+                            }
                         }
 
                         if (action == R.id.action_check) {
@@ -5877,32 +5942,6 @@ public class FragmentCompose extends FragmentBase {
                         }
 
                     } else if (action == R.id.action_send) {
-                        if (draft.plain_only == null || !draft.plain_only) {
-                            // Remove unused inline images
-                            List<String> cids = new ArrayList<>();
-                            Document d = JsoupEx.parse(body);
-                            for (Element element : d.select("img")) {
-                                String src = element.attr("src");
-                                if (src.startsWith("cid:"))
-                                    cids.add("<" + src.substring(4) + ">");
-                            }
-
-                            for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (attachment.isInline() && attachment.isImage() &&
-                                        attachment.cid != null && !cids.contains(attachment.cid)) {
-                                    Log.i("Removing unused inline attachment cid=" + attachment.cid);
-                                    db.attachment().deleteAttachment(attachment.id);
-                                }
-                        } else {
-                            // Convert inline images to attachments
-                            for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (attachment.isInline() && attachment.isImage()) {
-                                    Log.i("Converting to attachment cid=" + attachment.cid);
-                                    attachment.disposition = Part.ATTACHMENT;
-                                    db.attachment().setDisposition(attachment.id, attachment.disposition);
-                                }
-                        }
-
                         // Delete draft (cannot move to outbox)
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
 
@@ -6016,8 +6055,9 @@ public class FragmentCompose extends FragmentBase {
 
             Bundle extras = args.getBundle("extras");
             boolean show = extras.getBoolean("show");
+            boolean refedit = extras.getBoolean("refedit");
             if (show)
-                showDraft(draft, null);
+                showDraft(draft, refedit, null);
 
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(draft.revision > 1);
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
@@ -6038,7 +6078,7 @@ public class FragmentCompose extends FragmentBase {
                 finish();
 
             } else if (action == R.id.action_undo || action == R.id.action_redo) {
-                showDraft(draft, null);
+                showDraft(draft, false, null);
 
             } else if (action == R.id.action_save) {
                 boolean autosave = extras.getBoolean("autosave");
@@ -6199,7 +6239,7 @@ public class FragmentCompose extends FragmentBase {
                 ref.first().before(div);
     }
 
-    private void showDraft(final EntityMessage draft, Runnable postShow) {
+    private void showDraft(final EntityMessage draft, boolean refedit, Runnable postShow) {
         Bundle args = new Bundle();
         args.putLong("id", draft.id);
         args.putBoolean("show_images", show_images);
@@ -6275,6 +6315,7 @@ public class FragmentCompose extends FragmentBase {
                 Spanned spannedRef = null;
                 if (!ref.isEmpty()) {
                     Document dref = JsoupEx.parse(ref.outerHtml());
+                    HtmlHelper.autoLink(dref);
                     Document quote = HtmlHelper.sanitizeView(context, dref, show_images);
                     spannedRef = HtmlHelper.fromDocument(context, quote,
                             new Html.ImageGetter() {
@@ -6329,6 +6370,9 @@ public class FragmentCompose extends FragmentBase {
                 ibReferenceImages.setVisibility(ref_has_images && !show_images ? View.VISIBLE : View.GONE);
 
                 setBodyPadding();
+
+                if (refedit && write_below)
+                    etBody.setSelection(etBody.length());
 
                 if (state == State.LOADED)
                     return;

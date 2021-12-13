@@ -4,7 +4,6 @@
     <string name="app_changelog">Dəyişiklik jurnalı</string>
     <string name="app_welcome">FairEmail, gizlilik və təhlükəsizliyə fokuslanmış bir açıq mənbəli e-poçt tətbiqidir. Buna görə də bəzi xüsusiyyətlər, istifadə etdiyinizdən fərqli şəkildə işləyə bilər.</string>
     <string name="app_limitations">Nümunə üçün, güvənli olmayan elementləri çıxartmaq və oxunaqlılığı artırmaq üçün mesajlar ilkin olaraq yenidən formatlanır və təhlükəsizlik üçün bağlantıların açılmasının təsdiqlənməsi lazım olur. İstəsəniz, hər ikisini sıradan çıxarda bilərsiniz.</string>
-    <string name="app_crash">FairEmail, Android-in çökmə səbəbli xətalarına görə bu cihazda dəstəklənmir</string>
     <string name="app_exit">Çıxmaq üçün yenidən \'geri\'yə basın</string>
     <string name="app_cake">Anbar sahəsi yetərsizdir</string>
     <string name="app_updated">Son yeniləmə: %1$s</string>
@@ -117,6 +116,7 @@
     <string name="title_edit_account">Hesaba düzəliş et</string>
     <string name="title_edit_identity">Kimliyə düzəliş et</string>
     <string name="title_edit_folder">Qovluğa düzəliş et</string>
+    <string name="title_disable_gmail">Gmail tətbiqini sıradan çıxart</string>
     <string name="title_setup">Tənzimləmələr</string>
     <string name="title_setup_help">Kömək</string>
     <string name="title_setup_quick">Cəld quraşdırma</string>
@@ -366,6 +366,7 @@
     <string name="title_advanced_cards_beige">Kart stilini istifadə edəndə bej arxaplan istifadə et (yalnız açıq temalar)</string>
     <string name="title_advanced_tabular_background">Cədvəl stili istifadə edəndə kart rəngini arxaplan rəngi kimi istifadə et</string>
     <string name="title_advanced_cards_shadow">Kart stilini istifadə edəndə oxunmamış mesajlar üçün kölgə istifadə et</string>
+    <string name="title_advanced_cards_shadow_highlight">Rəngi vurğulamaq əvəzinə vurğu rəngini istifadə et</string>
     <string name="title_advanced_date_header">Tarixə görə qruplaşdır</string>
     <string name="title_advanced_date_fixed">Sabit tarix başlığını üstdə göstər</string>
     <string name="title_advanced_date_bold">Tarixi qalın göstər</string>
@@ -374,6 +375,7 @@
     <string name="title_advanced_indentation">Danışıqlarda alınan/göndərilən mesajların sol/sağ boşluğu</string>
     <string name="title_advanced_highlight_unread">Oxunmamış mesajları vurğula</string>
     <string name="title_advanced_color_stripe">Rəng zolağını göstər</string>
+    <string name="title_advanced_color_stripe_wide">Geniş rəng zolağı istifadə et</string>
     <string name="title_advanced_avatars">Əlaqə fotolarını göstər</string>
     <string name="title_advanced_gravatars">\"Gravatar\"ları göstər</string>
     <string name="title_advanced_bimi_unverified">Təsdiqlənməmiş göndərən</string>
@@ -411,6 +413,7 @@
     <string name="title_advanced_thumbnails">Mesaj mətnindən sonra təsvir eskizlərini göstər</string>
     <string name="title_advanced_message_text_zoom2">İlkin mesajın mətn yaxınlaşdırması: %1$s %%</string>
     <string name="title_advanced_overview_mode">Orijinal mesajı tam ekrana qədər yaxınlaşdır</string>
+    <string name="title_advanced_override_width">Orijinal mesajlarda sabit genişlikləri sıradan çıxart</string>
     <string name="title_advanced_contrast">Mesaj mətni üçün yüksək ziddiyyət istifadə et</string>
     <string name="title_advanced_monospaced">Mesaj mətni üçün ilkin olaraq tək boşluqlu şrift istifadə et</string>
     <string name="title_advanced_monospaced_pre">Ön formatlı mətn üçün tək boşluqlu şrift istifadə et</string>
@@ -465,6 +468,7 @@
     <string name="title_advanced_autounstar">Mesajları köçürəndə ulduzları mesajlardan avtomatik çıxart</string>
     <string name="title_advanced_auto_important">Ulduzlu mesajları avtomatik olaraq vacib et</string>
     <string name="title_advanced_reset_importance">Mesajları köçürəndə vacibliyi sıfırla</string>
+    <string name="title_advanced_swipe_reply">Genişləndirilmiş mesajları cavablandırmaq üçün sağa sürüşdür</string>
     <string name="title_advanced_default_snooze">İlkin ertələmə/gecikmə vaxtı</string>
     <string name="title_advanced_notifications">Bildirişləri idarə et</string>
     <string name="title_advanced_notifications_default">İlkin kanal</string>
@@ -482,6 +486,7 @@
     <string name="title_advanced_notify_preview_only">Bildirişləri yalnız önbaxış mətni ilə göstər</string>
     <string name="title_advanced_notify_actions">Bildiriş əməliyyatları</string>
     <string name="title_advanced_notify_action_trash">Tullantı</string>
+    <string name="title_advanced_notify_action_delete">Sil</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Arxivlə</string>
     <string name="title_advanced_notify_action_move">Daşı</string>
@@ -590,6 +595,7 @@
     <string name="title_advanced_reply_all_hint">Sıradan çıxarılsa, cavabla düyməsinə uzun basmaq, göndərə cavab verəcək</string>
     <string name="title_advanced_reply_move_hint">E-poçt serveri, mesajları yenə də göndərilən mesaj qovluğuna əlavə edə bilər</string>
     <string name="title_advanced_usenet_hint">Mətn və imza arasına \'-- \' əlavə et</string>
+    <string name="title_advanced_remove_signature_hint">Bu, həddindən az və ya çox mətnin silinməsinə səbəb ola bilər</string>
     <string name="title_advanced_metered_hint">Ümumiyyətlə ölçülmüş bağlantılar, mobil və ya ödənişli Wi-Fi bağlantılarıdır</string>
     <string name="title_advanced_metered_warning">Bu seçimin sıradan çıxarılması, mobil internet bağlantılarında mesajların göndərilməsini və alınmasını dayandıracaq</string>
     <string name="title_advanced_rlah_hint">AB daxilində roaminqdə olmadığını hesab et</string>
@@ -613,6 +619,7 @@
     <string name="title_advanced_preview_lines_hint">Cəmi maksimum %s simvol</string>
     <string name="title_advanced_preview_issue">Sətir sayı birdən çox olanda bəzi Android versiyalarında bir xətaya görə sürüşdürmə yavaşlaya bilər</string>
     <string name="title_advanced_overview_mode_hint">Bu, çox kiçik şriftlərə səbəb ola bilər</string>
+    <string name="title_advanced_override_width_hint">Bu, mesajları daraltmaqla yanaşı qəribə göstərə bilər</string>
     <string name="title_advanced_placeholders_hint">Bu, yalnız yenidən format edilmiş mesajlara tətbiq olunur</string>
     <string name="title_advanced_inline_hint">Sətiriçi təsvirlər, mesaja daxil edilən təsvirlərdir</string>
     <string name="title_advanced_parse_classes_hint">Bu, mesajları daha dəqiq görüntüləyəcək, ancaq gecikmə yaşana bilər</string>

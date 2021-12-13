@@ -100,6 +100,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
     private int dp12;
     private float textSize;
+    private int colorStripeWidth;
     private int textColorPrimary;
     private int textColorSecondary;
     private int colorUnread;
@@ -185,6 +186,9 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
             grpFlagged = itemView.findViewById(R.id.grpFlagged);
             grpExtended = itemView.findViewById(R.id.grpExtended);
+
+            if (vwColor != null)
+                vwColor.getLayoutParams().width = colorStripeWidth;
         }
 
         private void wire() {
@@ -619,9 +623,8 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
             if (Shortcuts.can(context))
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_pin, order++, R.string.title_pin);
 
-            if (!folder.selectable && debug)
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, order++, R.string.title_delete)
-                        .setEnabled(folder.inferiors);
+            if (!folder.read_only && EntityFolder.USER.equals(folder.type))
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, order++, R.string.title_delete);
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -1033,7 +1036,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 private void onActionExecuteRules() {
                     Bundle args = new Bundle();
                     args.putString("question", context.getString(R.string.title_execute_rules));
-                    args.putLong("folder", folder.id);
+                    args.putLong("id", folder.id);
 
                     FragmentDialogAsk ask = new FragmentDialogAsk();
                     ask.setArguments(args);
@@ -1164,6 +1167,8 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
         this.dp12 = Helper.dp2pixels(context, 12);
         this.textSize = Helper.getTextSize(context, zoom);
+        boolean color_stripe_wide = prefs.getBoolean("color_stripe_wide", false);
+        this.colorStripeWidth = Helper.dp2pixels(context, color_stripe_wide ? 12 : 6);
         this.textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
         this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
 

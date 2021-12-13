@@ -91,7 +91,7 @@ public class FragmentDialogStill extends FragmentDialogBase {
                         sendResult(Activity.RESULT_OK);
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, null);
+                .setNegativeButton(R.string.title_dismiss, null);
 
         return builder.create();
     }

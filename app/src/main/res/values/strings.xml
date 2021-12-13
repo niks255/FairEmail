@@ -7,7 +7,8 @@
     <string name="app_welcome">FairEmail is an open source email app focused on privacy and security. For this reason some features might work differently from what you are used to.</string>
     <string name="app_limitations">For example, messages are reformatted by default to remove unsafe elements and to improve readability, and opening links needs to be confirmed for safety. Both can be disabled if desired.</string>
     <string name="app_eula" translatable="false">THIS SOFTWARE IS PROVIDED BY THE AUTHOR \'\'AS IS\'\' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
-    <string name="app_crash">FairEmail is not supported on this device because bugs in Android cause crashes</string>
+    <string name="app_unsupported">Bugs in the Android version of this particular device cause crashes</string>
+    <string name="app_continue">Continue anyway</string>
     <string name="app_exit">Go \'back\' again to exit</string>
     <string name="app_cake">Insufficient storage space left</string>
     <string name="app_updated">Last update: %1$s</string>
@@ -351,6 +352,7 @@
     <string name="title_advanced_kept_removed">Check if old messages were removed from the server</string>
     <string name="title_advanced_gmail_thread">Gmail message grouping style for Gmail accounts</string>
     <string name="title_advanced_sync_folders">Synchronize folder list</string>
+    <string name="title_advanced_sync_folders_poll">Actively synchronize folder list</string>
     <string name="title_advanced_sync_shared_folders">Synchronize shared folder lists</string>
     <string name="title_advanced_subscriptions">Manage folder subscriptions</string>
     <string name="title_advanced_check_authentication">Check message authentication</string>
@@ -438,6 +440,7 @@
     <string name="title_advanced_cards_beige">Use beige background when using card style (light themes only)</string>
     <string name="title_advanced_tabular_background">Use card color as background color when using tabular style</string>
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
+    <string name="title_advanced_cards_shadow_highlight">Use highlight color instead of accent color</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_date_fixed">Show fixed date header at the top</string>
     <string name="title_advanced_date_bold">Show date in bold</string>
@@ -446,6 +449,7 @@
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
     <string name="title_advanced_highlight_unread">Highlight unread messages</string>
     <string name="title_advanced_color_stripe">Show color stripe</string>
+    <string name="title_advanced_color_stripe_wide">Use wide color stripe</string>
     <string name="title_advanced_avatars">Show contact photos</string>
     <string name="title_advanced_gravatars">Show Gravatars</string>
     <string name="title_advanced_bimi" translatable="false">Show Brand Indicators for Message Identification (BIMI)</string>
@@ -488,6 +492,7 @@
     <string name="title_advanced_thumbnails">Show image thumbnails after the message text</string>
     <string name="title_advanced_message_text_zoom2">Default message text zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
+    <string name="title_advanced_override_width">Disable fixed widths in original messages</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text by default</string>
     <string name="title_advanced_monospaced_pre">Use monospaced font for preformatted text</string>
@@ -564,6 +569,7 @@
     <string name="title_advanced_notify_transliterate" translatable="false">Transliterate</string>
     <string name="title_advanced_notify_actions">Notification actions</string>
     <string name="title_advanced_notify_action_trash">Trash</string>
+    <string name="title_advanced_notify_action_delete">Delete</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archive</string>
     <string name="title_advanced_notify_action_move">Move</string>
@@ -679,6 +685,7 @@
     <string name="title_advanced_auth_ntlm" translatable="false">NTLM</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_idle_done" translatable="false">IDLE/DONE</string>
+    <string name="title_advanced_keep_alive_poll" translatable="false">Poll on keep-alive</string>
     <string name="title_advanced_empty_pool" translatable="false">Empty connection pool</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
@@ -708,6 +715,7 @@
     <string name="title_advanced_sync_kept_hint">This will transfer extra data and consume extra battery power, especially if a lot of messages are stored on the device</string>
     <string name="title_advanced_gmail_thread_hint">This only applies to newly received messages and can break existing groups</string>
     <string name="title_advanced_sync_folders_hint">Disabling this will reduce data and battery usage somewhat, but will disable updating the list of folders too</string>
+    <string name="title_advanced_poll_folders_hint">Periodically synchronize the folder list in addition to after connecting to an account</string>
     <string name="title_advanced_check_authentication_hint">This will check the results of DKIM, SPF and DMARC authentication as performed by the email server</string>
     <string name="title_advanced_check_reply_hint">This will check if the domain name of the sender and the reply address are the same</string>
     <string name="title_advanced_lookup_mx_hint">This will check if DNS MX records exist</string>
@@ -746,6 +754,7 @@
     <string name="title_advanced_preview_lines_hint">Maximum %s characters in total</string>
     <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
     <string name="title_advanced_overview_mode_hint">This can result in very small fonts</string>
+    <string name="title_advanced_override_width_hint">This can make messages narrower, but also look strange</string>
     <string name="title_advanced_placeholders_hint">This applies to reformatted messages only</string>
     <string name="title_advanced_inline_hint">Inline images are images included in the message</string>
     <string name="title_advanced_parse_classes_hint">This will more accurately display messages, but possibly with a delay</string>
@@ -1137,6 +1146,9 @@
     <string name="title_truncated">Message too large to display completely</string>
     <string name="title_insufficient_memory">Message too large for the available memory (%1$d)</string>
     <string name="title_show_full">Show full message</string>
+    <string name="title_fullscreen">Show fullscreen</string>
+    <string name="title_fit_width">Fit width</string>
+    <string name="title_disable_widths">Disable widths</string>
     <string name="title_unused_inline">Unused inline images will be removed on send</string>
     <string name="title_accross_remark">Messages moved across accounts will be downloaded again resulting in extra data usage</string>
     <string name="title_raw_saved">Raw message saved</string>
@@ -1463,6 +1475,8 @@
     <string name="title_rule_attachments">Has attachments</string>
     <string name="title_rule_mime_type" translatable="false">Mime type</string>
     <string name="title_rule_header">Header contains</string>
+    <string name="title_rule_body">Text contains</string>
+    <string name="title_rule_body_remark">Using this condition will always download the message text, which may slow down the synchronization of the message list</string>
     <string name="title_rule_time_abs">Absolute time (received) between</string>
     <string name="title_rule_time_after">Received after</string>
     <string name="title_rule_time_before">Received before</string>
@@ -1494,6 +1508,7 @@
 
     <string name="title_rule_check">Check</string>
     <string name="title_rule_no_headers">Header conditions cannot be checked</string>
+    <string name="title_rule_no_body">Message text not available</string>
     <string name="title_rule_matched">Matching messages</string>
     <string name="title_rule_no_matches">No matching messages</string>
 

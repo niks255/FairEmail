@@ -122,6 +122,7 @@ public class MessageHelper {
     private boolean ensuredHeaders = false;
     private boolean ensuredStructure = false;
     private MimeMessage imessage;
+    private String hash = null;
 
     private static File cacheDir = null;
 
@@ -231,6 +232,11 @@ public class MessageHelper {
         boolean autocrypt = prefs.getBoolean("autocrypt", true);
         boolean mutual = prefs.getBoolean("autocrypt_mutual", true);
         boolean encrypt_subject = prefs.getBoolean("encrypt_subject", false);
+
+        Map<String, String> c = new HashMap<>();
+        c.put("id", message.id == null ? null : Long.toString(message.id));
+        c.put("encrypt", message.encrypt + "/" + message.ui_encrypt);
+        Log.breadcrumb("Build message", c);
 
         MimeMessageEx imessage = new MimeMessageEx(isession, message.msgid);
 
@@ -553,6 +559,14 @@ public class MessageHelper {
 
                 return imessage;
             }
+
+        if (EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) ||
+                EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt)) {
+            String msg = "Storing unencrypted message" +
+                    " encrypt=" + message.encrypt + "/" + message.ui_encrypt;
+            Log.w(msg);
+            throw new IllegalArgumentException(msg);
+        }
 
         build(context, message, attachments, identity, send, imessage);
 
@@ -1032,6 +1046,11 @@ public class MessageHelper {
         return (header == null ? null : MimeUtility.unfold(header));
     }
 
+    List<Header> getAllHeaders() throws MessagingException {
+        ensureHeaders();
+        return Collections.list(imessage.getAllHeaders());
+    }
+
     String[] getReferences() throws MessagingException {
         ensureHeaders();
 
@@ -1117,7 +1136,7 @@ public class MessageHelper {
         return (header == null ? null : MimeUtility.unfold(header));
     }
 
-    String getThreadId(Context context, long account, long uid) throws MessagingException {
+    String getThreadId(Context context, long account, long folder, long uid) throws MessagingException {
         if (imessage instanceof GmailMessage) {
             // https://developers.google.com/gmail/imap/imap-extensions#access_to_the_gmail_thread_id_x-gm-thrid
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -1155,23 +1174,24 @@ public class MessageHelper {
             }
         }
 
-        if (thread == null && refs.size() > 0)
-            thread = refs.get(0);
-
-        if (thread != null) {
-            List<EntityMessage> after = db.message().getMessagesByInReplyTo(account, msgid);
-            for (EntityMessage message : after)
-                if (!TextUtils.isEmpty(message.thread) && !thread.equals(message.thread)) {
-                    Log.w("Updating after thread from " + message.thread + " to " + thread);
-                    db.message().updateMessageThread(message.account, message.thread, thread);
+        if (thread == null) {
+            List<EntityMessage> similar = db.message().getMessagesByMsgId(account, msgid);
+            for (EntityMessage message : similar)
+                if (!TextUtils.isEmpty(message.thread) && Objects.equals(message.hash, getHash())) {
+                    thread = message.thread;
+                    break;
                 }
         }
 
         if (thread == null)
-            if (TextUtils.isEmpty(msgid))
-                thread = Long.toString(uid);
-            else
-                thread = msgid;
+            thread = getHash() + ":" + uid;
+
+        List<EntityMessage> after = db.message().getMessagesByInReplyTo(account, msgid);
+        for (EntityMessage message : after)
+            if (!TextUtils.isEmpty(message.thread) && !thread.equals(message.thread)) {
+                Log.w("Updating after thread from " + message.thread + " to " + thread);
+                db.message().updateMessageThread(message.account, message.thread, thread);
+            }
 
         return thread;
     }
@@ -1816,7 +1836,9 @@ public class MessageHelper {
 
     String getHash() throws MessagingException {
         try {
-            return Helper.sha1(getHeaders().getBytes());
+            if (hash == null)
+                hash = Helper.sha1(getHeaders().getBytes());
+            return hash;
         } catch (NoSuchAlgorithmException ex) {
             Log.e(ex);
             return null;

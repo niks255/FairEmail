@@ -144,6 +144,9 @@ public class Log {
     private static final int MAX_CRASH_REPORTS = 5;
     private static final String TAG = "fairemail";
 
+    static final String TOKEN_REFRESH_REQUIRED =
+            "Token refresh required. Is there a VPN based app running?";
+
     public static void setLevel(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
@@ -173,14 +176,14 @@ public class Log {
     }
 
     public static int i(String msg) {
-        if (level <= android.util.Log.INFO)
+        if (level <= android.util.Log.INFO || BuildConfig.DEBUG)
             return android.util.Log.i(TAG, msg);
         else
             return 0;
     }
 
     public static int i(String tag, String msg) {
-        if (level <= android.util.Log.INFO)
+        if (level <= android.util.Log.INFO || BuildConfig.DEBUG)
             return android.util.Log.i(tag, msg);
         else
             return 0;
@@ -367,6 +370,7 @@ public class Log {
             etypes.setAnrs(BuildConfig.DEBUG);
             etypes.setNdkCrashes(false);
             config.setEnabledErrorTypes(etypes);
+            config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 50 : 100);
 
             Set<String> ignore = new HashSet<>();
 
@@ -471,6 +475,7 @@ public class Log {
 
                     if (ex instanceof IllegalStateException &&
                             (no_internet.equals(ex.getMessage()) ||
+                                    TOKEN_REFRESH_REQUIRED.equals(ex.getMessage()) ||
                                     "Not connected".equals(ex.getMessage()) ||
                                     "This operation is not allowed on a closed folder".equals(ex.getMessage())))
                         return false;
@@ -567,24 +572,28 @@ public class Log {
                 Object v = data.get(key);
 
                 Object value = v;
+                int length = -1;
                 if (v != null && v.getClass().isArray()) {
-                    int length = Array.getLength(v);
-                    if (length <= 10) {
-                        String[] elements = new String[length];
-                        for (int i = 0; i < length; i++) {
-                            Object element = Array.get(v, i);
-                            if (element instanceof Long)
-                                elements[i] = element.toString() + " (0x" + Long.toHexString((Long) element) + ")";
-                            else
-                                elements[i] = (element == null ? null : printableString(element.toString()));
-                        }
-                        value = TextUtils.join(",", elements);
-                    } else
-                        value = "[" + length + "]";
+                    length = Array.getLength(v);
+                    String[] elements = new String[Math.min(length, 10)];
+                    for (int i = 0; i < elements.length; i++) {
+                        Object element = Array.get(v, i);
+                        if (element instanceof Long)
+                            elements[i] = element + " (0x" + Long.toHexString((Long) element) + ")";
+                        else
+                            elements[i] = (element == null ? "<null>" : printableString(element.toString()));
+                    }
+                    value = TextUtils.join(",", elements);
+                    if (length > 10)
+                        value += ", ...";
+                    value = "[" + value + "]";
                 } else if (v instanceof Long)
-                    value = v.toString() + " (0x" + Long.toHexString((Long) v) + ")";
+                    value = v + " (0x" + Long.toHexString((Long) v) + ")";
+                else if (v instanceof Bundle)
+                    value = "{" + TextUtils.join(" ", getExtras((Bundle) v)) + "}";
 
-                result.add(key + "=" + value + (value == null ? "" : " (" + v.getClass().getSimpleName() + ")"));
+                result.add(key + "=" + value + (value == null ? "" :
+                        " (" + v.getClass().getSimpleName() + (length < 0 ? "" : ":" + length) + ")"));
             }
         } catch (BadParcelableException ex) {
             // android.os.BadParcelableException: ClassNotFoundException when unmarshalling: ...
@@ -1504,7 +1513,8 @@ public class Log {
                 return null;
 
             if (ex instanceof IllegalStateException &&
-                    ("Not connected".equals(ex.getMessage()) ||
+                    (TOKEN_REFRESH_REQUIRED.equals(ex.getMessage()) ||
+                            "Not connected".equals(ex.getMessage()) ||
                             "This operation is not allowed on a closed folder".equals(ex.getMessage())))
                 return null;
         }

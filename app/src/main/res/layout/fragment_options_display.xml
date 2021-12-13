@@ -165,11 +165,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
-                    android:checked="true"
                     android:text="@string/title_advanced_cards_shadow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swTabularCardBackground"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swShadowHighlight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_cards_shadow_highlight"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swShadow"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -181,7 +192,7 @@
                     android:text="@string/title_advanced_date_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swShadow"
+                    app:layout_constraintTop_toBottomOf="@id/swShadowHighlight"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
@@ -556,11 +567,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:checked="true"
-                    android:enabled="true"
                     android:text="@string/title_advanced_color_stripe"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnHighlightColor"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swColorStripeWide"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_color_stripe_wide"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swColorStripe"
                     app:switchPadding="12dp" />
 
                 <View
@@ -571,7 +593,7 @@
                     android:background="?attr/colorSeparator"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swColorStripe" />
+                    app:layout_constraintTop_toBottomOf="@id/swColorStripeWide" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swAvatars"
@@ -638,7 +660,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBimiUnverified" />
 
-                <ImageButton
+                <eu.faircode.email.FixedImageButton
                     android:id="@+id/ibBimi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -735,7 +757,7 @@
                     app:layout_constraintTop_toBottomOf="@id/swIdenticons"
                     app:switchPadding="12dp" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/ivRed"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
@@ -745,7 +767,7 @@
                     app:layout_constraintTop_toBottomOf="@id/swCircular"
                     app:srcCompat="@drawable/twotone_person_24" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/ivGreen"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
@@ -755,7 +777,7 @@
                     app:layout_constraintTop_toBottomOf="@id/swCircular"
                     app:srcCompat="@drawable/twotone_person_24" />
 
-                <ImageView
+                <eu.faircode.email.FixedImageView
                     android:id="@+id/ivBlue"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
@@ -1327,6 +1349,29 @@
                     app:layout_constraintTop_toBottomOf="@id/swOverviewMode" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swOverrideWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_override_width"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvOverViewModeHint"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvOverrideWidthHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_override_width_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swOverrideWidth" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swContrast"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1334,7 +1379,7 @@
                     android:text="@string/title_advanced_contrast"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvOverViewModeHint"
+                    app:layout_constraintTop_toBottomOf="@id/tvOverrideWidthHint"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat

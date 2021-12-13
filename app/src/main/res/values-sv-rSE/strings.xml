@@ -4,7 +4,6 @@
     <string name="app_changelog">Ändringslogg</string>
     <string name="app_welcome">FairEmail är en e-postapp baserad på öppen källkod som fokuserar på integritet och säkerhet. Av denna anledning kan vissa funktioner fungera annorlunda än vad du är van vid.</string>
     <string name="app_limitations">Till exempel omformas meddelanden som standard för att ta bort osäkra element och för att förbättra läsbarheten. Länkar måste även bekräftas innan de öppnas. Båda funktionerna kan inaktiveras om så önskas.</string>
-    <string name="app_crash">FairEmail stöds inte på den här enheten eftersom buggar i Android orsakar kraschar</string>
     <string name="app_exit">Tryck \"tillbaka\" igen för att avsluta</string>
     <string name="app_cake">Otillräckligt lagringsutrymme kvar</string>
     <string name="app_updated">Senast uppdaterad: %1$s</string>
@@ -287,6 +286,7 @@
     <string name="title_advanced_kept_removed">Kontrollera om gamla meddelanden har tagits bort från servern</string>
     <string name="title_advanced_gmail_thread">Använd Gmails stil för gruppering av meddelande på Gmail-konton</string>
     <string name="title_advanced_sync_folders">Synkronisera mapplistan</string>
+    <string name="title_advanced_sync_folders_poll">Synkronisera mapplistan aktivt</string>
     <string name="title_advanced_sync_shared_folders">Synkronisera delade mapplistor</string>
     <string name="title_advanced_subscriptions">Hantera mapprenumerationer</string>
     <string name="title_advanced_check_authentication">Kontrollera meddelandeautentisering</string>
@@ -364,6 +364,7 @@
     <string name="title_advanced_cards_beige">Använd beige bakgrund när du använder kortstil (endast ljusa teman)</string>
     <string name="title_advanced_tabular_background">Använd kortfärg som bakgrundsfärg när du använder tabulär stil</string>
     <string name="title_advanced_cards_shadow">Använd skugga för olästa meddelanden när du använder kort-stil</string>
+    <string name="title_advanced_cards_shadow_highlight">Använd markeringsfärg istället för accentfärg</string>
     <string name="title_advanced_date_header">Gruppera efter datum</string>
     <string name="title_advanced_date_fixed">Visa fast datumrubrik högst upp</string>
     <string name="title_advanced_date_bold">Visa datum i fetstil</string>
@@ -372,6 +373,7 @@
     <string name="title_advanced_indentation">Vänster/höger indrag mottaget/skickade meddelanden i konversationer</string>
     <string name="title_advanced_highlight_unread">Markera olästa meddelanden</string>
     <string name="title_advanced_color_stripe">Visa färgrand</string>
+    <string name="title_advanced_color_stripe_wide">Använd bred färgrand</string>
     <string name="title_advanced_avatars">Visa kontaktfoton</string>
     <string name="title_advanced_gravatars">Visa Gravatars</string>
     <string name="title_advanced_bimi_unverified">Overifierad avsändare</string>
@@ -409,6 +411,7 @@
     <string name="title_advanced_thumbnails">Visa miniatyrbilder efter meddelandetexten</string>
     <string name="title_advanced_message_text_zoom2">Standard meddelandetext zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zooma originalmeddelanden för att passa skärmen</string>
+    <string name="title_advanced_override_width">Inaktivera fasta bredder i ursprungliga meddelanden</string>
     <string name="title_advanced_contrast">Använd hög kontrast för meddelandetext</string>
     <string name="title_advanced_monospaced">Använd monospaced typsnitt för meddelandetext som standard</string>
     <string name="title_advanced_monospaced_pre">Använd monospaced typsnitt till förformaterad text</string>
@@ -481,6 +484,7 @@
     <string name="title_advanced_notify_preview_only">Visa endast aviseringar med förhandsvisningar</string>
     <string name="title_advanced_notify_actions">Aviseringsåtgärd</string>
     <string name="title_advanced_notify_action_trash">Papperskorg</string>
+    <string name="title_advanced_notify_action_delete">Ta bort</string>
     <string name="title_advanced_notify_action_junk">Skräppost</string>
     <string name="title_advanced_notify_action_archive">Arkiv</string>
     <string name="title_advanced_notify_action_move">Flytta</string>
@@ -580,6 +584,7 @@
     <string name="title_advanced_sync_kept_hint">Detta kommer att överföra extra data och förbruka extra batterikraft, speciellt om många meddelanden lagras på enheten</string>
     <string name="title_advanced_gmail_thread_hint">Detta gäller endast för nyligen mottagna meddelanden och kan bryta befintliga grupper</string>
     <string name="title_advanced_sync_folders_hint">Inaktivering av detta kommer att minska data och batterianvändning något, men kommer att inaktivera uppdatering av listan över mappar också</string>
+    <string name="title_advanced_poll_folders_hint">Synkronisera mapplistan periodiskt utöver när du har anslutit till ett konto</string>
     <string name="title_advanced_check_authentication_hint">Detta kommer att kontrollera resultaten av DKIM, SPF och DMARC-autentisering som utförs av e-postservern</string>
     <string name="title_advanced_check_reply_hint">Detta kommer att kontrollera om domännamnet för avsändaren och svarsadressen är samma</string>
     <string name="title_advanced_lookup_mx_hint">Detta kommer att kontrollera om DNS MX-poster finns</string>
@@ -614,6 +619,7 @@
     <string name="title_advanced_preview_lines_hint">Max %s tecken totalt</string>
     <string name="title_advanced_preview_issue">Scrollningen kan vara långsam på grund av en bugg i vissa Android-versioner när antalet rader är mer än en</string>
     <string name="title_advanced_overview_mode_hint">Detta kan resultera i mycket små typsnitt</string>
+    <string name="title_advanced_override_width_hint">Detta kan göra meddelanden smalare, men också att de visas konstigt</string>
     <string name="title_advanced_placeholders_hint">Detta gäller endast omformaterade meddelanden</string>
     <string name="title_advanced_inline_hint">Infogade bilder är bilder som ingår i meddelandet</string>
     <string name="title_advanced_parse_classes_hint">Detta kommer att visa meddelanden mer korrekt, men möjligen med en fördröjning</string>
@@ -973,6 +979,9 @@
     <string name="title_truncated">Meddelandet är för stort för att visas helt</string>
     <string name="title_insufficient_memory">Meddelande för stort för tillgängligt minne (%1$d)</string>
     <string name="title_show_full">Visa hela meddelandet</string>
+    <string name="title_fullscreen">Visa i helskärmsläge</string>
+    <string name="title_fit_width">Anpassa till bredd</string>
+    <string name="title_disable_widths">Inaktivera bredder</string>
     <string name="title_unused_inline">Infogade bilder som är oanvända kommer att tas bort vid sändning</string>
     <string name="title_accross_remark">Meddelanden flyttade över konton kommer att hämtas igen och orsakar extra dataanvändning</string>
     <string name="title_raw_saved">Rent meddelande sparat</string>
@@ -1268,6 +1277,8 @@
     <string name="title_rule_subject">Ämnet innehåller</string>
     <string name="title_rule_attachments">Har bilagor</string>
     <string name="title_rule_header">Sidhuvud innehåller</string>
+    <string name="title_rule_body">Texten innehåller</string>
+    <string name="title_rule_body_remark">Användning av detta villkor kommer alltid att ladda ner meddelandetexten, vilket kan sakta ner synkroniseringen av meddelandelistan</string>
     <string name="title_rule_time_abs">Absolut tid (mottagen) mellan</string>
     <string name="title_rule_time_after">Mottagen efter</string>
     <string name="title_rule_time_before">Mottagits före</string>
@@ -1297,6 +1308,7 @@
     <string name="title_rule_applied">Berörda meddelanden: %1$d</string>
     <string name="title_rule_check">Kontrollera</string>
     <string name="title_rule_no_headers">Sidhuvudvillkor kan inte kontrolleras</string>
+    <string name="title_rule_no_body">Meddelandetexten är inte tillgänglig</string>
     <string name="title_rule_matched">Matchande meddelanden</string>
     <string name="title_rule_no_matches">Inga matchande meddelanden</string>
     <string name="title_rule_tts_ok">Installation okej</string>

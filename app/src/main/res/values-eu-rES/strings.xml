@@ -3,7 +3,6 @@
     <string name="app_search">FairEmail bilaketa</string>
     <string name="app_changelog">Aldaketen erregistroa</string>
     <string name="app_welcome">FairEmail kode irekiko email aplikazio bat da, pribatutasuna eta segurtasuna aintzat dituena. Horregatik ezaugarri batzuk ohi ez bezala funtzionatu dezakete.</string>
-    <string name="app_crash">FairEmail-ek ez du gailu honentzako euskarririk Android akatsek kraskatzea eragiten dutelako</string>
     <string name="app_exit">Jo \'atzera\' berriro irteteko</string>
     <string name="app_updated">Azken eguneratzea: %1$s</string>
     <string name="channel_service">Jaso</string>
@@ -322,6 +321,7 @@
     <string name="title_advanced_notify_preview_all">Aurreikusi testu osoa</string>
     <string name="title_advanced_notify_actions">Jakinarazpenen ekintzak</string>
     <string name="title_advanced_notify_action_trash">Zakarrontzia</string>
+    <string name="title_advanced_notify_action_delete">Ezabatu</string>
     <string name="title_advanced_notify_action_junk">Spama</string>
     <string name="title_advanced_notify_action_archive">Artxibatu</string>
     <string name="title_advanced_notify_action_move">Eraman</string>
@@ -670,6 +670,7 @@
     <string name="title_too_large">Mezua luzeegia da guztiz birformulatzeko</string>
     <string name="title_truncated">Mezua luzeegia da osorik erakusteko</string>
     <string name="title_show_full">Erakutsi mezu osoa</string>
+    <string name="title_fullscreen">Erakutsi pantaila osoan</string>
     <string name="title_unused_inline">Erabili gabeko txertatutako irudiak kenduko dira bidaltzean</string>
     <string name="title_accross_remark">Kontutik kontura eramandako mezuak berriro deskargatuko dira horrek dakarren datuen erabilera gehigarriarekin</string>
     <string name="title_raw_saved">Mezu gordina gorde da</string>

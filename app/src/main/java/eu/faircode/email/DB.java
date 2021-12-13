@@ -68,7 +68,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 216,
+        version = 217,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -121,13 +121,22 @@ public abstract class DB extends RoomDatabase {
     private static DB sInstance;
 
     static final int DEFAULT_QUERY_THREADS = 4; // AndroidX default thread count: 4
-    static final int DEFAULT_CACHE_SIZE = 7; // percentage of memory class
+    static final int DEFAULT_CACHE_SIZE = 10; // percentage of memory class
 
     private static final String DB_NAME = "fairemail";
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
 
     private static final String[] DB_TABLES = new String[]{
             "identity", "account", "folder", "message", "attachment", "operation", "contact", "certificate", "answer", "rule", "search", "log"};
+
+    private static final String[] DB_PRAGMAS = new String[]{
+            "synchronous", "journal_mode",
+            "wal_checkpoint", "wal_autocheckpoint", "journal_size_limit",
+            "page_count", "page_size", "max_page_count", "freelist_count",
+            "cache_size", "cache_spill",
+            "soft_heap_limit", "hard_heap_limit", "mmap_size",
+            "foreign_keys"
+    };
 
     @Override
     public void init(@NonNull DatabaseConfiguration configuration) {
@@ -414,13 +423,7 @@ public abstract class DB extends RoomDatabase {
                         }
 
                         // https://www.sqlite.org/pragma.html
-                        for (String pragma : new String[]{
-                                "synchronous", "journal_mode",
-                                "wal_checkpoint", "wal_autocheckpoint", "journal_size_limit",
-                                "page_count", "page_size", "max_page_count", "freelist_count",
-                                "cache_size", "cache_spill",
-                                "soft_heap_limit", "hard_heap_limit", "mmap_size",
-                                "foreign_keys"})
+                        for (String pragma : DB_PRAGMAS)
                             try (Cursor cursor = db.query("PRAGMA " + pragma + ";")) {
                                 Log.i("Get PRAGMA " + pragma + "=" + (cursor.moveToNext() ? cursor.getString(0) : "?"));
                             }
@@ -2197,6 +2200,12 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `message` ADD COLUMN `infrastructure` TEXT");
+                    }
+                }).addMigrations(new Migration(216, 217) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `folder` ADD COLUMN `last_sync_foreground` INTEGER");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

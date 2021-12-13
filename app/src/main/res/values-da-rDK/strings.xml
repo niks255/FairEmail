@@ -4,7 +4,6 @@
     <string name="app_changelog">Ændringslog</string>
     <string name="app_welcome">FairEmail er en open source e-mail app med fokus på privatliv og sikkerhed. Derfor vil visse funktioner muligvis fungere anderledes, end hvad du er vant til.</string>
     <string name="app_limitations">F.eks. omformateres beskeder som standard for at fjerne usikre elementer samt forbedre læsbarheden, og åbning af links skal sikkerhedsbekræftes. Begge funktioner kan om ønsket deaktiveres.</string>
-    <string name="app_crash">FairEmail er ikke understøttet på denne enhed, da fejl i Android forårsager nedbrud</string>
     <string name="app_exit">Tryk \'Tilbage\' igen for at afslutte</string>
     <string name="app_cake">Utilstrækkelig tilgængelig lagerplads</string>
     <string name="app_updated">Senest opdateret: %1$s</string>
@@ -289,6 +288,7 @@
     <string name="title_advanced_kept_removed">Tjek, om gamle beskeder er fjernet fra serveren</string>
     <string name="title_advanced_gmail_thread">Gmail- beskedgrupperingsstil for Gmail-konti</string>
     <string name="title_advanced_sync_folders">Synkronisér mappeliste</string>
+    <string name="title_advanced_sync_folders_poll">Synk aktivt mappeliste</string>
     <string name="title_advanced_sync_shared_folders">Synkronisér delte mappelister</string>
     <string name="title_advanced_subscriptions">Håndér mappeabonnementer</string>
     <string name="title_advanced_check_authentication">Tjek beskedgodkendelse</string>
@@ -364,6 +364,7 @@
     <string name="title_advanced_cards">Brug kortstil i stedet for tabelform</string>
     <string name="title_advanced_cards_beige">Brug beige baggrund ifm. kortstil (kun lyse temaer)</string>
     <string name="title_advanced_tabular_background">Brug kortfarve som baggrundsfarve ifm. tabelform</string>
+    <string name="title_advanced_cards_shadow_highlight">Brug fremhævningsfarve i stedet for accentfarve</string>
     <string name="title_advanced_date_header">Gruppér efter dato</string>
     <string name="title_advanced_date_fixed">Vis fast datohoved øverst</string>
     <string name="title_advanced_date_bold">Vis dato med fed</string>
@@ -372,6 +373,7 @@
     <string name="title_advanced_indentation">Venstre-/-højreindryk modtagne/sendte beskeder i samtaler</string>
     <string name="title_advanced_highlight_unread">Fremhæv ulæste beskeder</string>
     <string name="title_advanced_color_stripe">Vis farvestripe</string>
+    <string name="title_advanced_color_stripe_wide">Benyt bred farvestribe</string>
     <string name="title_advanced_avatars">Vis kontaktfotos</string>
     <string name="title_advanced_gravatars">Vis Gravatarer</string>
     <string name="title_advanced_bimi_unverified">Ubekræftet afsender</string>
@@ -409,6 +411,7 @@
     <string name="title_advanced_thumbnails">Vis billedminiaturer efter beskedteksten</string>
     <string name="title_advanced_message_text_zoom2">Standard beskedtekstzoom %1$s%%</string>
     <string name="title_advanced_overview_mode">Zoom originale beskeder for skærmtilpasning</string>
+    <string name="title_advanced_override_width">Deaktivér faste bredder i oprindelige beskeder</string>
     <string name="title_advanced_contrast">Benyt høj kontrast til beskedtekst</string>
     <string name="title_advanced_monospaced">Benyt som standard monospatieret skrifttype til beskedtekst</string>
     <string name="title_advanced_monospaced_pre">Benyt monospatieret skrifttype til præformateret tekst</string>
@@ -481,6 +484,7 @@
     <string name="title_advanced_notify_preview_only">Vis kun notifikationer med en forhåndsvisningstekst</string>
     <string name="title_advanced_notify_actions">Notifikationshandlinger</string>
     <string name="title_advanced_notify_action_trash">Papirkurv</string>
+    <string name="title_advanced_notify_action_delete">Slet</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Arkiv</string>
     <string name="title_advanced_notify_action_move">Flyt</string>
@@ -579,6 +583,7 @@
     <string name="title_advanced_sync_kept_hint">Dette vil overføre ekstra data og forbruge ekstra strøm, især hvis der er mange beskeder lagret på enheden</string>
     <string name="title_advanced_gmail_thread_hint">Dette gælder kun for nyligt modtagne beskeder og kan ødelægge eksisterende grupper</string>
     <string name="title_advanced_sync_folders_hint">Deaktivering af dette reducerer data- og strømforbruget noget, men deaktiverer også mappelisteopdatering</string>
+    <string name="title_advanced_poll_folders_hint">Synk periodisk mappelisten ud over efter kontotilslutning</string>
     <string name="title_advanced_check_authentication_hint">Dette vil tjekke resultaterne af DKIM-, SPF- og DMARC-godkendelser udført af e-mailserveren</string>
     <string name="title_advanced_lookup_mx_hint">Dette tjekker, om der findes DNS MX-poster</string>
     <string name="title_advanced_sync_delay_hint">Dette vil forøge beskedsynkroniseringstiden</string>
@@ -611,6 +616,7 @@
     <string name="title_advanced_preview_lines_hint">Maks. %s tegn i alt</string>
     <string name="title_advanced_preview_issue">Rulning kan, grundet en fejl i visse Android-versioner, være langsom, når antallet af linjer er flere end én</string>
     <string name="title_advanced_overview_mode_hint">Dette kan resultere i meget små skrifttyper</string>
+    <string name="title_advanced_override_width_hint">Dette gør ikke blot beskeder smallere, men give dem også et mærkeligt-udseende</string>
     <string name="title_advanced_placeholders_hint">Dette gælder kun omformaterede beskeder</string>
     <string name="title_advanced_inline_hint">Inline-billeder er billeder, som er inkluderet i beskeden</string>
     <string name="title_advanced_parse_classes_hint">Dette viser beskeder mere korrekt, men muligvis med en forsinkelse</string>
@@ -968,6 +974,9 @@
     <string name="title_truncated">Besked for stor til fuldstændig visning</string>
     <string name="title_insufficient_memory">Besked for stor ift. tilgængelige hukommelse (%1$d)</string>
     <string name="title_show_full">Vis fuld besked</string>
+    <string name="title_fullscreen">Vis fuldskærm</string>
+    <string name="title_fit_width">Tilpas bredde</string>
+    <string name="title_disable_widths">Deaktivér bredder</string>
     <string name="title_unused_inline">Ubrugte inline-billeder fjernes ved afsendelsen</string>
     <string name="title_accross_remark">Beskeder flyttet mellem konti gen-downloades, hvilket betyder ekstra dataforbrug</string>
     <string name="title_raw_saved">Besked i råformat gemt</string>
@@ -1262,6 +1271,8 @@
     <string name="title_rule_subject">Emne indeholder</string>
     <string name="title_rule_attachments">Har vedhæftninger</string>
     <string name="title_rule_header">Overskrift indeholder</string>
+    <string name="title_rule_body">Tekst indeholder</string>
+    <string name="title_rule_body_remark">Brug af denne betingelse vil altid downloade beskedteksten, hvilket kan forsinke synk af beskedlisten</string>
     <string name="title_rule_time_abs">Absolut tid (modtaget) mellem</string>
     <string name="title_rule_time_after">Modtaget efter</string>
     <string name="title_rule_time_before">Modtaget før</string>
@@ -1291,6 +1302,7 @@
     <string name="title_rule_applied">Berørte beskeder: %1$d</string>
     <string name="title_rule_check">Tjek</string>
     <string name="title_rule_no_headers">Overskriftsbetingelser kan ikke tjekkes</string>
+    <string name="title_rule_no_body">Beskedtekst utilgængelig</string>
     <string name="title_rule_matched">Matchende beskeder</string>
     <string name="title_rule_no_matches">Ingen matchende beskeder</string>
     <string name="title_rule_tts_ok">Opsætning OK</string>

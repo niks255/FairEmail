@@ -4,7 +4,8 @@
     <string name="app_changelog">Historia zmian</string>
     <string name="app_welcome">FairEmail to aplikacja e-mail o otwartym kodzie źródłowym, koncentrująca się na prywatności i bezpieczeństwie. Z tego powodu niektóre funkcje mogą działać inaczej niż to, do czego jesteś przyzwyczajony.</string>
     <string name="app_limitations">Na przykład wiadomości są domyślnie formatowane tak, aby usunąć niebezpieczne elementy i poprawić czytelność, a otwieranie linków musi zostać potwierdzone ze względów bezpieczeństwa. W razie potrzeby można to wyłączyć w opcjach.</string>
-    <string name="app_crash">FairEmail nie jest obsługiwany na tym urządzeniu, ponieważ błędy w Androidzie powodują awarie</string>
+    <string name="app_unsupported">Błędy w wersji Androida tego konkretnego urządzenia powodują awarie</string>
+    <string name="app_continue">Kontynuuj mimo to</string>
     <string name="app_exit">Ponownie \'wstecz\', aby wyjść</string>
     <string name="app_cake">Za mało miejsca w pamięci</string>
     <string name="app_updated">Ostatnia aktualizacja: %1$s</string>
@@ -310,6 +311,7 @@
     <string name="title_advanced_kept_removed">Sprawdź, czy stare wiadomości zostały usunięte z serwera</string>
     <string name="title_advanced_gmail_thread">Styl grupowania wiadomości Gmail dla kont Gmail</string>
     <string name="title_advanced_sync_folders">Synchronizuj listę folderów</string>
+    <string name="title_advanced_sync_folders_poll">Aktywnie synchronizuj listę folderów</string>
     <string name="title_advanced_sync_shared_folders">Synchronizuj listy udostępnionych folderów</string>
     <string name="title_advanced_subscriptions">Zarządzaj subskrypcjami folderów</string>
     <string name="title_advanced_check_authentication">Sprawdź uwierzytelnianie wiadomości</string>
@@ -387,6 +389,7 @@
     <string name="title_advanced_cards_beige">Użyj beżowego tła podczas używania stylu karty (tylko jasne motywy)</string>
     <string name="title_advanced_tabular_background">Użyj koloru karty jako koloru tła podczas korzystania ze stylu tabelarycznego</string>
     <string name="title_advanced_cards_shadow">Użyj cienia do nieprzeczytanych wiadomości, jeśli używasz stylu karty</string>
+    <string name="title_advanced_cards_shadow_highlight">Użyj koloru podświetlenia zamiast koloru akcentu</string>
     <string name="title_advanced_date_header">Grupuj według daty</string>
     <string name="title_advanced_date_fixed">Pokaż stały nagłówek daty na górze</string>
     <string name="title_advanced_date_bold">Pokaż datę pogrubioną</string>
@@ -395,6 +398,7 @@
     <string name="title_advanced_indentation">Otrzymane/wysłane wiadomości z lewej/prawej strony wątków</string>
     <string name="title_advanced_highlight_unread">Podświetl nieprzeczytane wiadomości</string>
     <string name="title_advanced_color_stripe">Pokaż kolorowy pasek</string>
+    <string name="title_advanced_color_stripe_wide">Użyj szerokiego kolorowego paska</string>
     <string name="title_advanced_avatars">Pokaż zdjęcia kontaktu</string>
     <string name="title_advanced_gravatars">Pokaż Gravatary</string>
     <string name="title_advanced_bimi_unverified">Niezweryfikowany nadawca</string>
@@ -432,6 +436,7 @@
     <string name="title_advanced_thumbnails">Pokaż miniatury obrazów po tekście wiadomości</string>
     <string name="title_advanced_message_text_zoom2">Domyślne powiększenie tekstu wiadomości: %1$s %%</string>
     <string name="title_advanced_overview_mode">Powiększ oryginalne wiadomości, aby dopasować je do ekranu</string>
+    <string name="title_advanced_override_width">Wyłącz stałe szerokości w oryginalnych wiadomościach</string>
     <string name="title_advanced_contrast">Użyj wysokiego kontrastu dla tekstu wiadomości</string>
     <string name="title_advanced_monospaced">Użyj czcionki o stałej szerokości dla tekstu wiadomości</string>
     <string name="title_advanced_monospaced_pre">Użyj czcionki o stałej szerokości dla tekstu sformatowanego</string>
@@ -504,6 +509,7 @@
     <string name="title_advanced_notify_preview_only">Pokaż powiadomienia tylko z podglądem tekstu</string>
     <string name="title_advanced_notify_actions">Akcje powiadomień</string>
     <string name="title_advanced_notify_action_trash">Kosz</string>
+    <string name="title_advanced_notify_action_delete">Usuń</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archiwum</string>
     <string name="title_advanced_notify_action_move">Przenieś</string>
@@ -603,6 +609,7 @@
     <string name="title_advanced_sync_kept_hint">Spowoduje to użycie dodatkowych danych i zużycie dodatkowej energii baterii, zwłaszcza jeśli w urządzeniu przechowywanych jest wiele wiadomości</string>
     <string name="title_advanced_gmail_thread_hint">Dotyczy to tylko nowo odebranych wiadomości i może uszkodzić istniejące grupy</string>
     <string name="title_advanced_sync_folders_hint">Wyłączenie tej opcji nieco zmniejszy zużycie danych i baterii, ale wyłączy także aktualizację listy folderów</string>
+    <string name="title_advanced_poll_folders_hint">Okresowo synchronizuj listę folderów po połączeniu z kontem</string>
     <string name="title_advanced_check_authentication_hint">Spowoduje to sprawdzenie wyników uwierzytelniania DKIM, SPF i DMARC w sposób wykonywany przez serwer poczty elektronicznej</string>
     <string name="title_advanced_check_reply_hint">Spowoduje to sprawdzenie, czy nazwa domeny nadawcy i adres odpowiedzi są takie same</string>
     <string name="title_advanced_lookup_mx_hint">To sprawdzi, czy istnieją rekordy MX DNS</string>
@@ -637,6 +644,7 @@
     <string name="title_advanced_preview_lines_hint">Maksymalnie %s znaków</string>
     <string name="title_advanced_preview_issue">Przewijanie może być powolne z powodu błędu w niektórych wersjach Androida, gdy liczba linii jest większa niż jedna</string>
     <string name="title_advanced_overview_mode_hint">Może to skutkować bardzo małymi czcionkami</string>
+    <string name="title_advanced_override_width_hint">Może to sprawić, że wiadomości będą węższe, ale też dziwnie wyglądające</string>
     <string name="title_advanced_placeholders_hint">Dotyczy to tylko przeformatowanych wiadomości</string>
     <string name="title_advanced_inline_hint">Obrazy wstawione są obrazami zawartymi w wiadomości</string>
     <string name="title_advanced_parse_classes_hint">Spowoduje to poprawniejsze wyświetlanie wiadomości, ale z możliwym opóźnieniem</string>
@@ -996,6 +1004,9 @@
     <string name="title_truncated">Wiadomość jest za duża, aby wyświetlić ją w całości</string>
     <string name="title_insufficient_memory">Wiadomość jest zbyt duża dla dostępnej pamięci (%1$d)</string>
     <string name="title_show_full">Pokaż pełną wiadomość</string>
+    <string name="title_fullscreen">Pokaż na pełnym ekranie</string>
+    <string name="title_fit_width">Dopasuj szerokość</string>
+    <string name="title_disable_widths">Wyłącz szerokości</string>
     <string name="title_unused_inline">Niewykorzystane wstawione obrazy zostaną usunięte podczas wysyłania</string>
     <string name="title_accross_remark">Wiadomości przenoszone pomiędzy kontami zostaną pobrane ponownie, wpływając na dodatkowe użycie danych</string>
     <string name="title_raw_saved">Zapisano nieprzetworzoną wiadomość</string>
@@ -1291,6 +1302,8 @@
     <string name="title_rule_subject">Tytuł zawiera</string>
     <string name="title_rule_attachments">Zawiera załącznik</string>
     <string name="title_rule_header">Nagłówek zawiera</string>
+    <string name="title_rule_body">Tekst zawiera</string>
+    <string name="title_rule_body_remark">Użycie tego warunku będzie zawsze pobierało tekst wiadomości, co może spowolnić synchronizację listy wiadomości</string>
     <string name="title_rule_time_abs">Całkowity czas (otrzymany) między</string>
     <string name="title_rule_time_after">Otrzymane po</string>
     <string name="title_rule_time_before">Otrzymane przed</string>
@@ -1320,6 +1333,7 @@
     <string name="title_rule_applied">Problematycznych wiadomości: %1$d</string>
     <string name="title_rule_check">Sprawdź</string>
     <string name="title_rule_no_headers">Nie można sprawdzić stanów nagłówka</string>
+    <string name="title_rule_no_body">Tekst wiadomości jest niedostępny</string>
     <string name="title_rule_matched">Pasujące wiadomości</string>
     <string name="title_rule_no_matches">Brak pasujących wiadomości</string>
     <string name="title_rule_tts_ok">Ustawienia poprawne</string>

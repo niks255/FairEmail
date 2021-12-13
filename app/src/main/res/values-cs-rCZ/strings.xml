@@ -4,7 +4,6 @@
     <string name="app_changelog">Přehled změn</string>
     <string name="app_welcome">FairEmail je e-mailový klient s otevřeným zdrojovým kódem zaměřený na soukromí a bezpečnost. Z tohoto důvodu se některé funkce mohou chovat odlišně než jste zvyklí.</string>
     <string name="app_limitations">Například, zprávy jsou ve výchozím nastavení přeformátovány, aby byly odstraněny nezabezpečené prvky a zlepšila se čitelnost, a otevírání odkazů je pro bezpečnost potřeba potvrdit. Oboje lze v případě potřeby vypnout.</string>
-    <string name="app_crash">FairEmail není na tomto zařízení podporován, protože chyby v Androidu způsobují jeho pády</string>
     <string name="app_exit">Znovu „zpět“ pro ukončení</string>
     <string name="app_cake">Nedostatek místa v úložišti</string>
     <string name="app_updated">Poslední aktualizace: %1$s</string>
@@ -502,6 +501,7 @@
     <string name="title_advanced_notify_preview_only">Zobrazit pouze oznámení s náhledem textu</string>
     <string name="title_advanced_notify_actions">Akce oznámení</string>
     <string name="title_advanced_notify_action_trash">Koš</string>
+    <string name="title_advanced_notify_action_delete">Odstranit</string>
     <string name="title_advanced_notify_action_junk">Nevyžádané</string>
     <string name="title_advanced_notify_action_archive">Archiv</string>
     <string name="title_advanced_notify_action_move">Přesunout</string>
@@ -993,6 +993,7 @@
     <string name="title_truncated">Zpráva je příliš velká pro úplné zobrazení</string>
     <string name="title_insufficient_memory">Zpráva je příliš velká na dostupnou paměť (%1$d)</string>
     <string name="title_show_full">Zobrazit celou zprávu</string>
+    <string name="title_fullscreen">Zobrazit na celou obrazovku</string>
     <string name="title_unused_inline">Nepoužité vložené obrázky budou při odeslání odebrány</string>
     <string name="title_accross_remark">Zprávy přesunuté napříč účty budou opětovně staženy, což povede ke spotřebě dat navíc</string>
     <string name="title_raw_saved">Zdrojová zpráva uložena</string>
@@ -1288,6 +1289,7 @@
     <string name="title_rule_subject">Předmět obsahuje</string>
     <string name="title_rule_attachments">Má přílohy</string>
     <string name="title_rule_header">Hlavička obsahuje</string>
+    <string name="title_rule_body">Text obsahuje</string>
     <string name="title_rule_time_abs">Absolutní čas (přijatý) mezi</string>
     <string name="title_rule_time_after">Přijato po</string>
     <string name="title_rule_time_before">Přijato před</string>
@@ -1317,6 +1319,7 @@
     <string name="title_rule_applied">Ovlivněné zprávy: %1$d</string>
     <string name="title_rule_check">Zkontrolovat</string>
     <string name="title_rule_no_headers">Podmínky hlavičky nelze zkontrolovat</string>
+    <string name="title_rule_no_body">Text zprávy není dostupný</string>
     <string name="title_rule_matched">Odpovídající zprávy</string>
     <string name="title_rule_no_matches">Žádné odpovídající zprávy</string>
     <string name="title_rule_tts_ok">Nastavení v pořádku</string>

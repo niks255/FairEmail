@@ -4,7 +4,6 @@
     <string name="app_changelog">Muutosloki</string>
     <string name="app_welcome">FairEmail on avoimen lähdekoodin sähköpostiohjelma, joka on keskittynyt yksityisyyteen ja turvallisuuteen. Tästä syystä jotkin ominaisuudet saattavat toimia eri tavalla kuin mihin olet tottunut.</string>
     <string name="app_limitations">Esimerkiksi viestit oletusarvoisesti uudelleenmuotoillaan turvattomien elementtien poistamiseksi ja luettavuuden parantamiseksi, ja linkkien avaaminen on vahvistettava turvallisuuden vuoksi. Molemmat ominaisuudet voidaan haluttaessa poistaa käytöstä.</string>
-    <string name="app_crash">FairEmailia ei tueta tässä laitteessa, koska bugit Androidissa aiheuttavat kaatumisia</string>
     <string name="app_exit">Poistu menemällä \'takaisin\' uudelleen</string>
     <string name="app_cake">Liian vähän tallennustilaa jäljellä</string>
     <string name="app_updated">Päivitetty viimeksi: %1$s</string>
@@ -481,6 +480,7 @@
     <string name="title_advanced_notify_preview_only">Näytä ilmoitukset vain esikatselutekstin kanssa</string>
     <string name="title_advanced_notify_actions">Ilmoituksen toiminnot</string>
     <string name="title_advanced_notify_action_trash">Roskakoriin</string>
+    <string name="title_advanced_notify_action_delete">Poista</string>
     <string name="title_advanced_notify_action_junk">Roskapostiin</string>
     <string name="title_advanced_notify_action_archive">Arkistoi</string>
     <string name="title_advanced_notify_action_move">Siirrä</string>
@@ -970,6 +970,7 @@
     <string name="title_truncated">Viesti liian suuri näytettäväksi kokonaisuudessaan</string>
     <string name="title_insufficient_memory">Viesti on liian suuri mahtuakseen käytettävissä olevaan muistiin (%1$d)</string>
     <string name="title_show_full">Näytä koko viesti</string>
+    <string name="title_fullscreen">Näytä koko näytöllä</string>
     <string name="title_unused_inline">Käyttämättömät upotetut kuvat poistetaan lähetettäessä</string>
     <string name="title_accross_remark">Tilien välillä siirretyt viestit ladataan uudelleen, mikä lisää datan käyttöä</string>
     <string name="title_raw_saved">Raakaviesti tallennettu</string>

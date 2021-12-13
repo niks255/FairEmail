@@ -151,7 +151,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "download_headers", "download_eml",
             "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", "ssl_harden", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "empty_pool", "idle_done", // force reconnect
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", // force reconnect
+            "keep_alive_poll", "empty_pool", "idle_done", // force reconnect
             "exact_alarms" // force schedule
     ));
 
@@ -425,6 +426,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                             for (EntityFolder folder : db.folder().getFolders(accountNetworkState.accountState.id, false, false)) {
                                 db.folder().setFolderState(folder.id, null);
+                                if (db.operation().getOperationCount(folder.id, EntityOperation.SYNC) == 0)
+                                    db.folder().setFolderSyncState(folder.id, null);
                                 db.folder().setFolderPollCount(folder.id, 0);
                             }
 
@@ -1339,6 +1342,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 // Debug
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 boolean subscriptions = prefs.getBoolean("subscriptions", false);
+                boolean keep_alive_poll = prefs.getBoolean("keep_alive_poll", false);
                 boolean empty_pool = prefs.getBoolean("empty_pool", true);
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
@@ -1531,8 +1535,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     });
 
                     // Update folder list
-                    if (account.protocol == EntityAccount.TYPE_IMAP)
-                        Core.onSynchronizeFolders(this, account, iservice.getStore(), state, force && !forced);
+                    Core.onSynchronizeFolders(this,
+                            account, iservice.getStore(), state,
+                            false, force && !forced);
 
                     // Open synchronizing folders
                     List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
@@ -1757,6 +1762,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         }
                     };
 
+                    final long serial = state.getSerial();
+
                     Log.i(account.name + " observing operations");
                     getMainHandler().post(new Runnable() {
                         @Override
@@ -1845,10 +1852,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                 ops = partitions.get(key).size();
                                                 Log.i(account.name + "/" + folder.name +
                                                         " queuing partition=" + key +
+                                                        " serial=" + serial +
                                                         " operations=" + ops);
                                             }
-
-                                            final long serial = state.getSerial();
 
                                             Map<String, String> crumb = new HashMap<>();
                                             crumb.put("account", folder.account == null ? null : Long.toString(folder.account));
@@ -1944,7 +1950,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                     folder.name + " process " + Log.formatThrowable(ex, false));
                                                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                                                             if (!(ex instanceof FolderNotFoundException))
-                                                                state.error(new OperationCanceledException("Process"));
+                                                                state.error(new Core.OperationCanceledExceptionEx("Process", ex));
                                                         } finally {
                                                             if (shouldClose) {
                                                                 if (ifolder != null && ifolder.isOpen()) {
@@ -1995,6 +2001,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 throw new StoreClosedException(iservice.getStore(), "Unrecoverable", cause);
                             }
 
+                            // Check token expiration
+                            iservice.check();
+
                             // Sends store NOOP
                             if (EmailService.SEPARATE_STORE_CONNECTION) {
                                 EntityLog.log(this, EntityLog.Type.Account,
@@ -2021,6 +2030,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             // Sends folder NOOP
                                             if (!mapFolders.get(folder).isOpen())
                                                 throw new StoreClosedException(iservice.getStore(), "NOOP " + folder.name);
+                                            if (keep_alive_poll)
+                                                EntityOperation.poll(this, folder.id);
                                         } else {
                                             if (folder.poll_count == 0) {
                                                 EntityLog.log(this, folder.name + " queue sync poll");
@@ -2032,6 +2043,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                     " poll count=" + folder.poll_count +
                                                     " factor=" + folder.poll_factor);
                                         }
+                                Core.onSynchronizeFolders(this,
+                                        account, iservice.getStore(), state,
+                                        true, false);
                             }
                         } catch (Throwable ex) {
                             if (tune) {
@@ -2122,6 +2136,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     Log.i(account.name + " done state=" + state);
                 } catch (Throwable ex) {
                     last_fail = ex;
+                    iservice.dump();
                     Log.e(account.name, ex);
                     EntityLog.log(this, EntityLog.Type.Account,
                             account.name + " connect " + Log.formatThrowable(ex, false));
