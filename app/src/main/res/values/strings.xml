@@ -351,6 +351,7 @@
     <string name="title_advanced_delete_unseen">Delete old unread messages</string>
     <string name="title_advanced_kept_removed">Check if old messages were removed from the server</string>
     <string name="title_advanced_gmail_thread">Gmail message grouping style for Gmail accounts</string>
+    <string name="title_advanced_subject_threading">Group messages by sender and subject</string>
     <string name="title_advanced_sync_folders">Synchronize folder list</string>
     <string name="title_advanced_sync_folders_poll">Actively synchronize folder list</string>
     <string name="title_advanced_sync_shared_folders">Synchronize shared folder lists</string>
@@ -429,6 +430,7 @@
     <string name="title_advanced_landscape">Landscape mode</string>
     <string name="title_advanced_two_row">Use two rows</string>
     <string name="title_advanced_two_col">Use two columns</string>
+    <string name="title_advanced_min_screen_size">Minimum screen size for splitting the screen</string>
     <string name="title_advanced_nav_options">Show navigation menu options</string>
     <string name="title_advanced_nav_pin">Pin navigation menu</string>
     <string name="title_advanced_nav_hide_title">Hide navigation menu options?</string>
@@ -714,6 +716,7 @@
     <string name="title_advanced_deleted_unseen">When disabled, unread messages are kept on the device forever</string>
     <string name="title_advanced_sync_kept_hint">This will transfer extra data and consume extra battery power, especially if a lot of messages are stored on the device</string>
     <string name="title_advanced_gmail_thread_hint">This only applies to newly received messages and can break existing groups</string>
+    <string name="title_advanced_subject_threading_hint">Only messages received in the last %1$d hours</string>
     <string name="title_advanced_sync_folders_hint">Disabling this will reduce data and battery usage somewhat, but will disable updating the list of folders too</string>
     <string name="title_advanced_poll_folders_hint">Periodically synchronize the folder list in addition to after connecting to an account</string>
     <string name="title_advanced_check_authentication_hint">This will check the results of DKIM, SPF and DMARC authentication as performed by the email server</string>
@@ -746,6 +749,7 @@
     <string name="title_advanced_date_hint">Messages are only grouped by date if they are sorted by time</string>
     <string name="title_advanced_navbar_colorize_hint">Whether this works depends on the Android version and variant</string>
     <string name="title_advanced_split_hint">This will split the screen into parts</string>
+    <string name="title_advanced_split_min_hint">This is a condition intended for foldable devices</string>
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
     <string name="title_advanced_highlight_hint">The accent color of the theme will be used for highlighting</string>
     <string name="title_advanced_gravatars_hint">There might be a privacy risk</string>
@@ -1052,6 +1056,8 @@
     <string name="title_importance_high">High</string>
     <string name="title_search_in_text">Search in text &#8230;</string>
     <string name="title_forward">Forward</string>
+    <string name="title_resend">Resend</string>
+    <string name="title_fetching_headers">Downloading message headers &#8230;</string>
     <string name="title_new_message">New message</string>
     <string name="title_editasnew">Edit as new</string>
     <string name="title_edit_notes">Edit local notes</string>
@@ -2141,6 +2147,13 @@
         <item>AES-128</item>
         <item>AES-192</item>
         <item>AES-256</item>
+    </string-array>
+
+    <string-array name="minScreenSizes">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Extra large</item>
     </string-array>
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>

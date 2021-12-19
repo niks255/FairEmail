@@ -98,7 +98,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -2740,6 +2739,7 @@ class Core {
                         if (message.spf == null && helper.getSPF())
                             message.spf = true;
                         message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
+                        message.smtp_from = helper.getMailFrom(authentication);
                         message.return_path = helper.getReturnPath();
                         message.submitter = helper.getSender();
                         message.from = helper.getFrom();
@@ -2796,7 +2796,11 @@ class Core {
                         if (message.avatar == null && notify_known && pro)
                             message.ui_ignored = true;
 
+                        message.from_domain = (message.checkFromDomain(context) == null);
+
+                        // No reply_domain
                         // No MX check
+                        // No blocklist
 
                         boolean needsHeaders = EntityRule.needsHeaders(rules);
                         List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
@@ -3705,6 +3709,7 @@ class Core {
             if (message.spf == null && helper.getSPF())
                 message.spf = true;
             message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
+            message.smtp_from = helper.getMailFrom(authentication);
             message.return_path = helper.getReturnPath();
             message.submitter = helper.getSender();
             message.from = helper.getFrom();
@@ -3778,6 +3783,8 @@ class Core {
             if (message.avatar == null && notify_known && pro)
                 message.ui_ignored = true;
 
+            message.from_domain = (message.checkFromDomain(context) == null);
+
             // For contact forms
             boolean self = false;
             if (identity != null && message.from != null)
@@ -3801,8 +3808,8 @@ class Core {
                     DnsHelper.checkMx(context, addresses);
                     message.mx = true;
                 } catch (UnknownHostException ex) {
+                    Log.w(ex);
                     message.mx = false;
-                    message.warning = ex.getMessage();
                 } catch (Throwable ex) {
                     Log.e(folder.name, ex);
                     message.warning = Log.formatThrowable(ex, false);

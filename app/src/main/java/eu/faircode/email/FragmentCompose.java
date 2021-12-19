@@ -245,6 +245,7 @@ public class FragmentCompose extends FragmentBase {
     private RecyclerView rvAttachment;
     private TextView tvNoInternetAttachments;
     private TextView tvDsn;
+    private TextView tvResend;
     private TextView tvPlainTextOnly;
     private EditTextCompose etBody;
     private TextView tvNoInternet;
@@ -367,6 +368,7 @@ public class FragmentCompose extends FragmentBase {
         rvAttachment = view.findViewById(R.id.rvAttachment);
         tvNoInternetAttachments = view.findViewById(R.id.tvNoInternetAttachments);
         tvDsn = view.findViewById(R.id.tvDsn);
+        tvResend = view.findViewById(R.id.tvResend);
         tvPlainTextOnly = view.findViewById(R.id.tvPlainTextOnly);
         etBody = view.findViewById(R.id.etBody);
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
@@ -941,6 +943,7 @@ public class FragmentCompose extends FragmentBase {
         etExtra.setHint("");
         tvDomain.setText(null);
         tvDsn.setVisibility(View.GONE);
+        tvResend.setVisibility(View.GONE);
         tvPlainTextOnly.setVisibility(View.GONE);
         etBody.setText(null);
 
@@ -4395,7 +4398,9 @@ public class FragmentCompose extends FragmentBase {
 
                     EntityLog.log(context, "Selected=" + selected.email);
 
-                    if (plain_only)
+                    if (plain_only &&
+                            !"resend".equals(action) &&
+                            !"editasnew".equals(action))
                         data.draft.plain_only = true;
 
                     if (encrypt_default || selected.encrypt_default)
@@ -4464,8 +4469,10 @@ public class FragmentCompose extends FragmentBase {
                         // - reply
                         // - reply_all
                         // - forward
+                        // - resend
                         // - editasnew
                         // - list
+                        // - dsn
                         // - receipt
                         // - participation
 
@@ -4561,6 +4568,10 @@ public class FragmentCompose extends FragmentBase {
                         } else if ("forward".equals(action)) {
                             data.draft.thread = data.draft.msgid; // new thread
                             data.draft.wasforwardedfrom = ref.msgid;
+                        } else if ("resend".equals(action)) {
+                            data.draft.resend = true;
+                            data.draft.thread = data.draft.msgid;
+                            data.draft.headers = ref.headers;
                         } else if ("editasnew".equals(action))
                             data.draft.thread = data.draft.msgid;
 
@@ -4591,6 +4602,8 @@ public class FragmentCompose extends FragmentBase {
                                     ref.language,
                                     alt_fwd ? R.string.title_subject_forward_alt : R.string.title_subject_forward,
                                     subject);
+                        } else if ("resend".equals(action)) {
+                            data.draft.subject = ref.subject;
                         } else if ("editasnew".equals(action)) {
                             if (ref.from != null && ref.from.length == 1) {
                                 String from = ((InternetAddress) ref.from[0]).getAddress();
@@ -4600,11 +4613,13 @@ public class FragmentCompose extends FragmentBase {
                                         break;
                                     }
                             }
+
                             data.draft.to = ref.to;
                             data.draft.cc = ref.cc;
                             data.draft.bcc = ref.bcc;
                             data.draft.subject = ref.subject;
-                            if (ref.content) // Edit-as-new
+
+                            if (ref.content)
                                 document = JsoupEx.parse(ref.getFile(context));
                         } else if ("list".equals(action)) {
                             data.draft.subject = ref.subject;
@@ -4693,8 +4708,20 @@ public class FragmentCompose extends FragmentBase {
                         else
                             data.draft.signature = false;
 
+                        if (ref.content && "resend".equals(action)) {
+                            document = JsoupEx.parse(ref.getFile(context));
+                            // Save original body
+                            Element div = document.body()
+                                    .tagName("div")
+                                    .attr("fairemail", "reference");
+                            Element body = document.createElement("body")
+                                    .appendChild(div);
+                            document.body().replaceWith(body);
+                        }
+
                         // Reply header
                         if (ref.content &&
+                                !"resend".equals(action) &&
                                 !"editasnew".equals(action) &&
                                 !("list".equals(action) && TextUtils.isEmpty(selected_text)) &&
                                 !"dsn".equals(action)) {
@@ -4902,8 +4929,9 @@ public class FragmentCompose extends FragmentBase {
 
                     if (ref != null &&
                             ("reply".equals(action) || "reply_all".equals(action) ||
-                                    "forward".equals(action) || "editasnew".equals(action))) {
-
+                                    "forward".equals(action) ||
+                                    "resend".equals(action) ||
+                                    "editasnew".equals(action))) {
                         List<String> cid = new ArrayList<>();
                         for (Element img : document.select("img")) {
                             String src = img.attr("src");
@@ -4915,8 +4943,8 @@ public class FragmentCompose extends FragmentBase {
                         List<EntityAttachment> attachments = db.attachment().getAttachments(ref.id);
                         for (EntityAttachment attachment : attachments)
                             if (!attachment.isEncryption() &&
-                                    ("forward".equals(action) || "editasnew".equals(action) ||
-                                            cid.contains(attachment.cid))) {
+                                    (cid.contains(attachment.cid) ||
+                                            !("reply".equals(action) || "reply_all".equals(action)))) {
                                 if (attachment.available) {
                                     File source = attachment.getFile(context);
 
@@ -4935,7 +4963,8 @@ public class FragmentCompose extends FragmentBase {
                                     File target = attachment.getFile(context);
                                     Helper.copy(source, target);
 
-                                    if (resize_reply && !"forward".equals(action))
+                                    if (resize_reply &&
+                                            ("reply".equals(action) || "reply_all".equals(action)))
                                         resizeAttachment(context, attachment, REDUCED_IMAGE_SIZE);
                                 } else
                                     args.putBoolean("incomplete", true);
@@ -5260,6 +5289,10 @@ public class FragmentCompose extends FragmentBase {
 
                         tvDsn.setVisibility(
                                 draft.dsn != null && !EntityMessage.DSN_NONE.equals(draft.dsn)
+                                        ? View.VISIBLE : View.GONE);
+
+                        tvResend.setVisibility(
+                                draft.headers != null && Boolean.TRUE.equals(draft.resend)
                                         ? View.VISIBLE : View.GONE);
 
                         tvPlainTextOnly.setVisibility(

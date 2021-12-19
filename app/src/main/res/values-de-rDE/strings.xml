@@ -74,8 +74,7 @@
     <string name="title_block">%1$s sperren</string>
     <string name="title_block_sender">Absender sperren</string>
     <string name="title_block_sender_domain">Domain „%1$s” sperren</string>
-    <string name="title_block_sender_hint">        Das Sperren eines Absenders ist eine kostenlose Funktion.
-        Das Sperren der Domain eines Absenders verwendet Filterregeln, welche nur in der Pro-Version verfügbar sind.
+    <string name="title_block_sender_hint">        Das Sperren eines Absenders ist eine kostenlose Funktion.        Das Sperren der Domain eines Absenders verwendet Filterregeln, welche nur in der Pro-Version verfügbar sind.
     </string>
     <string name="title_junk_filter">Lokalen Spam-Filter verwenden</string>
     <string name="title_junk_filter_hint">Das kann den Akkuverbrauch erhöhen und Nachrichten fälschlicherweise als Spam kennzeichnen</string>
@@ -260,8 +259,7 @@
     <string name="title_setup_reset_images">Bilder anzeigen</string>
     <string name="title_setup_reset_links">Links bestätigen</string>
     <string name="title_advanced_hint_title">Erweiterte Optionen</string>
-    <string name="title_advanced_hint_message">        Sie wechseln zu den erweiterten Optionen.
-        Alle Optionen haben allgemein verwendete Standardwerte, die nur geändert werden sollten, wenn Sie andere Einstellungen bevorzugen.
+    <string name="title_advanced_hint_message">        Sie wechseln zu den erweiterten Optionen.        Alle Optionen haben allgemein verwendete Standardwerte, die nur geändert werden sollten, wenn Sie andere Einstellungen bevorzugen.
     </string>
     <string name="title_advanced_hint_remark">Die Optionen sind nach Registerkarten kategorisiert, in Abschnitte unterteilt, nach Aussehen oder Verwendung geordnet und durchsuchbar.
     </string>
@@ -290,6 +288,7 @@
     <string name="title_advanced_delete_unseen">Alte ungelesene Nachrichten löschen</string>
     <string name="title_advanced_kept_removed">Überprüfen, ob alte Nachrichten vom Server entfernt wurden</string>
     <string name="title_advanced_gmail_thread">Die Nachrichten in Gmail-Konten im Stil von Gmail gruppieren</string>
+    <string name="title_advanced_subject_threading">Nachrichten nach Absender und Betreff gruppieren</string>
     <string name="title_advanced_sync_folders">Ordnerliste synchronisieren</string>
     <string name="title_advanced_sync_folders_poll">Ordnerliste aktiv synchronisieren</string>
     <string name="title_advanced_sync_shared_folders">Listen der freigegebenen Ordner synchronisieren</string>
@@ -358,6 +357,7 @@
     <string name="title_advanced_landscape">Querformat</string>
     <string name="title_advanced_two_row">Zwei Zeilen verwenden</string>
     <string name="title_advanced_two_col">Zwei Spalten verwenden</string>
+    <string name="title_advanced_min_screen_size">Minimale Bildschirmgröße zum Teilen des Bildschirms</string>
     <string name="title_advanced_nav_options">Navigationsmenü-Optionen anzeigen</string>
     <string name="title_advanced_nav_pin">Navigationsmenü anheften</string>
     <string name="title_advanced_nav_hide_title">Navigationsmenü-Optionen ausblenden?</string>
@@ -548,8 +548,7 @@
     <string name="title_advanced_import_key">Privaten Schlüssel importieren</string>
     <string name="title_advanced_manage_keys">Private Schlüssel verwalten</string>
     <string name="title_advanced_ca">Installierte CA-Zertifikate</string>
-    <string name="title_advanced_manage_keys_hint">        Hiermit öffnen Sie die Android-Sicherheitseinstellungen.
-        Schlüssel und Zertifikate sind in der Regel unter »Sicherheit &amp; Standort« ➜ »Verschlüsselung und Anmeldedaten« zu finden.
+    <string name="title_advanced_manage_keys_hint">        Hiermit öffnen Sie die Android-Sicherheitseinstellungen.        Schlüssel und Zertifikate sind in der Regel unter »Sicherheit &amp; Standort« ➜ »Verschlüsselung und Anmeldedaten« zu finden.
     </string>
     <string name="title_advanced_power_menu">Aktionen zum Android-Ein/Aus-Menü hinzufügen</string>
     <string name="title_advanced_external_search">Anderen Apps erlauben in Nachrichten zu suchen</string>
@@ -588,6 +587,7 @@
     <string name="title_advanced_deleted_unseen">Wenn deaktiviert, bleiben ungelesene Nachrichten dauerhaft auf dem Gerät erhalten</string>
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
     <string name="title_advanced_gmail_thread_hint">Dies gilt nur für neu empfangene Nachrichten und kann bestehende Gruppen zerbrechen</string>
+    <string name="title_advanced_subject_threading_hint">Nur Nachrichten, die in den letzten %1$d Stunden empfangen wurden</string>
     <string name="title_advanced_sync_folders_hint">Die Deaktivierung dieser Funktion verringert den Daten- und Akkuverbrauch etwas, deaktiviert aber auch die Aktualisierung der Ordnerliste.</string>
     <string name="title_advanced_poll_folders_hint">Synchronisiert die Ordnerliste regelmäßig und zusätzlich nach der Verbindung mit einem Konto</string>
     <string name="title_advanced_check_authentication_hint">Damit werden die Ergebnisse der DKIM-, SPF- und DMARC-Authentifizierung geprüft, wie sie vom E-Mail-Server durchgeführt werden</string>
@@ -616,6 +616,7 @@
     <string name="title_advanced_date_hint">Nachrichten werden nur nach Datum gruppiert, wenn sie nach Zeit sortiert sind</string>
     <string name="title_advanced_navbar_colorize_hint">Ob das funktioniert, hängt von der Android-Version und -Variante ab</string>
     <string name="title_advanced_split_hint">Dadurch wird der Bildschirm in Teile aufgeteilt</string>
+    <string name="title_advanced_split_min_hint">Dies ist eine Voraussetzung für faltbare Geräte</string>
     <string name="title_advanced_threading_hint">Zusammengehörige Nachrichten gruppieren</string>
     <string name="title_advanced_highlight_hint">Die Akzentfarbe des Designs wird zur Hervorhebung verwendet</string>
     <string name="title_advanced_gravatars_hint">Es könnte ein Datenschutzrisiko geben</string>
@@ -765,7 +766,7 @@
     <string name="title_last_connected">Zuletzt verbunden: %1$s</string>
     <string name="title_backoff_until">Warten nach einem Fehler bis: %1$s</string>
     <string name="title_storage_quota">Server-Speicherauslastung: %1$s/%2$s</string>
-    <string name="title_pop_support">Das POP3-Protokoll unterstützt das Herunterladen und Löschen von Nachrichten nur aus dem Posteingang. POP3 kann Nachrichten nicht markieren, Nachrichten verschieben, etc. POP3 verwendet mehr Akku- und Daten als IMAP. Daher erwägen Sie, das IMAP-Protokoll zu verwenden, wann immer möglich.</string>
+    <string name="title_pop_support">Das POP3-Protokoll unterstützt das Herunterladen und Löschen von Nachrichten nur aus dem Posteingang. POP3 kann Nachrichten nicht markieren, Nachrichten verschieben, usw. POP3 benötigt mehr Akkuleistung und Daten als IMAP. Daher erwägen Sie bitte, das IMAP-Protokoll zu verwenden, wann immer möglich.</string>
     <string name="title_pop_sent">Wenn Ihr Gerät verloren geht oder gestohlen wird, können gesendete Nachrichten verloren gehen.</string>
     <string name="title_pop_warning">Falls ein POP3-Server den Befehl UIDL nicht unterstützt, kann eine hohe Datenauslastung entstehen. Stellen Sie also die unten stehende Abfragefrequenz entsprechend ein.</string>
     <string name="title_pop_folders">Das POP3-Protokoll unterstützt das Erstellen von Ordnern nicht</string>
@@ -852,8 +853,7 @@
     <string name="title_auto_delete">Automatisch alte Nachrichten dauerhaft löschen</string>
     <string name="title_auto_delete_hint">Alte Nachrichten sind Nachrichten, die nicht mehr auf dem Gerät vorgehalten werden</string>
     <string name="title_auto_delete_archive_hint">Das Löschen aus dem Archivordner wird nicht immer vom E-Mail-Server zugelassen</string>
-    <string name="title_inbox_root_hint">Bei einigen Anbietern müssen neue Ordner unterhalb des Posteingangs angelegt werden. In diesem Fall können Sie den Posteingang in der Ordnerliste lange drücken und „Unterordner erstellen“ wählen.
-    </string>
+    <string name="title_inbox_root_hint">Bei einigen Anbietern müssen neue Ordner unterhalb des Posteingangs angelegt werden. In diesem Fall können Sie den Posteingang in der Ordnerliste lange drücken und „Unterordner erstellen“ wählen.    </string>
     <string name="title_folder_name_missing">Ordnername fehlt</string>
     <string name="title_folder_exists">Ordner %1$s bereits vorhanden</string>
     <string name="title_folder_delete">Diesen Ordner und alle darin enthaltenen E-Mails dauerhaft löschen?</string>
@@ -897,6 +897,8 @@
     <string name="title_importance_high">Hoch</string>
     <string name="title_search_in_text">Im Text suchen &#8230;</string>
     <string name="title_forward">Weiterleiten</string>
+    <string name="title_resend">Umleiten</string>
+    <string name="title_fetching_headers">Nachrichtenkopfzeilen werden heruntergeladen &#8230;</string>
     <string name="title_new_message">Neue Nachricht</string>
     <string name="title_editasnew">Als neu bearbeiten</string>
     <string name="title_edit_notes">Lokale Notizen bearbeiten</string>
@@ -923,7 +925,7 @@
     <string name="title_save_all">Alles speichern</string>
     <string name="title_save_eml">Rohdaten speichern</string>
     <string name="title_eml_remark">Um Nachrichten weiterzuleiten, müssen die ursprünglichen Nachrichten vom E-Mail-Server heruntergeladen werden. Dazu ist eine Internetverbindung erforderlich und die Nachrichten müssen noch auf dem E-Mail-Server verfügbar sein.</string>
-    <string name="title_eml_option">Dies kann verhindert werden, indem in den Verbindungseinstellungen \'Rohnachrichtendateien herunterladen\' eingeschaltet wird</string>
+    <string name="title_eml_option">Das kann verhindert werden, indem in den Verbindungseinstellungen „Rohnachrichtendateien herunterladen“ eingeschaltet wird</string>
     <string name="title_eml_downloaded">Rohnachrichten heruntergeladen: %1$s</string>
     <string name="title_buttons">Schaltflächen auswählen</string>
     <string name="title_buttons_hint">Die aktuell möglichen Aktionen hängen vom Kontotyp und der Konfiguration ab</string>
@@ -1009,16 +1011,14 @@
     <string name="title_ask_reporting">Fehlerberichte senden?</string>
     <string name="title_reporting_why">Fehlerberichte helfen uns, FairEmail zu verbessern</string>
     <string name="title_ask_review">Bitte bewerten Sie FairEmail</string>
-    <string name="title_ask_review_rationale">        Sie verwenden FairEmail bereits seit einiger Zeit.
-        Es wäre schön, wenn Sie FairEmail im Play Store bewerten würden.
+    <string name="title_ask_review_rationale">        Sie verwenden FairEmail bereits seit einiger Zeit.        Es wäre schön, wenn Sie FairEmail im Play Store bewerten würden.
     </string>
     <string name="title_need_help">Ich benötige Hilfe</string>
     <string name="title_ask_once">Diese Meldung wird nur einmal angezeigt, es sei denn, Sie wählen „Später”</string>
     <string name="title_third_party">Sie verwenden eine Version eines Drittanbieters</string>
     <string name="title_expand_warning">Durch Erweitern dieser Nachricht werden %1$s heruntergeladen</string>
     <string name="title_download_message">wird heruntergeladen &#8230;</string>
-    <string name="title_reformatted">        Dies ist die neu formatierte Nachrichtenansicht.
-        Sie können auf das &#x26F6; -Symbol tippen, um die ursprüngliche Nachricht zu sehen und diese Ansicht zu verstecken.
+    <string name="title_reformatted">        Dies ist die neu formatierte Nachrichtenansicht.        Sie können auf das &#x26F6; -Symbol tippen, um die ursprüngliche Nachricht zu sehen und diese Ansicht zu verstecken.
         Nachrichten neu formatieren dauert einige Zeit je nach Größe der Nachricht und der Geschwindigkeit Ihres Geräts.
     </string>
     <string name="title_compose">Verfassen</string>
@@ -1521,8 +1521,7 @@
     <string name="title_pro_purchase">Kaufen</string>
     <string name="title_pro_one_time">%1$s (einmaliger Kauf)</string>
     <string name="title_pro_no_play">Play Store konnte nicht aufgerufen werden</string>
-    <string name="title_pro_info">Die Entwicklung von FairEmail hat buchstäblich tausende Stunden gedauert und trotzdem sind die meisten Funktionen kostenlos nutzbar.
-FairEmail nimmt Ihre Privatsphäre ernst, zeigt keine Werbung an und verwendet keine Nachverfolgungs- oder Analysefunktionen, um damit Geld zu verdienen.
+    <string name="title_pro_info">Die Entwicklung von FairEmail hat buchstäblich tausende Stunden gedauert und trotzdem sind die meisten Funktionen kostenlos nutzbar. FairEmail nimmt Ihre Privatsphäre ernst, zeigt keine Werbung an und verwendet keine Nachverfolgungs- oder Analysefunktionen, um damit Geld zu verdienen.
 Um FairEmail auf lange Sicht zu erhalten und zu unterstützen, sind einige Komfort- und erweiterte Funktionen nicht kostenlos nutzbar.
 Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwindet beim Kauf der Pro-Funktionen.
     </string>
@@ -1748,4 +1747,10 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="minScreenSizes">
+        <item>Klein</item>
+        <item>Mittel</item>
+        <item>Groß</item>
+        <item>Sehr groß</item>
+    </string-array>
 </resources>

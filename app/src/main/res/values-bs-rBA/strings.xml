@@ -4,6 +4,8 @@
     <string name="app_changelog">Spisak izmjena</string>
     <string name="app_welcome">FairEmail je e-mail aplikacija otvorenog koda, s fokusom na privatnost i sigurnost. Zbog toga neke funkcionalnosti mogu raditi drugačije od onog što ste navikli.</string>
     <string name="app_limitations">Na primjer, poruke su preformatirane po zadanom režimu kako bi se uklonili nesigurni elementi i poboljšala čitljivost, te otvarali linkovi (hiperveze) koji se moraju potvrditi zbog sigurnosti. Te se mogućnosti mogu isključiti, ukoliko želite.</string>
+    <string name="app_unsupported">Greške Android verzije s ovog uređaja uzrokuju rušenje aplikacije</string>
+    <string name="app_continue">Želite nastaviti</string>
     <string name="app_exit">Ponovo pritisnite \'nazad\' za izlaz</string>
     <string name="app_cake">Nedovoljno prostora za pohranu</string>
     <string name="app_updated">Posljednje ažuriranje: %1$s</string>
@@ -298,6 +300,7 @@
     <string name="title_advanced_delete_unseen">Izbriši stare nepročitane poruke</string>
     <string name="title_advanced_kept_removed">Provjeri da li su stare poruke izbrisane sa servera</string>
     <string name="title_advanced_gmail_thread">Gmail stil grupisanja poruka za Gmail račune</string>
+    <string name="title_advanced_subject_threading">Grupisanje poruka prema pošiljaocu i predmetu</string>
     <string name="title_advanced_sync_folders">Sinhronizuj spisak foldera</string>
     <string name="title_advanced_sync_folders_poll">Aktivno sinhronizuj spisak foldera</string>
     <string name="title_advanced_sync_shared_folders">Sinhronizuj spisak dijeljenih foldera</string>
@@ -366,6 +369,7 @@
     <string name="title_advanced_landscape">Landšaft (vodoravni) prikaz</string>
     <string name="title_advanced_two_row">Koristi dva reda</string>
     <string name="title_advanced_two_col">Koristi dvije kolone</string>
+    <string name="title_advanced_min_screen_size">Minimalna veličina ekrana za podijeljeni ekran</string>
     <string name="title_advanced_nav_options">Prikaži opcije navigacijskog menija</string>
     <string name="title_advanced_nav_pin">Zakači navigacijski meni</string>
     <string name="title_advanced_nav_hide_title">Sakriti opcije navigacijskog menija?</string>
@@ -623,6 +627,7 @@
     <string name="title_advanced_date_hint">Poruke su grupisane samo po datumu ako se sortiraju vremenski</string>
     <string name="title_advanced_navbar_colorize_hint">Ova funkcija radi u zavisnosti od verzije i varijante Androida</string>
     <string name="title_advanced_split_hint">Ovo će podijeliti ekran u dijelove</string>
+    <string name="title_advanced_split_min_hint">Ovaj uvjet je namijenjen za sklopive uređaje</string>
     <string name="title_advanced_threading_hint">Grupiši poruke povezane jedne s drugima</string>
     <string name="title_advanced_highlight_hint">Tematska boja za naglašavanje koristit će se za markiranje</string>
     <string name="title_advanced_gravatars_hint">Moguće je da postoji rizik privatnosti</string>
@@ -905,6 +910,8 @@
     <string name="title_importance_high">Visoka</string>
     <string name="title_search_in_text">Pretraži u tekstu &#8230;</string>
     <string name="title_forward">Proslijedi</string>
+    <string name="title_resend">Ponovljeno slanje</string>
+    <string name="title_fetching_headers">Preuzimanje zaglavlja poruke &#8230;</string>
     <string name="title_new_message">Nova poruka</string>
     <string name="title_editasnew">Uredi kao novu</string>
     <string name="title_edit_notes">Uredi lokalne bilješke</string>
@@ -1290,6 +1297,7 @@
     <string name="title_rule_attachments">Ima priloge</string>
     <string name="title_rule_header">Zaglavlje sadrži</string>
     <string name="title_rule_body">Tekst sadrži</string>
+    <string name="title_rule_body_remark">Koristeći ovaj uvjet tekst poruke će se uvijek preuzimati, što može usporiti sinhronizaciju spiskova poruka</string>
     <string name="title_rule_time_abs">Apsolutno vrijeme (primljeno) između</string>
     <string name="title_rule_time_after">Primljeno poslije</string>
     <string name="title_rule_time_before">Primljeno prije</string>
@@ -1748,4 +1756,10 @@
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="minScreenSizes">
+        <item>Mali</item>
+        <item>Srednji</item>
+        <item>Veliki</item>
+        <item>Vrlo veliko</item>
+    </string-array>
 </resources>

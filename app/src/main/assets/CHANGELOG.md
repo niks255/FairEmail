@@ -4,6 +4,38 @@
 
 ### [Caudipteryx](https://en.wikipedia.org/wiki/Caudipteryx)
 
+### 1.1792 - 2021-12-18
+
+* Fixed always resending (2)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1791 - 2021-12-18
+
+* Fixed always resending
+* Added receive option to group on sender/subject
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1790 - 2021-12-16
+
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1789 - 2021-12-14
+
+* Added support for foldable devices
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated translations
+
+### 1.1788 - 2021-12-13
+
+* Added experimental resend support (RFC2822 section 3.6.6)
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1787 - 2021-12-11
 
 * Fixed always downloading headers/bodies for rules requiring this

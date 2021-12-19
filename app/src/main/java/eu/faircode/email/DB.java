@@ -32,6 +32,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +70,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 217,
+        version = 219,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -129,14 +131,14 @@ public abstract class DB extends RoomDatabase {
     private static final String[] DB_TABLES = new String[]{
             "identity", "account", "folder", "message", "attachment", "operation", "contact", "certificate", "answer", "rule", "search", "log"};
 
-    private static final String[] DB_PRAGMAS = new String[]{
+    private static final List<String> DB_PRAGMAS = Collections.unmodifiableList(Arrays.asList(
             "synchronous", "journal_mode",
             "wal_checkpoint", "wal_autocheckpoint", "journal_size_limit",
             "page_count", "page_size", "max_page_count", "freelist_count",
             "cache_size", "cache_spill",
             "soft_heap_limit", "hard_heap_limit", "mmap_size",
             "foreign_keys"
-    };
+    ));
 
     @Override
     public void init(@NonNull DatabaseConfiguration configuration) {
@@ -2206,6 +2208,19 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         Log.i("DB migration from version " + startVersion + " to " + endVersion);
                         db.execSQL("ALTER TABLE `folder` ADD COLUMN `last_sync_foreground` INTEGER");
+                    }
+                }).addMigrations(new Migration(217, 218) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `smtp_from` TEXT");
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `from_domain` INTEGER");
+                    }
+                }).addMigrations(new Migration(218, 219) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Log.i("DB migration from version " + startVersion + " to " + endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `resend` INTEGER");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

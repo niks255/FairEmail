@@ -3836,6 +3836,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 sb.append(context.getString(R.string.title_on_blocklist));
             }
 
+            if (Boolean.FALSE.equals(message.from_domain) && message.smtp_from != null)
+                for (Address smtp_from : message.smtp_from) {
+                    if (sb.length() > 0)
+                        sb.append('\n');
+                    String domain = UriHelper.getEmailDomain(((InternetAddress) smtp_from).getAddress());
+                    sb.append(context.getString(R.string.title_via, UriHelper.getParentDomain(context, domain)));
+                }
+
             if (Boolean.FALSE.equals(message.reply_domain)) {
                 String[] warning = message.checkReplyDomain(context);
                 if (warning != null) {
@@ -4757,7 +4765,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             aargs.putInt("protocol", message.accountProtocol);
             aargs.putLong("folder", message.folder);
             aargs.putString("type", message.folderType);
-            aargs.putString("from", MessageHelper.formatAddresses(message.from));
+            aargs.putString("from", DB.Converters.encodeAddresses(message.from));
             aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
             aargs.putBoolean("canBlock", canBlock);
 
@@ -6203,7 +6211,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     log("msgid changed", next.id);
                 }
                 // references
-                // deliveredto
+                if (!Objects.equals(prev.deliveredto, next.deliveredto)) {
+                    same = false;
+                    log("deliveredto changed", next.id);
+                }
                 // inreplyto
                 if (!Objects.equals(prev.thread, next.thread)) {
                     same = false;
@@ -6249,6 +6260,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("blocklist changed", next.id);
                 }
+                // from_domain
                 if (!Objects.equals(prev.reply_domain, next.reply_domain)) {
                     same = false;
                     log("reply_domain changed", next.id);
@@ -6260,6 +6272,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!Objects.equals(prev.sender, next.sender)) {
                     same = false;
                     log("sender changed", next.id);
+                }
+                // return_path
+                // smtp_from
+                if (!MessageHelper.equal(prev.submitter, next.submitter)) {
+                    same = false;
+                    log("submitter changed", next.id);
                 }
                 if (!MessageHelper.equal(prev.from, next.from)) {
                     same = false;

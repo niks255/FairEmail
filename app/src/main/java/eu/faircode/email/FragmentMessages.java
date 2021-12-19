@@ -1783,6 +1783,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
                 });
             }
+
+            if ("headers".equals(name)) {
+                scrolling = false;
+                updateExpanded();
+            }
         }
 
         @Override
@@ -2575,7 +2580,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             aargs.putInt("protocol", message.accountProtocol);
             aargs.putLong("folder", message.folder);
             aargs.putString("type", message.folderType);
-            aargs.putString("from", MessageHelper.formatAddresses(message.from));
+            aargs.putString("from", DB.Converters.encodeAddresses(message.from));
             aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
             aargs.putBoolean("canBlock", canBlock);
 
@@ -2783,6 +2788,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 popupMenu.getMenu().findItem(R.id.menu_reply_hard_bounce).setVisible(experiments);
                 popupMenu.getMenu().findItem(R.id.menu_reply_hard_bounce).setEnabled(canBounce);
                 popupMenu.getMenu().findItem(R.id.menu_new_message).setVisible(to != null && to.length > 0);
+                popupMenu.getMenu().findItem(R.id.menu_resend).setVisible(experiments);
                 popupMenu.getMenu().findItem(R.id.menu_reply_answer).setVisible(answers != 0 || !ActivityBilling.isPro(context));
 
                 popupMenu.getMenu().findItem(R.id.menu_reply_to_sender).setEnabled(message.content);
@@ -2836,6 +2842,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         } else if (itemId == R.id.menu_forward) {
                             onMenuReply(message, "forward");
                             return true;
+                        } else if (itemId == R.id.menu_resend) {
+                            onMenuResend(message);
+                            return true;
                         } else if (itemId == R.id.menu_editasnew) {
                             onMenuReply(message, "editasnew");
                             return true;
@@ -2869,6 +2878,41 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 .putExtra("reference", message.id)
                 .putExtra("selected", selected);
         startActivity(reply);
+    }
+
+    private void onMenuResend(TupleMessageEx message) {
+        if (message.headers == null) {
+            iProperties.setValue("resend", message.id, true);
+
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) throws Throwable {
+                    long id = args.getLong("id");
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null)
+                        return null;
+
+                    EntityOperation.queue(context, message, EntityOperation.HEADERS);
+
+                    return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Void data) {
+                    ToastEx.makeText(getContext(), R.string.title_fetching_headers, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(this, args, "resend:headers");
+        } else
+            onMenuReply(message, "resend");
     }
 
     private void onMenuDsn(TupleMessageEx message, int type) {
@@ -5512,6 +5556,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     dups.get(i).duplicate = true;
         }
 
+        // Check headers for resend
+        for (TupleMessageEx message : messages) {
+            if (message.headers == null)
+                continue;
+            boolean resend = iProperties.getValue("resend", message.id);
+            if (!resend)
+                continue;
+            iProperties.setValue("resend", message.id, false);
+            onMenuReply(message, "resend");
+        }
+
+        // Auto expand
         if (autoExpanded) {
             autoExpanded = false;
             if (download == 0)
@@ -8129,7 +8185,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 long id = args.getLong("id");
                 boolean block_sender = args.getBoolean("block_sender");
                 boolean block_domain = args.getBoolean("block_domain");
-                List<String> whitelist = EmailProvider.getDomainNames(context);
 
                 DB db = DB.getInstance(context);
                 try {
@@ -8152,18 +8207,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 EntityContact.TYPE_JUNK, message.received);
 
                     if (block_domain) {
-                        EntityRule rule = EntityRule.blockSender(context, message, junk, block_domain);
-                        if (rule != null) {
+                        List<EntityRule> rules = EntityRule.blockSender(context, message, junk, block_domain);
+                        for (EntityRule rule : rules) {
                             if (message.folder.equals(junk.id)) {
                                 EntityFolder inbox = db.folder().getFolderByType(message.account, EntityFolder.INBOX);
                                 if (inbox == null)
-                                    rule = null;
-                                else
-                                    rule.folder = inbox.id;
+                                    continue;
+                                rule.folder = inbox.id;
                             }
-                        }
-                        if (rule != null)
                             rule.id = db.rule().insertRule(rule);
+                        }
                     }
 
                     db.setTransactionSuccessful();

@@ -281,8 +281,7 @@
     <string name="title_setup_reset_links">Подтверждать ссылки</string>
     <string name="title_advanced_hint_title">Настройки для опытных</string>
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
-        Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.
-    </string>
+        Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.    </string>
     <string name="title_advanced_hint_remark">        Параметры сгруппированы по вкладкам, поделены на разделы, организованы по внешнему виду или использованию и доступны через поиск.
     </string>
     <string name="title_advanced_hint_setup">Можно настроить учётную запись, нажав кнопку мастера на главном экране настроек.</string>
@@ -310,6 +309,7 @@
     <string name="title_advanced_delete_unseen">Удалять старые непрочитанные сообщения</string>
     <string name="title_advanced_kept_removed">Проверять, были ли удалены старые сообщения с сервера</string>
     <string name="title_advanced_gmail_thread">Стиль группировки сообщений Gmail для соответствующих учётных записей</string>
+    <string name="title_advanced_subject_threading">Группировать сообщения по отправителю и теме</string>
     <string name="title_advanced_sync_folders">Синхронизировать список папок</string>
     <string name="title_advanced_sync_folders_poll">Активная синхронизация списка папок</string>
     <string name="title_advanced_sync_shared_folders">Синхронизировать списки общих папок</string>
@@ -378,6 +378,7 @@
     <string name="title_advanced_landscape">Альбомный режим</string>
     <string name="title_advanced_two_row">Использовать две строки</string>
     <string name="title_advanced_two_col">Использовать две колонки</string>
+    <string name="title_advanced_min_screen_size">Минимальный размер экрана для его разделения</string>
     <string name="title_advanced_nav_options">Показывать панель меню навигации</string>
     <string name="title_advanced_nav_pin">Закрепить меню навигации</string>
     <string name="title_advanced_nav_hide_title">Скрыть панель меню навигации?</string>
@@ -608,6 +609,7 @@
     <string name="title_advanced_deleted_unseen">Если отключено, непрочитанные сообщения хранятся на устройстве вечно</string>
     <string name="title_advanced_sync_kept_hint">Это приведёт к большему потреблению трафика и заряда батареи, особенно если на устройстве хранится много сообщений</string>
     <string name="title_advanced_gmail_thread_hint">Это относится только к вновь полученным сообщениям и может нарушить существующие группы</string>
+    <string name="title_advanced_subject_threading_hint">Только сообщения, полученные за последние %1$d часов</string>
     <string name="title_advanced_sync_folders_hint">Отключение этой функции уменьшит потребление трафика и заряда батареи, но также отключит обновление списка папок</string>
     <string name="title_advanced_poll_folders_hint">Периодическая синхронизация списка папок в дополнение к синхронизации после подключения к учётной записи</string>
     <string name="title_advanced_check_authentication_hint">Проверка результатов аутентификации DKIM, SPF и DMARC в зависимости от почтового сервера</string>
@@ -636,6 +638,7 @@
     <string name="title_advanced_date_hint">Сообщения группируются только по дате, если используется сортировка по времени</string>
     <string name="title_advanced_navbar_colorize_hint">Работает в зависимости от версии и варианта Android</string>
     <string name="title_advanced_split_hint">Экран будет разделён на части</string>
+    <string name="title_advanced_split_min_hint">Это условие предназначено для складных устройств</string>
     <string name="title_advanced_threading_hint">Группировать сообщения, связанные друг с другом</string>
     <string name="title_advanced_highlight_hint">Для подсветки будет использован цвет акцента темы</string>
     <string name="title_advanced_gravatars_hint">Возможен риск нарушения конфиденциальности</string>
@@ -918,6 +921,8 @@
     <string name="title_importance_high">Высокая</string>
     <string name="title_search_in_text">Поиск в тексте&#8230;</string>
     <string name="title_forward">Переслать</string>
+    <string name="title_resend">Перенаправить</string>
+    <string name="title_fetching_headers">Загрузка заголовков сообщений&#8230;</string>
     <string name="title_new_message">Новое сообщение</string>
     <string name="title_editasnew">Редактировать как новое</string>
     <string name="title_edit_notes">Редактировать локальные заметки</string>
@@ -1038,8 +1043,7 @@
     <string name="title_third_party">Вы используете стороннюю версию</string>
     <string name="title_expand_warning">При развёртывании этого сообщения будет загружено %1$s</string>
     <string name="title_download_message">Загрузка&#8230;</string>
-    <string name="title_reformatted">        Это переформатированное сообщение.
-        Можно нажать значок &#x26F6; для просмотра оригинального сообщения и скрытия этого уведомления.
+    <string name="title_reformatted">        Это переформатированное сообщение.        Можно нажать значок &#x26F6; для просмотра оригинального сообщения и скрытия этого уведомления.
         Переформатирование сообщений занимает некоторое время в зависимости от размера сообщения и быстродействия устройства.
     </string>
     <string name="title_compose">Создать</string>
@@ -1770,4 +1774,10 @@
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="minScreenSizes">
+        <item>Маленький</item>
+        <item>Средний</item>
+        <item>Большой</item>
+        <item>Очень большой</item>
+    </string-array>
 </resources>

@@ -4,6 +4,8 @@
     <string name="app_changelog">Ændringslog</string>
     <string name="app_welcome">FairEmail er en open source e-mail app med fokus på privatliv og sikkerhed. Derfor vil visse funktioner muligvis fungere anderledes, end hvad du er vant til.</string>
     <string name="app_limitations">F.eks. omformateres beskeder som standard for at fjerne usikre elementer samt forbedre læsbarheden, og åbning af links skal sikkerhedsbekræftes. Begge funktioner kan om ønsket deaktiveres.</string>
+    <string name="app_unsupported">Fejl i Android-versionen af denne enhed forårsager nedbrud</string>
+    <string name="app_continue">Fortsæt alligevel</string>
     <string name="app_exit">Tryk \'Tilbage\' igen for at afslutte</string>
     <string name="app_cake">Utilstrækkelig tilgængelig lagerplads</string>
     <string name="app_updated">Senest opdateret: %1$s</string>
@@ -259,7 +261,7 @@
     <string name="title_setup_reset_links">Bekræft links</string>
     <string name="title_advanced_hint_title">Flere avancerede indstillinger</string>
     <string name="title_advanced_hint_message">        De mere avancerede indstillinger tilgås nu.
-        Alle valgmuligheder har almindeligt brugte standardværdier, som kan ændres jf. dine præferencer.
+        Alle valgmuligheder har alm. brugte standardværdier, som kun behøver ændring ifm. en evt. anden præference.
     </string>
     <string name="title_advanced_hint_remark">        Indstillingerne er kategoriseret efter fane, opdelt i afsnit, organiseret efter udseende/brug, og er søgbare.
     </string>
@@ -287,11 +289,13 @@
     <string name="title_advanced_delete_unseen">Slet gamle, ulæste beskeder</string>
     <string name="title_advanced_kept_removed">Tjek, om gamle beskeder er fjernet fra serveren</string>
     <string name="title_advanced_gmail_thread">Gmail- beskedgrupperingsstil for Gmail-konti</string>
+    <string name="title_advanced_subject_threading">Gruppér beskeder efter afsender og emne</string>
     <string name="title_advanced_sync_folders">Synkronisér mappeliste</string>
     <string name="title_advanced_sync_folders_poll">Synk aktivt mappeliste</string>
     <string name="title_advanced_sync_shared_folders">Synkronisér delte mappelister</string>
     <string name="title_advanced_subscriptions">Håndér mappeabonnementer</string>
     <string name="title_advanced_check_authentication">Tjek beskedgodkendelse</string>
+    <string name="title_advanced_check_reply_domain">Tjek svaradresse på synkronisering af beskeder</string>
     <string name="title_advanced_check_mx">Tjek afsenderadresser ved beskedsynkroniseringer</string>
     <string name="title_advanced_check_blocklist">Tjek om afsenders domænenavn er på en spamblokeringsliste</string>
     <string name="title_advanced_use_blocklist">Flyt beskeder fra blokeringslistedomæner til Spammappen</string>
@@ -354,6 +358,7 @@
     <string name="title_advanced_landscape">Liggende tilstand</string>
     <string name="title_advanced_two_row">Brug to rækker</string>
     <string name="title_advanced_two_col">Brug to kolonner</string>
+    <string name="title_advanced_min_screen_size">Minimumsskærmstørrelse for opsplitning af skærmen</string>
     <string name="title_advanced_nav_options">Vis navigeringsmenuindstillinger</string>
     <string name="title_advanced_nav_pin">Fastgør navigeringsmenu</string>
     <string name="title_advanced_nav_hide_title">Skjul navigeringsmenuindstillinger?</string>
@@ -534,7 +539,7 @@
     <string name="title_advanced_encrypt_subject">Kryptér emne</string>
     <string name="title_advanced_sign_algo">Signaturalgoritme</string>
     <string name="title_advanced_encrypt_algo">Krypteringsalgoritme</string>
-    <string name="title_advanced_remark_algo">        Bemærk, at ikke alle e -mailklienter understøtter alle algoritmer.
+    <string name="title_advanced_remark_algo">        Bemærk, at ikke alle e-mailklienter understøtter alle algoritmer.
         Standardalgoritmerne SHA256 og AES128 understøttes almindeligvis.
     </string>
     <string name="title_advanced_check_certificate">Tjek offentlig nøgle ved afsendelse</string>
@@ -543,7 +548,7 @@
     <string name="title_advanced_manage_keys">Håndtér private nøgler</string>
     <string name="title_advanced_ca">Installerede CA-certifikater</string>
     <string name="title_advanced_manage_keys_hint">        Dette vil åbne Android-sikkerhedsindstillingerne.
-         Nøgler og certifikater kan generelt findes under Avanceret - Kryptering og akkreditiver.
+        Nøgler og certifikater kan generelt findes under Avanceret - Kryptering og akkreditiver.
     </string>
     <string name="title_advanced_power_menu">Føj handlinger til Androids Tænd/Sluk menu</string>
     <string name="title_advanced_external_search">Tillad andre apps at søge i beskeder</string>
@@ -585,6 +590,7 @@
     <string name="title_advanced_sync_folders_hint">Deaktivering af dette reducerer data- og strømforbruget noget, men deaktiverer også mappelisteopdatering</string>
     <string name="title_advanced_poll_folders_hint">Synk periodisk mappelisten ud over efter kontotilslutning</string>
     <string name="title_advanced_check_authentication_hint">Dette vil tjekke resultaterne af DKIM-, SPF- og DMARC-godkendelser udført af e-mailserveren</string>
+    <string name="title_advanced_check_reply_hint">Dette tjekker, om domænenavnet for afsender- og svaradresser er ens</string>
     <string name="title_advanced_lookup_mx_hint">Dette tjekker, om der findes DNS MX-poster</string>
     <string name="title_advanced_sync_delay_hint">Dette vil forøge beskedsynkroniseringstiden</string>
     <string name="title_advanced_suggest_names_hint">Hvis deaktiveret, bruges kun e-mailadresser ved valg af kontakter</string>
@@ -608,6 +614,8 @@
     <string name="title_advanced_startup_hint">Langt tryk på en vilkårlig mappe på mappelisten for at tilføje/fjerne den fra listen over samlede mapper</string>
     <string name="title_advanced_date_hint">Beskeder grupperes kun efter dato, hvis de er sorteret efter tid</string>
     <string name="title_advanced_navbar_colorize_hint">Hvorvidt dette fungerer afhænger af Android-version og -variant</string>
+    <string name="title_advanced_split_hint">Dette vil opdele skærmen i dele</string>
+    <string name="title_advanced_split_min_hint">Dette er en betingelse beregnet til foldbare enheder</string>
     <string name="title_advanced_threading_hint">Gruppér beskeder relateret til hinanden</string>
     <string name="title_advanced_highlight_hint">Temaets accentfarve benyttes til fremhævning</string>
     <string name="title_advanced_gravatars_hint">Der kan være en fortrolighedsrisiko</string>
@@ -665,6 +673,7 @@
     <string name="title_identity_email">Din e-mailadresse</string>
     <string name="title_identity_color_hint">Identitetsfarver har forrang over kontofarver</string>
     <string name="title_advanced_sender">Tillad redigering af afsenderadresse</string>
+    <string name="title_advanced_sender_name">Brug navnet, når afsenderadressen er blevet redigeret</string>
     <string name="title_advanced_sender_regex">Regex, der skal matche brugernavn for indgående e-mailadresser</string>
     <string name="title_identity_reply_to">Svar til-adresse</string>
     <string name="title_identity_internal">Interne domænenavne (kommasepareret)</string>
@@ -842,8 +851,9 @@
     <string name="title_auto_trash">Auto-flyt gamle beskeder til Papirkurv</string>
     <string name="title_auto_delete">Auto-slet gamle beskeder permanent</string>
     <string name="title_auto_delete_hint">Gamle beskeder er beskeder, som ikke længere opbevares på enheden</string>
+    <string name="title_auto_delete_archive_hint">Sletning fra arkivmappen er ikke altid tilladt af e-mail-serveren</string>
     <string name="title_inbox_root_hint">        Visse udbydere kræver, at nye mapper oprettes under indbakken.
-         Er dette tilfældet, så tryk og hold på indbakken i mappelisten og vælg \'Opret undermappe\'.
+        Er dette tilfældet, så tryk og hold på indbakken i mappelisten og vælg \'Opret undermappe\'.
     </string>
     <string name="title_folder_name_missing">Mappenavn manngler</string>
     <string name="title_folder_exists">Mappen %1$s findes</string>
@@ -888,6 +898,8 @@
     <string name="title_importance_high">Høj</string>
     <string name="title_search_in_text">Søg i tekst&#8230;</string>
     <string name="title_forward">Videresend</string>
+    <string name="title_resend">Send igen</string>
+    <string name="title_fetching_headers">Downloader beskedoverskrifter &#8230;</string>
     <string name="title_new_message">Ny besked</string>
     <string name="title_editasnew">Redigér som ny</string>
     <string name="title_edit_notes">Redigér lokale notater</string>
@@ -1000,15 +1012,15 @@
     <string name="title_ask_reporting">Send fejlrapporter?</string>
     <string name="title_reporting_why">Rapportering af fejl vil hjælpe med at forbedre FairEmail</string>
     <string name="title_ask_review">Bedøm venligst FairEmail</string>
-    <string name="title_ask_review_rationale">        Du har nu benyttet FairEmail i et stykke tid.
-         Det vil blive værdsat, hvis du kunne bedømme FairEmail i Play Butik.
+    <string name="title_ask_review_rationale">        Du har nu benyttet FairEmail i et stykke tide.
+        Det vil blive værdsat, hvis du kunne bedømme FairEmail i Play Butik.
     </string>
     <string name="title_need_help">Jeg behøver hjælp</string>
     <string name="title_ask_once">Denne besked vises kun én gang, med mindre duvælger \'Senere\'</string>
     <string name="title_third_party">Du benytter en tredjepartsversion</string>
     <string name="title_expand_warning">Udvides denne besked, downloades %1$s</string>
     <string name="title_download_message">Downloader &#8230;</string>
-    <string name="title_reformatted">        Dette er den reformaterede beskedvisning.
+    <string name="title_reformatted">        Dette er den omformaterede beskedvisning.
         Tryk på &#x26F6;-ikonet for at se originalbeskeden og skjule denne besked.
         Beskedomformatering tages lidt tid afhængigt af beskedstørrelsen og hastigheden på enheden.
     </string>
@@ -1161,7 +1173,7 @@
     <string name="title_search">Søg</string>
     <string name="title_search_for_hint">Angiv tekst</string>
     <string name="title_search_hint">        Indledningsvis udføres søgningen på enheden.
-         For også at søge på serveren, så tryk på knappen \'søg igen\'.
+        For også at søge på serveren, så tryk på knappen \'søg igen\'.
     </string>
     <string name="title_search_index_hint">Søgning via søgeindekset er hurtig, men vil kun finde hele ord.</string>
     <string name="title_search_text_hint">Søgning efter tekst i beskeder, når der er et stort antal heraf, fungerer muligvis ikke på alle servere</string>
@@ -1511,9 +1523,9 @@
     <string name="title_pro_one_time">%1$s (engangskøb)</string>
     <string name="title_pro_no_play">Play Butik blev ikke fundet</string>
     <string name="title_pro_info">        Udviklingen af FairEmail tog bogstaveligt talt tusindvis af timer, og på trods heraf, er de fleste af funktionerne gratis at benytte.
-         FairEmail tager din datafortrolighed seriøst og viser ikke annoncer og anvender ikke tracking eller analyse mhp. profitformål.
-         For at vedligeholde og supportere FairEmail i det lange løb er visse avancerede og bekvemmelighedsfunktioner ikke gratis at benytte.
-         For at minde dig om dette, viser FairEmail viser en lille meddelelse, der dog fjernes, hvis du køber Pro-funktionerne.
+        FairEmail tager datafortrolighed seriøst og viser ikke annoncer og anvender ikke tracking eller analyse mhp. profitformål.
+        For at vedligeholde og supportere FairEmail i det lange løb, er visse avancerede og bekvemmelighedsfunktioner ikke gratis at benytte.
+        For at minde om dette, viser FairEmail en lille meddelelse, der dog forsvinder ved køb af Pro-funktionerne.
     </string>
     <string name="title_pro_whichever">Uanset valgte Pro-funktioner, er der altid nogle, som klager over, at en funktion ikke er gratis. Vær venligst ikke en sådan person.</string>
     <string name="title_pro_hide">Skjul små meddelelser i %1$d uger</string>
@@ -1736,4 +1748,10 @@
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="minScreenSizes">
+        <item>Lille</item>
+        <item>Mellem</item>
+        <item>Stor</item>
+        <item>Ekstra stor</item>
+    </string-array>
 </resources>

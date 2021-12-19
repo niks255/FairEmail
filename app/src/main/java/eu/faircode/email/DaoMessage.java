@@ -421,6 +421,13 @@ public interface DaoMessage {
             " AND inreplyto = :inreplyto")
     List<EntityMessage> getMessagesByInReplyTo(long account, String inreplyto);
 
+    @Query("SELECT * FROM message" +
+            " WHERE account = :account" +
+            " AND sender = :sender" +
+            " AND subject = :subject" +
+            " AND received >= :since")
+    List<EntityMessage> getMessagesBySubject(long account, String sender, String subject, long since);
+
     @Query("SELECT message.* FROM message" +
             " LEFT JOIN message AS base ON base.id = :id" +
             " WHERE message.account = :account" +
@@ -641,8 +648,10 @@ public interface DaoMessage {
     int updateMessage(EntityMessage message);
 
     @Query("UPDATE message SET thread = :thread" +
-            " WHERE account = :account AND thread = :old AND NOT (:old IS :thread)")
-    int updateMessageThread(long account, String old, String thread);
+            " WHERE account = :account" +
+            " AND thread = :old AND NOT (:old IS :thread)" +
+            " AND (:since IS NULL OR received >= :since)")
+    int updateMessageThread(long account, String old, String thread, Long since);
 
     @Query("UPDATE message SET uid = :uid WHERE id = :id AND NOT (uid IS :uid)")
     int setMessageUid(long id, Long uid);

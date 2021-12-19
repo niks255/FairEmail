@@ -42,13 +42,15 @@ import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
-import com.sun.mail.smtp.SMTPTransport;
 import com.sun.mail.util.TraceOutputStream;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -526,6 +528,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean reply_move = prefs.getBoolean("reply_move", false);
+        boolean protocol = prefs.getBoolean("protocol", false);
         boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
         if (message.identity == null)
@@ -666,6 +669,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             iservice.setUseIp(ident.use_ip, ident.ehlo);
             iservice.setUnicode(ident.unicode);
 
+            // 0=Read receipt
+            // 1=Delivery receipt
+            // 2=Read+delivery receipt
+
             if (message.receipt_request != null && message.receipt_request) {
                 int receipt_type = prefs.getInt("receipt_type", 2);
                 if (receipt_type == 1 || receipt_type == 2) // Delivery receipt
@@ -682,9 +689,37 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             if (ident.max_size == null)
                 max_size = iservice.getMaxSize();
 
-            Address[] to = imessage.getAllRecipients();
+            List<Address> recipients = new ArrayList<>();
+            if (message.headers == null || !Boolean.TRUE.equals(message.resend)) {
+                Address[] all = imessage.getAllRecipients();
+                if (all != null)
+                    recipients.addAll(Arrays.asList(all));
+            } else {
+                String to = imessage.getHeader("Resent-To", ",");
+                if (to != null)
+                    for (Address a : InternetAddress.parse(to))
+                        recipients.add(a);
+
+                String cc = imessage.getHeader("Resent-Cc", ",");
+                if (cc != null)
+                    for (Address a : InternetAddress.parse(cc))
+                        recipients.add(a);
+
+                String bcc = imessage.getHeader("Resent-Bcc", ",");
+                if (bcc != null)
+                    for (Address a : InternetAddress.parse(bcc))
+                        recipients.add(a);
+            }
+
+            if (protocol && BuildConfig.DEBUG) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                imessage.writeTo(bos);
+                for (String line : bos.toString().split("\n"))
+                    EntityLog.log(this, line);
+            }
+
             String via = "via " + ident.host + "/" + ident.user +
-                    " to " + (to == null ? null : TextUtils.join(", ", to));
+                    " recipients=" + TextUtils.join(", ", recipients);
 
             iservice.setReporter(new TraceOutputStream.IReport() {
                 private int progress = -1;
@@ -708,7 +743,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             // Send message
             EntityLog.log(this, "Sending " + via);
             start = new Date().getTime();
-            iservice.getTransport().sendMessage(imessage, to);
+            iservice.getTransport().sendMessage(imessage, recipients.toArray(new Address[0]));
             end = new Date().getTime();
             EntityLog.log(this, "Sent " + via + " elapse=" + (end - start) + " ms");
         } catch (MessagingException ex) {

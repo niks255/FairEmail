@@ -310,6 +310,7 @@
     <string name="title_advanced_delete_unseen">מחיקת הודעות ישנות שלא נקראו</string>
     <string name="title_advanced_kept_removed">לבדוק אם הודעות ישנות הוסרו מהשרת</string>
     <string name="title_advanced_gmail_thread">סגנון קיבוץ הודעות ב־Gmail לחשבונות Gmail</string>
+    <string name="title_advanced_subject_threading">קיבוץ הודעות לפי מוען ונושא</string>
     <string name="title_advanced_sync_folders">סנכרון רשימת התיקיות</string>
     <string name="title_advanced_sync_folders_poll">סנכרון רשימת התיקיות באופן פעיל</string>
     <string name="title_advanced_sync_shared_folders">סנכרון רשימות תיקיות משותפות</string>
@@ -378,6 +379,7 @@
     <string name="title_advanced_landscape">מצב אופקי</string>
     <string name="title_advanced_two_row">להשתמש בשתי שורות</string>
     <string name="title_advanced_two_col">להשתמש בשתי עמודות</string>
+    <string name="title_advanced_min_screen_size">גודל המסך המזערי לפיצול המסך</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
     <string name="title_advanced_nav_hide_title">להסתיר את אפשרויות תפריט הניווט?</string>
@@ -635,6 +637,7 @@
     <string name="title_advanced_date_hint">הודעות מקובצות לפי תאריך רק אם הן מסודרות לפי זמן</string>
     <string name="title_advanced_navbar_colorize_hint">יכולת התפקוד תלויה בגרסת ה־Android וסוגה</string>
     <string name="title_advanced_split_hint">יפצל את המסך לחלקים</string>
+    <string name="title_advanced_split_min_hint">זה תנאי שמיועד למכשירים מתקפלים</string>
     <string name="title_advanced_threading_hint">קיבוץ הודעות שקשורות זו לזו</string>
     <string name="title_advanced_highlight_hint">הצבע המשני של ערכת הנושא ישמש להדגשה</string>
     <string name="title_advanced_gravatars_hint">עלול להיות סיכון לפרטיות</string>
@@ -917,6 +920,8 @@
     <string name="title_importance_high">גבוהה</string>
     <string name="title_search_in_text">חיפוש בטקסט &#8230;</string>
     <string name="title_forward">העברה</string>
+    <string name="title_resend">שליחה מחדש</string>
+    <string name="title_fetching_headers">כותרות ההודעה מתקבלות&#8230;</string>
     <string name="title_new_message">הודעה חדשה</string>
     <string name="title_editasnew">עריכה כחדש</string>
     <string name="title_edit_notes">עריכת הערות מקומיות</string>
@@ -1762,4 +1767,10 @@
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="minScreenSizes">
+        <item>קטן</item>
+        <item>בינוני</item>
+        <item>גודל</item>
+        <item>גדול במיוחד</item>
+    </string-array>
 </resources>
