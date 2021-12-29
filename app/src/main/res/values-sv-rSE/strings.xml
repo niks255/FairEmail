@@ -286,6 +286,7 @@
     <string name="title_advanced_delete_unseen">Ta bort gamla olästa meddelanden</string>
     <string name="title_advanced_kept_removed">Kontrollera om gamla meddelanden har tagits bort från servern</string>
     <string name="title_advanced_gmail_thread">Använd Gmails stil för gruppering av meddelande på Gmail-konton</string>
+    <string name="title_advanced_subject_threading">Gruppera meddelanden efter avsändare och ämne</string>
     <string name="title_advanced_sync_folders">Synkronisera mapplistan</string>
     <string name="title_advanced_sync_folders_poll">Synkronisera mapplistan aktivt</string>
     <string name="title_advanced_sync_shared_folders">Synkronisera delade mapplistor</string>
@@ -584,6 +585,7 @@
     <string name="title_advanced_deleted_unseen">När inaktiverad, behålls olästa meddelanden på enheten för alltid</string>
     <string name="title_advanced_sync_kept_hint">Detta kommer att överföra extra data och förbruka extra batterikraft, speciellt om många meddelanden lagras på enheten</string>
     <string name="title_advanced_gmail_thread_hint">Detta gäller endast för nyligen mottagna meddelanden och kan bryta befintliga grupper</string>
+    <string name="title_advanced_subject_threading_hint">Endast meddelanden mottagna under de senaste %1$d timmarna</string>
     <string name="title_advanced_sync_folders_hint">Inaktivering av detta kommer att minska data och batterianvändning något, men kommer att inaktivera uppdatering av listan över mappar också</string>
     <string name="title_advanced_poll_folders_hint">Synkronisera mapplistan periodiskt utöver när du har anslutit till ett konto</string>
     <string name="title_advanced_check_authentication_hint">Detta kommer att kontrollera resultaten av DKIM, SPF och DMARC-autentisering som utförs av e-postservern</string>
@@ -668,6 +670,7 @@
     <string name="title_select">Välj &#8230;</string>
     <string name="title_identity_name">Ditt namn</string>
     <string name="title_identity_email">Din e-postadress</string>
+    <string name="title_identity_tenant_hint">Detta fält skall lämnas tomt i de flesta fall</string>
     <string name="title_identity_color_hint">Identitetsfärger har företräde framför mapp- och kontofärger</string>
     <string name="title_advanced_sender">Tillåt avsändaradress redigering</string>
     <string name="title_advanced_sender_name">Använd namn när avsändaradressen har redigerats</string>
@@ -771,6 +774,7 @@
     <string name="title_hint_alias">Långtryck för alternativ, som att kopiera för att skapa alias för olika identiteter</string>
     <string name="title_service_auth">E-postservern sa: \'%1$s\'</string>
     <string name="title_service_vpn">Detta kan orsakas av den VPN som används</string>
+    <string name="title_service_token">Androids kontohanterare kan blockeras av VPN, brandvägg, annonsblockerare, etc, vilket hindrar systemet från att få en åtkomstkod</string>
     <string name="title_service_port">Vänligen dubbelkolla portnumret</string>
     <string name="title_service_protocol">Vänligen dubbelkolla protokollet (SSL/TLS eller STARTTLS)</string>
     <string name="title_advanced_browse">Bläddra bland meddelanden på servern</string>
@@ -1219,6 +1223,7 @@
     <string name="title_filter_unflagged">Utan stjärnmärkning</string>
     <string name="title_filter_unknown">Okända avsändare</string>
     <string name="title_filter_hidden">Dold</string>
+    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">Raderad</string>
     <string name="title_filter_duplicates">Dubbletter</string>
     <string name="title_filter_trash">Kastade</string>
     <string name="title_compact">Kompakt vy</string>

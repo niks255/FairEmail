@@ -330,8 +330,8 @@ public class EmailService implements AutoCloseable {
                     public void onPasswordChanged(Context context, String newPassword) {
                         DB db = DB.getInstance(context);
                         account.password = newPassword;
-                        int accounts = db.account().setAccountPassword(account.id, account.password);
-                        int identities = db.identity().setIdentityPassword(account.id, account.user, account.password, account.auth_type);
+                        int accounts = db.account().setAccountPassword(account.id, account.password, account.auth_type);
+                        int identities = db.identity().setIdentityPassword(account.id, account.user, account.password, account.auth_type, account.auth_type);
                         EntityLog.log(context, EntityLog.Type.Account, account,
                                 "token refreshed=" + accounts + "/" + identities);
                     }
@@ -446,8 +446,12 @@ public class EmailService implements AutoCloseable {
                     connect(host, port, auth, user, factory);
                 } catch (Exception ex1) {
                     Log.e(ex1);
+                    String msg = ex.getMessage();
+                    if (auth == AUTH_TYPE_GMAIL &&
+                            msg != null && msg.endsWith("Invalid credentials (Failure)"))
+                        msg += "; " + context.getString(R.string.title_service_token);
                     throw new AuthenticationFailedException(
-                            context.getString(R.string.title_service_auth, ex.getMessage()),
+                            context.getString(R.string.title_service_auth, msg),
                             ex.getNextException());
                 }
             } else if (purpose == PURPOSE_CHECK) {

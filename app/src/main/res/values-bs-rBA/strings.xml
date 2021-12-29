@@ -326,6 +326,7 @@
     <string name="title_advanced_send_pending">Prikaži nenametljivu ikonicu za odgođeno slanje</string>
     <string name="title_advanced_compose_font">Zadani font</string>
     <string name="title_advanced_prefix_once">Prefiks predmeta samo jedanput pri odgovoru ili prosljeđenju</string>
+    <string name="title_advanced_prefix_count">Dodaj brojač prefiksu odgovora</string>
     <string name="title_advanced_separate_reply">Ubaci vodoravnu liniju prije zaglavlja odgovora/prosljeđenja</string>
     <string name="title_advanced_extended_reply">Koristi prošireno zaglavlje odgovora/prosljeđenja</string>
     <string name="title_advanced_write_above">Piši iznad teksta od pošiljaoca</string>
@@ -599,6 +600,7 @@
     <string name="title_advanced_deleted_unseen">Kada je isključeno, nepročitane poruke se čuvaju na uređaju zauvijek</string>
     <string name="title_advanced_sync_kept_hint">Ovo će transferirati dodatne podatke i trošiti više baterije, posebno ako se na uređaju čuva dosta poruka</string>
     <string name="title_advanced_gmail_thread_hint">Ovo se primjenjuje samo na novoprimljene poruke i može razlomiti postojeće grupe</string>
+    <string name="title_advanced_subject_threading_hint">Samo poruke primljene zadnja(ih) %1$d sata(i)</string>
     <string name="title_advanced_sync_folders_hint">Isključivanjem ove opcije smanjit će se donekle potrošnja podataka i baterije, ali će se također isključiti i ažuriranje spiska foldera</string>
     <string name="title_advanced_poll_folders_hint">Periodično sinhronizuj spisak foldera, nakon povezivanja na račun</string>
     <string name="title_advanced_check_authentication_hint">Ovo će provjeriti rezultate DKIM, SPF i DMARC provjere koje se izvode na e-mail serveru</string>
@@ -683,6 +685,7 @@
     <string name="title_select">Izaberi &#8230;</string>
     <string name="title_identity_name">Vaše ime</string>
     <string name="title_identity_email">Vaša adresa e-pošte</string>
+    <string name="title_identity_tenant_hint">Ovo polje treba ostati prazno u najvećem broju slučajeva</string>
     <string name="title_identity_color_hint">Boje identiteta su preče od boja foldera i računa</string>
     <string name="title_advanced_sender">Dopusti uređivanje adrese pošiljaoca</string>
     <string name="title_advanced_sender_name">Koristi ime kada je adresa pošiljaoca uređena</string>
@@ -770,6 +773,8 @@
     <string name="title_identity_required">Identitet je neophodan za slanje e-pošte</string>
     <string name="title_drafts_required">Folder \'nacrti\' je neophodan za slanje e-pošte</string>
     <string name="title_drafts_select">Slanje e-pošte zahtijeva da se izabere folder za nacrte u postavkama računa</string>
+    <string name="title_account_auth_update">Osvježi autorizaciju</string>
+    <string name="title_account_auth_password">Prebaci na provjeru lozinkom</string>
     <string name="title_account_delete">Izbrisati ovaj račun trajno?</string>
     <string name="title_identity_delete">Izbrisati ovaj identitet trajno?</string>
     <string name="title_edit_html">Uredi kao HTML</string>

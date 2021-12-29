@@ -303,7 +303,6 @@ public class ServiceUI extends IntentService {
 
     private void onReplyDirect(long id, Intent intent) throws IOException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean prefix_once = prefs.getBoolean("prefix_once", true);
         boolean plain_only = prefs.getBoolean("plain_only", false);
 
         DB db = DB.getInstance(this);
@@ -319,10 +318,6 @@ public class ServiceUI extends IntentService {
         EntityFolder outbox = db.folder().getOutbox();
         if (outbox == null)
             throw new IllegalArgumentException("outbox not found");
-
-        String subject = (ref.subject == null ? "" : ref.subject);
-        if (prefix_once)
-            subject = EntityMessage.collapsePrefixes(this, ref.language, subject, false);
 
         Bundle results = RemoteInput.getResultsFromIntent(intent);
         String body = results.getString("text");
@@ -345,7 +340,7 @@ public class ServiceUI extends IntentService {
             reply.thread = ref.thread;
             reply.to = ref.from;
             reply.from = new Address[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())};
-            reply.subject = getString(R.string.title_subject_reply, subject);
+            reply.subject = EntityMessage.getSubject(this, ref.language, ref.subject, false);
             reply.received = new Date().getTime();
             reply.seen = true;
             reply.ui_seen = true;

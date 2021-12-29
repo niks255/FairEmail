@@ -2,7 +2,53 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Draconyx](https://en.wikipedia.org/wiki/Draconyx)
+
+### 1.1800 - 2021-12-27
+
+* Fixed crash when manually configuring an account
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1799 - 2021-12-27
+
+* Fixed removing inline images on replying/forwarding
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1797 - 2021-12-27
+
+* Added Outlook Tenant ID field
+* Added option for numbered reply prefix
+* Added conversion of OAuth to password authentication
+* Improved handling of delivery/read receipts
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Caudipteryx](https://en.wikipedia.org/wiki/Caudipteryx)
+
+### 1.1796 - 2021-12-23
+
+* Fixed incorrect background colors
+* Small improvements and minor bug fixes
+
+### 1.1795 - 2021-12-23
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1794 - 2021-12-22
+
+* Added logarithmic PIN failure delay of 3 seconds
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1793 - 2021-12-20
+
+* Fixed crash related to resending
+* Added compact mode for accounts on start screen
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.1792 - 2021-12-18
 

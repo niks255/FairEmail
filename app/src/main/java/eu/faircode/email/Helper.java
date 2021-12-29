@@ -98,6 +98,7 @@ import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -119,6 +120,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -161,6 +163,7 @@ public class Helper {
     static final long MIN_REQUIRED_SPACE = 250 * 1024L * 1024L;
     static final int MAX_REDIRECTS = 5; // https://www.freesoft.org/CIE/RFC/1945/46.htm
     static final int AUTOLOCK_GRACE = 7; // seconds
+    static final long PIN_FAILURE_DELAY = 3; // seconds
 
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
     static final String PGP_END_MESSAGE = "-----END PGP MESSAGE-----";
@@ -1026,6 +1029,15 @@ public class Helper {
         return "sony".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
+    static boolean isSurfaceDuo() {
+        return ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo".equals(Build.MODEL));
+    }
+
+    static boolean isArc() {
+        // https://github.com/google/talkback/blob/master/utils/src/main/java/com/google/android/accessibility/utils/FeatureSupport.java
+        return (Build.DEVICE != null) && Build.DEVICE.matches(".+_cheets|cheets_.+");
+    }
+
     static boolean isStaminaEnabled(Context context) {
         // https://dontkillmyapp.com/sony
         if (BuildConfig.DEBUG)
@@ -1041,10 +1053,6 @@ public class Helper {
             Log.e(ex);
             return false;
         }
-    }
-
-    static boolean isSurfaceDuo() {
-        return ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo".equals(Build.MODEL));
     }
 
     static boolean isKilling() {
@@ -1177,6 +1185,26 @@ public class Helper {
         Layout layout = widget.getLayout();
         int line = layout.getLineForVertical(y);
         return layout.getOffsetForHorizontal(line, x);
+    }
+
+    static String getRequestKey(Fragment fragment) {
+        String who;
+        try {
+            Class<?> cls = fragment.getClass();
+            while (!cls.isAssignableFrom(Fragment.class))
+                cls = cls.getSuperclass();
+            Field f = cls.getDeclaredField("mWho");
+            f.setAccessible(true);
+            who = (String) f.get(fragment);
+        } catch (Throwable ex) {
+            Log.w(ex);
+            String we = fragment.toString();
+            int pa = we.indexOf('(');
+            int sp = we.indexOf(' ', pa);
+            who = we.substring(pa + 1, sp);
+        }
+
+        return fragment.getClass().getName() + ":result:" + who;
     }
 
     // Graphics
@@ -2039,6 +2067,8 @@ public class Helper {
             final View dview = LayoutInflater.from(activity).inflate(R.layout.dialog_pin_ask, null);
             final EditText etPin = dview.findViewById(R.id.etPin);
 
+            etPin.setEnabled(false);
+
             final AlertDialog dialog = new AlertDialog.Builder(activity)
                     .setView(dview)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -2050,9 +2080,18 @@ public class Helper {
 
                             Log.i("Authenticate PIN ok=" + pin.equals(entered));
                             if (pin.equals(entered)) {
+                                prefs.edit()
+                                        .remove("pin_failure_at")
+                                        .remove("pin_failure_count")
+                                        .apply();
                                 setAuthenticated(activity);
                                 ApplicationEx.getMainHandler().post(authenticated);
                             } else {
+                                int count = prefs.getInt("pin_failure_count", 0) + 1;
+                                prefs.edit()
+                                        .putLong("pin_failure_at", new Date().getTime())
+                                        .putInt("pin_failure_count", count)
+                                        .apply();
                                 ApplicationEx.getMainHandler().post(cancelled);
                             }
                         }
@@ -2093,15 +2132,25 @@ public class Helper {
                 }
             });
 
-            ApplicationEx.getMainHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    etPin.requestFocus();
-                }
-            });
-
             try {
                 dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                long pin_failure_at = prefs.getLong("pin_failure_at", 0);
+                int pin_failure_count = prefs.getInt("pin_failure_count", 0);
+                long wait = (long) Math.pow(PIN_FAILURE_DELAY, pin_failure_count) * 1000L;
+                long delay = pin_failure_at + wait - new Date().getTime();
+                Log.i("PIN wait=" + wait + " delay=" + delay);
+                ApplicationEx.getMainHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        etPin.setCompoundDrawables(null, null, null, null);
+                        etPin.setEnabled(true);
+                        etPin.requestFocus();
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    }
+                }, delay < 0 ? 0 : delay);
+
             } catch (Throwable ex) {
                 Log.e(ex);
                 /*

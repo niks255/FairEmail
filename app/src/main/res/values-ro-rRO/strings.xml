@@ -299,6 +299,7 @@
     <string name="title_advanced_delete_unseen">Șterge mesajele vechi necitite</string>
     <string name="title_advanced_kept_removed">Verifică dacă mesajele vechi au fost înlăturate de pe server</string>
     <string name="title_advanced_gmail_thread">Stil grupare mesaje tip Gmail pentru conturile Gmail</string>
+    <string name="title_advanced_subject_threading">Gruparea mesajelor în funcție de expeditor și subiect</string>
     <string name="title_advanced_sync_folders">Sincronizare lista dosare</string>
     <string name="title_advanced_sync_folders_poll">Sincronizarea activă a listei de dosare</string>
     <string name="title_advanced_sync_shared_folders">Sincronizare liste de dosare partajate</string>
@@ -324,6 +325,7 @@
     <string name="title_advanced_send_pending">Arată pictograma neobstructivă de trimitere întârziată</string>
     <string name="title_advanced_compose_font">Font prestabilit</string>
     <string name="title_advanced_prefix_once">Adaugă prefix la subiect o singură dată pentru răspuns sau redirecționare</string>
+    <string name="title_advanced_prefix_count">Adăugați numărul la prefixul de răspuns</string>
     <string name="title_advanced_separate_reply">Introduceți o linie orizontală înaintea unui antet răspuns/forward</string>
     <string name="title_advanced_extended_reply">Folosește antetul extins pentru răspuns/redirecționare</string>
     <string name="title_advanced_write_above">Scrieți deasupra textului expeditorului</string>
@@ -597,6 +599,7 @@
     <string name="title_advanced_deleted_unseen">Dacă este dezactivat, mesajele necitite sunt păstrate pe dispozitiv pentru totdeauna</string>
     <string name="title_advanced_sync_kept_hint">Această opțiune va consuma date și baterie în plus, mai ales dacă sunt multe mesaje păstrate pe dispozitiv</string>
     <string name="title_advanced_gmail_thread_hint">Acest lucru se aplică doar la mesajele noi primite și poate strica grupurile existente</string>
+    <string name="title_advanced_subject_threading_hint">Numai mesajele primite în ultimele %1$d ore</string>
     <string name="title_advanced_sync_folders_hint">Dezactivând aceasta se va reduce utilizarea datelor și a bateriei, dar se va dezactiva și actualizarea listei de dosare</string>
     <string name="title_advanced_poll_folders_hint">Sincronizarea periodică a listei de dosare în plus față de după conectarea la un cont</string>
     <string name="title_advanced_check_authentication_hint">Aceasta va verifica rezultatele autentificării DKIM, SPF și DMARC efectuate de serverul de e-mail</string>
@@ -681,6 +684,7 @@
     <string name="title_select">Selectaţi &#8230;</string>
     <string name="title_identity_name">Numele dumneavoastră</string>
     <string name="title_identity_email">Adresa dvs. de e-mail</string>
+    <string name="title_identity_tenant_hint">Acest câmp ar trebui să fie gol în majoritatea cazurilor</string>
     <string name="title_identity_color_hint">Culorile de identitate au întâietate în fața culorilor dosarului și ale contului</string>
     <string name="title_advanced_sender">Permite editarea adresei expeditorului</string>
     <string name="title_advanced_sender_name">Utilizează numele atunci când adresa expeditorului a fost editată</string>
@@ -768,6 +772,8 @@
     <string name="title_identity_required">O identitate este necesară pentru a trimite e-mailuri</string>
     <string name="title_drafts_required">Un dosar de ciorne este necesar pentru a trimite e-mailuri</string>
     <string name="title_drafts_select">Trimiterea de e-mailuri necesită un dosar ciorne selectat în setările contului</string>
+    <string name="title_account_auth_update">Actualizarea autorizației</string>
+    <string name="title_account_auth_password">Treceți la autentificarea prin parolă</string>
     <string name="title_account_delete">Ștergeți definitiv acest cont?</string>
     <string name="title_identity_delete">Ștergeți definitiv această identitate?</string>
     <string name="title_edit_html">Editează ca HTML</string>
@@ -784,6 +790,7 @@
     <string name="title_hint_alias">Apăsare lunga pentru opțiuni, precum copiere pentru crearea de identități alias</string>
     <string name="title_service_auth">Serverul de e-mail a spus: \'%1$s\'</string>
     <string name="title_service_vpn">Acesta poate fi cauzată de VPN-ul folosit</string>
+    <string name="title_service_token">Managerul de cont Android ar putea fi blocat de un VPN, un firewall, un blocant de reclame etc., ceea ce îl împiedică să obțină un token de acces</string>
     <string name="title_service_port">Vă rugăm să verificaţi din nou numărul de port</string>
     <string name="title_service_protocol">Vă rugăm să verificaţi protocolul (SSL/TLS sau STARTTLS)</string>
     <string name="title_advanced_browse">Răsfoiește mesajele de pe server</string>
@@ -1232,6 +1239,7 @@
     <string name="title_filter_unflagged">Fără stea</string>
     <string name="title_filter_unknown">Expeditori necunoscuți</string>
     <string name="title_filter_hidden">Ascuns</string>
+    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">Șters</string>
     <string name="title_filter_duplicates">Duplicate</string>
     <string name="title_filter_trash">A fost aruncat la gunoi</string>
     <string name="title_compact">Vizualizare compactă</string>

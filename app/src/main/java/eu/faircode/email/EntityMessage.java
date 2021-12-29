@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
@@ -318,40 +320,89 @@ public class EntityMessage implements Serializable {
         return MessageHelper.equalDomain(context, reply, from);
     }
 
-    static String collapsePrefixes(Context context, String language, String subject, boolean forward) {
+    static String getSubject(Context context, String language, String subject, boolean forward) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean prefix_once = prefs.getBoolean("prefix_once", true);
+        boolean prefix_count = prefs.getBoolean("prefix_count", false);
+        boolean alt = prefs.getBoolean(forward ? "alt_fwd" : "alt_re", false);
+
+        if (subject == null)
+            subject = "";
+
+        int resid = forward
+                ? (alt ? R.string.title_subject_forward_alt : R.string.title_subject_forward)
+                : (alt ? R.string.title_subject_reply_alt : R.string.title_subject_reply);
+
+        if (!prefix_once)
+            return Helper.getString(context, language, resid, subject);
+
         List<Pair<String, Boolean>> prefixes = new ArrayList<>();
         for (String re : Helper.getStrings(context, language, R.string.title_subject_reply, ""))
-            prefixes.add(new Pair<>(re.trim().toLowerCase(), false));
+            prefixes.add(new Pair<>(re, false));
         for (String re : Helper.getStrings(context, language, R.string.title_subject_reply_alt, ""))
-            prefixes.add(new Pair<>(re.trim().toLowerCase(), false));
+            prefixes.add(new Pair<>(re, false));
         for (String fwd : Helper.getStrings(context, language, R.string.title_subject_forward, ""))
-            prefixes.add(new Pair<>(fwd.trim().toLowerCase(), true));
+            prefixes.add(new Pair<>(fwd, true));
         for (String fwd : Helper.getStrings(context, language, R.string.title_subject_forward_alt, ""))
-            prefixes.add(new Pair<>(fwd.trim().toLowerCase(), true));
+            prefixes.add(new Pair<>(fwd, true));
 
+        int replies = 0;
+        boolean re = !forward;
         List<Boolean> scanned = new ArrayList<>();
-        subject = subject.trim();
+        String subj = subject.trim();
         while (true) {
             boolean found = false;
-            for (Pair<String, Boolean> prefix : prefixes)
-                if (subject.toLowerCase().startsWith(prefix.first)) {
+            for (Pair<String, Boolean> prefix : prefixes) {
+                Matcher m = getPattern(prefix.first.trim()).matcher(subj);
+                if (m.matches()) {
                     found = true;
+                    subj = m.group(m.groupCount()).trim();
+
+                    re = (re && !prefix.second);
+                    if (re)
+                        if (prefix.first.trim().endsWith(":"))
+                            try {
+                                String n = m.group(2);
+                                if (n == null)
+                                    replies++;
+                                else
+                                    replies += Integer.parseInt(n.substring(1, n.length() - 1));
+                            } catch (NumberFormatException ex) {
+                                Log.e(ex);
+                                replies++;
+                            }
+                        else
+                            replies++;
+
                     int count = scanned.size();
                     if (!prefix.second.equals(count == 0 ? forward : scanned.get(count - 1)))
                         scanned.add(prefix.second);
-                    subject = subject.substring(prefix.first.length()).trim();
+
                     break;
                 }
+            }
             if (!found)
                 break;
         }
 
-        StringBuilder result = new StringBuilder();
+        String pre = Helper.getString(context, language, resid, "");
+        int semi = pre.lastIndexOf(':');
+        if (prefix_count && replies > 0 && semi > 0)
+            pre = pre.substring(0, semi) + "[" + (replies + 1) + "]" + pre.substring(semi);
+
+        StringBuilder result = new StringBuilder(pre);
         for (int i = 0; i < scanned.size(); i++)
             result.append(context.getString(scanned.get(i) ? R.string.title_subject_forward : R.string.title_subject_reply, ""));
-        result.append(subject);
+        result.append(subj);
 
         return result.toString();
+    }
+
+    private static Pattern getPattern(String prefix) {
+        String pat = prefix.endsWith(":")
+                ? "(^" + Pattern.quote(prefix.substring(0, prefix.length() - 1)) + ")" + "((\\[\\d+\\])|(\\(\\d+\\)))?" + ":"
+                : "(^" + Pattern.quote(prefix) + ")";
+        return Pattern.compile(pat + "(\\s*)(.*)", Pattern.CASE_INSENSITIVE);
     }
 
     Element getReplyHeader(Context context, Document document, boolean separate, boolean extended) {

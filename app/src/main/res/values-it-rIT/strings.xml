@@ -290,6 +290,7 @@
     <string name="title_advanced_delete_unseen">Elimina i vecchi messaggi non letti</string>
     <string name="title_advanced_kept_removed">Verifica se i vecchi messaggi sono stati rimossi dal server</string>
     <string name="title_advanced_gmail_thread">Stile di raggruppamento dei messaggi di Gmail per i profili di Gmail</string>
+    <string name="title_advanced_subject_threading">Raggruppa i messaggi per mittente e oggetto</string>
     <string name="title_advanced_sync_folders">Sincronizza elenco delle cartelle</string>
     <string name="title_advanced_sync_folders_poll">Sincronizza attivamente l\'elenco delle cartelle</string>
     <string name="title_advanced_sync_shared_folders">Sincronizza gli elenchi delle cartelle condivise</string>
@@ -315,6 +316,7 @@
     <string name="title_advanced_send_pending">Mostra icona ritardata di invio non vistosa</string>
     <string name="title_advanced_compose_font">Font predefinito</string>
     <string name="title_advanced_prefix_once">Prefissa l\'oggetto solo una volta alla risposta o l\'inoltro</string>
+    <string name="title_advanced_prefix_count">Aggiungi conteggio al prefisso di risposta</string>
     <string name="title_advanced_separate_reply">Inserisci una riga orizzontale prima di un\'intestazione di risposta/inoltro</string>
     <string name="title_advanced_extended_reply">Usa intestazione estesa di risposto/inoltro</string>
     <string name="title_advanced_write_above">Scrivi sopra al testo del mittente</string>
@@ -589,6 +591,7 @@
     <string name="title_advanced_deleted_unseen">Quando disabilitato, i messaggi non letti sono mantenuti per sempre sul dispositivo</string>
     <string name="title_advanced_sync_kept_hint">Questo trasferirà dati aggiuntivi e consumerà energia extra della batteria, specialmente se sono memorizzati molti messaggi sul dispositivo</string>
     <string name="title_advanced_gmail_thread_hint">Ciò si applica solo ai messaggi appena ricevuti e può corrompere i gruppi esistenti</string>
+    <string name="title_advanced_subject_threading_hint">Solo i messaggi ricevuti nelle ultime %1$d ore</string>
     <string name="title_advanced_sync_folders_hint">Disabilitarlo ridurrà in qualche modo l\'uso dei dati e della batteria, ma disabiliterà anche l\'aggiornamento dell\'elenco delle cartelle</string>
     <string name="title_advanced_poll_folders_hint">Sincronizza periodicamente l\'elenco di cartelle oltre alla connessione a un profilo</string>
     <string name="title_advanced_check_authentication_hint">Questo controllerà i risultati dell\'autenticazione DKIM, SPF e DMARC come eseguita dal server email</string>
@@ -673,6 +676,7 @@
     <string name="title_select">Seleziona &#8230;</string>
     <string name="title_identity_name">Il tuo nome</string>
     <string name="title_identity_email">Il tuo indirizzo email</string>
+    <string name="title_identity_tenant_hint">Questo campo dovrebbe esser vuoto in gran parte dei casi</string>
     <string name="title_identity_color_hint">I colori dell\'identità hanno la precedenza sui colori della cartella e del profilo</string>
     <string name="title_advanced_sender">Consenti la modifica dell\'indirizzo del mittente</string>
     <string name="title_advanced_sender_name">Usa il nome quando l\'indirizzo del mittente è modificato</string>
@@ -760,6 +764,8 @@
     <string name="title_identity_required">È necessaria un\'identità per inviare le email</string>
     <string name="title_drafts_required">È necessaria una cartella delle bozze per inviare le email</string>
     <string name="title_drafts_select">L\'invio delle email richiede la selezione di una cartella di bozze nelle impostazioni del profilo</string>
+    <string name="title_account_auth_update">Aggiorna l\'autorizzazione</string>
+    <string name="title_account_auth_password">Passa all\'autenticazione con password</string>
     <string name="title_account_delete">Eliminare permanentemente questo profilo?</string>
     <string name="title_identity_delete">Eliminare permanentemente quest\'identità?</string>
     <string name="title_edit_html">Modifica come HTML</string>
@@ -901,7 +907,7 @@
     <string name="title_search_in_text">Cerca nel testo&#8230;</string>
     <string name="title_forward">Inoltra</string>
     <string name="title_resend">Reinvia</string>
-    <string name="title_fetching_headers">Scaricando intestazioni messaggio &#8230;</string>
+    <string name="title_fetching_headers">Scaricando le intestazioni del messaggio&#8230;</string>
     <string name="title_new_message">Nuovo messaggio</string>
     <string name="title_editasnew">Modifica come nuovo</string>
     <string name="title_edit_notes">Modifica le note locali</string>

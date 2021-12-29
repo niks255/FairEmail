@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import static android.app.Activity.RESULT_OK;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_OAUTH;
+import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -108,6 +109,7 @@ public class FragmentOAuth extends FragmentBase {
     private TextView tvPrivacy;
     private EditText etName;
     private EditText etEmail;
+    private EditText etTenant;
     private CheckBox cbUpdate;
     private Button btnOAuth;
     private ContentLoadingProgressBar pbOAuth;
@@ -120,6 +122,7 @@ public class FragmentOAuth extends FragmentBase {
     private Button btnSupport;
     private Button btnHelp;
 
+    private Group grpTenant;
     private Group grpError;
 
     private static final int MAILRU_TIMEOUT = 20 * 1000; // milliseconds
@@ -153,6 +156,7 @@ public class FragmentOAuth extends FragmentBase {
         tvPrivacy = view.findViewById(R.id.tvPrivacy);
         etName = view.findViewById(R.id.etName);
         etEmail = view.findViewById(R.id.etEmail);
+        etTenant = view.findViewById(R.id.etTenant);
         cbUpdate = view.findViewById(R.id.cbUpdate);
         btnOAuth = view.findViewById(R.id.btnOAuth);
         pbOAuth = view.findViewById(R.id.pbOAuth);
@@ -165,6 +169,7 @@ public class FragmentOAuth extends FragmentBase {
         btnSupport = view.findViewById(R.id.btnSupport);
         btnHelp = view.findViewById(R.id.btnHelp);
 
+        grpTenant = view.findViewById(R.id.grpTenant);
         grpError = view.findViewById(R.id.grpError);
 
         // Wire controls
@@ -208,6 +213,7 @@ public class FragmentOAuth extends FragmentBase {
         tvTitle.setText(getString(R.string.title_setup_oauth_rationale, name));
         etName.setVisibility(askAccount ? View.VISIBLE : View.GONE);
         etEmail.setVisibility(askAccount ? View.VISIBLE : View.GONE);
+        grpTenant.setVisibility(isOutlook(id) ? View.VISIBLE : View.GONE);
         pbOAuth.setVisibility(View.GONE);
         tvConfiguring.setVisibility(View.GONE);
         tvGmailHint.setVisibility("gmail".equals(id) ? View.VISIBLE : View.GONE);
@@ -215,6 +221,7 @@ public class FragmentOAuth extends FragmentBase {
 
         etName.setText(personal);
         etEmail.setText(address);
+        etTenant.setText(null);
         cbUpdate.setChecked(update);
 
         return view;
@@ -263,10 +270,12 @@ public class FragmentOAuth extends FragmentBase {
 
             etName.clearFocus();
             etEmail.clearFocus();
+            etTenant.clearFocus();
             Helper.hideKeyboard(view);
 
             etName.setEnabled(false);
             etEmail.setEnabled(false);
+            etTenant.setEnabled(false);
             cbUpdate.setEnabled(false);
             btnOAuth.setEnabled(false);
             pbOAuth.setVisibility(View.VISIBLE);
@@ -336,9 +345,19 @@ public class FragmentOAuth extends FragmentBase {
 
             AuthorizationService authService = new AuthorizationService(context, appAuthConfig);
 
+            String authorizationEndpoint = provider.oauth.authorizationEndpoint;
+            String tokenEndpoint = provider.oauth.tokenEndpoint;
+            String tenant = etTenant.getText().toString().trim();
+
+            if (TextUtils.isEmpty(tenant))
+                tenant = "common";
+
+            authorizationEndpoint = authorizationEndpoint.replace("{tenant}", tenant);
+            tokenEndpoint = tokenEndpoint.replace("{tenant}", tenant);
+
             AuthorizationServiceConfiguration serviceConfig = new AuthorizationServiceConfiguration(
-                    Uri.parse(provider.oauth.authorizationEndpoint),
-                    Uri.parse(provider.oauth.tokenEndpoint));
+                    Uri.parse(authorizationEndpoint),
+                    Uri.parse(tokenEndpoint));
 
             AuthState authState = new AuthState(serviceConfig);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -384,10 +403,8 @@ public class FragmentOAuth extends FragmentBase {
                 authRequestBuilder.setPrompt("consent");
 
             // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
-            if ("office365".equals(provider.id))
+            if (isOutlook(provider.id))
                 authRequestBuilder.setPrompt("select_account");
-            if ("outlook".equals(provider.id))
-                authRequestBuilder.setPrompt("consent");
 
             AuthorizationRequest authRequest = authRequestBuilder.build();
 
@@ -413,6 +430,7 @@ public class FragmentOAuth extends FragmentBase {
         try {
             etName.setEnabled(true);
             etEmail.setEnabled(true);
+            etTenant.setEnabled(true);
             cbUpdate.setEnabled(true);
 
             AuthorizationResponse auth = AuthorizationResponse.fromIntent(data);
@@ -450,7 +468,7 @@ public class FragmentOAuth extends FragmentBase {
                     .setAdditionalParameters(Collections.<String, String>emptyMap())
                     .setNonce(auth.request.nonce);
 
-            if ("office365".equals(provider.id) || "outlook".equals(provider.id))
+            if (isOutlook(provider.id))
                 builder.setScope(TextUtils.join(" ", provider.oauth.scopes));
 
             TokenRequest request = builder.build();
@@ -789,7 +807,7 @@ public class FragmentOAuth extends FragmentBase {
 
                     if (args.getBoolean("update")) {
                         List<EntityAccount> accounts =
-                                db.account().getAccounts(username, AUTH_TYPE_OAUTH);
+                                db.account().getAccounts(username, new int[]{AUTH_TYPE_OAUTH, AUTH_TYPE_PASSWORD});
                         if (accounts != null && accounts.size() == 1)
                             update = accounts.get(0);
                     }
@@ -876,8 +894,8 @@ public class FragmentOAuth extends FragmentBase {
                         args.putLong("account", update.id);
                         EntityLog.log(context, "OAuth update account=" + update.name);
                         db.account().setAccountSynchronize(update.id, true);
-                        db.account().setAccountPassword(update.id, state);
-                        db.identity().setIdentityPassword(update.id, update.user, state, update.auth_type);
+                        db.account().setAccountPassword(update.id, state, AUTH_TYPE_OAUTH);
+                        db.identity().setIdentityPassword(update.id, update.user, state, update.auth_type, AUTH_TYPE_OAUTH);
                     }
 
                     db.setTransactionSuccessful();
@@ -921,6 +939,7 @@ public class FragmentOAuth extends FragmentBase {
     private void onHandleCancel() {
         etName.setEnabled(true);
         etEmail.setEnabled(true);
+        etTenant.setEnabled(true);
         cbUpdate.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
@@ -942,7 +961,7 @@ public class FragmentOAuth extends FragmentBase {
         if ("gmail".equals(id))
             tvGmailDraftsHint.setVisibility(View.VISIBLE);
 
-        if ("office365".equals(id) || "outlook".equals(id)) {
+        if (isOutlook(id)) {
             if (ex instanceof AuthenticationFailedException)
                 tvOfficeAuthHint.setVisibility(View.VISIBLE);
         }
@@ -959,6 +978,7 @@ public class FragmentOAuth extends FragmentBase {
 
         etName.setEnabled(true);
         etEmail.setEnabled(true);
+        etTenant.setEnabled(true);
         cbUpdate.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
@@ -978,5 +998,9 @@ public class FragmentOAuth extends FragmentBase {
         grpError.setVisibility(View.GONE);
         tvGmailDraftsHint.setVisibility(View.GONE);
         tvOfficeAuthHint.setVisibility(View.GONE);
+    }
+
+    private static boolean isOutlook(String id) {
+        return ("office365".equals(id) || "outlook".equals(id));
     }
 }

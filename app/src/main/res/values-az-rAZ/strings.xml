@@ -290,6 +290,7 @@
     <string name="title_advanced_delete_unseen">Köhnə oxunmamış mesajları sil</string>
     <string name="title_advanced_kept_removed">Köhnə mesajların serverlərdən silinib silinmədiyini yoxlayın</string>
     <string name="title_advanced_gmail_thread">Gmail hesabları üçün Gmail mesaj qruplaşdırma stili</string>
+    <string name="title_advanced_subject_threading">Göndərənə və mövzuya görə mesajları qruplaşdır</string>
     <string name="title_advanced_sync_folders">Qovluq siyahısını eyniləşdir</string>
     <string name="title_advanced_sync_folders_poll">Qovluq siyahısını aktiv olaraq eyniləşdir</string>
     <string name="title_advanced_sync_shared_folders">Paylaşılan qovluq siyahılarını eyniləşdir</string>
@@ -315,6 +316,7 @@
     <string name="title_advanced_send_pending">Narahat edici olmayan gecikməli göndərmə nişanını göstər</string>
     <string name="title_advanced_compose_font">İlkin şrift</string>
     <string name="title_advanced_prefix_once">Mövzunu yalnız bir dəfə cavablayarkən və ya yönləndirərkən prefiks</string>
+    <string name="title_advanced_prefix_count">Prefiksi cavablandırmaq üçün sayğac əlavə et</string>
     <string name="title_advanced_separate_reply">Cavablama/yönləndirmə başlığından əvvəl üfüqi bir xətt əlavə et</string>
     <string name="title_advanced_extended_reply">Genişləndirilmiş cavablama/yönləndirmə başlığı istifadə et</string>
     <string name="title_advanced_write_above">Göndərən mətninin üstünə yaz</string>
@@ -588,6 +590,7 @@
     <string name="title_advanced_deleted_unseen">Sıradan çıxarılanda, oxunmamış mesajlar həmişəlik cihazda qalacaq</string>
     <string name="title_advanced_sync_kept_hint">Bu, xüsusilə cihazda həddindən çox mesaj saxlanılanda ekstra data transfer edir və daha çox batareya enerjisi istifadə edir</string>
     <string name="title_advanced_gmail_thread_hint">Bu, yalnız yeni gələn mesajlara tətbiq olunur və mövcud qrupları zədələyə bilər</string>
+    <string name="title_advanced_subject_threading_hint">Yalnız son %1$d saat ərzində alınan mesajlar</string>
     <string name="title_advanced_sync_folders_hint">Bunu sıradan çıxartmaq, verilənlər və batareya istifadəsini bir az azaldacaq, ancaq qovluq siyahısının yenilənməsini də sıradan çıxardacaq</string>
     <string name="title_advanced_poll_folders_hint">Bir hesaba bağlandıqdan sonra əlavə olaraq qovluq siyahısını mütəmadi olaraq eyniləşdir</string>
     <string name="title_advanced_check_authentication_hint">Bu, e-poçt serveri tərəfindən icra edilən DKIM, SPF və DMARC kimlik təsdiqləməsinin nəticələrini yoxlayacaq</string>
@@ -672,6 +675,7 @@
     <string name="title_select">&#8230; seçin</string>
     <string name="title_identity_name">Adınız</string>
     <string name="title_identity_email">E-poçt ünvanınız</string>
+    <string name="title_identity_tenant_hint">Bu sahə əksər hallarda boş olmalıdır</string>
     <string name="title_identity_color_hint">Kimlik rəngləri, qovluq və hesab rənglərindən əvvəl gəlir</string>
     <string name="title_advanced_sender">Göndərənin ünvanına düzəlişə icazə ver</string>
     <string name="title_advanced_sender_name">Göndərənin ünvanına düzəliş ediləndə adı istifadə et</string>
@@ -759,6 +763,8 @@
     <string name="title_identity_required">E-poçtları göndərmək üçün bir kimlik tələb olunur</string>
     <string name="title_drafts_required">E-poçtları göndərmək üçün bir qaralama qovluğu tələb olunur</string>
     <string name="title_drafts_select">E-poçtları göndərmək, hesab tənzimləmələrdə bir qaralamalar qovluğunun seçilməsini tələb edir</string>
+    <string name="title_account_auth_update">Səlahiyyətləndirməni yenilə</string>
+    <string name="title_account_auth_password">Parol təsdiqləməsinə keç</string>
     <string name="title_account_delete">Bu hesab birdəfəlik silinsin?</string>
     <string name="title_identity_delete">Bu kimlik birdəfəlik silinsin?</string>
     <string name="title_edit_html">HTML kimi düzəliş et</string>
@@ -900,6 +906,7 @@
     <string name="title_search_in_text">Mətndə axtar &#8230;</string>
     <string name="title_forward">Yönləndir</string>
     <string name="title_resend">Təkrar göndər</string>
+    <string name="title_fetching_headers">Mesaj başlıqları endirilir &#8230;</string>
     <string name="title_new_message">Yeni mesaj</string>
     <string name="title_editasnew">Yeni kimi düzəliş et</string>
     <string name="title_edit_notes">Yerli qeydlərə düzəliş et</string>

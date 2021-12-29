@@ -104,6 +104,7 @@ Related questions:
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 * A [bug in Crowdin](https://crowdin.com/messages/536694) blocks updating FAQ.md (this text) for translation.
+* The Strato email server sometimes disconnects when sending messages, possibly due to stringent server firewall rules. This cannot be fixed by the app.
 
 <h2><a name="planned-features"></a>Planned features</h2>
 
@@ -447,6 +448,7 @@ The low priority status bar notification shows the number of pending operations,
 * *exists*: check if message exists
 * *rule*: execute rule on body text
 * *expunge*: permanently delete messages
+* *report*: process delivery or read receipt (experimental)
 
 Operations are processed only when there is a connection to the email server or when manually synchronizing.
 See also [this FAQ](#user-content-faq16).
@@ -3428,6 +3430,30 @@ Remarks:
 
 <br />
 
+*Process delivery/read receipt (version 1.1797+)*
+
+On receiving a delivery or read receipt, the related message will be looked up in the sent messages folder
+and the following keywords will be set depending on the contents of the report:
+
+```
+$Delivered
+$NotDelivered
+$Displayed
+$NotDisplayed
+```
+
+* Delivered: action = *delivered*, *relayed*, or *expanded*, [see here](https://datatracker.ietf.org/doc/html/rfc3464#section-2.3.3)
+* Displayed: disposition = *displayed*, [see here](https://datatracker.ietf.org/doc/html/rfc3798#section-3.2.6)
+
+It is probably a good idea to enable *Show keywords in message header* in the display settings.
+
+Note that the email server needs to support IMAP flags (keywords) for this feature.
+
+Filter rules will be applied to the received receipt, so it is possible to move/archive the receipt.
+See [this FAQ](#user-content-faq71) for a header condition to recognize receipts.
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -4349,6 +4375,10 @@ Like most Android apps, FairEmail consults the Android address book for contact 
 
 There is also a local contact database, which is filled with contacts from sent and received messages.
 You can enable/disable this in the send settings of the app.
+
+If you want to import contacts into the local contact database,
+this is possible (in recent versions of the app) by tapping on the *Manage* button in the send settings.
+In the three-dots menu at the top right there is an import (and also an export) [vCard](https://en.wikipedia.org/wiki/VCard)s menu item.
 
 The Android address book is managed by the Android Contacts app (or a replacement for this app).
 Please see [this article](https://support.google.com/contacts/answer/1069522) about importing contacts to the Android address book.

@@ -164,7 +164,6 @@ import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
-import org.openintents.openpgp.util.OpenPgpServiceConnection;
 import org.w3c.dom.css.CSSStyleSheet;
 
 import java.io.BufferedOutputStream;
@@ -273,9 +272,6 @@ public class FragmentCompose extends FragmentBase {
     private ContentResolver resolver;
     private AdapterAttachment adapter;
 
-    private boolean prefix_once = false;
-    private boolean alt_re = false;
-    private boolean alt_fwd = false;
     private boolean monospaced = false;
     private String compose_font;
     private Integer encrypt = null;
@@ -334,9 +330,6 @@ public class FragmentCompose extends FragmentBase {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        prefix_once = prefs.getBoolean("prefix_once", true);
-        alt_re = prefs.getBoolean("alt_re", false);
-        alt_fwd = prefs.getBoolean("alt_fwd", false);
         monospaced = prefs.getBoolean("monospaced", false);
         compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
         media = prefs.getBoolean("compose_media", true);
@@ -4578,12 +4571,8 @@ public class FragmentCompose extends FragmentBase {
                         // Subject
                         String subject = (ref.subject == null ? "" : ref.subject);
                         if ("reply".equals(action) || "reply_all".equals(action)) {
-                            if (prefix_once)
-                                subject = EntityMessage.collapsePrefixes(context, ref.language, subject, false);
-                            data.draft.subject = Helper.getString(context,
-                                    ref.language,
-                                    alt_re ? R.string.title_subject_reply_alt : R.string.title_subject_reply,
-                                    subject);
+                            data.draft.subject =
+                                    EntityMessage.getSubject(context, ref.language, subject, false);
 
                             if (external_text != null) {
                                 Element div = document.createElement("div");
@@ -4596,12 +4585,8 @@ public class FragmentCompose extends FragmentBase {
                                 document.body().appendChild(div);
                             }
                         } else if ("forward".equals(action)) {
-                            if (prefix_once)
-                                subject = EntityMessage.collapsePrefixes(context, ref.language, subject, true);
-                            data.draft.subject = Helper.getString(context,
-                                    ref.language,
-                                    alt_fwd ? R.string.title_subject_forward_alt : R.string.title_subject_forward,
-                                    subject);
+                            data.draft.subject =
+                                    EntityMessage.getSubject(context, ref.language, subject, true);
                         } else if ("resend".equals(action)) {
                             data.draft.subject = ref.subject;
                         } else if ("editasnew".equals(action)) {
@@ -5541,37 +5526,6 @@ public class FragmentCompose extends FragmentBase {
                     if (TextUtils.isEmpty(extra))
                         extra = null;
 
-                    if (action == R.id.action_send) {
-                        if (draft.plain_only == null || !draft.plain_only) {
-                            // Remove unused inline images
-                            List<String> cids = new ArrayList<>();
-                            Document d = JsoupEx.parse(body);
-                            for (Element element : d.select("img")) {
-                                String src = element.attr("src");
-                                if (src.startsWith("cid:"))
-                                    cids.add("<" + src.substring(4) + ">");
-                            }
-
-                            for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (attachment.isInline() && attachment.isImage() &&
-                                        attachment.cid != null && !cids.contains(attachment.cid)) {
-                                    Log.i("Removing unused inline attachment cid=" + attachment.cid);
-                                    attachments.remove(attachment);
-                                    db.attachment().deleteAttachment(attachment.id);
-                                    dirty = true;
-                                }
-                        } else {
-                            // Convert inline images to attachments
-                            for (EntityAttachment attachment : new ArrayList<>(attachments))
-                                if (attachment.isInline() && attachment.isImage()) {
-                                    Log.i("Converting to attachment cid=" + attachment.cid);
-                                    attachment.disposition = Part.ATTACHMENT;
-                                    db.attachment().setDisposition(attachment.id, attachment.disposition);
-                                    dirty = true;
-                                }
-                        }
-                    }
-
                     List<Integer> eparts = new ArrayList<>();
                     for (EntityAttachment attachment : attachments)
                         if (attachment.available)
@@ -5728,6 +5682,35 @@ public class FragmentCompose extends FragmentBase {
                                     " action=" + getActionName(action));
 
                         dirty = true;
+                    } else if (action == R.id.action_send) {
+                        if (draft.plain_only == null || !draft.plain_only) {
+                            // Remove unused inline images
+                            List<String> cids = new ArrayList<>();
+                            Document d = JsoupEx.parse(body);
+                            for (Element element : d.select("img")) {
+                                String src = element.attr("src");
+                                if (src.startsWith("cid:"))
+                                    cids.add("<" + src.substring(4) + ">");
+                            }
+
+                            for (EntityAttachment attachment : new ArrayList<>(attachments))
+                                if (attachment.isInline() && attachment.isImage() &&
+                                        attachment.cid != null && !cids.contains(attachment.cid)) {
+                                    Log.i("Removing unused inline attachment cid=" + attachment.cid);
+                                    attachments.remove(attachment);
+                                    db.attachment().deleteAttachment(attachment.id);
+                                    dirty = true;
+                                }
+                        } else {
+                            // Convert inline images to attachments
+                            for (EntityAttachment attachment : new ArrayList<>(attachments))
+                                if (attachment.isInline() && attachment.isImage()) {
+                                    Log.i("Converting to attachment cid=" + attachment.cid);
+                                    attachment.disposition = Part.ATTACHMENT;
+                                    db.attachment().setDisposition(attachment.id, attachment.disposition);
+                                    dirty = true;
+                                }
+                        }
                     }
 
                     Helper.writeText(draft.getFile(context), body);
@@ -6251,7 +6234,7 @@ public class FragmentCompose extends FragmentBase {
         div.attr("fairemail", "signature");
 
         if (usenet) {
-            // https://www.ietf.org/rfc/rfc3676.txt
+            // https://datatracker.ietf.org/doc/html/rfc3676#section-4.3
             Element span = document.createElement("span");
             span.text("-- ");
             span.appendElement("br");

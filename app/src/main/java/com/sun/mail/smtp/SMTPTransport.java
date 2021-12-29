@@ -1313,7 +1313,8 @@ public class SMTPTransport extends Transport {
 
 	    Integer _fd = null;
 	    try {
-			_fd = ParcelFileDescriptor.fromSocket(serverSocket).getFd();
+			if (eu.faircode.email.BuildConfig.DEBUG)
+				_fd = ParcelFileDescriptor.fromSocket(serverSocket).getFd();
 		} catch (Throwable ex) {
 			eu.faircode.email.Log.w(ex);
 		}
@@ -1325,20 +1326,24 @@ public class SMTPTransport extends Transport {
 	    traceOutput.setReporter(total.value, new TraceOutputStream.IReport() {
 			@Override
 			public void report(int pos, int total) {
-				if (reporter == null)
-					return;
+				try {
+					if (reporter == null)
+						return;
 
-				int q = 0;
-				if (fd != null)
-					q = eu.faircode.email.ConnectionHelper.jni_socket_get_send_buffer(fd);
-				if (q > pos)
-					q = pos;
+					int q = 0;
+					if (fd != null)
+						q = eu.faircode.email.ConnectionHelper.jni_socket_get_send_buffer(fd);
+					if (q > pos)
+						q = pos;
 
-				int sent = pos - q;
-				if (sent > total)
-					sent = total;
+					int sent = pos - q;
+					if (sent > total)
+						sent = total;
 
-				reporter.report(sent, total);
+					reporter.report(sent, total);
+				} catch (Throwable ex) {
+					eu.faircode.email.Log.e(ex);
+				}
 			}
 		});
 	    if (chunkSize > 0 && supportsExtension("CHUNKING")) {
