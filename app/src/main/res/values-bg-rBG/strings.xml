@@ -703,7 +703,6 @@
     <string name="title_move_to_account">Премести в %1$s &#8230;</string>
     <string name="title_report_spam">Третиране като спам</string>
     <string name="title_delete_permanently">Изтрийте за постоянно</string>
-    <string name="title_no_undo">Разбирам, че това не може да бъде отменено</string>
     <string name="title_snooze">Дрямка &#8230;</string>
     <string name="title_archive">Архив</string>
     <string name="title_reply">Отговори</string>
@@ -980,6 +979,7 @@
     <string name="title_rule_answer">Отговор/препращане</string>
     <string name="title_rule_tts">Озвучаване на текст</string>
     <string name="title_rule_automation">Автоматично</string>
+    <string name="title_rule_delete">Изтрийте за постоянно</string>
     <string name="title_rule_caption">Редакция правило</string>
     <string name="title_rule_title">Правилото важи за</string>
     <string name="title_rule_name">Име</string>
@@ -1049,6 +1049,7 @@
     <string name="title_legend_closing">Затваряне</string>
     <string name="title_legend_unified">Обединена входяща поща / главен профил</string>
     <string name="title_legend_inbox">Входящи</string>
+    <string name="title_legend_outbox">Изходящи</string>
     <string name="title_legend_drafts">Чернови</string>
     <string name="title_legend_sent">Изпратено</string>
     <string name="title_legend_archive">Архив</string>

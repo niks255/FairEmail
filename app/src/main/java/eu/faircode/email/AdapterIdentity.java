@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -129,6 +129,7 @@ public class AdapterIdentity extends RecyclerView.Adapter<AdapterIdentity.ViewHo
         }
 
         private void bindTo(TupleIdentityEx identity) {
+            view.setAlpha(identity.synchronize && identity.accountSynchronize ? 1.0f : Helper.LOW_LIGHT);
             vwColor.setBackgroundColor(identity.color == null ? Color.TRANSPARENT : identity.color);
             vwColor.setVisibility(ActivityBilling.isPro(context) ? View.VISIBLE : View.INVISIBLE);
 

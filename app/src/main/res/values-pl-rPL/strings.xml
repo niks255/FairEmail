@@ -315,6 +315,7 @@
     <string name="title_advanced_sync_shared_folders">Synchronizuj listy udostępnionych folderów</string>
     <string name="title_advanced_subscriptions">Zarządzaj subskrypcjami folderów</string>
     <string name="title_advanced_check_authentication">Sprawdź uwierzytelnianie wiadomości</string>
+    <string name="title_advanced_check_tls">Sprawdź Transport Layer Security (TLS)</string>
     <string name="title_advanced_check_reply_domain">Sprawdź adres odpowiedzi podczas synchronizacji wiadomości</string>
     <string name="title_advanced_check_mx">Sprawdź adresy e-mail nadawcy przy synchronizowaniu wiadomości</string>
     <string name="title_advanced_check_blocklist">Sprawdź, czy nazwa domeny nadawcy znajduje się na liście spamu</string>
@@ -380,6 +381,7 @@
     <string name="title_advanced_two_row">Dwa wiersze</string>
     <string name="title_advanced_two_col">Dwie kolumny</string>
     <string name="title_advanced_min_screen_size">Minimalny rozmiar ekranu dla podziału ekranu</string>
+    <string name="title_advanced_close_pane">Zwiń wiersz lub kolumnę podczas zamykania rozmowy</string>
     <string name="title_advanced_nav_options">Pokaż opcje menu nawigacji</string>
     <string name="title_advanced_nav_pin">Przypnij menu nawigacji</string>
     <string name="title_advanced_nav_hide_title">Ukryć opcje menu nawigacji?</string>
@@ -613,6 +615,7 @@
     <string name="title_advanced_sync_folders_hint">Wyłączenie tej opcji nieco zmniejszy zużycie danych i baterii, ale wyłączy także aktualizację listy folderów</string>
     <string name="title_advanced_poll_folders_hint">Okresowo synchronizuj listę folderów po połączeniu z kontem</string>
     <string name="title_advanced_check_authentication_hint">Spowoduje to sprawdzenie wyników uwierzytelniania DKIM, SPF i DMARC w sposób wykonywany przez serwer poczty elektronicznej</string>
+    <string name="title_advanced_check_tls_hint">Zielona tarcza wyświetlona będzie tylko wtedy, gdy wiadomość zostanie bezpiecznie przetransportowana przez wszystkie serwery</string>
     <string name="title_advanced_check_reply_hint">Spowoduje to sprawdzenie, czy nazwa domeny nadawcy i adres odpowiedzi są takie same</string>
     <string name="title_advanced_lookup_mx_hint">To sprawdzi, czy istnieją rekordy MX DNS</string>
     <string name="title_advanced_sync_delay_hint">Wydłuży to synchronizację wiadomości</string>
@@ -648,6 +651,7 @@
     <string name="title_advanced_preview_issue">Przewijanie może być powolne z powodu błędu w niektórych wersjach Androida, gdy liczba linii jest większa niż jedna</string>
     <string name="title_advanced_overview_mode_hint">Może to skutkować bardzo małymi czcionkami</string>
     <string name="title_advanced_override_width_hint">Może to sprawić, że wiadomości będą węższe, ale też dziwnie wyglądające</string>
+    <string name="title_advanced_monospaced_pre_hint">Tylko wiadomości tekstowe będą uważane za wstępnie sformatowane</string>
     <string name="title_advanced_placeholders_hint">Dotyczy to tylko przeformatowanych wiadomości</string>
     <string name="title_advanced_inline_hint">Obrazy wstawione są obrazami zawartymi w wiadomości</string>
     <string name="title_advanced_parse_classes_hint">Spowoduje to poprawniejsze wyświetlanie wiadomości, ale z możliwym opóźnieniem</string>
@@ -978,7 +982,6 @@
     <string name="title_move_to_account">Przenieś do %1$s &#8230;</string>
     <string name="title_report_spam">Traktuj jako spam</string>
     <string name="title_delete_permanently">Usuń trwale</string>
-    <string name="title_no_undo">Rozumiem, że tego nie można cofnąć</string>
     <string name="title_snooze">Odłóż &#8230;</string>
     <string name="title_archive">Archiwum</string>
     <string name="title_reply">Odpowiedz</string>
@@ -1249,7 +1252,7 @@
     <string name="title_filter_unflagged">Nie oznaczona</string>
     <string name="title_filter_unknown">Nieznani nadawcy</string>
     <string name="title_filter_hidden">Ukryta</string>
-    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">Usunięte</string>
+    <string name="title_filter_deleted">Usunięte</string>
     <string name="title_filter_duplicates">Duplikaty</string>
     <string name="title_filter_trash">Usunięte</string>
     <string name="title_compact">Widok kompaktowy</string>
@@ -1297,6 +1300,8 @@
     <string name="title_rule_answer">Odpowiedz/prześlij dalej</string>
     <string name="title_rule_tts">Przetwarzanie tekstu na mowę</string>
     <string name="title_rule_automation">Automatyzacja</string>
+    <string name="title_rule_delete">Usuń trwale</string>
+    <string name="title_rule_sound">Odtwórz dźwięk</string>
     <string name="title_rule_caption">Edytuj regułę</string>
     <string name="title_rule_title">Reguła dotyczy</string>
     <string name="title_rule_name">Nazwa</string>
@@ -1310,6 +1315,7 @@
     <string name="title_rule_attachments">Zawiera załącznik</string>
     <string name="title_rule_header">Nagłówek zawiera</string>
     <string name="title_rule_body">Tekst zawiera</string>
+    <string name="title_rule_skip_quotes">Pomiń cytowany tekst</string>
     <string name="title_rule_body_remark">Użycie tego warunku będzie zawsze pobierało tekst wiadomości, co może spowolnić synchronizację listy wiadomości</string>
     <string name="title_rule_time_abs">Całkowity czas (otrzymany) między</string>
     <string name="title_rule_time_after">Otrzymane po</string>
@@ -1336,6 +1342,7 @@
     <string name="title_rule_answer_missing">Brak szablonu</string>
     <string name="title_rule_keyword_missing">Brak słowa kluczowego</string>
     <string name="title_rule_automation_hint">Zostanie wysłany zamiar (intent) \'%1$s\' z dodatkami (extras) \'%2$s\'</string>
+    <string name="title_rule_delete_hint">Trwałe usunięcie jest nieodwracalne, więc upewnij się, że warunki reguły są poprawne!</string>
     <string name="title_rule_execute">Wykonaj teraz</string>
     <string name="title_rule_applied">Problematycznych wiadomości: %1$d</string>
     <string name="title_rule_check">Sprawdź</string>
@@ -1350,6 +1357,10 @@
     <string name="title_rule_tts_from">Od</string>
     <string name="title_rule_tts_subject">Temat</string>
     <string name="title_rule_tts_content">Tekst</string>
+    <string name="title_rule_select_sound">Wybierz dźwięk</string>
+    <string name="title_rule_use_as_alarm">Użyj jako alarmu</string>
+    <string name="title_rule_alarm_hint">To zignoruje zasady \"nie przeszkadzać\"</string>
+    <string name="title_rule_alarm_duration">Maksymalny czas trwania alarmu (sekundy)</string>
     <string name="title_legend_section_synchronize">Synchronizuj</string>
     <string name="title_legend_section_folders">Foldery</string>
     <string name="title_legend_section_messages">Wiadomości</string>
@@ -1374,6 +1385,7 @@
     <string name="title_legend_closing">Zamykanie</string>
     <string name="title_legend_unified">Wspólna skrzynka / konto podstawowe</string>
     <string name="title_legend_inbox">Odebrane</string>
+    <string name="title_legend_outbox">Wysyłane</string>
     <string name="title_legend_drafts">Szkice</string>
     <string name="title_legend_sent">Wysłane</string>
     <string name="title_legend_archive">Archiwum</string>

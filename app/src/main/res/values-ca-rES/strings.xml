@@ -876,6 +876,7 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_rule_copy">Copia (etiqueta)</string>
     <string name="title_rule_tts">Text a veu</string>
     <string name="title_rule_automation">Automatització</string>
+    <string name="title_rule_delete">Suprimeix permanentment</string>
     <string name="title_rule_caption">Edita la regla</string>
     <string name="title_rule_title">La regla s\'aplica a</string>
     <string name="title_rule_name">Nom</string>
@@ -934,6 +935,7 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_legend_closing">Tancant</string>
     <string name="title_legend_unified">Safata d\'entrada unificada / Compre principal</string>
     <string name="title_legend_inbox">Safata d\'entrada</string>
+    <string name="title_legend_outbox">Safata de sortida</string>
     <string name="title_legend_drafts">Esborranys</string>
     <string name="title_legend_sent">Enviat</string>
     <string name="title_legend_archive">Arxiu</string>

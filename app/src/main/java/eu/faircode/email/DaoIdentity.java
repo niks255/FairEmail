@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import androidx.lifecycle.LiveData;
@@ -33,7 +33,7 @@ public interface DaoIdentity {
     LiveData<List<TupleIdentityView>> liveIdentityView();
 
     @Query("SELECT identity.*" +
-            ", account.name AS accountName, account.category AS accountCategory" +
+            ", account.name AS accountName, account.category AS accountCategory, account.synchronize AS accountSynchronize" +
             ", folder.id AS drafts" +
             " FROM identity" +
             " JOIN account ON account.id = identity.account" +
@@ -41,7 +41,7 @@ public interface DaoIdentity {
     LiveData<List<TupleIdentityEx>> liveIdentities();
 
     @Query("SELECT identity.*" +
-            ", account.name AS accountName, account.category AS accountCategory" +
+            ", account.name AS accountName, account.category AS accountCategory, account.synchronize AS accountSynchronize" +
             ", folder.id AS drafts" +
             " FROM identity" +
             " JOIN account ON account.id = identity.account" +
@@ -51,7 +51,7 @@ public interface DaoIdentity {
     LiveData<List<TupleIdentityEx>> liveComposableIdentities();
 
     @Query("SELECT identity.*" +
-            ", account.name AS accountName, account.category AS accountCategory" +
+            ", account.name AS accountName, account.category AS accountCategory, account.synchronize AS accountSynchronize" +
             ", folder.id AS drafts" +
             " FROM identity" +
             " JOIN account ON account.id = identity.account" +

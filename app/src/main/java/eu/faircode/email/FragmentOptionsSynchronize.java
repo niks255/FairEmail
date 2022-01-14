@@ -16,14 +16,13 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -82,6 +81,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private SwitchCompat swDeleteUnseen;
     private SwitchCompat swSyncKept;
     private SwitchCompat swGmailThread;
+    private SwitchCompat swOutlookThread;
     private SwitchCompat swSubjectThreading;
     private TextView tvSubjectThreading;
     private SwitchCompat swSyncFolders;
@@ -91,6 +91,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private SwitchCompat swTuneKeepAlive;
 
     private SwitchCompat swCheckAuthentication;
+    private SwitchCompat swCheckTls;
+    private ImageButton ibCheckTlsInfo;
     private SwitchCompat swCheckReply;
     private SwitchCompat swCheckMx;
     private SwitchCompat swCheckBlocklist;
@@ -106,9 +108,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             "enabled", "poll_interval", "auto_optimize", "schedule", "schedule_start", "schedule_end",
             "sync_quick_imap", "sync_quick_pop",
             "sync_nodate", "sync_unseen", "sync_flagged", "delete_unseen", "sync_kept",
-            "gmail_thread_id", "subject_threading",
+            "gmail_thread_id", "outlook_thread_id", "subject_threading",
             "sync_folders", "sync_folders_poll", "sync_shared_folders", "subscriptions",
-            "check_authentication", "check_reply_domain", "check_mx", "check_blocklist", "use_blocklist",
+            "check_authentication", "check_tls", "check_reply_domain", "check_mx", "check_blocklist", "use_blocklist",
             "tune_keep_alive"
     };
 
@@ -152,6 +154,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swDeleteUnseen = view.findViewById(R.id.swDeleteUnseen);
         swSyncKept = view.findViewById(R.id.swSyncKept);
         swGmailThread = view.findViewById(R.id.swGmailThread);
+        swOutlookThread = view.findViewById(R.id.swOutlookThread);
         swSubjectThreading = view.findViewById(R.id.swSubjectThreading);
         tvSubjectThreading = view.findViewById(R.id.tvSubjectThreading);
         swSyncFolders = view.findViewById(R.id.swSyncFolders);
@@ -161,6 +164,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swTuneKeepAlive = view.findViewById(R.id.swTuneKeepAlive);
 
         swCheckAuthentication = view.findViewById(R.id.swCheckAuthentication);
+        swCheckTls = view.findViewById(R.id.swCheckTls);
+        ibCheckTlsInfo = view.findViewById(R.id.ibCheckTlsInfo);
         swCheckReply = view.findViewById(R.id.swCheckReply);
         swCheckMx = view.findViewById(R.id.swCheckMx);
         swCheckBlocklist = view.findViewById(R.id.swCheckBlocklist);
@@ -330,7 +335,15 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("gmail_thread_id", checked).apply();
-                swSubjectThreading.setEnabled(!checked);
+                swSubjectThreading.setEnabled(!swGmailThread.isChecked() && !swOutlookThread.isChecked());
+            }
+        });
+
+        swOutlookThread.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("outlook_thread_id", checked).apply();
+                swSubjectThreading.setEnabled(!swGmailThread.isChecked() && !swOutlookThread.isChecked());
             }
         });
 
@@ -382,6 +395,21 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
                 prefs.edit().putBoolean("check_authentication", checked).apply();
+                swCheckTls.setEnabled(checked);
+            }
+        });
+
+        swCheckTls.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
+                prefs.edit().putBoolean("check_tls", checked).apply();
+            }
+        });
+
+        ibCheckTlsInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 176);
             }
         });
 
@@ -424,6 +452,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
 
+        swOutlookThread.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         tvSubjectThreading.setText(getString(R.string.title_advanced_subject_threading_hint, MessageHelper.MAX_SUBJECT_AGE));
 
         DB db = DB.getInstance(getContext());
@@ -508,8 +537,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swDeleteUnseen.setChecked(prefs.getBoolean("delete_unseen", false));
         swSyncKept.setChecked(prefs.getBoolean("sync_kept", true));
         swGmailThread.setChecked(prefs.getBoolean("gmail_thread_id", false));
+        swOutlookThread.setChecked(prefs.getBoolean("outlook_thread_id", false));
         swSubjectThreading.setChecked(prefs.getBoolean("subject_threading", false));
-        swSubjectThreading.setEnabled(!swGmailThread.isChecked());
+        swSubjectThreading.setEnabled(!swGmailThread.isChecked() && !swOutlookThread.isChecked());
         swSyncFolders.setChecked(prefs.getBoolean("sync_folders", true));
         swSyncFoldersPoll.setChecked(prefs.getBoolean("sync_folders_poll", false));
         swSyncFoldersPoll.setEnabled(swSyncFolders.isChecked());
@@ -518,6 +548,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         swSubscriptions.setChecked(prefs.getBoolean("subscriptions", false));
         swTuneKeepAlive.setChecked(prefs.getBoolean("tune_keep_alive", true));
         swCheckAuthentication.setChecked(prefs.getBoolean("check_authentication", true));
+        swCheckTls.setChecked(prefs.getBoolean("check_tls", false));
+        swCheckTls.setEnabled(swCheckAuthentication.isChecked());
         swCheckReply.setChecked(prefs.getBoolean("check_reply_domain", true));
         swCheckMx.setChecked(prefs.getBoolean("check_mx", false));
         swCheckBlocklist.setChecked(prefs.getBoolean("check_blocklist", false));

@@ -306,6 +306,7 @@
     <string name="title_advanced_sync_shared_folders">Sinhronizuj spisak dijeljenih foldera</string>
     <string name="title_advanced_subscriptions">Upravljaj folderskim pretplatama</string>
     <string name="title_advanced_check_authentication">Provjeri vjerodostojnost poruke</string>
+    <string name="title_advanced_check_tls">Provjeri transport layer security (TLS)</string>
     <string name="title_advanced_check_reply_domain">Provjeri adresu za odgovore tokom sinhronizacije poruka</string>
     <string name="title_advanced_check_mx">Provjeri e-mail adrese pošiljaoca tokom sinhronizacije poruka</string>
     <string name="title_advanced_check_blocklist">Provjeri da li je naziv domene pošiljaoca na spisku za blokiranje spama</string>
@@ -371,6 +372,7 @@
     <string name="title_advanced_two_row">Koristi dva reda</string>
     <string name="title_advanced_two_col">Koristi dvije kolone</string>
     <string name="title_advanced_min_screen_size">Minimalna veličina ekrana za podijeljeni ekran</string>
+    <string name="title_advanced_close_pane">Suzi red ili kolonu pri zatvaranju konverzacije</string>
     <string name="title_advanced_nav_options">Prikaži opcije navigacijskog menija</string>
     <string name="title_advanced_nav_pin">Zakači navigacijski meni</string>
     <string name="title_advanced_nav_hide_title">Sakriti opcije navigacijskog menija?</string>
@@ -604,6 +606,7 @@
     <string name="title_advanced_sync_folders_hint">Isključivanjem ove opcije smanjit će se donekle potrošnja podataka i baterije, ali će se također isključiti i ažuriranje spiska foldera</string>
     <string name="title_advanced_poll_folders_hint">Periodično sinhronizuj spisak foldera, nakon povezivanja na račun</string>
     <string name="title_advanced_check_authentication_hint">Ovo će provjeriti rezultate DKIM, SPF i DMARC provjere koje se izvode na e-mail serveru</string>
+    <string name="title_advanced_check_tls_hint">Ovo će prikazati zeleni štit samo kada se poruka prenese sigurno na svim serverima</string>
     <string name="title_advanced_check_reply_hint">Ovo će provjeriti da li su naziv domene pošiljaoca i adresa za odgovore iste</string>
     <string name="title_advanced_lookup_mx_hint">Ovo će provjeriti da li postoje DNS MX zapisi</string>
     <string name="title_advanced_sync_delay_hint">Ovo će usporiti sinhronizaciju poruka</string>
@@ -639,6 +642,7 @@
     <string name="title_advanced_preview_issue">Pomjeranje može biti sporo zbog greške u nekim verzijama Androida kada je broj linija veći od jedan</string>
     <string name="title_advanced_overview_mode_hint">Ovo može rezultirati u jako malim fontovima</string>
     <string name="title_advanced_override_width_hint">Ovo ne samo da čini poruke užima, nego i čudnog izgleda</string>
+    <string name="title_advanced_monospaced_pre_hint">Samo poruke s običnim tekstom razmatrat će se kao preformatirane</string>
     <string name="title_advanced_placeholders_hint">Ovo se primjenjuje samo na preformatirane poruke</string>
     <string name="title_advanced_inline_hint">Poravnate slike su slike unutar tijela poruke</string>
     <string name="title_advanced_parse_classes_hint">Ovo će preciznije prikazivati poruke, ali vjerovatno sa kašnjenjem</string>
@@ -791,6 +795,7 @@
     <string name="title_hint_alias">Dugo držite na identitet za prikaz opcija, poput kopiranja u svrhu kreiranja pseudonimskih identiteta</string>
     <string name="title_service_auth">Poruka e-mail servera: \'%1$s\'</string>
     <string name="title_service_vpn">Ovo je možda uzrokovano od strane VPN-a koji se koristi</string>
+    <string name="title_service_token">Upravljač Android računima može biti blokiran od strane VPN-a, vatrozida, blokatora reklama itd., sprječavajući ga da dobije pristupni token</string>
     <string name="title_service_port">Molimo, ponovo provjerite broj porta</string>
     <string name="title_service_protocol">Molimo, ponovo provjerite protokol (SSL/TLS ili STARTTLS)</string>
     <string name="title_advanced_browse">Pretražuj poruke na serveru</string>
@@ -969,7 +974,6 @@
     <string name="title_move_to_account">Premjesti na %1$s &#8230;</string>
     <string name="title_report_spam">Tretiraj kao spam</string>
     <string name="title_delete_permanently">Trajno izbriši</string>
-    <string name="title_no_undo">Razumijem da se ova radnja ne može vratiti</string>
     <string name="title_snooze">Odgodi &#8230;</string>
     <string name="title_archive">Arhiv</string>
     <string name="title_reply">Odgovori</string>
@@ -1242,6 +1246,7 @@
     <string name="title_filter_unflagged">Bez zvjezdice</string>
     <string name="title_filter_unknown">Nepoznati pošiljaoci</string>
     <string name="title_filter_hidden">Skrivenom</string>
+    <string name="title_filter_deleted">Izbrisano</string>
     <string name="title_filter_duplicates">Duplikati</string>
     <string name="title_filter_trash">Otpad</string>
     <string name="title_compact">Kompaktni izgled</string>
@@ -1289,6 +1294,8 @@
     <string name="title_rule_answer">Odgovori/proslijedi</string>
     <string name="title_rule_tts">Tekst u govor</string>
     <string name="title_rule_automation">Automatizacija</string>
+    <string name="title_rule_delete">Trajno izbriši</string>
+    <string name="title_rule_sound">Pokreni zvuk</string>
     <string name="title_rule_caption">Uredi pravilo</string>
     <string name="title_rule_title">Pravilo se primjenjuje na</string>
     <string name="title_rule_name">Naziv</string>
@@ -1302,6 +1309,7 @@
     <string name="title_rule_attachments">Ima priloge</string>
     <string name="title_rule_header">Zaglavlje sadrži</string>
     <string name="title_rule_body">Tekst sadrži</string>
+    <string name="title_rule_skip_quotes">Preskoči \"citirani tekst\"</string>
     <string name="title_rule_body_remark">Koristeći ovaj uvjet tekst poruke će se uvijek preuzimati, što može usporiti sinhronizaciju spiskova poruka</string>
     <string name="title_rule_time_abs">Apsolutno vrijeme (primljeno) između</string>
     <string name="title_rule_time_after">Primljeno poslije</string>
@@ -1328,6 +1336,7 @@
     <string name="title_rule_answer_missing">Nedostaje prijedložak</string>
     <string name="title_rule_keyword_missing">Nedostaje ključna riječ</string>
     <string name="title_rule_automation_hint">Ovo će poslati opis zadatka \'%1$s\' sa dodacima \'%2$s\'</string>
+    <string name="title_rule_delete_hint">Trajno brisanje je nepovratna radnja, zato osigurajte da su uvjeti ispravni!</string>
     <string name="title_rule_execute">Izvrši sada</string>
     <string name="title_rule_applied">Zahvaćene poruke: %1$d</string>
     <string name="title_rule_check">Provjeri</string>
@@ -1342,6 +1351,10 @@
     <string name="title_rule_tts_from">Od</string>
     <string name="title_rule_tts_subject">Predmet</string>
     <string name="title_rule_tts_content">Tekst</string>
+    <string name="title_rule_select_sound">Izaberi zvuk</string>
+    <string name="title_rule_use_as_alarm">Koristi kao alarm</string>
+    <string name="title_rule_alarm_hint">Ovo će ignorisati pravila \"neometanja\"</string>
+    <string name="title_rule_alarm_duration">Maksimalno trajanje alarma (sekunde)</string>
     <string name="title_legend_section_synchronize">Sinhronizuj</string>
     <string name="title_legend_section_folders">Folderi</string>
     <string name="title_legend_section_messages">Poruke</string>
@@ -1366,6 +1379,7 @@
     <string name="title_legend_closing">Zatvaranje</string>
     <string name="title_legend_unified">Objedinjeni inbox / primarni račun</string>
     <string name="title_legend_inbox">Inbox</string>
+    <string name="title_legend_outbox">Izlazna pošta</string>
     <string name="title_legend_drafts">Nacrti</string>
     <string name="title_legend_sent">Poslano</string>
     <string name="title_legend_archive">Arhiv</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
@@ -1154,20 +1154,22 @@ public class HtmlHelper {
                         e.attr("x-line-after", "true");
                 }
             } else {
-                String style = e.attr("style");
-                e.attr("style",
-                        mergeStyles(style, "margin-top:0;margin-bottom:0"));
+                if (!BuildConfig.DEBUG) {
+                    String style = e.attr("style");
+                    e.attr("style",
+                            mergeStyles(style, "margin-top:0;margin-bottom:0"));
 
-                int ltr = 0;
-                int rtl = 0;
-                for (Element li : e.children()) {
-                    if ("rtl".equals(li.attr("dir")))
-                        rtl++;
-                    else
-                        ltr++;
-                    li.removeAttr("dir");
+                    int ltr = 0;
+                    int rtl = 0;
+                    for (Element li : e.children()) {
+                        if ("rtl".equals(li.attr("dir")))
+                            rtl++;
+                        else
+                            ltr++;
+                        li.removeAttr("dir");
+                    }
+                    e.attr("dir", rtl > ltr ? "rtl" : "ltr");
                 }
-                e.attr("dir", rtl > ltr ? "rtl" : "ltr");
             }
         }
 
@@ -1328,13 +1330,16 @@ public class HtmlHelper {
         // xmpp:[<user>]@<host>[:<port>]/[<resource>][?<query>]
         // geo:<lat>,<lon>[,<alt>][;u=<uncertainty>]
         // tel:<phonenumber>
+        final Pattern GPA_PATTERN = Pattern.compile("GPA\\.\\d{4}-\\d{4}-\\d{4}-\\d{5}");
+        final String GPA_LINK = "https://play.google.com/console/u/0/developers/8420080860664580239/orders/";
         final Pattern pattern = Pattern.compile(
                 "(((?i:mailto):)?" + PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern() + ")|" +
                         PatternsCompat.AUTOLINK_WEB_URL.pattern()
                                 .replace("(?i:http|https|rtsp)://",
                                         "(((?i:http|https)://)|((?i:xmpp):))") + "|" +
                         "(?i:geo:\\d+,\\d+(,\\d+)?(;u=\\d+)?)|" +
-                        "(?i:tel:" + Patterns.PHONE.pattern() + ")");
+                        "(?i:tel:" + Patterns.PHONE.pattern() + ")" +
+                        (BuildConfig.DEBUG ? "|(" + GPA_PATTERN + ")" : ""));
 
         NodeTraversor.traverse(new NodeVisitor() {
             private int links = 0;
@@ -1389,7 +1394,10 @@ public class HtmlHelper {
                                 span.appendText(text.substring(pos, start));
 
                                 Element a = document.createElement("a");
-                                a.attr("href", (email ? "mailto:" : "") + group);
+                                if (BuildConfig.DEBUG && GPA_PATTERN.matcher(group).matches())
+                                    a.attr("href", GPA_LINK + group);
+                                else
+                                    a.attr("href", (email ? "mailto:" : "") + group);
                                 a.text(group);
                                 span.appendChild(a);
 
@@ -1872,14 +1880,16 @@ public class HtmlHelper {
         return flowed.toString();
     }
 
-    static String formatPre(String text) {
-        return formatPre(text, true);
+    static String formatPlainText(String text) {
+        return formatPlainText(text, true);
     }
 
-    static String formatPre(String text, boolean view) {
+    static String formatPlainText(String text, boolean view) {
         int level = 0;
         StringBuilder sb = new StringBuilder();
-        String[] lines = text.split("\\r?\\n");
+        String[] lines = text
+                .replaceAll("\\r(?!\\n)", "\n")
+                .split("\\r?\\n");
         for (int l = 0; l < lines.length; l++) {
             String line = lines[l];
             lines[l] = null;
@@ -1939,6 +1949,12 @@ public class HtmlHelper {
             sb.append("</blockquote>");
 
         return sb.toString();
+    }
+
+    static void restorePre(Document document) {
+        document.select("div[x-plain=true]")
+                .tagName("pre")
+                .removeAttr("x-plain");
     }
 
     static void removeTrackingPixels(Context context, Document document) {
@@ -2372,6 +2388,8 @@ public class HtmlHelper {
     static Spanned highlightHeaders(Context context, String headers, boolean blocklist) {
         SpannableStringBuilder ssb = new SpannableStringBuilderEx(headers);
         int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
+        int colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
+        int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
 
         int index = 0;
         for (String line : headers.split("\n")) {
@@ -2385,15 +2403,13 @@ public class HtmlHelper {
 
         try {
             // https://datatracker.ietf.org/doc/html/rfc2821#section-4.4
-            final List<String> words = Collections.unmodifiableList(Arrays.asList(
-                    "from", "by", "via", "with", "id", "for"));
             final DateFormat DTF = Helper.getDateTimeInstance(context, DateFormat.SHORT, DateFormat.MEDIUM);
 
             ByteArrayInputStream bis = new ByteArrayInputStream(headers.getBytes());
             String[] received = new InternetHeaders(bis).getHeader("Received");
-            if (received.length > 0) {
-                ssb.append('\n');
+            if (received != null && received.length > 0) {
                 for (int i = received.length - 1; i >= 0; i--) {
+                    ssb.append('\n');
                     String h = MimeUtility.unfold(received[i]);
 
                     int semi = h.lastIndexOf(';');
@@ -2415,8 +2431,6 @@ public class HtmlHelper {
 
                         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.menu_item_icon_size);
                         d.setBounds(0, 0, iconSize, iconSize);
-
-                        int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
                         d.setTint(colorWarning);
 
                         ssb.append(" \uFFFC"); // Object replacement character
@@ -2437,18 +2451,34 @@ public class HtmlHelper {
                     ssb.append('\n');
 
                     int j = 0;
+                    boolean p = false;
                     String[] w = h.split("\\s+");
                     while (j < w.length) {
+                        if (w[j].startsWith("("))
+                            p = true;
+
                         if (j > 0)
                             ssb.append(' ');
 
                         s = ssb.length();
                         ssb.append(w[j]);
-                        if (words.contains(w[j].toLowerCase(Locale.ROOT)))
+                        if (!p && MessageHelper.RECEIVED_WORDS.contains(w[j].toLowerCase(Locale.ROOT)))
                             ssb.setSpan(new ForegroundColorSpan(textColorLink), s, ssb.length(), 0);
+
+                        if (w[j].endsWith(")"))
+                            p = false;
+
                         j++;
                     }
-                    ssb.append("\n\n");
+
+                    Boolean tls = MessageHelper.isTLS(h, i == received.length - 1);
+                    ssb.append(" TLS=");
+                    int t = ssb.length();
+                    ssb.append(tls == null ? "?" : Boolean.toString(tls));
+                    if (tls != null)
+                        ssb.setSpan(new ForegroundColorSpan(tls ? colorVerified : colorWarning), t, ssb.length(), 0);
+
+                    ssb.append("\n");
                 }
             }
         } catch (Throwable ex) {
@@ -3248,7 +3278,17 @@ public class HtmlHelper {
         String html = converter.toHtml(spanned, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL);
 
         Document doc = JsoupEx.parse(html);
+
         for (Element span : doc.select("span")) {
+            if (span.attr("dir").equals("rtl")) {
+                Element next = span.nextElementSibling();
+                if (next != null && next.tagName().equals("br")) {
+                    span.tagName("div");
+                    span.appendElement("br");
+                    next.remove();
+                }
+            }
+
             String style = span.attr("style");
             if (TextUtils.isEmpty(style))
                 continue;
@@ -3290,6 +3330,19 @@ public class HtmlHelper {
                 else
                     span.attr("style", sb.toString());
             }
+        }
+
+        for (Element e : doc.select("ol,ul")) {
+            int ltr = 0;
+            int rtl = 0;
+            for (Element li : e.children()) {
+                if ("rtl".equals(li.attr("dir")))
+                    rtl++;
+                else
+                    ltr++;
+                li.removeAttr("dir");
+            }
+            e.attr("dir", rtl > ltr ? "rtl" : "ltr");
         }
 
         for (Element quote : doc.select("blockquote")) {

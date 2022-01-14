@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -1943,7 +1943,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                             Core.processOperations(ServiceSynchronize.this,
                                                                     account, folder,
                                                                     partition,
-                                                                    iservice.getStore(), ifolder,
+                                                                    iservice, ifolder,
                                                                     state, serial);
 
                                                         } catch (Throwable ex) {
@@ -2047,9 +2047,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                     " poll count=" + folder.poll_count +
                                                     " factor=" + folder.poll_factor);
                                         }
-                                Core.onSynchronizeFolders(this,
-                                        account, iservice.getStore(), state,
-                                        true, false);
+                                if (!first)
+                                    Core.onSynchronizeFolders(this,
+                                            account, iservice.getStore(), state,
+                                            true, false);
                             }
                         } catch (Throwable ex) {
                             if (tune) {

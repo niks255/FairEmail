@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.InputDevice;
 import android.view.MotionEvent;
@@ -47,6 +48,8 @@ import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
 
 public class WebViewEx extends WebView implements DownloadListener, View.OnLongClickListener {
     private int height;
+    private int maxHeight;
+    private boolean legacy;
     private IWebView intf;
     private Runnable onPageLoaded;
 
@@ -86,10 +89,16 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
     }
 
-    void init(int height, float size, Pair<Integer, Integer> position, boolean force_light, IWebView intf) {
-        Log.i("Init height=" + height + " size=" + size);
+    void init(int height, int maxHeight, float size, Pair<Integer, Integer> position, boolean force_light, IWebView intf) {
+        Log.i("Init height=" + height + "/" + maxHeight + " size=" + size);
+
+        if (maxHeight == 0) {
+            Log.e("WebView max height zero");
+            maxHeight = getResources().getDisplayMetrics().heightPixels;
+        }
 
         this.height = (height == 0 ? getMinimumHeight() : height);
+        this.maxHeight = maxHeight;
 
         setInitialScale(size == 0 ? 0 : Math.round(size * 100));
 
@@ -104,6 +113,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
         int message_zoom = prefs.getInt("message_zoom", 100);
         boolean monospaced = prefs.getBoolean("monospaced", false);
+        legacy = prefs.getBoolean("webview_legacy", false);
 
         WebSettings settings = getSettings();
 
@@ -208,14 +218,18 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (height > getMinimumHeight())
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
-        else
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec); // Unspecified
+        if (legacy) {
+            if (height > getMinimumHeight())
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
+            else
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec); // Unspecified
+        } else {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
 
         int mh = getMeasuredHeight();
-        Log.i("Measured height=" + mh + " last=" + height);
-        if (mh == 0)
+        Log.i("Measured height=" + mh + " last=" + height + "/" + maxHeight + " ch=" + getContentHeight());
+        if (mh == 0 && legacy)
             setMeasuredDimension(getMeasuredWidth(), height);
     }
 
@@ -316,26 +330,11 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         return super.onGenericMotionEvent(event);
     }
 
-    public boolean isZoomedX() {
-        int xtend = computeHorizontalScrollExtent();
-        if (xtend != 0) {
-            float xscale = computeHorizontalScrollRange() / (float) xtend;
-            if (xscale > 1.2)
-                return true;
-        }
-
-        return false;
-    }
-
     public boolean isZoomedY() {
-        int ytend = computeVerticalScrollExtent();
-        if (ytend != 0) {
-            float yscale = computeVerticalScrollRange() / (float) ytend;
-            if (yscale > 1.2)
-                return true;
-        }
-
-        return false;
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int ch = Math.round(getContentHeight() * dm.density);
+        int dp6 = Math.round(6 * dm.density);
+        return (ch - dp6 > getHeight());
     }
 
     public static boolean isFeatureSupported(String feature) {

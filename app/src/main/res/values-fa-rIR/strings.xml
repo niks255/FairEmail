@@ -817,6 +817,7 @@
     <string name="title_rule_copy">کپی (برچسب)</string>
     <string name="title_rule_tts">متن به گفتار</string>
     <string name="title_rule_automation">خودکارسازی</string>
+    <string name="title_rule_delete">حذف برای همیشه</string>
     <string name="title_rule_caption">ویرایش قانون</string>
     <string name="title_rule_title">قانون اعمال می‌شود بر</string>
     <string name="title_rule_name">نام</string>
@@ -869,6 +870,7 @@
     <string name="title_legend_closing">در حال بسته شدن</string>
     <string name="title_legend_unified">صندوق دریافت یکپارچه / حساب اصلی</string>
     <string name="title_legend_inbox">صندوق دریافت</string>
+    <string name="title_legend_outbox">صندوق خروجی</string>
     <string name="title_legend_drafts">پيش‌نويس‌ها</string>
     <string name="title_legend_sent">ارسال شده</string>
     <string name="title_legend_archive">بایگانی</string>

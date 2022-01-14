@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.system.OsConstants.ENOSPC;
@@ -26,9 +26,12 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.system.ErrnoException;
 import android.text.TextUtils;
+import android.util.Base64;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.net.MailTo;
+import androidx.core.util.PatternsCompat;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
@@ -84,6 +87,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
@@ -123,6 +128,7 @@ public class MessageHelper {
     private boolean ensuredStructure = false;
     private MimeMessage imessage;
     private String hash = null;
+    private String threadId = null;
     private InternetHeaders reportHeaders = null;
 
     private static File cacheDir = null;
@@ -132,11 +138,16 @@ public class MessageHelper {
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
     static final int MAX_SUBJECT_AGE = 48; // hours
 
+    static final List<String> RECEIVED_WORDS = Collections.unmodifiableList(Arrays.asList(
+            "from", "by", "via", "with", "id", "for"
+    ));
+
     private static final int MAX_HEADER_LENGTH = 998;
     private static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
     private static final long ATTACHMENT_PROGRESS_UPDATE = 1500L; // milliseconds
     private static final int MAX_META_EXCERPT = 1024; // characters
-    private static final int FORMAT_FLOWED_LINE_LENGTH = 72;
+    private static final int FORMAT_FLOWED_LINE_LENGTH = 72; // characters
+    private static final int MAX_DIAGNOSTIC = 250; // characters
 
     private static final String DOCTYPE = "<!DOCTYPE";
     private static final String HTML_START = "<html>";
@@ -163,15 +174,23 @@ public class MessageHelper {
     static final String FLAG_NOT_JUNK = "$NotJunk";
     static final String FLAG_CLASSIFIED = "$Classified";
     static final String FLAG_FILTERED = "$Filtered";
+    static final String FLAG_DELIVERED = "$Delivered";
+    static final String FLAG_NOT_DELIVERED = "$NotDelivered";
+    static final String FLAG_DISPLAYED = "$Displayed";
+    static final String FLAG_NOT_DISPLAYED = "$NotDisplayed";
+    static final String FLAG_LOW_IMPORTANCE = "$LowImportance";
+    static final String FLAG_HIGH_IMPORTANCE = "$HighImportance";
 
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     // Not black listed: Gmail $Phishing
     private static final List<String> FLAG_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
-            MessageHelper.FLAG_FORWARDED,
-            MessageHelper.FLAG_JUNK,
-            MessageHelper.FLAG_NOT_JUNK,
-            MessageHelper.FLAG_CLASSIFIED, // FairEmail
-            MessageHelper.FLAG_FILTERED, // FairEmail
+            FLAG_FORWARDED,
+            FLAG_JUNK,
+            FLAG_NOT_JUNK,
+            FLAG_CLASSIFIED, // FairEmail
+            FLAG_FILTERED, // FairEmail
+            FLAG_LOW_IMPORTANCE, // FairEmail
+            FLAG_HIGH_IMPORTANCE, // FairEmail
             "$MDNSent", // https://tools.ietf.org/html/rfc3503
             "$SubmitPending",
             "$Submitted",
@@ -309,46 +328,49 @@ public class MessageHelper {
             ByteArrayInputStream bis = new ByteArrayInputStream(message.headers.getBytes());
             List<Header> headers = Collections.list(new InternetHeaders(bis).getAllHeaders());
 
-            for (Header header : headers) {
-                String name = header.getName();
-                String value = header.getValue();
-                if (name == null || TextUtils.isEmpty(value))
-                    continue;
+            for (Header header : headers)
+                try {
+                    String name = header.getName();
+                    String value = header.getValue();
+                    if (name == null || TextUtils.isEmpty(value))
+                        continue;
 
-                switch (name.toLowerCase(Locale.ROOT)) {
-                    case "date":
-                        imessage.setHeader("Date", value);
-                        break;
-                    case "from":
-                        imessage.setFrom(value);
-                        break;
-                    case "to":
-                        imessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(value));
-                        break;
-                    case "cc":
-                        imessage.setRecipients(Message.RecipientType.CC, InternetAddress.parse(value));
-                        break;
-                    case "bcc":
-                        imessage.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(value));
-                        break;
-                    case "reply-to":
-                        imessage.setReplyTo(InternetAddress.parse(value));
-                        break;
-                    case "message-id":
-                        if (send) {
-                            imessage.setHeader("Resent-Message-ID", message.msgid);
-                            imessage.updateMessageID(value);
-                        }
-                        break;
-                    case "references":
-                        imessage.setHeader("References", value);
-                        break;
-                    case "in-reply-to":
-                        imessage.setHeader("In-Reply-To", value);
-                        break;
-                    // Resent-Sender (=on behalf of)
+                    switch (name.toLowerCase(Locale.ROOT)) {
+                        case "date":
+                            imessage.setHeader("Date", value);
+                            break;
+                        case "from":
+                            imessage.setFrom(value);
+                            break;
+                        case "to":
+                            imessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(value));
+                            break;
+                        case "cc":
+                            imessage.setRecipients(Message.RecipientType.CC, InternetAddress.parse(value));
+                            break;
+                        case "bcc":
+                            imessage.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(value));
+                            break;
+                        case "reply-to":
+                            imessage.setReplyTo(InternetAddress.parse(value));
+                            break;
+                        case "message-id":
+                            if (send) {
+                                imessage.setHeader("Resent-Message-ID", message.msgid);
+                                imessage.updateMessageID(value);
+                            }
+                            break;
+                        case "references":
+                            imessage.setHeader("References", value);
+                            break;
+                        case "in-reply-to":
+                            imessage.setHeader("In-Reply-To", value);
+                            break;
+                        // Resent-Sender (=on behalf of)
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
                 }
-            }
 
             // The "Resent-Date:" indicates the date and time at which the resent
             //   message is dispatched by the resender of the message.
@@ -1129,6 +1151,7 @@ public class MessageHelper {
         return flags.toString();
     }
 
+    @NonNull
     String[] getKeywords() throws MessagingException {
         List<String> keywords = Arrays.asList(imessage.getFlags().getUserFlags());
         Collections.sort(keywords);
@@ -1267,6 +1290,15 @@ public class MessageHelper {
     }
 
     String getThreadId(Context context, long account, long folder, long uid) throws MessagingException {
+        if (threadId == null)
+            if (BuildConfig.DEBUG)
+                threadId = _getThreadIdAlt(context, account, folder, uid);
+            else
+                threadId = _getThreadId(context, account, folder, uid);
+        return threadId;
+    }
+
+    private String _getThreadId(Context context, long account, long folder, long uid) throws MessagingException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (imessage instanceof GmailMessage) {
@@ -1311,6 +1343,13 @@ public class MessageHelper {
                 }
         }
 
+        // Common reference
+        if (thread == null && refs.size() > 0) {
+            String ref = refs.get(0);
+            if (!Objects.equals(ref, msgid))
+                thread = ref;
+        }
+
         if (thread == null)
             thread = getHash() + ":" + uid;
 
@@ -1325,6 +1364,121 @@ public class MessageHelper {
             if (!thread.equals(message.thread)) {
                 Log.w("Updating after thread from " + message.thread + " to " + thread);
                 db.message().updateMessageThread(message.account, message.thread, thread, null);
+            }
+
+        boolean subject_threading = prefs.getBoolean("subject_threading", false);
+        if (subject_threading && !isReport()) {
+            String sender = getSortKey(getFrom());
+            String subject = getSubject();
+            long since = new Date().getTime() - MAX_SUBJECT_AGE * 3600 * 1000L;
+            if (!TextUtils.isEmpty(sender) && !TextUtils.isEmpty(subject)) {
+                List<EntityMessage> subjects = db.message().getMessagesBySubject(account, sender, subject, since);
+                for (EntityMessage message : subjects)
+                    if (!thread.equals(message.thread)) {
+                        Log.w("Updating subject thread from " + message.thread + " to " + thread);
+                        db.message().updateMessageThread(message.account, message.thread, thread, since);
+                    }
+            }
+        }
+
+        return thread;
+    }
+
+    private String _getThreadIdAlt(Context context, long account, long folder, long uid) throws MessagingException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        if (imessage instanceof GmailMessage) {
+            // https://developers.google.com/gmail/imap/imap-extensions#access_to_the_gmail_thread_id_x-gm-thrid
+            boolean gmail_thread_id = prefs.getBoolean("gmail_thread_id", false);
+            if (gmail_thread_id) {
+                long thrid = ((GmailMessage) imessage).getThrId();
+                Log.i("Gmail thread=" + thrid);
+                if (thrid > 0)
+                    return "gmail:" + thrid;
+            }
+        }
+
+        // https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxomsg/9e994fbb-b839-495f-84e3-2c8c02c7dd9b
+        if (BuildConfig.DEBUG)
+            try {
+                String tindex = imessage.getHeader("Thread-Index", null);
+                if (tindex != null) {
+                    boolean outlook_thread_id = prefs.getBoolean("outlook_thread_id", false);
+                    if (outlook_thread_id) {
+                        byte[] data = Base64.decode(tindex, Base64.DEFAULT);
+                        if (data.length >= 22) {
+                            long msb = 0, lsb = 0;
+                            for (int i = 0 + 6; i < 8 + 6; i++)
+                                msb = (msb << 8) | (data[i] & 0xff);
+                            for (int i = 8 + 6; i < 16 + 6; i++)
+                                lsb = (lsb << 8) | (data[i] & 0xff);
+                            UUID guid = new UUID(msb, lsb);
+                            Log.i("Outlook thread=" + guid);
+                            return "outlook:" + guid;
+                        }
+                    }
+                }
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+
+        String thread = null;
+        String msgid = getMessageID();
+
+        List<String> refs = new ArrayList<>();
+        for (String ref : getReferences())
+            if (!TextUtils.isEmpty(ref) && !refs.contains(ref))
+                refs.add(ref);
+
+        String inreplyto = getInReplyTo();
+        if (!TextUtils.isEmpty(inreplyto) && !refs.contains(inreplyto))
+            refs.add(inreplyto);
+
+        DB db = DB.getInstance(context);
+
+        List<String> all = new ArrayList<>(refs);
+        all.add(msgid);
+        List<TupleThreadInfo> infos = db.message().getThreadInfo(account, all);
+
+        // References, In-Reply-To (sent before)
+        for (TupleThreadInfo info : infos)
+            if (info.isReferencing(msgid) && !TextUtils.isEmpty(info.thread)) {
+                thread = info.thread;
+                break;
+            }
+
+        // Similar
+        if (thread == null) {
+            for (TupleThreadInfo info : infos)
+                if (info.isSelf(msgid) && !TextUtils.isEmpty(info.thread) &&
+                        Objects.equals(info.hash, getHash())) {
+                    thread = info.thread;
+                    break;
+                }
+        }
+
+        // Common reference
+        if (thread == null && refs.size() > 0) {
+            String ref = refs.get(0);
+            if (!Objects.equals(ref, msgid))
+                thread = ref;
+        }
+
+        if (thread == null)
+            thread = getHash() + ":" + uid;
+
+        // Sent before
+        for (TupleThreadInfo info : infos)
+            if (info.isReferencing(msgid) && !thread.equals(info.thread)) {
+                Log.w("Updating before thread from " + info.thread + " to " + thread);
+                db.message().updateMessageThread(account, info.thread, thread, null);
+            }
+
+        // Sent after
+        for (TupleThreadInfo info : infos)
+            if (info.isReferenced(msgid) && !thread.equals(info.thread)) {
+                Log.w("Updating after thread from " + info.thread + " to " + thread);
+                db.message().updateMessageThread(account, info.thread, thread, null);
             }
 
         boolean subject_threading = prefs.getBoolean("subject_threading", false);
@@ -1773,26 +1927,49 @@ public class MessageHelper {
             list = MimeUtility.unfold(list);
             list = decodeMime(list);
 
-            if (list != null && list.startsWith("NO"))
+            if (list == null || list.startsWith("NO"))
                 return null;
 
             String link = null;
             String mailto = null;
-            for (String entry : list.split(",")) {
-                entry = entry.trim();
-                int lt = entry.indexOf("<");
-                int gt = entry.lastIndexOf(">");
-                if (lt >= 0 && gt > lt) {
-                    String unsubscribe = entry.substring(lt + 1, gt);
-                    Uri uri = Uri.parse(unsubscribe);
-                    String scheme = uri.getScheme();
-                    if (scheme != null)
-                        scheme = scheme.toLowerCase(Locale.ROOT);
-                    if (mailto == null && "mailto".equals(scheme))
-                        mailto = unsubscribe;
-                    if (link == null && ("http".equals(scheme) || "https".equals(scheme)))
-                        link = unsubscribe;
+            int s = list.indexOf('<');
+            int e = list.indexOf('>', s + 1);
+            while (s >= 0 && e > s) {
+                String unsubscribe = list.substring(s + 1, e);
+                if (TextUtils.isEmpty(unsubscribe))
+                    ; // Empty address
+                else if (unsubscribe.toLowerCase(Locale.ROOT).startsWith("mailto:")) {
+                    if (mailto == null) {
+                        try {
+                            MailTo.parse(unsubscribe);
+                            mailto = unsubscribe;
+                        } catch (Throwable ex) {
+                            Log.w(new Throwable(unsubscribe, ex));
+                        }
+                    }
+                } else if (Helper.EMAIL_ADDRESS.matcher(unsubscribe).matches())
+                    mailto = "mailto:" + unsubscribe;
+                else {
+                    if (link == null) {
+                        Uri uri = Uri.parse(unsubscribe);
+                        String scheme = uri.getScheme();
+                        if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
+                            link = unsubscribe;
+                        else {
+                            Pattern p =
+                                    Pattern.compile(PatternsCompat.AUTOLINK_WEB_URL.pattern() + "|" +
+                                            PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern());
+                            Matcher m = p.matcher(unsubscribe);
+                            if (m.find())
+                                link = unsubscribe.substring(m.start(), m.end());
+                            else
+                                Log.w(new Throwable(unsubscribe));
+                        }
+                    }
                 }
+
+                s = list.indexOf('<', e + 1);
+                e = list.indexOf('>', s + 1);
             }
 
             if (link != null)
@@ -1800,10 +1977,11 @@ public class MessageHelper {
             if (mailto != null)
                 return mailto;
 
-            Log.i(new IllegalArgumentException("List-Unsubscribe: " + list));
+            if (!BuildConfig.PLAY_STORE_RELEASE)
+                Log.i(new IllegalArgumentException("List-Unsubscribe: " + list));
             return null;
-        } catch (AddressException ex) {
-            Log.w(ex);
+        } catch (Throwable ex) {
+            Log.e(ex);
             return null;
         }
     }
@@ -1884,6 +2062,212 @@ public class MessageHelper {
         }
 
         return null;
+    }
+
+    Boolean getTLS() throws MessagingException {
+        try {
+            Boolean tls = _getTLS();
+            Log.i("--- TLS=" + tls);
+            return tls;
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return null;
+        }
+    }
+
+    private Boolean _getTLS() throws MessagingException {
+        // https://datatracker.ietf.org/doc/html/rfc2821#section-4.4
+
+        // Time-stamp-line = "Received:" FWS Stamp <CRLF>
+        // Stamp = From-domain By-domain Opt-info ";"  FWS date-time
+        // From-domain = "FROM" FWS Extended-Domain CFWS
+        // By-domain = "BY" FWS Extended-Domain CFWS
+        // Opt-info = [Via] [With] [ID] [For]
+        // Via = "VIA" FWS Link CFWS
+        // With = "WITH" FWS Protocol CFWS
+        // ID = "ID" FWS String / msg-id CFWS
+        // For = "FOR" FWS 1*( Path / Mailbox ) CFWS
+
+        // Extended-Domain = Domain / ( Domain FWS "(" TCP-info ")" ) / ( Address-literal FWS "(" TCP-info ")" )
+        // TCP-info = Address-literal / ( Domain FWS Address-literal )
+        // Link = "TCP" / Addtl-Link
+        // Addtl-Link = Atom
+        // Protocol = "ESMTP" / "SMTP" / Attdl-Protocol
+        // Attdl-Protocol = Atom
+
+        ensureHeaders();
+
+        String[] received = imessage.getHeader("Received");
+        if (received == null || received.length == 0)
+            return null;
+
+        // First header is last added header
+        Log.i("=======");
+        for (int i = 0; i < received.length; i++) {
+            String header = MimeUtility.unfold(received[i]);
+            Log.i("--- header=" + header);
+            Boolean tls = isTLS(header, i == received.length - 1);
+            if (!Boolean.TRUE.equals(tls))
+                return tls;
+        }
+
+        return true;
+    }
+
+    static Boolean isTLS(String header, boolean first) {
+        // Strip date
+        int semi = header.lastIndexOf(';');
+        if (semi > 0)
+            header = header.substring(0, semi);
+
+        if (header.contains("using TLS") ||
+                header.contains("via HTTP") ||
+                header.contains("version=TLS")) {
+            Log.i("--- found TLS");
+            return true;
+        }
+
+        // (qmail nnn invoked by uid nnn); 1 Jan 2022 00:00:00 -0000
+        // by <host name> (Postfix, from userid nnn)
+        if (first &&
+                (header.matches(".*\\(qmail \\d+ invoked by uid \\d+\\).*") ||
+                        header.matches(".*\\(Postfix, from userid \\d+\\).*"))) {
+            Log.i("--- phrase");
+            return true;
+        }
+
+        // Get key/values
+        String[] parts = header.split("\\s+");
+        Map<String, StringBuilder> kv = new HashMap<>();
+        String key = null;
+        for (int p = 0; p < parts.length; p++) {
+            String k = parts[p].toLowerCase(Locale.ROOT);
+            if (RECEIVED_WORDS.contains(k)) {
+                key = k;
+                if (!kv.containsKey(key))
+                    kv.put(key, new StringBuilder());
+            } else if (key != null) {
+                StringBuilder sb = kv.get(key);
+                if (sb.length() > 0)
+                    sb.append(' ');
+                sb.append(parts[p]);
+            }
+        }
+
+        // Dump
+        for (String k : kv.keySet())
+            Log.i("--- " + k + "=" + kv.get(k));
+
+        // Check if 'by' local address
+        if (kv.containsKey("by")) {
+            String by = kv.get("by").toString();
+            if (by.matches(".*\\.google\\.com"))
+                return true;
+            if (isLocal(by)) {
+                Log.i("--- local by=" + by);
+                return true;
+            }
+        }
+
+        // Check if 'from' local address
+        if (kv.containsKey("from")) {
+            String from = kv.get("from").toString();
+            if (isLocal(from)) {
+                Log.i("--- local from=" + from);
+                return true;
+            }
+        }
+
+        // Check Microsoft front end transport (proxy)
+        // https://social.technet.microsoft.com/wiki/contents/articles/50370.exchange-2016-what-is-the-front-end-transport-service-on-the-mailbox-role.aspx
+        if (kv.containsKey("via")) {
+            String via = kv.get("via").toString();
+            if ("Frontend Transport".equals(via)) {
+                Log.i("--- frontend via=" + via);
+                return true;
+            }
+        }
+
+        // Check protocol
+        if (!kv.containsKey("with")) {
+            Log.i("--- with missing");
+            return null;
+        }
+
+        // https://datatracker.ietf.org/doc/html/rfc3848
+        // https://www.iana.org/assignments/mail-parameters/mail-parameters.txt
+        String with = kv.get("with").toString();
+        int w = with.indexOf(' ');
+        String protocol = (w < 0 ? with : with.substring(0, w)).toLowerCase(Locale.ROOT);
+
+        if (with.contains("TLS"))
+            return true;
+
+        if ("local".equals(protocol)) {
+            // Exim
+            Log.i("--- local with=" + with);
+            return true;
+        }
+
+        if (protocol.startsWith("lmtp")) {
+            // https://en.wikipedia.org/wiki/Local_Mail_Transfer_Protocol
+            Log.i("--- lmtp with=" + with);
+            return true;
+        }
+
+        if ("mapi".equals(protocol)) {
+            // https://en.wikipedia.org/wiki/MAPI
+            Log.i("--- mapi with=" + with);
+            return true;
+        }
+
+        if ("http".equals(protocol) ||
+                "https".equals(protocol) ||
+                "httprest".equals(protocol)) {
+            // https: Outlook
+            // httprest: by gmailapi.google.com
+            Log.i("--- http with=" + with);
+            return true;
+        }
+
+        if (!protocol.contains("mtp")) {
+            Log.i("--- unknown with=" + with);
+            return null;
+        }
+
+        if (protocol.contains("mtps")) {
+            Log.i("--- insecure with=" + with);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isLocal(String value) {
+        if (value.contains("localhost") ||
+                value.contains("127.0.0.1") ||
+                value.contains("[::1]"))
+            return true;
+
+        int s = value.indexOf('[');
+        int e = value.indexOf(']', s + 1);
+        if (s >= 0 && e > 0) {
+            String ip = value.substring(s + 1, e);
+            if (ip.toLowerCase(Locale.ROOT).startsWith("ipv6:"))
+                ip = ip.substring(5);
+            if (ConnectionHelper.isNumericAddress(ip) &&
+                    ConnectionHelper.isLocalAddress(ip))
+                return true;
+        }
+
+        int f = value.indexOf(' ');
+        String host = (f < 0 ? value : value.substring(0, f));
+        if (ConnectionHelper.isNumericAddress(host)) {
+            if (ConnectionHelper.isLocalAddress(host))
+                return true;
+        }
+
+        return false;
     }
 
     Long getSent() throws MessagingException {
@@ -2092,7 +2476,7 @@ public class MessageHelper {
                 String personal = address.getPersonal();
 
                 if (TextUtils.isEmpty(personal) || format == AddressFormat.EMAIL_ONLY)
-                    formatted.add(email);
+                    formatted.add(TextUtils.isEmpty(email) ? "<>" : email);
                 else {
                     if (compose) {
                         boolean quote = false;
@@ -2107,7 +2491,7 @@ public class MessageHelper {
                             personal = "\"" + personal + "\"";
                     }
 
-                    if (format == AddressFormat.NAME_EMAIL)
+                    if (format == AddressFormat.NAME_EMAIL && !TextUtils.isEmpty(email))
                         formatted.add(personal + " <" + email + ">");
                     else
                         formatted.add(personal);
@@ -2435,7 +2819,7 @@ public class MessageHelper {
                 }
 
                 if (h.isPlainText()) {
-                    if (charset == null || StandardCharsets.ISO_8859_1.equals(cs))
+                    if (charset == null || StandardCharsets.ISO_8859_1.equals(cs)) {
                         if (StandardCharsets.ISO_8859_1.equals(cs) && CharsetHelper.isUTF8(result)) {
                             Log.i("Charset upgrade=UTF8");
                             result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
@@ -2451,6 +2835,8 @@ public class MessageHelper {
                                 result = new String(result.getBytes(StandardCharsets.ISO_8859_1), detected);
                             }
                         }
+                    } else if (StandardCharsets.UTF_8.equals(cs))
+                        result = CharsetHelper.utf8toW1252(result);
 
                     if ("flowed".equalsIgnoreCase(h.contentType.getParameter("format")))
                         result = HtmlHelper.flow(result);
@@ -2477,7 +2863,7 @@ public class MessageHelper {
                             result.substring(e - HTML_END.length(), e).equalsIgnoreCase(HTML_END))
                         return result;
 
-                    result = "<div x-plain=\"true\">" + HtmlHelper.formatPre(result) + "</div>";
+                    result = "<div x-plain=\"true\">" + HtmlHelper.formatPlainText(result) + "</div>";
                 } else if (h.isHtml()) {
                     // Conditionally upgrade to UTF8
                     if ((cs == null ||
@@ -2485,6 +2871,9 @@ public class MessageHelper {
                             StandardCharsets.ISO_8859_1.equals(cs)) &&
                             CharsetHelper.isUTF8(result))
                         result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
+                    //if (StandardCharsets.UTF_8.equals(cs))
+                    //    result = CharsetHelper.utf8w1252(result);
 
                     // Fix incorrect UTF16
                     try {
@@ -2571,9 +2960,13 @@ public class MessageHelper {
 
                     StringBuilder w = new StringBuilder();
 
-                    if (!report.isDelivered()) {
-                        if (report.diagnostic != null)
-                            w.append(report.diagnostic);
+                    if (report.isDeliveryStatus() && !report.isDelivered()) {
+                        if (report.diagnostic != null) {
+                            String diag = report.diagnostic;
+                            if (diag.length() > MAX_DIAGNOSTIC)
+                                diag = diag.substring(0, MAX_DIAGNOSTIC) + "…";
+                            w.append(diag);
+                        }
                         if (report.action != null) {
                             if (w.length() == 0)
                                 w.append(report.action);
@@ -2582,7 +2975,7 @@ public class MessageHelper {
                         }
                     }
 
-                    if (!report.isDisplayed()) {
+                    if (report.isDispositionNotification() && !report.isDisplayed()) {
                         if (report.disposition != null)
                             w.append(report.disposition);
                     }
@@ -3532,6 +3925,9 @@ public class MessageHelper {
     }
 
     static String sanitizeEmail(String email) {
+        if (email == null)
+            return null;
+
         if (email.contains("<") && email.contains(">"))
             try {
                 InternetAddress address = new InternetAddress(email);

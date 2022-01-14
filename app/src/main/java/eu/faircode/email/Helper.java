@@ -16,13 +16,15 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
@@ -35,7 +37,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -62,6 +63,7 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -70,7 +72,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
@@ -109,7 +110,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.jsoup.helper.HttpConnection;
 import org.openintents.openpgp.util.OpenPgpApi;
 
 import java.io.ByteArrayOutputStream;
@@ -612,6 +612,41 @@ public class Helper {
 
     // View
 
+    static int getActionBarHeight(Context context) {
+        int actionBarHeight;
+        TypedValue tv = new TypedValue();
+        if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            return TypedValue.complexToDimensionPixelSize(tv.data, dm);
+        } else
+            return Helper.dp2pixels(context, 56);
+    }
+
+    static int getBottomNavigationHeight(Context context) {
+        int resid = context.getResources().getIdentifier("design_bottom_navigation_height", "dimen", context.getPackageName());
+        if (resid <= 0)
+            return Helper.dp2pixels(context, 56);
+        else
+            return context.getResources().getDimensionPixelSize(resid);
+    }
+
+    static ObjectAnimator getFabAnimator(View fab, LifecycleOwner owner) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(fab, "alpha", 0.9f, 1.0f);
+        animator.setDuration(750L);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.addUpdateListener(new ObjectAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (!owner.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return;
+                fab.setScaleX((float) animation.getAnimatedValue());
+                fab.setScaleY((float) animation.getAnimatedValue());
+            }
+        });
+        return animator;
+    }
+
     static Intent getChooser(Context context, Intent intent) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             PackageManager pm = context.getPackageManager();
@@ -899,7 +934,7 @@ public class Helper {
             html += "Locale: " + Html.escapeHtml(slocale.toString()) + "<br>";
             if (language != null)
                 html += "Language: " + Html.escapeHtml(language) + "<br>";
-            if (reporting && uuid != null)
+            if ((reporting || BuildConfig.TEST_RELEASE) && uuid != null)
                 html += "UUID: " + Html.escapeHtml(uuid) + "<br>";
             html += "</p>";
 
@@ -2005,6 +2040,8 @@ public class Helper {
 
             final BiometricPrompt prompt = new BiometricPrompt(activity, executor,
                     new BiometricPrompt.AuthenticationCallback() {
+                        private int fails = 0;
+
                         @Override
                         public void onAuthenticationError(final int errorCode, @NonNull final CharSequence errString) {
                             Log.w("Authenticate biometric error " + errorCode + ": " + errString);
@@ -2034,7 +2071,8 @@ public class Helper {
                         @Override
                         public void onAuthenticationFailed() {
                             Log.w("Authenticate biometric failed");
-                            ApplicationEx.getMainHandler().post(cancelled);
+                            if (++fails >= 3)
+                                ApplicationEx.getMainHandler().post(cancelled);
                         }
                     });
 

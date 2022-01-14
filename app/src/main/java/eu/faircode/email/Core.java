@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -181,12 +181,13 @@ class Core {
     static void processOperations(
             Context context,
             EntityAccount account, EntityFolder folder, List<TupleOperationEx> ops,
-            Store istore, Folder ifolder,
+            EmailService iservice, Folder ifolder,
             State state, long serial)
             throws JSONException, FolderClosedException {
         try {
             Log.i(folder.name + " start process");
 
+            Store istore = iservice.getStore();
             DB db = DB.getInstance(context);
 
             NotificationManager nm =
@@ -263,8 +264,9 @@ class Core {
                                 case EntityOperation.FETCH:
                                     if (EntityOperation.FETCH.equals(next.name)) {
                                         JSONArray jnext = new JSONArray(next.args);
-                                        // Same uid
-                                        if (jargs.getLong(0) == jnext.getLong(0))
+                                        // Same uid, delete flag
+                                        if (jargs.getLong(0) == jnext.getLong(0) &&
+                                                jargs.optBoolean(1) == jnext.optBoolean(1))
                                             skip = true;
                                     }
                                     break;
@@ -356,7 +358,7 @@ class Core {
                                     break;
 
                                 case EntityOperation.MOVE:
-                                    onMove(context, jargs, folder, message);
+                                    onMove(context, jargs, account, folder, message);
                                     break;
 
                                 case EntityOperation.DELETE:
@@ -499,6 +501,7 @@ class Core {
                         for (TupleOperationEx s : similar.keySet())
                             ops.remove(s);
                     } catch (Throwable ex) {
+                        iservice.dump();
                         if (ex instanceof OperationCanceledException)
                             Log.i(folder.name, ex);
                         else
@@ -583,7 +586,7 @@ class Core {
                             // Fetch UID: NO [TEMPFAIL] SELECT completed
                             // Move: NO Over quota
                             // Move: NO No matching messages
-                            // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist
+                            // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist (n.nnn + n.nnn + n.nnn secs)
                             // Move: BAD parse error: invalid message sequence number:
                             // Move: NO MOVE failed or partially completed.
                             // Move: NO mailbox selected READ-ONLY
@@ -1493,7 +1496,7 @@ class Core {
             }
     }
 
-    private static void onMove(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message) throws JSONException, FolderNotFoundException {
+    private static void onMove(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message) throws JSONException, FolderNotFoundException {
         // Move message
         DB db = DB.getInstance(context);
 
@@ -1510,10 +1513,11 @@ class Core {
             throw new IllegalArgumentException("self");
 
         // Move from trash/drafts only
-        if (!EntityFolder.TRASH.equals(folder.type) &&
-                !EntityFolder.DRAFTS.equals(folder.type))
+        if (!EntityFolder.DRAFTS.equals(folder.type) &&
+                !(EntityFolder.TRASH.equals(folder.type) && account.leave_deleted))
             throw new IllegalArgumentException("Invalid POP3 folder" +
-                    " source=" + folder.type + " target=" + target.type);
+                    " source=" + folder.type + " target=" + target.type +
+                    " leave deleted=" + account.leave_deleted);
 
         message.folder = target.id;
         if (seen)
@@ -1986,15 +1990,21 @@ class Core {
         if (TextUtils.isEmpty(keyword))
             throw new IllegalArgumentException("keyword missing");
 
-        if (folder.read_only)
-            throw new IllegalArgumentException(folder.name + " read-only");
+        if (folder.read_only) {
+            Log.w(folder.name + " read-only");
+            return;
+        }
 
-        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER))
-            throw new IllegalArgumentException(folder.name + " has no keywords");
+        if (!ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
+            Log.w(folder.name + " has no keywords");
+            return;
+        }
 
         Message[] imessages = ifolder.search(new MessageIDTerm(msgid));
-        if (imessages == null || imessages.length == 0)
-            throw new IllegalArgumentException(msgid + " not found");
+        if (imessages == null || imessages.length == 0) {
+            Log.w(folder.name + " " + msgid + " not found");
+            return;
+        }
 
         for (Message imessage : imessages) {
             long uid = ifolder.getUID(imessage);
@@ -2029,8 +2039,10 @@ class Core {
         Log.i(account.name + " sync folders=" + sync_folders + " poll=" + sync_folders_poll +
                 " shared=" + sync_shared_folders + " force=" + force);
 
-        if (force || (keep_alive && sync_folders_poll))
+        if (force)
             sync_folders = true;
+        if (keep_alive)
+            sync_folders = sync_folders_poll;
         if (!sync_folders)
             sync_shared_folders = false;
 
@@ -2778,6 +2790,7 @@ class Core {
                         message.receipt_request = helper.getReceiptRequested();
                         message.receipt_to = helper.getReceiptTo();
                         message.bimi_selector = helper.getBimiSelector();
+                        message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
                         if (message.spf == null && helper.getSPF())
@@ -2846,7 +2859,7 @@ class Core {
                         // No MX check
                         // No blocklist
 
-                        boolean needsHeaders = EntityRule.needsHeaders(rules);
+                        boolean needsHeaders = EntityRule.needsHeaders(message, rules);
                         List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
                         String body = parts.getHtml(context);
 
@@ -2956,7 +2969,8 @@ class Core {
     private static void onSynchronizeMessages(
             Context context, JSONArray jargs,
             EntityAccount account, final EntityFolder folder,
-            IMAPStore istore, final IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
+            IMAPStore istore, final IMAPFolder ifolder, State state)
+            throws JSONException, ProtocolException, MessagingException, IOException {
         final DB db = DB.getInstance(context);
         try {
             SyncStats stats = new SyncStats();
@@ -3218,12 +3232,8 @@ class Core {
                         long getuid = SystemClock.elapsedRealtime();
                         MessagingException ex = (MessagingException) ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
                             @Override
-                            public Object doCommand(IMAPProtocol protocol) {
-                                try {
-                                    protocol.select(folder.name);
-                                } catch (ProtocolException ex) {
-                                    return new MessagingException("UID FETCH", ex);
-                                }
+                            public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                protocol.select(folder.name);
 
                                 // Build ranges
                                 List<Pair<Long, Long>> ranges = new ArrayList<>();
@@ -3310,6 +3320,7 @@ class Core {
                                                             update = true;
                                                             message.deleted = deleted;
                                                             message.ui_deleted = deleted;
+                                                            message.ui_ignored = deleted;
                                                             Log.i("UID fetch deleted=" + deleted);
                                                         }
 
@@ -3323,10 +3334,10 @@ class Core {
                                             if (response.isBYE())
                                                 return new MessagingException("UID FETCH", new IOException(response.toString()));
                                             else if (response.isNO())
-                                                return new CommandFailedException(response);
+                                                throw new CommandFailedException(response);
                                             else if (response.isBAD())
-                                                return new BadCommandException(response);
-                                        return new MessagingException("UID FETCH failed");
+                                                throw new BadCommandException(response);
+                                        throw new ProtocolException("UID FETCH failed");
                                     }
                                 }
 
@@ -3744,11 +3755,21 @@ class Core {
             // Local address contains control or whitespace in string ``mailing list someone@example.org''
             message.deliveredto = helper.getDeliveredTo();
             message.thread = helper.getThreadId(context, account.id, folder.id, uid);
+            if (BuildConfig.DEBUG && message.thread.startsWith("outlook:"))
+                message.warning = message.thread;
             message.priority = helper.getPriority();
+
+            for (String keyword : keywords)
+                if (MessageHelper.FLAG_LOW_IMPORTANCE.equals(keyword))
+                    message.importance = EntityMessage.PRIORITIY_LOW;
+                else if (MessageHelper.FLAG_HIGH_IMPORTANCE.equals(keyword))
+                    message.importance = EntityMessage.PRIORITIY_HIGH;
+
             message.auto_submitted = helper.getAutoSubmitted();
             message.receipt_request = helper.getReceiptRequested();
             message.receipt_to = helper.getReceiptTo();
             message.bimi_selector = helper.getBimiSelector();
+            message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
             message.spf = MessageHelper.getAuthentication("spf", authentication);
             if (message.spf == null && helper.getSPF())
@@ -3791,7 +3812,7 @@ class Core {
             message.ui_deleted = deleted;
             message.ui_hide = false;
             message.ui_found = false;
-            message.ui_ignored = seen;
+            message.ui_ignored = (seen || deleted);
             message.ui_browsed = browsed;
 
             if (message.flagged)
@@ -3901,41 +3922,42 @@ class Core {
                     }
             }
 
-            boolean needsHeaders = EntityRule.needsHeaders(rules);
-            boolean needsBody = EntityRule.needsBody(rules);
+            boolean needsHeaders = EntityRule.needsHeaders(message, rules);
+            boolean needsBody = EntityRule.needsBody(message, rules);
             if (needsHeaders || needsBody)
                 Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
             List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
-            String body = (needsBody ? helper.getMessageParts().getHtml(context) : null);
+            String body = (needsBody ? parts.getHtml(context) : null);
 
             if (experiments && helper.isReport())
                 try {
                     MessageHelper.Report r = parts.getReport();
-
-                    EntityFolder s = db.folder().getFolderByType(folder.account, EntityFolder.SENT);
-                    EntityFolder a = db.folder().getFolderByType(folder.account, EntityFolder.ARCHIVE);
-                    List<EntityMessage> reported = db.message().getMessagesByMsgId(folder.account, message.inreplyto);
-                    if (reported != null) {
-                        Long f = null;
-                        for (EntityMessage m : reported)
-                            if (s != null && m.folder.equals(s.id)) {
-                                f = null;
-                                break;
-                            } else {
-                                if (f == null || (a != null && a.id.equals(f)))
-                                    f = m.folder;
-                            }
-                        if (f != null)
-                            s = db.folder().getFolder(f);
-                    }
-
-                    if (r != null && s != null) {
+                    if (r != null) {
+                        String label = null;
                         if (r.isDeliveryStatus())
-                            EntityOperation.queue(context, s, EntityOperation.REPORT,
-                                    message.inreplyto, r.isDelivered() ? "$Delivered" : "$NotDelivered");
+                            label = (r.isDelivered() ? MessageHelper.FLAG_DELIVERED : MessageHelper.FLAG_NOT_DELIVERED);
                         else if (r.isDispositionNotification())
-                            EntityOperation.queue(context, s, EntityOperation.REPORT,
-                                    message.inreplyto, r.isDisplayed() ? "$Displayed" : "$NotDisplayed");
+                            label = (r.isDisplayed() ? MessageHelper.FLAG_DISPLAYED : MessageHelper.FLAG_NOT_DISPLAYED);
+
+                        if (label != null) {
+                            Map<Long, EntityFolder> map = new HashMap<>();
+
+                            EntityFolder s = db.folder().getFolderByType(folder.account, EntityFolder.SENT);
+                            if (s != null)
+                                map.put(s.id, s);
+
+                            List<EntityMessage> reported = db.message().getMessagesByMsgId(folder.account, message.inreplyto);
+                            if (reported != null)
+                                for (EntityMessage m : reported)
+                                    if (!map.containsKey(m.folder)) {
+                                        EntityFolder f = db.folder().getFolder(m.folder);
+                                        if (f != null)
+                                            map.put(f.id, f);
+                                    }
+
+                            for (EntityFolder f : map.values())
+                                EntityOperation.queue(context, f, EntityOperation.REPORT, message.inreplyto, label);
+                        }
                     }
                 } catch (Throwable ex) {
                     Log.w(ex);
@@ -3997,6 +4019,9 @@ class Core {
 
             try {
                 EntityContact.received(context, account, folder, message);
+
+                if (body == null && helper.isReport())
+                    body = parts.getHtml(context);
 
                 // Download small messages inline
                 if (body != null || (download && !message.ui_hide)) {
@@ -4094,6 +4119,7 @@ class Core {
                 update = true;
                 message.deleted = deleted;
                 message.ui_deleted = deleted;
+                message.ui_ignored = deleted;
                 Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid + " deleted=" + deleted);
                 syncSimilar = true;
             }
@@ -4163,8 +4189,8 @@ class Core {
             }
 
             if (update || process) {
-                boolean needsHeaders = EntityRule.needsHeaders(rules);
-                boolean needsBody = EntityRule.needsBody(rules);
+                boolean needsHeaders = EntityRule.needsHeaders(message, rules);
+                boolean needsBody = EntityRule.needsBody(message, rules);
                 if (needsHeaders || needsBody)
                     Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
                 List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
@@ -4830,6 +4856,7 @@ class Core {
         boolean light = prefs.getBoolean("light", false);
         String sound = prefs.getString("sound", null);
         boolean alert_once = prefs.getBoolean("alert_once", true);
+        boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
 
         // Get contact info
         Map<Long, Address[]> messageFrom = new HashMap<>();
@@ -5109,6 +5136,7 @@ class Core {
             List<NotificationCompat.Action> wactions = new ArrayList<>();
 
             if (notify_trash &&
+                    perform_expunge &&
                     message.accountProtocol == EntityAccount.TYPE_IMAP &&
                     db.folder().getFolderByType(message.account, EntityFolder.TRASH) != null) {
                 Intent trash = new Intent(context, ServiceUI.class)
@@ -5129,8 +5157,8 @@ class Core {
             }
 
             if (notify_trash &&
-                    message.accountProtocol == EntityAccount.TYPE_POP &&
-                    message.accountLeaveDeleted) {
+                    ((message.accountProtocol == EntityAccount.TYPE_POP && message.accountLeaveDeleted) ||
+                            (message.accountProtocol == EntityAccount.TYPE_IMAP && !perform_expunge))) {
                 Intent delete = new Intent(context, ServiceUI.class)
                         .setAction("delete:" + message.id)
                         .putExtra("group", group);

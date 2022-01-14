@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -347,11 +347,11 @@ public class EntityFolder extends EntityOrder implements Serializable {
         if (EntityFolder.INBOX.equals(type))
             return R.drawable.twotone_inbox_24;
         if (EntityFolder.OUTBOX.equals(type))
-            return R.drawable.twotone_send_24;
+            return R.drawable.twotone_outbox_24;
         if (EntityFolder.DRAFTS.equals(type))
             return R.drawable.twotone_drafts_24;
         if (EntityFolder.SENT.equals(type))
-            return R.drawable.twotone_forward_24;
+            return R.drawable.twotone_send_24;
         if (EntityFolder.ARCHIVE.equals(type))
             return R.drawable.twotone_archive_24;
         if (EntityFolder.TRASH.equals(type))

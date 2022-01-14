@@ -296,6 +296,7 @@
     <string name="title_advanced_sync_shared_folders">Synchroniser les listes de dossiers partagés</string>
     <string name="title_advanced_subscriptions">Gérer les abonnements aux dossiers</string>
     <string name="title_advanced_check_authentication">Contrôler l\'authentification des messages</string>
+    <string name="title_advanced_check_tls">Vérifier la « Transport Layer Security » (TLS)</string>
     <string name="title_advanced_check_reply_domain">Vérifier l\'adresse de réponse lors de la synchronisation des messages</string>
     <string name="title_advanced_check_mx">Vérifier l\'adresse e-mail de l\'expéditeur lors de la synchronisation des messages</string>
     <string name="title_advanced_check_blocklist">Vérifier si le nom de domaine de l\'expéditeur est sur une liste de blocage de courrier indésirable</string>
@@ -361,6 +362,7 @@
     <string name="title_advanced_two_row">Utiliser deux rangées</string>
     <string name="title_advanced_two_col">Utiliser deux colonnes</string>
     <string name="title_advanced_min_screen_size">Taille minimale de l\'écran pour partager l\'écran</string>
+    <string name="title_advanced_close_pane">Replier la ligne ou la colonne lors de la fermeture d\'une conversation</string>
     <string name="title_advanced_nav_options">Afficher les options du menu de navigation</string>
     <string name="title_advanced_nav_pin">Épingler le menu de navigation</string>
     <string name="title_advanced_nav_hide_title">Masquer les options du menu de navigation ?</string>
@@ -595,6 +597,7 @@
     <string name="title_advanced_sync_folders_hint">Désactiver ceci réduira quelque peu l\'utilisation des données et de la batterie mais désactivera également la mise à jour de la liste des dossiers</string>
     <string name="title_advanced_poll_folders_hint">Synchroniser périodiquement la liste des dossiers suite à la connexion à un compte</string>
     <string name="title_advanced_check_authentication_hint">Ceci contrôlera les résultats de l\'authentification DKIM, SPF et DMARC effectuée par le serveur de messagerie</string>
+    <string name="title_advanced_check_tls_hint">Ceci n\'affichera un bouclier vert que si un message a été transporté en toute sécurité par tous les serveurs</string>
     <string name="title_advanced_check_reply_hint">Ceci vérifiera si le nom de domaine de l\'expéditeur et celui de l\'adresse de réponse sont les mêmes</string>
     <string name="title_advanced_lookup_mx_hint">Ceci vérifiera l’existence d’enregistrements DNS mail exchanger (MX)</string>
     <string name="title_advanced_sync_delay_hint">Ceci ralentira la synchronisation des messages</string>
@@ -630,6 +633,7 @@
     <string name="title_advanced_preview_issue">Le défilement peut être lent lorsqu’il y a plus d’une ligne en raison d’un bogue dans certaines versions d’Android</string>
     <string name="title_advanced_overview_mode_hint">Ceci peut afficher de très petites polices de caractères</string>
     <string name="title_advanced_override_width_hint">Ceci peut rendre les messages plus étroits mais également étranges</string>
+    <string name="title_advanced_monospaced_pre_hint">Seuls les messages en texte brut seront considérés comme préformatés</string>
     <string name="title_advanced_placeholders_hint">Ceci s\'applique uniquement aux messages reformatés</string>
     <string name="title_advanced_inline_hint">Les images incluses dans le message peuvent être affichées sans téléchargement supplémentaire</string>
     <string name="title_advanced_parse_classes_hint">L’affichage des messages sera plus fidèle mais pourra être retardé</string>
@@ -961,7 +965,6 @@
     <string name="title_move_to_account">Déplacer vers %1$s&#8230;</string>
     <string name="title_report_spam">Traiter comme indésirable</string>
     <string name="title_delete_permanently">Supprimer définitivement</string>
-    <string name="title_no_undo">Je comprends que ceci ne peut pas être annulé</string>
     <string name="title_snooze">Reporter&#8230;</string>
     <string name="title_archive">Archiver</string>
     <string name="title_reply">Répondre</string>
@@ -1129,7 +1132,7 @@
     <string name="title_send_plain_text">Texte brut seulement</string>
     <string name="title_send_dsn">Rapport d\'état</string>
     <string name="title_send_receipt">Demander une confirmation</string>
-    <string name="title_send_receipt_remark">La plupart des fournisseurs et des clients de messagerie ignorent les demandes d\'accusé de réception</string>
+    <string name="title_send_receipt_remark">La plupart des fournisseurs et des clients de messagerie ignorent les demandes de confirmation de réception</string>
     <string name="title_from_missing">Expéditeur manquant</string>
     <string name="title_pgp_reminder">Clés PGP disponibles</string>
     <string name="title_smime_reminder">Clés S/MIME disponibles</string>
@@ -1234,7 +1237,7 @@
     <string name="title_filter_unflagged">Non suivis</string>
     <string name="title_filter_unknown">Expéditeurs inconnus</string>
     <string name="title_filter_hidden">Masqués</string>
-    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">Supprimé</string>
+    <string name="title_filter_deleted">Supprimé</string>
     <string name="title_filter_duplicates">Doublons</string>
     <string name="title_filter_trash">Supprimé</string>
     <string name="title_compact">Vue compacte</string>
@@ -1282,6 +1285,8 @@
     <string name="title_rule_answer">Répondre/transférer</string>
     <string name="title_rule_tts">Synthèse vocale</string>
     <string name="title_rule_automation">Automatisation</string>
+    <string name="title_rule_delete">Supprimer définitivement</string>
+    <string name="title_rule_sound">Jouer un son</string>
     <string name="title_rule_caption">Modifier la règle</string>
     <string name="title_rule_title">La règle s\'applique à</string>
     <string name="title_rule_name">Nom</string>
@@ -1295,6 +1300,7 @@
     <string name="title_rule_attachments">A des pièces jointes</string>
     <string name="title_rule_header">L’en-tête contient</string>
     <string name="title_rule_body">Le texte contient</string>
+    <string name="title_rule_skip_quotes">Ignorer le texte cité</string>
     <string name="title_rule_body_remark">Utiliser cette condition va toujours télécharger le texte du message, ce qui peut ralentir la synchronisation de la liste des messages</string>
     <string name="title_rule_time_abs">Temps absolu (reçu) entre</string>
     <string name="title_rule_time_after">Reçu après</string>
@@ -1321,6 +1327,7 @@
     <string name="title_rule_answer_missing">Modèle manquant</string>
     <string name="title_rule_keyword_missing">Mot-clé manquant</string>
     <string name="title_rule_automation_hint">Ceci enverra l\'intent \'%1$s\' avec les extras \'%2$s\'</string>
+    <string name="title_rule_delete_hint">La suppression définitive est irréversible, assurez-vous donc que les conditions de la règle sont correctes !</string>
     <string name="title_rule_execute">Exécuter maintenant</string>
     <string name="title_rule_applied">Messages concernés : %1$d</string>
     <string name="title_rule_check">Vérifier</string>
@@ -1335,6 +1342,10 @@
     <string name="title_rule_tts_from">De</string>
     <string name="title_rule_tts_subject">Objet</string>
     <string name="title_rule_tts_content">Texte</string>
+    <string name="title_rule_select_sound">Choisir un son</string>
+    <string name="title_rule_use_as_alarm">Utiliser en tant qu\'alarme</string>
+    <string name="title_rule_alarm_hint">Ceci ignorera les règles « Ne pas déranger »</string>
+    <string name="title_rule_alarm_duration">Durée maximale de l\'alarme (secondes)</string>
     <string name="title_legend_section_synchronize">Synchronisation</string>
     <string name="title_legend_section_folders">Dossiers</string>
     <string name="title_legend_section_messages">Messages</string>
@@ -1359,6 +1370,7 @@
     <string name="title_legend_closing">Fermeture en cours</string>
     <string name="title_legend_unified">Boîte de réception unifiée / compte principal</string>
     <string name="title_legend_inbox">Boîte de réception</string>
+    <string name="title_legend_outbox">Boîte d\'envoi</string>
     <string name="title_legend_drafts">Brouillons</string>
     <string name="title_legend_sent">Envoyés</string>
     <string name="title_legend_archive">Archives</string>

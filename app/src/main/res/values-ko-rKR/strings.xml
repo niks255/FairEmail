@@ -236,6 +236,7 @@
     <string name="title_advanced_caption_message">메시지</string>
     <string name="title_advanced_caption_message_header">메시지 제목</string>
     <string name="title_advanced_caption_message_body">메시지 본문</string>
+    <string name="title_advanced_close_pane">대화 상자를 닫을 때 행 또는 열 축소</string>
     <string name="title_advanced_date_header">날짜로 묶기</string>
     <string name="title_advanced_date_fixed">상단 헤더에서 수정일 표시</string>
     <string name="title_advanced_threading">대화 스레딩</string>
@@ -306,6 +307,7 @@
     <string name="title_advanced_debug">디버그 모드</string>
     <string name="title_advanced_poll_hint">주기적으로 새 메시지를 확인하면 매번 오프라인 메시지와 온라인 메시지를 비교하게 되므로, 배터리 사용량이 증가할 수 있습니다. 항상 수신 기능은 변경사항을 그때그때 반영하므로 이런 현상을 막을 수 있습니다.</string>
     <string name="title_advanced_subject_threading_hint">최근 %1$d시간 동안 수신된 메시지만</string>
+    <string name="title_advanced_check_tls_hint">메시지가 모든 서버에서 안전하게 전송된 경우에만 녹색 방패 아이콘이 표시됩니다.</string>
     <string name="title_advanced_browse_hint">아래로 스크롤하여 메시지 더보기</string>
     <string name="title_advanced_date_hint">메시지가 시간별로 정렬된 경우 날짜별로만 묶입니다</string>
     <string name="title_advanced_split_min_hint">폴더블 기기를 위한 조건입니다</string>
@@ -428,6 +430,7 @@
     <string name="title_move_to">&#8230;으로 이동</string>
     <string name="title_move_to_folder">&#8230;으로 이동</string>
     <string name="title_report_spam">스팸으로 처리</string>
+    <string name="title_delete_permanently">영구 삭제</string>
     <string name="title_snooze">&#8230; 미루기</string>
     <string name="title_archive">보관처리</string>
     <string name="title_reply">답장</string>
@@ -554,7 +557,7 @@
     <string name="title_filter_unflagged">즐겨찾기 해제함</string>
     <string name="title_filter_unknown">알 수 없는 발신자</string>
     <string name="title_filter_hidden">숨김</string>
-    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">삭제됨</string>
+    <string name="title_filter_deleted">삭제됨</string>
     <string name="title_filter_duplicates">중복</string>
     <string name="title_compact">간략히 보기</string>
     <string name="title_zoom">글씨 크기</string>
@@ -592,6 +595,8 @@
     <string name="title_rule_answer">답장/전달</string>
     <string name="title_rule_tts">텍스트 음성 변환</string>
     <string name="title_rule_automation">자동화</string>
+    <string name="title_rule_delete">영구 삭제</string>
+    <string name="title_rule_sound">소리 재생</string>
     <string name="title_rule_caption">규칙 수정</string>
     <string name="title_rule_name">이름</string>
     <string name="title_rule_order">정렬</string>
@@ -599,6 +604,7 @@
     <string name="title_rule_sender">발신인 포함</string>
     <string name="title_rule_attachments">첨부파일</string>
     <string name="title_rule_header">제목 포함</string>
+    <string name="title_rule_skip_quotes">인용한 텍스트 건너뛰기</string>
     <string name="title_rule_regex">정규표현식</string>
     <string name="title_rule_and">그리고</string>
     <string name="title_rule_action">동작</string>
@@ -609,6 +615,7 @@
     <string name="title_rule_forward_to">전달</string>
     <string name="title_rule_folder_missing">폴더 없음</string>
     <string name="title_rule_keyword_missing">키워드 누락</string>
+    <string name="title_rule_delete_hint">영구 삭제는 되돌릴 수 없으므로, 규칙 조건이 올바른지 확인하십시오!</string>
     <string name="title_rule_execute">지금 실행</string>
     <string name="title_rule_check">확인</string>
     <string name="title_rule_tts_ok">설정 완료</string>
@@ -617,6 +624,10 @@
     <string name="title_rule_tts_from">발신인</string>
     <string name="title_rule_tts_subject">제목</string>
     <string name="title_rule_tts_content">내용</string>
+    <string name="title_rule_select_sound">소리 선택</string>
+    <string name="title_rule_use_as_alarm">알람으로 사용</string>
+    <string name="title_rule_alarm_hint">알람은 \"방해 금지 모드\"를 무시합니다</string>
+    <string name="title_rule_alarm_duration">최대 알람 시간 (초)</string>
     <string name="title_legend_section_synchronize">동기화</string>
     <string name="title_legend_section_folders">폴더</string>
     <string name="title_legend_section_messages">메시지</string>
@@ -631,6 +642,7 @@
     <string name="title_legend_downloading">다운로드 중</string>
     <string name="title_legend_closing">닫기</string>
     <string name="title_legend_inbox">받은 편지함</string>
+    <string name="title_legend_outbox">보낸 편지함</string>
     <string name="title_legend_drafts">임시 보관함</string>
     <string name="title_legend_sent">발신함</string>
     <string name="title_legend_archive">보관처리</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.accounts.Account;
@@ -105,6 +105,8 @@ public class GmailState {
 
     static Account getAccount(Context context, String user) {
         AccountManager am = AccountManager.get(context);
+        if (am == null)
+            return null;
         Account[] accounts = am.getAccountsByType(TYPE_GOOGLE);
         for (Account account : accounts)
             if (Objects.equals(account.name, user))

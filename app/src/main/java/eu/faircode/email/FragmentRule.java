@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -107,6 +108,7 @@ public class FragmentRule extends FragmentBase {
 
     private EditText etBody;
     private CheckBox cbBody;
+    private CheckBox cbSkipQuotes;
 
     private TextView tvDateAfter;
     private TextView tvDateBefore;
@@ -146,6 +148,10 @@ public class FragmentRule extends FragmentBase {
     private Button btnTtsSetup;
     private Button btnTtsData;
 
+    private Button btnSound;
+    private CheckBox cbAlarm;
+    private EditText etAlarmDuration;
+
     private TextView tvAutomation;
 
     private BottomNavigationView bottom_navigation;
@@ -160,7 +166,9 @@ public class FragmentRule extends FragmentBase {
     private Group grpMoveProp;
     private Group grpAnswer;
     private Group grpTts;
+    private Group grpSound;
     private Group grpAutomation;
+    private Group grpDelete;
 
     private ArrayAdapter<String> adapterDay;
     private ArrayAdapter<Action> adapterAction;
@@ -173,6 +181,7 @@ public class FragmentRule extends FragmentBase {
     private long account = -1;
     private int protocol = -1;
     private long folder = -1;
+    private Uri sound = null;
 
     private DateFormat DF;
 
@@ -187,8 +196,9 @@ public class FragmentRule extends FragmentBase {
     private static final int REQUEST_TO = 7;
     private final static int REQUEST_TTS_CHECK = 8;
     private final static int REQUEST_TTS_DATA = 9;
-    private final static int REQUEST_DATE_AFTER = 10;
-    private final static int REQUEST_DATE_BEFORE = 11;
+    private final static int REQUEST_SOUND = 10;
+    private final static int REQUEST_DATE_AFTER = 11;
+    private final static int REQUEST_DATE_BEFORE = 12;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -203,6 +213,9 @@ public class FragmentRule extends FragmentBase {
         account = args.getLong("account", -1);
         protocol = args.getInt("protocol", EntityAccount.TYPE_IMAP);
         folder = args.getLong("folder", -1);
+
+        if (savedInstanceState != null)
+            sound = savedInstanceState.getParcelable("fair:sound");
 
         DF = Helper.getDateTimeInstance(getContext(), DateFormat.SHORT, DateFormat.SHORT);
     }
@@ -245,6 +258,7 @@ public class FragmentRule extends FragmentBase {
 
         etBody = view.findViewById(R.id.etBody);
         cbBody = view.findViewById(R.id.cbBody);
+        cbSkipQuotes = view.findViewById(R.id.cbSkipQuotes);
 
         tvDateAfter = view.findViewById(R.id.tvDateAfter);
         tvDateBefore = view.findViewById(R.id.tvDateBefore);
@@ -283,6 +297,11 @@ public class FragmentRule extends FragmentBase {
 
         btnTtsSetup = view.findViewById(R.id.btnTtsSetup);
         btnTtsData = view.findViewById(R.id.btnTtsData);
+
+        btnSound = view.findViewById(R.id.btnSound);
+        cbAlarm = view.findViewById(R.id.cbAlarm);
+        etAlarmDuration = view.findViewById(R.id.etAlarmDuration);
+
         tvAutomation = view.findViewById(R.id.tvAutomation);
 
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
@@ -298,7 +317,9 @@ public class FragmentRule extends FragmentBase {
         grpMoveProp = view.findViewById(R.id.grpMoveProp);
         grpAnswer = view.findViewById(R.id.grpAnswer);
         grpTts = view.findViewById(R.id.grpTts);
+        grpSound = view.findViewById(R.id.grpSound);
         grpAutomation = view.findViewById(R.id.grpAutomation);
+        grpDelete = view.findViewById(R.id.grpDelete);
 
         ibSender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -456,8 +477,10 @@ public class FragmentRule extends FragmentBase {
             actions.add(new Action(EntityRule.TYPE_MOVE, getString(R.string.title_rule_move)));
             actions.add(new Action(EntityRule.TYPE_COPY, getString(R.string.title_rule_copy)));
         }
+        actions.add(new Action(EntityRule.TYPE_DELETE, getString(R.string.title_rule_delete)));
         actions.add(new Action(EntityRule.TYPE_ANSWER, getString(R.string.title_rule_answer)));
         actions.add(new Action(EntityRule.TYPE_TTS, getString(R.string.title_rule_tts)));
+        actions.add(new Action(EntityRule.TYPE_SOUND, getString(R.string.title_rule_sound)));
         actions.add(new Action(EntityRule.TYPE_AUTOMATION, getString(R.string.title_rule_automation)));
         adapterAction.addAll(actions);
 
@@ -497,6 +520,16 @@ public class FragmentRule extends FragmentBase {
                 });
             }
         });
+
+        cbAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                etAlarmDuration.setEnabled(isChecked);
+            }
+        });
+
+        etAlarmDuration.setHint(Integer.toString(MediaPlayerHelper.DEFAULT_ALARM_DURATION));
+        etAlarmDuration.setEnabled(false);
 
         npDuration.setMinValue(0);
         npDuration.setMaxValue(999);
@@ -549,6 +582,17 @@ public class FragmentRule extends FragmentBase {
             }
         });
 
+        btnSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.title_advanced_sound));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, sound);
+                startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_SOUND);
+            }
+        });
+
         tvAutomation.setText(getString(R.string.title_rule_automation_hint,
                 EntityRule.ACTION_AUTOMATION,
                 TextUtils.join(",", new String[]{
@@ -586,7 +630,9 @@ public class FragmentRule extends FragmentBase {
         grpMoveProp.setVisibility(View.GONE);
         grpAnswer.setVisibility(View.GONE);
         grpTts.setVisibility(View.GONE);
+        grpSound.setVisibility(View.GONE);
         grpAutomation.setVisibility(View.GONE);
+        grpDelete.setVisibility(View.GONE);
 
         pbWait.setVisibility(View.VISIBLE);
 
@@ -691,6 +737,7 @@ public class FragmentRule extends FragmentBase {
         outState.putInt("fair:target", spTarget.getSelectedItemPosition());
         outState.putInt("fair:identity", spIdent.getSelectedItemPosition());
         outState.putInt("fair:answer", spAnswer.getSelectedItemPosition());
+        outState.putParcelable("fair:sound", sound);
 
         super.onSaveInstanceState(outState);
     }
@@ -747,6 +794,10 @@ public class FragmentRule extends FragmentBase {
                     break;
                 case REQUEST_TTS_DATA:
                     break;
+                case REQUEST_SOUND:
+                    if (resultCode == RESULT_OK && data != null)
+                        onSelectSound(data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+                    break;
                 case REQUEST_DATE_AFTER:
                     if (resultCode == RESULT_OK && data != null)
                         onDateAfter(data.getBundleExtra("args"));
@@ -775,6 +826,10 @@ public class FragmentRule extends FragmentBase {
             Log.e(ex);
             Log.unexpectedError(getParentFragmentManager(), ex);
         }
+    }
+
+    private void onSelectSound(Uri uri) {
+        this.sound = uri;
     }
 
     private void onDelete() {
@@ -914,6 +969,7 @@ public class FragmentRule extends FragmentBase {
 
                         etBody.setText(jbody == null ? null : jbody.getString("value"));
                         cbBody.setChecked(jbody != null && jbody.getBoolean("regex"));
+                        cbSkipQuotes.setChecked(jbody != null && jbody.optBoolean("skip_quotes"));
 
                         long after = (jdate != null && jdate.has("after") ? jdate.getLong("after") : 0);
                         long before = (jdate != null && jdate.has("before") ? jdate.getLong("before") : 0);
@@ -998,6 +1054,16 @@ public class FragmentRule extends FragmentBase {
                                     cbCc.setChecked(jaction.optBoolean("cc"));
                                     cbWithAttachments.setChecked(jaction.optBoolean("attachments"));
                                     break;
+
+                                case EntityRule.TYPE_SOUND:
+                                    if (jaction.has("uri"))
+                                        FragmentRule.this.sound = Uri.parse(jaction.getString("uri"));
+                                    boolean alarm = jaction.optBoolean("alarm");
+                                    int duration = jaction.optInt("duration", 0);
+                                    cbAlarm.setChecked(alarm);
+                                    etAlarmDuration.setEnabled(alarm);
+                                    etAlarmDuration.setText(duration == 0 ? null : Integer.toString(duration));
+                                    break;
                             }
 
                             for (int pos = 0; pos < adapterAction.getCount(); pos++)
@@ -1049,7 +1115,9 @@ public class FragmentRule extends FragmentBase {
         grpMoveProp.setVisibility(type == EntityRule.TYPE_MOVE ? View.VISIBLE : View.GONE);
         grpAnswer.setVisibility(type == EntityRule.TYPE_ANSWER ? View.VISIBLE : View.GONE);
         grpTts.setVisibility(type == EntityRule.TYPE_TTS ? View.VISIBLE : View.GONE);
+        grpSound.setVisibility(type == EntityRule.TYPE_SOUND ? View.VISIBLE : View.GONE);
         grpAutomation.setVisibility(type == EntityRule.TYPE_AUTOMATION ? View.VISIBLE : View.GONE);
+        grpDelete.setVisibility(type == EntityRule.TYPE_DELETE ? View.VISIBLE : View.GONE);
     }
 
     private void onActionDelete() {
@@ -1238,6 +1306,7 @@ public class FragmentRule extends FragmentBase {
             JSONObject jbody = new JSONObject();
             jbody.put("value", body);
             jbody.put("regex", cbBody.isChecked());
+            jbody.put("skip_quotes", cbSkipQuotes.isChecked());
             jcondition.put("body", jbody);
         }
 
@@ -1323,6 +1392,19 @@ public class FragmentRule extends FragmentBase {
                     jaction.put("to", etTo.getText().toString().trim());
                     jaction.put("cc", cbCc.isChecked());
                     jaction.put("attachments", cbWithAttachments.isChecked());
+                    break;
+
+                case EntityRule.TYPE_SOUND:
+                    boolean alarm = cbAlarm.isChecked();
+                    String duration = etAlarmDuration.getText().toString();
+                    jaction.put("uri", sound);
+                    jaction.put("alarm", alarm);
+                    if (alarm && !TextUtils.isEmpty(duration))
+                        try {
+                            jaction.put("duration", Integer.parseInt(duration));
+                        } catch (NumberFormatException ex) {
+                            Log.e(ex);
+                        }
                     break;
             }
         }

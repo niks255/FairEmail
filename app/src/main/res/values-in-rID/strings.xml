@@ -938,7 +938,6 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_move_to_account">Pindahkan ke %1$s&#8230;</string>
     <string name="title_report_spam">Tandai sebagai spam</string>
     <string name="title_delete_permanently">Hapus permanen</string>
-    <string name="title_no_undo">Saya mengerti ini tidak dapat dibatalkan</string>
     <string name="title_snooze">Tunda &#8230;</string>
     <string name="title_archive">Arsip</string>
     <string name="title_reply">Balas</string>
@@ -1255,6 +1254,7 @@ Memformat ulang pesan perlu waktu, tergantung dari ukuran pesan dan keceoatan pe
     <string name="title_rule_answer">Balas/teruskan</string>
     <string name="title_rule_tts">Tulisan ke suara</string>
     <string name="title_rule_automation">Otomatisasi</string>
+    <string name="title_rule_delete">Hapus permanen</string>
     <string name="title_rule_caption">Sunting aturan</string>
     <string name="title_rule_title">Aturan berlaku untuk</string>
     <string name="title_rule_name">Nama</string>
@@ -1332,6 +1332,7 @@ Memformat ulang pesan perlu waktu, tergantung dari ukuran pesan dan keceoatan pe
     <string name="title_legend_closing">Mengakhiri</string>
     <string name="title_legend_unified">Kotak masuk terpadu / akun utama</string>
     <string name="title_legend_inbox">Kotak Masuk</string>
+    <string name="title_legend_outbox">Kotak keluar</string>
     <string name="title_legend_drafts">Konsep</string>
     <string name="title_legend_sent">Terkirim</string>
     <string name="title_legend_archive">Arsip</string>

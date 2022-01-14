@@ -292,6 +292,7 @@
     <string name="title_advanced_sync_shared_folders">Synkronisera delade mapplistor</string>
     <string name="title_advanced_subscriptions">Hantera mapprenumerationer</string>
     <string name="title_advanced_check_authentication">Kontrollera meddelandeautentisering</string>
+    <string name="title_advanced_check_tls">Kontrollera transportskiktssäkerhet (TLS)</string>
     <string name="title_advanced_check_reply_domain">Kontrollera svarsadresser vid synkronisering av meddelanden</string>
     <string name="title_advanced_check_mx">Kontrollera avsändarens e-postadresser vid synkronisering av meddelanden</string>
     <string name="title_advanced_check_blocklist">Kontrollera om avsändarens domän återfinns på skräppostblockeringslistor</string>
@@ -312,6 +313,7 @@
     <string name="title_advanced_send_pending">Visa icke-påträngande försenad leveransikon</string>
     <string name="title_advanced_compose_font">Standardtypsnitt</string>
     <string name="title_advanced_prefix_once">Prefix i ämnet endast när du svarar eller vidarebefordrar</string>
+    <string name="title_advanced_prefix_count">Lägg till antal svar till svarsprefix</string>
     <string name="title_advanced_separate_reply">Infoga en horisontell linje innan ett svar/framåt sidhuvud</string>
     <string name="title_advanced_extended_reply">Använd förlängd svars-/framåtriktad sidhuvud</string>
     <string name="title_advanced_write_above">Skriv ovanför avsändarens text</string>
@@ -356,6 +358,7 @@
     <string name="title_advanced_two_row">Använd två rader</string>
     <string name="title_advanced_two_col">Använd två kolumner</string>
     <string name="title_advanced_min_screen_size">Minsta skärmstorlek för uppdelning av skärmen</string>
+    <string name="title_advanced_close_pane">Kollapsa rad eller kolumn när en konversation stängs</string>
     <string name="title_advanced_nav_options">Visa alternativ för navigeringsmeny</string>
     <string name="title_advanced_nav_pin">Fäst navigeringsmenyn</string>
     <string name="title_advanced_nav_hide_title">Dölj alternativ för navigeringsmenyn?</string>
@@ -589,6 +592,7 @@
     <string name="title_advanced_sync_folders_hint">Inaktivering av detta kommer att minska data och batterianvändning något, men kommer att inaktivera uppdatering av listan över mappar också</string>
     <string name="title_advanced_poll_folders_hint">Synkronisera mapplistan periodiskt utöver när du har anslutit till ett konto</string>
     <string name="title_advanced_check_authentication_hint">Detta kommer att kontrollera resultaten av DKIM, SPF och DMARC-autentisering som utförs av e-postservern</string>
+    <string name="title_advanced_check_tls_hint">Detta kommer att visa en grön sköld endast om ett meddelande transporterades säkert av alla servrar</string>
     <string name="title_advanced_check_reply_hint">Detta kommer att kontrollera om domännamnet för avsändaren och svarsadressen är samma</string>
     <string name="title_advanced_lookup_mx_hint">Detta kommer att kontrollera om DNS MX-poster finns</string>
     <string name="title_advanced_sync_delay_hint">Detta kommer att sakta ner synkronisering av meddelanden</string>
@@ -624,6 +628,7 @@
     <string name="title_advanced_preview_issue">Scrollningen kan vara långsam på grund av en bugg i vissa Android-versioner när antalet rader är mer än en</string>
     <string name="title_advanced_overview_mode_hint">Detta kan resultera i mycket små typsnitt</string>
     <string name="title_advanced_override_width_hint">Detta kan göra meddelanden smalare, men också att de visas konstigt</string>
+    <string name="title_advanced_monospaced_pre_hint">Enkla textmeddelanden kommer att betraktas som förformaterade</string>
     <string name="title_advanced_placeholders_hint">Detta gäller endast omformaterade meddelanden</string>
     <string name="title_advanced_inline_hint">Infogade bilder är bilder som ingår i meddelandet</string>
     <string name="title_advanced_parse_classes_hint">Detta kommer att visa meddelanden mer korrekt, men möjligen med en fördröjning</string>
@@ -758,6 +763,8 @@
     <string name="title_identity_required">En identitet krävs för att skicka e-post</string>
     <string name="title_drafts_required">En utkastmapp krävs för att skicka e-post</string>
     <string name="title_drafts_select">Att skicka e-post kräver att en utkastmapp väljs i kontoinställningarna</string>
+    <string name="title_account_auth_update">Uppdatera auktorisering</string>
+    <string name="title_account_auth_password">Byt till lösenordsautentisering</string>
     <string name="title_account_delete">Ta bort detta konto permanent?</string>
     <string name="title_identity_delete">Ta bort denna identitet permanent?</string>
     <string name="title_edit_html">Redigera som HTML</string>
@@ -952,7 +959,6 @@
     <string name="title_move_to_account">Flytta till %1$s &#8230;</string>
     <string name="title_report_spam">Behandla som skräppost</string>
     <string name="title_delete_permanently">Ta bort permanent</string>
-    <string name="title_no_undo">Jag förstår att detta inte kan ångras</string>
     <string name="title_snooze">Slumra &#8230;</string>
     <string name="title_archive">Arkivera</string>
     <string name="title_reply">Svara</string>
@@ -1223,7 +1229,7 @@
     <string name="title_filter_unflagged">Utan stjärnmärkning</string>
     <string name="title_filter_unknown">Okända avsändare</string>
     <string name="title_filter_hidden">Dold</string>
-    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">Raderad</string>
+    <string name="title_filter_deleted">Raderad</string>
     <string name="title_filter_duplicates">Dubbletter</string>
     <string name="title_filter_trash">Kastade</string>
     <string name="title_compact">Kompakt vy</string>
@@ -1271,6 +1277,7 @@
     <string name="title_rule_answer">Svar/vidarebefordra</string>
     <string name="title_rule_tts">Text till tal</string>
     <string name="title_rule_automation">Automatisering</string>
+    <string name="title_rule_delete">Ta bort permanent</string>
     <string name="title_rule_caption">Redigera regel</string>
     <string name="title_rule_title">Regeln gäller</string>
     <string name="title_rule_name">Namn</string>
@@ -1284,6 +1291,7 @@
     <string name="title_rule_attachments">Har bilagor</string>
     <string name="title_rule_header">Sidhuvud innehåller</string>
     <string name="title_rule_body">Texten innehåller</string>
+    <string name="title_rule_skip_quotes">Hoppa över citerad text</string>
     <string name="title_rule_body_remark">Användning av detta villkor kommer alltid att ladda ner meddelandetexten, vilket kan sakta ner synkroniseringen av meddelandelistan</string>
     <string name="title_rule_time_abs">Absolut tid (mottagen) mellan</string>
     <string name="title_rule_time_after">Mottagen efter</string>
@@ -1310,6 +1318,7 @@
     <string name="title_rule_answer_missing">Mall saknas</string>
     <string name="title_rule_keyword_missing">Nyckelord saknas</string>
     <string name="title_rule_automation_hint">Detta kommer att skicka avsikten \'%1$s\' med extramaterial \'%2$s\'</string>
+    <string name="title_rule_delete_hint">Permanent borttagning är oåterkallelig, så se till att regelvillkoren är korrekta!</string>
     <string name="title_rule_execute">Verkställ nu</string>
     <string name="title_rule_applied">Berörda meddelanden: %1$d</string>
     <string name="title_rule_check">Kontrollera</string>
@@ -1324,6 +1333,7 @@
     <string name="title_rule_tts_from">Från</string>
     <string name="title_rule_tts_subject">Ämne</string>
     <string name="title_rule_tts_content">Text</string>
+    <string name="title_rule_alarm_duration">Maxtid för alarm (sekunder)</string>
     <string name="title_legend_section_synchronize">Synkronisera</string>
     <string name="title_legend_section_folders">Mappar</string>
     <string name="title_legend_section_messages">Meddelanden</string>
@@ -1348,6 +1358,7 @@
     <string name="title_legend_closing">Stänger</string>
     <string name="title_legend_unified">Samlad inkorg / primärt konto</string>
     <string name="title_legend_inbox">Inkorg</string>
+    <string name="title_legend_outbox">Utkorg</string>
     <string name="title_legend_drafts">Utkast</string>
     <string name="title_legend_sent">Skickat</string>
     <string name="title_legend_archive">Arkivera</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -406,7 +406,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         if (host != null && !host.equals(puny)) {
             etLink.setText(format(uri.buildUpon().encodedAuthority(puny).build(), context));
             tvLink.setText(uri.toString());
-            tvSuspicious.setVisibility(View.VISIBLE);
+            tvSuspicious.setVisibility(View.GONE);
         } else {
             etLink.setText(format(uri, context));
             tvLink.setText(null);

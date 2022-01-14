@@ -316,6 +316,7 @@
     <string name="title_advanced_sync_shared_folders">סנכרון רשימות תיקיות משותפות</string>
     <string name="title_advanced_subscriptions">ניהול מינוי על תיקיות</string>
     <string name="title_advanced_check_authentication">בדיקת אימות ההודעה</string>
+    <string name="title_advanced_check_tls">בדיקת אבטחת שכבת התעבורה (TLS)</string>
     <string name="title_advanced_check_reply_domain">לבדוק את כתובת המענה בעת סנכרון הודעות</string>
     <string name="title_advanced_check_mx">לבדוק את כתובות הדוא״ל של המוענים בעת סנכרון הודעות</string>
     <string name="title_advanced_check_blocklist">לבדוק אם שם התחום של המוען הוא ברשימת חסימת ספאם</string>
@@ -381,6 +382,7 @@
     <string name="title_advanced_two_row">להשתמש בשתי שורות</string>
     <string name="title_advanced_two_col">להשתמש בשתי עמודות</string>
     <string name="title_advanced_min_screen_size">גודל המסך המזערי לפיצול המסך</string>
+    <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
     <string name="title_advanced_nav_hide_title">להסתיר את אפשרויות תפריט הניווט?</string>
@@ -614,6 +616,7 @@
     <string name="title_advanced_sync_folders_hint">השבתת האפשרות הזאת תצמצם את צריכת הנתונים והסוללהבמידה מסוימת אך תשבית גם את עדכון רשימת התיקיות</string>
     <string name="title_advanced_poll_folders_hint">לסנכרן את רשימת התיקיות מדי פעם בנוסף לסנכרון שאחרי ההתחברות לחשבון</string>
     <string name="title_advanced_check_authentication_hint">אפשרות זו תבדוק את תוצאות אימות DKIM,‏ SPF ו־DMARC כפי שמבוצעות על ידי שרת הדוא״ל</string>
+    <string name="title_advanced_check_tls_hint">יציג מגן ירוק אם ההודעה הועברה בצורה מאובטחת על ידי כל השרתים</string>
     <string name="title_advanced_check_reply_hint">מנגנון זה יבדוק אם שם התחום של המוען וכתובת המענה זהות</string>
     <string name="title_advanced_lookup_mx_hint">יבדוק אם קיימות רשומות MX ב־DNS</string>
     <string name="title_advanced_sync_delay_hint">יאט סנכרון הודעות</string>
@@ -649,6 +652,7 @@
     <string name="title_advanced_preview_issue">גלילה עשויה להאט עקב תקלה בחלק מגרסאות ה־Android כשמספר השורות עולה על אחת</string>
     <string name="title_advanced_overview_mode_hint">יכול לגרום להקטנה מוגזמת של הגופנים</string>
     <string name="title_advanced_override_width_hint">זה יכול להצר הודעות אבל גם להציג בצורה מוזרה</string>
+    <string name="title_advanced_monospaced_pre_hint">הודעות בטקסט פשוט בלבד תיחשבנה שעוצבו מראש</string>
     <string name="title_advanced_placeholders_hint">חל על הודעות שעוצבו מחדש בלבד</string>
     <string name="title_advanced_inline_hint">תמונות מובנות הן תמונות שכלולות בהודעה</string>
     <string name="title_advanced_parse_classes_hint">זה יציג הודעות בצורה יותר מדויקת אך כנראה עם עיכוב מסוים</string>
@@ -801,6 +805,7 @@
     <string name="title_hint_alias">לחיצה ארוכה על זהות תציג אפשרויות, כגון העתקה ליצירת כינויים לזהות</string>
     <string name="title_service_auth">שרת הדוא״ל החזיר: ‚%1$s’</string>
     <string name="title_service_vpn">אולי בגלל ה־VPN הפעיל</string>
+    <string name="title_service_token">לא ניתן לחסום את מנהל החשבונות של Android עם VPN, חומת אש, חוסם פרסומות וכו׳, מה שימנע ממנו לקבל אסימון גישה</string>
     <string name="title_service_port">נא לבדוק היטב את מספר הפתחה</string>
     <string name="title_service_protocol">נא לבדוק את הפרוטוקול היטב (SSL/TLS או STARTTLS)</string>
     <string name="title_advanced_browse">עיון בהודעות שבשרת</string>
@@ -979,7 +984,6 @@
     <string name="title_move_to_account">העברה אל %1$s&#8230;</string>
     <string name="title_report_spam">התנהגות כספאם</string>
     <string name="title_delete_permanently">מחיקה לצמיתות</string>
-    <string name="title_no_undo">ברור לי שאין אפשרות לשחזר</string>
     <string name="title_snooze">השהיה&#8230;</string>
     <string name="title_archive">ארכיון</string>
     <string name="title_reply">תגובה</string>
@@ -1252,7 +1256,7 @@
     <string name="title_filter_unflagged">ללא כוכב</string>
     <string name="title_filter_unknown">מוענים בלתי ידועים</string>
     <string name="title_filter_hidden">מוסתר</string>
-    <string name="title_filter_deleted" comment="title_filter_deleted&#10;Filter out &quot;Deleted&quot; messages = messages with deleted flag set">נמחקו</string>
+    <string name="title_filter_deleted">נמחקו</string>
     <string name="title_filter_duplicates">כפילויות</string>
     <string name="title_filter_trash">באשפה</string>
     <string name="title_compact">תצוגה מצומצמת</string>
@@ -1300,6 +1304,8 @@
     <string name="title_rule_answer">תגובה/העברה</string>
     <string name="title_rule_tts">טקסט לדיבור</string>
     <string name="title_rule_automation">אוטומציה</string>
+    <string name="title_rule_delete">מחיקה לצמיתות</string>
+    <string name="title_rule_sound">השמעת צליל</string>
     <string name="title_rule_caption">עריכת כלל</string>
     <string name="title_rule_title">הכלל חל על</string>
     <string name="title_rule_name">שם</string>
@@ -1313,6 +1319,7 @@
     <string name="title_rule_attachments">יש קבצים מצורפים</string>
     <string name="title_rule_header">הכותרת מכילה</string>
     <string name="title_rule_body">הטקסט מכיל</string>
+    <string name="title_rule_skip_quotes">לדלג על טקסט מצוטט</string>
     <string name="title_rule_body_remark">השימוש בתנאי זה תמיד יוריד את טקסט ההודעה, מה שעלול להאט את סנכרון רשימת ההודעות</string>
     <string name="title_rule_time_abs">זמן מוחלט (של הקבלה) בין</string>
     <string name="title_rule_time_after">התקבל לאחר</string>
@@ -1339,6 +1346,7 @@
     <string name="title_rule_answer_missing">תבנית חסרה</string>
     <string name="title_rule_keyword_missing">מילת מפתח חסרה</string>
     <string name="title_rule_automation_hint">פעולה זו תשלח את ה־intent‏ ‚%1$s’ עם התוספות ‚%2$s’</string>
+    <string name="title_rule_delete_hint">מחיקה לצמיתות היא בלתי הפיכה, לכן כדאי לוודא שתנאי הכלל נכונים!</string>
     <string name="title_rule_execute">לבצע כעת</string>
     <string name="title_rule_applied">הודעות שיושפעו: %1$d</string>
     <string name="title_rule_check">בדיקה</string>
@@ -1353,6 +1361,10 @@
     <string name="title_rule_tts_from">מאת</string>
     <string name="title_rule_tts_subject">נושא</string>
     <string name="title_rule_tts_content">טקסט</string>
+    <string name="title_rule_select_sound">בחירת צליל</string>
+    <string name="title_rule_use_as_alarm">להשתמש כהתראה</string>
+    <string name="title_rule_alarm_hint">יתעלם מכללי „לא להפריע”</string>
+    <string name="title_rule_alarm_duration">משך ההתראה המרבי (שניות)</string>
     <string name="title_legend_section_synchronize">סנכרון</string>
     <string name="title_legend_section_folders">תיקיות</string>
     <string name="title_legend_section_messages">הודעות</string>
@@ -1377,6 +1389,7 @@
     <string name="title_legend_closing">נסגר</string>
     <string name="title_legend_unified">דואר נכנס מאוחד / חשבון עיקרי</string>
     <string name="title_legend_inbox">דואר נכנס</string>
+    <string name="title_legend_outbox">דואר יוצא</string>
     <string name="title_legend_drafts">טיוטות</string>
     <string name="title_legend_sent">נשלח</string>
     <string name="title_legend_archive">ארכיון</string>

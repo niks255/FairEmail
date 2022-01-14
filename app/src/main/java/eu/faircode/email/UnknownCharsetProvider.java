@@ -12,7 +12,7 @@ package eu.faircode.email;
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.text.TextUtils;
@@ -86,6 +86,9 @@ public class UnknownCharsetProvider extends CharsetProvider {
                     "8bit".equalsIgnoreCase(name) ||
                     "unknown-8bit".equalsIgnoreCase(name))
                 return StandardCharsets.ISO_8859_1;
+
+            if (name.contains("1252"))
+                name = "windows-1252";
 
             // Android will prevent recursion
             String jname = MimeUtility.javaCharset(name);

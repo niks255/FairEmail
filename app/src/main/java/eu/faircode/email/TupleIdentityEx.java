@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import java.util.Objects;
@@ -24,6 +24,7 @@ import java.util.Objects;
 public class TupleIdentityEx extends EntityIdentity {
     public String accountName;
     public String accountCategory;
+    public boolean accountSynchronize;
     public Long drafts;
 
     @Override
@@ -31,9 +32,10 @@ public class TupleIdentityEx extends EntityIdentity {
         if (obj instanceof TupleIdentityEx) {
             TupleIdentityEx other = (TupleIdentityEx) obj;
             return (super.equals(obj) &&
-                    Objects.equals(accountCategory, other.accountCategory) &&
-                    Objects.equals(accountName, other.accountName) &&
-                    Objects.equals(drafts, other.drafts));
+                    Objects.equals(this.accountCategory, other.accountCategory) &&
+                    Objects.equals(this.accountName, other.accountName) &&
+                    this.accountSynchronize == other.accountSynchronize &&
+                    Objects.equals(this.drafts, other.drafts));
         } else
             return false;
     }

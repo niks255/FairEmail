@@ -458,6 +458,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cbBody" />
 
+                <CheckBox
+                    android:id="@+id/cbSkipQuotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_rule_skip_quotes"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etBody" />
+
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvBodyRemark"
                     android:layout_width="0dp"
@@ -466,7 +474,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etBody" />
+                    app:layout_constraintTop_toBottomOf="@id/cbSkipQuotes" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvAndBody"
@@ -916,6 +924,61 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnTtsSetup" />
 
+                <Button
+                    android:id="@+id/btnSound"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_audiotrack_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_rule_select_sound"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnTtsData" />
+
+                <CheckBox
+                    android:id="@+id/cbAlarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_rule_use_as_alarm"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnSound" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAlarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/title_rule_alarm_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cbAlarm" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvAlarmDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_rule_alarm_duration"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAlarm" />
+
+                <eu.faircode.email.EditTextPlain
+                    android:id="@+id/etAlarmDuration"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:hint="10"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAlarmDuration" />
+
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvAutomation"
                     android:layout_width="wrap_content"
@@ -924,7 +987,22 @@
                     android:text="@string/title_rule_automation_hint"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnTtsData" />
+                    app:layout_constraintTop_toBottomOf="@+id/etAlarmDuration" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_warning_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorWarning"
+                    android:text="@string/title_rule_delete_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?attr/colorWarning"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAutomation" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpReady"
@@ -932,10 +1010,14 @@
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="
                     tvTitle,tvFolder,tvName,etName,tvOrder,etOrder,cbEnabled,cbStop,
+                    tvCondition,
                     vSeparatorSender,tvSender,cbSender,etSender,ibSender,cbKnownSender,tvAndSender,
                     vSeparatorRecipient,tvRecipient,cbRecipient,etRecipient,ibRecipient,tvAndRecipient,
                     vSeparatorSubject,tvSubject,cbSubject,etSubject,tvAndSubject,
+                    vSeparatorAttachments,cbAttachments,tvMimeType,etMimeType,tvAndAttachments,
                     vSeparatorHeader,tvHeader,cbHeader,etHeader,tvAndHeader,
+                    vSeparatorBody,tvBody,cbBody,etBody,tvBodyRemark,cbSkipQuotes,tvAndBody,
+                    vSeparatorDate,tvDate,tvDateAfter,btnDateAfter,tvDateBefore,btnDateBefore,tvAndDate,
                     vSeparatorSchedule,tvSchedule,spScheduleDayStart,spScheduleDayEnd,tvScheduleHourStart,tvScheduleHourEnd,
                     vSeparatorAction,tvAction,spAction,tvActionRemark,
                     vSeparatorParameters" />
@@ -989,10 +1071,22 @@
                     app:constraint_referenced_ids="btnTtsSetup,btnTtsData" />
 
                 <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpSound"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="btnSound,cbAlarm,tvAlarm,tvAlarmDuration,etAlarmDuration" />
+
+                <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpAutomation"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="tvAutomation" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpDelete"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="tvDelete" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </eu.faircode.email.ScrollViewEx>
 

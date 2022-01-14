@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.accounts.AccountsException;
@@ -37,7 +37,11 @@ import com.sun.mail.iap.ConnectionException;
 import com.sun.mail.util.FolderClosedIOException;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
@@ -100,6 +104,8 @@ public class ConnectionHelper {
     public static native int jni_socket_keep_alive(int fd, int seconds);
 
     public static native int jni_socket_get_send_buffer(int fd);
+
+    public static native boolean jni_is_numeric_address(String _ip);
 
     static class NetworkState {
         private Boolean connected = null;
@@ -480,6 +486,36 @@ public class ConnectionHelper {
     static boolean airplaneMode(Context context) {
         return Settings.Global.getInt(context.getContentResolver(),
                 Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+    }
+
+    static InetAddress from6to4(InetAddress addr) {
+        // https://en.wikipedia.org/wiki/6to4
+        if (addr instanceof Inet6Address) {
+            byte[] octets = ((Inet6Address) addr).getAddress();
+            if (octets[0] == 0x20 && octets[1] == 0x02)
+                try {
+                    return Inet4Address.getByAddress(Arrays.copyOfRange(octets, 2, 6));
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+        }
+        return addr;
+    }
+
+    static boolean isNumericAddress(String host) {
+        return ConnectionHelper.jni_is_numeric_address(host);
+    }
+
+    static boolean isLocalAddress(String host) {
+        try {
+            InetAddress addr = ConnectionHelper.from6to4(InetAddress.getByName(host));
+            return (addr.isLoopbackAddress() ||
+                    addr.isSiteLocalAddress() ||
+                    addr.isLinkLocalAddress());
+        } catch (UnknownHostException ex) {
+            Log.e(ex);
+            return false;
+        }
     }
 
     static List<String> getCommonNames(Context context, String domain, int port, int timeout) throws IOException {

@@ -16,13 +16,12 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -126,6 +125,9 @@ public class FragmentIdentities extends FragmentBase {
                 if (pos == NO_POSITION)
                     return null;
 
+                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return null;
+
                 TupleIdentityEx prev = adapter.getItemAtPosition(pos - 1);
                 TupleIdentityEx identity = adapter.getItemAtPosition(pos);
                 if (pos > 0 && prev == null)
@@ -176,18 +178,7 @@ public class FragmentIdentities extends FragmentBase {
             }
         });
 
-        animator = ObjectAnimator.ofFloat(fab, "alpha", 0.5f, 1.0f);
-        animator.setDuration(750L);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setRepeatMode(ValueAnimator.REVERSE);
-        animator.addUpdateListener(new ObjectAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                    return;
-                fab.setAlpha((float) animation.getAnimatedValue());
-            }
-        });
+        animator = Helper.getFabAnimator(fab, this);
 
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);

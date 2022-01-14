@@ -16,12 +16,11 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,11 +61,16 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class FragmentOptions extends FragmentBase {
     private ViewPager pager;
     private PagerAdapter adapter;
     private String searching = null;
+    private SuggestData data = null;
+
+    private final ExecutorService executor =
+            Helper.getBackgroundExecutor(1, "suggest");
 
     private static final int[] TAB_PAGES = {
             R.layout.fragment_setup,
@@ -123,7 +127,7 @@ public class FragmentOptions extends FragmentBase {
     static String[] OPTIONS_RESTART = new String[]{
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "subscriptions",
-            "check_authentication", "check_reply_domain", "check_mx", "check_blocklist",
+            "check_authentication", "check_tls", "check_reply_domain", "check_mx", "check_blocklist",
             "send_pending",
             "startup", "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight",
             "portrait2", "portrait2c", "portrait_min_size", "landscape", "landscape_min_size",
@@ -145,7 +149,7 @@ public class FragmentOptions extends FragmentBase {
             "swipe_reply",
             "language_detection",
             "quick_filter", "quick_scroll",
-            "experiments", "debug", "log_level",
+            "experiments", "debug", "log_level", "test1", "test2", "test3", "test4", "test5", "webview_legacy",
             "biometrics",
             "default_light"
     };
@@ -195,7 +199,7 @@ public class FragmentOptions extends FragmentBase {
                                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
                                     @Override
                                     public void onDismiss(DialogInterface dialog) {
-                                        if (!prefs.getBoolean("setup_advanced", false))
+                                        if (pager != null && !prefs.getBoolean("setup_advanced", false))
                                             pager.setCurrentItem(0);
                                     }
                                 })
@@ -321,9 +325,6 @@ public class FragmentOptions extends FragmentBase {
         searchView.setOnSuggestionListener(onSuggestionListener);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            private String[] titles = null;
-            private View[] views = null;
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searching = query;
@@ -343,22 +344,48 @@ public class FragmentOptions extends FragmentBase {
             }
 
             private void suggest(String query) {
+                if (data == null &&
+                        query != null && query.length() > 0)
+                    new SimpleTask<SuggestData>() {
+                        @Override
+                        protected SuggestData onExecute(Context context, Bundle args) throws Throwable {
+                            SuggestData data = new SuggestData();
+                            data.titles = new String[TAB_PAGES.length];
+                            data.views = new View[TAB_PAGES.length];
+
+                            LayoutInflater inflater = LayoutInflater.from(context);
+                            for (int tab = 0; tab < TAB_PAGES.length; tab++) {
+                                data.titles[tab] = getString(PAGE_TITLES[tab]);
+                                data.views[tab] = inflater.inflate(TAB_PAGES[tab], null);
+                            }
+
+                            return data;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, SuggestData result) {
+                            data = result;
+                            _suggest(query);
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        }
+                    }.setExecutor(executor)
+                            .execute(FragmentOptions.this, new Bundle(), "option:suggest");
+                else
+                    _suggest(query);
+            }
+
+            private void _suggest(String query) {
                 MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "tab", "resid", "title"});
 
-                if (query != null && query.length() > 1) {
-                    if (titles == null || views == null) {
-                        titles = new String[TAB_PAGES.length];
-                        views = new View[TAB_PAGES.length];
-                        LayoutInflater inflater = LayoutInflater.from(searchView.getContext());
-                        for (int tab = 0; tab < TAB_PAGES.length; tab++) {
-                            titles[tab] = getString(PAGE_TITLES[tab]);
-                            views[tab] = inflater.inflate(TAB_PAGES[tab], null);
-                        }
-                    }
-
+                if (data != null &&
+                        query != null && query.length() > 1) {
                     int id = 0;
                     for (int tab = 0; tab < TAB_PAGES.length; tab++)
-                        id = getSuggestions(query.toLowerCase(), id, tab, titles[tab], views[tab], cursor);
+                        id = getSuggestions(query.toLowerCase(), id, tab, data.titles[tab], data.views[tab], cursor);
                 }
 
                 searchView.setSuggestionsAdapter(new SimpleCursorAdapter(
@@ -369,6 +396,7 @@ public class FragmentOptions extends FragmentBase {
                         new int[]{android.R.id.text1},
                         0
                 ));
+                searchView.getSuggestionsAdapter().notifyDataSetChanged();
             }
 
             private int getSuggestions(String query, int id, int tab, String title, View view, MatrixCursor cursor) {
@@ -503,5 +531,10 @@ public class FragmentOptions extends FragmentBase {
         public int getItemPosition(@NonNull Object object) {
             return POSITION_NONE; // always recreate fragment
         }
+    }
+
+    private static class SuggestData {
+        private String[] titles;
+        private View[] views;
     }
 }

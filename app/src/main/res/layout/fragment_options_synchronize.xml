@@ -578,6 +578,29 @@
                     app:layout_constraintTop_toBottomOf="@id/swGmailThread" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swOutlookThread"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_outlook_thread"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvGmailThreadHint"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvOutlookThreadHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_gmail_thread_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swOutlookThread" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swSubjectThreading"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -586,7 +609,7 @@
                     android:text="@string/title_advanced_subject_threading"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvGmailThreadHint"
+                    app:layout_constraintTop_toBottomOf="@id/tvOutlookThreadHint"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
@@ -746,6 +769,42 @@
                     app:layout_constraintTop_toBottomOf="@id/swCheckAuthentication" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swCheckTls"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_check_tls"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCheckAuthenticationHint"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvCheckTlsHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_check_tls_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swCheckTls" />
+
+                <eu.faircode.email.FixedImageButton
+                    android:id="@+id/ibCheckTlsInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCheckTlsHint"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swCheckReply"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -754,7 +813,7 @@
                     android:text="@string/title_advanced_check_reply_domain"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCheckAuthenticationHint"
+                    app:layout_constraintTop_toBottomOf="@id/ibCheckTlsInfo"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView

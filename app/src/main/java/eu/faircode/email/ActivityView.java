@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
@@ -553,7 +553,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 int pos = parent.getChildAdapterPosition(view);
-                NavMenuItem menu = adapterNavMenuExtra.get(pos);
+                NavMenuItem menu = (adapterNavMenuExtra == null ? null : adapterNavMenuExtra.get(pos));
                 outRect.set(0, 0, 0, menu != null && menu.isSeparated() ? d.getIntrinsicHeight() : 0);
             }
         };
@@ -1032,15 +1032,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (nav_pinned)
             return getDrawerWidthPinned();
         else {
+            int actionBarHeight = Helper.getActionBarHeight(this);
             DisplayMetrics dm = getResources().getDisplayMetrics();
-
-            int actionBarHeight;
-            TypedValue tv = new TypedValue();
-            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, dm);
-            else
-                actionBarHeight = Helper.dp2pixels(this, 56);
-
             int screenWidth = Math.min(dm.widthPixels, dm.heightPixels);
             // Screen width 320 - action bar 56 = 264 dp
             // Icons 6 x (24 width + 2x6 padding) = 216 dp
@@ -1148,7 +1141,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             undo(undo_timeout, title, args, move, show);
     }
 
-    public void undo(long undo_timeout, String title, final Bundle args, final SimpleTask move, final SimpleTask show) {
+    private void undo(long undo_timeout, String title, final Bundle args, final SimpleTask move, final SimpleTask show) {
         if (drawerLayout == null || drawerLayout.getChildCount() == 0) {
             Log.e("Undo: drawer missing");
             if (show != null)

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -136,8 +136,11 @@ public class EntityOperation {
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean auto_important = prefs.getBoolean("auto_important", false);
-                if (auto_important)
-                    db.message().setMessageImportance(message.id, flagged ? 2 : null);
+                if (auto_important) {
+                    db.message().setMessageImportance(message.id, flagged ? EntityMessage.PRIORITIY_HIGH : null);
+                    queue(context, message, KEYWORD, MessageHelper.FLAG_LOW_IMPORTANCE, false);
+                    queue(context, message, KEYWORD, MessageHelper.FLAG_HIGH_IMPORTANCE, true);
+                }
 
                 return;
 
@@ -228,9 +231,15 @@ public class EntityOperation {
                             db.message().setMessageUiSeen(similar.id, true);
                         if (autounflag)
                             db.message().setMessageUiFlagged(similar.id, false, null);
-                        if (reset_importance)
+                        if (reset_importance) {
                             db.message().setMessageImportance(similar.id, null);
+                            queue(context, similar, KEYWORD, MessageHelper.FLAG_LOW_IMPORTANCE, false);
+                            queue(context, similar, KEYWORD, MessageHelper.FLAG_HIGH_IMPORTANCE, false);
+                        }
                     }
+
+                if (message.ui_found)
+                    db.message().setMessageFound(message.id, false);
 
                 if (source.account.equals(target.account)) {
                     EntityAccount account = db.account().getAccount(message.account);
@@ -288,7 +297,8 @@ public class EntityOperation {
                     boolean _flagged = message.flagged;
                     boolean _ui_seen = message.ui_seen;
                     boolean _ui_flagged = message.ui_flagged;
-                    Boolean _ui_hide = message.ui_hide;
+                    boolean _ui_hide = message.ui_hide;
+                    boolean _ui_found = message.ui_found;
                     boolean _ui_browsed = message.ui_browsed;
                     Long ui_busy = message.ui_busy;
                     Integer _color = message.color;
@@ -316,6 +326,7 @@ public class EntityOperation {
                         message.color = null;
                     }
                     message.ui_hide = false;
+                    message.ui_found = false;
                     message.ui_browsed = false;
                     message.ui_busy = null;
                     message.error = null;
@@ -341,6 +352,7 @@ public class EntityOperation {
                     message.ui_seen = _ui_seen;
                     message.ui_flagged = _ui_flagged;
                     message.ui_hide = _ui_hide;
+                    message.ui_found = _ui_found;
                     message.ui_browsed = _ui_browsed;
                     message.ui_busy = ui_busy;
                     message.color = _color;
@@ -394,11 +406,21 @@ public class EntityOperation {
             } else if (DELETE.equals(name)) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
-                if (perform_expunge)
-                    db.message().setMessageUiHide(message.id, true);
-                else {
+
+                EntityAccount account = db.account().getAccount(message.account);
+
+                if (perform_expunge ||
+                        account == null ||
+                        account.protocol != EntityAccount.TYPE_IMAP) {
+                    message.ui_hide = true;
+                    db.message().setMessageUiHide(message.id, message.ui_hide);
+                } else {
                     message.ui_deleted = !message.ui_deleted;
                     db.message().setMessageUiDeleted(message.id, message.ui_deleted);
+                    if (message.ui_deleted) {
+                        message.ui_ignored = true;
+                        db.message().setMessageUiIgnored(message.id, message.ui_ignored);
+                    }
                 }
 /*
                 if (message.hash != null) {

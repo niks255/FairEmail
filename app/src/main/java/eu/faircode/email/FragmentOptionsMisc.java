@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityManager;
@@ -127,6 +127,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swProtocol;
     private SwitchCompat swLogInfo;
     private SwitchCompat swDebug;
+    private SwitchCompat swTest1;
+    private SwitchCompat swTest2;
+    private SwitchCompat swTest3;
+    private SwitchCompat swTest4;
+    private SwitchCompat swTest5;
 
     private Button btnRepair;
     private SwitchCompat swAutostart;
@@ -140,6 +145,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvChunkSize;
     private SeekBar sbChunkSize;
     private ImageButton ibSqliteCache;
+    private SwitchCompat swUndoManager;
+    private SwitchCompat swWebViewLegacy;
     private SwitchCompat swModSeq;
     private SwitchCompat swExpunge;
     private SwitchCompat swUidExpunge;
@@ -169,6 +176,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvPermissions;
 
     private Group grpUpdates;
+    private Group grpTest;
     private CardView cardDebug;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -181,9 +189,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "language", "deepl_enabled", "watchdog",
             "updates", "weekly", "show_changelog",
             "experiments", "crash_reports", "cleanup_attachments",
-            "protocol", "debug", "log_level",
+            "protocol", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
             "query_threads", "wal", "checkpoints", "sqlite_cache",
-            "chunk_size", "use_modseq", "perform_expunge", "uid_expunge",
+            "chunk_size", "undo_manager", "webview_legacy",
+            "use_modseq", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
             "keep_alive_poll", "empty_pool", "idle_done",
             "exact_alarms", "infra", "dup_msgids", "test_iab"
@@ -264,6 +273,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swProtocol = view.findViewById(R.id.swProtocol);
         swLogInfo = view.findViewById(R.id.swLogInfo);
         swDebug = view.findViewById(R.id.swDebug);
+        swTest1 = view.findViewById(R.id.swTest1);
+        swTest2 = view.findViewById(R.id.swTest2);
+        swTest3 = view.findViewById(R.id.swTest3);
+        swTest4 = view.findViewById(R.id.swTest4);
+        swTest5 = view.findViewById(R.id.swTest5);
 
         btnRepair = view.findViewById(R.id.btnRepair);
         swAutostart = view.findViewById(R.id.swAutostart);
@@ -277,6 +291,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         ibSqliteCache = view.findViewById(R.id.ibSqliteCache);
         tvChunkSize = view.findViewById(R.id.tvChunkSize);
         sbChunkSize = view.findViewById(R.id.sbChunkSize);
+        swUndoManager = view.findViewById(R.id.swUndoManager);
+        swWebViewLegacy = view.findViewById(R.id.swWebViewLegacy);
         swModSeq = view.findViewById(R.id.swModSeq);
         swExpunge = view.findViewById(R.id.swExpunge);
         swUidExpunge = view.findViewById(R.id.swUidExpunge);
@@ -306,6 +322,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvPermissions = view.findViewById(R.id.tvPermissions);
 
         grpUpdates = view.findViewById(R.id.grpUpdates);
+        grpTest = view.findViewById(R.id.grpTest);
         cardDebug = view.findViewById(R.id.cardDebug);
 
         setOptions();
@@ -658,6 +675,41 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swTest1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("test1", checked).apply();
+            }
+        });
+
+        swTest2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("test2", checked).apply();
+            }
+        });
+
+        swTest3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("test3", checked).apply();
+            }
+        });
+
+        swTest4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("test4", checked).apply();
+            }
+        });
+
+        swTest5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("test5", checked).apply();
+            }
+        });
+
         btnRepair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -831,6 +883,20 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     prefs.edit().putLong("protocol_since", new Date().getTime()).apply();
                 else
                     EntityLog.clear(compoundButton.getContext());
+            }
+        });
+
+        swUndoManager.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("undo_manager", checked).apply();
+            }
+        });
+
+        swWebViewLegacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("webview_legacy", checked).apply();
             }
         });
 
@@ -1165,6 +1231,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         grpUpdates.setVisibility(!BuildConfig.DEBUG &&
                 (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
                 ? View.GONE : View.VISIBLE);
+        grpTest.setVisibility(BuildConfig.TEST_RELEASE ? View.VISIBLE : View.GONE);
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
 
@@ -1358,6 +1425,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swProtocol.setChecked(prefs.getBoolean("protocol", false));
         swLogInfo.setChecked(prefs.getInt("log_level", Log.getDefaultLogLevel()) <= android.util.Log.INFO);
         swDebug.setChecked(prefs.getBoolean("debug", false));
+        swTest1.setChecked(prefs.getBoolean("test1", false));
+        swTest2.setChecked(prefs.getBoolean("test2", false));
+        swTest3.setChecked(prefs.getBoolean("test3", false));
+        swTest4.setChecked(prefs.getBoolean("test4", false));
+        swTest5.setChecked(prefs.getBoolean("test5", false));
 
         swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
 
@@ -1381,6 +1453,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvChunkSize.setText(getString(R.string.title_advanced_chunk_size, chunk_size));
         sbChunkSize.setProgress(chunk_size);
 
+        swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
+        swWebViewLegacy.setChecked(prefs.getBoolean("webview_legacy", false));
         swModSeq.setChecked(prefs.getBoolean("use_modseq", true));
         swExpunge.setChecked(prefs.getBoolean("perform_expunge", true));
         swUidExpunge.setChecked(prefs.getBoolean("uid_expunge", false));

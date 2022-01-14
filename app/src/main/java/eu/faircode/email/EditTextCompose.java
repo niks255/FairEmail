@@ -16,12 +16,14 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -32,7 +34,12 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.QuoteSpan;
+import android.text.style.StyleSpan;
 import android.util.AttributeSet;
+import android.view.ActionMode;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -40,6 +47,7 @@ import android.view.inputmethod.InputConnection;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.nodes.Document;
 
@@ -50,22 +58,95 @@ public class EditTextCompose extends FixedEditText {
     private ISelection selectionListener = null;
     private IInputContentListener inputContentListener = null;
 
+    private Boolean canUndo = null;
+    private Boolean canRedo = null;
+    private boolean checkKeyEvent = false;
+
     private static final ExecutorService executor =
             Helper.getBackgroundExecutor(1, "paste");
 
     public EditTextCompose(Context context) {
         super(context);
-        Helper.setKeyboardIncognitoMode(this, context);
+        init(context);
     }
 
     public EditTextCompose(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Helper.setKeyboardIncognitoMode(this, context);
+        init(context);
     }
 
     public EditTextCompose(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    void init(Context context) {
         Helper.setKeyboardIncognitoMode(this, context);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean undo_manager = prefs.getBoolean("undo_manager", false);
+
+        if (undo_manager &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setCustomInsertionActionModeCallback(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    if (can(android.R.id.undo))
+                        menu.add(Menu.CATEGORY_ALTERNATIVE, R.string.title_undo, 1, getTitle(R.string.title_undo));
+                    if (can(android.R.id.redo))
+                        menu.add(Menu.CATEGORY_ALTERNATIVE, R.string.title_redo, 2, getTitle(R.string.title_redo));
+                    return true;
+                }
+
+                private CharSequence getTitle(int resid) {
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(context.getString(resid));
+                    ssb.setSpan(new StyleSpan(Typeface.ITALIC), 0, ssb.length(), 0);
+                    return ssb;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    if (item.getGroupId() == Menu.CATEGORY_ALTERNATIVE) {
+                        int id = item.getItemId();
+                        if (id == R.string.title_undo)
+                            return EditTextCompose.super.onTextContextMenuItem(android.R.id.undo);
+                        else if (id == R.string.title_redo)
+                            return EditTextCompose.super.onTextContextMenuItem(android.R.id.redo);
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    // Do nothing
+                }
+            });
+        }
+    }
+
+    private boolean can(int what) {
+        canUndo = null;
+        canRedo = null;
+
+        try {
+            checkKeyEvent = true;
+            int meta = KeyEvent.META_CTRL_ON;
+            if (what == android.R.id.redo)
+                meta = meta | KeyEvent.META_SHIFT_ON;
+            KeyEvent ke = new KeyEvent(0, 0, 0, 0, 0, meta);
+            onKeyShortcut(KeyEvent.KEYCODE_Z, ke);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        } finally {
+            checkKeyEvent = false;
+        }
+
+        return Boolean.TRUE.equals(what == android.R.id.redo ? canRedo : canUndo);
     }
 
     @Override
@@ -125,7 +206,7 @@ public class EditTextCompose extends FixedEditText {
                         String html = HtmlHelper.toHtml((Spanned) selected, context);
                         cbm.setPrimaryClip(ClipData.newHtmlText(context.getString(R.string.app_name), selected, html));
                         setSelection(end);
-                        return false;
+                        return true;
                     }
                 }
             } else if (id == android.R.id.paste) {
@@ -146,7 +227,7 @@ public class EditTextCompose extends FixedEditText {
                     if (raw)
                         html = text.toString();
                     else
-                        html = "<div>" + HtmlHelper.formatPre(text.toString(), false) + "</div>";
+                        html = "<div>" + HtmlHelper.formatPlainText(text.toString(), false) + "</div>";
                 } else
                     html = h;
 
@@ -231,6 +312,12 @@ public class EditTextCompose extends FixedEditText {
                     }
                 });
 
+                return true;
+            } else if (id == android.R.id.undo) {
+                canUndo = true;
+                return true;
+            } else if (id == android.R.id.redo) {
+                canRedo = true;
                 return true;
             }
 

@@ -1097,6 +1097,7 @@
     <string name="title_rule_answer">Válasz/Továbbítás</string>
     <string name="title_rule_tts">Szövegfelolvasás</string>
     <string name="title_rule_automation">Automatizálás</string>
+    <string name="title_rule_delete">Végleges törlés</string>
     <string name="title_rule_caption">Szabály szerkesztése</string>
     <string name="title_rule_title">A szabály érvényes erre</string>
     <string name="title_rule_name">Név</string>
@@ -1166,6 +1167,7 @@
     <string name="title_legend_closing">Bezárás</string>
     <string name="title_legend_unified">Egységes beérkező mappa / elsődleges fiók</string>
     <string name="title_legend_inbox">Bejövő mappa</string>
+    <string name="title_legend_outbox">Kimenő mappa</string>
     <string name="title_legend_drafts">Piszkozatok</string>
     <string name="title_legend_sent">Elküldött</string>
     <string name="title_legend_archive">Archiválás</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.AlarmManager;
@@ -41,6 +41,7 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -144,6 +145,7 @@ public class EntityMessage implements Serializable {
     public Boolean receipt_request;
     public Address[] receipt_to;
     public String bimi_selector;
+    public Boolean tls;
     public Boolean dkim;
     public Boolean spf;
     public Boolean dmarc;
@@ -410,10 +412,9 @@ public class EntityMessage implements Serializable {
         boolean language_detection = prefs.getBoolean("language_detection", false);
         String l = (language_detection ? language : null);
 
-        DateFormat DF = Helper.getDateTimeInstance(context);
-
         Element p = document.createElement("p");
         if (extended) {
+            DateFormat DTF = Helper.getDateTimeInstance(context, SimpleDateFormat.LONG, SimpleDateFormat.LONG);
             if (from != null && from.length > 0) {
                 Element strong = document.createElement("strong");
                 strong.text(Helper.getString(context, l, R.string.title_from) + " ");
@@ -439,7 +440,7 @@ public class EntityMessage implements Serializable {
                 Element strong = document.createElement("strong");
                 strong.text(Helper.getString(context, l, R.string.title_date) + " ");
                 p.appendChild(strong);
-                p.appendText(DF.format(received));
+                p.appendText(DTF.format(received));
                 p.appendElement("br");
             }
             if (!TextUtils.isEmpty(subject)) {
@@ -449,8 +450,10 @@ public class EntityMessage implements Serializable {
                 p.appendText(subject);
                 p.appendElement("br");
             }
-        } else
-            p.text(DF.format(new Date(received)) + " " + MessageHelper.formatAddresses(from) + ":");
+        } else {
+            DateFormat DTF = Helper.getDateTimeInstance(context);
+            p.text(DTF.format(new Date(received)) + " " + MessageHelper.formatAddresses(from) + ":");
+        }
 
         Element div = document.createElement("div")
                 .attr("fairemail", "reply");
@@ -563,6 +566,7 @@ public class EntityMessage implements Serializable {
                     Objects.equals(this.receipt_request, other.receipt_request) &&
                     MessageHelper.equal(this.receipt_to, other.receipt_to) &&
                     Objects.equals(this.bimi_selector, other.bimi_selector) &&
+                    Objects.equals(this.tls, other.tls) &&
                     Objects.equals(this.dkim, other.dkim) &&
                     Objects.equals(this.spf, other.spf) &&
                     Objects.equals(this.dmarc, other.dmarc) &&

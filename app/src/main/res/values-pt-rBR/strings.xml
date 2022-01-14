@@ -888,7 +888,6 @@
     <string name="title_move_to_account">Mover para %1$s &#8230;</string>
     <string name="title_report_spam">Tratar como spam</string>
     <string name="title_delete_permanently">Apagar permanentemente</string>
-    <string name="title_no_undo">Isto não pode ser desfeito</string>
     <string name="title_snooze">Adiar &#8230;</string>
     <string name="title_archive">Arquivar</string>
     <string name="title_reply">Responder</string>
@@ -1195,6 +1194,7 @@
     <string name="title_rule_answer">Responder/encaminhar</string>
     <string name="title_rule_tts">Texto para voz</string>
     <string name="title_rule_automation">Automatização</string>
+    <string name="title_rule_delete">Apagar permanentemente</string>
     <string name="title_rule_caption">Editar regra</string>
     <string name="title_rule_title">Regra se aplica a</string>
     <string name="title_rule_name">Nome</string>
@@ -1270,6 +1270,7 @@
     <string name="title_legend_closing">Fechando</string>
     <string name="title_legend_unified">Caixa de entrada unificada / conta principal</string>
     <string name="title_legend_inbox">Caixa de entrada</string>
+    <string name="title_legend_outbox">Caixa de saída</string>
     <string name="title_legend_drafts">Rascunhos</string>
     <string name="title_legend_sent">Enviado</string>
     <string name="title_legend_archive">Arquivo</string>

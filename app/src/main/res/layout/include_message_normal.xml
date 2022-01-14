@@ -389,29 +389,27 @@
         android:layout_marginStart="6dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:drawableStart="@drawable/twotone_info_24"
-        android:drawablePadding="6dp"
-        android:drawableTint="?attr/colorWarning"
         android:gravity="center_vertical"
-        android:minHeight="24dp"
+        android:minHeight="27dp"
         android:text="error"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="?attr/colorWarning"
-        app:layout_constraintEnd_toStartOf="@+id/ibSettings"
+        app:layout_constraintEnd_toStartOf="@+id/ibError"
         app:layout_constraintStart_toEndOf="@id/paddingStart"
         app:layout_constraintTop_toBottomOf="@id/tvNotes" />
 
     <eu.faircode.email.FixedImageButton
-        android:id="@+id/ibSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/ibError"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
         android:layout_marginEnd="6dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/tvError"
         app:layout_constraintEnd_toStartOf="@+id/paddingEnd"
         app:layout_constraintTop_toTopOf="@id/tvError"
-        app:srcCompat="@drawable/twotone_settings_24"
-        app:tint="?attr/colorWarning" />
+        app:srcCompat="@drawable/twotone_help_24"
+        app:tint="?attr/colorAccent" />
 
     <View
         android:id="@+id/paddingEnd"

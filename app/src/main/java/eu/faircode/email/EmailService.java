@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
@@ -887,10 +887,10 @@ public class EmailService implements AutoCloseable {
     }
 
     public void dump() {
-        EntityLog.log(context, "Dump start");
+        EntityLog.log(context, EntityLog.Type.Protocol, "Dump start");
         while (breadcrumbs != null && !breadcrumbs.isEmpty())
-            EntityLog.log(context, "Dump " + breadcrumbs.pop());
-        EntityLog.log(context, "Dump end");
+            EntityLog.log(context, EntityLog.Type.Protocol, "Dump " + breadcrumbs.pop());
+        EntityLog.log(context, EntityLog.Type.Protocol, "Dump end");
     }
 
     private static class SocketFactoryService extends SocketFactory {

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -378,7 +378,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     if (!matched)
                         continue;
 
-                    found += db.message().setMessageFound(id);
+                    found += db.message().setMessageFound(id, true);
                     Log.i("Boundary matched=" + id + " found=" + found);
                 }
                 db.setTransactionSuccessful();
@@ -456,7 +456,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 }
 
                 if (matched) {
-                    found += db.message().setMessageFound(match.id);
+                    found += db.message().setMessageFound(match.id, true);
                     Log.i("Boundary matched=" + match.id + " found=" + found);
                 }
             }
@@ -686,7 +686,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                             found++; // browsed
                     }
                     if (message != null && criteria != null)
-                        found += db.message().setMessageFound(message.id);
+                        found += db.message().setMessageFound(message.id, true);
                     Log.i("Boundary matched=" + (message == null ? null : message.id) + " found=" + found);
                 } catch (MessageRemovedException | MessageRemovedIOException ex) {
                     Log.w(browsable.name + " boundary server", ex);

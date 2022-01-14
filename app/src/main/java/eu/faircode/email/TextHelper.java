@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Person;
@@ -197,7 +197,7 @@ public class TextHelper {
         try {
             return future.get(MAX_CONVERSATION_DURATION, TimeUnit.MILLISECONDS);
         } catch (TimeoutException ex) {
-            Log.e(ex);
+            Log.e(new Throwable("Conversation actions", ex));
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             prefs.edit().putBoolean("conversation_actions", false);
             return null;

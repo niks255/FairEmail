@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -67,7 +67,6 @@ public class FragmentDialogJunk extends FragmentDialogBase {
         final String type = args.getString("type");
         final Address[] froms = DB.Converters.decodeAddresses(args.getString("from"));
         final boolean inJunk = args.getBoolean("inJunk");
-        final boolean canBlock = args.getBoolean("canBlock");
 
         final Context context = getContext();
         final View view = LayoutInflater.from(context).inflate(R.layout.dialog_junk, null);
@@ -89,8 +88,15 @@ public class FragmentDialogJunk extends FragmentDialogBase {
         final Group grpMore = view.findViewById(R.id.grpMore);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean block_sender = prefs.getBoolean("block_sender", true);
         boolean check_blocklist = prefs.getBoolean("check_blocklist", false);
         boolean use_blocklist = prefs.getBoolean("use_blocklist", false);
+
+        boolean canBlock = false;
+        if (froms != null && froms.length > 0) {
+            String email = ((InternetAddress) froms[0]).getAddress();
+            canBlock = !TextUtils.isEmpty(email);
+        }
 
         // Wire controls
 
@@ -329,7 +335,7 @@ public class FragmentDialogJunk extends FragmentDialogBase {
                 : getString(R.string.title_ask_spam_who, MessageHelper.formatAddresses(froms)));
         cbBlockSender.setEnabled(canBlock);
         cbBlockDomain.setEnabled(false);
-        cbBlockSender.setChecked(canBlock);
+        cbBlockSender.setChecked(canBlock && block_sender);
 
         cbBlockDomain.setText(getString(R.string.title_block_sender_domain, TextUtils.join(",", domains)));
         if (common) {
@@ -399,6 +405,7 @@ public class FragmentDialogJunk extends FragmentDialogBase {
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    prefs.edit().putBoolean("block_sender", cbBlockSender.isChecked()).apply();
                     getArguments().putBoolean("block_sender", cbBlockSender.isChecked());
                     getArguments().putBoolean("block_domain", cbBlockDomain.isChecked());
                     sendResult(Activity.RESULT_OK);

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -182,6 +182,12 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                         break;
                     case EntityRule.TYPE_AUTOMATION:
                         tvAction.setText(R.string.title_rule_automation);
+                        break;
+                    case EntityRule.TYPE_DELETE:
+                        tvAction.setText(R.string.title_rule_delete);
+                        break;
+                    case EntityRule.TYPE_SOUND:
+                        tvAction.setText(R.string.title_rule_sound);
                         break;
                     default:
                         throw new IllegalArgumentException("Unknown action type=" + type);

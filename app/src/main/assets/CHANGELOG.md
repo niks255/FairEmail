@@ -4,6 +4,70 @@
 
 ### [Draconyx](https://en.wikipedia.org/wiki/Draconyx)
 
+### 1.1810 - 2022-01-14
+
+* Fixed searching for options when swiping
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1809 - 2022-01-14
+
+* Reply with selected text in style
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1808 - 2022-01-13
+
+* Added share images button above mini gallery
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1807 - 2022-01-11
+
+* Fixed delay when going to a settings page
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1806 - 2022-01-11
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1805 - 2022-01-10
+
+* Long screenshots (Android 12+)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1804 - 2022-01-08
+
+* Added check for secure (TLS) transport (experimental)
+* Removed double confirm for permanently deleting messages
+* Allowing three tries for biometric authentication
+* Fixed RTL for sent messages
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1803 - 2022-01-06
+
+* Added rule action to play (alarm) sound (experimental)
+* Small improvements and minor bug fixes
+* Updated build tools and libraries
+* Updated translations
+
+### 1.1802 - 2022-01-03
+
+* Improved original message view scrolling
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1801 - 2021-12-30
+
+* Added rule action to permanently delete messages
+* Using IMAP flags to store low/high importance
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1800 - 2021-12-27
 
 * Fixed crash when manually configuring an account
@@ -15,6 +79,12 @@
 * Fixed removing inline images on replying/forwarding
 * Small improvements and minor bug fixes
 * Updated translations
+
+### 1.1798 - 2021-12-27
+
+* Play store only release
+* Fixed removing inline images on replying/forwarding
+* Changes: [see here](https://github.com/M66B/FairEmail/compare/1.1796...1.1798?w=1)
 
 ### 1.1797 - 2021-12-27
 

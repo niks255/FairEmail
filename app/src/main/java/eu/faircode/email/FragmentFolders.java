@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -58,7 +58,9 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.app.NotificationCompat;
 import androidx.core.view.MenuCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -143,6 +145,13 @@ public class FragmentFolders extends FragmentBase {
         compact = prefs.getBoolean("compact_folders", false);
         show_hidden = false; // prefs.getBoolean("hidden_folders", false);
         show_flagged = prefs.getBoolean("flagged_folders", false);
+
+        if (BuildConfig.DEBUG) {
+            ViewModelSelected selectedModel =
+                    new ViewModelProvider(getActivity()).get(ViewModelSelected.class);
+            if (savedInstanceState == null)
+                selectedModel.select(null);
+        }
 
         setTitle(R.string.page_folders);
     }
@@ -247,6 +256,9 @@ public class FragmentFolders extends FragmentBase {
 
                 private View getView(View view, RecyclerView parent, int pos) {
                     if (pos == NO_POSITION)
+                        return null;
+
+                    if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                         return null;
 
                     TupleFolderEx prev = adapter.getItemAtPosition(pos - 1);

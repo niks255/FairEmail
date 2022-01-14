@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.ClipData;
@@ -376,6 +376,9 @@ public class FixedTextView extends AppCompatTextView {
     public boolean onTextContextMenuItem(int id) {
         try {
             if (id == android.R.id.copy) {
+                Context context = getContext();
+                ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
                 int start = getSelectionStart();
                 int end = getSelectionEnd();
                 if (start > end) {
@@ -384,16 +387,14 @@ public class FixedTextView extends AppCompatTextView {
                     end = s;
                 }
 
-                Context context = getContext();
-                ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 if (start != end && cbm != null) {
                     CharSequence selected = getText().subSequence(start, end);
                     if (selected instanceof Spanned) {
                         String html = HtmlHelper.toHtml((Spanned) selected, context);
                         cbm.setPrimaryClip(ClipData.newHtmlText(context.getString(R.string.app_name), selected, html));
                         if (getText() instanceof Spannable)
-                            Selection.removeSelection((Spannable) getText());
-                        return false;
+                            Selection.setSelection((Spannable) getText(), end);
+                        return true;
                     }
                 }
             }

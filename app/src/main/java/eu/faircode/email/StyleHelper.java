@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -649,7 +649,13 @@ public class StyleHelper {
                             e++;
 
                         for (Object span : edit.getSpans(start, e, Object.class)) {
-                            if (!CLEAR_STYLES.contains(span.getClass()))
+                            boolean has = false;
+                            for (Class cls : CLEAR_STYLES)
+                                if (cls.isAssignableFrom(span.getClass())) {
+                                    has = true;
+                                    break;
+                                }
+                            if (!has)
                                 continue;
 
                             int sstart = edit.getSpanStart(span);

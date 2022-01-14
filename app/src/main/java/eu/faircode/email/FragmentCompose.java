@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2021 by Marcel Bokhorst (M66B)
+    Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -1392,7 +1392,7 @@ public class FragmentCompose extends FragmentBase {
                     args.putString("subject", a.getString("subject"));
                     args.putString("body", a.getString("body"));
                     args.putString("text", a.getString("text"));
-                    args.putString("selected", a.getString("selected"));
+                    args.putCharSequence("selected", a.getCharSequence("selected"));
 
                     if (a.containsKey("attachments")) {
                         args.putParcelableArrayList("attachments", a.getParcelableArrayList("attachments"));
@@ -4243,7 +4243,7 @@ public class FragmentCompose extends FragmentBase {
             String external_subject = args.getString("subject", "");
             String external_body = args.getString("body", "");
             String external_text = args.getString("text");
-            String selected_text = args.getString("selected");
+            CharSequence selected_text = args.getCharSequence("selected");
             ArrayList<Uri> uris = args.getParcelableArrayList("attachments");
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -4787,12 +4787,16 @@ public class FragmentCompose extends FragmentBase {
                                 d = Document.createShell("");
 
                                 Element div = d.createElement("div");
-                                for (String line : selected_text.split("\\r?\\n")) {
-                                    Element span = document.createElement("span");
-                                    span.text(line);
-                                    div.appendChild(span);
-                                    div.appendElement("br");
-                                }
+                                if (selected_text instanceof Spanned)
+                                    div.html(HtmlHelper.toHtml((Spanned) selected_text, context));
+                                else
+                                    for (String line : selected_text.toString().split("\\r?\\n")) {
+                                        Element span = document.createElement("span");
+                                        span.text(line);
+                                        div.appendChild(span);
+                                        div.appendElement("br");
+                                    }
+
                                 d.body().appendChild(div);
                             }
 
@@ -5918,25 +5922,28 @@ public class FragmentCompose extends FragmentBase {
                                 args.putBoolean("remind_dsn", true);
 
                             // Check size
-                            if (identity != null && identity.max_size != null) {
-                                Properties props = MessageHelper.getSessionProperties();
-                                if (identity.unicode)
-                                    props.put("mail.mime.allowutf8", "true");
-                                Session isession = Session.getInstance(props, null);
-                                Message imessage = MessageHelper.from(context, draft, identity, isession, false);
+                            if (identity != null && identity.max_size != null)
+                                try {
+                                    Properties props = MessageHelper.getSessionProperties();
+                                    if (identity.unicode)
+                                        props.put("mail.mime.allowutf8", "true");
+                                    Session isession = Session.getInstance(props, null);
+                                    Message imessage = MessageHelper.from(context, draft, identity, isession, false);
 
-                                File file = draft.getRawFile(context);
-                                try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
-                                    imessage.writeTo(os);
-                                }
+                                    File file = draft.getRawFile(context);
+                                    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                                        imessage.writeTo(os);
+                                    }
 
-                                long size = file.length();
-                                if (size > identity.max_size) {
-                                    args.putBoolean("remind_size", true);
-                                    args.putLong("size", size);
-                                    args.putLong("max_size", identity.max_size);
+                                    long size = file.length();
+                                    if (size > identity.max_size) {
+                                        args.putBoolean("remind_size", true);
+                                        args.putLong("size", size);
+                                        args.putLong("max_size", identity.max_size);
+                                    }
+                                } catch (Throwable ex) {
+                                    Log.e(ex);
                                 }
-                            }
                         } else {
                             int mid;
                             if (action == R.id.action_undo)
