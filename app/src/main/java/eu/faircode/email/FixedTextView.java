@@ -39,14 +39,21 @@ import androidx.appcompat.widget.AppCompatTextView;
 public class FixedTextView extends AppCompatTextView {
     public FixedTextView(@NonNull Context context) {
         super(context);
+        init(context);
     }
 
     public FixedTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public FixedTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        setCustomSelectionActionModeCallback(Helper.getActionModeWrapper(this));
     }
 
     @Override

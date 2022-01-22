@@ -57,8 +57,6 @@ public interface DaoMessage {
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", SUM(1 - message.ui_flagged) AS unflagged" +
             ", SUM(folder.type = '" + EntityFolder.DRAFTS + "') AS drafts" +
-            ", (message.ui_encrypt IN (2, 4)) AS signed" +
-            ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", COUNT(DISTINCT" +
             "   CASE WHEN NOT message.hash IS NULL THEN message.hash" +
             "   WHEN NOT message.msgid IS NULL THEN message.msgid" +
@@ -137,8 +135,6 @@ public interface DaoMessage {
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", SUM(1 - message.ui_flagged) AS unflagged" +
             ", SUM(folder.type = '" + EntityFolder.DRAFTS + "') AS drafts" +
-            ", (message.ui_encrypt IN (2, 4)) AS signed" +
-            ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", COUNT(DISTINCT" +
             "   CASE WHEN NOT message.hash IS NULL THEN message.hash" +
             "   WHEN NOT message.msgid IS NULL THEN message.msgid" +
@@ -210,8 +206,6 @@ public interface DaoMessage {
             ", CASE WHEN message.ui_seen THEN 0 ELSE 1 END AS unseen" +
             ", CASE WHEN message.ui_flagged THEN 0 ELSE 1 END AS unflagged" +
             ", (folder.type = '" + EntityFolder.DRAFTS + "') AS drafts" +
-            ", (message.ui_encrypt IN (2, 4)) AS signed" +
-            ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", 1 AS visible" +
             ", NOT message.ui_seen AS visible_unseen" +
             ", message.total AS totalSize" +
@@ -478,8 +472,6 @@ public interface DaoMessage {
             ", CASE WHEN message.ui_seen THEN 0 ELSE 1 END AS unseen" +
             ", CASE WHEN message.ui_flagged THEN 0 ELSE 1 END AS unflagged" +
             ", (folder.type = '" + EntityFolder.DRAFTS + "') AS drafts" +
-            ", (message.ui_encrypt IN (2, 4)) AS signed" +
-            ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", 1 AS visible" +
             ", NOT message.ui_seen AS visible_unseen" +
             ", message.total AS totalSize" +
@@ -510,8 +502,6 @@ public interface DaoMessage {
             ", 1 AS unseen" +
             ", 0 AS unflagged" +
             ", 0 AS drafts" +
-            ", (message.ui_encrypt IN (2, 4)) AS signed" +
-            ", (message.ui_encrypt IN (1, 3)) AS encrypted" +
             ", 1 AS visible" +
             ", NOT message.ui_seen AS visible_unseen" +
             ", message.total AS totalSize" +
@@ -676,6 +666,9 @@ public interface DaoMessage {
 
     @Query("UPDATE message SET priority = :priority WHERE id = :id AND NOT (priority IS :priority)")
     int setMessagePriority(long id, Integer priority);
+
+    @Query("UPDATE message SET sensitivity = :sensitivity WHERE id = :id AND NOT (sensitivity IS :sensitivity)")
+    int setMessageSensitivity(long id, Integer sensitivity);
 
     @Query("UPDATE message SET importance = :importance WHERE id = :id AND NOT (importance IS :importance)")
     int setMessageImportance(long id, Integer importance);
@@ -861,6 +854,11 @@ public interface DaoMessage {
             " WHERE headers IS NOT NULL" +
             " AND account IN (SELECT id FROM account WHERE pop = " + EntityAccount.TYPE_IMAP + ")")
     int clearMessageHeaders();
+
+    @Query("UPDATE message SET raw = NULL" +
+            " WHERE raw IS NOT NULL" +
+            " AND account IN (SELECT id FROM account WHERE pop = " + EntityAccount.TYPE_IMAP + ")")
+    int clearRawMessages();
 
     @Query("UPDATE message SET fts = 0 WHERE NOT (fts IS 0)")
     int resetFts();

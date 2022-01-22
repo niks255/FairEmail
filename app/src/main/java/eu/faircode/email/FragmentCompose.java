@@ -79,7 +79,6 @@ import android.text.style.ImageSpan;
 import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.util.LogPrinter;
 import android.util.Pair;
@@ -91,7 +90,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -1893,138 +1891,15 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, final List<EntityAnswer> answers) {
+                final Context context = getContext();
+
                 if (answers.size() == 0) {
-                    ToastEx.makeText(getContext(), R.string.title_no_answers, Toast.LENGTH_LONG).show();
+                    ToastEx.makeText(context, R.string.title_no_answers, Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                boolean grouped = BuildConfig.DEBUG;
-                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchorMenu);
-                Menu main = popupMenu.getMenu();
-
-                List<EntityAnswer> favorites = new ArrayList<>();
-                List<String> groups = new ArrayList<>();
-                for (EntityAnswer answer : answers)
-                    if (answer.favorite)
-                        favorites.add(answer);
-                    else if (answer.group != null && !groups.contains(answer.group))
-                        groups.add(answer.group);
-
-                Collator collator = Collator.getInstance(Locale.getDefault());
-                collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-                Collections.sort(groups, collator);
-
-                Collections.sort(answers, new Comparator<EntityAnswer>() {
-                    @Override
-                    public int compare(EntityAnswer a1, EntityAnswer a2) {
-                        if (!grouped || a1.applied.equals(a2.applied))
-                            return collator.compare(a1.name, a2.name);
-                        else
-                            return -a1.applied.compareTo(a2.applied);
-                    }
-                });
-
-                Collections.sort(favorites, new Comparator<EntityAnswer>() {
-                    @Override
-                    public int compare(EntityAnswer a1, EntityAnswer a2) {
-                        return collator.compare(a1.name, a2.name);
-                    }
-                });
-
-                int order = 0;
-
-                Map<String, SubMenu> map = new HashMap<>();
-                for (String group : groups)
-                    map.put(group, main.addSubMenu(Menu.NONE, order, order++, group));
-
-                NumberFormat NF = NumberFormat.getNumberInstance();
-                for (EntityAnswer answer : answers) {
-                    if (answer.favorite)
-                        continue;
-                    order++;
-
-                    SpannableStringBuilder name = new SpannableStringBuilder(answer.name);
-                    if (grouped && answer.applied > 0) {
-                        name.append(" (").append(NF.format(answer.applied)).append(")");
-                        name.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
-                                answer.name.length() + 1, name.length(), 0);
-                    }
-
-                    MenuItem item;
-                    if (answer.group == null)
-                        item = main.add(Menu.NONE, order, order++, name);
-                    else {
-                        SubMenu smenu = map.get(answer.group);
-                        item = smenu.add(answer.applied > 0 ? Menu.FIRST : Menu.NONE,
-                                smenu.size(), smenu.size() + 1, name);
-                    }
-                    item.setIntent(new Intent().putExtra("id", answer.id));
-                }
-
-                for (EntityAnswer answer : favorites)
-                    main.add(Menu.NONE, order, order++, answer.toString())
-                            .setIntent(new Intent().putExtra("id", answer.id));
-
-                if (BuildConfig.DEBUG) {
-                    SubMenu profiles = main.addSubMenu(Menu.NONE, order, order++, "Profiles");
-                    for (EmailProvider p : EmailProvider.loadProfiles(getContext())) {
-                        SpannableStringBuilder ssb = new SpannableStringBuilderEx();
-                        int start;
-                        ssb.append("IMAP (account, receive)");
-
-                        ssb.append(" host ");
-                        start = ssb.length();
-                        ssb.append(p.imap.host);
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
-                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        ssb.append(" port ");
-                        start = ssb.length();
-                        ssb.append(Integer.toString(p.imap.port));
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
-                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        ssb.append(" encryption ");
-                        start = ssb.length();
-                        ssb.append(p.imap.starttls ? "STARTTLS" : "SSL/TLS");
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
-                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        ssb.append("\n\n");
-
-                        ssb.append("SMTP (identity, send)");
-
-                        ssb.append(" host ");
-                        start = ssb.length();
-                        ssb.append(p.smtp.host);
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
-                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        ssb.append(" port ");
-                        start = ssb.length();
-                        ssb.append(Integer.toString(p.smtp.port));
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
-                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        ssb.append(" encryption ");
-                        start = ssb.length();
-                        ssb.append(p.smtp.starttls ? "STARTTLS" : "SSL/TLS");
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD),
-                                start, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        ssb.append("\n\n");
-
-                        if (!TextUtils.isEmpty(p.link))
-                            ssb.append(p.link).append("\n\n");
-
-                        profiles.add(999, profiles.size(), profiles.size() + 1, p.name +
-                                (p.appPassword ? "+" : ""))
-                                .setIntent(new Intent().putExtra("config", ssb));
-                    }
-                }
-
-                if (grouped)
-                    MenuCompat.setGroupDividerEnabled(popupMenu.getMenu(), true);
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), vwAnchorMenu);
+                EntityAnswer.fillMenu(popupMenu.getMenu(), true, answers, context);
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -2033,8 +1908,8 @@ public class FragmentCompose extends FragmentBase {
                         if (intent == null)
                             return false;
 
-                        if (!ActivityBilling.isPro(getContext())) {
-                            startActivity(new Intent(getContext(), ActivityBilling.class));
+                        if (!ActivityBilling.isPro(context)) {
+                            startActivity(new Intent(context, ActivityBilling.class));
                             return true;
                         }
 
@@ -2299,9 +2174,8 @@ public class FragmentCompose extends FragmentBase {
         } else
             try {
                 startActivityForResult(intent, REQUEST_RECORD_AUDIO);
-            } catch (SecurityException ex) {
-                Log.w(ex);
-                Helper.reportNoViewer(getContext(), intent);
+            } catch (Throwable ex) {
+                Helper.reportNoViewer(getContext(), intent, ex);
             }
     }
 
@@ -2771,12 +2645,9 @@ public class FragmentCompose extends FragmentBase {
                     photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID, file);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-                } catch (SecurityException ex) {
-                    Log.w(ex);
-                    Helper.reportNoViewer(getContext(), intent);
                 } catch (Throwable ex) {
-                    // / java.lang.IllegalArgumentException: Failed to resolve canonical path for ...
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                    // java.lang.IllegalArgumentException: Failed to resolve canonical path for ...
+                    Helper.reportNoViewer(getContext(), intent, ex);
                 }
             }
         } else {
@@ -5002,7 +4873,7 @@ public class FragmentCompose extends FragmentBase {
                         Log.i("Selected external identity=" + data.draft.identity);
                     }
 
-                    if (data.draft.revision == null) {
+                    if (data.draft.revision == null || data.draft.revisions == null) {
                         data.draft.revision = 1;
                         data.draft.revisions = 1;
                         db.message().setMessageRevision(data.draft.id, data.draft.revision);
@@ -5079,6 +4950,15 @@ public class FragmentCompose extends FragmentBase {
         protected void onExecuted(Bundle args, final DraftData data) {
             final String action = getArguments().getString("action");
             Log.i("Loaded draft id=" + data.draft.id + " action=" + action);
+
+            FragmentActivity activity = getActivity();
+            if (activity != null) {
+                Intent intent = activity.getIntent();
+                if (intent != null) {
+                    intent.putExtra("id", data.draft.id);
+                    intent.putExtra("action", "edit");
+                }
+            }
 
             working = data.draft.id;
             encrypt = data.draft.ui_encrypt;
@@ -5251,7 +5131,6 @@ public class FragmentCompose extends FragmentBase {
                                     @Override
                                     public void run() {
                                         try {
-
                                             boolean image_dialog = prefs.getBoolean("image_dialog", true);
                                             if (image_dialog) {
                                                 Helper.hideKeyboard(view);
@@ -6701,7 +6580,6 @@ public class FragmentCompose extends FragmentBase {
             final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
             final Spinner spGroup = dview.findViewById(R.id.spGroup);
             final Spinner spTarget = dview.findViewById(R.id.spTarget);
-            final Button btnManage = dview.findViewById(R.id.btnManage);
 
             ibInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -6749,6 +6627,8 @@ public class FragmentCompose extends FragmentBase {
                 public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                     if (view.getId() == R.id.tvGroup) {
                         String title = cursor.getString(1);
+                        if (TextUtils.isEmpty(title))
+                            title = "-";
                         int count = cursor.getInt(2);
                         ((TextView) view).setText(context.getString(R.string.title_name_count, title, NF.format(count)));
                         return true;
@@ -6926,8 +6806,6 @@ public class FragmentCompose extends FragmentBase {
             final int[] sendDelayedValues = getResources().getIntArray(R.array.sendDelayedValues);
             final String[] sendDelayedNames = getResources().getStringArray(R.array.sendDelayedNames);
 
-            final String pkgOpenKeyChain = Helper.getOpenKeychainPackage(context);
-
             final ViewGroup dview = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.dialog_send, null);
             final Button btnFixSent = dview.findViewById(R.id.btnFixSent);
             final TextView tvAddressError = dview.findViewById(R.id.tvAddressError);
@@ -6955,6 +6833,9 @@ public class FragmentCompose extends FragmentBase {
             final Spinner spEncrypt = dview.findViewById(R.id.spEncrypt);
             final ImageButton ibEncryption = dview.findViewById(R.id.ibEncryption);
             final Spinner spPriority = dview.findViewById(R.id.spPriority);
+            final ImageButton ibPriority = dview.findViewById(R.id.ibPriority);
+            final Spinner spSensitivity = dview.findViewById(R.id.spSensitivity);
+            final ImageButton ibSensitivity = dview.findViewById(R.id.ibSensitivity);
             final TextView tvSendAt = dview.findViewById(R.id.tvSendAt);
             final ImageButton ibSendAt = dview.findViewById(R.id.ibSendAt);
             final CheckBox cbArchive = dview.findViewById(R.id.cbArchive);
@@ -7003,6 +6884,8 @@ public class FragmentCompose extends FragmentBase {
             spEncrypt.setSelection(0);
             spPriority.setTag(1);
             spPriority.setSelection(1);
+            spSensitivity.setTag(0);
+            spSensitivity.setSelection(0);
             tvSendAt.setText(null);
             cbArchive.setEnabled(false);
             cbNotAgain.setChecked(!send_dialog);
@@ -7215,7 +7098,62 @@ public class FragmentCompose extends FragmentBase {
                 }
             });
 
-            ibSendAt.setOnClickListener(new View.OnClickListener() {
+            ibPriority.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Invisible
+                }
+            });
+
+            spSensitivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    int last = (int) spSensitivity.getTag();
+                    if (last != position) {
+                        spSensitivity.setTag(position);
+                        setSensitivity(position);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    spSensitivity.setTag(0);
+                    setSensitivity(0);
+                }
+
+                private void setSensitivity(int sensitivity) {
+                    Bundle args = new Bundle();
+                    args.putLong("id", id);
+                    args.putInt("sensitivity", sensitivity);
+
+                    new SimpleTask<Void>() {
+                        @Override
+                        protected Void onExecute(Context context, Bundle args) {
+                            long id = args.getLong("id");
+                            int sensitivity = args.getInt("sensitivity");
+
+                            DB db = DB.getInstance(context);
+                            db.message().setMessageSensitivity(id, sensitivity < 1 ? null : sensitivity);
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        }
+                    }.setExecutor(executor).execute(FragmentDialogSend.this, args, "compose:sensitivity");
+                }
+            });
+
+            ibSensitivity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(v.getContext(), 177);
+                }
+            });
+
+            View.OnClickListener sendAt = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Bundle args = new Bundle();
@@ -7227,7 +7165,10 @@ public class FragmentCompose extends FragmentBase {
                     fragment.setTargetFragment(FragmentDialogSend.this, 1);
                     fragment.show(getParentFragmentManager(), "send:snooze");
                 }
-            });
+            };
+
+            tvSendAt.setOnClickListener(sendAt);
+            ibSendAt.setOnClickListener(sendAt);
 
             cbArchive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -7284,6 +7225,10 @@ public class FragmentCompose extends FragmentBase {
                     int priority = (draft.priority == null ? 1 : draft.priority);
                     spPriority.setTag(priority);
                     spPriority.setSelection(priority);
+
+                    int sensitivity = (draft.sensitivity == null ? 0 : draft.sensitivity);
+                    spSensitivity.setTag(sensitivity);
+                    spSensitivity.setSelection(sensitivity);
 
                     if (draft.ui_snoozed == null) {
                         if (send_delayed == 0)

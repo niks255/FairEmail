@@ -804,6 +804,9 @@
     <string name="title_synchronize_subfolders">Podfolderi</string>
     <string name="title_synchronize_more">Dohvati više poruka</string>
     <string name="title_synchronize_more_hint">Ovo će rezultirati u jednostrukom preuzimanju starijih poruka, ali neće uticati na veću potrošnju baterije u svakodnevnom korištenju</string>
+    <string name="title_synchronize_more_hint2">        Poruke će se dohvatati brzinom kojom ih e-mail server dostavlja i spremati brzinom uređaja za skladištenje i indeksiranje.
+        Ograničavajući faktor je obično brzina unutrašnjeg uređaja za skladištenje.
+    </string>
     <string name="title_synchronize_enabled">Sinhronizuj</string>
     <string name="title_synchronize_batch_enable">Uključi sinhronizaciju</string>
     <string name="title_synchronize_batch_disable">Isključi sinhronizaciju</string>
@@ -960,6 +963,7 @@
     <string name="title_copy_to">Kopiraj u &#8230;</string>
     <string name="title_subscribe">Pretplati se</string>
     <string name="title_delete">Izbriši</string>
+    <string name="title_delete_all">Izbriši sve</string>
     <string name="title_more">Više</string>
     <string name="title_less">Manje</string>
     <string name="title_spam">Spam</string>
@@ -1075,6 +1079,7 @@
     <string name="title_send_auto_archive">Arhiviraj odgovorenu poruku</string>
     <string name="title_send_encryption">Šifriranje</string>
     <string name="title_send_priority">Prioritet</string>
+    <string name="title_send_sensitivity">Osjetljivost</string>
     <string name="title_no_server">Nije pronađen server na \'%1$s\'</string>
     <string name="title_style">Stil</string>
     <string name="title_style_bold">Podebljan</string>
@@ -1399,6 +1404,9 @@
     <string name="title_legend_draft">Nacrt</string>
     <string name="title_legend_priority">S visokim prioritetom</string>
     <string name="title_legend_priority_low">S niskim prioritetom</string>
+    <string name="title_legend_sensitivity_personal">Osobno</string>
+    <string name="title_legend_sensitivity_private">Privatno</string>
+    <string name="title_legend_sensitivity_confidential">Povjerljivo</string>
     <string name="title_legend_importance">Važno</string>
     <string name="title_legend_importance_low">Nevažno</string>
     <string name="title_legend_signed">Potpisan</string>
@@ -1715,6 +1723,12 @@
         <item>Niska</item>
         <item>Normalna</item>
         <item>Visoka</item>
+    </string-array>
+    <string-array name="sensitivityNames">
+        <item>Normalna</item>
+        <item>Lično</item>
+        <item>Privatno</item>
+        <item>Povjerljivo</item>
     </string-array>
     <string-array name="fontSizeNames">
         <item>Zadani</item>

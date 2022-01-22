@@ -31,7 +31,6 @@ import android.content.pm.PermissionInfo;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -122,7 +121,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swCleanupAttachments;
     private Button btnCleanup;
     private TextView tvLastCleanup;
-    private Button btnApp;
     private Button btnMore;
     private SwitchCompat swProtocol;
     private SwitchCompat swLogInfo;
@@ -268,7 +266,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swCleanupAttachments = view.findViewById(R.id.swCleanupAttachments);
         btnCleanup = view.findViewById(R.id.btnCleanup);
         tvLastCleanup = view.findViewById(R.id.tvLastCleanup);
-        btnApp = view.findViewById(R.id.btnApp);
         btnMore = view.findViewById(R.id.btnMore);
         swProtocol = view.findViewById(R.id.swProtocol);
         swLogInfo = view.findViewById(R.id.swLogInfo);
@@ -628,20 +625,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View view) {
                 onCleanup();
-            }
-        });
-
-        final Intent app = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        app.setData(Uri.parse("package:" + getContext().getPackageName()));
-        btnApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    getContext().startActivity(app);
-                } catch (Throwable ex) {
-                    Log.w(ex);
-                    Helper.reportNoViewer(getContext(), app);
-                }
             }
         });
 
@@ -1449,7 +1432,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 Helper.humanReadableByteCount(cache_size * 1024L)));
         sbSqliteCache.setProgress(sqlite_cache);
 
-        int chunk_size = prefs.getInt("chunk_size", Core.DEFAULT_CHUNCK_SIZE);
+        int chunk_size = prefs.getInt("chunk_size", Core.DEFAULT_CHUNK_SIZE);
         tvChunkSize.setText(getString(R.string.title_advanced_chunk_size, chunk_size));
         sbChunkSize.setProgress(chunk_size);
 

@@ -154,7 +154,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 }
             }
 
-            tvName.setText(contact.name == null ? "---" : contact.name);
+            tvName.setText(contact.name == null ? "-" : contact.name);
             tvEmail.setText(contact.accountName + "/" + contact.email);
             tvTimes.setText(NF.format(contact.times_contacted));
             tvLast.setText(contact.last_contacted == null ? null
@@ -300,9 +300,8 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 private void onActionShare() {
                     try {
                         context.startActivity(share);
-                    } catch (ActivityNotFoundException ex) {
-                        Log.w(ex);
-                        Helper.reportNoViewer(context, share);
+                    } catch (Throwable ex) {
+                        Helper.reportNoViewer(context, share, ex);
                     }
                 }
 

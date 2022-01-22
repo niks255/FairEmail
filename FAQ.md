@@ -41,9 +41,11 @@ For authorizing:
 * Yahoo, AOL and Sky, see [question 88](#user-content-faq88)
 * Apple iCloud, see [question 148](#user-content-faq148) ([German](https://support.apple.com/de-de/HT204397))
 * Free.fr, see [question 157](#user-content-faq157)
-* Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) isn't enabled
+* Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) ([German](https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren)) isn't enabled
 * Web.de: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html))
-* Ionos (1und1): please make sure you use [the email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/) and not your account password
+* GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html))
+* T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
+* Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/) (German) and not your account password
 
 Please see [here](#user-content-faq22) for common error messages and solutions.
 
@@ -327,6 +329,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(174) Is auto discovery supported?](#user-content-faq174)
 * [(175) Why should battery optimizations be disabled?](#user-content-faq175)
 * [(176) When will a message be considered safely transported?](#user-content-faq176)
+* [(177) What does 'Sensitivity' mean?](#user-content-faq177)
 
 [I have another question.](#user-content-get-support)
 
@@ -581,6 +584,7 @@ To use a password you can use the quick setup wizard and select *Other provider*
 *[ALERT] Please log in via your web browser: https://support.google.com/mail/accounts/answer/78754 (Failure)*
 
 This Google security check is triggered more often with *less secure apps* enabled, less with an app password, and hardly when using an on-device account (OAuth).
+You might see the error *OAUTH2 asked for more*, which basically says the connection is temporarily blocked, until you confirm it is you.
 
 Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
@@ -2183,15 +2187,24 @@ by [all supported Android versions](https://developer.android.com/training/artic
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq63)
 
-Large inline or attached [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) and [JPEG](https://en.wikipedia.org/wiki/JPEG) images
-will automatically be resized for displaying on screens.
-This is because email messages are limited in size, depending on the provider mostly between 10 and 50 MB.
-Images will by default be resized to a maximum width and height of about 1440 pixels and saved with a compression ratio of 90 %.
-Images are scaled down using whole number factors to reduce memory usage and to retain image quality.
-Automatically resizing of inline and/or attached images and the maximum target image size can be configured in the send settings.
+You can add images to a message in two ways:
 
-If you want to resize images on a case-by-case basis,
-you can use [Send Reduced](https://f-droid.org/en/packages/mobi.omegacentauri.SendReduced/) or a similar app.
+* As attachment, by tapping on the paperclip icon button in the bottom action bar
+* As image, by tapping on the image icon button in the bottom action bar
+
+If you disabled the bottom action bar, you can enable it again via the three-dots menu at the top right of the message editor.
+
+An attachment will always be sent as-is.
+An image can be added as attachment or inserted into a message and you can select to reduce the size of the image and to remove privacy sensitive information.
+
+Images will be scaled down using whole number factors to reduce memory usage and to retain the image quality.
+Scaled images will be saved with a compression ratio of 90 %.
+
+If the image options do not appear, you can enable them again via the three-dots menu.
+
+Note that most email providers limit the total message size to 10-50 MB.
+
+Automatically resizing of inline and/or attached images and the maximum target image size can be configured in the send settings.
 
 <br />
 
@@ -4422,7 +4435,7 @@ Related questions:
 * The Play store version does not support [Gravatars](https://gravatar.com/), see [here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-85226179) for the reason
 * The Play store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
 * The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently
-* The GitHub version has some different links and some options have a different default values (more geared to advanced users)
+* The GitHub version has some different links, some more options (like sharing the HTML of a message) and some different default values (more geared to advanced users)
 * The F-Droid build does not support OAuth, see [this FAQ](#user-content-faq147) about why not
 * The F-Droid build does not include [Google Play Billing](https://developer.android.com/google/play/billing/integrate), so Play store purchases cannot be reused
 * The F-Droid build is supported only if the version number is the same as the the version number of the latest GitHub version, see also [this FAQ](#user-content-faq147)
@@ -4503,6 +4516,21 @@ Received: brown.elm.relay.mailchannels.net (brown.elm.relay.mailchannels.net. [2
 
 <br />
 
+<a name="faq177"></a>
+**(177) What does 'Sensitivity' mean?**
+
+The sensitivity of a message indicates the confidentiality of a message.
+
+* Personal: for you only
+* Private: for you and trusted people only
+* Confidential: for a company, organization or department only
+
+Please see [this article](https://support.microsoft.com/en-us/office/mark-your-email-as-normal-personal-private-or-confidential-4a76d05b-6c29-4a0d-9096-71784a6b12c1) for more information.
+
+The sensitivity indication is sent as [a message header](https://datatracker.ietf.org/doc/html/rfc4021#section-2.1.55).
+
+<br />
+
 <h2><a name="get-support"></a>Get support</h2>
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-get-support)
@@ -4523,6 +4551,9 @@ Requested features should:
 * not complicate the usage of FairEmail
 * fit within the philosophy of FairEmail (privacy oriented, security minded)
 * comply with common standards (IMAP, SMTP, etc)
+* comply with the [Core app quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality)
+
+A feature will be considered useful to most people if more than 0.1% of the users request a feature, which in practice means about 500 people.
 
 Features not fulfilling these requirements will likely be rejected.
 This is also to keep maintenance and support in the long term feasible.

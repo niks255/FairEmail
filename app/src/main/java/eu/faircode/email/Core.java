@@ -138,7 +138,7 @@ import javax.mail.search.SentDateTerm;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 class Core {
-    static final int DEFAULT_CHUNCK_SIZE = 100;
+    static final int DEFAULT_CHUNK_SIZE = 50;
 
     private static final int MAX_NOTIFICATION_DISPLAY = 10; // per group
     private static final int MAX_NOTIFICATION_COUNT = 100; // per group
@@ -253,6 +253,22 @@ class Core {
                             TupleOperationEx next = ops.get(j);
 
                             switch (op.name) {
+                                case EntityOperation.SEEN:
+                                case EntityOperation.FLAG:
+                                    if (group &&
+                                            message.uid != null &&
+                                            op.name.equals(next.name) &&
+                                            account.protocol == EntityAccount.TYPE_IMAP) {
+                                        JSONArray jnext = new JSONArray(next.args);
+                                        // Same flag
+                                        if (jargs.getBoolean(0) == jnext.getBoolean(0)) {
+                                            EntityMessage m = db.message().getMessage(next.message);
+                                            if (m != null && m.uid != null)
+                                                similar.put(next, m);
+                                        }
+                                    }
+                                    break;
+
                                 case EntityOperation.ADD:
                                     // Same message
                                     if (Objects.equals(op.message, next.message) &&
@@ -283,6 +299,18 @@ class Core {
                                             if (m != null && m.uid != null)
                                                 similar.put(next, m);
                                         }
+                                    }
+                                    break;
+
+                                case EntityOperation.DELETE:
+                                    if (group &&
+                                            message.uid != null &&
+                                            op.name.equals(next.name) &&
+                                            account.protocol == EntityAccount.TYPE_IMAP) {
+                                        EntityMessage m = db.message().getMessage(next.message);
+                                        if (m != null &&
+                                                m.uid != null && m.ui_deleted == message.ui_deleted)
+                                            similar.put(next, m);
                                     }
                                     break;
                             }
@@ -383,15 +411,20 @@ class Core {
                                     Log.w(folder.name + " ignored=" + op.name);
                             }
                         else {
-                            ensureUid(context, account, folder, message, op, (IMAPFolder) ifolder);
+                            List<EntityMessage> messages = new ArrayList<>();
+                            messages.add(message);
+                            if (similar.size() == 0)
+                                ensureUid(context, account, folder, message, op, (IMAPFolder) ifolder);
+                            else
+                                messages.addAll(similar.values());
 
                             switch (op.name) {
                                 case EntityOperation.SEEN:
-                                    onSeen(context, jargs, folder, message, (IMAPFolder) ifolder);
+                                    onSetFlag(context, jargs, folder, messages, (IMAPFolder) ifolder, Flags.Flag.SEEN);
                                     break;
 
                                 case EntityOperation.FLAG:
-                                    onFlag(context, jargs, folder, message, (IMAPFolder) ifolder);
+                                    onSetFlag(context, jargs, folder, messages, (IMAPFolder) ifolder, Flags.Flag.FLAGGED);
                                     break;
 
                                 case EntityOperation.ANSWERED:
@@ -411,9 +444,6 @@ class Core {
                                     break;
 
                                 case EntityOperation.MOVE:
-                                    List<EntityMessage> messages = new ArrayList<>();
-                                    messages.add(message);
-                                    messages.addAll(similar.values());
                                     onMove(context, jargs, false, account, folder, messages, (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
@@ -426,7 +456,7 @@ class Core {
                                     break;
 
                                 case EntityOperation.DELETE:
-                                    onDelete(context, jargs, account, folder, message, (IMAPFolder) ifolder);
+                                    onDelete(context, jargs, account, folder, messages, (IMAPFolder) ifolder);
                                     break;
 
                                 case EntityOperation.HEADERS:
@@ -568,6 +598,7 @@ class Core {
                             // Drafts: * BYE Jakarta Mail Exception: java.io.IOException: Connection dropped by server?
                             // Sync: BAD Could not parse command
                             // Sync: SEARCH not allowed now
+                            // Sync: BAD Command SEARCH invalid in AUTHENTICATED state (MARKER:xxx)
                             // Seen: NO mailbox selected READ-ONLY
                             // Fetch: BAD Error in IMAP command FETCH: Invalid messageset (n.nnn + n.nnn secs).
                             // Fetch: NO all of the requested messages have been expunged
@@ -584,6 +615,7 @@ class Core {
                             // Fetch UID: NO Server Unavailable. 15
                             // Fetch UID: NO [UNAVAILABLE] Failed to open mailbox
                             // Fetch UID: NO [TEMPFAIL] SELECT completed
+                            // Fetch UID: NO Internal error. Try again later... (MARKER:xxx)
                             // Move: NO Over quota
                             // Move: NO No matching messages
                             // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist (n.nnn + n.nnn + n.nnn secs)
@@ -826,30 +858,60 @@ class Core {
         return null;
     }
 
-    private static void onSeen(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException {
+    private static void onSetFlag(Context context, JSONArray jargs, EntityFolder folder, List<EntityMessage> messages, IMAPFolder ifolder, Flags.Flag flag) throws MessagingException, JSONException {
         // Mark message (un)seen
         DB db = DB.getInstance(context);
+
+        if (flag != Flags.Flag.SEEN && flag != Flags.Flag.FLAGGED)
+            throw new IllegalArgumentException("Invalid flag=" + flag);
 
         if (folder.read_only)
             return;
 
-        if (!ifolder.getPermanentFlags().contains(Flags.Flag.SEEN)) {
-            db.message().setMessageSeen(message.id, false);
-            db.message().setMessageUiSeen(message.id, false);
+        if (!ifolder.getPermanentFlags().contains(flag)) {
+            for (EntityMessage message : messages)
+                if (flag == Flags.Flag.SEEN) {
+                    db.message().setMessageSeen(message.id, false);
+                    db.message().setMessageUiSeen(message.id, false);
+                } else if (flag == Flags.Flag.FLAGGED) {
+                    db.message().setMessageFlagged(message.id, false);
+                    db.message().setMessageUiFlagged(message.id, false, null);
+                }
             return;
         }
 
-        boolean seen = jargs.getBoolean(0);
-        if (message.seen.equals(seen))
+        List<Long> uids = new ArrayList<>();
+        boolean set = jargs.getBoolean(0);
+        for (EntityMessage message : messages) {
+            if (message.uid == null)
+                if (messages.size() == 1)
+                    throw new IllegalArgumentException("Set flag: uid missing");
+                else
+                    throw new MessagingException("Set flag: uid missing");
+            if (flag == Flags.Flag.SEEN && !message.seen.equals(set))
+                uids.add(message.uid);
+            else if (flag == Flags.Flag.FLAGGED && !message.flagged.equals(set))
+                uids.add(message.uid);
+        }
+
+        if (uids.size() == 0)
             return;
 
-        Message imessage = ifolder.getMessageByUID(message.uid);
-        if (imessage == null)
-            throw new MessageRemovedException();
+        Message[] imessages = ifolder.getMessagesByUID(Helper.toLongArray(uids));
+        for (Message imessage : imessages)
+            if (imessage == null)
+                if (messages.size() == 1)
+                    throw new MessageRemovedException();
+                else
+                    throw new MessagingException("Set flag: message missing");
 
-        imessage.setFlag(Flags.Flag.SEEN, seen);
+        ifolder.setFlags(imessages, new Flags(flag), set);
 
-        db.message().setMessageSeen(message.id, seen);
+        for (EntityMessage message : messages)
+            if (flag == Flags.Flag.SEEN && !message.seen.equals(set))
+                db.message().setMessageSeen(message.id, set);
+            else if (flag == Flags.Flag.FLAGGED && !message.flagged.equals(set))
+                db.message().setMessageFlagged(message.id, set);
     }
 
     private static void onSeen(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder) throws JSONException {
@@ -858,34 +920,6 @@ class Core {
 
         boolean seen = jargs.getBoolean(0);
         db.message().setMessageUiSeen(message.id, seen);
-    }
-
-    private static void onFlag(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, JSONException, IOException {
-        // Star/unstar message
-        DB db = DB.getInstance(context);
-
-        if (folder.read_only)
-            return;
-
-        if (!ifolder.getPermanentFlags().contains(Flags.Flag.FLAGGED)) {
-            db.message().setMessageFlagged(message.id, false);
-            db.message().setMessageUiFlagged(message.id, false, null);
-            return;
-        }
-
-        boolean flagged = jargs.getBoolean(0);
-        if (message.flagged.equals(flagged))
-            return;
-
-        Message imessage = ifolder.getMessageByUID(message.uid);
-        if (imessage == null)
-            throw new MessageRemovedException();
-
-        imessage.setFlag(Flags.Flag.FLAGGED, flagged);
-        if (imessage instanceof GmailMessage)
-            ((GmailMessage) imessage).setLabels(new String[]{"\\Starred"}, flagged);
-
-        db.message().setMessageFlagged(message.id, flagged);
     }
 
     private static void onFlag(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder) throws MessagingException, JSONException {
@@ -1557,18 +1591,10 @@ class Core {
             List<EntityRule> rules = db.rule().getEnabledRules(folder.id);
 
             FetchProfile fp = new FetchProfile();
-            fp.add(FetchProfile.Item.ENVELOPE);
-            fp.add(FetchProfile.Item.FLAGS);
-            fp.add(FetchProfile.Item.CONTENT_INFO); // body structure
-            //fp.add(UIDFolder.FetchProfileItem.UID);
-            fp.add(IMAPFolder.FetchProfileItem.HEADERS);
-            //fp.add(IMAPFolder.FetchProfileItem.MESSAGE);
-            fp.add(FetchProfile.Item.SIZE);
-            fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
-            if (account.isGmail()) {
-                fp.add(GmailFolder.FetchProfileItem.THRID);
+            fp.add(UIDFolder.FetchProfileItem.UID); // To check if message exists
+            fp.add(FetchProfile.Item.FLAGS); // To update existing messages
+            if (account.isGmail())
                 fp.add(GmailFolder.FetchProfileItem.LABELS);
-            }
             ifolder.fetch(new Message[]{imessage}, fp);
 
             EntityMessage message = synchronizeMessage(context, account, folder, istore, ifolder, imessage, false, download, rules, state, stats);
@@ -1613,7 +1639,7 @@ class Core {
         }
     }
 
-    private static void onDelete(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException {
+    private static void onDelete(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, List<EntityMessage> messages, IMAPFolder ifolder) throws MessagingException, IOException {
         // Delete message
         DB db = DB.getInstance(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -1621,69 +1647,103 @@ class Core {
 
         if (folder.local) {
             Log.i(folder.name + " local delete");
-            db.message().deleteMessage(message.id);
+            for (EntityMessage message : messages)
+                db.message().deleteMessage(message.id);
             return;
         }
 
         try {
-            List<Message> deleted = new ArrayList<>();
+            if (messages.size() > 1) {
+                boolean ui_deleted = messages.get(0).ui_deleted;
 
-            if (message.uid != null) {
-                Message iexisting = ifolder.getMessageByUID(message.uid);
-                if (iexisting == null)
-                    Log.w(folder.name + " existing not found uid=" + message.uid);
-                else
-                    try {
-                        Log.i(folder.name + " deleting uid=" + message.uid);
-                        if (perform_expunge)
-                            iexisting.setFlag(Flags.Flag.DELETED, true);
-                        else
-                            iexisting.setFlag(Flags.Flag.DELETED, message.ui_deleted);
-                        deleted.add(iexisting);
-                    } catch (MessageRemovedException ignored) {
-                        Log.w(folder.name + " existing gone uid=" + message.uid);
-                    }
-            }
-
-            boolean found = (deleted.size() > 0);
-            if (!TextUtils.isEmpty(message.msgid) &&
-                    (!found || EntityFolder.DRAFTS.equals(folder.type)))
-                try {
-                    Message[] imessages = findMsgId(context, account, ifolder, message.msgid);
-                    if (imessages != null)
-                        for (Message iexisting : imessages)
-                            try {
-                                long muid = ifolder.getUID(iexisting);
-                                if (found && muid == message.uid)
-                                    continue;
-
-                                // Fail safe
-                                MessageHelper helper = new MessageHelper((MimeMessage) iexisting, context);
-                                if (!message.msgid.equals(helper.getMessageID()))
-                                    continue;
-
-                                Log.i(folder.name + " deleting uid=" + muid);
-                                if (perform_expunge)
-                                    iexisting.setFlag(Flags.Flag.DELETED, true);
-                                else
-                                    iexisting.setFlag(Flags.Flag.DELETED, message.ui_deleted);
-
-                                deleted.add(iexisting);
-                            } catch (MessageRemovedException ex) {
-                                Log.w(ex);
-                            }
-                } catch (MessagingException ex) {
-                    Log.w(ex);
+                List<Long> uids = new ArrayList<>();
+                for (EntityMessage message : messages) {
+                    if (message.uid == null)
+                        throw new MessagingException("Delete: uid missing");
+                    if (message.ui_deleted != ui_deleted)
+                        throw new MessagingException("Delete: flag inconsistent");
+                    uids.add(message.uid);
                 }
 
-            if (perform_expunge) {
-                if (deleted.size() == 0 || expunge(context, ifolder, deleted))
-                    db.message().deleteMessage(message.id);
-            } else {
-                if (deleted.size() > 0)
-                    db.message().setMessageDeleted(message.id, message.ui_deleted);
-            }
+                Message[] idelete = ifolder.getMessagesByUID(Helper.toLongArray(uids));
+                for (Message imessage : idelete)
+                    if (imessage == null)
+                        throw new MessagingException("Delete: message missing");
 
+                EntityLog.log(context, folder.name + " deleting messages=" + uids.size());
+
+                if (perform_expunge) {
+                    ifolder.setFlags(idelete, new Flags(Flags.Flag.DELETED), true);
+                    expunge(context, ifolder, Arrays.asList(idelete));
+                    for (EntityMessage message : messages)
+                        db.message().deleteMessage(message.id);
+                } else {
+                    ifolder.setFlags(idelete, new Flags(Flags.Flag.DELETED), ui_deleted);
+                    for (EntityMessage message : messages)
+                        db.message().setMessageDeleted(message.id, message.ui_deleted);
+                }
+
+                EntityLog.log(context, folder.name + " deleted messages=" + uids.size());
+            } else if (messages.size() == 1) {
+                List<Message> deleted = new ArrayList<>();
+
+                EntityMessage message = messages.get(0);
+                if (message.uid != null) {
+                    Message iexisting = ifolder.getMessageByUID(message.uid);
+                    if (iexisting == null)
+                        Log.w(folder.name + " existing not found uid=" + message.uid);
+                    else
+                        try {
+                            Log.i(folder.name + " deleting uid=" + message.uid);
+                            if (perform_expunge)
+                                iexisting.setFlag(Flags.Flag.DELETED, true);
+                            else
+                                iexisting.setFlag(Flags.Flag.DELETED, message.ui_deleted);
+                            deleted.add(iexisting);
+                        } catch (MessageRemovedException ignored) {
+                            Log.w(folder.name + " existing gone uid=" + message.uid);
+                        }
+                }
+
+                boolean found = (deleted.size() > 0);
+                if (!TextUtils.isEmpty(message.msgid) &&
+                        (!found || EntityFolder.DRAFTS.equals(folder.type)))
+                    try {
+                        Message[] imessages = findMsgId(context, account, ifolder, message.msgid);
+                        if (imessages != null)
+                            for (Message iexisting : imessages)
+                                try {
+                                    long muid = ifolder.getUID(iexisting);
+                                    if (found && muid == message.uid)
+                                        continue;
+
+                                    // Fail safe
+                                    MessageHelper helper = new MessageHelper((MimeMessage) iexisting, context);
+                                    if (!message.msgid.equals(helper.getMessageID()))
+                                        continue;
+
+                                    Log.i(folder.name + " deleting uid=" + muid);
+                                    if (perform_expunge)
+                                        iexisting.setFlag(Flags.Flag.DELETED, true);
+                                    else
+                                        iexisting.setFlag(Flags.Flag.DELETED, message.ui_deleted);
+
+                                    deleted.add(iexisting);
+                                } catch (MessageRemovedException ex) {
+                                    Log.w(ex);
+                                }
+                    } catch (MessagingException ex) {
+                        Log.w(ex);
+                    }
+
+                if (perform_expunge) {
+                    if (deleted.size() == 0 || expunge(context, ifolder, deleted))
+                        db.message().deleteMessage(message.id);
+                } else {
+                    if (deleted.size() > 0)
+                        db.message().setMessageDeleted(message.id, message.ui_deleted);
+                }
+            }
         } finally {
             int count = MessageHelper.getMessageCount(ifolder);
             db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
@@ -2513,7 +2573,7 @@ class Core {
                     imessage.setFlag(Flags.Flag.DELETED, true);
             } else {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNCK_SIZE);
+                int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
 
                 Flags flags = new Flags(Flags.Flag.DELETED);
                 for (List<Message> list : Helper.chunkList(idelete, chunk_size))
@@ -2786,6 +2846,7 @@ class Core {
                         message.deliveredto = helper.getDeliveredTo();
                         message.thread = helper.getThreadId(context, account.id, folder.id, 0);
                         message.priority = helper.getPriority();
+                        message.sensitivity = helper.getSensitivity();
                         message.auto_submitted = helper.getAutoSubmitted();
                         message.receipt_request = helper.getReceiptRequested();
                         message.receipt_to = helper.getReceiptTo();
@@ -3127,6 +3188,10 @@ class Core {
                 if (imessages == null)
                     imessages = new Message[0];
 
+                for (Message imessage : imessages)
+                    if (imessage instanceof IMAPMessage)
+                        ((IMAPMessage) imessage).invalidateHeaders();
+
                 stats.search_ms = (SystemClock.elapsedRealtime() - search);
                 Log.i(folder.name + " remote count=" + imessages.length + " search=" + stats.search_ms + " ms");
 
@@ -3253,7 +3318,7 @@ class Core {
                                     ranges.add(new Pair<>(first, last < 0 ? first : last));
 
                                 // https://datatracker.ietf.org/doc/html/rfc2683#section-3.2.1.5
-                                int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNCK_SIZE);
+                                int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
                                 if (chunk_size < 200 &&
                                         (account.isGmail() || account.isOutlook()))
                                     chunk_size = 200;
@@ -3333,10 +3398,19 @@ class Core {
                                         for (Response response : responses)
                                             if (response.isBYE())
                                                 return new MessagingException("UID FETCH", new IOException(response.toString()));
-                                            else if (response.isNO())
+                                            else if (response.isNO()) {
+                                                Log.e("UID FETCH " + response);
                                                 throw new CommandFailedException(response);
-                                            else if (response.isBAD())
+                                            } else if (response.isBAD()) {
+                                                Log.e("UID FETCH " + response);
+                                                // BAD Error in IMAP command UID FETCH: Too long argument (n.nnn + n.nnn + n.nnn secs).
+                                                if (response.toString().contains("Too long argument")) {
+                                                    chunk_size = chunk_size / 2;
+                                                    if (chunk_size > 0)
+                                                        prefs.edit().putInt("chunk_size", chunk_size).apply();
+                                                }
                                                 throw new BadCommandException(response);
+                                            }
                                         throw new ProtocolException("UID FETCH failed");
                                     }
                                 }
@@ -3758,6 +3832,7 @@ class Core {
             if (BuildConfig.DEBUG && message.thread.startsWith("outlook:"))
                 message.warning = message.thread;
             message.priority = helper.getPriority();
+            message.sensitivity = helper.getSensitivity();
 
             for (String keyword : keywords)
                 if (MessageHelper.FLAG_LOW_IMPORTANCE.equals(keyword))
@@ -4189,8 +4264,8 @@ class Core {
             }
 
             if (update || process) {
-                boolean needsHeaders = EntityRule.needsHeaders(message, rules);
-                boolean needsBody = EntityRule.needsBody(message, rules);
+                boolean needsHeaders = (process && EntityRule.needsHeaders(message, rules));
+                boolean needsBody = (process && EntityRule.needsBody(message, rules));
                 if (needsHeaders || needsBody)
                     Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
                 List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
@@ -4264,7 +4339,7 @@ class Core {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
         boolean uid_expunge = prefs.getBoolean("uid_expunge", false);
-        int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNCK_SIZE);
+        int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
 
         if (!perform_expunge)
             return false;
@@ -4437,6 +4512,9 @@ class Core {
             IMAPStore istore, IMAPFolder ifolder,
             MimeMessage imessage, long id, State state, SyncStats stats) throws MessagingException, IOException {
         if (state.getNetworkState().isRoaming())
+            return false;
+
+        if (imessage == null)
             return false;
 
         DB db = DB.getInstance(context);

@@ -284,13 +284,9 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pm != null && !pm.isInteractive()) {
             Log.i("Stop with screen off");
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            boolean biometrics = prefs.getBoolean("biometrics", false);
-            String pin = prefs.getString("pin", null);
-            boolean autolock = prefs.getBoolean("autolock", true);
-            if (autolock && (biometrics || !TextUtils.isEmpty(pin))) {
+            if (Helper.shouldAutoLock(this)) {
                 Helper.clearAuthentication(this);
-                finish();
+                lock();
             }
         }
     }
@@ -371,27 +367,34 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     }
 
     private void checkAuthentication(boolean auth) {
-        if (!this.getClass().equals(ActivityMain.class) &&
-                Helper.shouldAuthenticate(this, false)) {
-            finishAndRemoveTask();
-            setResult(RESULT_CANCELED);
-            finishAffinity();
+        if (this.getClass().equals(ActivityMain.class))
+            return;
 
-            if (auth) {
-                if (this instanceof ActivityWidget ||
-                        this instanceof ActivityWidgetSync ||
-                        this instanceof ActivityWidgetUnified) {
-                    Toast.makeText(this, R.string.title_notification_redacted, Toast.LENGTH_LONG).show();
-                } else {
-                    Intent intent = getIntent();
-                    processStreams(intent);
-                    Intent main = new Intent(this, ActivityMain.class)
-                            .putExtra("intent", intent);
-                    main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(main);
-                }
+        if (!Helper.shouldAuthenticate(this, !auth))
+            return;
+
+        lock();
+
+        if (auth) {
+            if (this instanceof ActivityWidget ||
+                    this instanceof ActivityWidgetSync ||
+                    this instanceof ActivityWidgetUnified) {
+                Toast.makeText(this, R.string.title_notification_redacted, Toast.LENGTH_LONG).show();
+            } else {
+                Intent intent = getIntent();
+                processStreams(intent);
+                Intent main = new Intent(this, ActivityMain.class)
+                        .putExtra("intent", intent);
+                main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(main);
             }
         }
+    }
+
+    private void lock() {
+        finishAndRemoveTask();
+        setResult(RESULT_CANCELED);
+        finishAffinity();
     }
 
     private void processStreams(Intent intent) {
@@ -457,12 +460,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             Log.i("Start intent=" + intent);
             Log.logExtras(intent);
             super.startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            Log.w(ex);
-            Helper.reportNoViewer(this, intent);
         } catch (Throwable ex) {
-            Log.e(ex);
-            ToastEx.makeText(this, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
+            Helper.reportNoViewer(this, intent, ex);
         }
     }
 
@@ -472,15 +471,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             Log.i("Start intent=" + intent + " request=" + requestCode);
             Log.logExtras(intent);
             super.startActivityForResult(intent, requestCode);
-        } catch (ActivityNotFoundException ex) {
-            Log.w(ex);
-            if (Helper.isTnef(intent.getType(), null))
-                Helper.viewFAQ(this, 155);
-            else
-                Helper.reportNoViewer(this, intent);
         } catch (Throwable ex) {
-            Log.e(ex);
-            ToastEx.makeText(this, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
+            Helper.reportNoViewer(this, intent, ex);
         }
     }
 

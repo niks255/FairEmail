@@ -82,10 +82,11 @@ public class FragmentSetup extends FragmentBase {
     private CardView cardManual;
 
     private Button btnAccount;
-
     private Button btnIdentity;
+
     private TextView tvExchangeSupport;
     private TextView tvIdentityWhat;
+    private Button btnInbox;
     private TextView tvFree;
     private TextView tvNoComposable;
 
@@ -106,7 +107,7 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvBatteryUsage;
     private TextView tvSyncStopped;
 
-    private Button btnInbox;
+    private Button btnApp;
 
     private Group grpInexactAlarms;
     private Group grpBackgroundRestricted;
@@ -149,10 +150,11 @@ public class FragmentSetup extends FragmentBase {
         cardManual = view.findViewById(R.id.cardManual);
 
         btnAccount = view.findViewById(R.id.btnAccount);
-
         btnIdentity = view.findViewById(R.id.btnIdentity);
+
         tvExchangeSupport = view.findViewById(R.id.tvExchangeSupport);
         tvIdentityWhat = view.findViewById(R.id.tvIdentityWhat);
+        btnInbox = view.findViewById(R.id.btnInbox);
         tvFree = view.findViewById(R.id.tvFree);
         tvNoComposable = view.findViewById(R.id.tvNoComposable);
 
@@ -173,7 +175,7 @@ public class FragmentSetup extends FragmentBase {
         tvBatteryUsage = view.findViewById(R.id.tvBatteryUsage);
         tvSyncStopped = view.findViewById(R.id.tvSyncStopped);
 
-        btnInbox = view.findViewById(R.id.btnInbox);
+        btnApp = view.findViewById(R.id.btnApp);
 
         grpInexactAlarms = view.findViewById(R.id.grpInexactAlarms);
         grpBackgroundRestricted = view.findViewById(R.id.grpBackgroundRestricted);
@@ -409,6 +411,13 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        btnInbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((FragmentBase) getParentFragment()).finish();
+            }
+        });
+
         tvFree.setPaintFlags(tvFree.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvFree.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -534,10 +543,16 @@ public class FragmentSetup extends FragmentBase {
             });
         }
 
-        btnInbox.setOnClickListener(new View.OnClickListener() {
+        final Intent app = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        app.setData(Uri.parse("package:" + getContext().getPackageName()));
+        btnApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FragmentBase) getParentFragment()).finish();
+                try {
+                    getContext().startActivity(app);
+                } catch (Throwable ex) {
+                    Helper.reportNoViewer(getContext(), app, ex);
+                }
             }
         });
 
@@ -685,7 +700,7 @@ public class FragmentSetup extends FragmentBase {
         tvDoze12.setVisibility(Helper.isOptimizing12(getContext()) ? View.VISIBLE : View.GONE);
 
         grpInexactAlarms.setVisibility(
-                !AlarmManagerCompatEx.canScheduleExactAlarms(getContext()) || BuildConfig.DEBUG
+                !AlarmManagerCompatEx.canScheduleExactAlarms(getContext())
                         ? View.VISIBLE : View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

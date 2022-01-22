@@ -191,6 +191,7 @@ public class MessageHelper {
             FLAG_FILTERED, // FairEmail
             FLAG_LOW_IMPORTANCE, // FairEmail
             FLAG_HIGH_IMPORTANCE, // FairEmail
+            "Sent",
             "$MDNSent", // https://tools.ietf.org/html/rfc3503
             "$SubmitPending",
             "$Submitted",
@@ -281,6 +282,14 @@ public class MessageHelper {
             imessage.addHeader("X-Priority", "1"); // Highest
             imessage.addHeader("X-MSMail-Priority", "High");
         }
+
+        // Sensitivity
+        if (EntityMessage.SENSITIVITY_PERSONAL.equals(message.sensitivity))
+            imessage.addHeader("Sensitivity", "Personal");
+        else if (EntityMessage.SENSITIVITY_PRIVATE.equals(message.sensitivity))
+            imessage.addHeader("Sensitivity", "Private");
+        else if (EntityMessage.SENSITIVITY_CONFIDENTIAL.equals(message.sensitivity))
+            imessage.addHeader("Sensitivity", "Company-Confidential");
 
         // References
         if (message.references != null) {
@@ -1291,7 +1300,7 @@ public class MessageHelper {
 
     String getThreadId(Context context, long account, long folder, long uid) throws MessagingException {
         if (threadId == null)
-            if (BuildConfig.DEBUG)
+            if (!BuildConfig.PLAY_STORE_RELEASE)
                 threadId = _getThreadIdAlt(context, account, folder, uid);
             else
                 threadId = _getThreadId(context, account, folder, uid);
@@ -1580,6 +1589,27 @@ public class MessageHelper {
             priority = null;
 
         return priority;
+    }
+
+    Integer getSensitivity() throws MessagingException {
+        ensureHeaders();
+
+        // https://www.rfc-editor.org/rfc/rfc4021.html#section-2.1.55
+        String header = imessage.getHeader("Sensitivity", null);
+
+        if (TextUtils.isEmpty(header))
+            return null;
+
+        header = header.toLowerCase(Locale.ROOT);
+
+        if (header.contains("personal"))
+            return EntityMessage.SENSITIVITY_PERSONAL;
+        if (header.contains("private"))
+            return EntityMessage.SENSITIVITY_PRIVATE;
+        if (header.contains("company")) // company-confidential
+            return EntityMessage.SENSITIVITY_CONFIDENTIAL;
+
+        return null;
     }
 
     Boolean getAutoSubmitted() throws MessagingException {
@@ -3948,9 +3978,9 @@ public class MessageHelper {
         int len = text.length();
         for (int i = 0; i < len; i++) {
             char kar = text.charAt(i);
-            if (kar == '(')
+            if (kar == '(' && text.indexOf(')', i) > 0)
                 skip++;
-            else if (kar == ')')
+            else if (kar == ')' && skip > 0)
                 skip--;
             else if (skip == 0)
                 sb.append(kar);

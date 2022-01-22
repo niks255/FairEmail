@@ -51,6 +51,7 @@ import android.os.DeadSystemException;
 import android.os.Debug;
 import android.os.IBinder;
 import android.os.OperationCanceledException;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.TransactionTooLargeException;
 import android.provider.Settings;
@@ -1795,6 +1796,13 @@ public class Log {
 
         sb.append("\r\n");
 
+        String osVersion = null;
+        try {
+            osVersion = System.getProperty("os.version");
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+
         // Get device info
         sb.append(String.format("Brand: %s\r\n", Build.BRAND));
         sb.append(String.format("Manufacturer: %s\r\n", Build.MANUFACTURER));
@@ -1807,6 +1815,7 @@ public class Log {
         sb.append(String.format("Id: %s\r\n", Build.ID));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             sb.append(String.format("SoC: %s/%s\r\n", Build.SOC_MANUFACTURER, Build.SOC_MODEL));
+        sb.append(String.format("OS version: %s\r\n", osVersion));
         sb.append(String.format("uid: %d\r\n", android.os.Process.myUid()));
         sb.append("\r\n");
 
@@ -1920,6 +1929,10 @@ public class Log {
         sb.append(String.format("Battery optimizations: %s %s\r\n",
                 ignoring == null ? null : Boolean.toString(!ignoring),
                 Boolean.FALSE.equals(ignoring) ? "!!!" : ""));
+
+        PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        boolean psaving = power.isPowerSaveMode();
+        sb.append(String.format("Battery saving: %s %s\r\n", psaving, psaving ? "!!!" : ""));
 
         sb.append(String.format("Charging: %b; level: %d\r\n",
                 Helper.isCharging(context), Helper.getBatteryLevel(context)));
@@ -2128,7 +2141,7 @@ public class Log {
                                     (folder.notify ? " notify" : "") +
                                     " poll=" + folder.poll + "/" + folder.poll_factor +
                                     " days=" + folder.sync_days + "/" + folder.keep_days +
-                                    " msgs=" + folder.content + "/" + folder.messages +
+                                    " msgs=" + folder.content + "/" + folder.messages + "/" + folder.total +
                                     " " + folder.state +
                                     (folder.last_sync == null ? "" : " " + dtf.format(folder.last_sync)) +
                                     "\r\n");
@@ -2261,13 +2274,14 @@ public class Log {
                 size += write(os, ex.getMessage() + "\r\n");
             }
 
-            size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n\r\n");
-
             ConnectionHelper.NetworkState state = ConnectionHelper.getNetworkState(context);
             size += write(os, "Connected=" + state.isConnected() + "\r\n");
             size += write(os, "Suitable=" + state.isSuitable() + "\r\n");
             size += write(os, "Unmetered=" + state.isUnmetered() + "\r\n");
-            size += write(os, "Roaming=" + state.isRoaming() + "\r\n");
+            size += write(os, "Roaming=" + state.isRoaming() + "\r\n\r\n");
+
+            size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n");
+            size += write(os, "Data saving=" + ConnectionHelper.isDataSaving(context) + "\r\n");
             size += write(os, "Airplane=" + ConnectionHelper.airplaneMode(context) + "\r\n");
         }
 

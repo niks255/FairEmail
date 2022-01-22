@@ -938,7 +938,8 @@
     <string name="title_pop_folders">The POP3 protocol does not support creating folders</string>
     <string name="title_oauth_support">OAuth is not supported</string>
     <string name="title_review">Review</string>
-    <string name="title_hint_alias">Long press an identity to display options, like copy to create alias identities</string>
+    <string name="title_hint_accounts">Long press on an account to display options, for example to disable or delete an account</string>
+    <string name="title_hint_alias">Long press on an identity to display options, like copy to create alias identities</string>
     <string name="title_service_auth">The email server said: \'%1$s\'</string>
     <string name="title_service_vpn">This might be caused by the VPN that is being used</string>
     <string name="title_service_token">The Android account manager could be blocked by a VPN, firewall, ad blocker, etc., preventing it from obtaining an access token</string>
@@ -952,6 +953,10 @@
     <string name="title_synchronize_subfolders">Subfolders</string>
     <string name="title_synchronize_more">Fetch more messages</string>
     <string name="title_synchronize_more_hint">This will result in a single download of older messages, so it will not result in more battery usage for everyday use</string>
+    <string name="title_synchronize_more_hint2">
+        Messages will be fetched as fast as the email server can deliver them and stored as fast as the device can store and index them.
+        The limiting factor is usually the speed of the device\'s internal storage space.
+    </string>
     <string name="title_synchronize_enabled">Synchronize</string>
     <string name="title_synchronize_batch_enable">Enable synchronization</string>
     <string name="title_synchronize_batch_disable">Disable synchronization</string>
@@ -1118,6 +1123,7 @@
     <string name="title_copy_to">Copy to &#8230;</string>
     <string name="title_subscribe">Subscribe</string>
     <string name="title_delete">Delete</string>
+    <string name="title_delete_all">Delete all</string>
     <string name="title_more">More</string>
     <string name="title_less">Less</string>
     <string name="title_spam">Spam</string>
@@ -1244,6 +1250,7 @@
     <string name="title_send_auto_archive">Archive replied message</string>
     <string name="title_send_encryption">Encryption</string>
     <string name="title_send_priority">Priority</string>
+    <string name="title_send_sensitivity">Sensitivity</string>
     <string name="title_no_server">No server found at \'%1$s\'</string>
 
     <string name="title_style">Style</string>
@@ -1601,6 +1608,9 @@
     <string name="title_legend_draft">Has draft</string>
     <string name="title_legend_priority">Has high priority</string>
     <string name="title_legend_priority_low">Has low priority</string>
+    <string name="title_legend_sensitivity_personal">Is personal</string>
+    <string name="title_legend_sensitivity_private">Is private</string>
+    <string name="title_legend_sensitivity_confidential">Is confidential</string>
     <string name="title_legend_importance">Is important</string>
     <string name="title_legend_importance_low">Is not important</string>
     <string name="title_legend_signed">Is signed</string>
@@ -2042,6 +2052,13 @@
         <item>Low</item>
         <item>Normal</item>
         <item>High</item>
+    </string-array>
+
+    <string-array name="sensitivityNames">
+        <item>Normal</item>
+        <item>Personal</item>
+        <item>Private</item>
+        <item>Confidential</item>
     </string-array>
 
     <string-array name="linesNames">

@@ -2,7 +2,46 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Epidexipteryx](https://en.wikipedia.org/wiki/Epidexipteryx)
+
+### 1.1817 - 2022-01-21
+
+* Fixed text context menu actions
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1816 - 2022-01-20
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1815 - 2022-01-19
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1814 - 2022-01-18
+
+* Added support for sensitivity indicator (personal, private, confidential)
+* Added batch setting of message flags (protocol level)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1813 - 2022-01-17
+
+* Fixed downloading attachments on demand
+* Small improvements and minor bug fixes
+
+### 1.1812 - 2022-01-17
+
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Draconyx](https://en.wikipedia.org/wiki/Draconyx)
+
+### 1.1811 - 2022-01-14
+
+* Fixed scroll issue
 
 ### 1.1810 - 2022-01-14
 

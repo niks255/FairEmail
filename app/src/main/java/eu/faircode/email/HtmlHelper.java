@@ -1301,26 +1301,23 @@ public class HtmlHelper {
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
         Elements b = document.select("base");
         String base = (b.size() > 0 ? b.get(0).attr("href") : null);
-        for (Element a : document.select("a")) {
-            String href = a.attr("href");
-
-            if (href.contains(" ")) {
-                href = href.replace(" ", "%20");
-                a.attr("href", href);
-            }
+        for (Element e : document.select("a,img")) {
+            String attr = ("a".equals(e.tagName()) ? "href" : "src");
+            String link = e.attr(attr);
 
             if (!TextUtils.isEmpty(base))
                 try {
                     // https://developer.android.com/reference/java/net/URI
-                    href = URI.create(base).resolve(href).toString();
-                    a.attr("href", href);
+                    link = URI.create(base).resolve(link.replace(" ", "%20")).toString();
+                    e.attr(attr, link);
                 } catch (Throwable ex) {
                     Log.w(ex);
                 }
 
-            if (href.trim().startsWith("#")) {
-                a.tagName("span");
-                a.removeAttr("href");
+            if ("a".equals(e.tagName()) &&
+                    link.trim().startsWith("#")) {
+                e.tagName("span");
+                e.removeAttr(attr);
             }
         }
     }
@@ -1422,13 +1419,14 @@ public class HtmlHelper {
     }
 
     static void guessSchemes(Document document) {
-        for (Element a : document.select("a"))
+        for (Element e : document.select("a,img"))
             try {
-                String href = a.attr("href");
-                if (TextUtils.isEmpty(href))
+                String attr = ("a".equals(e.tagName()) ? "href" : "src");
+                String url = e.attr(attr);
+                if (TextUtils.isEmpty(url))
                     continue;
-                Uri uri = UriHelper.guessScheme(Uri.parse(href));
-                a.attr("href", uri.toString());
+                Uri uri = UriHelper.guessScheme(Uri.parse(url));
+                e.attr(attr, uri.toString());
             } catch (Throwable ex) {
                 Log.e(ex);
             }
@@ -2211,15 +2209,20 @@ public class HtmlHelper {
     }
 
     static String getQuoteStyle(CharSequence quoted, int start, int end) {
+        String dir = "left";
         try {
             int count = end - start;
             if (TextDirectionHeuristics.FIRSTSTRONG_LTR.isRtl(quoted, start, count))
-                return "border-right:3px solid #ccc; padding-left:3px;";
+                dir = "right";
         } catch (Throwable ex) {
             Log.e(new Throwable("getQuoteStyle " + start + "..." + end, ex));
         }
 
-        return "border-left:3px solid #ccc; padding-left:3px;";
+        return "border-" + dir + ":3px solid #ccc; padding-" + dir + ":3px;margin-top:0; margin-bottom:0;";
+    }
+
+    static String getIndentStyle(CharSequence quoted, int start, int end) {
+        return "margin-top:0; margin-bottom:0;";
     }
 
     static boolean hasBorder(Element e) {

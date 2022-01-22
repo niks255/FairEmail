@@ -801,6 +801,7 @@
     <string name="title_pop_folders">Protokół POP3 nie obsługuje tworzenia folderów</string>
     <string name="title_oauth_support">OAuth nie jest wspierane</string>
     <string name="title_review">Przejrzyj</string>
+    <string name="title_hint_accounts">Przytrzymaj dłużej na koncie, aby wyświetlić opcje, na przykład wyłączyć lub usunąć konto</string>
     <string name="title_hint_alias">Naciśnij i przytrzymaj tożsamość, aby wyświetlić opcje, np. kopiuj, aby utworzyć tożsamość aliasu</string>
     <string name="title_service_auth">Serwer e-mail odpowiedział: \'%1$s\'</string>
     <string name="title_service_vpn">Może to być spowodowane przez używany VPN</string>
@@ -813,6 +814,9 @@
     <string name="title_synchronize_subfolders">Podfoldery</string>
     <string name="title_synchronize_more">Pobierz więcej wiadomości</string>
     <string name="title_synchronize_more_hint">Spowoduje to jednorazowe pobranie starszych wiadomości, więc nie spowoduje większego zużycia baterii w codziennym użytkowaniu</string>
+    <string name="title_synchronize_more_hint2">        Wiadomości będą pobierane tak szybko, jak serwer poczty e-mail może je dostarczyć i przechowywane tak szybko, jak urządzenie może je przechowywać oraz indeksować.
+        Czynnikiem ograniczającym jest zwykle szybkość wewnętrznej pamięci urządzenia.
+    </string>
     <string name="title_synchronize_enabled">Synchronizuj</string>
     <string name="title_synchronize_batch_enable">Włącz synchronizację</string>
     <string name="title_synchronize_batch_disable">Wyłącz synchronizację</string>
@@ -968,6 +972,7 @@
     <string name="title_copy_to">Kopiuj do &#8230;</string>
     <string name="title_subscribe">Subskrybuj</string>
     <string name="title_delete">Usuń</string>
+    <string name="title_delete_all">Usuń wszystko</string>
     <string name="title_more">Więcej</string>
     <string name="title_less">Mniej</string>
     <string name="title_spam">Spam</string>
@@ -1081,6 +1086,7 @@
     <string name="title_send_auto_archive">Archiwizuj wysłaną odpowiedź</string>
     <string name="title_send_encryption">Szyfrowanie</string>
     <string name="title_send_priority">Priorytet</string>
+    <string name="title_send_sensitivity">Wrażliwość</string>
     <string name="title_no_server">Nie znaleziono serwera na \'%1$s\'</string>
     <string name="title_style">Styl</string>
     <string name="title_style_bold">Pogrubienie</string>
@@ -1405,6 +1411,9 @@
     <string name="title_legend_draft">Posiada szkic</string>
     <string name="title_legend_priority">Posiada wysoki priorytet</string>
     <string name="title_legend_priority_low">Posiada niski priorytet</string>
+    <string name="title_legend_sensitivity_personal">Jest osobisty</string>
+    <string name="title_legend_sensitivity_private">Jest prywatny</string>
+    <string name="title_legend_sensitivity_confidential">Jest poufny</string>
     <string name="title_legend_importance">Jest ważne</string>
     <string name="title_legend_importance_low">Jest nieważne</string>
     <string name="title_legend_signed">Jest podpisana</string>
@@ -1720,6 +1729,12 @@
         <item>Niski</item>
         <item>Normalny</item>
         <item>Wysoki</item>
+    </string-array>
+    <string-array name="sensitivityNames">
+        <item>Normalny</item>
+        <item>Osobiste</item>
+        <item>Prywatny</item>
+        <item>Poufne</item>
     </string-array>
     <string-array name="linesNames">
         <item>1</item>

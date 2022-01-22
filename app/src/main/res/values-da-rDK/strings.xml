@@ -951,6 +951,7 @@
     <string name="title_copy_to">Kopiér til &#8230;</string>
     <string name="title_subscribe">Abonnér</string>
     <string name="title_delete">Slet</string>
+    <string name="title_delete_all">Slet alt</string>
     <string name="title_more">Mere</string>
     <string name="title_less">Mindre</string>
     <string name="title_spam">Spam</string>
@@ -1066,6 +1067,7 @@
     <string name="title_send_auto_archive">Arkivér besvarede beskeder</string>
     <string name="title_send_encryption">Kryptering</string>
     <string name="title_send_priority">Prioritet</string>
+    <string name="title_send_sensitivity">Sensitivitet</string>
     <string name="title_no_server">Ingen server fundet på \'%1$s\'</string>
     <string name="title_style">Stil</string>
     <string name="title_style_bold">Fed</string>
@@ -1390,6 +1392,9 @@
     <string name="title_legend_draft">Har kladde</string>
     <string name="title_legend_priority">Har høj prioritet</string>
     <string name="title_legend_priority_low">Har lav prioritet</string>
+    <string name="title_legend_sensitivity_personal">Er personligt</string>
+    <string name="title_legend_sensitivity_private">Er privat</string>
+    <string name="title_legend_sensitivity_confidential">Er fortroligt</string>
     <string name="title_legend_importance">Er vigtig</string>
     <string name="title_legend_importance_low">Er ikke vigtig</string>
     <string name="title_legend_signed">Er signeret</string>
@@ -1705,6 +1710,12 @@
         <item>Lav</item>
         <item>Normal</item>
         <item>Høj</item>
+    </string-array>
+    <string-array name="sensitivityNames">
+        <item>Normal</item>
+        <item>Personligt</item>
+        <item>Privat</item>
+        <item>Fortroligt</item>
     </string-array>
     <string-array name="linesNames">
         <item>1</item>

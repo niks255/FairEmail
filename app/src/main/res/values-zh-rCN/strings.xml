@@ -140,7 +140,7 @@
     <string name="title_setup_gmail_support">只有 Play 商店和 GitHub 版本才支持授权 Google 账户，因为 Android 会检查应用的数字签名</string>
     <string name="title_setup_gmail_rationale">请授予权限来选择一个账户并读取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 会请求读取、撰写、发送和永久删除您的所有电子邮件的权限。相比之下，未经您的明确同意，FairEmail 永远不会删除您的邮件。</string>
-    <string name="title_setup_gmail_drafts">如果草稿文件夹无法通过IMAP访问，可以在Gmail的标签设置中进行修复</string>
+    <string name="title_setup_gmail_drafts">可以借助更改 Gmail 的标签设置来修复无法通过IMAP访问草稿文件夹的问题</string>
     <string name="title_setup_gmail_password">我想通过密码来授权一个账户</string>
     <string name="title_setup_office_auth">\"认证失败\" 的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
     <string name="title_setup_oauth_rationale">授权访问您的 %1$s 账户</string>
@@ -771,6 +771,7 @@
     <string name="title_pop_folders">POP3 协议不支持创建文件夹</string>
     <string name="title_oauth_support">不支持OAuth</string>
     <string name="title_review">评论</string>
+    <string name="title_hint_accounts">长按账户可显示选项，例如禁用或删除账户</string>
     <string name="title_hint_alias">长按出现选项，如复制以创建别名身份</string>
     <string name="title_service_auth">电子邮件服务器返回：\'%1$s\'</string>
     <string name="title_service_vpn">这可能是正在使用的 VPN 造成的</string>
@@ -783,6 +784,8 @@
     <string name="title_synchronize_subfolders">子文件夹</string>
     <string name="title_synchronize_more">获取更多消息</string>
     <string name="title_synchronize_more_hint">这只会导致一次旧消息的下载，因此它不会造成日常使用的更多电池消耗</string>
+    <string name="title_synchronize_more_hint2">        邮件将以电子邮件服务器的传送速度被快速提取，并根据设备存储和索引能力尽快进行存储
+        限制因素通常是设备内部存储的读写速度    </string>
     <string name="title_synchronize_enabled">同步</string>
     <string name="title_synchronize_batch_enable">启用同步</string>
     <string name="title_synchronize_batch_disable">禁用同步</string>
@@ -937,6 +940,7 @@
     <string name="title_copy_to">复制到 &#8230;</string>
     <string name="title_subscribe">订阅</string>
     <string name="title_delete">删除</string>
+    <string name="title_delete_all">删除所有</string>
     <string name="title_more">更多</string>
     <string name="title_less">更少</string>
     <string name="title_spam">垃圾邮件</string>
@@ -1050,6 +1054,7 @@
     <string name="title_send_auto_archive">存档已回复消息</string>
     <string name="title_send_encryption">加密</string>
     <string name="title_send_priority">优先级</string>
+    <string name="title_send_sensitivity">敏感度</string>
     <string name="title_no_server">在 \'%1$s\' 找不到服务器</string>
     <string name="title_style">样式</string>
     <string name="title_style_bold">粗体</string>
@@ -1374,6 +1379,9 @@
     <string name="title_legend_draft">有草稿</string>
     <string name="title_legend_priority">具备高优先级</string>
     <string name="title_legend_priority_low">低优先级</string>
+    <string name="title_legend_sensitivity_personal">个人</string>
+    <string name="title_legend_sensitivity_private">私有</string>
+    <string name="title_legend_sensitivity_confidential">机密</string>
     <string name="title_legend_importance">重要</string>
     <string name="title_legend_importance_low">不重要</string>
     <string name="title_legend_signed">已签名</string>
@@ -1686,6 +1694,12 @@
         <item>低</item>
         <item>正常</item>
         <item>高</item>
+    </string-array>
+    <string-array name="sensitivityNames">
+        <item>正常</item>
+        <item>个人</item>
+        <item>私密</item>
+        <item>机密</item>
     </string-array>
     <string-array name="linesNames">
         <item>1</item>

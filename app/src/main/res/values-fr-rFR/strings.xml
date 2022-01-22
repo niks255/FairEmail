@@ -3,7 +3,7 @@
     <string name="app_search">Recherche FairEmail</string>
     <string name="app_changelog">Historique des modifications</string>
     <string name="app_welcome">FairEmail est une application de messagerie open source centrée sur la confidentialité et la sécurité. C’est pourquoi certaines fonctionnalités peuvent être différentes de ce à quoi vous êtes habitué.</string>
-    <string name="app_limitations">Par exemple, les messages sont reformatés par défaut pour supprimer les éléments dangereux et améliorer la lisibilité, et l\'ouverture des liens doit être confirmée par sécurité. Les deux options peuvent être désactivées si vous le souhaitez.</string>
+    <string name="app_limitations">Par exemple, les messages sont reformatés par défaut pour supprimer tout élément dangereux et améliorer la lisibilité, et l\'ouverture des liens doit être confirmée pour des raisons de sécurité. Les deux options peuvent être désactivées si souhaité.</string>
     <string name="app_unsupported">Des bogues dans la version d\'Android de cet appareil spécifique provoquent des plantages</string>
     <string name="app_continue">Poursuivre tout de même</string>
     <string name="app_exit">Faire de nouveau « Retour » pour quitter</string>
@@ -337,7 +337,7 @@
     <string name="title_advanced_usenet_signature">Suivre la convention Usenet pour les signatures</string>
     <string name="title_advanced_remove_signatures">Supprimer les signatures reconnues</string>
     <string name="title_advanced_receipt">Lorsque vous demandez une confirmation</string>
-    <string name="title_advanced_lookup_mx">Vérifier les adresses e-mail des destinataires avant l’envoi</string>
+    <string name="title_advanced_lookup_mx">Vérifier les adresses électroniques des destinataires avant l’envoi</string>
     <string name="title_advanced_metered">Utiliser les connexions limitées</string>
     <string name="title_advanced_download">Télécharger automatiquement les messages et les pièces jointes sur les connexions limitées jusqu’à</string>
     <string name="title_advanced_roaming">Télécharger les messages et les pièces jointes en itinérance</string>
@@ -783,6 +783,7 @@
     <string name="title_pop_folders">Le protocole POP3 ne permet pas la création de dossiers</string>
     <string name="title_oauth_support">OAuth n\'est pas pris en charge</string>
     <string name="title_review">Récapitulatif</string>
+    <string name="title_hint_accounts">Appuyez longuement sur un compte pour afficher les options, par exemple pour désactiver ou supprimer un compte</string>
     <string name="title_hint_alias">Appuyer longuement sur une identité pour afficher les options, comme copier afin de créer des identités alias</string>
     <string name="title_service_auth">Le serveur de messagerie a dit : %1$s</string>
     <string name="title_service_vpn">Ceci pourrait être dû au VPN utilisé</string>
@@ -795,6 +796,9 @@
     <string name="title_synchronize_subfolders">Sous-dossiers</string>
     <string name="title_synchronize_more">Récupérer plus de messages</string>
     <string name="title_synchronize_more_hint">Ceci téléchargera les messages les plus anciens une seule fois, ce qui n\'engendrera pas une plus grande utilisation de la batterie pour une utilisation quotidienne</string>
+    <string name="title_synchronize_more_hint2">        Les messages seront récupérés aussi vite que le serveur de messagerie peut les délivrer et stockés aussi rapidement que l\'appareil peut les stocker.
+        Le facteur limitant est généralement la vitesse d\'accès à l\'espace de stockage interne de l\'appareil.
+    </string>
     <string name="title_synchronize_enabled">Synchroniser</string>
     <string name="title_synchronize_batch_enable">Activer la synchronisation</string>
     <string name="title_synchronize_batch_disable">Désactiver la synchronisation</string>
@@ -911,7 +915,7 @@
     <string name="title_importance_high">Haute</string>
     <string name="title_search_in_text">Rechercher dans le texte&#8230;</string>
     <string name="title_forward">Transférer</string>
-    <string name="title_resend">Réenvoyer</string>
+    <string name="title_resend">Envoyer à nouveau</string>
     <string name="title_fetching_headers">Téléchargement des en-têtes de messages en cours&#8230;</string>
     <string name="title_new_message">Nouveau message</string>
     <string name="title_editasnew">Modifier comme nouveau message</string>
@@ -951,6 +955,7 @@
     <string name="title_copy_to">Copier vers&#8230;</string>
     <string name="title_subscribe">S\'abonner</string>
     <string name="title_delete">Supprimer</string>
+    <string name="title_delete_all">Tout supprimer</string>
     <string name="title_more">Plus</string>
     <string name="title_less">Moins</string>
     <string name="title_spam">Indésirables</string>
@@ -1066,6 +1071,7 @@
     <string name="title_send_auto_archive">Archiver le message répondu</string>
     <string name="title_send_encryption">Chiffrement</string>
     <string name="title_send_priority">Priorité</string>
+    <string name="title_send_sensitivity">Sensibilité</string>
     <string name="title_no_server">Aucun serveur trouvé à \'%1$s\'</string>
     <string name="title_style">Style</string>
     <string name="title_style_bold">Gras</string>
@@ -1096,7 +1102,7 @@
     <string name="title_add_image_attach">Joindre</string>
     <string name="title_add_image_resize">Redimensionner</string>
     <string name="title_add_image_privacy">Supprimer les informations confidentielles sensibles</string>
-    <string name="title_add_image_privacy_remark">Informations de géolocalisation, numéros de série, noms de fichiers, etc.</string>
+    <string name="title_add_image_privacy_remark">Emplacement géographique, numéros de série, noms de fichiers, etc.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
     <string name="title_add_image_select">Choisir un fichier</string>
     <string name="title_add_attachment">Ajouter une pièce jointe</string>
@@ -1390,6 +1396,9 @@
     <string name="title_legend_draft">A un brouillon</string>
     <string name="title_legend_priority">A une priorité élevée</string>
     <string name="title_legend_priority_low">A une priorité basse</string>
+    <string name="title_legend_sensitivity_personal">Est personnel</string>
+    <string name="title_legend_sensitivity_private">Est privé</string>
+    <string name="title_legend_sensitivity_confidential">Est confidentiel</string>
     <string name="title_legend_importance">Est important</string>
     <string name="title_legend_importance_low">N\'est pas important</string>
     <string name="title_legend_signed">Est signé</string>
@@ -1705,6 +1714,12 @@
         <item>Basse</item>
         <item>Normale</item>
         <item>Haute</item>
+    </string-array>
+    <string-array name="sensitivityNames">
+        <item>Normal</item>
+        <item>Personnel</item>
+        <item>Privé</item>
+        <item>Confidentiel</item>
     </string-array>
     <string-array name="linesNames">
         <item>1</item>

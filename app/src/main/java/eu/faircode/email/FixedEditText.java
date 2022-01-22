@@ -35,14 +35,21 @@ import androidx.appcompat.widget.AppCompatEditText;
 public class FixedEditText extends AppCompatEditText {
     public FixedEditText(@NonNull Context context) {
         super(context);
+        init(context);
     }
 
     public FixedEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public FixedEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        setCustomSelectionActionModeCallback(Helper.getActionModeWrapper(this));
     }
 
     @Override

@@ -33,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -87,9 +88,9 @@ public class FragmentDialogFolder extends FragmentDialogBase {
         final AutoCompleteTextView etSearch = dview.findViewById(R.id.etSearch);
         final ImageButton ibNext = dview.findViewById(R.id.ibNext);
         final TextView tvNoFolder = dview.findViewById(R.id.tvNoFolder);
-        final TextView tvFavorite1 = dview.findViewById(R.id.tvFavorite1);
-        final TextView tvFavorite2 = dview.findViewById(R.id.tvFavorite2);
-        final TextView tvFavorite3 = dview.findViewById(R.id.tvFavorite3);
+        final Button btnFavorite1 = dview.findViewById(R.id.btnFavorite1);
+        final Button btnFavorite2 = dview.findViewById(R.id.btnFavorite2);
+        final Button btnFavorite3 = dview.findViewById(R.id.btnFavorite3);
         final ImageButton ibResetFavorites = dview.findViewById(R.id.ibResetFavorites);
         final RecyclerView rvFolder = dview.findViewById(R.id.rvFolder);
         final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
@@ -163,9 +164,9 @@ public class FragmentDialogFolder extends FragmentDialogBase {
             }
         });
 
-        tvFavorite1.setVisibility(View.GONE);
-        tvFavorite2.setVisibility(View.GONE);
-        tvFavorite3.setVisibility(View.GONE);
+        btnFavorite1.setVisibility(View.GONE);
+        btnFavorite2.setVisibility(View.GONE);
+        btnFavorite3.setVisibility(View.GONE);
         ibResetFavorites.setVisibility(View.GONE);
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -184,16 +185,16 @@ public class FragmentDialogFolder extends FragmentDialogBase {
                 dismiss();
             }
         };
-        tvFavorite1.setOnClickListener(listener);
-        tvFavorite2.setOnClickListener(listener);
-        tvFavorite3.setOnClickListener(listener);
+        btnFavorite1.setOnClickListener(listener);
+        btnFavorite2.setOnClickListener(listener);
+        btnFavorite3.setOnClickListener(listener);
 
         ibResetFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tvFavorite1.setVisibility(View.GONE);
-                tvFavorite2.setVisibility(View.GONE);
-                tvFavorite3.setVisibility(View.GONE);
+                btnFavorite1.setVisibility(View.GONE);
+                btnFavorite2.setVisibility(View.GONE);
+                btnFavorite3.setVisibility(View.GONE);
                 ibResetFavorites.setVisibility(View.GONE);
 
                 final DB db = DB.getInstance(context);
@@ -306,13 +307,15 @@ public class FragmentDialogFolder extends FragmentDialogBase {
                     tvNoFolder.setVisibility(View.VISIBLE);
                 else {
                     if (data.favorites != null && data.favorites.size() > 0) {
-                        TextView[] tv = new TextView[]{tvFavorite1, tvFavorite2, tvFavorite3};
-                        for (int i = 0; i < data.favorites.size(); i++) {
-                            EntityFolder favorite = data.favorites.get(i);
-                            tv[i].setTag(favorite.id);
-                            tv[i].setText(favorite.getDisplayName(context));
-                            tv[i].setVisibility(View.VISIBLE);
-                        }
+                        Button[] btn = new Button[]{btnFavorite1, btnFavorite2, btnFavorite3};
+                        for (int i = 0; i < btn.length; i++)
+                            if (i < data.favorites.size()) {
+                                EntityFolder favorite = data.favorites.get(i);
+                                btn[i].setTag(favorite.id);
+                                btn[i].setText(favorite.getDisplayName(context));
+                                btn[i].setVisibility(View.VISIBLE);
+                            } else
+                                btn[i].setVisibility(View.INVISIBLE);
 
                         ibResetFavorites.setVisibility(View.VISIBLE);
                     }
