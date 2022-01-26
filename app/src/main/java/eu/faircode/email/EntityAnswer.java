@@ -22,10 +22,13 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.Menu;
@@ -82,6 +85,7 @@ public class EntityAnswer implements Serializable {
     public Boolean hide;
     @NonNull
     public Boolean external;
+    public Integer color;
     @NonNull
     public String text;
     @NonNull
@@ -162,6 +166,8 @@ public class EntityAnswer implements Serializable {
     static void fillMenu(Menu main, boolean compose, List<EntityAnswer> answers, Context context) {
         boolean grouped = BuildConfig.DEBUG;
 
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.menu_item_icon_size);
+
         List<EntityAnswer> favorites = new ArrayList<>();
         List<String> groups = new ArrayList<>();
         for (EntityAnswer answer : answers)
@@ -203,20 +209,31 @@ public class EntityAnswer implements Serializable {
                 continue;
             order++;
 
-            SpannableStringBuilder name = new SpannableStringBuilder(answer.name);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(answer.name);
+
+            if (answer.color != null) {
+                Drawable d = new ColorDrawable(answer.color);
+                d.setBounds(0, 0, iconSize / 4, iconSize);
+
+                ImageSpan imageSpan = new CenteredImageSpan(d);
+                ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
+                ssb.setSpan(imageSpan, 0, 1, 0);
+            }
+
             if (grouped && answer.applied > 0) {
-                name.append(" (").append(NF.format(answer.applied)).append(")");
-                name.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
-                        answer.name.length() + 1, name.length(), 0);
+                int start = ssb.length();
+                ssb.append(" (").append(NF.format(answer.applied)).append(")");
+                ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
+                        start, ssb.length(), 0);
             }
 
             MenuItem item;
             if (answer.group == null)
-                item = main.add(Menu.NONE, order, order++, name);
+                item = main.add(Menu.NONE, order, order++, ssb);
             else {
                 SubMenu smenu = map.get(answer.group);
                 item = smenu.add(answer.applied > 0 ? Menu.FIRST : Menu.NONE,
-                        smenu.size(), smenu.size() + 1, name);
+                        smenu.size(), smenu.size() + 1, ssb);
             }
             item.setIntent(new Intent().putExtra("id", answer.id));
         }
@@ -279,9 +296,31 @@ public class EntityAnswer implements Serializable {
             }
         }
 
-        for (EntityAnswer answer : favorites)
-            main.add(Menu.NONE, order, order++, answer.toString())
+        Drawable icon = context.getResources().getDrawable(R.drawable.twotone_star_24);
+        icon.setBounds(0, 0, iconSize, iconSize);
+        icon = icon.getConstantState().newDrawable().mutate();
+        int color = Helper.resolveColor(context, R.attr.colorAccent);
+        icon.setTint(color);
+
+        for (EntityAnswer answer : favorites) {
+            SpannableStringBuilder ssb = new SpannableStringBuilder(answer.name);
+
+            if (answer.color != null) {
+                Drawable d = new ColorDrawable(answer.color);
+                d.setBounds(0, 0, iconSize / 4, iconSize);
+
+                ImageSpan imageSpan = new CenteredImageSpan(d);
+                ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
+                ssb.setSpan(imageSpan, 0, 1, 0);
+            }
+
+            ImageSpan imageSpan = new CenteredImageSpan(icon);
+            ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
+            ssb.setSpan(imageSpan, 0, 1, 0);
+
+            main.add(Menu.NONE, order, order++, ssb)
                     .setIntent(new Intent().putExtra("id", answer.id));
+        }
 
         if (grouped)
             MenuCompat.setGroupDividerEnabled(main, true);
@@ -297,6 +336,7 @@ public class EntityAnswer implements Serializable {
         json.put("favorite", favorite);
         json.put("hide", hide);
         json.put("external", external);
+        json.put("color", color);
         json.put("text", text);
         json.put("applied", applied);
         json.put("last_applied", last_applied);
@@ -315,6 +355,8 @@ public class EntityAnswer implements Serializable {
         answer.favorite = json.optBoolean("favorite");
         answer.hide = json.optBoolean("hide");
         answer.external = json.optBoolean("external");
+        if (json.has("color") && !json.isNull("color"))
+            answer.color = json.getInt("color");
         answer.text = json.getString("text");
         answer.applied = json.optInt("applied", 0);
         if (json.has("last_applied") && !json.isNull("last_applied"))
@@ -334,6 +376,7 @@ public class EntityAnswer implements Serializable {
                     this.hide.equals(other.hide) &&
                     this.external.equals(other.external) &&
                     this.text.equals(other.text) &&
+                    Objects.equals(this.color, other.color) &&
                     this.applied.equals(other.applied) &&
                     Objects.equals(this.last_applied, other.last_applied));
         }

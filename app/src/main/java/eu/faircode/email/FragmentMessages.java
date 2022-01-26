@@ -309,6 +309,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private WebView printWebView = null;
 
     private boolean cards;
+    private boolean category;
     private boolean date;
     private boolean date_fixed;
     private boolean date_bold;
@@ -437,6 +438,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         swipenav = prefs.getBoolean("swipenav", true);
         cards = prefs.getBoolean("cards", true);
+        category = prefs.getBoolean("group_category", false);
         date = prefs.getBoolean("date", true);
         date_fixed = (!date && prefs.getBoolean("date_fixed", false));
         date_bold = prefs.getBoolean("date_bold", false);
@@ -817,7 +819,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (message == null)
                     return null;
 
-                boolean ch = (viewType == AdapterMessage.ViewType.UNIFIED &&
+                boolean ch = (category &&
+                        viewType == AdapterMessage.ViewType.UNIFIED &&
                         (pos == 0
                                 ? message.accountCategory != null
                                 : !Objects.equals(prev.accountCategory, message.accountCategory)));
@@ -2907,8 +2910,18 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (data.answers != null) {
                     int order = 100;
                     for (EntityAnswer answer : data.answers) {
+                        SpannableStringBuilder ssb = new SpannableStringBuilder(answer.name);
+
+                        if (answer.color != null) {
+                            int first = answer.name.codePointAt(0);
+                            int count = Character.charCount(first);
+                            ssb.setSpan(new ForegroundColorSpan(answer.color), 0, count, 0);
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, count, 0);
+                            ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), 0, count, 0);
+                        }
+
                         order++;
-                        popupMenu.getMenu().add(Menu.FIRST, order, order, answer.name)
+                        popupMenu.getMenu().add(Menu.FIRST, order, order, ssb)
                                 .setIcon(R.drawable.twotone_star_24)
                                 .setIntent(new Intent().putExtra("id", answer.id));
                     }
@@ -3353,6 +3366,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             int first = title.codePointAt(i);
                             int count = Character.charCount(first);
                             ss.setSpan(new ForegroundColorSpan(account.color), i, i + count, 0);
+                            ss.setSpan(new StyleSpan(Typeface.BOLD), i, i + count, 0);
+                            ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_LARGE), i, i + count, 0);
                         }
                         MenuItem item = popupMenu.getMenu().add(Menu.FIRST, R.string.title_move_to_account, order++, ss)
                                 .setIcon(R.drawable.twotone_drive_file_move_24);
@@ -7143,6 +7158,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (attachments == null)
                     return null;
 
+                if (auto && message.revision != null)
+                    return null;
+
                 InputStream in = null;
                 OutputStream out = null;
                 boolean inline = false;
@@ -7448,14 +7466,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     String text = args.getString("sigresult");
                     Snackbar sb = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true);
-
-                    View sv = sb.getView();
-                    if (sv != null) {
-                        TextView tv = sv.findViewById(com.google.android.material.R.id.snackbar_text);
-                        if (tv != null)
-                            tv.setMaxLines(7);
-                    }
-
+                    Helper.setSnackbarLines(sb, 7);
                     sb.show();
                 }
 

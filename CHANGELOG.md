@@ -4,6 +4,31 @@
 
 ### [Epidexipteryx](https://en.wikipedia.org/wiki/Epidexipteryx)
 
+### 1.1821 - 2022-01-25
+
+* Fixed answer menu crash
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1820 - 2022-01-24
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1819 - 2022-01-23
+
+* Fixed crash in error handling
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1818 - 2022-01-22
+
+* Added colors to reply templates
+* Added displaying reply templates by group
+* Added option to group messages by account category (default disabled)
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1817 - 2022-01-21
 
 * Fixed text context menu actions

@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -70,8 +71,8 @@ public class AdapterAnswer extends RecyclerView.Adapter<AdapterAnswer.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private View view;
+        private View vwColor;
         private TextView tvName;
-        private TextView tvGroup;
         private ImageView ivExternal;
         private ImageView ivStandard;
         private ImageView ivFavorite;
@@ -85,8 +86,8 @@ public class AdapterAnswer extends RecyclerView.Adapter<AdapterAnswer.ViewHolder
             super(itemView);
 
             view = itemView.findViewById(R.id.clItem);
+            vwColor = itemView.findViewById(R.id.vwColor);
             tvName = itemView.findViewById(R.id.tvName);
-            tvGroup = itemView.findViewById(R.id.tvGroup);
             ivExternal = itemView.findViewById(R.id.ivExternal);
             ivStandard = itemView.findViewById(R.id.ivStandard);
             ivFavorite = itemView.findViewById(R.id.ivFavorite);
@@ -107,9 +108,8 @@ public class AdapterAnswer extends RecyclerView.Adapter<AdapterAnswer.ViewHolder
 
         private void bindTo(EntityAnswer answer) {
             view.setAlpha(answer.hide ? Helper.LOW_LIGHT : 1.0f);
+            vwColor.setBackgroundColor(answer.color == null ? Color.TRANSPARENT : answer.color);
             tvName.setText(answer.name);
-            tvGroup.setText(answer.group);
-            tvGroup.setVisibility(TextUtils.isEmpty(answer.group) ? View.GONE : View.VISIBLE);
             ivExternal.setVisibility(answer.external ? View.VISIBLE : View.GONE);
             ivStandard.setVisibility(answer.standard ? View.VISIBLE : View.GONE);
             ivFavorite.setVisibility(answer.favorite ? View.VISIBLE : View.GONE);
@@ -400,6 +400,13 @@ public class AdapterAnswer extends RecyclerView.Adapter<AdapterAnswer.ViewHolder
     @Override
     public long getItemId(int position) {
         return selected.get(position).id;
+    }
+
+    public EntityAnswer getItemAtPosition(int pos) {
+        if (pos >= 0 && pos < selected.size())
+            return selected.get(pos);
+        else
+            return null;
     }
 
     @Override
