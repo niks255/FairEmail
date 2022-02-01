@@ -47,6 +47,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,6 +95,8 @@ public class ActivityEML extends ActivityBase {
     private TextView tvBody;
     private TextView tvStructure;
     private ImageButton ibEml;
+    private CardView cardHeaders;
+    private TextView tvHeaders;
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
 
@@ -123,6 +126,8 @@ public class ActivityEML extends ActivityBase {
         tvBody = findViewById(R.id.tvBody);
         tvStructure = findViewById(R.id.tvStructure);
         ibEml = findViewById(R.id.ibEml);
+        cardHeaders = findViewById(R.id.cardHeaders);
+        tvHeaders = findViewById(R.id.tvHeaders);
         pbWait = findViewById(R.id.pbWait);
         grpReady = findViewById(R.id.grpReady);
 
@@ -205,6 +210,7 @@ public class ActivityEML extends ActivityBase {
         FragmentDialogTheme.setBackground(this, view, false);
         vSeparatorAttachments.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
+        cardHeaders.setVisibility(View.GONE);
 
         load();
     }
@@ -280,6 +286,8 @@ public class ActivityEML extends ActivityBase {
                     SpannableStringBuilder ssb = new SpannableStringBuilderEx();
                     getStructure(imessage, ssb, 0, textColorLink);
                     result.structure = ssb;
+
+                    result.headers = HtmlHelper.highlightHeaders(context, helper.getHeaders(), false);
 
                     return result;
                 }
@@ -358,7 +366,9 @@ public class ActivityEML extends ActivityBase {
 
                 tvBody.setText(result.body);
                 tvStructure.setText(result.structure);
+                tvHeaders.setText(result.headers);
                 grpReady.setVisibility(View.VISIBLE);
+                cardHeaders.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -421,7 +431,8 @@ public class ActivityEML extends ActivityBase {
                             .append(size > 0 ? Helper.humanReadableByteCount(size) : "?")
                             .append('\n');
 
-                    if (!part.isMimeType("multipart/*")) {
+                    if (BuildConfig.DEBUG &&
+                            !part.isMimeType("multipart/*")) {
                         Object content = part.getContent();
                         if (content instanceof String) {
                             String text = (String) content;
@@ -563,7 +574,7 @@ public class ActivityEML extends ActivityBase {
             @Override
             protected List<EntityAccount> onExecute(Context context, Bundle args) {
                 DB db = DB.getInstance(context);
-                return db.account().getSynchronizingAccounts();
+                return db.account().getSynchronizingAccounts(EntityAccount.TYPE_IMAP);
             }
 
             @Override
@@ -571,8 +582,7 @@ public class ActivityEML extends ActivityBase {
                 ArrayAdapter<EntityAccount> adapter =
                         new ArrayAdapter<>(ActivityEML.this, R.layout.spinner_item1, android.R.id.text1);
                 for (EntityAccount account : accounts)
-                    if (account.protocol == EntityAccount.TYPE_IMAP)
-                        adapter.add(account);
+                    adapter.add(account);
 
                 new AlertDialog.Builder(ActivityEML.this)
                         .setIcon(R.drawable.twotone_save_alt_24)
@@ -673,5 +683,6 @@ public class ActivityEML extends ActivityBase {
         MessageHelper.MessageParts parts;
         Spanned body;
         Spanned structure;
+        Spanned headers;
     }
 }

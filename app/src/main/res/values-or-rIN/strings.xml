@@ -7,6 +7,7 @@
     <string name="app_continue">ଯେକୌଣସି ପ୍ରକାରେ ଜାରି ରଖନ୍ତୁ</string>
     <string name="app_exit">ପ୍ରସ୍ଥାନ କରିବା ପାଇଁ ପୁଣି \'ବ୍ୟାକ୍\' ଯାଆନ୍ତୁ</string>
     <string name="app_updated">ଗତ ଅପଡେଟ୍: %1$s</string>
+    <string name="app_download">ଏଠାରୁ ଡାଉନଲୋଡ୍ ହୋଇଛି: %1$s</string>
     <string name="channel_service">ପ୍ରାପ୍ତ କରନ୍ତୁ</string>
     <string name="channel_send">ପଠାନ୍ତୁ</string>
     <string name="channel_notification">ଇମେଲ୍</string>
@@ -161,6 +162,8 @@
     <string name="title_advanced_keyboard_no_fullscreen">ପୂର୍ଣ୍ଣସ୍କ୍ରିନ୍ କୀବୋର୍ଡ୍ ପ୍ରତିରୋଧ କରନ୍ତୁ</string>
     <string name="title_advanced_compose_font">ଡିଫଲ୍ଟ ଫଣ୍ଟ</string>
     <string name="title_advanced_prefix_count">ପ୍ରତ୍ୟୁତ୍ତର ଉପସର୍ଗ ରେ ଗଣନା ଯୋଡ଼ନ୍ତୁ</string>
+    <string name="title_advanced_receipt">ଏକ ରସିଦ ଅନୁରୋଧ କରିବା ସମୟରେ</string>
+    <string name="title_advanced_cert_strict">କଠୋର ସାର୍ଟିଫିକେଟ୍ ଯାଞ୍ଚ</string>
     <string name="title_advanced_caption_general">ସାଧାରଣ</string>
     <string name="title_advanced_caption_conversation">ବାର୍ତ୍ତାଳାପ</string>
     <string name="title_advanced_caption_message">ବାର୍ତ୍ତା</string>
@@ -223,6 +226,7 @@
     <string name="title_advanced_poll_battery">ଏହା ଅଧିକ ବ୍ୟାଟେରୀ ବ୍ୟବହାର ର କାରଣ ହୋଇପାରେ!</string>
     <string name="title_advanced_subject_threading_hint">କେବଳ %1$d ଘଣ୍ଟା ମଧ୍ୟରେ ପ୍ରାପ୍ତ ହୋଇଥିବା ବାର୍ତ୍ତାଗୁଡ଼ିକ</string>
     <string name="title_advanced_remove_signature_hint">ଏହା ଫଳରେ ବହୁତ କମ୍ କିମ୍ୱା ଅତ୍ୟଧିକ ପାଠ୍ୟ ଅପସାରଣ ହୋଇପାରେ</string>
+    <string name="title_advanced_cert_strict_hint">ଏହା ଅକ୍ଷମ କରିବା ଦ୍ୱାରା ସର୍ଭର ସାର୍ଟିଫିକେଟ୍ ଯାଞ୍ଚ କରିବା କୋହଳ ହେବ</string>
     <string name="title_advanced_highlight_hint">ଥିମର ଆକ୍ସେଣ୍ଟ ରଙ୍ଗ ହାଇଲାଇଟ୍ କରିବା ପାଇଁ ବ୍ୟବହୃତ ହେବ</string>
     <string name="title_advanced_override_width_hint">ଏହା ବାର୍ତ୍ତାଗୁଡ଼ିକୁ ସଂକୀର୍ଣ୍ଣ କରିପାରେ, କିନ୍ତୁ ଅଦ୍ଭୁତ ଦେଖାଯାଏ</string>
     <string name="title_advanced_expandall_hint">ଏକାଧିକ ବାର୍ତ୍ତା ସମ୍ପ୍ରସାରଣ ହୋଇଥିବା ବେଳେ ଉତ୍ତର ବଟନ୍ ଦେଖାଯିବ ନାହିଁ କାରଣ ବଟନ୍ କେଉଁ ବାର୍ତ୍ତା ପାଇଁ ପ୍ରଯୁଜ୍ୟ ତାହା ଅସ୍ପଷ୍ଟ ଅଟେ</string>
@@ -236,6 +240,7 @@
     <string name="title_identity_unicode_remark">ଅଧିକାଂଶ ସର୍ଭର ଏହାକୁ ସମର୍ଥନ କରନ୍ତି ନାହିଁ</string>
     <string name="title_identity_max_size">ସର୍ବାଧିକ ବାର୍ତ୍ତା ଆକାର (MB)</string>
     <string name="title_identity_receipt">ଡିଫଲ୍ଟ ଭାବେ ବିତରଣ/ପଠନ ରସିଦ ଅନୁରୋଧ କରନ୍ତୁ</string>
+    <string name="title_identity_receipt_legacy">ପୁରୁଣା ରସିଦ ଅନୁରୋଧ ଶୀର୍ଷଲେଖ ବ୍ୟବହାର କରନ୍ତୁ</string>
     <string name="title_optional">ବୈକଳ୍ପିକ</string>
     <string name="title_recommended">ସୁପାରିଶ କରାଯାଇଛି</string>
     <string name="title_account_linked">ଲିଙ୍କ୍ ହୋଇଥିବା ଆକାଉଣ୍ଟ୍</string>
@@ -373,6 +378,8 @@
     <string name="title_show_addresses">CC/BCC ଦେଖାଅ</string>
     <string name="title_manage_local_contacts">ସ୍ଥାନୀୟ ସମ୍ପର୍କଗୁଡ଼ିକୁ ପରିଚାଳନା କରନ୍ତୁ</string>
     <string name="title_translate">ଅନୁବାଦ କର</string>
+    <string name="title_send_dsn">ସ୍ଥିତି ରିପୋର୍ଟ୍</string>
+    <string name="title_send_receipt">ରସିଦ ଅନୁରୋଧ କରିବା</string>
     <string name="title_send_receipt_remark">ଅଧିକାଂଶ ପ୍ରଦାନକାରୀ ଏବଂ ଇମେଲ୍ ଗ୍ରାହକମାନେ ରସିଦ ଅନୁରୋଧକୁ ଅଣଦେଖା କରନ୍ତି</string>
     <string name="title_noreply_reminder">ଏକ \'ଉତ୍ତର-ଦିଅନି\' ଠିକଣାକୁ ପଠାଉଛି</string>
     <string name="title_resync">ପୁନଃସିଙ୍କ୍ କରନ୍ତୁ</string>
@@ -456,6 +463,7 @@
     <string name="title_legend_trash">ଆବର୍ଜନା ପାତ୍ର</string>
     <string name="title_legend_primary">ପ୍ରାଥମିକ</string>
     <string name="title_legend_thread">ବାର୍ତ୍ତାଳାପ</string>
+    <string name="title_legend_receipt">ରସିଦ ଅନୁରୋଧ କରାଯାଇଥିଲା</string>
     <string name="title_legend_cc">CC/BCC ଦେଖାଅ</string>
     <string name="title_legend_link">ଲିଙ୍କ୍ ସନ୍ନିବେଶ କର</string>
     <string name="title_legend_photo">ଫଟୋ ଉଠାନ୍ତୁ</string>
@@ -532,7 +540,7 @@
     </string-array>
     <string-array name="receiptNames">
         <item>କେବଳ ପଠନ ରସିଦ</item>
-        <item>Delivery receipt only</item>
+        <item>କେବଳ ବିତରଣ ରସିଦ</item>
         <item>ପଠନ+ବିତରଣ ରସିଦ</item>
     </string-array>
     <string-array name="encryptNames">

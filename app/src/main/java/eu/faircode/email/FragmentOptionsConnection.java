@@ -71,6 +71,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private SwitchCompat swTcpKeepAlive;
     private TextView tvTcpKeepAliveHint;
     private SwitchCompat swSslHarden;
+    private SwitchCompat swCertStrict;
     private Button btnManage;
     private TextView tvNetworkMetered;
     private TextView tvNetworkRoaming;
@@ -83,7 +84,8 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             "metered", "download", "roaming", "rlah",
             "download_headers", "download_eml",
             "require_validated", "vpn_only",
-            "timeout", "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", "ssl_harden"
+            "timeout", "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive",
+            "ssl_harden", "cert_strict"
     };
 
     @Override
@@ -111,6 +113,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         swTcpKeepAlive = view.findViewById(R.id.swTcpKeepAlive);
         tvTcpKeepAliveHint = view.findViewById(R.id.tvTcpKeepAliveHint);
         swSslHarden = view.findViewById(R.id.swSslHarden);
+        swCertStrict = view.findViewById(R.id.swCertStrict);
         btnManage = view.findViewById(R.id.btnManage);
 
         tvNetworkMetered = view.findViewById(R.id.tvNetworkMetered);
@@ -263,6 +266,13 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
+        swCertStrict.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("cert_strict", checked).apply();
+            }
+        });
+
         final Intent manage = getIntentConnectivity();
         PackageManager pm = getContext().getPackageManager();
         btnManage.setVisibility(
@@ -374,6 +384,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         swStandaloneVpn.setChecked(prefs.getBoolean("standalone_vpn", false));
         swTcpKeepAlive.setChecked(prefs.getBoolean("tcp_keep_alive", false));
         swSslHarden.setChecked(prefs.getBoolean("ssl_harden", false));
+        swCertStrict.setChecked(prefs.getBoolean("cert_strict", !BuildConfig.PLAY_STORE_RELEASE));
     }
 
     private static Intent getIntentConnectivity() {

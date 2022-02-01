@@ -59,7 +59,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.view.MenuCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -602,6 +604,14 @@ public class FragmentFolders extends FragmentBase {
             searchView.setQuery(searching, true);
         }
 
+        getViewLifecycleOwner().getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            public void onDestroyed() {
+                menuSearch.collapseActionView();
+                getViewLifecycleOwner().getLifecycle().removeObserver(this);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -939,6 +949,8 @@ public class FragmentFolders extends FragmentBase {
                 } finally {
                     db.endTransaction();
                 }
+
+                WorkerCleanup.cleanup(context, false);
 
                 return null;
             }

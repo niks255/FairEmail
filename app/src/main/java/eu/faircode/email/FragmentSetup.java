@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -46,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -365,6 +367,27 @@ public class FragmentSetup extends FragmentBase {
             public void onClick(View v) {
                 manual = !manual;
                 updateManual();
+                if (manual)
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Rect rect = new Rect();
+                                cardManual.getDrawingRect(rect);
+                                view.offsetDescendantRectToMyCoords(cardManual, rect);
+
+                                int vh = view.getHeight();
+                                int ch = rect.height();
+                                if (vh > 0 && ch > 0) {
+                                    int y = rect.top - (vh - ch);
+                                    if (y > 0 && view instanceof ScrollView)
+                                        ((ScrollView) view).scrollTo(0, y);
+                                }
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
+                        }
+                    });
             }
         });
 
@@ -648,7 +671,7 @@ public class FragmentSetup extends FragmentBase {
                     @Override
                     protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
                         DB db = DB.getInstance(context);
-                        return db.account().getSynchronizingAccounts();
+                        return db.account().getSynchronizingAccounts(null);
                     }
 
                     @Override

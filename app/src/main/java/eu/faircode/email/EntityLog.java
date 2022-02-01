@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.room.Entity;
 import androidx.room.Index;
@@ -73,19 +74,32 @@ public class EntityLog {
     }
 
     static void log(final Context context, @NonNull Type type, EntityAccount account, String data) {
-        log(context, type, account.id, null, null, account.name + " " + data);
-    }
-
-    static void log(final Context context, @NonNull Type type, EntityAccount account, EntityFolder folder, String data) {
-        log(context, type, account.id, folder.id, null, account.name + "/" + folder.name + " " + data);
+        if (account == null)
+            log(context, type, data);
+        else {
+            if (data == null || !data.contains(account.name))
+                log(context, type, account.id, null, null, account.name + " " + data);
+            else
+                log(context, type, account.id, null, null, data);
+        }
     }
 
     static void log(final Context context, @NonNull Type type, EntityFolder folder, String data) {
-        log(context, type, folder.account, folder.id, null, folder.name + " " + data);
+        if (folder == null)
+            log(context, type, data);
+        else {
+            if (data == null || !data.contains(folder.name))
+                log(context, type, folder.account, folder.id, null, folder.name + " " + data);
+            else
+                log(context, type, folder.account, folder.id, null, data);
+        }
     }
 
     static void log(final Context context, @NonNull Type type, EntityMessage message, String data) {
-        log(context, type, message.account, message.folder, message.id, data);
+        if (message == null)
+            log(context, type, data);
+        else
+            log(context, type, message.account, message.folder, message.id, data);
     }
 
     static void log(final Context context, @NonNull Type type, String data) {
@@ -119,9 +133,19 @@ public class EntityLog {
                 // Check available storage space
                 if (!ok || (++count % LOG_DELETE_BATCH_SIZE) == 0) {
                     long cake = Helper.getAvailableStorageSpace();
-                    ok = (cake < Helper.MIN_REQUIRED_SPACE);
+                    boolean wasOk = ok;
+                    ok = (cake > Helper.MIN_REQUIRED_SPACE);
                     if (!ok)
-                        return;
+                        if (wasOk) {
+                            entry.type = Type.General;
+                            entry.account = null;
+                            entry.folder = null;
+                            entry.message = null;
+                            entry.data = "Insufficient storage space=" +
+                                    Helper.humanReadableByteCount(cake) + "/" +
+                                    Helper.humanReadableByteCount(Helper.MIN_REQUIRED_SPACE);
+                        } else
+                            return;
                 }
 
                 try {
@@ -169,6 +193,36 @@ public class EntityLog {
             } finally {
                 db.endTransaction();
             }
+    }
+
+    Integer getColor(Context context) {
+        return getColor(context, this.type);
+    }
+
+    static Integer getColor(Context context, Type type) {
+        // R.color.solarizedRed
+        switch (type) {
+            case General:
+                return Helper.resolveColor(context, android.R.attr.textColorPrimary);
+            case Statistics:
+                return ContextCompat.getColor(context, R.color.solarizedGreen);
+            case Scheduling:
+                return ContextCompat.getColor(context, R.color.solarizedYellow);
+            case Network:
+                return ContextCompat.getColor(context, R.color.solarizedOrange);
+            case Account:
+                return ContextCompat.getColor(context, R.color.solarizedMagenta);
+            case Protocol:
+                return Helper.resolveColor(context, android.R.attr.textColorSecondary);
+            case Classification:
+                return ContextCompat.getColor(context, R.color.solarizedViolet);
+            case Notification:
+                return ContextCompat.getColor(context, R.color.solarizedBlue);
+            case Rules:
+                return ContextCompat.getColor(context, R.color.solarizedCyan);
+            default:
+                return null;
+        }
     }
 
     @Override

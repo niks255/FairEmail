@@ -9,6 +9,7 @@
     <string name="app_exit">Apăsați din nou \'Înapoi\' pentru a ieși</string>
     <string name="app_cake">Spațiu de stocare insuficient rămas</string>
     <string name="app_updated">Ultima actualizare: %1$s</string>
+    <string name="app_download">Descărcat de la: %1$s</string>
     <string name="channel_service">Primește</string>
     <string name="channel_send">Trimite</string>
     <string name="channel_notification">E-mail</string>
@@ -358,6 +359,7 @@
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
     <string name="title_advanced_prefer_ip4">Preferă IPv4 înaintea IPv6</string>
     <string name="title_advanced_ssl_harden">Întârire conexiuni SSL</string>
+    <string name="title_advanced_cert_strict">Verificarea strictă a certificatelor</string>
     <string name="title_advanced_manage_connectivity">Gestionare conexiuni</string>
     <string name="title_advanced_caption_general">Generale</string>
     <string name="title_advanced_caption_checks">Verificări</string>
@@ -624,6 +626,7 @@
     <string name="title_advanced_tcp_keep_alive_hint">Activarea acesteia poate cauza probleme de conexiune pe unele dispozitive</string>
     <string name="title_advanced_validate_hint">Acest lucru poate duce la nesincronizarea mesajelor, de exemplu atunci când se utilizează un VPN, dar și în alte situații</string>
     <string name="title_advanced_timeout_hint">Timpul de expirare a citirii/scrierii va fi setat la dublul intervalului de expirare a conexiunii. Valori mai mari au ca rezultat o utilizare mai mare a bateriei.</string>
+    <string name="title_advanced_cert_strict_hint">Dezactivarea acestui lucru va relaxa verificarea certificatelor serverului</string>
     <string name="title_advanced_ssl_harden_hint">Activând această setare se vor dezactiva protocoalele și cifrările SSL slabe, putând duce la probleme de conectare</string>
     <string name="title_advanced_roaming_hint">Antetele mesajelor vor fi mereu descărcate și în roaming. Puteți folosi setările roaming ale dispozitivului pentru a dezactiva internetul atunci când sunteți în roaming.</string>
     <string name="title_advanced_browse_hint">Descarcă mai multe mesaje când se derulează în jos</string>
@@ -700,6 +703,7 @@
     <string name="title_identity_unicode_remark">Majoritatea serverelor nu acceptă acest lucru</string>
     <string name="title_identity_max_size">Dimensiunea maximă a mesajului (MB)</string>
     <string name="title_identity_receipt">Solicită implicit confirmare la livrare/citire</string>
+    <string name="title_identity_receipt_legacy">Utilizați antetele de cerere de primire vechi</string>
     <string name="title_identity_use_ip_hint">În cazul în care apare erori de tipul \'invalid greeting\', \'requires valid address\' sau similare, încercați să schimbați această setare</string>
     <string name="title_identity_self_hint">De asemenea, previne raspunsul către tine însuți</string>
     <string name="title_optional">Opțional</string>
@@ -1014,6 +1018,7 @@
     <string name="title_fullscreen">Afișează pe ecranul complet</string>
     <string name="title_fit_width">Potrivește lățimea</string>
     <string name="title_disable_widths">Dezactivați lățimile</string>
+    <string name="title_monospaced_pre">Monospațiu &lt;pre&gt;</string>
     <string name="title_unused_inline">Imaginile integrate nefolosite vor fi eliminate la trimitere</string>
     <string name="title_accross_remark">Mesajele mutate între conturi vor fi descărcate din nou consumând date în plus</string>
     <string name="title_raw_saved">Mesaj original salvat</string>

@@ -814,6 +814,8 @@ Without this permission the draft will be saved, but the OpenKeychain popup to c
 FairEmail will send the [Autocrypt](https://autocrypt.org/) header for use by other email clients,
 but only for signed and encrypted messages because too many email servers have problems with the often long Autocrypt header.
 Note that the most secure way to start an encrypted email exchange is by sending signed messages first.
+There is an encryption option to send signed messages by default.
+Alternatively, this can enabled for a specific identity in the advanced identity settings.
 Received Autocrypt headers will be sent to the OpenKeychain app for storage on verifying a signature or decrypting a message.
 
 Although this shouldn't be necessary for most email clients, you can attach your public key to a message
@@ -2126,7 +2128,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can open the navigation drawer by swiping from the left, even when viewing a conversation?
 * Did you know that you can long press the people's icon to show/hide the CC/BCC fields and remember the visibility state for the next time?
 * Did you know that you can insert the email addresses of an Android contact group via the three dots overflow menu?
-* Did you know that if you select text and reply, only the selected text will be quoted?
+* Did you know that if you select text and reply, only the selected text will be quoted? (this works for reformatted messages only because of [this issue](https://issuetracker.google.com/issues/36939405))
 * Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)
 * Did you know that you can long press the send action to show the send dialog, even if it was disabled?
 * Did you know that you can long press the full screen icon to show the original message text only?
@@ -2430,17 +2432,18 @@ $$flagged$
 $$deleted$
 ```
 
-To match *passed* message checks via a header condition (since version 1.1787; no/multi-from since version 1.1791):
+To match *passed* message checks via a header condition (since version 1.1787):
 
 ```
+$$tls$ (since version 1.1826)
 $$dkim$
 $$spf$
 $$dmarc$
 $$mx$
 $$blocklist$
 $$replydomain$
-$$nofrom$
-$$multifrom$
+$$nofrom$ (since version 1.1791)
+$$multifrom$ (since version 1.1791)
 ```
 
 Note that *regex* should be disable and that there should be no white space.

@@ -28,7 +28,9 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -42,7 +44,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -50,6 +51,8 @@ import androidx.preference.PreferenceManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,6 +60,14 @@ import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 
 public class FragmentDialogJunk extends FragmentDialogBase {
+    private static final List<String> COMMON_DOMAINS = Collections.unmodifiableList(Arrays.asList(
+            "amazon\\.com",
+            "facebook\\.com",
+            "google\\.com",
+            "microsoft\\.com",
+            "twitter\\.com"
+    ));
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -312,27 +323,45 @@ public class FragmentDialogJunk extends FragmentDialogBase {
             }
         });
 
+        List<String> regex = new ArrayList<>();
+        regex.addAll(COMMON_DOMAINS);
+        regex.addAll(EmailProvider.getDomainNames(context));
+
         boolean common = false;
         List<String> domains = new ArrayList<>();
         if (froms != null)
             for (Address from : froms) {
                 String email = ((InternetAddress) from).getAddress();
-                int at = (email == null ? -1 : email.indexOf('@'));
-                String domain = (at < 0 ? null : email.substring(at + 1).toLowerCase(Locale.ROOT));
-                if (TextUtils.isEmpty(domain))
+                String domain = UriHelper.getEmailDomain(email);
+                if (TextUtils.isEmpty(domain) || domains.contains(domain))
                     continue;
 
                 domains.add(domain);
 
-                for (String d : EmailProvider.getDomainNames(context))
-                    if (domain.matches(d))
+                for (String r : regex)
+                    if (domain.matches(r)) {
                         common = true;
+                        break;
+                    }
             }
 
         // Initialize
-        tvMessage.setText(inJunk
-                ? getString(R.string.title_folder_junk)
-                : getString(R.string.title_ask_spam_who, MessageHelper.formatAddresses(froms)));
+        if (inJunk)
+            tvMessage.setText(R.string.title_folder_junk);
+        else {
+            String who = MessageHelper.formatAddresses(froms);
+            String title = getString(R.string.title_ask_spam_who, who);
+            SpannableStringBuilder ssb = new SpannableStringBuilderEx(title);
+            if (who.length() > 0) {
+                int start = title.indexOf(who);
+                if (start > 0) {
+                    int textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
+                    ssb.setSpan(new ForegroundColorSpan(textColorPrimary), start, start + who.length(), 0);
+                }
+            }
+            tvMessage.setText(ssb);
+        }
+
         cbBlockSender.setEnabled(canBlock);
         cbBlockDomain.setEnabled(false);
         cbBlockSender.setChecked(canBlock && block_sender);

@@ -1860,8 +1860,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSignedData.setVisibility(View.GONE);
 
             // Message text
-            tvNoInternetBody.setVisibility(suitable || message.content ? View.GONE : View.VISIBLE);
-            grpDownloading.setVisibility(message.content ? View.GONE : View.VISIBLE);
+            boolean content = (message.content || message.error != null);
+            tvNoInternetBody.setVisibility(suitable || content ? View.GONE : View.VISIBLE);
+            grpDownloading.setVisibility(content ? View.GONE : View.VISIBLE);
 
             int height = properties.getHeight(message.id, 0);
             if (height == 0) {
@@ -2050,6 +2051,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibSeen.setImageResource(message.ui_seen ? R.drawable.twotone_mail_24 : R.drawable.twotone_drafts_24);
                     ibTrash.setTag(delete);
                     ibTrash.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
+                    ibTrash.setImageTintList(ColorStateList.valueOf(outbox ? colorWarning : colorControlNormal));
                     ibTrashBottom.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
                     ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
 
@@ -2663,9 +2665,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     .appendElement("em")
                                     .text(context.getString(R.string.title_truncated));
 
-                        boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
-                        if (Boolean.TRUE.equals(message.plain_only) && monospaced_pre)
-                            HtmlHelper.restorePre(document);
+                        if (Boolean.TRUE.equals(message.plain_only)) {
+                            document.select("body")
+                                    .attr("style", "margin:0; padding:0;");
+                            boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
+                            if (monospaced_pre)
+                                HtmlHelper.restorePre(document);
+                        }
 
                         HtmlHelper.guessSchemes(document);
                         HtmlHelper.autoLink(document);
@@ -2975,7 +2981,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibInfrastructure.setImageResource(resid);
             ibInfrastructure.setVisibility(resid != 0 ? View.VISIBLE : View.GONE);
 
-            ibTrashBottom.setVisibility(ibTrash.getVisibility());
+            boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
+
+            ibTrashBottom.setVisibility(outbox ? View.GONE : ibTrash.getVisibility());
             ibArchiveBottom.setVisibility(ibArchive.getVisibility());
             ibMoveBottom.setVisibility(ibMove.getVisibility());
 
@@ -3794,6 +3802,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_disable_widths, 3, R.string.title_disable_widths)
                         .setCheckable(true)
                         .setChecked(prefs.getBoolean("override_width", false));
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_monospaced_pre, 4, R.string.title_monospaced_pre)
+                        .setCheckable(true)
+                        .setChecked(prefs.getBoolean("monospaced_pre", false));
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -3802,15 +3813,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (itemId == R.string.title_fullscreen) {
                             onActionOpenFull(message);
                             return true;
-                        } else if (itemId == R.string.title_fit_width || itemId == R.string.title_disable_widths) {
+                        } else if (itemId == R.string.title_fit_width ||
+                                itemId == R.string.title_disable_widths ||
+                                itemId == R.string.title_monospaced_pre) {
                             boolean enabled = !item.isChecked();
                             item.setChecked(enabled);
-                            String key = (itemId == R.string.title_fit_width
-                                    ? "overview_mode" : "override_width");
-                            prefs.edit().putBoolean(key, enabled).apply();
+
+                            if (itemId == R.string.title_fit_width)
+                                prefs.edit().putBoolean("overview_mode", enabled).apply();
+                            else if (itemId == R.string.title_disable_widths)
+                                prefs.edit().putBoolean("override_width", enabled).apply();
+                            else if (itemId == R.string.title_monospaced_pre)
+                                prefs.edit().putBoolean("monospaced_pre", enabled).apply();
+
                             properties.setSize(message.id, null);
                             properties.setHeight(message.id, null);
                             properties.setPosition(message.id, null);
+
+                            if (itemId == R.string.title_fit_width && wvBody instanceof WebView)
+                                ((WebView) wvBody).getSettings().setLoadWithOverviewMode(enabled);
+
                             bindBody(message, false);
                             return true;
                         }
@@ -4879,7 +4901,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 protected List<EntityAccount> onExecute(Context context, Bundle args) {
                     DB db = DB.getInstance(context);
-                    return db.account().getSynchronizingAccounts();
+                    return db.account().getSynchronizingAccounts(EntityAccount.TYPE_IMAP);
                 }
 
                 @Override

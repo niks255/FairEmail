@@ -9,6 +9,7 @@
     <string name="app_exit">Tryck \"tillbaka\" igen för att avsluta</string>
     <string name="app_cake">Otillräckligt lagringsutrymme kvar</string>
     <string name="app_updated">Senast uppdaterad: %1$s</string>
+    <string name="app_download">Hämtad från: %1$s</string>
     <string name="channel_service">Ta emot</string>
     <string name="channel_send">Skicka</string>
     <string name="channel_notification">E-post</string>
@@ -345,6 +346,7 @@
     <string name="title_advanced_timeout">Timeout för anslutning (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Föredra IPv4 över IPv6</string>
     <string name="title_advanced_ssl_harden">Strikta SSL-anslutningar</string>
+    <string name="title_advanced_cert_strict">Strikt certifikatkontroll</string>
     <string name="title_advanced_manage_connectivity">Hantera anslutning</string>
     <string name="title_advanced_caption_general">Allmänt</string>
     <string name="title_advanced_caption_checks">Kontroller</string>
@@ -371,6 +373,7 @@
     <string name="title_advanced_tabular_background">Använd kortfärg som bakgrundsfärg när du använder tabulär stil</string>
     <string name="title_advanced_cards_shadow">Använd skugga för olästa meddelanden när du använder kort-stil</string>
     <string name="title_advanced_cards_shadow_highlight">Använd markeringsfärg istället för accentfärg</string>
+    <string name="title_advanced_category_header">Gruppera efter kontokategori</string>
     <string name="title_advanced_date_header">Gruppera efter datum</string>
     <string name="title_advanced_date_fixed">Visa fast datumrubrik högst upp</string>
     <string name="title_advanced_date_bold">Visa datum i fetstil</string>
@@ -610,6 +613,7 @@
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering av detta kan orsaka anslutningsproblem på vissa enheter</string>
     <string name="title_advanced_validate_hint">Detta kan resultera i att meddelanden inte synkroniseras, till exempel vid användning av VPN, men även i andra situationer</string>
     <string name="title_advanced_timeout_hint">Tidsgräns för läs/skriva kommer att ställas in på den dubbla av anslutningens tidsgräns. Högre värden kommer att resultera i mer batterianvändning.</string>
+    <string name="title_advanced_cert_strict_hint">Inaktivering av detta kommer att stänga av kontroll av servercertifikat</string>
     <string name="title_advanced_ssl_harden_hint">Aktivering av detta kommer att inaktivera svaga SSL-protokoll och chiffer, vilket kan leda till anslutningsproblem</string>
     <string name="title_advanced_roaming_hint">Meddelanderubriker kommer alltid att hämtas vid roaming. Du kan använda enhetens roaminginställning för att inaktivera internet vid roaming.</string>
     <string name="title_advanced_browse_hint">Hämta fler meddelanden när du rullar ner</string>
@@ -686,6 +690,7 @@
     <string name="title_identity_unicode_remark">De flesta servrar stöder inte detta</string>
     <string name="title_identity_max_size">Maximal meddelandestorlek (MB)</string>
     <string name="title_identity_receipt">Begär leverans/läs kvitto som standard</string>
+    <string name="title_identity_receipt_legacy">Använd den äldre typen av kvittoförfrågningsrubriker</string>
     <string name="title_identity_use_ip_hint">Vid \"invalid greeting\", \"requires valid address\" eller ett liknande fel, försök ändra den här inställningen</string>
     <string name="title_identity_self_hint">Hindrar dig också från att svara på dig själv</string>
     <string name="title_optional">Valfritt</string>
@@ -778,6 +783,7 @@
     <string name="title_pop_folders">POP3-protokollet stöder inte skapande av mappar</string>
     <string name="title_oauth_support">OAuth stöds inte</string>
     <string name="title_review">Granska</string>
+    <string name="title_hint_accounts">Tryck och håll in på ett konto för att visa alternativ, till exempel för att inaktivera eller ta bort ett konto</string>
     <string name="title_hint_alias">Långtryck för alternativ, som att kopiera för att skapa alias för olika identiteter</string>
     <string name="title_service_auth">E-postservern sa: \'%1$s\'</string>
     <string name="title_service_vpn">Detta kan orsakas av den VPN som används</string>
@@ -999,6 +1005,7 @@
     <string name="title_fullscreen">Visa i helskärmsläge</string>
     <string name="title_fit_width">Anpassa till bredd</string>
     <string name="title_disable_widths">Inaktivera bredder</string>
+    <string name="title_monospaced_pre">Fast typsnittsbredd &lt;pre&gt;</string>
     <string name="title_unused_inline">Infogade bilder som är oanvända kommer att tas bort vid sändning</string>
     <string name="title_accross_remark">Meddelanden flyttade över konton kommer att hämtas igen och orsakar extra dataanvändning</string>
     <string name="title_raw_saved">Rent meddelande sparat</string>
@@ -1062,6 +1069,7 @@
     <string name="title_send_auto_archive">Arkivera besvarat meddelande</string>
     <string name="title_send_encryption">Kryptering</string>
     <string name="title_send_priority">Prioritet</string>
+    <string name="title_send_sensitivity">Känslighet</string>
     <string name="title_no_server">Ingen server hittades vid \"%1$s\"</string>
     <string name="title_style">Stil</string>
     <string name="title_style_bold">Fetstil</string>
@@ -1282,6 +1290,7 @@
     <string name="title_rule_tts">Text till tal</string>
     <string name="title_rule_automation">Automatisering</string>
     <string name="title_rule_delete">Ta bort permanent</string>
+    <string name="title_rule_sound">Spela upp ljud</string>
     <string name="title_rule_caption">Redigera regel</string>
     <string name="title_rule_title">Regeln gäller</string>
     <string name="title_rule_name">Namn</string>
@@ -1337,6 +1346,9 @@
     <string name="title_rule_tts_from">Från</string>
     <string name="title_rule_tts_subject">Ämne</string>
     <string name="title_rule_tts_content">Text</string>
+    <string name="title_rule_select_sound">Välj ljud</string>
+    <string name="title_rule_use_as_alarm">Använd som larm</string>
+    <string name="title_rule_alarm_hint">Det här kommer att ignorera \"stör ej\"-reglerna</string>
     <string name="title_rule_alarm_duration">Maxtid för alarm (sekunder)</string>
     <string name="title_legend_section_synchronize">Synkronisera</string>
     <string name="title_legend_section_folders">Mappar</string>
@@ -1382,6 +1394,9 @@
     <string name="title_legend_draft">Har utkast</string>
     <string name="title_legend_priority">Har hög prioritet</string>
     <string name="title_legend_priority_low">Har låg prioritet</string>
+    <string name="title_legend_sensitivity_personal">Är personlig</string>
+    <string name="title_legend_sensitivity_private">Är privat</string>
+    <string name="title_legend_sensitivity_confidential">Är konfidentiell</string>
     <string name="title_legend_importance">Är viktigt</string>
     <string name="title_legend_importance_low">Är inte viktigt</string>
     <string name="title_legend_signed">Är signerad</string>
@@ -1700,8 +1715,8 @@
     <string-array name="sensitivityNames">
         <item>Normal</item>
         <item>Personligt</item>
-        <item>Private</item>
-        <item>Confidential</item>
+        <item>Privat</item>
+        <item>Konfidentiellt</item>
     </string-array>
     <string-array name="linesNames">
         <item>1</item>

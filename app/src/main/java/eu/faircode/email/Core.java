@@ -190,6 +190,9 @@ class Core {
             Store istore = iservice.getStore();
             DB db = DB.getInstance(context);
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
+
             NotificationManager nm =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -315,6 +318,9 @@ class Core {
                                     }
                                     break;
                             }
+
+                            if (similar.size() >= chunk_size)
+                                break;
                         }
 
                         if (skip) {
@@ -586,6 +592,8 @@ class Core {
                                 MessageHelper.isRemoved(ex) ||
                                 EntityOperation.HEADERS.equals(op.name) ||
                                 EntityOperation.RAW.equals(op.name) ||
+                                (op.tries >= LOCAL_RETRY_MAX &&
+                                        EntityOperation.BODY.equals(op.name)) ||
                                 EntityOperation.ATTACHMENT.equals(op.name) ||
                                 ((op.tries >= LOCAL_RETRY_MAX || attachments > 0) &&
                                         EntityOperation.ADD.equals(op.name) &&
@@ -866,7 +874,10 @@ class Core {
         // Mark message (un)seen
         DB db = DB.getInstance(context);
 
-        if (flag != Flags.Flag.SEEN && flag != Flags.Flag.FLAGGED)
+        if (flag != Flags.Flag.SEEN &&
+                flag != Flags.Flag.ANSWERED &&
+                flag != Flags.Flag.FLAGGED &&
+                flag != Flags.Flag.DELETED)
             throw new IllegalArgumentException("Invalid flag=" + flag);
 
         if (folder.read_only)
@@ -877,9 +888,15 @@ class Core {
                 if (flag == Flags.Flag.SEEN) {
                     db.message().setMessageSeen(message.id, false);
                     db.message().setMessageUiSeen(message.id, false);
+                } else if (flag == Flags.Flag.ANSWERED) {
+                    db.message().setMessageAnswered(message.id, false);
+                    db.message().setMessageUiAnswered(message.id, false);
                 } else if (flag == Flags.Flag.FLAGGED) {
                     db.message().setMessageFlagged(message.id, false);
                     db.message().setMessageUiFlagged(message.id, false, null);
+                } else if (flag == Flags.Flag.DELETED) {
+                    db.message().setMessageDeleted(message.id, false);
+                    db.message().setMessageUiDeleted(message.id, false);
                 }
             return;
         }
@@ -894,7 +911,11 @@ class Core {
                     throw new MessagingException("Set flag: uid missing");
             if (flag == Flags.Flag.SEEN && !message.seen.equals(set))
                 uids.add(message.uid);
+            else if (flag == Flags.Flag.ANSWERED && !message.answered.equals(set))
+                uids.add(message.uid);
             else if (flag == Flags.Flag.FLAGGED && !message.flagged.equals(set))
+                uids.add(message.uid);
+            else if (flag == Flags.Flag.DELETED && !message.deleted.equals(set))
                 uids.add(message.uid);
         }
 
@@ -914,8 +935,12 @@ class Core {
         for (EntityMessage message : messages)
             if (flag == Flags.Flag.SEEN && !message.seen.equals(set))
                 db.message().setMessageSeen(message.id, set);
+            else if (flag == Flags.Flag.ANSWERED && !message.answered.equals(set))
+                db.message().setMessageAnswered(message.id, set);
             else if (flag == Flags.Flag.FLAGGED && !message.flagged.equals(set))
                 db.message().setMessageFlagged(message.id, set);
+            else if (flag == Flags.Flag.DELETED && !message.deleted.equals(set))
+                db.message().setMessageDeleted(message.id, set);
     }
 
     private static void onSeen(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder) throws JSONException {
@@ -2104,8 +2129,11 @@ class Core {
         boolean sync_folders = prefs.getBoolean("sync_folders", true);
         boolean sync_folders_poll = prefs.getBoolean("sync_folders_poll", false);
         boolean sync_shared_folders = prefs.getBoolean("sync_shared_folders", false);
-        Log.i(account.name + " sync folders=" + sync_folders + " poll=" + sync_folders_poll +
-                " shared=" + sync_shared_folders + " force=" + force);
+        Log.i(account.name + " sync folders=" + sync_folders +
+                " poll=" + sync_folders_poll +
+                " shared=" + sync_shared_folders +
+                " keep_alive=" + keep_alive +
+                " force=" + force);
 
         if (force)
             sync_folders = true;
@@ -4355,6 +4383,8 @@ class Core {
         try {
             if (uid_expunge)
                 uid_expunge = MessageHelper.hasCapability(ifolder, "UIDPLUS");
+            if (MessageHelper.hasCapability(ifolder, "X-UIDONLY"))
+                uid_expunge = true;
 
             if (uid_expunge) {
                 FetchProfile fp = new FetchProfile();

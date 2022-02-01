@@ -118,10 +118,10 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         WebSettings settings = getSettings();
 
         boolean dark = Helper.isDarkTheme(context);
-        if (WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK))
+        boolean canForce = WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK);
+        if (canForce)
             WebSettingsCompat.setForceDark(settings, dark && !force_light ? FORCE_DARK_ON : FORCE_DARK_OFF);
-        if (!dark)
-            setBackgroundColor(ColorUtils.setAlphaComponent(Color.WHITE, 127));
+        setBackgroundColor(canForce && force_light ? Color.WHITE : Color.TRANSPARENT);
 
         float fontSize = 16f /* Default */ * message_zoom / 100f;
         if (zoom == 0 /* small */)
@@ -373,7 +373,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     static String getUserAgent(Context context, WebView webView) {
         // https://developer.chrome.com/docs/multidevice/user-agent/#chrome-for-android
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean generic_ua = prefs.getBoolean("generic_ua", true);
+        boolean generic_ua = prefs.getBoolean("generic_ua", false);
         if (generic_ua)
             return getGenericUserAgent(context);
 

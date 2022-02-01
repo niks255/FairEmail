@@ -39,6 +39,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -146,6 +147,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swUndoManager;
     private SwitchCompat swWebViewLegacy;
     private SwitchCompat swModSeq;
+    private SwitchCompat swUid;
     private SwitchCompat swExpunge;
     private SwitchCompat swUidExpunge;
     private SwitchCompat swAuthPlain;
@@ -190,7 +192,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "protocol", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
             "query_threads", "wal", "checkpoints", "sqlite_cache",
             "chunk_size", "undo_manager", "webview_legacy",
-            "use_modseq", "perform_expunge", "uid_expunge",
+            "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
             "keep_alive_poll", "empty_pool", "idle_done",
             "exact_alarms", "infra", "dup_msgids", "test_iab"
@@ -291,6 +293,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swUndoManager = view.findViewById(R.id.swUndoManager);
         swWebViewLegacy = view.findViewById(R.id.swWebViewLegacy);
         swModSeq = view.findViewById(R.id.swModSeq);
+        swUid = view.findViewById(R.id.swUid);
         swExpunge = view.findViewById(R.id.swExpunge);
         swUidExpunge = view.findViewById(R.id.swUidExpunge);
         swAuthPlain = view.findViewById(R.id.swAuthPlain);
@@ -891,6 +894,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swUid.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("uid_command", checked).apply();
+                System.setProperty("fairemail.uid_command", Boolean.toString(checked));
+                ServiceSynchronize.reload(compoundButton.getContext(), null, true, "uid_command");
+            }
+        });
+
         swExpunge.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -904,7 +916,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("uid_expunge", checked).apply();
-                ServiceSynchronize.reload(compoundButton.getContext(), null, true, "perform_expunge");
+                ServiceSynchronize.reload(compoundButton.getContext(), null, true, "uid_expunge");
             }
         });
 
@@ -1139,7 +1151,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
                     @Override
                     protected void onExecuted(Bundle args, List<File> files) {
-                        StringBuilder sb = new StringBuilder();
+                        SpannableStringBuilder ssb = new SpannableStringBuilderEx();
 
                         final Context context = getContext();
                         File dataDir = (Build.VERSION.SDK_INT < Build.VERSION_CODES.N
@@ -1148,23 +1160,28 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         File cacheDir = context.getCacheDir();
 
                         if (dataDir != null)
-                            sb.append("Data: ").append(dataDir).append("\r\n");
+                            ssb.append("Data: ").append(dataDir.getAbsolutePath()).append("\r\n");
                         if (filesDir != null)
-                            sb.append("Files: ").append(filesDir).append("\r\n");
+                            ssb.append("Files: ").append(filesDir.getAbsolutePath()).append("\r\n");
                         if (cacheDir != null)
-                            sb.append("Cache: ").append(cacheDir).append("\r\n");
-                        sb.append("\r\n");
+                            ssb.append("Cache: ").append(cacheDir.getAbsolutePath()).append("\r\n");
+                        ssb.append("\r\n");
 
-                        for (File file : files)
-                            sb.append(Helper.humanReadableByteCount(file.length()))
-                                    .append(' ')
+                        for (File file : files) {
+                            int start = ssb.length();
+                            ssb.append(Helper.humanReadableByteCount(file.length()));
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                            ssb.append(' ')
                                     .append(file.getAbsolutePath())
                                     .append("\r\n");
+                        }
+
+                        ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssb.length(), 0);
 
                         new AlertDialog.Builder(context)
                                 .setIcon(R.drawable.twotone_info_24)
                                 .setTitle(title)
-                                .setMessage(sb.toString())
+                                .setMessage(ssb)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1439,6 +1456,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
         swWebViewLegacy.setChecked(prefs.getBoolean("webview_legacy", false));
         swModSeq.setChecked(prefs.getBoolean("use_modseq", true));
+        swUid.setChecked(prefs.getBoolean("uid_command", false));
         swExpunge.setChecked(prefs.getBoolean("perform_expunge", true));
         swUidExpunge.setChecked(prefs.getBoolean("uid_expunge", false));
         swUidExpunge.setEnabled(swExpunge.isChecked());
