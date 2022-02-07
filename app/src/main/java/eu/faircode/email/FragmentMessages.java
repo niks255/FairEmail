@@ -309,6 +309,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private WebView printWebView = null;
 
     private boolean cards;
+    private boolean dividers;
     private boolean category;
     private boolean date;
     private boolean date_fixed;
@@ -438,6 +439,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         swipenav = prefs.getBoolean("swipenav", true);
         cards = prefs.getBoolean("cards", true);
+        dividers = prefs.getBoolean("dividers", true);
         category = prefs.getBoolean("group_category", false);
         date = prefs.getBoolean("date", true);
         date_fixed = (!date && prefs.getBoolean("date_fixed", false));
@@ -669,7 +671,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         };
         rvMessage.setLayoutManager(llm);
 
-        if (!cards) {
+        if (!cards && dividers) {
             DividerItemDecoration itemDecorator = new DividerItemDecoration(getContext(), llm.getOrientation()) {
                 @Override
                 public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -780,7 +782,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (i == 0 && date_fixed && "time".equals(sort)) {
                         TupleMessageEx top = adapter.getItemAtPosition(pos);
                         tvFixedDate.setVisibility(top == null ? View.INVISIBLE : View.VISIBLE);
-                        if (!cards)
+                        if (!cards && dividers)
                             vFixedSeparator.setVisibility(top == null ? View.INVISIBLE : View.VISIBLE);
                         tvFixedDate.setText(top == null ? null : getRelativeDate(top.received, parent.getContext()));
                     } else {
@@ -865,7 +867,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     if (date_bold)
                         tvDate.setTypeface(Typeface.DEFAULT_BOLD);
 
-                    if (cards) {
+                    if (cards || !dividers) {
                         View vSeparator = header.findViewById(R.id.vSeparator);
                         vSeparator.setVisibility(View.GONE);
                     }
@@ -2751,7 +2753,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             if (sourceFolder == null || sourceFolder.read_only)
                                 continue;
                             if (EntityFolder.TRASH.equals(targetFolder.type)) {
-                                if (EntityFolder.ARCHIVE.equals(sourceFolder.type) && filter_archive)
+                                if (EntityFolder.ARCHIVE.equals(sourceFolder.type) && thread && filter_archive)
                                     continue;
                                 if (EntityFolder.JUNK.equals(sourceFolder.type) && !threaded.folder.equals(message.folder))
                                     continue;
@@ -4940,24 +4942,69 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onMenuEmpty(String type) {
-        Bundle aargs = new Bundle();
-        if (EntityFolder.TRASH.equals(type))
-            aargs.putString("question", getString(
-                    account < 0 ? R.string.title_empty_trash_all_ask : R.string.title_empty_trash_ask));
-        else if (EntityFolder.JUNK.equals(type))
-            aargs.putString("question", getString(
-                    account < 0 ? R.string.title_empty_spam_all_ask : R.string.title_empty_spam_ask));
-        else
-            throw new IllegalArgumentException("Invalid folder type=" + type);
-        aargs.putBoolean("warning", true);
-        aargs.putString("remark", getString(R.string.title_empty_all));
-        aargs.putLong("account", account);
-        aargs.putString("type", type);
+        Bundle args = new Bundle();
+        args.putLong("account", account);
 
-        FragmentDialogAsk ask = new FragmentDialogAsk();
-        ask.setArguments(aargs);
-        ask.setTargetFragment(this, REQUEST_EMPTY_FOLDER);
-        ask.show(getParentFragmentManager(), "messages:empty");
+        new SimpleTask<List<EntityAccount>>() {
+            @Override
+            protected List<EntityAccount> onExecute(Context context, Bundle args) {
+                long aid = args.getLong("account");
+
+                List<EntityAccount> result = new ArrayList<>();
+
+                DB db = DB.getInstance(context);
+                if (aid < 0) {
+                    List<EntityAccount> accounts = db.account().getSynchronizingAccounts(null);
+                    if (accounts != null)
+                        result.addAll(accounts);
+                } else {
+                    EntityAccount account = db.account().getAccount(aid);
+                    if (account != null)
+                        result.add(account);
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                boolean permanent = false;
+                for (EntityAccount account : accounts)
+                    if (account.protocol == EntityAccount.TYPE_IMAP || !account.leave_deleted) {
+                        permanent = true;
+                        break;
+                    }
+
+                Bundle aargs = new Bundle();
+
+                if (EntityFolder.TRASH.equals(type))
+                    aargs.putString("question", getString(
+                            accounts.size() > 1 ? R.string.title_empty_trash_all_ask : R.string.title_empty_trash_ask));
+                else if (EntityFolder.JUNK.equals(type))
+                    aargs.putString("question", getString(
+                            accounts.size() > 1 ? R.string.title_empty_spam_all_ask : R.string.title_empty_spam_ask));
+                else
+                    throw new IllegalArgumentException("Invalid folder type=" + type);
+
+                aargs.putBoolean("warning", true);
+
+                if (permanent)
+                    aargs.putString("remark", getString(R.string.title_empty_all));
+
+                aargs.putLong("account", args.getLong("account"));
+                aargs.putString("type", type);
+
+                FragmentDialogAsk ask = new FragmentDialogAsk();
+                ask.setArguments(aargs);
+                ask.setTargetFragment(FragmentMessages.this, REQUEST_EMPTY_FOLDER);
+                ask.show(getParentFragmentManager(), "messages:empty");
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "folder:empty");
     }
 
     private void onMenuSort(String sort) {

@@ -365,6 +365,7 @@
     <string name="title_advanced_two_col">Utiliser deux colonnes</string>
     <string name="title_advanced_min_screen_size">Taille minimale de l\'écran pour partager l\'écran</string>
     <string name="title_advanced_close_pane">Replier la ligne ou la colonne lors de la fermeture d\'une conversation</string>
+    <string name="title_advanced_column_width">Largeur de la colonne des messages : %1$s %%</string>
     <string name="title_advanced_nav_options">Afficher les options du menu de navigation</string>
     <string name="title_advanced_nav_pin">Épingler le menu de navigation</string>
     <string name="title_advanced_nav_hide_title">Masquer les options du menu de navigation ?</string>
@@ -377,6 +378,7 @@
     <string name="title_advanced_tabular_background">Utiliser la couleur de la carte comme couleur d\'arrière-plan lors de l\'utilisation du style tableau</string>
     <string name="title_advanced_cards_shadow">Utiliser une ombre autour des messages non lus pour le style carte</string>
     <string name="title_advanced_cards_shadow_highlight">Utiliser la couleur de surbrillance au lieu de la couleur d\'accentuation</string>
+    <string name="title_advanced_tabular_dividers">Afficher des lignes de séparation lors de l\'utilisation du style tableau</string>
     <string name="title_advanced_category_header">Regrouper par catégorie de compte</string>
     <string name="title_advanced_date_header">Regrouper par date</string>
     <string name="title_advanced_date_fixed">Afficher l\'en-tête de la date fixe en haut</string>
@@ -1128,6 +1130,7 @@
     <string name="title_translate_configure">Configurer&#8230;</string>
     <string name="title_translate_key">Saisir la clé</string>
     <string name="title_translating">Traduction&#8230;</string>
+    <string name="title_translate_formal">Utiliser un langage formel</string>
     <string name="title_translate_small">Utiliser une petite police de caractères pour le texte source</string>
     <string name="title_translate_usage">Utilisation : %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Appuyez sur le texte à traduire</string>
@@ -1269,6 +1272,9 @@
     <string name="title_edit_signature_remark">Bien qu\'Android ne puisse pas afficher tout le code HTML, il sera envoyé tel quel</string>
     <string name="title_edit_signature_text">Texte de la signature</string>
     <string name="title_edit_signature_image">Insérer une image</string>
+    <string name="title_edit_signature_image_hint">        Lors de l\'envoi d\'un message, l\'image est copiée dans le message à partir de l\'emplacement sélectionné.
+        Ne supprimez donc pas le fichier image !
+    </string>
     <string name="title_answer_caption">Modifier le modèle</string>
     <string name="title_answer_reply">Modèle de réponse</string>
     <string name="title_answer_name">Nom du modèle</string>
@@ -1513,6 +1519,7 @@
     <string name="title_later">Plus tard</string>
     <string name="title_undo">Annuler</string>
     <string name="title_redo">Rétablir</string>
+    <string name="title_insert_line">Insérer une ligne</string>
     <string name="title_add">Ajouter</string>
     <string name="title_browse">Ouvrir avec</string>
     <string name="title_info">Info</string>

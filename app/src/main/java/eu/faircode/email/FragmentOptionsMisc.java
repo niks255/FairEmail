@@ -34,12 +34,13 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Environment;
 import android.provider.Settings;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -81,6 +82,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.SortedMap;
 
 import javax.net.ssl.SSLSocket;
@@ -134,6 +136,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     private Button btnRepair;
     private SwitchCompat swAutostart;
+    private SwitchCompat swExternalStorage;
+    private TextView tvExternalStorageFolder;
     private TextView tvRoomQueryThreads;
     private SeekBar sbRoomQueryThreads;
     private ImageButton ibRoom;
@@ -154,6 +158,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAuthLogin;
     private SwitchCompat swAuthNtlm;
     private SwitchCompat swAuthSasl;
+    private SwitchCompat swAuthApop;
     private SwitchCompat swKeepAlivePoll;
     private SwitchCompat swEmptyPool;
     private SwitchCompat swIdleDone;
@@ -171,6 +176,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvCursorWindow;
     private Button btnGC;
     private Button btnCharsets;
+    private Button btnFontMap;
     private Button btnCiphers;
     private Button btnFiles;
     private TextView tvPermissions;
@@ -190,10 +196,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "updates", "weekly", "show_changelog",
             "experiments", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
+            // "external_storage",
             "query_threads", "wal", "checkpoints", "sqlite_cache",
             "chunk_size", "undo_manager", "webview_legacy",
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl",
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop",
             "keep_alive_poll", "empty_pool", "idle_done",
             "exact_alarms", "infra", "dup_msgids", "test_iab"
     };
@@ -210,7 +217,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "identities_asked", "identities_primary_hint",
             "raw_asked", "all_read_asked", "delete_asked",
             "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
-            "setup_reminder", "setup_advanced"
+            "setup_reminder", "setup_advanced",
+            "signature_images_hint"
     };
 
     @Override
@@ -280,6 +288,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         btnRepair = view.findViewById(R.id.btnRepair);
         swAutostart = view.findViewById(R.id.swAutostart);
+        swExternalStorage = view.findViewById(R.id.swExternalStorage);
+        tvExternalStorageFolder = view.findViewById(R.id.tvExternalStorageFolder);
         tvRoomQueryThreads = view.findViewById(R.id.tvRoomQueryThreads);
         sbRoomQueryThreads = view.findViewById(R.id.sbRoomQueryThreads);
         ibRoom = view.findViewById(R.id.ibRoom);
@@ -300,6 +310,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthLogin = view.findViewById(R.id.swAuthLogin);
         swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
+        swAuthApop = view.findViewById(R.id.swAuthApop);
         swKeepAlivePoll = view.findViewById(R.id.swKeepAlivePoll);
         swEmptyPool = view.findViewById(R.id.swEmptyPool);
         swIdleDone = view.findViewById(R.id.swIdleDone);
@@ -317,6 +328,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvCursorWindow = view.findViewById(R.id.tvCursorWindow);
         btnGC = view.findViewById(R.id.btnGC);
         btnCharsets = view.findViewById(R.id.btnCharsets);
+        btnFontMap = view.findViewById(R.id.btnFontMap);
         btnCiphers = view.findViewById(R.id.btnCiphers);
         btnFiles = view.findViewById(R.id.btnFiles);
         tvPermissions = view.findViewById(R.id.tvPermissions);
@@ -604,6 +616,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit()
                         .remove("crash_reports_asked")
+                        .remove("crash_report_count")
                         .putBoolean("crash_reports", checked)
                         .apply();
                 Log.setCrashReporting(checked);
@@ -773,6 +786,56 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton v, boolean checked) {
                 Helper.enableComponent(v.getContext(), ReceiverAutoStart.class, checked);
+            }
+        });
+
+        swExternalStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("external_storage", isChecked).apply();
+
+                Bundle args = new Bundle();
+                args.putBoolean("external_storage", isChecked);
+
+                new SimpleTask<Integer>() {
+                    @Override
+                    protected Integer onExecute(Context context, Bundle args) throws IOException {
+                        boolean external_storage = args.getBoolean("external_storage");
+
+                        File source = (!external_storage
+                                ? context.getExternalFilesDir(null)
+                                : context.getFilesDir());
+
+                        File target = (external_storage
+                                ? context.getExternalFilesDir(null)
+                                : context.getFilesDir());
+
+                        source = new File(source, "attachments");
+                        target = new File(target, "attachments");
+
+                        File[] attachments = source.listFiles();
+                        if (attachments != null)
+                            for (File attachment : attachments) {
+                                File dest = new File(target, attachment.getName());
+                                Log.i("Move " + attachment + " to " + dest);
+                                Helper.copy(attachment, dest);
+                                attachment.delete();
+                            }
+
+                        return (attachments == null ? -1 : attachments.length);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Integer count) {
+                        String msg = String.format("Moved %d attachments", count);
+                        ToastEx.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    }
+                }.execute(FragmentOptionsMisc.this, args, "external");
             }
         });
 
@@ -948,6 +1011,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swAuthApop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auth_apop", checked).apply();
+            }
+        });
+
         swKeepAlivePoll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1001,6 +1071,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 Helper.gc();
+                DB.shrinkMemory(v.getContext());
             }
         });
 
@@ -1049,10 +1120,40 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        btnFontMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+
+                try {
+                    Typeface typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
+                    Field f = Typeface.class.getDeclaredField("sSystemFontMap");
+                    f.setAccessible(true);
+                    Map<String, Typeface> sSystemFontMap = (Map<String, Typeface>) f.get(typeface);
+                    for (String key : sSystemFontMap.keySet())
+                        ssb.append(key).append("\n");
+                } catch (Throwable ex) {
+                    ssb.append(ex.toString());
+                }
+
+                new AlertDialog.Builder(getContext())
+                        .setIcon(R.drawable.twotone_info_24)
+                        .setTitle(R.string.title_advanced_font_map)
+                        .setMessage(ssb)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing
+                            }
+                        })
+                        .show();
+            }
+        });
+
         btnCiphers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder sb = new StringBuilder();
+                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
                 try {
                     SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket();
 
@@ -1064,33 +1165,33 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
                     for (String p : socket.getSupportedProtocols()) {
                         boolean enabled = protocols.contains(p);
+                        int start = ssb.length();
+                        ssb.append(p);
                         if (!enabled)
-                            sb.append("(");
-                        sb.append(p);
-                        if (!enabled)
-                            sb.append(")");
-                        sb.append("\r\n");
+                            ssb.setSpan(new StrikethroughSpan(), start, ssb.length(), 0);
+                        ssb.append("\r\n");
                     }
-                    sb.append("\r\n");
+                    ssb.append("\r\n");
 
                     for (String c : socket.getSupportedCipherSuites()) {
                         boolean enabled = ciphers.contains(c);
+                        int start = ssb.length();
+                        ssb.append(c);
                         if (!enabled)
-                            sb.append("(");
-                        sb.append(c);
-                        if (!enabled)
-                            sb.append(")");
-                        sb.append("\r\n");
+                            ssb.setSpan(new StrikethroughSpan(), start, ssb.length(), 0);
+                        ssb.append("\r\n");
                     }
-                    sb.append("\r\n");
+                    ssb.append("\r\n");
                 } catch (IOException ex) {
-                    sb.append(ex.toString());
+                    ssb.append(ex.toString());
                 }
+
+                ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssb.length(), 0);
 
                 new AlertDialog.Builder(getContext())
                         .setIcon(R.drawable.twotone_info_24)
                         .setTitle(R.string.title_advanced_ciphers)
-                        .setMessage(sb.toString())
+                        .setMessage(ssb)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -1125,6 +1226,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         files.addAll(getFiles(context.getCacheDir(), MIN_FILE_SIZE));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             files.addAll(getFiles(context.getDataDir(), MIN_FILE_SIZE));
+                        files.addAll(getFiles(context.getExternalFilesDir(null), MIN_FILE_SIZE));
 
                         Collections.sort(files, new Comparator<File>() {
                             @Override
@@ -1158,6 +1260,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 ? null : context.getDataDir());
                         File filesDir = context.getFilesDir();
                         File cacheDir = context.getCacheDir();
+                        File externalDir = context.getExternalFilesDir(null);
 
                         if (dataDir != null)
                             ssb.append("Data: ").append(dataDir.getAbsolutePath()).append("\r\n");
@@ -1165,6 +1268,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                             ssb.append("Files: ").append(filesDir.getAbsolutePath()).append("\r\n");
                         if (cacheDir != null)
                             ssb.append("Cache: ").append(cacheDir.getAbsolutePath()).append("\r\n");
+                        if (externalDir != null)
+                            ssb.append("External: ").append(externalDir.getAbsolutePath()).append("\r\n");
                         ssb.append("\r\n");
 
                         for (File file : files) {
@@ -1234,6 +1339,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         grpTest.setVisibility(BuildConfig.TEST_RELEASE ? View.VISIBLE : View.GONE);
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
+
+        File external = getContext().getExternalFilesDir(null);
+        boolean emulated = Environment.isExternalStorageEmulated(external);
+        tvExternalStorageFolder.setText(external.getAbsolutePath() + (emulated ? " emulated" : ""));
 
         swExactAlarms.setEnabled(AlarmManagerCompatEx.canScheduleExactAlarms(getContext()));
         swTestIab.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
@@ -1432,6 +1541,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swTest5.setChecked(prefs.getBoolean("test5", false));
 
         swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
+        swExternalStorage.setChecked(prefs.getBoolean("external_storage", false));
 
         int query_threads = prefs.getInt("query_threads", DB.DEFAULT_QUERY_THREADS);
         tvRoomQueryThreads.setText(getString(R.string.title_advanced_room_query_threads, NF.format(query_threads)));
@@ -1464,6 +1574,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthLogin.setChecked(prefs.getBoolean("auth_login", true));
         swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
+        swAuthApop.setChecked(prefs.getBoolean("auth_apop", false));
         swKeepAlivePoll.setChecked(prefs.getBoolean("keep_alive_poll", false));
         swEmptyPool.setChecked(prefs.getBoolean("empty_pool", true));
         swIdleDone.setChecked(prefs.getBoolean("idle_done", true));

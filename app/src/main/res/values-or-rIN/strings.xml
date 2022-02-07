@@ -171,8 +171,14 @@
     <string name="title_advanced_landscape">ଲ୍ୟାଣ୍ଡସ୍କେପ୍ ମୋଡ୍</string>
     <string name="title_advanced_min_screen_size">ସ୍କ୍ରିନ୍ ବିଭାଜନ ପାଇଁ ସର୍ବନିମ୍ନ ସ୍କ୍ରିନ୍ ଆକାର</string>
     <string name="title_advanced_close_pane">ବାର୍ତ୍ତାଳାପ ବନ୍ଦ କରିବା ସମୟରେ ଧାଡ଼ି କିମ୍ବା ସ୍ତମ୍ଭକୁ ସଙ୍କୋଚନ କରନ୍ତୁ</string>
+    <string name="title_advanced_column_width">ବାର୍ତ୍ତା ସ୍ତମ୍ଭର ପ୍ରସ୍ଥ: %1$s %%</string>
     <string name="title_advanced_startup">ଷ୍ଟାର୍ଟ ସ୍କ୍ରିନରେ ଦେଖାନ୍ତୁ</string>
+    <string name="title_advanced_cards">ଟାବୁଲାର୍ ଶୈଳୀ ପରିବର୍ତ୍ତେ କାର୍ଡ଼ ଶୈଳୀ ବ୍ୟବହାର କରିବା</string>
+    <string name="title_advanced_cards_beige">କାର୍ଡ଼ ଶୈଳୀ ବ୍ୟବହାର କଲାବେଳେ ବେଜ୍ ପୃଷ୍ଠପଟ ବ୍ୟବହାର କରିବା (କେବଳ ହାଲୁକା ଥିମ୍ ପାଇଁ ପ୍ରଯୁଜ୍ୟ)</string>
+    <string name="title_advanced_tabular_background">ଟାବୁଲାର୍ ଶୈଳୀ ବ୍ୟବହାର କଲାବେଳେ କାର୍ଡ଼ ରଙ୍ଗକୁ ପୃଷ୍ଠପଟ ରଙ୍ଗ ଭାବେ ବ୍ୟବହାର କରିବା</string>
+    <string name="title_advanced_cards_shadow">କାର୍ଡ଼ ଶୈଳୀ ବ୍ୟବହାର କଲାବେଳେ ପଢ଼ିନଥିବା ବାର୍ତ୍ତାଗୁଡ଼ିକ ପାଇଁ ଛାୟା ବ୍ୟବହାର କରିବା</string>
     <string name="title_advanced_cards_shadow_highlight">ଆକ୍ସେଣ୍ଟ ରଙ୍ଗ ବଦଳରେ ହାଇଲାଇଟ୍ ରଙ୍ଗ ବ୍ୟବହାର କରିବା</string>
+    <string name="title_advanced_tabular_dividers">ଟାବୁଲାର୍ ଶୈଳୀ ବ୍ୟବହାର କଲାବେଳେ ଡିଭାଇଡର୍ ଲାଇନ୍ ବ୍ୟବହାର କରିବା</string>
     <string name="title_advanced_category_header">ଆକାଉଣ୍ଟ୍ ବର୍ଗ ଅନୁଯାୟୀ ଗୋଷ୍ଠୀ ପ୍ରସ୍ତୁତ କରନ୍ତୁ</string>
     <string name="title_advanced_date_header">ତାରିଖ ଅନୁଯାୟୀ ଗୋଷ୍ଠୀ ପ୍ରସ୍ତୁତ କରନ୍ତୁ</string>
     <string name="title_advanced_color_stripe_wide">ପ୍ରଶସ୍ତ ରଙ୍ଗ ଷ୍ଟ୍ରାଇପ୍ ବ୍ୟବହାର କରନ୍ତୁ</string>
@@ -227,6 +233,7 @@
     <string name="title_advanced_subject_threading_hint">କେବଳ %1$d ଘଣ୍ଟା ମଧ୍ୟରେ ପ୍ରାପ୍ତ ହୋଇଥିବା ବାର୍ତ୍ତାଗୁଡ଼ିକ</string>
     <string name="title_advanced_remove_signature_hint">ଏହା ଫଳରେ ବହୁତ କମ୍ କିମ୍ୱା ଅତ୍ୟଧିକ ପାଠ୍ୟ ଅପସାରଣ ହୋଇପାରେ</string>
     <string name="title_advanced_cert_strict_hint">ଏହା ଅକ୍ଷମ କରିବା ଦ୍ୱାରା ସର୍ଭର ସାର୍ଟିଫିକେଟ୍ ଯାଞ୍ଚ କରିବା କୋହଳ ହେବ</string>
+    <string name="title_advanced_date_hint">ସମୟାନୁସାର ସଜାଯାଇଥିଲେ ହି ବାର୍ତ୍ତାଗୁଡ଼ିକ ତାରିଖ ଅନୁଯାୟୀ ଗୋଷ୍ଠୀ ପ୍ରସ୍ତୁତ କରାଯିବ</string>
     <string name="title_advanced_highlight_hint">ଥିମର ଆକ୍ସେଣ୍ଟ ରଙ୍ଗ ହାଇଲାଇଟ୍ କରିବା ପାଇଁ ବ୍ୟବହୃତ ହେବ</string>
     <string name="title_advanced_override_width_hint">ଏହା ବାର୍ତ୍ତାଗୁଡ଼ିକୁ ସଂକୀର୍ଣ୍ଣ କରିପାରେ, କିନ୍ତୁ ଅଦ୍ଭୁତ ଦେଖାଯାଏ</string>
     <string name="title_advanced_expandall_hint">ଏକାଧିକ ବାର୍ତ୍ତା ସମ୍ପ୍ରସାରଣ ହୋଇଥିବା ବେଳେ ଉତ୍ତର ବଟନ୍ ଦେଖାଯିବ ନାହିଁ କାରଣ ବଟନ୍ କେଉଁ ବାର୍ତ୍ତା ପାଇଁ ପ୍ରଯୁଜ୍ୟ ତାହା ଅସ୍ପଷ୍ଟ ଅଟେ</string>
@@ -378,6 +385,7 @@
     <string name="title_show_addresses">CC/BCC ଦେଖାଅ</string>
     <string name="title_manage_local_contacts">ସ୍ଥାନୀୟ ସମ୍ପର୍କଗୁଡ଼ିକୁ ପରିଚାଳନା କରନ୍ତୁ</string>
     <string name="title_translate">ଅନୁବାଦ କର</string>
+    <string name="title_translate_formal">ଆନୁଷ୍ଠାନିକ ଶବ୍ଦରୂପ ବ୍ୟବହାର କରିବା</string>
     <string name="title_send_dsn">ସ୍ଥିତି ରିପୋର୍ଟ୍</string>
     <string name="title_send_receipt">ରସିଦ ଅନୁରୋଧ କରିବା</string>
     <string name="title_send_receipt_remark">ଅଧିକାଂଶ ପ୍ରଦାନକାରୀ ଏବଂ ଇମେଲ୍ ଗ୍ରାହକମାନେ ରସିଦ ଅନୁରୋଧକୁ ଅଣଦେଖା କରନ୍ତି</string>
@@ -422,6 +430,9 @@
     <string name="title_previous">ପୂର୍ବବର୍ତ୍ତୀ</string>
     <string name="title_next">ପରବର୍ତ୍ତୀ</string>
     <string name="title_edit_signature_image">ପ୍ରତିଛବି ସନ୍ନିବେଶ କର</string>
+    <string name="title_edit_signature_image_hint">        ଏକ ବାର୍ତ୍ତା ପଠାଇବାବେଳେ, ପ୍ରତିଛବି ମନୋନୀତ ସ୍ଥାନରୁ ସନ୍ଦେଶରେ କପି କରାଯାଇଥାଏ।
+        ତେଣୁ, ପ୍ରତିଛବିର ଫାଇଲକୁ ବିଲୋପ କରନ୍ତୁ ନାହିଁ!
+    </string>
     <string name="title_answer_caption">ଟେମ୍ପଲେଟ୍ ସମ୍ପାଦନା</string>
     <string name="title_answer_reply">ପ୍ରତ୍ୟୁତ୍ତର ଟେମ୍ପଲେଟ୍</string>
     <string name="title_answer_name">ଟେମ୍ପଲେଟ୍ ନାମ</string>
@@ -478,6 +489,7 @@
     <string name="title_updated">ସଂସ୍କରଣ %1$s କୁ ଅପଡେଟ୍ ଉପଲବ୍ଧ ଅଛି</string>
     <string name="title_undo">ପୂର୍ବବତ୍</string>
     <string name="title_redo">ପୁନଃକରଣ</string>
+    <string name="title_insert_line">ଲାଇନ୍ ସନ୍ନିବେଶ କର</string>
     <string name="title_info">ସୂଚନା</string>
     <string name="title_show">ଦେଖାଅ</string>
     <string name="title_enable">ସକ୍ଷମ କରନ୍ତୁ</string>

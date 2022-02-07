@@ -54,12 +54,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -100,6 +102,7 @@ public class DeepL {
                 JSONObject jlanguage = jlanguages.getJSONObject(i);
                 String name = jlanguage.getString("name");
                 String target = jlanguage.getString("language");
+                boolean formality = jlanguage.optBoolean("supports_formality");
 
                 Locale locale = Locale.forLanguageTag(target);
                 if (locale != null)
@@ -110,7 +113,7 @@ public class DeepL {
                 String resname = "language_" + target.toLowerCase().replace('-', '_');
                 int resid = res.getIdentifier(resname, "drawable", pkg);
 
-                languages.add(new Language(name, target,
+                languages.add(new Language(name, target, formality,
                         resid == 0 ? null : resid,
                         favorites && frequency > 0));
                 frequencies.put(target, frequency);
@@ -188,10 +191,27 @@ public class DeepL {
     }
 
     public static Translation translate(String text, String target, Context context) throws IOException, JSONException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean formality = prefs.getBoolean("deepl_formal", true);
+        return translate(text, target, formality, context);
+    }
+
+    public static Translation translate(String text, String target, boolean formality, Context context) throws IOException, JSONException {
         // https://www.deepl.com/docs-api/translating-text/request/
         String request =
                 "text=" + URLEncoder.encode(text, StandardCharsets.UTF_8.name()) +
                         "&target_lang=" + URLEncoder.encode(target, StandardCharsets.UTF_8.name());
+
+        ensureLanguages(context);
+        for (int i = 0; i < jlanguages.length(); i++) {
+            JSONObject jlanguage = jlanguages.getJSONObject(i);
+            if (Objects.equals(target, jlanguage.getString("language"))) {
+                boolean supports_formality = jlanguage.optBoolean("supports_formality");
+                if (supports_formality)
+                    request += "&formality=" + (formality ? "more" : "less");
+                break;
+            }
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String key = prefs.getString("deepl_key", null);
@@ -289,12 +309,14 @@ public class DeepL {
     public static class Language {
         public String name;
         public String target;
+        public boolean formality;
         public Integer icon;
         public boolean favorite;
 
-        private Language(String name, String target, Integer icon, boolean favorit) {
+        private Language(String name, String target, boolean formality, Integer icon, boolean favorit) {
             this.name = name;
             this.target = target;
+            this.formality = formality;
             this.icon = icon;
             this.favorite = favorit;
         }
@@ -319,12 +341,16 @@ public class DeepL {
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String key = prefs.getString("deepl_key", null);
             boolean pro = prefs.getBoolean("deepl_pro", false);
+            boolean formal = prefs.getBoolean("deepl_formal", true);
             boolean small = prefs.getBoolean("deepl_small", false);
+            int subscription = prefs.getInt("deepl_subscription", BuildConfig.DEBUG ? 17 : 0);
 
             View view = LayoutInflater.from(context).inflate(R.layout.dialog_deepl, null);
             final ImageButton ibInfo = view.findViewById(R.id.ibInfo);
             final EditText etKey = view.findViewById(R.id.etKey);
             final CheckBox cbPro = view.findViewById(R.id.cbPro);
+            final CheckBox cbFormal = view.findViewById(R.id.cbFormal);
+            final TextView tvFormal = view.findViewById(R.id.tvFormal);
             final CheckBox cbSmall = view.findViewById(R.id.cbSmall);
             final TextView tvUsage = view.findViewById(R.id.tvUsage);
             final TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
@@ -353,6 +379,19 @@ public class DeepL {
 
             etKey.setText(key);
             cbPro.setChecked(pro);
+            cbFormal.setChecked(formal);
+
+            try {
+                List<String> formals = new ArrayList<>();
+                for (Language lang : getTargetLanguages(context, false))
+                    if (lang.formality)
+                        formals.add(lang.name);
+
+                tvFormal.setText(TextUtils.join(", ", formals));
+            } catch (Throwable ex) {
+                tvFormal.setText(Log.formatThrowable(ex, false));
+            }
+
             cbSmall.setChecked(small);
 
             tvUsage.setVisibility(View.GONE);
@@ -369,10 +408,28 @@ public class DeepL {
 
                     @Override
                     protected void onExecuted(Bundle args, Integer[] usage) {
-                        tvUsage.setText(getString(R.string.title_translate_usage,
+                        String used = getString(R.string.title_translate_usage,
                                 Helper.humanReadableByteCount(usage[0]),
                                 Helper.humanReadableByteCount(usage[1]),
-                                Math.round(100f * usage[0] / usage[1])));
+                                Math.round(100f * usage[0] / usage[1]));
+
+                        if (subscription > 0) {
+                            Calendar next = Calendar.getInstance();
+                            next.set(Calendar.MILLISECOND, 0);
+                            next.set(Calendar.SECOND, 0);
+                            next.set(Calendar.MINUTE, 0);
+                            next.set(Calendar.HOUR, 0);
+                            long today = next.getTimeInMillis();
+                            if (next.get(Calendar.DATE) > subscription)
+                                next.add(Calendar.MONTH, 1);
+                            next.set(Calendar.DATE, subscription);
+                            int remaining = (int) ((next.getTimeInMillis() - today) / (24 * 3600 * 1000L));
+
+                            if (remaining > 0)
+                                used += " +" + remaining;
+                        }
+
+                        tvUsage.setText(used);
                         tvUsage.setVisibility(View.VISIBLE);
                     }
 
@@ -396,6 +453,7 @@ public class DeepL {
                             else
                                 editor.putString("deepl_key", key);
                             editor.putBoolean("deepl_pro", cbPro.isChecked());
+                            editor.putBoolean("deepl_formal", cbFormal.isChecked());
                             editor.putBoolean("deepl_small", cbSmall.isChecked());
                             editor.apply();
                         }

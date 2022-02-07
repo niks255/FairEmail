@@ -702,6 +702,32 @@
                     app:layout_constraintTop_toBottomOf="@id/btnRepair"
                     app:switchPadding="12dp" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swExternalStorage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_warning_24"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?attr/colorError"
+                    android:text="@string/title_advanced_external_storage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAutostart"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvExternalStorageFolder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="/data/data/..."
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swExternalStorage" />
+
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvRoomQueryThreads"
                     android:layout_width="0dp"
@@ -712,7 +738,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swAutostart" />
+                    app:layout_constraintTop_toBottomOf="@id/tvExternalStorageFolder" />
 
                 <SeekBar
                     android:id="@+id/sbRoomQueryThreads"
@@ -955,6 +981,17 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swAuthApop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_auth_apop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swAuthSasl"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swKeepAlivePoll"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -962,7 +999,7 @@
                     android:text="@string/title_advanced_keep_alive_poll"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swAuthSasl"
+                    app:layout_constraintTop_toBottomOf="@id/swAuthApop"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1351,6 +1388,16 @@
                     app:layout_constraintTop_toBottomOf="@id/btnGC" />
 
                 <Button
+                    android:id="@+id/btnFontMap"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_font_map"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnCharsets" />
+
+                <Button
                     android:id="@+id/btnCiphers"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
@@ -1358,7 +1405,7 @@
                     android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_ciphers"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnCharsets" />
+                    app:layout_constraintTop_toBottomOf="@id/btnFontMap" />
 
                 <Button
                     android:id="@+id/btnFiles"

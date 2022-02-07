@@ -385,6 +385,7 @@
     <string name="title_advanced_two_col">להשתמש בשתי עמודות</string>
     <string name="title_advanced_min_screen_size">גודל המסך המזערי לפיצול המסך</string>
     <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
+    <string name="title_advanced_column_width">רוחב עמודת הודעה: %1$s %%</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
     <string name="title_advanced_nav_hide_title">להסתיר את אפשרויות תפריט הניווט?</string>
@@ -397,6 +398,7 @@
     <string name="title_advanced_tabular_background">להשתמש בצבע הכרטיס כצבע הרקע בעת שימוש בסגנון כרטיסיות</string>
     <string name="title_advanced_cards_shadow">להשתמש בהצללה להודעות שלא נקראו בעת שימוש בסגנון כרטיסים</string>
     <string name="title_advanced_cards_shadow_highlight">להשתמש בצבע ההדגשה במקום בצבע המשני</string>
+    <string name="title_advanced_tabular_dividers">להשתמש בקווי הפרדה בסגנון הטבלאי</string>
     <string name="title_advanced_category_header">קיבוץ לפי קטגוריית חשבון</string>
     <string name="title_advanced_date_header">קיבוץ לפי תאריך</string>
     <string name="title_advanced_date_fixed">להציג כותרת תאריך מקובעת למעלה</string>
@@ -1147,6 +1149,7 @@
     <string name="title_translate_configure">הגדרה&#8230;</string>
     <string name="title_translate_key">נא להקליד מפתח</string>
     <string name="title_translating">מתורגם&#8230;</string>
+    <string name="title_translate_formal">להשתמש בשפה רשמית</string>
     <string name="title_translate_small">להשתמש בגופן קטן לטקסט המקור</string>
     <string name="title_translate_usage">שימוש: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">נא לגעת בטקסט לתרגום</string>
@@ -1288,6 +1291,9 @@
     <string name="title_edit_signature_remark">למרות ש־Android לא יכול להציג HTML לגמרי, זה יישלח כמו שזה</string>
     <string name="title_edit_signature_text">טקסט חתימה</string>
     <string name="title_edit_signature_image">הוספת תמונה</string>
+    <string name="title_edit_signature_image_hint">        בעת שליחת הודעה, התמונה מועתקת להודעה מהמיקום הנבחר.
+        לכן, אין למחוק את קובץ התמונה!
+    </string>
     <string name="title_answer_caption">עריכת תבנית</string>
     <string name="title_answer_reply">תבנית מענה</string>
     <string name="title_answer_name">שם תבנית</string>
@@ -1532,6 +1538,7 @@
     <string name="title_later">אחר כך</string>
     <string name="title_undo">ביטול</string>
     <string name="title_redo">ביצוע מחדש</string>
+    <string name="title_insert_line">הוספת שורה</string>
     <string name="title_add">הוספה</string>
     <string name="title_browse">פתיחה באמצעות</string>
     <string name="title_info">פרטים</string>

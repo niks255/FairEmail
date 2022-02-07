@@ -64,6 +64,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swTabularBackground;
     private SwitchCompat swShadow;
     private SwitchCompat swShadowHighlight;
+    private SwitchCompat swTabularDividers;
     private SwitchCompat swCategory;
     private SwitchCompat swDate;
     private SwitchCompat swDateFixed;
@@ -75,6 +76,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swLandscape;
     private Spinner spLandscapeMinSize;
     private SwitchCompat swClosePane;
+    private TextView tvColumnWidth;
+    private SeekBar sbColumnWidth;
     private SwitchCompat swNavOptions;
     private SwitchCompat swNavMessageCount;
     private SwitchCompat swNavUnseenDrafts;
@@ -166,9 +169,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private NumberFormat NF = NumberFormat.getNumberInstance();
 
     private final static String[] RESET_OPTIONS = new String[]{
-            "theme", "startup", "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight",
+            "theme", "startup",
+            "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight", "dividers",
             "group_category", "date", "date_fixed", "date_bold",
-            "portrait2", "portrait2c", "landscape", "close_pane",
+            "portrait2", "portrait2c", "landscape", "close_pane", "column_width",
             "nav_options", "nav_count", "nav_unseen_drafts", "navbar_colorize",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
@@ -203,6 +207,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swTabularBackground = view.findViewById(R.id.swTabularCardBackground);
         swShadow = view.findViewById(R.id.swShadow);
         swShadowHighlight = view.findViewById(R.id.swShadowHighlight);
+        swTabularDividers = view.findViewById(R.id.swTabularDividers);
         swCategory = view.findViewById(R.id.swCategory);
         swDate = view.findViewById(R.id.swDate);
         swDateFixed = view.findViewById(R.id.swDateFixed);
@@ -213,6 +218,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swLandscape = view.findViewById(R.id.swLandscape);
         spLandscapeMinSize = view.findViewById(R.id.spLandscapeMinSize);
         swClosePane = view.findViewById(R.id.swClosePane);
+        tvColumnWidth = view.findViewById(R.id.tvColumnWidth);
+        sbColumnWidth = view.findViewById(R.id.sbColumnWidth);
         swNavOptions = view.findViewById(R.id.swNavOptions);
         swNavMessageCount = view.findViewById(R.id.swNavMessageCount);
         swNavUnseenDrafts = view.findViewById(R.id.swNavUnseenDrafts);
@@ -337,6 +344,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                 swTabularBackground.setEnabled(!checked);
                 swShadow.setEnabled(checked);
                 swShadowHighlight.setEnabled(swShadow.isEnabled() && checked);
+                swTabularDividers.setEnabled(!checked);
                 swIndentation.setEnabled(checked);
             }
         });
@@ -368,6 +376,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("shadow_highlight", checked).apply();
+            }
+        });
+
+        swTabularDividers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("dividers", checked).apply();
             }
         });
 
@@ -455,6 +470,28 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("close_pane", checked).apply();
+            }
+        });
+
+        sbColumnWidth.setEnabled(!Helper.isSurfaceDuo());
+        sbColumnWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (progress < 10)
+                    progress = 10;
+                if (progress > 90)
+                    progress = 90;
+                prefs.edit().putInt("column_width", progress).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
             }
         });
 
@@ -1157,6 +1194,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swTabularBackground.setEnabled(!swCards.isChecked());
         swShadow.setEnabled(swCards.isChecked());
         swShadowHighlight.setEnabled(swShadow.isEnabled() && swShadow.isChecked());
+        swTabularDividers.setChecked(prefs.getBoolean("dividers", true));
+        swTabularDividers.setEnabled(!swCards.isChecked());
         swCategory.setChecked(prefs.getBoolean("group_category", false));
         swDate.setChecked(prefs.getBoolean("date", true));
         swDateFixed.setChecked(prefs.getBoolean("date_fixed", false));
@@ -1169,6 +1208,11 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swLandscape.setChecked(prefs.getBoolean("landscape", true));
         spLandscapeMinSize.setSelection(prefs.getInt("landscape_min_size", 0));
         swClosePane.setChecked(prefs.getBoolean("close_pane", !Helper.isSurfaceDuo()));
+
+        int column_width = prefs.getInt("column_width", 67);
+        tvColumnWidth.setText(getString(R.string.title_advanced_column_width, NF.format(column_width)));
+        sbColumnWidth.setProgress(column_width);
+
         swNavOptions.setChecked(prefs.getBoolean("nav_options", true));
         swNavMessageCount.setChecked(prefs.getBoolean("nav_count", false));
         swNavUnseenDrafts.setChecked(prefs.getBoolean("nav_unseen_drafts", false));

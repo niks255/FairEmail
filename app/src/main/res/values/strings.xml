@@ -437,6 +437,7 @@
     <string name="title_advanced_two_col">Use two columns</string>
     <string name="title_advanced_min_screen_size">Minimum screen size for splitting the screen</string>
     <string name="title_advanced_close_pane">Collapse row or column when closing a conversation</string>
+    <string name="title_advanced_column_width">Message column width: %1$s %%</string>
     <string name="title_advanced_nav_options">Show navigation menu options</string>
     <string name="title_advanced_nav_pin">Pin navigation menu</string>
     <string name="title_advanced_nav_hide_title">Hide navigation menu options?</string>
@@ -449,6 +450,7 @@
     <string name="title_advanced_tabular_background">Use card color as background color when using tabular style</string>
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
     <string name="title_advanced_cards_shadow_highlight">Use highlight color instead of accent color</string>
+    <string name="title_advanced_tabular_dividers">Use divider lines when using tabular style</string>
     <string name="title_advanced_category_header">Group by account category</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_date_fixed">Show fixed date header at the top</string>
@@ -686,6 +688,7 @@
     <string name="title_advanced_test5" translatable="false">Test #5</string>
     <string name="title_advanced_repair" translatable="false">Repair</string>
     <string name="title_advanced_autostart" translatable="false">Autostart</string>
+    <string name="title_advanced_external_storage" translatable="false">External storage</string>
     <string name="title_advanced_room_query_threads" translatable="false">ROOM query threads: %1$s</string>
     <string name="title_advanced_wal" translatable="false">WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">Checkpoints</string>
@@ -702,6 +705,7 @@
     <string name="title_advanced_auth_login" translatable="false">LOGIN</string>
     <string name="title_advanced_auth_ntlm" translatable="false">NTLM</string>
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
+    <string name="title_advanced_auth_apop" translatable="false">APOP</string>
     <string name="title_advanced_idle_done" translatable="false">IDLE/DONE</string>
     <string name="title_advanced_keep_alive_poll" translatable="false">Poll on keep-alive</string>
     <string name="title_advanced_empty_pool" translatable="false">Empty connection pool</string>
@@ -718,6 +722,7 @@
     <string name="title_advanced_android_id" translatable="false">Android ID: %1$s</string>
     <string name="title_advanced_gc" translatable="false">GC</string>
     <string name="title_advanced_charsets" translatable="false">Charsets</string>
+    <string name="title_advanced_font_map" translatable="false">Font map</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
     <string name="title_advanced_files" translatable="false">Files &gt;%1$s</string>
 
@@ -1243,6 +1248,7 @@
     <string name="title_stored">Stored:</string>
     <string name="title_size">Size:</string>
     <string name="title_language">Language:</string>
+    <string name="title_thread" translatable="false">Thread:</string>
     <string name="title_subject">Subject:</string>
     <string name="title_attachment">Attachment:</string>
     <string name="title_body_hint">Your message</string>
@@ -1314,6 +1320,7 @@
     <string name="title_translate_configure">Configure &#8230;</string>
     <string name="title_translate_key">Enter key</string>
     <string name="title_translating">Translating &#8230;</string>
+    <string name="title_translate_formal">Use formal form</string>
     <string name="title_translate_small">Use a small font for the source text</string>
     <string name="title_translate_usage">Usage: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Tap the text to be translated</string>
@@ -1469,6 +1476,10 @@
     <string name="title_edit_signature_remark">Although Android cannot display all HTML, it will be sent as-is</string>
     <string name="title_edit_signature_text">Signature text</string>
     <string name="title_edit_signature_image">Insert image</string>
+    <string name="title_edit_signature_image_hint">
+        When sending a message, the image is copied into the message from the selected location.
+        So, don\'t delete the image file!
+    </string>
 
     <string name="title_answer_caption">Edit template</string>
     <string name="title_answer_reply">Reply template</string>
@@ -1732,6 +1743,7 @@
     <string name="title_later">Later</string>
     <string name="title_undo">Undo</string>
     <string name="title_redo">Redo</string>
+    <string name="title_insert_line">Insert line</string>
     <string name="title_add">Add</string>
     <string name="title_browse">Open with</string>
     <string name="title_info">Info</string>

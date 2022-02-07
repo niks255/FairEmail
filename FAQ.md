@@ -103,7 +103,7 @@ Related questions:
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 * A [bug in Crowdin](https://crowdin.com/messages/536694) blocks updating FAQ.md (this text) for translation.
-* The Strato email server sometimes disconnects when sending messages, possibly due to stringent server firewall rules. This cannot be fixed by the app.
+* Search suggestions causes the keyboard losing focus on Android 12L
 
 <h2><a name="planned-features"></a>Planned features</h2>
 
@@ -1134,7 +1134,7 @@ Please see the Play store description of the app or [see here](https://email.fai
 The right question is "*why are there so many taxes and fees?*":
 
 * VAT: 25 % (depending on your country)
-* Google fee: 30 %
+* Google fee: 15-30 %
 * Income tax: 50 %
 * <sub>Paypal fee: 5-10 % depending on the country/amount</sub>
 
@@ -1144,7 +1144,7 @@ Also note that most free apps will appear not to be sustainable in the end, wher
 and that free apps may have a catch, like sending privacy sensitive information to the internet.
 There are no privacy violating ads in the app either.
 
-I have been working on FairEmail almost every day for more than two years, so I think the price is more than reasonable.
+I have been working on FairEmail almost every day for more than three years, so I think the price is more than reasonable.
 For this reason there won't be discounts either.
 
 <br />
@@ -2894,6 +2894,13 @@ See also [here](https://developer.android.com/guide/topics/data/install-location
 
 Messages, attachments, etc stored on external storage media, like an sdcard, can be accessed by other apps and is therefore not safe.
 See [here](https://developer.android.com/training/data-storage) for the details.
+Instead, consider to use [adoptable storage](https://source.android.com/devices/storage/adoptable).
+
+Since version 1.1829 is it possible to store attachments to external storage space private to the app (except for file managers) via an option in the debug panel.
+You can enable the debug panel by enabling debug mode in the miscellaneous settings (last option).
+To prevent ongoing operations from storing attachments at the old location
+you should disable receiving messages in the receive settings and wait until all operations have been completed before changing this option.
+Please be aware that removing the storage space will inevitably result in problems, which is one of the reasons why this option is hidden.
 
 When needed you can save (raw) messages via the three-dots menu just above the message text
 and save attachments by tapping on the floppy icon.
@@ -3214,7 +3221,7 @@ Please see these websites for lists of privacy oriented email providers with adv
 * [Privacy Guides](https://privacyguides.org/providers/email/)
 * [Privacy Tools](https://www.privacytools.io/providers/email/)
 
-Some providers, like ProtonMail, Tutanota, use proprietary email protocols, which make it impossible to use third party email apps.
+**Important**: Some providers, like ProtonMail, Tutanota, use proprietary email protocols, which make it impossible to use third party email apps.
 Please see [this FAQ](#user-content-faq129) for more information.
 
 Using your own (custom) domain name, which is supported by most email providers, will make it easier to switch to another email provider.
@@ -4496,8 +4503,8 @@ To show shields, the option *Show authentication status indicator* in the displa
 A message will be consired safely transported if *every* [Received](https://datatracker.ietf.org/doc/html/rfc2821#section-4.4) header:
 
 * contains the phrase 'using TLS', 'via HTTP', 'version=TLS'
-* contains the phrase '(qmail <nnn> invoked by uid <nnn>)' in the first added header
-* contains the phrase '(Postfix, from userid nnn)' in the first added header
+* contains the phrase '(qmail <nnn> invoked by uid <nnn>)'
+* contains the phrase '(Postfix, from userid nnn)'
 * has a *by* with a local address
 * has a *by* xxx.google.com
 * has a *from* with a local address

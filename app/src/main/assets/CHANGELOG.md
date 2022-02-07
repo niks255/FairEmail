@@ -2,7 +2,47 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Fulgurotherium](https://en.wikipedia.org/wiki/Fulgurotherium)
+
+### 1.1833 - 2022-02-07
+
+* Added view original signature
+* Added support for CSS text-transform
+* Added option to disable divider lines for tabular layout
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1832 - 2022-02-05
+
+* Added saving S/MIME public keys
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1831 - 2022-02-04
+
+* Added slider to change message column width
+* Added option for formal/informal DeepL translation
+* Added insert line to long press menu
+* Small improvements and minor bug fixes
+* Updated libraries/AndroidX
+* Updated translations
+
 ### [Epidexipteryx](https://en.wikipedia.org/wiki/Epidexipteryx)
+
+### 1.1830 - 2022-02-02
+
+* Fixed extra buttons option
+
+### 1.1829 - 2022-02-02
+
+* Reduced logging
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1828 - 2022-02-01
+
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.1827 - 2022-02-01
 

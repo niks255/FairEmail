@@ -155,7 +155,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "download_headers", "download_eml",
             "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", "ssl_harden", "cert_strict", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", // force reconnect
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", // force reconnect
             "keep_alive_poll", "empty_pool", "idle_done", // force reconnect
             "exact_alarms" // force schedule
     ));
@@ -1193,6 +1193,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     private void onState(Intent intent) {
         foreground = intent.getBooleanExtra("foreground", false);
+        for (Core.State state : coreStates.values())
+            state.setForeground(foreground);
     }
 
     private void onPoll(Intent intent) {
@@ -1457,7 +1459,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 // Allow Android account manager to refresh the access token
                                 if (account.auth_type != AUTH_TYPE_PASSWORD &&
-                                        state.getBackoff() <= CONNECT_BACKOFF_INTERMEDIATE * 60)
+                                        state.getBackoff() <= CONNECT_BACKOFF_ALARM_START * 60)
                                     throw ex;
 
                                 try {
@@ -1817,6 +1819,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             cowner.value.start();
 
                             db.operation().liveOperations(account.id).observe(cowner.value, new Observer<List<TupleOperationEx>>() {
+                                private DutyCycle dc = new DutyCycle(account.name + " operations");
                                 private List<Long> handling = new ArrayList<>();
                                 private final Map<TupleOperationEx.PartitionKey, List<TupleOperationEx>> partitions = new HashMap<>();
 
@@ -1983,11 +1986,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                 Log.i(account.name + " folder " + folder.name + " flags=" + ifolder.getPermanentFlags());
                                                             }
 
-                                                            Core.processOperations(ServiceSynchronize.this,
-                                                                    account, folder,
-                                                                    partition,
-                                                                    iservice, ifolder,
-                                                                    state, serial);
+                                                            try {
+                                                                dc.start();
+                                                                Core.processOperations(ServiceSynchronize.this,
+                                                                        account, folder,
+                                                                        partition,
+                                                                        iservice, ifolder,
+                                                                        state, serial);
+                                                            } finally {
+                                                                dc.stop(state.getForeground(), executor);
+                                                            }
 
                                                         } catch (Throwable ex) {
                                                             Log.e(folder.name, ex);

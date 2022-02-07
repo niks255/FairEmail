@@ -774,6 +774,35 @@ public class HtmlHelper {
                                 sb.append("text-decoration:line-through;");
                             break;
 
+                        case "text-transform":
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform
+                            NodeTraversor.traverse(new NodeVisitor() {
+                                @Override
+                                public void head(Node node, int depth) {
+                                    if (node instanceof TextNode) {
+                                        TextNode tnode = (TextNode) node;
+                                        String text = tnode.getWholeText();
+                                        switch (value) {
+                                            case "capitalize":
+                                                // TODO: capitalize
+                                                break;
+                                            case "uppercase":
+                                                tnode.text(text.toUpperCase(Locale.ROOT));
+                                                break;
+                                            case "lowercase":
+                                                tnode.text(text.toLowerCase(Locale.ROOT));
+                                                break;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void tail(Node node, int depth) {
+                                    // Do nothing
+                                }
+                            }, element);
+                            break;
+
                         case "display":
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/display
                             if (element.parent() != null &&
@@ -1007,11 +1036,8 @@ public class HtmlHelper {
 
         // Lines
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr
-        if (!view)
-            for (Element hr : document.select("hr")) {
-                hr.tagName("div");
-                hr.text(LINE);
-            }
+        for (Element hr : document.select("hr"))
+            hr.attr("x-keep-line", "true");
 
         // Descriptions
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl
@@ -1328,7 +1354,6 @@ public class HtmlHelper {
         // geo:<lat>,<lon>[,<alt>][;u=<uncertainty>]
         // tel:<phonenumber>
         final Pattern GPA_PATTERN = Pattern.compile("GPA\\.\\d{4}-\\d{4}-\\d{4}-\\d{5}");
-        final String GPA_LINK = "https://play.google.com/console/u/0/developers/8420080860664580239/orders/";
         final Pattern pattern = Pattern.compile(
                 "(((?i:mailto):)?" + PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern() + ")|" +
                         PatternsCompat.AUTOLINK_WEB_URL.pattern()
@@ -1346,6 +1371,18 @@ public class HtmlHelper {
                 if (links < MAX_AUTO_LINK && node instanceof TextNode) {
                     TextNode tnode = (TextNode) node;
                     String text = tnode.getWholeText();
+
+                    if (BuildConfig.DEBUG && node.parentNode() instanceof Element) {
+                        Element parent = (Element) node.parentNode();
+                        if ("faircode_txn_id".equals(parent.className())) {
+                            Element a = document.createElement("a");
+                            a.attr("href", BuildConfig.PAYPAL_URI + text.trim());
+                            a.text(text);
+                            tnode.before(a);
+                            tnode.text("");
+                            return;
+                        }
+                    }
 
                     Matcher matcher = pattern.matcher(text);
                     if (matcher.find()) {
@@ -1392,7 +1429,7 @@ public class HtmlHelper {
 
                                 Element a = document.createElement("a");
                                 if (BuildConfig.DEBUG && GPA_PATTERN.matcher(group).matches())
-                                    a.attr("href", GPA_LINK + group);
+                                    a.attr("href", BuildConfig.GPA_URI + group);
                                 else
                                     a.attr("href", (email ? "mailto:" : "") + group);
                                 a.text(group);
@@ -2385,6 +2422,12 @@ public class HtmlHelper {
             }
         }
 
+        for (LineSpan span : ssb.getSpans(0, ssb.length(), LineSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            ssb.replace(start, end, LINE);
+        }
+
         return ssb.toString();
     }
 
@@ -3001,32 +3044,34 @@ public class HtmlHelper {
                                 break;
                             case "hr":
                                 // Suppress successive lines
-                                LineSpan[] lines = ssb.getSpans(0, ssb.length(), LineSpan.class);
-                                int last = -1;
-                                if (lines != null)
-                                    for (LineSpan line : lines) {
-                                        int e = ssb.getSpanEnd(line);
-                                        if (e > last)
-                                            last = e;
-                                    }
-                                if (last >= 0) {
-                                    boolean blank = true;
-                                    for (int i = last; i < ssb.length(); i++) {
-                                        char kar = ssb.charAt(i);
-                                        if (kar != ' ' && kar != '\n' && kar != '\u00a0') {
-                                            blank = false;
-                                            break;
+                                if (!"true".equals(element.attr("x-keep-line"))) {
+                                    LineSpan[] lines = ssb.getSpans(0, ssb.length(), LineSpan.class);
+                                    int last = -1;
+                                    if (lines != null)
+                                        for (LineSpan line : lines) {
+                                            int e = ssb.getSpanEnd(line);
+                                            if (e > last)
+                                                last = e;
                                         }
-                                    }
+                                    if (last >= 0) {
+                                        boolean blank = true;
+                                        for (int i = last; i < ssb.length(); i++) {
+                                            char kar = ssb.charAt(i);
+                                            if (kar != ' ' && kar != '\n' && kar != '\u00a0') {
+                                                blank = false;
+                                                break;
+                                            }
+                                        }
 
-                                    if (blank)
-                                        break;
+                                        if (blank)
+                                            break;
+                                    }
                                 }
 
                                 boolean dashed = "true".equals(element.attr("x-dashed"));
                                 float stroke = context.getResources().getDisplayMetrics().density;
                                 float dash = (dashed ? line_dash_length : 0f);
-                                ssb.append(LINE);
+                                ssb.append("\uFFFC");  // Object replacement character
                                 setSpan(ssb, new LineSpan(colorSeparator, stroke, dash), start, ssb.length());
                                 break;
                             case "img":
@@ -3264,7 +3309,8 @@ public class HtmlHelper {
                 .removeAttr("x-tracking")
                 .removeAttr("x-border")
                 .removeAttr("x-list-style")
-                .removeAttr("x-plain");
+                .removeAttr("x-plain")
+                .remove("x-keep-line");
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {
@@ -3356,6 +3402,12 @@ public class HtmlHelper {
             Element last = quote.children().last();
             if (last != null && "br".equals(last.tagName()))
                 last.remove();
+        }
+
+        for (Element line : doc.select("hr")) {
+            Element next = line.nextElementSibling();
+            if (next != null && "br".equals(next.tagName()))
+                next.remove();
         }
 
         return doc.html();

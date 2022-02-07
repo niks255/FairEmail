@@ -354,6 +354,7 @@
     <string name="title_advanced_two_col">使用两列</string>
     <string name="title_advanced_min_screen_size">分屏下的最小屏幕尺寸</string>
     <string name="title_advanced_close_pane">关闭会话时收起行或列</string>
+    <string name="title_advanced_column_width">消息列宽：%1$s %%</string>
     <string name="title_advanced_nav_options">显示导航菜单选项</string>
     <string name="title_advanced_nav_pin">固定导航菜单</string>
     <string name="title_advanced_nav_hide_title">隐藏导航菜单选项？</string>
@@ -366,6 +367,7 @@
     <string name="title_advanced_tabular_background">使用表格样式时，使用卡片颜色作为背景色</string>
     <string name="title_advanced_cards_shadow">使用卡片样式时对未读消息显示阴影</string>
     <string name="title_advanced_cards_shadow_highlight">使用高亮色而不是强调色</string>
+    <string name="title_advanced_tabular_dividers">使用表格样式时使用分隔线</string>
     <string name="title_advanced_category_header">按账户类别分组</string>
     <string name="title_advanced_date_header">按日期分组</string>
     <string name="title_advanced_date_fixed">在顶部显示固定日期标题</string>
@@ -1111,6 +1113,7 @@
     <string name="title_translate_configure">配置 &#8230;</string>
     <string name="title_translate_key">输入密钥</string>
     <string name="title_translating">正在翻译 &#8230;</string>
+    <string name="title_translate_formal">使用正式语言形式</string>
     <string name="title_translate_small">对源文本使用一个小字体</string>
     <string name="title_translate_usage">用量： %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">点击要翻译的文本</string>
@@ -1496,6 +1499,7 @@
     <string name="title_later">稍后再说</string>
     <string name="title_undo">撤销</string>
     <string name="title_redo">重做</string>
+    <string name="title_insert_line">插入行</string>
     <string name="title_add">添加</string>
     <string name="title_browse">打开方式</string>
     <string name="title_info">信息</string>

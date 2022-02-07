@@ -365,6 +365,7 @@
     <string name="title_advanced_two_col">Usa due colonne</string>
     <string name="title_advanced_min_screen_size">Dimensione minima dello schermo per la sua divisione</string>
     <string name="title_advanced_close_pane">Comprimi riga o colonna chiudendo una conversazione</string>
+    <string name="title_advanced_column_width">Larghezza della colonna del messaggio: %1$s %%</string>
     <string name="title_advanced_nav_options">Mostra le opzioni del menu di navigazione</string>
     <string name="title_advanced_nav_pin">Fissa il menu di navigazione</string>
     <string name="title_advanced_nav_hide_title">Nascondere le opzioni del menu di navigazione?</string>
@@ -377,6 +378,7 @@
     <string name="title_advanced_tabular_background">Usa il colore della carta come colore di sfondo usando lo stile tabulare</string>
     <string name="title_advanced_cards_shadow">Usa l\'ombreggiatura per i messaggi non letti usando lo stile della carta</string>
     <string name="title_advanced_cards_shadow_highlight">Usa il colore d\'evidenziazione invece del colore secondario</string>
+    <string name="title_advanced_tabular_dividers">Usa le linee divisorie usando lo stile tabulare</string>
     <string name="title_advanced_category_header">Raggruppa per categoria del profilo</string>
     <string name="title_advanced_date_header">Raggruppa per data</string>
     <string name="title_advanced_date_fixed">Mostra l\'intestazione a data fissa in cima</string>
@@ -1128,6 +1130,7 @@
     <string name="title_translate_configure">Configura &#8230;</string>
     <string name="title_translate_key">Inserisci tasto</string>
     <string name="title_translating">Traducendo&#8230;</string>
+    <string name="title_translate_formal">Usa il modulo formale</string>
     <string name="title_translate_small">Usa caratteri piccoli per il testo sorgente</string>
     <string name="title_translate_usage">Uso: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Tocca il testo da tradurre</string>
@@ -1269,6 +1272,9 @@
     <string name="title_edit_signature_remark">Sebbene Android non possa mostrare tutto lo HTML, sarà inviata così com\'è</string>
     <string name="title_edit_signature_text">Testo della firma</string>
     <string name="title_edit_signature_image">Inserisci immagine</string>
+    <string name="title_edit_signature_image_hint">        Inviando un messaggio, l\'immagine è copiata nel messaggio dalla posizione selezionata.
+        Quindi, non eliminare il file immagine!
+    </string>
     <string name="title_answer_caption">Modifica modello</string>
     <string name="title_answer_reply">Modello di risposta</string>
     <string name="title_answer_name">Nome del modello</string>
@@ -1513,6 +1519,7 @@
     <string name="title_later">Più tardi</string>
     <string name="title_undo">Annulla</string>
     <string name="title_redo">Ripeti</string>
+    <string name="title_insert_line">Inserisci riga</string>
     <string name="title_add">Aggiungi</string>
     <string name="title_browse">Apri con</string>
     <string name="title_info">Info</string>

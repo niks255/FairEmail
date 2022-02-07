@@ -184,6 +184,19 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swTabularDividers"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_tabular_dividers"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swShadowHighlight"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swCategory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -192,7 +205,7 @@
                     android:text="@string/title_advanced_category_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swShadowHighlight"
+                    app:layout_constraintTop_toBottomOf="@id/swTabularDividers"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -433,6 +446,29 @@
                     app:layout_constraintTop_toBottomOf="@id/tvLandscapeSplitMinHint"
                     app:switchPadding="12dp" />
 
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvColumnWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_column_width"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swClosePane" />
+
+                <SeekBar
+                    android:id="@+id/sbColumnWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:min="0"
+                    android:progress="66"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvColumnWidth" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swNavOptions"
                     android:layout_width="0dp"
@@ -441,7 +477,7 @@
                     android:text="@string/title_advanced_nav_options"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swClosePane"
+                    app:layout_constraintTop_toBottomOf="@id/sbColumnWidth"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1775,22 +1811,6 @@
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
-                    android:id="@+id/tvAuthNone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="6dp"
-                    android:drawableStart="@drawable/twotone_gpp_bad_24"
-                    android:drawablePadding="6dp"
-                    android:drawableTint="?attr/colorControlNormal"
-                    android:text="@string/title_advanced_authentication_none"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textStyle="italic"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swAuthenticationIndicator" />
-
-                <eu.faircode.email.FixedTextView
                     android:id="@+id/tvAuthSome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1803,7 +1823,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAuthNone" />
+                    app:layout_constraintTop_toBottomOf="@id/swAuthenticationIndicator" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvAutheAll"
